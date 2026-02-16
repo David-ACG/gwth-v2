@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "standalone",
+  images: {
+    remotePatterns: [
+      // Add patterns as external image sources are identified
+    ],
+  },
 };
 
 export default nextConfig;
