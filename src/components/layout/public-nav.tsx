@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { cn } from "@/lib/utils"
 
 const navLinks = [
@@ -13,7 +14,7 @@ const navLinks = [
 
 /**
  * Navigation bar for public-facing pages.
- * Shows logo, nav links, and login/signup CTAs.
+ * Shows logo, nav links, theme toggle, and login/signup CTAs.
  */
 export function PublicNav() {
   const pathname = usePathname()
@@ -43,6 +44,7 @@ export function PublicNav() {
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button variant="ghost" size="sm" asChild>
             <Link href="/login">Log in</Link>
           </Button>

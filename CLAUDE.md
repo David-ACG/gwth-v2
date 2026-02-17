@@ -4,6 +4,8 @@
 
 Build GWTH v2, a student-facing learning platform where users can browse courses, view lessons (video + text + audio), complete labs, track progress, and take quizzes. This is a full rebuild — clean, modern, and properly architected from scratch.
 
+**Content model:** This is a single course delivered over 3 months (not a multi-course catalog). The mock data uses multiple courses for UI development, but the production site will feature one course with monthly content releases.
+
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router, React 19, React Compiler, Turbopack)
@@ -79,48 +81,52 @@ Create a `.env.local.example` committed to git showing what vars are needed (wit
 
 ## Design System
 
-Use the GWTH Student theme from the design system at `C:\Projects\design-system`. Import these files:
+All colors use OKLCH format in CSS custom properties defined in `src/app/globals.css`. The theme defaults to **light mode** (set in `src/providers/theme-provider.tsx`). Users can toggle via the sun/moon icon in the dashboard header.
 
-### Theme Colors (HSL format — use with CSS custom properties)
+### Theme Colors (OKLCH — CSS custom properties)
 
 **Light mode:**
-| Token | Value |
-|-------|-------|
-| background | `0 0% 96%` |
-| foreground | `175 54% 11%` |
-| primary | `200 100% 60%` (bright aqua) |
-| accent | `163 74% 42%` (mint green) |
-| secondary | `220 20% 93%` |
-| muted | `220 20% 93%` |
-| muted-foreground | `220 15% 40%` |
-| card | `0 0% 100%` (white cards on gray bg) |
-| border | `220 15% 87%` |
-| destructive | `0 84% 60%` |
-| success | `142 76% 36%` |
-| warning | `38 92% 50%` |
-| info | `200 100% 60%` |
-| sidebar | `175 20% 97%` |
+| Token | OKLCH Value | Hex Approx | Notes |
+|-------|-------------|-----------|-------|
+| background | `oklch(0.98 0 0)` | `#F5F5F5` | Near-white |
+| foreground | `oklch(0.18 0.04 175)` | `#0F2624` | Dark teal text |
+| primary | `oklch(0.7 0.18 220)` | `#33BBFF` | Bright aqua |
+| accent | `oklch(0.65 0.16 165)` | `#1CBA93` | Mint green |
+| secondary | `oklch(0.95 0.01 220)` | `#EDF0F5` | Light blue-grey |
+| muted | `oklch(0.95 0.01 220)` | `#EDF0F5` | Same as secondary |
+| muted-foreground | `oklch(0.5 0.02 220)` | `#5E6E85` | Subdued text |
+| card | `oklch(1 0 0)` | `#FFFFFF` | White cards on grey bg |
+| border | `oklch(0.9 0.02 220)` | `#D6DCE6` | Light border |
+| destructive | `oklch(0.577 0.245 27.325)` | `#E53935` | Red |
+| success | `oklch(0.6 0.18 145)` | `#2E7D32` | Green |
+| warning | `oklch(0.75 0.15 75)` | `#F59E0B` | Amber |
+| info | `oklch(0.7 0.18 220)` | `#33BBFF` | Same as primary |
+| sidebar | `oklch(0.97 0.005 175)` | `#F3F7F6` | Slight teal tint |
 
-**Dark mode:**
-| Token | Value |
-|-------|-------|
-| background | `174 50% 4%` (#050F0E — very dark teal) |
-| foreground | `155 20% 93%` |
-| primary | `220 60% 73%` |
-| accent | `165 56% 73%` |
-| secondary | `175 40% 15%` |
-| card | `175 40% 14%` |
-| border | `0 0% 100% / 12%` |
-| sidebar | `175 45% 10%` |
+**Dark mode — "Graphite Warm":**
+| Token | OKLCH Value | Hex Approx | Notes |
+|-------|-------------|-----------|-------|
+| background | `oklch(0.17 0.005 60)` | `#191817` | Warm charcoal |
+| foreground | `oklch(0.93 0.008 60)` | `#EDEAE6` | Warm off-white |
+| primary | `oklch(0.75 0.16 220)` | `#5BA8E6` | Lighter aqua for contrast |
+| accent | `oklch(0.75 0.14 165)` | `#5CC8A8` | Lighter mint |
+| secondary | `oklch(0.24 0.006 60)` | `#3A3937` | Dark warm grey |
+| muted | `oklch(0.24 0.006 60)` | `#3A3937` | Same as secondary |
+| muted-foreground | `oklch(0.65 0.015 60)` | `#9E9A94` | Warm grey text |
+| card | `oklch(0.21 0.005 60)` | `#232221` | Slightly lighter than bg |
+| border | `oklch(1 0 0 / 12%)` | `rgba(255,255,255,0.12)` | Subtle white border |
+| sidebar | `oklch(0.15 0.005 60)` | `#151413` | Slightly darker than bg |
 
-**Status colors:** completed=`142 76% 36%`, in-progress=`200 100% 60%`, not-started=`220 15% 60%`, locked=`220 10% 40%`
+The dark mode uses hue 60 (warm/amber axis) with very low chroma (0.005-0.015) to create a neutral warm charcoal that avoids the green tint of teal-based dark themes. Primary and accent colors (aqua/mint) pop well against this neutral base.
+
+**Status colors (both modes):** completed=green, in-progress=aqua, not-started=grey, locked=dark grey
 
 **Grade colors:** A=green, B=mint, C=amber, D=orange, F=red
 
 ### Typography
-- **Headings + Body:** Inter
-- **Code blocks:** JetBrains Mono
-- **Corners:** rounded (`--radius: 0.5rem`)
+- **Headings + Body:** Inter (via `next/font/google`, variable `--font-inter`)
+- **Code blocks:** JetBrains Mono (via `next/font/google`, variable `--font-jetbrains`)
+- **Corners:** rounded (`--radius: 0.625rem`)
 - **Shadows:** subtle
 - **Animations:** subtle, not flashy
 
@@ -159,12 +165,67 @@ Then in `globals.css`:
 - Header height: 64px
 - Content max-width: 1400px
 
-### Background Effects
-Use agilecommerce.ai-style backgrounds for hero sections and marketing pages:
-- Glowing orbs: large blurred circles (400-600px, `filter: blur(64px)`, 15-25% opacity) using primary and accent colors
-- Gradient mesh: overlapping `radial-gradient()` layers
-- Frosted glass: `backdrop-filter: blur(12px)` with semi-transparent bg
-- Noise texture: subtle SVG noise overlay at 3% opacity
+### Background Effects — Cascading Spiral Windmill
+
+The landing page hero uses a **cascading blurred spiral animation** matching the agilecommercegroup.com style. This replaces the original glowing orbs approach.
+
+**How it works:**
+- A 7-blade SVG spiral (`public/logo-spiral.svg`) in the GWTH aqua-to-mint-to-indigo color spectrum (deep teal, teal, mint, aqua green, primary aqua, sky blue, indigo blue)
+- 4 pre-blurred SVG variants at different Gaussian blur levels (`logo-spiral-blur-6.svg`, `-12.svg`, `-18.svg`, `-25.svg`)
+- 4 cascading `<Image>` layers positioned in the top-right area, each with different size, blur level, opacity, rotation speed, and direction
+
+**Layer configuration (hero section in `src/components/landing/hero-section.tsx`):**
+| Layer | Size | SVG | Speed | Direction | Opacity (light/dark) |
+|-------|------|-----|-------|-----------|---------------------|
+| 1 (furthest) | 800px | blur-25 | 120s | forward | 12% / 8% |
+| 2 | 650px | blur-18 | 80s | reverse | 18% / 12% |
+| 3 | 500px | blur-12 | 55s | forward | 25% / 18% |
+| 4 (closest) | 380px | blur-6 | 40s | reverse | 30% / 22% |
+
+**Animation classes:** Uses Tailwind arbitrary animations — `animate-[spin_120s_linear_infinite]` and `animate-[spin_80s_linear_infinite_reverse]`. The standard `spin` keyframe from Tailwind handles the rotation. All layers are hidden when `prefers-reduced-motion` is active.
+
+**Content layout:** Text is left-aligned (`max-w-2xl`) to balance visually against the spiral layers on the right.
+
+**SVG files in `public/`:**
+- `logo-spiral.svg` — sharp, no blur (not used directly in hero, available for other uses)
+- `logo-spiral-blur-6.svg` — lightest blur (closest layer)
+- `logo-spiral-blur-12.svg` — medium blur
+- `logo-spiral-blur-18.svg` — heavy blur
+- `logo-spiral-blur-25.svg` — heaviest blur (furthest layer)
+
+**Blade colors (all SVG variants):**
+| Blade | Color | Hex |
+|-------|-------|-----|
+| 1 | Deep Teal | `#0D4F4F` |
+| 2 | Teal | `#0E7C7B` |
+| 3 | Mint | `#1CBA93` |
+| 4 | Aqua Green | `#22D3A7` |
+| 5 | Primary Aqua | `#33BBFF` |
+| 6 | Sky Blue | `#5B9BF5` |
+| 7 | Indigo Blue | `#4A6CF7` |
+
+### Route Transition Indicator
+
+A `RouteProgress` component (`src/components/shared/route-progress.tsx`) renders on every client-side navigation:
+- Top-of-page gradient bar (primary-to-accent) that animates from 0% to 100% width
+- Small SVG spinner in the top-right corner
+- Both auto-dismiss after 500ms
+- Wired into the root layout (`src/app/layout.tsx`)
+
+### Loading Spinners
+
+The `Spinner` and `PageSpinner` components (`src/components/shared/spinner.tsx`) are used in all `loading.tsx` files:
+- **`Spinner`** — dual-ring SVG spinner with primary outer arc and accent inner arc (counter-rotating). Configurable size.
+- **`PageSpinner`** — full-page centered spinner with "Loading..." text, used for root and public loading states.
+- Dashboard loading states combine the small spinner with skeleton placeholders.
+
+Custom CSS animations in `globals.css`:
+- `.animate-spin-reverse` — reverse rotation at 1.2s for the inner ring
+- `.animate-progress` — 0-to-100% width animation for the route transition bar
+
+### Additional Background Effects
+- Frosted glass: `backdrop-filter: blur(12px)` with semi-transparent bg (used in public nav header)
+- Gradient backdrop: `bg-gradient-to-br from-primary/5 via-transparent to-accent/5` (hero section base)
 
 ### Image Optimization
 

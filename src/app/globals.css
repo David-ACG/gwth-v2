@@ -1,7 +1,8 @@
 /**
- * GWTH Student Backend - Global Styles
+ * GWTH Student Platform - Global Styles
  *
- * Uses Ocean Tech design system with dashboard-specific components.
+ * Light mode: Near-white background, aqua/mint accents
+ * Dark mode: "Graphite Warm" — warm charcoal (hue 60, low chroma)
  *
  * Primary (Aqua): oklch(0.7 0.18 220) / #33BBFF
  * Accent (Mint): oklch(0.65 0.16 165) / #1CBA93
@@ -155,48 +156,49 @@
    ================================================================= */
 
 .dark {
-  --background: oklch(0.18 0.04 175);
-  --foreground: oklch(0.95 0.01 155);
+  /* Graphite Warm — bg: #191817, card: #232221 */
+  --background: oklch(0.17 0.005 60);
+  --foreground: oklch(0.93 0.008 60);
 
-  --card: oklch(0.22 0.04 175);
-  --card-foreground: oklch(0.95 0.01 155);
+  --card: oklch(0.21 0.005 60);
+  --card-foreground: oklch(0.93 0.008 60);
 
-  --popover: oklch(0.22 0.04 175);
-  --popover-foreground: oklch(0.95 0.01 155);
+  --popover: oklch(0.21 0.005 60);
+  --popover-foreground: oklch(0.93 0.008 60);
 
   --primary: oklch(0.75 0.16 220);
-  --primary-foreground: oklch(0.18 0.04 175);
+  --primary-foreground: oklch(0.17 0.005 60);
 
-  --secondary: oklch(0.25 0.04 175);
-  --secondary-foreground: oklch(0.95 0.01 155);
+  --secondary: oklch(0.24 0.006 60);
+  --secondary-foreground: oklch(0.93 0.008 60);
 
-  --muted: oklch(0.25 0.04 175);
-  --muted-foreground: oklch(0.65 0.06 220);
+  --muted: oklch(0.24 0.006 60);
+  --muted-foreground: oklch(0.65 0.015 60);
 
   --accent: oklch(0.75 0.14 165);
-  --accent-foreground: oklch(0.18 0.04 175);
+  --accent-foreground: oklch(0.17 0.005 60);
 
   --destructive: oklch(0.704 0.191 22.216);
 
   --success: oklch(0.7 0.16 145);
-  --success-foreground: oklch(0.18 0.04 175);
+  --success-foreground: oklch(0.17 0.005 60);
 
   --warning: oklch(0.8 0.14 75);
-  --warning-foreground: oklch(0.18 0.04 175);
+  --warning-foreground: oklch(0.17 0.005 60);
 
   --info: oklch(0.75 0.16 220);
-  --info-foreground: oklch(0.18 0.04 175);
+  --info-foreground: oklch(0.17 0.005 60);
 
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.75 0.16 220);
 
-  --sidebar: oklch(0.16 0.04 175);
-  --sidebar-foreground: oklch(0.95 0.01 155);
+  --sidebar: oklch(0.15 0.005 60);
+  --sidebar-foreground: oklch(0.93 0.008 60);
   --sidebar-primary: oklch(0.75 0.16 220);
-  --sidebar-primary-foreground: oklch(0.95 0.01 155);
-  --sidebar-accent: oklch(0.25 0.04 175);
-  --sidebar-accent-foreground: oklch(0.95 0.01 155);
+  --sidebar-primary-foreground: oklch(0.93 0.008 60);
+  --sidebar-accent: oklch(0.24 0.006 60);
+  --sidebar-accent-foreground: oklch(0.93 0.008 60);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.75 0.16 220);
 
@@ -208,8 +210,8 @@
 
   --status-completed: oklch(0.7 0.16 145);
   --status-in-progress: oklch(0.75 0.16 220);
-  --status-not-started: oklch(0.5 0.02 220);
-  --status-locked: oklch(0.35 0.02 220);
+  --status-not-started: oklch(0.5 0.01 60);
+  --status-locked: oklch(0.35 0.01 60);
 
   --grade-a: oklch(0.7 0.16 145);
   --grade-b: oklch(0.75 0.14 165);
@@ -303,6 +305,37 @@
 .skeleton {
   @apply animate-pulse rounded;
   background: var(--muted);
+}
+
+/* Reverse spin animation for spinner inner ring */
+@keyframes spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 1.2s linear infinite;
+}
+
+/* Top progress bar animation for route transitions */
+@keyframes progress {
+  0% {
+    width: 0%;
+    opacity: 1;
+  }
+  50% {
+    width: 70%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-progress {
+  animation: progress 0.5s ease-out forwards;
 }
 
 /* =================================================================

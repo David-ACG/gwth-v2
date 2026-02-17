@@ -1,8 +1,8 @@
 "use client"
 
-import { useTheme } from "next-themes"
-import { Moon, Sun, Search, Menu } from "lucide-react"
+import { Search, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useSidebar } from "@/hooks/use-sidebar"
 import { useSearch } from "@/hooks/use-search"
 import { BreadcrumbNav } from "@/components/layout/breadcrumb-nav"
@@ -12,7 +12,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
  * Dashboard header with breadcrumb, search trigger, theme toggle, and user avatar.
  */
 export function DashboardHeader() {
-  const { theme, setTheme } = useTheme()
   const { isMobile, open: openSidebar } = useSidebar()
   const { open: openSearch } = useSearch()
 
@@ -57,16 +56,7 @@ export function DashboardHeader() {
         </Button>
 
         {/* Theme toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          aria-label="Toggle theme"
-          className="size-8"
-        >
-          <Sun className="size-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute size-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
-        </Button>
+        <ThemeToggle />
 
         {/* User avatar */}
         <Avatar className="size-8">
