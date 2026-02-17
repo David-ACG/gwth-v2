@@ -10,13 +10,16 @@ Card displaying a single course with a gradient thumbnail placeholder, difficult
 ### `CoursesFilter` (`courses-filter.tsx`)
 Filter bar for the courses listing page. Provides a search input, category dropdown, and difficulty dropdown. All filter state is synced to URL search params so filtered views are shareable and bookmarkable. Client component.
 
+### `LessonNav` (`lesson-nav.tsx`)
+Course navigation sidebar tree showing sections and lessons with progress indicators (completed, in-progress, locked, available). Auto-expands the section containing the current lesson. Highlights the active lesson. Locked lessons are rendered as non-clickable items. Used in the lesson viewer page. Client component.
+
 ### `LessonViewer` (`lesson-viewer.tsx`)
 The core lesson page component. Features:
 - Lesson header with breadcrumb link back to the course, difficulty badge, and duration.
-- Tabbed content area: Learn (video placeholder + markdown content + audio + resources), Build (video + instructions), Quiz (dynamic-imported QuizEngine).
+- Tabbed content area: Learn (VideoPlayer + markdown content + AudioPlayer + resources), Build (VideoPlayer + instructions), Quiz (dynamic-imported QuizEngine).
 - Bottom navigation bar with previous/next lesson links and a "Mark Complete" button with optimistic UI via `useProgress`.
 - Bookmark toggle and a slide-out notes panel (dynamic-imported NotesPanel).
-- Heavy sub-components (QuizEngine, MarkdownRenderer, NotesPanel) are loaded via `next/dynamic`.
+- Heavy sub-components (VideoPlayer, AudioPlayer, QuizEngine, MarkdownRenderer, NotesPanel) are loaded via `next/dynamic`.
 
 ### `QuizEngine` (`quiz-engine.tsx`)
 Interactive multiple-choice quiz with scoring. Uses `react-hook-form` for answer state and an `AlertDialog` for submit confirmation. Shows score, grade, and per-question explanations after submission. Enforces a maximum attempt limit from `lib/config.ts`.
@@ -30,4 +33,5 @@ Interactive multiple-choice quiz with scoring. Uses `react-hook-form` for answer
 
 - `CourseCard` is used on the dashboard, courses listing, and bookmarks pages.
 - `CoursesFilter` is used on the courses listing page.
+- `LessonNav` is the course sidebar in the lesson viewer page (hidden on mobile).
 - `LessonViewer` is the primary component on the lesson detail page.

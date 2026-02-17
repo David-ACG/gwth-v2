@@ -26,6 +26,18 @@ import type {
   Note,
 } from "@/lib/types"
 
+const VideoPlayer = dynamic(
+  () =>
+    import("@/components/shared/video-player").then((m) => m.VideoPlayer),
+  { loading: () => <Skeleton className="aspect-video w-full rounded-lg" /> }
+)
+
+const AudioPlayer = dynamic(
+  () =>
+    import("@/components/shared/audio-player").then((m) => m.AudioPlayer),
+  { loading: () => <Skeleton className="h-20 w-full rounded-lg" /> }
+)
+
 const QuizEngine = dynamic(
   () => import("@/components/course/quiz-engine").then((m) => m.QuizEngine),
   { loading: () => <Skeleton className="h-64 w-full" /> }
@@ -144,33 +156,24 @@ export function LessonViewer({
         </TabsList>
 
         <TabsContent value="learn" className="mt-6 space-y-6">
-          {/* Video player placeholder */}
+          {/* Video player */}
           {lesson.introVideoUrl && (
-            <div className="flex aspect-video items-center justify-center rounded-lg bg-muted">
-              <p className="text-sm text-muted-foreground">
-                Video player placeholder
-              </p>
-            </div>
+            <VideoPlayer
+              src={lesson.introVideoUrl}
+              title={`${lesson.title} — Introduction`}
+            />
           )}
 
           {/* Lesson content */}
           <MarkdownRenderer content={lesson.learnContent} />
 
-          {/* Audio player placeholder */}
+          {/* Audio player */}
           {lesson.audioFileUrl && (
-            <div className="flex items-center gap-3 rounded-lg border bg-card p-4">
-              <div className="flex size-10 items-center justify-center rounded-full bg-primary/10">
-                <span className="text-sm">▶</span>
-              </div>
-              <div>
-                <p className="text-sm font-medium">Listen to this lesson</p>
-                <p className="text-xs text-muted-foreground">
-                  {lesson.audioDuration
-                    ? formatDuration(Math.round(lesson.audioDuration / 60))
-                    : "Audio available"}
-                </p>
-              </div>
-            </div>
+            <AudioPlayer
+              src={lesson.audioFileUrl}
+              title="Listen to this lesson"
+              duration={lesson.audioDuration ?? undefined}
+            />
           )}
 
           {/* Resources */}
@@ -197,11 +200,10 @@ export function LessonViewer({
         {lesson.buildInstructions && (
           <TabsContent value="build" className="mt-6 space-y-6">
             {lesson.buildVideoUrl && (
-              <div className="flex aspect-video items-center justify-center rounded-lg bg-muted">
-                <p className="text-sm text-muted-foreground">
-                  Build video placeholder
-                </p>
-              </div>
+              <VideoPlayer
+                src={lesson.buildVideoUrl}
+                title={`${lesson.title} — Build Along`}
+              />
             )}
             <MarkdownRenderer content={lesson.buildInstructions} />
           </TabsContent>

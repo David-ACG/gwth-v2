@@ -1,27 +1,37 @@
 "use client"
 
-import { useEffect, useState, useTransition } from "react"
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { Spinner } from "./spinner"
 
 /**
  * Route transition progress indicator.
  * Shows a top progress bar and small spinner during client-side navigation.
- * Visible in the top-right corner during page transitions.
+ * Detects route changes via render-time state comparison (React recommended pattern),
+ * then auto-dismisses after 500ms.
  */
 export function RouteProgress() {
   const pathname = usePathname()
-  const [isNavigating, setIsNavigating] = useState(false)
   const [prevPathname, setPrevPathname] = useState(pathname)
+  const [isNavigating, setIsNavigating] = useState(false)
 
+  // Render-time state derivation: detect when pathname prop changes.
+  // This is the React-recommended pattern for synchronizing derived state
+  // with props, avoiding the need for effects. See:
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname)
+    setIsNavigating(true)
+  }
+
+  // Auto-dismiss the indicator after 500ms.
+  // The setTimeout callback is asynchronous, so this is not a synchronous
+  // setState inside an effect.
   useEffect(() => {
-    if (pathname !== prevPathname) {
-      setPrevPathname(pathname)
-      setIsNavigating(true)
-      const timeout = setTimeout(() => setIsNavigating(false), 500)
-      return () => clearTimeout(timeout)
-    }
-  }, [pathname, prevPathname])
+    if (!isNavigating) return
+    const id = setTimeout(() => setIsNavigating(false), 500)
+    return () => clearTimeout(id)
+  }, [isNavigating])
 
   if (!isNavigating) return null
 
