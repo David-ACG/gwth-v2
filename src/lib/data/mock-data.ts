@@ -156,7 +156,7 @@ export const mockLessons: Lesson[] = [
     sectionId: "section_001",
     courseId: "course_001",
     courseSlug: "ai-fundamentals",
-    introVideoUrl: "https://example.com/videos/what-is-ai.mp4",
+    introVideoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     learnContent: `# What is Artificial Intelligence?
 
 Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn like humans.
@@ -189,8 +189,8 @@ predictions = model.predict(X_test)
 ## Summary
 
 AI is transforming every industry. In this course, you'll build a solid foundation to understand and work with AI systems.`,
-    audioFileUrl: "https://example.com/audio/what-is-ai.mp3",
-    audioDuration: 1500,
+    audioFileUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    audioDuration: 375,
     buildVideoUrl: null,
     buildInstructions: null,
     questions: [
@@ -236,7 +236,7 @@ AI is transforming every industry. In this course, you'll build a solid foundati
     sectionId: "section_002",
     courseId: "course_001",
     courseSlug: "ai-fundamentals",
-    introVideoUrl: "https://example.com/videos/supervised-learning.mp4",
+    introVideoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
     learnContent: `# Supervised Learning
 
 Supervised learning is the most common type of machine learning. The algorithm learns from labeled training data to make predictions on new, unseen data.
@@ -283,9 +283,9 @@ print(f"Predicted class: {prediction[0]}")
 | Precision/Recall | ✅ | ❌ |
 | MAE | ❌ | ✅ |
 | R² Score | ❌ | ✅ |`,
-    audioFileUrl: "https://example.com/audio/supervised-learning.mp3",
-    audioDuration: 2400,
-    buildVideoUrl: "https://example.com/videos/supervised-learning-build.mp4",
+    audioFileUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    audioDuration: 345,
+    buildVideoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
     buildInstructions: `## Build: Train a Classifier
 
 In this exercise, you'll train a decision tree classifier on the Iris dataset.

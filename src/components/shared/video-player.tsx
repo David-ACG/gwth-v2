@@ -1,10 +1,13 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Play, Pause, Maximize, Volume2, VolumeX, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
+
+/** How long to wait for the video to start loading before showing error (ms) */
+const LOAD_TIMEOUT = 8000
 
 interface VideoPlayerProps {
   /** URL of the video to play (MP4, YouTube embed, or other embeddable source) */
@@ -20,6 +23,9 @@ interface VideoPlayerProps {
 /**
  * Responsive video player wrapper with play/pause overlay, loading state,
  * and error fallback. Uses native HTML5 video for MP4 sources.
+ * Attaches media event listeners via useEffect for reliable error detection
+ * (React's onError doesn't reliably fire for media elements).
+ * Includes a timeout fallback for URLs that silently fail.
  * Designed to be loaded via next/dynamic for code-splitting.
  */
 export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps) {
@@ -30,6 +36,54 @@ export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps)
   const [hasError, setHasError] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [progress, setProgress] = useState(0)
+
+  // Attach media event listeners via native DOM API for reliable error detection.
+  // React's onError doesn't reliably fire for <video> / <audio> elements
+  // because media error events don't bubble.
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    function handleLoadedData() {
+      setIsLoading(false)
+    }
+
+    function handleError() {
+      setHasError(true)
+      setIsLoading(false)
+    }
+
+    function handleTimeUpdate() {
+      if (video && video.duration) {
+        setProgress((video.currentTime / video.duration) * 100)
+      }
+    }
+
+    function handleEnded() {
+      setIsPlaying(false)
+    }
+
+    video.addEventListener("loadeddata", handleLoadedData)
+    video.addEventListener("error", handleError)
+    video.addEventListener("timeupdate", handleTimeUpdate)
+    video.addEventListener("ended", handleEnded)
+
+    // Timeout fallback: if the video hasn't loaded after LOAD_TIMEOUT ms
+    // and readyState is still 0 (HAVE_NOTHING), treat as error
+    const timeout = setTimeout(() => {
+      if (video.readyState === 0) {
+        handleError()
+      }
+    }, LOAD_TIMEOUT)
+
+    return () => {
+      video.removeEventListener("loadeddata", handleLoadedData)
+      video.removeEventListener("error", handleError)
+      video.removeEventListener("timeupdate", handleTimeUpdate)
+      video.removeEventListener("ended", handleEnded)
+      clearTimeout(timeout)
+    }
+  }, [src])
 
   function handlePlayPause() {
     const video = videoRef.current
@@ -43,12 +97,6 @@ export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps)
       video.pause()
       setIsPlaying(false)
     }
-  }
-
-  function handleTimeUpdate() {
-    const video = videoRef.current
-    if (!video || !video.duration) return
-    setProgress((video.currentTime / video.duration) * 100)
   }
 
   function handleToggleMute() {
@@ -82,9 +130,14 @@ export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps)
           className
         )}
       >
-        <div className="flex flex-col items-center gap-2 text-muted-foreground">
-          <AlertCircle className="size-8" />
-          <p className="text-sm">Video failed to load</p>
+        <div className="flex flex-col items-center gap-3 text-muted-foreground">
+          <div className="flex size-12 items-center justify-center rounded-full bg-muted-foreground/10">
+            <AlertCircle className="size-6" />
+          </div>
+          <div className="text-center">
+            <p className="text-sm font-medium">Video unavailable</p>
+            <p className="mt-0.5 text-xs">This video could not be loaded.</p>
+          </div>
           <Button
             variant="outline"
             size="sm"
@@ -119,13 +172,6 @@ export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps)
         preload="metadata"
         className="aspect-video w-full"
         aria-label={title ?? "Video player"}
-        onLoadedData={() => setIsLoading(false)}
-        onError={() => {
-          setHasError(true)
-          setIsLoading(false)
-        }}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={() => setIsPlaying(false)}
         onClick={handlePlayPause}
       />
 

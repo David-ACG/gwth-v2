@@ -60,13 +60,22 @@ export function AudioPlayer({ src, title, duration: propDuration, className }: A
     audio.addEventListener("ended", handleEnded)
     audio.addEventListener("error", handleError)
 
+    // Timeout fallback: if audio hasn't loaded metadata after 8s, treat as error.
+    // Some URLs silently fail without firing the error event.
+    const timeout = setTimeout(() => {
+      if (audio.readyState === 0) {
+        handleError()
+      }
+    }, 8000)
+
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata)
       audio.removeEventListener("timeupdate", handleTimeUpdate)
       audio.removeEventListener("ended", handleEnded)
       audio.removeEventListener("error", handleError)
+      clearTimeout(timeout)
     }
-  }, [])
+  }, [src])
 
   function handlePlayPause() {
     const audio = audioRef.current
