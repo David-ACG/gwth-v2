@@ -4,6 +4,18 @@
  * The actual storage/API shape may differ; the data layer maps between them.
  */
 
+// ─── Subscription ────────────────────────────────────────────────────────────
+
+/** The 7 possible subscription states a user can be in */
+export type SubscriptionState =
+  | "visitor"
+  | "registered"
+  | "month1"
+  | "month2"
+  | "month3"
+  | "ongoing"
+  | "lapsed"
+
 // ─── User ─────────────────────────────────────────────────────────────────────
 
 /** Authenticated user profile */
@@ -18,12 +30,90 @@ export interface User {
   avatarUrl: string | null
   /** Short bio / about text */
   bio: string | null
-  /** Subscription plan tier */
-  plan: "free" | "pro" | "team"
+  /** Current subscription state */
+  subscriptionState: SubscriptionState
+  /** Which subscription month the user has paid through (0 = free, 1-3 = course months, 4+ = ongoing) */
+  subscriptionMonth: number
+  /** Grace period end date if payment lapsed, null otherwise */
+  gracePeriodEnds: Date | null
+  /** Date of last successful payment */
+  lastPaymentDate: Date | null
   /** When the user account was created */
   createdAt: Date
   /** When the user profile was last updated */
   updatedAt: Date
+}
+
+// ─── Dynamic Score ───────────────────────────────────────────────────────────
+
+/** Student's dynamic score and related metrics */
+export interface DynamicScore {
+  /** Overall score (1.5 pts per lesson, decays if content not reviewed) */
+  overallScore: number
+  /** Maximum possible score based on completed lessons */
+  maxPossibleScore: number
+  /** Percentile rank among all students (0-100) */
+  percentile: number
+  /** Curiosity Index: ratio of optional/advanced lessons explored */
+  curiosityIndex: number
+  /** Consistency Score: regularity of study sessions (0-100) */
+  consistencyScore: number
+  /** Improvement Rate: trend in quiz scores over time (-100 to 100) */
+  improvementRate: number
+  /** Score history over time for chart display */
+  scoreHistory: { date: Date; score: number }[]
+}
+
+// ─── Tech Radar ──────────────────────────────────────────────────────────────
+
+/** A tool tracked on the GWTH Tech Radar */
+export interface TechRadarTool {
+  /** Tool name */
+  name: string
+  /** URL-friendly slug */
+  slug: string
+  /** Version string */
+  version: string
+  /** Tool category (e.g., "LLM", "Automation", "AI Image") */
+  category: string
+  /** Release status */
+  status: "GA" | "Beta" | "Alpha" | "Deprecated" | "Research Preview"
+  /** Pricing model */
+  cost_tier: "free" | "freemium" | "paid" | "open_source"
+  /** Tool website URL */
+  url: string
+  /** Brief description */
+  description: string
+  /** Searchable tags */
+  tags: string[]
+  /** Whether this tool is currently trending/notable */
+  is_hot: boolean
+  /** When the tool entry was last verified */
+  last_verified: string
+}
+
+// ─── Month Configuration ─────────────────────────────────────────────────────
+
+/** Configuration for a course month */
+export interface MonthConfig {
+  /** Month number (1, 2, or 3) */
+  month: 1 | 2 | 3
+  /** Display title */
+  title: string
+  /** Subtitle shown on cards */
+  subtitle: string
+  /** Brief description */
+  description: string
+  /** Total mandatory lessons */
+  mandatoryLessons: number
+  /** Total optional lessons */
+  optionalLessons: number
+  /** Capstone project name */
+  capstoneName: string
+  /** Capstone project domain */
+  capstoneDomain: string
+  /** Capstone project description */
+  capstoneDescription: string
 }
 
 // ─── Course ───────────────────────────────────────────────────────────────────
@@ -66,6 +156,12 @@ export interface CourseSection {
   title: string
   /** Display order within the course */
   order: number
+  /** Which month this section belongs to (1, 2, or 3) */
+  month: 1 | 2 | 3
+  /** Whether this section contains optional lessons */
+  isOptional?: boolean
+  /** Optional track name (e.g., "Industry Verticals", "Advanced Technical") */
+  optionalTrack?: string
   /** Lessons belonging to this section */
   lessons: LessonSummary[]
 }
@@ -84,6 +180,10 @@ export interface LessonSummary {
   duration: number
   /** Current completion status for the viewing user */
   status: LessonStatus
+  /** Whether this is an optional lesson (Month 2 & 3 only) */
+  isOptional?: boolean
+  /** Optional track label (e.g., "Healthcare", "Career Accelerator") */
+  optionalTrack?: string
 }
 
 // ─── Lesson ───────────────────────────────────────────────────────────────────
@@ -115,6 +215,12 @@ export interface Lesson {
   courseId: string
   /** Slug of the course (for URL construction) */
   courseSlug: string
+  /** Which month this lesson belongs to */
+  month: 1 | 2 | 3
+  /** Whether this is an optional lesson */
+  isOptional?: boolean
+  /** Optional track label */
+  optionalTrack?: string
 
   // ── Learn tab content ──
   /** URL to the introductory video */

@@ -3,6 +3,7 @@ import {
   getAllCourseProgress,
   getAllLessonProgress,
   getStreak,
+  getDynamicScore,
 } from "@/lib/data/progress"
 import { getCourses } from "@/lib/data/courses"
 import { Card, CardContent } from "@/components/ui/card"
@@ -11,21 +12,30 @@ import { ProgressRing } from "@/components/progress/progress-ring"
 import { StudyStreakCalendar } from "@/components/progress/study-streak-calendar"
 import { EmptyState } from "@/components/shared/empty-state"
 import { Badge } from "@/components/ui/badge"
-import { BarChart3, Trophy } from "lucide-react"
+import {
+  BarChart3,
+  Trophy,
+  TrendingUp,
+  Brain,
+  Target,
+  Zap,
+} from "lucide-react"
 import { formatDuration, formatProgress, getGradeFromScore } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "Progress",
-  description: "Track your learning progress, streaks, and achievements.",
+  description: "Track your learning progress, dynamic score, and achievements.",
 }
 
 export default async function ProgressPage() {
-  const [courseProgress, lessonProgress, streak, courses] = await Promise.all([
-    getAllCourseProgress(),
-    getAllLessonProgress(),
-    getStreak(),
-    getCourses(),
-  ])
+  const [courseProgress, lessonProgress, streak, courses, dynamicScore] =
+    await Promise.all([
+      getAllCourseProgress(),
+      getAllLessonProgress(),
+      getStreak(),
+      getCourses(),
+      getDynamicScore(),
+    ])
 
   const totalTimeSpent = lessonProgress.reduce(
     (sum, lp) => sum + lp.timeSpent,
@@ -47,9 +57,68 @@ export default async function ProgressPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Progress</h1>
         <p className="mt-1 text-muted-foreground">
-          Track your learning journey
+          Track your learning journey and dynamic score
         </p>
       </div>
+
+      {/* Dynamic Score */}
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
+        <CardContent className="p-6">
+          <h2 className="text-lg font-semibold">Dynamic Score</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Your score reflects current competence. It grows as you learn and
+            decays if updated content is not reviewed.
+          </p>
+          <div className="mt-4 flex flex-col gap-6 sm:flex-row sm:items-center">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-primary">
+                {dynamicScore.overallScore}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                of {dynamicScore.maxPossibleScore} possible
+              </p>
+            </div>
+            <div className="flex-1 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1">
+                  <Target className="size-3.5 text-muted-foreground" />
+                  <span className="text-sm font-semibold">
+                    {dynamicScore.percentile}%
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">Percentile</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1">
+                  <Brain className="size-3.5 text-muted-foreground" />
+                  <span className="text-sm font-semibold">
+                    {Math.round(dynamicScore.curiosityIndex * 100)}%
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">Curiosity</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1">
+                  <Zap className="size-3.5 text-muted-foreground" />
+                  <span className="text-sm font-semibold">
+                    {dynamicScore.consistencyScore}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">Consistency</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1">
+                  <TrendingUp className="size-3.5 text-muted-foreground" />
+                  <span className="text-sm font-semibold">
+                    +{dynamicScore.improvementRate}%
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">Improvement</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Stats overview */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -70,7 +139,9 @@ export default async function ProgressPage() {
         <Card>
           <CardContent className="p-6">
             <p className="text-sm text-muted-foreground">Current Streak</p>
-            <p className="mt-1 text-3xl font-bold">{streak.currentStreak} days</p>
+            <p className="mt-1 text-3xl font-bold">
+              {streak.currentStreak} days
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -97,11 +168,14 @@ export default async function ProgressPage() {
           <EmptyState
             icon={BarChart3}
             title="No progress yet"
-            description="Start a course to track your progress here."
-            action={{ label: "Browse Courses", href: "/courses" }}
+            description="Start the course to track your progress here."
+            action={{
+              label: "Start the Course",
+              href: "/course/applied-ai-skills",
+            }}
           />
         ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4">
             {courseProgress.map((cp) => {
               const course = courses.find((c) => c.id === cp.courseId)
               if (!course) return null
@@ -137,8 +211,11 @@ export default async function ProgressPage() {
         <EmptyState
           icon={Trophy}
           title="No certificates yet"
-          description="Complete a course to earn your first certificate."
-          action={{ label: "View Courses", href: "/courses" }}
+          description="Complete the course to earn your certificate."
+          action={{
+            label: "Continue Learning",
+            href: "/course/applied-ai-skills",
+          }}
         />
       </section>
 
@@ -156,10 +233,11 @@ export default async function ProgressPage() {
                     <CardContent className="flex items-center justify-between p-4">
                       <div>
                         <p className="text-sm font-medium">
-                          Lesson {lp.lessonId.replace("lesson_", "#")}
+                          Lesson {lp.lessonId}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {lp.quizAttempts} attempts
+                          {lp.quizAttempts} attempt
+                          {lp.quizAttempts !== 1 ? "s" : ""}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">

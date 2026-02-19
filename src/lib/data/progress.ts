@@ -9,11 +9,13 @@ import type {
   CourseProgress,
   StudyStreak,
 } from "@/lib/types"
+import type { DynamicScore } from "@/lib/types"
 import {
   mockLessonProgress,
   mockLabProgress,
   mockCourseProgress,
   mockStudyStreak,
+  mockDynamicScore,
 } from "./mock-data"
 
 /**
@@ -98,4 +100,11 @@ export async function getAllCourseProgress(): Promise<CourseProgress[]> {
  */
 export async function getStreak(): Promise<StudyStreak> {
   return { ...mockStudyStreak }
+}
+
+/**
+ * Fetches the user's dynamic score data.
+ */
+export async function getDynamicScore(): Promise<DynamicScore> {
+  return { ...mockDynamicScore }
 }

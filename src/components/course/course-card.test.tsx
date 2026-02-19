@@ -21,6 +21,7 @@ const mockCourse: Course = {
       id: "s1",
       title: "Section 1",
       order: 1,
+      month: 1,
       lessons: [
         { id: "l1", slug: "l1", title: "Lesson 1", order: 1, duration: 30, status: "completed" },
         { id: "l2", slug: "l2", title: "Lesson 2", order: 2, duration: 30, status: "available" },

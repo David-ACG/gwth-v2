@@ -1,0 +1,1077 @@
+{
+  "tools": [
+    {
+      "name": "Claude Opus 4.6",
+      "slug": "claude-opus-4-6",
+      "version": "4.6",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://claude.ai",
+      "description": "Anthropic's most capable model. Extended thinking, vision, tool use. Powers Claude Code CLI.",
+      "tags": [
+        "llm",
+        "reasoning",
+        "coding",
+        "vision"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "GPT-5.3-Codex",
+      "slug": "gpt-5-3-codex",
+      "version": "5.3",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://openai.com",
+      "description": "OpenAI's flagship model with codex-level coding ability. Handles complex multi-step tasks.",
+      "tags": [
+        "llm",
+        "coding",
+        "reasoning"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "GPT-5.3-Codex-Spark",
+      "slug": "gpt-5-3-codex-spark",
+      "version": "5.3",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://openai.com",
+      "description": "Real-time coding model. 1,000+ tokens/sec on Cerebras Wafer Scale Engine 3. OpenAI's first production deployment away from NVIDIA. Research preview for ChatGPT Pro.",
+      "tags": [
+        "llm",
+        "coding",
+        "fast"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Gemini 3 Pro",
+      "slug": "gemini-3-pro",
+      "version": "3.0",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://gemini.google.com",
+      "description": "Google's latest flagship. State-of-the-art reasoning, multimodal, agentic capabilities. Gemini 3 Flash for speed, Gemini 3 Deep Think for science/research.",
+      "tags": [
+        "llm",
+        "multimodal",
+        "long-context"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Claude Cowork",
+      "slug": "claude-cowork",
+      "version": "",
+      "category": "Desktop Agent",
+      "status": "Research Preview",
+      "cost_tier": "paid",
+      "url": "https://claude.ai",
+      "description": "Anthropic's desktop agent. Can control your computer to complete tasks autonomously.",
+      "tags": [
+        "agent",
+        "desktop",
+        "automation"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "OpenClaw",
+      "slug": "openclaw",
+      "version": "",
+      "category": "Desktop Agent",
+      "status": "Beta",
+      "cost_tier": "open_source",
+      "url": "https://github.com/anthropics/openclaw",
+      "description": "Open-source desktop agent framework. 200K+ GitHub stars. Community-driven computer-use agent.",
+      "tags": [
+        "agent",
+        "desktop",
+        "open-source"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Claude Code",
+      "slug": "claude-code",
+      "version": "1.0",
+      "category": "CLI Coding Agent",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://docs.anthropic.com/en/docs/claude-code",
+      "description": "Anthropic's official CLI agent for coding. Runs in terminal, edits files, executes commands.",
+      "tags": [
+        "coding",
+        "agent",
+        "cli",
+        "terminal"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Cursor",
+      "slug": "cursor",
+      "version": "2.4.37",
+      "category": "AI-Native IDE",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://cursor.com",
+      "description": "AI-native code editor built on VS Code. Tab completion, chat, multi-file editing with Composer.",
+      "tags": [
+        "ide",
+        "coding",
+        "ai-native"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Windsurf",
+      "slug": "windsurf",
+      "version": "",
+      "category": "AI-Native IDE",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://windsurf.com",
+      "description": "AI-native IDE (formerly Codeium). Cascade flow for multi-file edits, strong autocomplete.",
+      "tags": [
+        "ide",
+        "coding",
+        "ai-native"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "GitHub Copilot",
+      "slug": "github-copilot",
+      "version": "",
+      "category": "AI-Native IDE",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://github.com/features/copilot",
+      "description": "GitHub's AI pair programmer. Inline completions, chat, and workspace agent in VS Code.",
+      "tags": [
+        "ide",
+        "coding",
+        "github"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Lovable",
+      "slug": "lovable",
+      "version": "",
+      "category": "No-Code Builder",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://lovable.dev",
+      "description": "AI-powered full-stack app builder. Generates React + Supabase apps from natural language prompts.",
+      "tags": [
+        "no-code",
+        "full-stack",
+        "react",
+        "supabase"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Bolt",
+      "slug": "bolt",
+      "version": "",
+      "category": "No-Code Builder",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://bolt.new",
+      "description": "StackBlitz's AI web app builder. Runs a full dev environment in the browser with AI coding.",
+      "tags": [
+        "no-code",
+        "web",
+        "stackblitz"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "v0",
+      "slug": "v0",
+      "version": "",
+      "category": "No-Code Builder",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://v0.dev",
+      "description": "Vercel's AI UI generator. Creates React components from text/image prompts with shadcn/ui.",
+      "tags": [
+        "no-code",
+        "ui",
+        "react",
+        "vercel"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Replit",
+      "slug": "replit",
+      "version": "",
+      "category": "No-Code Builder",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://replit.com",
+      "description": "Browser-based IDE with AI agent. Full deployment pipeline, collaborative coding, hosting included.",
+      "tags": [
+        "no-code",
+        "ide",
+        "hosting",
+        "collaborative"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "n8n",
+      "slug": "n8n",
+      "version": "2.9.0",
+      "category": "Automation",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://n8n.io",
+      "description": "Open-source workflow automation platform. Visual node editor, 400+ integrations, AI agent nodes.",
+      "tags": [
+        "automation",
+        "workflow",
+        "integrations",
+        "self-hosted"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Make.com",
+      "slug": "make-com",
+      "version": "",
+      "category": "Automation",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://make.com",
+      "description": "Visual automation platform (formerly Integromat). Complex workflows with branching and error handling.",
+      "tags": [
+        "automation",
+        "workflow",
+        "no-code"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Zapier",
+      "slug": "zapier",
+      "version": "",
+      "category": "Automation",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://zapier.com",
+      "description": "Most popular automation platform. 6,000+ app integrations, AI actions, simple trigger-action model.",
+      "tags": [
+        "automation",
+        "workflow",
+        "integrations"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Supabase",
+      "slug": "supabase",
+      "version": "",
+      "category": "Database",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://supabase.com",
+      "description": "Open-source Firebase alternative. PostgreSQL, auth, storage, realtime, edge functions.",
+      "tags": [
+        "database",
+        "auth",
+        "backend",
+        "postgres"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "SQLite",
+      "slug": "sqlite",
+      "version": "3.x",
+      "category": "Database",
+      "status": "GA",
+      "cost_tier": "free",
+      "url": "https://sqlite.org",
+      "description": "Embedded SQL database. Zero-config, serverless, self-contained. Perfect for local-first apps.",
+      "tags": [
+        "database",
+        "embedded",
+        "local-first"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "PostgreSQL",
+      "slug": "postgresql",
+      "version": "17",
+      "category": "Database",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://postgresql.org",
+      "description": "Enterprise-grade relational database. Full SQL compliance, JSON support, extensible with pgvector.",
+      "tags": [
+        "database",
+        "relational",
+        "enterprise"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Qdrant",
+      "slug": "qdrant",
+      "version": "1.16",
+      "category": "Vector Database",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://qdrant.tech",
+      "description": "High-performance vector database. Rust-based, supports filtering, embedded mode for local use.",
+      "tags": [
+        "vector-db",
+        "rag",
+        "embeddings",
+        "rust"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Pinecone",
+      "slug": "pinecone",
+      "version": "",
+      "category": "Vector Database",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://pinecone.io",
+      "description": "Managed vector database. Serverless, fast similarity search, built for production RAG pipelines.",
+      "tags": [
+        "vector-db",
+        "rag",
+        "managed",
+        "serverless"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "ChromaDB",
+      "slug": "chromadb",
+      "version": "",
+      "category": "Vector Database",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://trychroma.com",
+      "description": "Simple open-source vector database. Python-native, great for prototyping RAG applications.",
+      "tags": [
+        "vector-db",
+        "rag",
+        "python",
+        "simple"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Vercel",
+      "slug": "vercel",
+      "version": "",
+      "category": "Hosting",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://vercel.com",
+      "description": "Frontend deployment platform. Next.js native, edge functions, preview deployments, analytics.",
+      "tags": [
+        "hosting",
+        "deployment",
+        "nextjs",
+        "edge"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Railway",
+      "slug": "railway",
+      "version": "",
+      "category": "Hosting",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://railway.app",
+      "description": "Simple cloud deployment. Auto-scaling, databases, cron jobs. Great for full-stack and backend apps.",
+      "tags": [
+        "hosting",
+        "deployment",
+        "backend",
+        "databases"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Netlify",
+      "slug": "netlify",
+      "version": "",
+      "category": "Hosting",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://netlify.com",
+      "description": "Web deployment platform. Edge functions, forms, identity, deploy previews.",
+      "tags": [
+        "hosting",
+        "deployment",
+        "jamstack"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Perplexity",
+      "slug": "perplexity",
+      "version": "",
+      "category": "Research",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://perplexity.ai",
+      "description": "AI-powered search engine. Real-time web search with citations, multi-step research, focus modes.",
+      "tags": [
+        "search",
+        "research",
+        "citations"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "ChatGPT",
+      "slug": "chatgpt",
+      "version": "",
+      "category": "Research",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://chat.openai.com",
+      "description": "OpenAI's conversational AI. Web browsing, code execution, image generation, plugins ecosystem.",
+      "tags": [
+        "chat",
+        "research",
+        "general-purpose"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "ElevenLabs",
+      "slug": "elevenlabs",
+      "version": "Eleven v3",
+      "category": "AI Voice",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://elevenlabs.io",
+      "description": "Leading AI voice platform. Voice cloning, text-to-speech, Eleven v3 model with natural prosody.",
+      "tags": [
+        "tts",
+        "voice",
+        "cloning",
+        "audio"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Kokoro",
+      "slug": "kokoro",
+      "version": "",
+      "category": "AI Voice",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://github.com/hexgrad/kokoro",
+      "description": "Open-source TTS engine. 67 voices, GPU-accelerated, word-level timestamps. Self-hosted on P520.",
+      "tags": [
+        "tts",
+        "voice",
+        "open-source",
+        "self-hosted"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Midjourney",
+      "slug": "midjourney",
+      "version": "V7",
+      "category": "AI Image",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://midjourney.com",
+      "description": "Premier AI image generator. V7 with enhanced photorealism, style control, and web editor.",
+      "tags": [
+        "image",
+        "art",
+        "generation"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "FLUX.2",
+      "slug": "flux-2",
+      "version": "2",
+      "category": "AI Image",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://blackforestlabs.ai",
+      "description": "Black Forest Labs' latest image model. Open weights, fast generation, strong text rendering.",
+      "tags": [
+        "image",
+        "open-source",
+        "text-rendering"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Ideogram 3.0",
+      "slug": "ideogram-3-0",
+      "version": "3.0",
+      "category": "AI Image",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://ideogram.ai",
+      "description": "AI image generator with best-in-class text rendering. Great for logos, posters, and design work.",
+      "tags": [
+        "image",
+        "text-rendering",
+        "design"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "NanoBanana",
+      "slug": "nanobanana",
+      "version": "",
+      "category": "AI Image",
+      "status": "Beta",
+      "cost_tier": "free",
+      "url": "https://nanobanana.ai",
+      "description": "Emerging AI image platform with novel architecture. Fast generation, unique style capabilities.",
+      "tags": [
+        "image",
+        "emerging",
+        "fast"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Suno",
+      "slug": "suno",
+      "version": "V5",
+      "category": "AI Music",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://suno.com",
+      "description": "AI music generation. Create full songs from text prompts, V5 with improved vocals and instruments.",
+      "tags": [
+        "music",
+        "audio",
+        "generation"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Udio",
+      "slug": "udio",
+      "version": "",
+      "category": "AI Music",
+      "status": "Beta",
+      "cost_tier": "free",
+      "url": "https://udio.com",
+      "description": "AI music creation with high-fidelity output. Extended tracks, style control, remix capabilities.",
+      "tags": [
+        "music",
+        "audio",
+        "generation"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Runway Gen-4.5",
+      "slug": "runway-gen-4-5",
+      "version": "Gen-4.5",
+      "category": "AI Video",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://runwayml.com",
+      "description": "Leading AI video generator. Image-to-video, text-to-video, motion brush, camera controls.",
+      "tags": [
+        "video",
+        "generation",
+        "motion"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Kling 3.0",
+      "slug": "kling-3-0",
+      "version": "3.0",
+      "category": "AI Video",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://klingai.com",
+      "description": "Kuaishou's AI video model. Long-form generation, motion control, virtual try-on features.",
+      "tags": [
+        "video",
+        "generation",
+        "chinese-ai"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Sora",
+      "slug": "sora",
+      "version": "",
+      "category": "AI Video",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://sora.com",
+      "description": "OpenAI's video generation model. Text-to-video, storyboarding, remix capabilities.",
+      "tags": [
+        "video",
+        "generation",
+        "openai"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "LangGraph",
+      "slug": "langgraph",
+      "version": "1.0.6",
+      "category": "Multi-Agent Framework",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://langchain-ai.github.io/langgraph/",
+      "description": "Framework for building multi-agent systems. Graph-based workflows, state management, human-in-the-loop.",
+      "tags": [
+        "agents",
+        "multi-agent",
+        "framework",
+        "langchain"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "CrewAI",
+      "slug": "crewai",
+      "version": "",
+      "category": "Multi-Agent Framework",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://crewai.com",
+      "description": "Role-based multi-agent framework. Agents with roles, goals, and backstories collaborate on tasks.",
+      "tags": [
+        "agents",
+        "multi-agent",
+        "framework",
+        "roles"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "AWS Strands Agents",
+      "slug": "aws-strands-agents",
+      "version": "",
+      "category": "Multi-Agent Framework",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://github.com/strands-agents/sdk-python",
+      "description": "AWS's open-source agent SDK. Simple model-driven approach, tool integration, multi-agent orchestration.",
+      "tags": [
+        "agents",
+        "aws",
+        "framework",
+        "open-source"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "OpenAI Agents SDK",
+      "slug": "openai-agents-sdk",
+      "version": "",
+      "category": "Multi-Agent Framework",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://github.com/openai/openai-agents-python",
+      "description": "OpenAI's agent building SDK. Handoffs, guardrails, tracing. Lightweight alternative to LangChain.",
+      "tags": [
+        "agents",
+        "openai",
+        "framework"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "GitHub",
+      "slug": "github",
+      "version": "",
+      "category": "Infrastructure",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://github.com",
+      "description": "Code hosting and collaboration platform. Git repos, Actions CI/CD, Issues, Projects, Copilot.",
+      "tags": [
+        "git",
+        "ci-cd",
+        "collaboration"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Stripe",
+      "slug": "stripe",
+      "version": "",
+      "category": "Infrastructure",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://stripe.com",
+      "description": "Payment processing platform. Subscriptions, invoicing, checkout, Connect for marketplaces.",
+      "tags": [
+        "payments",
+        "billing",
+        "subscriptions"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Sentry",
+      "slug": "sentry",
+      "version": "",
+      "category": "Infrastructure",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://sentry.io",
+      "description": "Error monitoring and performance tracking. Stack traces, breadcrumbs, release tracking.",
+      "tags": [
+        "monitoring",
+        "errors",
+        "performance"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Docker",
+      "slug": "docker",
+      "version": "",
+      "category": "Infrastructure",
+      "status": "GA",
+      "cost_tier": "freemium",
+      "url": "https://docker.com",
+      "description": "Container platform. Build, ship, and run applications in isolated environments.",
+      "tags": [
+        "containers",
+        "devops",
+        "deployment"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Claude Sonnet 4.6",
+      "slug": "claude-sonnet-4-6",
+      "version": "4.6",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://claude.ai",
+      "description": "Opus-level reasoning at Sonnet cost. Released Feb 17, 2026. Now the default model for Free and Pro users. 1M context window (beta).",
+      "tags": [
+        "llm",
+        "reasoning",
+        "coding",
+        "cost-efficient"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Claude Haiku 4.5",
+      "slug": "claude-haiku-4-5",
+      "version": "4.5",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "https://claude.ai",
+      "description": "Fastest, cheapest Claude model. Ideal for classification, routing, simple extraction. Enterprise cost optimisation layer.",
+      "tags": [
+        "llm",
+        "fast",
+        "cost-efficient",
+        "classification"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "DeepSeek V3.2",
+      "slug": "deepseek-v3-2",
+      "version": "3.2",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://github.com/deepseek-ai/DeepSeek-V3",
+      "description": "MIT-licensed frontier model. 685B total / 37B active (MoE). Matches proprietary models on reasoning and coding. Self-hostable. Chinese AI leader.",
+      "tags": [
+        "llm",
+        "open-source",
+        "reasoning",
+        "self-hosted",
+        "chinese-ai"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Qwen3",
+      "slug": "qwen3",
+      "version": "3.0",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://huggingface.co/Qwen",
+      "description": "Alibaba's frontier open model. Apache 2.0. Sizes from 8B to 1T+ (MoE). 119 languages. Qwen3-Coder-Next 80B matches Claude Sonnet 4.6 on coding. Hybrid thinking modes.",
+      "tags": [
+        "llm",
+        "open-source",
+        "multilingual",
+        "coding",
+        "self-hosted",
+        "chinese-ai"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Mistral Large 3",
+      "slug": "mistral-large-3",
+      "version": "3.0",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://mistral.ai",
+      "description": "Apache 2.0. 675B total / 41B active (MoE). Trained on 3000 H200 GPUs. #2 on LMArena (OSS non-reasoning). 40+ languages. European AI leader.",
+      "tags": [
+        "llm",
+        "open-source",
+        "multilingual",
+        "european",
+        "self-hosted"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Llama 4",
+      "slug": "llama-4",
+      "version": "4.0",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://llama.com",
+      "description": "Meta's open model family. Scout: 17B active, 16 experts, industry-leading 10M context window. Maverick: 128 experts, beats GPT-4o. Natively multimodal. Llama Community License.",
+      "tags": [
+        "llm",
+        "open-source",
+        "multimodal",
+        "long-context",
+        "self-hosted"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Devstral 2",
+      "slug": "devstral-2",
+      "version": "2.0",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://mistral.ai/news/devstral-2-vibe-cli",
+      "description": "Mistral's open-source coding model. 123B and 24B sizes. 72.2% on SWE-bench Verified. Apache 2.0. Strong alternative to proprietary coding models.",
+      "tags": [
+        "llm",
+        "open-source",
+        "coding",
+        "self-hosted"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Claude Agent SDK",
+      "slug": "claude-agent-sdk",
+      "version": "1.0",
+      "category": "Multi-Agent Framework",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://github.com/anthropics/claude-agent-sdk-python",
+      "description": "Anthropic's production-grade agent framework. Same tools, agent loop, and context management powering Claude Code. Python and TypeScript. MCP integration for external services.",
+      "tags": [
+        "agents",
+        "framework",
+        "anthropic",
+        "mcp",
+        "production"
+      ],
+      "is_hot": true,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Ollama",
+      "slug": "ollama",
+      "version": "0.6",
+      "category": "Local LLM Runtime",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://ollama.com",
+      "description": "The 'Docker for LLMs'. One command to download and run any model. OpenAI-compatible API. Auto-detects hardware (GPU/CPU). macOS, Linux, Windows.",
+      "tags": [
+        "local-ai",
+        "self-hosted",
+        "inference",
+        "privacy"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "vLLM",
+      "slug": "vllm",
+      "version": "0.7",
+      "category": "Local LLM Runtime",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://github.com/vllm-project/vllm",
+      "description": "Production-grade LLM inference engine. PagedAttention reduces memory fragmentation 40%+. 19x throughput vs Ollama at scale. Use for 10+ concurrent users.",
+      "tags": [
+        "local-ai",
+        "self-hosted",
+        "inference",
+        "production",
+        "high-throughput"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "LM Studio",
+      "slug": "lm-studio",
+      "version": "0.3",
+      "category": "Local LLM Runtime",
+      "status": "GA",
+      "cost_tier": "free",
+      "url": "https://lmstudio.ai",
+      "description": "GUI-based local LLM runner. Download, configure, and chat with models visually. Perfect for non-technical users who need local AI. Cross-platform.",
+      "tags": [
+        "local-ai",
+        "self-hosted",
+        "gui",
+        "beginner-friendly"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "Voxtral Transcribe 2",
+      "slug": "voxtral-transcribe-2",
+      "version": "2.0",
+      "category": "AI Voice",
+      "status": "GA",
+      "cost_tier": "open_source",
+      "url": "https://mistral.ai",
+      "description": "Mistral's open-source speech-to-text model. Runs on-device. 13 languages. Low cost (pennies per hour). Apache 2.0.",
+      "tags": [
+        "stt",
+        "speech",
+        "open-source",
+        "on-device",
+        "multilingual"
+      ],
+      "is_hot": false,
+      "last_verified": "2026-02-17"
+    },
+    {
+      "name": "seedance 2.0",
+      "slug": "seedance-2-0",
+      "version": "2",
+      "category": "LLM",
+      "status": "GA",
+      "cost_tier": "paid",
+      "url": "",
+      "description": "",
+      "tags": [],
+      "is_hot": true,
+      "last_verified": "2026-02-18"
+    }
+  ],
+  "categories": [
+    "LLM",
+    "Desktop Agent",
+    "CLI Coding Agent",
+    "AI-Native IDE",
+    "No-Code Builder",
+    "Automation",
+    "Database",
+    "Vector Database",
+    "Hosting",
+    "Research",
+    "AI Voice",
+    "AI Image",
+    "AI Music",
+    "AI Video",
+    "Multi-Agent Framework",
+    "Infrastructure",
+    "Local LLM Runtime"
+  ],
+  "exported_at": "2026-02-19T20:32:03.153888"
+}

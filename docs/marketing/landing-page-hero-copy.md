@@ -35,7 +35,7 @@ Explore the free labs
 
 ### Section Intro
 
-Every lesson ends with a hands-on project you build yourself. Then every lesson ends with a video walkthrough where the instructor takes you through that project step by step — so you completely understand every decision, every technique, and every best practice. You are never left guessing. You are never stuck.
+Every lesson ends with a hands-on project you build yourself. Then project ends with a video walkthrough where the instructor takes you through that project step by step — so you completely understand every decision, every technique, and every best practice. You are never left guessing. You are never stuck.
 
 **94 projects across three months.** Not quizzes about transformer architecture. Not slide decks about large language models. Real things you build, use, and show to people.
 

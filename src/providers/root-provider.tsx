@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@/providers/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { DevStateSwitcher } from "@/components/dev/state-switcher"
 
 /**
  * Composes all application-level providers.
@@ -10,6 +11,7 @@ export function RootProvider({ children }: { children: React.ReactNode }) {
     <ThemeProvider>
       <TooltipProvider delayDuration={300}>
         {children}
+        <DevStateSwitcher />
       </TooltipProvider>
     </ThemeProvider>
   )

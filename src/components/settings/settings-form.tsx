@@ -40,7 +40,7 @@ export function SettingsForm() {
     },
   })
 
-  function onSubmit(_data: SettingsFormData) {
+  function onSubmit() {
     toast.success("Settings saved")
   }
 

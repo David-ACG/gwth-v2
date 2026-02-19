@@ -28,7 +28,7 @@ export function LoginForm() {
     defaultValues: { email: "", password: "" },
   })
 
-  async function onSubmit(_data: LoginFormData) {
+  async function onSubmit() {
     // Mock login — always succeeds
     toast.success("Welcome back!")
     router.push("/dashboard")

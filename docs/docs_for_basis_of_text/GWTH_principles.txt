@@ -1,0 +1,30 @@
+Principles for GWTH
+
+- Focussed on applied AI - Only tell you what you need to know to improve your application of AI
+Interesting facts are put in an optional lessons
+- Each lesson has a project section that we then walk through with a video - the fastest way to learn practical skills and far better than traditional courses.
+- Gives you a score based on how much of the course you have completed. If you are in the top 1% you will have a score of 100. Each lesson gives you 1.5 points towards your score and you can get aa score over 100 if you complete optional lessons. However, you will lose points when lessons get updated and you have not reviewed the new content 2 weeks after publishing. This is so employers and customers value the certification instead of wondering if it is 3 years old, which is a lifetime in AI terms.
+    - Dynamic scoring so you are always up to date and encourages continuous learning
+- You can easily put your score on LinkedIn to show prospective employers and customers your expertise in a simple and trustworthy way
+- Research shows that on average we are more scared than excited about AI. We want to put you in the driving seat so you don’t need to be scared as you have full control. You can give the course to your employees or your children and help protect them from being replaced by AI.
+- Flexible enough to accommodate different industries, sizes of company, departments and levels
+- Designed to be really fun and easy to use so students actually want to learn AI using our platform
+- Hard enough to be a valuable challenge and worth having yet straight forward enough to encourage a wide audience
+- No writing code - even for our most ambitious projects. Students don’t need to learn Python or Javascript or any other language. Everything is done by typing or speaking in plain English.
+- We assume no prior knowledge. If you can write a doc or create slides you are qualified.
+- We are totally independent and don’t have any adverts or sponsors, so you don’t need to worry about bias. We compare services from all companies, not just the big ones.
+- One course, not many courses that duplicate sections and work and may contradict each other
+- Low price that discounts after 3 months - $37.50 each month for 3 months and then $7.50 onward
+- No discount codes. If you don’t think your friends of colleagues would benefit from knowing about the course we don’t want to mask the problem by giving discount codes. We have priced the course as low as possible and want you to tell us how you think we should improve it enough for you to recommend us without discount codes.
+- We keep the course constantly up to date and built in tools from the start to keep the course up to date
+- we test multiple tools all the time and then recommend the best one for you At the moment so you don’t have to test, but you always understand what alternatives are out there and why we made certain recommendations
+- We have 25 years of experience in solution architecture, including at one the largest cloud provider in the world where we helped design hundreds of solutions for customers so we can therefore recommend the best stack for the many projects you will create
+- Teach you to build an Agentic Mindset - Core Concept: Moving from "prompt → output" to "prompt → evaluate → improve → repeat
+- Only 5 hours a week, which should ideally be completed in work hours to reduce fatigue
+- Covers both soft and hard skills so you can choose which to concentrate on
+- Provides you with enough examples of AI expertise to impress any employer or customer. Talks you through showing off your new portfolio of solutions you have built.
+- As well as an overall score we give you several others to help you benchmark yourself:
+AI Skill Percentile - How your composite score compares to others
+Curiosity Index - How often you explore optional or advanced lessons
+Consistency Score - How regularly you learn and complete lessons
+Improvement Rate - How your performance trends over time

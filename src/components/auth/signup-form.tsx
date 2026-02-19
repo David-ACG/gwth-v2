@@ -28,7 +28,7 @@ export function SignupForm() {
     defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
   })
 
-  async function onSubmit(_data: SignupFormData) {
+  async function onSubmit() {
     // Mock signup — always succeeds
     toast.success("Account created! Welcome to GWTH.ai")
     router.push("/dashboard")

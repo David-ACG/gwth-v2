@@ -23,7 +23,7 @@ import { SIDEBAR_WIDTH, SIDEBAR_COLLAPSED_WIDTH } from "@/lib/config"
 
 const mainNavItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/courses", label: "Courses", icon: BookOpen },
+  { href: "/course/applied-ai-skills", label: "The Course", icon: BookOpen },
   { href: "/labs", label: "Labs", icon: FlaskConical },
   { href: "/progress", label: "Progress", icon: BarChart3 },
 ]

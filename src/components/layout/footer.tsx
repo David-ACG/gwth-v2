@@ -6,14 +6,16 @@ const footerLinks = [
     title: "Product",
     links: [
       { href: "/pricing", label: "Pricing" },
-      { href: "/about", label: "About" },
+      { href: "/for-teams", label: "For Teams" },
+      { href: "/tech-radar", label: "Tech Radar" },
     ],
   },
   {
-    title: "Resources",
+    title: "Learn",
     links: [
-      { href: "/courses", label: "Courses" },
-      { href: "/labs", label: "Labs" },
+      { href: "/labs", label: "Free Labs" },
+      { href: "/newsletter", label: "Newsletter" },
+      { href: "/about", label: "About GWTH" },
     ],
   },
   {
@@ -27,7 +29,7 @@ const footerLinks = [
 
 /**
  * Site footer for public pages.
- * Shows logo, organized link columns, and copyright.
+ * Shows logo, tagline, organized link columns, and copyright.
  */
 export function Footer() {
   return (
@@ -39,8 +41,8 @@ export function Footer() {
               {APP_NAME}
             </Link>
             <p className="mt-2 text-sm text-muted-foreground">
-              Master AI development with hands-on courses, labs, and
-              real-world projects.
+              Learn to build apps, automate workflows, and solve real problems
+              using AI — all in plain English. No coding required.
             </p>
           </div>
           {footerLinks.map((group) => (
@@ -61,8 +63,15 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+        <div className="mt-12 border-t pt-8">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p className="text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Independent. No sponsors. No ads. No vendor partnerships.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

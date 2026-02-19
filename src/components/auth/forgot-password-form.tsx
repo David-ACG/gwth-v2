@@ -29,7 +29,7 @@ export function ForgotPasswordForm() {
     defaultValues: { email: "" },
   })
 
-  async function onSubmit(_data: ForgotPasswordFormData) {
+  async function onSubmit() {
     // Mock reset — always succeeds
     toast.success("Check your email for a reset link")
     form.reset()

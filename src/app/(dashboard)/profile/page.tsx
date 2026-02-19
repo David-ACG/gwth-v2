@@ -38,7 +38,7 @@ export default async function ProfilePage() {
               <p className="text-sm text-muted-foreground">{user.email}</p>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="capitalize">
-                  {user.plan} plan
+                  {user.subscriptionState === "registered" ? "Free" : user.subscriptionState}
                 </Badge>
                 <span className="text-xs text-muted-foreground">
                   Member since {formatDate(user.createdAt)}

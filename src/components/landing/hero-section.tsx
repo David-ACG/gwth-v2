@@ -5,65 +5,39 @@ import Image from "next/image"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Radar } from "lucide-react"
 
 /**
- * Animated hero section with cascading blurred spiral layers, gradient text, and CTAs.
- * Spirals rotate at different speeds and directions for a depth-of-field effect.
- * Respects prefers-reduced-motion.
+ * Animated hero section with cascading blurred spiral layers, GWTH headline, and CTAs.
+ * Copy from design-requirements: "Stop watching AI change the world. Start building with it."
  */
 export function HeroSection() {
   const prefersReduced = useReducedMotion()
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+    <section className="relative flex min-h-[90vh] items-center overflow-hidden">
       {/* Subtle gradient backdrop */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
-      {/* Cascading spiral layers — different blur levels, speeds, and directions */}
+      {/* Cascading spiral layers */}
       {!prefersReduced && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-          {/* Layer 1 — furthest back, most blurred, slowest */}
-          <div className="absolute top-[-20%] right-[-30%] w-[800px] h-[800px] animate-[spin_120s_linear_infinite]">
-            <Image
-              src="/logo-spiral-blur-25.svg"
-              alt=""
-              fill
-              className="object-contain opacity-12 dark:opacity-8"
-              priority
-            />
+          <div className="absolute top-[-20%] right-[-30%] h-[800px] w-[800px] animate-[spin_120s_linear_infinite]">
+            <Image src="/logo-spiral-blur-25.svg" alt="" fill className="object-contain opacity-12 dark:opacity-8" priority />
           </div>
-          {/* Layer 2 — reverse rotation */}
-          <div className="absolute top-[-5%] right-[-15%] w-[650px] h-[650px] animate-[spin_80s_linear_infinite_reverse]">
-            <Image
-              src="/logo-spiral-blur-18.svg"
-              alt=""
-              fill
-              className="object-contain opacity-18 dark:opacity-12"
-            />
+          <div className="absolute top-[-5%] right-[-15%] h-[650px] w-[650px] animate-[spin_80s_linear_infinite_reverse]">
+            <Image src="/logo-spiral-blur-18.svg" alt="" fill className="object-contain opacity-18 dark:opacity-12" />
           </div>
-          {/* Layer 3 */}
-          <div className="absolute top-[10%] right-[0%] w-[500px] h-[500px] animate-[spin_55s_linear_infinite]">
-            <Image
-              src="/logo-spiral-blur-12.svg"
-              alt=""
-              fill
-              className="object-contain opacity-25 dark:opacity-18"
-            />
+          <div className="absolute top-[10%] right-[0%] h-[500px] w-[500px] animate-[spin_55s_linear_infinite]">
+            <Image src="/logo-spiral-blur-12.svg" alt="" fill className="object-contain opacity-25 dark:opacity-18" />
           </div>
-          {/* Layer 4 — closest, sharpest, fastest */}
-          <div className="absolute top-[20%] right-[10%] w-[380px] h-[380px] animate-[spin_40s_linear_infinite_reverse]">
-            <Image
-              src="/logo-spiral-blur-6.svg"
-              alt=""
-              fill
-              className="object-contain opacity-30 dark:opacity-22"
-            />
+          <div className="absolute top-[20%] right-[10%] h-[380px] w-[380px] animate-[spin_40s_linear_infinite_reverse]">
+            <Image src="/logo-spiral-blur-6.svg" alt="" fill className="object-contain opacity-30 dark:opacity-22" />
           </div>
         </div>
       )}
 
-      <div className="relative z-10 mx-auto max-w-5xl px-4 py-20 md:py-32 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 py-20 sm:px-6 md:py-32 lg:px-8">
         <div className="max-w-2xl">
           <motion.div
             initial={prefersReduced ? undefined : { opacity: 0, y: 20 }}
@@ -71,22 +45,26 @@ export function HeroSection() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              Learn to Build with{" "}
-              <span className="text-gradient">
-                Artificial Intelligence
-              </span>
+              Stop watching AI change the world.{" "}
+              <span className="text-gradient">Start building with it.</span>
             </h1>
           </motion.div>
 
-          <motion.p
-            className="mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl"
+          <motion.div
             initial={prefersReduced ? undefined : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
           >
-            Master AI development with hands-on courses, real-world labs, and
-            interactive quizzes. From fundamentals to production-ready applications.
-          </motion.p>
+            <p className="mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
+              Learn to build apps, automate workflows, research faster, create content,
+              analyse data, and solve real problems using AI — all in plain English.
+              No coding. No theory. Just the applied skills employers are hiring for right now.
+            </p>
+            <p className="mt-4 max-w-xl text-base text-muted-foreground">
+              One course. Three months to get started. Five hours a week. Updated every day
+              so your skills never go stale.
+            </p>
+          </motion.div>
 
           <motion.div
             className="mt-10 flex flex-col gap-4 sm:flex-row"
@@ -96,12 +74,15 @@ export function HeroSection() {
           >
             <Button size="lg" className="gap-2" asChild>
               <Link href="/signup">
-                Start Learning
+                Create Free Account
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/courses">Browse Courses</Link>
+            <Button size="lg" variant="outline" className="gap-2" asChild>
+              <Link href="/tech-radar">
+                <Radar className="size-4" />
+                Explore the Tech Radar
+              </Link>
             </Button>
           </motion.div>
         </div>
@@ -114,9 +95,9 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 0.45 }}
         >
           {[
-            { value: "15+", label: "Lessons" },
-            { value: "5", label: "Hands-on Labs" },
-            { value: "3", label: "Full Courses" },
+            { value: "94", label: "Hands-on Projects" },
+            { value: "47+", label: "AI Tools Tracked" },
+            { value: "3", label: "Months to Get Started" },
           ].map((stat) => (
             <div key={stat.label}>
               <div className="text-3xl font-bold text-primary sm:text-4xl">

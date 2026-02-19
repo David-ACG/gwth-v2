@@ -4,6 +4,8 @@
  * are centralized here to avoid scattering them across components.
  */
 
+import type { MonthConfig } from "@/lib/types"
+
 // ─── Layout Dimensions ────────────────────────────────────────────────────────
 
 /** Sidebar width in pixels when fully expanded */
@@ -69,6 +71,77 @@ export const APP_URL = "https://gwth.ai"
 /** Support email address */
 export const SUPPORT_EMAIL = "support@gwth.ai"
 
+/** Teams/enterprise contact email */
+export const TEAMS_EMAIL = "teams@gwth.ai"
+
+// ─── Subscription & Pricing ──────────────────────────────────────────────────
+
+/** Monthly price during the 3-month course (USD) */
+export const COURSE_MONTHLY_PRICE = 37.5
+
+/** Monthly price for ongoing access after course completion (USD) */
+export const ONGOING_MONTHLY_PRICE = 7.5
+
+/** Number of days in the grace period after a payment failure */
+export const GRACE_PERIOD_DAYS = 14
+
+/** Days at which payment reminder emails are sent during grace period */
+export const PAYMENT_REMINDER_DAYS = [1, 7, 12] as const
+
+/** Total number of course months */
+export const TOTAL_COURSE_MONTHS = 3
+
+/** Points earned per completed lesson */
+export const POINTS_PER_LESSON = 1.5
+
+/** Score decay period — days after content update before score starts decaying */
+export const SCORE_DECAY_DAYS = 14
+
+// ─── Course Structure ────────────────────────────────────────────────────────
+
+/** Configuration for each month of the course */
+export const MONTH_CONFIGS: MonthConfig[] = [
+  {
+    month: 1,
+    title: "From Zero to Building",
+    subtitle: "AI for Your Life",
+    description:
+      "Go from your first AI conversation to building real, working tools — apps, websites, dashboards, research projects, content packages, AI assistants, and automations — by typing plain English descriptions of what you want.",
+    mandatoryLessons: 24,
+    optionalLessons: 0,
+    capstoneName: "Family AI Bot",
+    capstoneDomain: "familyaibot.com",
+    capstoneDescription:
+      "Record your weekly family meeting. AI transcribes it, extracts tasks, books calendar events, creates a meal plan, and generates a shopping list. Automatically.",
+  },
+  {
+    month: 2,
+    title: "Building Real Apps",
+    subtitle: "AI for Your Industry",
+    description:
+      "Build for the real world. Choose your industry — healthcare, legal, finance, travel, creative, marketing, or HR — and build applications that solve actual problems in that field.",
+    mandatoryLessons: 20,
+    optionalLessons: 15,
+    capstoneName: "AI Customer-Support Chatbot",
+    capstoneDomain: "askmyco.com",
+    capstoneDescription:
+      "A production-grade chatbot trained on real business data. The kind of thing companies pay consultants thousands to build.",
+  },
+  {
+    month: 3,
+    title: "Enterprise AI & Multi-Agent Systems",
+    subtitle: "AI Transformation",
+    description:
+      "Go from individual contributor to the person who can lead an AI transformation. Multi-agent systems. Self-hosted AI. Governance frameworks. The strategic layer that separates someone who uses AI from someone who deploys it.",
+    mandatoryLessons: 20,
+    optionalLessons: 15,
+    capstoneName: "AI Readiness Assessment Tool",
+    capstoneDomain: "askevery.one",
+    capstoneDescription:
+      "A working tool that evaluates any business's AI maturity and produces an actionable transformation roadmap.",
+  },
+]
+
 // ─── Feature Flags ────────────────────────────────────────────────────────────
 
 /** Whether the search palette (Cmd+K) is enabled */
@@ -82,3 +155,6 @@ export const ENABLE_NOTES = true
 
 /** Whether certificate generation is enabled */
 export const ENABLE_CERTIFICATES = false
+
+/** Whether the dev state switcher toolbar is shown (development only) */
+export const ENABLE_DEV_TOOLBAR = process.env.NODE_ENV === "development"
