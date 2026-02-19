@@ -1,6 +1,6 @@
 # GWTH.ai Social Media Content
 
-Last updated: 2026-02-18
+Last updated: 2026-02-19
 
 ---
 
@@ -38,9 +38,9 @@ Today, you type what you want in plain English. The AI builds it.
 
 This is not a gimmick. This is not a dumbed-down version of building. This is how software gets made now. The people building the fastest are the ones who can describe what they want clearly and evaluate what they get back critically. Those are human skills, not technical ones.
 
-At GWTH.ai, month one has students building functional applications, websites, and dashboards. Not toy projects. Real things they actually use. One of the builds is a Family AI Bot — a custom assistant for your household. Another is a complete business dashboard.
+At GWTH.ai, month one alone has 24 projects — apps, websites, dashboards, research tools, content packages, AI assistants, and automations. Not toy projects. Real things students actually use. Every project includes a video walkthrough showing you exactly how it is done.
 
-Five hours a week. No prior technical experience. No coding.
+One hour a day. Five days a week. No prior technical experience. No coding.
 
 The old gatekeeping is gone. The new skill is not writing code. It is knowing what to build and being able to articulate it precisely. Solution architecture thinking, not syntax memorisation.
 
@@ -68,9 +68,9 @@ But here is what fear misses: transformation is not elimination. The work change
 
 The window for being early is still open. It will not be open for much longer. When everyone has AI skills, the advantage belongs to those who have been practising them longest.
 
-GWTH.ai is one course, three months, five hours a week. It exists because I believe the gap between those who engage with AI now and those who wait will define careers for the next decade.
+GWTH.ai is one course. Three months to get started. One hour a day. Updated every day — not annually — because AI does not wait. It exists because I believe the gap between those who engage with AI now and those who wait will define careers for the next decade.
 
-That is not a sales pitch. It is an observation from 25 years of watching technology reshape industries.
+That is not a sales pitch. It is an observation from 25 years of watching technology reshape industries — and from building with AI tools myself from day one.
 
 [gwth.ai — $37.50/month for 3 months]
 
@@ -86,7 +86,7 @@ AI capability is doubling every 4 to 7 months. A certification that tested you o
 
 GWTH.ai does not work that way. We built a dynamic scoring system that evolves with the technology. Your assessment reflects current tools and current best practices, not a frozen snapshot from whenever the exam was last updated.
 
-We also track 47 or more AI tools daily through our Tech Radar. When something meaningful changes in the landscape, the curriculum updates. Monthly. Not annually. Not "when we get around to it."
+We also track 47 or more AI tools daily through our Tech Radar. When something meaningful changes in the landscape, the curriculum updates. That day. Not monthly. Not annually. Not "when we get around to it."
 
 This is possible because GWTH.ai is completely independent. No ads, no sponsors, no vendor partnerships. We do not recommend tools because someone paid us to. We recommend them because they are the best option right now. And when they stop being the best option, we say that too.
 
@@ -94,7 +94,7 @@ Independence is not a marketing bullet point. It is the only way to keep educati
 
 Your AI skills should be measured against what AI can do today, not what it could do when some exam board last convened.
 
-[gwth.ai — Dynamic scoring, updated monthly, zero vendor bias]
+[gwth.ai — Dynamic scoring, updated every day, zero vendor bias]
 
 ---
 
@@ -112,13 +112,13 @@ I understand all of those fears. And every single one of them gets smaller the m
 
 Fear thrives on abstraction. "AI will transform 50 percent of white-collar work" is terrifying when you do not know what that transformation looks like. It is far less terrifying when you are the one doing the transforming.
 
-That is why GWTH.ai is entirely applied. No theory lectures. No academic frameworks. You build things. In month one, you build apps, websites, dashboards, and a Family AI Bot. In month two, you build business tools and a Customer Support Chatbot. In month three, you build multi-agent systems and run a full AI Readiness Assessment.
+That is why GWTH.ai is entirely applied. No theory lectures. No academic frameworks. You build things — 94 projects across three months. And every single project includes a video walkthrough where I take you through it step by step, so you are never left wondering what to do next. We hold your hand the whole way through.
 
-Every single project is something you can use or show to someone. The fear-to-empowerment shift does not happen by reading about AI. It happens by using it. By seeing what you can create in an afternoon that would have taken weeks before.
+In month one, you build apps, websites, dashboards, research tools, AI assistants, and a Family AI Bot. In month two, business tools and a Customer Support Chatbot. In month three, multi-agent systems and a full AI Readiness Assessment.
 
-Most people are one hands-on project away from flipping their entire relationship with AI from anxiety to agency.
+The fear-to-empowerment shift does not happen by reading about AI. It happens by building with it — with someone showing you exactly how. Most people are one guided project away from flipping their entire relationship with AI from anxiety to agency.
 
-Five hours a week. Three months. No coding. Just building.
+One hour a day. Three months. No coding. Just building.
 
 [gwth.ai — Free labs to start today]
 
@@ -164,7 +164,7 @@ If your child is starting their career in 2030, the skill that matters most is n
 
 **Theme: The independence advantage**
 
-GWTH.ai tracks 47+ AI tools daily and has zero sponsors, zero ads, zero vendor deals. When a tool stops being the best option, we say so. Independence is not a feature. It is the only way to trust a recommendation.
+GWTH.ai tracks 47+ AI tools daily and updates the course every day. Zero sponsors, zero ads, zero vendor deals. When a tool stops being the best option, we say so. Independence is not a feature. It is the only way to trust a recommendation.
 
 ---
 
@@ -175,22 +175,22 @@ GWTH.ai tracks 47+ AI tools daily and has zero sponsors, zero ads, zero vendor d
 **Theme: What you can build in 5 hours/week**
 
 **Tweet 1/4:**
-People ask what you can realistically build with AI in 5 hours a week.
+People ask what you can realistically build with AI in 1 hour a day.
 
-Here is the actual GWTH.ai build list. No coding required for any of it. Thread:
+GWTH.ai has 94 hands-on projects across 3 months. Every single one includes a video walkthrough. No coding required for any of it. Thread:
 
 **Tweet 2/4:**
-Month 1: Functional web applications. Business dashboards that pull real data. Personal websites. A Family AI Bot that knows your household's preferences and schedules.
+Month 1 (24 projects): Functional web applications. Business dashboards. Personal websites. Research tools. AI assistants. Automated workflows. A Family AI Bot capstone.
 
-All built by typing in plain English.
+All built by typing in plain English. All with step-by-step video guidance.
 
 **Tweet 3/4:**
-Month 2: Business automation tools. A RAG system that searches your own documents. Customer Support Chatbot. Seven different industry specialisations so you build for your actual field.
+Month 2 (35 projects): Business automation tools. RAG systems that search your own documents. Customer Support Chatbot capstone. Seven industry specialisations so you build for your actual field.
 
 **Tweet 4/4:**
-Month 3: Enterprise AI transformation playbooks. Multi-agent systems where AIs coordinate with each other. A full AI Readiness Assessment tool you can run for any organisation.
+Month 3 (35 projects): Enterprise AI transformation. Multi-agent systems. A full AI Readiness Assessment tool you can deploy for any organisation.
 
-From zero to enterprise-grade in 3 months. gwth.ai
+94 projects. Updated every day. From zero to enterprise-grade. gwth.ai
 
 ---
 
@@ -211,7 +211,7 @@ Imagine forming your opinion of the internet based on dial-up in 1997 and never 
 The data: early AI adopters growing revenue 1.5x faster. Companies with AI training retaining 34% more staff. 50% of entry-level white-collar work transforming in 1-5 years.
 
 **Tweet 5/5:**
-The window for being early is still open. It will not stay open. GWTH.ai exists to close the gap between what people think AI can do and what it actually can do. 3 months, 5 hrs/week, no coding.
+The window for being early is still open. It will not stay open. GWTH.ai exists to close the gap between what people think AI can do and what it actually can do. 3 months, 1 hr/day, no coding. Updated every day.
 
 gwth.ai
 
@@ -232,7 +232,7 @@ AI capability doubles every 4-7 months. A certification that was relevant in Sep
 You are earning a credential with a hidden expiration date.
 
 **Tweet 3/4:**
-GWTH.ai built dynamic scoring that evolves with the technology. We track 47+ tools daily. The curriculum updates monthly. Your assessment reflects what is true right now, not when an exam board last met.
+GWTH.ai built dynamic scoring that evolves with the technology. We track 47+ tools daily. The curriculum updates every day. Your assessment reflects what is true right now, not when an exam board last met.
 
 **Tweet 4/4:**
 Also: GWTH.ai is fully independent. No vendor sponsors, no ads, no partnership deals. We recommend the best tool today and change that recommendation tomorrow if something better appears.
@@ -263,7 +263,7 @@ The fear-to-empowerment shift is one project away.
 **Tweet 4/4:**
 Five hours a week. Three months. No coding required. Free labs to start.
 
-25 years of solution architecture distilled into the most practical AI education I know how to build.
+25 years of solution architecture plus hands-on AI building from day one of Cursor and Claude Code. Distilled into the most practical AI education I know how to build.
 
 gwth.ai
 

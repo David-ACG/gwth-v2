@@ -4,7 +4,9 @@
 
 In February 2026, the world of AI crossed a line. Not in an "eventually we should pay attention" way. In a "this already happened and you need to understand it" way.
 
-New AI models arrived that don't just answer questions — they build things. Complete applications, from description to finished product. They analyse contracts, generate financial models, write marketing campaigns, create interactive dashboards, and automate workflows that used to take teams of people.
+New AI models arrived that don't just answer questions — they do real work. They build complete applications from a plain English description. They conduct research that used to take a team three days and deliver it in two hours. They write marketing campaigns, analyse contracts, generate financial models, create interactive dashboards, produce professional content at scale, and automate workflows that used to take teams of people.
+
+Building is the headline capability — and it's genuinely transformative — but AI is now exceptional at research, writing, data analysis, content creation, ideation, and automation too. The person who learns to direct AI across all of these becomes extraordinarily productive.
 
 One tech founder described his Monday: he told AI what he wanted, walked away for four hours, and came back to find the work done. Not a rough draft. The finished product. Better than he could have done himself.
 
@@ -20,7 +22,13 @@ The person who walks into a meeting and says "I used AI to complete this competi
 
 These aren't hypotheticals. These are the projects GWTH students build in their first three months.
 
-**Your dreams just got a lot closer.** If you've ever wanted to build something — an app, a tool, a website, a business — but didn't have the technical skills or the money to hire someone, that barrier is largely gone. You describe what you want. AI builds it. The best tutor in the world is now available for less than $20 a month — infinitely patient, available 24/7, and able to explain anything at whatever level you need.
+**Your dreams just got a lot closer.** If you've ever wanted to build something — an app, a tool, a website, a business — but didn't have the technical skills or the money to hire someone, that barrier is largely gone. You describe what you want. AI builds it.
+
+But here's what most people discover the hard way: having access to AI tools is not the same as knowing how to use them effectively. You can give a million people the same AI subscription and get a million different levels of output. The difference is knowing what to ask for, how to evaluate what you get back, and what's actually possible.
+
+The problem with teaching yourself is simple: **you don't know what you don't know.** You won't think to ask AI about context engineering, RAG systems, or multi-agent workflows because you've never heard of them. You'll waste weeks on approaches that a structured course would have you skip in five minutes. And here's the uncomfortable truth — when you ask AI to teach you about AI, it draws on training data from existing courses and articles. Those courses are already out of date. The methods and tools they reference have been superseded. You end up learning yesterday's AI from yesterday's curriculum, taught by a model that doesn't know what's changed since its training data was collected.
+
+GWTH exists because the gap between "having AI" and "being dangerous with AI" requires a guide who is testing every tool, every day, and updating the path in real time.
 
 ## Why You Should Care (Even If You Think Your Job Is Safe)
 
@@ -50,9 +58,17 @@ You type in plain English. AI builds what you describe. If you can write an emai
 
 This isn't a coding bootcamp with AI shortcuts. This is an entirely different approach — one that works because AI has become good enough to translate your descriptions directly into working software, tools, and automations.
 
-### Five Hours a Week
+### Five Hours a Week — Backed by Science
 
-GWTH is designed to fit into your life, not consume it. Five hours per week — ideally during work hours, because these skills directly improve your job performance. That's a lunch break and two focused evenings. Compare that to coding bootcamps that demand 40+ hours a week and still teach you to write code rather than direct AI to write it for you.
+GWTH is designed around one hour a day, five days a week. This isn't arbitrary — it's based on decades of research into how humans actually learn.
+
+Anders Ericsson's landmark study of elite performers found that the effective duration of deliberate practice — focused, high-intensity learning — is approximately one hour per day. Beyond that, cognitive fatigue degrades quality. The world's top performers don't practice for eight hours straight. They practice in focused daily sessions and let their brains consolidate overnight.
+
+The spacing effect, confirmed by over 200 studies across more than a century of cognitive science, shows that distributing learning across shorter daily sessions produces dramatically better long-term retention than cramming the same total hours into weekends. Without daily review, you forget up to 80% of new material within 24 hours (Ebbinghaus, replicated in 2015). Each daily session reinforces what came before.
+
+This is the same "5-hour rule" practiced by Bill Gates, Warren Buffett, and Elon Musk — one hour of deliberate learning per workday. Michael Simmons, who studied their habits, puts it bluntly: "If you're not spending 5 hours per week learning, you're being irresponsible."
+
+Compare that to coding bootcamps that demand 40+ hours a week and still teach you to write code rather than direct AI to write it for you. GWTH fits into your life — a lunch break and two focused evenings — because the science says that's how learning actually sticks.
 
 ### Applied AI Only
 
@@ -68,21 +84,29 @@ The core skill GWTH develops is moving from "ask AI a question, get an answer" t
 
 ### One Course, Always Current
 
-Not a marketplace of courses that duplicate content and contradict each other. One structured path, updated monthly, because AI doesn't wait.
+Not a marketplace of courses that duplicate content and contradict each other. One structured path, updated every day, because AI doesn't wait.
 
-Our Tech Radar tracks 47+ AI tools across 16 categories, with a daily scanner searching for new developments. When something better appears, the course updates. You'll always be learning what works right now, not what worked six months ago.
+New models, tools, and services appear weekly. The avalanche of releases is relentless — and the only way to stay ahead is a course that moves as fast as the technology. Our Tech Radar tracks 47+ AI tools across 16 categories, with a daily scanner searching for new developments. When something better appears, the course updates. Not next quarter. Not next month. Now.
+
+This is the only course designed to help you keep up with the pace of AI for just one hour a day during the three-month programme, and then probably one to two hours a week after that. Without structured, always-current guidance, you'll fall behind — because the landscape is changing faster than any individual can track alone.
 
 ### Completely Independent
 
 No adverts. No sponsors. No vendor partnerships. We test tools from every company — not just the big names — and recommend what actually works best. When we compare services, you can trust the comparison isn't paid for. This independence is rare in AI education, and it matters.
 
-### 25 Years of Architecture Experience
+### 25 Years of Architecture Experience — Plus AI-First Building from Day One
 
 GWTH isn't built by content creators who learned AI last year. It's designed by solution architects with 25 years of experience, including work at one of the world's largest cloud providers, designing hundreds of solutions for enterprise customers. When we recommend a technology stack, it's backed by deep expertise in what works at scale.
 
-## The Three-Month Journey
+But experience alone isn't enough in a field moving this fast. GWTH's creator has been building with AI tools from day one — from the first release of Cursor to the first release of Claude Code. This isn't theory about what AI might be able to do. It's hard-won practical knowledge of what AI actually does, right now, tested daily across dozens of tools.
 
-### Month 1: From Zero to Building (24 lessons)
+## The Three-Month Journey — 94 Projects and Counting
+
+Every single lesson ends with a hands-on project that you build yourself. Then every lesson ends with a video walkthrough where the instructor takes you through the project step by step, so you completely understand each decision, each technique, and each best practice. You're never left guessing. You're never stuck.
+
+Across all three months, you'll complete **94 BUILD projects** (64 in the mandatory path, 30 more in optional specialisations). And we're adding new lessons and labs constantly, so that number is growing.
+
+### Month 1: From Zero to Building (24 lessons, 24 projects)
 
 Master six AI superpowers: research, content creation, building, data analysis, ideation, and automation.
 
@@ -90,12 +114,14 @@ Master six AI superpowers: research, content creation, building, data analysis, 
 - Your first working app (Week 2 — a tool you'll actually use)
 - A personal website, published on the real internet
 - Interactive data dashboards with charts and filters
-- Automated workflows that save you real time every week
+- Research projects, content packages, AI assistants, and automated workflows
 - **Capstone: A Family AI Bot** that takes a recording of your weekly family meeting, extracts tasks, books calendar events, creates a meal plan, and generates a shopping list — all automatically
+
+Each project comes with a detailed video walkthrough showing you exactly how to build it, what decisions to make along the way, and the best practices that separate good results from great ones.
 
 By the end of Month 1, most students look back at their "AI Wishlist" from Lesson 1 and find they've already crossed off the majority of things they wished AI could do.
 
-### Month 2: Building Real Apps for Your Industry (20 mandatory + 15 optional lessons)
+### Month 2: Building Real Apps for Your Industry (20 mandatory + 15 optional lessons, 35 projects)
 
 Level up with professional development tools. Build business applications that replace paid subscriptions. Learn to teach AI about your specific business using RAG (Retrieval-Augmented Generation). Choose from seven industry specialisations: healthcare, legal, finance, travel, creative, marketing, or HR.
 
@@ -103,9 +129,10 @@ Level up with professional development tools. Build business applications that r
 - Business tools with databases, authentication, and mobile-responsive design
 - Connected apps that pull real data from external services
 - Automated multi-step business workflows
+- Industry-specific projects on real domains you can show employers or clients
 - **Capstone: An AI Customer-Support Chatbot** deployed on a real domain, trained on your company's own documents, with citation-backed answers
 
-### Month 3: AI Transformation & Enterprise Solutions (20 mandatory + 15 optional lessons)
+### Month 3: AI Transformation & Enterprise Solutions (20 mandatory + 15 optional lessons, 35 projects)
 
 Lead AI transformation in your organisation. Build multi-agent systems, enterprise knowledge bases, and self-hosted AI infrastructure. Master security governance, cost management, and change management.
 
@@ -114,6 +141,7 @@ Lead AI transformation in your organisation. Build multi-agent systems, enterpri
 - Enterprise-scale knowledge bases with access controls
 - Self-hosted AI running on your own hardware (privacy, cost control)
 - AI transformation plans with ROI projections
+- Governance frameworks, training programmes, and change management strategies
 - **Capstone: An AI Readiness Assessment Tool** — a professional system that assesses any organisation's readiness for AI transformation, deployed on a real domain
 
 ## Who This Is For
@@ -152,7 +180,7 @@ GWTH doesn't just teach — it certifies. And unlike traditional certifications 
 
 **How it works:** Each lesson earns you 1.5 points toward your overall score. Complete all mandatory lessons and you'll reach the top tier. Optional lessons push your score above 100, showing exceptional breadth.
 
-**The dynamic part:** When lessons update with new content (which happens monthly, because AI moves fast), you have two weeks to review the changes. If you don't, your score adjusts. This means your certification always represents what you know right now, not what you knew a year ago.
+**The dynamic part:** When lessons update with new content (which happens constantly, because AI moves fast), you have two weeks to review the changes. If you don't, your score adjusts. This means your certification always represents what you know right now, not what you knew a year ago.
 
 **Why employers trust it:** A GWTH score isn't a one-time exam result. It's a living measure of current, verified AI expertise. Display it on LinkedIn. Include it on your CV. Share it with clients. It means something because it can't go stale.
 
@@ -169,6 +197,8 @@ GWTH doesn't just teach — it certifies. And unlike traditional certifications 
 That's less than a single hour with a consultant. Less than most of the software subscriptions you'll learn to replace. And after the initial three months, keeping your certification current and accessing new content costs less than a couple of coffees.
 
 **No discount codes.** This is a deliberate choice. If the course isn't good enough for you to recommend to friends and colleagues without a discount, we want you to tell us how to improve it. We've priced it as low as possible while keeping the content exceptional and constantly updated.
+
+**No yearly price either.** We believe the course is good enough that you'll want to stay — but you're free to leave at any point. No lock-in, no penalty, no guilt. If the course stops being worth it to you, cancel. That keeps us honest and keeps the quality high.
 
 **Free labs are available** so you can experience the quality firsthand before subscribing. Try them. See what you think. Then decide.
 

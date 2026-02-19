@@ -1,7 +1,7 @@
 # GWTH.ai Landing Page Copy
 
 > Landing page hero and below-the-fold section copy.
-> Last updated: 2026-02-18
+> Last updated: 2026-02-19
 
 ---
 
@@ -13,9 +13,9 @@
 
 ### Subheadline
 
-Learn to build apps, automate workflows, and solve real problems using AI — all in plain English. No coding. No theory. Just the applied skills employers are hiring for right now.
+Learn to build apps, automate workflows, research faster, create content, analyse data, and solve real problems using AI — all in plain English. No coding. No theory. Just the applied skills employers are hiring for right now.
 
-One course. Three months. Five hours a week. That is all it takes to go from "I should probably learn AI" to "I just built that."
+One course. Three months to get started. Five hours a week. Updated every day so your skills never go stale. That is all it takes to go from "I should probably learn AI" to "I just built that."
 
 ### Primary CTA
 
@@ -23,7 +23,7 @@ One course. Three months. Five hours a week. That is all it takes to go from "I 
 
 ### Secondary CTA
 
-See the full course
+Explore the free labs
 
 ---
 
@@ -35,15 +35,17 @@ See the full course
 
 ### Section Intro
 
-Every lesson ends with something working. Not a quiz about transformer architecture. Not a slide deck about large language models. Something you built, something you can use, something you can show someone.
+Every lesson ends with a hands-on project you build yourself. Then every lesson ends with a video walkthrough where the instructor takes you through that project step by step — so you completely understand every decision, every technique, and every best practice. You are never left guessing. You are never stuck.
+
+**94 projects across three months.** Not quizzes about transformer architecture. Not slide decks about large language models. Real things you build, use, and show to people.
 
 ---
 
 ### Month 1 — From Zero to Building
 
-*24 lessons. No prerequisites. Seriously.*
+*24 lessons. 24 projects. No prerequisites. Seriously.*
 
-You will go from your first AI conversation to building real, working tools — apps, websites, dashboards, and automations — by typing plain English descriptions of what you want. No syntax. No debugging. No command line.
+You will go from your first AI conversation to building real, working tools — apps, websites, dashboards, research projects, content packages, AI assistants, and automations — by typing plain English descriptions of what you want. No syntax. No debugging. No command line. Every project includes a video walkthrough showing you exactly how it's done.
 
 **Capstone project: Family AI Bot** — Record your weekly family meeting. AI transcribes it, extracts tasks, books calendar events, creates a meal plan, and generates a shopping list. Automatically. You built it. In plain English.
 
@@ -53,7 +55,7 @@ By the end of Month 1, you will have built more with AI than most people will bu
 
 ### Month 2 — Real Business Applications
 
-*20 mandatory + 15 optional industry-specific lessons*
+*35 lessons. 35 projects. Choose your industry specialisation.*
 
 Now you build for the real world. Choose your industry — healthcare, legal, finance, travel, creative, marketing, or HR — and build applications that solve actual problems in that field. This is where "I know a bit about AI" becomes "I can transform how my team works."
 
@@ -63,7 +65,7 @@ Now you build for the real world. Choose your industry — healthcare, legal, fi
 
 ### Month 3 — Enterprise AI and Multi-Agent Systems
 
-*20 mandatory + 15 optional advanced lessons*
+*35 lessons. 35 projects. Lead AI transformation.*
 
 This is where you go from individual contributor to the person who can lead an AI transformation. Multi-agent systems. Self-hosted AI for data-sensitive environments. Governance frameworks. The strategic layer that separates someone who uses AI from someone who deploys it across an organisation.
 
@@ -83,9 +85,9 @@ This is where you go from individual contributor to the person who can lead an A
 
 You will not write a single line of code. Every project in this course is built by describing what you want in plain English. AI builds it. You guide it. That is the skill that matters now, and it is the one almost nobody is teaching properly.
 
-### 2. Updated monthly, not annually
+### 2. Updated every day, not annually
 
-AI tools change weekly. Most courses are outdated before you finish them. Our Tech Radar scans 47+ AI tools every single day. When a tool you learned gets replaced by something better, we update the lesson. Your skills never go stale.
+AI tools change weekly. Most courses are outdated before you finish them. Our Tech Radar scans 47+ AI tools every single day. When a tool you learned gets replaced by something better, we update the lesson immediately. Not next quarter. Not next month. Now. Your skills never go stale because the course never stops evolving.
 
 ### 3. Completely independent
 
@@ -95,13 +97,15 @@ No sponsors. No ads. No vendor partnerships. No "this lesson brought to you by O
 
 Our dynamic scoring system stays current. Your assessment results reflect what you can actually do with the tools that exist right now — not what you could do with tools from six months ago. When companies see a GWTH score, they know it means something today.
 
-### 5. Designed by people who build this stuff
+### 5. Designed by people who build this stuff — every day
 
-This course was designed by solution architects with 25 years of experience building enterprise systems. Not by marketers who learned AI last year. Not by academics who have never shipped a product. By people who have spent decades solving real problems for real organisations and now apply AI to do it faster and better.
+This course was designed by solution architects with 25 years of experience building enterprise systems — and who have been building with AI tools from day one, from the first release of Cursor to the first release of Claude Code. Not marketers who learned AI last year. Not academics who have never shipped a product. People who test every new tool the day it launches and update the course the same week.
 
-### 6. Built for how people actually feel about AI
+### 6. We will hold your hand every step of the way
 
-Research shows most people are more anxious than excited about AI. We get it. This course does not pretend everything is fine or that AI will magically solve your problems. It puts you in the driving seat. You will understand what AI can and cannot do, and you will have the skills to make it work for you — not the other way around.
+Research shows most people are more anxious than excited about AI. We get it. That is why every single lesson includes a step-by-step video walkthrough where the instructor builds the project alongside you, explaining every decision and every technique. You are never left staring at a blank screen wondering what to do next.
+
+This course does not pretend everything is fine or that AI will magically solve your problems. But it does put you in the driving seat — gently, with clear guidance, at your own pace. You will understand what AI can and cannot do, and you will have the confidence and skills to make it work for you.
 
 ---
 
@@ -157,14 +161,17 @@ Our labs are free. No credit card. No trial period that expires. Build something
 
 ### What You Are Actually Paying For
 
-- 64+ structured lessons (not random YouTube tutorials)
-- 3 portfolio-ready capstone projects
+- 94 hands-on projects with video walkthroughs (not random YouTube tutorials)
+- 3 portfolio-ready capstone projects deployed on real domains
 - Industry-specific modules for your exact field
-- Content that updates monthly so your skills stay current
+- Content that updates every day so your skills never go stale
 - Dynamic scores that employers can verify
+- Access to the GWTH Tech Radar — 47+ tools tracked daily
 - No ads, no upsells, no "premium tier" behind another paywall
 
-That is $112.50 total for the course. An AI consultant charges more than that per hour. A bootcamp charges 50 times that for skills that will be outdated in six months.
+**No yearly price.** We believe the course is good enough that you will want to stay — but you are free to leave at any point. No lock-in. No penalty. That keeps us honest.
+
+An AI consultant charges more per hour than an entire month of GWTH. A bootcamp charges 50 times more for skills that will be outdated in six months.
 
 ---
 
@@ -178,7 +185,7 @@ That is $112.50 total for the course. An AI consultant charges more than that pe
 
 Every week you wait, the gap between people who can use AI and people who cannot gets wider. This is not about being an early adopter anymore. It is about not being left behind.
 
-One course. Three months. Five hours a week. No coding. No theory. Just the skills that matter, taught by people who actually use them, updated every month so they stay relevant.
+One course. Three months to get started. Five hours a week. No coding. No theory. Just the skills that matter, taught by people who actually use them, updated every day so they stay relevant. The course never ends — and neither does your advantage.
 
 ### Primary CTA
 
@@ -186,4 +193,4 @@ One course. Three months. Five hours a week. No coding. No theory. Just the skil
 
 ### Secondary CTA
 
-View the full curriculum
+Browse the Tech Radar — see which AI tools we track

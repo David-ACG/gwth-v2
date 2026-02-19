@@ -22,7 +22,7 @@ Hi,
 
 Thanks for signing up. No fluff, no 47-email onboarding funnel. Just a few emails over the next two weeks that I think you'll genuinely find useful, whether you ever subscribe or not.
 
-First, a quick orientation. GWTH.ai teaches applied AI skills — the kind that produce immediate, practical results. No coding. No theory lectures. You type in plain English, AI builds what you describe. The full course runs three months at about five hours a week, and there are free labs you can try right now.
+First, a quick orientation. GWTH.ai teaches applied AI skills — the kind that produce immediate, practical results. No coding. No theory lectures. You type in plain English, AI builds what you describe. The full course runs three months at about five hours a week (one hour a day — the science-backed sweet spot for learning), and it never stops updating. There are free labs you can try right now.
 
 But you probably already know that if you're here. So let me give you something useful instead.
 
@@ -103,7 +103,7 @@ I want to show you what Month 1 of GWTH actually looks like, because I think the
 
 Month 1 is called "From Zero to Building." It has 24 lessons. By the end, most students look back at the AI wishlist they wrote in Lesson 1 and find they've already crossed off the majority of it.
 
-Here's what you build along the way — all by typing in plain English, no coding at any point:
+Here's what you build along the way — all by typing in plain English, no coding at any point. And every single project includes a video walkthrough where I take you through it step by step, so you're never stuck:
 
 **Week 2: Your first working app.** Not a tutorial exercise. A tool you'll actually use. Students have built everything from personal budget trackers to client intake forms to recipe managers. You pick what's useful to you.
 
@@ -113,9 +113,9 @@ Here's what you build along the way — all by typing in plain English, no codin
 
 **End of Month 1 — the capstone project:** You build a Family AI Bot. It takes a recording of your weekly family meeting, extracts the action items, books calendar events, creates a meal plan for the week, and generates a shopping list. Automatically. From a single voice recording.
 
-That's one month. Five hours a week.
+That's one month. Five hours a week. 24 projects — each with a step-by-step video walkthrough.
 
-Month 2 gets into professional tools and building real business applications — the kind that replace paid software subscriptions. Month 3 covers enterprise AI, multi-agent systems, and leading AI transformation in an organisation. Each month ends with a capstone you deploy on a real domain.
+Month 2 gets into professional tools and building real business applications — the kind that replace paid software subscriptions (35 more projects). Month 3 covers enterprise AI, multi-agent systems, and leading AI transformation in an organisation (35 more projects). Each month ends with a capstone you deploy on a real domain. That's 94 projects total — and we're adding more constantly.
 
 The feeling that drives people through the course isn't fear about AI replacing jobs. It's the feeling of making something. Of describing what you want and watching it appear. Of showing someone and saying "I made this."
 
@@ -155,9 +155,9 @@ More importantly, most people's first experience with AI is typing a vague quest
 
 **"I don't have time."**
 
-GWTH is designed for five hours a week. That's a lunch break and two focused evenings. Compare that to coding bootcamps that demand 40+ hours a week and still teach you to write code rather than direct AI to write it for you.
+GWTH is designed around one hour a day, five days a week. That's backed by decades of cognitive science — Anders Ericsson's research on deliberate practice found one hour of focused daily learning is the sweet spot. Over 200 studies confirm that short daily sessions produce dramatically better retention than cramming.
 
-Five hours a week for three months. That's 60 hours total to gain a skill set that most of the job market hasn't caught up to yet.
+Compare that to coding bootcamps that demand 40+ hours a week and still teach you to write code rather than direct AI to write it for you.
 
 **"Is it worth the money?"**
 
@@ -193,12 +193,14 @@ Here's the direct invitation: **[Subscribe to GWTH.ai](https://gwth.ai/pricing)*
 
 $37.50/month for three months. Five hours a week. No coding. By the end of Month 1, you'll have built working apps, dashboards, and automated workflows — all by describing what you want in plain English. By the end of Month 3, you'll have deployed professional tools on real domains and have the skills to lead AI adoption in your organisation.
 
-The curriculum is built on 25 years of solution architecture experience and updated monthly to keep pace with AI's rapid development. Your GWTH score stays current — it's a living certification that employers can trust because it can't go stale.
+The curriculum is built on 25 years of solution architecture experience — plus hands-on AI building from day one of Cursor and Claude Code — and is updated every day to keep pace with AI's rapid development. Your GWTH score stays current — it's a living certification that employers can trust because it can't go stale.
+
+**No yearly price.** You're free to leave at any point. No lock-in. If the course stops being worth it, cancel. That keeps us honest.
 
 **If now isn't the right time,** that's completely fine. A few things to know:
 
 - The free labs remain available. You can build with them whenever you want.
-- The course content updates monthly. Starting next month means slightly different (and likely more capable) tools. There's no penalty for waiting.
+- The course content updates every day. Starting later means slightly different (and likely more capable) tools. There's no penalty for waiting.
 - You can reply to any of these emails and reach a real person. If you have a question I didn't answer, ask it.
 
 **If the timing is right,** here's what happens after you subscribe: you get immediate access to the full course. Lesson 1 starts with your AI Wishlist — everything you've ever wished AI could do for you. By Lesson 5, you'll be building your first working application. The pace is steady, the instructions are clear, and everything is designed so you succeed.

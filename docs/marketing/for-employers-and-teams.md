@@ -1,7 +1,7 @@
 # AI Training for Your Team — GWTH.ai for Employers
 
 > Targeted at employers, HR directors, and team leaders evaluating AI training for their organisations.
-> Last updated: 2026-02-18
+> Last updated: 2026-02-19
 
 ---
 
@@ -32,11 +32,11 @@ Both paths lead to the same outcome: money spent, little returned. The missing p
 
 There is no shortage of AI training. LinkedIn Learning, Coursera, internal vendor certifications — your team has options. Here is why GWTH is different.
 
-### Applied, not theoretical
+### Applied, not theoretical — 94 projects with video walkthroughs
 
-Every lesson ends with something your employee built. Not a quiz about neural network architecture. Not a certificate for watching videos. A working tool, automation, or framework they can use the next day at work.
+Every lesson ends with a hands-on project your employee builds themselves. Then every lesson ends with a video walkthrough where the instructor takes them through that project step by step, so they completely understand every decision and best practice. Not a quiz about neural network architecture. Not a certificate for watching videos. Real, working tools they can use the next day at work.
 
-By the end of the course, your team will have built governance policies, ROI calculators, customer support chatbots, AI readiness assessments, and internal training programs — as actual course projects, not hypothetical exercises.
+Across all three months, your team will complete 94 projects — including governance policies, ROI calculators, customer support chatbots, AI readiness assessments, and internal training programs. As actual course deliverables, not hypothetical exercises. And we are adding new lessons and labs constantly.
 
 ### No coding required
 
@@ -44,15 +44,19 @@ Your employees type in plain English. If they can write an email, they can compl
 
 ### Vendor-neutral
 
-GWTH does not sell tools. We teach your team to evaluate and use them. Our Tech Radar tracks 47+ AI tools and is updated monthly. When a tool improves, declines, or a better alternative appears, the course reflects that within weeks — not years.
+GWTH does not sell tools. We teach your team to evaluate and use them. Our Tech Radar tracks 47+ AI tools with a daily scanner searching for new developments. When a tool improves, declines, or a better alternative appears, the course reflects that the same day — not months or years later.
 
-This matters because the AI landscape changes faster than any vendor certification can keep up with. A course built around one platform becomes outdated the moment that platform changes its pricing, capabilities, or terms of service.
+This matters because the AI landscape changes faster than any vendor certification can keep up with. New models and services launch weekly. A course built around one platform becomes outdated the moment that platform changes its pricing, capabilities, or terms of service.
 
 ### Dynamic certification
 
 Traditional certifications prove what someone knew on test day. GWTH's scoring system is dynamic — it reflects current competence, not historical achievement. If the field moves and your employee keeps up, their certification reflects that. If they don't, it reflects that too.
 
 This gives you, the employer, a meaningful signal about who on your team is genuinely AI-capable right now.
+
+### Designed by people who build with AI — every day
+
+This course was designed by solution architects with 25 years of enterprise experience — and who have been building with AI tools from day one, from the first release of Cursor to the first release of Claude Code. Not marketers who learned AI last year. People who test every new tool the day it launches and update the course the same week.
 
 ### Built for the enterprise conversation
 
@@ -64,9 +68,9 @@ Month 3 of the course is specifically designed for the questions you are asking 
 
 ### Month 1 — Personal AI Mastery
 
-*24 lessons. No prerequisites.*
+*24 lessons. 24 projects. No prerequisites.*
 
-Every employee starts here. They learn to use AI effectively for personal and professional tasks: building apps, creating automations, working with data, and developing the intuition for what AI can and cannot do reliably.
+Every employee starts here. They learn to use AI effectively for personal and professional tasks: building apps, researching, creating content, analysing data, automating workflows, and developing the intuition for what AI can and cannot do reliably. Every project includes a video walkthrough where the instructor takes them through it step by step.
 
 **What they will build:**
 - Working applications and tools using plain English descriptions
@@ -77,7 +81,7 @@ Every employee starts here. They learn to use AI effectively for personal and pr
 
 ### Month 2 — Professional and Industry Application
 
-*Deep-dive into business applications and industry specialisations.*
+*35 lessons. 35 projects. Choose your industry specialisation.*
 
 This is where the course becomes directly relevant to your business. Employees learn to build professional-grade tools and work through specialised tracks for their industry.
 
@@ -93,7 +97,7 @@ This is where the course becomes directly relevant to your business. Employees l
 
 ### Month 3 — Enterprise Transformation
 
-*The leadership and governance module.*
+*35 lessons. 35 projects. Lead AI transformation.*
 
 This is the month most AI courses skip entirely — and the reason most AI initiatives fail. Month 3 teaches your team to think at the organisational level: governance, change management, ROI measurement, and building internal AI training programs.
 
@@ -112,7 +116,7 @@ This is the month most AI courses skip entirely — and the reason most AI initi
 
 **Duration:** 3 months, structured with weekly content releases.
 
-**Time commitment:** Approximately 5 hours per week per employee. This is designed to fit alongside full-time work — most employees complete lessons during focused morning or evening blocks.
+**Time commitment:** Approximately 5 hours per week per employee — one hour a day, five days a week. This is backed by decades of cognitive science: Anders Ericsson's research on deliberate practice found one hour of focused daily learning is the effective cap before cognitive fatigue degrades quality. Over 200 studies on the spacing effect confirm that short daily sessions produce dramatically better retention than cramming. This is designed to fit alongside full-time work — most employees complete lessons during focused morning or evening blocks.
 
 **Delivery:** Fully online, self-paced within each week's content window. Video lessons, written guides, hands-on projects, and quizzes. No scheduled live sessions to coordinate across time zones.
 
@@ -120,7 +124,7 @@ This is the month most AI courses skip entirely — and the reason most AI initi
 
 **Progress tracking:** Managers can see completion rates and certification status. The dynamic scoring system provides an ongoing signal of competence, not just a one-time pass/fail.
 
-**Monthly updates:** The course content, tool recommendations, and Tech Radar are updated monthly to reflect the current state of AI. Your team is always learning what works now, not what worked six months ago.
+**Daily updates:** The course content, tool recommendations, and Tech Radar are updated every day to reflect the current state of AI. New models and services launch weekly — GWTH is the only course designed to keep pace. Your team is always learning what works now, not what worked six months ago.
 
 ---
 
@@ -130,15 +134,17 @@ This is the month most AI courses skip entirely — and the reason most AI initi
 
 **$37.50 per month** for the 3-month structured course, then **$7.50 per month** for continued access, updates, and dynamic certification maintenance.
 
-Total cost for the full course: $112.50 per person.
+For context: that is less than one hour of most consultants' time — for three months of structured AI training that produces 94 deployable projects, governance frameworks, and certified practitioners.
 
-For context: that is less than one hour of most consultants' time — for three months of structured AI training that produces deployable tools, governance frameworks, and certified practitioners.
+**No yearly price.** We believe the course is good enough that your employees will want to stay — but they are free to leave at any point. No lock-in, no penalty. That keeps us honest and keeps the quality high.
 
-### Team pricing
+### Team enrolment
 
-Team and enterprise pricing with volume discounts, centralised billing, and admin dashboards is coming soon.
+The per-person price is the same for teams. We do not offer volume discounts because the price is already as low as we can make it while keeping the content exceptional and constantly updated.
 
-If you are evaluating GWTH for a team of 5 or more, contact us directly. We will work with you on pricing and onboarding.
+What teams do get is an **enterprise admin dashboard** — centralised billing, employee progress tracking, completion rates, certification status, and the ability to designate which optional lessons are relevant for your organisation. Your managers get visibility into who is building AI capability and who needs support.
+
+If you are evaluating GWTH for a team of 5 or more, contact us directly. We will help you design a rollout plan and set up your admin dashboard.
 
 **Contact:** [teams@gwth.ai](mailto:teams@gwth.ai)
 
@@ -156,7 +162,7 @@ This is addressed directly in the course. Month 3 includes building governance f
 
 ### What is the ROI of this training?
 
-The course teaches your employees to calculate exactly that — building ROI measurement frameworks is a Month 3 deliverable. But consider the baseline: if each trained employee saves 3 hours per week through AI-assisted automation (a conservative estimate based on current research), and your average loaded cost per employee-hour is $50, that is $7,800 in annual productivity gains per person against a $112.50 training cost. The payback period is measured in days, not months.
+The course teaches your employees to calculate exactly that — building ROI measurement frameworks is a Month 3 deliverable. But consider the baseline: if each trained employee saves 3 hours per week through AI-assisted automation (a conservative estimate based on current research), and your average loaded cost per employee-hour is $50, that is $7,800 in annual productivity gains per person against a training cost of $37.50 per month. The payback period is measured in days, not months.
 
 ### Our team is not technical. Can they really do this?
 
@@ -164,7 +170,7 @@ Yes. The entire course is built around plain English interaction with AI. No cod
 
 ### How is this different from vendor-specific training (Microsoft Copilot, Google Gemini, etc.)?
 
-Vendor training teaches your team to use one product. GWTH teaches your team to think with AI across any product. When Microsoft changes Copilot's pricing, when Google launches a new tool, when a startup releases something better than both — your GWTH-trained team can evaluate, adopt, and deploy it. The Tech Radar tracks 47+ tools and is updated monthly. Vendor neutrality means your team's skills are durable, not dependent on one company's product roadmap.
+Vendor training teaches your team to use one product. GWTH teaches your team to think with AI across any product. When Microsoft changes Copilot's pricing, when Google launches a new tool, when a startup releases something better than both — your GWTH-trained team can evaluate, adopt, and deploy it. The Tech Radar tracks 47+ tools and is updated every day. Vendor neutrality means your team's skills are durable, not dependent on one company's product roadmap.
 
 ### Can we start with a small pilot before committing the whole team?
 
@@ -176,9 +182,9 @@ Absolutely. GWTH offers free labs that give your team a genuine experience of th
 
 **Try the free labs.** Send your team to [gwth.ai/labs](https://gwth.ai/labs) to experience the course methodology firsthand. They will build something real in their first session. No sign-up friction, no sales qualification — just the work.
 
-**Talk to us about team enrolment.** If you are evaluating GWTH for your organisation, reach out at [teams@gwth.ai](mailto:teams@gwth.ai). We will answer your questions, discuss team pricing, and help you design a rollout plan.
+**Talk to us about team enrolment.** If you are evaluating GWTH for your organisation, reach out at [teams@gwth.ai](mailto:teams@gwth.ai). We will answer your questions and help you design a rollout plan with your enterprise admin dashboard.
 
-**Read the full curriculum.** Visit [gwth.ai/course](https://gwth.ai/course) to see every lesson, project, and capstone across all three months.
+**Browse the Tech Radar.** Visit [gwth.ai/tech-radar](https://gwth.ai/tech-radar) to see the 47+ AI tools we track daily — the same independent analysis your team will learn from.
 
 ---
 
