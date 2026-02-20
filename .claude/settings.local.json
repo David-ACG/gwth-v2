@@ -55,7 +55,8 @@
       "Bash(gh secret set:*)",
       "Bash(gh secret:*)",
       "Bash(npx knip:*)",
-      "Bash(npm run typecheck:*)"
+      "Bash(npm run typecheck:*)",
+      "Bash(nslookup:*)"
     ]
   },
   "hooks": {
