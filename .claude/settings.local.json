@@ -49,7 +49,9 @@
       "Bash(wc -l:*)",
       "mcp__claude_ai_Mermaid_Chart__validate_and_render_mermaid_diagram",
       "Bash(npx husky:*)",
-      "Bash(npx lint-staged:*)"
+      "Bash(npx lint-staged:*)",
+      "Bash(cmd /c npx -y @linear/mcp-server --help)",
+      "Bash(timeout 10 npx:*)"
     ]
   },
   "hooks": {
