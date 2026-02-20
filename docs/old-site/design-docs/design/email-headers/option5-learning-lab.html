@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1656, height=801">
+    <title>GWTH.ai - Interactive Learning Lab</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 1656px;
+            height: 801px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #0A0A0B 0%, #0F1419 100%);
+        }
+        .circuit-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10h30v30h30v30' stroke='%2300BCD4' fill='none'/%3E%3Ccircle cx='10' cy='10' r='2' fill='%2300BCD4'/%3E%3Ccircle cx='40' cy='40' r='2' fill='%2300BCD4'/%3E%3Ccircle cx='70' cy='70' r='2' fill='%2300BCD4'/%3E%3C/svg%3E");
+            background-size: 100px 100px;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            z-index: 10;
+        }
+        .lab-workspace {
+            width: 100%;
+            max-width: 1400px;
+            height: 100%;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 188, 212, 0.1);
+            border: 2px solid #00BCD4;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(0, 188, 212, 0.4);
+            position: relative;
+        }
+        .logo::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            border: 1px solid #00BCD4;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        .logo-text {
+            font-size: 42px;
+            font-weight: bold;
+            color: #00BCD4;
+        }
+        .title-section {
+            flex: 1;
+        }
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 20px;
+            color: #00BCD4;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .right-panel {
+            flex: 1.5;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            perspective: 1000px;
+        }
+        .workspace-3d {
+            flex: 1;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(5deg) rotateY(-10deg);
+        }
+        .window {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .window-header {
+            background: rgba(0, 188, 212, 0.1);
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(0, 188, 212, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FF5252;
+        }
+        .window-dot:nth-child(2) { background: #FFD600; }
+        .window-dot:nth-child(3) { background: #00E676; }
+        .window-title {
+            flex: 1;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        .window-content {
+            padding: 20px;
+            color: #00BCD4;
+            font-family: 'Monaco', monospace;
+            font-size: 14px;
+        }
+        .code-editor {
+            width: 500px;
+            height: 350px;
+            top: 0;
+            left: 0;
+            z-index: 3;
+        }
+        .video-player {
+            width: 450px;
+            height: 280px;
+            top: 80px;
+            right: 0;
+            z-index: 2;
+        }
+        .video-content {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.2), rgba(0, 188, 212, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: rgba(0, 188, 212, 0.5);
+        }
+        .chat-window {
+            width: 350px;
+            height: 200px;
+            bottom: 0;
+            left: 150px;
+            z-index: 1;
+        }
+        .achievement {
+            width: 200px;
+            height: 200px;
+            bottom: 0;
+            right: 100px;
+            z-index: 4;
+            background: rgba(0, 188, 212, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+        .feature-list {
+            display: flex;
+            gap: 30px;
+        }
+        .feature-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+        .feature-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .glow-effect {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 188, 212, 0.2) 0%, transparent 70%);
+            filter: blur(100px);
+            pointer-events: none;
+        }
+        .glow1 {
+            top: -200px;
+            left: -200px;
+        }
+        .glow2 {
+            bottom: -200px;
+            right: -200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="circuit-pattern"></div>
+    <div class="glow-effect glow1"></div>
+    <div class="glow-effect glow2"></div>
+    
+    <div class="container">
+        <div class="lab-workspace">
+            <div class="left-panel">
+                <div class="header-section">
+                    <div class="logo">
+                        <span class="logo-text">G</span>
+                    </div>
+                    <div class="title-section">
+                        <h1>GWTH.ai</h1>
+                        <p class="subtitle">Hands-on AI Education</p>
+                    </div>
+                </div>
+                
+                <div class="feature-list">
+                    <div class="feature-card">
+                        <div class="feature-icon">💻</div>
+                        <div class="feature-title">Live Coding</div>
+                        <div class="feature-desc">Real-time code execution</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎥</div>
+                        <div class="feature-title">Video Lessons</div>
+                        <div class="feature-desc">Expert instruction</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <div class="feature-title">AI Assistant</div>
+                        <div class="feature-desc">24/7 help available</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="workspace-3d">
+                    <div class="window code-editor">
+                        <div class="window-header">
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-title">main.py</div>
+                        </div>
+                        <div class="window-content">
+                            import tensorflow as tf<br>
+                            import numpy as np<br><br>
+                            # Build neural network<br>
+                            model = tf.keras.Sequential([<br>
+                            &nbsp;&nbsp;tf.keras.layers.Dense(128),<br>
+                            &nbsp;&nbsp;tf.keras.layers.Activation('relu'),<br>
+                            &nbsp;&nbsp;tf.keras.layers.Dense(10)<br>
+                            ])<br><br>
+                            # Compile model<br>
+                            model.compile(optimizer='adam')
+                        </div>
+                    </div>
+                    
+                    <div class="window video-player">
+                        <div class="window-header">
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-title">Lesson: Neural Networks</div>
+                        </div>
+                        <div class="video-content">▶</div>
+                    </div>
+                    
+                    <div class="window chat-window">
+                        <div class="window-header">
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-title">AI Assistant</div>
+                        </div>
+                        <div class="window-content">
+                            > How can I improve this model?<br>
+                            > Add dropout layers to prevent...<br>
+                            > Great suggestion! Let me try...
+                        </div>
+                    </div>
+                    
+                    <div class="window achievement">
+                        <div class="window-header">
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-title">Achievement</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px;">
+                            🏆
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

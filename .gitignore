@@ -37,6 +37,11 @@ yarn-error.log*
 .env*
 !.env.local.example
 
+# old site archive (large media files + compromised secrets)
+docs/old-site/videos/
+docs/old-site/audio/
+docs/old-site/.env.local
+
 # vercel
 .vercel
 

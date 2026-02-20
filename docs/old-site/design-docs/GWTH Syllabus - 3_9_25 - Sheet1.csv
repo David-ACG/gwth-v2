@@ -1,0 +1,150 @@
+Type,Month,Lesson,Must / Optional,Title,Sub Lessons
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,1,Essential,Intro to GWTH,"Welcome to GWTH
+OpenAI's  6 Use Case Primitives
+Intro to LLMs and AI powered Apps "
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,2,Essential,Setting Up Your AI Toolkit,"Comparing Some Basic Tools
+Setting Up Tools You'll Need"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,3,Essential,Understanding AI Models and How They Work,"The Most Popular AI Use Cases for Individuals and Small Businesses
+Test and document different LLMs"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,4,Essential,Prompt / Context Engineering Basics,"Prompt Engineering 101
+Context is king Part 1
+Write Instructions That Get Perfect AI Responses 
+Metaprompting basics"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,5,Essential,"AI Safety, Ethics, and Best Practices","Trust but Verify
+Essential Safety Practices for Every AI User
+OpenAI Court Case relating to sycophancy - South Park"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,6,Essential,Research with AI - Fundamentals,"Which tools are best for research?
+Build your AI Personal Research Assistant: Find Any Information in Minutes"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,7,Essential,Research with AI - Advanced Techniques,"Professional Research Techniques
+Context is king Part 2
+Multi-Source Investigation and Deep Analysis
+Project - Researching the best school for your child"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,8,Essential,Research with AI - Verification and Sources,"Garbage In - Garbage Out is still relevant
+Fact-Checking AI: How to Verify Information and Avoid Misinformation"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,9,Essential,Content Creation - Writing Basics,"Write Anything in Minutes: Blog Posts, Emails, and Reports with AI
+Tools for individuals to make writing more efficient"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,10,Essential,Content Creation - Multimedia,"Create Images, Videos, and Audio Content with AI
+Tools for individuals to make multimedia creation more efficient
+Project - Using AI to fix photos
+Project - AI-Generated Birthday Card
+Project - AI-Generated Home Page Video"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,11,Essential,Data Analysis with AI - Basics,"Turn Numbers into Insights
+Let AI Analyze Your Data in Plain English"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,12,Essential,Data Analysis with AI - Practical Applications,"Practical Analysis for Home and Work
+Metaprompting Advanced - Using AI to ask you questions and recording your answers
+Project - Planning for retirement"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,13,Essential,Ideation & Strategy Using AI,"Use AI for Brainstorming and Planning
+Project - Planning a big holiday"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,14,Essential,Introduction to Coding with AI for individuals,"Write Code Without Knowing How to Code
+Project - Your First AI-Generated Game
+Project - Your First AI-Generated Time Saving App"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,15,Optional,AI on your mobile (Optional),"Android - Fixing photos, writing messages, Assistant
+Apple iOS - Fixing photos, writing messages, Assistant"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,16,Essential,Simple AI Agents that are Very Powerful,"What is an Agent?
+Which agents can I use for my small business and what are the use cases?
+Project - Using Manus to collect competitor data"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,17,Essential,Automation Basics,"Your First AI Automations
+Connect Tools with AI and Save Hours Every Week"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,18,Essential,Integrating All 6 Primitives,"How to Use Multiple Primitives in Real Projects for Individuals
+Project - House meeting and planning"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,19,Essential,Small Business Case Studies,Proven AI Strategies from Successful Small Businesses
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,20,Optional,Building a Multi-Primitive Project,"Create an Impressive AI Solution from Start to Finish. Choose one from:
+A website with a blog written with AI (optional)
+Helping your child create a revision plan for big exams (optional)
+Build a Month of Content in One Session (optional)"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,21,Essential,Cost-Benefit Analysis & Tool Selection,"Which AI Tools Are Worth Paying For? 
+Build your own Cost-Benefit Analysis tool"
+Lesson,Month 1: Foundations & AI for Individuals/Small Businesses,22,Essential,Month 1 Review and Assessment,"Review Your New AI Superpowers
+Learning from other people's questions (Optional)"
+Lesson,Month 2: AI for Corporate Teams,1,Essential,Welcome to Month 2 & differences between individuals and business AI expectations,"Your Month 2 Journey
+Risk aversion of businesses
+Professional tools - why are they often not as good or easy to use?"
+Lesson,Month 2: AI for Corporate Teams,2,Essential,Advanced Prompt Engineering Techniques,Advanced Methods Used by AI Professionals
+Lesson,Month 2: AI for Corporate Teams,3,Essential,Multi-Step Research Projects,"Research Project Management
+Organize and Execute Deep Research with AI
+The Multi-Model Advantage: Combine ChatGPT, Claude, Perplexity etc for Better Results"
+Lesson,Month 2: AI for Corporate Teams,4,Essential,Intoduction to Coding with AI for business - Part 1,"The Non-Programmer's Guide to Building Real Applications
+What is a dynamic site?
+Project - Building a company recruitment page with Lovable or V0"
+Lesson,Month 2: AI for Corporate Teams,5,Essential,Intoduction to Coding with AI for business - Part 2,"What is a PRD and why do you need one?
+Project - Create a site to collect data through a questionnaire"
+Lesson,Month 2: AI for Corporate Teams,6,Essential,Image Creation using AI,"Which tools are best for images?
+Project - creating a product mockup for your business
+Project - creating an advert for your business"
+Lesson,Month 2: AI for Corporate Teams,7,Essential,Video Creation using AI,"Which tools are best for videos?
+Project - creating an advert for your business"
+Lesson,Month 2: AI for Corporate Teams,8,Essential,Intermediate Coding with AI Part 1 - Building Solutions for HR and L&D,"Using tools like Cursor to create simple sites with no coding knowledge
+Project - New recruitment onboarding site"
+Lesson,Month 2: AI for Corporate Teams,9,Essential,Intermediate Coding with AI Part 2 - Building Employee Experience Applications,Project - Create Internal Tool for Self-Service using chatbot (Cursor)
+Lesson,Month 2: AI for Corporate Teams,10,Essential,Internal software API Integration and Data Processing - Part 1,"People Data Pipelines: Automate Information Flow Across All Your HR Systems (Conscia)
+Project - People Data Pipeline Part 1"
+Lesson,Month 2: AI for Corporate Teams,11,Essential,Internal software API Integration and Data Processing - Part 2,"People Data Pipelines: Automate Information Flow Across All Your HR Systems (Conscia)
+Project - People Data Pipeline Part 2"
+Lesson,Month 2: AI for Corporate Teams,12,Essential,Advanced Data Analysis & Visualization,"Tell Stories with Data
+Project - Create an HR Dashboard and Reports using AI (previous lesson is a pre-requisite)"
+Lesson,Month 2: AI for Corporate Teams,13,Essential,Multi-Channel Content Strategy,"One Idea, Ten Platforms: Repurpose Content Across Every Channel
+Project - Build a mock ecommerce site that works on web, mobile, AI Agent"
+Lesson,Month 2: AI for Corporate Teams,14,Essential,Advanced Ideation for Products and Services,Product Development with AI: From Concept to Market-Ready in Record Time
+Lesson,Month 2: AI for Corporate Teams,15,Essential,Strategic Planning with AI,Executive-Level Planning: Create Strategies That Actually Get Implemented
+Lesson,Month 2: AI for Corporate Teams,16,Essential,Complex Automation Workflows (optional),Advanced Automation: Multi-Step Workflows That Run Your Business (n8n and ChatGPT API)
+Lesson,Month 2: AI for Corporate Teams,17,Essential,Copilot Vs Gemini for AI with Office apps,Test the most common business AI implementations Microsoft Copilot and Google Gemini 
+Lesson,Month 2: AI for Corporate Teams,18,Essential,AI for Teams and Collaboration,Implement AI Across Your Entire Department
+Lesson,Month 2: AI for Corporate Teams,19,Essential,Using AI for Product Management,From Concept to Launch to Scale
+Lesson,Month 2: AI for Corporate Teams,20,Essential,Skills for a future with AI,"judgment to select the best answer from multiple AI-generated options, 
+communication to properly frame questions, 
+deep thinking to structure problems for AI systems, 
+continuous learning to keep pace with evolving technology, 
+adaptability to navigate a workforce where technical skills have a shelf life of just 2.5 years and career pivots across industries become the norm."
+Lesson,Month 3: Advanced Applications & Custom Development,1,Essential,Month 3 Welcome - The Journey to Mastery,Welcome to the Elite: Skills That Put You in the Top 1% of AI Practitioners
+Lesson,Month 3: Advanced Applications & Custom Development,2,Essential,Leading AI-First Organisations,The AI-First Mindset: Reimagine How Your Business Actually Operates
+Lesson,Month 3: Advanced Applications & Custom Development,3,Essential,Measuring ROI and Performance,The ROI Dashboard: Track Everything That Matters in Your AI Implementation
+Lesson,Month 3: Advanced Applications & Custom Development,4,Essential,Enterprise AI for Marketing and Sales Teams,Transform Your Sales and Marketing: Complete AI Systems for Lead Generation to Close e.g. Salesforce / Agentforce
+Lesson,Month 3: Advanced Applications & Custom Development,5,Optional,AI for Operations and HR (Optional),"What are the most well known enterprise tools?
+What to look for when selecting People and Process Systems that use AI"
+Lesson,Month 3: Advanced Applications & Custom Development,6,Optional,AI for Finance and Analytics (Optional),"What are the most well known enterprise tools?
+What to look for when selecting tools with advanced AI for Budgeting, Forecasting, and Analysis"
+Lesson,Month 3: Advanced Applications & Custom Development,7,Essential,AI for Customer Success,"What are the most well known enterprise tools?
+Customer Experience Revolution: AI Systems That Delight at Every Touchpoint"
+Lesson,Month 3: Advanced Applications & Custom Development,8,Essential,Change Management for AI Adoption,"The Human Side of AI: Managing Fear, Resistance, and Excitement"
+Lesson,Month 3: Advanced Applications & Custom Development,9,Essential,Building Enterprise AI Strategy,The C-Suite Playbook: Design and Pitch AI Strategy for Board Approval
+Lesson,Month 3: Advanced Applications & Custom Development,10,Essential,AI Governance and Risk Management,AI Control Systems: Governance Models Used by Fortune 500 Companies
+Lesson,Month 3: Advanced Applications & Custom Development,11,Essential,AI Economics and Investment Strategy,AI Portfolio Management: Prioritize and Fund the Right AI Initiatives
+Lesson,Month 3: Advanced Applications & Custom Development,12,Optional,Building AI Centers of Excellence (Optional),From Idea to Impact: How Top Companies Structure Their AI Teams
+Lesson,Month 3: Advanced Applications & Custom Development,13,Optional,Advanced Application Development with AI - Part 1 (Optional),"Compare different CLI tools
+The Full-Stack AI Developer
+Project - Create Complete Internal Application for enterprise RAG system Using Claude Code"
+,,14,Optional,Advanced Application Development with AI - Part 2 (Optional),Project - Create Complete Internal Application for enterprise RAG system Using Claude Code
+Lesson,Month 3: Advanced Applications & Custom Development,15,Optional,Enterprise Model Fine-Tuning and Customization (Optional),Beyond Off-the-Shelf: Create Specialized AI Models for Your Industry
+Lesson,Month 3: Advanced Applications & Custom Development,16,Essential,Building AI Agents and Autonomous Systems,Multi-Agent Orchestration: Coordinate Teams of AI Agents
+Lesson,Month 3: Advanced Applications & Custom Development,17,Essential,Enterprise Integration and Architecture,The Integration Challenge: Connect AI to Legacy Systems and Databases
+Lesson,Month 3: Advanced Applications & Custom Development,18,Essential,AI Security and Compliance,"Securing AI Systems: Protect Against Attacks, Leaks, and Misuse"
+Lesson,Month 3: Advanced Applications & Custom Development,19,Essential,AI for Digital Transformation,The Transformation Playbook: How Industry Leaders Reinvent with AI
+Lesson,Month 3: Advanced Applications & Custom Development,20,Essential,Creating New Business Models with AI,AI-Native Business Models: Create New Revenue Streams and Markets
+Lesson,Month 3: Advanced Applications & Custom Development,21,Essential,Advanced AI Product Management (continued from month 2),Managing AI Products: From Concept to Launch to Scale
+Lesson,Month 3: Advanced Applications & Custom Development,22,Essential,Introduction to Industry-Specific AI Solutions,"Vertical AI: Deep Solutions for Healthcare, Finance, Retail, and Manufacturing"
+Lesson,Month 3: Advanced Applications & Custom Development,23,Optional,Building and Managing Virtual AI Teams (Optional),"What happens when we have virstual AI teams that we need to manage. See how Moderna manages AI Agents
+How does having virtual agents affect HR?"
+Lesson,Month 3: Advanced Applications & Custom Development,24,Optional,AI Partnership and Vendor Management (Optional),"Strategic AI Partnerships: Work with Vendors, Consultants, and Platforms"
+Lesson,Month 3: Advanced Applications & Custom Development,25,Optional,Scaling AI Across Global Operations (Optional),"Global AI Rollout: Implement Across Countries, Cultures, and Regulations"
+Lesson,Month 3: Advanced Applications & Custom Development,26,Optional,Advanced Research and Knowledge Management (Optional),Enterprise Knowledge Systems: Build AI-Powered Organizational Intelligence
+Lesson,Month 3: Advanced Applications & Custom Development,27,Optional,Advanced Content and Marketing Systems (Optional),Content Operations at Scale: Run a Global Content Machine with AI
+Lesson,Month 3: Advanced Applications & Custom Development,28,Optional,Industry-Specific AI Applications - Healthcare & Life Sciences (Optional),"Use cases that are examples of success and failure
+Strategy for success"
+Lesson,Month 3: Advanced Applications & Custom Development,29,Optional,Industry-Specific AI Applications - Financial Services & Banking (Optional),"Use cases that are examples of success and failure
+Strategy for success"
+Lesson,Month 3: Advanced Applications & Custom Development,30,Optional,Industry-Specific AI Applications - Retail & E-commerce (Optional),"Use cases that are examples of success and failure
+Strategy for success"
+Lesson,Month 3: Advanced Applications & Custom Development,31,Optional,Industry-Specific AI Applications - Manufacturing & Supply Chain (Optional),"Use cases that are examples of success and failure
+Strategy for success"
+Lesson,Month 3: Advanced Applications & Custom Development,32,Optional,Industry-Specific AI Applications - Education & Training (Optional),"Use cases that are examples of success and failure
+Strategy for success"
+Lesson,Month 3: Advanced Applications & Custom Development,33,Optional,AI Coding for Professionals - Full Applications (Optional),"Ship Real Products: Build and Launch Complete SaaS Applications with AI
+Risks of using AI
+How much of the top 10 company's code is written with AI
+Strategies for the future"
+Lesson,Month 3: Advanced Applications & Custom Development,34,Essential,"Closing lesson
+Emerging AI Technologies and Trends
+The AI Professional's Career Path
+Course Graduation and Community","Technology Radar: Track and Adopt Emerging AI Capabilities
+Your AI Future: Build a Career That Thrives on Change
+Join the Elite: Your Invitation to the GWTH Alumni Network"

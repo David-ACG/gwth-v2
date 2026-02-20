@@ -1,0 +1,709 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                      String              @id @default(cuid())
+  clerkId                 String?             @unique
+  email                   String              @unique
+  emailVerified           Boolean             @default(false)
+  firstName               String?
+  lastName                String?
+  name                    String?             // Better Auth required field
+  image                   String?             // Better Auth required field (mapped from profileImageUrl)
+  profileImageUrl         String?
+  createdAt               DateTime            @default(now())
+  updatedAt               DateTime            @updatedAt
+  stripeCustomerId        String?             @unique
+  stripeSubscriptionId    String?
+  subscriptionStatus      String?
+  subscriptionPlan        String?
+  subscriptionEndsAt      DateTime?
+  preferences             Json?
+  subscriptionStartedAt   DateTime?
+  betaTesterEndsAt        DateTime?
+  betaTesterPhase         String?
+  betaTesterStartedAt     DateTime?
+  isBetaTester            Boolean             @default(false)
+  passwordResetToken      String?
+  passwordResetExpiry     DateTime?
+  completedLessonVersions Json?               // Track which version of each lesson was completed
+  completedLabVersions    Json?               // Track which version of each lab was completed
+  courseProgress          CourseProgress[]
+  emailSubscriptions      EmailSubscription[]
+  labProgress             LabProgress[]
+  lessonProgress          LessonProgress[]
+  subsectionProgress      SubsectionProgress[]
+  userActivities          UserActivity[]
+  // Better Auth relations
+  accounts                account[]
+  sessions                session[]
+  // Removed whitelist relation - no foreign key constraint needed
+
+  @@map("users")
+}
+
+model Course {
+  id          String           @id @default(cuid())
+  title       String
+  description String
+  slug        String           @unique
+  price       Float
+  thumbnail   String?
+  isPublished Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  progress    CourseProgress[]
+  sections    CourseSection[]
+  feedback    Feedback[]
+  lessons     Lesson[]
+
+  @@map("courses")
+}
+
+model CourseSection {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  order       Int
+  courseId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+
+  @@map("course_sections")
+}
+
+model Lesson {
+  id                String             @id @default(cuid())
+  title             String
+  description       String?
+  order             Int
+  duration          String?
+  isPublished       Boolean            @default(false)
+  courseId          String
+  sectionId         String?
+  thumbnail         String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  buildDescription  String?
+  buildInstructions Json?
+  buildVideoNotes   String?
+  buildVideoUrl     String?
+  category          String?
+  difficulty        String?
+  introVideoLinks   Json?
+  introVideoScript  String?
+  introVideoUrl     String?
+  lastUpdatedAt     DateTime           @default(now())
+  learnContent      Json?
+  nextLessonId      String?
+  nextUpdateAt      DateTime?
+  previousLessonId  String?
+  questions         Json?
+  resources         Json?
+  slug              String             @unique
+  status            String             @default("locked")
+  topics            String[]
+  updateInterval    String?
+  audioContentHash  String?
+  audioDuration     Int?
+  audioFileUrl      String?
+  audioGeneratedAt  DateTime?
+  audioLanguage     String?            @default("en-US")
+  audioProvider     String?
+  audioSize         Int?
+  audioVoice        String?
+  isMainLesson      Boolean            @default(true)
+  month             Int?
+  parentLessonId    String?
+  subLessonOrder    Int?
+  week              Int?
+  isOptional        Boolean            @default(false)
+  feedback          Feedback[]
+  progress          LessonProgress[]
+  subsections       LessonSubsection[]
+  course            Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  parentLesson      Lesson?            @relation("LessonHierarchy", fields: [parentLessonId], references: [id])
+  subLessons        Lesson[]           @relation("LessonHierarchy")
+  section           CourseSection?     @relation(fields: [sectionId], references: [id])
+
+  @@map("lessons")
+}
+
+model Lab {
+  id               String           @id @default(cuid())
+  title            String
+  description      String
+  difficulty       String
+  duration         String
+  technologies     String[]
+  category         String           @default("Free")
+  projectType      String
+  color            String
+  thumbnail        String?
+  isPublished      Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  content          String?
+  resources        Json?
+  learningOutcomes String[]
+  prerequisites    String?
+  icon             String?
+  isPremium        Boolean          @default(false)
+  lastUpdatedAt    DateTime         @default(now())
+  nextUpdateAt     DateTime?
+  slug             String           @unique
+  updateInterval   String?
+  instructions     Json?
+  audioContentHash String?
+  audioDuration    Int?
+  audioFileUrl     String?
+  audioGeneratedAt DateTime?
+  audioLanguage    String?          @default("en-US")
+  audioProvider    String?
+  audioSize        Int?
+  audioVoice       String?
+  isMainLab        Boolean          @default(true)
+  month            Int?
+  parentLabId      String?
+  subLabOrder      Int?
+  week             Int?
+  feedback         Feedback[]
+  progress         LabProgress[]
+  subsections      LabSubsection[]
+  parentLab        Lab?             @relation("LabHierarchy", fields: [parentLabId], references: [id])
+  subLabs          Lab[]            @relation("LabHierarchy")
+
+  @@map("labs")
+}
+
+// Lesson Subsections for breaking learn content into numbered sections
+model LessonSubsection {
+  id        String   @id @default(cuid())
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  order     Int      // 1, 2, 3, etc. (for 1.1, 1.2, 1.3)
+  title     String   // "Introduction to AI", "Advanced Concepts", etc.
+  content   Json     // Rich content (markdown, images, videos, code)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Audio generation fields
+  audioFileUrl        String?   // URL to generated audio file
+  audioGeneratedAt    DateTime? // When audio was last generated
+  audioDuration       Float?    // Duration in seconds
+  audioSize           Int?      // File size in bytes
+  audioProvider       String?   // TTS provider used
+  audioVoice          String?   // Voice used for generation
+  audioLanguage       String?   // Language code
+  audioContentHash    String?   // Hash of content used for generation
+  lastUpdatedAt       DateTime?
+
+  // Progress tracking relation
+  progress  SubsectionProgress[]
+
+  @@unique([lessonId, order])
+  @@index([lessonId, order])
+  @@map("lesson_subsections")
+}
+
+// Lab Subsections for breaking learn content into numbered sections
+model LabSubsection {
+  id        String   @id @default(cuid())
+  labId     String
+  lab       Lab      @relation(fields: [labId], references: [id], onDelete: Cascade)
+
+  order     Int      // 1, 2, 3, etc. (for 1.1, 1.2, 1.3)
+  title     String   // "Introduction to AI", "Advanced Concepts", etc.
+  content   Json     // Rich content (markdown, images, videos, code)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Progress tracking relation
+  progress  SubsectionProgress[]
+
+  @@unique([labId, order])
+  @@index([labId, order])
+  @@map("lab_subsections")
+}
+
+// Progress Tracking for Subsections
+model SubsectionProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Either lessonSubsectionId OR labSubsectionId will be filled
+  lessonSubsectionId String?
+  lessonSubsection   LessonSubsection? @relation(fields: [lessonSubsectionId], references: [id], onDelete: Cascade)
+
+  labSubsectionId    String?
+  labSubsection      LabSubsection? @relation(fields: [labSubsectionId], references: [id], onDelete: Cascade)
+
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, lessonSubsectionId])
+  @@unique([userId, labSubsectionId])
+  @@index([userId])
+  @@index([lessonSubsectionId])
+  @@index([labSubsectionId])
+  @@map("subsection_progress")
+}
+
+model CourseProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  courseId    String
+  progress    Float     @default(0)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@map("course_progress")
+}
+
+model LessonProgress {
+  id             String    @id @default(cuid())
+  userId         String
+  lessonId       String
+  isCompleted    Boolean   @default(false)
+  progress       Float     @default(0)
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  attemptCount   Int       @default(1)
+  bestQuizScore  Float?
+  lastActivityAt DateTime?
+  quizAttempts   Int       @default(0)
+  quizScore      Float?
+  startedAt      DateTime?
+  stuckDuration  Int?
+  timeSpent      Int?
+  lesson         Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
+}
+
+model LabProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  labId       String
+  isCompleted Boolean   @default(false)
+  progress    Float     @default(0)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lab         Lab       @relation(fields: [labId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, labId])
+  @@map("lab_progress")
+}
+
+model EmailSubscription {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  userId          String?
+  mailerLiteId    String?
+  isActive        Boolean   @default(true)
+  subscribedAt    DateTime  @default(now())
+  unsubscribedAt  DateTime?
+  source          String?
+  marketingEmails Boolean   @default(true)
+  courseUpdates   Boolean   @default(true)
+  productUpdates  Boolean   @default(true)
+  user            User?     @relation(fields: [userId], references: [id])
+
+  @@map("email_subscriptions")
+}
+
+model EmailLog {
+  id           String    @id @default(cuid())
+  to           String
+  subject      String
+  template     String
+  status       String
+  mailerSendId String?
+  sentAt       DateTime  @default(now())
+  deliveredAt  DateTime?
+  openedAt     DateTime?
+  clickedAt    DateTime?
+  content      String?
+  variables    Json?
+
+  @@map("email_logs")
+}
+
+model Newsletter {
+  id          String    @id @default(cuid())
+  subject     String
+  content     String
+  htmlContent String?
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  status      String    @default("draft")
+  campaignId  String?
+  recipients  Int?
+  opens       Int?
+  clicks      Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("newsletters")
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  type      String
+  status    String   @default("new")
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_submissions")
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  page      String
+  userId    String?
+  sessionId String?
+  ipAddress String?
+  userAgent String?
+  referer   String?
+  createdAt DateTime @default(now())
+
+  @@map("page_views")
+}
+
+model Setting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  description String?
+  type        String   @default("string")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model TTSUsage {
+  id             String   @id @default(cuid())
+  contentType    String
+  contentId      String
+  contentTitle   String
+  provider       String
+  voice          String
+  language       String
+  characterCount Int
+  estimatedCost  Float
+  actualCost     Float?
+  success        Boolean  @default(true)
+  errorMessage   String?
+  audioFileSize  Int?
+  audioDuration  Int?
+  requestTime    Int
+  createdAt      DateTime @default(now())
+
+  @@index([contentType, contentId])
+  @@index([provider])
+  @@index([createdAt])
+  @@map("tts_usage")
+}
+
+model Feedback {
+  id            String             @id @default(cuid())
+  userId        String?
+  userEmail     String
+  userName      String
+  subject       String
+  content       String
+  category      String
+  rating        Int?
+  status        String             @default("pending")
+  priority      String             @default("medium")
+  lessonId      String?
+  labId         String?
+  courseId      String?
+  responseCount Int                @default(0)
+  internalNotes String?
+  assignedTo    String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  resolvedAt    DateTime?
+  screenshotUrl String?
+  course        Course?            @relation(fields: [courseId], references: [id])
+  lab           Lab?               @relation(fields: [labId], references: [id])
+  lesson        Lesson?            @relation(fields: [lessonId], references: [id])
+  responses     FeedbackResponse[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([priority])
+  @@index([category])
+  @@map("feedback")
+}
+
+model FeedbackResponse {
+  id         String   @id @default(cuid())
+  feedbackId String
+  authorId   String
+  authorName String
+  content    String
+  isPublic   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+
+  @@index([feedbackId])
+  @@map("feedback_responses")
+}
+
+model Waitlist {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String?
+  source            String?
+  referrer          String?
+  ipAddress         String?
+  userAgent         String?
+  marketingEmails   Boolean   @default(true)
+  productUpdates    Boolean   @default(true)
+  isVerified        Boolean   @default(false)
+  verificationToken String?
+  verifiedAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  clerkUserId       String?
+  isPromoted        Boolean   @default(false)
+  promotedAt        DateTime?
+  promotedBy        String?
+
+  @@index([email])
+  @@index([clerkUserId])
+  @@index([createdAt])
+  @@map("waitlist")
+}
+
+model BetaTester {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String
+  inviteToken     String    @unique
+  inviteExpiresAt DateTime
+  status          String    @default("invited")
+  invitedAt       DateTime  @default(now())
+  inviteClickedAt DateTime?
+  registeredAt    DateTime?
+  lastActiveAt    DateTime?
+  clerkUserId     String?
+  notes           String?
+  source          String?
+  emailOpened     Boolean   @default(false)
+  emailOpenedAt   DateTime?
+  lessonsViewed   Int       @default(0)
+  totalTimeSpent  Int       @default(0)
+  lastLessonId    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([inviteToken])
+  @@index([status])
+  @@index([email])
+  @@map("beta_testers")
+}
+
+model Whitelist {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String?
+  reason            String?
+  addedBy           String?
+  isActive          Boolean   @default(true)
+  expiresAt         DateTime?
+  firstAccessAt     DateTime?
+  lastAccessAt      DateTime?
+  accessCount       Int       @default(0)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  betaTesterNotes   String?
+  betaTesterPricing String?
+  clerkUserId       String?
+  isBetaTester      Boolean   @default(false)
+  inviteToken       String?   @unique
+  inviteExpiresAt   DateTime?
+  inviteUsedAt      DateTime?
+  // Removed foreign key constraint - users don't need to exist when added to whitelist
+
+  @@index([email])
+  @@index([clerkUserId])
+  @@index([isActive])
+  @@map("whitelist")
+}
+
+model UserActivity {
+  id           String   @id @default(cuid())
+  userId       String
+  activityType String
+  contentType  String
+  contentId    String
+  sessionId    String
+  duration     Int?
+  metadata     Json?
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([contentType, contentId])
+  @@index([sessionId])
+  @@map("user_activities")
+}
+
+model CohortAnalysis {
+  id             String    @id @default(cuid())
+  cohortName     String    @unique
+  description    String?
+  startDate      DateTime
+  endDate        DateTime?
+  userCount      Int       @default(0)
+  activeUsers    Int       @default(0)
+  avgProgress    Float     @default(0)
+  avgTimeSpent   Int       @default(0)
+  completionRate Float     @default(0)
+  churnRate      Float     @default(0)
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([cohortName])
+  @@index([startDate, endDate])
+  @@map("cohort_analyses")
+}
+
+model account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime? @db.Timestamp(6)
+  refreshTokenExpiresAt DateTime? @db.Timestamp(6)
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt             DateTime  @db.Timestamp(6)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([userId], map: "idx_account_userId")
+  @@index([userId], map: "idx_account_userid")
+}
+
+model session {
+  id        String   @id
+  expiresAt DateTime @db.Timestamp(6)
+  token     String   @unique
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @db.Timestamp(6)
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([token], map: "idx_session_token")
+  @@index([userId], map: "idx_session_userId")
+  @@index([userId], map: "idx_session_userid")
+}
+
+
+model verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime @db.Timestamp(6)
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([identifier], map: "idx_verification_identifier")
+}
+
+// Server Monitoring Models
+model ServerMonitor {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String   
+  type        String   
+  host        String   @default("localhost")
+  port        Int?
+  checkUrl    String?  
+  checkCommand String? 
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  statusLogs  ServerStatusLog[]
+  
+  @@map("server_monitors")
+}
+
+model ServerStatusLog {
+  id          String   @id @default(cuid())
+  serverId    String
+  status      String   // 'up', 'down', 'degraded'
+  responseTime Int?
+  statusCode  Int?
+  errorMessage String?
+  checkTime   DateTime @default(now())
+  metadata    Json?
+  
+  // Relations
+  server        ServerMonitor @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  
+  @@index([serverId])
+  @@index([checkTime])
+  @@index([status])
+  @@map("server_status_logs")
+}
+
+// Content Update History for tracking lesson and lab updates
+model ContentUpdateHistory {
+  id            String   @id @default(cuid())
+  contentId     String   // lessonId or labId
+  contentType   String   // 'lesson' or 'lab'
+  version       Int      @default(1)
+  changeType    String   // 'content', 'video', 'resources', 'minor', 'major'
+  description   String   // Description of what changed
+  updatedAt     DateTime @default(now())
+  updatedBy     String?  // Admin who made the update
+  
+  @@index([contentId, contentType])
+  @@index([updatedAt])
+  @@map("content_update_history")
+}

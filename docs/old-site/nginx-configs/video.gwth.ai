@@ -1,0 +1,79 @@
+server {
+    server_name video.gwth.ai;
+
+    # SEO blocking headers
+    add_header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer" always;
+
+    # Security headers - Allow clerk.video.gwth.ai for custom domain
+    add_header Content-Security-Policy "default-src 'self' https://*.clerk.com https://*.clerk.dev https://clerk.video.gwth.ai wss://*.clerk.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.com https://*.clerk.dev https://clerk.video.gwth.ai; style-src 'self' 'unsafe-inline' https://*.clerk.com https://clerk.video.gwth.ai; img-src 'self' data: https: blob:; connect-src 'self' https://*.clerk.com https://*.clerk.dev https://clerk.video.gwth.ai wss://*.clerk.com;" always;
+
+    # Allow large file uploads (100MB for videos)
+    client_max_body_size 100M;
+
+    # Allow public access to uploaded files (no auth required)
+
+location /uploads/ {
+      alias /var/www/gwth-ai/video-generator/public/uploads/;
+      autoindex off;
+      auth_basic off;
+      expires 30d;
+      add_header Cache-Control "public, immutable";
+  }
+
+
+    # HTTP Basic Authentication for everything else
+    location / {
+        auth_basic "Video Generator Admin Access";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        proxy_pass http://localhost:3002;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+    }
+
+    # Block search engine crawlers
+    location = /robots.txt {
+        add_header Content-Type text/plain;
+        return 200 "User-agent: *\nDisallow: /\n";
+    }
+
+    # Deny access to hidden files
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    access_log /var/log/nginx/video.gwth.ai.access.log;
+    error_log /var/log/nginx/video.gwth.ai.error.log;
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/video.gwth.ai/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/video.gwth.ai/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}server {
+    if ($host = video.gwth.ai) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    listen [::]:80;
+    server_name video.gwth.ai;
+    return 404; # managed by Certbot
+
+
+}

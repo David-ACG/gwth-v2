@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1656, height=801">
+    <title>GWTH.ai - Minimalist Tech Stack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 1656px;
+            height: 801px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            position: relative;
+            background: #0A0A0B;
+        }
+        .geometric-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, #00BCD4 35px, #00BCD4 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, #00BCD4 35px, #00BCD4 70px);
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .logo-container {
+            position: relative;
+            margin-bottom: 50px;
+        }
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #0A0A0B, #1A1A2E);
+            border: 3px solid #00BCD4;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 60px rgba(0, 188, 212, 0.3),
+                inset 0 0 20px rgba(0, 188, 212, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        .logo-text {
+            font-size: 60px;
+            font-weight: bold;
+            color: #00BCD4;
+            text-shadow: 0 0 30px rgba(0, 188, 212, 0.8);
+        }
+        .orbit {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 188, 212, 0.2);
+            animation: rotate 20s linear infinite;
+        }
+        .orbit1 {
+            width: 300px;
+            height: 300px;
+            top: -90px;
+            left: -90px;
+        }
+        .orbit2 {
+            width: 450px;
+            height: 450px;
+            top: -165px;
+            left: -165px;
+            animation-duration: 30s;
+            animation-direction: reverse;
+        }
+        .orbit3 {
+            width: 600px;
+            height: 600px;
+            top: -240px;
+            left: -240px;
+            animation-duration: 40s;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .tech-icon {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 188, 212, 0.1);
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            color: #00BCD4;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .tech-icon:hover {
+            background: rgba(0, 188, 212, 0.2);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.5);
+        }
+        .orbit1 .tech-icon { top: -25px; left: calc(50% - 25px); }
+        .orbit2 .tech-icon:nth-child(1) { top: -25px; left: calc(50% - 25px); }
+        .orbit2 .tech-icon:nth-child(2) { bottom: -25px; left: calc(50% - 25px); }
+        .orbit3 .tech-icon:nth-child(1) { top: calc(50% - 25px); right: -25px; }
+        .orbit3 .tech-icon:nth-child(2) { top: calc(50% - 25px); left: -25px; }
+        .orbit3 .tech-icon:nth-child(3) { top: -25px; left: calc(50% - 25px); }
+        
+        h1 {
+            font-size: 72px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .brand-name {
+            color: #00BCD4;
+            text-shadow: 0 0 40px rgba(0, 188, 212, 0.6);
+        }
+        .tagline {
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .motto {
+            display: flex;
+            gap: 40px;
+            margin-top: 60px;
+        }
+        .motto-item {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            padding: 0 20px;
+        }
+        .motto-item:not(:last-child)::after {
+            content: '•';
+            position: absolute;
+            right: -22px;
+            color: #00BCD4;
+        }
+        .gradient-line {
+            position: absolute;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00BCD4, transparent);
+            left: 10%;
+        }
+        .line-top {
+            top: 100px;
+        }
+        .line-bottom {
+            bottom: 100px;
+        }
+        .corner-accent {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(0, 188, 212, 0.3);
+        }
+        .corner-tl {
+            top: 40px;
+            left: 40px;
+            border-right: none;
+            border-bottom: none;
+        }
+        .corner-tr {
+            top: 40px;
+            right: 40px;
+            border-left: none;
+            border-bottom: none;
+        }
+        .corner-bl {
+            bottom: 40px;
+            left: 40px;
+            border-right: none;
+            border-top: none;
+        }
+        .corner-br {
+            bottom: 40px;
+            right: 40px;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="geometric-pattern"></div>
+    <div class="gradient-line line-top"></div>
+    <div class="gradient-line line-bottom"></div>
+    <div class="corner-accent corner-tl"></div>
+    <div class="corner-accent corner-tr"></div>
+    <div class="corner-accent corner-bl"></div>
+    <div class="corner-accent corner-br"></div>
+    
+    <div class="container">
+        <div class="logo-container">
+            <div class="orbit orbit1">
+                <div class="tech-icon">Py</div>
+            </div>
+            <div class="orbit orbit2">
+                <div class="tech-icon">JS</div>
+                <div class="tech-icon">⚛</div>
+            </div>
+            <div class="orbit orbit3">
+                <div class="tech-icon">🔧</div>
+                <div class="tech-icon">☁</div>
+                <div class="tech-icon">📊</div>
+            </div>
+            <div class="logo">
+                <span class="logo-text">G</span>
+            </div>
+        </div>
+        
+        <h1><span class="brand-name">GWTH.ai</span></h1>
+        <p class="tagline">Master Modern Technology</p>
+        
+        <div class="motto">
+            <div class="motto-item">Learn</div>
+            <div class="motto-item">Build</div>
+            <div class="motto-item">Deploy</div>
+        </div>
+    </div>
+</body>
+</html>

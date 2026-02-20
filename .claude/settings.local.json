@@ -56,7 +56,12 @@
       "Bash(gh secret:*)",
       "Bash(npx knip:*)",
       "Bash(npm run typecheck:*)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "Bash(gh repo view:*)",
+      "Bash(scp:*)",
+      "Bash(git clone:*)",
+      "Bash(gh repo clone:*)",
+      "Bash(gzip -t:*)"
     ]
   },
   "hooks": {
