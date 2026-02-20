@@ -45,7 +45,7 @@ export async function getAdjacentLessons(
   }
 
   return {
-    prev: currentIndex > 0 ? allLessons[currentIndex - 1] : null,
-    next: currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null,
+    prev: currentIndex > 0 ? (allLessons[currentIndex - 1] ?? null) : null,
+    next: currentIndex < allLessons.length - 1 ? (allLessons[currentIndex + 1] ?? null) : null,
   }
 }

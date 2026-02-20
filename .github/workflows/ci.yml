@@ -25,11 +25,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit dependencies
+        run: npm audit --audit-level=high || true
+
       - name: Lint
         run: npm run lint
 
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: npm run typecheck
+
+      - name: Check unused code & dependencies
+        run: npx knip --include files,dependencies,devDependencies,unlisted
 
       - name: Unit tests
         run: npm test

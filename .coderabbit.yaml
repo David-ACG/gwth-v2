@@ -1,0 +1,17 @@
+language: en-US
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "src/components/**"
+      instructions: "Check for accessibility (ARIA labels, keyboard nav), proper use of shadcn/ui patterns, and responsive design."
+    - path: "src/lib/data/**"
+      instructions: "Ensure functions have JSDoc comments, return typed interfaces, and handle null/undefined gracefully."
+    - path: "src/app/**"
+      instructions: "Verify metadata exports, loading.tsx and error.tsx exist for each route, and Server Components are used by default."
+chat:
+  auto_reply: true

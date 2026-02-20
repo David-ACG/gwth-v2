@@ -1,4 +1,5 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
+import bundleAnalyzer from "@next/bundle-analyzer"
 
 const nextConfig: NextConfig = {
   output: "standalone",
@@ -7,6 +8,10 @@ const nextConfig: NextConfig = {
       // Add patterns as external image sources are identified
     ],
   },
-};
+}
 
-export default nextConfig;
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+})
+
+export default withBundleAnalyzer(nextConfig)

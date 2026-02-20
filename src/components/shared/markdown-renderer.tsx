@@ -1,16 +1,20 @@
+import DOMPurify from "isomorphic-dompurify"
+
 interface MarkdownRendererProps {
   /** Markdown content to render */
   content: string
 }
 
 /**
- * Renders markdown content as HTML.
- * Currently uses dangerouslySetInnerHTML with basic markdown-to-HTML conversion.
+ * Renders markdown content as sanitized HTML.
+ * Uses DOMPurify to prevent XSS before rendering with dangerouslySetInnerHTML.
  * Will be enhanced with Shiki syntax highlighting for code blocks later.
  */
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   // Basic markdown processing — handles headers, code blocks, lists, bold, links
-  const html = convertMarkdownToHtml(content)
+  const rawHtml = convertMarkdownToHtml(content)
+  // Sanitize HTML to prevent XSS attacks
+  const html = DOMPurify.sanitize(rawHtml)
 
   return (
     <div
@@ -124,7 +128,7 @@ function convertMarkdownToHtml(md: string): string {
 
   // Step 10: Restore code blocks from placeholders
   for (let i = 0; i < codeBlocks.length; i++) {
-    processed = processed.replace(`%%CODEBLOCK_${i}%%`, codeBlocks[i])
+    processed = processed.replace(`%%CODEBLOCK_${i}%%`, codeBlocks[i] ?? "")
   }
 
   // Clean up empty paragraphs

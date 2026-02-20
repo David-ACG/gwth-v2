@@ -60,7 +60,7 @@ export function QuizEngine({
   function handleSubmit() {
     let correct = 0
     questions.forEach((q) => {
-      if (parseInt(answers[q.id]) === q.correctOptionIndex) {
+      if (parseInt(answers[q.id] ?? "") === q.correctOptionIndex) {
         correct++
       }
     })
@@ -95,7 +95,7 @@ export function QuizEngine({
         {/* Show answers with explanations */}
         <div className="space-y-4">
           {questions.map((q) => {
-            const selected = parseInt(answers[q.id])
+            const selected = parseInt(answers[q.id] ?? "")
             const isCorrect = selected === q.correctOptionIndex
             return (
               <Card key={q.id}>

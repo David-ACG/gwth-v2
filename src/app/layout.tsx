@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import { RootProvider } from "@/providers/root-provider"
 import { RouteProgress } from "@/components/shared/route-progress"
+import { WebVitals } from "@/components/shared/web-vitals"
 import { Toaster } from "sonner"
 import "./globals.css"
 
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body className="antialiased">
         <RootProvider>
           <RouteProgress />
+          <WebVitals />
           {children}
           <Toaster richColors position="bottom-right" />
         </RootProvider>

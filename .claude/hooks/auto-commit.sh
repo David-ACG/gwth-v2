@@ -19,9 +19,9 @@ if npm test 2>&1 | tail -5; then
   # Tests passed — stage and commit
   git add -A
   if ! git diff --cached --quiet; then
-    # Generate a commit message from the diff summary
+    # Generate a conventional commit message from the diff summary
     summary=$(git diff --cached --stat | tail -1 | sed 's/^ *//')
-    git commit -m "Auto-commit: ${summary}" -m "Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>" --no-verify
+    git commit -m "chore: auto-commit ${summary}" -m "Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>" --no-verify
     echo '{"decision": "allow"}'
   else
     echo '{"decision": "allow"}'

@@ -110,7 +110,7 @@ export function AudioPlayer({ src, title, duration: propDuration, className }: A
     if (!audio) return
     const currentIndex = SPEED_OPTIONS.indexOf(speed as (typeof SPEED_OPTIONS)[number])
     const nextIndex = (currentIndex + 1) % SPEED_OPTIONS.length
-    const newSpeed = SPEED_OPTIONS[nextIndex]
+    const newSpeed = SPEED_OPTIONS[nextIndex] ?? 1
     audio.playbackRate = newSpeed
     setSpeed(newSpeed)
   }

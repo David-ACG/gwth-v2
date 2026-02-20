@@ -63,7 +63,7 @@ export function canAccessMonth(
     2: ["month2", "month3", "ongoing"],
     3: ["month3", "ongoing"],
   }
-  return monthStates[month].includes(state)
+  return monthStates[month]?.includes(state) ?? false
 }
 
 /**

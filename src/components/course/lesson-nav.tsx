@@ -60,7 +60,7 @@ export function LessonNav({
     >
       <Accordion
         type="multiple"
-        defaultValue={currentSectionId ? [currentSectionId] : [sections[0]?.id]}
+        defaultValue={currentSectionId ? [currentSectionId] : sections[0] ? [sections[0].id] : []}
       >
         {sections.map((section) => {
           const completedCount = section.lessons.filter(
