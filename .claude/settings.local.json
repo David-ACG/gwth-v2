@@ -51,7 +51,9 @@
       "Bash(npx husky:*)",
       "Bash(npx lint-staged:*)",
       "Bash(cmd /c npx -y @linear/mcp-server --help)",
-      "Bash(timeout 10 npx:*)"
+      "Bash(timeout 10 npx:*)",
+      "Bash(gh secret set:*)",
+      "Bash(gh secret:*)"
     ]
   },
   "hooks": {
