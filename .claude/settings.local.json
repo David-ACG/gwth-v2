@@ -15,7 +15,66 @@
       "Bash(npx create-next-app@latest:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx shadcn@latest init -y --defaults)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint:*)",
+      "Bash(git status:*)",
+      "Bash(timeout 30 npx next dev:*)",
+      "Bash(pkill:*)",
+      "Bash(npx vitest run)",
+      "Bash(npm test:*)",
+      "Bash(npx playwright install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npx playwright test --update-snapshots)",
+      "Bash(tee:*)",
+      "Bash(echo:*)",
+      "Bash(npx playwright test --update-snapshots --workers=2)",
+      "Bash(ls:*)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:agilecommercegroup.com)",
+      "Bash(gh repo list:*)",
+      "Bash(gh repo create:*)",
+      "Bash(npx eslint:*)",
+      "Bash(git push:*)",
+      "Bash(npx playwright:*)",
+      "Bash(node debug-screenshot.mjs:*)",
+      "WebSearch",
+      "WebFetch(domain:www.inc.com)",
+      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:www.frontiersin.org)",
+      "Bash(grep:*)",
+      "Bash(xargs:*)",
+      "Bash(wc -l:*)",
+      "mcp__claude_ai_Mermaid_Chart__validate_and_render_mermaid_diagram",
+      "Bash(npx husky:*)",
+      "Bash(npx lint-staged:*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/auto-commit.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/lint-on-edit.sh",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   }
 }

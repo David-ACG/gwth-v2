@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, Typecheck, Test, Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  deploy-hetzner:
+    name: Deploy to Hetzner (Production)
+    needs: check
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Coolify deployment
+        run: |
+          response=$(curl -s -w "\n%{http_code}" \
+            "http://195.201.177.66:8000/api/v1/deploy?uuid=${{ secrets.COOLIFY_APP_UUID }}&force=false" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}")
+          http_code=$(echo "$response" | tail -1)
+          body=$(echo "$response" | head -n -1)
+          echo "Status: $http_code"
+          echo "Response: $body"
+          if [ "$http_code" -ge 400 ]; then
+            echo "::error::Coolify deploy failed with status $http_code"
+            exit 1
+          fi
+
+  deploy-p520:
+    name: Deploy to P520 (Test)
+    needs: check
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Coolify deployment via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.P520_HOST }}
+          username: ${{ secrets.P520_USER }}
+          key: ${{ secrets.P520_SSH_KEY }}
+          port: 22
+          script: |
+            docker exec coolify php artisan tinker --execute="
+            use App\Models\Application;
+            use App\Models\ApplicationDeploymentQueue;
+            \$app = Application::where('uuid', '${{ secrets.P520_APP_UUID }}')->first();
+            \$server = \$app->destination->server;
+            \$queue = ApplicationDeploymentQueue::create([
+                'application_id' => \$app->id,
+                'deployment_uuid' => Illuminate\Support\Str::uuid()->toString(),
+                'force_rebuild' => false,
+                'commit' => 'HEAD',
+                'status' => 'queued',
+                'is_webhook' => false,
+                'server_id' => \$server->id,
+            ]);
+            dispatch(new App\Jobs\ApplicationDeploymentJob(\$queue->id));
+            echo 'Deploy queued! Queue ID: ' . \$queue->id;
+            "

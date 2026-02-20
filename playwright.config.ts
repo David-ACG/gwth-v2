@@ -19,6 +19,13 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
     {
+      name: "desktop-dark",
+      use: {
+        ...devices["Desktop Chrome"],
+        colorScheme: "dark",
+      },
+    },
+    {
       name: "mobile-chromium",
       use: { ...devices["Pixel 5"] },
     },
