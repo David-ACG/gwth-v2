@@ -2,7 +2,7 @@
 
 > Phased rollout plan for GWTH v2 backend integration, with cost projections at each phase.
 >
-> Last updated: 2026-02-19
+> Last updated: 2026-02-20
 
 ---
 
@@ -30,6 +30,7 @@ gantt
 
     section Phase 1 (Done)
     Frontend Foundation         :done, p1a, 2026-01-01, 2026-02-19
+    Quality & Automation Infra  :done, p1b, 2026-02-19, 2026-02-20
 
     section Phase 2
     Supabase Setup              :p2a, 2026-02-20, 3d
@@ -63,9 +64,9 @@ gantt
 
 ## 2. Phase 1 — Foundation (Complete)
 
-**Status: Done** (all 5 checkpoints passing)
+**Status: Done** (all checkpoints passing — 32/32 tests, 0 TypeScript errors, ESLint clean, Knip clean)
 
-What was built:
+### Frontend
 - Next.js 16 frontend with all pages (public + dashboard)
 - shadcn/ui component library with custom components
 - Design system (OKLCH colours, Graphite Warm dark mode, cascading spiral)
@@ -73,10 +74,30 @@ What was built:
 - Mock data layer with realistic seed data (1 course, 94 lessons, 5 labs)
 - Auth abstraction (`lib/auth.ts`) with mock user
 - Config centralisation (`lib/config.ts`)
-- Route protection stubs (`middleware.ts`)
+- Route protection stubs (`middleware.ts` with security headers)
 - Error boundaries, loading states, not-found pages on every route
 - Vitest component tests + Playwright E2E tests (32/32 passing)
 - Dev toolbar for testing subscription states
+
+### Quality & Automation Infrastructure
+- **CI/CD pipeline:** GitHub Actions (audit → lint → typecheck → knip → test → build → deploy to Hetzner + P520)
+- **Security scanning:** CodeQL (weekly + on push/PR), Dependabot (auto-PRs for vulnerable deps)
+- **Dependency updates:** Renovate config (auto-merge patches), Dependabot config
+- **AI code review:** CodeRabbit config (`.coderabbit.yaml` with path-specific instructions)
+- **Pre-commit hooks:** Husky + lint-staged (ESLint fix, Prettier, full test suite)
+- **Commit enforcement:** Commitlint for conventional commit format
+- **Post-merge hooks:** Auto `npm install` after pulling new dependencies
+- **Dead code detection:** Knip config (`knip.json`) running in CI
+- **Security headers:** HSTS, CSP, X-Frame-Options, etc. in middleware
+- **XSS protection:** DOMPurify sanitisation on markdown HTML rendering
+- **TypeScript strictness:** `noUncheckedIndexedAccess` enabled (9 errors fixed across 6 files)
+- **Test coverage:** Vitest thresholds (40% lines/functions/statements, 35% branches)
+- **Web Vitals:** `useReportWebVitals` component in root layout (console output in dev)
+- **Bundle analysis:** `@next/bundle-analyzer` configured (`ANALYZE=true npm run build`)
+- **Claude Code hooks:** Stop hook (auto-test + auto-commit), PostToolUse hook (lint on edit)
+- **Context management:** `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=60` for auto-compaction
+- **Lighthouse CI:** Config ready (`lighthouserc.js`), will activate in Phase 4
+- **Documentation:** Quality tools research doc, automation setup guide
 
 ---
 
@@ -352,14 +373,24 @@ interface LessonSyncPayload {
 
 ### 4.2 Monitoring & Analytics
 
-**Duration:** 1-2 days
+**Duration:** 2-3 days
 
+Already done (Phase 1):
+- [x] Web Vitals reporting component in root layout (`src/components/shared/web-vitals.tsx`)
+- [x] CodeQL security scanning (`.github/workflows/codeql.yml`)
+- [x] Dependabot vulnerability alerts (`.github/dependabot.yml`)
+- [x] Lighthouse CI config ready (`lighthouserc.js`)
+
+Still to do:
 - [ ] Deploy Uptime Kuma via Coolify
 - [ ] Configure all monitors (website, API, video, Supabase, pipeline)
 - [ ] Connect Telegram alerts
 - [ ] Deploy Plausible via Coolify
 - [ ] Add Plausible script to Next.js layout
-- [ ] Configure Sentry (install SDK, set DSN)
+- [ ] Configure Sentry (install SDK, set DSN) — see [research §6.1](../research-quality-tools-2025-2026.md)
+- [ ] Configure PostHog (analytics + feature flags + session replay) — see [research §6.2](../research-quality-tools-2025-2026.md)
+- [ ] Wire Web Vitals reporting to PostHog/Sentry (replace console.log)
+- [ ] Activate Lighthouse CI in GitHub Actions workflow
 - [ ] Create `/api/health` endpoint
 - [ ] Test all alerts (trigger a failure, verify Telegram message)
 
@@ -367,12 +398,24 @@ interface LessonSyncPayload {
 
 **Duration:** 1-2 days
 
-- [ ] Add security headers to `next.config.ts` (CSP, X-Frame-Options, etc.)
-- [ ] Verify all secrets are in Coolify env vars (not in code)
+Already done (Phase 1):
+- [x] Security headers in middleware (HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
+- [x] DOMPurify XSS sanitisation on markdown HTML rendering
+- [x] CodeQL semantic security scanning (weekly + on push/PR)
+- [x] Dependabot auto-PRs for vulnerable dependencies
+- [x] `npm audit --audit-level=high` in CI pipeline
+- [x] `security.txt` at `/.well-known/security.txt`
+- [x] GitHub Secrets configured for CI deploy jobs (no secrets in code)
+
+Still to do:
+- [ ] Update CSP in middleware to allow Supabase, Stripe, Plausible, video domains
+- [ ] Consider Nosecone for type-safe CSP management (see [research §3.1](../research-quality-tools-2025-2026.md))
+- [ ] Configure Arcjet for bot protection + rate limiting (see [research §3.3](../research-quality-tools-2025-2026.md))
 - [ ] Audit RLS policies (test with multiple users)
 - [ ] Enable Supabase Auth email verification
 - [ ] Configure rate limiting on auth and API routes
-- [ ] Run `npm audit` and fix any vulnerabilities
+- [ ] Install Socket Security GitHub App for supply chain scanning
+- [ ] Run Mozilla Observatory scan after deployment to verify headers
 
 ### 4.4 GDPR Compliance
 
@@ -396,8 +439,10 @@ interface LessonSyncPayload {
 - [ ] Monitor Uptime Kuma for availability
 - [ ] Gather feedback on UX, performance, video quality
 - [ ] Fix critical bugs
+- [ ] Load test with k6 (simulate 50 concurrent users — see [research §5.4](../research-quality-tools-2025-2026.md))
 - [ ] Load test video server (simulate 50 concurrent viewers)
 - [ ] Verify Stripe payment flow with real cards (test mode → live mode)
+- [ ] Run Unlighthouse full-site audit (see [research §2.2](../research-quality-tools-2025-2026.md))
 
 ### 4.6 Launch Checklist
 
@@ -427,6 +472,25 @@ interface LessonSyncPayload {
 | **Offline video + DRM** | With mobile app | Add FairPlay (iOS) + Widevine (Android) via Mux or Bitmovin. Enables offline downloads with content protection. Existing HLS segments are reused — just adds an encryption wrapper. ~£100+/month. |
 | **Enterprise features** | First team customer | Admin dashboard, team billing, progress reporting. |
 | **Content search** | User feedback | Full-text search across lessons using Supabase pg_trgm or vector search. |
+
+### Quality & DX Improvements (from [Quality Tools Research](../research-quality-tools-2025-2026.md))
+
+| Initiative | Priority | Trigger | Description |
+|-----------|----------|---------|-------------|
+| **Storybook** | HIGH | After 20+ custom components | Component development environment + visual documentation. `@storybook/nextjs-vite`. |
+| **PPR (Partial Prerendering)** | HIGH | Phase 4 performance tuning | Static shell + dynamic streaming for dashboard pages. Built into Next.js 16. |
+| **Dynamic OG images** | HIGH | Before launch SEO | Auto-generated social preview images per course/lesson via `next/og`. |
+| **JSON-LD structured data** | HIGH | Before launch SEO | Schema.org Course + LearningResource markup for Google rich results. |
+| **Stryker mutation testing** | HIGH | After 70%+ coverage | Verify test effectiveness beyond code coverage numbers. |
+| **k6 load testing** | HIGH | Beta testing phase | Simulate concurrent users to find capacity limits on Coolify/Docker setup. |
+| **Chromatic** | MEDIUM | If Storybook adopted | Visual regression testing. Free: 5,000 snapshots/month. |
+| **CSS Container Queries** | MEDIUM | Component refinement | Component-level responsive design for cards and widgets. |
+| **View Transitions API** | MEDIUM | After launch polish | Browser-native page transitions (experimental in React 19/Next.js 16). |
+| **PWA manifest** | MEDIUM | User request | Installable app + offline lesson reading. Use Serwist. |
+| **Guidepup screen reader testing** | HIGH | Accessibility audit | Automated NVDA/VoiceOver testing with Playwright. |
+| **Biome** | LOW | If ESLint causes friction | Replace ESLint + Prettier with 10-25x faster Rust toolchain. |
+| **Partytown** | HIGH | If analytics scripts impact CWV | Offload third-party scripts to web worker. |
+| **Arcjet full security** | HIGH | Post-launch hardening | Bot protection, advanced rate limiting, Shield WAF. |
 
 ---
 
@@ -526,14 +590,13 @@ Configure these in your Claude Code MCP settings:
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "@linear/mcp-server@latest"],
-      "env": {
-        "LINEAR_API_KEY": "YOUR_LINEAR_API_KEY"
-      }
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/sse"]
     }
   }
 }
 ```
+
+**Note:** The `@linear/mcp-server` npm package does not exist. Use the official hosted server at `mcp.linear.app/sse` via `mcp-remote`. Authentication is handled via browser OAuth on first connection.
 
 **Capabilities:** Create/update issues, manage cycles, search backlog, link PRs to issues.
 
@@ -559,6 +622,8 @@ Should show all 4 MCP servers connected with their available tools.
 | **Video HLS encoding quality** | Low | Medium | Test with real videos before launch. Adjust FFmpeg CRF/bitrate params. Use ABR to handle varied connections. |
 | **GDPR complaint** | Low | High | Privacy policy, data export, account deletion all implemented before launch. DPAs signed with all processors. |
 | **Payment fraud** | Low | Medium | Stripe Radar (included) handles fraud detection. Enable 3D Secure for additional protection. |
+| **npm supply chain attack** | Medium | High | Dependabot + `npm audit` in CI detect known vulns. Socket Security GitHub App detects typosquatting and suspicious packages. `npm ci` enforces lockfile integrity. Renovate auto-merges only patch/minor updates. |
+| **Regression from dependency update** | Medium | Low | CI runs full test suite before deploy. Auto-merge only for patches with passing CI. Major updates require manual review. |
 
 ---
 
@@ -566,12 +631,20 @@ Should show all 4 MCP servers connected with their available tools.
 
 The critical path is:
 
-1. **Supabase setup + Auth** (week 1) — unlocks all other backend work
-2. **Database schema + Data layer migration** (week 2) — replaces mock data with real persistence
-3. **Stripe integration** (week 2-3) — enables payments and subscription gating
-4. **Video pipeline + Nginx** (week 3-4) — enables real lesson content delivery
-5. **Infrastructure + monitoring** (week 4-5) — production readiness
-6. **Beta testing** (week 5-6) — validate everything with real users
-7. **Launch** (week 6-7)
+1. **Quality infrastructure** (done) — CI/CD, security scanning, automated testing, dependency management
+2. **Supabase setup + Auth** (week 1) — unlocks all other backend work
+3. **Database schema + Data layer migration** (week 2) — replaces mock data with real persistence
+4. **Stripe integration** (week 2-3) — enables payments and subscription gating
+5. **Video pipeline + Nginx** (week 3-4) — enables real lesson content delivery
+6. **Infrastructure + monitoring** (week 4-5) — production readiness
+7. **Beta testing** (week 5-6) — validate everything with real users
+8. **Launch** (week 6-7)
 
 Total estimated time: **6-7 weeks** from start of Phase 2 to launch, working full-time with Claude Code.
+
+### Quality Tools Reference
+
+For full details on all quality tools (implemented and planned), see:
+- [Quality Tools Research](../research-quality-tools-2025-2026.md) — comprehensive research with rationale, setup guides, and priority matrix
+- [Automation Setup Guide](../automation-setup-guide.md) — reusable guide for setting up the full automation stack
+- [Technology Decisions §15](./technology-decisions.md#15-quality--automation-tooling) — detailed documentation of implemented tools

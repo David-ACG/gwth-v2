@@ -54,7 +54,8 @@
       "Bash(timeout 10 npx:*)",
       "Bash(gh secret set:*)",
       "Bash(gh secret:*)",
-      "Bash(npx knip:*)"
+      "Bash(npx knip:*)",
+      "Bash(npm run typecheck:*)"
     ]
   },
   "hooks": {

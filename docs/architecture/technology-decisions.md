@@ -3,7 +3,7 @@
 > Detailed rationale for every technology choice in the GWTH v2 stack.
 > Each decision includes: what it is, why it was chosen, alternatives considered, MCP/AI-coding status, cost, and risks.
 >
-> Last updated: 2026-02-19
+> Last updated: 2026-02-20
 
 ---
 
@@ -23,6 +23,7 @@
 12. [CI/CD — GitHub Actions + Coolify](#12-cicd--github-actions--coolify)
 13. [Project Management — Linear](#13-project-management--linear)
 14. [GDPR Compliance](#14-gdpr-compliance)
+15. [Quality & Automation Tooling](#15-quality--automation-tooling)
 
 ---
 
@@ -939,56 +940,76 @@ Privacy-friendly web analytics. Self-hosted via Coolify. No cookies, no tracking
 
 ### What It Is
 
-GitHub Actions runs tests and linting on every push. Coolify handles deployment via webhook trigger.
+A multi-layer automation pipeline: Claude Code hooks (instant local feedback) → Husky pre-commit hooks (local gate) → GitHub Actions CI (remote gate) → Coolify deployment (automatic on master).
 
 ### Pipeline
 
 ```mermaid
 flowchart LR
-    A[Git Push] --> B[GitHub Actions]
-    B --> C{Tests Pass?}
-    C -->|Yes| D[Coolify Webhook]
-    C -->|No| E[Fail - Notify]
-    D --> F[Build Docker Image]
-    F --> G[Deploy to Hetzner]
-    G --> H[Health Check]
-    H -->|OK| I[Live]
-    H -->|Fail| J[Rollback]
+    subgraph "Local (Claude Code)"
+        A1[Edit File] --> A2[PostToolUse Hook<br/>ESLint on save]
+        A3[Claude Stops] --> A4[Stop Hook<br/>Run tests + auto-commit]
+    end
+
+    subgraph "Local (Git)"
+        A4 --> B1[pre-commit<br/>lint-staged + tests]
+        B1 --> B2[commit-msg<br/>Commitlint]
+        B2 --> B3[Git Push]
+    end
+
+    subgraph "GitHub Actions CI"
+        B3 --> C1[npm audit]
+        C1 --> C2[ESLint]
+        C2 --> C3[TypeScript]
+        C3 --> C4[Knip]
+        C4 --> C5[Vitest]
+        C5 --> C6[Build]
+    end
+
+    subgraph "Deploy (parallel)"
+        C6 --> D1[Coolify API<br/>Hetzner Production]
+        C6 --> D2[SSH + Tinker<br/>P520 Test]
+    end
 ```
 
-### GitHub Actions Workflow
+### GitHub Actions Workflows
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22 }
-      - run: npm ci
-      - run: npm run lint
-      - run: npm test
-      - run: npx tsc --noEmit
+**Main CI (`ci.yml`):**
+- **Trigger:** Push to master, PRs against master
+- **Concurrency:** Cancels in-progress runs for same ref
+- **Check job:** npm audit → lint → typecheck → knip (unused code) → unit tests → build
+- **Deploy jobs:** Parallel deploy to Hetzner (Coolify API) and P520 (SSH tinker) — only on master push after check passes
 
-  deploy:
-    needs: test
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Coolify deployment
-        run: |
-          curl -s "${{ secrets.COOLIFY_DEPLOY_URL }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}"
-```
+**CodeQL (`codeql.yml`):**
+- **Trigger:** Push to master, PRs, weekly Monday scan (cron)
+- **Purpose:** Semantic security analysis for JavaScript/TypeScript vulnerabilities
+
+**Dependabot (`dependabot.yml`):**
+- **Purpose:** Automatic PRs for npm and GitHub Actions dependency vulnerabilities
+- **Schedule:** Weekly, grouped by type (production deps, dev deps, GitHub Actions)
+
+### Local Automation (Claude Code Hooks)
+
+| Hook | Trigger | What It Does |
+|------|---------|-------------|
+| Stop hook | Claude Code finishes a response | Runs `npm test`, auto-commits if passing, blocks if failing |
+| PostToolUse hook | Write or Edit tool used on .ts/.tsx | Runs ESLint on the changed file |
+
+Config: `.claude/settings.local.json`, scripts in `.claude/hooks/`
+
+### Local Automation (Husky + lint-staged)
+
+| Hook | What It Does |
+|------|-------------|
+| `pre-commit` | Runs lint-staged (ESLint fix on .ts/.tsx, Prettier on .json/.md/.css) + full test suite |
+| `commit-msg` | Enforces conventional commit format via commitlint |
+| `post-merge` | Auto-runs `npm install` after pulling changes with new dependencies |
 
 ### Cost
 
 - GitHub Actions free tier: 2,000 minutes/month (more than enough for daily deploys)
 - Coolify: self-hosted, free
+- All quality tools: free and open source
 
 ---
 
@@ -1078,3 +1099,172 @@ export async function DELETE(request: NextRequest) {
   return Response.json({ success: true })
 }
 ```
+
+---
+
+## 15. Quality & Automation Tooling
+
+> All tools in this section are free, open source, and were implemented during Phase 1.
+> Full research and rationale: [Quality Tools Research](../research-quality-tools-2025-2026.md)
+
+### 15.1 Code Quality
+
+#### Knip — Unused Code Detection
+
+**What:** Detects unused files, exports, dependencies, and devDependencies in a single run. Understands Next.js entry points (pages, layouts, API routes).
+
+**Config:** `knip.json` — ignores `src/components/ui/**` (shadcn generated) and indirect dependencies (tailwindcss, shiki, date-fns, etc.).
+
+**CI integration:** Runs in GitHub Actions as `npx knip --include files,dependencies,devDependencies,unlisted`.
+
+**npm:** `knip` (v5.84+). Docs: [knip.dev](https://knip.dev/)
+
+#### noUncheckedIndexedAccess — TypeScript Strict Flag
+
+**What:** Makes array/object index access return `T | undefined` instead of `T`. Prevents the #1 source of runtime TypeErrors.
+
+**Implementation:** Added to `tsconfig.json`. Required fixing 9 type errors across 6 files with appropriate null checks (`?? ""`, `?? 1`, `?? null`, optional chaining).
+
+#### Commitlint — Conventional Commits
+
+**What:** Enforces conventional commit message format (`feat:`, `fix:`, `docs:`, `chore:`, etc.) via Husky commit-msg hook.
+
+**Config:** `.commitlintrc.json` extends `@commitlint/config-conventional`.
+
+**Note:** The Claude Code auto-commit hook uses `--no-verify` to bypass commitlint (it generates its own `chore: auto-commit` messages). Manual commits are enforced.
+
+**npm:** `@commitlint/cli`, `@commitlint/config-conventional`. Docs: [commitlint.js.org](https://commitlint.js.org/)
+
+### 15.2 Security
+
+#### CodeQL — Semantic Security Scanning
+
+**What:** GitHub's free code analysis engine that finds security vulnerabilities by querying code as data.
+
+**Setup:** `.github/workflows/codeql.yml` — runs on push to master, on PRs, and weekly Monday scan.
+
+**Why it matters:** Catches vulnerabilities like XSS, SQL injection, command injection, and insecure data flow that linters miss. Particularly important given critical CVEs in React Server Components and Next.js discovered in 2025 (both CVSS 10.0).
+
+**Cost:** Free for all GitHub repos. Docs: [GitHub CodeQL docs](https://docs.github.com/en/code-security/code-scanning)
+
+#### DOMPurify — XSS Sanitisation
+
+**What:** Industry-standard DOM-only XSS sanitiser for HTML content.
+
+**Implementation:** `isomorphic-dompurify` wraps all HTML output in `markdown-renderer.tsx` before `dangerouslySetInnerHTML`. Applied server-side and client-side.
+
+**npm:** `isomorphic-dompurify`. Docs: [github.com/cure53/DOMPurify](https://github.com/cure53/DOMPurify)
+
+#### Security Headers — Middleware
+
+**What:** Comprehensive security headers applied to all responses via `src/middleware.ts`:
+
+| Header | Value |
+|--------|-------|
+| X-DNS-Prefetch-Control | on |
+| X-Frame-Options | SAMEORIGIN |
+| X-Content-Type-Options | nosniff |
+| Referrer-Policy | strict-origin-when-cross-origin |
+| Permissions-Policy | camera=(), microphone=(), geolocation=() |
+| Strict-Transport-Security | max-age=63072000; includeSubDomains; preload |
+| Content-Security-Policy | default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-ancestors 'none' |
+
+**Future:** Replace hand-rolled CSP with Nosecone (`@nosecone/next`) for type-safe security header management once backend integrations require CSP modifications.
+
+#### security.txt
+
+**What:** Standard file at `/.well-known/security.txt` for vulnerability disclosure.
+
+**Location:** `public/.well-known/security.txt` — contact: security@gwth.ai, expires 2027-01-01.
+
+### 15.3 Dependency Management
+
+#### Dependabot
+
+**What:** GitHub-native automatic PRs for vulnerable dependencies.
+
+**Config:** `.github/dependabot.yml` — weekly checks for npm and GitHub Actions, grouped by type.
+
+#### Renovate
+
+**What:** Advanced dependency update automation with auto-merge for patches, grouping, and scheduling.
+
+**Config:** `renovate.json` — extends recommended config, weekly schedule, auto-merges minor/patch, groups shadcn/radix deps and testing deps.
+
+**Note:** Requires installing the [Renovate GitHub App](https://github.com/apps/renovate) (config file is ready).
+
+### 15.4 Performance Monitoring
+
+#### @next/bundle-analyzer
+
+**What:** Interactive treemap visualisation of JavaScript bundles.
+
+**Usage:** `ANALYZE=true npm run build` (or `npm run analyze`).
+
+**Config:** Wrapped in `next.config.ts` via `bundleAnalyzer({ enabled: process.env.ANALYZE === 'true' })`.
+
+#### Web Vitals Reporting
+
+**What:** `useReportWebVitals` hook captures real user metrics (LCP, CLS, INP, FCP, TTFB) with colour-coded console output.
+
+**Implementation:** `src/components/shared/web-vitals.tsx` — added to root layout. Currently logs to console in development. Will send to PostHog or Sentry in production (Phase 4).
+
+#### Lighthouse CI (config ready)
+
+**What:** Automated Lighthouse audits with performance thresholds.
+
+**Config:** `lighthouserc.js` — 3 runs per URL, performance ≥ 0.8 (warn), accessibility ≥ 0.9 (error), SEO ≥ 0.9 (warn), LCP < 3000ms, CLS < 0.1.
+
+**Status:** Config ready, will be added to CI pipeline in Phase 4 when full app is running.
+
+### 15.5 Testing
+
+#### Coverage Thresholds
+
+**What:** Vitest configured to fail if coverage drops below thresholds.
+
+**Config:** `vitest.config.ts` — 40% lines/functions/statements, 35% branches. Uses v8 provider with text, html, and lcov reporters.
+
+#### fast-check (installed, not yet used)
+
+**What:** Property-based testing that generates random inputs and finds minimal failing cases.
+
+**npm:** `fast-check`. Will be used for quiz scoring, progress calculation, and other data transformation functions.
+
+### 15.6 AI-Assisted Development
+
+#### CodeRabbit — AI Code Review
+
+**What:** AI-powered PR review with summaries and inline suggestions.
+
+**Config:** `.coderabbit.yaml` — path-specific instructions for components, data layer, and app routes.
+
+**Cost:** Free tier (PR summaries + basic reviews). Requires installing the [CodeRabbit GitHub App](https://github.com/apps/coderabbitai).
+
+#### Claude Code Hooks
+
+**What:** Automated quality gates that run at Claude Code lifecycle events.
+
+| Hook | File | Trigger | Action |
+|------|------|---------|--------|
+| Stop | `.claude/hooks/auto-commit.sh` | Claude finishes response | Run tests → auto-commit if passing, block if failing |
+| PostToolUse | `.claude/hooks/lint-on-edit.sh` | Write or Edit on .ts/.tsx | Run ESLint on changed file |
+
+**Context management:** `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=60` set in `~/.bash_profile` to auto-compact at 60% context usage.
+
+### 15.7 Future Tools (Researched, Not Yet Implemented)
+
+See [Quality Tools Research](../research-quality-tools-2025-2026.md) for full details on each tool.
+
+| Tool | Category | Priority | When |
+|------|----------|----------|------|
+| **Sentry** | Error tracking + session replay | HIGH | Phase 4 (launch) |
+| **PostHog** | Product analytics + feature flags + A/B testing | HIGH | Phase 4 (launch) |
+| **Arcjet** | Bot protection + rate limiting + WAF | HIGH | Phase 4 (security hardening) |
+| **Storybook** | Component development + visual documentation | HIGH | Phase 5 (growth) |
+| **k6** | Load testing (before launch) | HIGH | Phase 4 (beta) |
+| **Nosecone** | Type-safe security headers (replace hand-rolled CSP) | MEDIUM | Phase 4 (when CSP needs updating) |
+| **Stryker** | Mutation testing (test quality) | HIGH | Phase 5 (growth) |
+| **Chromatic** | Visual regression testing (with Storybook) | MEDIUM | Phase 5 (growth) |
+| **Partytown** | Third-party script offloading | HIGH | Phase 5 (if analytics scripts impact CWV) |
+| **Biome** | ESLint + Prettier replacement (10-25x faster) | MEDIUM | Long-term (when ESLint causes friction) |

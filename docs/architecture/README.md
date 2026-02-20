@@ -3,7 +3,7 @@
 > The complete backend architecture for the GWTH student learning platform.
 > Complements the [Design Requirements](../design-requirements.md) (frontend spec) and [CLAUDE.md](../../CLAUDE.md) (project conventions).
 >
-> Last updated: 2026-02-19
+> Last updated: 2026-02-20
 
 ---
 
@@ -14,7 +14,8 @@
 3. [System Architecture](#3-system-architecture)
 4. [Key Architectural Decisions](#4-key-architectural-decisions)
 5. [Answers to Strategic Questions](#5-answers-to-strategic-questions)
-6. [Related Documents](#6-related-documents)
+6. [Quality & Automation Infrastructure](#6-quality--automation-infrastructure-implemented)
+7. [Related Documents](#7-related-documents)
 
 ---
 
@@ -61,6 +62,13 @@ This is both a development principle and a business requirement. GWTH teaches pe
 | **CI/CD** | GitHub Actions + Coolify webhooks | Yes (GitHub built-in) | Free (2,000 min) | Done |
 | **Project Management** | Linear | Yes (`@linear/sdk`) | Free tier | Now |
 | **Deployment** | Coolify (self-hosted) | No | Free | Done |
+| **Code Quality** | Knip, CodeQL, Commitlint, noUncheckedIndexedAccess | N/A | Free | Done |
+| **Security Scanning** | CodeQL, Dependabot, DOMPurify, Security Headers | N/A | Free | Done |
+| **Dependency Mgmt** | Renovate, Dependabot | N/A | Free | Done |
+| **AI Code Review** | CodeRabbit (free tier) | N/A | Free | Done |
+| **Performance** | Bundle Analyzer, Lighthouse CI, Web Vitals | N/A | Free | Done |
+| **Test Quality** | Vitest coverage thresholds, fast-check | N/A | Free | Done |
+| **DX Automation** | Husky, lint-staged, Claude Code hooks | N/A | Free | Done |
 
 **MCP-enabled core services:** Supabase (auth + DB + storage), Stripe, Sentry, Linear, GitHub — 5 services with direct Claude Code integration.
 
@@ -279,16 +287,11 @@ Self-hosted on Hetzner, encoded by the P520 pipeline via FFmpeg. This gives you:
 
 ### Q2: Should I use CodeRabbit?
 
-**No. Not at this stage.**
+**Yes. Using the free tier.**
 
-You're a solo developer using Claude Code, which already provides AI code review. CodeRabbit ($12/month) adds a second AI reviewer on GitHub PRs. The marginal value for a solo developer is low:
-- Claude Code catches issues during development (before the PR)
-- ESLint + TypeScript strict mode catch static issues
-- Vitest + Playwright catch runtime issues
+*Updated 2026-02-20:* Originally the recommendation was "no" due to marginal value for a solo developer. After further research, the free tier provides PR summarisation and basic reviews at zero cost — worth having as a "second pair of eyes" alongside Claude Code. The `.coderabbit.yaml` config file provides path-specific review instructions (e.g., stricter checks on `lib/data/` and `app/` routes).
 
-**When to reconsider:** If you add a second developer, CodeRabbit becomes valuable as a consistent PR reviewer that catches things humans miss. At that point, $12/month is justified.
-
-**Free alternative:** GitHub's built-in code scanning (CodeQL) for security vulnerabilities. Enable it in the repo settings — it's free for public and private repos.
+**Also implemented:** CodeQL (free GitHub security scanning) runs weekly and on every push/PR, catching security vulnerabilities that CodeRabbit doesn't focus on. Both tools complement each other — CodeRabbit for code quality, CodeQL for security.
 
 ### Q3: Should I use Linear?
 
@@ -302,7 +305,52 @@ You're already using it, found it helpful for prioritisation, and it has an MCP 
 
 ---
 
-## 6. Related Documents
+## 6. Quality & Automation Infrastructure (Implemented)
+
+A comprehensive quality and automation stack was implemented alongside Phase 1. Full research and rationale is documented in [Quality Tools Research](../research-quality-tools-2025-2026.md). Setup instructions are in [Automation Setup Guide](../automation-setup-guide.md).
+
+### What's Running Now
+
+| Category | Tools | Where |
+|----------|-------|-------|
+| **CI/CD Pipeline** | GitHub Actions (lint → typecheck → knip → test → build → deploy) | `.github/workflows/ci.yml` |
+| **Security Scanning** | CodeQL (weekly + on push/PR) | `.github/workflows/codeql.yml` |
+| **Dependency Updates** | Dependabot + Renovate (auto-merge patches) | `.github/dependabot.yml`, `renovate.json` |
+| **AI Code Review** | CodeRabbit (free tier, auto-reviews PRs) | `.coderabbit.yaml` |
+| **Pre-commit** | Husky + lint-staged (ESLint fix + Prettier) | `.husky/pre-commit` |
+| **Commit Messages** | Commitlint (conventional commits enforced) | `.husky/commit-msg`, `.commitlintrc.json` |
+| **Post-merge** | Auto `npm install` after pulling changes | `.husky/post-merge` |
+| **Dead Code** | Knip (unused files, exports, dependencies) | `knip.json` |
+| **Security Headers** | HSTS, CSP, X-Frame-Options, etc. via middleware | `src/middleware.ts` |
+| **XSS Protection** | DOMPurify sanitisation on markdown HTML | `src/components/shared/markdown-renderer.tsx` |
+| **TypeScript Strictness** | `noUncheckedIndexedAccess` (array access returns `T \| undefined`) | `tsconfig.json` |
+| **Test Coverage** | Vitest thresholds (40% lines/functions/statements, 35% branches) | `vitest.config.ts` |
+| **Web Vitals** | `useReportWebVitals` with colour-coded console output | `src/components/shared/web-vitals.tsx` |
+| **Bundle Analysis** | `@next/bundle-analyzer` (run with `ANALYZE=true`) | `next.config.ts` |
+| **Claude Code Hooks** | Stop hook (auto-commit with test gate), PostToolUse hook (lint on edit) | `.claude/hooks/` |
+
+### Still Needs Manual Setup (GitHub Apps)
+
+These have config files ready but require browser installation:
+1. **Renovate** — [github.com/apps/renovate](https://github.com/apps/renovate)
+2. **CodeRabbit** — [github.com/apps/coderabbitai](https://github.com/apps/coderabbitai)
+3. **Socket Security** — [github.com/apps/socket-security](https://github.com/apps/socket-security)
+
+### Future Quality Tools (from Research)
+
+| Tool | Category | When | Reference |
+|------|----------|------|-----------|
+| Sentry | Error tracking + session replay | Phase 4 launch | Research §6.1 |
+| PostHog | Product analytics + feature flags | Phase 4 launch | Research §6.2 |
+| Lighthouse CI | Automated performance scoring in CI | Phase 4 launch | Research §2.1 |
+| Storybook | Component development + documentation | Phase 5 growth | Research §4.1 |
+| k6 | Load testing before launch | Phase 4 beta | Research §5.4 |
+| Arcjet | Bot protection + rate limiting | Phase 4 security | Research §3.3 |
+| Stryker | Mutation testing for test quality | Phase 5 growth | Research §5.1 |
+
+---
+
+## 7. Related Documents
 
 | Document | What It Covers |
 |----------|---------------|
@@ -310,4 +358,6 @@ You're already using it, found it helpful for prioritisation, and it has an MCP 
 | [Infrastructure & Deployment](./infrastructure-and-deployment.md) | Server topology, VM configuration, Coolify setup, networking, backups, monitoring |
 | [Implementation Roadmap](./implementation-roadmap.md) | Phased rollout plan with cost projections at each phase |
 | [Design Requirements](../design-requirements.md) | Frontend spec — pages, components, user flows, content model |
+| [Quality Tools Research](../research-quality-tools-2025-2026.md) | Comprehensive research on quality, security, performance, and DX tools (2025-2026) |
+| [Automation Setup Guide](../automation-setup-guide.md) | Reusable guide for setting up the full CI/CD and quality automation stack |
 | [CLAUDE.md](../../CLAUDE.md) | Project conventions, coding standards, design system |

@@ -2,7 +2,7 @@
 
 > Server topology, VM configuration, Coolify setup, networking, backups, and monitoring for GWTH v2.
 >
-> Last updated: 2026-02-19
+> Last updated: 2026-02-20
 
 ---
 
@@ -363,13 +363,16 @@ echo "$(date): Backup completed — gwth_v2_$DATE.dump.gz" >> "$BACKUP_DIR/backu
 
 ### Overview
 
-| Tool | What It Monitors | Alerts Via |
-|------|-----------------|-----------|
-| **Sentry** | Runtime errors, performance, session replays | Email + Telegram (via webhook) |
-| **Uptime Kuma** | Endpoint availability, response times | Telegram |
-| **Plausible** | Traffic, conversions, referrers | Dashboard only (no alerts) |
-| **Coolify** | Container health, resource usage | Built-in notifications |
-| **Stripe Dashboard** | Payment success rates, MRR, churn | Email |
+| Tool | What It Monitors | Alerts Via | Status |
+|------|-----------------|-----------|--------|
+| **Web Vitals** | LCP, CLS, INP, FCP, TTFB (real user metrics) | Console (dev), PostHog/Sentry (prod) | Done |
+| **CodeQL** | Security vulnerabilities in JS/TS code | GitHub Security tab | Done |
+| **Dependabot** | Known dependency vulnerabilities | GitHub PRs | Done |
+| **Sentry** | Runtime errors, performance, session replays | Email + Telegram (via webhook) | Phase 4 |
+| **Uptime Kuma** | Endpoint availability, response times | Telegram | Phase 4 |
+| **Plausible** | Traffic, conversions, referrers | Dashboard only (no alerts) | Phase 4 |
+| **Coolify** | Container health, resource usage | Built-in notifications | Done |
+| **Stripe Dashboard** | Payment success rates, MRR, churn | Email | Phase 2 |
 
 ### Sentry Configuration
 
@@ -440,17 +443,21 @@ export async function GET() {
 | **Unattended upgrades** | Auto-install security patches |
 | **Docker security** | Non-root container users, read-only filesystems where possible |
 
-### Application Level
+### Application Level (Implemented)
 
-| Measure | Implementation |
-|---------|---------------|
-| **HTTPS everywhere** | Coolify/Traefik handles TLS termination with Let's Encrypt |
-| **Security headers** | CSP, X-Frame-Options, X-Content-Type-Options via Next.js config |
-| **Rate limiting** | Nginx rate limiting on video endpoints, Next.js rate limiting on API routes |
-| **Input validation** | Zod schemas on all API inputs (already in `lib/validations.ts`) |
-| **SQL injection** | Prevented by Supabase parameterised queries (never raw SQL with user input) |
-| **XSS** | React auto-escapes by default. CSP headers. No `dangerouslySetInnerHTML` with user content. |
-| **CSRF** | Supabase Auth uses httpOnly cookies with SameSite=Lax |
+| Measure | Implementation | Status |
+|---------|---------------|--------|
+| **HTTPS everywhere** | Coolify/Traefik handles TLS termination with Let's Encrypt | Phase 4 |
+| **Security headers** | HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy via `src/middleware.ts` | Done |
+| **XSS sanitisation** | DOMPurify (`isomorphic-dompurify`) wraps all `dangerouslySetInnerHTML` output in `markdown-renderer.tsx` | Done |
+| **CodeQL scanning** | Semantic security analysis on every push/PR + weekly scan | Done |
+| **Dependency scanning** | Dependabot auto-PRs for vulnerable deps, `npm audit --audit-level=high` in CI | Done |
+| **Rate limiting** | Nginx rate limiting on video endpoints, Next.js rate limiting on API routes | Phase 4 |
+| **Input validation** | Zod schemas on all API inputs (already in `lib/validations.ts`) | Done |
+| **SQL injection** | Prevented by Supabase parameterised queries (never raw SQL with user input) | Phase 2 |
+| **XSS prevention** | React auto-escapes by default. CSP headers. DOMPurify on markdown content. | Done |
+| **CSRF** | Supabase Auth uses httpOnly cookies with SameSite=Lax | Phase 2 |
+| **security.txt** | Vulnerability disclosure at `/.well-known/security.txt` | Done |
 
 ### Secrets Management
 
@@ -462,30 +469,42 @@ export async function GET() {
 | Resend API key | Coolify env vars | Coolify dashboard only |
 | Sentry DSN | Coolify env vars (public DSN is OK client-side) | Public (by design) |
 | SSH keys | `~/.ssh/` on dev machine | Local only |
+| GitHub Secrets | GitHub repo settings | Repo admins only |
 
-**Never in code. Never in `.env` committed to git. Always in Coolify environment variables.**
+**GitHub Secrets configured for CI deploy jobs:** `COOLIFY_APP_UUID`, `COOLIFY_TOKEN`, `P520_HOST`, `P520_USER`, `P520_SSH_KEY`, `P520_APP_UUID`.
 
-### Content Security Policy
+**Never in code. Never in `.env` committed to git. Always in Coolify environment variables (runtime) or GitHub Secrets (CI).**
+
+### Security Headers (Implemented in middleware.ts)
+
+Security headers are applied to all responses via Next.js middleware (`src/middleware.ts`), not `next.config.ts`. This allows dynamic CSP updates per request when needed.
 
 ```typescript
-// next.config.ts — Security headers
-const securityHeaders = [
-  {
-    key: 'Content-Security-Policy',
-    value: [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://plausible.gwth.ai",
-      "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' blob: data: https://*.supabase.co",
-      "media-src 'self' https://video.gwth.ai",
-      "connect-src 'self' https://*.supabase.co https://video.gwth.ai wss://*.supabase.co",
-      "frame-src 'self' https://js.stripe.com",
-      "font-src 'self'",
-    ].join('; '),
-  },
-  { key: 'X-Frame-Options', value: 'DENY' },
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-]
+// src/middleware.ts — Actual implementation (simplified)
+const securityHeaders: Record<string, string> = {
+  "X-DNS-Prefetch-Control": "on",
+  "X-Frame-Options": "SAMEORIGIN",
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+  "Content-Security-Policy": [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "frame-ancestors 'none'",
+  ].join("; "),
+}
 ```
+
+**CSP will be updated in Phase 2-4** to allow:
+- `https://plausible.gwth.ai` in `script-src` (analytics)
+- `https://*.supabase.co` in `img-src` and `connect-src` (auth + storage)
+- `wss://*.supabase.co` in `connect-src` (realtime)
+- `https://video.gwth.ai` in `media-src` and `connect-src` (HLS streaming)
+- `https://js.stripe.com` in `frame-src` (payment checkout)
+
+**Future:** Replace hand-rolled headers with Nosecone (`@nosecone/next`) for type-safe configuration when CSP complexity increases.
