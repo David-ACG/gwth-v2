@@ -42,6 +42,9 @@ docs/old-site/videos/
 docs/old-site/audio/
 docs/old-site/.env.local
 
+# infrastructure secrets (save to password manager, not git)
+docs/connection-secrets.md
+
 # vercel
 .vercel
 
