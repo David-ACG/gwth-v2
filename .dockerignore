@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+docs/
+coverage/
+test-results/
+playwright-report/
+.env*
+.claude/
+__tests__/
+*.test.ts
+*.test.tsx
+screenshots/
