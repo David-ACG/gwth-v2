@@ -155,9 +155,11 @@ Default: deny incoming, allow outgoing.
 | 2026-02-21 | Passwordless sudo for david | OK |
 | 2026-02-21 | apt update/upgrade + base packages | OK |
 | 2026-02-21 | LVM extended 98 GB → 785 GB | OK |
-| 2026-02-21 | SSH hardened: port 111, key-only, no root | OK |
+| 2026-02-21 | SSH hardened: port 111, key-only, root key-only (for Coolify) | OK |
 | 2026-02-21 | UFW enabled: 111, 80, 443, 8000 | OK |
 | 2026-02-21 | Fail2ban configured for SSH | OK |
 | 2026-02-21 | Unattended security upgrades enabled | OK |
 | 2026-02-21 | Docker 29.2.1 installed | OK |
 | 2026-02-21 | Coolify 4.0.0-beta.463 installed | OK |
+| 2026-02-21 | Coolify onboarding completed (localhost server) | OK |
+| 2026-02-21 | Coolify API enabled + token created (deploy/read/write) | OK |
