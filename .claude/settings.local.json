@@ -61,7 +61,8 @@
       "Bash(scp:*)",
       "Bash(git clone:*)",
       "Bash(gh repo clone:*)",
-      "Bash(gzip -t:*)"
+      "Bash(gzip -t:*)",
+      "Bash(ssh-keygen:*)"
     ]
   },
   "hooks": {
