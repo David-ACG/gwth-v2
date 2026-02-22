@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
+import Script from "next/script"
 import { RootProvider } from "@/providers/root-provider"
 import { RouteProgress } from "@/components/shared/route-progress"
 import { WebVitals } from "@/components/shared/web-vitals"
@@ -48,6 +49,14 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <Script
+          defer
+          data-domain="gwth.ai"
+          src="https://analytics.gwth.ai/js/script.outbound-links.js"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="antialiased">
         <RootProvider>
           <RouteProgress />
