@@ -142,18 +142,18 @@ Default: deny incoming, allow outgoing.
 | ----------------- | -------------- | ------------------ | ---------------------------------------- |
 | gwth.ai           | 195.201.177.66 | Main website       | DNS configured, app deployed, SSL active |
 | video.gwth.ai     | 195.201.177.66 | HLS video delivery | DNS configured, app not deployed         |
-| status.gwth.ai    | 195.201.177.66 | Uptime Kuma        | **DNS A record needed**, app deployed    |
-| analytics.gwth.ai | 195.201.177.66 | Plausible          | **DNS A record needed**, app deployed    |
+| status.gwth.ai    | 195.201.177.66 | Uptime Kuma        | DNS configured, app deployed, SSL active |
+| analytics.gwth.ai | 195.201.177.66 | Plausible          | DNS configured, app deployed, SSL active |
 
 ---
 
 ## Deployed Services
 
-| Service           | Image                                    | Port | Domain                    | Status                       |
-| ----------------- | ---------------------------------------- | ---- | ------------------------- | ---------------------------- |
-| GWTH v2 (Next.js) | Built from Dockerfile                    | 3000 | https://gwth.ai           | Running, healthy             |
-| Uptime Kuma       | louislam/uptime-kuma:2                   | 3001 | https://status.gwth.ai    | Running, healthy (needs DNS) |
-| Plausible CE      | ghcr.io/plausible/community-edition:v2.1 | 8000 | https://analytics.gwth.ai | Running (needs DNS)          |
+| Service           | Image                                    | Port | Domain                    | Status           |
+| ----------------- | ---------------------------------------- | ---- | ------------------------- | ---------------- |
+| GWTH v2 (Next.js) | Built from Dockerfile                    | 3000 | https://gwth.ai           | Running, healthy |
+| Uptime Kuma       | louislam/uptime-kuma:2                   | 3001 | https://status.gwth.ai    | Running, healthy |
+| Plausible CE      | ghcr.io/plausible/community-edition:v2.1 | 8000 | https://analytics.gwth.ai | Running          |
 
 ### GWTH v2 App (Coolify)
 
@@ -219,28 +219,28 @@ ssh hetzner 'docker logs plausible-plausible-1 --tail 50'
 
 ## Build Log
 
-| Date       | Action                                                           | Result |
-| ---------- | ---------------------------------------------------------------- | ------ |
-| 2026-02-21 | VM created in Proxmox (800 GB, 32 GB RAM, 16 cores)              | OK     |
-| 2026-02-21 | Ubuntu 24.04 LTS installed                                       | OK     |
-| 2026-02-21 | SSH key auth configured                                          | OK     |
-| 2026-02-21 | Passwordless sudo for david                                      | OK     |
-| 2026-02-21 | apt update/upgrade + base packages                               | OK     |
-| 2026-02-21 | LVM extended 98 GB → 785 GB                                      | OK     |
-| 2026-02-21 | SSH hardened: port 111, key-only, root key-only (for Coolify)    | OK     |
-| 2026-02-21 | UFW enabled: 111, 80, 443, 8000                                  | OK     |
-| 2026-02-21 | Fail2ban configured for SSH                                      | OK     |
-| 2026-02-21 | Unattended security upgrades enabled                             | OK     |
-| 2026-02-21 | Docker 29.2.1 installed                                          | OK     |
-| 2026-02-21 | Coolify 4.0.0-beta.463 installed                                 | OK     |
-| 2026-02-21 | Coolify onboarding completed (localhost server)                  | OK     |
-| 2026-02-21 | Coolify API enabled + token created (deploy/read/write)          | OK     |
-| 2026-02-22 | GWTH v2 app created in Coolify (Dockerfile build, public GitHub) | OK     |
-| 2026-02-22 | First successful deployment to https://gwth.ai                   | OK     |
-| 2026-02-22 | Health check verified: GET /api/health returns 200               | OK     |
-| 2026-02-22 | SSL cert verified: Let's Encrypt R12, valid to 2026-05-22        | OK     |
-| 2026-02-22 | HTTP→HTTPS redirect verified (307)                               | OK     |
-| 2026-02-22 | P520 GWTH v2 app updated to gwth-v2 repo, deployed successfully  | OK     |
-| 2026-02-22 | Uptime Kuma deployed (Coolify service, status.gwth.ai)           | OK     |
-| 2026-02-22 | Plausible CE deployed (docker-compose, analytics.gwth.ai)        | OK     |
-| 2026-02-22 | DNS A records needed for status.gwth.ai and analytics.gwth.ai    | TODO   |
+| Date       | Action                                                                   | Result |
+| ---------- | ------------------------------------------------------------------------ | ------ |
+| 2026-02-21 | VM created in Proxmox (800 GB, 32 GB RAM, 16 cores)                      | OK     |
+| 2026-02-21 | Ubuntu 24.04 LTS installed                                               | OK     |
+| 2026-02-21 | SSH key auth configured                                                  | OK     |
+| 2026-02-21 | Passwordless sudo for david                                              | OK     |
+| 2026-02-21 | apt update/upgrade + base packages                                       | OK     |
+| 2026-02-21 | LVM extended 98 GB → 785 GB                                              | OK     |
+| 2026-02-21 | SSH hardened: port 111, key-only, root key-only (for Coolify)            | OK     |
+| 2026-02-21 | UFW enabled: 111, 80, 443, 8000                                          | OK     |
+| 2026-02-21 | Fail2ban configured for SSH                                              | OK     |
+| 2026-02-21 | Unattended security upgrades enabled                                     | OK     |
+| 2026-02-21 | Docker 29.2.1 installed                                                  | OK     |
+| 2026-02-21 | Coolify 4.0.0-beta.463 installed                                         | OK     |
+| 2026-02-21 | Coolify onboarding completed (localhost server)                          | OK     |
+| 2026-02-21 | Coolify API enabled + token created (deploy/read/write)                  | OK     |
+| 2026-02-22 | GWTH v2 app created in Coolify (Dockerfile build, public GitHub)         | OK     |
+| 2026-02-22 | First successful deployment to https://gwth.ai                           | OK     |
+| 2026-02-22 | Health check verified: GET /api/health returns 200                       | OK     |
+| 2026-02-22 | SSL cert verified: Let's Encrypt R12, valid to 2026-05-22                | OK     |
+| 2026-02-22 | HTTP→HTTPS redirect verified (307)                                       | OK     |
+| 2026-02-22 | P520 GWTH v2 app updated to gwth-v2 repo, deployed successfully          | OK     |
+| 2026-02-22 | Uptime Kuma deployed (Coolify service, status.gwth.ai)                   | OK     |
+| 2026-02-22 | Plausible CE deployed (docker-compose, analytics.gwth.ai)                | OK     |
+| 2026-02-22 | DNS A records added for status.gwth.ai and analytics.gwth.ai (Namecheap) | OK     |
