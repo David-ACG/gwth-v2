@@ -80,7 +80,15 @@
       "Bash(echo sharp not installed:*)",
       "Bash(cd:*)",
       "Bash(head:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "WebFetch(domain:steve-yegge.medium.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:steveyegge.github.io)",
+      "WebFetch(domain:one-shot.aitinkerers.org)",
+      "WebFetch(domain:paddo.dev)",
+      "WebFetch(domain:ianbull.com)",
+      "WebFetch(domain:www.edgartools.io)",
+      "WebFetch(domain:ai-assisted-software-development.com)"
     ]
   },
   "hooks": {
