@@ -4,6 +4,7 @@ node_modules
 .gitignore
 *.md
 docs/
+!docs/tech_radar.json
 coverage/
 test-results/
 playwright-report/
