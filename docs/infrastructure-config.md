@@ -178,13 +178,25 @@ curl -s "http://195.201.177.66:8000/api/v1/deploy?uuid=tw0cc8oc0w4scwoccs0cw0go&
 
 ### Uptime Kuma (Coolify Service)
 
-| Setting      | Value                        |
-| ------------ | ---------------------------- |
-| Service UUID | `i0owos0o4gosogg4kskgw8cg`   |
-| Image        | louislam/uptime-kuma:2       |
-| Domain       | https://status.gwth.ai       |
-| Managed by   | Coolify (one-click service)  |
-| Data         | Docker volume (auto-managed) |
+| Setting      | Value                                 |
+| ------------ | ------------------------------------- |
+| Service UUID | `i0owos0o4gosogg4kskgw8cg`            |
+| Image        | louislam/uptime-kuma:2                |
+| Domain       | https://status.gwth.ai                |
+| Managed by   | Coolify (one-click service)           |
+| Database     | SQLite                                |
+| Data         | Docker volume (auto-managed)          |
+| Status page  | https://status.gwth.ai/status/default |
+
+**Monitors configured:**
+
+| Monitor                                 | URL                        | Interval | Retries |
+| --------------------------------------- | -------------------------- | -------- | ------- |
+| GWTH v2 (gwth.ai)                       | https://gwth.ai/api/health | 60s      | 3       |
+| Uptime Kuma (status.gwth.ai)            | https://status.gwth.ai     | 60s      | 3       |
+| Plausible Analytics (analytics.gwth.ai) | https://analytics.gwth.ai  | 60s      | 3       |
+
+All monitors have certificate expiry and domain expiry notifications enabled.
 
 ### Plausible CE (Docker Compose — outside Coolify)
 
@@ -197,6 +209,8 @@ curl -s "http://195.201.177.66:8000/api/v1/deploy?uuid=tw0cc8oc0w4scwoccs0cw0go&
 | PostgreSQL   | plausible-plausible-db-1 (postgres:16-alpine)                 |
 | ClickHouse   | plausible-plausible-events-db-1 (clickhouse:24.3-alpine)      |
 | Registration | invite_only                                                   |
+| Site domain  | gwth.ai (timezone: Europe/Berlin)                             |
+| Tracking     | `script.outbound-links.js` (outbound links + 404 tracking)    |
 
 **Manage Plausible:**
 
@@ -246,3 +260,7 @@ ssh hetzner 'docker logs plausible-plausible-1 --tail 50'
 | 2026-02-22 | DNS A records added for status.gwth.ai and analytics.gwth.ai (Namecheap) | OK     |
 | 2026-02-22 | SSL certs verified for status.gwth.ai (R12) and analytics.gwth.ai (R13)  | OK     |
 | 2026-02-22 | Plausible Gateway Timeout fixed (added traefik.docker.network=coolify)   | OK     |
+| 2026-02-22 | Uptime Kuma setup: SQLite DB, admin account, 3 monitors, public page     | OK     |
+| 2026-02-22 | Plausible setup: admin account, gwth.ai site, outbound links + 404       | OK     |
+| 2026-02-22 | Plausible tracking script added to GWTH v2 root layout, deployed         | OK     |
+| 2026-02-22 | First pageview verified in Plausible dashboard                           | OK     |
