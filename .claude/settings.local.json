@@ -74,7 +74,8 @@
       "mcp__playwright__browser_close",
       "Bash(python3:*)",
       "mcp__playwright__browser_tabs",
-      "Bash(claude:*)"
+      "Bash(claude:*)",
+      "mcp__claude_ai_Mermaid_Chart__list_tools"
     ]
   },
   "hooks": {
