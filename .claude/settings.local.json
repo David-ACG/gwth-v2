@@ -73,7 +73,8 @@
       "Bash(python:*)",
       "mcp__playwright__browser_close",
       "Bash(python3:*)",
-      "mcp__playwright__browser_tabs"
+      "mcp__playwright__browser_tabs",
+      "Bash(claude:*)"
     ]
   },
   "hooks": {
