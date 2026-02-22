@@ -153,7 +153,7 @@ Default: deny incoming, allow outgoing.
 | ----------------- | ---------------------------------------- | ---- | ------------------------- | ---------------- |
 | GWTH v2 (Next.js) | Built from Dockerfile                    | 3000 | https://gwth.ai           | Running, healthy |
 | Uptime Kuma       | louislam/uptime-kuma:2                   | 3001 | https://status.gwth.ai    | Running, healthy |
-| Plausible CE      | ghcr.io/plausible/community-edition:v2.1 | 8000 | https://analytics.gwth.ai | Running          |
+| Plausible CE      | ghcr.io/plausible/community-edition:v2.1 | 8000 | https://analytics.gwth.ai | Running, healthy |
 
 ### GWTH v2 App (Coolify)
 
@@ -188,15 +188,15 @@ curl -s "http://195.201.177.66:8000/api/v1/deploy?uuid=tw0cc8oc0w4scwoccs0cw0go&
 
 ### Plausible CE (Docker Compose — outside Coolify)
 
-| Setting      | Value                                                    |
-| ------------ | -------------------------------------------------------- |
-| Compose file | `/data/plausible/docker-compose.yml`                     |
-| Env file     | `/data/plausible/plausible.env`                          |
-| Domain       | https://analytics.gwth.ai                                |
-| Routing      | Traefik labels (in compose, shares Coolify Traefik)      |
-| PostgreSQL   | plausible-plausible-db-1 (postgres:16-alpine)            |
-| ClickHouse   | plausible-plausible-events-db-1 (clickhouse:24.3-alpine) |
-| Registration | invite_only                                              |
+| Setting      | Value                                                         |
+| ------------ | ------------------------------------------------------------- |
+| Compose file | `/data/plausible/docker-compose.yml`                          |
+| Env file     | `/data/plausible/plausible.env`                               |
+| Domain       | https://analytics.gwth.ai                                     |
+| Routing      | Traefik labels (in compose, `traefik.docker.network=coolify`) |
+| PostgreSQL   | plausible-plausible-db-1 (postgres:16-alpine)                 |
+| ClickHouse   | plausible-plausible-events-db-1 (clickhouse:24.3-alpine)      |
+| Registration | invite_only                                                   |
 
 **Manage Plausible:**
 
@@ -244,3 +244,5 @@ ssh hetzner 'docker logs plausible-plausible-1 --tail 50'
 | 2026-02-22 | Uptime Kuma deployed (Coolify service, status.gwth.ai)                   | OK     |
 | 2026-02-22 | Plausible CE deployed (docker-compose, analytics.gwth.ai)                | OK     |
 | 2026-02-22 | DNS A records added for status.gwth.ai and analytics.gwth.ai (Namecheap) | OK     |
+| 2026-02-22 | SSL certs verified for status.gwth.ai (R12) and analytics.gwth.ai (R13)  | OK     |
+| 2026-02-22 | Plausible Gateway Timeout fixed (added traefik.docker.network=coolify)   | OK     |
