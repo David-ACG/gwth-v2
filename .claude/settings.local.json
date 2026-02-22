@@ -79,7 +79,8 @@
       "WebFetch(domain:agilecommerce.ai)",
       "Bash(echo sharp not installed:*)",
       "Bash(cd:*)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "Bash(tail:*)"
     ]
   },
   "hooks": {
