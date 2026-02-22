@@ -76,7 +76,10 @@
       "mcp__playwright__browser_tabs",
       "Bash(claude:*)",
       "mcp__claude_ai_Mermaid_Chart__list_tools",
-      "WebFetch(domain:agilecommerce.ai)"
+      "WebFetch(domain:agilecommerce.ai)",
+      "Bash(echo sharp not installed:*)",
+      "Bash(cd:*)",
+      "Bash(head:*)"
     ]
   },
   "hooks": {
