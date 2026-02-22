@@ -78,6 +78,19 @@ Claude will:
 
 **Always review the prompt before running the kanban loop or implementing it.** The idea-to-prompt step is where requirements get clarified and scoped — catching issues here is much cheaper than after implementation.
 
+## Quick Deploy Shorthands
+
+For low-risk changes where you want to skip the review/staging steps, use these phrases:
+
+| Phrase | What happens |
+|--------|-------------|
+| "New idea in 0_idea. Implement it." | Read idea → implement → tests → stop (no deploy) |
+| "New idea in 0_idea. Implement and push to live." | Read idea → implement → tests → commit → push → deploy Hetzner |
+| "New idea in 0_idea. Implement and push to live, skip P520." | Same as above, skips P520 staging — goes straight to production |
+| "New idea in 0_idea." | Read idea → craft prompt → wait for review (default workflow) |
+
+These bypass the prompt-crafting and review steps. Use for simple, self-contained changes (visual tweaks, config changes, copy updates). For anything architectural or multi-file, stick with the full workflow.
+
 ## Prompt Format
 
 The generated prompts follow `PROMPT_TEMPLATE.md`. Key rules:
