@@ -111,7 +111,7 @@ Default: deny incoming, allow outgoing.
 
 | Setting        | Value                      |
 | -------------- | -------------------------- |
-| Hostname       | (existing)                 |
+| Hostname       | hlab                       |
 | IP (Tailscale) | 100.79.248.39              |
 | IP (LAN)       | 192.168.178.50             |
 | SSH Port       | 22                         |
@@ -119,26 +119,41 @@ Default: deny incoming, allow outgoing.
 | RAM            | 125 GB                     |
 | Disk           | 3.6 TB NVMe                |
 | Coolify        | http://192.168.178.50:8000 |
-| GWTH Test App  | http://192.168.178.50:3001 |
+| GWTH v2 Test   | http://192.168.178.50:3001 |
+
+### P520 GWTH v2 App (Coolify)
+
+| Setting      | Value                               |
+| ------------ | ----------------------------------- |
+| App UUID     | `xw4csk0ssos8800kws0cswwk`          |
+| GitHub Repo  | `David-ACG/gwth-v2` (public, HTTPS) |
+| Branch       | master                              |
+| Build Pack   | Dockerfile                          |
+| Base Dir     | `/`                                 |
+| Health Check | `GET /api/health`                   |
+| Port         | 3001 → 3000                         |
+| Status       | Running, healthy                    |
 
 ---
 
 ## DNS Configuration
 
-| Domain            | Points To      | Purpose            | Status                           |
-| ----------------- | -------------- | ------------------ | -------------------------------- |
-| gwth.ai           | 195.201.177.66 | Main website       | DNS configured, app deployed     |
-| video.gwth.ai     | 195.201.177.66 | HLS video delivery | DNS configured, app not deployed |
-| status.gwth.ai    | 195.201.177.66 | Uptime Kuma        | Not configured                   |
-| analytics.gwth.ai | 195.201.177.66 | Plausible          | Not configured                   |
+| Domain            | Points To      | Purpose            | Status                                   |
+| ----------------- | -------------- | ------------------ | ---------------------------------------- |
+| gwth.ai           | 195.201.177.66 | Main website       | DNS configured, app deployed, SSL active |
+| video.gwth.ai     | 195.201.177.66 | HLS video delivery | DNS configured, app not deployed         |
+| status.gwth.ai    | 195.201.177.66 | Uptime Kuma        | **DNS A record needed**, app deployed    |
+| analytics.gwth.ai | 195.201.177.66 | Plausible          | **DNS A record needed**, app deployed    |
 
 ---
 
 ## Deployed Services
 
-| Service           | Image                 | Port | Domain          | Status           |
-| ----------------- | --------------------- | ---- | --------------- | ---------------- |
-| GWTH v2 (Next.js) | Built from Dockerfile | 3000 | https://gwth.ai | Running, healthy |
+| Service           | Image                                    | Port | Domain                    | Status                       |
+| ----------------- | ---------------------------------------- | ---- | ------------------------- | ---------------------------- |
+| GWTH v2 (Next.js) | Built from Dockerfile                    | 3000 | https://gwth.ai           | Running, healthy             |
+| Uptime Kuma       | louislam/uptime-kuma:2                   | 3001 | https://status.gwth.ai    | Running, healthy (needs DNS) |
+| Plausible CE      | ghcr.io/plausible/community-edition:v2.1 | 8000 | https://analytics.gwth.ai | Running (needs DNS)          |
 
 ### GWTH v2 App (Coolify)
 
@@ -161,13 +176,44 @@ curl -s "http://195.201.177.66:8000/api/v1/deploy?uuid=tw0cc8oc0w4scwoccs0cw0go&
   -H "Authorization: Bearer <COOLIFY_TOKEN>"
 ```
 
+### Uptime Kuma (Coolify Service)
+
+| Setting      | Value                        |
+| ------------ | ---------------------------- |
+| Service UUID | `i0owos0o4gosogg4kskgw8cg`   |
+| Image        | louislam/uptime-kuma:2       |
+| Domain       | https://status.gwth.ai       |
+| Managed by   | Coolify (one-click service)  |
+| Data         | Docker volume (auto-managed) |
+
+### Plausible CE (Docker Compose — outside Coolify)
+
+| Setting      | Value                                                    |
+| ------------ | -------------------------------------------------------- |
+| Compose file | `/data/plausible/docker-compose.yml`                     |
+| Env file     | `/data/plausible/plausible.env`                          |
+| Domain       | https://analytics.gwth.ai                                |
+| Routing      | Traefik labels (in compose, shares Coolify Traefik)      |
+| PostgreSQL   | plausible-plausible-db-1 (postgres:16-alpine)            |
+| ClickHouse   | plausible-plausible-events-db-1 (clickhouse:24.3-alpine) |
+| Registration | invite_only                                              |
+
+**Manage Plausible:**
+
+```bash
+# Start/stop
+ssh hetzner 'cd /data/plausible && docker compose up -d'
+ssh hetzner 'cd /data/plausible && docker compose down'
+
+# View logs
+ssh hetzner 'docker logs plausible-plausible-1 --tail 50'
+```
+
 ## Services to Deploy (TODO)
 
-| Service     | Image                                  | Port                  | Status       |
-| ----------- | -------------------------------------- | --------------------- | ------------ |
-| Nginx Video | nginx:alpine                           | 443 (video subdomain) | Not deployed |
-| Uptime Kuma | louislam/uptime-kuma:1                 | 3001                  | Not deployed |
-| Plausible   | ghcr.io/plausible/community-edition:v2 | 8008                  | Not deployed |
+| Service     | Image        | Port                  | Status                                            |
+| ----------- | ------------ | --------------------- | ------------------------------------------------- |
+| Nginx Video | nginx:alpine | 443 (video subdomain) | Not deployed (deferred until video content ready) |
 
 ---
 
@@ -192,3 +238,9 @@ curl -s "http://195.201.177.66:8000/api/v1/deploy?uuid=tw0cc8oc0w4scwoccs0cw0go&
 | 2026-02-22 | GWTH v2 app created in Coolify (Dockerfile build, public GitHub) | OK     |
 | 2026-02-22 | First successful deployment to https://gwth.ai                   | OK     |
 | 2026-02-22 | Health check verified: GET /api/health returns 200               | OK     |
+| 2026-02-22 | SSL cert verified: Let's Encrypt R12, valid to 2026-05-22        | OK     |
+| 2026-02-22 | HTTP→HTTPS redirect verified (307)                               | OK     |
+| 2026-02-22 | P520 GWTH v2 app updated to gwth-v2 repo, deployed successfully  | OK     |
+| 2026-02-22 | Uptime Kuma deployed (Coolify service, status.gwth.ai)           | OK     |
+| 2026-02-22 | Plausible CE deployed (docker-compose, analytics.gwth.ai)        | OK     |
+| 2026-02-22 | DNS A records needed for status.gwth.ai and analytics.gwth.ai    | TODO   |
