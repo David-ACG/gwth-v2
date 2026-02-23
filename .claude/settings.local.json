@@ -90,7 +90,10 @@
       "WebFetch(domain:www.edgartools.io)",
       "WebFetch(domain:ai-assisted-software-development.com)",
       "Bash(echo === $\\(basename \"$dir\"\\) ===:*)",
-      "Bash(echo === $\\(basename \"$dir\"\\) kanban structure ===:*)"
+      "Bash(echo === $\\(basename \"$dir\"\\) kanban structure ===:*)",
+      "WebFetch(domain:docs.openclaw.ai)",
+      "WebFetch(domain:zenvanriel.nl)",
+      "WebFetch(domain:agor.live)"
     ]
   },
   "hooks": {
