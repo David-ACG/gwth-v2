@@ -88,7 +88,9 @@
       "WebFetch(domain:paddo.dev)",
       "WebFetch(domain:ianbull.com)",
       "WebFetch(domain:www.edgartools.io)",
-      "WebFetch(domain:ai-assisted-software-development.com)"
+      "WebFetch(domain:ai-assisted-software-development.com)",
+      "Bash(echo === $\\(basename \"$dir\"\\) ===:*)",
+      "Bash(echo === $\\(basename \"$dir\"\\) kanban structure ===:*)"
     ]
   },
   "hooks": {
