@@ -22,18 +22,21 @@ export const metadata: Metadata = {
 const principles = [
   {
     icon: Code2,
+    color: "#33BBFF",
     title: "If you can describe it in plain English, you can build it with AI.",
     description:
       "Every project in this course is built by describing what you want to an AI tool. No syntax to memorise. No frameworks to install. The skill is knowing what to ask for and how to guide the result.",
   },
   {
     icon: Wrench,
+    color: "#4A6CF7",
     title: "Build, don't just learn.",
     description:
       "Every single lesson ends with a practical output you can use, show to someone, or put in a portfolio. Theory without application is entertainment, not education.",
   },
   {
     icon: Trophy,
+    color: "#F59E0B",
     title: "Real problems, not toy examples.",
     description:
       "You will not build a to-do app. You will build things that solve actual problems — automate a workflow, analyse real data, deploy something on a real domain. The kind of work people get paid to do.",
@@ -43,24 +46,28 @@ const principles = [
 const differentiators = [
   {
     icon: RefreshCw,
+    color: "#0E7C7B",
     title: "Updated every day",
     description:
       "Our Tech Radar scans 47+ AI tools every single day. When a tool gets replaced by something better, we update the lesson that same day. Most courses are out of date before you finish them. Ours never is.",
   },
   {
     icon: Trophy,
+    color: "#F59E0B",
     title: "Dynamic scoring that stays current",
     description:
       "Your scores are not a snapshot of what you knew on test day. They are living assessments tied to the tools that exist right now. When the landscape shifts, your scores update to reflect current relevance.",
   },
   {
     icon: Heart,
+    color: "#E53935",
     title: "Video walkthroughs for every project",
     description:
       "Every single one of the 94 projects includes a step-by-step video where the instructor builds it alongside you. You are never left staring at a blank screen wondering what to do next.",
   },
   {
     icon: Wrench,
+    color: "#4A6CF7",
     title: "Designed by practitioners, not marketers",
     description:
       "Built by someone who has shipped enterprise software for 25 years and has been building with AI tools from day one. Not by a marketing team who discovered AI last year and saw a business opportunity.",
@@ -151,8 +158,15 @@ export default function AboutPage() {
                 className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
               >
                 <CardContent className="p-6">
-                  <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
-                    <item.icon className="size-6 text-primary" />
+                  <div
+                    className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-card shadow-xl"
+                    style={{ border: `1.5px solid ${item.color}30` }}
+                  >
+                    <item.icon
+                      className="h-10 w-10"
+                      style={{ color: item.color }}
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <h3 className="text-base font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
@@ -171,8 +185,15 @@ export default function AboutPage() {
           <div className="mx-auto max-w-3xl">
             <div className="flex items-start gap-4">
               <div className="shrink-0">
-                <div className="inline-flex rounded-lg bg-accent/10 p-3">
-                  <Shield className="size-6 text-accent" />
+                <div
+                  className="flex h-16 w-16 items-center justify-center rounded-2xl bg-card shadow-xl"
+                  style={{ border: "1.5px solid #388E3C30" }}
+                >
+                  <Shield
+                    className="h-8 w-8"
+                    style={{ color: "#388E3C" }}
+                    strokeWidth={1.5}
+                  />
                 </div>
               </div>
               <div>
@@ -226,8 +247,15 @@ export default function AboutPage() {
               >
                 <CardContent className="flex gap-4 p-6">
                   <div className="shrink-0">
-                    <div className="inline-flex rounded-lg bg-primary/10 p-3">
-                      <item.icon className="size-5 text-primary" />
+                    <div
+                      className="flex h-16 w-16 items-center justify-center rounded-2xl bg-card shadow-xl"
+                      style={{ border: `1.5px solid ${item.color}30` }}
+                    >
+                      <item.icon
+                        className="h-8 w-8"
+                        style={{ color: item.color }}
+                        strokeWidth={1.5}
+                      />
                     </div>
                   </div>
                   <div>

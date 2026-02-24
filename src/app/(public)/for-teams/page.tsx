@@ -34,30 +34,35 @@ export const metadata: Metadata = {
 const whyGwth = [
   {
     icon: Trophy,
+    color: "#F59E0B",
     title: "94 hands-on projects with video walkthroughs",
     description:
       "Not slides. Not theory. Every lesson ends with a real project your team members build themselves, with a step-by-step video walkthrough for every single one.",
   },
   {
     icon: Users,
+    color: "#33BBFF",
     title: "No coding required",
     description:
       "Everything is built by describing what you want in plain English. Your marketing team, your operations team, your finance team — they can all do this.",
   },
   {
     icon: Radar,
+    color: "#0E7C7B",
     title: "Vendor-neutral (Tech Radar tracks 47+ tools)",
     description:
       "We do not sell tools. Our Tech Radar evaluates 47+ AI tools every day so your team learns the best option, not the one that paid for placement.",
   },
   {
     icon: BarChart3,
+    color: "#4A6CF7",
     title: "Dynamic certification",
     description:
       "Our scores reflect current competence, not a one-time exam. When tools change, assessments update. Scores that are six months old look six months old.",
   },
   {
     icon: Shield,
+    color: "#388E3C",
     title: "Built for the enterprise conversation",
     description:
       "Month 3 covers governance, ROI measurement, change management, and multi-agent systems. The strategic layer that boards and compliance teams need to hear.",
@@ -202,8 +207,15 @@ export default function ForTeamsPage() {
                 className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
               >
                 <CardContent className="p-6">
-                  <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
-                    <item.icon className="size-6 text-primary" />
+                  <div
+                    className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-card shadow-xl"
+                    style={{ border: `1.5px solid ${item.color}30` }}
+                  >
+                    <item.icon
+                      className="h-10 w-10"
+                      style={{ color: item.color }}
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <h3 className="text-base font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">

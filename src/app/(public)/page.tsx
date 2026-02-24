@@ -74,24 +74,28 @@ const differentiators = [
 const audiences = [
   {
     icon: AlertTriangle,
+    color: "#F59E0B",
     title: "You are worried AI will take your job",
     description:
       "Someone who knows how to use AI will be more productive than you. This course makes you that person. In three months, you will be the one your team asks for help.",
   },
   {
     icon: Briefcase,
+    color: "#33BBFF",
     title: "You have been made redundant and need to reskill",
     description:
       "Five hours a week for three months. Every project you build goes in your portfolio. Every score is verifiable. Employers are hiring for exactly these skills.",
   },
   {
     icon: Store,
+    color: "#0E7C7B",
     title: "You run a small business",
     description:
       "Your competitors are already using AI. You do not need to hire a developer. Five hours a week for three months, and you will be able to do it all yourself.",
   },
   {
     icon: Baby,
+    color: "#1CBA93",
     title: "You are a parent thinking about the future",
     description:
       "AI fluency will not be a nice-to-have — it will be table stakes. No coding required. If your teenager can describe what they want, they can build with AI.",
@@ -197,8 +201,15 @@ export default function LandingPage() {
                 className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
               >
                 <CardContent className="p-6">
-                  <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
-                    <item.icon className="size-6 text-primary" />
+                  <div
+                    className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-card shadow-xl"
+                    style={{ border: `1.5px solid ${item.color}30` }}
+                  >
+                    <item.icon
+                      className="h-10 w-10"
+                      style={{ color: item.color }}
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <h3 className="text-base font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
@@ -224,8 +235,15 @@ export default function LandingPage() {
               <Card key={item.title}>
                 <CardContent className="flex gap-4 p-6">
                   <div className="shrink-0">
-                    <div className="inline-flex rounded-lg bg-accent/10 p-3">
-                      <item.icon className="size-5 text-accent" />
+                    <div
+                      className="flex h-16 w-16 items-center justify-center rounded-2xl bg-card shadow-xl"
+                      style={{ border: `1.5px solid ${item.color}30` }}
+                    >
+                      <item.icon
+                        className="h-8 w-8"
+                        style={{ color: item.color }}
+                        strokeWidth={1.5}
+                      />
                     </div>
                   </div>
                   <div>
