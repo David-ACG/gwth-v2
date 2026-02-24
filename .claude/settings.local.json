@@ -93,7 +93,14 @@
       "Bash(echo === $\\(basename \"$dir\"\\) kanban structure ===:*)",
       "WebFetch(domain:docs.openclaw.ai)",
       "WebFetch(domain:zenvanriel.nl)",
-      "WebFetch(domain:agor.live)"
+      "WebFetch(domain:agor.live)",
+      "Bash(echo === $dir ===:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(echo === PROJECT: $dir ===:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:deepwiki.com)",
+      "mcp__playwright__browser_run_code",
+      "mcp__playwright__browser_evaluate"
     ]
   },
   "hooks": {

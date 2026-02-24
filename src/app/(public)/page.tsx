@@ -29,36 +29,42 @@ export const metadata: Metadata = {
 const differentiators = [
   {
     icon: Code2,
+    color: "#33BBFF",
     title: "No coding required — and we mean it",
     description:
       "Every project is built by describing what you want in plain English. AI builds it. You guide it. That is the skill that matters now.",
   },
   {
     icon: RefreshCw,
+    color: "#0E7C7B",
     title: "Updated every day, not annually",
     description:
       "Our Tech Radar scans 47+ AI tools every single day. When a tool you learned gets replaced by something better, we update the lesson immediately.",
   },
   {
     icon: Shield,
+    color: "#388E3C",
     title: "Completely independent",
     description:
       "No sponsors. No ads. No vendor partnerships. When we recommend a tool, it is because we tested it against every alternative and it was the best option.",
   },
   {
     icon: Trophy,
+    color: "#F59E0B",
     title: "Scores that employers can trust",
     description:
       "Our dynamic scoring system stays current. Your assessment results reflect what you can actually do with the tools that exist right now.",
   },
   {
     icon: Wrench,
+    color: "#4A6CF7",
     title: "Designed by people who build this stuff",
     description:
       "25 years of enterprise experience. Building with AI tools from day one — from the first release of Cursor to the first release of Claude Code.",
   },
   {
     icon: Heart,
+    color: "#E53935",
     title: "We will hold your hand every step of the way",
     description:
       "Every single lesson includes a step-by-step video walkthrough where the instructor builds the project alongside you. You are never left guessing.",
