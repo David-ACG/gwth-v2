@@ -135,8 +135,24 @@ export default function ForTeamsPage() {
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex rounded-full bg-primary/10 p-3">
-              <Briefcase className="size-8 text-primary" />
+            <div className="relative mx-auto mb-6 h-28 w-28">
+              <div
+                className="absolute inset-4 rounded-2xl opacity-40 blur-xl"
+                style={{ backgroundColor: "#33BBFF" }}
+              />
+              <div
+                className="relative flex h-full w-full items-center justify-center rounded-2xl bg-background shadow-xl"
+                style={{
+                  border: "2px solid #33BBFF30",
+                  transform: "translateY(-4px)",
+                }}
+              >
+                <Briefcase
+                  className="h-12 w-12"
+                  style={{ color: "#33BBFF" }}
+                  strokeWidth={1.5}
+                />
+              </div>
             </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               AI Training for Your Team
@@ -204,20 +220,29 @@ export default function ForTeamsPage() {
             {whyGwth.map((item) => (
               <Card
                 key={item.title}
-                className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
+                className="text-center transition-shadow hover:shadow-lg"
               >
                 <CardContent className="p-6">
-                  <div
-                    className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-card shadow-xl"
-                    style={{ border: `1.5px solid ${item.color}30` }}
-                  >
-                    <item.icon
-                      className="h-10 w-10"
-                      style={{ color: item.color }}
-                      strokeWidth={1.5}
+                  <div className="relative mx-auto mb-4 h-28 w-28">
+                    <div
+                      className="absolute inset-4 rounded-2xl opacity-40 blur-xl"
+                      style={{ backgroundColor: item.color }}
                     />
+                    <div
+                      className="relative flex h-full w-full items-center justify-center rounded-2xl bg-background shadow-xl"
+                      style={{
+                        border: `2px solid ${item.color}30`,
+                        transform: "translateY(-4px)",
+                      }}
+                    >
+                      <item.icon
+                        className="h-12 w-12"
+                        style={{ color: item.color }}
+                        strokeWidth={1.5}
+                      />
+                    </div>
                   </div>
-                  <h3 className="text-base font-semibold">{item.title}</h3>
+                  <h3 className="text-xl font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
                     {item.description}
                   </p>
