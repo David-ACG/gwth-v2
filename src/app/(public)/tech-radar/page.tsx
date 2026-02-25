@@ -13,7 +13,7 @@ import { TechRadarGrid } from "@/components/tech-radar/tech-radar-grid"
 export const metadata: Metadata = {
   title: "Tech Radar",
   description:
-    "Track 47+ AI tools daily with the GWTH Tech Radar. Independent reviews, no vendor partnerships. See what is GA, Beta, Alpha, and trending right now.",
+    "Track 60+ AI tools daily with the GWTH Tech Radar. Independent reviews, no vendor partnerships. See what is GA, Beta, Alpha, and trending right now.",
 }
 
 /**
@@ -66,7 +66,7 @@ export default function TechRadarPage() {
               GWTH Tech Radar
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              {toolCount}+ AI tools tracked daily. Independent. No vendor
+              {toolCount} AI tools tracked daily. Independent. No vendor
               partnerships.
             </p>
           </div>

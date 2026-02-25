@@ -1,33 +1,54 @@
 import Link from "next/link"
 import type { Metadata } from "next"
-import { Check } from "lucide-react"
+import { Check, ArrowRight, FlaskConical, BookOpen, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
+  TOTAL_COURSE_COST,
+  ONGOING_NEW_CONTENT_HOURS,
+  TOTAL_OPTIONAL_LESSONS,
   TEAMS_EMAIL,
 } from "@/lib/config"
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "One course. $37.50/month for 3 months. Then $7.50/month ongoing. No yearly price, no lock-in, cancel anytime.",
+    "Free labs to start, $37.50/month for the 3-month course, then just $7.50/month to stay current. No lock-in, cancel anytime.",
 }
 
-const included = [
-  "94 hands-on projects with video walkthroughs (not random YouTube tutorials)",
-  "3 portfolio-ready capstone projects deployed on real domains",
+const freeFeatures = [
+  "Access to all free labs",
+  "Build real projects with AI",
+  "No credit card required",
+  "No time limit — free forever",
+]
+
+const courseFeatures = [
+  "94 hands-on projects with video walkthroughs",
+  "3 portfolio-ready capstone projects on real domains",
   "Industry-specific modules for your exact field",
-  "Content that updates every day so your skills never go stale",
-  "Dynamic scores that employers can verify",
-  "Access to the GWTH Tech Radar — 47+ tools tracked daily",
+  "Dynamic certification scores employers can verify",
+  "Content updated every day — never goes stale",
+  "Access to the GWTH Tech Radar (60+ tools tracked)",
   "No ads, no upsells, no hidden premium tier",
 ]
 
+const ongoingFeatures = [
+  "Keep your dynamic score as high as possible — scores decay if you stop",
+  `~${ONGOING_NEW_CONTENT_HOURS} hours of new content every month (AI changes fast)`,
+  `Work through the ${TOTAL_OPTIONAL_LESSONS} optional lessons you skipped in the first 3 months`,
+  "New tools added to Tech Radar as they launch",
+  "Updated lessons when tools change — your training never goes stale",
+  "Access to new industry modules as they are released",
+  "Score history and progression analytics",
+  "Cancel anytime — no lock-in, no penalty",
+]
+
 /**
- * Pricing page with single course pricing, free labs CTA, and employer section.
- * No tiered comparison, no discount codes, no total price shown.
+ * Pricing page with three tiers: Free Labs, The Course, and Stay Current.
+ * Emphasizes the $7.50/month ongoing value after the 3-month course.
  */
 export default function PricingPage() {
   return (
@@ -35,42 +56,76 @@ export default function PricingPage() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mx-auto max-w-2xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Less than the cost of one hour with an AI consultant.
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            One course. Three months. Everything you need to build with AI.
+            Start free. Learn everything in 3 months. Stay current for the price
+            of a coffee.
           </p>
         </div>
 
-        {/* Main pricing card */}
-        <div className="mx-auto mt-12 max-w-lg">
-          <Card className="border-primary shadow-lg">
-            <CardContent className="p-8">
+        {/* Three-tier pricing grid */}
+        <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
+          {/* Tier 1: Free Labs */}
+          <Card className="flex flex-col">
+            <CardContent className="flex flex-1 flex-col p-8">
               <div className="text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                  <FlaskConical className="size-6 text-muted-foreground" />
+                </div>
+                <h2 className="text-lg font-semibold">Free Labs</h2>
+                <div className="mt-4 text-5xl font-bold">
+                  $0
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  forever — no card required
+                </p>
+              </div>
+
+              <ul className="mt-8 flex-1 space-y-3">
+                {freeFeatures.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2 text-sm">
+                    <Check className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8">
+                <Button variant="outline" className="w-full" size="lg" asChild>
+                  <Link href="/signup">Start Free</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Tier 2: The Course (highlighted) */}
+          <Card className="relative flex flex-col border-primary shadow-lg">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span className="rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground">
+                Most Popular
+              </span>
+            </div>
+            <CardContent className="flex flex-1 flex-col p-8">
+              <div className="text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                  <BookOpen className="size-6 text-primary" />
+                </div>
                 <h2 className="text-lg font-semibold">The Course</h2>
                 <div className="mt-4 text-5xl font-bold">
                   ${COURSE_MONTHLY_PRICE.toFixed(2)}
                   <span className="text-lg font-normal text-muted-foreground">
-                    /month
+                    /mo
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  for 3 months — full access to all lessons, labs, capstone projects,
-                  industry specialisations, and dynamic scoring.
+                  for 3 months (${TOTAL_COURSE_COST.toFixed(2)} total)
                 </p>
-                <div className="mt-4 rounded-lg bg-muted/50 p-3">
-                  <p className="text-sm">
-                    After completing the course:{" "}
-                    <strong>${ONGOING_MONTHLY_PRICE.toFixed(2)}/month</strong>
-                    {" "} — Ongoing access to updated content, new tools as they emerge,
-                    and your live skill scores. Cancel anytime.
-                  </p>
-                </div>
               </div>
 
-              <ul className="mt-8 space-y-3">
-                {included.map((feature) => (
+              <ul className="mt-8 flex-1 space-y-3">
+                {courseFeatures.map((feature) => (
                   <li key={feature} className="flex items-start gap-2 text-sm">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
                     <span>{feature}</span>
@@ -80,54 +135,87 @@ export default function PricingPage() {
 
               <div className="mt-8">
                 <Button className="w-full" size="lg" asChild>
-                  <Link href="/signup">Create Free Account</Link>
+                  <Link href="/signup">
+                    Start Learning
+                    <ArrowRight className="ml-2 size-4" />
+                  </Link>
                 </Button>
-                <p className="mt-3 text-center text-xs text-muted-foreground">
-                  Start with free labs — no credit card required.
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Tier 3: Stay Current */}
+          <Card className="flex flex-col border-accent/50">
+            <CardContent className="flex flex-1 flex-col p-8">
+              <div className="text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
+                  <TrendingUp className="size-6 text-accent" />
+                </div>
+                <h2 className="text-lg font-semibold">Stay Current</h2>
+                <div className="mt-4 text-5xl font-bold">
+                  ${ONGOING_MONTHLY_PRICE.toFixed(2)}
+                  <span className="text-lg font-normal text-muted-foreground">
+                    /mo
+                  </span>
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  after completing the course
                 </p>
+              </div>
+
+              <ul className="mt-8 flex-1 space-y-3">
+                {ongoingFeatures.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2 text-sm">
+                    <Check className="mt-0.5 size-4 shrink-0 text-accent" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8">
+                <Button
+                  variant="outline"
+                  className="w-full border-accent/50 text-accent hover:bg-accent/10"
+                  size="lg"
+                  disabled
+                >
+                  Included After Course
+                </Button>
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* No yearly price note */}
-        <div className="mx-auto mt-8 max-w-lg text-center">
+        <div className="mx-auto mt-10 max-w-2xl text-center">
           <p className="text-sm text-muted-foreground">
-            <strong>No yearly price.</strong> We believe the course is good enough
-            that you will want to stay — but you are free to leave at any point.
-            No lock-in. No penalty. That keeps us honest.
+            <strong>No yearly price.</strong> We believe the course is good
+            enough that you will want to stay — but you are free to leave at any
+            point. No lock-in. No penalty. That keeps us honest.
           </p>
         </div>
 
-        {/* Try before you subscribe */}
-        <div className="mx-auto mt-16 max-w-lg text-center">
-          <h2 className="text-2xl font-bold">Try Before You Subscribe</h2>
-          <p className="mt-2 text-muted-foreground">
-            Our labs are free. No credit card. No trial period that expires. Build
-            something with AI right now and see if this is for you.
-          </p>
-          <div className="mt-6">
-            <Button variant="outline" size="lg" asChild>
-              <Link href="/signup">Start with a Free Lab</Link>
-            </Button>
-          </div>
-        </div>
-
-        {/* Employer/Teams section */}
-        <div className="mx-auto mt-20 max-w-2xl">
+        {/* For Teams section */}
+        <div className="mx-auto mt-16 max-w-2xl">
           <Card>
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold">For Teams</h2>
               <p className="mt-2 text-muted-foreground">
-                Same per-person price. No bulk discounts — it is already the lowest
-                possible price. Teams of 5+ get an enterprise admin dashboard with
-                progress tracking, completion rates, and the ability to designate
-                relevant optional lessons.
+                Same per-person price. No bulk discounts — it is already the
+                lowest possible price. Teams of 5+ get an admin dashboard with
+                progress tracking, completion rates, and the ability to choose
+                which optional lessons each role completes.
               </p>
-              <div className="mt-6">
+              <div className="mt-6 flex flex-wrap gap-4">
                 <Button variant="outline" asChild>
                   <Link href={`mailto:${TEAMS_EMAIL}`}>
                     Contact {TEAMS_EMAIL}
+                  </Link>
+                </Button>
+                <Button variant="ghost" className="gap-2" asChild>
+                  <Link href="/for-teams">
+                    Learn more
+                    <ArrowRight className="size-4" />
                   </Link>
                 </Button>
               </div>

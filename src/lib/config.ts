@@ -97,6 +97,18 @@ export const POINTS_PER_LESSON = 1.5
 /** Score decay period — days after content update before score starts decaying */
 export const SCORE_DECAY_DAYS = 14
 
+/** Estimated hours of new content added per month (ongoing subscribers) */
+export const ONGOING_NEW_CONTENT_HOURS = 5
+
+/** Total optional lessons available across Months 2 & 3 */
+export const TOTAL_OPTIONAL_LESSONS = 30
+
+/** Total mandatory lessons across all 3 months */
+export const TOTAL_MANDATORY_LESSONS = 64
+
+/** Total course cost for 3 months (USD) */
+export const TOTAL_COURSE_COST = COURSE_MONTHLY_PRICE * TOTAL_COURSE_MONTHS
+
 // ─── Course Structure ────────────────────────────────────────────────────────
 
 /** Configuration for each month of the course */

@@ -1052,6 +1052,19 @@
       "tags": [],
       "is_hot": true,
       "last_verified": "2026-02-18"
+    },
+    {
+      "name": "Beads and Gas Town",
+      "slug": "beads-and-gas-town",
+      "version": "",
+      "category": "Multi-Agent Framework",
+      "status": "GA",
+      "cost_tier": "free",
+      "url": "https://github.com/steveyegge/gastown",
+      "description": "",
+      "tags": [],
+      "is_hot": true,
+      "last_verified": "2026-02-24"
     }
   ],
   "categories": [
@@ -1073,5 +1086,5 @@
     "Infrastructure",
     "Local LLM Runtime"
   ],
-  "exported_at": "2026-02-19T20:32:03.153888"
+  "exported_at": "2026-02-25T21:10:46.858588"
 }
