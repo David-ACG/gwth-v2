@@ -44,7 +44,7 @@ export default function TechRadarPage() {
             "@type": "WebPage",
             name: "GWTH Tech Radar",
             description:
-              "Track 47+ AI tools daily. Independent reviews with no vendor partnerships.",
+              "Track 60+ AI tools daily. Independent reviews with no vendor partnerships.",
             provider: {
               "@type": "Organization",
               name: "GWTH.ai",

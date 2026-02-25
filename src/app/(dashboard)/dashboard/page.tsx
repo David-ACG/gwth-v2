@@ -239,7 +239,7 @@ export default async function DashboardPage() {
               <div className="flex-1">
                 <h3 className="font-semibold">Tech Radar</h3>
                 <p className="text-sm text-muted-foreground">
-                  47+ AI tools tracked and evaluated daily.
+                  60+ AI tools tracked and evaluated daily.
                 </p>
               </div>
               <Button variant="ghost" size="sm" asChild>

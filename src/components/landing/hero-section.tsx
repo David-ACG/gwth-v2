@@ -96,7 +96,7 @@ export function HeroSection() {
         >
           {[
             { value: "94", label: "Hands-on Projects" },
-            { value: "47+", label: "AI Tools Tracked" },
+            { value: "60+", label: "AI Tools Tracked" },
             { value: "3", label: "Months to Get Started" },
           ].map((stat) => (
             <div key={stat.label}>

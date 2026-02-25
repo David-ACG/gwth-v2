@@ -39,7 +39,7 @@ const differentiators = [
     color: "#0E7C7B",
     title: "Updated every day, not annually",
     description:
-      "Our Tech Radar scans 47+ AI tools every single day. When a tool you learned gets replaced by something better, we update the lesson immediately.",
+      "Our Tech Radar scans 60+ AI tools every single day. When a tool you learned gets replaced by something better, we update the lesson immediately.",
   },
   {
     icon: Shield,
@@ -306,7 +306,7 @@ export default function LandingPage() {
                     "Industry-specific modules for your field",
                     "Content updated every day",
                     "Dynamic scores that employers can verify",
-                    "Tech Radar — 47+ tools tracked daily",
+                    "Tech Radar — 60+ tools tracked daily",
                     "No ads, no upsells, no hidden premium tier",
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-sm">

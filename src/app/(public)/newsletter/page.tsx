@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const includes = [
   "A practical AI tip you can use that day",
-  "Tool updates from the GWTH Tech Radar (47+ tools tracked daily)",
+  "Tool updates from the GWTH Tech Radar (60+ tools tracked daily)",
   "Course updates and new content previews",
 ]
 

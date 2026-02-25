@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: "About",
   description:
-    "GWTH.ai is an independent AI course built by practitioners, not marketers. 94 projects, 47+ tools tracked daily, updated every day. No sponsors, no ads, no vendor partnerships.",
+    "GWTH.ai is an independent AI course built by practitioners, not marketers. 94 projects, 60+ tools tracked daily, updated every day. No sponsors, no ads, no vendor partnerships.",
 }
 
 const principles = [
@@ -49,7 +49,7 @@ const differentiators = [
     color: "#0E7C7B",
     title: "Updated every day",
     description:
-      "Our Tech Radar scans 47+ AI tools every single day. When a tool gets replaced by something better, we update the lesson that same day. Most courses are out of date before you finish them. Ours never is.",
+      "Our Tech Radar scans 60+ AI tools every single day. When a tool gets replaced by something better, we update the lesson that same day. Most courses are out of date before you finish them. Ours never is.",
   },
   {
     icon: Trophy,
@@ -76,7 +76,7 @@ const differentiators = [
 
 const stats = [
   { value: "94", label: "Hands-on projects" },
-  { value: "47+", label: "Tools tracked daily" },
+  { value: "60+", label: "Tools tracked daily" },
   { value: "3", label: "Months to completion" },
   { value: "3", label: "Capstone projects" },
 ]
