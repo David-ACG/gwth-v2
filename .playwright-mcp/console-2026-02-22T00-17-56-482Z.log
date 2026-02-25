@@ -1,7 +1,0 @@
-[  106463ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://195.201.177.66:8000/livewire/update:0
-[  106636ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://195.201.177.66:8000/livewire/update:0
-[  106712ms] InvalidStateError: Failed to execute 'showModal' on 'HTMLDialogElement': The dialog is already open as a non-modal dialog, and therefore cannot be opened as a modal dialog.
-    at gn (http://195.201.177.66:8000/livewire/livewire.min.js?id=61e33937:5:42397)
-    at Fc (http://195.201.177.66:8000/livewire/livewire.min.js?id=61e33937:6:80)
-    at Yo (http://195.201.177.66:8000/livewire/livewire.min.js?id=61e33937:5:46576)
-    at async Vt.send (http://195.201.177.66:8000/livewire/livewire.min.js?id=61e33937:5:42877)

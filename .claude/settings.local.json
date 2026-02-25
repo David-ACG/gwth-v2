@@ -100,7 +100,18 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:deepwiki.com)",
       "mcp__playwright__browser_run_code",
-      "mcp__playwright__browser_evaluate"
+      "mcp__playwright__browser_evaluate",
+      "WebFetch(domain:random.qmx.me)",
+      "WebFetch(domain:developers.linear.app)",
+      "WebFetch(domain:linear.app)",
+      "WebFetch(domain:betterstack.com)",
+      "mcp__linear__list_teams",
+      "mcp__linear__list_issue_labels",
+      "WebFetch(domain:www.vibesparking.com)",
+      "mcp__linear__list_issues",
+      "mcp__linear__list_issue_statuses",
+      "WebFetch(domain:mikemason.ca)",
+      "WebFetch(domain:yuv.ai)"
     ]
   },
   "hooks": {
