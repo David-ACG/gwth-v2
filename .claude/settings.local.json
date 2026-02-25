@@ -111,7 +111,9 @@
       "mcp__linear__list_issues",
       "mcp__linear__list_issue_statuses",
       "WebFetch(domain:mikemason.ca)",
-      "WebFetch(domain:yuv.ai)"
+      "WebFetch(domain:yuv.ai)",
+      "Bash(echo bd not found on PATH:*)",
+      "Bash(cd /c/Projects/GWTH_V2 && npx vitest run src/app/\\\\\\(public\\\\\\)/for-teams/for-teams.test.tsx 2>&1)"
     ]
   },
   "hooks": {
