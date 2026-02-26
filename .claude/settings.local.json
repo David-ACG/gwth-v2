@@ -123,7 +123,8 @@
       "Bash(/c/Users/david/AppData/Local/beads/bd.exe version:*)",
       "Bash(npm uninstall:*)",
       "Bash(cd /c/Projects/GWTH_V2 && npm run build 2>&1)",
-      "Bash(bd init:*)"
+      "Bash(bd init:*)",
+      "Bash(dolt version:*)"
     ]
   },
   "hooks": {
