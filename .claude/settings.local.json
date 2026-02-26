@@ -113,7 +113,17 @@
       "WebFetch(domain:mikemason.ca)",
       "WebFetch(domain:yuv.ai)",
       "Bash(echo bd not found on PATH:*)",
-      "Bash(cd /c/Projects/GWTH_V2 && npx vitest run src/app/\\\\\\(public\\\\\\)/for-teams/for-teams.test.tsx 2>&1)"
+      "Bash(cd /c/Projects/GWTH_V2 && npx vitest run src/app/\\\\\\(public\\\\\\)/for-teams/for-teams.test.tsx 2>&1)",
+      "mcp__linear__create_issue_label",
+      "Bash(schtasks:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(bd version:*)",
+      "Bash(gh release:*)",
+      "Bash(mkdir -p /c/Users/david/AppData/Local/beads && cd /c/Users/david/AppData/Local/beads && gh release download v0.56.1 --repo steveyegge/beads --pattern \"beads_0.56.1_windows_amd64.zip\" --clobber 2>&1)",
+      "Bash(/c/Users/david/AppData/Local/beads/bd.exe version:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(cd /c/Projects/GWTH_V2 && npm run build 2>&1)",
+      "Bash(bd init:*)"
     ]
   },
   "hooks": {

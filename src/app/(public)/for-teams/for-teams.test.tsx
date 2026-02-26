@@ -95,7 +95,7 @@ describe("ForTeamsPage", () => {
   it("has contact CTA", () => {
     render(<ForTeamsPage />)
     expect(
-      screen.getByRole("link", { name: /teams@gwth\.ai/ })
+      screen.getByRole("link", { name: /Get in Touch/ })
     ).toBeInTheDocument()
   })
 })

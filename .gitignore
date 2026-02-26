@@ -45,6 +45,11 @@ docs/old-site/.env.local
 # infrastructure secrets (save to password manager, not git)
 docs/connection-secrets.md
 
+# kanban automation state/logs
+kanban/.linear-poll-state.json
+kanban/.linear-poll.log
+kanban/.heartbeat.log
+
 # vercel
 .vercel
 

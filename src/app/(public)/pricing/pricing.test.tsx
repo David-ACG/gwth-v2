@@ -54,17 +54,17 @@ describe("PricingPage", () => {
     ).toBeInTheDocument()
   })
 
-  it("has Start Free CTA for free tier", () => {
+  it("has Join the Waitlist CTA for free tier", () => {
     render(<PricingPage />)
     expect(
-      screen.getByRole("link", { name: "Start Free" })
+      screen.getByRole("link", { name: "Join the Waitlist" })
     ).toBeInTheDocument()
   })
 
-  it("has Start Learning CTA for course tier", () => {
+  it("has Join the Earlybird Waitlist CTA for course tier", () => {
     render(<PricingPage />)
     expect(
-      screen.getByRole("link", { name: /Start Learning/ })
+      screen.getByRole("link", { name: /Join the Earlybird Waitlist/ })
     ).toBeInTheDocument()
   })
 
@@ -77,7 +77,7 @@ describe("PricingPage", () => {
     render(<PricingPage />)
     expect(screen.getByText("For Teams")).toBeInTheDocument()
     expect(
-      screen.getByRole("link", { name: /teams@gwth\.ai/ })
+      screen.getByRole("link", { name: /Get in Touch/ })
     ).toBeInTheDocument()
   })
 })

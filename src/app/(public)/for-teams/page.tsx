@@ -7,7 +7,7 @@ import {
   Briefcase,
   BarChart3,
   ArrowRight,
-  Mail,
+  MessageSquare,
   Check,
   Radar,
   Zap,
@@ -23,7 +23,6 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion"
 import {
-  TEAMS_EMAIL,
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
   TOTAL_COURSE_COST,
@@ -347,7 +346,15 @@ export default function ForTeamsPage() {
             </h2>
             <p className="mt-4 text-muted-foreground">
               Not every role needs every lesson. The team admin dashboard lets
-              you build the right syllabus for each department.
+              you build the right syllabus for each department. Month 1 is
+              designed for individuals and families first — personal AI mastery
+              that naturally adapts to any team context.
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Every concept is introduced with a clear explanation of why it matters — not
+              just what it is. That &quot;why you should care&quot; approach means your team
+              members stay engaged because they understand the practical benefit before
+              learning the skill.
             </p>
           </div>
           <div className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-3">
@@ -498,9 +505,9 @@ export default function ForTeamsPage() {
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button size="lg" className="gap-2" asChild>
-              <Link href={`mailto:${TEAMS_EMAIL}`}>
-                <Mail className="size-4" />
-                Contact {TEAMS_EMAIL}
+              <Link href="/contact">
+                <MessageSquare className="size-4" />
+                Get in Touch
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="gap-2" asChild>

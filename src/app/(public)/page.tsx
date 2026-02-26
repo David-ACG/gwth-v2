@@ -144,6 +144,13 @@ export default function LandingPage() {
               <strong className="text-foreground">94 projects across three months.</strong>{" "}
               Not quizzes about transformer architecture. Real things you build, use, and show to people.
             </p>
+            <p className="mt-4 text-base text-muted-foreground">
+              Every concept is introduced with a clear explanation of{" "}
+              <strong className="text-foreground">why it matters to you</strong> — not
+              just what it is. No jargon without context. When other courses mention
+              &quot;RAG&quot; or &quot;fine-tuning&quot;, they assume you know why you should care.
+              We explain the benefit first, then teach the skill.
+            </p>
           </div>
           <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
             {MONTH_CONFIGS.map((month) => (
@@ -164,6 +171,8 @@ export default function LandingPage() {
                     {month.mandatoryLessons + month.optionalLessons} projects.
                     {month.optionalLessons > 0 &&
                       " Choose your industry specialisation."}
+                    {month.month === 1 &&
+                      " Designed for individuals and families first — easily adapted for teams."}
                   </p>
                   <p className="mt-3 text-sm">
                     {month.description}
@@ -238,6 +247,11 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Whether AI feels like a threat or an opportunity, this course makes it yours.
             </h2>
+            <p className="mt-4 text-base text-muted-foreground">
+              This is not a chore. Every lesson is designed to give you a quick win — something
+              you can use, show someone, or be proud of. Plus 30 optional lessons let you follow
+              your interests and go deeper in the areas that matter most to you.
+            </p>
           </div>
           <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {audiences.map((item) => (
@@ -317,10 +331,10 @@ export default function LandingPage() {
                 </ul>
                 <div className="mt-8 space-y-3">
                   <Button className="w-full" size="lg" asChild>
-                    <Link href="/signup">Create Free Account</Link>
+                    <Link href="/signup">Join the Waitlist</Link>
                   </Button>
                   <p className="text-center text-xs text-muted-foreground">
-                    Start with free labs — no credit card required.
+                    Create a free account to join the earlybird waiting list.
                   </p>
                 </div>
                 <p className="mt-6 text-center text-xs text-muted-foreground">
@@ -346,7 +360,7 @@ export default function LandingPage() {
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button size="lg" className="gap-2" asChild>
               <Link href="/signup">
-                Create Free Account
+                Join the Earlybird Waitlist
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

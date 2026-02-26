@@ -1,5 +1,5 @@
 /**
- * Email integration stubs for waitlist and newsletter signups.
+ * Email integration stubs for waitlist, newsletter, and contact form.
  * Will be wired to MailerSend (transactional) and MailerLite (newsletter) later.
  *
  * Env vars needed (when connecting real providers):
@@ -9,7 +9,8 @@
 
 /**
  * Subscribes a user to the waitlist.
- * Sends a confirmation email via MailerSend.
+ * In production: sends a confirmation email to the user via MailerSend,
+ * and a notification email to the admin (david@agilecommercegroup.com).
  * Currently a stub that returns success.
  */
 export async function subscribeToWaitlist(params: {
@@ -17,6 +18,8 @@ export async function subscribeToWaitlist(params: {
   name?: string
 }): Promise<{ success: boolean; message: string }> {
   // TODO: Wire to MailerSend transactional email
+  // 1. Send confirmation email to user
+  // 2. Send notification email to admin (david@agilecommercegroup.com)
   console.log(`[Stub] Waitlist signup: ${params.email} (${params.name ?? "no name"})`)
   return {
     success: true,
@@ -36,5 +39,26 @@ export async function subscribeToNewsletter(params: {
   return {
     success: true,
     message: "You're subscribed to our newsletter!",
+  }
+}
+
+/**
+ * Submits a contact form message.
+ * In production: sends the message to david@agilecommercegroup.com via MailerSend,
+ * and sends a confirmation email to the sender.
+ * Currently a stub that logs and returns success.
+ */
+export async function submitContactForm(params: {
+  name: string
+  email: string
+  message: string
+}): Promise<{ success: boolean; message: string }> {
+  // TODO: Wire to MailerSend
+  // 1. Send message to admin (david@agilecommercegroup.com) with sender details
+  // 2. Send confirmation email to sender ("We received your message")
+  console.log(`[Stub] Contact form: ${params.name} <${params.email}> — ${params.message.slice(0, 50)}...`)
+  return {
+    success: true,
+    message: "Message sent! We will get back to you as soon as possible.",
   }
 }

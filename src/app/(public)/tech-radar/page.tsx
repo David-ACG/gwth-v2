@@ -117,7 +117,7 @@ export default function TechRadarPage() {
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button size="lg" className="gap-2" asChild>
               <Link href="/signup">
-                Start Learning
+                Join the Earlybird Waitlist
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

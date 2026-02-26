@@ -106,6 +106,24 @@ export const noteSchema = z.object({
   timestamp: z.number().min(0).optional(),
 })
 
+// ─── Contact Form ────────────────────────────────────────────────────────────
+
+/** Contact form schema — name, email, and message */
+export const contactSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be less than 100 characters"),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message must be less than 2000 characters"),
+})
+
 // ─── Waitlist / Newsletter ────────────────────────────────────────────────────
 
 /** Waitlist signup schema */
@@ -132,4 +150,5 @@ export type SettingsFormData = z.infer<typeof settingsSchema>
 export type QuizAnswerData = z.infer<typeof quizAnswerSchema>
 export type QuizSubmissionData = z.infer<typeof quizSubmissionSchema>
 export type NoteFormData = z.infer<typeof noteSchema>
+export type ContactFormData = z.infer<typeof contactSchema>
 export type WaitlistFormData = z.infer<typeof waitlistSchema>

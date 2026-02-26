@@ -41,6 +41,13 @@ const principles = [
     description:
       "You will not build a to-do app. You will build things that solve actual problems — automate a workflow, analyse real data, deploy something on a real domain. The kind of work people get paid to do.",
   },
+  {
+    icon: Heart,
+    color: "#E53935",
+    title: "Why you should care — explained every time.",
+    description:
+      "Every concept comes with a clear explanation of why it matters. When other courses mention 'RAG' or 'fine-tuning', they assume you know why you should care. We do not. We explain the benefit first, then teach the skill.",
+  },
 ]
 
 const differentiators = [
@@ -148,10 +155,10 @@ export default function AboutPage() {
               Our Philosophy
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Three principles guide everything we build.
+              Four principles guide everything we build.
             </p>
           </div>
-          <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {principles.map((item) => (
               <Card
                 key={item.title}

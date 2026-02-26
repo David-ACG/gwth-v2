@@ -29,17 +29,17 @@ export function SignupForm() {
   })
 
   async function onSubmit() {
-    // Mock signup — always succeeds
-    toast.success("Account created! Welcome to GWTH.ai")
+    // Mock signup — always succeeds, waitlist confirmation
+    toast.success("You're on the list! We'll notify you when the course launches.")
     router.push("/dashboard")
   }
 
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Create an account</CardTitle>
+        <CardTitle className="text-2xl">Join the Earlybird Waitlist</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Start your AI learning journey today
+          Create a free account and be first to access the course when it launches.
         </p>
       </CardHeader>
       <CardContent>
@@ -121,7 +121,7 @@ export function SignupForm() {
               className="w-full"
               disabled={form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? "Creating account..." : "Sign Up"}
+              {form.formState.isSubmitting ? "Joining waitlist..." : "Join the Waitlist"}
             </Button>
           </form>
         </Form>

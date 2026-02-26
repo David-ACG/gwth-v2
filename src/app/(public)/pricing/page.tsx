@@ -9,7 +9,6 @@ import {
   TOTAL_COURSE_COST,
   ONGOING_NEW_CONTENT_HOURS,
   TOTAL_OPTIONAL_LESSONS,
-  TEAMS_EMAIL,
 } from "@/lib/config"
 
 export const metadata: Metadata = {
@@ -94,7 +93,7 @@ export default function PricingPage() {
 
               <div className="mt-8">
                 <Button variant="outline" className="w-full" size="lg" asChild>
-                  <Link href="/signup">Start Free</Link>
+                  <Link href="/signup">Join the Waitlist</Link>
                 </Button>
               </div>
             </CardContent>
@@ -136,7 +135,7 @@ export default function PricingPage() {
               <div className="mt-8">
                 <Button className="w-full" size="lg" asChild>
                   <Link href="/signup">
-                    Start Learning
+                    Join the Earlybird Waitlist
                     <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
@@ -186,8 +185,16 @@ export default function PricingPage() {
           </Card>
         </div>
 
-        {/* No yearly price note */}
+        {/* Earlybird note */}
         <div className="mx-auto mt-10 max-w-2xl text-center">
+          <p className="text-sm text-muted-foreground">
+            We are currently accepting earlybird testers. Create a free account to
+            join the waiting list and be first to access the course when it launches.
+          </p>
+        </div>
+
+        {/* No yearly price note */}
+        <div className="mx-auto mt-4 max-w-2xl text-center">
           <p className="text-sm text-muted-foreground">
             <strong>No yearly price.</strong> We believe the course is good
             enough that you will want to stay — but you are free to leave at any
@@ -208,9 +215,7 @@ export default function PricingPage() {
               </p>
               <div className="mt-6 flex flex-wrap gap-4">
                 <Button variant="outline" asChild>
-                  <Link href={`mailto:${TEAMS_EMAIL}`}>
-                    Contact {TEAMS_EMAIL}
-                  </Link>
+                  <Link href="/contact">Get in Touch</Link>
                 </Button>
                 <Button variant="ghost" className="gap-2" asChild>
                   <Link href="/for-teams">

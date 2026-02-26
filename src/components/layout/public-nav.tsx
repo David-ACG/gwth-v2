@@ -54,7 +54,7 @@ export function PublicNav() {
             <Link href="/login">Log in</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="/signup">Create Free Account</Link>
+            <Link href="/signup">Join the Waitlist</Link>
           </Button>
           {/* Mobile hamburger */}
           <Sheet>
@@ -88,7 +88,7 @@ export function PublicNav() {
                   Log in
                 </Link>
                 <Button asChild className="mt-2">
-                  <Link href="/signup">Create Free Account</Link>
+                  <Link href="/signup">Join the Waitlist</Link>
                 </Button>
               </nav>
             </SheetContent>

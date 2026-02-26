@@ -62,7 +62,7 @@ export function HeroSection() {
             </p>
             <p className="mt-4 max-w-xl text-base text-muted-foreground">
               One course. Three months to get started. Five hours a week. Updated every day
-              so your skills never go stale.
+              so your skills never go stale. Designed to be practical, enjoyable, and immediately useful.
             </p>
           </motion.div>
 
@@ -74,7 +74,7 @@ export function HeroSection() {
           >
             <Button size="lg" className="gap-2" asChild>
               <Link href="/signup">
-                Create Free Account
+                Join the Earlybird Waitlist
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

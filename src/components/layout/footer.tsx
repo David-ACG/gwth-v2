@@ -8,6 +8,7 @@ const footerLinks = [
       { href: "/pricing", label: "Pricing" },
       { href: "/for-teams", label: "For Teams" },
       { href: "/tech-radar", label: "Tech Radar" },
+      { href: "/contact", label: "Contact" },
     ],
   },
   {
