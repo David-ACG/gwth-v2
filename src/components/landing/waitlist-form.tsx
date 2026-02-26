@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { waitlistSchema, type WaitlistFormData } from "@/lib/validations"
-import { subscribeToWaitlist } from "@/lib/data/email"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -18,6 +17,7 @@ import {
 /**
  * Waitlist signup form with email validation.
  * Uses react-hook-form + zod for validation, Sonner for feedback.
+ * Posts to /api/waitlist for email delivery.
  */
 export function WaitlistForm() {
   const form = useForm<WaitlistFormData>({
@@ -26,12 +26,26 @@ export function WaitlistForm() {
   })
 
   async function onSubmit(data: WaitlistFormData) {
-    const result = await subscribeToWaitlist(data)
-    if (result.success) {
-      toast.success(result.message)
-      form.reset()
-    } else {
-      toast.error(result.message)
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name || "Friend",
+          email: data.email,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        toast.success(result.message)
+        form.reset()
+      } else {
+        toast.error(result.message)
+      }
+    } catch {
+      toast.error("Something went wrong. Please try again.")
     }
   }
 
