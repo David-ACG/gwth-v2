@@ -24,9 +24,22 @@ const MOCK_USER: User = {
 
 /**
  * Returns the currently authenticated user, or null if not logged in.
- * In development, always returns the mock user.
+ * Returns null until Supabase Auth is configured.
+ * Dashboard pages use getMockUser() for UI development.
  */
 export async function getCurrentUser(): Promise<User | null> {
+  // TODO: Replace with Supabase Auth when configured
+  // const supabase = await createClient()
+  // const { data: { user } } = await supabase.auth.getUser()
+  // return user ? mapUser(user) : null
+  return null
+}
+
+/**
+ * Returns the mock user for dashboard UI development.
+ * Use this only in dashboard pages that need a fake logged-in state.
+ */
+export async function getMockUser(): Promise<User> {
   return MOCK_USER
 }
 

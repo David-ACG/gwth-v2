@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { requireAuth } from "@/lib/auth"
+import { getMockUser } from "@/lib/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ProfilePage() {
-  const user = await requireAuth()
+  const user = await getMockUser()
 
   return (
     <div className="space-y-6">

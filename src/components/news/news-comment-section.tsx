@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { MessageSquare, Reply, Trash2 } from "lucide-react"
 import { toast } from "sonner"
-import { addNewsComment, deleteNewsComment } from "@/lib/data/news"
+import { addNewsCommentAction, deleteNewsCommentAction } from "@/lib/actions/news"
 import { newsCommentSchema, type NewsCommentFormData } from "@/lib/validations"
 import { formatRelativeDate } from "@/lib/utils"
 import type { NewsComment } from "@/lib/types"
@@ -44,7 +44,7 @@ export function NewsCommentSection({
 
   async function handleAddComment(body: string, parentId?: string) {
     try {
-      const newComment = await addNewsComment(articleId, body, parentId)
+      const newComment = await addNewsCommentAction(articleId, body, parentId)
       setComments((prev) => [...prev, newComment])
       setReplyingTo(null)
       toast.success("Comment added")
@@ -55,7 +55,7 @@ export function NewsCommentSection({
 
   async function handleDeleteComment(commentId: string) {
     try {
-      const deleted = await deleteNewsComment(commentId)
+      const deleted = await deleteNewsCommentAction(commentId)
       if (deleted) {
         setComments((prev) => prev.filter((c) => c.id !== commentId))
         toast.info("Comment deleted")

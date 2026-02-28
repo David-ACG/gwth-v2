@@ -4,7 +4,7 @@ import { getCourses } from "@/lib/data/courses"
 import { getAllCourseProgress, getStreak } from "@/lib/data/progress"
 import { getBookmarks } from "@/lib/data/bookmarks"
 import { getNotifications } from "@/lib/data/notifications"
-import { getCurrentUser, canAccessCourse } from "@/lib/auth"
+import { getMockUser, canAccessCourse } from "@/lib/auth"
 import { ProgressRing } from "@/components/progress/progress-ring"
 import { StudyStreakCalendar } from "@/components/progress/study-streak-calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   const [user, courses, courseProgress, streak, bookmarks, notifications] =
     await Promise.all([
-      getCurrentUser(),
+      getMockUser(),
       getCourses(),
       getAllCourseProgress(),
       getStreak(),

@@ -1,15 +1,55 @@
 /**
  * Data access functions for news articles and voting.
- * Currently backed by mock data. Will be replaced with Supabase calls later.
+ * Backed by Supabase. Uses the admin client for mutations until Supabase Auth is configured.
  */
 
 import type { NewsArticle, NewsComment, NewsSortOption } from "@/lib/types"
-import {
-  mockNewsArticles,
-  mockNewsVotes,
-  mockNewsComments,
-} from "./mock-data"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { NEWS_PAGE_SIZE } from "@/lib/config"
+
+// ─── Row → Type Mappers ─────────────────────────────────────────────────────
+
+/** Maps a Supabase news_articles row (snake_case) to a NewsArticle (camelCase). */
+function mapArticle(row: Record<string, unknown>): NewsArticle {
+  return {
+    id: row.id as string,
+    slug: row.slug as string,
+    title: row.title as string,
+    excerpt: row.excerpt as string,
+    content: row.content as string,
+    url: (row.url as string) ?? null,
+    category: row.category as NewsArticle["category"],
+    tags: (row.tags as string[]) ?? [],
+    thumbnailUrl: (row.thumbnail_url as string) ?? null,
+    author: row.author as string,
+    voteCount: row.vote_count as number,
+    commentCount: row.comment_count as number,
+    labSlug: (row.lab_slug as string) ?? null,
+    isFeatured: row.is_featured as boolean,
+    status: row.status as NewsArticle["status"],
+    publishedAt: new Date(row.published_at as string),
+    hotnessScore: (row.hotness_score as number) ?? 0,
+    createdAt: new Date(row.created_at as string),
+    updatedAt: new Date(row.updated_at as string),
+  }
+}
+
+/** Maps a Supabase news_comments row (snake_case) to a NewsComment (camelCase). */
+function mapComment(row: Record<string, unknown>): NewsComment {
+  return {
+    id: row.id as string,
+    articleId: row.article_id as string,
+    userId: row.user_id as string,
+    parentId: (row.parent_id as string) ?? null,
+    body: row.body as string,
+    createdAt: new Date(row.created_at as string),
+    updatedAt: new Date(row.updated_at as string),
+    userName: (row.user_name as string) ?? "Anonymous",
+    userAvatar: (row.user_avatar as string) ?? null,
+  }
+}
+
+// ─── Data Access Functions ───────────────────────────────────────────────────
 
 /**
  * Fetches news articles with sorting, filtering, and pagination.
@@ -23,51 +63,53 @@ export async function getNews(params: {
   page?: number
   limit?: number
 }): Promise<{ articles: NewsArticle[]; total: number }> {
-  let results = mockNewsArticles.filter((a) => a.status === "published")
-
-  if (params.category) {
-    results = results.filter((a) => a.category === params.category)
-  }
-
-  if (params.tag) {
-    const tag = params.tag.toLowerCase()
-    results = results.filter((a) =>
-      a.tags.some((t) => t.toLowerCase() === tag)
-    )
-  }
-
-  if (params.query) {
-    const q = params.query.toLowerCase()
-    results = results.filter(
-      (a) =>
-        a.title.toLowerCase().includes(q) ||
-        a.excerpt.toLowerCase().includes(q) ||
-        a.tags.some((t) => t.toLowerCase().includes(q))
-    )
-  }
-
+  const supabase = createAdminClient()
   const sort = params.sort ?? "hot"
-  switch (sort) {
-    case "hot":
-      results.sort((a, b) => b.hotnessScore - a.hotnessScore)
-      break
-    case "new":
-      results.sort(
-        (a, b) => b.publishedAt.getTime() - a.publishedAt.getTime()
-      )
-      break
-    case "top":
-      results.sort((a, b) => b.voteCount - a.voteCount)
-      break
-  }
-
-  const total = results.length
   const limit = params.limit ?? NEWS_PAGE_SIZE
   const page = params.page ?? 1
   const offset = (page - 1) * limit
-  results = results.slice(offset, offset + limit)
 
-  return { articles: results, total }
+  // Use the ranked view for hot sorting (includes hotness_score),
+  // or the base table for new/top sorting.
+  const table = sort === "hot" ? "news_articles_ranked" : "news_articles_ranked"
+  let query = supabase
+    .from(table)
+    .select("*", { count: "exact" })
+
+  if (params.category) {
+    query = query.eq("category", params.category)
+  }
+
+  if (params.tag) {
+    query = query.contains("tags", [params.tag])
+  }
+
+  if (params.query) {
+    const q = params.query
+    query = query.or(`title.ilike.%${q}%,excerpt.ilike.%${q}%`)
+  }
+
+  switch (sort) {
+    case "hot":
+      query = query.order("hotness_score", { ascending: false })
+      break
+    case "new":
+      query = query.order("published_at", { ascending: false })
+      break
+    case "top":
+      query = query.order("vote_count", { ascending: false })
+      break
+  }
+
+  query = query.range(offset, offset + limit - 1)
+
+  const { data, count, error } = await query
+  if (error) throw new Error(error.message)
+
+  return {
+    articles: (data ?? []).map(mapArticle),
+    total: count ?? 0,
+  }
 }
 
 /**
@@ -77,11 +119,16 @@ export async function getNews(params: {
 export async function getNewsArticle(
   slug: string
 ): Promise<NewsArticle | null> {
-  return (
-    mockNewsArticles.find(
-      (a) => a.slug === slug && a.status === "published"
-    ) ?? null
-  )
+  const supabase = createAdminClient()
+
+  const { data, error } = await supabase
+    .from("news_articles_ranked")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle()
+
+  if (error || !data) return null
+  return mapArticle(data)
 }
 
 /**
@@ -92,9 +139,17 @@ export async function getNewsFilters(): Promise<{
   categories: string[]
   tags: string[]
 }> {
-  const published = mockNewsArticles.filter((a) => a.status === "published")
-  const categories = new Set(published.map((a) => a.category))
-  const tags = new Set(published.flatMap((a) => a.tags))
+  const supabase = createAdminClient()
+
+  const { data, error } = await supabase
+    .from("news_articles_ranked")
+    .select("category, tags")
+
+  if (error || !data) return { categories: [], tags: [] }
+
+  const categories = new Set(data.map((a) => a.category as string))
+  const tags = new Set(data.flatMap((a) => (a.tags as string[]) ?? []))
+
   return {
     categories: [...categories].sort(),
     tags: [...tags].sort(),
@@ -106,40 +161,38 @@ export async function getNewsFilters(): Promise<{
  * Used to show the filled/unfilled vote button state.
  */
 export async function getUserVotes(userId: string): Promise<string[]> {
-  return mockNewsVotes
-    .filter((v) => v.userId === userId)
-    .map((v) => v.articleId)
+  const supabase = createAdminClient()
+
+  const { data, error } = await supabase
+    .from("news_votes")
+    .select("article_id")
+    .eq("user_id", userId)
+
+  if (error || !data) return []
+  return data.map((v) => v.article_id as string)
 }
 
 /**
- * Toggles a vote on a news article for the current mock user.
- * If the user has already voted, removes the vote. Otherwise, adds it.
+ * Toggles a vote on a news article.
+ * Uses the toggle_news_vote database function for atomicity.
  * Returns the new vote state and updated count.
  */
 export async function toggleVote(
   articleId: string
 ): Promise<{ voted: boolean; newCount: number }> {
-  const existingIndex = mockNewsVotes.findIndex(
-    (v) => v.articleId === articleId && v.userId === "user_mock_001"
-  )
+  // Use mock user ID until auth is configured
+  const userId = "user_mock_001"
+  const supabase = createAdminClient()
 
-  const article = mockNewsArticles.find((a) => a.id === articleId)
-  if (!article) throw new Error("Article not found")
-
-  if (existingIndex >= 0) {
-    mockNewsVotes.splice(existingIndex, 1)
-    article.voteCount -= 1
-    return { voted: false, newCount: article.voteCount }
-  }
-
-  mockNewsVotes.push({
-    id: `vote_${Date.now()}`,
-    articleId,
-    userId: "user_mock_001",
-    createdAt: new Date(),
+  const { data, error } = await supabase.rpc("toggle_news_vote", {
+    p_article_id: articleId,
+    p_user_id: userId,
   })
-  article.voteCount += 1
-  return { voted: true, newCount: article.voteCount }
+
+  if (error) throw new Error(error.message)
+
+  const result = data as { voted: boolean; vote_count: number }
+  return { voted: result.voted, newCount: result.vote_count }
 }
 
 /**
@@ -148,9 +201,16 @@ export async function toggleVote(
 export async function getNewsComments(
   articleId: string
 ): Promise<NewsComment[]> {
-  return mockNewsComments
-    .filter((c) => c.articleId === articleId)
-    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+  const supabase = createAdminClient()
+
+  const { data, error } = await supabase
+    .from("news_comments")
+    .select("*")
+    .eq("article_id", articleId)
+    .order("created_at", { ascending: true })
+
+  if (error || !data) return []
+  return data.map(mapComment)
 }
 
 /**
@@ -161,23 +221,25 @@ export async function addNewsComment(
   body: string,
   parentId?: string
 ): Promise<NewsComment> {
-  const comment: NewsComment = {
-    id: `nc_${Date.now()}`,
-    articleId,
-    userId: "user_mock_001",
-    parentId: parentId ?? null,
-    body,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    userName: "David",
-    userAvatar: null,
-  }
-  mockNewsComments.push(comment)
+  // Use mock user until auth is configured
+  const userId = "user_mock_001"
+  const userName = "David"
+  const supabase = createAdminClient()
 
-  const article = mockNewsArticles.find((a) => a.id === articleId)
-  if (article) article.commentCount += 1
+  const { data, error } = await supabase
+    .from("news_comments")
+    .insert({
+      article_id: articleId,
+      user_id: userId,
+      parent_id: parentId ?? null,
+      body,
+      user_name: userName,
+    })
+    .select()
+    .single()
 
-  return comment
+  if (error) throw new Error(error.message)
+  return mapComment(data)
 }
 
 /**
@@ -185,16 +247,13 @@ export async function addNewsComment(
  * Returns true if the comment was deleted.
  */
 export async function deleteNewsComment(commentId: string): Promise<boolean> {
-  const index = mockNewsComments.findIndex(
-    (c) => c.id === commentId && c.userId === "user_mock_001"
-  )
-  if (index < 0) return false
+  const supabase = createAdminClient()
 
-  const articleId = mockNewsComments[index]!.articleId
-  mockNewsComments.splice(index, 1)
+  const { error } = await supabase
+    .from("news_comments")
+    .delete()
+    .eq("id", commentId)
+    .eq("user_id", "user_mock_001")
 
-  const article = mockNewsArticles.find((a) => a.id === articleId)
-  if (article) article.commentCount -= 1
-
-  return true
+  return !error
 }

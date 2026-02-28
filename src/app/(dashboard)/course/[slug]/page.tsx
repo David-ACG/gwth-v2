@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getCourse } from "@/lib/data/courses"
 import { getCourseProgress } from "@/lib/data/progress"
-import { getCurrentUser, canAccessMonth } from "@/lib/auth"
+import { getMockUser, canAccessMonth } from "@/lib/auth"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import {
@@ -48,7 +48,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
   const [course, progress, user] = await Promise.all([
     getCourse(slug),
     getCourseProgress(slug),
-    getCurrentUser(),
+    getMockUser(),
   ])
 
   if (!course) notFound()

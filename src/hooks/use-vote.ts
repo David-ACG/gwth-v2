@@ -1,7 +1,7 @@
 "use client"
 
 import { useOptimistic, useTransition } from "react"
-import { toggleVote } from "@/lib/data/news"
+import { toggleVoteAction } from "@/lib/actions/news"
 import { toast } from "sonner"
 
 /**
@@ -27,7 +27,7 @@ export function useVote(initialVoted: boolean, initialCount: number) {
 
     startTransition(async () => {
       try {
-        await toggleVote(articleId)
+        await toggleVoteAction(articleId)
         if (newVoted) {
           toast.success("Upvoted!", {
             description: "Your vote has been recorded",

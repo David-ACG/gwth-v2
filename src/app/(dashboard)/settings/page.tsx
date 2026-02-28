@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { getCurrentUser } from "@/lib/auth"
+import { getMockUser } from "@/lib/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -42,7 +42,7 @@ function getSubscriptionVariant(
 }
 
 export default async function SettingsPage() {
-  const user = await getCurrentUser()
+  const user = await getMockUser()
   const state = user?.subscriptionState ?? "visitor"
 
   return (
