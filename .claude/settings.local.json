@@ -124,7 +124,9 @@
       "Bash(npm uninstall:*)",
       "Bash(cd /c/Projects/GWTH_V2 && npm run build 2>&1)",
       "Bash(bd init:*)",
-      "Bash(dolt version:*)"
+      "Bash(dolt version:*)",
+      "Bash(choco list:*)",
+      "Bash(mkdir -p /c/Users/david/AppData/Local/dolt && cd /c/Users/david/AppData/Local/dolt && gh release download v1.83.0 --repo dolthub/dolt --pattern \"dolt-windows-amd64.zip\" --clobber 2>&1)"
     ]
   },
   "hooks": {
