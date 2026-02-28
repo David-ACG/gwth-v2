@@ -4,7 +4,7 @@
  * are centralized here to avoid scattering them across components.
  */
 
-import type { MonthConfig } from "@/lib/types"
+import type { MonthConfig, NewsCategory, NewsSortOption } from "@/lib/types"
 
 // ─── Layout Dimensions ────────────────────────────────────────────────────────
 
@@ -170,3 +170,49 @@ export const ENABLE_CERTIFICATES = false
 
 /** Whether the dev state switcher toolbar is shown (development only) */
 export const ENABLE_DEV_TOOLBAR = process.env.NODE_ENV === "development"
+
+// ─── News ────────────────────────────────────────────────────────────────────
+
+/** Whether the news section is enabled */
+export const ENABLE_NEWS = true
+
+/** Number of news articles per page */
+export const NEWS_PAGE_SIZE = 12
+
+/** Default sort option for the news feed */
+export const NEWS_DEFAULT_SORT: NewsSortOption = "hot"
+
+/** Maximum comment body length */
+export const NEWS_MAX_COMMENT_LENGTH = 2000
+
+/** Category configuration for news articles — labels and Tailwind color classes */
+export const NEWS_CATEGORIES: Record<
+  NewsCategory,
+  { label: string; color: string; bgColor: string }
+> = {
+  "ai-launch": {
+    label: "AI Launch",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  research: {
+    label: "Research",
+    color: "text-accent",
+    bgColor: "bg-accent/10",
+  },
+  tool: {
+    label: "Tool",
+    color: "text-info",
+    bgColor: "bg-info/10",
+  },
+  industry: {
+    label: "Industry",
+    color: "text-warning",
+    bgColor: "bg-warning/10",
+  },
+  tutorial: {
+    label: "Tutorial",
+    color: "text-success",
+    bgColor: "bg-success/10",
+  },
+}

@@ -480,3 +480,92 @@ export interface Notification {
   /** When the notification was created */
   createdAt: Date
 }
+
+// ─── News ────────────────────────────────────────────────────────────────────
+
+/** Content categories for news articles */
+export type NewsCategory =
+  | "ai-launch"
+  | "research"
+  | "tool"
+  | "industry"
+  | "tutorial"
+
+/** Sort options for the news feed */
+export type NewsSortOption = "hot" | "new" | "top"
+
+/** A curated news article posted by the GWTH team */
+export interface NewsArticle {
+  /** Unique identifier */
+  id: string
+  /** URL-friendly slug */
+  slug: string
+  /** Article headline */
+  title: string
+  /** Short summary shown on cards (1-2 sentences) */
+  excerpt: string
+  /** Full article content in markdown */
+  content: string
+  /** External source URL, null for original content */
+  url: string | null
+  /** Article category */
+  category: NewsCategory
+  /** Searchable tags (e.g. "claude", "anthropic", "agents") */
+  tags: string[]
+  /** URL to the article thumbnail image */
+  thumbnailUrl: string | null
+  /** Author name */
+  author: string
+  /** Total number of upvotes */
+  voteCount: number
+  /** Total number of comments */
+  commentCount: number
+  /** Slug of the lab created from this article, null if no lab exists */
+  labSlug: string | null
+  /** Whether this article is editorially featured */
+  isFeatured: boolean
+  /** Publication status */
+  status: "draft" | "published" | "archived"
+  /** When the article was published */
+  publishedAt: Date
+  /** Calculated hotness score for "hot" sorting */
+  hotnessScore: number
+  /** When the article was created */
+  createdAt: Date
+  /** When the article was last updated */
+  updatedAt: Date
+}
+
+/** A user's upvote on a news article */
+export interface NewsVote {
+  /** Unique identifier */
+  id: string
+  /** Article that was voted on */
+  articleId: string
+  /** User who voted */
+  userId: string
+  /** When the vote was cast */
+  createdAt: Date
+}
+
+/** A comment on a news article (supports threading via parentId) */
+export interface NewsComment {
+  /** Unique identifier */
+  id: string
+  /** Article the comment belongs to */
+  articleId: string
+  /** User who wrote the comment */
+  userId: string
+  /** Parent comment ID for threaded replies, null for top-level comments */
+  parentId: string | null
+  /** Comment body text */
+  body: string
+  /** When the comment was created */
+  createdAt: Date
+  /** When the comment was last updated */
+  updatedAt: Date
+  /** Display name of the commenter */
+  userName: string
+  /** Avatar URL of the commenter */
+  userAvatar: string | null
+}

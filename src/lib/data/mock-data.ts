@@ -22,6 +22,9 @@ import type {
   Certificate,
   Notification,
   DynamicScore,
+  NewsArticle,
+  NewsVote,
+  NewsComment,
 } from "@/lib/types"
 
 // ─── Courses ──────────────────────────────────────────────────────────────────
@@ -1454,3 +1457,372 @@ export const mockDynamicScore: DynamicScore = {
     }
   }),
 }
+
+// ─── News Articles ────────────────────────────────────────────────────────────
+
+export const mockNewsArticles: NewsArticle[] = [
+  {
+    id: "news_001",
+    slug: "claude-remote-control",
+    title: "Claude Can Now Control Your Computer Remotely",
+    excerpt:
+      "Anthropic launches remote computer control for Claude, enabling AI agents to operate desktop applications directly. This changes what's possible with AI automation.",
+    content: `## Remote Control Changes Everything
+
+Anthropic has released a new capability allowing Claude to remotely control computers — navigating desktop applications, clicking buttons, filling forms, and executing multi-step workflows.
+
+### What This Means for Builders
+
+This isn't just a demo. Remote computer control means AI agents can now:
+
+- **Automate legacy software** that has no API
+- **Bridge applications** that don't integrate natively
+- **Handle repetitive workflows** across multiple tools
+- **Test user interfaces** by actually interacting with them
+
+### How It Works
+
+Claude uses a combination of screenshot analysis and action primitives (click, type, scroll, keypress) to interact with any graphical interface. The model reasons about what it sees on screen and plans multi-step actions to accomplish goals.
+
+### Try It Yourself
+
+The feature is available today through the Claude API and Claude Code. We'll be building a lab on this — vote if you want it prioritised!`,
+    url: null,
+    category: "ai-launch",
+    tags: ["claude", "anthropic", "agents", "computer-use", "automation"],
+    thumbnailUrl: null,
+    author: "David",
+    voteCount: 142,
+    commentCount: 3,
+    labSlug: null,
+    isFeatured: true,
+    status: "published",
+    publishedAt: new Date("2026-02-27"),
+    hotnessScore: 95,
+    createdAt: new Date("2026-02-27"),
+    updatedAt: new Date("2026-02-27"),
+  },
+  {
+    id: "news_002",
+    slug: "mcp-protocol-explained",
+    title: "MCP: The Protocol That Lets AI Tools Talk to Each Other",
+    excerpt:
+      "Model Context Protocol is becoming the USB-C of AI integrations. Every major tool now supports it. Here's a plain-English breakdown of why it matters.",
+    content: `## What is MCP?
+
+Model Context Protocol (MCP) is an open standard that lets AI models connect to external tools, data sources, and services through a unified interface.
+
+### Why It Matters
+
+Before MCP, every AI tool had its own way of connecting to external services. Want Claude to read your database? Custom integration. Want it to call an API? Another custom integration. MCP standardises all of this.
+
+### The Ecosystem Today
+
+Major tools with MCP support:
+- **Claude Code** — connects to any MCP server
+- **Cursor** — IDE integration via MCP
+- **Windsurf** — full MCP tool support
+- **Linear, GitHub, Slack** — official MCP servers
+
+### Build Your Own MCP Server
+
+It's surprisingly simple. An MCP server is just a program that exposes tools via JSON-RPC. You can build one in Python or TypeScript in under an hour.`,
+    url: null,
+    category: "tool",
+    tags: ["mcp", "anthropic", "integrations", "agents", "protocol"],
+    thumbnailUrl: null,
+    author: "David",
+    voteCount: 98,
+    commentCount: 1,
+    labSlug: "build-mcp-server",
+    isFeatured: false,
+    status: "published",
+    publishedAt: new Date("2026-02-25"),
+    hotnessScore: 82,
+    createdAt: new Date("2026-02-25"),
+    updatedAt: new Date("2026-02-25"),
+  },
+  {
+    id: "news_003",
+    slug: "gpt5-benchmarks-analysis",
+    title: "GPT-5 Benchmarks Are In — And They're Not What You Expected",
+    excerpt:
+      "OpenAI's latest model excels at reasoning but falls short on code generation compared to Claude Opus 4. The benchmark wars are getting interesting.",
+    content: `## The Benchmark Results
+
+GPT-5 landed with impressive reasoning scores but a surprising gap in code generation. Here's the breakdown.
+
+### Where GPT-5 Excels
+- Mathematical reasoning: +15% over GPT-4o
+- Multi-step logic: best-in-class
+- Long-form analysis: excellent coherence
+
+### Where It Falls Short
+- Code generation: Claude Opus 4 still leads
+- Tool use reliability: more hallucinated function calls
+- Context window utilisation: effective window is smaller than advertised
+
+### What This Means for You
+
+The "best model" depends entirely on your use case. For coding and tool-heavy workflows, Claude remains the leader. For pure reasoning tasks, GPT-5 is worth testing.`,
+    url: "https://openai.com/research/gpt5",
+    category: "research",
+    tags: ["openai", "gpt-5", "benchmarks", "comparison", "claude"],
+    thumbnailUrl: null,
+    author: "David",
+    voteCount: 76,
+    commentCount: 0,
+    labSlug: null,
+    isFeatured: false,
+    status: "published",
+    publishedAt: new Date("2026-02-23"),
+    hotnessScore: 68,
+    createdAt: new Date("2026-02-23"),
+    updatedAt: new Date("2026-02-23"),
+  },
+  {
+    id: "news_004",
+    slug: "ai-customer-support-30-minutes",
+    title: "How to Build an AI Customer Support Bot in 30 Minutes",
+    excerpt:
+      "Step-by-step tutorial using Claude + MCP + Lovable. From zero to a working chatbot that answers from your docs. No coding experience needed.",
+    content: `## Build a Support Bot in 30 Minutes
+
+This tutorial walks you through building a production-ready AI customer support chatbot using free tools.
+
+### What You'll Build
+A chatbot that:
+- Answers questions from your documentation
+- Handles follow-up questions with context
+- Escalates to a human when it can't help
+- Runs 24/7 on a free tier
+
+### Prerequisites
+- A Claude API key (free tier works)
+- Your documentation in markdown or PDF format
+- 30 minutes of focus
+
+### Step 1: Set Up Your Knowledge Base
+Upload your docs to a vector store...
+
+### Step 2: Create the Chat Interface
+Using Lovable, describe the interface you want...
+
+### Step 3: Connect Claude via MCP
+Wire the chatbot to Claude using the MCP protocol...
+
+The full walkthrough is available as a lab — check it out!`,
+    url: null,
+    category: "tutorial",
+    tags: ["tutorial", "chatbot", "no-code", "claude", "lovable", "mcp"],
+    thumbnailUrl: null,
+    author: "David",
+    voteCount: 203,
+    commentCount: 2,
+    labSlug: "ai-customer-support-bot",
+    isFeatured: true,
+    status: "published",
+    publishedAt: new Date("2026-02-20"),
+    hotnessScore: 91,
+    createdAt: new Date("2026-02-20"),
+    updatedAt: new Date("2026-02-20"),
+  },
+  {
+    id: "news_005",
+    slug: "eu-ai-act-what-builders-need",
+    title: "EU AI Act: What Builders Actually Need to Know",
+    excerpt:
+      "The EU AI Act is now enforceable. Here's a no-nonsense guide to what it means for people building with AI tools — without the legal jargon.",
+    content: `## The Short Version
+
+The EU AI Act categorises AI systems into risk levels. Most things you're building probably fall into "limited risk" — which means transparency requirements, not bans.
+
+### Risk Levels
+1. **Unacceptable risk** — banned (social scoring, real-time biometric surveillance)
+2. **High risk** — heavy regulation (medical devices, recruitment tools, credit scoring)
+3. **Limited risk** — transparency required (chatbots must disclose they're AI)
+4. **Minimal risk** — no specific requirements (most creative and productivity tools)
+
+### What You Actually Need to Do
+- **Label AI-generated content** — if your tool generates text, images, or audio
+- **Keep records** — document what models you use and how
+- **Monitor for bias** — especially if your tool makes decisions about people
+
+### Don't Panic
+If you're building internal tools, prototypes, or educational projects, the compliance burden is minimal. The Act primarily targets companies deploying AI at scale in high-risk domains.`,
+    url: null,
+    category: "industry",
+    tags: ["regulation", "eu", "compliance", "governance", "legal"],
+    thumbnailUrl: null,
+    author: "David",
+    voteCount: 34,
+    commentCount: 0,
+    labSlug: null,
+    isFeatured: false,
+    status: "published",
+    publishedAt: new Date("2026-02-18"),
+    hotnessScore: 35,
+    createdAt: new Date("2026-02-18"),
+    updatedAt: new Date("2026-02-18"),
+  },
+  {
+    id: "news_006",
+    slug: "cursor-vs-windsurf-vs-claude-code",
+    title: "Cursor vs Windsurf vs Claude Code: The AI Editor Showdown",
+    excerpt:
+      "We tested all three on the same project. The results might surprise you — especially if you've been loyal to one tool.",
+    content: `## Test Methodology
+
+We built the same Next.js application using all three AI-powered coding tools. Same requirements, same starting point, same human operator.
+
+### The Project
+A full-stack todo app with authentication, real-time updates, and deployment. Complex enough to test real capabilities, simple enough to complete in a day.
+
+### Results
+
+| Feature | Cursor | Windsurf | Claude Code |
+|---------|--------|----------|-------------|
+| Code quality | Good | Good | Excellent |
+| Speed | Fast | Fast | Medium |
+| Context awareness | Good | Excellent | Excellent |
+| Multi-file edits | Good | Good | Excellent |
+| Debugging | Good | Good | Excellent |
+| Cost | $20/mo | $15/mo | Pay-per-use |
+
+### Our Take
+
+Claude Code wins on quality and multi-file reasoning. Cursor wins on speed for small edits. Windsurf is the best balance. The right choice depends on your workflow.`,
+    url: null,
+    category: "tool",
+    tags: ["cursor", "windsurf", "claude-code", "ide", "comparison"],
+    thumbnailUrl: null,
+    author: "David",
+    voteCount: 167,
+    commentCount: 0,
+    labSlug: null,
+    isFeatured: false,
+    status: "published",
+    publishedAt: new Date("2026-02-15"),
+    hotnessScore: 78,
+    createdAt: new Date("2026-02-15"),
+    updatedAt: new Date("2026-02-15"),
+  },
+  {
+    id: "news_007",
+    slug: "multi-agent-workflows-production-ready",
+    title: "Multi-Step AI Agents Are Finally Reliable Enough for Production",
+    excerpt:
+      "After a year of hype, the tooling has caught up. Here's what changed and how to build reliable agent workflows today.",
+    content: `## What Changed
+
+A year ago, multi-step AI agents were impressive demos that broke in production. Today, they're deployable. Three things changed:
+
+### 1. Better Tool Use
+Models now call tools with >95% accuracy. Claude Opus 4 in particular handles complex tool chains reliably.
+
+### 2. Structured Outputs
+JSON mode and function calling mean agents return predictable, parseable responses instead of free-form text.
+
+### 3. Observability
+Tools like LangSmith, Helicone, and Braintrust let you trace every step of an agent's reasoning. When something fails, you can see exactly where and why.
+
+### Building Reliable Agents Today
+
+The key is **constraint, not capability**. Limit your agent's scope, validate every tool call, and build human-in-the-loop checkpoints for high-stakes actions.
+
+We're developing a lab on building production agent workflows — vote if you'd like to see it!`,
+    url: null,
+    category: "ai-launch",
+    tags: ["agents", "automation", "workflows", "production", "reliability"],
+    thumbnailUrl: null,
+    author: "David",
+    voteCount: 89,
+    commentCount: 0,
+    labSlug: null,
+    isFeatured: false,
+    status: "published",
+    publishedAt: new Date("2026-02-12"),
+    hotnessScore: 52,
+    createdAt: new Date("2026-02-12"),
+    updatedAt: new Date("2026-02-12"),
+  },
+]
+
+// ─── News Votes ──────────────────────────────────────────────────────────────
+
+export const mockNewsVotes: NewsVote[] = [
+  { id: "vote_001", articleId: "news_001", userId: "user_mock_001", createdAt: new Date("2026-02-27") },
+  { id: "vote_002", articleId: "news_004", userId: "user_mock_001", createdAt: new Date("2026-02-20") },
+  { id: "vote_003", articleId: "news_006", userId: "user_mock_001", createdAt: new Date("2026-02-15") },
+]
+
+// ─── News Comments ───────────────────────────────────────────────────────────
+
+export const mockNewsComments: NewsComment[] = [
+  {
+    id: "nc_001",
+    articleId: "news_001",
+    userId: "user_mock_001",
+    parentId: null,
+    body: "This is a game changer. The sustained context window alone makes it worth exploring for automation workflows.",
+    createdAt: new Date("2026-02-27T10:30:00"),
+    updatedAt: new Date("2026-02-27T10:30:00"),
+    userName: "David",
+    userAvatar: null,
+  },
+  {
+    id: "nc_002",
+    articleId: "news_001",
+    userId: "user_002",
+    parentId: "nc_001",
+    body: "Agreed! I've been testing it for a week and the difference in reliability is noticeable compared to earlier computer-use attempts.",
+    createdAt: new Date("2026-02-27T11:15:00"),
+    updatedAt: new Date("2026-02-27T11:15:00"),
+    userName: "Sarah Chen",
+    userAvatar: null,
+  },
+  {
+    id: "nc_003",
+    articleId: "news_001",
+    userId: "user_003",
+    parentId: null,
+    body: "Would love a lab on this! Especially for automating desktop apps that don't have APIs.",
+    createdAt: new Date("2026-02-27T14:00:00"),
+    updatedAt: new Date("2026-02-27T14:00:00"),
+    userName: "Marcus Johnson",
+    userAvatar: null,
+  },
+  {
+    id: "nc_004",
+    articleId: "news_002",
+    userId: "user_002",
+    parentId: null,
+    body: "The MCP lab was brilliant. Built my own server connecting to our internal wiki in about 45 minutes.",
+    createdAt: new Date("2026-02-25T16:00:00"),
+    updatedAt: new Date("2026-02-25T16:00:00"),
+    userName: "Sarah Chen",
+    userAvatar: null,
+  },
+  {
+    id: "nc_005",
+    articleId: "news_004",
+    userId: "user_003",
+    parentId: null,
+    body: "Followed this tutorial and had my bot running in under 25 minutes. Would love a lab on customising the responses!",
+    createdAt: new Date("2026-02-21T09:00:00"),
+    updatedAt: new Date("2026-02-21T09:00:00"),
+    userName: "Marcus Johnson",
+    userAvatar: null,
+  },
+  {
+    id: "nc_006",
+    articleId: "news_004",
+    userId: "user_mock_001",
+    parentId: "nc_005",
+    body: "Great to hear! The lab goes deeper into response customisation — check it out.",
+    createdAt: new Date("2026-02-21T10:30:00"),
+    updatedAt: new Date("2026-02-21T10:30:00"),
+    userName: "David",
+    userAvatar: null,
+  },
+]

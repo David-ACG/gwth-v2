@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next"
-import { mockCourses, mockLabs } from "@/lib/data/mock-data"
+import { mockCourses, mockLabs, mockNewsArticles } from "@/lib/data/mock-data"
 import { APP_URL } from "@/lib/config"
 
 /**
@@ -27,5 +27,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...staticPages, ...coursePages, ...labPages]
+  const newsPages: MetadataRoute.Sitemap = [
+    {
+      url: `${APP_URL}/news`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.8,
+    },
+    ...mockNewsArticles
+      .filter((a) => a.status === "published")
+      .map((article) => ({
+        url: `${APP_URL}/news/${article.slug}`,
+        lastModified: article.updatedAt,
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      })),
+  ]
+
+  return [...staticPages, ...coursePages, ...labPages, ...newsPages]
 }

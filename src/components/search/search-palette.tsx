@@ -11,8 +11,8 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { useSearch } from "@/hooks/use-search"
-import { BookOpen, FlaskConical, BarChart3, Settings, User } from "lucide-react"
-import { mockCourses, mockLabs } from "@/lib/data/mock-data"
+import { BookOpen, FlaskConical, Newspaper, BarChart3, Settings, User } from "lucide-react"
+import { mockCourses, mockLabs, mockNewsArticles } from "@/lib/data/mock-data"
 
 const quickLinks = [
   { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
@@ -67,6 +67,21 @@ export function SearchPalette() {
               {lab.title}
             </CommandItem>
           ))}
+        </CommandGroup>
+
+        <CommandGroup heading="News">
+          {mockNewsArticles
+            .filter((a) => a.status === "published")
+            .map((article) => (
+              <CommandItem
+                key={article.id}
+                value={article.title}
+                onSelect={() => navigateTo(`/news/${article.slug}`)}
+              >
+                <Newspaper className="mr-2 size-4" />
+                {article.title}
+              </CommandItem>
+            ))}
         </CommandGroup>
 
         <CommandGroup heading="Quick Links">

@@ -140,6 +140,17 @@ export const waitlistSchema = z.object({
     .or(z.literal("")),
 })
 
+// ─── News Comments ───────────────────────────────────────────────────────────
+
+/** News comment creation schema */
+export const newsCommentSchema = z.object({
+  body: z
+    .string()
+    .min(1, "Comment is required")
+    .max(2000, "Comment must be less than 2000 characters"),
+  parentId: z.string().optional(),
+})
+
 // ─── Inferred Types ───────────────────────────────────────────────────────────
 
 export type LoginFormData = z.infer<typeof loginSchema>
@@ -152,3 +163,4 @@ export type QuizSubmissionData = z.infer<typeof quizSubmissionSchema>
 export type NoteFormData = z.infer<typeof noteSchema>
 export type ContactFormData = z.infer<typeof contactSchema>
 export type WaitlistFormData = z.infer<typeof waitlistSchema>
+export type NewsCommentFormData = z.infer<typeof newsCommentSchema>
