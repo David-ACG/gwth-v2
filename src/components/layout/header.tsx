@@ -1,19 +1,45 @@
 "use client"
 
-import { Search, Menu } from "lucide-react"
+import { Search, Menu, LogOut, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useSidebar } from "@/hooks/use-sidebar"
 import { useSearch } from "@/hooks/use-search"
 import { BreadcrumbNav } from "@/components/layout/breadcrumb-nav"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { signOut } from "@/lib/actions/auth"
+
+interface DashboardHeaderProps {
+  /** Authenticated user's display name */
+  userName?: string | null
+  /** Authenticated user's email */
+  userEmail?: string | null
+  /** Authenticated user's avatar URL (from OAuth provider) */
+  userAvatarUrl?: string | null
+}
 
 /**
- * Dashboard header with breadcrumb, search trigger, theme toggle, and user avatar.
+ * Dashboard header with breadcrumb, search trigger, theme toggle, and user dropdown.
  */
-export function DashboardHeader() {
+export function DashboardHeader({ userName, userEmail, userAvatarUrl }: DashboardHeaderProps) {
   const { isMobile, open: openSidebar } = useSidebar()
   const { open: openSearch } = useSearch()
+
+  const initials = userName
+    ? userName
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "U"
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-lg md:px-6">
@@ -58,10 +84,40 @@ export function DashboardHeader() {
         {/* Theme toggle */}
         <ThemeToggle />
 
-        {/* User avatar */}
-        <Avatar className="size-8">
-          <AvatarFallback className="text-xs">D</AvatarFallback>
-        </Avatar>
+        {/* User dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="size-8 rounded-full">
+              <Avatar className="size-8">
+                {userAvatarUrl && <AvatarImage src={userAvatarUrl} alt={userName ?? "User"} />}
+                <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <div className="px-2 py-1.5">
+              <p className="text-sm font-medium">{userName ?? "User"}</p>
+              {userEmail && (
+                <p className="text-xs text-muted-foreground">{userEmail}</p>
+              )}
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <a href="/profile" className="cursor-pointer">
+                <User className="mr-2 size-4" />
+                Profile
+              </a>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => signOut()}
+              className="cursor-pointer text-destructive focus:text-destructive"
+            >
+              <LogOut className="mr-2 size-4" />
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   )

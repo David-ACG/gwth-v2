@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -8,6 +9,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "@/lib/validations"
+import { resetPassword } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,16 +23,24 @@ import {
 } from "@/components/ui/form"
 
 /**
- * Forgot password form — sends reset email (stub).
+ * Forgot password form — sends a password reset email via Supabase Auth.
  */
 export function ForgotPasswordForm() {
+  const [serverError, setServerError] = useState<string | null>(null)
   const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   })
 
-  async function onSubmit() {
-    // Mock reset — always succeeds
+  async function onSubmit(data: ForgotPasswordFormData) {
+    setServerError(null)
+    const result = await resetPassword(data.email)
+
+    if (result.error) {
+      setServerError(result.error)
+      return
+    }
+
     toast.success("Check your email for a reset link")
     form.reset()
   }
@@ -46,6 +56,11 @@ export function ForgotPasswordForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {serverError && (
+              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+                {serverError}
+              </div>
+            )}
             <FormField
               control={form.control}
               name="email"

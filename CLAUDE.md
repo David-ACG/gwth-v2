@@ -745,3 +745,47 @@ Every list page must handle the "nothing here yet" case:
 - Every filterable list must sync filters to URL search params (so users can share/bookmark filtered views).
 - Use Sonner `toast()` for user feedback on actions (lesson completed, quiz submitted, bookmark toggled).
 - Use `AlertDialog` for destructive or irreversible actions (submit quiz, reset progress).
+
+## Beads Issue Tracking
+
+This project uses [Beads (bd)](https://github.com/steveyegge/beads) for persistent agent memory across sessions.
+
+### Core Rules
+
+- Track all non-trivial work in Beads (never use markdown TODOs or comment-based task lists for multi-session work)
+- Use `bd ready` to find available work at session start
+- Use `bd create` to track new issues/tasks/bugs discovered during work
+- Use `bd sync` at end of session to persist state to git
+- The SessionStart hook auto-runs `bd prime` — you get context for free
+
+### Quick Reference
+
+```bash
+bd prime                              # Load complete workflow context (auto-runs on session start)
+bd ready                              # Show issues ready to work (no blockers)
+bd list --status=open                 # List all open issues
+bd create --title="..." --type=task   # Create new issue
+bd update <id> --status=in_progress   # Claim work
+bd close <id>                         # Mark complete
+bd dep add <issue> <depends-on>       # Add dependency
+bd sync                               # Sync with git remote
+```
+
+### "Land the Plane" Protocol
+
+When ending a session (or when David says "Land the Plane"):
+
+1. Close completed Beads issues: `bd close <id>` for each finished item
+2. File remaining discovered work as new issues: `bd create --title="..." --type=task`
+3. Run quality gates: `npm test` (this project) or appropriate test command
+4. Commit and push everything
+5. Sync Beads state: `bd sync`
+6. Summarize: what was done, what's next, known problems
+
+### Dolt Server Dependency
+
+Beads requires a running Dolt SQL server on port 3307. If `bd` commands fail with connection errors:
+```bash
+# Start the Dolt server
+C:\Users\david\AppData\Local\beads\start-dolt.bat
+```

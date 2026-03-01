@@ -1,11 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { loginSchema, type LoginFormData } from "@/lib/validations"
+import { signIn } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -17,21 +19,32 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
 
 /**
- * Login form with email/password validation.
+ * Login form with OAuth social buttons and email/password validation.
+ * Calls the signIn server action and redirects to dashboard on success.
  */
 export function LoginForm() {
   const router = useRouter()
+  const [serverError, setServerError] = useState<string | null>(null)
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   })
 
-  async function onSubmit() {
-    // Mock login — always succeeds
+  async function onSubmit(data: LoginFormData) {
+    setServerError(null)
+    const result = await signIn({ email: data.email, password: data.password })
+
+    if (result.error) {
+      setServerError(result.error)
+      return
+    }
+
     toast.success("Welcome back!")
     router.push("/dashboard")
+    router.refresh()
   }
 
   return (
@@ -43,8 +56,15 @@ export function LoginForm() {
         </p>
       </CardHeader>
       <CardContent>
+        <OAuthButtons />
+        <OAuthDivider />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {serverError && (
+              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+                {serverError}
+              </div>
+            )}
             <FormField
               control={form.control}
               name="email"

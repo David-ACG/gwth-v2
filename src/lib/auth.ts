@@ -1,11 +1,11 @@
 /**
  * Auth abstraction layer.
- * Currently returns mock data for development. The real auth provider
- * (e.g., Better Auth, Clerk, NextAuth) will be wired in later.
- * All components should import from this file, never from the auth provider directly.
+ * Maps Supabase Auth to our User type. All components should import
+ * from this file, never from the auth provider directly.
  */
 
 import type { User, SubscriptionState } from "@/lib/types"
+import { createClient } from "@/lib/supabase/server"
 
 /** Mock user for development — subscription state is controlled by the dev toolbar */
 const MOCK_USER: User = {
@@ -24,15 +24,47 @@ const MOCK_USER: User = {
 
 /**
  * Returns the currently authenticated user, or null if not logged in.
- * Returns null until Supabase Auth is configured.
- * Dashboard pages use getMockUser() for UI development.
+ * Maps Supabase auth.getUser() to our User type.
  */
 export async function getCurrentUser(): Promise<User | null> {
-  // TODO: Replace with Supabase Auth when configured
-  // const supabase = await createClient()
-  // const { data: { user } } = await supabase.auth.getUser()
-  // return user ? mapUser(user) : null
-  return null
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) return null
+
+  // OAuth providers return different metadata shapes:
+  // Google: full_name, avatar_url
+  // GitHub: user_name or full_name, avatar_url
+  // LinkedIn OIDC: full_name, picture
+  // Email signup: name (set in signUp options.data)
+  const meta = user.user_metadata ?? {}
+  const name =
+    (meta.full_name as string) ??
+    (meta.name as string) ??
+    (meta.user_name as string) ??
+    user.email?.split("@")[0] ??
+    "User"
+
+  const avatarUrl =
+    (meta.avatar_url as string) ??
+    (meta.picture as string) ??
+    null
+
+  return {
+    id: user.id,
+    name,
+    email: user.email ?? "",
+    avatarUrl,
+    bio: null,
+    subscriptionState: "registered" as SubscriptionState,
+    subscriptionMonth: 0,
+    gracePeriodEnds: null,
+    lastPaymentDate: null,
+    createdAt: new Date(user.created_at),
+    updatedAt: new Date(user.updated_at ?? user.created_at),
+  }
 }
 
 /**

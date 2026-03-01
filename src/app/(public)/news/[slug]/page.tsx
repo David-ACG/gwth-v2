@@ -206,6 +206,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
               articleId={article.id}
               comments={comments}
               isAuthenticated={!!user}
+              currentUserId={user?.id}
             />
           </div>
         </div>

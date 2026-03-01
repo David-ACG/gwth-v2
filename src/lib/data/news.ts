@@ -1,6 +1,7 @@
 /**
  * Data access functions for news articles and voting.
- * Backed by Supabase. Uses the admin client for mutations until Supabase Auth is configured.
+ * Read operations use the admin client (bypasses RLS for published content queries).
+ * Mutations use the cookie-based auth client so RLS policies enforce ownership.
  */
 
 import type { NewsArticle, NewsComment, NewsSortOption } from "@/lib/types"
@@ -174,15 +175,14 @@ export async function getUserVotes(userId: string): Promise<string[]> {
 
 /**
  * Toggles a vote on a news article.
- * Uses the toggle_news_vote database function for atomicity.
+ * Uses the cookie-based auth client so RLS policies enforce ownership.
  * Returns the new vote state and updated count.
  */
 export async function toggleVote(
-  articleId: string
+  articleId: string,
+  userId: string
 ): Promise<{ voted: boolean; newCount: number }> {
-  // Use mock user ID until auth is configured
-  const userId = "user_mock_001"
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase.rpc("toggle_news_vote", {
     p_article_id: articleId,
@@ -215,16 +215,16 @@ export async function getNewsComments(
 
 /**
  * Adds a comment to a news article. Returns the newly created comment.
+ * Uses the cookie-based auth client so RLS policies enforce ownership.
  */
 export async function addNewsComment(
   articleId: string,
   body: string,
+  userId: string,
+  userName: string,
   parentId?: string
 ): Promise<NewsComment> {
-  // Use mock user until auth is configured
-  const userId = "user_mock_001"
-  const userName = "David"
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from("news_comments")
@@ -244,16 +244,20 @@ export async function addNewsComment(
 
 /**
  * Deletes a comment by ID. Only the comment author can delete their own comments.
+ * Uses the cookie-based auth client so RLS policies enforce ownership.
  * Returns true if the comment was deleted.
  */
-export async function deleteNewsComment(commentId: string): Promise<boolean> {
-  const supabase = createAdminClient()
+export async function deleteNewsComment(
+  commentId: string,
+  userId: string
+): Promise<boolean> {
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from("news_comments")
     .delete()
     .eq("id", commentId)
-    .eq("user_id", "user_mock_001")
+    .eq("user_id", userId)
 
   return !error
 }

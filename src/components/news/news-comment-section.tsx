@@ -21,6 +21,8 @@ interface NewsCommentSectionProps {
   comments: NewsComment[]
   /** Whether the user is authenticated */
   isAuthenticated: boolean
+  /** Current authenticated user's ID, used for own-comment detection */
+  currentUserId?: string | null
 }
 
 /**
@@ -32,6 +34,7 @@ export function NewsCommentSection({
   articleId,
   comments: initialComments,
   isAuthenticated,
+  currentUserId,
 }: NewsCommentSectionProps) {
   const router = useRouter()
   const [comments, setComments] = useState(initialComments)
@@ -100,7 +103,7 @@ export function NewsCommentSection({
             <div key={comment.id}>
               <CommentItem
                 comment={comment}
-                isOwnComment={comment.userId === "user_mock_001"}
+                isOwnComment={!!currentUserId && comment.userId === currentUserId}
                 isAuthenticated={isAuthenticated}
                 onReply={() => setReplyingTo(comment.id)}
                 onDelete={() => handleDeleteComment(comment.id)}
@@ -113,7 +116,7 @@ export function NewsCommentSection({
                     <CommentItem
                       key={reply.id}
                       comment={reply}
-                      isOwnComment={reply.userId === "user_mock_001"}
+                      isOwnComment={!!currentUserId && reply.userId === currentUserId}
                       isAuthenticated={isAuthenticated}
                       onDelete={() => handleDeleteComment(reply.id)}
                     />

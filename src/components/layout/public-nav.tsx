@@ -5,8 +5,17 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Menu, LayoutDashboard, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { signOut } from "@/lib/actions/auth"
 
 const navLinks = [
   { href: "/about", label: "About" },
@@ -16,13 +25,28 @@ const navLinks = [
   { href: "/news", label: "News" },
 ]
 
+interface PublicNavProps {
+  /** Authenticated user info, or null if not logged in */
+  user: { name: string; email: string } | null
+}
+
 /**
  * Navigation bar for public-facing pages.
  * Shows logo, nav links, theme toggle, and login/signup CTAs.
+ * When authenticated, shows user avatar with dropdown instead of login buttons.
  * Responsive: hamburger menu on mobile.
  */
-export function PublicNav() {
+export function PublicNav({ user }: PublicNavProps) {
   const pathname = usePathname()
+
+  const initials = user
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : ""
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-lg">
@@ -51,12 +75,51 @@ export function PublicNav() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
-            <Link href="/login">Log in</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href="/signup">Join the Waitlist</Link>
-          </Button>
+
+          {user ? (
+            /* Authenticated: show avatar dropdown */
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="size-8 rounded-full">
+                  <Avatar className="size-8">
+                    <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="px-2 py-1.5">
+                  <p className="text-sm font-medium">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <a href="/dashboard" className="cursor-pointer">
+                    <LayoutDashboard className="mr-2 size-4" />
+                    Dashboard
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => signOut()}
+                  className="cursor-pointer text-destructive focus:text-destructive"
+                >
+                  <LogOut className="mr-2 size-4" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            /* Not authenticated: show login + signup buttons */
+            <>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
+                <Link href="/login">Log in</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/signup">Sign Up</Link>
+              </Button>
+            </>
+          )}
+
           {/* Mobile hamburger */}
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
@@ -82,15 +145,35 @@ export function PublicNav() {
                   </Link>
                 ))}
                 <div className="my-4 border-t" />
-                <Link
-                  href="/login"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
-                >
-                  Log in
-                </Link>
-                <Button asChild className="mt-2">
-                  <Link href="/signup">Join the Waitlist</Link>
-                </Button>
+                {user ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
+                    >
+                      Dashboard
+                    </Link>
+                    <Button
+                      variant="outline"
+                      className="mt-2"
+                      onClick={() => signOut()}
+                    >
+                      Sign out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
+                    >
+                      Log in
+                    </Link>
+                    <Button asChild className="mt-2">
+                      <Link href="/signup">Sign Up</Link>
+                    </Button>
+                  </>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

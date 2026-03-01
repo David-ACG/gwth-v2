@@ -128,21 +128,20 @@
       "Bash(choco list:*)",
       "Bash(mkdir -p /c/Users/david/AppData/Local/dolt && cd /c/Users/david/AppData/Local/dolt && gh release download v1.83.0 --repo dolthub/dolt --pattern \"dolt-windows-amd64.zip\" --clobber 2>&1)",
       "Bash(CLAUDECODE= claude:*)",
-      "Bash(mkdir -p /c/Users/david/AppData/Local/beads/doltdb && cd /c/Users/david/AppData/Local/beads/doltdb && dolt init --name \"david\" --email \"david@agilecommercegroup.com\" 2>&1)"
+      "Bash(mkdir -p /c/Users/david/AppData/Local/beads/doltdb && cd /c/Users/david/AppData/Local/beads/doltdb && dolt init --name \"david\" --email \"david@agilecommercegroup.com\" 2>&1)",
+      "Bash(bd version 2>&1 && bd list 2>&1)",
+      "Bash(bd setup:*)",
+      "Bash(npm run:*)",
+      "WebFetch(domain:supabase.com)",
+      "Bash(bd list:*)",
+      "Bash(npx vitest:*)"
     ]
   },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ],
   "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/auto-commit.sh",
-            "timeout": 120
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit",
@@ -151,6 +150,39 @@
             "type": "command",
             "command": "bash .claude/hooks/lint-on-edit.sh",
             "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bd prime"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bd prime"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/auto-commit.sh",
+            "timeout": 120
           }
         ]
       }

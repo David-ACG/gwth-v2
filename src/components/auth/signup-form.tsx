@@ -5,7 +5,8 @@ import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import { z } from "zod"
+import { signupSchema, type SignupFormData } from "@/lib/validations"
+import { signUp } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,55 +19,43 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { CheckCircle2, ArrowRight, Radar } from "lucide-react"
-
-/** Waitlist-only schema — just name and email, no password. */
-const waitlistFormSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be less than 100 characters"),
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-})
-
-type WaitlistFormData = z.infer<typeof waitlistFormSchema>
+import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
 
 /**
- * Waitlist signup form — collects name and email, sends a confirmation email,
- * and shows a success screen. No account creation or dashboard redirect.
+ * Signup form with real Supabase Auth registration.
+ * Collects name, email, password + confirmation.
+ * Shows a success screen after signup with email confirmation instructions.
  */
 export function SignupForm() {
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [submittedName, setSubmittedName] = useState("")
+  const [serverError, setServerError] = useState<string | null>(null)
 
-  const form = useForm<WaitlistFormData>({
-    resolver: zodResolver(waitlistFormSchema),
-    defaultValues: { name: "", email: "" },
+  const form = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
   })
 
-  async function onSubmit(data: WaitlistFormData) {
-    try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
+  async function onSubmit(data: SignupFormData) {
+    setServerError(null)
+    const result = await signUp({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    })
 
-      const result = await response.json()
-
-      if (!response.ok || !result.success) {
-        toast.error(result.message ?? "Something went wrong. Please try again.")
-        return
+    if (result.error) {
+      if (result.error.includes("already registered")) {
+        setServerError("This email is already registered. Try logging in instead.")
+      } else {
+        setServerError(result.error)
       }
-
-      setSubmittedName(data.name.split(" ")[0] ?? data.name)
-      setIsConfirmed(true)
-    } catch {
-      toast.error("Something went wrong. Please try again.")
+      return
     }
+
+    setSubmittedName(data.name.split(" ")[0] ?? data.name)
+    setIsConfirmed(true)
+    toast.success("Account created! Check your email.")
   }
 
   if (isConfirmed) {
@@ -76,10 +65,12 @@ export function SignupForm() {
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
             <CheckCircle2 className="h-8 w-8 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold">You&apos;re on the list, {submittedName}.</h2>
+          <h2 className="text-2xl font-bold">
+            Check your email, {submittedName}.
+          </h2>
           <p className="mt-3 text-muted-foreground">
-            We have sent you a confirmation email. You will be among the first to
-            know when the course launches.
+            We&apos;ve sent you a confirmation link. Click it to activate your
+            account and start learning.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button className="gap-2" asChild>
@@ -103,15 +94,21 @@ export function SignupForm() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Join the Earlybird Waitlist</CardTitle>
+        <CardTitle className="text-2xl">Create your account</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Be first to access the course when it launches. We will send you a
-          confirmation email.
+          Sign up to start learning. We&apos;ll send you a confirmation email.
         </p>
       </CardHeader>
       <CardContent>
+        <OAuthButtons />
+        <OAuthDivider />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {serverError && (
+              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+                {serverError}
+              </div>
+            )}
             <FormField
               control={form.control}
               name="name"
@@ -147,12 +144,48 @@ export function SignupForm() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <Button
               type="submit"
               className="w-full"
               disabled={form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? "Joining waitlist..." : "Join the Waitlist"}
+              {form.formState.isSubmitting ? "Creating account..." : "Create Account"}
             </Button>
           </form>
         </Form>

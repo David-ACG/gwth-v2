@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { updateSession } from "@/lib/supabase/middleware"
 
 /**
  * Security headers applied to all responses.
@@ -29,42 +30,17 @@ const securityHeaders = {
   ].join("; "),
 }
 
-/** Dashboard routes that require authentication */
-const PROTECTED_PATHS = [
-  "/dashboard",
-  "/courses",
-  "/course",
-  "/labs",
-  "/progress",
-  "/settings",
-  "/profile",
-  "/bookmarks",
-  "/notifications",
-]
-
 /**
- * Middleware: applies security headers to all responses and
- * protects dashboard routes from unauthenticated access.
- * Auth check is currently a passthrough — will be wired to Supabase later.
+ * Middleware: applies security headers to all responses,
+ * refreshes Supabase auth sessions, and protects dashboard routes.
  */
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  const response = NextResponse.next()
+export async function middleware(request: NextRequest) {
+  // Refresh auth session and handle route protection
+  const response = await updateSession(request)
 
-  // Apply security headers to all responses
+  // Apply security headers to the response
   for (const [key, value] of Object.entries(securityHeaders)) {
     response.headers.set(key, value)
-  }
-
-  // Check if the path is a protected dashboard route
-  const isProtected = PROTECTED_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  )
-
-  if (isProtected) {
-    // TODO: Check auth session when backend is connected
-    // const session = await getSession(request)
-    // if (!session) return NextResponse.redirect(new URL("/login", request.url))
   }
 
   return response
