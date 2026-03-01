@@ -10,7 +10,7 @@ import { CalloutBox } from "@/components/lesson/callout-box"
 import type { CalloutVariant } from "@/components/lesson/callout-box"
 import { KeyTermTooltip } from "@/components/lesson/key-term-tooltip"
 import type { Components } from "react-markdown"
-import type { ReactNode } from "react"
+import type { ReactNode, HTMLAttributes } from "react"
 
 const CodeBlock = dynamic(
   () =>
@@ -41,10 +41,14 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
   // that react-markdown + rehype-raw can handle
   const processed = preprocessMarkdown(content)
 
-  // Sanitise — allow our custom data attributes and elements
+  // Sanitise — allow our custom data attributes
   const sanitised = DOMPurify.sanitize(processed, {
-    ADD_TAGS: ["callout-box", "key-term"],
-    ADD_ATTR: ["data-variant", "data-title", "data-term", "data-definition"],
+    ADD_ATTR: [
+      "data-callout",
+      "data-callout-title",
+      "data-keyterm",
+      "data-definition",
+    ],
   })
 
   return (
@@ -61,26 +65,30 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
 }
 
 /**
- * Pre-processes markdown to convert custom syntax to HTML elements
- * that react-markdown can render with custom components.
+ * Pre-processes markdown to convert custom syntax to standard HTML elements
+ * with data attributes that react-markdown can render via component overrides.
  */
 function preprocessMarkdown(md: string): string {
   let result = md
 
   // Convert callout blocks: :::variant[optional title]\ncontent\n:::
+  // Use <div data-callout="variant"> so the div component override handles it
   result = result.replace(
-    /^:::(\w+)(?:\[([^\]]*)\])?\s*\n([\s\S]*?)^:::\s*$/gm,
+    /^:::(\w[-\w]*)(?:\[([^\]]*)\])?\s*\n([\s\S]*?)^:::\s*$/gm,
     (_match, variant: string, title: string | undefined, content: string) => {
-      const titleAttr = title ? ` data-title="${escapeHtmlAttr(title)}"` : ""
-      return `<callout-box data-variant="${variant}"${titleAttr}>\n\n${content.trim()}\n\n</callout-box>`
+      const titleAttr = title
+        ? ` data-callout-title="${escapeHtmlAttr(title)}"`
+        : ""
+      return `<div data-callout="${variant}"${titleAttr}>\n\n${content.trim()}\n\n</div>`
     },
   )
 
   // Convert key terms: ==term|definition==
+  // Use <span data-keyterm="term" data-definition="definition">term</span>
   result = result.replace(
     /==((?:(?!==).)+?)\|((?:(?!==).)+?)==/g,
     (_match, term: string, definition: string) => {
-      return `<key-term data-term="${escapeHtmlAttr(term)}" data-definition="${escapeHtmlAttr(definition)}"></key-term>`
+      return `<span data-keyterm="${escapeHtmlAttr(term)}" data-definition="${escapeHtmlAttr(definition)}">${escapeHtml(term)}</span>`
     },
   )
 
@@ -97,13 +105,23 @@ function escapeHtmlAttr(str: string): string {
     .replace(/>/g, "&gt;")
 }
 
+/** Escape string for use in HTML text content */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+}
+
 /** Extract text content from react-markdown children */
 function extractText(children: ReactNode): string {
   if (typeof children === "string") return children
   if (typeof children === "number") return String(children)
   if (Array.isArray(children)) return children.map(extractText).join("")
   if (children && typeof children === "object" && "props" in children) {
-    return extractText((children as { props: { children?: ReactNode } }).props.children)
+    return extractText(
+      (children as { props: { children?: ReactNode } }).props.children,
+    )
   }
   return ""
 }
@@ -118,10 +136,26 @@ function headingId(text: string): string {
     .replace(/^-|-$/g, "")
 }
 
+/** Type for div props that may include our custom data attributes */
+type DivProps = HTMLAttributes<HTMLDivElement> & {
+  "data-callout"?: string
+  "data-callout-title"?: string
+  children?: ReactNode
+  node?: unknown
+}
+
+/** Type for span props that may include our custom data attributes */
+type SpanProps = HTMLAttributes<HTMLSpanElement> & {
+  "data-keyterm"?: string
+  "data-definition"?: string
+  children?: ReactNode
+  node?: unknown
+}
+
 /**
  * Custom react-markdown component overrides.
- * Maps standard markdown elements to styled components,
- * and custom HTML elements to lesson components.
+ * Maps standard markdown elements to styled components.
+ * Detects custom data attributes on div/span to render lesson components.
  */
 const markdownComponents: Components = {
   // Headings with generated IDs for TOC scroll-spy
@@ -156,12 +190,7 @@ const markdownComponents: Components = {
   // Code blocks → Shiki CodeBlock
   pre: ({ children }) => {
     // react-markdown wraps code in <pre><code>
-    // Extract the code element's props
-    if (
-      children &&
-      typeof children === "object" &&
-      "props" in children
-    ) {
+    if (children && typeof children === "object" && "props" in children) {
       const codeElement = children as {
         props: { className?: string; children?: ReactNode }
       }
@@ -177,29 +206,38 @@ const markdownComponents: Components = {
 
   // Inline code — don't pass through to CodeBlock
   code: ({ children, className }) => {
-    // If it has a language class, it's handled by the pre component
     if (className?.startsWith("language-")) {
       return <code className={className}>{children}</code>
     }
     return <code>{children}</code>
   },
 
-  // Custom elements
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  "callout-box": ((props: any) => {
-    const variant = (props["data-variant"] as CalloutVariant) ?? "note"
-    const title = props["data-title"] as string | undefined
-    return (
-      <CalloutBox variant={variant} title={title}>
-        {props.children}
-      </CalloutBox>
-    )
+  // Override div to detect callout data attributes
+  div: (({ children, node, ...props }: DivProps) => {
+    void node
+    const calloutVariant = props["data-callout"]
+    if (calloutVariant) {
+      const title = props["data-callout-title"]
+      return (
+        <CalloutBox
+          variant={calloutVariant as CalloutVariant}
+          title={title}
+        >
+          {children}
+        </CalloutBox>
+      )
+    }
+    return <div {...props}>{children}</div>
   }) as Components["div"],
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  "key-term": ((props: any) => {
-    const term = (props["data-term"] as string) ?? ""
-    const definition = (props["data-definition"] as string) ?? ""
-    return <KeyTermTooltip term={term} definition={definition} />
+  // Override span to detect key-term data attributes
+  span: (({ children, node, ...props }: SpanProps) => {
+    void node
+    const term = props["data-keyterm"]
+    const definition = props["data-definition"]
+    if (term && definition) {
+      return <KeyTermTooltip term={term} definition={definition} />
+    }
+    return <span {...props}>{children}</span>
   }) as Components["span"],
 }
