@@ -21,8 +21,7 @@ describe("SignupForm", () => {
 
   it("renders the submit button with correct text", () => {
     render(<SignupForm />)
-    const buttons = screen.getAllByRole("button", { name: "Create Account" })
-    expect(buttons.length).toBeGreaterThan(0)
+    expect(screen.getAllByRole("button", { name: "Create Account" }).length).toBeGreaterThan(0)
   })
 
   it("renders the login link", () => {
