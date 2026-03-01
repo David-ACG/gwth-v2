@@ -134,7 +134,17 @@
       "Bash(npm run:*)",
       "WebFetch(domain:supabase.com)",
       "Bash(bd list:*)",
-      "Bash(npx vitest:*)"
+      "Bash(npx vitest:*)",
+      "WebFetch(domain:stylokit.com)",
+      "WebFetch(domain:www.designsystems.com)",
+      "WebFetch(domain:www.toptal.com)",
+      "WebFetch(domain:web.dev)",
+      "WebFetch(domain:accessibility.huit.harvard.edu)",
+      "WebFetch(domain:designsystem.digital.gov)",
+      "WebFetch(domain:www.eleken.co)",
+      "WebFetch(domain:www.justinmind.com)",
+      "WebFetch(domain:blog.logrocket.com)",
+      "WebFetch(domain:www.docsie.io)"
     ]
   },
   "enableAllProjectMcpServers": true,
