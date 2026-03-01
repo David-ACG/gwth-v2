@@ -144,7 +144,10 @@
       "WebFetch(domain:www.eleken.co)",
       "WebFetch(domain:www.justinmind.com)",
       "WebFetch(domain:blog.logrocket.com)",
-      "WebFetch(domain:www.docsie.io)"
+      "WebFetch(domain:www.docsie.io)",
+      "WebFetch(domain:www.interaction-design.org)",
+      "WebFetch(domain:www.mintlify.com)",
+      "WebFetch(domain:www.nngroup.com)"
     ]
   },
   "enableAllProjectMcpServers": true,
