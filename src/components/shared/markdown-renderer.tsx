@@ -1,138 +1,205 @@
+"use client"
+
+import dynamic from "next/dynamic"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import rehypeRaw from "rehype-raw"
 import DOMPurify from "isomorphic-dompurify"
+import { cn } from "@/lib/utils"
+import { CalloutBox } from "@/components/lesson/callout-box"
+import type { CalloutVariant } from "@/components/lesson/callout-box"
+import { KeyTermTooltip } from "@/components/lesson/key-term-tooltip"
+import type { Components } from "react-markdown"
+import type { ReactNode } from "react"
+
+const CodeBlock = dynamic(
+  () =>
+    import("@/components/lesson/code-block").then((mod) => mod.CodeBlock),
+  { ssr: false },
+)
 
 interface MarkdownRendererProps {
   /** Markdown content to render */
   content: string
+  /** Additional CSS classes for the wrapper */
+  className?: string
 }
 
 /**
- * Renders markdown content as sanitized HTML.
- * Uses DOMPurify to prevent XSS before rendering with dangerouslySetInnerHTML.
- * Will be enhanced with Shiki syntax highlighting for code blocks later.
+ * Renders markdown content using react-markdown with remark-gfm (tables,
+ * strikethrough, task lists) and rehype-raw (HTML passthrough).
+ * Sanitises HTML via DOMPurify before rendering.
+ *
+ * Supports custom syntax:
+ * - Callouts: `:::note`, `:::warning`, `:::tip`, `:::deep-dive[Title]`
+ * - Key terms: `==term|definition==`
+ *
+ * Code blocks are rendered via Shiki-powered CodeBlock component.
  */
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-  // Basic markdown processing — handles headers, code blocks, lists, bold, links
-  const rawHtml = convertMarkdownToHtml(content)
-  // Sanitize HTML to prevent XSS attacks
-  const html = DOMPurify.sanitize(rawHtml)
+export function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
+  // Pre-process: expand custom callout and key-term syntax into HTML
+  // that react-markdown + rehype-raw can handle
+  const processed = preprocessMarkdown(content)
+
+  // Sanitise — allow our custom data attributes and elements
+  const sanitised = DOMPurify.sanitize(processed, {
+    ADD_TAGS: ["callout-box", "key-term"],
+    ADD_ATTR: ["data-variant", "data-title", "data-term", "data-definition"],
+  })
 
   return (
-    <div
-      className="prose prose-neutral dark:prose-invert max-w-none
-        prose-headings:font-semibold prose-headings:tracking-tight
-        prose-code:before:content-none prose-code:after:content-none
-        prose-pre:bg-muted prose-pre:rounded-lg
-        prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <div className={cn("lesson-prose", className)}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        components={markdownComponents}
+      >
+        {sanitised}
+      </ReactMarkdown>
+    </div>
   )
 }
 
 /**
- * Basic markdown to HTML conversion.
- * Extracts code blocks first to protect them from paragraph processing,
- * then handles inline elements, block elements, and finally paragraphs.
+ * Pre-processes markdown to convert custom syntax to HTML elements
+ * that react-markdown can render with custom components.
  */
-function convertMarkdownToHtml(md: string): string {
-  // Step 1: Extract fenced code blocks into placeholders to protect them
-  const codeBlocks: string[] = []
-  let processed = md.replace(
-    /```(\w+)?\n([\s\S]*?)```/g,
-    (_match, lang, code) => {
-      const escaped = code
-        .trim()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-      const index = codeBlocks.length
-      codeBlocks.push(
-        `<pre><code class="language-${lang || "text"}">${escaped}</code></pre>`
-      )
-      return `\n\n%%CODEBLOCK_${index}%%\n\n`
-    }
+function preprocessMarkdown(md: string): string {
+  let result = md
+
+  // Convert callout blocks: :::variant[optional title]\ncontent\n:::
+  result = result.replace(
+    /^:::(\w+)(?:\[([^\]]*)\])?\s*\n([\s\S]*?)^:::\s*$/gm,
+    (_match, variant: string, title: string | undefined, content: string) => {
+      const titleAttr = title ? ` data-title="${escapeHtmlAttr(title)}"` : ""
+      return `<callout-box data-variant="${variant}"${titleAttr}>\n\n${content.trim()}\n\n</callout-box>`
+    },
   )
 
-  // Step 2: Escape remaining HTML entities
-  processed = processed
+  // Convert key terms: ==term|definition==
+  result = result.replace(
+    /==((?:(?!==).)+?)\|((?:(?!==).)+?)==/g,
+    (_match, term: string, definition: string) => {
+      return `<key-term data-term="${escapeHtmlAttr(term)}" data-definition="${escapeHtmlAttr(definition)}"></key-term>`
+    },
+  )
+
+  return result
+}
+
+/** Escape string for use in an HTML attribute value */
+function escapeHtmlAttr(str: string): string {
+  return str
     .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
+}
 
-  // Step 3: Inline code
-  processed = processed.replace(/`([^`]+)`/g, "<code>$1</code>")
-
-  // Step 4: Headers
-  processed = processed.replace(/^#### (.+)$/gm, "<h4>$1</h4>")
-  processed = processed.replace(/^### (.+)$/gm, "<h3>$1</h3>")
-  processed = processed.replace(/^## (.+)$/gm, "<h2>$1</h2>")
-  processed = processed.replace(/^# (.+)$/gm, "<h1>$1</h1>")
-
-  // Step 5: Bold and italic
-  processed = processed.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-  processed = processed.replace(/\*([^*]+)\*/g, "<em>$1</em>")
-
-  // Step 6: Lists — use distinct markers to avoid cross-contamination
-  // Convert unordered items to %%ULI%% marker
-  processed = processed.replace(/^- (.+)$/gm, "%%ULI%%$1%%/ULI%%")
-  // Convert ordered items to %%OLI%% marker
-  processed = processed.replace(/^\d+\. (.+)$/gm, "%%OLI%%$1%%/OLI%%")
-
-  // Wrap consecutive unordered items in <ul>
-  processed = processed.replace(
-    /(%%ULI%%[\s\S]*?%%\/ULI%%\n?)+/g,
-    (match) =>
-      `<ul>${match.replace(/%%ULI%%([\s\S]*?)%%\/ULI%%/g, "<li>$1</li>")}</ul>`
-  )
-  // Wrap consecutive ordered items in <ol>
-  processed = processed.replace(
-    /(%%OLI%%[\s\S]*?%%\/OLI%%\n?)+/g,
-    (match) =>
-      `<ol>${match.replace(/%%OLI%%([\s\S]*?)%%\/OLI%%/g, "<li>$1</li>")}</ol>`
-  )
-
-  // Step 8: Tables (basic)
-  processed = processed.replace(
-    /^\|(.+)\|\s*$/gm,
-    (match) => {
-      const cells = match
-        .split("|")
-        .filter((c) => c.trim())
-        .map((c) => c.trim())
-      if (cells.every((c) => /^[-:]+$/.test(c))) return "" // separator row
-      return `<tr>${cells.map((c) => `<td>${c}</td>`).join("")}</tr>`
-    }
-  )
-
-  // Step 9: Paragraphs — split on double newlines, wrap text segments in <p>
-  const blocks = processed.split(/\n{2,}/)
-  processed = blocks
-    .map((block) => {
-      const trimmed = block.trim()
-      if (!trimmed) return ""
-      // Don't wrap block-level elements in <p>
-      if (
-        trimmed.startsWith("<h") ||
-        trimmed.startsWith("<pre") ||
-        trimmed.startsWith("<ul") ||
-        trimmed.startsWith("<ol") ||
-        trimmed.startsWith("<table") ||
-        trimmed.startsWith("<tr") ||
-        trimmed.startsWith("%%CODEBLOCK_")
-      ) {
-        return trimmed
-      }
-      // Replace single newlines with <br> for line breaks within a paragraph
-      return `<p>${trimmed.replace(/\n/g, "<br>")}</p>`
-    })
-    .join("\n")
-
-  // Step 10: Restore code blocks from placeholders
-  for (let i = 0; i < codeBlocks.length; i++) {
-    processed = processed.replace(`%%CODEBLOCK_${i}%%`, codeBlocks[i] ?? "")
+/** Extract text content from react-markdown children */
+function extractText(children: ReactNode): string {
+  if (typeof children === "string") return children
+  if (typeof children === "number") return String(children)
+  if (Array.isArray(children)) return children.map(extractText).join("")
+  if (children && typeof children === "object" && "props" in children) {
+    return extractText((children as { props: { children?: ReactNode } }).props.children)
   }
+  return ""
+}
 
-  // Clean up empty paragraphs
-  processed = processed.replace(/<p>\s*<\/p>/g, "")
+/** Generate a URL-friendly id from heading text */
+function headingId(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+}
 
-  return processed
+/**
+ * Custom react-markdown component overrides.
+ * Maps standard markdown elements to styled components,
+ * and custom HTML elements to lesson components.
+ */
+const markdownComponents: Components = {
+  // Headings with generated IDs for TOC scroll-spy
+  h1: ({ children, ...props }) => {
+    const text = extractText(children)
+    const id = headingId(text)
+    return (
+      <h1 id={id} {...props}>
+        {children}
+      </h1>
+    )
+  },
+  h2: ({ children, ...props }) => {
+    const text = extractText(children)
+    const id = headingId(text)
+    return (
+      <h2 id={id} {...props}>
+        {children}
+      </h2>
+    )
+  },
+  h3: ({ children, ...props }) => {
+    const text = extractText(children)
+    const id = headingId(text)
+    return (
+      <h3 id={id} {...props}>
+        {children}
+      </h3>
+    )
+  },
+
+  // Code blocks → Shiki CodeBlock
+  pre: ({ children }) => {
+    // react-markdown wraps code in <pre><code>
+    // Extract the code element's props
+    if (
+      children &&
+      typeof children === "object" &&
+      "props" in children
+    ) {
+      const codeElement = children as {
+        props: { className?: string; children?: ReactNode }
+      }
+      const codeProps = codeElement.props
+      const langMatch = codeProps.className?.match(/language-(\w+)/)
+      const language = langMatch?.[1] ?? "text"
+      const code = extractText(codeProps.children).replace(/\n$/, "")
+
+      return <CodeBlock code={code} language={language} />
+    }
+    return <pre>{children}</pre>
+  },
+
+  // Inline code — don't pass through to CodeBlock
+  code: ({ children, className }) => {
+    // If it has a language class, it's handled by the pre component
+    if (className?.startsWith("language-")) {
+      return <code className={className}>{children}</code>
+    }
+    return <code>{children}</code>
+  },
+
+  // Custom elements
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  "callout-box": ((props: any) => {
+    const variant = (props["data-variant"] as CalloutVariant) ?? "note"
+    const title = props["data-title"] as string | undefined
+    return (
+      <CalloutBox variant={variant} title={title}>
+        {props.children}
+      </CalloutBox>
+    )
+  }) as Components["div"],
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  "key-term": ((props: any) => {
+    const term = (props["data-term"] as string) ?? ""
+    const definition = (props["data-definition"] as string) ?? ""
+    return <KeyTermTooltip term={term} definition={definition} />
+  }) as Components["span"],
 }
