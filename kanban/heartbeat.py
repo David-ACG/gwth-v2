@@ -13,7 +13,9 @@ Manual test:
 
 import json
 import os
+import socket
 import ssl
+import sys
 import urllib.request
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -47,7 +49,8 @@ def log(msg):
     """Append a timestamped message to the log file."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     line = f"[{timestamp}] {msg}"
-    print(line)
+    # Use errors="replace" to avoid UnicodeEncodeError on Windows cp1252 consoles
+    print(line.encode(sys.stdout.encoding or "utf-8", errors="replace").decode(sys.stdout.encoding or "utf-8", errors="replace"))
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(line + "\n")
 
@@ -118,6 +121,15 @@ def check_endpoint(name, url):
         return "FAIL", f"{name} unreachable: {e}"
 
 
+def check_dolt_server(host="127.0.0.1", port=3307, timeout=5):
+    """Check if the Dolt SQL server is reachable on the expected port."""
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return "OK", f"Dolt server responding on port {port}"
+    except (ConnectionRefusedError, OSError) as e:
+        return "FAIL", f"Dolt server unreachable on port {port}: {e}"
+
+
 def check_testing_items():
     """Check for items in 2_testing/ folders across projects."""
     items = []
@@ -150,7 +162,14 @@ def main():
         if status != "OK":
             has_issues = True
 
-    # 3. Items awaiting review
+    # 3. Dolt server health (Beads dependency)
+    status, msg = check_dolt_server()
+    emoji = {"OK": "✅", "WARN": "⚠️", "FAIL": "❌"}.get(status, "❓")
+    results.append(f"{emoji} *Dolt:* {msg}")
+    if status != "OK":
+        has_issues = True
+
+    # 4. Items awaiting review
     testing_items = check_testing_items()
     if testing_items:
         results.append(f"📋 *Awaiting review ({len(testing_items)} items):*")
