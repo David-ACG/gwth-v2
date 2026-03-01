@@ -30,6 +30,7 @@ The script should:
 Add a call to `linear-close.py` at the end of `kanban/run-kanban.sh`, after prompts are moved to `2_testing/`. This is non-blocking — if it fails, the kanban run still succeeds.
 
 Add to `run-kanban.sh` after the move-to-testing step:
+
 ```bash
 # Close the loop on Linear issues
 if [ -f "kanban/linear-close.py" ]; then
@@ -43,11 +44,13 @@ fi
 Add `.linear-close-state.json` and `.linear-close.log` to the project `.gitignore`.
 
 ## Files likely affected
+
 - `kanban/linear-close.py` (NEW)
 - `kanban/run-kanban.sh` — add linear-close call after testing move
 - `.gitignore` — add `.linear-close-state.json` and `.linear-close.log`
 
 ## Acceptance criteria
+
 - [ ] `kanban/linear-close.py` exists and runs without errors: `python kanban/linear-close.py`
 - [ ] Script correctly identifies Linear issue references in `2_testing/` and `3_done/` files
 - [ ] Script updates Linear issues to "Done" status via GraphQL API
@@ -57,6 +60,7 @@ Add `.linear-close-state.json` and `.linear-close.log` to the project `.gitignor
 - [ ] State and log files are gitignored
 
 ## Notes
+
 - The Linear API key is in env var `LINEAR_API_KEY` (same as `linear-poll.py` uses)
 - Linear GraphQL endpoint: `https://api.linear.app/graphql`
 - The "Done" status needs to be resolved by querying the team's workflow states (same approach as `linear-poll.py`)

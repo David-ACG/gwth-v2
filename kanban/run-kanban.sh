@@ -16,6 +16,28 @@ if [ ! -d "$PLANNING" ]; then
 fi
 mkdir -p "$TESTING"
 
+# ── Beads pre-flight ──────────────────────────────────
+BD_AVAILABLE=0
+if command -v bd &>/dev/null; then
+    # Check Dolt server (Beads dependency)
+    if bd stats --json &>/dev/null 2>&1; then
+        BD_AVAILABLE=1
+        echo "========================================"
+        echo "BEADS STATUS:"
+        bd stats 2>/dev/null | grep -E "Open|In Progress|Blocked|Ready" || true
+        echo ""
+        echo "READY TO WORK:"
+        bd ready 2>/dev/null || echo "  (none)"
+        echo "========================================"
+    else
+        echo "WARNING: Dolt server not reachable — Beads integration disabled for this run."
+        echo "  Start with: C:\\Users\\david\\AppData\\Local\\beads\\start-dolt.bat"
+    fi
+else
+    echo "WARNING: bd not found in PATH — Beads integration disabled for this run."
+fi
+echo ""
+
 # Collect prompt files
 PROMPTS=($(ls "$PLANNING"/PROMPT_*.md 2>/dev/null | sort))
 
@@ -44,12 +66,30 @@ for FILE in "${PROMPTS[@]}"; do
     echo "========================================"
     echo ""
 
+    # Extract Beads reference from prompt content if present
+    BEADS_REF=$(grep -oP 'Beads:\s*\K\S+' "$FILE" 2>/dev/null || true)
+
+    # Build Beads instructions block if Beads is available and prompt has a reference
+    BEADS_INSTRUCTIONS=""
+    if [ "$BD_AVAILABLE" -eq 1 ] && [ -n "$BEADS_REF" ]; then
+        BEADS_INSTRUCTIONS="
+BEADS TRACKING: This task is tracked as Beads issue $BEADS_REF.
+- At the START of work, run: bd update $BEADS_REF --status=in_progress
+- When ALL work is COMPLETE (tests pass, committed, pushed), run: bd close $BEADS_REF
+- If the task fails after 3 retries, leave the issue open and add a note: bd update $BEADS_REF --notes=\"Failed: <reason>\"
+"
+    elif [ "$BD_AVAILABLE" -eq 1 ]; then
+        BEADS_INSTRUCTIONS="
+BEADS TRACKING: If you discover the Beads issue ID for this task during execution, claim it with bd update <id> --status=in_progress and close it with bd close <id> when done.
+"
+    fi
+
     PROMPT="You are working in project: $PROJECT_ROOT
 
 CONTEXT MANAGEMENT: If your context usage exceeds 110k tokens out of 200k, immediately run /compact to summarize context before continuing.
 
 REFERENCE FILES: The kanban/1_planning/ folder contains plan files (without PROMPT_ prefix) that may be referenced in this task. Read them if the prompt below refers to them.
-
+$BEADS_INSTRUCTIONS
 TASK — Execute the following prompt completely. Do not ask questions. Do not stop until every requirement is met. If something fails, fix it and retry up to 3 times before moving on.
 
 PIPELINE — After implementing the changes, follow these steps in order:
@@ -109,3 +149,10 @@ echo "ALL PROMPTS PROCESSED"
 echo "  Completed: $COMPLETED"
 echo "  Failed:    $FAILED"
 echo "========================================"
+
+# ── Beads post-processing ─────────────────────────────
+if [ "$BD_AVAILABLE" -eq 1 ]; then
+    echo ""
+    echo "Syncing Beads closures to Linear..."
+    bd linear sync --push 2>/dev/null && echo "Linear sync complete." || echo "WARNING: Linear sync failed (non-fatal)."
+fi

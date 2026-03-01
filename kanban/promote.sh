@@ -110,3 +110,10 @@ echo "Production deploy complete!"
 echo "  Promoted: ${#SELECTED[@]} file(s)"
 echo "  Verify at: https://gwth.ai"
 echo "========================================"
+
+# ── Sync Beads closures to Linear (safety net) ────────
+if command -v bd &>/dev/null && bd stats --json &>/dev/null 2>&1; then
+    echo ""
+    echo "Syncing Beads closures to Linear..."
+    bd linear sync --push 2>/dev/null && echo "Linear sync complete." || echo "WARNING: Linear sync failed (non-fatal)."
+fi

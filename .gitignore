@@ -48,6 +48,8 @@ docs/connection-secrets.md
 # kanban automation state/logs
 kanban/.linear-poll-state.json
 kanban/.linear-poll.log
+kanban/.unified-sync-state.json
+kanban/.unified-sync.log
 kanban/.heartbeat.log
 
 # vercel

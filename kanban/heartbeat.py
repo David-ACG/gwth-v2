@@ -15,6 +15,7 @@ import json
 import os
 import socket
 import ssl
+import subprocess
 import sys
 import urllib.request
 from datetime import datetime, timedelta
@@ -25,7 +26,8 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 KANBAN_DIR = Path(__file__).parent
 LOG_FILE = KANBAN_DIR / ".heartbeat.log"
-POLL_LOG = KANBAN_DIR / ".linear-poll.log"
+POLL_LOG = KANBAN_DIR / ".unified-sync.log"
+LEGACY_POLL_LOG = KANBAN_DIR / ".linear-poll.log"
 
 # Projects to check for testing items
 PROJECTS = {
@@ -81,24 +83,81 @@ def send_telegram(message):
 
 
 def check_poll_health():
-    """Check if linear-poll.py has run recently."""
-    if not POLL_LOG.exists():
-        return "WARN", "Poll log not found — linear-poll.py may never have run"
+    """Check if unified-sync.py (or legacy linear-poll.py) has run recently."""
+    # Prefer unified-sync log, fall back to legacy
+    log_file = POLL_LOG if POLL_LOG.exists() else LEGACY_POLL_LOG
+    label = "unified-sync" if log_file == POLL_LOG else "linear-poll (legacy)"
+
+    if not log_file.exists():
+        return "WARN", f"Sync log not found — {label} may never have run"
 
     # Check last modification time of the log file
-    mtime = datetime.fromtimestamp(POLL_LOG.stat().st_mtime)
+    mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
     age = datetime.now() - mtime
     if age > timedelta(hours=POLL_STALE_HOURS):
         hours = age.total_seconds() / 3600
-        return "WARN", f"Poll log is {hours:.1f}h old (threshold: {POLL_STALE_HOURS}h)"
+        return "WARN", f"Sync log ({label}) is {hours:.1f}h old (threshold: {POLL_STALE_HOURS}h)"
 
     # Read last line to check for errors
-    lines = POLL_LOG.read_text(encoding="utf-8").strip().split("\n")
+    lines = log_file.read_text(encoding="utf-8").strip().split("\n")
     last_line = lines[-1] if lines else ""
     if "ERROR" in last_line:
-        return "FAIL", f"Last poll had error: {last_line}"
+        return "FAIL", f"Last sync had error: {last_line}"
 
-    return "OK", f"Last poll: {last_line}"
+    return "OK", f"Last sync ({label}): {last_line}"
+
+
+def check_beads_health():
+    """Check Beads issue stats and flag stale in-progress issues."""
+    results = []
+
+    try:
+        result = subprocess.run(
+            ["bd", "stats", "--json"],
+            capture_output=True, text=True, timeout=15,
+            cwd=str(KANBAN_DIR.parent)
+        )
+        if result.returncode != 0:
+            return [("WARN", "Beads stats unavailable (bd command failed)")]
+
+        data = json.loads(result.stdout)
+        summary = data.get("summary", {})
+        open_count = summary.get("open_issues", 0)
+        in_progress = summary.get("in_progress_issues", 0)
+        blocked = summary.get("blocked_issues", 0)
+        ready = summary.get("ready_issues", 0)
+
+        stats_msg = f"Open: {open_count}, In-progress: {in_progress}, Blocked: {blocked}, Ready: {ready}"
+        results.append(("OK", f"Beads: {stats_msg}"))
+
+        # Check for stale in-progress issues (claimed but not updated in 24h)
+        if in_progress > 0:
+            list_result = subprocess.run(
+                ["bd", "list", "--status=in_progress", "--json"],
+                capture_output=True, text=True, timeout=15,
+                cwd=str(KANBAN_DIR.parent)
+            )
+            if list_result.returncode == 0:
+                issues = json.loads(list_result.stdout)
+                for issue in issues:
+                    updated = issue.get("updated_at", "")
+                    if updated:
+                        try:
+                            updated_dt = datetime.fromisoformat(updated.replace("Z", "+00:00"))
+                            age = datetime.now(updated_dt.tzinfo) - updated_dt
+                            if age > timedelta(hours=24):
+                                hours = age.total_seconds() / 3600
+                                results.append((
+                                    "WARN",
+                                    f"Stale issue: {issue.get('id', '?')} ({issue.get('title', '?')}) — {hours:.0f}h since update"
+                                ))
+                        except (ValueError, TypeError):
+                            pass
+
+    except (FileNotFoundError, subprocess.TimeoutExpired, json.JSONDecodeError) as e:
+        results.append(("WARN", f"Beads stats check failed: {e}"))
+
+    return results
 
 
 def check_endpoint(name, url):
@@ -169,7 +228,16 @@ def main():
     if status != "OK":
         has_issues = True
 
-    # 4. Items awaiting review
+    # 4. Beads issue stats (only if Dolt is healthy)
+    if status == "OK":
+        beads_checks = check_beads_health()
+        for b_status, b_msg in beads_checks:
+            emoji = {"OK": "✅", "WARN": "⚠️", "FAIL": "❌"}.get(b_status, "❓")
+            results.append(f"{emoji} *{b_msg}*")
+            if b_status != "OK":
+                has_issues = True
+
+    # 5. Items awaiting review
     testing_items = check_testing_items()
     if testing_items:
         results.append(f"📋 *Awaiting review ({len(testing_items)} items):*")
