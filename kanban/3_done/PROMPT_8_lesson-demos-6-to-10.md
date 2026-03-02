@@ -7,6 +7,7 @@ Create 5 more demo lesson pages at `/demo/lesson-v6` through `/demo/lesson-v10`.
 **Read the full design spec first:** `kanban/1_planning/PLAN_2026-03-01_lesson-ui-design-spec.md`
 
 All variants share the same foundation as V1-V5:
+
 - 5-section flow: Intro Video → Objectives → Lesson Content → Q&A → Project
 - Demo lesson data from `src/lib/data/demo-lesson-data.ts`
 - Shared components from `src/components/lesson/`

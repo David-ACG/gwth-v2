@@ -48,12 +48,12 @@ Every lesson page follows this vertical flow — **no tabs**. All sections are v
 
 ### Responsive Breakpoints
 
-| Device | Left Sidebar | Main Content | Right TOC |
-|--------|-------------|-------------|-----------|
-| Desktop (1280px+) | 280px, visible, collapsible | 720px max, centred | 200px, sticky |
-| Large tablet (1024-1279px) | 280px, collapsible (default collapsed) | 720px max | 200px, sticky |
-| Tablet (768-1023px) | Hidden (sheet trigger) | Full width, max 720px | Hidden (optional toggle) |
-| Mobile (<768px) | Hidden (sheet trigger) | Full width, reflowed | Hidden |
+| Device                     | Left Sidebar                           | Main Content          | Right TOC                |
+| -------------------------- | -------------------------------------- | --------------------- | ------------------------ |
+| Desktop (1280px+)          | 280px, visible, collapsible            | 720px max, centred    | 200px, sticky            |
+| Large tablet (1024-1279px) | 280px, collapsible (default collapsed) | 720px max             | 200px, sticky            |
+| Tablet (768-1023px)        | Hidden (sheet trigger)                 | Full width, max 720px | Hidden (optional toggle) |
+| Mobile (<768px)            | Hidden (sheet trigger)                 | Full width, reflowed  | Hidden                   |
 
 ---
 
@@ -114,12 +114,12 @@ margin: 2em 0
 
 Four variants with left-border styling (react.dev pattern adapted to GWTH colours):
 
-| Type | CSS Classes | Icon (lucide-react) | Label |
-|------|------------|---------------------|-------|
-| note | `bg-primary/5 border-l-4 border-primary` | `Info` | "Note" |
-| warning | `bg-warning/5 border-l-4 border-warning` | `AlertTriangle` | "Warning" |
-| tip | `bg-success/5 border-l-4 border-success` | `Lightbulb` | "Tip" |
-| deep-dive | `bg-accent/5 border-l-4 border-accent` | `BookOpen` | "Deep Dive" |
+| Type      | CSS Classes                              | Icon (lucide-react) | Label       |
+| --------- | ---------------------------------------- | ------------------- | ----------- |
+| note      | `bg-primary/5 border-l-4 border-primary` | `Info`              | "Note"      |
+| warning   | `bg-warning/5 border-l-4 border-warning` | `AlertTriangle`     | "Warning"   |
+| tip       | `bg-success/5 border-l-4 border-success` | `Lightbulb`         | "Tip"       |
+| deep-dive | `bg-accent/5 border-l-4 border-accent`   | `BookOpen`          | "Deep Dive" |
 
 - Deep-dive variant is collapsible (click title to toggle)
 - Padding: `1rem 1.25rem`
@@ -129,6 +129,7 @@ Four variants with left-border styling (react.dev pattern adapted to GWTH colour
 - Max 3-5 per page
 
 **Markdown syntax** (to be parsed by enhanced MarkdownRenderer):
+
 ```
 :::note
 This is a note callout.
@@ -188,6 +189,7 @@ Expandable advanced content here.
 - Dark mode: same pattern, colours adapt
 
 **Markdown syntax:**
+
 ```
 The ==AI primitive|A fundamental capability that AI systems can perform== is key.
 ```
@@ -254,39 +256,40 @@ The mock data for "Welcome to GWTH" needs to be restructured from the current fo
 interface DemoLessonData {
   // Section 1: Intro
   introVideo: {
-    url: string
-    duration: number // seconds
-    title: string
-    description: string // 1-2 sentences
-  }
+    url: string;
+    duration: number; // seconds
+    title: string;
+    description: string; // 1-2 sentences
+  };
 
   // Section 2: Objectives
-  objectives: string[] // array of objective strings
+  objectives: string[]; // array of objective strings
 
   // Section 3: Lesson Content
-  lessonContent: string // markdown with callout syntax, key terms, etc.
-  audioUrl: string | null
-  audioDuration: number | null
+  lessonContent: string; // markdown with callout syntax, key terms, etc.
+  audioUrl: string | null;
+  audioDuration: number | null;
 
   // Section 4: Q&A
-  questions: QuizQuestion[] // existing type
+  questions: QuizQuestion[]; // existing type
 
   // Section 5: Project
   project: {
-    title: string
-    description: string
+    title: string;
+    description: string;
     milestones: {
-      title: string
-      description: string
-      completed: boolean
-    }[]
-    videoUrl: string | null
-    videoDuration: number | null
-  }
+      title: string;
+      description: string;
+      completed: boolean;
+    }[];
+    videoUrl: string | null;
+    videoDuration: number | null;
+  };
 }
 ```
 
 The lesson content markdown should include examples of ALL component types:
+
 - At least 2 callout boxes (note, tip)
 - At least 1 deep-dive collapsible
 - At least 1 code block with syntax highlighting
@@ -301,14 +304,14 @@ The lesson content markdown should include examples of ALL component types:
 
 ## Design References
 
-| Source | What to Draw From |
-|--------|------------------|
-| **react.dev/learn** | Callout boxes (Note blue, Pitfall amber, Deep Dive green collapsible), "You Will Learn" objectives box, scroll-spy TOC, constrained content width ~720px, generous line-height |
-| **Notion** | Block-based visual rhythm, toggle/collapsible sections, generous whitespace, callout blocks with icons, clean dividers between sections |
-| **Linear docs** | Minimal aesthetic, 8px spacing grid, restrained colour palette, Inter font, tiered text colour (primary/muted/faint) |
-| **Mintlify** | Clean documentation layout, dark/light theme switching, styled code blocks with copy + language label, step components, card grids, tabs, accordion components, subtle backgrounds |
-| **Medium/Substack** | Blog-style reading experience, large headings, pull quotes, generous paragraph spacing, wide content area |
-| **Coursera/Udemy** | Video-first layout, progress tracking in sidebar, quiz inline feedback |
+| Source              | What to Draw From                                                                                                                                                                  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **react.dev/learn** | Callout boxes (Note blue, Pitfall amber, Deep Dive green collapsible), "You Will Learn" objectives box, scroll-spy TOC, constrained content width ~720px, generous line-height     |
+| **Notion**          | Block-based visual rhythm, toggle/collapsible sections, generous whitespace, callout blocks with icons, clean dividers between sections                                            |
+| **Linear docs**     | Minimal aesthetic, 8px spacing grid, restrained colour palette, Inter font, tiered text colour (primary/muted/faint)                                                               |
+| **Mintlify**        | Clean documentation layout, dark/light theme switching, styled code blocks with copy + language label, step components, card grids, tabs, accordion components, subtle backgrounds |
+| **Medium/Substack** | Blog-style reading experience, large headings, pull quotes, generous paragraph spacing, wide content area                                                                          |
+| **Coursera/Udemy**  | Video-first layout, progress tracking in sidebar, quiz inline feedback                                                                                                             |
 
 ---
 
@@ -316,16 +319,16 @@ The lesson content markdown should include examples of ALL component types:
 
 All colours use CSS custom properties from `globals.css`. Do NOT hardcode hex values.
 
-| Token | Light | Dark | Usage |
-|-------|-------|------|-------|
-| `--primary` | Aqua | Lighter aqua | Links, active TOC, callout (note) |
-| `--accent` | Mint | Lighter mint | Key terms, callout (deep-dive) |
-| `--success` | Green | Green | Completed state, callout (tip) |
-| `--warning` | Amber | Amber | Callout (warning) |
-| `--destructive` | Red | Red | Errors, callout (danger if needed) |
-| `--muted` | Light blue-grey | Dark warm grey | Code block backgrounds |
-| `--muted-foreground` | Subdued text | Warm grey text | Secondary text, inactive TOC |
-| `--card` | White | Dark charcoal | Card backgrounds |
-| `--border` | Light border | Subtle white border | Borders, dividers |
-| `--foreground` | Dark teal | Warm off-white | Body text |
-| `--background` | Near-white | Warm charcoal | Page background |
+| Token                | Light           | Dark                | Usage                              |
+| -------------------- | --------------- | ------------------- | ---------------------------------- |
+| `--primary`          | Aqua            | Lighter aqua        | Links, active TOC, callout (note)  |
+| `--accent`           | Mint            | Lighter mint        | Key terms, callout (deep-dive)     |
+| `--success`          | Green           | Green               | Completed state, callout (tip)     |
+| `--warning`          | Amber           | Amber               | Callout (warning)                  |
+| `--destructive`      | Red             | Red                 | Errors, callout (danger if needed) |
+| `--muted`            | Light blue-grey | Dark warm grey      | Code block backgrounds             |
+| `--muted-foreground` | Subdued text    | Warm grey text      | Secondary text, inactive TOC       |
+| `--card`             | White           | Dark charcoal       | Card backgrounds                   |
+| `--border`           | Light border    | Subtle white border | Borders, dividers                  |
+| `--foreground`       | Dark teal       | Warm off-white      | Body text                          |
+| `--background`       | Near-white      | Warm charcoal       | Page background                    |

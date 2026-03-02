@@ -7,6 +7,7 @@ Create 5 demo lesson pages at `/demo/lesson-v1` through `/demo/lesson-v5`. Each 
 **Read the full design spec first:** `kanban/1_planning/PLAN_2026-03-01_lesson-ui-design-spec.md` — it contains the 5-section lesson structure, component specs, typography, and responsive breakpoints.
 
 All variants share:
+
 - The same 5-section flow: Intro Video → Objectives → Lesson Content → Q&A → Project
 - The same demo lesson data from `src/lib/data/demo-lesson-data.ts`
 - The same shared components from `src/components/lesson/`
@@ -21,6 +22,7 @@ Each variant applies different CSS classes, spacing, backgrounds, and component 
 ### Demo Index Page
 
 Create `/demo/page.tsx` — a simple index page listing all 10 variants (V6-V10 will be added later) with:
+
 - Title: "Lesson UI Demo Variants"
 - Cards or links for each variant with its name and 1-line description
 - Links to `/demo/lesson-v1` through `/demo/lesson-v10` (V6-V10 will 404 until PROMPT_8 runs)
