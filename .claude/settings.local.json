@@ -158,7 +158,8 @@
       "WebFetch(domain:www.remotion.dev)",
       "WebFetch(domain:developers.openai.com)",
       "Bash(bd stats:*)",
-      "Bash(bd doctor:*)"
+      "Bash(bd doctor:*)",
+      "WebFetch(domain:www.kdnuggets.com)"
     ]
   },
   "enableAllProjectMcpServers": true,
