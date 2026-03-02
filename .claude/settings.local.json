@@ -154,7 +154,11 @@
       "Bash(powershell:*)",
       "Bash(bd ready:*)",
       "Bash(bd show:*)",
-      "Bash(bd close:*)"
+      "Bash(bd close:*)",
+      "WebFetch(domain:www.remotion.dev)",
+      "WebFetch(domain:developers.openai.com)",
+      "Bash(bd stats:*)",
+      "Bash(bd doctor:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
