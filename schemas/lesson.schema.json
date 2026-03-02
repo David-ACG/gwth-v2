@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gwth.ai/schemas/lesson.schema.json",
+  "title": "GWTH Lesson Bridge Schema",
+  "description": "Shared schema between the GWTH Pipeline (producer) and GWTH V2 site (consumer). The pipeline assembler outputs JSON matching this schema; the site's admin import API validates against it.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "description",
+    "order",
+    "duration",
+    "difficulty",
+    "category",
+    "sectionId",
+    "courseId",
+    "courseSlug",
+    "month",
+    "learnContent",
+    "questions",
+    "resources",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique lesson identifier. Pipeline uses format 'm{month}_l{nn}' (e.g. 'm1_l01')."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "URL-safe slug derived from the lesson title (lowercase, hyphenated)."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full lesson title as displayed to students."
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description for listings and metadata."
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Display order within the section (0-indexed from pipeline, 1-indexed on site)."
+    },
+    "duration": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Estimated lesson duration in minutes."
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["beginner", "intermediate", "advanced"],
+      "description": "Difficulty level (lowercase). Pipeline maps Title Case → lowercase."
+    },
+    "category": {
+      "type": "string",
+      "description": "Content category. Maps from pipeline's 'primitive' field (e.g. 'Foundations', 'Content', 'Code')."
+    },
+    "sectionId": {
+      "type": "string",
+      "description": "ID of the parent section. Pipeline maps from 'week' field using format 'm{month}_w{week}'."
+    },
+    "courseId": {
+      "type": "string",
+      "default": "course_gwth",
+      "description": "Course ID. Always 'course_gwth' for the current single-course model."
+    },
+    "courseSlug": {
+      "type": "string",
+      "default": "applied-ai-skills",
+      "description": "Course slug. Always 'applied-ai-skills' for the current single-course model."
+    },
+    "month": {
+      "type": "integer",
+      "enum": [1, 2, 3],
+      "description": "Which month this lesson belongs to. Parsed from pipeline's 'column' field."
+    },
+    "isOptional": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is an optional lesson (Month 2 & 3 specialty tracks)."
+    },
+    "optionalTrack": {
+      "type": ["string", "null"],
+      "description": "Optional track label (e.g. 'Healthcare', 'Career Accelerator')."
+    },
+    "introVideoUrl": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Public HTTPS URL to the intro video. Null until media is uploaded to CDN."
+    },
+    "learnContent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Main lesson content as markdown with custom syntax (:::note, :::tip, :::warning, :::deep-dive, ==term|def==)."
+    },
+    "audioFileUrl": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Public HTTPS URL to audio narration. Null until media is uploaded."
+    },
+    "audioDuration": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Audio duration in seconds. Null if no audio."
+    },
+    "buildVideoUrl": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Public HTTPS URL to the build-along video. Null until uploaded."
+    },
+    "buildInstructions": {
+      "type": ["string", "null"],
+      "description": "Step-by-step build instructions as markdown. From pipeline's _project.md file."
+    },
+    "questions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/QuizQuestion" },
+      "description": "Structured quiz questions. Pipeline assembler extracts from _qna.md or structured JSON."
+    },
+    "resources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Resource" },
+      "description": "Supplementary resources (links, downloads, articles)."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["locked", "available", "in-progress", "completed"],
+      "default": "available",
+      "description": "Default publish status. Per-user status is tracked separately in the progress table."
+    },
+    "objectives": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Learning objectives from the syllabus. Displayed in ObjectivesCard."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Searchable tags from the syllabus."
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Prerequisite lesson titles or slugs."
+    },
+    "pipelineId": {
+      "type": ["string", "null"],
+      "description": "Original UUID from the pipeline syllabus.json, for cross-reference."
+    },
+    "pipelineStatus": {
+      "type": ["string", "null"],
+      "enum": ["draft", "in_progress", "review", "published", "exported", null],
+      "description": "Pipeline-side status at time of export."
+    },
+    "exportedAt": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of when this lesson was exported from the pipeline."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 creation timestamp."
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 last update timestamp."
+    }
+  },
+  "$defs": {
+    "QuizQuestion": {
+      "type": "object",
+      "required": [
+        "id",
+        "question",
+        "options",
+        "correctOptionIndex",
+        "explanation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique question ID (e.g. 'm1_l01_q1')."
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The question text."
+        },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 6,
+          "description": "Answer options (typically 4)."
+        },
+        "correctOptionIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Zero-based index of the correct answer in the options array."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Explanation shown after answering, clarifying why the answer is correct."
+        }
+      }
+    },
+    "Resource": {
+      "type": "object",
+      "required": ["title", "url", "type"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Resource display title."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the resource."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["link", "download", "video", "article"],
+          "description": "Type of resource for icon selection."
+        }
+      }
+    }
+  }
+}
