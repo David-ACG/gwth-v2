@@ -10,7 +10,7 @@ export default function CourseNotFound() {
         The course you&apos;re looking for doesn&apos;t exist or has been removed.
       </p>
       <Button className="mt-6" asChild>
-        <Link href="/courses">Browse Courses</Link>
+        <Link href="/dashboard">Back to Dashboard</Link>
       </Button>
     </div>
   )

@@ -10,7 +10,7 @@ export default function LessonNotFound() {
         This lesson doesn&apos;t exist or has been removed.
       </p>
       <Button className="mt-6" asChild>
-        <Link href="/courses">Back to Courses</Link>
+        <Link href="/course/applied-ai-skills">Back to Course</Link>
       </Button>
     </div>
   )

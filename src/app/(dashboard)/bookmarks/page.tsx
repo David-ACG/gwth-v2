@@ -70,7 +70,7 @@ export default async function BookmarksPage() {
           icon={Bookmark}
           title="No bookmarks yet"
           description="Save lessons and labs to access them quickly later."
-          action={{ label: "Browse Courses", href: "/courses" }}
+          action={{ label: "Start Learning", href: "/course/applied-ai-skills" }}
         />
       ) : (
         <div className="space-y-2">

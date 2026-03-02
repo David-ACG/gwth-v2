@@ -14,7 +14,6 @@ import React from "react"
 /** Maps route segments to human-readable labels */
 const segmentLabels: Record<string, string> = {
   dashboard: "Dashboard",
-  courses: "Courses",
   course: "Course",
   labs: "Labs",
   lesson: "Lesson",

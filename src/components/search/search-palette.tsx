@@ -37,13 +37,13 @@ export function SearchPalette() {
   return (
     <CommandDialog open={isOpen} onOpenChange={(open) => !open && close()}>
       <CommandInput
-        placeholder="Search courses, labs, pages..."
+        placeholder="Search lessons, labs, pages..."
         onValueChange={setQuery}
       />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
 
-        <CommandGroup heading="Courses">
+        <CommandGroup heading="Course">
           {mockCourses.map((course) => (
             <CommandItem
               key={course.id}

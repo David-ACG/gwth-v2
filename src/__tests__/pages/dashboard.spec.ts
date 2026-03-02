@@ -9,7 +9,7 @@ test.describe("Dashboard Page", () => {
 
   test("renders sidebar navigation on desktop", async ({ page, isMobile }) => {
     test.skip(!!isMobile, "Sidebar is hidden on mobile")
-    const sidebar = page.locator("aside, nav").filter({ hasText: /courses/i }).first()
+    const sidebar = page.locator("aside, nav").filter({ hasText: /the course/i }).first()
     await expect(sidebar).toBeVisible()
   })
 
