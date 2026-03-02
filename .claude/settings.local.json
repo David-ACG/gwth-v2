@@ -151,7 +151,10 @@
       "WebFetch(domain:mintlify.com)",
       "Bash(tasklist:*)",
       "Bash(wmic process:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(bd ready:*)",
+      "Bash(bd show:*)",
+      "Bash(bd close:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
