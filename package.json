@@ -60,7 +60,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^4.0.18",
     "axe-playwright": "^2.2.2",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-next": "16.1.6",
     "fast-check": "^4.5.3",
     "husky": "^9.1.7",
