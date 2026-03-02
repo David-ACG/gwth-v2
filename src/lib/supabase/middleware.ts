@@ -17,17 +17,38 @@ const PROTECTED_PATHS = [
 /** Auth routes that should redirect to dashboard if already logged in */
 const AUTH_PATHS = ["/login", "/signup", "/forgot-password"]
 
+/** Paths that never need Supabase auth checks */
+const PUBLIC_ONLY_PATHS = ["/demo", "/api/health"]
+
 /**
  * Refreshes the Supabase auth session and enforces route protection.
  * - Protected routes: no user -> redirect to /login
  * - Auth routes: user exists -> redirect to /dashboard
+ * - Public-only paths and missing env vars: pass through without Supabase
  */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
+  const { pathname } = request.nextUrl
+
+  // Skip Supabase entirely for paths that never need auth
+  const isPublicOnly = PUBLIC_ONLY_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  )
+  if (isPublicOnly) {
+    return supabaseResponse
+  }
+
+  // If Supabase env vars are missing, pass through without auth checks
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!supabaseUrl || !supabaseKey) {
+    return supabaseResponse
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() {
@@ -51,8 +72,6 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
-  const { pathname } = request.nextUrl
 
   // Check if visiting a protected route without auth
   const isProtected = PROTECTED_PATHS.some(
