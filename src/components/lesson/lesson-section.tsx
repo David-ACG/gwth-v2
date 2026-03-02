@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 
 interface LessonSectionProps {
-  /** Optional section number (displayed as a badge) */
+  /** Section number (displayed as a solid primary badge) */
   number?: number
   /** Section title */
   title?: string
@@ -9,28 +9,38 @@ interface LessonSectionProps {
   children: React.ReactNode
   /** HTML id for scroll-to targeting */
   id?: string
+  /** Whether this section uses the tinted (muted) background */
+  tinted?: boolean
   /** Additional CSS classes */
   className?: string
 }
 
 /**
- * Wrapper component that adds consistent spacing and optional section numbering.
- * Used to visually separate the 5 lesson sections (Intro, Objectives, Content, Q&A, Project).
+ * Wrapper component for lesson sections with V11 composite styling.
+ * Features solid primary number badges and alternating bg-card/bg-muted/50 backgrounds.
  */
 export function LessonSection({
   number,
   title,
   children,
   id,
+  tinted = false,
   className,
 }: LessonSectionProps) {
   return (
-    <section id={id} className={cn("py-8", className)}>
+    <section
+      id={id}
+      className={cn(
+        "p-8",
+        tinted ? "bg-muted/50" : "bg-card",
+        className,
+      )}
+    >
       {(number !== undefined || title) && (
-        <div className="mb-6 flex items-center gap-3">
+        <div className="mb-5 flex items-center gap-3">
           {number !== undefined && (
-            <span className="flex size-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-              {number}
+            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
+              {String(number).padStart(2, "0")}
             </span>
           )}
           {title && (
