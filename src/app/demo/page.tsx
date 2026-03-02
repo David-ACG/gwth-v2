@@ -71,11 +71,16 @@ const variants: VariantInfo[] = [
     description: "V5 + darker page surround (bg-secondary), white card inset, left accent bar headings.",
     status: "ready",
   },
+  {
+    slug: "lesson-v11",
+    name: "Composite",
+    description: "V6 elevated paper + V10 darker surround + V9 alternating section backgrounds.",
+    status: "ready",
+  },
 ]
 
 /**
- * Demo index page listing all 10 lesson UI variants.
- * V1-V5 are active, V6-V10 are placeholders.
+ * Demo index page listing all 11 lesson UI variants.
  */
 export default function DemoIndexPage() {
   return (
