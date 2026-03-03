@@ -1,547 +1,499 @@
-# GWTH Diagramming Research — Tool Evaluation & Workflow Recommendation
+# Diagramming Research for GWTH Lesson Content
 
-**Date:** 2026-03-02
+**Date:** 2026-03-03
 **Beads:** GWTH-3rawd4 | **Linear:** GWTH-12
-**Status:** Complete
-
----
+**Status:** Research complete
 
 ## Executive Summary
 
-This document evaluates 5 categories of diagramming tools for producing ~500 educational diagrams (5 per lesson x 100 lessons) with a consistent hand-drawn/sketch aesthetic. After extensive research, the **recommended primary workflow** is **Mermaid.js + Nano Banana 2** for structural diagrams, with **Remotion + Rough.js** as the secondary workflow for custom/interactive diagrams. An optional **Excalidraw** workflow serves as a manual fallback for complex one-off diagrams.
+After evaluating 5 categories of diagramming tools across automation, cost, quality, style consistency, and scale feasibility, the recommended approach is a **two-tier hybrid workflow**:
+
+1. **Primary (80% of diagrams):** Mermaid.js (hand-drawn look) + Excalidraw export pipeline — for flowcharts, architecture, data flow, sequence diagrams
+2. **Secondary (20% of diagrams):** AI image generation (FLUX.2 locally or Nano Banana 2 cloud) — for rich conceptual illustrations, knolling/flat-lay infographics
+3. **Bonus:** Remotion for animated diagram walkthroughs in video lessons (uses the same source data)
+
+---
+
+## 1. Excalidraw-Based Workflows
+
+### Overview
+
+Excalidraw is an open-source virtual whiteboard with a signature hand-drawn aesthetic. It stores diagrams as JSON, which can be generated programmatically and rendered to SVG/PNG.
+
+### Key Tools
+
+| Tool                                | What it does                                 | Automation | Cost | Local |
+| ----------------------------------- | -------------------------------------------- | ---------- | ---- | ----- |
+| `@swiftlysingh/excalidraw-cli`      | Creates `.excalidraw` JSON from text DSL     | Full (CLI) | Free | Yes   |
+| `@excalidraw/mermaid-to-excalidraw` | Converts Mermaid → Excalidraw elements       | Full (API) | Free | Yes   |
+| `excalidraw-to-svg`                 | Headless `.excalidraw` → SVG conversion      | Full (CLI) | Free | Yes   |
+| `excalirender`                      | Headless `.excalidraw` → PNG/SVG/PDF         | Full (CLI) | Free | Yes   |
+| Cole Medin's Claude skill           | AI generates + renders + validates diagrams  | Semi-auto  | Free | Yes   |
+| Ooi Yee Fei's Claude skill          | AI analyzes codebase → architecture diagrams | Semi-auto  | Free | Yes   |
+
+### Style Consistency
+
+Excalidraw's hand-drawn look is controlled by JSON properties:
+
+- `roughness: 2` (Cartoonist = maximum sketch effect)
+- `fontFamily: 1` (Virgil = hand-written font)
+- `fillStyle: "hachure"` (hand-drawn hatching)
+
+These are baked into the JSON — every rendering tool reproduces them identically. A style template applied during generation ensures 100% consistency across 500+ diagrams.
+
+### Batch Pipeline
+
+```
+Data Source (lesson content JSON)
+    → Generator Script (Node.js/Python, produces .excalidraw files)
+    → excalidraw-to-svg or excalirender (batch conversion)
+    → 500 SVG files in ~30-60 seconds
+```
+
+### Pros
+
+- Signature hand-drawn aesthetic that David likes
+- JSON format is version-controllable and diffable
+- Multiple rendering tools available (headless, no browser needed)
+- Claude Code skills exist for AI-assisted generation
+- 100% style consistency via JSON property templates
+- Free and fully local
+
+### Cons
+
+- Requires building a generator script to produce JSON
+- Limited to Excalidraw's built-in shapes (no complex illustrations)
+- Arrow routing and layout need manual effort or dagre/ELK.js integration
+- Not as polished as AI-generated images for conceptual diagrams
+- Font rendering can vary between tools (Virgil font must be available)
+
+### Verdict: Strong choice for structural diagrams (flowcharts, architecture, data flow)
+
+---
+
+## 2. Mermaid + AI Rendering
+
+### Overview
+
+Mermaid.js defines diagrams as text DSL (version-controllable, diffable). Version 11 added a `handDrawn` look using rough.js. Google's Nano Banana 2 can transform Mermaid diagrams into visually stunning images.
+
+### Mermaid.js Capabilities
+
+**24 diagram types** including: flowchart, sequence, class, state, ER, gantt, user journey, mindmap, timeline, architecture, kanban, and more.
+
+**Built-in hand-drawn look** (v11+):
+
+```
+---
+config:
+  look: handDrawn
+  theme: neutral
+---
+flowchart LR
+  A --> B --> C
+```
+
+Currently supported for flowcharts and state diagrams. Other types planned.
+
+### Mermaid CLI (`mmdc`)
+
+| Feature         | Detail                           |
+| --------------- | -------------------------------- |
+| Output formats  | SVG, PNG, PDF                    |
+| Themes          | default, dark, forest, neutral   |
+| Custom CSS      | Via `--cssFile` flag             |
+| Batch rendering | Shell loop over `.mmd` files     |
+| Deterministic   | Same input → same output, always |
+| Cost            | Free (open source)               |
+| Local           | Yes (Puppeteer + Chromium)       |
+
+### Nano Banana 2 (Google Gemini 3.1 Flash Image)
+
+A two-stage pipeline: Mermaid for structure → Nano Banana 2 for visual polish.
+
+| Property      | Value                                                                    |
+| ------------- | ------------------------------------------------------------------------ |
+| Model         | Gemini 3.1 Flash Image Preview                                           |
+| Automation    | Full API (Gemini API), batch mode available                              |
+| Cost          | $0.03/img (1K, batch) to $0.15/img (4K, real-time)                       |
+| Style         | Prompt-controlled: Swiss Modernism, Neo-Memphis, Blueprint, Isometric 3D |
+| Text accuracy | 95%+ for short labels (<25 chars)                                        |
+| Output        | Raster PNG/JPEG (not editable)                                           |
+
+**Cost for GWTH:**
+
+- 500 initial (1K batch): ~$15
+- 50/month ongoing (1K batch): ~$1.50/month
+- Annual total: ~$21
+
+### Mermaid Chart MCP (Available in Workspace)
+
+Already configured with `validate_and_render_mermaid_diagram` tool. Good for quick validation during development. Limited to Mermaid's built-in themes — not suitable for production-quality styled output.
+
+### Mermaid-to-Excalidraw
+
+Converts Mermaid definitions to Excalidraw's hand-drawn format. **Limitation:** Only flowcharts are truly converted; other diagram types fall back to embedded images.
+
+### Pros
+
+- Text DSL is the most version-control-friendly format
+- 24 diagram types cover almost any educational content
+- Built-in hand-drawn look for informal/friendly diagrams
+- Deterministic rendering (same source → same output)
+- Nano Banana 2 produces stunning visuals at low cost
+- Free baseline (mmdc) with premium option (Nano Banana 2)
+
+### Cons
+
+- Default Mermaid rendering is functional but not beautiful
+- hand-drawn look only supports flowcharts + state diagrams currently
+- Nano Banana 2 output is raster-only (not editable)
+- Nano Banana 2 introduces style variability (generative AI)
+- Requires Puppeteer/Chromium for rendering (heavyweight)
+
+### Verdict: Best baseline for all diagrams; Nano Banana 2 for selective premium styling
+
+---
+
+## 3. AI Image Generation
+
+### Overview
+
+AI image models can generate rich, visually appealing diagrams — especially knolling/flat-lay infographics. However, they struggle with structural accuracy and text rendering.
+
+### Cloud API Options
+
+| Provider | Model                            | Cost/Image                  | Text Quality | Automation           | Notes              |
+| -------- | -------------------------------- | --------------------------- | ------------ | -------------------- | ------------------ |
+| Google   | Nano Banana 2 (Gemini 3.1 Flash) | $0.03 batch                 | 95% (short)  | Full API             | Best value         |
+| OpenAI   | GPT Image 1.5                    | $0.02 batch                 | 95% (best)   | Full API             | Best text          |
+| OpenAI   | GPT Image 1 Mini                 | $0.005 batch                | Good         | Full API             | Cheapest quality   |
+| Ideogram | 3.0                              | $0.03-0.06                  | 90%          | Full API + CSV batch | Good all-round     |
+| Recraft  | V3                               | $0.04 (raster), $0.08 (SVG) | 85%          | Full API             | Vector SVG output! |
+
+### Local Models (RTX 3090, 24GB VRAM)
+
+| Model                  | VRAM    | Speed      | Text Quality     | License        | Notes                      |
+| ---------------------- | ------- | ---------- | ---------------- | -------------- | -------------------------- |
+| FLUX.2 Dev (quantized) | 18-20GB | 12-15s/img | 85%              | Non-commercial | Best quality local         |
+| FLUX.2 Klein 4B        | 13GB    | <1s/img    | Moderate         | Apache 2.0     | Best speed + license       |
+| CogView4 6B            | 8GB     | 5-8s/img   | Good (bilingual) | Apache 2.0     | Lightweight, free          |
+| SDXL + ControlNet      | 6-8GB   | 5-8s/img   | Poor (50%)       | Varies         | Best compositional control |
+
+### Knolling / Flat-Lay Style
+
+AI models handle this style **very well** — the overhead perspective and organized layouts align with diffusion models' strengths. The example images from the Linear issue (water cycle, DeepMind knolling) are achievable with FLUX.2 or Nano Banana 2.
+
+**Effective prompt template:**
+
+```
+High-quality flat lay knolling photography creating a DIY infographic that explains [TOPIC],
+objects arranged at 90-degree angles on a clean light gray textured background,
+simple clean black hand-drawn arrows guiding the viewer's eye between elements,
+soft overhead studio lighting, minimalist composition,
+educational diagram style, labeled components, professional product photography
+```
+
+### Custom LoRA Training (Recommended for Style Consistency)
+
+Train a LoRA on 20-25 reference images of the target style:
+
+- Training time: ~20-30 minutes on RTX 3090
+- Tools: SimpleTuner or kohya-ss
+- Result: Consistent style across all generations using trigger word in prompt
+
+### Text Accuracy Problem
+
+Even the best models achieve ~85-95% accuracy per label. With 5 labels per diagram, ~50% of images will have at least one error. **Recommended mitigation:** Generate images without text labels, then overlay labels programmatically.
+
+### Pros
+
+- Produces visually stunning, rich illustrations
+- Knolling/flat-lay style is excellent for educational content
+- Custom LoRA ensures style consistency
+- FLUX.2 runs locally on RTX 3090 (free)
+- Cloud options are extremely cheap ($0.005-0.06/image)
+
+### Cons
+
+- Cannot produce structurally accurate technical diagrams
+- Text rendering is unreliable (needs post-processing or overlay)
+- Each image is a raster bitmap — not editable
+- Style drift over 500 images requires QA
+- Not suitable for flowcharts, sequence diagrams, architecture diagrams
+
+### Verdict: Excellent for conceptual/illustrative diagrams, not for structural ones
+
+---
+
+## 4. Remotion-Based Approach
+
+### Overview
+
+Remotion is a React framework for rendering video and still images programmatically. Diagrams are built as React components using SVG + layout libraries, then rendered via headless Chromium.
+
+### Key Capabilities
+
+| Capability        | Detail                                                |
+| ----------------- | ----------------------------------------------------- |
+| Static output     | PNG, JPEG, WebP, PDF via `renderStill()`              |
+| Video output      | MP4, WebM, GIF via `renderMedia()`                    |
+| Diagram libraries | React Flow, dagre, ELK.js, D3 — any React/SVG library |
+| Hand-drawn look   | `react-rough-fiber` wraps any SVG in sketchy style    |
+| Batch rendering   | Built-in dataset rendering with browser reuse         |
+| Dual output       | Same component → static image AND animated video      |
+| Style consistency | Full CSS/React — use GWTH's design tokens directly    |
+
+### Dual-Output Advantage
+
+This is Remotion's killer feature for GWTH. The same diagram component produces:
+
+1. **Static PNG** for lesson pages (captured at a specific frame)
+2. **Animated MP4** for video walkthroughs (nodes appearing, edges drawing in, data flowing)
+
+Build once, get both deliverables.
+
+### Development Effort
+
+| Component                                  | Effort        |
+| ------------------------------------------ | ------------- |
+| Core SVG diagram renderer + dagre layout   | 2-3 days      |
+| Node types (process, decision, data, etc.) | 1-2 days      |
+| Edge types + arrowheads                    | 1 day         |
+| react-rough-fiber integration              | 0.5 day       |
+| Color/theme system                         | 0.5 day       |
+| Animation system                           | 2-3 days      |
+| Batch rendering script                     | 1 day         |
+| Data schema + validation                   | 0.5 day       |
+| **Total**                                  | **8-11 days** |
+
+### Scale Performance
+
+| Batch             | Time (sequential, browser reuse) |
+| ----------------- | -------------------------------- |
+| 500 diagrams      | 8-25 minutes                     |
+| 50 diagrams/month | 50-150 seconds                   |
+
+### Cost
+
+Free for individuals and teams up to 3 employees. $100/month for larger teams.
+
+### Pros
+
+- Dual static + animated output from same source
+- Full programmatic control via React/CSS
+- Uses GWTH's existing design system tokens
+- react-rough-fiber provides hand-drawn aesthetic
+- Excellent style consistency (CSS-based)
+- Runs fully locally
+
+### Cons
+
+- Highest initial development effort (8-11 days)
+- Output is raster only (PNG/JPEG), not vector SVG
+- Requires building a custom diagram component library
+- Remotion is a heavy dependency (Chromium-based rendering)
+- Overkill if you don't need animation
+
+### Verdict: Best long-term investment if animated diagrams for video lessons are needed
+
+---
+
+## 5. Hybrid Approaches
+
+### Recommended: Two-Tier Workflow
+
+Based on the research, diagrams in GWTH lessons fall into two categories that need different tools:
+
+**Tier 1 — Structural Diagrams (80% of diagrams)**
+
+- Flowcharts, architecture, data flow, sequence diagrams, state machines
+- Accuracy of structure and labels is critical
+- Need: deterministic, text-based, version-controlled
+
+**Tier 2 — Conceptual Illustrations (20% of diagrams)**
+
+- Concept overviews, process explanations, metaphorical diagrams
+- Visual appeal and engagement are critical
+- Need: artistic, attention-grabbing, hand-drawn/knolling aesthetic
+
+### Workflow A: Structural Diagrams
+
+```
+Author .mmd file (Mermaid DSL, committed to repo)
+    → Mermaid-to-Excalidraw (convert to hand-drawn format)
+    → excalidraw-to-svg (render to SVG)
+    → Commit SVG to repo or deploy to CDN
+```
+
+**Alternative fast path:**
+
+```
+Author .mmd file → mmdc --look handDrawn (direct Mermaid hand-drawn rendering)
+```
+
+### Workflow B: Conceptual Illustrations
+
+```
+Write prompt template (committed to repo)
+    → FLUX.2 Dev locally (RTX 3090) or Nano Banana 2 (cloud)
+    → Generate image without text labels
+    → Overlay text labels programmatically (ImageMagick/Pillow)
+    → Commit to repo or deploy to CDN
+```
+
+### Workflow C: Animated Diagrams (Phase 2)
+
+```
+Diagram data JSON (same as Workflow A source)
+    → Remotion React components + react-rough-fiber
+    → renderStill() for lesson page images
+    → renderMedia() for video lesson walkthroughs
+```
 
 ---
 
 ## Comparison Table
 
-| Tool                               | Automation               | Quality                  | Cost (500 imgs) | Local (RTX 3090)   | Style Consistency             | Output Format       | Best For                       |
-| ---------------------------------- | ------------------------ | ------------------------ | --------------- | ------------------ | ----------------------------- | ------------------- | ------------------------------ |
-| **Mermaid.js (standard)**          | Full (CLI/MCP)           | Functional               | Free            | Yes                | High (deterministic)          | SVG, PNG, PDF       | Quick structural diagrams      |
-| **Mermaid handDrawn**              | Full (CLI/MCP)           | Good sketch              | Free            | Yes                | High (deterministic + seed)   | SVG, PNG            | Sketch-style flowcharts        |
-| **Mermaid + Nano Banana 2**        | Full (API)               | Presentation-grade       | ~$17-34         | No (cloud API)     | Medium-High (prompt template) | PNG (up to 4K)      | Polished educational diagrams  |
-| **Excalidraw (programmatic)**      | Semi (JSON + CLI)        | Excellent hand-drawn     | Free            | Yes                | High (JSON template)          | SVG, PNG            | Detailed architecture diagrams |
-| **Excalidraw (Claude Code skill)** | Semi (AI-generated JSON) | Excellent hand-drawn     | Free            | Yes                | High (skill refs)             | SVG, PNG            | AI-generated tech diagrams     |
-| **Remotion + Rough.js**            | Full (Node.js batch)     | Excellent                | Free            | Yes                | Very High (React components)  | PNG, JPEG, SVG, MP4 | Interactive + static dual-use  |
-| **PaperBanana (Google)**           | Full (API)               | Very High (diagrams)     | ~$25            | No (cloud API)     | High (multi-agent loop)       | PNG                 | Academic-style diagrams        |
-| **Qwen-Image-2.0 (Alibaba)**       | Full (API)               | Very High (infographics) | ~$15            | No (cloud API)     | Medium (prompt-based)         | PNG                 | Infographic-style diagrams     |
-| **FLUX.2 Dev (local)**             | Full (ComfyUI)           | Good                     | Free (compute)  | Yes (18-20GB VRAM) | Very High (LoRA)              | PNG                 | Stylized/artistic diagrams     |
-| **SD 3.5 + ControlNet**            | Full (ComfyUI)           | Medium                   | Free (compute)  | Yes                | High (LoRA + structure)       | PNG                 | Structure-guided stylization   |
-| **Seedream 5.0 Lite**              | Full (API)               | Good                     | ~$18            | No (cloud API)     | Medium                        | PNG                 | Reasoning-based diagrams       |
-| **Imagen 4 (Google)**              | Full (API)               | Medium                   | ~$10-30         | No (cloud API)     | Low (no diagram logic)        | PNG                 | Simple illustrative images     |
-| **Kling (Kuaishou)**               | Full (API)               | Medium                   | ~$70+           | No (cloud API)     | Medium                        | PNG                 | Not recommended (overpriced)   |
+| Tool                      | Automation    | Quality           | Cost      | Local (RTX 3090) | Style Consistency           | Output Format   | Best For                   |
+| ------------------------- | ------------- | ----------------- | --------- | ---------------- | --------------------------- | --------------- | -------------------------- |
+| **Mermaid CLI (mmdc)**    | Full          | Functional        | Free      | Yes              | Perfect (deterministic)     | SVG/PNG         | Baseline for all diagrams  |
+| **Mermaid handDrawn**     | Full          | Good (sketch)     | Free      | Yes              | Perfect                     | SVG/PNG         | Informal/whiteboard style  |
+| **Mermaid-to-Excalidraw** | Full          | Good (hand-drawn) | Free      | Yes              | Good                        | Excalidraw JSON | Flowcharts only            |
+| **Excalidraw pipeline**   | Full          | Good (hand-drawn) | Free      | Yes              | Excellent (JSON templates)  | SVG/PNG         | Structural + hand-drawn    |
+| **Nano Banana 2**         | Full (API)    | Excellent         | $0.03/img | No (cloud)       | Variable (prompt-dependent) | PNG/JPEG        | Premium styled diagrams    |
+| **GPT Image 1.5**         | Full (API)    | Excellent         | $0.02/img | No (cloud)       | Variable                    | PNG/JPEG        | Best text in images        |
+| **FLUX.2 Dev**            | Full (script) | Excellent         | Free      | Yes (18-20GB)    | Good (with LoRA)            | PNG             | Rich illustrations locally |
+| **FLUX.2 Klein 4B**       | Full (script) | Very good         | Free      | Yes (13GB)       | Moderate                    | PNG             | Fast local generation      |
+| **Remotion + rough.js**   | Full          | Good (hand-drawn) | Free\*    | Yes              | Excellent (CSS-based)       | PNG/MP4         | Static + animated output   |
+| **Recraft V3**            | Full (API)    | Very good         | $0.08/SVG | No (cloud)       | Good                        | SVG vector      | Scalable vector output     |
+
+\*Free for individuals/small teams
 
 ---
 
-## Category 1: Excalidraw-Based Workflows
+## Top 3 Recommendations
 
-### Overview
+### 1. Mermaid + Excalidraw Pipeline (Primary — Structural Diagrams)
 
-Excalidraw produces the exact "hand-drawn whiteboard" aesthetic David wants (roughness=2, hachure fills, wobbly lines). It's the gold standard for sketch-style technical diagrams.
+**Why:** Best balance of automation, consistency, hand-drawn aesthetic, and version control. Free, local, deterministic.
 
-### Programmatic Generation
+**Workflow:**
 
-**JSON format:** Excalidraw uses a well-documented JSON format. Each element (rectangle, ellipse, arrow, text) carries its own style properties including `roughness` (0=clean, 1=artist, 2=cartoonist/max sloppiness), `fillStyle` (hachure, cross-hatch, zigzag, solid), and `strokeWidth`.
+1. Author diagrams as `.mmd` files alongside lesson content
+2. Convert to Excalidraw format via `mermaid-to-excalidraw` (for flowcharts) or generate Excalidraw JSON directly
+3. Render to SVG via `excalidraw-to-svg`
+4. Store both `.mmd`/`.excalidraw` source and rendered SVG in repo
+5. CI/CD renders all diagrams on build
 
-**Claude Code skill approach:** A proven pattern from the community (ooiyeefei/ccc) uses markdown reference files to teach Claude how to generate valid `.excalidraw` JSON. Claude reads the codebase, identifies components, and generates diagram JSON with correct arrow bindings, labels, and color palettes. Export uses `@excalidraw/utils` via Playwright.
+**Cost:** $0 (all open-source, runs locally)
+**Style:** Hand-drawn with roughness=2, Virgil font, hachure fill
+**Scale:** 500 diagrams in ~1-2 minutes of render time
 
-### Rendering to SVG/PNG
+### 2. AI Generation with FLUX.2 + Custom LoRA (Secondary — Conceptual Illustrations)
 
-| Tool                           | Browser?                 | Fidelity                 | Speed            |
-| ------------------------------ | ------------------------ | ------------------------ | ---------------- |
-| `excalirender` (JonRC)         | No (node-canvas)         | Good (re-implementation) | Fast             |
-| `excalidraw-to-svg`            | No (Node.js)             | Good                     | Fast             |
-| `excalidraw-brute-export-cli`  | Yes (Playwright+Firefox) | Perfect (real renderer)  | Slower           |
-| `excalidraw-render` MCP server | Yes (headless Chromium)  | Perfect                  | ~60ms after init |
+**Why:** Produces visually stunning knolling/flat-lay infographics that engage students. Runs on existing RTX 3090 hardware.
 
-### Self-Hosted
+**Workflow:**
 
-Docker image: `excalidraw/excalidraw` — client-only, runs on port 5000. Can be automated with Playwright for batch operations.
+1. Train a LoRA on 25 curated reference images (one-time, 30 min)
+2. Write prompt templates with `[TOPIC]` placeholders
+3. Generate images via ComfyUI or Python diffusers script
+4. Overlay text labels programmatically (Pillow/ImageMagick)
+5. QA and commit to repo
 
-### Pros
+**Cost:** Electricity only (~$0 per image)
+**Style:** Flat-lay knolling, consistent via LoRA
+**Scale:** 500 images in ~1.7 hours (FLUX.2 Dev) or ~8 min (FLUX.2 Klein)
+**Fallback:** Nano Banana 2 cloud API ($0.03/img) if local generation is impractical
 
-- Best hand-drawn aesthetic (roughness, hachure fills, organic lines)
-- Free, open-source, no API costs
-- JSON format is LLM-friendly — Claude generates valid diagrams
-- Multiple rendering options (browser-based for fidelity, node-canvas for speed)
-- `excalidraw-render` MCP server integrates directly with Claude Code (~60ms per render)
+### 3. Remotion Pipeline (Phase 2 — Animated + Static)
 
-### Cons
+**Why:** Same diagram definitions produce both static lesson images AND animated video walkthroughs. The development investment pays off when video lessons need diagram animations.
 
-- No single canonical CLI tool — fragmented ecosystem
-- Browser-based rendering needed for pixel-perfect output
-- JSON authoring is verbose compared to Mermaid's text DSL
-- No built-in batch processing — requires custom scripting
-- Claude Code skill requires setup (markdown reference files, Playwright MCP)
+**Workflow:**
 
-### Automation Feasibility
+1. Define diagrams as JSON data
+2. Build React diagram components with react-rough-fiber
+3. `renderStill()` for lesson page PNGs
+4. `renderMedia()` for video lesson animated walkthroughs
+5. Batch render via Node.js script
 
-**Semi-automated.** Claude generates JSON, export requires Playwright or `excalirender`. Batch rendering of 500 diagrams is possible but requires custom scripting. Estimated ~15-30 minutes for 500 renders via `excalirender`.
-
-### Cost
-
-Free (all tools are open-source).
-
----
-
-## Category 2: Mermaid + AI Rendering
-
-### Mermaid.js
-
-**23 diagram types** including flowcharts, sequence diagrams, state diagrams, ER diagrams, Gantt charts, architecture diagrams, Kanban boards, timelines, mindmaps, and more.
-
-**CLI (`mmdc`):** Full command-line rendering to SVG, PNG, PDF. Supports custom themes (8 built-in), configuration files, custom CSS, transparent backgrounds, and Markdown processing (replaces code blocks with images).
-
-**Hand-drawn look:** `look: handDrawn` config enables RoughJS rendering with wobbly lines and organic shapes. Currently limited to **flowcharts and state diagrams only** (expanding to all types). A `seed` option makes randomness deterministic for reproducible output.
-
-**Mermaid Chart MCP:** Already installed in this workspace. The `validate_and_render_mermaid_diagram` tool renders diagrams directly and returns PNG images + live editor links. No authentication required for rendering.
-
-### Google Nano Banana 2 (Gemini 3.1 Flash Image)
-
-Released February 26, 2026. Google's best image generation model, combining pro-level fidelity with Flash-tier speed.
-
-**Key capability for diagrams:** Excellent text rendering — legible labels, accurate positioning. Maintains subject consistency across multiple generations.
-
-**Pricing:**
-
-| Resolution  | Standard   | Batch (50% off) |
-| ----------- | ---------- | --------------- |
-| 512px       | $0.045/img | $0.022/img      |
-| 1K (1024px) | $0.067/img | $0.034/img      |
-| 2K (2048px) | $0.101/img | $0.050/img      |
-| 4K (4096px) | $0.151/img | $0.076/img      |
-
-**The Mermaid + NB2 Workflow (from Dmitry Kostyuk's article):**
-
-1. **Structure with Mermaid** (deterministic, verifiable) — Generate Mermaid code, validate logic in live editor, iterate until correct
-2. **Style with Nano Banana 2** (AI aesthetics) — Feed validated Mermaid diagram + style prompt to NB2 API
-3. Recommended styles: Swiss Modernism, Neo-Memphis, Blueprint, Isometric 3D
-
-**Why this works:** Mermaid forces strict logic definition, eliminating hallucination risk. NB2 handles only aesthetics, working from a verified structure.
-
-### Google PaperBanana
-
-An agentic framework for publication-ready scientific diagrams. Five specialized agents: Retriever, Planner, Stylist, Visualizer, Critic. The Critic agent identifies errors and triggers re-generation (3-round iterative refinement). Won 72.7% of head-to-head human preference tests.
-
-**Cost:** ~$0.05/illustration via APIYI. Open-source on GitHub.
-
-### Pros
-
-- Mermaid is text-based — perfect for version control, LLM generation, batch processing
-- Deterministic structure eliminates "hallucinated connections" problem
-- NB2 produces presentation-grade output with accurate text
-- Extremely cheap (~$17 for 500 images at 1K batch)
-- Full API automation — no manual steps
-- MCP tool already available in workspace for quick iterations
-- PaperBanana adds structural understanding of diagram semantics
-
-### Cons
-
-- Mermaid handDrawn look limited to flowcharts/state diagrams (for now)
-- NB2 requires Google Cloud API setup
-- Two-step pipeline adds complexity (Mermaid → NB2)
-- NB2 still doesn't understand graph topology — it stylizes, doesn't verify
-- SynthID watermark on NB2 outputs (cannot be removed)
-
-### Automation Feasibility
-
-**Fully automatable.** Mermaid CLI + NB2 API = complete scripted pipeline. Batch mode available at 50% discount. For 500 diagrams: write Mermaid definitions → validate → send to NB2 API → download results. Estimated ~20 minutes total.
-
-### Cost
-
-| Scenario                               | Cost         |
-| -------------------------------------- | ------------ |
-| 500 diagrams, Mermaid only (free)      | $0           |
-| 500 diagrams, Mermaid handDrawn (free) | $0           |
-| 500 diagrams, Mermaid + NB2 1K (batch) | ~$17         |
-| 500 diagrams, Mermaid + NB2 2K (batch) | ~$25         |
-| 500 diagrams, PaperBanana              | ~$25         |
-| 50/month ongoing (NB2 1K batch)        | ~$1.70/month |
-
----
-
-## Category 3: AI Image Generation
-
-### Google Ecosystem
-
-**Imagen 4:** General-purpose image generator. Cheap ($0.02-0.06/image) but does NOT understand diagram semantics. Arrows and connections are unreliable for 5+ node diagrams.
-
-**Nano Banana 2:** Best text rendering among general image models. Viable for diagrams with labels but still pattern-matches rather than understanding topology.
-
-**PaperBanana:** The standout option — the only tool with structural understanding of diagrams. Multi-agent review loop catches errors. ~$25 for 500 diagrams.
-
-### Chinese Cloud AI Tools
-
-**Qwen-Image-2.0 (Alibaba):** Best for structured infographic generation. Supports ultra-long instructions up to 1,000 tokens — critical for detailed diagram specs. Native 2048x2048. Excellent bilingual text rendering. ~$0.03/image.
-
-**Seedream 5.0 Lite (ByteDance):** Chain-of-thought reasoning for complex visual logic. Real-time web search integration. ~$0.035/image. Better for artistic generation than structured diagrams.
-
-**Kling (Kuaishou):** Too expensive (~$0.14/unit), video-focused. Not recommended.
-
-### Open-Source Models (RTX 3090)
-
-**FLUX.2 Dev:** Best open-source option. Excellent text rendering. Fits in 18-20GB VRAM. ~12-15 seconds per image. LoRA fine-tuning provides style consistency (train on 20-30 reference images, 2-4 hours). ComfyUI enables CSV-driven batch automation.
-
-**SD 3.5 + ControlNet:** The ControlNet approach is powerful — create wireframe diagrams, extract Canny edges, use AI for style only. Solves "hallucinated connections" problem. But text rendering is noticeably worse than FLUX.
-
-### Quality Assessment (Honest Verdict)
-
-**Text labels:** PaperBanana > Qwen-Image-2.0 > NB2 ≈ FLUX.2 > Imagen 4 > SD 3.5
-
-**Arrows/flow indicators:** This is the **weakest area across ALL image generators.** Pure image generators don't understand graph topology.
-
-- Simple 2-3 node diagrams: usually correct
-- 5-10 nodes: frequent errors
-- 10+ nodes: unreliable across all models
-
-**Technical accuracy:** No image generator guarantees correctness. Only PaperBanana has structural understanding.
-
-### Pros
-
-- Can produce visually stunning, unique diagrams (flat-lay, knolling, isometric)
-- Multiple price points from free (FLUX local) to cheap ($15-25 for 500)
-- LoRA training enables rock-solid style consistency (FLUX)
-- Chinese tools offer excellent value and quality
-
-### Cons
-
-- Text labels remain error-prone across all models
-- No structural understanding of diagram semantics (except PaperBanana)
-- Complex diagrams (10+ nodes) are unreliable
-- Style consistency requires either LoRA training or careful prompt engineering
-- Generated diagrams cannot be edited — must regenerate entirely
-
-### Automation Feasibility
-
-**Fully automatable** via APIs (cloud tools) or ComfyUI (local tools). All support batch processing.
-
-### Cost
-
-| Tool               | 500 Images          | 50/month Ongoing |
-| ------------------ | ------------------- | ---------------- |
-| FLUX.2 Dev (local) | Free (~2 hours GPU) | Free             |
-| Qwen-Image-2.0     | $15                 | $1.50            |
-| NB2 (1K, batch)    | $17                 | $1.70            |
-| PaperBanana        | $25                 | $2.50            |
-| Seedream 5.0       | $18                 | $1.75            |
-
----
-
-## Category 4: Remotion + Rough.js
-
-### Overview
-
-Remotion is a React framework for rendering components to images/video. Combined with Rough.js (the same engine powering Excalidraw's hand-drawn look), it creates a fully programmatic diagram pipeline using React components.
-
-### How It Works
-
-1. **Define diagram as React component** with SVG elements
-2. **Wrap in `<RoughSVG>`** from `react-rough-fiber` — automatically converts all SVG primitives to hand-drawn style
-3. **Register as Remotion `<Still>` composition** — renders to PNG/JPEG/WebP
-4. **Batch render** via Node.js API or CLI — pass different data to same template
-
-```tsx
-// Example: Diagram component with hand-drawn style
-import { RoughSVG } from "react-rough-fiber";
-
-const FlowchartDiagram = ({ nodes, connections }) => (
-  <div style={{ width: 1920, height: 1080, background: "#F5F5F5" }}>
-    <RoughSVG options={{ roughness: 1.2, bowing: 0.8, fillStyle: "hachure" }}>
-      <svg viewBox="0 0 1920 1080">
-        {connections.map((c) => (
-          <ConnectionLine {...c} />
-        ))}
-        {nodes.map((n) => (
-          <DiagramNode {...n} />
-        ))}
-      </svg>
-    </RoughSVG>
-  </div>
-);
-```
-
-### Dual-Use Components
-
-The strongest argument for Remotion: the **same React component** works in 3 contexts:
-
-1. **Static PNG** via Remotion for offline content
-2. **Interactive in browser** on lesson pages (hover, click, animate)
-3. **Animated GIF/MP4** via Remotion for video lessons
-
-This means designing a diagram once and using it everywhere.
-
-### Shared Design System
-
-Since Remotion compositions are React, they import GWTH's Tailwind tokens, OKLCH colors, Inter/JetBrains Mono fonts — guaranteed visual consistency with the website.
-
-### Batch Rendering
-
-```bash
-# Single diagram
-npx remotion still --props='{"diagramId":"arch-001"}' flowchart out/arch-001.png
-
-# Batch via Node.js API
-node render-all-diagrams.ts  # loops through JSON dataset
-```
-
-**Performance:** ~0.5-2 seconds per still. 500 diagrams in ~5-17 minutes. CPU-bound (RTX 3090 GPU not a factor for DOM rendering).
-
-### Rough.js Style Options
-
-| Property     | Description              | Recommended Value         |
-| ------------ | ------------------------ | ------------------------- |
-| roughness    | Line wobbliness (0-3+)   | 1.0-1.5 for educational   |
-| bowing       | Line curvature           | 0.5-1.0                   |
-| fillStyle    | Interior fill            | "hachure" (cross-hatched) |
-| fillWeight   | Fill line thickness      | 1.5                       |
-| hachureAngle | Fill line angle          | -41 (default)             |
-| hachureGap   | Fill line spacing        | 4                         |
-| seed         | Deterministic randomness | Fixed per diagram         |
-
-### Licensing
-
-Free for individuals and companies with 3 or fewer employees. Company license: $25/month per seat.
-
-### Pros
-
-- React-native: same language, tools, and design system as GWTH
-- Dual-use: interactive in browser + static PNG + animated MP4
-- Hand-drawn aesthetic via Rough.js (same engine as Excalidraw)
-- Batch rendering is fast and fully scriptable
-- Deterministic output (seed-based randomness)
-- Free for small teams
-- Diagram data is JSON — version-controllable, LLM-generatable
-- 5-10 templates can generate hundreds of variations
-
-### Cons
-
-- Requires building diagram templates (5-10 needed, 2-3 days)
-- Chromium dependency for rendering
-- Sequential rendering recommended (one at a time)
-- react-rough-fiber is a smaller community project
-- The JSON data authoring for 500 diagrams is the real bottleneck, not rendering
-- Adds ~4MB of dev dependencies
-
-### Automation Feasibility
-
-**Fully automatable.** Define diagram data as JSON, run batch render script. LLMs can generate the JSON data from lesson content. Estimated ~10-15 minutes for 500 renders.
-
-### Cost
-
-Free (Remotion is free for small teams, Rough.js is MIT licensed).
-
----
-
-## Category 5: Hybrid Approaches
-
-### Recommended Hybrid: 3 Styles, 2 Workflows
-
-Based on the research, different diagram types need different tools:
-
-| Diagram Type                | Example                    | Recommended Tool       | Style                     |
-| --------------------------- | -------------------------- | ---------------------- | ------------------------- |
-| Flowcharts, data flow       | API pipeline, kanban flow  | Mermaid + NB2          | Swiss Modern / Blueprint  |
-| Architecture, system design | Service topology, infra    | Excalidraw or Remotion | Hand-drawn sketch         |
-| Conceptual, educational     | "How X works", comparisons | Remotion + Rough.js    | Warm sketch + GWTH colors |
-| Infographic, flat-lay       | Process overview, summary  | NB2 or Qwen-Image-2.0  | Flat-lay / knolling       |
-
-### Workflow A: Quick/Simple (Mermaid Pipeline)
-
-For most diagrams (~70% of the 500):
-
-1. Write Mermaid code (or have Claude generate it from lesson content)
-2. Validate with Mermaid MCP tool or CLI
-3. Render with handDrawn look for sketch aesthetic
-4. (Optional) Post-process through NB2 API for polish
-
-**Cost:** Free (Mermaid only) or ~$0.034/image (with NB2 batch)
-**Time:** ~30 seconds per diagram (generation + render)
-**Automation:** Full — scriptable end to end
-
-### Workflow B: Rich/Custom (Remotion Pipeline)
-
-For complex, interactive, or animated diagrams (~30% of the 500):
-
-1. Define diagram data as JSON (nodes, connections, labels)
-2. Select from 5-10 pre-built React templates
-3. Render via Remotion to PNG (static) and/or MP4 (animated)
-4. Same component used interactively on the website
-
-**Cost:** Free
-**Time:** ~2 seconds per diagram (render only, excludes template design)
-**Automation:** Full — JSON data can be LLM-generated from lesson content
-
-### Workflow C: Manual Fallback (Excalidraw)
-
-For one-off complex diagrams or diagrams that need precise manual adjustment:
-
-1. Generate initial JSON via Claude Code skill
-2. Open in Excalidraw for manual refinement
-3. Export via excalirender or Playwright
-
-**Cost:** Free
-**Time:** 5-15 minutes per diagram (manual)
-**Automation:** Semi — initial generation automated, refinement manual
-
----
-
-## Demo Diagrams
-
-Three demos of the "Unified Workflow" have been created:
-
-### Demo 1: Mermaid Standard (LR flowchart)
-
-**File:** `kanban/1_planning/diagrams/unified-workflow-mermaid.md`
-**Style:** Clean, corporate, horizontal flow with subgraphs
-**Rendering:** Via Mermaid Chart MCP tool (PNG)
-**Verdict:** Functional but visually plain. Good for documentation, not for lesson content.
-
-### Demo 2: Mermaid Hand-Drawn (TD flowchart)
-
-**File:** `kanban/1_planning/diagrams/unified-workflow-mermaid-handdrawn.md`
-**Style:** Sketch/hand-drawn via `look: handDrawn` + `theme: neutral`
-**Rendering:** Via Mermaid Chart MCP tool (PNG)
-**Verdict:** Subtle sketch aesthetic with wobbly lines. Better than standard but still "diagram-like." Would benefit from NB2 post-processing for lesson-quality output.
-
-### Demo 3: Excalidraw JSON
-
-**File:** `kanban/1_planning/diagrams/unified-workflow.excalidraw`
-**Style:** Full hand-drawn with roughness=2, hachure fills, colored shapes (blue, green, orange, purple, pink)
-**Rendering:** Open in excalidraw.com or render via excalirender/Playwright
-**Verdict:** Best hand-drawn aesthetic. Colored shapes with hachure fills match David's preferred style. Requires browser or CLI tool to render to image.
-
----
-
-## Recommended Strategy
-
-### Primary Workflow: Mermaid + Nano Banana 2
-
-**For ~70% of diagrams (350 of 500):** flowcharts, data flows, sequences, architecture overviews
-
-1. **Author:** Write Mermaid code (text DSL) — store in repo alongside lesson content
-2. **Store:** `.mmd` files in `content/diagrams/` directory, version-controlled in git
-3. **Validate:** Run `mmdc` CLI or Mermaid MCP tool to verify structure
-4. **Style:** Send validated Mermaid + style prompt to NB2 API
-5. **Output:** PNG at 2K resolution, saved to `public/diagrams/`
-6. **Update:** Edit the `.mmd` file, re-run pipeline — old image replaced automatically
-7. **Batch:** Script processes all changed `.mmd` files, sends to NB2, saves output
-
-**Why this wins:**
-
-- Text-based authoring = fast, version-controllable, LLM-generatable
-- Deterministic structure = no hallucinated connections
-- NB2 styling = presentation-grade output
-- Full automation = no manual steps
-- Cheap = ~$17 for initial 500, ~$1.70/month ongoing
-
-### Secondary Workflow: Remotion + Rough.js
-
-**For ~30% of diagrams (150 of 500):** complex architecture, interactive diagrams, animated walkthroughs
-
-1. **Author:** Define diagram data as JSON (nodes, edges, labels, positions)
-2. **Store:** JSON data files in `content/diagrams/data/`, React templates in `src/diagrams/`
-3. **Render:** Remotion batch script generates PNGs for all diagrams
-4. **Interactive:** Same React components render in-browser with hover/click interactions
-5. **Animated:** Remotion generates MP4/GIF variants for video lessons
-6. **Update:** Edit JSON data, re-run render script
-7. **Batch:** `npm run render:diagrams` processes all changed definitions
-
-**Why this as secondary:**
-
-- React-native = shared design system, dual-use (static + interactive)
-- Rough.js = Excalidraw-quality hand-drawn aesthetic
-- Free = no API costs
-- But: requires building templates (2-3 day investment)
-- And: JSON data authoring is more verbose than Mermaid text
-
-### Manual Fallback: Excalidraw
-
-**For special cases (<5%):** Complex diagrams needing precise layout, one-off illustrations
-
-- Use Claude Code Excalidraw skill for initial generation
-- Refine in excalidraw.com if needed
-- Export via `excalirender` or Playwright
+**Cost:** Free (individual license)
+**Development:** 8-11 days initial investment
+**Style:** Full CSS control, uses GWTH design tokens
+**Scale:** 500 stills in ~10-25 minutes
 
 ---
 
 ## Pipeline Integration Plan
 
-### How Diagrams Fit Into Lesson Authoring
+### How Diagrams Are Authored
 
-```
-Lesson Content Written
-        ↓
-Claude analyzes lesson → generates Mermaid code for key concepts
-        ↓
-Mermaid validated (MCP or CLI)
-        ↓
-  ┌─────────────┬──────────────────┐
-  │ Simple?     │ Complex/Interactive? │
-  │ Mermaid+NB2 │ Remotion+Rough.js    │
-  └──────┬──────┴──────────┬───────────┘
-         ↓                 ↓
-   NB2 API render    Remotion batch render
-         ↓                 ↓
-   public/diagrams/   public/diagrams/
-         ↓                 ↓
-   Referenced in lesson MDX content
-         ↓
-   Next.js build includes optimized images
-```
+**Structural diagrams:** Written as Mermaid DSL (`.mmd` files) in `content/diagrams/` alongside lesson markdown. Claude Code can generate Mermaid from lesson content descriptions.
 
-### Storage Strategy
+**Conceptual illustrations:** Prompt templates in `content/diagram-prompts/` with `[TOPIC]` and `[DESCRIPTION]` placeholders. A script substitutes lesson-specific values and generates images.
+
+### How Diagrams Are Stored
 
 ```
 content/
-├── diagrams/
-│   ├── mermaid/           # .mmd source files (version-controlled)
-│   │   ├── lesson-01/
-│   │   │   ├── api-flow.mmd
-│   │   │   ├── data-pipeline.mmd
-│   │   │   └── ...
-│   │   └── lesson-02/
-│   ├── data/              # JSON definitions for Remotion diagrams
-│   │   ├── lesson-01/
-│   │   │   ├── architecture.json
-│   │   │   └── ...
-│   │   └── ...
-│   └── excalidraw/        # .excalidraw files for manual diagrams
-│       └── ...
-public/
-├── diagrams/              # Rendered output (PNG/SVG, gitignored)
-│   ├── lesson-01/
-│   │   ├── api-flow.png
-│   │   ├── architecture.png
-│   │   └── ...
-│   └── ...
-scripts/
-├── render-diagrams.ts     # Batch render script
-├── sync-mermaid-nb2.ts    # Mermaid → NB2 API pipeline
-└── ...
+  lessons/
+    lesson-01/
+      content.mdx          # Lesson text (references diagrams by path)
+      diagrams/
+        architecture.mmd    # Mermaid source (git-tracked)
+        architecture.svg    # Rendered output (git-tracked or gitignored if generated at build)
+        overview.prompt.md  # AI prompt template (git-tracked)
+        overview.png        # AI-generated image (git-tracked after QA)
 ```
+
+**Source files** (`.mmd`, `.excalidraw`, `.prompt.md`) are always committed.
+**Rendered outputs** (`.svg`, `.png`) can be either:
+
+- Committed to repo (simpler, works offline)
+- Generated at build time (cleaner repo, requires render tools in CI)
+
+Recommendation: Commit rendered outputs for now. Move to build-time generation when the pipeline is more mature.
+
+### How Diagrams Are Updated
+
+1. Edit the `.mmd` source file or `.prompt.md` template
+2. Run render script: `npm run render:diagrams` (wrapper around batch rendering)
+3. Review diffs in PR (SVGs are diffable, PNGs show visual diff in GitHub)
+4. Merge and deploy
 
 ### How Batch Updates Work (50 diagrams/month)
 
-1. **Detect changes:** `git diff --name-only content/diagrams/` shows modified source files
-2. **Re-render changed only:** Script processes only modified `.mmd` or `.json` files
-3. **NB2 batch mode:** Changed Mermaid files sent to NB2 API in batch (50% discount)
-4. **Remotion incremental:** Only re-render changed Remotion compositions
-5. **Deploy:** New PNGs committed to `public/diagrams/`, deployed with next build
+```bash
+# Render all structural diagrams (Mermaid → SVG)
+npm run render:diagrams:structural
 
-**Estimated time for 50 monthly updates:** ~5 minutes (automated script)
-**Estimated cost for 50 monthly updates:** ~$1.70 (NB2 batch at 1K resolution)
+# Render specific AI illustrations (prompts → PNG)
+npm run render:diagrams:illustrations --lessons=1,5,12
+
+# Render all (both pipelines)
+npm run render:diagrams:all
+```
+
+Each script:
+
+1. Finds source files that changed since last render (git diff)
+2. Renders only changed diagrams (incremental)
+3. Reports what was generated
 
 ### Playwright Automation Feasibility
 
-| Approach          | Playwright Needed? | Notes                                         |
-| ----------------- | ------------------ | --------------------------------------------- |
-| Mermaid CLI       | No                 | CLI renders directly                          |
-| Mermaid MCP       | No                 | MCP renders directly                          |
-| NB2 API           | No                 | REST API, no browser                          |
-| Remotion          | No                 | Node.js renderer (Chromium internal)          |
-| Excalidraw render | Yes                | `excalidraw-brute-export-cli` uses Playwright |
-| Excalidraw MCP    | Yes                | `excalidraw-render` uses headless Chromium    |
+| Approach            | Playwright Needed?    | Notes                                |
+| ------------------- | --------------------- | ------------------------------------ |
+| Mermaid CLI         | No                    | mmdc handles rendering natively      |
+| Excalidraw pipeline | No                    | excalidraw-to-svg is headless        |
+| FLUX.2 local        | No                    | ComfyUI or Python diffusers          |
+| Nano Banana 2       | No                    | Direct API calls                     |
+| Remotion            | No                    | renderStill() uses built-in Chromium |
+| Excalidraw web app  | Yes (not recommended) | Fragile, slow, unnecessary           |
 
-**Verdict:** Playwright is only needed for Excalidraw workflows. The primary (Mermaid+NB2) and secondary (Remotion) workflows are fully scriptable without Playwright.
+**Verdict:** Playwright automation is not needed for any recommended workflow. All tools have CLI/API interfaces.
 
 ---
 
@@ -549,130 +501,118 @@ scripts/
 
 ### Initial 500 Diagrams
 
-| Item                      | Quantity     | Unit Cost            | Total    |
-| ------------------------- | ------------ | -------------------- | -------- |
-| Mermaid source authoring  | 350          | Free (LLM-generated) | $0       |
-| NB2 rendering (1K, batch) | 350          | $0.034               | $11.90   |
-| Remotion template design  | 10 templates | Free (labor)         | $0       |
-| Remotion rendering        | 150          | Free (local compute) | $0       |
-| Excalidraw one-offs       | ~25          | Free                 | $0       |
-| **Total**                 | **500**      |                      | **~$12** |
+| Category                              | Count   | Tool                 | Cost   |
+| ------------------------------------- | ------- | -------------------- | ------ |
+| Structural (flowcharts, architecture) | 400     | Mermaid + Excalidraw | $0     |
+| Conceptual illustrations              | 100     | FLUX.2 Dev (local)   | $0     |
+| **Total**                             | **500** |                      | **$0** |
 
-### Monthly Ongoing (50 diagrams/month)
+If using cloud AI instead of local:
+| Category | Count | Tool | Cost |
+|----------|-------|------|------|
+| Structural | 400 | Mermaid + Excalidraw | $0 |
+| Conceptual | 100 | Nano Banana 2 (batch) | $3.00 |
+| **Total** | **500** | | **$3.00** |
 
-| Item                  | Quantity | Unit Cost | Total/month      |
-| --------------------- | -------- | --------- | ---------------- |
-| Mermaid updates + NB2 | ~35      | $0.034    | $1.19            |
-| Remotion re-renders   | ~15      | Free      | $0               |
-| **Total**             | **50**   |           | **~$1.20/month** |
+### Ongoing 50 Diagrams/Month
 
-### If Using 2K Resolution
+| Category           | Count  | Tool                 | Cost/Month   |
+| ------------------ | ------ | -------------------- | ------------ |
+| Structural updates | 40     | Mermaid + Excalidraw | $0           |
+| Conceptual updates | 10     | FLUX.2 Dev (local)   | $0           |
+| **Total**          | **50** |                      | **$0/month** |
 
-| Scenario     | 500 Initial | 50/month |
-| ------------ | ----------- | -------- |
-| NB2 1K batch | $12         | $1.20    |
-| NB2 2K batch | $18         | $1.75    |
-| NB2 4K batch | $27         | $2.66    |
+Cloud alternative: $0.30/month for Nano Banana 2
 
----
+### Annual Total
 
-## Implementation Roadmap
+- **All local:** $0/year
+- **With cloud AI for illustrations:** ~$6.60/year
+- **Premium option (all Nano Banana 2):** ~$21/year
 
-### Phase 1: Quick Wins (Now)
+### LoRA Training (One-Time)
 
-- [x] Mermaid MCP tool already available — can generate diagrams immediately
-- [ ] Set up Mermaid handDrawn rendering for sketch aesthetic
-- [ ] Test NB2 API with a few Mermaid diagrams to validate quality
+- 25 reference images (curate manually): 2-3 hours of curation
+- Training on RTX 3090: ~30 minutes
+- Cost: $0 (local compute)
 
-### Phase 2: Pipeline Setup (1-2 days)
+### Remotion Development (One-Time, Phase 2)
 
-- [ ] Create `content/diagrams/mermaid/` directory structure
-- [ ] Write `scripts/sync-mermaid-nb2.ts` batch processing script
-- [ ] Set up Google Cloud API key for NB2
-- [ ] Define 3-4 style prompt templates (Swiss Modern, Blueprint, Educational Sketch)
-- [ ] Generate first 10 production diagrams to validate quality
-
-### Phase 3: Remotion Templates (2-3 days)
-
-- [ ] Install Remotion + react-rough-fiber as dev dependencies
-- [ ] Build 5-10 diagram templates (flowchart, architecture, data flow, timeline, comparison)
-- [ ] Create `scripts/render-diagrams.ts` batch render script
-- [ ] Test dual-use: same component renders in browser + Remotion
-
-### Phase 4: Scale (Ongoing)
-
-- [ ] Generate diagrams for all 100 lessons as content is written
-- [ ] Monthly batch updates as lesson content evolves
-- [ ] Refine style prompts and templates based on feedback
+- 8-11 developer days
+- Cost: Developer time only (Remotion is free for individuals)
 
 ---
 
-## Appendix: Diagram Style Prompts
+## Demo Diagrams
 
-### For Nano Banana 2 (educational diagrams)
+Three demos of the "Unified Workflow" have been produced and saved in `kanban/1_planning/diagrams/`:
 
-**Swiss Modern:**
+### Demo 1: Mermaid (hand-drawn look)
 
-```
-Transform this technical diagram into a clean Swiss Modernism style visualization.
-Use a structured grid layout with clear hierarchy. Sans-serif typography.
-Muted blue and teal color palette (#33BBFF, #1CBA93, #0F2624).
-White background. Thin connecting lines with directional arrows.
-Professional and authoritative. Educational context.
-```
+- **Source:** `unified-workflow-mermaid.mmd`
+- **Output:** Rendered via Mermaid Chart MCP with `look: handDrawn, theme: neutral`
+- **Style:** Sketchy lines, hand-written feel, subgraph groupings
+- **Verdict:** Good for structural accuracy. The hand-drawn look softens the "corporate diagram" feel. Fast to author and update.
 
-**Blueprint:**
+### Demo 2: Excalidraw (programmatic JSON)
 
-```
-Render this diagram as a technical blueprint. Dark navy background (#0F2624)
-with white and cyan (#33BBFF) line work. Grid pattern overlay.
-Monospace labels. Engineering/technical aesthetic. Clean arrows
-and connection lines. Educational diagram for a software engineering course.
-```
+- **Source:** `unified-workflow-excalidraw.excalidraw`
+- **Style:** roughness=2, Virgil font, hachure fill, pastel colors
+- **Verdict:** The most authentic hand-drawn aesthetic. JSON is machine-generated. Can be opened in Excalidraw web app for manual touch-ups. Requires excalidraw-to-svg for rendering.
 
-**Hand-Drawn Infographic:**
+### Demo 3: Remotion Spec (data-driven JSON)
 
-```
-Create a hand-drawn style infographic explaining this concept.
-Warm, approachable aesthetic. Sketchy lines and organic shapes.
-Soft colors (aqua #33BBFF, mint #1CBA93, warm grey).
-Simple icons and labels. Directional flow with hand-drawn arrows.
-Top-down bird's eye view. Clean light background.
-Educational and easy to understand.
-```
+- **Source:** `unified-workflow-remotion-spec.json`
+- **Style:** Defines nodes, edges, colors, and animation parameters
+- **Verdict:** Not renderable without the Remotion component library (which needs to be built). But shows how diagram data would be structured. The same data drives both static and animated output.
 
-### For FLUX.2 Dev LoRA (if using local generation)
+### Bonus: AI Image Prompt
 
-**Training prompt template:**
-
-```
-educational diagram, hand-drawn sketch style, thick outlines,
-hachure fill pattern, rounded corners, directional arrows,
-labeled components, aqua and mint color scheme, white background,
-clean layout, technical illustration, software engineering concept
-```
+- **Source:** `unified-workflow-ai-prompt.md`
+- **Style:** Flat-lay knolling infographic prompt
+- **Verdict:** Would produce a visually stunning but non-editable image. Best for hero/overview diagrams, not for detailed technical flows.
 
 ---
 
-## References
+## Final Recommendation
 
-### Articles
+### Start With (Week 1)
 
-- [Stop Using Ugly Charts — Mermaid + Nano Banana 2](https://itnext.io/stop-using-ugly-charts-how-to-build-pro-level-diagrams-with-mermaid-js-and-nano-banana-2-f2c96d914350)
-- [Claude Code Excalidraw Skill](https://dev.to/yooi/custom-claude-code-skill-auto-generating-updating-architecture-diagrams-with-excalidraw-227k)
-- [Google Nano Banana 2 Blog](https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/)
-- [PaperBanana — Automated Scientific Diagrams](https://www.marktechpost.com/2026/02/07/google-ai-introduces-paperbanana-an-agentic-framework-that-automates-publication-ready-methodology-diagrams-and-statistical-plots/)
+1. **Mermaid DSL** as the universal source format for all structural diagrams
+2. **Mermaid CLI** (`mmdc`) for rendering with hand-drawn look where supported
+3. **Mermaid Chart MCP** for quick validation during authoring in Claude Code
 
-### Tools
+### Add Next (Week 2-3)
 
-- [Mermaid.js](https://mermaid.js.org/) / [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) / [Mermaid Chart MCP](https://mermaid.ai/)
-- [Excalidraw](https://excalidraw.com/) / [excalirender](https://github.com/JonRC/excalirender) / [excalidraw-render MCP](https://github.com/bassimeledath/excalidraw-render)
-- [Remotion](https://www.remotion.dev/) / [Rough.js](https://roughjs.com/) / [react-rough-fiber](https://react-rough-fiber.amind.app/)
-- [FLUX.2 Dev](https://bfl.ai/blog/flux-2) / [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
-- [Qwen-Image-2.0](https://www.alibabacloud.com/help/en/model-studio/models) / [Seedream 5.0](https://seed.bytedance.com/en/)
+4. **Excalidraw pipeline** for diagrams needing authentic hand-drawn aesthetic beyond what Mermaid's hand-drawn look provides
+5. **FLUX.2 + LoRA** for 100 conceptual/illustrative diagrams (train LoRA first)
 
-### Demo Files
+### Add Later (Month 2+)
 
-- `kanban/1_planning/diagrams/unified-workflow-mermaid.md` — Mermaid standard demo
-- `kanban/1_planning/diagrams/unified-workflow-mermaid-handdrawn.md` — Mermaid handDrawn demo
-- `kanban/1_planning/diagrams/unified-workflow.excalidraw` — Excalidraw JSON demo
+6. **Remotion** for animated diagram walkthroughs when video lesson production begins
+
+### Summary
+
+The beauty of this approach is that **Mermaid DSL is the single source of truth** for 80% of diagrams. It is text-based (version-controllable), supports 24 diagram types, and can be rendered through multiple backends:
+
+- Default Mermaid rendering (clean, functional)
+- Mermaid hand-drawn look (sketch aesthetic)
+- Mermaid → Excalidraw → SVG (authentic hand-drawn)
+- Mermaid → Nano Banana 2 (AI-polished premium)
+
+If any rendering approach becomes inadequate, you switch the backend without changing the source files.
+
+---
+
+## Review Checklist — 2026-03-03
+
+- [ ] Scope is correctly bounded (not too broad, not too narrow)
+- [ ] All 5 categories researched with pros/cons
+- [ ] Comparison table covers: tool name, automation, cost, local, style consistency, output format
+- [ ] 3 demo diagrams produced and saved
+- [ ] Clear recommendation for primary + secondary workflow
+- [ ] Pipeline integration plan included
+- [ ] Cost estimate for 500 initial + 50/month ongoing
+- [ ] No unexpected dependencies introduced
+
+**Review this plan:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PLAN_2026-03-02_diagramming-research.md`
