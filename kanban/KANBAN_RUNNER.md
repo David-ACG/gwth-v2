@@ -43,7 +43,7 @@ After implementing a prompt, Claude runs tests, verifies with Playwright, and ap
 
 ### Gate 4: Testing Handoff
 
-After implementation, Claude appends a timestamped testing checklist to the prompt file, moves it to `2_testing/`, and asks David to verify.
+After implementation, Claude appends a timestamped testing checklist to the prompt file — including an explicit **Actions for David** section that states exactly what David needs to do (or says "No actions required"). Then moves the file to `2_testing/` and tells David.
 
 **Full gate specifications are in the global CLAUDE.md** (`~/.claude/CLAUDE.md` > Kanban Workflow section).
 

@@ -144,6 +144,11 @@ PIPELINE — After implementing the changes, follow these steps in order:
    - [ ] Mobile responsive (if applicable)
    - [ ] No console errors
 
+   ### Actions for David
+   <Tell David exactly what he needs to do — e.g. "Visit the URL above and verify the feature works" or "No actions required — this was a backend-only change". NEVER omit this section.>
+
+   **Review this file:** \`file:///\${FILE}\`
+
 8. REPORT: Summarize what was changed, committed, pushed, and whether P520 deploy succeeded.
 
 DO NOT deploy to Hetzner production — that happens separately after user verification on P520.

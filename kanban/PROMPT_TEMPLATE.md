@@ -47,3 +47,7 @@
 ## Testing Checklist
 
 <!-- Appended by Claude with timestamp (Gate 4) -->
+
+### Actions for David
+
+<!-- ALWAYS include this section. State what David needs to do, or explicitly say "No actions required." -->
