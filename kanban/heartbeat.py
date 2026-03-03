@@ -209,6 +209,30 @@ def check_endpoint(name, url):
         return "FAIL", f"{name} unreachable: {e}"
 
 
+DOLT_START_BAT = Path(os.environ.get("LOCALAPPDATA", "")) / "beads" / "start-dolt.bat"
+
+
+def restart_dolt():
+    """Attempt to restart the Dolt SQL server. Returns (success, message)."""
+    if not DOLT_START_BAT.exists():
+        return False, f"start-dolt.bat not found at {DOLT_START_BAT}"
+    try:
+        subprocess.Popen(
+            ["cmd", "/c", str(DOLT_START_BAT)],
+            creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        # Wait a few seconds for Dolt to start up
+        import time
+        time.sleep(5)
+        # Verify it's actually up now
+        with socket.create_connection(("127.0.0.1", 3307), timeout=5):
+            return True, "Dolt server restarted successfully"
+    except Exception as e:
+        return False, f"Failed to restart Dolt: {e}"
+
+
 def check_dolt_server(host="127.0.0.1", port=3307, timeout=5):
     """Check if the Dolt SQL server is reachable on the expected port."""
     try:
@@ -244,29 +268,29 @@ def check_pipeline_integrity():
     """
     End-to-end check: every Linear "idea" issue should have a Beads issue
     with issue_type=idea AND a kanban file in 0_idea/ (or be tracked in state).
+    Also checks closed Beads issues so already-handled ideas aren't flagged.
     Returns (status, message, orphans_list).
     """
     linear_ideas = query_linear_ideas()
     if not linear_ideas:
         return "OK", "No Linear ideas to check (or API unavailable)", []
 
-    # Get open Beads issues
-    ok, output = run_bd("list", "--status=open", "--json")
-    if not ok:
-        return "WARN", "Could not list Beads issues for pipeline check", []
-
-    try:
-        issues = json.loads(output)
-    except json.JSONDecodeError:
-        return "WARN", "Could not parse Beads issues for pipeline check", []
-
-    # Map Linear identifiers to Beads issues
+    # Get ALL Beads issues (open + closed) to avoid false positives
     linear_to_beads = {}
-    for issue in issues:
-        ext_ref = issue.get("external_ref", "")
-        linear_id = extract_linear_identifier(ext_ref)
-        if linear_id:
-            linear_to_beads[linear_id] = issue
+    for status_filter in ("--status=open", "--status=closed"):
+        ok, output = run_bd("list", status_filter, "--json")
+        if ok:
+            try:
+                for issue in json.loads(output):
+                    ext_ref = issue.get("external_ref", "")
+                    linear_id = extract_linear_identifier(ext_ref)
+                    if linear_id:
+                        linear_to_beads[linear_id] = issue
+            except json.JSONDecodeError:
+                pass
+
+    if not linear_to_beads:
+        return "WARN", "Could not list Beads issues for pipeline check", []
 
     # Check each Linear idea
     kanban_state = load_state()
@@ -276,6 +300,9 @@ def check_pipeline_integrity():
         beads_issue = linear_to_beads.get(linear_id)
         if not beads_issue:
             orphans.append(f"{linear_id}: not in Beads")
+            continue
+        # Skip closed issues — they've been handled
+        if beads_issue.get("status") == "closed":
             continue
         if beads_issue.get("issue_type") != "idea":
             orphans.append(f"{linear_id} ({beads_issue.get('id', '?')}): wrong type '{beads_issue.get('issue_type')}'")
@@ -427,8 +454,17 @@ def main():
         if status != "OK":
             has_issues = True
 
-    # 3. Dolt server health (Beads dependency)
+    # 3. Dolt server health (Beads dependency) — auto-restart if down
     dolt_status, msg = check_dolt_server()
+    if dolt_status != "OK":
+        log("Dolt server down — attempting auto-restart...")
+        restart_ok, restart_msg = restart_dolt()
+        if restart_ok:
+            dolt_status = "OK"
+            msg = f"Dolt server auto-restarted (was down)"
+            repairs.append(f"Dolt auto-restart: {restart_msg}")
+        else:
+            repairs.append(f"Dolt auto-restart failed: {restart_msg}")
     emoji = {"OK": "\u2705", "WARN": "\u26a0\ufe0f", "FAIL": "\u274c"}.get(dolt_status, "\u2753")
     results.append(f"{emoji} <b>Dolt:</b> {msg}")
     if dolt_status != "OK":
