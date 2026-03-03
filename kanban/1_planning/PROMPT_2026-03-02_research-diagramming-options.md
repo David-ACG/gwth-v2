@@ -81,3 +81,55 @@ Investigate these categories of tools:
 - Scale matters: 500 diagrams initially, changing ~50/month. Manual tools are not viable long-term.
 - RTX 3090 is available on the local workstation for running open-source models
 - This is research only — no code changes to the GWTH app in this task
+
+---
+
+## Implementation Notes — 2026-03-03 17:08
+
+- **Commit:** 7c831ea docs: add diagramming research for GWTH lesson content (GWTH-12)
+- **Tests:** 14 files passed, 110 tests passed (no test changes — research only)
+- **Verification URL:** http://192.168.178.50:3001 (P520 test)
+- **Playwright check:** N/A — research task, no UI changes
+- **Changes summary:**
+  - Created comprehensive research document `PLAN_2026-03-02_diagramming-research.md` covering all 5 categories (Excalidraw, Mermaid+AI, AI image generation, Remotion, hybrid approaches)
+  - Includes 10-tool comparison table with automation level, cost, local/cloud, style consistency, output format
+  - Top 3 recommendations with rationale and workflows
+  - Pipeline integration plan (authoring, storage, updates, batch rendering)
+  - Cost estimates ($0/year with local tools, ~$21/year with cloud AI)
+  - Created 4 demo source files in `kanban/1_planning/diagrams/`:
+    - `unified-workflow-mermaid.mmd` — Mermaid DSL with hand-drawn look (rendered via MCP)
+    - `unified-workflow-excalidraw.excalidraw` — Programmatic Excalidraw JSON (roughness=2, Virgil font)
+    - `unified-workflow-remotion-spec.json` — Remotion-compatible data spec with animation config
+    - `unified-workflow-ai-prompt.md` — Flat-lay knolling prompt for AI image generation
+- **Deviations from plan:** Demo diagrams saved as source files rather than rendered PNG/SVG, because rendering tools (excalidraw-to-svg, mmdc CLI) are not installed in this environment. The Mermaid diagram was rendered via the MCP tool (screenshot available in the conversation). The Excalidraw JSON can be opened at excalidraw.com to view/export.
+- **Follow-up issues:**
+  - Install `@mermaid-js/mermaid-cli` and `excalidraw-to-svg` for batch rendering
+  - Train FLUX.2 LoRA on 25 curated reference images for knolling style
+  - Build Remotion diagram component library (8-11 days, Phase 2)
+  - Create `npm run render:diagrams` script for CI/CD integration
+
+---
+
+## Testing Checklist — 2026-03-03 17:08
+
+**Check the changes:** http://192.168.178.50:3001
+
+- [ ] Page loads without errors
+- [ ] Research document is complete and readable at `kanban/1_planning/PLAN_2026-03-02_diagramming-research.md`
+- [ ] All 5 categories covered with pros/cons
+- [ ] Comparison table has all required columns
+- [ ] 3+ demo source files saved in `kanban/1_planning/diagrams/`
+- [ ] Excalidraw JSON opens correctly at https://excalidraw.com (paste content)
+- [ ] Mermaid source renders at https://mermaid.live (paste content)
+- [ ] Recommendations are clear and actionable
+- [ ] Cost estimates included
+
+### Actions for David
+
+1. **Review the research document:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PLAN_2026-03-02_diagramming-research.md`
+2. **View the Mermaid demo:** Open `kanban/1_planning/diagrams/unified-workflow-mermaid.mmd` at https://mermaid.live to see the hand-drawn rendering
+3. **View the Excalidraw demo:** Open https://excalidraw.com, then File > Open and select `kanban/1_planning/diagrams/unified-workflow-excalidraw.excalidraw`
+4. **Decide on primary workflow:** The recommendation is Mermaid+Excalidraw for structural (80%) + FLUX.2/LoRA for conceptual (20%). Approve or suggest changes.
+5. **Decide on Remotion:** Is the animated diagram capability (Phase 2) worth the 8-11 day development investment?
+
+**Review this file:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PROMPT_2026-03-02_research-diagramming-options.md`
