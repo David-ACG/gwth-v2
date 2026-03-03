@@ -163,7 +163,9 @@
       "Bash(env:*)",
       "Bash(cmd:*)",
       "Bash(bd search:*)",
-      "Bash(bd create:*)"
+      "Bash(bd create:*)",
+      "Bash(bd update:*)",
+      "Bash(where python:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
