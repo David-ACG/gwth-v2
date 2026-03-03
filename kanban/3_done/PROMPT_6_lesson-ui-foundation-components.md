@@ -22,19 +22,19 @@ Replace the current hand-rolled markdown parser in `src/components/shared/markdo
 
 Create a new `src/components/lesson/` directory with these components:
 
-| Component | File | Description |
-|-----------|------|-------------|
-| `CalloutBox` | `callout-box.tsx` | 4 variants: note (primary/aqua), warning (amber), tip (green), deep-dive (accent/mint, collapsible). Left-border style per spec. |
-| `CollapsibleSection` | `collapsible-section.tsx` | Animated expand/collapse with Motion. Chevron rotates. Used by deep-dive callouts. |
-| `TableOfContents` | `table-of-contents.tsx` | Right-side sticky TOC. Scroll-spy with Intersection Observer. Shows H2/H3. Hidden < 1024px. |
-| `ObjectivesCard` | `objectives-card.tsx` | Card with "What you'll learn" header, icon list of objectives. `bg-primary/5` border accent. |
-| `KeyTermTooltip` | `key-term-tooltip.tsx` | Inline dotted-underline term with shadcn Tooltip showing definition. Accessible. |
-| `ImageLightbox` | `image-lightbox.tsx` | Click-to-expand image in fullscreen overlay. Motion animation. Close on Escape/click-outside. Caption support. |
-| `StepProgress` | `step-progress.tsx` | Numbered milestone list with checkboxes, vertical connecting line, progress bar at top. |
-| `CodeBlock` | `code-block.tsx` | Shiki-highlighted code with copy button (top-right), optional filename label, optional line highlighting. Light/dark theme. |
-| `QuizSection` | `quiz-section.tsx` | Inline quiz (not tabbed). 3 questions with radio options, immediate feedback, score summary. Reuses existing QuizQuestion type. |
-| `AudioBar` | `audio-bar.tsx` | Compact "Listen to this lesson" bar with play/pause, progress, speed control. Collapsible. |
-| `LessonSection` | `lesson-section.tsx` | Wrapper component that adds consistent spacing and optional section numbering. |
+| Component            | File                      | Description                                                                                                                      |
+| -------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `CalloutBox`         | `callout-box.tsx`         | 4 variants: note (primary/aqua), warning (amber), tip (green), deep-dive (accent/mint, collapsible). Left-border style per spec. |
+| `CollapsibleSection` | `collapsible-section.tsx` | Animated expand/collapse with Motion. Chevron rotates. Used by deep-dive callouts.                                               |
+| `TableOfContents`    | `table-of-contents.tsx`   | Right-side sticky TOC. Scroll-spy with Intersection Observer. Shows H2/H3. Hidden < 1024px.                                      |
+| `ObjectivesCard`     | `objectives-card.tsx`     | Card with "What you'll learn" header, icon list of objectives. `bg-primary/5` border accent.                                     |
+| `KeyTermTooltip`     | `key-term-tooltip.tsx`    | Inline dotted-underline term with shadcn Tooltip showing definition. Accessible.                                                 |
+| `ImageLightbox`      | `image-lightbox.tsx`      | Click-to-expand image in fullscreen overlay. Motion animation. Close on Escape/click-outside. Caption support.                   |
+| `StepProgress`       | `step-progress.tsx`       | Numbered milestone list with checkboxes, vertical connecting line, progress bar at top.                                          |
+| `CodeBlock`          | `code-block.tsx`          | Shiki-highlighted code with copy button (top-right), optional filename label, optional line highlighting. Light/dark theme.      |
+| `QuizSection`        | `quiz-section.tsx`        | Inline quiz (not tabbed). 3 questions with radio options, immediate feedback, score summary. Reuses existing QuizQuestion type.  |
+| `AudioBar`           | `audio-bar.tsx`           | Compact "Listen to this lesson" bar with play/pause, progress, speed control. Collapsible.                                       |
+| `LessonSection`      | `lesson-section.tsx`      | Wrapper component that adds consistent spacing and optional section numbering.                                                   |
 
 ### 3. Typography Updates
 
