@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mermaid - GWTH Unified Workflow (Hand-Drawn)</title>
+  <style>
+    body { margin: 0; padding: 40px; background: #ffffff; display: flex; justify-content: center; }
+    #diagram { max-width: 1200px; }
+    h2 { font-family: sans-serif; text-align: center; color: #333; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div>
+    <h2>1. Mermaid.js (Hand-Drawn Look)</h2>
+    <pre id="diagram" class="mermaid">
+---
+config:
+  look: handDrawn
+  theme: neutral
+---
+flowchart TD
+    subgraph intake["Idea Intake"]
+        phone["Phone/Linear<br/>(idea label)"]
+        claude["Claude Session<br/>(bd create)"]
+        manual["Manual<br/>(.md file)"]
+    end
+
+    subgraph sync["Hourly Sync (:00)"]
+        unified["unified-sync.py<br/>Linear &gt; Beads &gt; Kanban"]
+    end
+
+    subgraph pipeline["Kanban Pipeline"]
+        idea["0_idea/<br/>Raw ideas"]
+        review{"Review &amp; Triage"}
+        planning["1_planning/<br/>PROMPT_*.md files"]
+        execute["run-kanban.sh<br/>bd stats + bd ready<br/>Auto-claim + Execute"]
+        testing["2_testing/<br/>Verify on P520"]
+        promote["promote.sh<br/>Deploy to Hetzner<br/>bd linear sync --push"]
+        done["3_done/<br/>Archived"]
+    end
+
+    subgraph monitor["Heartbeat (:30)"]
+        heartbeat["heartbeat.py<br/>Sync freshness<br/>P520 + Hetzner health<br/>Dolt server check"]
+        telegram["Telegram<br/>(alerts only)"]
+    end
+
+    phone --> unified
+    claude --> idea
+    manual --> idea
+    unified --> idea
+
+    idea --> review
+    review --> planning
+    planning --> execute
+    execute --> testing
+    testing --> promote
+    promote --> done
+
+    execute -.->|bd close| unified
+    heartbeat --> telegram
+    </pre>
+  </div>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      look: 'handDrawn',
+      theme: 'neutral',
+      flowchart: {
+        htmlLabels: true,
+        curve: 'basis'
+      }
+    });
+  </script>
+</body>
+</html>

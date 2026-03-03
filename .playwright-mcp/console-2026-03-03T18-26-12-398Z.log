@@ -1,0 +1,7 @@
+[     187ms] [WARNING] Error with Feature-Policy header: Unrecognized feature: '*'. @ :0
+[   11655ms] [WARNING] AbortError: Failed to execute 'showOpenFilePicker' on 'Window': Intercepted by Page.setInterceptFileChooserDialog().
+    at Module.p (https://excalidraw.com/assets/file-open-002ab408-DIuFHtCF.js:1:315)
+    at gve (https://excalidraw.com/assets/index-D5QAYKVL.js:150:304409)
+    at async JI (https://excalidraw.com/assets/index-D5QAYKVL.js:150:305000)
+    at async bve (https://excalidraw.com/assets/index-D5QAYKVL.js:150:306461)
+    at async Object.perform (https://excalidraw.com/assets/index-D5QAYKVL.js:156:4001) @ https://excalidraw.com/assets/index-D5QAYKVL.js:66

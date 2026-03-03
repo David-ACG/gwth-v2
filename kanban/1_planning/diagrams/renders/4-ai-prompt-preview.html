@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AI Image Generation Prompt Preview</title>
+  <style>
+    body { margin: 0; padding: 40px; background: #f5f5f5; font-family: sans-serif; max-width: 800px; margin: 0 auto; }
+    h2 { text-align: center; color: #333; margin-bottom: 20px; }
+    .prompt-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .style-tag {
+      display: inline-block;
+      background: #e8f4f8;
+      color: #0d4f4f;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin: 4px;
+    }
+    .prompt-text {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: 'Georgia', serif;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #444;
+      white-space: pre-wrap;
+    }
+    .params {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .param {
+      background: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .param strong { color: #333; }
+    .note {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .placeholder {
+      background: linear-gradient(135deg, #e8f4f8 0%, #f0f4ff 50%, #fdf8f6 100%);
+      border: 2px dashed #999;
+      border-radius: 12px;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .placeholder .icon { font-size: 48px; margin-bottom: 10px; opacity: 0.5; }
+    .placeholder .sub { font-size: 13px; color: #999; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <h2>4. AI Image Generation (Flat-Lay Knolling Prompt)</h2>
+
+  <div class="placeholder">
+    <div class="icon">&#x1f3a8;</div>
+    <div>Requires AI image generation model to render</div>
+    <div class="sub">FLUX.2 Dev (local RTX 3090) or GPT Image / Nano Banana 2 (cloud)</div>
+  </div>
+
+  <div class="prompt-card">
+    <h3>Generation Prompt</h3>
+    <div style="margin-bottom: 12px;">
+      <span class="style-tag">Flat-lay</span>
+      <span class="style-tag">Knolling</span>
+      <span class="style-tag">Infographic</span>
+      <span class="style-tag">Bird's-eye view</span>
+    </div>
+    <div class="prompt-text">High-quality flat lay photography creating a DIY infographic that explains the GWTH Kanban Workflow pipeline, arranged on a clean, light gray textured background. The visual story flows from top to bottom in clear steps.
+
+At the top: three input sources (a smartphone with "Linear" on screen, a laptop showing "Claude Code", and a notepad with a pencil representing manual file creation) feed into a central folder labeled "0_idea".
+
+Below that: a review/triage step shown as a magnifying glass over papers, leading to a planning folder labeled "1_planning" with prompt documents.
+
+Center: a gear/cog mechanism representing "run-kanban.sh" execution with small labels showing "bd stats", "bd ready", and "auto-claim".
+
+Below: a testing station with a server rack labeled "P520" and a checkmark, then a rocket icon for "promote.sh" deploying to a cloud labeled "Hetzner".
+
+At the bottom: an archive box labeled "3_done".
+
+On the right side: a heartbeat monitor showing health checks, connected to a phone with Telegram alerts.
+
+Simple, clean black arrows are hand-drawn onto the background to guide the viewer's eye between each step. The overall mood is educational, modern, and easy to understand. The image is shot from a top-down, bird's-eye view with soft, even lighting that minimizes shadows.</div>
+  </div>
+
+  <div class="prompt-card">
+    <h3>Style Parameters</h3>
+    <div class="params">
+      <div class="param"><strong>Resolution:</strong> 1024x1536</div>
+      <div class="param"><strong>Style:</strong> Flat-lay knolling</div>
+      <div class="param"><strong>Background:</strong> Light gray textured</div>
+      <div class="param"><strong>Arrows:</strong> Hand-drawn black</div>
+      <div class="param"><strong>Perspective:</strong> Overhead / bird's-eye</div>
+      <div class="param"><strong>Lighting:</strong> Soft, even, minimal shadows</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> This approach outputs a raster image (PNG/JPEG) — not an editable diagram.
+    Best suited for conceptual/hero diagrams where visual appeal matters more than editability.
+    For text-heavy diagrams, generate without text labels and overlay them programmatically.
+  </div>
+</body>
+</html>

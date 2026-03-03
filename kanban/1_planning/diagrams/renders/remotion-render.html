@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Remotion-Style - GWTH Unified Workflow (Rough.js)</title>
+  <style>
+    body { margin: 0; padding: 40px; background: #ffffff; display: flex; flex-direction: column; align-items: center; }
+    h2 { font-family: sans-serif; text-align: center; color: #333; margin-bottom: 20px; }
+    canvas { display: none; }
+    svg { max-width: 1200px; }
+  </style>
+</head>
+<body>
+  <h2>3. Remotion/Rough.js (Hand-Drawn SVG)</h2>
+  <div id="diagram"></div>
+  <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
+  <script>
+    const spec = {
+      nodes: [
+        { id: "phone", label: "Phone/Linear\n(idea label)", x: 40, y: 60, w: 180, h: 60, color: "#b2f2bb", group: "intake" },
+        { id: "claude", label: "Claude Session\n(bd create)", x: 260, y: 60, w: 180, h: 60, color: "#ffd8a8", group: "intake" },
+        { id: "manual", label: "Manual\n(.md file)", x: 480, y: 60, w: 180, h: 60, color: "#d0bfff", group: "intake" },
+        { id: "unified", label: "unified-sync.py\nHourly @ :00\nLinear > Beads > Kanban", x: 40, y: 200, w: 220, h: 70, color: "#fff3bf", group: "sync" },
+        { id: "idea", label: "0_idea/\nRaw ideas", x: 300, y: 200, w: 160, h: 60, color: "#c3fae8", group: "pipeline" },
+        { id: "review", label: "Review\n& Triage", x: 320, y: 320, w: 120, h: 80, color: "#ffc9c9", group: "pipeline", diamond: true },
+        { id: "planning", label: "1_planning/\nPROMPT_*.md", x: 290, y: 450, w: 180, h: 60, color: "#a5d8ff", group: "pipeline" },
+        { id: "execute", label: "run-kanban.sh\nbd stats + bd ready\nAuto-claim + Execute", x: 270, y: 560, w: 220, h: 80, color: "#ffd8a8", group: "pipeline" },
+        { id: "testing", label: "2_testing/\nVerify on P520", x: 290, y: 700, w: 180, h: 60, color: "#d0bfff", group: "pipeline" },
+        { id: "promote", label: "promote.sh\nDeploy to Hetzner\nbd linear sync --push", x: 270, y: 820, w: 220, h: 70, color: "#b2f2bb", group: "pipeline" },
+        { id: "done", label: "3_done/\nArchived", x: 310, y: 940, w: 140, h: 50, color: "#b2f2bb", group: "pipeline" },
+        { id: "heartbeat", label: "heartbeat.py\nHourly @ :30\nSync freshness\nP520 + Hetzner health", x: 560, y: 500, w: 200, h: 110, color: "#ffc9c9", group: "monitor" },
+        { id: "telegram", label: "Telegram\n(alerts only)", x: 590, y: 660, w: 140, h: 50, color: "#a5d8ff", group: "monitor" }
+      ],
+      edges: [
+        { from: "phone", to: "unified" },
+        { from: "claude", to: "idea" },
+        { from: "manual", to: "idea" },
+        { from: "unified", to: "idea" },
+        { from: "idea", to: "review" },
+        { from: "review", to: "planning" },
+        { from: "planning", to: "execute" },
+        { from: "execute", to: "testing" },
+        { from: "testing", to: "promote" },
+        { from: "promote", to: "done" },
+        { from: "heartbeat", to: "telegram" },
+        { from: "execute", to: "unified", label: "bd close", dashed: true }
+      ],
+      groups: {
+        intake: { label: "Idea Intake", x: 20, y: 20, w: 680, h: 120, color: "#a5d8ff" },
+        sync: { label: "Hourly Sync (:00)", x: 20, y: 170, w: 250, h: 120, color: "#fff3bf" },
+        pipeline: { label: "Kanban Pipeline", x: 250, y: 170, w: 260, h: 850, color: "#e8f4f8" },
+        monitor: { label: "Heartbeat (:30)", x: 540, y: 470, w: 240, h: 270, color: "#ffc9c9" }
+      }
+    };
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", "800");
+    svg.setAttribute("height", "1020");
+    svg.setAttribute("viewBox", "0 0 800 1020");
+    document.getElementById("diagram").appendChild(svg);
+
+    const rc = rough.svg(svg);
+
+    // Draw group backgrounds
+    Object.values(spec.groups).forEach(g => {
+      const rect = rc.rectangle(g.x, g.y, g.w, g.h, {
+        fill: g.color,
+        fillStyle: 'hachure',
+        fillWeight: 0.5,
+        roughness: 2,
+        stroke: '#666',
+        strokeWidth: 1.5,
+        hachureGap: 8
+      });
+      svg.appendChild(rect);
+
+      // Group label
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", g.x + g.w/2);
+      text.setAttribute("y", g.y + 15);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("font-family", "Comic Sans MS, Segoe Print, cursive");
+      text.setAttribute("font-size", "14");
+      text.setAttribute("font-weight", "bold");
+      text.setAttribute("fill", "#333");
+      text.textContent = g.label;
+      svg.appendChild(text);
+    });
+
+    // Draw nodes
+    const nodePositions = {};
+    spec.nodes.forEach(n => {
+      nodePositions[n.id] = { cx: n.x + n.w/2, cy: n.y + n.h/2, x: n.x, y: n.y, w: n.w, h: n.h };
+
+      if (n.diamond) {
+        const cx = n.x + n.w/2;
+        const cy = n.y + n.h/2;
+        const points = [
+          [cx, n.y],
+          [n.x + n.w, cy],
+          [cx, n.y + n.h],
+          [n.x, cy]
+        ];
+        const diamond = rc.polygon(points, {
+          fill: n.color,
+          fillStyle: 'hachure',
+          roughness: 2,
+          stroke: '#1e1e1e',
+          strokeWidth: 2
+        });
+        svg.appendChild(diamond);
+      } else {
+        const rect = rc.rectangle(n.x, n.y, n.w, n.h, {
+          fill: n.color,
+          fillStyle: 'hachure',
+          roughness: 2,
+          stroke: '#1e1e1e',
+          strokeWidth: 2
+        });
+        svg.appendChild(rect);
+      }
+
+      // Node label
+      const lines = n.label.split('\n');
+      const lineHeight = 15;
+      const startY = n.y + n.h/2 - (lines.length - 1) * lineHeight / 2;
+      lines.forEach((line, i) => {
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", n.x + n.w/2);
+        text.setAttribute("y", startY + i * lineHeight);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "middle");
+        text.setAttribute("font-family", "Comic Sans MS, Segoe Print, cursive");
+        text.setAttribute("font-size", "12");
+        text.setAttribute("fill", "#1e1e1e");
+        text.textContent = line;
+        svg.appendChild(text);
+      });
+    });
+
+    // Draw edges
+    spec.edges.forEach(e => {
+      const from = nodePositions[e.from];
+      const to = nodePositions[e.to];
+      if (!from || !to) return;
+
+      const startX = from.cx;
+      const startY = from.y + from.h;
+      const endX = to.cx;
+      const endY = to.y;
+
+      const line = rc.line(startX, startY, endX, endY, {
+        roughness: 1.5,
+        stroke: '#1e1e1e',
+        strokeWidth: 1.5,
+        strokeLineDash: e.dashed ? [5, 5] : undefined
+      });
+      svg.appendChild(line);
+
+      // Arrowhead
+      const angle = Math.atan2(endY - startY, endX - startX);
+      const arrowLen = 10;
+      const p1x = endX - arrowLen * Math.cos(angle - 0.4);
+      const p1y = endY - arrowLen * Math.sin(angle - 0.4);
+      const p2x = endX - arrowLen * Math.cos(angle + 0.4);
+      const p2y = endY - arrowLen * Math.sin(angle + 0.4);
+      const arrow = rc.polygon([[endX, endY], [p1x, p1y], [p2x, p2y]], {
+        fill: '#1e1e1e',
+        stroke: '#1e1e1e',
+        roughness: 0.5,
+        strokeWidth: 1
+      });
+      svg.appendChild(arrow);
+
+      // Edge label
+      if (e.label) {
+        const midX = (startX + endX) / 2;
+        const midY = (startY + endY) / 2;
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", midX + 10);
+        text.setAttribute("y", midY);
+        text.setAttribute("font-family", "Comic Sans MS, Segoe Print, cursive");
+        text.setAttribute("font-size", "10");
+        text.setAttribute("fill", "#666");
+        text.textContent = e.label;
+        svg.appendChild(text);
+      }
+    });
+
+    // Signal ready
+    document.title = "RENDERED";
+  </script>
+</body>
+</html>
