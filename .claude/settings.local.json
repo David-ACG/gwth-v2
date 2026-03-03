@@ -159,7 +159,11 @@
       "WebFetch(domain:developers.openai.com)",
       "Bash(bd stats:*)",
       "Bash(bd doctor:*)",
-      "WebFetch(domain:www.kdnuggets.com)"
+      "WebFetch(domain:www.kdnuggets.com)",
+      "Bash(env:*)",
+      "Bash(cmd:*)",
+      "Bash(bd search:*)",
+      "Bash(bd create:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
