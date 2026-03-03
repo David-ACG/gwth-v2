@@ -1,0 +1,51 @@
+---
+config:
+  look: handDrawn
+  theme: neutral
+---
+flowchart TD
+    subgraph intake["📥 Idea Intake"]
+        phone["📱 Phone/Linear\n(idea label)"]
+        claude["💻 Claude Session\n(bd create)"]
+        manual["📝 Manual\n(.md file)"]
+    end
+
+    subgraph sync["🔄 Hourly Sync (:00)"]
+        unified["unified-sync.py\nLinear → Beads → Kanban"]
+    end
+
+    subgraph pipeline["🏭 Kanban Pipeline"]
+        idea["0_idea/\nRaw ideas"]
+        review["👀 Review & Triage"]
+        planning["1_planning/\nPROMPT_*.md files"]
+        execute["⚡ run-kanban.sh\n• bd stats + bd ready\n• Auto-claim Beads\n• Execute prompt"]
+        testing["2_testing/\nVerify on P520"]
+        promote["🚀 promote.sh\n• Deploy to Hetzner\n• bd linear sync --push"]
+        done["3_done/\nArchived"]
+    end
+
+    subgraph monitor["📡 Heartbeat (:30)"]
+        heartbeat["heartbeat.py\n• Check sync freshness\n• P520 + Hetzner health\n• Dolt server check\n• Beads stats\n• Stale issue alerts"]
+        telegram["📱 Telegram\n(alerts only)"]
+    end
+
+    subgraph degrade["⚠️ Graceful Degradation"]
+        doltdown["Dolt Down?\n(port 3307)"]
+        skip["Skip Beads ops\nContinue pipeline"]
+    end
+
+    phone --> unified
+    claude --> idea
+    manual --> idea
+    unified --> idea
+
+    idea --> review
+    review --> planning
+    planning --> execute
+    execute --> testing
+    testing --> promote
+    promote --> done
+
+    execute -.->|bd close| unified
+    heartbeat --> telegram
+    doltdown -->|Yes| skip
