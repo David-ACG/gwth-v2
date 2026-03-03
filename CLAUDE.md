@@ -27,7 +27,7 @@ Backend, auth, database, and payment choices will be decided separately. Do not 
 
 ```ts
 const nextConfig: NextConfig = {
-  output: "standalone",  // Docker-ready for Coolify deployment
+  output: "standalone", // Docker-ready for Coolify deployment
   images: {
     remotePatterns: [
       // Add patterns as external image sources are identified
@@ -124,6 +124,7 @@ The dark mode uses hue 60 (warm/amber axis) with very low chroma (0.005-0.015) t
 **Grade colors:** A=green, B=mint, C=amber, D=orange, F=red
 
 ### Typography
+
 - **Headings + Body:** Inter (via `next/font/google`, variable `--font-inter`)
 - **Code blocks:** JetBrains Mono (via `next/font/google`, variable `--font-jetbrains`)
 - **Corners:** rounded (`--radius: 0.625rem`)
@@ -153,6 +154,7 @@ const jetbrainsMono = JetBrains_Mono({
 ```
 
 Then in `globals.css`:
+
 ```css
 @theme inline {
   --font-sans: var(--font-inter);
@@ -161,6 +163,7 @@ Then in `globals.css`:
 ```
 
 ### Layout Dimensions
+
 - Sidebar width: 280px (collapsed: 64px)
 - Header height: 64px
 - Content max-width: 1400px
@@ -170,6 +173,7 @@ Then in `globals.css`:
 The landing page hero uses a **cascading blurred spiral animation** matching the agilecommercegroup.com style. This replaces the original glowing orbs approach.
 
 **How it works:**
+
 - A 7-blade SVG spiral (`public/logo-spiral.svg`) in the GWTH aqua-to-mint-to-indigo color spectrum (deep teal, teal, mint, aqua green, primary aqua, sky blue, indigo blue)
 - 4 pre-blurred SVG variants at different Gaussian blur levels (`logo-spiral-blur-6.svg`, `-12.svg`, `-18.svg`, `-25.svg`)
 - 4 cascading `<Image>` layers positioned in the top-right area, each with different size, blur level, opacity, rotation speed, and direction
@@ -187,6 +191,7 @@ The landing page hero uses a **cascading blurred spiral animation** matching the
 **Content layout:** Text is left-aligned (`max-w-2xl`) to balance visually against the spiral layers on the right.
 
 **SVG files in `public/`:**
+
 - `logo-spiral.svg` — sharp, no blur (not used directly in hero, available for other uses)
 - `logo-spiral-blur-6.svg` — lightest blur (closest layer)
 - `logo-spiral-blur-12.svg` — medium blur
@@ -207,6 +212,7 @@ The landing page hero uses a **cascading blurred spiral animation** matching the
 ### Route Transition Indicator
 
 A `RouteProgress` component (`src/components/shared/route-progress.tsx`) renders on every client-side navigation:
+
 - Top-of-page gradient bar (primary-to-accent) that animates from 0% to 100% width
 - Small SVG spinner in the top-right corner
 - Both auto-dismiss after 500ms
@@ -215,15 +221,18 @@ A `RouteProgress` component (`src/components/shared/route-progress.tsx`) renders
 ### Loading Spinners
 
 The `Spinner` and `PageSpinner` components (`src/components/shared/spinner.tsx`) are used in all `loading.tsx` files:
+
 - **`Spinner`** — dual-ring SVG spinner with primary outer arc and accent inner arc (counter-rotating). Configurable size.
 - **`PageSpinner`** — full-page centered spinner with "Loading..." text, used for root and public loading states.
 - Dashboard loading states combine the small spinner with skeleton placeholders.
 
 Custom CSS animations in `globals.css`:
+
 - `.animate-spin-reverse` — reverse rotation at 1.2s for the inner ring
 - `.animate-progress` — 0-to-100% width animation for the route transition bar
 
 ### Additional Background Effects
+
 - Frosted glass: `backdrop-filter: blur(12px)` with semi-transparent bg (used in public nav header)
 - Gradient backdrop: `bg-gradient-to-br from-primary/5 via-transparent to-accent/5` (hero section base)
 
@@ -256,11 +265,13 @@ Add remote patterns to `next.config.ts` as external image sources are identified
 These are the content types the UI must support. How they're stored is a backend concern.
 
 ### Course
+
 - `title`, `slug`, `description`, `thumbnail`, `blurDataUrl`, `price`
 - Contains ordered **sections**, each containing ordered **lessons**
 - `category`, `difficulty`, `estimatedDuration`
 
 ### Lesson
+
 - `title`, `slug`, `description`, `order`, `duration`, `difficulty`, `category`
 - **Learn content:** video (`introVideoUrl`) + rich text/MDX (`learnContent`) + audio (`audioFileUrl`, `audioDuration`)
 - **Build content:** video (`buildVideoUrl`) + step-by-step instructions (`buildInstructions`)
@@ -270,6 +281,7 @@ These are the content types the UI must support. How they're stored is a backend
 - **Hierarchy:** lessons can have sub-lessons (parent/child)
 
 ### Lab
+
 - `title`, `slug`, `description`, `difficulty`, `duration`
 - `technologies[]`, `learningOutcomes[]`, `prerequisites`
 - `content` (markdown), `instructions` (step-by-step JSON)
@@ -277,33 +289,40 @@ These are the content types the UI must support. How they're stored is a backend
 - `isPremium`
 
 ### Progress (per user)
+
 - **Lesson:** `isCompleted`, `progress` (0-1), `quizScore`, `bestQuizScore`, `quizAttempts`, `timeSpent`
 - **Lab:** `isCompleted`, `progress` (0-1)
 - **Course:** `progress` (0-1), `completedAt`
 
 ### Study Streak
+
 - `currentStreak` (consecutive days), `longestStreak`, `lastActiveDate`
 - `weeklyActivity[]` (array of 7 booleans for heatmap display)
 
 ### Bookmark
+
 - `userId`, `lessonId` or `labId`, `createdAt`
 - Used for "saved for later" / favorites feature
 
 ### Note
+
 - `userId`, `lessonId`, `content` (markdown), `timestamp` (video position if applicable)
 - Students can annotate lessons with personal notes
 
 ### Certificate
+
 - `userId`, `courseId`, `issuedAt`, `certificateUrl`
 - Awarded on course completion (100% lessons + passing quiz scores)
 
 ### Notification
+
 - `userId`, `type` (achievement | reminder | announcement), `title`, `message`, `read`, `createdAt`
 - For study reminders, achievement unlocks, new content alerts
 
 ## Pages & Routes
 
 ### Public (no auth)
+
 - `/` — Landing page with hero, features, testimonials, pricing preview
 - `/pricing` — Plans comparison (Free / Pro / Team)
 - `/about` — About GWTH
@@ -312,6 +331,7 @@ These are the content types the UI must support. How they're stored is a backend
 - `/forgot-password` — Password reset flow
 
 ### Student Dashboard (authenticated)
+
 - `/dashboard` — Overview: course cards, progress rings, recent activity, study streak calendar, bookmarked items
 - `/courses` — Browse all courses (filterable by category, difficulty, search)
 - `/course/[slug]` — Course detail: sections accordion, lesson list with status badges
@@ -332,12 +352,14 @@ These are the content types the UI must support. How they're stored is a backend
 - `/notifications` — Notification center (achievements, reminders, announcements)
 
 ### Admin (separate admin panel — phase 2)
+
 - Content management for courses, lessons, labs
 - User management, analytics dashboard
 
 ## Architecture Principles
 
 ### Core
+
 1. **Server Components by default.** Only use `"use client"` for interactive elements (video player, quiz, sidebar toggle, theme toggle, forms).
 2. **React Compiler enabled.** Let the compiler handle memoization — do NOT manually use `useMemo`, `useCallback`, or `React.memo`.
 3. **Turbopack** as the default bundler (`next dev --turbopack`).
@@ -347,32 +369,41 @@ These are the content types the UI must support. How they're stored is a backend
 7. **Mobile-first responsive design.** The lesson viewer sidebar becomes a Sheet on mobile.
 
 ### Abstraction & Boundaries
+
 8. **Data layer abstraction.** All data access goes through functions in `lib/data/` (e.g. `getCourse(slug)`, `getLessons(courseId)`, `updateProgress()`). These return typed interfaces. Initially use mock/seed data. The real backend will be wired in later. Every function must have a JSDoc comment describing what it returns.
 9. **Auth abstraction.** Use a `lib/auth.ts` that exports `getCurrentUser()`, `requireAuth()`, etc. Stub these with a mock user for now. Real auth provider will be configured separately.
 10. **Config abstraction.** All magic numbers, feature flags, and app-wide settings go in `lib/config.ts` — not scattered across components. This includes layout dimensions, animation durations, pagination sizes, etc.
 11. **Clear module boundaries.** Each directory under `components/` is a feature module. Components in `components/course/` should not import from `components/lab/`. Shared utilities go in `components/shared/` or `lib/`.
 
 ### Error Handling & Resilience
+
 12. **Error boundaries at every route.** Every route group gets an `error.tsx` that catches rendering errors and shows a user-friendly fallback with a retry button. The root `app/error.tsx` catches anything that slips through.
 13. **Not-found handling.** Every dynamic route (`[slug]`) must handle missing data gracefully with `notFound()` from `next/navigation`. Provide a custom `app/not-found.tsx`.
 14. **Loading states everywhere.** Every route gets a `loading.tsx` with skeleton UI matching the page layout. No blank white screens while data loads.
 15. **Graceful degradation.** If a video fails to load, show a placeholder. If audio isn't available, hide the player. Components must never crash the page.
 
 ### Performance
+
 16. **Dynamic imports for heavy components.** Video player, quiz engine, chart libraries, and syntax highlighter should use `next/dynamic` with loading fallbacks:
     ```tsx
-    const VideoPlayer = dynamic(() => import("@/components/shared/video-player"), {
-      loading: () => <Skeleton className="aspect-video w-full" />,
-    });
+    const VideoPlayer = dynamic(
+      () => import("@/components/shared/video-player"),
+      {
+        loading: () => <Skeleton className="aspect-video w-full" />,
+      },
+    );
     ```
 17. **Image optimization.** Always use `next/image`. Generate blur placeholders for course/lab thumbnails. Configure `remotePatterns` for external image sources.
 18. **Font optimization.** Use `next/font/google` for Inter and JetBrains Mono. Self-hosted by Next.js — zero external requests, zero layout shift.
 19. **Core Web Vitals awareness.** Target LCP < 2.5s, INP < 200ms, CLS < 0.1. Avoid layout shifts from loading content. Use `sizes` prop on images.
 
 ### SEO & Metadata
+
 20. **Dynamic metadata.** Use `generateMetadata` for every page with dynamic content:
     ```tsx
-    export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    export async function generateMetadata({
+      params,
+    }: Props): Promise<Metadata> {
       const course = await getCourse(params.slug);
       return {
         title: `${course.title} | GWTH`,
@@ -387,17 +418,23 @@ These are the content types the UI must support. How they're stored is a backend
     ```
 21. **Structured data.** Add JSON-LD for courses (Google understands `Course` schema):
     ```tsx
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": course.title,
-      "description": course.description,
-      "provider": { "@type": "Organization", "name": "GWTH.ai" },
-    }) }} />
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: course.title,
+          description: course.description,
+          provider: { "@type": "Organization", name: "GWTH.ai" },
+        }),
+      }}
+    />
     ```
 22. **Sitemap & robots.** Generate `sitemap.xml` via `app/sitemap.ts` and `robots.txt` via `app/robots.ts` using Next.js conventions.
 
 ### Documentation Standards
+
 23. **JSDoc on all exports.** Every exported function, component, type, and constant must have a JSDoc comment explaining what it does, its parameters, and return value. This is non-negotiable.
     ```tsx
     /**
@@ -418,9 +455,10 @@ These are the content types the UI must support. How they're stored is a backend
     }
     ```
 25. **README per feature module.** Each directory under `components/` gets a brief `README.md` explaining what's in it, which components are the main entry points, and any patterns used.
-26. **Inline comments for non-obvious logic.** Don't comment what the code does — comment *why*. Especially for accessibility workarounds, browser quirks, and animation timing choices.
+26. **Inline comments for non-obvious logic.** Don't comment what the code does — comment _why_. Especially for accessibility workarounds, browser quirks, and animation timing choices.
 
 ### Naming Conventions
+
 27. **Files:** kebab-case (`course-card.tsx`, `use-sidebar.ts`, `mock-data.ts`)
 28. **Components:** PascalCase (`CourseCard`, `LessonNav`, `ProgressRing`)
 29. **Hooks:** camelCase with `use` prefix (`useSidebar`, `useTheme`, `useProgress`)
@@ -429,6 +467,7 @@ These are the content types the UI must support. How they're stored is a backend
 32. **CSS variables:** kebab-case with semantic names (`--primary`, `--card`, `--sidebar-width`)
 
 ### Accessibility
+
 33. **WCAG 2.1 AA compliance.** All text must meet 4.5:1 contrast ratio (3:1 for large text). Use the design system's semantic color tokens which have been tested.
 34. **Keyboard navigation.** All interactive elements must be focusable and operable with keyboard. Tab order must be logical. Focus rings must be visible.
 35. **ARIA labels.** Icon-only buttons must have `aria-label`. Progress indicators must have `aria-valuenow`. Status badges must convey meaning beyond color alone (text + icon).
@@ -436,6 +475,7 @@ These are the content types the UI must support. How they're stored is a backend
 37. **Reduced motion.** All Motion animations must respect `prefers-reduced-motion`. Use `useReducedMotion()` hook globally.
 
 ### Testing Strategy
+
 38. **Component tests with Vitest + React Testing Library.** Test each custom component in isolation — props render correctly, interactions work, loading/error states display properly.
 39. **Visual regression with Playwright.** Screenshot tests for key pages in light/dark mode at desktop/mobile breakpoints.
 40. **Accessibility tests with axe-core.** Run automated a11y checks on every page during CI.
@@ -459,6 +499,7 @@ Keep animations subtle and purposeful — never flashy or distracting. Use `spri
 ## Component Library
 
 Use shadcn/ui components. Key ones needed:
+
 - `Button`, `Badge`, `Card`, `Avatar`, `Progress`
 - `Tabs`, `Accordion`, `Dialog`, `Sheet` (mobile sidebar)
 - `Input`, `Label`, `Select`, `Checkbox`, `RadioGroup`
@@ -471,6 +512,7 @@ Use shadcn/ui components. Key ones needed:
 - `Breadcrumb` (course > section > lesson navigation)
 
 Custom components to build:
+
 - `<VideoPlayer>` — wrapper around a video embed (YouTube/Mux/custom). Use `next/dynamic` for lazy loading.
 - `<AudioPlayer>` — inline audio with waveform, playback speed control
 - `<LessonNav>` — sidebar tree with sections, lessons, progress dots
@@ -599,7 +641,16 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/courses/:path*", "/labs/:path*", "/progress/:path*", "/settings/:path*", "/profile/:path*", "/bookmarks/:path*", "/notifications/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/courses/:path*",
+    "/labs/:path*",
+    "/progress/:path*",
+    "/settings/:path*",
+    "/profile/:path*",
+    "/bookmarks/:path*",
+    "/notifications/:path*",
+  ],
 };
 ```
 
@@ -615,15 +666,23 @@ import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+});
 
 export const metadata: Metadata = {
-  title: { default: "GWTH.ai | Learn to Build with AI", template: "%s | GWTH.ai" },
-  description: "Master AI development with hands-on courses, labs, and real-world projects.",
+  title: {
+    default: "GWTH.ai | Learn to Build with AI",
+    template: "%s | GWTH.ai",
+  },
+  description:
+    "Master AI development with hands-on courses, labs, and real-world projects.",
   metadataBase: new URL("https://gwth.ai"),
   openGraph: {
     title: "GWTH.ai | Learn to Build with AI",
-    description: "Master AI development with hands-on courses, labs, and real-world projects.",
+    description:
+      "Master AI development with hands-on courses, labs, and real-world projects.",
     url: "https://gwth.ai",
     siteName: "GWTH.ai",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -633,9 +692,17 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="antialiased">
         <RootProvider>
           {children}
@@ -696,6 +763,7 @@ Every list page must handle the "nothing here yet" case:
 ## Phase 1 Deliverables (build this first)
 
 ### Foundation
+
 1. Project scaffolding: Next.js 16, React 19, Tailwind v4, shadcn/ui, Motion, Sonner, next-themes, react-hook-form, zod, Shiki, Vitest
 2. Theme setup: `globals.css` with all GWTH Student tokens (light + dark mode), `next/font/google` for Inter + JetBrains Mono
 3. Root layout with `RootProvider` (ThemeProvider + any future providers), `Toaster`, font variables
@@ -709,6 +777,7 @@ Every list page must handle the "nothing here yet" case:
 11. ESLint flat config matching ACG project
 
 ### Pages
+
 12. Landing page with animated hero section (glowing orbs, scroll reveals, staggered features), JSON-LD structured data
 13. Dashboard layout: collapsible sidebar with layout animation + header + breadcrumb + content area
 14. Dashboard page: course cards with progress rings, recent activity, study streak calendar, bookmarked items
@@ -722,6 +791,7 @@ Every list page must handle the "nothing here yet" case:
 22. Search palette (Cmd+K) accessible from any page
 
 ### Quality
+
 23. `README.md` in each component directory explaining what's inside
 24. Component tests for `CourseCard`, `ProgressRing`, `StatusBadge`, `QuizEngine`, `EmptyState`
 25. Playwright visual tests for landing page, dashboard, and lesson viewer (light + dark, desktop + mobile)
@@ -734,7 +804,7 @@ Every list page must handle the "nothing here yet" case:
 - This is a FRESH project. Do not copy v1 code — rebuild properly.
 - **No backend dependencies.** No database ORM, no auth library, no payment SDK. Build the entire frontend against mock data and abstract interfaces. The backend will be chosen and integrated separately.
 - **Robust architecture.** Error boundaries on every route group. Loading skeletons on every page. Graceful fallbacks for missing media. No component should crash the page.
-- **Well-documented.** JSDoc on every export. README per component module. Inline comments explaining *why*, not *what*. The codebase should be understandable by a new developer without a walkthrough.
+- **Well-documented.** JSDoc on every export. README per component module. Inline comments explaining _why_, not _what_. The codebase should be understandable by a new developer without a walkthrough.
 - All colors must use CSS custom properties. Never hardcode hex values in components.
 - Support light/dark mode from day one. Every component must work in both. Use `next-themes` ThemeProvider.
 - Mobile-first responsive design. The lesson viewer should work on phones (sidebar becomes a sheet).
@@ -745,6 +815,15 @@ Every list page must handle the "nothing here yet" case:
 - Every filterable list must sync filters to URL search params (so users can share/bookmark filtered views).
 - Use Sonner `toast()` for user feedback on actions (lesson completed, quiz submitted, bookmark toggled).
 - Use `AlertDialog` for destructive or irreversible actions (submit quiz, reset progress).
+
+## Kanban Workflow
+
+This project uses the kanban workflow defined in `kanban/KANBAN_RUNNER.md`.
+See the global CLAUDE.md (`~/.claude/CLAUDE.md`) for gate rules.
+
+- **Test command:** `npm test`
+- **Verification:** Playwright check at http://192.168.178.50:3001 (P520) / https://gwth.ai (prod)
+- **File naming:** `PREFIX_YYYY-MM-DD_short-slug.md`
 
 ## Beads Issue Tracking
 
@@ -785,6 +864,7 @@ When ending a session (or when David says "Land the Plane"):
 ### Dolt Server Dependency
 
 Beads requires a running Dolt SQL server on port 3307. If `bd` commands fail with connection errors:
+
 ```bash
 # Start the Dolt server
 C:\Users\david\AppData\Local\beads\start-dolt.bat

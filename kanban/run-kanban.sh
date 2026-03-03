@@ -123,7 +123,28 @@ PIPELINE — After implementing the changes, follow these steps in order:
    curl -sf http://192.168.178.50:3001/api/health
    If the health check fails, wait another 30 seconds and retry once.
 
-6. REPORT: Summarize what was changed, committed, pushed, and whether P520 deploy succeeded.
+6. IMPLEMENTATION DOCUMENTATION (Gate 3): After ALL code changes are complete and tests pass, APPEND the following to the prompt file at $FILE:
+   ---
+   ## Implementation Notes — <current date and time>
+   - **Commit:** <commit hash + message>
+   - **Tests:** <pass/fail summary>
+   - **Verification URL:** http://192.168.178.50:3001 (P520 test)
+   - **Playwright check:** <passed/failed + what was verified>
+   - **Changes summary:** <bullet list of what was actually done>
+   - **Deviations from plan:** <any differences from the prompt>
+   - **Follow-up issues:** <new work discovered, or \"None\">
+
+7. TESTING CHECKLIST (Gate 4): Then APPEND a testing checklist to the same prompt file:
+   ---
+   ## Testing Checklist — <current date and time>
+   **Check the changes:** http://192.168.178.50:3001
+   - [ ] Page loads without errors
+   - [ ] <Feature-specific check based on what was implemented>
+   - [ ] Light/dark mode correct (if applicable)
+   - [ ] Mobile responsive (if applicable)
+   - [ ] No console errors
+
+8. REPORT: Summarize what was changed, committed, pushed, and whether P520 deploy succeeded.
 
 DO NOT deploy to Hetzner production — that happens separately after user verification on P520.
 
