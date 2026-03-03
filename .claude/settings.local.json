@@ -165,7 +165,8 @@
       "Bash(bd search:*)",
       "Bash(bd create:*)",
       "Bash(bd update:*)",
-      "Bash(where python:*)"
+      "Bash(where python:*)",
+      "Bash(git:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
