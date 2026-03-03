@@ -1,0 +1,142 @@
+{
+  "title": "GWTH Unified Workflow",
+  "description": "Kanban pipeline from idea intake through deployment",
+  "style": {
+    "theme": "hand-drawn",
+    "roughness": 2,
+    "fontFamily": "Virgil",
+    "fillStyle": "hachure",
+    "strokeWidth": 2,
+    "colors": {
+      "intake": "#b2f2bb",
+      "sync": "#fff3bf",
+      "pipeline": "#a5d8ff",
+      "execute": "#ffd8a8",
+      "review": "#ffc9c9",
+      "testing": "#d0bfff",
+      "done": "#b2f2bb",
+      "monitor": "#ffc9c9"
+    }
+  },
+  "nodes": [
+    {
+      "id": "phone",
+      "label": "Phone/Linear\n(idea label)",
+      "type": "rectangle",
+      "group": "intake",
+      "color": "intake"
+    },
+    {
+      "id": "claude",
+      "label": "Claude Session\n(bd create)",
+      "type": "rectangle",
+      "group": "intake",
+      "color": "execute"
+    },
+    {
+      "id": "manual",
+      "label": "Manual\n(.md file)",
+      "type": "rectangle",
+      "group": "intake",
+      "color": "testing"
+    },
+    {
+      "id": "unified-sync",
+      "label": "unified-sync.py\nHourly @ :00\nLinear > Beads > Kanban",
+      "type": "rectangle",
+      "group": "sync",
+      "color": "sync"
+    },
+    {
+      "id": "idea",
+      "label": "0_idea/\nRaw ideas",
+      "type": "rectangle",
+      "group": "pipeline",
+      "color": "pipeline"
+    },
+    {
+      "id": "review",
+      "label": "Review & Triage",
+      "type": "diamond",
+      "group": "pipeline",
+      "color": "review"
+    },
+    {
+      "id": "planning",
+      "label": "1_planning/\nPROMPT_*.md",
+      "type": "rectangle",
+      "group": "pipeline",
+      "color": "pipeline"
+    },
+    {
+      "id": "execute",
+      "label": "run-kanban.sh\nbd stats + bd ready\nAuto-claim + Execute",
+      "type": "rectangle",
+      "group": "pipeline",
+      "color": "execute"
+    },
+    {
+      "id": "testing",
+      "label": "2_testing/\nVerify on P520",
+      "type": "rectangle",
+      "group": "pipeline",
+      "color": "testing"
+    },
+    {
+      "id": "promote",
+      "label": "promote.sh\nDeploy to Hetzner\nbd linear sync --push",
+      "type": "rectangle",
+      "group": "pipeline",
+      "color": "done"
+    },
+    {
+      "id": "done",
+      "label": "3_done/\nArchived",
+      "type": "rectangle",
+      "group": "pipeline",
+      "color": "done"
+    },
+    {
+      "id": "heartbeat",
+      "label": "heartbeat.py\nHourly @ :30\nHealth checks + alerts",
+      "type": "rectangle",
+      "group": "monitor",
+      "color": "monitor"
+    },
+    {
+      "id": "telegram",
+      "label": "Telegram\n(alerts only)",
+      "type": "rectangle",
+      "group": "monitor",
+      "color": "pipeline"
+    }
+  ],
+  "edges": [
+    { "from": "phone", "to": "unified-sync", "label": "" },
+    { "from": "claude", "to": "idea", "label": "" },
+    { "from": "manual", "to": "idea", "label": "" },
+    { "from": "unified-sync", "to": "idea", "label": "" },
+    { "from": "idea", "to": "review", "label": "" },
+    { "from": "review", "to": "planning", "label": "" },
+    { "from": "planning", "to": "execute", "label": "" },
+    { "from": "execute", "to": "testing", "label": "" },
+    { "from": "testing", "to": "promote", "label": "" },
+    { "from": "promote", "to": "done", "label": "" },
+    {
+      "from": "execute",
+      "to": "unified-sync",
+      "label": "bd close",
+      "style": "dashed"
+    },
+    { "from": "heartbeat", "to": "telegram", "label": "" }
+  ],
+  "animation": {
+    "nodeEntrance": "stagger",
+    "staggerDelay": 5,
+    "edgeDrawIn": true,
+    "edgeDrawDuration": 15,
+    "totalFrames": 180,
+    "fps": 30
+  },
+  "notes": "This JSON spec defines the diagram data for a Remotion-based renderer. A React component would read this, compute layout with dagre/ELK.js, wrap SVG shapes in react-rough-fiber for the hand-drawn look, and use Remotion's renderStill() for static output or renderMedia() for animated video."
+}
