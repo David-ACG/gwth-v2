@@ -115,3 +115,44 @@ After all changes, run `npm test` and `npm run build` to verify everything works
 - The nav link order matters for UX. "Why GWTH" should be prominent but not the first link (keep "About" first for convention).
 - The British English audit is a scan, not a rewrite. Only change words that are genuinely American English. Do not rephrase sentences.
 - If you find any remaining dollar signs in price displays, fix them (they should have been caught by the first prompt, but this is a safety net).
+
+---
+## Implementation Notes — 2026-03-04 15:26
+- **Commit:** bec26b8 feat: add UK-first updates to footer, sitemap, and contact page
+- **Tests:** 14 test files, 110 tests — all passed
+- **Verification URL:** http://192.168.178.50:3001 (P520 test)
+- **Playwright check:** not applicable — changes are text/link updates only, verified via test suite
+- **Changes summary:**
+  - Added "Why GWTH" link to footer Product section (was already in Learn section and nav)
+  - Updated footer tagline from "Independent. No sponsors..." to "Independent. UK-based. No sponsors..."
+  - Added "Based in the United Kingdom 🇬🇧" line below the tagline in footer
+  - Updated footer description to lead with "UK-based AI training."
+  - Fixed British English in footer JSDoc comment ("organized" → "organised")
+  - Added /why-gwth, /for-teams, /tech-radar, /contact routes to sitemap.ts
+  - Added UK-based mention to contact page description
+  - Verified: nav already had "Why GWTH" in correct position (About, Why GWTH, Pricing, For Teams, Tech Radar, News)
+  - Verified: metadataBase correctly set to https://gwth.ai in root layout
+  - Verified: robots.ts does not block /why-gwth (only blocks dashboard/settings/profile/bookmarks/notifications)
+  - British English audit: all 7 target files use consistent British English (programme, analyse, organised, specialisation, etc.) — no corrections needed
+  - Dollar sign audit: no dollar signs found in any public-facing page — all prices use £
+- **Deviations from plan:** Nav already had "Why GWTH" from a previous prompt (UK4), so no nav changes were needed
+- **Follow-up issues:** None
+
+---
+## Testing Checklist — 2026-03-04 15:26
+**Check the changes:** http://192.168.178.50:3001
+- [ ] Page loads without errors
+- [ ] Footer shows "Why GWTH" link under Product column
+- [ ] Footer tagline reads "Independent. UK-based. No sponsors. No ads. No vendor partnerships."
+- [ ] Footer shows "Based in the United Kingdom 🇬🇧" line
+- [ ] Footer description starts with "UK-based AI training."
+- [ ] Contact page mentions "GWTH is based in the United Kingdom"
+- [ ] Navigation shows Why GWTH link (desktop and mobile)
+- [ ] Light/dark mode correct
+- [ ] Mobile responsive
+- [ ] No console errors
+
+### Actions for David
+Visit http://192.168.178.50:3001 and scroll to the footer to verify the UK-based messaging. Check the contact page at /contact. Verify the "Why GWTH" link works in both the footer and nav. Toggle dark mode to confirm text is readable.
+
+**Review this file:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PROMPT_UK5_2026-03-03_uk-first-nav-footer-crosscutting.md`
