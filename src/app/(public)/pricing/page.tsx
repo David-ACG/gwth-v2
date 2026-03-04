@@ -1,14 +1,8 @@
 import Link from "next/link"
 import type { Metadata } from "next"
-import { Check, ArrowRight, FlaskConical, BookOpen, TrendingUp, Info } from "lucide-react"
+import { Check, ArrowRight, FlaskConical, BookOpen, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion"
 import {
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
@@ -20,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Free labs to start, £29/month for the 3-month course, then just £5/month to stay current. UK-first pricing in GBP. No lock-in, cancel anytime.",
+    "Free labs to start, £29/month for the 3-month course, then just £7.50/month to stay current. UK-first pricing in GBP. No lock-in, cancel anytime.",
 }
 
 const freeFeatures = [
@@ -53,7 +47,7 @@ const ongoingFeatures = [
 
 /**
  * Pricing page with three tiers: Free Labs, The Course, and Stay Current.
- * Emphasises the £5/month ongoing value after the 3-month course.
+ * Emphasises the £7.50/month ongoing value after the 3-month course.
  */
 export default function PricingPage() {
   return (
@@ -191,83 +185,6 @@ export default function PricingPage() {
           </Card>
         </div>
 
-        {/* Government comparison callout */}
-        <div className="mx-auto mt-16 max-w-2xl">
-          <Card className="border bg-muted/30">
-            <CardContent className="p-8">
-              <div className="mb-4 flex items-center gap-2">
-                <Info className="size-5 text-primary" />
-                <h2 className="text-lg font-semibold">How does this compare?</h2>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                The UK Government&apos;s AI Skills Boost offers 14 free foundation
-                courses covering basic AI awareness — roughly equivalent to
-                GWTH&apos;s first two weeks. GWTH covers everything the government
-                programme does in Month 1, then goes dramatically further with 94
-                hands-on projects, industry-specific modules, and enterprise
-                transformation over 3 months.
-              </p>
-              <div className="mt-4">
-                <Button variant="outline" size="sm" className="gap-2" asChild>
-                  <Link href="/why-gwth">
-                    See the full comparison
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Government course FAQ */}
-        <div className="mx-auto mt-8 max-w-2xl">
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="gov-faq-1">
-              <AccordionTrigger>
-                Is the government AI Skills Boost enough?
-              </AccordionTrigger>
-              <AccordionContent>
-                <p className="text-muted-foreground">
-                  The government programme covers AI basics in 20 minutes to 9
-                  hours — roughly equivalent to GWTH&apos;s first two weeks. It
-                  teaches you what AI is and how to prompt a chatbot. There are no
-                  hands-on projects, no progression pathway beyond foundation
-                  level, and no enterprise content. If you want to understand AI
-                  awareness, the government course is a good start. If you want to
-                  build with AI, you need more.
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="gov-faq-2">
-              <AccordionTrigger>
-                Why should I pay when the government course is free?
-              </AccordionTrigger>
-              <AccordionContent>
-                <p className="text-muted-foreground">
-                  The government course teaches you to ask AI a question. GWTH
-                  teaches you to build with AI. 94 hands-on projects, 3
-                  portfolio-ready capstones, content updated every day, and
-                  completely vendor-neutral — we teach the skill, not one
-                  company&apos;s product. The free course is a solid introduction.
-                  GWTH is the comprehensive education that follows.
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="gov-faq-3">
-              <AccordionTrigger>Can I do both?</AccordionTrigger>
-              <AccordionContent>
-                <p className="text-muted-foreground">
-                  Absolutely. Start with the government&apos;s AI Foundation Badge,
-                  then come to GWTH for everything it does not cover. We designed
-                  the course to work as the natural next step — you will not repeat
-                  anything you have already learnt, and you will be building real
-                  projects from day one.
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
-
         {/* Earlybird note */}
         <div className="mx-auto mt-10 max-w-2xl text-center">
           <p className="text-sm text-muted-foreground">
@@ -297,7 +214,9 @@ export default function PricingPage() {
                 discounts — it is already the lowest possible price. Teams of 5+
                 get an admin dashboard with progress tracking, completion rates,
                 and the ability to choose which optional lessons each role
-                completes.
+                completes. For teams of 100+, we can create bespoke lessons
+                tailored specifically to your company&apos;s workflows, tools,
+                and industry challenges.
               </p>
               <div className="mt-6 flex flex-wrap gap-4">
                 <Button variant="outline" asChild>

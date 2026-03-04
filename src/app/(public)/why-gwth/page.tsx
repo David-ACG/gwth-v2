@@ -32,21 +32,33 @@ const pressQuotes = [
     detail: "On vendor dependency",
   },
   {
+    quote:
+      "The UK\u2019s AI training landscape is extensive but fragmented, lacking coordination and progression pathways.",
+    source: "LSE Impact Blog",
+    detail: "Independent review, February 2026",
+  },
+  {
     quote: "A copy and paste of past failure.",
     source: "FE Week",
     detail: "Comparison to pandemic-era skills toolkits",
   },
   {
     quote:
-      "The website feels messy. I am an everyday person. I do not want to be a programmer. I just want to understand how to use AI.",
-    source: "User feedback",
-    detail: "AI Skills Hub user testing",
-  },
-  {
-    quote:
       "The AI Skills Hub seems mostly to consist of rehashed sales propaganda written by big tech and low-quality slide decks meant for other countries.",
     source: "Ed Newton-Rex",
     detail: "AI researcher and Fairly Trained founder",
+  },
+  {
+    quote:
+      "\u00A34.1 million for a link list: how the UK\u2019s AI Skills Hub became a portal to American tech power.",
+    source: "Medium",
+    detail: "Independent analysis of programme costs",
+  },
+  {
+    quote:
+      "The website feels messy. I am an everyday person. I do not want to be a programmer. I just want to understand how to use AI.",
+    source: "User feedback",
+    detail: "AI Skills Hub user testing",
   },
 ]
 
@@ -79,7 +91,7 @@ const comparisonRows = [
   {
     dimension: "Quality control",
     boost: "Benchmarked by Skills England",
-    marketplace: "No oversight \u2014 courses found with broken links, decade-old content, and incorrect UK law",
+    marketplace: "No oversight \u2014 courses with outdated content, US legal frameworks, and misleading \u2018free\u2019 labels that redirect to paid subscriptions",
     gwth: "Every lesson reviewed and updated daily",
     gwthAdvantage: true,
   },
@@ -252,6 +264,15 @@ export default function WhyGwthPage() {
                 against Skills England&apos;s AI Foundation Skills for Work
                 Framework. The programme is delivered by PwC under a
                 &pound;4.1&nbsp;million contract.
+              </p>
+              <p>
+                Beyond the 14 free courses, the AI Skills Hub lists over 660
+                courses in a broader marketplace. Around 60% of those require
+                payment, with costs ranging from a few pounds to over
+                &pound;7,000. Independent researchers found courses with
+                outdated content, US legal frameworks presented as UK-relevant,
+                and &ldquo;free&rdquo; courses that redirect to paid
+                subscriptions.
               </p>
               <p className="font-medium text-foreground">
                 This is a good starting point. The government calls it &ldquo;the

@@ -28,7 +28,7 @@ describe("PricingPage", () => {
 
   it("displays the ongoing monthly price", () => {
     render(<PricingPage />)
-    expect(screen.getByText("£5.00")).toBeInTheDocument()
+    expect(screen.getByText("£7.50")).toBeInTheDocument()
   })
 
   it("displays the total course cost", () => {

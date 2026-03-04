@@ -89,7 +89,7 @@ describe("ForTeamsPage", () => {
   it("displays the pricing", () => {
     render(<ForTeamsPage />)
     expect(screen.getByText("£29.00")).toBeInTheDocument()
-    expect(screen.getByText(/£5\.00\/month/)).toBeInTheDocument()
+    expect(screen.getByText(/£7\.50\/month/)).toBeInTheDocument()
   })
 
   it("has contact CTA", () => {

@@ -158,6 +158,11 @@ const faqs = [
     answer:
       "Absolutely. There is no minimum team size and no contract. Start with 2 people or 200. The admin dashboard is available for teams of 5+, but smaller groups work perfectly well with individual accounts.",
   },
+  {
+    question: "Can you create bespoke content for our company?",
+    answer:
+      "Yes. For teams of 100+, we can create bespoke lessons tailored specifically to your company's workflows, tools, and industry challenges. This means your team learns AI skills in the context of the work they actually do every day — not generic examples they have to mentally translate. Get in touch to discuss your requirements.",
+  },
 ]
 
 /**

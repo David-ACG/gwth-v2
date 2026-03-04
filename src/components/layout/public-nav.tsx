@@ -19,7 +19,7 @@ import { signOut } from "@/lib/actions/auth"
 
 const navLinks = [
   { href: "/about", label: "About" },
-  { href: "/why-gwth", label: "Why GWTH" },
+  { href: "/labs", label: "Free Labs" },
   { href: "/pricing", label: "Pricing" },
   { href: "/for-teams", label: "For Teams" },
   { href: "/tech-radar", label: "Tech Radar" },

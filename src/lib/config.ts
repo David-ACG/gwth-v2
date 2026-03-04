@@ -81,7 +81,7 @@ export const TEAMS_EMAIL = "teams@gwth.ai"
 export const COURSE_MONTHLY_PRICE = 29
 
 /** Monthly price for ongoing access after course completion (GBP) */
-export const ONGOING_MONTHLY_PRICE = 5
+export const ONGOING_MONTHLY_PRICE = 7.5
 
 /** Number of days in the grace period after a payment failure */
 export const GRACE_PERIOD_DAYS = 14

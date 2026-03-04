@@ -103,10 +103,11 @@ export default function AboutPage() {
             An AI course that is actually honest with you.
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            Based in the UK. Most AI courses are built by marketers who learned AI last year.
-            GWTH is built by a UK-based solution architect with 25 years of enterprise
+            Most AI courses are built by marketers who learned AI last year.
+            GWTH was founded by a UK-based solution architect with 25 years of enterprise
             experience who has been building with AI tools from day one — from
-            the first release of Cursor to the first release of Claude Code.
+            Machine Learning tools in 2015 to the first release of Cursor to the
+            first release of Claude Code.
           </p>
         </div>
       </section>
@@ -144,7 +145,7 @@ export default function AboutPage() {
                 alternative and picking the one that works best.
               </p>
               <p>
-                GWTH is based in the UK because that is where the skills gap is
+                GWTH is squarely aimed at the UK because this is where the skills gap is
                 most urgent. Only 21% of UK workers feel confident using AI at
                 work. Only 1 in 6 UK businesses were using AI as of mid-2025.
                 Micro businesses are 45% less likely to adopt AI than large
@@ -357,6 +358,12 @@ export default function AboutPage() {
             <Button size="lg" className="gap-2" asChild>
               <Link href="/labs">
                 Start with a Free Lab
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="gap-2" asChild>
+              <Link href="/why-gwth">
+                How We Compare
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
