@@ -169,13 +169,13 @@
       "Bash(git:*)",
       "Bash(\"C:\\\\Projects\\\\1_gwthpipeline520\\\\kanban\\\\2_testing\\\\PROMPT_02_complete-production-sync.md\":*)",
       "Bash(pip install:*)",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(rm:*)",
+      "mcp__playwright__browser_resize"
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "supabase"
-  ],
+  "enabledMcpjsonServers": ["supabase"],
   "hooks": {
     "PostToolUse": [
       {

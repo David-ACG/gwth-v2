@@ -74,9 +74,10 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Check if visiting a protected route without auth
-  const isProtected = PROTECTED_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  )
+  const isProtected =
+    PROTECTED_PATHS.some(
+      (path) => pathname === path || pathname.startsWith(`${path}/`)
+    ) && pathname !== "/labs"
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone()

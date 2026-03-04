@@ -8,7 +8,11 @@ import { NewsFilters } from "@/components/news/news-filters"
 import { EmptyState } from "@/components/shared/empty-state"
 import { NEWS_PAGE_SIZE } from "@/lib/config"
 import type { NewsSortOption } from "@/lib/types"
+import { NewsletterInline } from "@/components/news/newsletter-inline"
 import Link from "next/link"
+
+/** Revalidate news feed every 24 hours */
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: "News",
@@ -86,6 +90,13 @@ export default async function NewsPage({
               stories become hands-on labs.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter signup */}
+      <section className="py-6 md:py-8">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <NewsletterInline />
         </div>
       </section>
 

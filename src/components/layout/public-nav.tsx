@@ -18,11 +18,11 @@ import { cn } from "@/lib/utils"
 import { signOut } from "@/lib/actions/auth"
 
 const navLinks = [
-  { href: "/about", label: "About" },
   { href: "/labs", label: "Free Labs" },
+  { href: "/lessons", label: "Lessons" },
   { href: "/pricing", label: "Pricing" },
   { href: "/for-teams", label: "For Teams" },
-  { href: "/tech-radar", label: "Tech Radar" },
+  { href: "/about", label: "About" },
   { href: "/news", label: "News" },
 ]
 

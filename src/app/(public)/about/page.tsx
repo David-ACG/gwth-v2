@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -102,6 +103,16 @@ export default function AboutPage() {
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             An AI course that is actually honest with you.
           </h1>
+          <div className="mt-10 flex justify-center">
+            <Image
+              src="/trees-and-wind.png"
+              alt="Illustration of a fragile tree losing its leaves in the wind versus a strong, deeply rooted tree standing firm"
+              width={800}
+              height={400}
+              className="w-full max-w-lg rounded-2xl sm:max-w-xl md:max-w-2xl"
+              priority
+            />
+          </div>
           <p className="mt-6 text-lg text-muted-foreground">
             Most AI courses are built by marketers who learned AI last year.
             GWTH was founded by a UK-based solution architect with 25 years of enterprise
@@ -210,33 +221,36 @@ export default function AboutPage() {
       {/* Section 4: Independence Pledge */}
       <section className="border-t bg-muted/30 py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl">
-            <div className="flex items-start gap-6">
-              <div className="shrink-0">
-                <div className="relative h-20 w-20">
-                  <div
-                    className="absolute inset-3 rounded-2xl opacity-40 blur-xl"
-                    style={{ backgroundColor: "#388E3C" }}
-                  />
-                  <div
-                    className="relative flex h-full w-full items-center justify-center rounded-2xl bg-background shadow-xl"
-                    style={{
-                      border: "2px solid #388E3C30",
-                      transform: "translateY(-4px)",
-                    }}
-                  >
-                    <Shield
-                      className="h-10 w-10"
-                      style={{ color: "#388E3C" }}
-                      strokeWidth={1.5}
-                    />
-                  </div>
-                </div>
-              </div>
+          <div className="mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16">
+              {/* Text column */}
               <div>
-                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                  Independence Pledge
-                </h2>
+                <div className="flex items-center gap-4">
+                  <div className="shrink-0">
+                    <div className="relative h-16 w-16">
+                      <div
+                        className="absolute inset-2 rounded-2xl opacity-40 blur-xl"
+                        style={{ backgroundColor: "#388E3C" }}
+                      />
+                      <div
+                        className="relative flex h-full w-full items-center justify-center rounded-2xl bg-background shadow-xl"
+                        style={{
+                          border: "2px solid #388E3C30",
+                          transform: "translateY(-4px)",
+                        }}
+                      >
+                        <Shield
+                          className="h-8 w-8"
+                          style={{ color: "#388E3C" }}
+                          strokeWidth={1.5}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                    Independence Pledge
+                  </h2>
+                </div>
                 <div className="mt-6 space-y-4 text-lg leading-relaxed text-muted-foreground">
                   <p>
                     GWTH has no sponsors. No ads. No vendor partnerships. No
@@ -269,6 +283,18 @@ export default function AboutPage() {
                     is the only thing we sell to.
                   </p>
                 </div>
+              </div>
+
+              {/* Image column — shown above text on mobile (via order), beside on desktop */}
+              <div className="order-first flex justify-center md:order-last">
+                <Image
+                  src="/independence-pledge.png"
+                  alt="Independence Pledge — No sponsors, no ads, no affiliates, no partnerships"
+                  width={480}
+                  height={480}
+                  className="w-full max-w-sm rounded-2xl md:max-w-none"
+                  priority
+                />
               </div>
             </div>
           </div>

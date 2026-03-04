@@ -8,7 +8,7 @@ import {
   getTechRadarToolCount,
   getTechRadarLastUpdated,
 } from "@/lib/data/tech-radar"
-import { TechRadarGrid } from "@/components/tech-radar/tech-radar-grid"
+import { TechRadarTable } from "@/components/tech-radar/tech-radar-table"
 
 export const metadata: Metadata = {
   title: "Tech Radar",
@@ -99,7 +99,7 @@ export default function TechRadarPage() {
       {/* Tool Grid */}
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <TechRadarGrid tools={tools} categories={categories} />
+          <TechRadarTable tools={tools} categories={categories} />
         </div>
       </section>
 
