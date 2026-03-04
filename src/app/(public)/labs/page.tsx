@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import { FlaskConical, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { searchLabs, getLabFilters } from "@/lib/data/labs"
@@ -48,9 +49,15 @@ export default async function PublicLabsPage({
       <section className="border-b bg-muted/30 py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              <FlaskConical className="size-4" />
-              Free Labs
+            <div className="mb-6 flex justify-center">
+              <Image
+                src="/free-labs.png"
+                alt="AI labs — scientist with test tubes surrounded by lab projects like Family AI Bot, AI Customer Chatbot, AI Readiness Assessment Tool, and Local Whisper Bot"
+                width={900}
+                height={500}
+                className="w-full max-w-lg rounded-2xl sm:max-w-xl md:max-w-2xl"
+                priority
+              />
             </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               Build Real AI Projects
