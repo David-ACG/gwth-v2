@@ -50,84 +50,100 @@ const pressQuotes = [
   },
 ]
 
-/** Comparison table rows: dimension, government description, GWTH description, whether GWTH has advantage. */
+/**
+ * 3-column comparison: Government AI Skills Boost (14 free badged courses),
+ * Government AI Skills Marketplace (600+ broader courses), and GWTH.ai.
+ */
 const comparisonRows = [
   {
     dimension: "Price",
-    government: "Free",
+    boost: "Free",
+    marketplace: "Free to \u00A31,000+",
     gwth: `\u00A3${COURSE_MONTHLY_PRICE.toFixed(2)}/month for 3 months`,
     gwthAdvantage: false,
   },
   {
+    dimension: "Number of courses",
+    boost: "14 benchmarked courses",
+    marketplace: "600+ courses from mixed providers",
+    gwth: "1 structured programme (94 projects)",
+    gwthAdvantage: true,
+  },
+  {
     dimension: "Depth",
-    government: "Foundation (20 min \u2013 9 hrs per course)",
+    boost: "Foundation (20 min \u2013 9 hrs each)",
+    marketplace: "Mixed \u2014 some foundation, some advanced",
     gwth: "Comprehensive (120+ hrs over 3 months)",
     gwthAdvantage: true,
   },
   {
+    dimension: "Quality control",
+    boost: "Benchmarked by Skills England",
+    marketplace: "No oversight \u2014 courses found with broken links, decade-old content, and incorrect UK law",
+    gwth: "Every lesson reviewed and updated daily",
+    gwthAdvantage: true,
+  },
+  {
     dimension: "Scope",
-    government: "Basic AI awareness and prompting",
+    boost: "Basic AI awareness and prompting",
+    marketplace: "Varies wildly \u2014 basics to vendor certifications",
     gwth: "Use, Implement, Build, Transform",
     gwthAdvantage: true,
   },
   {
     dimension: "Hands-on projects",
-    government: "None",
+    boost: "None",
+    marketplace: "Occasional exercises",
     gwth: "94 projects with video walkthroughs",
     gwthAdvantage: true,
   },
   {
     dimension: "Tool bias",
-    government: "Vendor-specific (Google, Microsoft, Amazon)",
+    boost: "Vendor-specific (Google, Microsoft, Amazon)",
+    marketplace: "Vendor-specific \u2014 each course promotes its provider\u2019s tools",
     gwth: "Independent, vendor-neutral",
     gwthAdvantage: true,
   },
   {
     dimension: "Content freshness",
-    government: "Static, some courses from 2023\u20132024",
+    boost: "Static, some courses from 2023\u20132024",
+    marketplace: "Some courses 10+ years old",
     gwth: "Updated every day via Tech Radar",
     gwthAdvantage: true,
   },
   {
     dimension: "Enterprise content",
-    government: "None",
+    boost: "None",
+    marketplace: "None structured",
     gwth: "Month 3: governance, ROI, change management",
     gwthAdvantage: true,
   },
   {
     dimension: "Progression pathway",
-    government: "None beyond foundation",
+    boost: "None beyond foundation",
+    marketplace: "No structured pathway \u2014 self-directed browsing",
     gwth: "3-month structured pathway",
     gwthAdvantage: true,
   },
   {
     dimension: "Assessment",
-    government: "Badge on completion",
+    boost: "Badge on completion",
+    marketplace: "Varies \u2014 some offer certificates, some do not",
     gwth: "Dynamic scoring that stays current",
     gwthAdvantage: true,
   },
   {
     dimension: "Community",
-    government: "None",
+    boost: "None",
+    marketplace: "None",
     gwth: "Peer support, forums, office hours",
     gwthAdvantage: true,
   },
   {
     dimension: "UK focus",
-    government: "Courses from US companies",
+    boost: "Courses from US companies",
+    marketplace: "Mix of US and international providers",
     gwth: "Built in the UK, UK-focused content",
-    gwthAdvantage: true,
-  },
-  {
-    dimension: "Coding skills",
-    government: "Not covered",
-    gwth: "Progressive: no-code to AI-assisted coding",
-    gwthAdvantage: true,
-  },
-  {
-    dimension: "Automation",
-    government: "Basic admin tasks",
-    gwth: "Full pipeline: Zapier to n8n to custom systems",
     gwthAdvantage: true,
   },
 ]
@@ -296,23 +312,34 @@ export default function WhyGwthPage() {
               Side-by-Side Comparison
             </h2>
             <p className="mt-4 text-muted-foreground">
-              A factual comparison of what each programme offers.
+              The government offers two things: 14 free badged foundation
+              courses (the AI Skills Boost) and a broader marketplace of 600+
+              courses from mixed providers. Here is how they compare to GWTH.
             </p>
           </div>
 
           {/* Desktop table (md and above) */}
-          <div className="mx-auto mt-12 hidden max-w-5xl md:block">
+          <div className="mx-auto mt-12 hidden max-w-6xl md:block">
             <div className="overflow-hidden rounded-lg border">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
-                    <th className="px-6 py-4 text-left font-semibold">
+                    <th className="px-4 py-4 text-left font-semibold">
                       Dimension
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold">
-                      Government AI Skills Boost
+                    <th className="px-4 py-4 text-left font-semibold">
+                      AI Skills Boost
+                      <span className="block text-xs font-normal text-muted-foreground">
+                        14 free badged courses
+                      </span>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold">
+                    <th className="px-4 py-4 text-left font-semibold">
+                      AI Skills Marketplace
+                      <span className="block text-xs font-normal text-muted-foreground">
+                        600+ broader courses
+                      </span>
+                    </th>
+                    <th className="px-4 py-4 text-left font-semibold text-primary">
                       GWTH.ai
                     </th>
                   </tr>
@@ -323,14 +350,20 @@ export default function WhyGwthPage() {
                       key={row.dimension}
                       className={index % 2 === 0 ? "bg-card" : "bg-muted/20"}
                     >
-                      <td className="px-6 py-4 font-medium">{row.dimension}</td>
-                      <td className="px-6 py-4 text-muted-foreground">
+                      <td className="px-4 py-4 font-medium">{row.dimension}</td>
+                      <td className="px-4 py-4 text-muted-foreground">
                         <span className="inline-flex items-center gap-2">
                           <Minus className="size-4 shrink-0 text-muted-foreground/50" />
-                          {row.government}
+                          {row.boost}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4 text-muted-foreground">
+                        <span className="inline-flex items-center gap-2">
+                          <Minus className="size-4 shrink-0 text-muted-foreground/50" />
+                          {row.marketplace}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4">
                         <span className="inline-flex items-center gap-2">
                           {row.gwthAdvantage ? (
                             <Check className="size-4 shrink-0 text-green-600 dark:text-green-400" />
@@ -358,10 +391,19 @@ export default function WhyGwthPage() {
                       <Minus className="mt-0.5 size-4 shrink-0 text-muted-foreground/50" />
                       <div>
                         <span className="text-xs font-medium text-muted-foreground">
-                          Government
+                          AI Skills Boost
+                        </span>
+                        <p className="text-muted-foreground">{row.boost}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Minus className="mt-0.5 size-4 shrink-0 text-muted-foreground/50" />
+                      <div>
+                        <span className="text-xs font-medium text-muted-foreground">
+                          AI Skills Marketplace
                         </span>
                         <p className="text-muted-foreground">
-                          {row.government}
+                          {row.marketplace}
                         </p>
                       </div>
                     </div>

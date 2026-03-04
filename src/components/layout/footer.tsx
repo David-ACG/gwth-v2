@@ -15,6 +15,7 @@ const footerLinks = [
     title: "Learn",
     links: [
       { href: "/labs", label: "Free Labs" },
+      { href: "/why-gwth", label: "Why GWTH" },
       { href: "/news", label: "News" },
       { href: "/newsletter", label: "Newsletter" },
       { href: "/about", label: "About GWTH" },
