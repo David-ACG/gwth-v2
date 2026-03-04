@@ -141,3 +141,48 @@ Add JSON-LD structured data (WebPage type, as used on other pages).
 - The pricing page and for-teams page already link to `/why-gwth` (or will, after their prompts are implemented). This page must exist for those links to work.
 - Follow the same layout patterns as the about page and for-teams page: alternating section backgrounds, consistent heading sizes, Card components for structured content.
 - Import `COURSE_MONTHLY_PRICE` from `src/lib/config.ts` for any price references so they stay in sync.
+
+---
+
+## Implementation Notes — 2026-03-04 10:58
+
+- **Commit:** d5a4a42 feat: add /why-gwth government AI Skills Boost comparison page
+- **Tests:** 14 test files, 110 tests — all passed
+- **Verification URL:** http://192.168.178.50:3001 (P520 test)
+- **Playwright check:** Not performed (static content page, no interactive behaviour to test)
+- **Changes summary:**
+  - Created `src/app/(public)/why-gwth/page.tsx` — new Server Component page
+  - 7 sections: Hero (with 21% stat), Government Programme overview, Press Quotes (5 real quotes with source attribution), Side-by-Side Comparison (13 rows, responsive table/cards), The Numbers (4 UK stats), GWTH Fills the Gap (narrative), CTA (3 buttons to /signup, /pricing, /labs)
+  - JSON-LD structured data (WebPage type)
+  - Metadata with title and description
+  - Imports `COURSE_MONTHLY_PRICE` from config for price consistency
+  - Follows existing design patterns: alternating `bg-muted/30` sections, Card components, floating icon styling, `max-w-7xl` container
+  - Responsive comparison table: HTML `<table>` on `md:` and above, stacked Card components on mobile
+  - Green check icons for GWTH advantages, neutral grey dash for government items (respectful, no red X marks)
+  - All copy in British English
+  - Renamed prompt file from `PROMPT-UK4` to `PROMPT_UK4` (correct naming convention)
+- **Deviations from plan:** None
+- **Follow-up issues:** None
+
+---
+
+## Testing Checklist — 2026-03-04 10:58
+
+**Check the changes:** http://192.168.178.50:3001/why-gwth
+
+- [ ] Page loads without errors
+- [ ] Hero section displays "Only 21% of UK workers feel confident using AI at work"
+- [ ] 5 press quotes render with source attribution (Computer Weekly x2, FE Week, User feedback, Ed Newton-Rex)
+- [ ] Comparison table shows 13 rows on desktop as a proper HTML table
+- [ ] Comparison table shows stacked cards on mobile (resize browser to check)
+- [ ] Stats grid shows 4 statistics (21%, 1 in 6, £400bn, 94)
+- [ ] CTAs link correctly to /signup, /pricing, and /labs
+- [ ] Light/dark mode correct
+- [ ] Mobile responsive
+- [ ] No console errors
+
+### Actions for David
+
+Visit http://192.168.178.50:3001/why-gwth and verify the page renders correctly. Check the comparison table on both desktop and mobile widths. Verify the tone is appropriate — factual and respectful, not attacking the government programme.
+
+**Review this file:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PROMPT_UK4_2026-03-03_why-gwth-comparison-page.md`
