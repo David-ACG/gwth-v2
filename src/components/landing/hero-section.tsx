@@ -44,6 +44,9 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
+            <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+              Built in the UK. For the world.
+            </span>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               Stop watching AI change the world.{" "}
               <span className="text-gradient">Start building with it.</span>
@@ -58,7 +61,8 @@ export function HeroSection() {
             <p className="mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
               Learn to build apps, automate workflows, research faster, create content,
               analyse data, and solve real problems using AI — all in plain English.
-              No coding. No theory. Just the applied skills employers are hiring for right now.
+              Built in the UK by practitioners, not marketers. Independent of any vendor
+              or government programme.
             </p>
             <p className="mt-4 max-w-xl text-base text-muted-foreground">
               One course. Three months to get started. Five hours a week. Updated every day

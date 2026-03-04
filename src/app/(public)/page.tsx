@@ -44,9 +44,9 @@ const differentiators = [
   {
     icon: Shield,
     color: "#388E3C",
-    title: "Completely independent",
+    title: "Independent and UK-based",
     description:
-      "No sponsors. No ads. No vendor partnerships. When we recommend a tool, it is because we tested it against every alternative and it was the best option.",
+      "No sponsors. No ads. No vendor partnerships. Based in the UK, not funded by or affiliated with any government programme. When the UK government outsources AI training to US big tech, GWTH is the independent British alternative that tests every tool honestly.",
   },
   {
     icon: Trophy,
@@ -84,14 +84,14 @@ const audiences = [
     color: "#33BBFF",
     title: "You have been made redundant and need to reskill",
     description:
-      "Five hours a week for three months. Every project you build goes in your portfolio. Every score is verifiable. Employers are hiring for exactly these skills.",
+      "Five hours a week for three months. Every project you build goes in your portfolio. Every score is verifiable. UK employers are hiring for exactly these skills — and only 21% of UK workers feel confident using AI. That gap is your opportunity.",
   },
   {
     icon: Store,
     color: "#0E7C7B",
     title: "You run a small business",
     description:
-      "Your competitors are already using AI. You do not need to hire a developer. Five hours a week for three months, and you will be able to do it all yourself.",
+      "UK micro businesses are 45% less likely to adopt AI than large companies. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant — you will be able to do it all yourself.",
   },
   {
     icon: Baby,
@@ -303,13 +303,13 @@ export default function LandingPage() {
               <CardContent className="p-8">
                 <div className="text-center">
                   <div className="text-4xl font-bold">
-                    ${COURSE_MONTHLY_PRICE.toFixed(2)}
+                    £{COURSE_MONTHLY_PRICE.toFixed(2)}
                     <span className="text-lg font-normal text-muted-foreground">
                       /month for 3 months
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Then ${ONGOING_MONTHLY_PRICE.toFixed(2)}/month for ongoing access
+                    Then £{ONGOING_MONTHLY_PRICE.toFixed(2)}/month for ongoing access
                     to updated content and your live skill scores.
                   </p>
                 </div>
@@ -356,6 +356,7 @@ export default function LandingPage() {
             Every week you wait, the gap between people who can use AI and people who cannot
             gets wider. One course. Three months. Five hours a week. No coding. No theory.
             Just the skills that matter, updated every day so they stay relevant.
+            Based in the UK. Built for everyone who wants to stay relevant.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button size="lg" className="gap-2" asChild>

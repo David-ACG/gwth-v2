@@ -23,22 +23,22 @@ describe("PricingPage", () => {
 
   it("displays the course monthly price", () => {
     render(<PricingPage />)
-    expect(screen.getByText("$37.50")).toBeInTheDocument()
+    expect(screen.getByText("£29.00")).toBeInTheDocument()
   })
 
   it("displays the ongoing monthly price", () => {
     render(<PricingPage />)
-    expect(screen.getByText("$7.50")).toBeInTheDocument()
+    expect(screen.getByText("£5.00")).toBeInTheDocument()
   })
 
   it("displays the total course cost", () => {
     render(<PricingPage />)
-    expect(screen.getByText(/\$112\.50 total/)).toBeInTheDocument()
+    expect(screen.getByText(/£87\.00 total/)).toBeInTheDocument()
   })
 
   it("displays free tier price", () => {
     render(<PricingPage />)
-    expect(screen.getByText("$0")).toBeInTheDocument()
+    expect(screen.getByText("£0")).toBeInTheDocument()
   })
 
   it("renders Stay Current advantages", () => {

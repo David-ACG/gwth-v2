@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Free labs to start, $37.50/month for the 3-month course, then just $7.50/month to stay current. No lock-in, cancel anytime.",
+    "Free labs to start, £29/month for the 3-month course, then just £5/month to stay current. No lock-in, cancel anytime.",
 }
 
 const freeFeatures = [
@@ -47,7 +47,7 @@ const ongoingFeatures = [
 
 /**
  * Pricing page with three tiers: Free Labs, The Course, and Stay Current.
- * Emphasizes the $7.50/month ongoing value after the 3-month course.
+ * Emphasises the £5/month ongoing value after the 3-month course.
  */
 export default function PricingPage() {
   return (
@@ -75,7 +75,7 @@ export default function PricingPage() {
                 </div>
                 <h2 className="text-lg font-semibold">Free Labs</h2>
                 <div className="mt-4 text-5xl font-bold">
-                  $0
+                  £0
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">
                   forever — no card required
@@ -113,13 +113,13 @@ export default function PricingPage() {
                 </div>
                 <h2 className="text-lg font-semibold">The Course</h2>
                 <div className="mt-4 text-5xl font-bold">
-                  ${COURSE_MONTHLY_PRICE.toFixed(2)}
+                  £{COURSE_MONTHLY_PRICE.toFixed(2)}
                   <span className="text-lg font-normal text-muted-foreground">
                     /mo
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  for 3 months (${TOTAL_COURSE_COST.toFixed(2)} total)
+                  for 3 months (£{TOTAL_COURSE_COST.toFixed(2)} total)
                 </p>
               </div>
 
@@ -152,7 +152,7 @@ export default function PricingPage() {
                 </div>
                 <h2 className="text-lg font-semibold">Stay Current</h2>
                 <div className="mt-4 text-5xl font-bold">
-                  ${ONGOING_MONTHLY_PRICE.toFixed(2)}
+                  £{ONGOING_MONTHLY_PRICE.toFixed(2)}
                   <span className="text-lg font-normal text-muted-foreground">
                     /mo
                   </span>

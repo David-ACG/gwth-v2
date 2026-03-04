@@ -86,6 +86,7 @@ const stats = [
   { value: "60+", label: "Tools tracked daily" },
   { value: "3", label: "Months to completion" },
   { value: "3", label: "Capstone projects" },
+  { value: "UK", label: "Based & built" },
 ]
 
 /**
@@ -102,8 +103,8 @@ export default function AboutPage() {
             An AI course that is actually honest with you.
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            Most AI courses are built by marketers who learned AI last year.
-            GWTH is built by a solution architect with 25 years of enterprise
+            Based in the UK. Most AI courses are built by marketers who learned AI last year.
+            GWTH is built by a UK-based solution architect with 25 years of enterprise
             experience who has been building with AI tools from day one — from
             the first release of Cursor to the first release of Claude Code.
           </p>
@@ -141,6 +142,16 @@ export default function AboutPage() {
                 try to build something real. The recommendations are not based
                 on who sponsors the channel. They are based on testing every
                 alternative and picking the one that works best.
+              </p>
+              <p>
+                GWTH is based in the UK because that is where the skills gap is
+                most urgent. Only 21% of UK workers feel confident using AI at
+                work. Only 1 in 6 UK businesses were using AI as of mid-2025.
+                Micro businesses are 45% less likely to adopt AI than large
+                companies. The government has responded with free courses
+                delivered by US big tech — 20-minute introductions that teach
+                you one vendor&apos;s tools and call it job done. GWTH exists
+                because UK workers and businesses deserve better than that.
               </p>
             </div>
           </div>
@@ -245,6 +256,13 @@ export default function AboutPage() {
                     partnership with a tool vendor, their recommendations are
                     compromised whether they admit it or not.
                   </p>
+                  <p>
+                    GWTH is a British company with no foreign vendor partnerships.
+                    When the UK government&apos;s own AI training programme outsources
+                    every course to US big tech companies, we believe there should
+                    be an independent, UK-based alternative that puts learners
+                    first — not shareholders.
+                  </p>
                   <p className="font-medium text-foreground">
                     Our revenue comes from subscriptions. That is it. Your trust
                     is the only thing we sell to.
@@ -309,7 +327,7 @@ export default function AboutPage() {
               The Numbers
             </h2>
           </div>
-          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-8 md:grid-cols-4">
+          <div className="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-5">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-4xl font-bold text-primary">

@@ -195,7 +195,7 @@ export default async function DashboardPage() {
                   <div className="mt-4 flex flex-wrap gap-3">
                     <Button className="gap-2" asChild>
                       <Link href="/pricing">
-                        Subscribe — ${COURSE_MONTHLY_PRICE.toFixed(2)}/month
+                        Subscribe — £{COURSE_MONTHLY_PRICE.toFixed(2)}/month
                         <ArrowRight className="size-4" />
                       </Link>
                     </Button>

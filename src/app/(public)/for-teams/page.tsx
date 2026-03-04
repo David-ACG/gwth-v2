@@ -33,7 +33,7 @@ import {
 export const metadata: Metadata = {
   title: "AI Training for Teams",
   description:
-    "Upskill your team with hands-on AI training. 94 projects, no coding required, vendor-neutral. Choose the syllabus that fits each role. $37.50/month per person for 3 months.",
+    "Upskill your team with hands-on AI training. 94 projects, no coding required, vendor-neutral. Choose the syllabus that fits each role. £29/month per person for 3 months.",
 }
 
 const whyGwth = [
@@ -131,7 +131,7 @@ const faqs = [
   {
     question: "What is the ROI?",
     answer:
-      `The entire course costs $${TOTAL_COURSE_COST.toFixed(2)} per person over 3 months — less than 5 hours of a $50k employee's time. By Month 1, your team will be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives. The course pays for itself in the first week.`,
+      `The entire course costs £${TOTAL_COURSE_COST.toFixed(2)} per person over 3 months — less than 5 hours of an employee earning £35k a year. By Month 1, your team will be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives. The course pays for itself in the first week.`,
   },
   {
     question: "Our team is not technical. Is this appropriate?",
@@ -249,9 +249,9 @@ export default function ForTeamsPage() {
                 The real cost is not the course. It is your team&apos;s time.
               </h2>
               <p className="mt-6 text-lg text-muted-foreground">
-                At ${COURSE_MONTHLY_PRICE.toFixed(2)}/month for 3 months, the entire
-                course costs <strong className="text-foreground">${TOTAL_COURSE_COST.toFixed(2)} per person</strong>.
-                That is less than 5 hours of an employee earning $50k a year.
+                At £{COURSE_MONTHLY_PRICE.toFixed(2)}/month for 3 months, the entire
+                course costs <strong className="text-foreground">£{TOTAL_COURSE_COST.toFixed(2)} per person</strong>.
+                That is less than 5 hours of an employee earning £35k a year.
               </p>
             </div>
             <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
@@ -440,13 +440,13 @@ export default function ForTeamsPage() {
               <CardContent className="p-8">
                 <div className="text-center">
                   <div className="text-5xl font-bold">
-                    ${COURSE_MONTHLY_PRICE.toFixed(2)}
+                    £{COURSE_MONTHLY_PRICE.toFixed(2)}
                     <span className="text-lg font-normal text-muted-foreground">
                       /month per person
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    for 3 months (${TOTAL_COURSE_COST.toFixed(2)} total per person), then ${ONGOING_MONTHLY_PRICE.toFixed(2)}/month
+                    for 3 months (£{TOTAL_COURSE_COST.toFixed(2)} total per person), then £{ONGOING_MONTHLY_PRICE.toFixed(2)}/month
                     ongoing for continued access and live skill scores.
                   </p>
                 </div>

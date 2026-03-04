@@ -70,9 +70,9 @@ export default async function SettingsPage() {
                 {state === "registered"
                   ? "Free labs access only"
                   : state === "ongoing"
-                    ? `Full course access · $${ONGOING_MONTHLY_PRICE.toFixed(2)}/month`
+                    ? `Full course access · £${ONGOING_MONTHLY_PRICE.toFixed(2)}/month`
                     : ["month1", "month2", "month3"].includes(state)
-                      ? `Course access · $${COURSE_MONTHLY_PRICE.toFixed(2)}/month`
+                      ? `Course access · £${COURSE_MONTHLY_PRICE.toFixed(2)}/month`
                       : "No active subscription"}
               </p>
             </div>
@@ -122,7 +122,7 @@ export default async function SettingsPage() {
             <div className="rounded-lg bg-muted/50 p-4">
               <p className="text-sm font-medium">Ready to start the course?</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Subscribe for ${COURSE_MONTHLY_PRICE.toFixed(2)}/month to
+                Subscribe for £{COURSE_MONTHLY_PRICE.toFixed(2)}/month to
                 unlock the full course, monthly content, and dynamic scoring.
               </p>
               <Button size="sm" className="mt-3" asChild>

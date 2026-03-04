@@ -75,12 +75,13 @@ export const SUPPORT_EMAIL = "support@gwth.ai"
 export const TEAMS_EMAIL = "teams@gwth.ai"
 
 // ─── Subscription & Pricing ──────────────────────────────────────────────────
+// All prices are in GBP (£)
 
-/** Monthly price during the 3-month course (USD) */
-export const COURSE_MONTHLY_PRICE = 37.5
+/** Monthly price during the 3-month course (GBP) */
+export const COURSE_MONTHLY_PRICE = 29
 
-/** Monthly price for ongoing access after course completion (USD) */
-export const ONGOING_MONTHLY_PRICE = 7.5
+/** Monthly price for ongoing access after course completion (GBP) */
+export const ONGOING_MONTHLY_PRICE = 5
 
 /** Number of days in the grace period after a payment failure */
 export const GRACE_PERIOD_DAYS = 14
@@ -106,7 +107,7 @@ export const TOTAL_OPTIONAL_LESSONS = 30
 /** Total mandatory lessons across all 3 months */
 export const TOTAL_MANDATORY_LESSONS = 64
 
-/** Total course cost for 3 months (USD) */
+/** Total course cost for 3 months (GBP) */
 export const TOTAL_COURSE_COST = COURSE_MONTHLY_PRICE * TOTAL_COURSE_MONTHS
 
 // ─── Course Structure ────────────────────────────────────────────────────────
