@@ -88,6 +88,8 @@ export interface TechRadarTool {
   tags: string[]
   /** Whether this tool is currently trending/notable */
   is_hot: boolean
+  /** ISO 3166-1 alpha-2 country code for the tool's headquarters/origin (e.g., "US", "GB", "FR") */
+  country_code: string
   /** When the tool entry was last verified */
   last_verified: string
 }

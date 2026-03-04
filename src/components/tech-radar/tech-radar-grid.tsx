@@ -35,6 +35,30 @@ const COST_LABELS: Record<TechRadarTool["cost_tier"], string> = {
   open_source: "Open Source",
 }
 
+/** Converts ISO 3166-1 alpha-2 country code to flag emoji */
+function countryFlag(code: string): string {
+  return [...code.toUpperCase()]
+    .map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
+    .join("")
+}
+
+/** Maps ISO country codes to full country names for accessibility */
+const COUNTRY_NAMES: Record<string, string> = {
+  US: "United States",
+  GB: "United Kingdom",
+  FR: "France",
+  DE: "Germany",
+  CN: "China",
+  CA: "Canada",
+  SE: "Sweden",
+  IL: "Israel",
+  AE: "United Arab Emirates",
+  KR: "South Korea",
+  JP: "Japan",
+  AU: "Australia",
+  IN: "India",
+}
+
 /** Maps cost tier to a color scheme for the badge */
 const COST_COLORS: Record<TechRadarTool["cost_tier"], string> = {
   free: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
@@ -315,6 +339,15 @@ function ToolCard({ tool }: { tool: TechRadarTool }) {
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h3 className="truncate text-base font-bold">{tool.name}</h3>
+              {tool.country_code && (
+                <span
+                  title={COUNTRY_NAMES[tool.country_code] ?? tool.country_code}
+                  aria-label={COUNTRY_NAMES[tool.country_code] ?? tool.country_code}
+                  className="shrink-0 text-sm"
+                >
+                  {countryFlag(tool.country_code)}
+                </span>
+              )}
               {tool.is_hot && (
                 <span
                   className="inline-flex shrink-0 items-center gap-0.5 text-orange-500 dark:text-orange-400"
