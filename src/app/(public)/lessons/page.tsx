@@ -157,6 +157,40 @@ export default function LessonsPage() {
         </div>
       </section>
 
+      {/* Why One Hour a Day */}
+      <section className="py-16 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Why One Hour a Day?
+          </h2>
+          <div className="mt-6 space-y-4 text-lg leading-relaxed text-muted-foreground">
+            <p>
+              GWTH.ai is built around the 5-Hour Rule — the principle, coined by
+              Michael Simmons, that no matter how busy successful people are, they
+              always set aside at least an hour a day for deliberate learning. Bill
+              Gates, Warren Buffett, Elon Musk, and Oprah Winfrey all follow this
+              approach. Simmons traces the idea back to Benjamin Franklin, who
+              consistently invested an hour a day in reading, writing, and tracking
+              his goals. Entrepreneur Thomas Corley&apos;s five-year study of 233
+              millionaires confirmed that 88% dedicate at least 30 minutes daily to
+              self-education — not for fun, but to sharpen their edge. The research
+              is clear: sustained daily learning beats occasional cramming every
+              time.
+            </p>
+            <p>
+              GWTH.ai lessons are designed to fit this rhythm. Each one delivers
+              focused, practical AI skills in roughly an hour — five hours across
+              your working week — so you build real capability without disrupting
+              your life. Read, reflect, then apply what you&apos;ve learned through
+              hands-on projects. As the AT&amp;T CEO warned, those who don&apos;t
+              spend at least five to ten hours a week learning risk making
+              themselves obsolete. In the age of AI, that&apos;s never been more
+              true — and GWTH makes sure those five hours count.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom CTA */}
       <section className="py-16 md:py-20">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
