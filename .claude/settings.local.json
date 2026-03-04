@@ -167,7 +167,9 @@
       "Bash(bd update:*)",
       "Bash(where python:*)",
       "Bash(git:*)",
-      "Bash(\"C:\\\\Projects\\\\1_gwthpipeline520\\\\kanban\\\\2_testing\\\\PROMPT_02_complete-production-sync.md\":*)"
+      "Bash(\"C:\\\\Projects\\\\1_gwthpipeline520\\\\kanban\\\\2_testing\\\\PROMPT_02_complete-production-sync.md\":*)",
+      "Bash(pip install:*)",
+      "Bash(npx next:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
