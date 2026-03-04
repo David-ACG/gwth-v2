@@ -31,9 +31,9 @@ import {
 } from "@/lib/config"
 
 export const metadata: Metadata = {
-  title: "AI Training for Teams",
+  title: "AI Training for UK Teams",
   description:
-    "Upskill your team with hands-on AI training. 94 projects, no coding required, vendor-neutral. Choose the syllabus that fits each role. £29/month per person for 3 months.",
+    "Upskill your UK team with hands-on AI training. 94 projects, no coding required, vendor-neutral. Choose the syllabus that fits each role. £29/month per person for 3 months.",
 }
 
 const whyGwth = [
@@ -121,7 +121,7 @@ const faqs = [
   {
     question: "Will this displace our employees?",
     answer:
-      "No. This course makes your existing team more productive. People who can use AI effectively are more valuable, not less. Companies investing in AI training retain 34% more staff because employees feel invested in rather than threatened.",
+      "No. This course makes your existing team more productive. People who can use AI effectively are more valuable, not less. UK employment law provides strong protections, and the government's own AI strategy emphasises augmentation over replacement. Companies investing in AI training retain 34% more staff because employees feel invested in rather than threatened.",
   },
   {
     question: "Is our data safe?",
@@ -131,7 +131,7 @@ const faqs = [
   {
     question: "What is the ROI?",
     answer:
-      `The entire course costs £${TOTAL_COURSE_COST.toFixed(2)} per person over 3 months — less than 5 hours of an employee earning £35k a year. By Month 1, your team will be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives. The course pays for itself in the first week.`,
+      `The entire course costs £${TOTAL_COURSE_COST.toFixed(2)} per person over 3 months — less than 5 hours of an employee earning £30,000 a year. By Month 1, your team will be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives. The course pays for itself in the first week.`,
   },
   {
     question: "Our team is not technical. Is this appropriate?",
@@ -142,6 +142,11 @@ const faqs = [
     question: "How is this different from vendor-specific training?",
     answer:
       "Vendor training teaches you one tool. We teach the skill of working with AI, using whichever tool is best for the job. Our Tech Radar tracks 60+ tools daily — when something better appears, we update the course immediately. Your team learns transferable skills, not product-specific workflows that become obsolete.",
+  },
+  {
+    question: "How does this compare to the government's AI Skills Boost?",
+    answer:
+      "The government programme covers AI awareness basics in 20 minutes to 9 hours. That is roughly equivalent to our first two weeks. GWTH goes dramatically further — 94 hands-on projects, industry-specific modules, enterprise transformation, and content updated every day. Many teams complete the free government badge first, then use GWTH for the comprehensive skills their people actually need.",
   },
   {
     question: "Can employees complete this during working hours?",
@@ -190,7 +195,8 @@ export default function ForTeamsPage() {
               AI Training for Your Team
             </h1>
             <p className="mt-4 text-xl text-muted-foreground">
-              The gap is not tools. It is skills.
+              UK businesses are falling behind on AI skills. The gap is not
+              tools — it is training.
             </p>
           </div>
         </div>
@@ -207,16 +213,16 @@ export default function ForTeamsPage() {
           <div className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
             {[
               {
-                stat: "5%",
-                label: "of companies generate meaningful value from AI at scale",
+                stat: "21%",
+                label: "of UK workers feel confident using AI at work",
               },
               {
-                stat: "70%",
-                label: "of digital transformations fail due to people and process",
+                stat: "1 in 6",
+                label: "UK businesses were using AI as of mid-2025",
               },
               {
-                stat: "34%",
-                label: "more staff retained by companies investing in AI training",
+                stat: "45%",
+                label: "less likely for micro businesses to adopt AI vs large firms",
               },
             ].map((item) => (
               <Card key={item.stat}>
@@ -231,11 +237,15 @@ export default function ForTeamsPage() {
               </Card>
             ))}
           </div>
-          <p className="mx-auto mt-8 max-w-2xl text-center text-muted-foreground">
-            Most AI training fails because it teaches tools, not skills. Your team
-            finishes a vendor workshop, the tool updates, and everything they learned
-            is obsolete. We teach the skill of working with AI — which tool is best
-            changes every week, but the skill transfers.
+          <p className="mx-auto mt-8 max-w-2xl text-center text-sm text-muted-foreground italic">
+            Source: UK Government / DSIT research, published alongside the AI
+            Skills Boost programme (January 2026).
+          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
+            Most AI training fails because it teaches tools, not skills. The UK
+            government&apos;s own research shows only 21% of workers feel confident
+            using AI. A 20-minute vendor course will not change that. 120 hours of
+            hands-on, vendor-neutral training will.
           </p>
         </div>
       </section>
@@ -251,7 +261,7 @@ export default function ForTeamsPage() {
               <p className="mt-6 text-lg text-muted-foreground">
                 At £{COURSE_MONTHLY_PRICE.toFixed(2)}/month for 3 months, the entire
                 course costs <strong className="text-foreground">£{TOTAL_COURSE_COST.toFixed(2)} per person</strong>.
-                That is less than 5 hours of an employee earning £35k a year.
+                That is less than 5 hours of an employee earning £30,000 a year.
               </p>
             </div>
             <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
@@ -466,6 +476,9 @@ export default function ForTeamsPage() {
                 </ul>
               </CardContent>
             </Card>
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              All prices in GBP. International pricing coming soon.
+            </p>
           </div>
         </div>
       </section>
@@ -497,7 +510,7 @@ export default function ForTeamsPage() {
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Ready to upskill your team?
+            Ready to upskill your UK team?
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Get in touch to discuss your team&apos;s needs, or let your people
