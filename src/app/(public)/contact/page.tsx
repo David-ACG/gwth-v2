@@ -21,7 +21,8 @@ export default function ContactPage() {
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
             Have a question about the course, team pricing, or anything else?
-            Send us a message and we will get back to you.
+            Send us a message and we will get back to you. GWTH is based in the
+            United Kingdom.
           </p>
         </div>
         <ContactForm />

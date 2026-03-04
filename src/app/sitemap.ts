@@ -11,6 +11,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: APP_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     { url: `${APP_URL}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${APP_URL}/pricing`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${APP_URL}/why-gwth`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${APP_URL}/for-teams`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${APP_URL}/tech-radar`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${APP_URL}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
   ]
 
   const coursePages: MetadataRoute.Sitemap = mockCourses.map((course) => ({

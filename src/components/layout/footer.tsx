@@ -6,6 +6,7 @@ const footerLinks = [
     title: "Product",
     links: [
       { href: "/pricing", label: "Pricing" },
+      { href: "/why-gwth", label: "Why GWTH" },
       { href: "/for-teams", label: "For Teams" },
       { href: "/tech-radar", label: "Tech Radar" },
       { href: "/contact", label: "Contact" },
@@ -32,7 +33,7 @@ const footerLinks = [
 
 /**
  * Site footer for public pages.
- * Shows logo, tagline, organized link columns, and copyright.
+ * Shows logo, tagline, organised link columns, and copyright.
  */
 export function Footer() {
   return (
@@ -44,8 +45,9 @@ export function Footer() {
               {APP_NAME}
             </Link>
             <p className="mt-2 text-sm text-muted-foreground">
-              Learn to build apps, automate workflows, and solve real problems
-              using AI — all in plain English. No coding required.
+              UK-based AI training. Learn to build apps, automate workflows, and
+              solve real problems using AI — all in plain English. No coding
+              required.
             </p>
           </div>
           {footerLinks.map((group) => (
@@ -72,7 +74,10 @@ export function Footer() {
               &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
             </p>
             <p className="text-xs text-muted-foreground">
-              Independent. No sponsors. No ads. No vendor partnerships.
+              Independent. UK-based. No sponsors. No ads. No vendor partnerships.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Based in the United Kingdom 🇬🇧
             </p>
           </div>
         </div>
