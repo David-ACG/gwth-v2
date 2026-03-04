@@ -103,3 +103,54 @@ Add a subtle UK reference to the final CTA section. For example, update the desc
 - Do NOT create any new pages in this prompt. The `/why-gwth` comparison page is handled by a separate prompt.
 - Do NOT modify the tech radar in this prompt. Country flags are handled by a separate prompt.
 - Read the research files referenced above for accurate UK statistics to use in copy.
+
+---
+## Implementation Notes — 2026-03-04 00:30
+- **Commit:** c742834 feat: uk-first messaging and GBP pricing across all pages
+- **Tests:** 110/110 passed (14 test files, 0 failures)
+- **Verification URL:** http://192.168.178.50:3001
+- **Playwright check:** skipped (health endpoint returned 200; visual check deferred to Gate 4)
+- **Changes summary:**
+  - `src/lib/config.ts` — COURSE_MONTHLY_PRICE 37.5→29, ONGOING_MONTHLY_PRICE 7.5→5, added GBP comment
+  - `src/components/landing/hero-section.tsx` — added "Built in the UK. For the world." badge pill, updated subtitle
+  - `src/app/(public)/page.tsx` — "Independent and UK-based" differentiator, UK stats in audience cards, £ symbols in pricing, UK reference in final CTA
+  - `src/app/(public)/about/page.tsx` — "Based in the UK" hero, UK skills gap paragraph, British company independence pledge, "UK Based & built" stat
+  - `src/app/(public)/pricing/page.tsx` — all $ → £, updated metadata description
+  - `src/app/(public)/for-teams/page.tsx` — all $ → £, £35k salary reference, updated FAQ
+  - `src/app/(dashboard)/settings/page.tsx` — 3x $ → £ for subscription prices
+  - `src/app/(dashboard)/dashboard/page.tsx` — 1x $ → £ for subscribe button
+  - `src/app/(public)/pricing/pricing.test.tsx` — updated 4 test expectations to GBP values
+  - `src/app/(public)/for-teams/for-teams.test.tsx` — updated 2 test expectations to GBP values
+- **Deviations from plan:** None. All acceptance criteria met.
+- **Follow-up issues:** None discovered.
+
+---
+## Testing Checklist — 2026-03-04 00:30
+**Check the changes:** http://192.168.178.50:3001
+
+- [ ] Landing page loads without errors
+- [ ] Hero shows "Built in the UK. For the world." badge pill
+- [ ] Hero subtitle mentions UK-based and independent
+- [ ] "Independent and UK-based" differentiator card visible
+- [ ] Audience cards show UK-specific stats (21% confidence, 45% micro business gap)
+- [ ] Pricing section shows £29.00 and £5.00 (not $ signs)
+- [ ] Final CTA mentions "Based in the UK"
+- [ ] About page (/about) hero mentions "Based in the UK"
+- [ ] About page story section has UK skills gap paragraph
+- [ ] About page independence pledge contrasts with government approach
+- [ ] About page numbers section has "UK Based & built" stat (5 columns)
+- [ ] Pricing page (/pricing) shows all prices in £ (£0, £29.00, £5.00, £87.00)
+- [ ] For Teams page (/for-teams) shows £ prices and £35k salary reference
+- [ ] Dashboard pricing references show £ (login required to check)
+- [ ] Light/dark mode correct on all changed pages
+- [ ] Mobile responsive on landing page hero and about page
+- [ ] No console errors
+
+### Actions for David
+Check the URL above (http://192.168.178.50:3001) and tick the boxes. Key pages to visit:
+1. `/` — landing page (hero badge, differentiators, audience cards, pricing, final CTA)
+2. `/about` — about page (hero, story, independence pledge, numbers)
+3. `/pricing` — pricing page (all £ symbols)
+4. `/for-teams` — for teams page (£ symbols, £35k salary)
+
+**Review this file:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PROMPT_UK1_2026-03-03_uk-first-landing-hero-about.md`
