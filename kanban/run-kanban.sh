@@ -145,7 +145,7 @@ PIPELINE — After implementing the changes, follow these steps in order:
    - [ ] No console errors
 
    ### Actions for David
-   <Tell David exactly what he needs to do — e.g. "Visit the URL above and verify the feature works" or "No actions required — this was a backend-only change". NEVER omit this section.>
+   Tell David exactly what he needs to do — e.g. 'Visit the URL above and verify the feature works' or 'No actions required — this was a backend-only change'. NEVER omit this section.
 
    **Review this file:** \`file:///\${FILE}\`
 
