@@ -14,7 +14,7 @@ Add a new field to the `TechRadarTool` interface:
 
 ```typescript
 /** ISO 3166-1 alpha-2 country code for the tool's headquarters/origin (e.g., "US", "GB", "FR") */
-country_code: string
+country_code: string;
 ```
 
 ### Data changes (`docs/tech_radar.json`)
@@ -22,6 +22,7 @@ country_code: string
 Add a `country_code` field to every tool in the JSON file. Use ISO 3166-1 alpha-2 codes. Research the actual headquarters of each tool:
 
 Common mappings (verify against the actual tools in the JSON):
+
 - **US**: OpenAI (ChatGPT, DALL-E), Anthropic (Claude), Google (Gemini, NotebookLM), Meta (Llama), Microsoft (Copilot), Midjourney, Perplexity, Cursor, Vercel (v0), Replit, GitHub Copilot, Zapier, Make (originally CZ but now US-headquartered), Jasper, Copy.ai, ElevenLabs (originally PL but HQ now US), Runway, Suno, etc.
 - **GB**: DeepMind (owned by Google but London-based -- use GB), Stability AI (London), ARM (Cambridge -- if listed)
 - **FR**: Mistral AI, HuggingFace
@@ -43,9 +44,9 @@ Read the actual `docs/tech_radar.json` file first to see which tools are listed,
 ```typescript
 /** Converts ISO 3166-1 alpha-2 country code to flag emoji */
 function countryFlag(code: string): string {
-  return [...code.toUpperCase()].map(
-    (c) => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)
-  ).join("")
+  return [...code.toUpperCase()]
+    .map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
+    .join("");
 }
 ```
 
@@ -64,11 +65,13 @@ function countryFlag(code: string): string {
 No changes needed to the data functions -- they already pass through all fields from the JSON. The new `country_code` field will flow through automatically once it is in the JSON and the type.
 
 ## Files likely affected
+
 - `src/lib/types.ts` -- add `country_code` field to `TechRadarTool`
 - `docs/tech_radar.json` -- add `country_code` to every tool entry
 - `src/components/tech-radar/tech-radar-grid.tsx` -- add flag emoji display, add `countryFlag()` helper
 
 ## Acceptance criteria
+
 - [ ] `TechRadarTool` interface in `src/lib/types.ts` has a `country_code: string` field with JSDoc
 - [ ] Every tool in `docs/tech_radar.json` has a `country_code` field with a valid ISO 3166-1 alpha-2 code
 - [ ] The Tech Radar grid displays a flag emoji next to each tool name
@@ -79,7 +82,43 @@ No changes needed to the data functions -- they already pass through all fields 
 - [ ] The site builds successfully with `npm run build`
 
 ## Notes
+
 - Use emoji flags, not image files. Emoji flags are universally supported on modern browsers and require no additional assets.
 - The flag should be visually subtle -- same size as or slightly smaller than the tool name text. Do not make it overpowering.
 - If ElevenLabs is listed, use "US" (they moved HQ to the US despite Polish founders). If Stability AI is listed, use "GB" (London HQ). If DeepMind is listed, use "GB" (London).
 - This is a self-contained change with no dependencies on other UK-first prompts.
+
+---
+## Implementation Notes — 2026-03-04 09:31
+- **Commit:** ad7d67a feat: add country flags to tech radar tools
+- **Tests:** 110 tests passed across 14 test files (0 failures)
+- **Verification URL:** http://192.168.178.50:3001/tech-radar
+- **Playwright check:** not run (visual check via URL)
+- **Changes summary:**
+  - Added `country_code: string` field with JSDoc to `TechRadarTool` interface in `src/lib/types.ts`
+  - Added `country_code` to all 53 tools in `docs/tech_radar.json` with researched HQ locations
+  - Added `countryFlag()` helper function and `COUNTRY_NAMES` accessibility map in `tech-radar-grid.tsx`
+  - Flag emoji displayed after tool name with `title` and `aria-label` for accessibility
+  - Country breakdown: US (~40 tools), FR (3: Mistral, Devstral, Voxtral), DE (3: n8n, Qdrant, FLUX.2), CN (4: DeepSeek, Qwen, Kling, seedance), CA (1: Ideogram), SE (1: Lovable)
+  - ElevenLabs assigned US per prompt instructions (moved HQ despite Polish founders)
+- **Deviations from plan:** None — all acceptance criteria met
+- **Follow-up issues:** Country filter (optional nice-to-have from prompt) not implemented — could be a future task
+
+---
+## Testing Checklist — 2026-03-04 09:32
+**Check the changes:** http://192.168.178.50:3001/tech-radar
+- [ ] Page loads without errors
+- [ ] Flag emoji visible next to each tool name
+- [ ] US tools (e.g. Claude, GPT-4.5) show US flag
+- [ ] French tools (Mistral Large 3, Devstral 2) show French flag
+- [ ] Chinese tools (DeepSeek V3.2, Qwen3) show Chinese flag
+- [ ] German tools (n8n, Qdrant) show German flag
+- [ ] Hovering a flag shows full country name tooltip
+- [ ] Flags do not break card layout on mobile
+- [ ] Light/dark mode both display correctly
+- [ ] No console errors
+
+### Actions for David
+Check the URL above and tick the boxes. Spot-check at least 5 tools to confirm correct country flags. Verify flags render on both desktop and mobile viewports.
+
+**Review this file:** `file:///C:/Projects/GWTH_V2/kanban/2_testing/PROMPT_UK3_2026-03-03_tech-radar-country-flags.md`
