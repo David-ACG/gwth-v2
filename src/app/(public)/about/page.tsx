@@ -158,27 +158,30 @@ export default function AboutPage() {
               <p>
                 He has been using ChatGPT since the GPT-3.5 days — not as a
                 novelty, but as a working tool. So when he faced a
-                life-threatening medical situation in late 2024, AI was already
+                life-threatening medical situation in late 2023, AI was already
                 second nature.
               </p>
               <p>
-                The condition was rare — so rare that the hospital performing
-                the operation only carries out two like it per year. A
-                transplant surgeon led the procedure. It lasted eight and a
-                half hours. Fifteen litres of blood. Sixty-eight staples.
-                Complications followed, with multiple return visits stretching
-                into 2025.
+                The condition was rare — so rare that only two operations like
+                it had been performed in the entire UK the previous year, both
+                by the same surgeon. A transplant surgeon led the procedure.
+                It lasted eight and a half hours. Fifteen litres of blood.
+                Sixty-eight staples. Complications followed, with multiple
+                return visits stretching well into 2024.
               </p>
               <p>
-                Throughout it all, he recorded every conversation with
-                surgeons and medical consultants, transcribed the recordings,
-                and used GPT-4o and Claude 3.5 Sonnet to break down the
-                clinical language into something he could actually understand.
-                The condition did not have a simple name. The decisions he was
-                asked to make were not simple either. But by using AI to
-                analyse each conversation after the fact, he was able to walk
-                into the next appointment with sensible questions — and be
-                genuinely prepared for the difficult choices ahead.
+                Every day on the ward, consultants did their rounds — often
+                two or three different specialists in a single day, each
+                covering a different aspect of the case. He recorded every
+                one of those conversations, transcribed the recordings, and
+                used GPT-4 to break down the clinical language into something
+                he could actually understand. As the months went on and newer
+                models arrived — Claude 3 and GPT-4o — the analysis became
+                even sharper. The condition did not have a simple name. The
+                decisions he was asked to make were not simple either. But by
+                using AI to analyse each conversation after the fact, he was
+                able to walk into the next round with sensible questions —
+                and be genuinely prepared for the difficult choices ahead.
               </p>
               <p>
                 Other patients on the ward noticed. They saw him reviewing
