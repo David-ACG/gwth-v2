@@ -156,6 +156,46 @@ export default function AboutPage() {
                 alternative and picking the one that works best.
               </p>
               <p>
+                He has been using ChatGPT since the GPT-3.5 days — not as a
+                novelty, but as a working tool. So when he faced a
+                life-threatening medical situation in late 2024, AI was already
+                second nature.
+              </p>
+              <p>
+                The condition was rare — so rare that the hospital performing
+                the operation only carries out two like it per year. A
+                transplant surgeon led the procedure. It lasted eight and a
+                half hours. Fifteen litres of blood. Sixty-eight staples.
+                Complications followed, with multiple return visits stretching
+                into 2025.
+              </p>
+              <p>
+                Throughout it all, he recorded every conversation with
+                surgeons and medical consultants, transcribed the recordings,
+                and used GPT-4o and Claude 3.5 Sonnet to break down the
+                clinical language into something he could actually understand.
+                The condition did not have a simple name. The decisions he was
+                asked to make were not simple either. But by using AI to
+                analyse each conversation after the fact, he was able to walk
+                into the next appointment with sensible questions — and be
+                genuinely prepared for the difficult choices ahead.
+              </p>
+              <p>
+                Other patients on the ward noticed. They saw him reviewing
+                transcripts on his laptop, asking informed questions that
+                surprised the consultants, and making confident decisions
+                about his own care. They asked him to help them set up the
+                same system. He did. And from those conversations — in a
+                hospital, between people who were scared and wanted to
+                understand what was happening to them — GWTH was born.
+              </p>
+              <p>
+                That is why this course exists. Not because someone saw a
+                market opportunity in AI education. Because someone used AI
+                when it mattered most, saw how much it helped, and realised
+                that most people have no idea how to do the same thing.
+              </p>
+              <p>
                 GWTH is squarely aimed at the UK because this is where the skills gap is
                 most urgent. Only 21% of UK workers feel confident using AI at
                 work. Only 1 in 6 UK businesses were using AI as of mid-2025.
