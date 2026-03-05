@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Clock } from "lucide-react"
@@ -13,18 +14,29 @@ interface LabCardProps {
 }
 
 /**
- * Card component for displaying a lab with difficulty badge,
- * technology pills, and duration.
+ * Card component for displaying a lab with thumbnail image,
+ * difficulty badge, technology pills, and duration.
  */
 export function LabCard({ lab, progress }: LabCardProps) {
   return (
     <Link href={`/labs/${lab.slug}`}>
-      <Card className="group h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
-        {/* Color bar */}
-        <div
-          className="h-2 rounded-t-lg"
-          style={{ backgroundColor: lab.color }}
-        />
+      <Card className="group h-full overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
+        {lab.image ? (
+          <div className="relative aspect-[16/10] w-full overflow-hidden">
+            <Image
+              src={lab.image}
+              alt={lab.title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          </div>
+        ) : (
+          <div
+            className="h-2 rounded-t-lg"
+            style={{ backgroundColor: lab.color }}
+          />
+        )}
         <CardContent className="p-4">
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-xs">

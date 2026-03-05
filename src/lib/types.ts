@@ -314,6 +314,8 @@ export interface Lab {
   color: string
   /** Icon name from lucide-react */
   icon: string
+  /** Path to the lab's hero/thumbnail image */
+  image?: string
   /** Whether the lab requires a pro subscription */
   isPremium: boolean
   /** When the lab was created */
