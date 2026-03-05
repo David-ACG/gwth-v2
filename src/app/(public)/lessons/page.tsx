@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import {
   ArrowRight,
-  BookOpen,
   Video,
   FlaskConical,
   BarChart3,
@@ -61,10 +61,6 @@ export default function LessonsPage() {
       <section className="border-b bg-muted/30 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              <BookOpen className="size-4" />
-              Course Lessons
-            </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               What You&apos;ll Build
             </h1>
@@ -160,6 +156,15 @@ export default function LessonsPage() {
       {/* Why One Hour a Day */}
       <section className="py-16 md:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex justify-center">
+            <Image
+              src="/five-hour-rule.png"
+              alt="The 5-Hour Rule — Bill Gates, Warren Buffett, Elon Musk, and Oprah Winfrey all dedicate at least an hour a day to deliberate learning"
+              width={900}
+              height={450}
+              className="w-full rounded-2xl"
+            />
+          </div>
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Why One Hour a Day?
           </h2>
