@@ -183,6 +183,15 @@ export default function AboutPage() {
                 able to walk into the next round with sensible questions —
                 and be genuinely prepared for the difficult choices ahead.
               </p>
+              <div className="my-8 flex justify-center">
+                <Image
+                  src="/origin-story-hospital.png"
+                  alt="A patient in a hospital bed showing a consultant the ChatGPT 4 interface on a tablet — using AI to understand complex medical conversations"
+                  width={700}
+                  height={500}
+                  className="w-full max-w-md rounded-2xl sm:max-w-lg"
+                />
+              </div>
               <p>
                 Other patients on the ward noticed. They saw him reviewing
                 transcripts on his laptop, asking informed questions that
