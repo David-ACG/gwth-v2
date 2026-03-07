@@ -6,6 +6,7 @@
 
 import type { NewsArticle, NewsComment, NewsSortOption } from "@/lib/types"
 import { createClient, createAdminClient } from "@/lib/supabase/server"
+import { unstable_cache, revalidateTag } from "next/cache"
 import { NEWS_PAGE_SIZE } from "@/lib/config"
 
 // ─── Row → Type Mappers ─────────────────────────────────────────────────────
@@ -55,6 +56,7 @@ function mapComment(row: Record<string, unknown>): NewsComment {
 /**
  * Fetches news articles with sorting, filtering, and pagination.
  * Returns articles matching the given criteria and the total count for pagination.
+ * Results are cached for 5 minutes per unique parameter combination.
  */
 export async function getNews(params: {
   sort?: NewsSortOption
@@ -64,97 +66,116 @@ export async function getNews(params: {
   page?: number
   limit?: number
 }): Promise<{ articles: NewsArticle[]; total: number }> {
-  const supabase = createAdminClient()
   const sort = params.sort ?? "hot"
   const limit = params.limit ?? NEWS_PAGE_SIZE
   const page = params.page ?? 1
-  const offset = (page - 1) * limit
+  const category = params.category ?? ""
+  const tag = params.tag ?? ""
+  const q = params.query ?? ""
 
-  // Use the ranked view for hot sorting (includes hotness_score),
-  // or the base table for new/top sorting.
-  const table = sort === "hot" ? "news_articles_ranked" : "news_articles_ranked"
-  let query = supabase
-    .from(table)
-    .select("*", { count: "exact" })
+  return unstable_cache(
+    async () => {
+      const supabase = createAdminClient()
+      const offset = (page - 1) * limit
 
-  if (params.category) {
-    query = query.eq("category", params.category)
-  }
+      let query = supabase
+        .from("news_articles_ranked")
+        .select("*", { count: "exact" })
 
-  if (params.tag) {
-    query = query.contains("tags", [params.tag])
-  }
+      if (category) {
+        query = query.eq("category", category)
+      }
 
-  if (params.query) {
-    const q = params.query
-    query = query.or(`title.ilike.%${q}%,excerpt.ilike.%${q}%`)
-  }
+      if (tag) {
+        query = query.contains("tags", [tag])
+      }
 
-  switch (sort) {
-    case "hot":
-      query = query.order("hotness_score", { ascending: false })
-      break
-    case "new":
-      query = query.order("published_at", { ascending: false })
-      break
-    case "top":
-      query = query.order("vote_count", { ascending: false })
-      break
-  }
+      if (q) {
+        query = query.or(`title.ilike.%${q}%,excerpt.ilike.%${q}%`)
+      }
 
-  query = query.range(offset, offset + limit - 1)
+      switch (sort) {
+        case "hot":
+          query = query.order("hotness_score", { ascending: false })
+          break
+        case "new":
+          query = query.order("published_at", { ascending: false })
+          break
+        case "top":
+          query = query.order("vote_count", { ascending: false })
+          break
+      }
 
-  const { data, count, error } = await query
-  if (error) throw new Error(error.message)
+      query = query.range(offset, offset + limit - 1)
 
-  return {
-    articles: (data ?? []).map(mapArticle),
-    total: count ?? 0,
-  }
+      const { data, count, error } = await query
+      if (error) throw new Error(error.message)
+
+      return {
+        articles: (data ?? []).map(mapArticle),
+        total: count ?? 0,
+      }
+    },
+    ["news-feed", sort, category, tag, q, String(page), String(limit)],
+    { revalidate: 300, tags: ["news-feed"] }
+  )()
 }
 
 /**
  * Fetches a single news article by slug.
  * Returns null if the article doesn't exist or isn't published.
+ * Cached for 5 minutes per slug.
  */
 export async function getNewsArticle(
   slug: string
 ): Promise<NewsArticle | null> {
-  const supabase = createAdminClient()
+  return unstable_cache(
+    async () => {
+      const supabase = createAdminClient()
 
-  const { data, error } = await supabase
-    .from("news_articles_ranked")
-    .select("*")
-    .eq("slug", slug)
-    .maybeSingle()
+      const { data, error } = await supabase
+        .from("news_articles_ranked")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle()
 
-  if (error || !data) return null
-  return mapArticle(data)
+      if (error || !data) return null
+      return mapArticle(data)
+    },
+    ["news-article", slug],
+    { revalidate: 300, tags: ["news-feed"] }
+  )()
 }
 
 /**
  * Returns available categories and tags across all published articles.
- * Used to populate filter dropdowns.
+ * Used to populate filter dropdowns. Cached for 1 hour (filters rarely change).
  */
 export async function getNewsFilters(): Promise<{
   categories: string[]
   tags: string[]
 }> {
-  const supabase = createAdminClient()
+  return unstable_cache(
+    async () => {
+      const supabase = createAdminClient()
 
-  const { data, error } = await supabase
-    .from("news_articles_ranked")
-    .select("category, tags")
+      const { data, error } = await supabase
+        .from("news_articles_ranked")
+        .select("category, tags")
 
-  if (error || !data) return { categories: [], tags: [] }
+      if (error || !data) return { categories: [], tags: [] }
 
-  const categories = new Set(data.map((a) => a.category as string))
-  const tags = new Set(data.flatMap((a) => (a.tags as string[]) ?? []))
+      const categories = new Set(data.map((a) => a.category as string))
+      const tags = new Set(data.flatMap((a) => (a.tags as string[]) ?? []))
 
-  return {
-    categories: [...categories].sort(),
-    tags: [...tags].sort(),
-  }
+      return {
+        categories: [...categories].sort(),
+        tags: [...tags].sort(),
+      }
+    },
+    ["news-filters"],
+    { revalidate: 3600, tags: ["news-filters"] }
+  )()
 }
 
 /**
@@ -191,26 +212,36 @@ export async function toggleVote(
 
   if (error) throw new Error(error.message)
 
+  // Bust the feed cache so vote counts update
+  revalidateTag("news-feed")
+
   const result = data as { voted: boolean; vote_count: number }
   return { voted: result.voted, newCount: result.vote_count }
 }
 
 /**
  * Fetches comments for a news article, ordered by creation date (oldest first).
+ * Cached for 1 minute per article.
  */
 export async function getNewsComments(
   articleId: string
 ): Promise<NewsComment[]> {
-  const supabase = createAdminClient()
+  return unstable_cache(
+    async () => {
+      const supabase = createAdminClient()
 
-  const { data, error } = await supabase
-    .from("news_comments")
-    .select("*")
-    .eq("article_id", articleId)
-    .order("created_at", { ascending: true })
+      const { data, error } = await supabase
+        .from("news_comments")
+        .select("*")
+        .eq("article_id", articleId)
+        .order("created_at", { ascending: true })
 
-  if (error || !data) return []
-  return data.map(mapComment)
+      if (error || !data) return []
+      return data.map(mapComment)
+    },
+    ["news-comments", articleId],
+    { revalidate: 60, tags: [`news-comments-${articleId}`] }
+  )()
 }
 
 /**
@@ -239,6 +270,11 @@ export async function addNewsComment(
     .single()
 
   if (error) throw new Error(error.message)
+
+  // Bust feed cache (comment count) and article comment cache
+  revalidateTag("news-feed")
+  revalidateTag(`news-comments-${articleId}`)
+
   return mapComment(data)
 }
 
@@ -249,7 +285,8 @@ export async function addNewsComment(
  */
 export async function deleteNewsComment(
   commentId: string,
-  userId: string
+  userId: string,
+  articleId: string
 ): Promise<boolean> {
   const supabase = await createClient()
 
@@ -258,6 +295,11 @@ export async function deleteNewsComment(
     .delete()
     .eq("id", commentId)
     .eq("user_id", userId)
+
+  if (!error) {
+    revalidateTag("news-feed")
+    revalidateTag(`news-comments-${articleId}`)
+  }
 
   return !error
 }

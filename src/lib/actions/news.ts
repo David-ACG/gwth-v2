@@ -47,10 +47,11 @@ export async function addNewsCommentAction(
  * Requires authentication. Only the comment author can delete their own comments.
  */
 export async function deleteNewsCommentAction(
-  commentId: string
+  commentId: string,
+  articleId: string
 ): Promise<boolean> {
   const user = await getCurrentUser()
   if (!user) throw new Error("Authentication required")
 
-  return deleteCommentData(commentId, user.id)
+  return deleteCommentData(commentId, user.id, articleId)
 }

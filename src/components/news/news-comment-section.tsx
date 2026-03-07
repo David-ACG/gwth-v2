@@ -58,7 +58,7 @@ export function NewsCommentSection({
 
   async function handleDeleteComment(commentId: string) {
     try {
-      const deleted = await deleteNewsCommentAction(commentId)
+      const deleted = await deleteNewsCommentAction(commentId, articleId)
       if (deleted) {
         setComments((prev) => prev.filter((c) => c.id !== commentId))
         toast.info("Comment deleted")
