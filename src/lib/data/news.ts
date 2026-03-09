@@ -213,7 +213,7 @@ export async function toggleVote(
   if (error) throw new Error(error.message)
 
   // Bust the feed cache so vote counts update
-  revalidateTag("news-feed")
+  revalidateTag("news-feed", { expire: 0 })
 
   const result = data as { voted: boolean; vote_count: number }
   return { voted: result.voted, newCount: result.vote_count }
@@ -272,8 +272,8 @@ export async function addNewsComment(
   if (error) throw new Error(error.message)
 
   // Bust feed cache (comment count) and article comment cache
-  revalidateTag("news-feed")
-  revalidateTag(`news-comments-${articleId}`)
+  revalidateTag("news-feed", { expire: 0 })
+  revalidateTag(`news-comments-${articleId}`, { expire: 0 })
 
   return mapComment(data)
 }
@@ -297,8 +297,8 @@ export async function deleteNewsComment(
     .eq("user_id", userId)
 
   if (!error) {
-    revalidateTag("news-feed")
-    revalidateTag(`news-comments-${articleId}`)
+    revalidateTag("news-feed", { expire: 0 })
+    revalidateTag(`news-comments-${articleId}`, { expire: 0 })
   }
 
   return !error
