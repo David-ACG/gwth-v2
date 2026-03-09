@@ -11,6 +11,9 @@ import type { NewsSortOption } from "@/lib/types"
 import { NewsletterInline } from "@/components/news/newsletter-inline"
 import Link from "next/link"
 
+/** Revalidate news feed every 12 hours */
+export const revalidate = 43200
+
 export const metadata: Metadata = {
   title: "News",
   description:

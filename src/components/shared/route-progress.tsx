@@ -14,6 +14,12 @@ export function RouteProgress() {
   const pathname = usePathname()
   const [prevPathname, setPrevPathname] = useState(pathname)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
+
+  // Track initial mount to avoid flashing on full-page refresh/hydration
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   // Render-time state derivation: detect when pathname prop changes.
   // This is the React-recommended pattern for synchronizing derived state
@@ -21,7 +27,9 @@ export function RouteProgress() {
   // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
   if (pathname !== prevPathname) {
     setPrevPathname(pathname)
-    setIsNavigating(true)
+    if (hasMounted) {
+      setIsNavigating(true)
+    }
   }
 
   // Auto-dismiss the indicator after 500ms.
