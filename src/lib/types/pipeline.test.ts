@@ -100,10 +100,10 @@ describe("pipelinePayloadToLesson", () => {
     const lesson = pipelinePayloadToLesson(payload)
 
     expect(lesson.questions).toHaveLength(2)
-    expect(lesson.questions[0].id).toBe("m1_l01_q1")
-    expect(lesson.questions[0].options).toHaveLength(4)
-    expect(lesson.questions[0].correctOptionIndex).toBe(0)
-    expect(lesson.questions[1].id).toBe("m1_l01_q2")
+    expect(lesson.questions![0]!.id).toBe("m1_l01_q1")
+    expect(lesson.questions![0]!.options).toHaveLength(4)
+    expect(lesson.questions![0]!.correctOptionIndex).toBe(0)
+    expect(lesson.questions![1]!.id).toBe("m1_l01_q2")
   })
 
   it("preserves resources array", () => {
@@ -116,9 +116,9 @@ describe("pipelinePayloadToLesson", () => {
     const lesson = pipelinePayloadToLesson(payload)
 
     expect(lesson.resources).toHaveLength(2)
-    expect(lesson.resources[0].title).toBe("Docs")
-    expect(lesson.resources[0].type).toBe("link")
-    expect(lesson.resources[1].type).toBe("video")
+    expect(lesson.resources![0]!.title).toBe("Docs")
+    expect(lesson.resources![0]!.type).toBe("link")
+    expect(lesson.resources![1]!.type).toBe("video")
   })
 
   it("handles optional fields correctly", () => {
