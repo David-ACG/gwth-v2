@@ -2,14 +2,17 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "project": ["src/**/*.{ts,tsx}"],
   "ignore": [
-    "src/components/ui/**"
+    "src/components/ui/**",
+    "src/components/course/courses-filter.tsx",
+    "src/components/landing/waitlist-form.tsx",
+    "src/components/shared/audio-player.tsx",
+    "src/components/tech-radar/tech-radar-grid.tsx"
   ],
   "ignoreDependencies": [
     "tw-animate-css",
     "shadcn",
     "axe-playwright",
     "tailwindcss",
-    "shiki",
     "date-fns",
     "react-day-picker",
     "@nosecone/next",
