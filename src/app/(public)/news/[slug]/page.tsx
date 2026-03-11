@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: article.title,
       description: article.excerpt,
       type: "article",
-      publishedTime: article.publishedAt.toISOString(),
+      publishedTime: new Date(article.publishedAt).toISOString(),
       authors: [article.author],
       tags: article.tags,
     },
@@ -72,8 +72,8 @@ export default async function NewsArticlePage({ params }: PageProps) {
             "@type": "NewsArticle",
             headline: article.title,
             description: article.excerpt,
-            datePublished: article.publishedAt.toISOString(),
-            dateModified: article.updatedAt.toISOString(),
+            datePublished: new Date(article.publishedAt).toISOString(),
+            dateModified: new Date(article.updatedAt).toISOString(),
             author: {
               "@type": "Person",
               name: article.author,
@@ -141,8 +141,8 @@ export default async function NewsArticlePage({ params }: PageProps) {
               <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                 <span>By {article.author}</span>
                 <span>&middot;</span>
-                <time dateTime={article.publishedAt.toISOString()}>
-                  {formatRelativeDate(article.publishedAt)}
+                <time dateTime={new Date(article.publishedAt).toISOString()}>
+                  {formatRelativeDate(new Date(article.publishedAt))}
                 </time>
                 <span>&middot;</span>
                 <span className="flex items-center gap-1">

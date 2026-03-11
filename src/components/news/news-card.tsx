@@ -96,8 +96,8 @@ export function NewsCard({ article, hasVoted, isAuthenticated }: NewsCardProps) 
           <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
             <span>{article.author}</span>
             <span>&middot;</span>
-            <time dateTime={article.publishedAt.toISOString()}>
-              {formatRelativeDate(article.publishedAt)}
+            <time dateTime={new Date(article.publishedAt).toISOString()}>
+              {formatRelativeDate(new Date(article.publishedAt))}
             </time>
             <span>&middot;</span>
             <span className="flex items-center gap-1">
