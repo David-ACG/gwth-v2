@@ -7,34 +7,29 @@ import { Spinner } from "./spinner"
 /**
  * Route transition progress indicator.
  * Shows a top progress bar and small spinner during client-side navigation.
- * Detects route changes via render-time state comparison (React recommended pattern),
- * then auto-dismisses after 500ms.
+ * Detects route changes via pathname comparison, skipping the first change
+ * (which is the initial hydration, not a real navigation).
  */
 export function RouteProgress() {
   const pathname = usePathname()
   const [prevPathname, setPrevPathname] = useState(pathname)
   const [isNavigating, setIsNavigating] = useState(false)
-  const [hasMounted, setHasMounted] = useState(false)
-
-  // Track initial mount to avoid flashing on full-page refresh/hydration
-  useEffect(() => {
-    setHasMounted(true)
-  }, [])
+  const [changeCount, setChangeCount] = useState(0)
 
   // Render-time state derivation: detect when pathname prop changes.
-  // This is the React-recommended pattern for synchronizing derived state
-  // with props, avoiding the need for effects. See:
-  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  // changeCount tracks how many pathname changes we've seen. The first
+  // change (count 0 → 1) is the initial mount/hydration, so we only
+  // show the indicator from the second change onwards.
   if (pathname !== prevPathname) {
     setPrevPathname(pathname)
-    if (hasMounted) {
+    const nextCount = changeCount + 1
+    setChangeCount(nextCount)
+    if (nextCount > 1) {
       setIsNavigating(true)
     }
   }
 
   // Auto-dismiss the indicator after 500ms.
-  // The setTimeout callback is asynchronous, so this is not a synchronous
-  // setState inside an effect.
   useEffect(() => {
     if (!isNavigating) return
     const id = setTimeout(() => setIsNavigating(false), 500)

@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Old site scripts are archived docs, not production code
+    "docs/old-site/**",
   ]),
 ]);
 
