@@ -724,6 +724,25 @@ Each lesson can have a corresponding GWTH lab where students:
 | Newsletter send failures | MailerLite webhook + Telegram | Immediate |
 | Container crashes | Docker restart policy + Telegram | On restart |
 | Cost tracking | Anthropic dashboard | Monthly review |
+| **Downvote on unreviewed article** | Supabase DB trigger + Telegram | Immediate |
+
+### Downvote Alert System
+
+When a Newsbot-authored article (`author = 'Newsbot'`) that has not yet been reviewed (`reviewed_by_admin = false`) receives a downvote (vote count decreases), a Supabase Edge Function fires a Telegram alert:
+
+```
+⚠️ NEWSBOT DOWNVOTE ALERT
+Article: "Claude 4 Benchmarks Questioned"
+Votes: 3 → 2
+Link: https://gwth.ai/news/claude-4-benchmarks-questioned
+Action: Review and archive if inappropriate
+```
+
+This requires:
+1. A `reviewed_by_admin BOOLEAN DEFAULT FALSE` column on `news_articles`
+2. A Supabase database trigger on `news_articles` UPDATE where `vote_count` decreases and `reviewed_by_admin = false` and `author = 'Newsbot'`
+3. A Supabase Edge Function that sends the Telegram message
+4. A simple admin action to mark articles as reviewed (toggle `reviewed_by_admin = true`)
 
 ---
 
@@ -753,13 +772,13 @@ Each lesson can have a corresponding GWTH lab where students:
 
 ---
 
-## 16. Open Questions
+## 16. Decisions (formerly Open Questions)
 
-1. **newsbot.biz hosting**: Same Coolify deployment (Hetzner) or separate? Recommendation is same for MVP.
-2. **Moderation**: Should scraped articles auto-publish or go through a review queue? Recommendation: auto-publish with importance_score >= 3, with ability to archive manually.
-3. **User accounts**: Should newsbot.biz have its own auth or share GWTH Supabase Auth? Recommendation: share auth — one account for both.
-4. **Content licensing**: Some sources may have restrictive terms. Need to review each source's ToS. Using excerpts + links (not full articles) should be fair use.
-5. **MailerLite vs MailerSend**: MailerLite for marketing emails (newsletter), MailerSend for transactional (already configured). Or consolidate?
+1. **newsbot.biz hosting**: Same Coolify deployment on Hetzner. Shared infrastructure, single deploy.
+2. **Moderation**: Auto-publish with `importance_score >= 3`, with manual archive ability. **Downvote alerting**: When an article receives a downvote before David has reviewed it, send a Telegram alert with the article title, current vote count, and a direct link. This acts as a community-powered moderation signal — if real users flag something early, David can review and archive before it gains visibility. Requires tracking a `reviewed_by_admin` flag on articles (default `false` for Newsbot-authored articles).
+3. **User accounts**: Shared GWTH Supabase Auth — one account for both sites. newsbot.biz drives registrations back to the GWTH user base.
+4. **Content licensing**: Rewrite all summaries in Newsbot's own voice (never copy verbatim). Always link to original source. Follow the Digg/Techmeme model: short original summary + prominent source attribution. If a source objects, remove and blocklist immediately.
+5. **MailerLite vs MailerSend**: Split by purpose — MailerLite for marketing/newsletter emails, MailerSend for transactional (waitlist confirmations, password resets). No consolidation needed.
 
 ---
 

@@ -294,9 +294,10 @@ export const mockCourses: Course[] = [
         optionalTrack: "Advanced Technical",
         lessons: [
           { id: "m3_e06", slug: "self-hosted-model-deployment", title: "Self-Hosted Model Deployment", order: 1, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
-          { id: "m3_e07", slug: "voice-ai-agents", title: "Voice AI Agents", order: 2, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
-          { id: "m3_e08", slug: "security-red-teaming", title: "Security Red Teaming", order: 3, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
-          { id: "m3_e09", slug: "cost-optimisation-at-scale", title: "Cost Optimisation at Scale", order: 4, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
+          { id: "m3_e06b", slug: "localwhisper-build", title: "LocalWhisper — Build a Local Speech-to-Text App", order: 2, duration: 90, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
+          { id: "m3_e07", slug: "voice-ai-agents", title: "Voice AI Agents", order: 3, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
+          { id: "m3_e08", slug: "security-red-teaming", title: "Security Red Teaming", order: 4, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
+          { id: "m3_e09", slug: "cost-optimisation-at-scale", title: "Cost Optimisation at Scale", order: 5, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
           { id: "m3_e10", slug: "compliance-automation", title: "Compliance Automation", order: 5, duration: 60, status: "locked", isOptional: true, optionalTrack: "Advanced Technical" },
         ],
       },
@@ -963,6 +964,409 @@ Write down three insights:
     status: "locked",
     createdAt: new Date("2026-01-01"),
     updatedAt: new Date("2026-02-01"),
+  },
+
+  // LocalWhisper — Build a Local Speech-to-Text App
+  {
+    id: "m3_e06b",
+    slug: "localwhisper-build",
+    title: "LocalWhisper — Build a Local Speech-to-Text App",
+    description:
+      "Build a privacy-first, system-wide dictation app that runs entirely on your machine. Uses AI speech-to-text models, audio capture, hotkeys, and a settings web UI — all orchestrated with Claude Code.",
+    order: 2,
+    duration: 90,
+    difficulty: "advanced",
+    category: "Self-Hosted AI",
+    sectionId: "m3_opt_advanced",
+    courseId: "course_gwth",
+    courseSlug: "applied-ai-skills",
+    month: 3,
+    isOptional: true,
+    optionalTrack: "Advanced Technical",
+    introVideoUrl: null,
+    learnContent: `# LocalWhisper — Build a Local Speech-to-Text App
+
+You have used cloud-based speech-to-text services. They are convenient, fast, and accurate — but your voice data leaves your machine, crosses the internet, and lands on someone else's servers. For many people and organisations, that is a dealbreaker.
+
+In this lesson, you will build **LocalWhisper** — a fully local, privacy-first dictation app for Windows. Press a hotkey, speak, and text appears wherever your cursor is. No internet required. No data leaves your machine. Ever.
+
+:::note
+This is a real, working application — not a toy demo. You will end this lesson with an installable Windows app that you can use daily. The full source code is available in the \`gwth_projects/localwhisper\` directory.
+:::
+
+## Why Build This?
+
+Commercial dictation tools like SuperWhisper and Wispr Flow cost £8-15/month and send your audio to the cloud. LocalWhisper gives you the same functionality for free, running on your own hardware.
+
+More importantly, building this teaches you how to:
+
+- **Deploy AI models locally** — download, load, and run inference on your own GPU or CPU
+- **Orchestrate complex systems** — audio capture, VAD, transcription, text injection, UI, and a web server all running together
+- **Build desktop apps with AI** — system tray icons, overlays, hotkeys, and settings pages
+- **Use Claude Code for real projects** — every component was built using AI-assisted development
+
+## Architecture Overview
+
+LocalWhisper has a clean, modular architecture:
+
+\`\`\`
+[Hotkey Press] → [Microphone Capture] → [Voice Activity Detection] → [STT Engine]
+                                                                          |
+                                                                  [Transcribed Text]
+                                                                          |
+                                                              [Clipboard + Ctrl+V]
+                                                                          |
+                                                               [Text in Active App]
+\`\`\`
+
+### Core Components
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **Audio Capture** | sounddevice (PortAudio) | Records microphone input at 16kHz mono |
+| **Voice Activity Detection** | Silero VAD | Detects speech vs silence — stops recording automatically |
+| **STT Engine** | faster-whisper or SenseVoice | Converts audio to text on your GPU or CPU |
+| **Text Injection** | Clipboard + pyautogui | Pastes transcribed text into any active window |
+| **Hotkey System** | keyboard library | Global push-to-talk or toggle hotkey |
+| **System Tray** | pystray | Background icon with status and controls |
+| **Recording Overlay** | tkinter | Non-intrusive recording indicator on each monitor |
+| **Settings UI** | FastAPI + Jinja2 | Web-based settings page at localhost:9876 |
+| **Database** | SQLite | Stores transcription history |
+| **Configuration** | TOML | User-editable config file |
+
+### The Engine Abstraction
+
+One of the most interesting design decisions is the **engine abstraction**. LocalWhisper supports multiple STT backends through a Python Protocol:
+
+\`\`\`python
+class STTEngine(Protocol):
+    model_name: str
+    is_loaded: bool
+
+    def load_model(self) -> None: ...
+    def transcribe(self, audio: np.ndarray, sample_rate: int) -> TranscriptionResult: ...
+    def unload_model(self) -> None: ...
+\`\`\`
+
+A factory function creates the right engine based on config:
+
+\`\`\`python
+engine = create_engine(
+    "faster-whisper",
+    model_name="large-v3-turbo",
+    device="cuda",
+    compute_type="int8",
+)
+\`\`\`
+
+This means you can swap between faster-whisper (Whisper-based, best accuracy) and SenseVoice (5-15x faster, great for CPU) without changing any other code.
+
+:::tip
+The Protocol-based approach (duck typing) is more Pythonic than abstract base classes. Any class that has the right methods and attributes automatically satisfies the protocol — no inheritance required.
+:::
+
+## How Text Injection Works
+
+The trickiest part of a dictation app is getting text into the active window. LocalWhisper uses a clipboard-based approach:
+
+1. **Save** the current clipboard contents
+2. **Copy** the transcribed text to the clipboard
+3. **Simulate** Ctrl+V (or Ctrl+Shift+V for terminal windows)
+4. **Restore** the original clipboard contents
+
+This works in every Windows application — browsers, editors, terminals, Notion, Word, everything. The \`TextInjector\` class detects terminal windows (Windows Terminal, cmd, PowerShell) and uses Ctrl+Shift+V instead, since terminals use Ctrl+V for other purposes.
+
+## The Pipeline Orchestrator
+
+The \`Pipeline\` class is the heart of LocalWhisper. It coordinates the entire flow:
+
+\`\`\`python
+class Pipeline:
+    def start_recording(self):
+        # Begin capturing audio from microphone
+        self.recorder.start()
+        self.on_state_change(PipelineState.RECORDING)
+
+    def stop_recording(self):
+        # Stop capture, get audio data
+        audio = self.recorder.stop()
+        self.on_state_change(PipelineState.PROCESSING)
+        # Submit to background worker for transcription
+        self._work_queue.put(audio)
+\`\`\`
+
+The worker thread handles transcription asynchronously, so the UI never freezes:
+
+\`\`\`python
+def _worker(self):
+    while self._running:
+        audio = self._work_queue.get()
+        result = self.transcriber.transcribe(audio, sample_rate=16000)
+        self.on_transcription(result)
+        self.on_state_change(PipelineState.IDLE)
+\`\`\`
+
+## Multi-Monitor Support
+
+The recording overlay shows a thin status bar on **every connected monitor**. This uses the Windows API to enumerate displays:
+
+\`\`\`python
+import ctypes
+monitors = []
+def callback(hMonitor, hdcMonitor, lprcMonitor, dwData):
+    rect = lprcMonitor.contents
+    monitors.append((rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top))
+    return True
+ctypes.windll.user32.EnumDisplayMonitors(None, None, MONITORENUMPROC(callback), 0)
+\`\`\`
+
+Each monitor gets its own tkinter overlay window positioned at the top, with drag-to-move support.
+
+## The Settings Web UI
+
+Rather than building a complex native GUI, LocalWhisper serves a web page at \`http://127.0.0.1:9876\` using FastAPI and Jinja2 templates. This lets you:
+
+- Change the STT model and engine
+- Switch between GPU and CPU
+- Select your microphone
+- Adjust the hotkey and recording mode
+- View transcription history with search
+- Add custom words to improve recognition
+
+The settings page writes changes to a TOML config file and offers a "Restart to Apply" button that spawns a new process and shuts down the old one.
+
+## Key Lessons from Building This
+
+### 1. pythonw.exe Breaks Everything
+Windows GUI apps use \`pythonw.exe\` (no console window), which sets \`sys.stdout\` and \`sys.stderr\` to \`None\`. Libraries that try to write to stdout (uvicorn, funasr) crash immediately. The fix: redirect to \`os.devnull\` before importing anything.
+
+### 2. Windows MME Truncates Device Names
+The Windows Multimedia Extension (MME) audio API truncates device names to 31 characters. To show the full name, you need to look it up from another host API (DirectSound or WASAPI).
+
+### 3. Global Hotkeys Are Hard
+The \`keyboard\` library installs a low-level keyboard hook that can interfere with other applications. Push-to-talk mode (hold to record) is more reliable than toggle mode for most users.
+
+### 4. Clipboard Restore Is Tricky
+Some applications clear the clipboard on paste, making it impossible to restore the original content. The \`paste_delay_ms\` setting gives applications time to read the clipboard before we restore it.
+
+### 5. Model Loading Takes Time
+Large AI models take 5-30 seconds to load. Loading in a background thread with a fallback model prevents the app from appearing frozen on startup.
+
+## Hardware Requirements
+
+| Setup | GPU | Model | Speed |
+|-------|-----|-------|-------|
+| **Best** | NVIDIA GPU (4GB+ VRAM) | large-v3-turbo (int8) | ~0.5s for 10s audio |
+| **Good** | NVIDIA GPU (2GB+ VRAM) | SenseVoice | ~0.3s for 10s audio |
+| **CPU Only** | Any modern CPU | SenseVoice | ~2s for 10s audio |
+| **CPU Fallback** | Any modern CPU | small (faster-whisper) | ~3s for 10s audio |
+
+:::deep-dive[VRAM Management]
+The large-v3-turbo model with int8 quantisation uses approximately 2.5GB of VRAM. On a 4GB GPU like the T1000, this leaves enough room for the CUDA runtime and VAD model. If VRAM is tight, SenseVoice is an excellent alternative — it uses far less memory and is actually faster, though it supports fewer languages.
+:::
+
+## Project Structure
+
+\`\`\`
+localwhisper/
+├── src/localwhisper/
+│   ├── app.py              # Main entry point — wires everything together
+│   ├── config.py            # TOML configuration management
+│   ├── core/
+│   │   ├── engine.py        # STT engine Protocol + factory
+│   │   ├── transcriber.py   # faster-whisper implementation
+│   │   ├── sensevoice.py    # SenseVoice implementation
+│   │   ├── pipeline.py      # Recording → transcription orchestrator
+│   │   ├── audio_recorder.py # Microphone capture with pre-buffer
+│   │   ├── text_injector.py # Clipboard-based text paste
+│   │   └── hotkey_manager.py # Global hotkey registration
+│   ├── ui/
+│   │   ├── tray.py          # System tray icon
+│   │   ├── status_bar.py    # Recording overlay bars
+│   │   └── overlay.py       # Legacy overlay (replaced by status bars)
+│   ├── web/
+│   │   ├── server.py        # FastAPI server wrapper
+│   │   ├── routes.py        # API endpoints + page routes
+│   │   ├── templates/       # Jinja2 HTML templates
+│   │   └── static/          # CSS + JavaScript
+│   └── db/
+│       ├── database.py      # SQLite wrapper
+│       └── models.py        # Data models
+├── config/default.toml      # Default configuration
+├── installer/               # PyInstaller + Inno Setup scripts
+└── tests/                   # Unit, integration, and E2E tests
+\`\`\``,
+    audioFileUrl: null,
+    audioDuration: null,
+    buildVideoUrl: null,
+    buildInstructions: `## Build: Set Up and Run LocalWhisper
+
+Follow these steps to get LocalWhisper running on your machine. You will need Python 3.11+ and optionally an NVIDIA GPU with CUDA support.
+
+### Step 1: Clone the Project
+
+The full source code is in the \`gwth_projects/localwhisper\` directory of this course repository. Copy it to your working directory:
+
+\`\`\`bash
+cp -r gwth_projects/localwhisper ~/Projects/LocalWhisper
+cd ~/Projects/LocalWhisper
+\`\`\`
+
+### Step 2: Create a Virtual Environment
+
+\`\`\`bash
+python -m venv .venv
+# Windows:
+.venv\\Scripts\\activate
+# macOS/Linux:
+source .venv/bin/activate
+\`\`\`
+
+### Step 3: Install Dependencies
+
+\`\`\`bash
+# Core dependencies
+pip install -r requirements.txt
+
+# For SenseVoice engine (optional, recommended for CPU-only setups)
+pip install funasr torch torchaudio
+\`\`\`
+
+### Step 4: Configure Your Setup
+
+Edit \`config/default.toml\` or create a user config at \`%APPDATA%/LocalWhisper/config/localwhisper.toml\`:
+
+**For GPU users:**
+\`\`\`toml
+[model]
+engine = "faster-whisper"
+name = "large-v3-turbo"
+device = "cuda"
+compute_type = "int8"
+\`\`\`
+
+**For CPU-only users:**
+\`\`\`toml
+[model]
+engine = "sensevoice"
+name = "iic/SenseVoiceSmall"
+device = "cpu"
+\`\`\`
+
+### Step 5: Run LocalWhisper
+
+\`\`\`bash
+python -m localwhisper
+\`\`\`
+
+The app will:
+1. Open an audio stream to your microphone
+2. Start the settings web server at http://127.0.0.1:9876
+3. Load the STT model in the background
+4. Show a system tray icon and recording overlay
+5. Wait for your hotkey (default: Ctrl+Space)
+
+### Step 6: Test Dictation
+
+1. Press and hold **Ctrl+Space**
+2. Speak clearly
+3. Release the key
+4. Watch text appear wherever your cursor is
+
+### Step 7: Explore the Settings
+
+Open http://127.0.0.1:9876 in your browser to:
+- Change the model, engine, and device
+- Select a different microphone
+- Adjust the hotkey and VAD threshold
+- View your transcription history
+
+### Step 8: Run the Tests
+
+\`\`\`bash
+# Unit tests
+python -m pytest tests/unit/ -v
+
+# All tests
+python -m pytest tests/ -v
+\`\`\`
+
+### Step 9: Build the Installer (Optional)
+
+If you want to create a distributable Windows installer:
+
+\`\`\`bash
+# Build with PyInstaller
+pip install pyinstaller
+pyinstaller installer/localwhisper.spec
+
+# Package with Inno Setup (requires Inno Setup 6 installed)
+iscc installer/localwhisper.iss
+\`\`\`
+
+This produces \`installer/Output/LocalWhisper-Setup-0.1.0.exe\`.
+
+### Challenge: Add a New Feature
+
+Try extending LocalWhisper with one of these features using Claude Code:
+
+1. **Auto-punctuation** — Post-process transcriptions to add proper punctuation
+2. **Speaker identification** — Detect different speakers in multi-person dictation
+3. **Keyboard shortcut customisation** — Let users pick any key combination from the settings UI
+4. **Audio preprocessing** — Add noise reduction before transcription
+5. **Export history** — Add a CSV/JSON export button to the history page`,
+    questions: [
+      {
+        id: "m3_e06b_q1",
+        question: "Why does LocalWhisper use a clipboard-based approach for text injection instead of simulating individual keystrokes?",
+        options: [
+          "Simulating keystrokes is slower",
+          "Clipboard paste works in every Windows application regardless of input method",
+          "Individual keystrokes are blocked by antivirus software",
+          "The keyboard library does not support keystroke simulation",
+        ],
+        correctOptionIndex: 1,
+        explanation:
+          "Clipboard-based injection (Ctrl+V) works universally across all Windows applications — browsers, editors, terminals, Notion, Word, everything. Keystroke simulation can be intercepted, filtered, or handled differently by each application.",
+      },
+      {
+        id: "m3_e06b_q2",
+        question: "What is the purpose of the STTEngine Protocol in LocalWhisper's architecture?",
+        options: [
+          "It forces all engines to inherit from a base class",
+          "It provides a common interface so engines can be swapped without changing other code",
+          "It encrypts audio data before sending it to the model",
+          "It manages GPU memory allocation for different models",
+        ],
+        correctOptionIndex: 1,
+        explanation:
+          "The Protocol defines a duck-typed interface (model_name, load_model, transcribe, unload_model). Any class that implements these methods automatically satisfies the protocol, allowing faster-whisper and SenseVoice to be swapped via config without changing the pipeline, UI, or any other code.",
+      },
+      {
+        id: "m3_e06b_q3",
+        question: "Why does LocalWhisper redirect sys.stdout and sys.stderr to os.devnull when running under pythonw.exe?",
+        options: [
+          "To improve performance by reducing log output",
+          "To prevent log files from growing too large",
+          "Because pythonw.exe sets them to None, causing libraries to crash when they try to write",
+          "To hide error messages from the user",
+        ],
+        correctOptionIndex: 2,
+        explanation:
+          "Windows GUI apps launched via pythonw.exe have no console, so Python sets sys.stdout and sys.stderr to None. Libraries like uvicorn and funasr call methods like write() or isatty() on these streams, which crashes with AttributeError. Redirecting to devnull provides a valid file object that silently discards output.",
+      },
+    ],
+    resources: [
+      { title: "LocalWhisper Source Code", url: "https://github.com/David-ACG/LocalWhisper", type: "link" },
+      { title: "faster-whisper — CTranslate2-based Whisper", url: "https://github.com/SYSTRAN/faster-whisper", type: "link" },
+      { title: "SenseVoice — Fast Multilingual Speech Understanding", url: "https://github.com/FunAudioLLM/SenseVoice", type: "link" },
+      { title: "Silero VAD — Voice Activity Detection", url: "https://github.com/snakers4/silero-vad", type: "link" },
+      { title: "PyInstaller — Freeze Python Apps", url: "https://pyinstaller.org", type: "link" },
+      { title: "Inno Setup — Windows Installer Builder", url: "https://jrsoftware.org/isinfo.php", type: "link" },
+    ],
+    status: "locked",
+    createdAt: new Date("2026-01-01"),
+    updatedAt: new Date("2026-03-12"),
   },
 ]
 
