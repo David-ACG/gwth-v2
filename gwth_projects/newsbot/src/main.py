@@ -113,10 +113,31 @@ async def run_scrape(settings: Settings, dry_run: bool = False) -> ScrapeResult:
     result.duplicates_skipped = skipped
     log.info("dedup_complete", new=len(new_articles), skipped=skipped)
 
-    # Cap per run
+    # Cap per run with round-robin source diversity
     if len(new_articles) > MAX_ARTICLES_PER_RUN:
-        new_articles = new_articles[:MAX_ARTICLES_PER_RUN]
-        log.info("articles_capped", cap=MAX_ARTICLES_PER_RUN)
+        from collections import defaultdict
+
+        by_source: dict[str, list] = defaultdict(list)
+        for a in new_articles:
+            by_source[a.source_name].append(a)
+
+        selected: list = []
+        source_names = list(by_source.keys())
+        idx = 0
+        while len(selected) < MAX_ARTICLES_PER_RUN and source_names:
+            name = source_names[idx % len(source_names)]
+            if by_source[name]:
+                selected.append(by_source[name].pop(0))
+                idx += 1
+            else:
+                source_names.remove(name)
+
+        new_articles = selected
+        log.info(
+            "articles_capped",
+            cap=MAX_ARTICLES_PER_RUN,
+            sources_represented=len({a.source_name for a in selected}),
+        )
 
     if not new_articles:
         log.info("scrape_run_complete_no_new")
