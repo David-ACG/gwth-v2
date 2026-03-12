@@ -21,22 +21,27 @@ class Publisher:
 
     async def get_known_urls(self, days: int = 30) -> set[str]:
         """Fetch URLs of articles published in the last N days for dedup."""
-        cutoff = datetime.now(timezone.utc).isoformat()
+        from datetime import timedelta
+
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
         response = (
             await self._db.table("news_articles")
             .select("url")
             .not_.is_("url", "null")
-            .gte("published_at", f"now() - interval '{days} days'")
+            .gte("published_at", cutoff)
             .execute()
         )
         return {row["url"] for row in response.data if row.get("url")}
 
     async def get_known_titles(self, days: int = 30) -> list[str]:
         """Fetch titles of articles published in the last N days for dedup."""
+        from datetime import timedelta
+
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
         response = (
             await self._db.table("news_articles")
             .select("title")
-            .gte("published_at", f"now() - interval '{days} days'")
+            .gte("published_at", cutoff)
             .execute()
         )
         return [row["title"] for row in response.data if row.get("title")]
