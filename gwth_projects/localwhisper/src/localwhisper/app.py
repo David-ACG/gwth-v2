@@ -241,20 +241,35 @@ class LocalWhisperApp:
     def _apply_custom_words(self, text: str) -> str:
         """Apply custom word replacements to transcribed text.
 
-        Does case-insensitive whole-word replacement so Whisper's variations
-        (e.g. 'gwth.aii', 'GWTH.AI') get corrected to the stored form.
+        Handles Whisper variations:
+        - Case differences (gwth.ai -> GWTH.ai)
+        - Trailing duplicate chars (GWTH.aii -> GWTH.ai)
+        - Spoken punctuation (gwth dot ai -> GWTH.ai)
         """
         import re
+        # Map of spoken punctuation to their symbols
+        _SPOKEN_PUNCT = {
+            ".": r"(?:\.| dot | dot\.)",
+            "-": r"(?:-| dash | hyphen )",
+            "/": r"(?:/| slash )",
+            "@": r"(?:@| at )",
+            "_": r"(?:_| underscore )",
+        }
         custom_words = self.db.get_custom_words()
         for cw in custom_words:
-            # Escape the word for regex, then do case-insensitive whole-word replace.
-            # \b word-boundary handles most cases; we also strip trailing/leading
-            # repeated chars that Whisper sometimes hallucinates.
-            pattern = re.escape(cw.word)
-            # Allow optional trailing duplicate of the last character (common Whisper artifact)
-            if cw.word:
-                last_char = re.escape(cw.word[-1])
-                pattern = pattern + last_char + "?"
+            if not cw.word:
+                continue
+            # Build pattern that matches both literal and spoken-punctuation forms
+            parts = []
+            for ch in cw.word:
+                if ch in _SPOKEN_PUNCT:
+                    parts.append(_SPOKEN_PUNCT[ch])
+                else:
+                    parts.append(re.escape(ch))
+            pattern = "".join(parts)
+            # Allow optional trailing duplicate of last char (common Whisper artifact)
+            last_char = re.escape(cw.word[-1])
+            pattern = pattern + last_char + "?"
             text = re.sub(pattern, cw.word, text, flags=re.IGNORECASE)
         return text
 
