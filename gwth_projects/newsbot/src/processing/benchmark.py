@@ -253,3 +253,65 @@ def save_benchmark_results(run: BenchmarkRun, output_dir: str = "benchmark_resul
 
     print(f"\nResults saved to: {filename}")
     return str(filename)
+
+
+async def save_benchmark_to_supabase(run: BenchmarkRun, settings) -> str | None:
+    """Save benchmark results to Supabase for aggregation and apicompare.net.
+
+    Returns the run_id UUID or None on failure.
+    """
+    if not settings.supabase_url or not settings.supabase_service_role_key:
+        logger.warning("supabase_not_configured_skipping_save")
+        return None
+
+    from supabase import acreate_client
+
+    supabase = await acreate_client(
+        settings.supabase_url,
+        settings.supabase_service_role_key,
+    )
+
+    # Insert the run
+    run_data = {
+        "run_at": run.run_at.isoformat(),
+        "articles_sampled": run.articles_sampled,
+        "providers_tested": run.providers_tested,
+    }
+    run_resp = await supabase.table("benchmark_runs").insert(run_data).execute()
+    run_id = run_resp.data[0]["id"]
+    logger.info("benchmark_run_saved", run_id=run_id)
+
+    # Insert all results
+    results_data = [
+        {
+            "run_id": run_id,
+            "article_title": r.article_title,
+            "article_url": r.article_url,
+            "provider_id": r.provider_id,
+            "provider_name": r.provider_name,
+            "model": r.model,
+            "latency_ms": r.latency_ms,
+            "success": r.success,
+            "error": r.error,
+            "json_valid": r.json_valid,
+            "fields_complete": r.fields_complete,
+            "importance_score": r.importance_score,
+            "category": r.category,
+            "title_rewritten": r.title_rewritten,
+            "excerpt": r.excerpt,
+            "content_length": r.content_length,
+            "estimated_input_tokens": r.estimated_input_tokens,
+            "estimated_output_tokens": r.estimated_output_tokens,
+            "estimated_cost_usd": r.estimated_cost_usd,
+        }
+        for r in run.results
+    ]
+
+    # Insert in batches of 50
+    for i in range(0, len(results_data), 50):
+        batch = results_data[i : i + 50]
+        await supabase.table("benchmark_results").insert(batch).execute()
+
+    logger.info("benchmark_results_saved", count=len(results_data), run_id=run_id)
+    print(f"Saved to Supabase: run_id={run_id}, {len(results_data)} results")
+    return run_id

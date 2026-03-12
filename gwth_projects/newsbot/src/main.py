@@ -172,7 +172,7 @@ async def run_clean_seeds(settings: Settings) -> None:
 async def run_benchmark(settings: Settings, sample_size: int = BENCHMARK_SAMPLE_SIZE) -> None:
     """Benchmark all configured providers against real RSS articles."""
     from src.processing.benchmark import run_benchmark as _run_benchmark
-    from src.processing.benchmark import save_benchmark_results
+    from src.processing.benchmark import save_benchmark_results, save_benchmark_to_supabase
 
     # Fetch real articles for the benchmark
     scraper = RSSFeedScraper()
@@ -212,6 +212,9 @@ async def run_benchmark(settings: Settings, sample_size: int = BENCHMARK_SAMPLE_
     # Run the benchmark
     run = await _run_benchmark(sample, settings)
     save_benchmark_results(run)
+
+    # Save to Supabase for aggregation
+    await save_benchmark_to_supabase(run, settings)
 
 
 async def _test_feeds():
