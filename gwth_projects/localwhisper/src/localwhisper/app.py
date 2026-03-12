@@ -238,22 +238,43 @@ class LocalWhisperApp:
             self.tray.set_state("idle")
             self.status_bar.set_state("idle")
 
+    def _apply_custom_words(self, text: str) -> str:
+        """Apply custom word replacements to transcribed text.
+
+        Does case-insensitive whole-word replacement so Whisper's variations
+        (e.g. 'gwth.aii', 'GWTH.AI') get corrected to the stored form.
+        """
+        import re
+        custom_words = self.db.get_custom_words()
+        for cw in custom_words:
+            # Escape the word for regex, then do case-insensitive whole-word replace.
+            # \b word-boundary handles most cases; we also strip trailing/leading
+            # repeated chars that Whisper sometimes hallucinates.
+            pattern = re.escape(cw.word)
+            # Allow optional trailing duplicate of the last character (common Whisper artifact)
+            if cw.word:
+                last_char = re.escape(cw.word[-1])
+                pattern = pattern + last_char + "?"
+            text = re.sub(pattern, cw.word, text, flags=re.IGNORECASE)
+        return text
+
     def _on_transcription(self, result: TranscriptionResult):
         """Handle completed transcription - inject text and save to DB."""
         if result.text.strip():
-            self.injector.inject(result.text)
-            self.status_bar.show_transcription(result.text)
+            text = self._apply_custom_words(result.text)
+            self.injector.inject(text)
+            self.status_bar.show_transcription(text)
 
             # Save to database
             from localwhisper.db.models import Transcription
             self.db.add_transcription(Transcription(
-                text=result.text,
+                text=text,
                 duration_s=result.duration_s,
                 model=self.transcriber.model_name,
                 language=result.language,
                 confidence=result.language_probability,
             ))
-            logger.info("Transcribed: %s", result.text[:80])
+            logger.info("Transcribed: %s", text[:80])
 
     def _on_error(self, error: Exception):
         """Handle pipeline errors."""
