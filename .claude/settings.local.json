@@ -172,7 +172,9 @@
       "Bash(npx next:*)",
       "Bash(rm:*)",
       "mcp__playwright__browser_resize",
-      "Bash(find \"C:\\\\Projects\\\\GWTH_V2\" -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\) -path \"*newsletter*\" 2>/dev/null | head -20)"
+      "Bash(find \"C:\\\\Projects\\\\GWTH_V2\" -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\) -path \"*newsletter*\" 2>/dev/null | head -20)",
+      "Bash(python --version 2>&1 && pip --version 2>&1)",
+      "Bash(cd \"C:/Projects/GWTH_V2/gwth_lesson_ideas/maybe\" && mkdir -p \\\\\n  \"01-how-to-compare-api-models-on-cost-and-quality\" \\\\\n  \"02-how-to-use-api-models-in-an-app\" \\\\\n  \"03-how-to-build-a-local-app-that-is-automated\" \\\\\n  \"04-parsing-rss-atom-feeds-with-python\" \\\\\n  \"05-web-scraping-ethics-robots-txt-rate-limiting\" \\\\\n  \"06-html-scraping-with-beautifulsoup\" \\\\\n  \"07-handling-unreliable-sources-timeouts-retries\" \\\\\n  \"08-deduplication-strategies-url-and-fuzzy-matching\" \\\\\n  \"09-text-preprocessing-for-llm-input\" \\\\\n  \"10-scoring-and-filtering-building-an-importance-threshold\" \\\\\n  \"11-prompt-engineering-for-structured-json-output\" \\\\\n  \"12-building-a-provider-abstraction-layer\" \\\\\n  \"13-handling-llm-failures-retries-and-fallbacks\" \\\\\n  \"14-cost-monitoring-and-budget-controls-for-apis\" \\\\\n  \"15-pydantic-for-config-and-settings-management\" \\\\\n  \"16-structured-logging-with-structlog\" \\\\\n  \"17-scheduling-with-cron-and-apscheduler\" \\\\\n  \"18-cli-design-with-argparse\" \\\\\n  \"19-designing-tables-for-a-content-pipeline\" \\\\\n  \"20-row-level-security-in-supabase-postgresql\" \\\\\n  \"21-idempotent-writes-handling-duplicate-inserts\" \\\\\n  \"22-dockerizing-a-python-service\" \\\\\n  \"23-alerting-on-content-quality-issues\" \\\\\n  \"24-building-a-daily-digest-newsletter-pipeline\" \\\\\n  \"25-mocking-http-requests-for-deterministic-tests\" \\\\\n  \"26-testing-llm-integrations-without-burning-credits\" \\\\\n  \"27-dry-run-modes-for-safe-development\" && echo \"Done\")"
     ]
   },
   "enableAllProjectMcpServers": true,
