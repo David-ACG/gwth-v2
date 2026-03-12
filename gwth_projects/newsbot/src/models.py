@@ -46,3 +46,35 @@ class ScrapeResult(BaseModel):
     articles_published: int = 0
     articles_below_threshold: int = 0
     errors: list[str] = Field(default_factory=list)
+
+
+class ArticleBenchmark(BaseModel):
+    """Benchmark result for a single article processed by a single provider."""
+
+    article_title: str
+    article_url: str
+    provider_id: str
+    provider_name: str
+    model: str
+    latency_ms: float
+    success: bool
+    error: str = ""
+    json_valid: bool = False
+    fields_complete: bool = False
+    importance_score: int | None = None
+    category: str = ""
+    title_rewritten: str = ""
+    excerpt: str = ""
+    content_length: int = 0
+    estimated_input_tokens: int = 0
+    estimated_output_tokens: int = 0
+    estimated_cost_usd: float = 0.0
+
+
+class BenchmarkRun(BaseModel):
+    """Summary of a full benchmark run across all providers."""
+
+    run_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    articles_sampled: int = 0
+    providers_tested: int = 0
+    results: list[ArticleBenchmark] = Field(default_factory=list)

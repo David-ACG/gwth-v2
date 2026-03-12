@@ -8,13 +8,14 @@ import sys
 
 import structlog
 
-from src.config import MAX_ARTICLES_PER_RUN, RSS_SOURCES, Settings
+from src.config import BENCHMARK_SAMPLE_SIZE, MAX_ARTICLES_PER_RUN, PROVIDER_REGISTRY, RSS_SOURCES, Settings
 from src.models import ScrapeResult
 from src.processing.dedup import Deduplicator
 from src.processing.llm_processor import (
     AnthropicProvider,
     LLMProcessor,
     OllamaProvider,
+    OpenAICompatibleProvider,
 )
 from src.processing.publisher import Publisher
 from src.scrapers.rss_scraper import RSSFeedScraper
@@ -23,8 +24,41 @@ from src.utils.logging import setup_logging
 logger = structlog.get_logger()
 
 
+def _get_default_provider(settings: Settings):
+    """Get the default LLM provider based on available API keys.
+
+    Priority: DeepSeek > Groq > Mistral > Anthropic > Ollama
+    """
+    if settings.deepseek_api_key:
+        return OpenAICompatibleProvider(
+            base_url="https://api.deepseek.com",
+            api_key=settings.deepseek_api_key,
+            model="deepseek-chat",
+        )
+    if settings.groq_api_key:
+        return OpenAICompatibleProvider(
+            base_url="https://api.groq.com/openai",
+            api_key=settings.groq_api_key,
+            model="llama-3.3-70b-versatile",
+        )
+    if settings.mistral_api_key:
+        return OpenAICompatibleProvider(
+            base_url="https://api.mistral.ai",
+            api_key=settings.mistral_api_key,
+            model="mistral-small-latest",
+        )
+    if settings.anthropic_api_key:
+        return AnthropicProvider(settings.anthropic_api_key, settings.llm_model)
+
+    # Fall back to Ollama local
+    return OllamaProvider(
+        base_url=settings.ollama_base_url,
+        model=settings.ollama_model,
+    )
+
+
 async def run_scrape(settings: Settings, dry_run: bool = False) -> ScrapeResult:
-    """Execute a full scrape run: fetch → dedup → process → publish.
+    """Execute a full scrape run: fetch -> dedup -> process -> publish.
 
     Args:
         settings: Application settings.
@@ -89,12 +123,7 @@ async def run_scrape(settings: Settings, dry_run: bool = False) -> ScrapeResult:
         return result
 
     # ─── 4. LLM processing ──────────────────────────────────────────────────
-    if settings.anthropic_api_key:
-        provider = AnthropicProvider(settings.anthropic_api_key, settings.llm_model)
-    else:
-        # Fall back to Ollama
-        provider = OllamaProvider()
-
+    provider = _get_default_provider(settings)
     processor = LLMProcessor(provider)
     processed = await processor.process_batch(new_articles)
     result.articles_processed = len(processed)
@@ -140,52 +169,49 @@ async def run_clean_seeds(settings: Settings) -> None:
     logger.info("seed_cleanup_done", deleted=count)
 
 
-def cli():
-    """Command-line interface for Newsbot."""
-    parser = argparse.ArgumentParser(description="Newsbot — AI news scraper")
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+async def run_benchmark(settings: Settings, sample_size: int = BENCHMARK_SAMPLE_SIZE) -> None:
+    """Benchmark all configured providers against real RSS articles."""
+    from src.processing.benchmark import run_benchmark as _run_benchmark
+    from src.processing.benchmark import save_benchmark_results
 
-    # scrape command
-    scrape_parser = subparsers.add_parser("scrape", help="Run a scrape cycle")
-    scrape_parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Scrape and process but don't publish to Supabase",
-    )
+    # Fetch real articles for the benchmark
+    scraper = RSSFeedScraper()
+    all_raw = []
 
-    # clean-seeds command
-    subparsers.add_parser("clean-seeds", help="Delete manually seeded articles")
+    print(f"Fetching articles from {len(RSS_SOURCES)} sources...")
+    for source in RSS_SOURCES:
+        try:
+            articles = await scraper.fetch(source)
+            all_raw.extend(articles)
+        except Exception as exc:
+            logger.warning("source_failed", source=source["name"], error=str(exc))
 
-    # test-feeds command
-    subparsers.add_parser("test-feeds", help="Test RSS feed connectivity (no LLM)")
-
-    args = parser.parse_args()
-
-    if not args.command:
-        parser.print_help()
+    if not all_raw:
+        print("No articles fetched. Cannot run benchmark.")
         sys.exit(1)
 
-    # Load settings (allow missing API key for test-feeds)
-    try:
-        settings = Settings()  # type: ignore[call-arg]
-    except Exception:
-        if args.command == "test-feeds":
-            settings = None
-        else:
-            raise
+    # Take a diverse sample (first N from different sources)
+    seen_sources = set()
+    sample = []
+    for article in all_raw:
+        if article.source_name not in seen_sources and len(sample) < sample_size:
+            sample.append(article)
+            seen_sources.add(article.source_name)
+    # Fill remaining slots if needed
+    for article in all_raw:
+        if len(sample) >= sample_size:
+            break
+        if article not in sample:
+            sample.append(article)
 
-    setup_logging(settings.log_level if settings else "INFO")
+    print(f"Selected {len(sample)} articles for benchmark from {len(seen_sources)} sources")
+    for i, a in enumerate(sample, 1):
+        print(f"  {i}. [{a.source_name}] {a.title[:70]}")
+    print()
 
-    if args.command == "scrape":
-        result = asyncio.run(run_scrape(settings, dry_run=args.dry_run or settings.dry_run))
-        if result.errors:
-            sys.exit(1)
-
-    elif args.command == "clean-seeds":
-        asyncio.run(run_clean_seeds(settings))
-
-    elif args.command == "test-feeds":
-        asyncio.run(_test_feeds())
+    # Run the benchmark
+    run = await _run_benchmark(sample, settings)
+    save_benchmark_results(run)
 
 
 async def _test_feeds():
@@ -207,6 +233,102 @@ async def _test_feeds():
         print(f"  {mark:6s} {source['name']:30s} {status}")
 
     print(f"\nTotal: {total} articles from {len(RSS_SOURCES)} sources ({failed} failed)")
+
+
+def _list_providers(settings: Settings) -> None:
+    """List all providers and their configuration status."""
+    import os
+
+    print(f"\n{'Provider':<25s} {'Model':<25s} {'API Key':>10s} {'Cost (in/out)':>15s}")
+    print("-" * 80)
+
+    for entry in PROVIDER_REGISTRY:
+        api_key_env = entry["api_key_env"]
+        if entry["provider_type"] == "ollama":
+            key_status = "N/A"
+        elif api_key_env:
+            key_val = getattr(settings, api_key_env.lower(), "") or os.environ.get(api_key_env, "")
+            key_status = "SET" if key_val else "MISSING"
+        else:
+            key_status = "N/A"
+
+        cost_str = (
+            f"${entry['cost_input']:.2f}/${entry['cost_output']:.2f}"
+            if entry["cost_input"] > 0 or entry["cost_output"] > 0
+            else "FREE"
+        )
+
+        print(f"{entry['name']:<25s} {entry['model']:<25s} {key_status:>10s} {cost_str:>15s}")
+
+    print()
+
+
+def cli():
+    """Command-line interface for Newsbot."""
+    parser = argparse.ArgumentParser(description="Newsbot — AI news scraper")
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # scrape command
+    scrape_parser = subparsers.add_parser("scrape", help="Run a scrape cycle")
+    scrape_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Scrape and process but don't publish to Supabase",
+    )
+
+    # clean-seeds command
+    subparsers.add_parser("clean-seeds", help="Delete manually seeded articles")
+
+    # test-feeds command
+    subparsers.add_parser("test-feeds", help="Test RSS feed connectivity (no LLM)")
+
+    # benchmark command
+    bench_parser = subparsers.add_parser(
+        "benchmark", help="Benchmark all configured LLM providers"
+    )
+    bench_parser.add_argument(
+        "--sample-size",
+        type=int,
+        default=BENCHMARK_SAMPLE_SIZE,
+        help=f"Number of articles to use (default: {BENCHMARK_SAMPLE_SIZE})",
+    )
+
+    # providers command
+    subparsers.add_parser("providers", help="List all configured LLM providers")
+
+    args = parser.parse_args()
+
+    if not args.command:
+        parser.print_help()
+        sys.exit(1)
+
+    # Load settings (allow missing keys for test-feeds and providers)
+    try:
+        settings = Settings()  # type: ignore[call-arg]
+    except Exception:
+        if args.command in ("test-feeds",):
+            settings = None
+        else:
+            raise
+
+    setup_logging(settings.log_level if settings else "INFO")
+
+    if args.command == "scrape":
+        result = asyncio.run(run_scrape(settings, dry_run=args.dry_run or settings.dry_run))
+        if result.errors:
+            sys.exit(1)
+
+    elif args.command == "clean-seeds":
+        asyncio.run(run_clean_seeds(settings))
+
+    elif args.command == "test-feeds":
+        asyncio.run(_test_feeds())
+
+    elif args.command == "benchmark":
+        asyncio.run(run_benchmark(settings, sample_size=args.sample_size))
+
+    elif args.command == "providers":
+        _list_providers(settings)
 
 
 if __name__ == "__main__":
