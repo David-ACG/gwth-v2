@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "localwhisper"
+version = "0.1.0"
+description = "Local speech-to-text dictation for Windows using faster-whisper"
+requires-python = ">=3.11"
+license = "MIT"
+
+[project.optional-dependencies]
+sensevoice = ["funasr>=1.0.0"]
+
+[project.scripts]
+localwhisper = "localwhisper.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests requiring hardware (microphone, GPU)",
+    "gpu: marks tests requiring NVIDIA GPU",
+    "mic: marks tests requiring microphone",
+    "e2e: marks end-to-end Playwright tests",
+]

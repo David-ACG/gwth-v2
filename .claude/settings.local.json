@@ -171,11 +171,14 @@
       "Bash(pip install:*)",
       "Bash(npx next:*)",
       "Bash(rm:*)",
-      "mcp__playwright__browser_resize"
+      "mcp__playwright__browser_resize",
+      "Bash(find \"C:\\\\Projects\\\\GWTH_V2\" -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\) -path \"*newsletter*\" 2>/dev/null | head -20)"
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["supabase"],
+  "enabledMcpjsonServers": [
+    "supabase"
+  ],
   "hooks": {
     "PostToolUse": [
       {

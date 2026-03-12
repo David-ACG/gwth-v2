@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Transcription History</h1>
+
+<div class="search-bar">
+    <form method="GET" action="/history">
+        <input type="text" name="search" value="{{ search }}" placeholder="Search transcriptions...">
+        <button type="submit">Search</button>
+    </form>
+    <span class="count">{{ total }} transcription{{ 's' if total != 1 else '' }}</span>
+</div>
+
+<table id="history-table">
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Text</th>
+            <th>Duration</th>
+            <th>Model</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td class="timestamp">{{ entry.timestamp[:19] }}</td>
+            <td class="text-cell">
+                <span class="text-preview" onclick="this.classList.toggle('expanded')">{{ entry.text }}</span>
+                <input type="hidden" class="full-text" value="{{ entry.text|e }}">
+            </td>
+            <td>{{ "%.1f"|format(entry.duration_s) }}s</td>
+            <td>{{ entry.model }}</td>
+            <td class="actions-cell">
+                <button class="btn-copy" onclick="copyText(this)" title="Copy to clipboard">&#128203;</button>
+                <button class="btn-delete" onclick="deleteEntry({{ entry.id }})" title="Delete">&times;</button>
+            </td>
+        </tr>
+        {% endfor %}
+        {% if not entries %}
+        <tr>
+            <td colspan="5" class="empty">No transcriptions yet.</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="/history?page={{ page - 1 }}&search={{ search }}">&laquo; Previous</a>
+    {% endif %}
+    <span>Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+    <a href="/history?page={{ page + 1 }}&search={{ search }}">Next &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

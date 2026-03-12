@@ -1,0 +1,111 @@
+[general]
+language = "en"
+auto_detect_language = false
+theme = "dark"
+
+[model]
+engine = "sensevoice"
+name = "iic/SenseVoiceSmall"
+compute_type = "int8"
+device = "cpu"
+download_dir = "./models"
+
+[audio]
+sample_rate = 16000
+channels = 1
+device_index = -1
+chunk_duration_ms = 30
+
+[vad]
+enabled = true
+threshold = 0.5
+min_speech_duration_ms = 250
+max_speech_duration_s = 30
+min_silence_duration_ms = 500
+
+[hotkey]
+push_to_talk = "ctrl+shift+space"
+toggle_record = "ctrl+shift+r"
+mode = "push_to_talk"
+
+[injection]
+method = "clipboard"
+restore_clipboard = true
+paste_delay_ms = 50
+terminal_classes = [
+    "WarpTerminal",
+    "ConsoleWindowClass",
+    "CASCADIA_HOSTING_WINDOW_CLASS",
+    "mintty",
+    "VirtualConsoleClass",
+]
+
+[overlay]
+enabled = true
+position = "top-center"
+opacity = 0.85
+size = 48
+
+[server]
+host = "127.0.0.1"
+port = 9876
+auto_open_browser = true
+
+[database]
+path = "./data/localwhisper.db"
+max_history = 10000
+
+[profiles]
+# Predefined model/device/compute combos for quick switching.
+# Each profile sets: model, device, compute_type
+
+[profiles.gpu_best]
+label = "GPU — Best Quality"
+engine = "faster-whisper"
+model = "large-v3-turbo"
+device = "cuda"
+compute_type = "int8"
+
+[profiles.gpu_fast]
+label = "GPU — Fast"
+engine = "faster-whisper"
+model = "small"
+device = "cuda"
+compute_type = "int8"
+
+[profiles.cpu_quality]
+label = "CPU — Quality"
+engine = "faster-whisper"
+model = "medium"
+device = "cpu"
+compute_type = "int8"
+
+[profiles.cpu_balanced]
+label = "CPU — Balanced"
+engine = "faster-whisper"
+model = "small"
+device = "cpu"
+compute_type = "int8"
+
+[profiles.cpu_fast]
+label = "CPU — Fast"
+engine = "faster-whisper"
+model = "tiny"
+device = "cpu"
+compute_type = "int8"
+
+[profiles.sensevoice_gpu]
+label = "SenseVoice — GPU"
+engine = "sensevoice"
+model = "iic/SenseVoiceSmall"
+device = "cuda"
+compute_type = "int8"
+
+[profiles.sensevoice_cpu]
+label = "SenseVoice — CPU"
+engine = "sensevoice"
+model = "iic/SenseVoiceSmall"
+device = "cpu"
+compute_type = "int8"
+
+[custom_words]

@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.claude/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Project-specific
+config/localwhisper.toml
+data/
+models/
+*.log
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Assets (generated, but we track them)
+# assets/ is tracked
+
+# Secrets
+.env
+*.pem
+*.key
+
+# Large files
+*.wav
+*.mp3
+*.mp4
+tests/fixtures/*.wav
+!tests/fixtures/.gitkeep

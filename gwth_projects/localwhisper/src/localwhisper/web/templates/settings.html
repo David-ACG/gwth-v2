@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Settings</h1>
+
+{% if request.query_params.get('saved') %}
+<div class="toast toast-success" id="toast">Settings saved successfully!</div>
+{% endif %}
+
+<form method="POST" action="/api/settings" id="settings-form">
+    <section class="card">
+        <h2>Model</h2>
+        <div class="form-group">
+            <label for="profile">Quick Profile</label>
+            <select id="profile" onchange="applyProfile(this.value)">
+                <option value="">— Custom —</option>
+                {% for key, p in profiles.items() %}
+                <option value="{{ key }}"
+                    data-engine="{{ p.get('engine', 'faster-whisper') }}"
+                    data-model="{{ p.model }}"
+                    data-device="{{ p.device }}"
+                    data-compute="{{ p.compute_type }}"
+                    {% if p.get('engine', 'faster-whisper') == current_engine and p.model == config.model.name and p.device == config.model.device and p.compute_type == config.model.compute_type %}selected{% endif %}
+                >{{ p.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="engine">STT Engine</label>
+            <select name="engine" id="engine" onchange="onEngineChange(this.value)">
+                {% for e in engines %}
+                <option value="{{ e }}" {% if e == current_engine %}selected{% endif %}>{{ e }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <select name="model" id="model" onchange="clearProfile()">
+                {% for m in models %}
+                <option value="{{ m }}" {% if m == config.model.name %}selected{% endif %}>{{ m }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group" id="compute-type-group">
+            <label for="compute_type">Compute Type</label>
+            <select name="compute_type" id="compute_type" onchange="clearProfile()">
+                <option value="int8" {% if config.model.compute_type == 'int8' %}selected{% endif %}>int8 (recommended)</option>
+                <option value="int8_float16" {% if config.model.compute_type == 'int8_float16' %}selected{% endif %}>int8_float16 (GPU only)</option>
+                <option value="float16" {% if config.model.compute_type == 'float16' %}selected{% endif %}>float16 (GPU only)</option>
+                <option value="float32" {% if config.model.compute_type == 'float32' %}selected{% endif %}>float32</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="device">Device</label>
+            <select name="device" id="device" onchange="clearProfile()">
+                <option value="cuda" {% if config.model.device == 'cuda' %}selected{% endif %}>CUDA (GPU)</option>
+                <option value="cpu" {% if config.model.device == 'cpu' %}selected{% endif %}>CPU</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Language</h2>
+        <div class="form-group">
+            <label for="language">Language</label>
+            <select name="language" id="language">
+                <option value="en" {% if config.general.language == 'en' %}selected{% endif %}>English</option>
+                <option value="de" {% if config.general.language == 'de' %}selected{% endif %}>German</option>
+                <option value="fr" {% if config.general.language == 'fr' %}selected{% endif %}>French</option>
+                <option value="es" {% if config.general.language == 'es' %}selected{% endif %}>Spanish</option>
+                <option value="auto" {% if config.general.language == 'auto' %}selected{% endif %}>Auto-detect</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Hotkey</h2>
+        <div class="form-group">
+            <label for="hotkey">Push-to-Talk Hotkey</label>
+            <input type="text" name="hotkey" id="hotkey" value="{{ config.hotkey.push_to_talk }}">
+        </div>
+        <div class="form-group">
+            <label for="hotkey_mode">Mode</label>
+            <select name="hotkey_mode" id="hotkey_mode">
+                <option value="push_to_talk" {% if config.hotkey.mode == 'push_to_talk' %}selected{% endif %}>Push to Talk (hold)</option>
+                <option value="toggle" {% if config.hotkey.mode == 'toggle' %}selected{% endif %}>Toggle (press to start/stop)</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Audio</h2>
+        <div class="form-group">
+            <label for="audio-device">Input Device</label>
+            <select name="audio_device" id="audio-device">
+                <option value="-1" {% if current_device == -1 %}selected{% endif %}>System Default</option>
+                {% for dev in devices %}
+                <option value="{{ dev.index }}" {% if dev.index == current_device %}selected{% endif %}>{{ dev.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Voice Activity Detection</h2>
+        <div class="form-group">
+            <label for="vad_threshold">VAD Threshold: <span id="vad-value">{{ config.vad.threshold }}</span></label>
+            <input type="range" name="vad_threshold" id="vad_threshold" min="0.1" max="0.9" step="0.05" value="{{ config.vad.threshold }}" oninput="document.getElementById('vad-value').textContent=this.value">
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Overlay</h2>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="overlay_enabled" id="overlay_enabled" {% if config.overlay.enabled %}checked{% endif %}>
+                Show recording overlay
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="overlay_position">Position</label>
+            <select name="overlay_position" id="overlay_position">
+                <option value="top-center" {% if config.overlay.position == 'top-center' %}selected{% endif %}>Top Center</option>
+                <option value="top-right" {% if config.overlay.position == 'top-right' %}selected{% endif %}>Top Right</option>
+                <option value="bottom-right" {% if config.overlay.position == 'bottom-right' %}selected{% endif %}>Bottom Right</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Custom Words</h2>
+        <p class="hint">Add words to improve recognition accuracy.</p>
+        <div class="word-input-row">
+            <input type="text" id="new-word" placeholder="Add a word...">
+            <button type="button" id="add-word" onclick="addWord()">Add</button>
+        </div>
+        <div id="word-list">
+            {% for w in custom_words %}
+            <span class="word-tag">
+                {{ w.word }}
+                <button type="button" class="delete-word" data-word="{{ w.word }}" onclick="deleteWord('{{ w.word }}')">&times;</button>
+            </span>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="button-row">
+        <button type="submit" id="save-settings" class="btn-primary">Save Settings</button>
+        <button type="button" id="restart-btn" class="btn-restart" onclick="restartApp()">Restart to Apply</button>
+    </div>
+</form>
+{% endblock %}

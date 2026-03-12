@@ -1,0 +1,30 @@
+# LocalWhisper - Production Dependencies
+
+# Speech-to-text engine
+faster-whisper>=1.1.0
+
+# CUDA runtime libraries (for GPU inference)
+nvidia-cublas-cu12>=12.4.0
+nvidia-cudnn-cu12>=9.0.0
+
+# Audio capture
+sounddevice>=0.5.0
+
+# Global hotkeys
+keyboard>=0.13.5
+
+# System tray
+pystray>=0.19.5
+Pillow>=10.0.0
+
+# Clipboard and text injection
+pyperclip>=1.9.0
+
+# Settings web UI
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+jinja2>=3.1.0
+python-multipart>=0.0.18
+
+# Database models
+pydantic>=2.10.0
