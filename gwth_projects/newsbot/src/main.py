@@ -217,6 +217,41 @@ async def run_benchmark(settings: Settings, sample_size: int = BENCHMARK_SAMPLE_
     await save_benchmark_to_supabase(run, settings)
 
 
+async def run_compare(settings: Settings) -> None:
+    """Compare all providers side-by-side on a single article."""
+    from src.processing.benchmark import (
+        print_comparison,
+        run_compare as _run_compare,
+        save_comparison_markdown,
+    )
+
+    # Fetch one recent article from a reliable source
+    scraper = RSSFeedScraper()
+    all_raw = []
+
+    print("Fetching articles for comparison...")
+    for source in RSS_SOURCES:
+        try:
+            articles = await scraper.fetch(source)
+            all_raw.extend(articles)
+        except Exception:
+            pass
+
+    if not all_raw:
+        print("No articles fetched.")
+        sys.exit(1)
+
+    # Pick the first article (most recent from first source)
+    article = all_raw[0]
+    print(f"\nComparing providers on:")
+    print(f"  [{article.source_name}] {article.title}")
+    print(f"  {article.source_url}\n")
+
+    results = await _run_compare(article, settings)
+    print_comparison(article, results)
+    save_comparison_markdown(article, results)
+
+
 async def _test_feeds():
     """Test connectivity to all RSS sources without LLM processing."""
     from src.scrapers.rss_scraper import RSSFeedScraper
@@ -296,6 +331,11 @@ def cli():
         help=f"Number of articles to use (default: {BENCHMARK_SAMPLE_SIZE})",
     )
 
+    # compare command
+    subparsers.add_parser(
+        "compare", help="Compare all providers side-by-side on one article"
+    )
+
     # providers command
     subparsers.add_parser("providers", help="List all configured LLM providers")
 
@@ -329,6 +369,9 @@ def cli():
 
     elif args.command == "benchmark":
         asyncio.run(run_benchmark(settings, sample_size=args.sample_size))
+
+    elif args.command == "compare":
+        asyncio.run(run_compare(settings))
 
     elif args.command == "providers":
         _list_providers(settings)

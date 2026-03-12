@@ -129,7 +129,9 @@ async def benchmark_article(
             result.category = data.get("category", "")
             result.title_rewritten = data.get("title", "")
             result.excerpt = data.get("excerpt", "")
-            result.content_length = len(data.get("content", ""))
+            result.content = data.get("content", "")
+            result.content_length = len(result.content)
+            result.tags = data.get("tags", [])
 
         except json.JSONDecodeError:
             result.json_valid = False
@@ -252,6 +254,219 @@ def save_benchmark_results(run: BenchmarkRun, output_dir: str = "benchmark_resul
         )
 
     print(f"\nResults saved to: {filename}")
+    return str(filename)
+
+
+def _flesch_kincaid_grade(text: str) -> float:
+    """Calculate Flesch-Kincaid Grade Level for readability comparison."""
+    sentences = [s.strip() for s in re.split(r"[.!?]+", text) if s.strip()]
+    words = text.split()
+    if not sentences or not words:
+        return 0.0
+    syllable_count = 0
+    for word in words:
+        word = word.lower().strip(".,!?;:\"'()-")
+        # Simple syllable estimation
+        vowels = "aeiou"
+        count = 0
+        prev_vowel = False
+        for ch in word:
+            is_vowel = ch in vowels
+            if is_vowel and not prev_vowel:
+                count += 1
+            prev_vowel = is_vowel
+        if word.endswith("e") and count > 1:
+            count -= 1
+        syllable_count += max(count, 1)
+    avg_sentence_len = len(words) / len(sentences)
+    avg_syllables = syllable_count / len(words)
+    return round(0.39 * avg_sentence_len + 11.8 * avg_syllables - 15.59, 1)
+
+
+def _avg_sentence_length(text: str) -> float:
+    """Average words per sentence."""
+    sentences = [s.strip() for s in re.split(r"[.!?]+", text) if s.strip()]
+    words = text.split()
+    if not sentences:
+        return 0.0
+    return round(len(words) / len(sentences), 1)
+
+
+async def run_compare(
+    article: RawArticle,
+    settings,
+) -> list[ArticleBenchmark]:
+    """Run a single article through all providers for side-by-side quality comparison.
+
+    Returns list of ArticleBenchmark with full content for human review.
+    """
+    providers = build_available_providers(settings)
+    if not providers:
+        logger.error("no_providers_configured")
+        return []
+
+    results = []
+    for entry, provider in providers:
+        result = await benchmark_article(article, entry, provider)
+        results.append(result)
+
+    return results
+
+
+def print_comparison(article: RawArticle, results: list[ArticleBenchmark]) -> None:
+    """Print a side-by-side quality comparison for human review."""
+    print(f"\n{'='*90}")
+    print("SIDE-BY-SIDE QUALITY COMPARISON")
+    print(f"{'='*90}")
+    print(f"Source:   {article.source_name}")
+    print(f"Original: {article.title}")
+    print(f"URL:      {article.source_url}")
+    if article.content_snippet:
+        snippet = article.content_snippet[:200] + "..." if len(article.content_snippet) > 200 else article.content_snippet
+        print(f"Snippet:  {snippet}")
+    print(f"{'='*90}")
+
+    for r in results:
+        print(f"\n{'-'*90}")
+        print(f"PROVIDER: {r.provider_name} ({r.model})")
+        print(f"Latency: {r.latency_ms:.0f}ms | Cost: ${r.estimated_cost_usd:.6f}")
+        print(f"{'-'*90}")
+
+        if not r.success:
+            print(f"  [FAILED] {r.error}")
+            continue
+
+        if not r.json_valid:
+            print("  [INVALID JSON]")
+            continue
+
+        print(f"  Title:      {r.title_rewritten}")
+        print(f"  Category:   {r.category}")
+        print(f"  Importance: {r.importance_score}/10")
+        print(f"  Tags:       {', '.join(r.tags)}")
+        print(f"  Excerpt:    {r.excerpt}")
+        print()
+        print(f"  Content ({r.content_length} chars):")
+        # Indent content for readability
+        for line in r.content.split("\n"):
+            print(f"    {line}")
+
+        # Readability metrics
+        if r.content:
+            fk = _flesch_kincaid_grade(r.content)
+            avg_sl = _avg_sentence_length(r.content)
+            word_count = len(r.content.split())
+            print()
+            print(f"  --- Quality Metrics ---")
+            print(f"  Word count:         {word_count}")
+            print(f"  Avg sentence len:   {avg_sl} words")
+            print(f"  Flesch-Kincaid:     {fk} (grade level; lower = easier to read)")
+
+    # Summary table
+    print(f"\n{'='*90}")
+    print("SUMMARY")
+    print(f"{'='*90}")
+    print(
+        f"{'Provider':<22s} {'Latency':>8s} {'Cost':>10s} {'Score':>6s} "
+        f"{'Words':>6s} {'FK Grade':>9s} {'Avg Sent':>9s}"
+    )
+    print("-" * 80)
+    for r in results:
+        if not r.success or not r.json_valid:
+            print(f"{r.provider_name:<22s} {'FAIL':>8s}")
+            continue
+        fk = _flesch_kincaid_grade(r.content) if r.content else 0
+        avg_sl = _avg_sentence_length(r.content) if r.content else 0
+        words = len(r.content.split()) if r.content else 0
+        print(
+            f"{r.provider_name:<22s} {r.latency_ms:>7.0f}ms "
+            f"${r.estimated_cost_usd:>8.6f} "
+            f"{r.importance_score or 0:>5d} "
+            f"{words:>6d} "
+            f"{fk:>8.1f} "
+            f"{avg_sl:>8.1f}"
+        )
+    print()
+
+
+def save_comparison_markdown(
+    article: RawArticle,
+    results: list[ArticleBenchmark],
+    output_dir: str = "benchmark_results",
+) -> str:
+    """Save comparison to a markdown file for lesson content."""
+    out_path = Path(output_dir)
+    out_path.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H-%M-%S")
+    filename = out_path / f"compare_{timestamp}.md"
+
+    lines = [
+        f"# LLM Quality Comparison — {timestamp}",
+        "",
+        f"## Source Article",
+        f"- **Source:** {article.source_name}",
+        f"- **Title:** {article.title}",
+        f"- **URL:** {article.source_url}",
+        "",
+    ]
+
+    if article.content_snippet:
+        lines.append(f"**Original snippet:**")
+        lines.append(f"> {article.content_snippet[:500]}")
+        lines.append("")
+
+    # Summary table
+    lines.append("## Results Summary")
+    lines.append("")
+    lines.append(
+        "| Provider | Model | Latency | Cost | Score | Words | FK Grade | Avg Sent Len |"
+    )
+    lines.append(
+        "|----------|-------|---------|------|-------|-------|----------|-------------|"
+    )
+
+    for r in results:
+        if not r.success or not r.json_valid:
+            lines.append(f"| {r.provider_name} | {r.model} | FAIL | — | — | — | — | — |")
+            continue
+        fk = _flesch_kincaid_grade(r.content) if r.content else 0
+        avg_sl = _avg_sentence_length(r.content) if r.content else 0
+        words = len(r.content.split()) if r.content else 0
+        lines.append(
+            f"| {r.provider_name} | {r.model} | {r.latency_ms:.0f}ms | "
+            f"${r.estimated_cost_usd:.6f} | {r.importance_score}/10 | "
+            f"{words} | {fk} | {avg_sl} |"
+        )
+
+    lines.append("")
+
+    # Full outputs
+    for r in results:
+        lines.append(f"## {r.provider_name} ({r.model})")
+        lines.append("")
+        if not r.success:
+            lines.append(f"**FAILED:** {r.error}")
+            lines.append("")
+            continue
+        if not r.json_valid:
+            lines.append("**INVALID JSON**")
+            lines.append("")
+            continue
+
+        lines.append(f"- **Title:** {r.title_rewritten}")
+        lines.append(f"- **Category:** {r.category}")
+        lines.append(f"- **Importance:** {r.importance_score}/10")
+        lines.append(f"- **Tags:** {', '.join(r.tags)}")
+        lines.append(f"- **Excerpt:** {r.excerpt}")
+        lines.append("")
+        lines.append("**Content:**")
+        lines.append("")
+        lines.append(r.content)
+        lines.append("")
+
+    filename.write_text("\n".join(lines), encoding="utf-8")
+    print(f"Comparison saved to: {filename}")
     return str(filename)
 
 

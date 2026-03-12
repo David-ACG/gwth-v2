@@ -65,7 +65,9 @@ class ArticleBenchmark(BaseModel):
     category: str = ""
     title_rewritten: str = ""
     excerpt: str = ""
+    content: str = ""
     content_length: int = 0
+    tags: list[str] = Field(default_factory=list)
     estimated_input_tokens: int = 0
     estimated_output_tokens: int = 0
     estimated_cost_usd: float = 0.0
