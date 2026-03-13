@@ -66,7 +66,7 @@ export async function getNews(params: {
   page?: number
   limit?: number
 }): Promise<{ articles: NewsArticle[]; total: number }> {
-  const sort = params.sort ?? "hot"
+  const sort = params.sort ?? "new"
   const limit = params.limit ?? NEWS_PAGE_SIZE
   const page = params.page ?? 1
   const category = params.category ?? ""
@@ -96,13 +96,17 @@ export async function getNews(params: {
 
       switch (sort) {
         case "hot":
-          query = query.order("hotness_score", { ascending: false })
+          query = query
+            .order("hotness_score", { ascending: false })
+            .order("published_at", { ascending: false })
           break
         case "new":
           query = query.order("published_at", { ascending: false })
           break
         case "top":
-          query = query.order("vote_count", { ascending: false })
+          query = query
+            .order("vote_count", { ascending: false })
+            .order("published_at", { ascending: false })
           break
       }
 
