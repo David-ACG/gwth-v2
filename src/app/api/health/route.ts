@@ -11,7 +11,7 @@ function getVersion(): string {
   } catch {
     cachedVersion = "unknown"
   }
-  return cachedVersion
+  return cachedVersion!
 }
 
 /**
