@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   description:
     "Master AI development with hands-on courses, labs, and real-world projects.",
   metadataBase: new URL("https://gwth.ai"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "GWTH.ai | Learn to Build with AI",
     description:

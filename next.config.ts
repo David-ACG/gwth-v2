@@ -3,6 +3,7 @@ import bundleAnalyzer from "@next/bundle-analyzer"
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  compress: true,
   images: {
     remotePatterns: [
       // Add patterns as external image sources are identified
