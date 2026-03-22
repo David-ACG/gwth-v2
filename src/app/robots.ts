@@ -1,16 +1,57 @@
 import type { MetadataRoute } from "next"
-import { APP_URL } from "@/lib/config"
 
 /**
- * Robots.txt configuration for search engine crawlers.
+ * Robots.txt: blocks all crawlers and AI scrapers during pre-launch.
+ * No sitemap is exposed.
  */
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/dashboard/", "/settings/", "/profile/", "/bookmarks/", "/notifications/"],
-    },
-    sitemap: `${APP_URL}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: "*",
+        disallow: "/",
+      },
+      // Explicitly block known AI scrapers
+      {
+        userAgent: "GPTBot",
+        disallow: "/",
+      },
+      {
+        userAgent: "ChatGPT-User",
+        disallow: "/",
+      },
+      {
+        userAgent: "Google-Extended",
+        disallow: "/",
+      },
+      {
+        userAgent: "CCBot",
+        disallow: "/",
+      },
+      {
+        userAgent: "anthropic-ai",
+        disallow: "/",
+      },
+      {
+        userAgent: "ClaudeBot",
+        disallow: "/",
+      },
+      {
+        userAgent: "Bytespider",
+        disallow: "/",
+      },
+      {
+        userAgent: "PerplexityBot",
+        disallow: "/",
+      },
+      {
+        userAgent: "Amazonbot",
+        disallow: "/",
+      },
+      {
+        userAgent: "FacebookBot",
+        disallow: "/",
+      },
+    ],
   }
 }

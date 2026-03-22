@@ -13,11 +13,11 @@ import {
   Baby,
   Store,
   AlertTriangle,
-  ArrowRight,
   Radar,
   Check,
 } from "lucide-react"
 import { HeroSection } from "@/components/landing/hero-section"
+import { WaitlistForm } from "@/components/landing/waitlist-form"
 import { MONTH_CONFIGS, COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 
 export const metadata: Metadata = {
@@ -329,13 +329,8 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8 space-y-3">
-                  <Button className="w-full" size="lg" asChild>
-                    <Link href="/signup">Join the Waitlist</Link>
-                  </Button>
-                  <p className="text-center text-xs text-muted-foreground">
-                    Create a free account to join the earlybird waiting list.
-                  </p>
+                <div className="mt-8">
+                  <WaitlistForm />
                 </div>
                 <p className="mt-6 text-center text-xs text-muted-foreground">
                   No yearly price. Cancel anytime. No lock-in. No penalty.
@@ -358,13 +353,10 @@ export default function LandingPage() {
             Just the skills that matter, updated every day so they stay relevant.
             Based in the UK. Built for everyone who wants to stay relevant.
           </p>
-          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" className="gap-2" asChild>
-              <Link href="/signup">
-                Join the Earlybird Waitlist
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
+          <div className="mx-auto mt-8 max-w-md">
+            <WaitlistForm />
+          </div>
+          <div className="mt-4">
             <Button size="lg" variant="outline" className="gap-2" asChild>
               <Link href="/tech-radar">
                 <Radar className="size-4" />

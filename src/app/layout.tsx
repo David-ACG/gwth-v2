@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: { card: "summary_large_image" },
-  robots: { index: true, follow: true },
+  robots: { index: false, follow: false },
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },

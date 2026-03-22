@@ -5,7 +5,8 @@ import Image from "next/image"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
-import { ArrowRight, Radar } from "lucide-react"
+import { Radar } from "lucide-react"
+import { WaitlistForm } from "@/components/landing/waitlist-form"
 
 /**
  * Animated hero section with cascading blurred spiral layers, GWTH headline, and CTAs.
@@ -71,23 +72,20 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div
-            className="mt-10 flex flex-col gap-4 sm:flex-row"
+            className="mt-10"
             initial={prefersReduced ? undefined : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Button size="lg" className="gap-2" asChild>
-              <Link href="/signup">
-                Join the Earlybird Waitlist
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" asChild>
-              <Link href="/tech-radar">
-                <Radar className="size-4" />
-                Explore the Tech Radar
-              </Link>
-            </Button>
+            <WaitlistForm />
+            <div className="mt-4">
+              <Button size="lg" variant="outline" className="gap-2" asChild>
+                <Link href="/tech-radar">
+                  <Radar className="size-4" />
+                  Explore the Tech Radar
+                </Link>
+              </Button>
+            </div>
           </motion.div>
         </div>
 
