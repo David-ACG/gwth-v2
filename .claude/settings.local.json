@@ -180,7 +180,10 @@
       "Read(//c/Projects/**)",
       "Read(//c//**)",
       "WebFetch(domain:aidailybrief.beehiiv.com)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(find /c/Projects/GWTH_V2 -type f \\\\\\(-name middleware.ts -o -name auth.ts -o -name robots.ts -o -name sitemap.ts -o -name layout.tsx -o -name .env* -o -name globals.css \\\\\\))",
+      "Bash(cat \"/c/Projects/GWTH_V2/src/app/\\(public\\)/page.tsx\")",
+      "Bash(cat \"/c/Projects/GWTH_V2/src/app/\\(dashboard\\)/layout.tsx\")"
     ]
   },
   "enableAllProjectMcpServers": true,

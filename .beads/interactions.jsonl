@@ -1,0 +1,1 @@
+{"id":"int-099129ae","kind":"field_change","created_at":"2026-03-22T23:19:55.8738859Z","actor":"David-ACG","issue_id":"beads_GWTH-agw","extra":{"field":"status","new_value":"closed","old_value":"in_progress","reason":"Implemented password gate, scraper blocking, waitlist forms. Deployed to both Hetzner and P520."}}
