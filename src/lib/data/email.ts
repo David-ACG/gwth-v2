@@ -10,6 +10,7 @@
  */
 
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend"
+import { createClient } from "@supabase/supabase-js"
 
 /** Returns a configured MailerSend client, or null if no API key is set. */
 function getMailerSend(): MailerSend | null {
@@ -118,14 +119,44 @@ function buildAdminNotificationHtml(name: string, email: string): string {
 }
 
 /**
+ * Persists a waitlist signup to the Supabase waitlist table.
+ * Uses upsert on email to avoid duplicates. Logs errors but does not throw —
+ * email delivery is the primary path, persistence is secondary.
+ */
+async function persistWaitlistSignup(email: string, name: string): Promise<void> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!supabaseUrl || !serviceRoleKey) return
+
+  try {
+    const supabase = createClient(supabaseUrl, serviceRoleKey)
+    const { error } = await supabase
+      .from("waitlist")
+      .upsert(
+        { email: email.toLowerCase().trim(), name: name.trim() },
+        { onConflict: "email" }
+      )
+    if (error) {
+      console.error("[Waitlist DB] Insert failed:", error.message)
+    }
+  } catch (err) {
+    console.error("[Waitlist DB] Unexpected error:", err)
+  }
+}
+
+/**
  * Subscribes a user to the waitlist.
- * Sends a confirmation email to the user and a notification to the admin.
- * When MAILERSEND_API_KEY is not set, falls back to console logging.
+ * Persists the signup to Supabase, then sends confirmation + admin notification
+ * via MailerSend. When MAILERSEND_API_KEY is not set, falls back to console logging
+ * but still persists to the database.
  */
 export async function subscribeToWaitlist(params: {
   email: string
   name: string
 }): Promise<{ success: boolean; message: string }> {
+  // Always persist to Supabase (non-blocking — errors are logged, not thrown)
+  await persistWaitlistSignup(params.email, params.name)
+
   const mailerSend = getMailerSend()
 
   if (!mailerSend) {
