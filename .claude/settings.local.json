@@ -179,7 +179,8 @@
       "Read(//c/Users/david/AppData/**)",
       "Read(//c/Projects/**)",
       "Read(//c//**)",
-      "WebFetch(domain:aidailybrief.beehiiv.com)"
+      "WebFetch(domain:aidailybrief.beehiiv.com)",
+      "Bash(cp:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
