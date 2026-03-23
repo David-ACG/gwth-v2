@@ -184,7 +184,14 @@
       "Bash(find /c/Projects/GWTH_V2 -type f \\\\\\(-name middleware.ts -o -name auth.ts -o -name robots.ts -o -name sitemap.ts -o -name layout.tsx -o -name .env* -o -name globals.css \\\\\\))",
       "Bash(cat \"/c/Projects/GWTH_V2/src/app/\\(public\\)/page.tsx\")",
       "Bash(cat \"/c/Projects/GWTH_V2/src/app/\\(dashboard\\)/layout.tsx\")",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db execute --project-ref zdhnwxknovzdnxgvwykt \"\nCREATE TABLE public.waitlist \\(\n  id uuid DEFAULT gen_random_uuid\\(\\) PRIMARY KEY,\n  email text UNIQUE NOT NULL,\n  name text,\n  created_at timestamptz DEFAULT now\\(\\) NOT NULL\n\\);\n\nALTER TABLE public.waitlist ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY \\\\\"Service role can manage waitlist\\\\\"\n  ON public.waitlist FOR ALL USING \\(true\\) WITH CHECK \\(true\\);\n\nCREATE INDEX idx_waitlist_email ON public.waitlist \\(email\\);\n\" 2>&1)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --help)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked \"\nCREATE TABLE public.waitlist \\(\n  id uuid DEFAULT gen_random_uuid\\(\\) PRIMARY KEY,\n  email text UNIQUE NOT NULL,\n  name text,\n  created_at timestamptz DEFAULT now\\(\\) NOT NULL\n\\);\n\nALTER TABLE public.waitlist ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY \\\\\"Service role can manage waitlist\\\\\"\n  ON public.waitlist FOR ALL USING \\(true\\) WITH CHECK \\(true\\);\n\nCREATE INDEX idx_waitlist_email ON public.waitlist \\(email\\);\n\" 2>&1)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase link --project-ref zdhnwxknovzdnxgvwykt)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked \":*)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked -f /dev/stdin <<'EOSQL':*)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked -f tmp_waitlist.sql)"
     ]
   },
   "enableAllProjectMcpServers": true,
