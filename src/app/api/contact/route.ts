@@ -1,7 +1,7 @@
 /**
  * Contact form API route.
  * Validates input with Zod, then delegates to the email stub.
- * In production: sends to david@agilecommercegroup.com via MailerSend.
+ * In production: sends to david@agilecommercegroup.com via Plunk.
  */
 
 import { contactSchema } from "@/lib/validations"

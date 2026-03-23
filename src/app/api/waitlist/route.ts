@@ -1,7 +1,7 @@
 /**
  * Waitlist signup API route.
  * Validates name + email, then sends a confirmation email to the user
- * and a notification to the admin via MailerSend.
+ * and a notification to the admin via Plunk.
  */
 
 import { z } from "zod"

@@ -1,30 +1,59 @@
 /**
  * Email integration for waitlist, newsletter, and contact form.
- * Uses MailerSend for transactional emails when configured.
- * Falls back to console logging when MAILERSEND_API_KEY is not set.
+ * Uses Plunk (useplunk.com) for transactional emails when configured.
+ * Falls back to console logging when PLUNK_SECRET_KEY is not set.
  *
  * Env vars:
- * - MAILERSEND_API_KEY — required for real email delivery
- * - MAILERSEND_FROM_EMAIL — sender address (default: hello@gwth.ai)
- * - MAILERSEND_FROM_NAME — sender name (default: GWTH.ai)
+ * - PLUNK_SECRET_KEY — required for real email delivery
  */
 
-import { MailerSend, EmailParams, Sender, Recipient } from "mailersend"
 import { createClient } from "@supabase/supabase-js"
 
-/** Returns a configured MailerSend client, or null if no API key is set. */
-function getMailerSend(): MailerSend | null {
-  const apiKey = process.env.MAILERSEND_API_KEY
-  if (!apiKey) return null
-  return new MailerSend({ apiKey })
-}
+const PLUNK_API_URL = "https://next-api.useplunk.com/v1/send"
+const FROM_EMAIL = "hello@gwth.ai"
+const FROM_NAME = "GWTH.ai"
+const ADMIN_EMAIL = "david@agilecommercegroup.com"
 
-/** Returns the configured sender for transactional emails. */
-function getSender(): Sender {
-  return new Sender(
-    process.env.MAILERSEND_FROM_EMAIL ?? "hello@gwth.ai",
-    process.env.MAILERSEND_FROM_NAME ?? "GWTH.ai"
-  )
+/**
+ * Sends an email via the Plunk API.
+ * Returns true on success, false on failure.
+ */
+async function sendEmail(params: {
+  to: string
+  subject: string
+  body: string
+  name?: string
+}): Promise<boolean> {
+  const secretKey = process.env.PLUNK_SECRET_KEY
+  if (!secretKey) return false
+
+  try {
+    const res = await fetch(PLUNK_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${secretKey}`,
+      },
+      body: JSON.stringify({
+        to: params.to,
+        subject: params.subject,
+        body: params.body,
+        from: FROM_EMAIL,
+        name: params.name ?? FROM_NAME,
+      }),
+    })
+
+    if (!res.ok) {
+      const error = await res.text()
+      console.error("[Plunk] Send failed:", res.status, error)
+      return false
+    }
+
+    return true
+  } catch (err) {
+    console.error("[Plunk] Unexpected error:", err)
+    return false
+  }
 }
 
 /**
@@ -147,7 +176,7 @@ async function persistWaitlistSignup(email: string, name: string): Promise<void>
 /**
  * Subscribes a user to the waitlist.
  * Persists the signup to Supabase, then sends confirmation + admin notification
- * via MailerSend. When MAILERSEND_API_KEY is not set, falls back to console logging
+ * via Plunk. When PLUNK_SECRET_KEY is not set, falls back to console logging
  * but still persists to the database.
  */
 export async function subscribeToWaitlist(params: {
@@ -157,11 +186,11 @@ export async function subscribeToWaitlist(params: {
   // Always persist to Supabase (non-blocking — errors are logged, not thrown)
   await persistWaitlistSignup(params.email, params.name)
 
-  const mailerSend = getMailerSend()
+  const hasPlunk = !!process.env.PLUNK_SECRET_KEY
 
-  if (!mailerSend) {
+  if (!hasPlunk) {
     console.log(`[Stub] Waitlist signup: ${params.email} (${params.name})`)
-    console.log("[Stub] No MAILERSEND_API_KEY — skipping real email delivery")
+    console.log("[Stub] No PLUNK_SECRET_KEY — skipping real email delivery")
     return {
       success: true,
       message: "You've been added to the waitlist!",
@@ -169,32 +198,33 @@ export async function subscribeToWaitlist(params: {
   }
 
   try {
-    const sender = getSender()
+    // Send both emails concurrently
+    const [userSent, adminSent] = await Promise.all([
+      sendEmail({
+        to: params.email,
+        subject: "You're on the GWTH earlybird list",
+        body: buildWaitlistEmailHtml(params.name),
+      }),
+      sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `New waitlist signup: ${params.name}`,
+        body: buildAdminNotificationHtml(params.name, params.email),
+      }),
+    ])
 
-    // 1. Send confirmation email to the user
-    const userEmail = new EmailParams()
-      .setFrom(sender)
-      .setTo([new Recipient(params.email, params.name)])
-      .setSubject("You're on the GWTH earlybird list")
-      .setHtml(buildWaitlistEmailHtml(params.name))
-
-    await mailerSend.email.send(userEmail)
-
-    // 2. Send notification to admin
-    const adminEmail = new EmailParams()
-      .setFrom(sender)
-      .setTo([new Recipient("david@agilecommercegroup.com", "David")])
-      .setSubject(`New waitlist signup: ${params.name}`)
-      .setHtml(buildAdminNotificationHtml(params.name, params.email))
-
-    await mailerSend.email.send(adminEmail)
+    if (!userSent) {
+      console.error("[Plunk] Failed to send user confirmation to:", params.email)
+    }
+    if (!adminSent) {
+      console.error("[Plunk] Failed to send admin notification")
+    }
 
     return {
       success: true,
       message: "You've been added to the waitlist! Check your email for confirmation.",
     }
   } catch (error) {
-    console.error("[MailerSend] Failed to send waitlist emails:", error)
+    console.error("[Plunk] Failed to send waitlist emails:", error)
     return {
       success: false,
       message: "Something went wrong. Please try again.",
@@ -203,13 +233,12 @@ export async function subscribeToWaitlist(params: {
 }
 
 /**
- * Subscribes a user to the newsletter via MailerLite.
+ * Subscribes a user to the newsletter.
  * Currently a stub that returns success.
  */
 export async function subscribeToNewsletter(params: {
   email: string
 }): Promise<{ success: boolean; message: string }> {
-  // TODO: Wire to MailerLite API
   console.log(`[Stub] Newsletter signup: ${params.email}`)
   return {
     success: true,
@@ -219,19 +248,36 @@ export async function subscribeToNewsletter(params: {
 
 /**
  * Submits a contact form message.
- * In production: sends the message to david@agilecommercegroup.com via MailerSend,
- * and sends a confirmation email to the sender.
- * Currently a stub that logs and returns success.
+ * Sends the message to the admin and a confirmation to the sender via Plunk.
  */
 export async function submitContactForm(params: {
   name: string
   email: string
   message: string
 }): Promise<{ success: boolean; message: string }> {
-  // TODO: Wire to MailerSend
-  // 1. Send message to admin (david@agilecommercegroup.com) with sender details
-  // 2. Send confirmation email to sender ("We received your message")
-  console.log(`[Stub] Contact form: ${params.name} <${params.email}> — ${params.message.slice(0, 50)}...`)
+  const hasPlunk = !!process.env.PLUNK_SECRET_KEY
+
+  if (!hasPlunk) {
+    console.log(`[Stub] Contact form: ${params.name} <${params.email}> — ${params.message.slice(0, 50)}...`)
+    return {
+      success: true,
+      message: "Message sent! We will get back to you as soon as possible.",
+    }
+  }
+
+  await sendEmail({
+    to: ADMIN_EMAIL,
+    subject: `Contact form: ${params.name}`,
+    body: `
+<div style="font-family:sans-serif;max-width:480px;margin:20px auto;padding:24px;background:#fff;border-radius:8px;border:1px solid #e5e7eb;">
+  <h2 style="margin:0 0 16px;font-size:18px;">New Contact Form Message</h2>
+  <p><strong>Name:</strong> ${params.name}</p>
+  <p><strong>Email:</strong> ${params.email}</p>
+  <p><strong>Message:</strong></p>
+  <p style="white-space:pre-wrap;">${params.message}</p>
+</div>`,
+  })
+
   return {
     success: true,
     message: "Message sent! We will get back to you as soon as possible.",
