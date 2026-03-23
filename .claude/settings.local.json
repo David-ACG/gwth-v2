@@ -191,7 +191,11 @@
       "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase link --project-ref zdhnwxknovzdnxgvwykt)",
       "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked \":*)",
       "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked -f /dev/stdin <<'EOSQL':*)",
-      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked -f tmp_waitlist.sql)"
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_25276e0e0770fbaeac7ad0e3dd2c6b6fb1ec8a63 npx supabase db query --linked -f tmp_waitlist.sql)",
+      "WebFetch(domain:docs.useplunk.com)",
+      "WebFetch(domain:www.useplunk.com)",
+      "WebFetch(domain:next.useplunk.com)",
+      "WebFetch(domain:resend.com)"
     ]
   },
   "enableAllProjectMcpServers": true,
