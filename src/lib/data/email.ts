@@ -9,7 +9,7 @@
 
 import { createClient } from "@supabase/supabase-js"
 
-const PLUNK_API_URL = "https://next-api.useplunk.com/v1/send"
+const PLUNK_API_URL = "https://api.useplunk.com/v1/send"
 const FROM_EMAIL = "david@gwth.ai"
 const FROM_NAME = "GWTH.ai"
 const ADMIN_EMAIL = "david@agilecommercegroup.com"
