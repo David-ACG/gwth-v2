@@ -197,7 +197,8 @@
       "WebFetch(domain:next.useplunk.com)",
       "WebFetch(domain:resend.com)",
       "Bash(curl:*)",
-      "Bash(printf '%s' 'sk_21a6919a600dc3bfba752efee244a8948e1b1ead24f488a8')"
+      "Bash(printf '%s' 'sk_21a6919a600dc3bfba752efee244a8948e1b1ead24f488a8')",
+      "Bash(ssh p520 'docker exec coolify php artisan tinker --execute=\"\":*)"
     ]
   },
   "enableAllProjectMcpServers": true,
