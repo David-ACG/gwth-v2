@@ -46,6 +46,19 @@ This replaces the old approach of designing entirely through written specs. Writ
 
 **Community sentiment:** Consistently rated the best tool for React/shadcn code generation. Figma import (analyzing visual layout AND design tokens) produces higher fidelity than screenshot input.
 
+**v0 MCP Server (use from Claude Code):**
+```bash
+# Requires Premium plan ($20/mo). Get key from v0.dev/chat/settings/keys
+claude mcp add v0 -- npx mcp-remote https://mcp.v0.dev --header "Authorization: Bearer YOUR_V0_API_KEY"
+```
+Exposes tools: create chats (generate components), send follow-ups (iterate), read generated files. Output quality identical to web UI — same models. The tradeoff: no visual preview via MCP (must run code locally to see it). Best used for batch generation of derivative components after establishing visual direction on v0.dev web UI.
+
+**v0 CLI:** `npx v0 add <component-id>` downloads a v0-generated component into your project. It's a downloader, not a generator — you create on v0.dev first.
+
+**Community MCP alternative (hellolucky/v0-mcp):** Adds `v0_generate_from_image` tool — pass a screenshot/wireframe, get React code back. Useful for Stitch → v0 pipeline.
+
+**Optimal v0 workflow:** Use v0.dev web UI for visual exploration and initial design (this is where "doesn't look like AI" happens — through visual iteration). Use v0 MCP for batch generation of similar components once the visual direction is established. Claude Code integrates everything.
+
 **Verdict:** The single most valuable design tool for GWTH. $20/month is worth it.
 
 ---
