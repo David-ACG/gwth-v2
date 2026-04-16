@@ -4,20 +4,35 @@
 
 Research into the best tools and workflow for designing gwth.ai (a Next.js 16 + Tailwind v4 + shadcn/ui education platform), with a $50/month budget for design tools. Goal: find the optimal way to create high-quality designs and hand them off to Claude Code for implementation.
 
+> **Companion file:** [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md) — 10 Claude Code skills/plugins/CLIs that fight AI slop. Includes Impeccable, awesome-design-md, 21st.dev Magic MCP, Taste Skill, and more. **Install these before doing any design work** — they improve every design-related prompt materially.
+
 ---
 
 ## Executive Summary
 
-**Recommended $50/month stack:**
+**Recommended stack — free skills layer + $48/month paid tools:**
+
+**Free layer (install first — permanent foundation):**
 
 | Tool | Cost | Role |
 |------|------|------|
+| **Impeccable skill + CLI + Chrome ext** | Free | Universal quality filter — 18 commands (`/audit`, `/critique`, `/polish`, `/typeset`, etc.) fights AI slop |
+| **awesome-design-md** | Free | 68 DESIGN.md files for popular brands (Linear, Notion, Supabase, Claude, etc.) — drop into project root |
+| **Taste Skill** | Free | Premium aesthetic enforcement with 3 dials (variance/motion/density) |
+| **21st.dev Magic MCP** | Free tier | Generate components inside Claude Code via `/ui <description>` — exact GWTH stack output |
 | **Google Stitch** | Free | Design exploration — generate high-fidelity mockups from prompts |
-| **v0 by Vercel (Pro)** | $20/mo | Component generation — produces exact Next.js + shadcn/ui + Tailwind code |
-| **Gemini Advanced** | $20/mo | Design QA — analyze screenshots, compare to references, suggest improvements |
-| **Remaining budget** | $10/mo | Optional: Magic Patterns ($19/mo) or Figma ($15/mo) if needed |
 
-**The workflow: Stitch (explore) → v0 (prototype components) → Claude Code (implement) → Gemini (QA)**
+**Paid layer (inspiration + generation + QA):**
+
+| Tool | Cost | Role |
+|------|------|------|
+| **Mobbin Pro (annual)** | $8/mo | Real shipped LMS flows (Duolingo, Khan Academy, Coursera references) |
+| **v0 by Vercel (Pro)** | $20/mo | Component generation (or swap to 21st.dev Pro if MCP integration wins) |
+| **Gemini Advanced** | $20/mo | Design QA — analyze screenshots, compare to references, suggest improvements |
+
+> Full details on the free skills layer: [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)
+
+**The workflow: Stitch (explore) → v0 or 21st.dev (prototype) → Claude Code + Impeccable/Taste (implement with taste) → Gemini (QA)**
 
 This replaces the old approach of designing entirely through written specs. Written specs (like the CLAUDE.md design system) remain the foundation, but visual tools now fill the gap between "idea" and "implemented UI."
 
@@ -214,11 +229,17 @@ Pre-built component collections for the exact GWTH stack:
 
 ### Phase 1: Inspiration & References (1-2 hours, one-time)
 
-1. Browse these for visual inspiration:
-   - [Dribbble: Learning Platform](https://dribbble.com/tags/learning_platform) — 2,500+ designs
-   - [Dribbble: Education Dashboard](https://dribbble.com/tags/education-dashboard)
-   - [Behance: Education Dashboard](https://www.behance.net/search/projects/education%20dashboard)
-   - Competitor sites: Brilliant.org, Codecademy, Duolingo, MasterClass, Khan Academy, Uxcel
+1. Browse these for visual inspiration (ranked by quality for a real product build):
+   - **[Mobbin](https://mobbin.com)** ($96/yr annual, ~$50-70 with promo code) — **BEST option**. Real shipped apps with full flows. Confirmed coverage: Duolingo, Khan Academy, Coursera, Udemy. Dedicated `/explore/web/app-categories/education` section. "Copy to Figma" plugin pastes screens as images.
+   - **[Awwwards](https://awwwards.com)** (free) — Cutting-edge marketing sites and landing page animations
+   - **[Land-book](https://land-book.com)** + **[Godly](https://godly.website)** (free) — Curated marketing/landing page galleries
+   - **[SaaSLandingPage](https://saaslandingpage.com)** (free) — Pricing and features patterns
+   - **[Interface Index](https://interfaceindex.com)** (free) — B2B/SaaS dashboard components
+   - **[Marbleflows](https://marbleflows.com)** (free) — SaaS onboarding flow recordings
+   - **[Page Flows](https://pageflows.com)** (~$99/yr) — Video recordings of real user flows
+   - **[Behance](https://behance.net)** (free) — Deep case studies with process and rationale
+   - Competitor sites (direct reference): Brilliant.org, Codecademy, Duolingo, MasterClass, Khan Academy, Uxcel
+   - **Skip Dribbble** — concept art will mislead you on real product complexity
 
 2. Screenshot 8-12 pages you like. Note what you like about each.
 
@@ -352,11 +373,24 @@ The most effective way to communicate a page design to Claude Code:
 |-------------|-------------|-------------|
 | **Stitch + v0 Pro** | $20 | Design exploration + component code generation |
 | **Stitch + v0 Pro + Gemini** | $40 | Above + design QA and analysis |
+| **Stitch + v0 Pro + Gemini + Mobbin** | $48 | Above + real shipped LMS app references ($96/yr ÷ 12) |
 | **Stitch + v0 Pro + Gemini + Magic Patterns** | $59 | Above + unlimited component generation |
 | **Stitch + v0 Pro + Figma** | $35 | Above + pixel-perfect design control |
 | **Stitch + v0 Pro + Gemini + Figma** | $55 | The full stack (slightly over budget) |
 
-**Recommended for $50 budget: Stitch (free) + v0 Pro ($20) + Gemini Advanced ($20) = $40/month** with $10 to spare.
+**Recommended for $50 budget: Stitch (free) + v0 Pro ($20) + Gemini Advanced ($20) + Mobbin Pro ($8/mo annual) = $48/month** with $2 to spare. Use a Mobbin promo code (20% off via Secret, 50% off via Freelance Stack) to bring it down further.
+
+### Mobbin vs Dribbble for Inspiration
+
+| Factor | Mobbin ($96/yr) | Dribbble (free) |
+|--------|-----------------|----------------|
+| Content type | Real shipped apps, full flows | Concept art, isolated shots |
+| LMS coverage | Duolingo, Khan Academy, Coursera, Udemy | Concepts, no real data |
+| Search | By UI pattern, element, flow | Tags only |
+| Figma export | Yes (as images) | No |
+| Risk | Free tier too thin to use | Concept art misleads on real complexity |
+
+**Verdict:** Mobbin is the single best inspiration source for GWTH. Free tier is useless (15-min wall). Annual Pro with promo code (~$50-70/yr effective) is worth it for the lesson viewer design alone. Avoid monthly billing — Trustpilot complaints cluster there.
 
 ---
 
