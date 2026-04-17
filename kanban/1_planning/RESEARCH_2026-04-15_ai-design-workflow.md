@@ -10,7 +10,7 @@ Research into the best tools and workflow for designing gwth.ai (a Next.js 16 + 
 
 ## Executive Summary
 
-**Recommended stack — free skills layer + $48/month paid tools:**
+**Recommended stack — free skills layer + $40/month paid tools:**
 
 **Free layer (install first — permanent foundation):**
 
@@ -22,13 +22,13 @@ Research into the best tools and workflow for designing gwth.ai (a Next.js 16 + 
 | **21st.dev Magic MCP** | Free tier | Generate components inside Claude Code via `/ui <description>` — exact GWTH stack output |
 | **Google Stitch** | Free | Design exploration — generate high-fidelity mockups from prompts |
 
-**Paid layer (inspiration + generation + QA):**
+**Paid layer (generation + QA — $40/month):**
 
 | Tool | Cost | Role |
 |------|------|------|
-| **Mobbin Pro (annual)** | $8/mo | Real shipped LMS flows (Duolingo, Khan Academy, Coursera references) |
 | **v0 by Vercel (Pro)** | $20/mo | Component generation (or swap to 21st.dev Pro if MCP integration wins) |
 | **Gemini Advanced** | $20/mo | Design QA — analyze screenshots, compare to references, suggest improvements |
+| ~~**Mobbin Pro**~~ | ~~$8/mo~~ | ~~Dropped — annual commitment not justified for a single-project build. Visit LMS sites directly + use Stitch/awesome-design-md instead.~~ |
 
 > Full details on the free skills layer: [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)
 
