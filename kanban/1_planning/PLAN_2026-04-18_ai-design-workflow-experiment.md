@@ -9,6 +9,12 @@
 
 ## 0. Amendment Log
 
+### 2026-04-18 (late evening) — Repo + page-swap decisions locked
+
+- **Repo (Q6 resolved):** The commercial fractionalbuddy.com is a **new repo forked from the conscia-fractional MVP** — not a route group added to the MVP. The local MVP stays private; the commercial site lives separately. Working name: `fractionalbuddy-site`. New §5.0 added below with the fork procedure.
+- **Pricing swapped in for Timesheet (Q7 resolved):** Pages under test are now **Homepage (greenfield) + Dashboard (redesign) + Pricing (greenfield)**. This shifts the balance to 2 greenfield + 1 redesign — more brand-expressive work, more conversion-pattern learning, which is a better fit for evaluating AI design tools on a new commercial launch. §4.3 rewritten.
+- Supabase note: the experiment is pure design — no live Supabase needed during the A/B tracks. When the commercial site ships for real (post-experiment), it'll need its own Supabase project separate from `fractionalbuddy` (MVP).
+
 ### 2026-04-18 (evening) — Scope widened from "redesign" to "greenfield + redesign"
 
 David's decision: turn FractionalBuddy into the **commercial product at fractionalbuddy.com** (Namecheap domain). The experiment now exercises a broader workflow than pure redesign — it also validates the greenfield marketing case.
@@ -138,13 +144,14 @@ Three pages, each captured in **light + dark** theme, each implemented by both t
 - **What to improve:** Add a light theme, modernise the widget hierarchy (primary metric deserves more weight), simpler visual grammar at small breakpoints.
 - **Tests:** dashboard design language, data visualisation, multi-theme discipline, responsive density.
 
-### 4.3 Timesheet — REDESIGN
+### 4.3 Pricing — GREENFIELD
 
-- **Status:** Exists, dark theme only. Baseline screenshot: `C:\Projects\GWTH_V2\screenshots\March\2026-04-18_192339.jpg`.
-- **Current pattern:** Daily/Weekly/Monthly toggle, month navigator, vertical entry list with category chips (General, Meeting, Meeting prep, Customer), inline time/edit/delete controls.
-- **What it does well today:** Category colour-coding, at-a-glance totals.
-- **What to improve:** Light theme, clearer weekly totals, bulk-edit affordances, print-friendly layout.
-- **Tests:** list/table UX at scale, filter patterns, inline actions, data export thinking.
+- **Status:** Does not exist. Both tracks design and build from scratch.
+- **Purpose:** Convert marketing-site visitors into paid signups. Needs to communicate value, tiers, and a clear default choice.
+- **Must contain:** headline + sub, 3-tier comparison table (Solo, Team, Consultancy — exact names TBD), feature matrix with row grouping, FAQ accordion, final CTA. Yearly/monthly toggle on prices.
+- **Competitive benchmarks to study briefly:** Harvest pricing, Toggl pricing, Notion pricing, Linear pricing. Do **not** copy — study conversion patterns.
+- **Tests:** conversion hierarchy, comparison-table UX (notoriously hard to do well), pricing psychology, cross-theme discipline for tabular content.
+- **Why this is a better A/B probe than Timesheet was:** pricing pages stress the same visual-hierarchy muscles that the homepage does, but with very different patterns (grids + tables + conditional pricing). They also produce *directly commercial* learnings — the winning pricing design can ship.
 
 ### 4.4 Theme capture requirement (both tracks, all three pages)
 
@@ -152,35 +159,80 @@ For every final implementation, capture:
 - Desktop 1440px × 900px — light + dark
 - Mobile 375px × 800px — light + dark
 
-**8 screenshots per page × 3 pages = 24 final screenshots per track × 2 tracks = 48 screenshots total.** These are the raw material for side-by-side comparison in §8 and the lab gallery in §9.
+**4 screenshots per page × 3 pages = 12 final screenshots per track × 2 tracks = 24 final screenshots for side-by-side comparison**, plus baseline captures for Dashboard only. These are the raw material for §8 synthesis and the §9 lab gallery.
 
 ### 4.5 What the pages don't test
 
-Deliberately excluded from this experiment to keep scope honest:
-- Login / signup / auth (skipped — tested later once chosen stack is committed)
-- Pricing page (skipped — just a teaser on the homepage)
+Deliberately excluded to keep scope honest:
+- Login / signup / auth (skipped — different concerns; build post-experiment)
+- Timesheet (dropped in favour of Pricing — see §0 amendment log)
 - Settings (skipped — low brand impact)
 
-If you'd prefer to swap timesheet for login/pricing to test conversion patterns, call it now before §5.1 runs.
+### 4.6 Scope balance
+
+2 greenfield (Homepage, Pricing) + 1 redesign (Dashboard). This is intentionally greenfield-heavy — the hardest test of AI design tools is cold-starting a brand-consistent page from nothing.
 
 ---
 
 ## 5. Setup — Before Any Track Runs
 
-All setup steps run from this session (GWTH v2), then we move. **Run §14 (Brand kit) BEFORE §5** so both tracks start with an agreed logo, favicon, and colour direction.
+All setup steps run from this session (GWTH v2), then we move. **Run §14 (Brand kit) BEFORE §5.1** so both tracks start with an agreed logo, favicon, and colour direction. **Run §5.0 first** to fork the MVP into the new commercial repo.
 
-### 5.1 Capture the baseline
+### 5.0 Fork the MVP into the commercial repo
 
-1. Start conscia-fractional dev server (`npm run dev`).
-2. For **Dashboard** and **Timesheet** only (homepage doesn't exist yet):
-   - Screenshot each at 1440px + 375px = **4 baseline screenshots** (dark theme only, since app has no light theme today). Save to `C:\Projects\conscia-fractional\experiments\baseline\`.
-   - Run Lighthouse on each page, save JSON to `baseline/lighthouse/`.
-   - Record LOC per page.
-3. For **Marketing homepage**: there is no baseline — note this explicitly in the log. Both tracks start from blank.
-4. Write `baseline/README.md`:
-   - **Dashboard** — what works today, what's weak, what light-theme introduces.
-   - **Timesheet** — same.
-   - **Marketing homepage** — 1 paragraph on the positioning ("FractionalBuddy is time-tracking + client relationship for fractional consultants — the segment Harvest/Toggl don't specialise in"). Both tracks will start from this.
+The commercial `fractionalbuddy.com` is a new repo forked from `conscia-fractional` — not a route group added to the MVP. The local MVP stays private for Conscia's data; the commercial product is public.
+
+Working name: **`fractionalbuddy-site`** at `C:\Projects\fractionalbuddy-site`. Rename freely before running.
+
+**Fork procedure:**
+
+```bash
+# 1. Clone the MVP into a new local folder, then strip its git history
+cd /c/Projects
+cp -r conscia-fractional fractionalbuddy-site
+cd fractionalbuddy-site
+rm -rf .git
+rm -f .env.local                         # keep .env.local.example, strip secrets
+rm -rf node_modules .next playwright-report
+rm -rf experiments/ 2>/dev/null          # no MVP-side experiments
+rm -rf CRM contacts meetings deliverables calendar   # strip Conscia's private data folders if present
+
+# 2. Scrub the README / package.json name / any hard-coded "Conscia" strings
+sed -i 's/conscia-fractional/fractionalbuddy-site/g' package.json
+# Manually review CLAUDE.md / AGENTS.md / README.md for private references
+
+# 3. Re-init as a fresh repo
+git init
+git add .
+git commit -m "chore: initial commit, forked from conscia-fractional MVP (2026-04-18)"
+
+# 4. Create the GitHub repo and push
+gh repo create David-ACG/fractionalbuddy-site --private --source=. --push
+```
+
+**Review checklist after fork (10 min):**
+- [ ] No Conscia client names (LoveSac, Holt Renfrew, Jaguar Land Rover, Staples) in code, seeded data, or copy
+- [ ] No MVP-specific private Supabase URL / keys in any committed file
+- [ ] README.md rewritten for the commercial product (tagline only, full copy comes from Phase 0 brand brief)
+- [ ] `package.json` name + `next.config.ts` metadata updated to FractionalBuddy
+- [ ] `.gitignore` includes `experiments/sandbox/` and `experiments/recordings/` per §10
+
+**Repeat all §5 setup from inside the new repo** — not from the MVP.
+
+### 5.1 Capture the baseline (from the MVP, before fork work starts)
+
+Run baseline capture from the **original `conscia-fractional` MVP** — it's the only place the current Dashboard/Timesheet designs live. Save outputs into the new `fractionalbuddy-site/experiments/baseline/` folder so they travel with the experiment.
+
+1. Start conscia-fractional dev server (`npm run dev` from `C:\Projects\conscia-fractional`).
+2. For **Dashboard** only (Pricing and Homepage don't exist in MVP):
+   - Screenshot at 1440px + 375px = **2 baseline screenshots** (dark theme only, MVP has no light theme). Save to `C:\Projects\fractionalbuddy-site\experiments\baseline\`.
+   - Run Lighthouse, save JSON to `baseline/lighthouse/dashboard.json`.
+   - Record LOC for the dashboard route.
+3. **Homepage** and **Pricing**: no baseline (both greenfield). Note explicitly in the log.
+4. Write `experiments/baseline/README.md`:
+   - **Dashboard** — what works today (information density, teal-on-dark, timer affordance), what's weak (dark-only, widget hierarchy can be clearer, mobile density).
+   - **Homepage** — 1 paragraph positioning: "FractionalBuddy is time-tracking + client-relationship for fractional consultants — the segment Harvest/Toggl don't specialise in. Target user: solution architects, fractional CTOs/CMOs billing by the day or half-day."
+   - **Pricing** — 1 paragraph on tiering philosophy: "Pricing page must make the middle tier the obvious default. Competitive anchors: Harvest ($12-14/user), Toggl ($10-20/user), Reclaim ($10/user). Probably 3 tiers with annual toggle. Exact numbers TBD during design."
 
 ### 5.2 Prepare Claude Design seed bundle
 
@@ -192,29 +244,37 @@ Both tracks feed Claude Design the **same inputs** — this is the control. Save
 - Current screenshots of the 3 pages (baseline)
 - Written brief: `brief.md` — 2 paragraphs per page on *what should improve*
 
-### 5.3 Create branches
+### 5.3 Create experiment branches in the new repo
 
-⚠️ **Open decision (Q6 in §13):** Where does the fractionalbuddy.com marketing homepage code live?
-
-- **Option A (recommended):** Add a `(marketing)` route group to the existing `conscia-fractional` Next.js app. Routes `/`, `/pricing`, `/login` etc. live there; the current app moves to an `(app)` group behind auth. **One repo, one deploy, clean separation by route group.** Both experiment branches include marketing code.
-- **Option B:** Create a new `fractionalbuddy-site` repo just for the marketing site. App stays where it is. Two repos, two deploys. Experiment becomes more complex.
-- **Option C:** Monorepo with `apps/site` and `apps/dashboard`. Overkill for a solo project.
-
-**Decision needed before §5.3 runs. If unsure, default to Option A.**
+Branches live in `fractionalbuddy-site` (created in §5.0), not the MVP.
 
 ```bash
-cd /c/Projects/conscia-fractional
-git status                              # must be clean
-git checkout main && git pull
+cd /c/Projects/fractionalbuddy-site
+git status                              # should be clean after §5.0
 git checkout -b experiment/with-v0
 git push -u origin experiment/with-v0
 git checkout main
 git checkout -b experiment/without-v0
 git push -u origin experiment/without-v0
-git checkout main
+git checkout main                       # back to clean main
 ```
 
-Under Option A, both branches will get a new `src/app/(marketing)/page.tsx` (the homepage) in addition to the dashboard/timesheet redesigns.
+Route-group layout (applies to both branches):
+
+```
+src/app/
+├── (marketing)/
+│   ├── page.tsx              # Homepage — §4.1 target
+│   ├── pricing/page.tsx      # Pricing — §4.3 target
+│   ├── layout.tsx            # Public nav + footer
+│   └── (future: login/, signup/, about/)
+├── (app)/
+│   ├── dashboard/page.tsx    # Dashboard — §4.2 target (redesigned from MVP)
+│   └── layout.tsx            # Authed sidebar + header
+└── layout.tsx                # Root (fonts, ThemeProvider, Toaster)
+```
+
+Both branches start from main which already has the forked MVP code. Each track commits all three redesigns to its own branch.
 
 ### 5.4 Create measurement log template
 
@@ -474,18 +534,30 @@ No custom pipeline work required — we're following the existing template.
 
 ---
 
-## 12. Pre-Flight Checklist (run before §5.1)
+## 12. Pre-Flight Checklist (run before Phase 0)
 
-- [ ] Verify Claude Design still accessible (not fully locked out) on current Claude plan
-- [ ] Verify v0.app free tier account exists and email is confirmed
+### Accounts & tooling
+- [ ] Verify Claude Design accessible on your **Max** plan
+- [ ] Verify v0.app free tier account exists and email confirmed
 - [ ] Verify 21st.dev Magic MCP is installed in Claude Code settings
-- [ ] Verify Gemini Advanced subscription active
-- [ ] Pick the 3 pages (hero + list + form) — write them into §4 above before starting
-- [ ] Confirm `conscia-fractional` main branch is clean (`git status` empty)
-- [ ] Confirm Supabase (`fractionalbuddy` project) is running — design work touches live routes
-- [ ] Set up a 3-hour timer (phone, physical, whatever)
-- [ ] Decide: start Track A morning or evening of Day 1?
-- [ ] Create the `experiments/` folder in conscia-fractional and add to `.gitignore` the parts that shouldn't be committed (screenshots yes, raw v0 sandbox code no)
+- [ ] Verify **Recraft** access (already in `C:\Projects\GWTH_V2\recraft`)
+- [ ] **Gemini Advanced**: not active yet — enable on morning of Track A (Day 2)
+- [ ] **Camtasia**: confirm installed + working mic/display capture
+
+### Project prep
+- [ ] Confirm `conscia-fractional` main branch is clean (`git status` empty) — baseline capture in §5.1 reads from this
+- [ ] Confirm target repo name **`fractionalbuddy-site`** (change in §5.0 if different)
+- [ ] Confirm GitHub CLI (`gh`) is authed to `David-ACG`
+- [ ] Check `fractionalbuddy.com` is registered and available (Namecheap)
+- [ ] Set up a 4-5 hour timer per track day
+
+### Content prep
+- [ ] Pages locked: **Homepage + Dashboard + Pricing** (confirmed)
+- [ ] Identify the blind rater and book their 30-minute slot post-Track B
+- [ ] Decide: start Phase 0 (brand kit) Day 1 AM or afternoon?
+
+### Safety
+- [ ] Review the fork checklist in §5.0 — no Conscia client names, no private Supabase keys, no MVP-specific private folders carry into the commercial repo
 
 ---
 
@@ -498,8 +570,8 @@ No custom pipeline work required — we're following the existing template.
 | 3 | 3 pages × 2 tracks feasible? | ✅ **Yes** — David confirms pages are simple; plan revised to reflect light+dark capture. |
 | 4 | External blind rater available? | ✅ **Yes** — send the 6 unlabelled final screenshots at §8. |
 | 5 | Screen-recording tool? | ✅ **Camtasia** (instead of OBS). |
-| 6 | Where does fractionalbuddy.com homepage code live? | ❓ **NEW — open.** See §5.3 Options A/B/C. Default to A unless David overrides. |
-| 7 | Confirm final page list: Homepage + Dashboard + Timesheet? | ❓ **NEW — confirm.** Per §4.5, Login/Pricing is an alternative if David wants to test conversion patterns instead of Timesheet. |
+| 6 | Where does fractionalbuddy.com homepage code live? | ✅ **New forked repo** `fractionalbuddy-site` (not a route group in the MVP). Procedure in §5.0. |
+| 7 | Confirm final page list | ✅ **Homepage + Dashboard + Pricing** (Timesheet dropped, Pricing added). §4 rewritten. |
 
 ---
 
@@ -547,33 +619,36 @@ If Phase 0 takes more than 3 hours, stop and ship what you have — the experime
 
 ---
 
-## Appendix A — Exact commands for branch setup
+## Appendix A — Exact commands for branch setup (after §5.0 fork + §14 brand kit)
 
 ```bash
-cd /c/Projects/conscia-fractional
+cd /c/Projects/fractionalbuddy-site
 git status                              # must be clean
-git checkout main && git pull
 git checkout -b experiment/with-v0
 git push -u origin experiment/with-v0
 git checkout main
 git checkout -b experiment/without-v0
 git push -u origin experiment/without-v0
 git checkout main                       # back to clean main
-mkdir -p experiments/{baseline,bundles,sandbox,logs}
-echo "experiments/sandbox/" >> .gitignore   # don't commit raw v0 scratch
+mkdir -p experiments/{baseline,bundles,sandbox,logs,recordings}
+cat >> .gitignore <<'EOF'
+experiments/sandbox/
+experiments/recordings/
+EOF
 git add .gitignore && git commit -m "chore: add experiments/ scaffolding"
+git push
 ```
 
 ## Appendix B — Exact session-open prompts
 
 **Track A session open:**
-> I'm running design experiment Track A (WITH v0) against branch `experiment/with-v0` on this repo. The full plan is at `C:\Projects\GWTH_V2\kanban\1_planning\PLAN_2026-04-18_ai-design-workflow-experiment.md`. Load §6 as my instructions. Confirm the branch, create today's log directory, and wait for my go signal before touching any code.
+> I'm running design experiment Track A (WITH v0) against branch `experiment/with-v0` in the `fractionalbuddy-site` repo. The full plan is at `C:\Projects\GWTH_V2\kanban\1_planning\PLAN_2026-04-18_ai-design-workflow-experiment.md`. Load §6 as my instructions. Confirm the branch, create today's log directory, and wait for my go signal before touching any code.
 
 **Track B session open:**
-> I'm running design experiment Track B (WITHOUT v0) against branch `experiment/without-v0` on this repo. The full plan is at `C:\Projects\GWTH_V2\kanban\1_planning\PLAN_2026-04-18_ai-design-workflow-experiment.md`. Load §7 as my instructions. Do NOT reference the with-v0 branch or any Track A artefacts. Confirm the branch, create today's log directory, wait for go.
+> I'm running design experiment Track B (WITHOUT v0) against branch `experiment/without-v0` in the `fractionalbuddy-site` repo. The full plan is at `C:\Projects\GWTH_V2\kanban\1_planning\PLAN_2026-04-18_ai-design-workflow-experiment.md`. Load §7 as my instructions. Do NOT reference the with-v0 branch or any Track A artefacts. Confirm the branch, create today's log directory, wait for go.
 
 **Synthesis session open:**
-> Experiment complete. Both branches exist on conscia-fractional. All logs in `C:\Projects\conscia-fractional\experiments\logs\`. All screenshots in `experiments/trackA|B/screenshots/`. Load §8 of `PLAN_2026-04-18_ai-design-workflow-experiment.md` and execute the synthesis.
+> Experiment complete. Both branches exist on `fractionalbuddy-site`. All logs in `C:\Projects\fractionalbuddy-site\experiments\logs\`. All screenshots in `experiments/trackA|B/screenshots/`. Load §8 of `PLAN_2026-04-18_ai-design-workflow-experiment.md` and execute the synthesis.
 
 **Lab production session open:**
 > Synthesis complete (results at `C:\Projects\GWTH_V2\kanban\1_planning\RESEARCH_2026-04-15_ai-design-workflow.md` §12). Load §9 of `PLAN_2026-04-18_ai-design-workflow-experiment.md` and produce the lab under `C:\Projects\1_gwthpipeline520\data\generated_lessons\labs\LAB_ai-design-ab\`.
