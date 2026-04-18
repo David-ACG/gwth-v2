@@ -1,9 +1,29 @@
 # PLAN — AI Design Workflow A/B Experiment (FractionalBuddy)
 
-**Date:** 2026-04-18
+**Date:** 2026-04-18 (amended evening same day — see §0 changelog)
 **Author:** David + Claude
-**Budget:** ~10-14 hours total work across planning/execution/synthesis/Lab production
+**Budget:** ~14-20 hours total (revised — see §0)
 **Related:** [RESEARCH_2026-04-15_ai-design-workflow.md](./RESEARCH_2026-04-15_ai-design-workflow.md), [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)
+
+---
+
+## 0. Amendment Log
+
+### 2026-04-18 (evening) — Scope widened from "redesign" to "greenfield + redesign"
+
+David's decision: turn FractionalBuddy into the **commercial product at fractionalbuddy.com** (Namecheap domain). The experiment now exercises a broader workflow than pure redesign — it also validates the greenfield marketing case.
+
+**Changes vs morning version:**
+- **Pages under test changed** (§4):
+  - ~~Landing hero, a list page, a form page~~ (redesigns of existing app pages)
+  - New set: **(1) Marketing homepage (NEW, greenfield) + (2) Dashboard (redesign of current app UI) + (3) Timesheet (redesign of current app UI)**
+- **Light + dark theme captured for all 3 pages, both tracks** → 3 pages × 2 tracks × 2 themes = 12 final screenshots per phase
+- **Logo + favicon added as shared Phase 0** (§14) — produced once, used by both tracks so it's not an experiment variable
+- **Time budget raised** from 3h → 4-5h per track (homepage is greenfield and harder)
+- **New open question:** where does the fractionalbuddy.com marketing homepage code live? (§13 Q6)
+- **All 5 questions from §13 answered:** Claude **Max** ✓, Gemini Advanced will be turned on ✓, 3 pages feasible ✓, blind rater available ✓, **Camtasia** for recording ✓
+
+The original thinking on session architecture (§2), variables/controls (§3), synthesis framework (§8), and pipeline hand-off (§9) is unchanged — the scope change stretches the work but not the methodology.
 
 ---
 
@@ -98,31 +118,69 @@ The lean path "wins" if it meets acceptance on all three pages, within 120% of T
 
 ---
 
-## 4. Pages Under Test
+## 4. Pages Under Test (revised 2026-04-18 evening)
 
-Pick three pages from conscia-fractional that represent different UI pattern families. These should *already exist* so there's a before/after.
+Three pages, each captured in **light + dark** theme, each implemented by both tracks.
 
-### Confirm before starting:
+### 4.1 Marketing homepage — GREENFIELD (fractionalbuddy.com)
 
-1. **Landing hero** — marketing/above-the-fold pattern. Tests: brand expression, typography, conversion CTA.
-2. **A list/grid page** — e.g. `contacts/`, `calendar/`, `deliverables/`, or `CRM/` landing. Tests: data density, card design, filter patterns.
-3. **A form page** — e.g. a contact edit form or deliverable creator. Tests: input styling, validation UX, multi-step flows.
+- **Status:** Does not exist. Both tracks design and build from scratch.
+- **Purpose:** Sell FractionalBuddy as a SaaS to fractional consultants (solution architects, fractional CTOs, fractional CMOs). Competitors to bench against: Harvest, Toggl, Clockify, Reclaim.
+- **Must contain:** hero (logo + H1 + sub + primary CTA), 3-feature section, product screenshot, pricing teaser, email capture / sign-up CTA, footer.
+- **Tests:** brand voice creation from nothing, typography system, conversion hierarchy, cross-theme consistency.
+- **Why this page is the hardest of the three:** No baseline, no existing design tokens yet (FractionalBuddy's current UI is app-only, dark-only). Both tracks start truly cold except for the shared brand kit from §14.
 
-**To decide in §8 pre-flight:** Open conscia-fractional → spend 15 min picking the three pages based on what's most *broken* today, so the redesign has clear wins to measure.
+### 4.2 Dashboard — REDESIGN
+
+- **Status:** Exists, dark theme only. Baseline screenshot: `C:\Projects\GWTH_V2\screenshots\March\2026-04-18_192239.jpg`.
+- **Current pattern:** Left sidebar nav, 3-col widget grid (Hours This Week, Engagement card, Quick Actions, Active Tasks, Recent Meetings, Recent Activity, Upcoming Events), bottom-right timer.
+- **What it does well today:** Information density, teal-on-dark palette, timer affordance.
+- **What to improve:** Add a light theme, modernise the widget hierarchy (primary metric deserves more weight), simpler visual grammar at small breakpoints.
+- **Tests:** dashboard design language, data visualisation, multi-theme discipline, responsive density.
+
+### 4.3 Timesheet — REDESIGN
+
+- **Status:** Exists, dark theme only. Baseline screenshot: `C:\Projects\GWTH_V2\screenshots\March\2026-04-18_192339.jpg`.
+- **Current pattern:** Daily/Weekly/Monthly toggle, month navigator, vertical entry list with category chips (General, Meeting, Meeting prep, Customer), inline time/edit/delete controls.
+- **What it does well today:** Category colour-coding, at-a-glance totals.
+- **What to improve:** Light theme, clearer weekly totals, bulk-edit affordances, print-friendly layout.
+- **Tests:** list/table UX at scale, filter patterns, inline actions, data export thinking.
+
+### 4.4 Theme capture requirement (both tracks, all three pages)
+
+For every final implementation, capture:
+- Desktop 1440px × 900px — light + dark
+- Mobile 375px × 800px — light + dark
+
+**8 screenshots per page × 3 pages = 24 final screenshots per track × 2 tracks = 48 screenshots total.** These are the raw material for side-by-side comparison in §8 and the lab gallery in §9.
+
+### 4.5 What the pages don't test
+
+Deliberately excluded from this experiment to keep scope honest:
+- Login / signup / auth (skipped — tested later once chosen stack is committed)
+- Pricing page (skipped — just a teaser on the homepage)
+- Settings (skipped — low brand impact)
+
+If you'd prefer to swap timesheet for login/pricing to test conversion patterns, call it now before §5.1 runs.
 
 ---
 
 ## 5. Setup — Before Any Track Runs
 
-All setup steps run from this session (GWTH v2), then we move.
+All setup steps run from this session (GWTH v2), then we move. **Run §14 (Brand kit) BEFORE §5** so both tracks start with an agreed logo, favicon, and colour direction.
 
 ### 5.1 Capture the baseline
 
-1. Start conscia-fractional dev server (whatever `npm run dev` gives).
-2. Screenshot each of the 3 chosen pages at 1440px + 375px, light + dark = **12 baseline screenshots**. Save to `C:\Projects\conscia-fractional\experiments\baseline\`.
-3. Run Lighthouse on each page, save JSON to `baseline/lighthouse/`.
-4. Record LOC per page (`wc -l` or VS Code line count).
-5. Write `baseline/README.md` — one paragraph per page describing what's there today and what's weak about it.
+1. Start conscia-fractional dev server (`npm run dev`).
+2. For **Dashboard** and **Timesheet** only (homepage doesn't exist yet):
+   - Screenshot each at 1440px + 375px = **4 baseline screenshots** (dark theme only, since app has no light theme today). Save to `C:\Projects\conscia-fractional\experiments\baseline\`.
+   - Run Lighthouse on each page, save JSON to `baseline/lighthouse/`.
+   - Record LOC per page.
+3. For **Marketing homepage**: there is no baseline — note this explicitly in the log. Both tracks start from blank.
+4. Write `baseline/README.md`:
+   - **Dashboard** — what works today, what's weak, what light-theme introduces.
+   - **Timesheet** — same.
+   - **Marketing homepage** — 1 paragraph on the positioning ("FractionalBuddy is time-tracking + client relationship for fractional consultants — the segment Harvest/Toggl don't specialise in"). Both tracks will start from this.
 
 ### 5.2 Prepare Claude Design seed bundle
 
@@ -136,8 +194,17 @@ Both tracks feed Claude Design the **same inputs** — this is the control. Save
 
 ### 5.3 Create branches
 
+⚠️ **Open decision (Q6 in §13):** Where does the fractionalbuddy.com marketing homepage code live?
+
+- **Option A (recommended):** Add a `(marketing)` route group to the existing `conscia-fractional` Next.js app. Routes `/`, `/pricing`, `/login` etc. live there; the current app moves to an `(app)` group behind auth. **One repo, one deploy, clean separation by route group.** Both experiment branches include marketing code.
+- **Option B:** Create a new `fractionalbuddy-site` repo just for the marketing site. App stays where it is. Two repos, two deploys. Experiment becomes more complex.
+- **Option C:** Monorepo with `apps/site` and `apps/dashboard`. Overkill for a solo project.
+
+**Decision needed before §5.3 runs. If unsure, default to Option A.**
+
 ```bash
 cd /c/Projects/conscia-fractional
+git status                              # must be clean
 git checkout main && git pull
 git checkout -b experiment/with-v0
 git push -u origin experiment/with-v0
@@ -146,6 +213,8 @@ git checkout -b experiment/without-v0
 git push -u origin experiment/without-v0
 git checkout main
 ```
+
+Under Option A, both branches will get a new `src/app/(marketing)/page.tsx` (the homepage) in addition to the dashboard/timesheet redesigns.
 
 ### 5.4 Create measurement log template
 
@@ -366,17 +435,20 @@ No custom pipeline work required — we're following the existing template.
 
 ---
 
-## 10. Timeline
+## 10. Timeline (revised for widened scope)
 
 | When | What | Duration | Session |
 |---|---|---|---|
-| Day 1 AM | Setup (§5) — capture baseline, prep seed, branch, folders | 1-1.5h | Here (GWTH v2) |
-| Day 1 PM | **Track A** — all 3 pages | 3h hard cap | conscia-fractional (new session) |
-| Day 2 AM | **Track B** — all 3 pages | 3h hard cap | conscia-fractional (new session) |
-| Day 2 PM | Synthesis (§8) | 1.5-2h | GWTH v2 (new session) |
-| Day 3 | Lab production (§9) | 2-3h | Pipeline project (new session) |
+| Day 1 AM | **Phase 0 — Brand kit** (§14): positioning → logo → favicon → palette → type | 2-3h | Here (GWTH v2) or conscia-fractional — one session, flexible |
+| Day 1 PM | Setup (§5) — baselines, seed bundle, branches, log templates | 1-1.5h | Here (GWTH v2) |
+| Day 2 | **Track A** — 3 pages × light+dark | 4-5h hard cap | conscia-fractional (NEW session) |
+| Day 3 | **Track B** — 3 pages × light+dark | 4-5h hard cap | conscia-fractional (NEW session) |
+| Day 4 AM | Synthesis (§8) — compare, blind rating, verdict | 2-3h | GWTH v2 (NEW session) |
+| Day 4 PM | Lab production (§9) — lab.md + voiceover.txt + image_prompts.json | 2-3h | Pipeline project (NEW session) |
 
-**Total: ~10-14h of work spread across 3 days.** Day boundaries are soft — each phase can flex, but Tracks A and B must each start from a fresh session.
+**Total: ~15-20h of work spread across 4 days.** Phase 0 and Setup must complete before Track A starts. Tracks A and B each start from a fresh session.
+
+**Camtasia recording note:** start recording at the top of each session, end at the bottom. Don't try to record across sessions — Claude sessions end cleanly, Camtasia files should match. Raw recordings go into `experiments/recordings/` (add to `.gitignore` — they're huge).
 
 ### Budget estimate
 
@@ -417,13 +489,61 @@ No custom pipeline work required — we're following the existing template.
 
 ---
 
-## 13. Open Questions to Resolve Before Starting
+## 13. Open Questions — Status (answered 2026-04-18 evening)
 
-1. **Are you on Claude Pro or Max?** Affects Claude Design quota comfort. If Pro and you're worried about lockout, consider upgrading to Max just for the experiment month (cancellable).
-2. **Do you have a Gemini Advanced subscription active right now?** The plan assumes yes.
-3. **Is 3 pages × 2 tracks realistic for a solo builder?** 6 hours of execution + setup + synthesis + lab is a big chunk. If tight, consider 2 pages instead of 3 (hero + form, skip list). Losing the list page means losing the "data density" pattern finding — acceptable trade.
-4. **Who is the external blind rater?** Ideally a designer friend who hasn't seen any of this. If not available, skip that measurement and note the gap.
-5. **Do you want a time-lapse screen recording of each track?** Cheap to set up (OBS), enormous value for the lab video. Recommend yes.
+| # | Question | Answer |
+|---|---|---|
+| 1 | Claude Pro or Max? | ✅ **Max** — quota comfort confirmed for Claude Design. |
+| 2 | Gemini Advanced active? | ✅ Not currently — David will **enable on demand** during §6 QA / §7 QA / §8 synthesis. |
+| 3 | 3 pages × 2 tracks feasible? | ✅ **Yes** — David confirms pages are simple; plan revised to reflect light+dark capture. |
+| 4 | External blind rater available? | ✅ **Yes** — send the 6 unlabelled final screenshots at §8. |
+| 5 | Screen-recording tool? | ✅ **Camtasia** (instead of OBS). |
+| 6 | Where does fractionalbuddy.com homepage code live? | ❓ **NEW — open.** See §5.3 Options A/B/C. Default to A unless David overrides. |
+| 7 | Confirm final page list: Homepage + Dashboard + Timesheet? | ❓ **NEW — confirm.** Per §4.5, Login/Pricing is an alternative if David wants to test conversion patterns instead of Timesheet. |
+
+---
+
+## 14. Phase 0 — Brand Kit (logo, favicon, palette, type)
+
+> **Runs ONCE before both tracks.** Shared output — not an experiment variable. This isolates v0's role to component generation, not brand design.
+
+### 14.1 Why isolate this from the A/B test
+
+Logos and core colour palette are judged differently from UI components (more subjective, fewer tool-specific techniques, small number of iterations). Including them in the A/B test would add noise without generating useful A/B findings — both tracks would likely produce similar results because both would use the same underlying tools (Claude Design for concepts, Recraft for vectors, neither uses v0 for logos).
+
+Doing brand once upfront means:
+- Both tracks start with the same logo, favicon, and palette
+- The homepage, dashboard, and timesheet all express the **same brand** in both tracks
+- The experiment variable (v0 vs no-v0) stays clean
+
+### 14.2 Deliverables
+
+- **Logo** — primary mark (horizontal + stacked) + dark-mode variant. SVG + PNG at 512/256/128.
+- **Favicon** — 32×32 ICO + 180×180 apple-touch-icon + 512×512 PNG (manifest). Derived from the logo.
+- **Colour palette** — 6-8 OKLCH tokens covering: primary, accent, neutral scale (bg/fg/card/border/muted), destructive/success/warning, plus full light + dark mappings. Committed as `globals.css` variables.
+- **Typography pairing** — one sans (headings + body), optionally one mono (for time/code blocks). Loaded via `next/font/google`.
+- **Brand brief** — 1-pager written in plain English: who FractionalBuddy is for, the voice (confident / calm / practitioner-first), what we're not (not a productivity-porn tool, not a consulting-industry cliché).
+
+### 14.3 Workflow for Phase 0 (cheapest path first)
+
+1. **Positioning** (30 min, you + Claude Code in a new session) — nail the brand brief first. Without positioning, logo work is a random-walk.
+2. **Claude Design — logo concepts** (30-45 min) — prompt it to produce 6-8 logo directions with the brand brief. Export the top 2-3 as reference images.
+3. **Recraft — vector finalisation** (30-45 min) — recreate the chosen direction as clean vectors at primary/stacked/dark-mode variants. Recraft is already in your toolkit (`C:\Projects\GWTH_V2\recraft`).
+4. **Favicon generation** (15 min) — use [realfavicongenerator.net](https://realfavicongenerator.net/) from the 512×512 PNG. Produces the full icon set + `site.webmanifest`.
+5. **Palette build** (30 min) — pull the logo's two dominant hues into OKLCH tokens, build the full semantic palette in `globals.css`. Generate light + dark mappings. Use the existing GWTH OKLCH tokens file as a template.
+6. **Commit the brand kit** to `main` of `conscia-fractional` (or the new site repo, if Option B in §5.3). Both experiment branches inherit it.
+
+### 14.4 Time budget for Phase 0
+
+**2-3 hours total.** This is before the A/B tracks run. Do it in a single sitting to keep the brand voice coherent.
+
+### 14.5 What the brand kit is NOT
+
+- Not a full style guide (that can wait)
+- Not illustrations / marketing imagery (those are per-page, per-track)
+- Not motion specs (handled in-component by Motion/Framer)
+
+If Phase 0 takes more than 3 hours, stop and ship what you have — the experiment is more important than perfecting the logo.
 
 ---
 
