@@ -1,6 +1,8 @@
 # AI-Powered Web Design Workflow Research — 2026-04-15
 
-> **Revision 2026-04-18:** Claude Design launched 2026-04-17 (Anthropic Labs). It reshapes Phase 1 of the workflow — Google Stitch is **retired** in favour of Claude Design for the "explore" step. Full rationale in the [Claude Design section](#claude-design-anthropic-labs--new-2026-04-17) below. v0 Pro, Gemini Advanced, and the Tier-1 free skills layer are all unchanged.
+> **Revision 2026-04-18:** Two changes landed today:
+> 1. **Claude Design** launched 2026-04-17 (Anthropic Labs) — Google Stitch is **retired** from Phase 1 in favour of Claude Design's codebase-ingesting explore step. Full rationale in the [Claude Design section](#claude-design-anthropic-labs--new-2026-04-17) below.
+> 2. **v0 paid tier dropped from baseline.** v0 restructured pricing (old $20 Pro tier is gone; entry paid tier is now $30/mo "Team"). Combined with Claude Design's handoff bundle reducing component-gen demand, the **lean path** starts on **v0 Free ($0)** and only upgrades to Team during active sprint weeks. **New baseline: $20/mo** (Gemini only), down from $40.
 
 ## Context
 
@@ -30,17 +32,20 @@ Research into the best tools and workflow for designing gwth.ai (a Next.js 16 + 
 |------|------|------|
 | **Claude Design** (claude.ai/design) | Included in Claude Pro+ | **Explore step:** ingests your repo's design tokens + components, produces interactive HTML prototypes and a "handoff bundle" Claude Code consumes natively. No API/MCP yet (Anthropic says "coming in weeks"). **Weekly quota is separate from chat/Code — brutal on Pro tier (~30-min lockout reported), fine on Max.** |
 
-**Paid layer (generation + QA — $40/month):**
+**Lean baseline ($20/month, trial v0 first):**
 
 | Tool | Cost | Role |
 |------|------|------|
-| **v0 by Vercel (Pro)** | $20/mo | Component generation. Still the *only* tool that emits drop-in Next.js 16 + Tailwind v4 + shadcn/ui TSX. Claude Design does not replace this. |
+| **v0 Free** | $0 | Component generation — $5 credits/mo, 7 msg/day. **Treat as the v0 trial.** Covers occasional component bursts. |
 | **Gemini Advanced** | $20/mo | Design QA — analyze screenshots, compare to references, suggest improvements |
-| ~~**Mobbin Pro**~~ | ~~$8/mo~~ | ~~Dropped — annual commitment not justified for a single-project build. Visit LMS sites directly + use Stitch/awesome-design-md instead.~~ |
+| ~~**v0 Team**~~ (escalation, not baseline) | ~~$30/mo~~ | Only upgrade during sprint weeks when you hit the 7-msg/day or $5-credit wall. Downgrade back to Free after sprint. |
+| ~~**Mobbin Pro**~~ | ~~$8/mo~~ | ~~Dropped — annual commitment not justified for a single-project build.~~ |
 
 > Full details on the free skills layer: [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)
 
-**The workflow: Claude Design (explore + handoff bundle) → v0 or 21st.dev (prototype shadcn TSX) → Claude Code + Impeccable/Taste (implement with taste) → Gemini (QA)**
+**The workflow: Claude Design (explore + handoff bundle) → 21st.dev Magic MCP + v0 Free (prototype shadcn TSX) → Claude Code + Impeccable/Taste (implement with taste) → Gemini (QA)**
+
+**Escalation trigger:** Upgrade v0 Free → Team ($30) when you hit the daily/credit limit mid-build. Cancel when the sprint ends. Tracking rule: if you upgrade 3 months in a row, make Team the permanent baseline.
 
 This replaces the old approach of designing entirely through written specs. Written specs (like the CLAUDE.md design system) remain the foundation, but Claude Design now ingests those specs automatically — the handoff is no longer a manual paste step.
 
@@ -106,14 +111,17 @@ This replaces the old approach of designing entirely through written specs. Writ
 
 ---
 
-#### 1. v0 by Vercel (v0.app) — RECOMMENDED
+#### 1. v0 by Vercel (v0.app) — RECOMMENDED (Free tier as baseline)
 
 **What it does:** Generates production-ready React components from text prompts, screenshots, or Figma imports. Built by the creators of Next.js — outputs code in the exact GWTH stack (Next.js + React + TypeScript + Tailwind CSS + shadcn/ui).
 
-**Pricing:**
-- Free: $5/month credits, v0-1.5-md model
-- **Pro: $20/month** — $20 credits, v0-1.5-lg (higher quality), Figma import, API access
-- Team: $30/user/month
+**Pricing (checked 2026-04-18 — pricing restructured since earlier research):**
+- **Free: $0** — $5 credits/month, 7 messages/day limit. Models: v0 Mini. **This IS the trial.**
+- **Team: $30/user/month** — $30 credits + $2/day login bonus. Models: v0 Pro, v0 Max, v0 Max Fast.
+- Business: $100/user/month
+- Enterprise: custom
+
+> ⚠️ The old $20 "Pro" tier is gone. Entry paid tier is now $30. This materially changed the cost-benefit calculus — see the "Lean path" section below.
 
 **Quality:** Best-in-class for React/shadcn component generation. Generated code follows best practices, includes accessibility, responsive by default. February 2026 update added Git integration, VS Code-style editor, and agentic workflows.
 
@@ -138,7 +146,15 @@ Exposes tools: create chats (generate components), send follow-ups (iterate), re
 
 **Optimal v0 workflow:** Use v0.dev web UI for visual exploration and initial design (this is where "doesn't look like AI" happens — through visual iteration). Use v0 MCP for batch generation of similar components once the visual direction is established. Claude Code integrates everything.
 
-**Verdict:** The single most valuable design tool for GWTH. $20/month is worth it.
+**Verdict (revised 2026-04-18): Start on Free, upgrade only if needed.** With Claude Design ingesting the codebase and producing handoff bundles, the demand for v0 component generation dropped. The Free tier ($5 credits, 7 msg/day) is now adequate for most weeks. Upgrade to Team ($30) only when you hit the wall during an active sprint, then downgrade. If you upgrade 3 months in a row, make Team permanent.
+
+**Lean path decision tree:**
+
+```
+Is this component complex (quiz engine, streak calendar, search palette)?
+  ├─ YES → v0 (burst a few Free msgs, or upgrade Team if locked out)
+  └─ NO → 21st.dev Magic MCP (free) or Claude Code direct from design bundle
+```
 
 ---
 
@@ -332,13 +348,30 @@ Pre-built component collections for the exact GWTH stack:
 5. **Export the handoff bundle** (not just a screenshot). Save as `design/bundles/<page>-<version>.bundle`
 6. ⚠️ **Ration usage on Pro plan** — expect ~2-3 full explore sessions per week before lockout. If lock-out hits mid-project, fall back to Stitch for that page.
 
-### Phase 3: Component Prototyping with v0 (30 min per component)
+### Phase 3: Component Prototyping — Lean path (10-30 min per component)
 
-1. Take the best Stitch designs and feed them into v0 via screenshot or description
-2. Prompt v0 for specific components:
-   - "A course card component using shadcn/ui Card with Next.js Image thumbnail (16:9), semibold title, muted description with line-clamp-2, a circular progress ring, and a bookmark toggle button. Tailwind CSS, dark mode support."
-3. Generate 2-3 variants, pick the best
-4. Copy the generated code as a reference for Claude Code
+> **Updated 2026-04-18** — v0 is now a *burst* capability, not a primary step. Route components through the cheapest tool that does the job.
+
+**Decision tree per component:**
+
+```
+Is it a standard shadcn pattern (card, nav, form, dialog)?
+  ├─ YES → shadcn CLI (`npx shadcn add <component>`) + Claude Code adapts to design bundle
+  │
+Is it a derivative/variant of shadcn (stat tile, course card, badge set)?
+  ├─ YES → 21st.dev Magic MCP (`/ui <description>` inside Claude Code) — free, in-terminal
+  │
+Is it complex or novel (quiz engine, search palette, streak calendar, notes panel)?
+  └─ YES → v0 Free tier (burst 1-2 msgs from 7/day allowance)
+           └─ If locked out or 3+ complex components in one day → upgrade v0 Team $30 for this month only
+```
+
+**When you do use v0:**
+1. Take the Claude Design handoff bundle + your `globals.css` tokens and describe the component
+2. Generate 2-3 variants, pick the best
+3. Copy the generated code; Claude Code adapts it to GWTH's component module conventions
+
+**Rationing v0 Free wisely:** 7 messages/day is genuinely tight during active build. Batch your "hard" component work into a single session per day, spread routine work across 21st.dev and shadcn CLI.
 
 ### Phase 4: Implementation with Claude Code
 
@@ -445,19 +478,22 @@ The most effective way to communicate a page design to Claude Code:
 
 ## Cost Comparison Summary
 
-> **Updated 2026-04-18** — assumes Claude Pro/Max is already paid for (you use Claude Code). Claude Design is a no-marginal-cost addition on that plan.
+> **Updated 2026-04-18** — assumes Claude Pro/Max is already paid for (you use Claude Code). Claude Design is a no-marginal-cost addition on that plan. v0's old $20 Pro tier no longer exists.
 
 | Stack Option | Monthly Cost | What You Get |
 |-------------|-------------|-------------|
-| **Claude Design + v0 Pro** | $20 + (Claude Pro/Max sunk) | Explore + component generation |
-| **Claude Design + v0 Pro + Gemini** ⭐ | $40 + (Claude sunk) | **Recommended** — Above + design QA |
-| Claude Design + v0 Pro + Gemini + Stitch (fallback) | $40 | Above + free unlimited explorations if Claude Design quota locks out |
-| Claude Design + v0 Pro + Gemini + Figma | $55 | Above + pixel-perfect control (slightly over $50 budget) |
-| Claude Max upgrade (if Claude Design becomes a daily driver) | +$80/mo on top of the above | Unblocks Claude Design quota limits |
+| **Claude Design + v0 Free** | $0 + (Claude Pro/Max sunk) | Explore + component generation — very lean, may hit v0 free limits |
+| **Claude Design + v0 Free + Gemini** ⭐ | **$20** + (Claude sunk) | **Recommended lean baseline** — adds QA, still fits inside $50 budget with room to spare |
+| Claude Design + v0 Free + Gemini + Stitch (fallback) | $20 | Above + free unlimited explorations if Claude Design quota hits |
+| Claude Design + v0 Team + Gemini (sprint mode) | $50 | Full-power month during heavy component generation — cancel Team when sprint ends |
+| Claude Design + v0 Team + Gemini + Figma | $65 | Above + pixel-perfect control (over $50 budget) |
+| Claude Max upgrade (if Claude Design daily driver) | +$80/mo on top | Unblocks Claude Design quota limits |
 
-**Recommended for $50 budget: Claude Design (included in existing Claude Pro) + v0 Pro ($20) + Gemini Advanced ($20) = $40/month.** Stitch stays bookmarked as a free fallback. The old Mobbin/Magic Patterns options remain inferior per earlier analysis.
+**Recommended for $50 budget: Claude Design (bundled) + v0 Free ($0) + Gemini Advanced ($20) = $20/month baseline.** When you hit v0 Free's 7-msg/day or $5-credit wall during a sprint, upgrade to Team ($30) for that month only, taking you to $50. This *is* the intended flex — Vercel's daily-msg limit effectively forces you into a sprint/steady-state cadence.
 
-**Quota-stress scenario:** If you find yourself wanting Claude Design more than 3x per week and hitting Pro lockouts, upgrade Claude Pro → Max ($100/mo uplift is ~$80 on top of your current Pro). Only do this once you've validated Claude Design's actual value over several weeks — the launch-week quota reports are harsh but may improve as Anthropic tunes the ration.
+**Quota-stress scenario (separate dimension):** If Claude Design becomes a daily driver and Pro locks you out weekly, upgrade Claude Pro → Max (~$80/mo uplift). Evaluate after a few weeks — launch quotas may loosen.
+
+**Annual cost projection (conservative):** 2-3 sprint months × $30 v0 Team + 12 × $20 Gemini = **$300-330/year** total paid tooling, down from $480/year on the old "always keep v0" plan. Savings: $150-180/year.
 
 ### Mobbin vs Dribbble for Inspiration
 
@@ -477,7 +513,7 @@ The most effective way to communicate a page design to Claude Code:
 
 > Updated 2026-04-18 after Claude Design launch.
 
-1. **v0 is still the only tool that outputs directly in the GWTH stack** (Next.js + Tailwind + shadcn/ui). Claude Design does NOT compete here — it emits a handoff bundle (instructions), not production TSX. Keep v0 Pro.
+1. **v0 is still best-in-class for shadcn TSX, but the Free tier suffices in the Claude Design era.** Claude Design's handoff bundle reduces v0 demand, and v0's old $20 Pro tier no longer exists — Team is $30. Trial v0 Free as the baseline; only upgrade to Team ($30) during heavy-generation sprint weeks. 21st.dev Magic MCP (free) covers routine components without burning v0 credits.
 
 2. **Claude Design replaces Stitch as the "explore" step** — because it ingests your codebase (OKLCH tokens, existing components, spiral SVGs) and emits interactive HTML. Stitch generated generic mockups you then had to translate to GWTH brand.
 
@@ -493,7 +529,7 @@ The most effective way to communicate a page design to Claude Code:
 
 8. **Figma MCP is now *less* relevant** — Claude Design + v0 + Claude Code covers what Figma MCP was bridging. Skip Figma unless a designer joins the team.
 
-9. **The 2026-04-18 meta-workflow is: Claude Design (explore + handoff bundle) → v0 (generate shadcn components) → Claude Code (implement in codebase) → Gemini (visual QA).** Three paid SaaS tools ($40/mo) + one bundled capability on your existing Claude plan.
+9. **The 2026-04-18 meta-workflow (lean version) is: Claude Design (explore + handoff bundle) → shadcn CLI / 21st.dev Magic MCP / v0 Free (component generation, cheapest tool first) → Claude Code (implement in codebase) → Gemini (visual QA).** Baseline cost: **$20/mo** (Gemini only). Upgrade v0 Free → Team ($30) only during heavy-generation sprint weeks.
 
 10. **Claude Design's real constraint is quota, not capability.** The tool works well when you can use it; the bottleneck is the weekly lockout on Pro. Plan explore sessions in batches, not sprinkled across the week. Revisit Max upgrade in ~6 weeks after Anthropic tunes limits and ships the promised MCP.
 
