@@ -1,5 +1,7 @@
 # AI-Powered Web Design Workflow Research — 2026-04-15
 
+> **Revision 2026-04-18:** Claude Design launched 2026-04-17 (Anthropic Labs). It reshapes Phase 1 of the workflow — Google Stitch is **retired** in favour of Claude Design for the "explore" step. Full rationale in the [Claude Design section](#claude-design-anthropic-labs--new-2026-04-17) below. v0 Pro, Gemini Advanced, and the Tier-1 free skills layer are all unchanged.
+
 ## Context
 
 Research into the best tools and workflow for designing gwth.ai (a Next.js 16 + Tailwind v4 + shadcn/ui education platform), with a $50/month budget for design tools. Goal: find the optimal way to create high-quality designs and hand them off to Claude Code for implementation.
@@ -10,7 +12,7 @@ Research into the best tools and workflow for designing gwth.ai (a Next.js 16 + 
 
 ## Executive Summary
 
-**Recommended stack — free skills layer + $40/month paid tools:**
+**Recommended stack — free skills layer + $40/month paid tools + Claude Design (no marginal cost on existing Claude Pro/Max):**
 
 **Free layer (install first — permanent foundation):**
 
@@ -20,27 +22,89 @@ Research into the best tools and workflow for designing gwth.ai (a Next.js 16 + 
 | **awesome-design-md** | Free | 68 DESIGN.md files for popular brands (Linear, Notion, Supabase, Claude, etc.) — drop into project root |
 | **Taste Skill** | Free | Premium aesthetic enforcement with 3 dials (variance/motion/density) |
 | **21st.dev Magic MCP** | Free tier | Generate components inside Claude Code via `/ui <description>` — exact GWTH stack output |
-| **Google Stitch** | Free | Design exploration — generate high-fidelity mockups from prompts |
+| ~~**Google Stitch**~~ | ~~Free~~ | ~~Retired 2026-04-18 — superseded by Claude Design (interactive output + codebase ingestion).~~ |
+
+**Bonus capability (no marginal cost — already on your Claude Pro/Max plan):**
+
+| Tool | Cost | Role |
+|------|------|------|
+| **Claude Design** (claude.ai/design) | Included in Claude Pro+ | **Explore step:** ingests your repo's design tokens + components, produces interactive HTML prototypes and a "handoff bundle" Claude Code consumes natively. No API/MCP yet (Anthropic says "coming in weeks"). **Weekly quota is separate from chat/Code — brutal on Pro tier (~30-min lockout reported), fine on Max.** |
 
 **Paid layer (generation + QA — $40/month):**
 
 | Tool | Cost | Role |
 |------|------|------|
-| **v0 by Vercel (Pro)** | $20/mo | Component generation (or swap to 21st.dev Pro if MCP integration wins) |
+| **v0 by Vercel (Pro)** | $20/mo | Component generation. Still the *only* tool that emits drop-in Next.js 16 + Tailwind v4 + shadcn/ui TSX. Claude Design does not replace this. |
 | **Gemini Advanced** | $20/mo | Design QA — analyze screenshots, compare to references, suggest improvements |
 | ~~**Mobbin Pro**~~ | ~~$8/mo~~ | ~~Dropped — annual commitment not justified for a single-project build. Visit LMS sites directly + use Stitch/awesome-design-md instead.~~ |
 
 > Full details on the free skills layer: [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)
 
-**The workflow: Stitch (explore) → v0 or 21st.dev (prototype) → Claude Code + Impeccable/Taste (implement with taste) → Gemini (QA)**
+**The workflow: Claude Design (explore + handoff bundle) → v0 or 21st.dev (prototype shadcn TSX) → Claude Code + Impeccable/Taste (implement with taste) → Gemini (QA)**
 
-This replaces the old approach of designing entirely through written specs. Written specs (like the CLAUDE.md design system) remain the foundation, but visual tools now fill the gap between "idea" and "implemented UI."
+This replaces the old approach of designing entirely through written specs. Written specs (like the CLAUDE.md design system) remain the foundation, but Claude Design now ingests those specs automatically — the handoff is no longer a manual paste step.
 
 ---
 
 ## Tool-by-Tool Analysis
 
 ### Tier 1: Directly Useful for GWTH's Stack
+
+#### Claude Design (Anthropic Labs) — NEW (2026-04-17)
+
+**What it is:** A dedicated experimental product at `claude.ai/design`, powered by Claude Opus 4.7. A persistent design canvas — not a chat artifact — with design-system memory, web-capture, document upload, versioned iteration, and its own weekly quota. Pitched at non-designers (founders, PMs) who need to go prompt → visual artefact fast.
+
+**What it generates:**
+- Interactive HTML prototypes (hover states, theme toggles, reorderable sections rendered in-chat) — not static mockups
+- Pitch decks, slides, one-pagers, wireframes, marketing collateral
+- **Design systems extracted from your own codebase** — ingests `globals.css` OKLCH tokens, `hero-section.tsx` spirals, `components.json`, and auto-applies them
+- Export formats: PDF, PPTX, zip, standalone HTML, shareable URL, **push-to-Canva**, and — the important one — a **Claude Code handoff bundle** (structured spec + brand tokens + component structure + copy variants + framework hints)
+
+**What it does NOT do:**
+- ❌ **No direct React/Tailwind/shadcn TSX output.** The handoff bundle is *instructions*, not code. Claude Code implements the bundle into your repo's conventions (this is actually a strength for a well-architected project like GWTH — the bundle respects your existing component module boundaries).
+- ❌ **No public API / no MCP server at launch.** Anthropic has committed to "easier integrations in the coming weeks." Revisit early May 2026.
+- ❌ **No Figma import** (Canva export only).
+- ❌ **Not multiplayer** — single-seat conversational.
+
+**Pricing / availability:**
+- Available on **Claude Pro, Max, Team, Enterprise** (Enterprise off by default, admin-gated).
+- **Not on Free.** Weekly quota is **separate** from chat and Claude Code quotas.
+- ⚠️ **Quota is brutal on Pro.** Early reviews (PCWorld, X users) burned 58-80% of a Pro weekly allowance in a single 30-60 min session, locking them out for 5-6 days. **For weekly use, budget for Max (~$100/mo), not Pro.**
+
+**Claude Code integration:**
+- One-way handoff today: export bundle from Design → reference in Claude Code → Code implements.
+- Pattern: `/design-handoff <bundle-name>.bundle` (Claude Code recognises the bundle schema natively)
+- No reverse direction yet (Code → Design). If you want to iterate on a component, screenshot it and paste back into Design.
+
+**Why it's the right "explore" tool for GWTH specifically:**
+1. **Brand ingestion** — it reads `globals.css` OKLCH tokens, the 7-blade spiral colour spectrum, the Inter + JetBrains Mono font pairing. Output stays on-brand automatically.
+2. **Codebase-aware** — it will reference existing components (`<CourseCard>`, `<LessonNav>`) rather than reinventing them.
+3. **Interactive prototypes** — you can click through a lesson viewer mock before committing to TSX. Stitch couldn't do this.
+4. **No context tax** — the handoff bundle replaces the "paste 20 screenshots + describe spacing" step I was recommending previously.
+
+**Where it fits best in GWTH's build order:**
+- Landing hero explorations (brand-heavy)
+- Lesson viewer layout variants (the hardest page)
+- Study-streak calendar & progress visualisations
+- Pricing page and pitch materials
+
+**Where it does NOT fit:**
+- Component-level iteration (use v0 — faster, cheaper per iteration, emits code you can read and review)
+- Tight precision work (reviewers note print/precision quality is weak)
+- Anything you need to automate (no API yet)
+
+**Verdict:** Use Claude Design as the *first* step, replacing Google Stitch entirely. Then hand off to v0 for component-level TSX generation, then to Claude Code for implementation. **Zero marginal cost if you're already on Claude Pro, but ration usage — treat it like ~2-3 "explore sessions" per week on Pro, or upgrade to Max if you want it as a daily driver.**
+
+**Sources:**
+- [TechCrunch launch coverage](https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals/)
+- [VentureBeat: challenges Figma](https://venturebeat.com/technology/anthropic-just-launched-claude-design-an-ai-tool-that-turns-prompts-into-prototypes-and-challenges-figma)
+- [The New Stack: deep dive](https://thenewstack.io/anthropic-claude-design-launch/)
+- [The Register: hands-on review](https://www.theregister.com/2026/04/17/anthropic_debuts_claude_design/)
+- [PCWorld: quota-lockout hands-on](https://www.pcworld.com/article/3117811/i-tried-claude-design-for-half-an-hour-im-already-locked-out-for-a-week.html)
+- [vibecoding.app: `/design-handoff` workflow](https://vibecoding.app/blog/claude-design-review)
+- [Testing Catalog: rollout details](https://www.testingcatalog.com/anthropic-launches-claude-design-ai-tool-for-paid-plans/)
+
+---
 
 #### 1. v0 by Vercel (v0.app) — RECOMMENDED
 
@@ -78,7 +142,9 @@ Exposes tools: create chats (generate components), send follow-ups (iterate), re
 
 ---
 
-#### 2. Google Stitch (stitch.withgoogle.com) — RECOMMENDED
+#### 2. Google Stitch (stitch.withgoogle.com) — ⚠️ SUPERSEDED 2026-04-18
+
+> **Status:** Retired from the GWTH workflow in favour of Claude Design (launched 2026-04-17). Keep this section as reference for why it lost the "explore" slot.
 
 **What it does:** AI design canvas that generates high-fidelity mockups from text prompts, sketches, images, or voice. Originally Galileo AI (acquired by Google mid-2025), relaunched as Stitch.
 
@@ -86,15 +152,17 @@ Exposes tools: create chats (generate components), send follow-ups (iterate), re
 
 **Quality:** Production-quality mockups with proper component hierarchy, spacing, and modern patterns. Stitch 2.0 (March 2026) added multi-screen generation (up to 5 interconnected screens), infinite canvas, voice input, context-aware design agents.
 
-**Export format:** Figma export (with layers), HTML/CSS, Tailwind code, Vue, Angular, Flutter, SwiftUI. The Tailwind export is directly useful.
+**Export format:** Figma export (with layers), HTML/CSS, Tailwind code, Vue, Angular, Flutter, SwiftUI.
 
-**Best for:** Generating 3-5 design variations for each page (dashboard, lesson viewer, course detail). Multi-screen mode can mock up entire user flows.
+**Why Claude Design won:**
+- Claude Design ingests the GWTH codebase directly (OKLCH tokens, spiral SVGs, existing components). Stitch can't — it generates generic mockups.
+- Claude Design produces **interactive** HTML prototypes. Stitch produces static mockups.
+- Claude Design's handoff bundle is Claude Code-native. Stitch needs a screenshot-and-describe step.
+- No marginal cost on existing Claude Pro/Max plan.
 
-**Limitations:** Generated code is a starting point, not production-ready like v0. Best at "0-to-1 ideation" — use v0 or Claude Code for "1-to-100 refinement."
+**When Stitch still wins:** If Claude Design is rate-limited and you need more explorations *this week* on a Pro plan, fall back to Stitch for free unlimited runs. Also still useful for Figma export if a designer is collaborating.
 
-**Community impact:** "Sent shockwaves through the design industry" — Figma shares dropped 8.8% the morning after Stitch 2.0 launched.
-
-**Verdict:** Free and excellent. Use as the first step before v0 or Claude Code.
+**Verdict:** Keep bookmarked as a fallback when Claude Design quota is exhausted. Not the primary tool.
 
 ---
 
@@ -248,14 +316,21 @@ Pre-built component collections for the exact GWTH stack:
    - **EduAll** — Comprehensive, lightweight, modern
    - **Educrat** — Professional LMS layout
 
-### Phase 2: Design Exploration with Stitch (30-60 min per page)
+### Phase 2: Design Exploration with Claude Design (20-40 min per page)
 
-1. Open [stitch.withgoogle.com](https://stitch.withgoogle.com)
-2. For each major page, prompt Stitch with your requirements:
-   - "Design a student dashboard for an AI learning platform. Show course progress cards with circular progress indicators, a GitHub-style study streak calendar, recent activity feed, and bookmarked lessons. Use an aqua/teal color palette with dark mode support. Collapsible sidebar on the left."
-3. Generate 3-5 variations per page
-4. Use multi-screen mode for flows (dashboard → course → lesson)
-5. Export the best designs as screenshots and/or Tailwind code
+> **Updated 2026-04-18** — replaces Stitch. Fewer steps because Claude Design ingests the codebase automatically.
+
+1. Open [claude.ai/design](https://claude.ai/design) (requires Claude Pro or Max).
+2. **Seed it with GWTH's design system once per session** — paste or drag:
+   - `src/app/globals.css` (the OKLCH token file)
+   - `CLAUDE.md` (layout dimensions, design tokens, component catalogue)
+   - 2-3 existing components for brand-voice context (e.g. `hero-section.tsx`, `course-card.tsx`)
+   - Optionally: a web-capture of the current landing page at `http://192.168.178.50:3001`
+3. Prompt per page — shorter than Stitch prompts because brand is already ingested:
+   - "Design the student dashboard. Variations: A = minimal (whitespace-heavy), B = information-dense (stat tiles), C = narrative (greeting + single hero CTA + grid below). Keep OKLCH palette. Preserve spiral hero treatment."
+4. Iterate interactively — click through the rendered HTML, request hover/theme-toggle variants
+5. **Export the handoff bundle** (not just a screenshot). Save as `design/bundles/<page>-<version>.bundle`
+6. ⚠️ **Ration usage on Pro plan** — expect ~2-3 full explore sessions per week before lockout. If lock-out hits mid-project, fall back to Stitch for that page.
 
 ### Phase 3: Component Prototyping with v0 (30 min per component)
 
@@ -268,12 +343,13 @@ Pre-built component collections for the exact GWTH stack:
 ### Phase 4: Implementation with Claude Code
 
 1. Feed Claude Code:
-   - Design tokens from `globals.css` (already done)
+   - Design tokens from `globals.css` (already done — and now also ingested by Claude Design upstream)
    - Component specs from `CLAUDE.md` (already done)
-   - Screenshots from Stitch as visual references
-   - v0 component code as starting points
-2. Build one page at a time
-3. Review each in the browser at http://192.168.178.50:3001
+   - **Claude Design handoff bundle** (`design/bundles/<page>.bundle`) — the primary visual input, replaces screenshot-dumping
+   - v0 component code as starting points for shadcn-flavoured TSX scaffolds
+2. Invoke with something like: `/design-handoff dashboard-v3.bundle — implement in src/app/(dashboard)/dashboard/page.tsx using our existing component module conventions`
+3. Build one page at a time
+4. Review each in the browser at http://192.168.178.50:3001
 
 ### Phase 5: Visual QA with Gemini (10 min per page)
 
@@ -369,16 +445,19 @@ The most effective way to communicate a page design to Claude Code:
 
 ## Cost Comparison Summary
 
+> **Updated 2026-04-18** — assumes Claude Pro/Max is already paid for (you use Claude Code). Claude Design is a no-marginal-cost addition on that plan.
+
 | Stack Option | Monthly Cost | What You Get |
 |-------------|-------------|-------------|
-| **Stitch + v0 Pro** | $20 | Design exploration + component code generation |
-| **Stitch + v0 Pro + Gemini** | $40 | Above + design QA and analysis |
-| **Stitch + v0 Pro + Gemini + Mobbin** | $48 | Above + real shipped LMS app references ($96/yr ÷ 12) |
-| **Stitch + v0 Pro + Gemini + Magic Patterns** | $59 | Above + unlimited component generation |
-| **Stitch + v0 Pro + Figma** | $35 | Above + pixel-perfect design control |
-| **Stitch + v0 Pro + Gemini + Figma** | $55 | The full stack (slightly over budget) |
+| **Claude Design + v0 Pro** | $20 + (Claude Pro/Max sunk) | Explore + component generation |
+| **Claude Design + v0 Pro + Gemini** ⭐ | $40 + (Claude sunk) | **Recommended** — Above + design QA |
+| Claude Design + v0 Pro + Gemini + Stitch (fallback) | $40 | Above + free unlimited explorations if Claude Design quota locks out |
+| Claude Design + v0 Pro + Gemini + Figma | $55 | Above + pixel-perfect control (slightly over $50 budget) |
+| Claude Max upgrade (if Claude Design becomes a daily driver) | +$80/mo on top of the above | Unblocks Claude Design quota limits |
 
-**Recommended for $50 budget: Stitch (free) + v0 Pro ($20) + Gemini Advanced ($20) + Mobbin Pro ($8/mo annual) = $48/month** with $2 to spare. Use a Mobbin promo code (20% off via Secret, 50% off via Freelance Stack) to bring it down further.
+**Recommended for $50 budget: Claude Design (included in existing Claude Pro) + v0 Pro ($20) + Gemini Advanced ($20) = $40/month.** Stitch stays bookmarked as a free fallback. The old Mobbin/Magic Patterns options remain inferior per earlier analysis.
+
+**Quota-stress scenario:** If you find yourself wanting Claude Design more than 3x per week and hitting Pro lockouts, upgrade Claude Pro → Max ($100/mo uplift is ~$80 on top of your current Pro). Only do this once you've validated Claude Design's actual value over several weeks — the launch-week quota reports are harsh but may improve as Anthropic tunes the ration.
 
 ### Mobbin vs Dribbble for Inspiration
 
@@ -396,18 +475,30 @@ The most effective way to communicate a page design to Claude Code:
 
 ## Key Findings
 
-1. **v0 is the only tool that outputs directly in the GWTH stack** (Next.js + Tailwind + shadcn/ui). Nothing else comes close.
+> Updated 2026-04-18 after Claude Design launch.
 
-2. **Google Stitch is the best free design tool** — replaced Galileo AI, generates production-quality mockups with Tailwind export.
+1. **v0 is still the only tool that outputs directly in the GWTH stack** (Next.js + Tailwind + shadcn/ui). Claude Design does NOT compete here — it emits a handoff bundle (instructions), not production TSX. Keep v0 Pro.
 
-3. **Full-stack builders (Lovable, Bolt) are wrong for GWTH** — they generate their own architecture, conflicting with the existing project.
+2. **Claude Design replaces Stitch as the "explore" step** — because it ingests your codebase (OKLCH tokens, existing components, spiral SVGs) and emits interactive HTML. Stitch generated generic mockups you then had to translate to GWTH brand.
 
-4. **No-code builders (Framer, Webflow) are also wrong** — locked ecosystems, no code export.
+3. **The Claude Design handoff bundle eliminates the screenshot-paste tax.** Previously you pasted mockup images + wrote spacing/typography descriptions into Claude Code. Now Claude Design emits a structured bundle Claude Code consumes natively. Fewer round-trips, less information loss.
 
-5. **GWTH's CLAUDE.md is already the optimal design handoff format** — documented OKLCH tokens, layout dimensions, component specs. Most teams struggling with AI design handoff lack exactly this.
+4. **Full-stack builders (Lovable, Bolt) remain wrong for GWTH** — they generate their own architecture, conflicting with the existing project.
 
-6. **The Gemini advantage is real but narrow** — it's better at analyzing visual designs and suggesting improvements, not at generating them. Use it as a QA tool, not a design tool.
+5. **No-code builders (Framer, Webflow) remain wrong** — locked ecosystems, no code export.
 
-7. **Figma MCP is the most seamless handoff** but costs $15/month and adds complexity. For a solo developer, Stitch + v0 screenshots + Claude Code is simpler and almost as effective.
+6. **GWTH's CLAUDE.md + `globals.css` are the optimal handoff inputs** — Claude Design ingests both automatically. Most projects trying to adopt Claude Design lack exactly this level of written design-system documentation; GWTH already has it.
 
-8. **The 2026 meta-workflow is: Stitch (explore) → v0 (generate components) → Claude Code (implement in codebase) → Gemini (visual QA).** This is what productive developers are doing.
+7. **Gemini's niche holds** — still better than Claude Design for comparing an *implemented* screenshot against a reference design. Claude Design is explore/generate; Gemini is analyse/QA. They don't overlap.
+
+8. **Figma MCP is now *less* relevant** — Claude Design + v0 + Claude Code covers what Figma MCP was bridging. Skip Figma unless a designer joins the team.
+
+9. **The 2026-04-18 meta-workflow is: Claude Design (explore + handoff bundle) → v0 (generate shadcn components) → Claude Code (implement in codebase) → Gemini (visual QA).** Three paid SaaS tools ($40/mo) + one bundled capability on your existing Claude plan.
+
+10. **Claude Design's real constraint is quota, not capability.** The tool works well when you can use it; the bottleneck is the weekly lockout on Pro. Plan explore sessions in batches, not sprinkled across the week. Revisit Max upgrade in ~6 weeks after Anthropic tunes limits and ships the promised MCP.
+
+11. **What to watch for (revisit early May 2026):**
+    - Claude Design MCP server (Anthropic committed to "easier integrations in coming weeks")
+    - Handoff bundle schema published (would let the Tier-1 skills layer consume bundles)
+    - Figma import support (would enable reverse compatibility with existing design assets)
+    - Quota adjustments on Pro tier (early reports may not reflect steady-state)
