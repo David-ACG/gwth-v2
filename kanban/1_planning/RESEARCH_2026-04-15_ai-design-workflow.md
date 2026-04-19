@@ -3,6 +3,8 @@
 > **Revision 2026-04-18:** Two changes landed today:
 > 1. **Claude Design** launched 2026-04-17 (Anthropic Labs) — Google Stitch is **retired** from Phase 1 in favour of Claude Design's codebase-ingesting explore step. Full rationale in the [Claude Design section](#claude-design-anthropic-labs--new-2026-04-17) below.
 > 2. **v0 paid tier dropped from baseline.** v0 restructured pricing (old $20 Pro tier is gone; entry paid tier is now $30/mo "Team"). Combined with Claude Design's handoff bundle reducing component-gen demand, the **lean path** starts on **v0 Free ($0)** and only upgrades to Team during active sprint weeks. **New baseline: $20/mo** (Gemini only), down from $40.
+>
+> **Revision 2026-04-19:** The recommendations above (Claude Design as lead, Stitch retired, v0 Free as baseline) have **not yet been empirically tested**. They are based on launch-day reviews, not hands-on A/B data. A **3-way head-to-head experiment** is planned on the FractionalBuddy commercial build — Claude Design vs v0 vs Google Stitch, each as the lead tool for identical pages — to either confirm or falsify this recommendation. See [PLAN_2026-04-18_ai-design-workflow-experiment.md](./PLAN_2026-04-18_ai-design-workflow-experiment.md). Results will be appended below as a "3-way experiment results" section once synthesis completes.
 
 ## Context
 
