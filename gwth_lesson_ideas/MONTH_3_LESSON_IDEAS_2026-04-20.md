@@ -12,9 +12,24 @@
 
 - **Month 1 — AI for Your Life** — foundations, first builds, automations for yourself.
 - **Month 2 — AI for Your Industry** — production apps: pipelines, data, integrations.
-- **Month 3 — AI for Your Company** — leadership, strategy, org-design, governance, culture. *No new apps are built. Students plan.*
+- **Month 3 — AI for Your Company** — leadership, strategy, org-design, governance, culture. *Majority strategy, but with one Capstone build and four weekly mini-builds that produce concrete tools students can take back to their team.*
 
-Month 3 is for the students who've finished Month 2 with working apps and now need to take AI back to their team, department, or company. The question moves from *"how do I use AI?"* to *"how do I get my team to use AI well?"*
+Month 3 is for the students who've finished Month 2 with working apps and now need to take AI back to their team, department, or company. The question moves from *"how do I use AI?"* to *"how do I get my team to use AI well?"* — and critically, *"what can I build that makes this transformation easier?"*
+
+## Build projects in Month 3
+
+Month 3 is mostly strategy, but strategy lessons produce artefacts. **We turn those artefacts into working tools.** Four weekly mini-builds and one Capstone give students something to *ship*, not just something to plan:
+
+- **Week 9:** AI Maturity Scorecard Web App
+- **Week 10:** Domain Discovery Assistant
+- **Week 11:** Right-to-Deploy Template Generator
+- **Week 12:** Internal AI Skills Library ("Dojo clone")
+- **Capstone (spans the month, presented end of Week 12):** **AI Readiness Assessment Tool** — a working SaaS that evaluates any business's AI maturity across the six capabilities, 12 themes and seven pillars, and produces an actionable transformation roadmap.
+
+See the [Build Projects](#build-projects--mini-builds--capstone) section after Week 12 for full specs. Every build is designed to be:
+- Buildable in 1–2 evenings for the mini-builds, ~10–15 hours for the Capstone.
+- Portfolio-quality — live URLs the student can show a prospective client, employer, or their own leadership team.
+- Reusable — they produce the exact artefacts the strategy lessons ask for (scorecards, domain maps, right-to-deploy gates, skill libraries, 90-day plans), but on demand and without manual work.
 
 ## Throughline — the core argument for Month 3
 
@@ -59,6 +74,8 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 **Bring your team along:** Share the scorecard with two colleagues. Compare scores. Where do you agree? Where do your perspectives diverge?
 
 **UK context:** The **UK AI Opportunities Action Plan** (Matt Clifford review, Jan 2025) is the UK-government analogue of McKinsey's 12 themes. Its framing — *"AI maker, not just an AI taker"* — rhymes with Theme 1 (enduring capabilities) and Theme 7 (platforms as strategic assets). All **50 recommendations** have been endorsed by government, with most immediate steps scheduled within 12 months. KPMG's 2026 Global Tech Report (UK-led): **88% of organisations embedding AI agents** into workflows; **71% of CEOs** make AI a top investment priority. These are not US-only numbers — the manifesto's themes map directly onto the UK's own strategic map.
+
+**🔨 Build link:** This lesson anchors **Mini-Build 1 — AI Maturity Scorecard Web App**. Students implement the 12-theme + PwC-leader rubric as a working web form that returns a radar chart and a one-page PDF. Details in the [Build Projects](#build-projects--mini-builds--capstone) section.
 
 **Research:** [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
 
@@ -105,6 +122,8 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 **Project / activity:** Draw the participant's company's value chain on one page. Mark the 3–5 places where a 10% improvement would cascade. Rank them by feasibility × impact.
 
 **Bring your team along:** Share the map with operating peers. Ask: *do you agree these are our leverage points?* If not, why?
+
+**🔨 Build link:** This lesson anchors **Mini-Build 2 — Domain Discovery Assistant**. Students build a conversational LLM tool that interviews a user about their business and returns a prioritised domain map — the exact artefact this lesson asks for, but generated in 10 minutes instead of a 2-hour workshop. Details in the [Build Projects](#build-projects--mini-builds--capstone) section.
 
 **UK context:** UK exemplars of leverage-point thinking, per industry:
 - **Manufacturing (Toyota parallel):** **Jaguar Land Rover** — leverage point is the supply chain + connected vehicle. 2.5TB of data/day, 500k ECU updates/month, from 2026 NVIDIA DRIVE AGX in every new Range Rover, Defender, Discovery, Jaguar. Private 5G + AI smart manufacturing with Ericsson.
@@ -198,6 +217,8 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 **Project / activity:** *"What would a Glass look like at our company?"* one-pager. What are the five most-used workflows? What integrations matter? Who's the first 10 users? Build vs buy vs fork (e.g. Vercel's Open Agents)?
 
 **Bring your team along:** Identify one "power user" inside your company. Interview them. What have they figured out that no one else has? That's your first Dojo skill.
+
+**🔨 Build link:** This lesson anchors **Mini-Build 4 — Internal AI Skills Library ("Dojo clone")**. Students build a lightweight internal Dojo for their own team: a skills marketplace with submission, vector search, and a Sensei recommendation engine. Modelled on Ramp's Dojo, sized for SMEs. Details in the [Build Projects](#build-projects--mini-builds--capstone) section.
 
 **UK context:** The UK's best equivalent to Ramp Glass is **Kraken (Octopus Energy)** — an internal AI/automation platform built to run Octopus's own utility operations, now licensed to **over 70M accounts worldwide** (EDF, E.ON, Origin, Good Energy, Plenitude/Eni, Severn Trent) and spun out in Dec 2025 at a **$8.65bn valuation** with a **$1bn raise**. Kraken processes **15 billion data points per day**. The internal harness became the moat and — eventually — the entire business. This is the clearest British validation of Seb Goddijn's thesis: *internal AI infrastructure is a moat, and you don't hand your moat to a vendor.* Other UK harness examples to reference:
 - **Ocado Smart Platform** — AI "air traffic control" talking to every bot 10 times/second; 3,000+ patents; 100+ AI applications; MODEX 2026 launch of **Ocado IQ** cloud platform.
@@ -302,6 +323,8 @@ For SME students the lesson is: *your moat doesn't have to be 30 years of turbin
 **Project / activity:** Write a one-page "right to deploy" template the participant's org can adopt. Draft a PURE-style four-word test for their own customer data.
 
 **Bring your team along:** Share with compliance, legal, IT security. The template is the conversation starter.
+
+**🔨 Build link:** This lesson anchors **Mini-Build 3 — Right-to-Deploy Template Generator**. Students build a form-based tool that produces a full governance artefact pack (model card, risk register, fairness review, monitoring plan, escalation path, kill switch) with selectable profiles for UK FCA/ICO principles, DBS PURE, or Rewired Ch 34. Details in the [Build Projects](#build-projects--mini-builds--capstone) section.
 
 **UK context:** UK students have a direct, citeable regulatory framework to reference — arguably clearer than the US fragmented approach:
 - **UK's five principles** (cross-regulator, DSIT-led): **safety, transparency, fairness, accountability, contestability**.
@@ -431,6 +454,229 @@ Every UK number comes with a currency sign or a percentage — the shape the CFO
 
 ---
 
+## Build Projects — Mini-Builds + Capstone
+
+Month 3's strategy lessons produce artefacts (scorecards, roadmaps, domain maps, right-to-deploy gates). The build projects turn each of those artefacts into working software the student can use and — crucially — share with colleagues to accelerate their own organisation's transformation.
+
+Students come in with Month 1–2 skills: Python, REST APIs, LLM integrations, Next.js/React basics, PostgreSQL, Docker. Every build uses only those skills. Nothing new is taught that the strategy lessons themselves don't already motivate.
+
+### Build stack (default — students can substitute)
+
+| Layer | Default choice | Why |
+|-------|---------------|-----|
+| Backend | FastAPI (Python) | Matches Month 2 stack; fast to scaffold |
+| Frontend | Next.js 16 + shadcn/ui + Tailwind | Matches the GWTH platform and ACG; production-quality on day one |
+| LLM | Claude Sonnet 4.6 via Anthropic SDK or OpenAI GPT-5 | Either works; students pick one |
+| Storage | SQLite locally → Supabase in production | Zero setup for local, cloud-ready when they deploy |
+| Deployment | Coolify on P520 (course-provided) or Vercel free tier | Students deploy to a URL their team can open |
+| Auth (optional) | Supabase Auth / magic link | Added only if students want multi-user |
+
+### Build helper repos (provided as starter templates)
+
+- `gwth-m3-capstone-starter` — Next.js + FastAPI + Supabase, CI, Playwright, ready for Coolify.
+- `gwth-m3-mini-starter` — CLI or FastAPI-only starter for the weekly mini-builds.
+
+---
+
+### Mini-Build 1 (Week 9) — AI Maturity Scorecard Web App
+
+**Sits alongside:** L2 (12 Themes), L1 (20/74 Rule).
+
+**Description:** A single-page web app that walks a leader through a self-assessment on McKinsey's 12 themes and PwC's five leader-signals, returns a radar chart of their org's maturity, and drops out a personalised one-page PDF they can email to their leadership team — exactly the artefact L1 and L2 ask for, but generated in five minutes instead of drawn by hand.
+
+**Build scope:**
+- 12 slider / radio inputs (one per theme), scored 1–5.
+- Five additional questions on PwC leader signals.
+- Radar chart (Recharts / Chart.js).
+- LLM-generated narrative: *"your organisation looks like a Theme-1 laggard but a Theme-11 leader — here's what to do about it"* (200 words, grounded in the scores).
+- PDF export (server-side via `@react-pdf/renderer` or Puppeteer).
+- Anonymous by default; shareable link.
+
+**Tech stack:** Next.js 16 + shadcn/ui + a single FastAPI endpoint for LLM narrative + Puppeteer-driven PDF export. Supabase optional (for saving results across sessions).
+
+**Acceptance criteria:**
+1. Filling all 17 questions < 4 minutes.
+2. Radar chart renders on mobile.
+3. PDF downloads in < 10 seconds and fits on one A4 page.
+4. Narrative names at least two specific themes by number.
+5. Deployed to a URL that loads in < 2 seconds.
+6. Includes a "book a conversation" link or a CTA to enrol the team in GWTH.
+
+**Why this helps the enterprise:** Most SME leaders won't sit down and do a 12-theme self-assessment on paper. They will do it on a web form in 4 minutes. The scorecard is a Trojan horse for the strategic conversation.
+
+**Estimated time:** 6–8 hours. Pair programming with Claude Code keeps it to one evening.
+
+---
+
+### Mini-Build 2 (Week 10) — Domain Discovery Assistant
+
+**Sits alongside:** L5 (Leverage Points), L6 (Domains Not Use Cases).
+
+**Description:** A conversational LLM app that interviews the user about their business — industry, size, value chain, current initiatives — and returns a prioritised domain map: the 3–5 places where an AI investment would cascade. The output replaces the "pick three use cases" workshop SMEs default to.
+
+**Build scope:**
+- Multi-turn chat UI (streaming). LLM asks ~10 questions about the business.
+- Structured extraction into a typed "Business Profile" JSON (company name, sector, main processes, current AI use, 3-year goals).
+- Domain-scoring prompt: takes the profile and outputs 3–5 ranked domains with (a) a one-sentence opportunity, (b) expected economic leverage, (c) feasibility, (d) a first concrete experiment.
+- Map output: simple Sankey or matrix visualisation.
+- Shareable output URL.
+
+**Tech stack:** Next.js + Vercel AI SDK (streaming), single LLM call per turn, JSON mode for structured extraction. No database required — results are in-URL encoded.
+
+**Acceptance criteria:**
+1. Conversation feels natural, not form-like.
+2. Output includes sector-relevant leverage points (supply chain for manufacturers, pricing for airlines, customer journey for retail, fraud for banks — matching the UK examples from L5).
+3. Shareable URL preserves the full output.
+4. Works with *either* Claude or GPT backing.
+5. Graceful fallback when the LLM is rate-limited.
+
+**Why this helps the enterprise:** Exec teams sit in rooms for 2-hour workshops arguing about AI priorities. This tool does the framing job in 10 minutes and produces a starter artefact the team can argue about.
+
+**Estimated time:** 8–10 hours. LLM integration is the bulk of the work; UI can be minimal.
+
+---
+
+### Mini-Build 3 (Week 11) — Right-to-Deploy Template Generator
+
+**Sits alongside:** L14 (Proprietary Data), L15 (Right to Deploy).
+
+**Description:** A form-based generator that takes a description of an AI solution and produces a full "Right to Deploy" artefact pack: model card, risk register, fairness review, monitoring plan, escalation path, kill switch procedure. Outputs a downloadable PDF + a machine-readable JSON bundle. Pre-configured for UK principles (FCA/ICO five principles) with a DBS-PURE option.
+
+**Build scope:**
+- Structured input form (~15 fields): solution name, purpose, data inputs, model type, deployment mode, users affected, failure modes, etc.
+- LLM-assisted generation of each artefact section.
+- Governance-profile switch: UK (FCA/ICO), DBS PURE, or McKinsey Rewired — each produces a differently-framed output.
+- Version history (stored in Supabase or just localStorage).
+- PDF export + JSON bundle.
+- **Non-LLM reviewer mode:** a second pass that checks the output against a hard-coded checklist and flags gaps in the generated artefacts.
+
+**Tech stack:** Next.js + FastAPI + Supabase + Puppeteer PDF. Uses LLM structured output for the sections that need rich prose, deterministic logic for the checks.
+
+**Acceptance criteria:**
+1. PDF output is presentation-quality and ready to send to compliance / legal without further editing.
+2. The UK principles mode cites the five FCA/ICO principles by name.
+3. The DBS PURE mode produces a four-word summary that passes a trivial human sanity check.
+4. JSON bundle is re-ingestible (re-running the generator on the same JSON reproduces the PDF).
+5. Non-LLM reviewer catches at least three classes of missing content.
+
+**Why this helps the enterprise:** Governance artefacts are the single biggest blocker to scaling AI deployment in regulated UK sectors. Producing them takes days of a compliance officer's time per initiative. This tool turns the first 80% into minutes.
+
+**Estimated time:** 10–12 hours — the most complex of the mini-builds.
+
+---
+
+### Mini-Build 4 (Week 12) — Internal AI Skills Library ("Dojo clone")
+
+**Sits alongside:** L10 (Harness Engineering / Ramp Glass), L16 (Adoption).
+
+**Description:** A lightweight internal skill marketplace modelled on Ramp's Dojo. Any team member can publish an "AI skill" — a reusable prompt, workflow, or MCP server configuration, stored as markdown with frontmatter. The app indexes them, embeds them for semantic search, and has a "Sensei" recommendation feature that surfaces the top 5 skills for a user based on their role and current project.
+
+**Build scope:**
+- Skill file format: markdown with frontmatter (name, author, team, tags, intended tool, expected output, example input).
+- Submission form (upload markdown or paste inline).
+- Search (keyword + vector via Qdrant local or pgvector in Supabase).
+- Sensei: LLM call that takes user role + current project + top-N skills and returns the 5 most relevant.
+- Usage logging so the "popular skills" list is data-driven.
+- Slash-command export: any skill can be exported as a Claude Code skill file or a Cursor rule.
+
+**Tech stack:** Next.js + FastAPI + Qdrant (reuses the GWTH pipeline's Qdrant) + Anthropic SDK for Sensei + simple auth.
+
+**Acceptance criteria:**
+1. Minimum 10 seed skills shipped with the starter.
+2. Submitting a new skill takes < 60 seconds.
+3. Search returns relevant results for a natural-language query.
+4. Sensei recommendations change when the user's role / project changes.
+5. Each skill has a "clone to Claude Code" button that produces a valid skill file.
+6. Deployed URL the student can share with their actual team.
+
+**Why this helps the enterprise:** Ramp's thesis — *one person's breakthrough should become everyone's baseline* — requires a skill-sharing harness. Most UK SMEs have a Slack channel and scattered docs. This gives them a proper internal Dojo without building from scratch.
+
+**Estimated time:** 10–15 hours. The vector search is the new piece; everything else is straightforward.
+
+---
+
+### Capstone Project — AI Readiness Assessment Tool
+
+**Spans:** The full month. Background work in Weeks 9–11, intensive build in Week 12, presentation at end of Week 12.
+
+**Description:** A production-quality web application that any UK business leader can use to evaluate their organisation's AI maturity and receive an actionable transformation roadmap. The tool takes a company profile (free text about the business, ~5 minutes to complete), scores the organisation across the **six Rewired capabilities**, the **12 McKinsey themes**, and the **seven pillars of institutional AI** (Sivulka), benchmarks the result against UK peer data (BCC, PwC UK, HSBC UK), and generates a personalised 90-day roadmap with specific initiatives, priority scores, and explicit enrolment prompts for GWTH.
+
+**This is not a toy.** It is the tool the student will use to prospect consulting clients, drive conversations with their own leadership team, and (for some) launch as a lead-generation asset.
+
+**Full feature list:**
+
+1. **Company profile intake.** Wizard UI collecting: industry, size, revenue band, current AI use (free text), AI investment YTD, named initiatives, perceived biggest blocker. ~5 minutes.
+2. **Scoring engine.**
+   - Six capabilities scored 1–5 each (Roadmap, Talent, Operating Model, Technology, Data, Adoption).
+   - 12 themes scored 1–5 each.
+   - Seven pillars scored 1–5 each.
+   - Aggregate: PwC-style "which quintile are you in" band (20%, 80%, bottom).
+3. **UK benchmark overlay.** Comparison against BCC 54% (using AI), 11% (deep use), HSBC £105bn opportunity for mid-sized firms, sector-specific PwC UK productivity multiples.
+4. **Gap analysis.** Ordered list of the five biggest gaps, with concrete language: *"Your Theme 5 (30/70 talent) score is 2 — UK peers average 3.4. You are investing in consultants while Lloyds, HSBC, NatWest and Barclays have all appointed Chief AI Officers from inside the business this year."*
+5. **90-day roadmap.** Pillar-1 (personal tech muscle), Pillar-2 (Lab charter), Pillar-3 (Crowd enrolment), Pillar-4 (governance gate). Each pillar has 3–5 named initiatives, a lead, a success metric, and a due date 90 days from today.
+6. **UK peer case picker.** Based on the user's industry, recommends one UK case study to read (Lloyds, HSBC, BA/IAG, Tesco, Ocado, Kraken/Octopus, JLR, Rolls-Royce, Humphrey, etc.) — each with a link, key numbers, and a "what to steal" summary.
+7. **Training recommendations.** Named seats for GWTH.ai: how many people to enrol, which role profiles, estimated budget, onboarding order.
+8. **Live radar / heatmap visualisation.** Dashboard view showing the six capabilities, drillable into themes and pillars.
+9. **PDF executive report.** 8–12 pages, designed to be board-presentable. Includes cover, executive summary, scorecard, benchmarks, gap analysis, roadmap, training plan, and sources.
+10. **Sharing / collaboration.** A unique URL per assessment; option to invite 2–3 colleagues to answer independently and see a team-consensus view.
+11. **"Ask the tool" chat.** Optional LLM chat surface where the leader can ask follow-up questions — *"Why did we score low on Theme 11?"* — grounded in their own assessment data + the research corpus.
+12. **Anonymous benchmarking.** Opt-in: share anonymised scores to a global benchmark pool, see how you rank.
+
+**Tech stack:**
+- **Frontend:** Next.js 16 App Router, React 19, Tailwind v4, shadcn/ui, Motion for animation, Recharts or Visx for the radar/heatmap.
+- **Backend:** FastAPI (Python) with LangChain or direct Anthropic/OpenAI SDK usage; separation between the deterministic scoring engine and LLM-generated narrative.
+- **Data:** Supabase (Postgres) for user accounts, assessments, benchmarks. Qdrant (reusing the GWTH pipeline collection) for the research corpus the chat feature queries.
+- **Auth:** Supabase Auth (magic link) for saving assessments; anonymous mode for first-time users.
+- **PDF:** React PDF / Puppeteer server-side generation.
+- **LLM:** Claude Sonnet 4.6 default (students can swap to GPT-5 or Gemini with a flag).
+- **Infra:** Dockerised; deployed to Coolify on P520 at `assessment.gwth.ai` (course-provided domain) or Vercel free tier.
+
+**Acceptance criteria:**
+
+1. A first-time user completes an assessment, sees their scores, and downloads a PDF in **≤ 12 minutes**.
+2. The PDF is board-presentable: typography, no broken layouts, all scores consistent with on-screen values.
+3. The scoring engine is **deterministic** given the same input — LLM is only used for narrative, not for scoring.
+4. All LLM-generated narrative cites at least **one UK benchmark** and **one UK company**.
+5. Given an obviously bad input (*"we don't use AI at all"*), the tool produces a plausible roadmap without hallucinating capabilities the user said they don't have.
+6. A leader can share the assessment URL with colleagues; collaborators can answer independently; the dashboard aggregates.
+7. The "Ask the tool" chat never fabricates sources — every quoted UK stat traces back to a document in the Qdrant corpus.
+8. End-to-end test suite (Playwright) passes: profile → score → roadmap → PDF → chat, all green.
+9. Analytics integrated so the student can see who completed assessments (if they use it as a lead-gen tool).
+10. Accessible (axe-core clean) and responsive to mobile.
+11. Deployed to a live URL the student can show a prospective client on day one.
+
+**The submission.** Students present:
+- Live URL.
+- 3-minute walkthrough video.
+- GitHub repo with README, architecture diagram, and a "how this was built" log (Claude Code session transcripts welcome).
+- Their *own* assessment — they must run the tool on their own business.
+- A two-paragraph reflection: *what this tool actually helped them see about their own company that the strategy lessons alone hadn't revealed*.
+
+**Why this helps the enterprise (and the student's career):**
+
+- The **enterprise** gets a tool that replaces a £50k–£100k consulting engagement with a structured, repeatable assessment.
+- The **student** gets a portfolio-quality deliverable: *"I built an AI readiness assessment tool for SMEs"* is a legitimate consulting / employment offer. For many students this becomes the service they sell under their own brand.
+- **GWTH** gets a channel: every assessment recommends GWTH.ai by role. The better the students' assessments work, the more GWTH grows — aligned incentives throughout.
+
+**Build cadence (suggested):**
+- **Week 9:** Scaffolding + scoring engine (deterministic part). Mini-Build 1 (Scorecard) is a direct building block.
+- **Week 10:** LLM narrative generation + domain mapping. Mini-Build 2 (Domain Assistant) feeds in.
+- **Week 11:** Governance section + PDF export. Mini-Build 3 (Right to Deploy) feeds in.
+- **Week 12:** Chat feature + benchmarking + polish + deployment. Mini-Build 4 (Dojo clone) isn't directly reused but reinforces the skill-library thinking the Roadmap section recommends.
+
+**Estimated total effort:** 15–25 hours spread over the month. Students using Claude Code well should land around 15; students who fight the tools will land at 25+.
+
+**Fallback scope for time-constrained students:**
+If a student runs out of time, the minimum viable Capstone is: company profile intake → six-capability scoring → PDF output with a 90-day roadmap. That alone is still useful and submittable.
+
+**Stretch goals for advanced students:**
+- Integration with CRM (HubSpot / Pipedrive) to auto-create leads from assessments.
+- Slack bot that lets exec teams complete a section each and aggregates.
+- White-label mode: consultancies can rebrand and sell the tool.
+- Multi-language (starting with Welsh, then Spanish for IAG / LATAM reach).
+
+---
+
 ## Appendix — Cross-cutting principles to weave through every lesson
 
 Not lessons of their own, but themes that should surface in multiple lessons for reinforcement:
@@ -449,12 +695,14 @@ Not lessons of their own, but themes that should surface in multiple lessons for
 
 ## Format and delivery notes for the GWTH team
 
-- **No building.** Month 3 lessons are recorded discussion + workbook + activity, not code walkthroughs. This is deliberate.
+- **Strategy-first with builds attached.** Most lessons are recorded discussion + workbook + activity. Four weekly mini-builds plus a Capstone sit alongside — optional for students who want to stop at the strategy, mandatory for students pursuing the full certification.
 - **Each lesson ~20–25 min video + 20 min activity.** Lighter on screen time than Months 1–2; heavier on reflection and worksheet.
-- **Workbooks.** Every lesson has a downloadable PDF worksheet (canvas, scorecard, template). These become the participant's 90-day plan evidence pack.
-- **Guest commentary.** Consider short clips from the AI Daily Brief transcript, the RAMP engineers, or Ethan Mollick's talks (check fair use before embedding).
-- **Weekly live session (optional).** Office hours where participants bring their worksheets and get feedback.
-- **Consistent closing.** Every lesson ends with the "Bring your team along" prompt. By L20, the CTA to enrol colleagues into GWTH is the natural conclusion, not a sales pitch.
+- **Workbooks.** Every lesson has a downloadable PDF worksheet (canvas, scorecard, template). These become the participant's 90-day plan evidence pack — and several of them are the input format for the build projects.
+- **Build sessions.** Each week has a ~60-minute build walkthrough (recorded + live office hours). Students use Claude Code / Cursor to pair-program with the instructor's reference implementation.
+- **Capstone presentations.** End of Week 12: each student presents their AI Readiness Assessment Tool live — URL, demo, reflection. Aim: 15 minutes per student in a cohort session of ~6 students.
+- **Guest commentary.** Consider short clips from the AI Daily Brief transcript, the RAMP engineers, Ethan Mollick, or **Azeem Azhar's Exponential View** (check fair use before embedding).
+- **Weekly live session.** Office hours where participants bring their worksheets *and* their mini-build work-in-progress. Questions get solved for the whole cohort.
+- **Consistent closing.** Every lesson ends with the "Bring your team along" prompt. By L20, the CTA to enrol colleagues into GWTH is the natural conclusion, not a sales pitch. The Capstone URL — the student's own tool — is the asset they use to start those conversations.
 
 ---
 
