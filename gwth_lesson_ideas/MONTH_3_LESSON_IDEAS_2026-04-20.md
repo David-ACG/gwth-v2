@@ -1,8 +1,10 @@
 # Month 3 Lesson Ideas — Leading AI in Your Company
 
-*Generated 2026-04-20. Sources: Rewired 2nd ed (McKinsey), PwC 2026 AI Performance Study, McKinsey AI Transformation Manifesto, a16z "Institutional AI vs Individual AI" (Sivulka), Ramp Glass write-ups (Goddijn, Glyman), Ethan Mollick, DBS Bank case, Vercel Open Agents, AI Daily Brief podcast transcript.*
+*Generated 2026-04-20. Sources: Rewired 2nd ed (McKinsey), PwC 2026 AI Performance Study, McKinsey AI Transformation Manifesto, a16z "Institutional AI vs Individual AI" (Sivulka), Ramp Glass write-ups (Goddijn, Glyman), Ethan Mollick, DBS Bank case, Vercel Open Agents, AI Daily Brief podcast transcript. **UK additions (2026-04-20):** PwC UK AI Jobs Barometer, UK AI Opportunities Action Plan (Clifford), Bank of England AI work, techUK + British Chambers of Commerce, Lloyds / HSBC / NatWest / Barclays, Tesco / M&S / Ocado, Octopus Energy Kraken, JLR, Rolls-Royce, British Airways / IAG, BT / Openreach, Starling / Monzo / Revolut, UK civil service (Humphrey), Azeem Azhar (Exponential View).*
 
-*Research library: [`month-3-research/`](month-3-research/) · Book notes: [`rewired-book-notes/`](rewired-book-notes/)*
+*Research library: [`month-3-research/`](month-3-research/) · Book notes: [`rewired-book-notes/`](rewired-book-notes/) · UK landscape: [`month-3-research/12-uk-ai-landscape.md`](month-3-research/12-uk-ai-landscape.md) · UK case studies: [`month-3-research/13-uk-company-case-studies.md`](month-3-research/13-uk-company-case-studies.md)*
+
+**Why UK additions?** The core argument of Month 3 is global, but GWTH participants are majority UK SMEs. Every non-UK data point below is paired with a UK equivalent so students can benchmark against domestic peers, cite UK regulators, and point to British case studies their teams can read, visit, or hire from. Nothing US or global is removed — the comparison is deliberately maintained so students can see how the UK is and isn't different.
 
 ---
 
@@ -17,6 +19,8 @@ Month 3 is for the students who've finished Month 2 with working apps and now ne
 ## Throughline — the core argument for Month 3
 
 The PwC 2026 study found **20% of companies are capturing 74% of AI's economic value** — and they are 7.2× more productive than the average competitor. These leaders are doing things *fundamentally* differently. They treat AI as a **growth** lever (not a productivity one), they build **institutional systems** around individual AI use, and they **raise the floor** rather than lowering the ceiling. Month 3 is the bridge from the individual AI productivity the student has already earned, to institutional AI value in the company they lead.
+
+**UK framing.** The British Chambers of Commerce (March 2026) found **54% of UK firms are actively using AI** — but only **11% deeply** (structured workflows, training, measurement). HSBC UK estimates **£105bn in additional revenue** is available to UK mid-sized firms alone by 2030 if they adopt AI meaningfully. The PwC UK AI Jobs Barometer shows productivity growth in AI-exposed UK industries (financial services, IT, professional services) has **nearly quadrupled** (7% → 27%) since 2022. The UK's **AI Opportunities Action Plan** (Matt Clifford, Jan 2025) — all 50 recommendations endorsed — is the domestic analogue of McKinsey's manifesto. The upside is real; the gap is wide; the clock is ticking.
 
 ## The GWTH training recommendation, woven into every lesson
 
@@ -38,7 +42,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** A one-page brief leaders can email to their team titled *"Why we need to get serious about AI now"*, citing the PwC finding.
 
-**Research:** [02-pwc-ai-leaders-study.md](month-3-research/02-pwc-ai-leaders-study.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md).
+**UK context:** The British Chambers of Commerce's March 2026 survey shows **54% of UK firms using AI** (up from 25% in 2024) — but only **11% of UK SMEs use AI to a great extent** to streamline operations. Top UK adopter sectors: IT & telecoms (56%), media/marketing (53%). Laggards: real estate (11%), transport (15%), hospitality (18%), manufacturing (19%), retail (19%). **HSBC UK** estimates AI adoption could unlock **£105bn in additional revenue for UK mid-sized firms by 2030** — a UK-scale answer to PwC's global 20/74 finding. The UK version of the diagnostic question is sharper: *we know the upside — are we capturing it, or sitting on the £105bn?*
+
+**Research:** [02-pwc-ai-leaders-study.md](month-3-research/02-pwc-ai-leaders-study.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
 
 ---
 
@@ -52,7 +58,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Share the scorecard with two colleagues. Compare scores. Where do you agree? Where do your perspectives diverge?
 
-**Research:** [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md).
+**UK context:** The **UK AI Opportunities Action Plan** (Matt Clifford review, Jan 2025) is the UK-government analogue of McKinsey's 12 themes. Its framing — *"AI maker, not just an AI taker"* — rhymes with Theme 1 (enduring capabilities) and Theme 7 (platforms as strategic assets). All **50 recommendations** have been endorsed by government, with most immediate steps scheduled within 12 months. KPMG's 2026 Global Tech Report (UK-led): **88% of organisations embedding AI agents** into workflows; **71% of CEOs** make AI a top investment priority. These are not US-only numbers — the manifesto's themes map directly onto the UK's own strategic map.
+
+**Research:** [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
 
 ---
 
@@ -66,7 +74,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Run the same canvas with two other members of your leadership team. Compare.
 
-**Research:** [02-pwc-ai-leaders-study.md](month-3-research/02-pwc-ai-leaders-study.md).
+**UK context:** **Lloyds Banking Group** is the UK's clearest "growth-over-productivity" trajectory: **£50m of AI value in 2025 → £100m+ expected in 2026** (part of a **$5bn digital transformation** envelope), with the agentic AI financial assistant rolling out to **21m customer accounts**. **Tesco** is tracking **£500m of FY2026 productivity savings** alongside **£1.5bn of digital capex** — framed as growth (higher on-shelf availability, new micro-fulfilment formats, Whoosh expansion) not just cost-cut. UK CEOs agree: **79% of CEOs** in KPMG's 2025 survey say AI has made them rethink how they train and develop employees — a structural reinvention signal, not a productivity one.
+
+**Research:** [02-pwc-ai-leaders-study.md](month-3-research/02-pwc-ai-leaders-study.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -80,7 +90,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Present the one-pager to a finance-minded colleague. Stress-test the assumptions.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 2), [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md).
+**UK context:** The **Bank of England** projects generative AI could deliver **productivity gains of up to 30%** to UK banking, insurance and capital markets over 15 years — a number UK leaders can cite to their own boards. Concrete UK case numbers to benchmark against: **Lloyds £100m+ value in 2026** on a **$5bn digital investment envelope** (payback curve visible); **Tesco £500m FY2026 productivity** against **£1.5bn FY26 capex** (roughly 33% year-one return on the capex). The 1:1 adoption rule applies in the UK too — Lloyds' explicit **AI Academy** for **200 senior executives** *is* the adoption leg of the £100m+ build.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 2), [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -94,7 +106,13 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Share the map with operating peers. Ask: *do you agree these are our leverage points?* If not, why?
 
-**Research:** [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md).
+**UK context:** UK exemplars of leverage-point thinking, per industry:
+- **Manufacturing (Toyota parallel):** **Jaguar Land Rover** — leverage point is the supply chain + connected vehicle. 2.5TB of data/day, 500k ECU updates/month, from 2026 NVIDIA DRIVE AGX in every new Range Rover, Defender, Discovery, Jaguar. Private 5G + AI smart manufacturing with Ericsson.
+- **Grocery/logistics (no direct Rewired case):** **Ocado** — leverage point is the automated warehouse. 100+ AI applications embedded end-to-end; robot fleet with AI "air traffic control" (10 comms/sec per bot).
+- **Aviation (LATAM parallel):** **British Airways / IAG** — leverage point is ops reliability. Heathrow 86% on-time departures (record) driven by ML landing-slot optimisation. **£100m biometric + AI investment.**
+- **Engineering (Freeport-McMoRan parallel):** **Rolls-Royce R² Data Labs** — 30 years of data-led services, turned into the "IntelligentEngine" product proposition.
+
+**Research:** [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -112,7 +130,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Bring the re-framing to your next exec meeting. Propose that the team commits to *domains* going forward, not *use cases*.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 3, Ch 4).
+**UK context:** **British Airways / IAG** is a *worked example* of the use-case-to-domain pivot. The group mapped **600 AI use cases** in value-mapping exercises, then consolidated into a focused AI strategy that went live in **January 2026** — a concrete, recent, British transition from use-case-hunting to domain-led. The mapping exercise wasn't wasted; it was the diagnostic that told them which domains mattered. Contrast with the **UK public sector's** experience: Appian research (2026) found that nearly half of UK public-sector AI initiatives are deployed as "bolt-on" standalone tools rather than integrated into workflows — use-case-hunting at scale, without the domain pivot.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 3, Ch 4), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -126,7 +146,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Invite one business leader peer to do the same time audit. Compare.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 4), [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md).
+**UK context:** UK banking has moved as a cohort on this in 2026: **HSBC promoted David Rice as its first Chief AI Officer** (from COO of corporate & institutional banking). **Lloyds, Barclays, and NatWest** all expanded their AI leadership structures in the same window. **IAG** appointed **Dr Ben Dias as Chief AI Scientist**. The UK norm is now: a named C-level owner of AI, drawn from the business (not only from IT). The signal for SME leaders: the top of the UK corporate sector has already accepted that business leaders lead AI. If your exec team doesn't have that ownership, you're behind your UK peers.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 4), [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -140,7 +162,14 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Walk the redesigned workflow through the team who currently run it. Capture their reactions — especially the objections. Those are the seeds of the real design.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 5, Ch 22).
+**UK context:** UK-native worked examples of workflow reimagination:
+- **Starling Bank** — AI-generated chat summaries save **8,000 staff-hours per month** (admin time liberated, not eliminated). Agentic 'assistant' on Google Gemini for personalised customer insights.
+- **Monzo** — **42% of simpler customer queries** now resolved by the customer themselves via AI self-service.
+- **Openreach (BT)** — redesigned **15 million customer journeys** during the UK's biggest fibre rollout using NiCE Cognigy proactive AI agents.
+- **UK Civil Service** — **Humphrey** suite (Consult, Parlex, Minute, Lex, Redbox) built in-house by i.AI; redesigns consultation analysis, Hansard search, meeting minutes, legal research, and policy drafting as human-agent workflows.
+- **NatWest Cora+** — enhanced GenAI chatbot: **150% increase in customer satisfaction scores**.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 5, Ch 22), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -154,7 +183,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Read Sivulka's essay with your senior team. Debate. Where do you agree? Where are you overclaiming?
 
-**Research:** [03-institutional-vs-individual-ai.md](month-3-research/03-institutional-vs-individual-ai.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md).
+**UK context:** **Azeem Azhar** is the UK thought-leader equivalent to Ethan Mollick on this territory — founder of **Exponential View** (newsletter + HBR podcast + Bloomberg Originals *Exponentially*). Merton College, Oxford; ex-Guardian tech correspondent. Regularly in dialogue with Mollick and Sivulka on the same coordination-over-chaos argument, framed through a UK/European lens. Pair Sivulka's essay with an Exponential View episode for the course reading list. The empirical UK angle: **techUK's 2026 research** with Public First surveyed 500 UK business leaders and found a *"confidence gap"* between government AI rhetoric and operating reality — the same individual-versus-institutional gap Sivulka names, visible at national scale.
+
+**Research:** [03-institutional-vs-individual-ai.md](month-3-research/03-institutional-vs-individual-ai.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
 
 ---
 
@@ -168,7 +199,12 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Identify one "power user" inside your company. Interview them. What have they figured out that no one else has? That's your first Dojo skill.
 
-**Research:** [05-harness-engineering-ramp-glass.md](month-3-research/05-harness-engineering-ramp-glass.md), [06-open-agents-vercel.md](month-3-research/06-open-agents-vercel.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md).
+**UK context:** The UK's best equivalent to Ramp Glass is **Kraken (Octopus Energy)** — an internal AI/automation platform built to run Octopus's own utility operations, now licensed to **over 70M accounts worldwide** (EDF, E.ON, Origin, Good Energy, Plenitude/Eni, Severn Trent) and spun out in Dec 2025 at a **$8.65bn valuation** with a **$1bn raise**. Kraken processes **15 billion data points per day**. The internal harness became the moat and — eventually — the entire business. This is the clearest British validation of Seb Goddijn's thesis: *internal AI infrastructure is a moat, and you don't hand your moat to a vendor.* Other UK harness examples to reference:
+- **Ocado Smart Platform** — AI "air traffic control" talking to every bot 10 times/second; 3,000+ patents; 100+ AI applications; MODEX 2026 launch of **Ocado IQ** cloud platform.
+- **IAG.ai labs** (London + Barcelona) — in-house designed **Engine Optimisation System**.
+- **Humphrey** (UK civil service) — built by i.AI in-house, not bought.
+
+**Research:** [05-harness-engineering-ramp-glass.md](month-3-research/05-harness-engineering-ramp-glass.md), [06-open-agents-vercel.md](month-3-research/06-open-agents-vercel.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -186,7 +222,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Propose that every member of your leadership team does the same personal plan. [GWTH.ai](https://gwth.ai) is the fastest off-the-shelf curriculum for this.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 8), [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md).
+**UK context:** The UK reference model for this is **Lloyds Banking Group's AI Academy** — launched 2026 and already trained **200 senior executives** in AI fluency. Note: it's called an *Academy*, not a briefing or a workshop — the structural framing matches Rewired Ch 8 exactly (awareness → muscle). UK peer signal: **techUK research** finds **27% of non-tech businesses and 35% of tech businesses** name expanding AI training as the top skills-gap priority for 2026 — so the pressure is institutional, not just personal. For SME leaders without a Lloyds-scale budget, GWTH.ai is explicitly positioned as the SME equivalent to an internal academy.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 8), [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -200,7 +238,14 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Show the map to HR and the CFO. The 30/70 ratio is as much a finance and HR conversation as a tech one.
 
-**Research:** [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md), [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md).
+**UK context:** The UK has explicit, quotable 70%-in-house examples:
+- **IAG.ai labs** in London and Barcelona — an in-house AI Lab structure, not a consulting engagement. **100+ data scientists** across the group; **80 at British Airways alone**.
+- **UK Civil Service Humphrey** — built **in-house by i.AI** (the government's own Incubator for Artificial Intelligence). The government *chose* to build rather than buy at national scale.
+- **Kraken (Octopus Energy)** — 100% in-house origin before becoming a product.
+- **Lloyds AI Academy** — explicitly about building internal capability, not importing it.
+- **British Chambers of Commerce (April 2026)**: *"Britain's workforce is not ready for what is coming"* — the warning is specifically about the UK under-investing in internal capability. Use the BCC quote to validate the chapter's in-house argument.
+
+**Research:** [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md), [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -214,7 +259,14 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Share the redesign with the team. Their reaction is data. (If they panic, you have a culture problem to address before you have a tech problem to solve.)
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 11).
+**UK context:** The UK has two contrasting 2026 case shapes for the agentic talent model:
+- **Lloyds** — agentic AI rolling out to **21m customer accounts** in early 2026. The agents *augment*; staff are trained in the AI Academy to manage and supervise them. Growth story.
+- **BT Group** — **up to 55,000 jobs** to be cut by 2030 (CEO warns the real number may be higher as AI matures). Openreach's **15M customer journey** redesign is happening in parallel with that workforce reduction. Cost-extraction story.
+- **Barclays** — **Microsoft 365 Copilot to 100,000 employees** globally — a reshape-not-replace bet.
+
+Use these three side-by-side to open the honest conversation participants are avoiding: *which version of the agentic talent model are we running?* The answer shapes every other decision.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 11), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -228,7 +280,16 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** The audit is a cross-functional conversation (sales, ops, product, legal). Schedule the workshop.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 29).
+**UK context:** The UK's biggest proprietary-data moats are visible in the numbers:
+- **Ocado Group** — **3,000+ patents**, **100+ AI applications**, robot fleet "air traffic control" (10 comms/sec per bot), deployed in 120+ warehouses worldwide.
+- **Kraken (Octopus Energy)** — **15 billion data points/day** from utility operations; 70M+ accounts under licensing. The data volume itself is the moat.
+- **JLR** — **2.5TB of vehicle data per day**, **500,000 ECU updates/month**. Proprietary because it comes off a fleet no one else has.
+- **Rolls-Royce R² Data Labs** — **30 years of data-led services** as the compounding asset, now packaged as the "IntelligentEngine" proposition.
+- **DeepMind AlphaFold** — Nobel-prize-winning proprietary output that rewrote biology. UK-bred.
+
+For SME students the lesson is: *your moat doesn't have to be 30 years of turbine telemetry. It might be the call transcripts you haven't been keeping, or the sign-off patterns your customers don't realise they follow.*
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 29), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -242,7 +303,16 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Share with compliance, legal, IT security. The template is the conversation starter.
 
-**Research:** [09-ai-trust-right-to-deploy.md](month-3-research/09-ai-trust-right-to-deploy.md), [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md).
+**UK context:** UK students have a direct, citeable regulatory framework to reference — arguably clearer than the US fragmented approach:
+- **UK's five principles** (cross-regulator, DSIT-led): **safety, transparency, fairness, accountability, contestability**.
+- **FCA**: CEO Nikhil Rathi (Dec 2025): *"we will not introduce AI-specific rules"* — AI governed under existing regulatory frameworks, not bespoke ones.
+- **ICO**: guidance on AI and data protection; joint guidance with FCA on AI and vulnerable customers expected early 2026.
+- **Bank of England + PRA**: AI strategy focused on safe adoption; joint AI survey with FCA in 2026.
+- **DSIT + DBT (Jan 2026)**: strategic letters to 19 regulators directing them to publish AI-enablement plans and report annually.
+- **Public-trust benchmark**: the **NHS** commands a **63% net trust rating** — the highest of any UK organisation for AI use. Worth citing when students argue "nobody trusts AI".
+- Use **DBS's PURE framework** (Purposeful, Unsurprising, Respectful, Explainable) alongside the UK's five principles as a customer-facing distillation.
+
+**Research:** [09-ai-trust-right-to-deploy.md](month-3-research/09-ai-trust-right-to-deploy.md), [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
 
 ---
 
@@ -260,7 +330,14 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** The adoption walk is a shadowing exercise — spend an hour next to a user. This is leadership work, not delegated work.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 30), [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md).
+**UK context:** The UK public sector is the cautionary tale and the bright spot, both at once:
+- **NHS staff** report spending **~50% of their time on bureaucracy** — they believe AI use could cut this by **18 percentage points**, the equivalent of saving almost a full working day each week.
+- **UK Civil Service research (20,000 participants)** — AI use saved **26 minutes/person/day = 2 weeks/year**; scaled to ~550k civil servants this is **1M+ weeks of effort saved annually**.
+- **Appian (2026)**: nearly half of UK public-sector AI initiatives are deployed as *"bolt-on" standalone tools* — the exact failure mode the chapter is warning against.
+- **BCC (April 2026)**: "Britain's workforce is not ready for what is coming." Most UK SMEs have licences but no process redesign.
+- **Tesco AI shopping assistant trial with 280,000 colleagues** before any customer rollout — a strong UK example of adoption-first thinking.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 30), [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -274,7 +351,17 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Get the CFO to sign off on the metric. If they won't, the metric isn't real.
 
-**Research:** [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md), [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 32).
+**UK context:** **Lloyds Banking Group** is DBS's UK mirror on value tracking — **£50m of AI value in 2025 → £100m+ in 2026** on a $5bn digital investment. Exactly the compounding shape DBS showed (SGD 180m → SGD 1b+). Other UK value-metric examples to cite:
+- **Tesco** — **£500m productivity savings** in FY2026 from AI + automation, against £1.5bn capex.
+- **British Airways / IAG** — Heathrow **86% on-time departures** record attributed to ML optimisation.
+- **Starling Bank** — **8,000 staff-hours/month** saved on admin.
+- **NatWest** — **150% increase in chatbot customer satisfaction** post-GenAI rollout.
+- **Openreach** — redesigned **15M customer journeys** in the UK fibre rollout.
+- **UK Civil Service** — **£80m+/year** savings from consultation analysis alone.
+
+Every UK number comes with a currency sign or a percentage — the shape the CFO wants.
+
+**Research:** [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md), [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 32), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -288,7 +375,13 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** Socialise the rubric *before* you need it. This is much easier to agree on in peacetime.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 33).
+**UK context:** The UK public sector is a live experiment in midstream adjustment failures:
+- **Diagnostic AI across 66 NHS trusts** — technology deployed, but "misalignment in processes and insufficient engagement with staff led to slow integration." A programme that needs adjustment, not cancellation.
+- **Appian 2026 research**: nearly half of UK public-sector AI initiatives are deployed as "bolt-on" tools rather than integrated — symptom of plans that didn't survive contact with workflow reality.
+- **British Chambers of Commerce (April 2026)**: workforce not ready for the transition — a large-scale signal that original plans (training, timelines, comms) need revision mid-flight.
+- **UK AI Opportunities Action Plan — 2026 Progress Report**: the year-one review itself is an institutional example of structured midstream recalibration. A model worth copying at SME scale.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 33), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md), [13-uk-company-case-studies.md](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -302,7 +395,13 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Bring your team along:** The diagnostic itself is the intervention — it signals that "I don't know" is acceptable, starting at the top.
 
-**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 35), [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md).
+**UK context:** UK cultural data is unusually good on this:
+- **techUK "confidence gap"** (2026, 500 UK business leaders) — the gap between leadership enthusiasm for AI and day-to-day operating reality. Evidence that the ambient UK culture is ready for the conversation but not yet for the behaviour change.
+- **NHS 63% net trust rating** — the highest of any UK organisation for AI use. Public-facing cultures that invest in trust deploy more, not less.
+- **Deloitte UK State of AI in Enterprise 2026** (3,235 leaders surveyed): 34% of orgs using AI to "deeply transform", 30% redesigning key processes, **37% still at surface level**. The UK distribution mirrors the global one — and surface-level culture is as common here as anywhere.
+- **KPMG 2026 Global CEO Outlook**: 79% of CEOs say AI has made them rethink how they train and develop employees. The cultural shift from "hire for AI" to "train for AI" is already underway in UK C-suites.
+
+**Research:** [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md) (Ch 35), [08-ethan-mollick-leadership.md](month-3-research/08-ethan-mollick-leadership.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
 
 ---
 
@@ -321,7 +420,14 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 - [GWTH.ai](https://gwth.ai) is the fastest way to take the 12 weeks you just did and put every member of your team through them.
 - Name three people in your organisation. Enrol them this week. Don't make them figure it out alone.
 
-**Research:** all files in [`month-3-research/`](month-3-research/).
+**UK context — bring the plan home:**
+- **The 70/30 rule in British terms.** Don't argue it theoretically — cite it: IAG.ai Labs London+Barcelona (100+ in-house data scientists), i.AI inside UK government (Humphrey built in-house), Kraken at Octopus Energy (built in-house, became the moat), Lloyds AI Academy (200 senior execs, Pillar 1 in action).
+- **The UK investment signal.** HSBC UK says **£105bn** of revenue is available to UK mid-sized firms by 2030 if they adopt AI. That number belongs on the first slide of the 90-day plan: *"this is what we're leaving on the table"*.
+- **The UK regulatory reality.** FCA / ICO / BoE / ICO five principles (safety, transparency, fairness, accountability, contestability) + the FCA's explicit *"no AI-specific rules"* stance — no regulator is going to stop you; the only question is whether you start.
+- **The UK thought-leader pairing.** Ethan Mollick + **Azeem Azhar** as the course reading duo. American framework + British lens.
+- **The training argument, British version.** British Chambers of Commerce (April 2026): *"Britain's workforce is not ready for what is coming."* techUK: 27% of non-tech / 35% of tech UK businesses name AI training as the top 2026 skills gap. **The BCC-named gap is why GWTH.ai exists.** Your 90-day plan should name every team member you're enrolling and the date you're starting them.
+
+**Research:** all files in [`month-3-research/`](month-3-research/) — including [`12-uk-ai-landscape.md`](month-3-research/12-uk-ai-landscape.md) and [`13-uk-company-case-studies.md`](month-3-research/13-uk-company-case-studies.md).
 
 ---
 
@@ -337,6 +443,7 @@ Not lessons of their own, but themes that should surface in multiple lessons for
 6. **Trust is a growth engine.** Governance lets you scale, not slow down.
 7. **You cannot outsource this.** Consultants can map; you must lead.
 8. **Train your team.** The capability is in your people.
+9. **UK peer pressure is real.** Every UK bank now has a Chief AI Officer; Lloyds has trained 200 senior executives; the NHS commands 63% public trust for AI use; HSBC says £105bn of revenue is available to UK mid-sized firms by 2030. Your UK peers are moving — the Month 3 plan is how you catch up.
 
 ---
 
@@ -355,6 +462,8 @@ Not lessons of their own, but themes that should surface in multiple lessons for
 
 Full research library at [`month-3-research/`](month-3-research/). Key primary sources:
 
+### Global
+
 - [The AI Transformation Manifesto — McKinsey (Apr 2026)](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-ai-transformation-manifesto)
 - [PwC 2026 AI Performance Study](https://www.pwc.com/gx/en/news-room/press-releases/2026/pwc-2026-ai-performance-study.html)
 - [Institutional AI vs Individual AI — George Sivulka, a16z](https://www.a16z.news/p/institutional-ai-vs-individual-ai)
@@ -366,3 +475,25 @@ Full research library at [`month-3-research/`](month-3-research/). Key primary s
 - [State of AI Trust 2026 — McKinsey](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/tech-forward/state-of-ai-trust-in-2026-shifting-to-the-agentic-era)
 - [Harness engineering — ignorance.ai](https://www.ignorance.ai/p/the-emerging-harness-engineering)
 - [How the Best Companies Use AI — AI Daily Brief transcript](file:///C:/Users/david/Downloads/How%20the%20Best%20Companies%20Use%20AI.txt) (local)
+
+### UK-specific
+
+- [UK AI Opportunities Action Plan (Clifford review, Jan 2025)](https://www.gov.uk/government/publications/ai-opportunities-action-plan)
+- [PwC UK AI Jobs Barometer](https://www.pwc.co.uk/services/technology/generative-artificial-intelligence/uk-ai-jobs-barometer.html)
+- [Bank of England — AI in the financial system](https://www.bankofengland.co.uk/financial-stability-in-focus/2025/april-2025)
+- [HSBC UK — AI could unlock £105bn for UK mid-sized firms](https://www.about.hsbc.co.uk/news-and-media/ai-adoption-could-unlock-105bn-in-additional-revenue-for-uk-mid-sized-firms-by-2030)
+- [Lloyds Banking Group — £100m+ AI value in 2026](https://www.lloydsbankinggroup.com/media/press-releases/2026/lloyds-banking-group/ai-driven-benefits-2026.html)
+- [HSBC first Chief AI Officer (Mar 2026)](https://www.resultsense.com/news/2026-03-25-hsbc-appoints-first-chief-ai-officer)
+- [techUK + Public First — State of UK Tech 2026](https://www.techuk.org/resource/the-state-of-uk-tech-in-2026-polling-from-techuk-public-first.html)
+- [British Chambers of Commerce — Britain's Workforce Not Ready (Apr 2026)](https://www.britishchambers.org.uk/news/2026/04/britains-workforce-is-not-ready-for-what-is-coming)
+- [GOV.UK AI Adoption Research](https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research)
+- [Octopus Energy — Kraken $8.65bn spin-out](https://kraken.tech/press-releases/octopus-energy-group-to-spin-out-kraken-at-valuation-of-8-65bn)
+- [Tesco Digital Transformation FY2026 — £500m savings](https://infotechlead.com/cio/tesco-digital-transformation-2026-ai-clubcard-data-1-5-bn-capex-drive-growth-and-500-mn-savings-95179)
+- [NVIDIA — JLR AI partnership](https://www.nvidia.com/en-us/solutions/autonomous-vehicles/partners/jlr/)
+- [IAG — Engine Optimisation System (in-house AI)](https://www.aerotime.aero/articles/iag-eos-engine-maintenance-scheduling-artificial-intelligence)
+- [Humphrey — UK civil service AI suite](https://www.globalgovernmentforum.com/yes-civil-servant-meet-humphrey-the-governments-ai-package-for-officials/)
+- [FCA AI approach](https://www.fca.org.uk/firms/innovation/ai-approach)
+- [ICO AI and biometrics strategy](https://ico.org.uk/about-the-ico/our-information/our-strategies-and-plans/artificial-intelligence-and-biometrics-strategy/our-plan-of-action/)
+- [Azeem Azhar — Exponential View](https://www.exponentialview.co/)
+- [Deloitte UK State of AI in the Enterprise 2026](https://www.deloitte.com/uk/en/issues/generative-ai/state-of-ai-in-enterprise.html)
+- [KPMG Global Tech Report 2026](https://kpmg.com/uk/en/insights/technology/kpmg-global-tech-report.html)
