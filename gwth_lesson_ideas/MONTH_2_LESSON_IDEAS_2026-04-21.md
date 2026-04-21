@@ -183,7 +183,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** LLM APIs · the Vercel AI SDK · streaming vs non-streaming · structured outputs (Zod + AI SDK) · environment variables · cost per 1M tokens (Claude Sonnet 4.6 / GPT-5 / Gemini 3 Pro April 2026 prices in the appendix) · per-request cost estimation · the "always stream, always structure, always log" rule.
 
-**Build / activity:** ***API-Powered Mini-App*** — a tiny tool: user pastes a job ad, app returns a matching CV summary (or: user pastes a contract, app returns a red-flag list). Single page, live URL. First time the student sees "their own code talking to Claude." **Thorough walkthrough video (60 min)** covering every concept with UK pricing examples.
+**Build / activity:** ***LLM API Playground & Cost Comparison — `aiapi.click`*** — a public playground: paste one prompt, pick Claude Sonnet 4.6 / Opus 4.7 / Haiku 4.5 / GPT-5 / Gemini 3 Pro, get side-by-side streamed outputs with live token count and £ cost per call. Shareable URL per comparison. Single Next.js page, deployed to Vercel. First time the student sees "their own code talking to Claude" — and they ship a genuinely useful public tool (provider-swap is the lesson). Reuses four of the GWTH domain set (aiapi.click, apicompare.net, llmapi.click, llmapicompare.com). **Thorough walkthrough video (60 min)** covering every concept with UK pricing examples.
 
 **UK context:** FCA Live AI Testing (2025–2026) is the regulatory scaffold. Every API call is data processing under UK GDPR — if the student collects user input that includes personal data, they need an ICO-compliant privacy notice. Teach that at the API moment, not as a separate compliance lesson. Highlight UK-friendly providers: Anthropic (UK enterprise team, EU data residency option), OpenAI (EU data residency available), Google (Vertex AI eu-west2 region).
 
@@ -215,7 +215,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** structured vs unstructured data · the "clean first, prompt second" rule · text extraction vs semantic extraction · PDF layout vs text order · table extraction in Docling · website crawling etiquette · robots.txt · rate limiting · UK copyright and text-and-data-mining (TDM) rules for training vs inference.
 
-**Build / activity:** ***Document Parser*** — upload a PDF, Word, or Excel file; see the cleaned structured output. Demo on a UK public document: HMRC's 2025/26 income-tax guide, ICO AI guidance, an Office for National Statistics release.
+**Build / activity:** ***Document Ingestion Pipeline — Phase 1 of `askmyco.com`*** — upload a PDF, Word, or Excel file; see the cleaned structured output. This is the *first phase* of the Company Knowledge Bot that grows across L6 → L8 → L9 on one named domain (askmyco.com). Demo on a UK public document: HMRC's 2025/26 income-tax guide, ICO AI guidance, an Office for National Statistics release. Students commit to the `askmyco.com` repo in L6 and carry it forward — no new project in L8.
 
 **UK context:** UK public sector is a goldmine of PDFs. HMRC, DWP, ICO, FCA, ONS, NHS, every council — all publish PDFs. The UK IP Office's 2024 consultation on TDM is the compliance backdrop for any app that ingests UK content.
 
@@ -239,11 +239,11 @@ Two honest statements to put in front of the cohort in L1:
 
 ### L8. Build Your First RAG App — Supabase pgvector + Claude
 
-**Description:** The big one. The first multi-file, multi-page, multi-concept app — and the skeleton that the Capstone AI Readiness Assessment Tool will extend. Students build a **Company Knowledge Bot**: upload ≤ 20 PDFs (their company handbook, policies, sales decks), vectorise with OpenAI embeddings into Supabase pgvector, query via a chat UI, get grounded answers with citations. Prescribed stack: Next.js 16 + Vercel AI SDK v5 + Supabase (Auth + Postgres + pgvector) + Claude Sonnet 4.6 + Docling for ingest. Covers the three RAG failure modes beginners hit (irrelevant retrieval, too-small chunks, hallucinated citations) — all three are fixed in L9.
+**Description:** The big one — **Phase 2 of `askmyco.com`**. The first multi-file, multi-page, multi-concept app, and the skeleton that the Capstone AI Readiness Assessment Tool will extend. Students continue the Company Knowledge Bot project begun in L6: they now embed the L6-ingested documents into Supabase pgvector, query via a chat UI, and get grounded answers with citations. Prescribed stack: Next.js 16 + Vercel AI SDK v5 + Supabase (Auth + Postgres + pgvector) + Claude Sonnet 4.6 + Docling for ingest. Covers the three RAG failure modes beginners hit (irrelevant retrieval, too-small chunks, hallucinated citations) — all three are fixed in L9 (Phase 3).
 
 **Key concepts:** end-to-end RAG pipeline · chunking strategies (fixed-size, recursive, semantic) · upsert to pgvector · hybrid search (keyword + semantic with the `RRF` function) · source citations · retrieval-augmented vs retrieval-grounded outputs · the "never cite what you didn't retrieve" rule.
 
-**Build / activity:** ***Company Knowledge Bot*** — live URL, upload UI, chat UI, cited answers. **Thorough walkthrough video (90 min)** — full start-to-finish build; every copy-paste line explained.
+**Build / activity:** ***Company Knowledge Bot — Phase 2 of `askmyco.com`*** — live URL at askmyco.com, upload UI (from L6), chat UI, cited answers. **Thorough walkthrough video (90 min)** — full start-to-finish build; every copy-paste line explained. Continuing the same repo from L6, not a new one.
 
 **UK context:** Use UK company case studies of "knowledge bots" from the last 12 months: **NatWest Cora+** (internal customer-ops assistant grounded on their policies, rolled out to 10k staff 2025–26); **BT Openreach's** engineer knowledge bot (grounded on 40 years of network docs); **Starling's** internal compliance assistant. Each is a real grounded-RAG story the student can point to.
 
@@ -253,11 +253,11 @@ Two honest statements to put in front of the cohort in L1:
 
 ### L9. Making RAG Actually Work — Chunking, Re-ranking, Evals
 
-**Description:** Most students' L8 bot answers 70% of questions well and 30% disastrously. L9 closes the gap. Three techniques: **smarter chunking** (parent-child chunks, document-aware splits — via LangChain's text splitters or Claude's structured-doc parsing), **re-ranking** with Cohere Rerank v3 or Voyage Rerank-2 (the cheapest production quality lift you can buy), and **evals** using Langfuse + Braintrust (or a DIY Claude-graded eval in 20 lines). Plus the essential "when NOT to use RAG" frame: if the data fits in the context window, *don't* RAG — just put the documents in. Many UK SMEs have fewer pages than a Claude 1M context holds.
+**Description:** **Phase 3 of `askmyco.com`.** Most students' L8 bot answers 70% of questions well and 30% disastrously. L9 closes the gap on the same project. Three techniques: **smarter chunking** (parent-child chunks, document-aware splits — via LangChain's text splitters or Claude's structured-doc parsing), **re-ranking** with Cohere Rerank v3 or Voyage Rerank-2 (the cheapest production quality lift you can buy), and **evals** using Langfuse + Braintrust (or a DIY Claude-graded eval in 20 lines). Plus the essential "when NOT to use RAG" frame: if the data fits in the context window, *don't* RAG — just put the documents in. Many UK SMEs have fewer pages than a Claude 1M context holds.
 
 **Key concepts:** advanced chunking · re-ranking architecture (retrieve 20, re-rank to top 5) · RAG evals (precision@k, recall@k, faithfulness) · RAGAS framework · Langfuse traces · the context-vs-RAG decision.
 
-**Build / activity:** ***RAG Tuning Notebook*** — take your L8 bot, measure its precision on a 20-question eval set, add re-ranking, measure again; produce a before/after screenshot for your portfolio.
+**Build / activity:** ***RAG Tuning Notebook*** — take your `askmyco.com` bot (from L6/L8), measure its precision on a 20-question eval set, add re-ranking, measure again; produce a before/after screenshot for your portfolio. By end of L9 the `askmyco.com` domain is a production-quality RAG consulting asset.
 
 **UK context:** HSBC UK's and Lloyds' internal knowledge bots both moved from pure vector search to hybrid + re-ranking in H2 2025, a shift their public engineering blogs document.
 
@@ -271,7 +271,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** user-owned data · JWT auth · server vs client components · RLS policies · migrations · foreign keys · the "always filter by user_id in every query" rule. Optional: Stripe subscriptions (covered properly in L20 but previewed here).
 
-**Build / activity:** ***Multi-User App Skeleton*** — take your L8 Knowledge Bot, add sign-up/login, give each user their own isolated documents, test that two users can't see each other's data. Deploy.
+**Build / activity:** ***Multi-User App Skeleton*** — take your `askmyco.com` Knowledge Bot, add sign-up/login, give each user their own isolated documents, test that two users can't see each other's data. Deploy. This same Auth + RLS pattern powers `healthlog.app`, `jobtryout.co.uk`, `myvideo.cv`, the Capstone at `productarchitect.dev`, and every subsequent SaaS build.
 
 **UK context:** Supabase's EU-west-2 (London) region is the GDPR-safe choice for UK apps. Teach the default: *"EU region, never send personal data to a US-region Postgres unless you have a legitimate transfer mechanism."*
 
@@ -291,7 +291,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** agent vs chain-of-prompts · tools vs APIs · CLIs as the fastest tool surface · MCP as the portable-discoverable tool surface · agent loop (perceive → decide → act → observe) · retries, timeouts, cost ceilings · observability (every action logged) · the "dry run by default" rule · the kill-switch pattern · the "try the CLI first" rule.
 
-**Build / activity:** ***CLI + MCP Email-Triage Agent*** — an email-triage agent that processes your own Gmail inbox in `--dry-run` mode and produces a "what I would have done" report. Reading email via a Gmail MCP server; filing decisions via the Supabase CLI; alerting to Slack via an `slack` CLI; optional Stripe reconciliation via the Stripe CLI. **Thorough walkthrough video (90 min)** — from clean repo to running agent, explicitly showing both CLI and MCP paths for the same tool so the student can feel the difference.
+**Build / activity:** ***Fractional Inbox Assistant — Phase 1 of `fractionalbuddy.com`*** — a real persona, not an abstract demo. A UK fractional CTO/CFO typically juggles 4-8 client inboxes; this agent triages all of them, classifies by client + urgency, drafts replies in the right client tone, runs daily at 7am, produces a `--dry-run` report until the human trusts it. Reading email via a Gmail MCP server; filing decisions via the Supabase CLI; alerting to Slack via an `slack` CLI; optional Stripe reconciliation via the Stripe CLI. The same `fractionalbuddy.com` project grows into a full platform in L20. **Thorough walkthrough video (90 min)** — from clean repo to running agent, explicitly showing both CLI and MCP paths for the same tool so the student can feel the difference.
 
 **UK context:** **Octopus Energy Kraken's** agentic customer-ops platform (65+ energy retailers worldwide, UK-founded) is the gold-standard UK agent-at-scale story. Talk to Sleep's founder story (UK solo-operator AI music business). Lloyds' internal agent rollout (200+ senior execs trained H1 2026). *Your agent is the same pattern, smaller.*
 
@@ -305,7 +305,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** browser automation architecture · the DOM-vs-screenshot choice (Claude for Chrome uses DOM; Computer Use uses screenshots) · action allowlists · the "never run a browser agent on your personal logged-in browser" rule · Firefox containers and separate profiles.
 
-**Build / activity:** ***Research Agent*** — an agent that, given a UK town name, pulls the last week's planning applications from the relevant council site, summarises them, and emails a digest. Safe because council sites are public and the agent is only reading.
+**Build / activity:** ***Research Agent — `planningapplicationbot.co.uk`*** — an agent that, given a UK town name, pulls the last week's planning applications from the relevant council site, summarises them, and emails a digest. Safe because council sites are public and the agent is only reading. Domain ships as a paid notifier-by-postcode SaaS; real UK niche with no incumbent.
 
 **UK context:** UK local government runs on PDF planning portals. There's a genuine small-business opportunity for anyone who can build reliable monitoring against them (property developers, trees-and-hedges consultants, local newspapers). This is one UK SME industry the student could sell into.
 
@@ -319,7 +319,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** STT (Whisper, ElevenLabs Scribe) · LLM in the loop · TTS voice quality vs latency trade-off · real-time API architecture · phone-number provisioning · the "human handover" rule · voice-agent UX ethics (always say you're AI at the top of the call).
 
-**Build / activity:** ***First Voice Agent*** — a simple appointment-booking voice agent for a fictitious UK plumber, wired to a Google Calendar via Zapier. Ring your own burner number; talk to your own agent.
+**Build / activity:** ***First Voice Agent*** — a simple appointment-booking voice agent for a fictitious UK plumber, wired to a Google Calendar via Zapier. Ring your own burner number; talk to your own agent. Two worked extensions students can pick up: **`spanish.gcseapp.com`** (GCSE Spanish examiner role-play — language-subdomain pattern means italian.gcseapp.com / french.gcseapp.com follow naturally), and **`askevery.one`** (the voice-intake front-end that later feeds the Capstone `productarchitect.dev` scoring engine in L17 — an 8-minute voice conversation completes better than a form).
 
 **UK context:** UK sole-trader phone-call pain is a real documented market — CBI 2025 survey found 37% of UK sole-traders *refuse calls* because answering is too disruptive. A £40/month voice agent is a real fix. Several UK startups are building this (Curran AI, Voxel AI, numerous plumbing-industry SaaS). This is a legitimate solo-founder business.
 
@@ -333,7 +333,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** multimodal pipelines · batch processing · queue systems (Inngest + Vercel Cron) · asset storage (Supabase Storage) · FFmpeg basics · thumbnail generation · watermarking · cost control at scale.
 
-**Build / activity:** ***Content Pipeline*** — a working pipeline that takes 5 product photos + a 1-paragraph description and outputs a ready-to-publish product page (hero image, 4 lifestyle composites, 30-second voiceover, SEO copy).
+**Build / activity:** ***Content Pipeline*** — a working pipeline that takes 5 product photos + a 1-paragraph description and outputs a ready-to-publish product page (hero image, 4 lifestyle composites, 30-second voiceover, SEO copy). Students who prefer the SaaS track build the **GEO audit engine** for `sitegeo.net` instead — audits how ChatGPT / Claude / Perplexity / Gemini answer a target query, produces fixes (schema.org markup, entity clarity). L15 wires whichever version they chose into Stripe + n8n + Supabase as Phase 3.
 
 **UK context:** **Rightmove / Zoopla** have rolled out AI-enhanced property imagery in 2025–26; independent UK estate agents can now match them at a tenth of the cost. UK ecommerce: Notonthehighstreet, Etsy UK sellers, Shopify UK merchants all benefit from AI product pages.
 
@@ -347,7 +347,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** self-hosting tradeoffs · error handling patterns · retries with exponential backoff · queue depth · MCP inside n8n · cost comparison (Zapier Pro £29/month vs n8n self-hosted £4/month for comparable throughput).
 
-**Build / activity:** ***Multi-Step Automation*** — a real end-to-end pipeline: Stripe new-customer webhook → n8n → Supabase insert → Claude-generated welcome email → Gmail send → PostHog event. Deploy. Test. Celebrate.
+**Build / activity:** ***Production Automation — Phase 3 of `sitegeo.net`*** — wire the L14 GEO audit engine into a real paid SaaS pipeline: Stripe new-customer webhook → n8n → Supabase insert → Claude-generated welcome email → Gmail send → weekly visibility-report automation → PostHog event → Slack alert to the operator. Deploy. Test. Celebrate. Students ship `sitegeo.net` as a genuinely paid £100-400/mo SaaS at end of Week 7 — not a demo.
 
 **UK context:** **UK data sovereignty angle** — for NHS, law firms, and financial services clients, self-hosted n8n on a UK-region VPS is often the only acceptable automation platform. This is a genuine consulting niche.
 
@@ -361,11 +361,11 @@ Two honest statements to put in front of the cohort in L1:
 
 ### L16. Capstone Part 1 — Design the Scoring Engine
 
-**Description:** The Capstone begins. Students design and build the **deterministic scoring engine** at the core of the AI Readiness Assessment Tool — because **hallucinated scores are career-ending** for any consultant who ships this. We define six AI-maturity dimensions (Leadership, Talent, Data Readiness, Technology, Governance, Adoption) each scored 1-5, then the aggregation into an overall maturity band. Explicit architecture choice: the LLM generates the **narrative** (the "why" + the "what to do next") but never the **score**. The score is pure TypeScript. We also scaffold the Next.js app, the Supabase schema, and the Vercel deploy.
+**Description:** The Capstone begins — deployed to **`productarchitect.dev`** (with alt-domains `aibusinesscoach.pro`, `transformation.diy`, `productarchitect.co.uk` available for branding experiments). Students design and build the **deterministic scoring engine** at the core of the AI Readiness Assessment Tool — because **hallucinated scores are career-ending** for any consultant who ships this. We define six AI-maturity dimensions (Leadership, Talent, Data Readiness, Technology, Governance, Adoption) each scored 1-5, then the aggregation into an overall maturity band. Explicit architecture choice: the LLM generates the **narrative** (the "why" + the "what to do next") but never the **score**. The score is pure TypeScript. We also scaffold the Next.js app, the Supabase schema, and the Vercel deploy.
 
 **Key concepts:** deterministic vs stochastic code · test-driven development for scoring logic · domain-driven design (core vs narrative vs UI) · Zod schemas everywhere · starter scaffolding.
 
-**Build / activity:** ***Scoring Engine + App Scaffold*** — `gwth-m2-capstone-starter` cloned, scoring engine tested, first deploy live at a vanity subdomain (e.g. `<yourname>-assessment.vercel.app`).
+**Build / activity:** ***Scoring Engine + App Scaffold*** — `gwth-m2-capstone-starter` cloned, scoring engine tested, first deploy live at **`productarchitect.dev`** (or a vanity subdomain of your choosing if you want to white-label).
 
 **UK context:** The scoring model is explicitly designed around UK SME realities — not FTSE-100 transformation. UK peer benchmarks (BCC 54%/11%, HSBC £105bn, PwC UK AI Jobs Barometer) are baked in.
 
@@ -393,7 +393,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** server-side PDF rendering · HTML-to-PDF vs declarative PDF · brand-fit design · deployment pipelines · rollback strategy · observability in production.
 
-**Build / activity:** ***PDF + Deploy*** — the tool is production. A real PDF downloads. It's on a live URL you can give a UK client or a prospective employer.
+**Build / activity:** ***PDF + Deploy*** — the tool is production at **`productarchitect.dev`**. A real PDF downloads. It's on a live URL you can give a UK client or a prospective employer. HTTPS, UK-branded report, Sentry wired, PostHog wired.
 
 **UK context:** UK-branded PDF template comes with the GWTH colour palette and UK-formatted dates/currency. UK businesses respond better to a UK-native-looking report than a US-looking one.
 
@@ -407,7 +407,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** own-dogfooding · demo-video best practices (no-music, clear narration, cursor focus) · LinkedIn for consultants · the 3-prospect rule · open-source as a marketing move · STAR method for the project description.
 
-**Build / activity:** ***Launch Package*** — public URL, demo video, LinkedIn post, GitHub repo with README, a real assessment of your own business, 3 named prospects in a CRM (HubSpot free tier).
+**Build / activity:** ***Launch Package*** — `productarchitect.dev` live and public, demo video, LinkedIn post, GitHub repo with README, a real assessment of your own business, 3 named prospects in a CRM (HubSpot free tier).
 
 **UK context:** UK LinkedIn is a serious channel for SME consulting. Daniel Priestley-style positioning (Scorecard → Key Person of Influence) converts well here.
 
@@ -421,7 +421,7 @@ Two honest statements to put in front of the cohort in L1:
 
 **Key concepts:** portfolio review · skills self-assessment · UK consultancy pricing · day-rate benchmarks (CIPD + IR35 context) · the consulting-vs-product fork · Month 3 as the bridge from building to leading.
 
-**Build / activity:** ***Consulting Service Page*** — a Lovable or Next.js landing page that says "AI Readiness Assessments for UK SMEs from £X" with the demo video, the PDF sample, and a Calendly link. *Your first lead-gen asset.*
+**Build / activity:** ***Consulting Service Page*** — a Lovable or Next.js landing page that says "AI Readiness Assessments for UK SMEs from £X" with the demo video, the PDF sample, and a Calendly link. *Your first lead-gen asset.* Worked example in lesson: **`fractionalbuddy.com`** — take the L11 Fractional Inbox Assistant (Phase 1), add the service-page front-end here (Phase 2), and by end of Week 8 the student has two named portfolio assets (`productarchitect.dev` + `fractionalbuddy.com`) plus the Capstone.
 
 **UK context:** UK AI-consulting market data from techUK and CIPD 2026 reports; IR35 and sole-trader structuring basics; UK day-rate benchmarks for AI engineers vs AI strategists (AI engineers £600–1,200/day in April 2026; strategists £800–2,500).
 
@@ -433,32 +433,41 @@ Two honest statements to put in front of the cohort in L1:
 
 Every lesson has a hands-on build. **Month 2 has the most builds of any month** — by design, and to match the user request.
 
-| # | Lesson | Build | Primary tool(s) | Time | Portfolio? |
-|---|--------|-------|-----------------|------|------------|
-| 1 | L1 | Month 2 Charter + Capstone Brief | Notion / Markdown | 30 min | No |
-| 2 | L2 | Dev Environment Ready (+ first commit) | Claude Code + Cursor + Git | 60 min | No |
-| 3 | L3 | Re-spec a Month 1 App | Next.js + CLAUDE.md | 60 min | Optional |
-| 4 | L4 | **API-Powered Mini-App** | Next.js + Vercel AI SDK + Claude | 90 min | **Yes** |
-| 5 | L5 | Hardened Project Template | GWTH starter + gitleaks | 45 min | Template |
-| 6 | L6 | Document Parser | Docling + Next.js | 60 min | Yes |
-| 7 | L7 | Semantic-Search Demo | OpenAI embeddings + visualiser | 60 min | Optional |
-| 8 | L8 | **Company Knowledge Bot** | Next.js + Supabase pgvector + Claude | 90 min | **Yes** |
-| 9 | L9 | RAG Tuning Notebook | Cohere Rerank + Langfuse | 60 min | Attach to L8 |
-| 10 | L10 | **Multi-User App Skeleton** | Supabase Auth + RLS + Drizzle | 90 min | **Yes** |
-| 11 | L11 | **MCP-Enabled Email-Triage Agent** | Claude Agent SDK + MCP + Gmail | 90 min | **Yes** |
-| 12 | L12 | Planning-Applications Research Agent | Claude for Chrome | 60 min | Yes |
-| 13 | L13 | **First Voice Agent** | ElevenLabs Agents + Twilio + Zapier | 90 min | **Yes** |
-| 14 | L14 | Content Pipeline (product-page generator) | GPT Image + ElevenLabs + FFmpeg | 90 min | Yes |
-| 15 | L15 | Multi-Step Automation | n8n 2.0 self-hosted + Stripe + Supabase | 60 min | Yes |
-| 16 | L16 | Capstone — Scoring Engine + App Scaffold | Next.js + Supabase | 120 min | Capstone |
-| 17 | L17 | Capstone — Ask-the-Tool Chat | pgvector + Claude + citation guardrails | 120 min | Capstone |
-| 18 | L18 | Capstone — PDF + Auth + Deploy | @react-pdf + Vercel + Sentry | 120 min | Capstone |
-| 19 | L19 | **Capstone — Launch Package** | Live URL + demo video + LinkedIn | 90 min | **Capstone** |
-| 20 | L20 | **Consulting Service Page** | Lovable or Next.js + Calendly + HubSpot | 60 min | **Yes** |
+| # | Lesson | Build | Named domain | Primary tool(s) | Time | Portfolio? |
+|---|--------|-------|--------------|-----------------|------|------------|
+| 1 | L1 | Month 2 Charter + Capstone Brief | — | Notion / Markdown | 30 min | No |
+| 2 | L2 | Dev Environment Ready (+ first commit) | — | Claude Code + Cursor + Git | 60 min | No |
+| 3 | L3 | Re-spec a Month 1 App | — | Next.js + CLAUDE.md | 60 min | Optional |
+| 4 | L4 | **LLM API Playground & Cost Comparison** | **aiapi.click** | Next.js + Vercel AI SDK + Claude/GPT-5/Gemini | 90 min | **Yes** |
+| 5 | L5 | Hardened Project Template | — | GWTH starter + gitleaks | 45 min | Template |
+| 6 | L6 | **Document Ingestion — Phase 1 of askmyco** | **askmyco.com** | Docling + Next.js + Supabase Storage | 60 min | Yes |
+| 7 | L7 | Semantic-Search Demo | — | OpenAI embeddings + visualiser | 60 min | Optional |
+| 8 | L8 | **Company Knowledge Bot — Phase 2 of askmyco** | **askmyco.com** | Next.js + Supabase pgvector + Claude | 90 min | **Yes** |
+| 9 | L9 | **RAG Tuning — Phase 3 of askmyco** | **askmyco.com** | Cohere Rerank + Langfuse | 60 min | Attach to L8 |
+| 10 | L10 | **Multi-User App Skeleton** | — (pattern reused by all) | Supabase Auth + RLS + Drizzle | 90 min | **Yes** |
+| 11 | L11 | **Fractional Inbox Assistant — Phase 1 of fractionalbuddy** | **fractionalbuddy.com** | Claude Agent SDK + MCP Gmail + Supabase CLI | 90 min | **Yes** |
+| 12 | L12 | Planning-Applications Research Agent | **planningapplicationbot.co.uk** | Claude for Chrome | 60 min | Yes |
+| 13 | L13 | **First Voice Agent** | **spanish.gcseapp.com** or **askevery.one** | ElevenLabs Agents + Twilio + Zapier | 90 min | **Yes** |
+| 14 | L14 | Content Pipeline / GEO Audit Engine | **sitegeo.net** (SaaS track) | GPT Image + ElevenLabs + FFmpeg / Claude for Chrome | 90 min | Yes |
+| 15 | L15 | **Production Automation — Phase 3 of sitegeo** | **sitegeo.net** | n8n 2.0 self-hosted + Stripe + Supabase | 60 min | Yes |
+| 16 | L16 | Capstone — Scoring Engine + App Scaffold | **productarchitect.dev** | Next.js + Supabase | 120 min | Capstone |
+| 17 | L17 | Capstone — Ask-the-Tool Chat | **productarchitect.dev** | pgvector + Claude + citation guardrails | 120 min | Capstone |
+| 18 | L18 | Capstone — PDF + Auth + Deploy | **productarchitect.dev** | @react-pdf + Vercel + Sentry | 120 min | Capstone |
+| 19 | L19 | **Capstone — Launch Package** | **productarchitect.dev** | Live URL + demo video + LinkedIn | 90 min | **Capstone** |
+| 20 | L20 | **Consulting Service Page — Phase 2 of fractionalbuddy** | **fractionalbuddy.com** | Lovable or Next.js + Calendly + HubSpot | 60 min | **Yes** |
+
+**Project continuity threads (introduced in the April 2026 redesign):**
+- **askmyco.com** grows across L6 → L8 → L9 (ingest → RAG → tune) — one project, three lessons.
+- **fractionalbuddy.com** grows across L11 → L20 (inbox agent → service page + platform) — Phase 1 and Phase 2.
+- **sitegeo.net** grows across L14 → L15 (GEO engine → paid SaaS with Stripe) — Phase 2 and Phase 3.
+- **productarchitect.dev** spans the entire Capstone L16 → L19.
+- No lesson now teaches against an abstract demo — every build anchors to a named, domain-owned project that students can show clients on day one.
 
 **Portfolio artefacts count:** at least **10 standalone deployable projects** (L4, L6, L8, L10, L11, L12, L13, L14, L15, L20) + the **Capstone** (L16–L19) = **11 total portfolio-quality shippables**. Most students will end Month 2 with 7–11 live URLs they can show clients or employers.
 
 ### Capstone Project — AI Readiness Assessment Tool
+
+**Domain:** **`productarchitect.dev`** (primary); alt-domains `aibusinesscoach.pro`, `transformation.diy`, `productarchitect.co.uk` available for white-label variants.
 
 **Spans:** Weeks 5–7 set up the skills; Week 8 is intensive build; launch at end of Week 8.
 

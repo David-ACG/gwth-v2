@@ -351,12 +351,13 @@ The iteration loop: *"That's great, but make the button bigger / add dark mode /
 
 **Key concepts:** state persistence · multi-view apps · sharing and URLs · tool selection matrix.
 
-**Build / activity:** ***Personal Utility*** — build something more ambitious than L9. Options:
+**Build / activity:** ***Personal Utility*** — build something more ambitious than L9. Named worked examples from the GWTH project set (each has a reserved domain the student can deploy to):
+- **`cheatprompt.dev`** — personal prompt hub with tags and share links
+- **`tokenocd.com`** — token/credit burn-rate dashboard (PM5-rower-style)
+- **`goalsfor.me`** — personal goal planner that interviews you quarterly
 - A client-intake form that captures info and formats it as an onboarding brief
 - A personal CRM: contacts, last interaction, follow-up dates
 - A habit tracker with streaks and weekly view
-- An invoice generator with your business details pre-filled
-- A meeting-agenda builder with a live timer
 - **Stretch:** build it in Lovable or Bolt and get a shareable URL you can send to a friend
 
 **UK context:** UK freelancers and SMEs have adopted Lovable/Bolt heavily for internal tools. UK community of "build in public" practitioners on LinkedIn and X.
@@ -375,7 +376,10 @@ The iteration loop: *"That's great, but make the button bigger / add dark mode /
 
 **Key concepts:** landing-page anatomy · mobile-responsive · hosting · domains · AI as web-designer.
 
-**Build / activity:** ***My Website*** — build and publish a real website to a real URL. Options:
+**Build / activity:** ***My Website*** — build and publish a real website to a real URL. Named worked examples from the GWTH project set:
+- **`eyeonai.dev`** — personal blog / brand site
+- **`bestrobotmop.com`** or any of the 14-domain "research + comparison" template (affiliate-ready niches)
+- **`aicoursedirectory.com`** — AI course comparison (a GWTH lead-gen site; domain exists but stale, rebuild from scratch)
 - Personal portfolio / CV site
 - Landing page for a business idea or side project
 - A site for a local club, school group, charity or event
@@ -457,6 +461,10 @@ The "wow" is watching AI work autonomously on your machine.
 - Has well-written system instructions (≥300 words)
 - Handles at least five different question types reliably
 - **Test with 10 real queries and document the results** in your Tool Log
+
+Named worked examples from the GWTH project set:
+- **`bragmanager.com`** — work-wins log that quantifies monthly and drafts promotion-review talking points
+- **`goalsfor.me`** — quarterly goals interviewer that holds you accountable on weekly check-ins
 
 **UK context:** UK GCSE / A-level private tutor bots built by parents. UK solicitors building Custom GPTs on their own case-law notes. UK GPs experimenting with patient-facing Claude Projects for admin tasks (within ICO rules). UK charities building volunteer-onboarding bots.
 
@@ -597,6 +605,8 @@ Every lesson has a hands-on activity. **The 15 rows below have a code/tool build
 | 15 | L21 | **Portfolio page** | Lovable / Notion / Claude Artifacts | 90 min |
 
 **Capstone — Family AI Bot** (spans L18–L21; demoed at end of Week 4):
+
+**Domain:** **`familyaibot.com`** (primary); `familymanager.net` and `familymanager.space` reserved for alternative positioning. Extension projects anchor to named siblings: grocery agent on **`groceryshoppingagent.com`**, recipe → shopping list on **`recipeunboxed.com`**, party photo sharing on **`partysnapper.com`**.
 
 **Spec.** Record your weekly family meeting. AI transcribes it, extracts tasks, books calendar events, creates a meal plan, and generates a shopping list. Automatically.
 

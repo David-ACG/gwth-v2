@@ -589,6 +589,8 @@ Students come in with Month 1–2 skills: Python, REST APIs, LLM integrations, N
 
 ### Mini-Build 3 (Week 11) — Right-to-Deploy Template Generator
 
+**Domain:** **`governancekit.co.uk`** — positions it as a UK-first compliance toolkit, which is the natural audience.
+
 **Sits alongside:** L14 (Proprietary Data), L15 (Right to Deploy).
 
 **Description:** A form-based generator that takes a description of an AI solution and produces a full "Right to Deploy" artefact pack: model card, risk register, fairness review, monitoring plan, escalation path, kill switch procedure. Outputs a downloadable PDF + a machine-readable JSON bundle. Pre-configured for UK principles (FCA/ICO five principles) with a DBS-PURE option.
@@ -617,6 +619,8 @@ Students come in with Month 1–2 skills: Python, REST APIs, LLM integrations, N
 ---
 
 ### Mini-Build 4 (Week 12) — Internal AI Skills Library ("Dojo clone")
+
+**Domain:** **`aiconfident.io`** (primary); alt-domains `aiserviceindex.com`, `corporateaihub.com`, `vibeappmarket.com` available for positioning experiments. `aiconfident.io` frames the library as a confidence-building tool for enterprises early in their AI journey — which is the natural buyer.
 
 **Sits alongside:** L10 (Harness Engineering / Ramp Glass), L16 (Adoption).
 
@@ -648,7 +652,9 @@ Students come in with Month 1–2 skills: Python, REST APIs, LLM integrations, N
 
 ### Capstone Project — AI Readiness Assessment Tool
 
-**Spans:** The full month. Background work in Weeks 9–11, intensive build in Week 12, presentation at end of Week 12.
+**Domain:** **`productarchitect.dev`** — **continues the same codebase students shipped in Month 2** (no rewrite; no new domain). Month 3 extends the scoring engine with 12 McKinsey themes + 7 Sivulka pillars + 6 Rewired capabilities, adds multi-respondent team mode, CRM/HubSpot lead export, consulting-handover deck, anonymised benchmarking pool, and enterprise white-label.
+
+**Spans:** The full month. Background work in Weeks 9–11 (each mini-build feeds a layer into the Capstone), intensive extension in Week 12, presentation at end of Week 12.
 
 **Description:** A production-quality web application that any UK business leader can use to evaluate their organisation's AI maturity and receive an actionable transformation roadmap. The tool takes a company profile (free text about the business, ~5 minutes to complete), scores the organisation across the **six Rewired capabilities**, the **12 McKinsey themes**, and the **seven pillars of institutional AI** (Sivulka), benchmarks the result against UK peer data (BCC, PwC UK, HSBC UK), and generates a personalised 90-day roadmap with specific initiatives, priority scores, and explicit enrolment prompts for GWTH.
 
@@ -680,7 +686,7 @@ Students come in with Month 1–2 skills: Python, REST APIs, LLM integrations, N
 - **Auth:** Supabase Auth (magic link) for saving assessments; anonymous mode for first-time users.
 - **PDF:** React PDF / Puppeteer server-side generation.
 - **LLM:** Claude Sonnet 4.6 default (students can swap to GPT-5 or Gemini with a flag).
-- **Infra:** Dockerised; deployed to Coolify on P520 at `assessment.gwth.ai` (course-provided domain) or Vercel free tier.
+- **Infra:** Dockerised; deployed to Vercel free tier at **`productarchitect.dev`** (default), or Coolify on a UK VPS for students with data-sovereign clients.
 
 **Acceptance criteria:**
 
