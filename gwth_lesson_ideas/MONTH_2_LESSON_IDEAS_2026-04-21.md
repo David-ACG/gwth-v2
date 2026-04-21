@@ -97,7 +97,7 @@ Carrying forward from Month 1's L9, and deliberately extending it to production 
 | **Vector DB for RAG** | **Supabase pgvector** (default for Next.js apps) | Qdrant (self-host), Pinecone | Weaviate, Turso Vector | M2-Lab 8 |
 | **Document ingestion** | **Docling** (IBM) for PDF/Word; **Firecrawl** for websites | Unstructured, LlamaParse, Markitdown | Mistral OCR | M2-Lab 9 |
 | **Agent framework** | **Claude Agent SDK** (TypeScript + Python) | OpenAI Agents SDK, LangGraph, CrewAI | AWS Strands, Pydantic AI | M2-Lab 11 |
-| **MCP tool runtime** | **Anthropic MCP** (the standard; supported by Claude + OpenAI + Google + most IDEs) | — (no rival standard in April 2026) | — | — |
+| **Agent tool integration — CLIs first, MCP second** | **(a) CLIs via Bash** (gh, supabase, stripe, vercel, aws, gcloud, git, pnpm, ffmpeg, docker, kubectl, gemini, codex, claude) — the *first* reach for most agentic-coding tasks. **(b) Anthropic MCP** for persistent, discoverable, non-CLI tools (Gmail, Slack, internal APIs, CRM). | Direct HTTP/SDK calls when neither fits; Function calling (OpenAI-specific) | — | M2-Lab 20 |
 | **Browser / computer-use agent** | **Claude for Chrome** (paid tier) + **Anthropic Computer Use** | ChatGPT Atlas (macOS), Google Project Mariner, Perplexity Comet | OpenClaw (only in labs — CVE warnings) | M2-Lab 12 |
 | **Voice agent** | **ElevenLabs Agents** (UK presence; great voices) | OpenAI Voice Agents, Google AI Voice | Vapi, Retell | M2-Lab 13 |
 | **Automation platform** | **n8n 2.0 self-hosted on Coolify** (UK data-sovereignty) + **Zapier Agents** (for quick wins) | Make Maia, Pipedream | — | M2-Lab 15 |
@@ -110,7 +110,8 @@ Carrying forward from Month 1's L9, and deliberately extending it to production 
 - **Single-language full-stack** (TypeScript + Next.js + Supabase) reduces the concept load massively. One language to learn, one deploy target, one auth provider. Students who want Python for LLM work use it *inside* Next.js serverless routes or Supabase Edge Functions — no split codebase.
 - **All the AI APIs (Claude, GPT, Gemini) speak TypeScript fluently** with Vercel AI SDK v5. No reason to force Python on a beginner unless they need specific Python-only libraries (Docling, a specific fine-tuning toolkit, etc.).
 - **Supabase is the single-subscription UK-acceptable stack** — EU region, GDPR-friendly, Auth + Postgres + pgvector + Storage in one bill.
-- **MCP is the winning standard** in April 2026. Anthropic launched it in Dec 2024; by April 2026 it's supported by Claude Code, Cursor, Windsurf, Claude Cowork, Claude for Chrome, OpenAI's Agent SDK (via a bridge), and ~300 community MCP servers. No rival emerged. Teach it as the agent-tool protocol.
+- **CLIs first, MCP second, direct APIs last.** April 2026 reality: the majority of agentic-coding tasks get solved by the agent (Claude Code, Codex CLI, Gemini CLI) **invoking an existing developer CLI via Bash** — `gh`, `supabase`, `stripe`, `vercel`, `aws`, `gcloud`, `git`, `pnpm`, `ffmpeg`, `docker`, `kubectl`. Every mature SaaS now ships a CLI, and Claude Code's Bash tool is the shortest path to tool use. **MCP earns its place** where the CLI doesn't exist or is a bad fit — persistent agent connections to Gmail/Slack/CRM, internal-system integrations, tools that benefit from MCP's discovery + resource + prompt surfaces, and anything that needs to work inside a non-terminal runtime (Claude Cowork, Claude for Chrome). Teach both — CLIs as the default, MCP as the upgrade. (Note: many community MCP servers are themselves thin wrappers around a CLI. Skipping the wrapper is often fine.)
+- **MCP is the only inter-vendor standard that exists** in April 2026. Anthropic launched it in Dec 2024; by April 2026 it's supported by Claude Code, Cursor, Windsurf, Claude Cowork, Claude for Chrome, OpenAI's Agent SDK (via a bridge), and ~300 community servers. No rival standard emerged. When you *do* need a discoverable protocol, MCP wins — but don't reach for it before you've tried a CLI.
 
 ---
 
@@ -282,13 +283,15 @@ Two honest statements to put in front of the cohort in L1:
 
 **Arc:** *Your apps start doing work without you. They talk. They see. They integrate.*
 
-### L11. Agents That Take Actions — Claude Agent SDK + MCP
+### L11. Agents That Take Actions — Claude Agent SDK, CLIs, and MCP
 
-**Description:** The agentic leap. Students build a **real agent** (not a fancy prompt) that reads an email, decides whether it needs a human, replies if it doesn't, and files it if it's done. Uses **Claude Agent SDK** (TypeScript version) as the framework and **MCP (Model Context Protocol)** as the tool-connection layer. We wire up three MCP servers: a Gmail MCP (read/reply/label), a Supabase MCP (store decisions), and a Sentry MCP (observability). The lesson covers the three agent architectures from OpenAI's "Practical Guide to Building Agents": **single-step tool-use**, **multi-step plan-then-execute**, and **manager-worker**. We stick to single-step + multi-step; manager-worker is a Lab.
+**Description:** The agentic leap. Students build a **real agent** (not a fancy prompt) that reads an email, decides whether it needs a human, replies if it doesn't, and files it if it's done. Uses **Claude Agent SDK** (TypeScript version) as the framework. Tool use is taught in two complementary surfaces: **(a) CLIs via Bash** — the agent invokes `gh`, `supabase`, `stripe`, `vercel`, `gcloud`, `git`, `gmail` (Google's `gmail` CLI or a thin wrapper), etc.; **(b) MCP servers** — where the task needs persistent discovery, non-CLI surfaces, or cross-runtime portability (Cowork, Claude for Chrome). We wire up: the **Supabase CLI + Stripe CLI + gcloud** for the action surface *(CLI-first)*, and a **Gmail MCP + Sentry MCP** where CLI ergonomics break down *(MCP-second)*. The lesson covers the three agent architectures from OpenAI's "Practical Guide to Building Agents": **single-step tool-use**, **multi-step plan-then-execute**, and **manager-worker**. We stick to single-step + multi-step; manager-worker is a Lab.
 
-**Key concepts:** agent vs chain-of-prompts · tools vs APIs · MCP as the tool protocol · agent loop (perceive → decide → act → observe) · retries, timeouts, cost ceilings · observability (every action logged) · the "dry run by default" rule · the kill-switch pattern.
+**Why CLIs first.** Most agentic-coding tasks in April 2026 are solved fastest by Claude (Claude Code, Codex CLI, Gemini CLI) calling an existing SaaS CLI via Bash. No new code, no new protocol, no server to maintain. MCP earns its place where CLIs don't exist, don't expose the right verbs, or need to work inside non-terminal runtimes. **Teach students to try a CLI first**; introduce MCP when the CLI approach breaks. Many community MCP servers are, under the hood, CLI wrappers — saving the wrapper is often the point.
 
-**Build / activity:** ***MCP-Enabled Agent*** — an email-triage agent that processes your own Gmail inbox in `--dry-run` mode and produces a "what I would have done" report. **Thorough walkthrough video (90 min)** — from clean repo to running agent.
+**Key concepts:** agent vs chain-of-prompts · tools vs APIs · CLIs as the fastest tool surface · MCP as the portable-discoverable tool surface · agent loop (perceive → decide → act → observe) · retries, timeouts, cost ceilings · observability (every action logged) · the "dry run by default" rule · the kill-switch pattern · the "try the CLI first" rule.
+
+**Build / activity:** ***CLI + MCP Email-Triage Agent*** — an email-triage agent that processes your own Gmail inbox in `--dry-run` mode and produces a "what I would have done" report. Reading email via a Gmail MCP server; filing decisions via the Supabase CLI; alerting to Slack via an `slack` CLI; optional Stripe reconciliation via the Stripe CLI. **Thorough walkthrough video (90 min)** — from clean repo to running agent, explicitly showing both CLI and MCP paths for the same tool so the student can feel the difference.
 
 **UK context:** **Octopus Energy Kraken's** agentic customer-ops platform (65+ energy retailers worldwide, UK-founded) is the gold-standard UK agent-at-scale story. Talk to Sleep's founder story (UK solo-operator AI music business). Lloyds' internal agent rollout (200+ senior execs trained H1 2026). *Your agent is the same pattern, smaller.*
 
@@ -557,7 +560,8 @@ Instead of theory lessons, technical concepts are drip-fed at the moment they be
 | Re-ranking | L9 | Cheapest production quality lift |
 | RLS (Row-Level Security) | L10 | Moment app becomes multi-user |
 | JWT auth | L10 | Moment app becomes multi-user |
-| MCP | L11 | The standard agent-tool protocol in April 2026 |
+| CLIs as agent tools (Bash + `gh`/`supabase`/`stripe`/...) | L2 / L11 | Fastest tool surface; Claude Code's Bash tool makes this the first reach |
+| MCP | L11 | The portable agent-tool protocol when a CLI doesn't fit |
 | Observability (Sentry, PostHog, Langfuse) | L11 / L18 | Moment app goes public |
 | Queue + cron patterns | L14 / L15 | Moment batch work starts |
 | PDF generation | L18 | Moment you need a client deliverable |
@@ -696,7 +700,7 @@ Lessons we considered and decided **not** to include in the core 20 — because 
 17. **M2-Lab 17 — Stripe vs Lemon Squeezy vs Paddle** for a UK-based SaaS launch (VAT handling, Stripe Tax, Paddle MoR).
 18. **M2-Lab 18 — Vercel vs Netlify vs Railway vs Coolify vs Fly.io** for a Next.js + Supabase app. Cost, DX, UK data sovereignty.
 19. **M2-Lab 19 — AI-generated UK SEO content tool-off** — Site Geo (L6 Month 1 industry) vs Frase vs Clearscope vs Surfer on real UK SERPs.
-20. **M2-Lab 20 — Anthropic MCP vs OpenAI function calling vs Google's tool-use protocol** — compare wire formats, DX, ecosystem.
+20. **M2-Lab 20 — CLI-via-Bash vs MCP vs direct HTTP vs OpenAI function calling** — same task (e.g. "add a Supabase row and create a Stripe customer") built four ways. Compare DX, LOC, latency, fragility, portability. *This is the Lab that settles the "which tool-use surface should I reach for?" question for the student's own builds.*
 21. **M2-Lab 21 — Self-hosted Llama 3.3 70B on consumer hardware (Ollama) vs Claude Sonnet 4.6 vs GPT-5** on a privacy-first RAG task. Inference speed, quality, cost per 1k queries.
 
 **Format.** Each Lab has: a brief (one paragraph), the GWTH-default-today ranking, the scoring rubric, a short demo video, and a publish date / last-reviewed date. When a Lab goes stale (tool drops support, price changes, better alternative arrives), refresh it.

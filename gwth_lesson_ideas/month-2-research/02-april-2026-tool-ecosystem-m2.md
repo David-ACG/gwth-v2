@@ -146,7 +146,7 @@ These are the items that changed between the Month 1 ecosystem brief (2026-04-20
 1. **One language (TypeScript) reduces cognitive load.** Students who fought with Python vs JS in Feb-2026 cohorts lost ~8 hours to context switching. Staying in TS for frontend + backend + scripts + edge functions removes that tax.
 2. **Supabase wins the single-subscription game.** One login, one bill, one admin UI for Postgres + Auth + Storage + Vectors + Edge Functions.
 3. **Claude Code + Cursor is the empirically validated dual-tool workflow.** From Anthropic's Feb 2026 data + independent UK-developer surveys.
-4. **MCP is the winning standard.** Every big lab now supports it (directly or via bridge). No rival standard emerged.
+4. **CLIs + MCP together, CLIs first.** The majority of agentic-coding tool-use in April 2026 goes through CLIs invoked via Bash (`gh`, `supabase`, `stripe`, `vercel`, `aws`, `gcloud`, `git`, `ffmpeg`, `docker`). MCP earns its place for non-CLI surfaces (Gmail, Slack, web search, internal-wiki), for non-terminal runtimes (Claude Cowork, Claude for Chrome), and for cross-runtime portability. Teach both; default to CLI where one exists. *See `14-agents-and-mcp-april-2026.md` for the decision rule.*
 5. **Vercel + Coolify covers both deployment demands.** Most students want fastest deploy (Vercel); UK-regulated clients need sovereignty (Coolify).
 
 ## Review cadence

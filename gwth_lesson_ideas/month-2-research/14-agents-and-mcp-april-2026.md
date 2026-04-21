@@ -1,19 +1,74 @@
-# Agents + MCP — April 2026
+# Agents, CLIs, and MCP — April 2026
 
-*Research spine for L11. Written 2026-04-21. Extends Month-1 `15-agents-april-2026.md` into production-builder territory.*
+*Research spine for L11. Written 2026-04-21. Updated 2026-04-21 to elevate CLIs to equal billing with MCP, reflecting the empirical reality of how most builders integrate tools in April 2026. Extends Month-1 `15-agents-april-2026.md` into production-builder territory.*
 
-## The MCP moment
+## The two tool-use surfaces builders actually reach for
 
-In April 2026, the **Model Context Protocol** (Anthropic's open standard for connecting LLMs to tools, data, and workflows) has decisively won as the agent-tool protocol. The ecosystem at April 21, 2026:
+When a student's agent needs to *do* something — read an email, add a database row, open a PR, charge a card, deploy code, post a message — there are four plausible integration surfaces in April 2026. Ranked by the order most builders reach for them:
+
+1. **CLIs invoked via Bash** — *fastest, most common*. The agent (Claude Code, OpenAI Codex CLI, Gemini CLI) calls an existing SaaS CLI: `gh`, `supabase`, `stripe`, `vercel`, `aws`, `gcloud`, `firebase`, `cloudflared`, `git`, `pnpm`, `ffmpeg`, `docker`, `kubectl`, `slack`, `curl`. No server to build, no new protocol to learn, full Unix composability. This is the **default** most Anthropic Feb 2026 data points at.
+2. **MCP (Model Context Protocol)** — *the inter-vendor standard*. Use when the tool isn't a CLI, when the agent runs in a non-terminal runtime (Claude Cowork, Claude for Chrome, an embedded agent), or when you want persistent discovery of tools the agent can find-and-use without being told.
+3. **Direct HTTP / SDK calls** — *when neither of the above fits*. You're writing code that the agent executes; the code calls an API directly. Works when CLIs are absent and MCP feels too heavy.
+4. **Vendor-specific function calling** (OpenAI function-calling, Anthropic tool-use, Google tool-use) — *only when staying inside one vendor*. Not portable; avoid for anything that might swap LLMs.
+
+**The GWTH rule: CLIs first, MCP second, direct HTTP third, vendor-specific function calling last.**
+
+## Why CLIs dominate in practice
+
+- **Every mature SaaS ships a CLI in 2026.** Supabase CLI, Stripe CLI, Vercel CLI, AWS CLI v3, gcloud, Firebase CLI, GitHub CLI, Cloudflare Wrangler, Sentry CLI, PostHog CLI, Langfuse CLI. If the service is worth integrating with, it has a CLI.
+- **Claude Code's `Bash` tool is the shortest path.** Claude Code (and Cursor's agent, and Codex CLI, and Gemini CLI) all execute Bash natively. The agent learns the CLI's `--help` output at runtime and composes it into multi-step plans. No client code required.
+- **Unix composability is still the most expressive integration style ever invented.** Pipe stdout to `jq`, redirect to a file, chain with `&&`, background with `&`. MCP can't do that.
+- **Debuggability is better.** A failing CLI command shows the student a real error message in a terminal. A failing MCP server's error surfaces through an abstraction layer that beginners struggle to read.
+- **Onboarding for students is faster.** *"Install the Supabase CLI, authenticate, call it from your agent"* is a 10-minute exercise. *"Install an MCP server, configure the transport, wire it into Claude Code's settings"* is a 30-minute exercise.
+
+## Why MCP still matters (and the specific cases where it wins)
+
+MCP is not obsolete in a CLI-first world. It wins cleanly in these cases:
+
+1. **Non-terminal runtimes.** Claude Cowork, Claude for Chrome, and Claude for iPhone don't have Bash. MCP is how they discover tools.
+2. **Persistent, discoverable tool sets.** If the agent should *find* a tool at runtime rather than being told, MCP's discovery + resource + prompt model is the right shape. Gmail MCP, Slack MCP, internal-wiki MCP — these feel right as MCP because you want the agent to *browse* them.
+3. **Cross-vendor portability.** MCP works in Claude Code, Cursor, Windsurf, Codex CLI, Gemini CLI, n8n 2.0, Zapier Agents, Make Maia. Writing a CLI wrapper for an internal system only helps if the caller is a shell; writing an MCP server helps every runtime.
+4. **Internal tool catalogues at scale.** Enterprises standardising on MCP for internal systems (customer-data API, product-catalogue API, compliance-data API) get a single protocol for every agent to consume. This is the Octopus Kraken pattern.
+5. **Resources and prompts (not just tools).** MCP lets a server expose *resources* (data the agent can read) and *prompts* (templates the agent can choose) in addition to *tools* (functions it can call). CLIs only expose tools.
+
+**The honest caveat:** in April 2026, probably 40% of community MCP servers are thin wrappers around a CLI. If you already have a CLI, skip the wrapper.
+
+## The MCP ecosystem at April 21, 2026
 
 - **300+ MCP servers** in the community registry.
 - **Direct MCP support** in: Claude Code, Cursor, Windsurf, Claude Cowork (desktop + mobile), Claude for Chrome, Claude.ai web.
 - **Indirect/bridged support** in: OpenAI Agents SDK, Google Gemini Code Assist, most LangGraph / CrewAI pipelines.
-- **MCP inside automation platforms:** n8n 2.0 has a native MCP node (launched March 2026); Zapier Agents has an MCP bridge; Make Maia added MCP in April 2026.
+- **MCP inside automation platforms:** n8n 2.0 native MCP node (March 2026); Zapier Agents MCP bridge; Make Maia MCP (April 2026).
 
 The protocol is simple: a **server** exposes tools (functions), resources (data), and prompts (templates); a **client** (Claude, GPT, Gemini, whatever) discovers them at runtime and calls them as needed. JSON-RPC over stdio, SSE, or HTTP.
 
-## Why no rival emerged
+## CLIs worth teaching by name in L11 (April 2026)
+
+All Unix-executable; all scriptable; all usable by Claude Code / Codex CLI / Gemini CLI out of the box (just `npm i -g` or equivalent and authenticate).
+
+| CLI | Verb coverage | Used in GWTH |
+|-----|--------------|--------------|
+| `gh` (GitHub CLI) | Full GitHub API | L2, L11 |
+| `supabase` | Postgres, Auth, Storage, Edge Functions | L10, L11, Capstone |
+| `stripe` | Customers, Subscriptions, Events, Webhooks | L15, Capstone |
+| `vercel` | Deploy, env, domains, logs | L18 |
+| `gcloud` | Anything Google Cloud | Capstone (stretch) |
+| `aws` (v3) | Anything AWS | Optional |
+| `firebase` | Firebase services | Optional |
+| `cloudflared` + `wrangler` | Cloudflare Workers, Tunnels | Optional |
+| `git` | Source control | Every lesson |
+| `pnpm` / `npm` | Package management | Every lesson |
+| `ffmpeg` | Audio/video processing | L14 |
+| `docker` | Container lifecycle | L18 (Coolify) |
+| `kubectl` | Kubernetes | Rare; capstone stretch |
+| `sentry-cli` | Release tracking | L18 |
+| `posthog-cli` | Events, flags | L18 |
+| `slack` (community CLI) | Messages, channels | L11 |
+| `gemini` / `codex` / `claude` | Call other LLM CLIs from inside an agent | Advanced |
+
+**Meta-CLI pattern.** Claude Code can call Gemini CLI or Codex CLI — and vice versa — as tools. Students can compose agents across vendors via Bash. This is a surprisingly underrated pattern.
+
+## Why no rival protocol (to MCP) emerged
 
 In early 2025, there were three plausible rivals to MCP:
 
@@ -102,21 +157,26 @@ The pattern comes straight from Anthropic's Agent SDK best-practices doc and fro
 
 ## MCP servers worth teaching by name (April 2026)
 
-| MCP Server | Publisher | What it does | Used in GWTH |
-|------------|-----------|--------------|--------------|
-| `filesystem` | Anthropic | Read/write files in a sandbox | L11 |
-| `gmail` | Community (Anthropic-blessed) | Read/send/label Gmail | L11 |
-| `supabase` | Supabase | Postgres + Auth + Storage access | L11, Capstone |
-| `slack` | Anthropic | Send messages / read threads | Capstone stretch |
-| `hubspot` | HubSpot | CRM CRUD | Capstone stretch |
-| `calendar` | Community | Google/Microsoft calendar | L13 voice agent |
-| `stripe` | Stripe | Customer + Subscription CRUD | L15, Capstone |
-| `web-search` | Various (Perplexity, Tavily, Brave) | Live search | L12 |
-| `sentry` | Sentry | Error CRUD | Observability |
-| `github` | Anthropic | Repo CRUD | L2, L11 |
-| `playwright` | Microsoft | Browser automation | L12 |
-| `postgres` | Anthropic | Arbitrary Postgres | Capstone |
-| `n8n` | n8n | Trigger n8n workflows | L15 |
+Use these when the CLI path doesn't fit — typically: the tool isn't CLI-shaped (Gmail, Slack, web search), the agent runtime isn't a terminal (Claude Cowork, Claude for Chrome), or the team wants persistent discovery across runtimes.
+
+| MCP Server | Publisher | What it does | CLI alternative? | Used in GWTH |
+|------------|-----------|--------------|------------------|--------------|
+| `filesystem` | Anthropic | Read/write files in a sandbox | Native Bash | L11 (rarely needed) |
+| `gmail` | Community (Anthropic-blessed) | Read/send/label Gmail | `gmail` CLI is thin; MCP wins | L11 |
+| `slack` | Anthropic | Send messages / read threads | `slack` CLI exists; MCP wins for discovery | Capstone stretch |
+| `web-search` | Various (Perplexity, Tavily, Brave) | Live search | None — MCP wins | L12 |
+| `playwright` | Microsoft | Browser automation | `playwright` CLI exists; MCP wins for LLM shape | L12 |
+| `calendar` | Community | Google/Microsoft calendar | Thin CLIs; MCP wins | L13 voice agent |
+| `hubspot` / `salesforce` | Respective vendors | CRM CRUD | CLIs awkward; MCP wins | Capstone stretch |
+| `internal-wiki` | You (organisation-specific) | Search internal knowledge | No CLI exists | Capstone / bespoke |
+| **(Supabase)** | Supabase | Postgres + Auth + Storage | `supabase` CLI is excellent — **prefer CLI** | Capstone (CLI-first) |
+| **(Stripe)** | Stripe | Customer + Subscription CRUD | `stripe` CLI is excellent — **prefer CLI** | L15 (CLI-first) |
+| **(GitHub)** | Anthropic | Repo CRUD | `gh` CLI is excellent — **prefer CLI** | L2, L11 (CLI-first) |
+| **(Sentry)** | Sentry | Error CRUD | `sentry-cli` is excellent — **prefer CLI** | Observability (CLI-first) |
+| **(Postgres)** | Anthropic | Arbitrary Postgres | `psql` exists — **prefer CLI** | Capstone (CLI-first) |
+| **(n8n)** | n8n | Trigger n8n workflows | `n8n` CLI — **prefer CLI** | L15 (CLI-first) |
+
+*The "prefer CLI" rows are included to demonstrate the rule: when a mature CLI exists and works in a terminal runtime, skip the MCP wrapper.*
 
 ## UK-specific angle
 
