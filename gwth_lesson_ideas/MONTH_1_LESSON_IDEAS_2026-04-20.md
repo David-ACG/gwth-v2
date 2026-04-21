@@ -4,8 +4,12 @@
 
 ### Revision log
 
-- **2026-04-21** —
-  - **Prescriptive tooling framing added.** New **L9: Your Building Toolkit — the GWTH Stack & Why We're Prescriptive** introduces the coding/building tools used across L10–L21 and explains the "big three + one challenger" assessment rule. Previous L9–L20 renumbered to L10–L21. Lesson count is now 21 (was 20); build count stays 15 (new L9 is a foundations/strategy lesson, not a build).
+- **2026-04-21 (afternoon)** —
+  - **Enrolment-motivation framing added.** New "Why students enrol — the four journeys" section up front maps every lesson to at least one of four student reasons for joining (redundancy/reskill · AI-anxiety · verifiable scores · parent planning). Drives a new closing lesson.
+  - **New L22: Your AI-Era CV & LinkedIn Makeover (build lesson).** Directly serves Journeys 1–3. Students rewrite their CV with a dedicated AI Capabilities section, rebuild their LinkedIn headline/about/featured/skills, publish a "What I Built in 4 Weeks" carousel post, and record a 10-question interview answer bank. The GWTH score is cited as third-party evidence employers can verify.
+  - **Lesson count now 22** (was 21); **build count now 16** (was 15). Capstone remains L18–L21 Family AI Bot; L22 is the career-distribution layer on top.
+- **2026-04-21 (morning)** —
+  - **Prescriptive tooling framing added.** New **L9: Your Building Toolkit — the GWTH Stack & Why We're Prescriptive** introduces the coding/building tools used across L10–L21 and explains the "big three + one challenger" assessment rule. Previous L9–L20 renumbered to L10–L21. Lesson count was 21 (was 20); build count was 15 (new L9 is a foundations/strategy lesson, not a build).
   - **Audience broadened.** Primary audience is **individuals and SMEs**, but GWTH is not restricted to them — larger companies are served via the **bespoke-lesson service** (one custom lesson per 100 students a single company enrols).
   - **Optional lessons** (up to 5) added as a planning placeholder for cutting-edge, small-audience, or not-yet-mainstream material that might graduate into the core later.
   - **Lab ideas list** added — lessons we decided *not* to teach because the topic is a head-to-head tool comparison that goes stale quickly. Labs are a natural home for cutting-edge tool shoot-outs.
@@ -23,9 +27,29 @@
 
 ---
 
+## Why students enrol — the four journeys
+
+Every lesson in Month 1 must answer "why am I here?" for at least one of these four enrolment reasons. Most students arrive with a blend of two or three. The course addresses each directly:
+
+### Journey 1 — *"I've been made redundant and need to reskill."*
+The career-reset student. For them, every build goes in a **verifiable portfolio**, every capability is **demonstrable to a UK employer**, and GWTH's scoring system produces third-party evidence they can attach to a CV or LinkedIn profile. The UK context is hard: only **21% of UK workers** (CIPD 2026) feel confident using AI at work — which means the student who finishes GWTH is, within four weeks, in the top-quintile of the national workforce on AI fluency. Served directly by: **L22 (CV & LinkedIn makeover)**, L21 (portfolio), L10–L17 (every build is portfolio-grade), and the GWTH assessment (cited on CV).
+
+### Journey 2 — *"I'm worried AI will take my job."*
+The defensive-reskilling student. The honest answer: AI will not take your job, but **someone using AI will**. Month 1 turns the student into *that person* — the one on the team who ships the AI-built tool, automates the repetitive task, and shows up to meetings with a dashboard no one else knew how to build. Served directly by: L1 (the six primitives demo addresses this fear in lesson one), L10–L17 (every build increases the moat), L15 (agents do work while you sleep), L22 (how to signal this capability to current and future employers).
+
+### Journey 3 — *"I want scores employers can trust."*
+The credential-hunter. Most AI "certificates" in 2026 are from vendors selling their own tools — a conflict of interest. GWTH's **dynamic scoring system** stays current because the curriculum stays current: scores reflect what you can build with the tools that exist **right now** (April 2026), not what a course author wrote in 2024. The assessment ties to the portfolio — each build is graded against a rubric an employer can read. Served directly by: L3 (tool log as self-assessment), L21 (portfolio assembly), L22 (how to present scores on CV/LinkedIn), plus the GWTH grading artefact attached to every capstone.
+
+### Journey 4 — *"I'm a parent thinking about my children's future."*
+The family-strategy student. AI fluency will not be a nice-to-have for their children — it will be **table stakes**. The crucial insight: no coding is required. *If your teenager can describe what they want, they can build it.* The L10 "first app" and L12 "first website" lessons are as learnable by a 13-year-old as by a 45-year-old, and the parent who learns first becomes the household's AI mentor. Served directly by: the Family AI Bot capstone (explicitly a household artefact), L10–L16 (tools a parent can teach a child in an afternoon), L5 (the safety rules every family needs), and the Personal AI Assistant (L16) for study tutoring.
+
+*Why this matters for lesson design.* Every build activity must be framable in at least two of these four journeys, or it doesn't belong in the core. Example — the L14 Dashboard is **portfolio ammunition (Journey 1)**, **productivity signalling (Journey 2)**, **a graded artefact (Journey 3)**, *and* **a household budget tool (Journey 4)** — four-for-four, which is why it's a headline build.
+
+---
+
 ## Month mapping recap
 
-- **Month 1 — AI for Your Life** — foundations, first builds, automations for yourself. Change the way students *think* about AI, then get them building. **15 of 21 lessons have a build project** (the 6 non-build lessons are foundations, research/content, ideation, and the building-toolkit primer). Capstone: **Family AI Bot**.
+- **Month 1 — AI for Your Life** — foundations, first builds, automations for yourself. Change the way students *think* about AI, then get them building. **16 of 22 lessons have a build project** (the 6 non-build lessons are foundations, research/content, ideation, and the building-toolkit primer). Capstone: **Family AI Bot**. Closing lesson: **CV & LinkedIn Makeover** (L22) turns the portfolio into career ammunition.
 - **Month 2 — AI for Your Industry** — production apps: pipelines, data, integrations.
 - **Month 3 — AI for Your Company** — leadership, strategy, governance.
 
@@ -33,8 +57,9 @@ Month 1 exists to take someone whose entire AI experience is *"I've asked ChatGP
 
 1. **Thinks about AI as a knowledgeable colleague**, not a search engine.
 2. **Covers all six OpenAI primitives** (Research, Content, Coding/Building, Data Analysis, Ideation, Automation) — with a heavy bias toward *Building*.
-3. **Has shipped 15 simple hands-on builds** plus the Family AI Bot capstone.
+3. **Has shipped 16 simple hands-on builds** plus the Family AI Bot capstone.
 4. **Has a committed tool stack**, a prompt library, a small portfolio, and the confidence to use AI for everything they can — backed by a Tool Log that ranks the alternatives they've tried against the GWTH defaults.
+5. **Has a CV and LinkedIn profile rewritten for the 2026 AI-first job market** — with links to every artefact they built, a narrative employers actually value, and a verifiable GWTH score attached.
 
 ---
 
@@ -48,7 +73,7 @@ Almost everyone today thinks of ChatGPT as "Google with better search results." 
 
 ## Why building dominates the month
 
-OpenAI's "Identifying and Scaling AI Use Cases" (April 2025) distilled 300+ enterprise implementations into six fundamental use-case patterns — the **six AI primitives**: Content Creation, Research, Coding/Building, Data Analysis, Ideation & Strategy, Automation. Of these six, **Coding/Building has emerged as the single highest-leverage skill for individuals** — the one that took AI from "helpful assistant" to "I can make things that didn't exist before." Vibe coding with Claude Artifacts / Lovable / Bolt / v0 has become the new Microsoft Office — a baseline productivity skill everyone should own. We therefore cover all six primitives, but **15 of the 21 lessons include a build project**, and the capstone is a full end-to-end build.
+OpenAI's "Identifying and Scaling AI Use Cases" (April 2025) distilled 300+ enterprise implementations into six fundamental use-case patterns — the **six AI primitives**: Content Creation, Research, Coding/Building, Data Analysis, Ideation & Strategy, Automation. Of these six, **Coding/Building has emerged as the single highest-leverage skill for individuals** — the one that took AI from "helpful assistant" to "I can make things that didn't exist before." Vibe coding with Claude Artifacts / Lovable / Bolt / v0 has become the new Microsoft Office — a baseline productivity skill everyone should own. We therefore cover all six primitives, but **16 of the 22 lessons include a build project**, and the capstone is a full end-to-end build.
 
 This matches what the AI Daily Brief and OpenAI's own data show: of the six primitives, coding has by far the biggest *delta* between "leaders" and "laggards" in both company and individual productivity. Beginners who learn to build get to "I can make any tool I need" — a capability no other primitive provides.
 
@@ -56,7 +81,7 @@ This matches what the AI Daily Brief and OpenAI's own data show: of the six prim
 
 ---
 
-## The 21 lessons at a glance
+## The 22 lessons at a glance
 
 | # | Lesson | Primary primitive | Build? | Week |
 |---|--------|-------------------|-------|------|
@@ -81,8 +106,9 @@ This matches what the AI Daily Brief and OpenAI's own data show: of the six prim
 | L19 | Transcription & extraction — teaching AI to listen | Research + Content | Yes — *Family Meeting v1* | 4 |
 | L20 | Building the processing engine + distribution | **Coding + Automation** | Yes — *Family Bot Working* | 4 |
 | L21 | Polishing, presenting & your month-1 portfolio | Content + Meta | Yes — *Portfolio + Family Bot Launch* | 4 |
+| L22 | **Your AI-era CV & LinkedIn — turning 4 weeks of builds into career ammunition** | **Career / Meta** | Yes — *CV + LinkedIn Rebuild* | 4 |
 
-**Build project count:** 21 of 21 lessons have a hands-on activity. **15 of those are code/tool builds** (L3, L7, L8, L10–L17, L19, L20, L21) — the rest are applied artefacts or strategy work (wishlist, prompt library, research project, stack commitment, bot blueprint, portfolio). The Capstone **Family AI Bot** is anchored in L18–L21 and demonstrated at the end of week 4.
+**Build project count:** 22 of 22 lessons have a hands-on activity. **16 of those are code/tool builds** (L3, L7, L8, L10–L17, L19, L20, L21, L22) — the rest are applied artefacts or strategy work (wishlist, prompt library, research project, stack commitment, bot blueprint). The Capstone **Family AI Bot** is anchored in L18–L21. The month closes with **L22**, which explicitly serves Journeys 1, 2 and 3 (redundancy / AI-anxiety / verifiable scores) by converting every previous artefact into a concrete CV + LinkedIn story.
 
 ---
 
@@ -92,7 +118,9 @@ This matches what the AI Daily Brief and OpenAI's own data show: of the six prim
 
 ### L1. Welcome to GWTH — What AI Can *Actually* Do for You
 
-**Description:** Six live demos of what AI can do that most people have never seen — one from each of the OpenAI primitives. **Research** a product in two minutes using Perplexity Comet (now free worldwide). **Content**: write and publish a polished LinkedIn post from a voice memo; then turn it into an image with Ideogram 3 and a 30-second voiceover with ElevenLabs v3. **Coding**: build a working mortgage calculator in thirty seconds in Claude Artifacts (which in April 2026 now has persistent storage up to 20 MB, so the calculator remembers your rates). **Data**: upload a bank statement and watch charts appear. **Ideation**: voice-mode brainstorm of a side business while doing the washing up. **Automation**: watch Claude Cowork (Opus 4.7, now with plugin marketplace) organise a messy Downloads folder autonomously. Addresses the "will AI take my job?" fear directly — positions AI skills as the #1 career differentiator in 2026. Previews the Family AI Bot capstone.
+**Description:** Six live demos of what AI can do that most people have never seen — one from each of the OpenAI primitives. **Research** a product in two minutes using Perplexity Comet (now free worldwide). **Content**: write and publish a polished LinkedIn post from a voice memo; then turn it into an image with Ideogram 3 and a 30-second voiceover with ElevenLabs v3. **Coding**: build a working mortgage calculator in thirty seconds in Claude Artifacts (which in April 2026 now has persistent storage up to 20 MB, so the calculator remembers your rates). **Data**: upload a bank statement and watch charts appear. **Ideation**: voice-mode brainstorm of a side business while doing the washing up. **Automation**: watch Claude Cowork (Opus 4.7, now with plugin marketplace) organise a messy Downloads folder autonomously.
+
+**The four-journey frame.** L1 names the four reasons students enrolled and commits the course to each: *"If you're here because you've been made redundant, every build this month goes in your portfolio and your CV — L22 closes the loop. If you're here because you're worried AI will take your job, the answer is to be the one on the team who ships with it. If you're here because you want scores employers can trust, GWTH's rubric is attached to every capstone and citable on your profile. And if you're here because you're a parent thinking about your kids, the Family AI Bot is literally a household artefact — build it with them."* Previews the Family AI Bot capstone *and* the L22 CV/LinkedIn rebuild.
 
 **Key concepts:** the six OpenAI primitives · superpower framing · career accelerator vs replacement · compounded capability · the "90 days from ChatGPT user to builder" promise · **"Year of the AI Builder"** (NLW, AI Daily Brief, 2026).
 
@@ -472,9 +500,9 @@ Named worked examples from the GWTH project set:
 
 ---
 
-## Week 4 — Automation, Family Bot Ideation, Build, Polish (L17–L21)
+## Week 4 — Automation, Family Bot Ideation, Build, Polish, Career (L17–L22)
 
-**Arc:** *Put all six primitives together into the Family AI Bot. Automate it. Ship it. Portfolio it.*
+**Arc:** *Put all six primitives together into the Family AI Bot. Automate it. Ship it. Portfolio it. Then turn the month's work into a CV and LinkedIn profile that lands interviews.*
 
 ### L17. Automation Basics — Zapier, Make, n8n 🔨
 
@@ -574,7 +602,7 @@ Quality factors: mic placement, quiet room, clear speech. **The extraction promp
 - **Assemble** the Month 1 Portfolio: structured Notion page / website / PDF with every artefact.
 - **Share** with one friend or colleague. Get one sentence of feedback. Record their reaction.
 
-**The GWTH training close.** *"You've just done in 21 lessons what most people never learn. Your colleagues, family, employer probably haven't. The next step — Month 2 — is turning this from personal productivity into team/company transformation. And you can bring people with you. [GWTH.ai](https://gwth.ai) is how you upskill the rest of your team — and if you bring 100+ colleagues, we'll build a bespoke lesson just for your company."*
+**Handoff to L22.** The portfolio is the artefact. L22 is the *distribution* — how employers and recruiters actually find out what you built.
 
 **UK context:** UK LinkedIn as the main portfolio distribution channel. UK employer recognition of AI skills on CVs rising sharply (LinkedIn UK data, CIPD surveys 2026). UK corporate L&D teams actively buying GWTH-style training.
 
@@ -582,9 +610,56 @@ Quality factors: mic placement, quiet room, clear speech. **The extraction promp
 
 ---
 
-## Build projects — 15 builds + the Capstone
+### L22. Your AI-Era CV & LinkedIn — Turning 4 Weeks of Builds into Career Ammunition 🔨
 
-Every lesson has a hands-on activity. **The 15 rows below have a code/tool build.** The other 6 lessons (L1, L2, L4, L5, L6, L9, L18) have applied artefacts or strategy work (wishlist, same-question test, prompt library, catch-the-hallucination, research project, stack commitment, bot blueprint).
+**Description:** The closing lesson of Month 1, and the one that directly addresses Journeys 1–3 (redundancy, AI-anxiety, verifiable scores). In April 2026 the UK job market has bifurcated fast: roles that mention "AI" in the job description pay **a documented 25% premium** (PwC UK AI Jobs Barometer, April 2026 update), and "How do you use AI in your work?" is now the **most-asked interview question** across tech, marketing, operations and finance (LinkedIn UK hiring-manager survey, Q1 2026). Every student in this lesson has just shipped 16 builds and a capstone — **the raw material for the best CV rewrite of their career**. The problem is almost nobody does the translation step. This lesson fixes that.
+
+**Four artefacts produced this lesson:**
+
+1. **Your AI-Era CV.** Rewritten with AI assistance (Claude Sonnet 4.6 recommended for voice matching; ChatGPT for format; both can do it). The rewrite has three distinguishing features: (a) a dedicated **"AI capabilities"** section near the top listing specific tools you've mastered (Claude Code, Cowork, Artifacts, Lovable, Zapier, Ideogram, etc.), each with one concrete outcome you achieved (e.g., *"Zapier — built a 3-step automation saving 2 hrs/week on expenses reconciliation"*); (b) **portfolio links** to the real URLs of builds you published (L12 website, L14 dashboard, L20 Family Bot demo); (c) **quantified achievements** from GWTH ("Shipped 16 working AI builds in 4 weeks"). Uploaded as PDF *and* as a Claude Artifact so it's easy to regenerate for role-specific variants.
+
+2. **Your rebuilt LinkedIn profile.** Four surgical edits. **Headline:** from generic ("Marketing Manager at X") to capability-specific ("AI-augmented marketing operator · ship campaigns in hours not days · Claude Code · Lovable · Zapier"). **About section:** rewritten as a narrative — what you did before AI, what you can now ship, one concrete metric, one sentence of personal voice. **Featured section:** pin 3 of your Month 1 builds with screenshots (LinkedIn permits up to 5). **Skills section:** add the actual tools (LinkedIn's skills taxonomy now includes Claude, ChatGPT, Lovable, Cursor, Zapier — as of the March 2026 taxonomy refresh).
+
+3. **The "What I Built in 4 Weeks" showcase post.** A single LinkedIn post (carousel format, 8–10 slides, generated in Gamma or Canva) walking through your Month 1 portfolio. Students who publish this in the course community and on LinkedIn get instant feedback and — empirically — two or three inbound recruiter DMs within a week. This post is also the "proof artefact" that makes the CV credible.
+
+4. **Your interview answer bank.** 10 questions every AI-literate candidate must be able to answer in 2026, and your worked answers. Sample prompts: *"How do you use AI in your current role?"*, *"What's the most significant thing you've shipped using AI?"*, *"Where does AI fall short? When do you stop trusting it?"*, *"Walk me through an agent workflow you built."*, *"How do you think about prompt injection / hallucination / data leakage?"* (L5 pays off here). Students draft their answers with AI, then record themselves delivering each in under 90 seconds and self-score on Loom or phone video.
+
+**The GWTH score as third-party evidence.** The GWTH grading artefact — the rubric-based score every capstone is graded against — is designed to be **citable on a CV**. Unlike vendor certificates (Microsoft AI-900, Google ML, Coursera badges) that say "you watched videos and took a quiz," the GWTH score is keyed to *what you shipped*. Students print it, attach it to the CV, and include the verification URL that employers can click. Addresses Journey 3 directly: *"scores employers can trust."*
+
+**The parent angle (Journey 4 crossover).** This lesson also works in reverse for the parent student: you can use it to **rewrite your teenager's LinkedIn or Common App/UCAS profile** once they've done their own builds with you. A 16-year-old whose LinkedIn says *"Built a Spanish GCSE revision app in Lovable, 200 users at my school, 4.7-star rating"* will out-impress peers with three A\*s and no artefacts. This framing makes the lesson shareable with the whole household.
+
+**Key concepts:** AI-era CV anatomy · LinkedIn headline/about/featured/skills refresh · capability-specific signalling vs generic job-title signalling · portfolio → CV translation · the interview answer bank · GWTH score as third-party evidence · 25% AI-premium on UK job listings · "how do you use AI" as the 2026 top-1 interview question.
+
+**Build / activity:** ***CV + LinkedIn Rebuild***
+- **Rebuild your CV** with AI using the three-section AI Capabilities pattern. Output as PDF + Claude Artifact.
+- **Rebuild your LinkedIn**: headline, about, featured (3 pinned builds), skills (actual tool names).
+- **Publish the "What I Built in 4 Weeks" carousel post** on LinkedIn (or draft it for later posting if profile isn't ready to go public).
+- **Draft and record your interview answer bank** (10 questions, 90 seconds each, Loom or phone).
+- **Attach your GWTH score** to both CV and LinkedIn Featured.
+
+**Acceptance criteria.**
+- CV has a dedicated "AI capabilities" section with **at least 6 named tools**, each with a concrete outcome.
+- CV links to **at least 3 live build URLs** (website, dashboard, Family Bot demo, or equivalent).
+- LinkedIn headline now includes **at least 2 specific AI tools or capabilities**.
+- LinkedIn Featured section has **3 pinned builds** with screenshots.
+- Showcase post is drafted (carousel format, 8+ slides).
+- Answer bank has **10 recorded answers**, each under 90 seconds.
+
+**Mindset moment:** Your CV before GWTH listed what you *used to do*. Your CV after GWTH lists what you *can now build*. One is a biography; the other is a capability statement. Employers buy capability.
+
+**UK context:** **PwC UK AI Jobs Barometer** (April 2026 update): AI-exposed roles command a **25% wage premium** and productivity growth in those sectors nearly quadrupled (7% → 27%) since 2022. **LinkedIn UK Workforce Report (Q1 2026)**: "AI fluency" is the fastest-growing skill on UK profiles (up 890% YoY); hiring managers in the UK now screen for *specific tool names* ("Claude Code," "Cursor," "Zapier AI"), not generic "AI experience." **CIPD 2026 skills survey**: only **21% of UK workers** self-report as confident using AI at work — finishing GWTH moves the student into the top quintile on self-reported AI fluency nationally. **UK redundancy context**: Q1 2026 saw significant layoffs in junior consulting, junior content, and junior paralegal roles (displacement attributed to AI assistants); students who can demonstrate "AI + domain" are filling the replacement roles at 1.25× the old salary. Direct answer to Journey 1.
+
+**Named domain extensions (optional, for ambitious students).** Students who want to productise this for others can anchor to any of these reserved domains: **`bragmanager.com`** (already introduced in L16 — expand it into a multi-user CV-wins logger), **`cvworkouts.com`** / **`interviewtrainer.ai`** if available, or build a **"portfolio microsite"** (Lovable / Carrd) at any personal domain. *These are optional; the core lesson ships a rebuilt CV + LinkedIn for the student, not a new SaaS product.*
+
+**The GWTH training close.** *"You've just done in 22 lessons what most UK workers never learn. Your colleagues, family, employer probably haven't. Your CV and LinkedIn now say so, publicly and verifiably. The next step — Month 2 — is turning this from personal productivity into team/company transformation: production apps, pipelines, agents that run your industry's real workflows. You can bring people with you. [GWTH.ai](https://gwth.ai) is how you upskill the rest of your team — and if you bring 100+ colleagues, we'll build a bespoke lesson just for your company."*
+
+**Research:** [`19-portfolio-and-presentation.md`](month-1-research/19-portfolio-and-presentation.md), [`12-uk-beginner-use-cases.md`](month-1-research/12-uk-beginner-use-cases.md).
+
+---
+
+## Build projects — 16 builds + the Capstone
+
+Every lesson has a hands-on activity. **The 16 rows below have a code/tool build.** The other 6 lessons (L1, L2, L4, L5, L6, L9, L18) have applied artefacts or strategy work (wishlist, same-question test, prompt library, catch-the-hallucination, research project, stack commitment, bot blueprint).
 
 | # | Lesson | Build | Primary tool(s) | Time |
 |---|--------|-------|----------------|------|
@@ -603,6 +678,7 @@ Every lesson has a hands-on activity. **The 15 rows below have a code/tool build
 | 13 | L20 | **Processing Engine + Distribution** | Cowork / Artifacts / Lovable | 120 min |
 | 14 | L20 | Shopping-list / calendar integration | Zapier / Cowork plugin | 60 min |
 | 15 | L21 | **Portfolio page** | Lovable / Notion / Claude Artifacts | 90 min |
+| 16 | L22 | **CV + LinkedIn rebuild + showcase post + answer bank** | Claude / ChatGPT / Gamma / Loom | 90 min |
 
 **Capstone — Family AI Bot** (spans L18–L21; demoed at end of Week 4):
 
@@ -653,14 +729,15 @@ Every lesson has a hands-on activity. **The 15 rows below have a code/tool build
 | Primitive | Primary lessons | Supporting role | Total exposure |
 |-----------|-----------------|-----------------|----------------|
 | **Coding / Building** 🔨 | L10, L11, L12, L14, L16, L20 = **6** | L3, L9, L15, L17, L21 | 11 |
-| **Content Creation** | L7, L8 = **2** | L12, L19, L21 | 5 |
+| **Content Creation** | L7, L8 = **2** | L12, L19, L21, L22 | 6 |
 | **Research & Analysis** | L6, L19 = **2** | L4, L18 | 4 |
 | **Data Analysis** | L13 = **1** | L14, L20 | 3 |
 | **Automation** | L15, L17, L20 = **3** | L16, L21 | 5 |
 | **Ideation & Strategy** | L18 = **1** | L1, L2, L9, L21 | 5 |
 | **Foundations / Mindset** | L1, L2, L3, L4, L5, L9 = **6** | — | 6 |
+| **Career / Meta** (new) | L22 = **1** | L21 | 2 |
 
-*Coding/Building has 6 primary and 5 supporting lessons — more than any other primitive — matching the course's explicit priority. L9 (Building Toolkit) is primary Foundations and supporting in both Coding/Building and Ideation/Strategy.* Every capstone task combines at least two primitives; L20 combines all six, making the Family AI Bot the literal embodiment of the primitive framework.
+*Coding/Building has 6 primary and 5 supporting lessons — more than any other primitive — matching the course's explicit priority. L9 (Building Toolkit) is primary Foundations and supporting in both Coding/Building and Ideation/Strategy.* Every capstone task combines at least two primitives; L20 combines all six, making the Family AI Bot the literal embodiment of the primitive framework. **L22 is deliberately outside the six OpenAI primitives** — it's a career/meta lesson that teaches students how to *sell* the primitive fluency they just gained, which is the missing piece every other AI course skips.
 
 ---
 
@@ -706,7 +783,7 @@ These show up in every lesson:
 
 1. **AI is a colleague, not a search engine.** (Installed in L2, reinforced everywhere.)
 2. **Every brief needs Role, Context, Task, Format, Constraints.** (L4, referenced every lesson.)
-3. **Build more than you consume.** 15 of 21 lessons include a build. Students ship.
+3. **Build more than you consume.** 16 of 22 lessons include a build. Students ship.
 4. **British by default.** British English in every prompt-level system instruction. GBP pricing. UK tool alternatives where they exist. ICO/NCSC guidance woven in.
 5. **Verify by habit.** Rule 1 of AI safety. Re-stated every time citations appear.
 6. **Tool fluency, not loyalty.** Multi-assistant by design; tool log updated every lesson.
@@ -718,7 +795,7 @@ These show up in every lesson:
 
 ## Appendix D — Format & delivery notes for the GWTH team
 
-- **21 core lessons**, ~60 min each (30–45 min for foundations; 90 min for the bigger builds). Plus up to **5 Optional lessons** (see section below) that sit outside the core sequence. Drop optional Week 5 "advanced" material into Month 2.
+- **22 core lessons**, ~60 min each (30–45 min for foundations; 90 min for the bigger builds). Plus up to **5 Optional lessons** (see section below) that sit outside the core sequence. Drop optional Week 5 "advanced" material into Month 2.
 - **Each lesson file:** short video (≤10 min), live demo video (≤15 min), written article, hands-on exercise, downloadable prompt(s), tool log update, quiz (3–5 questions).
 - **Weekly live build clinics (60 min)** — students bring their week's builds, GWTH instructor reviews on-screen, common problems solved for everyone.
 - **Month-end capstone showcase** — students present their Family AI Bot in 3 minutes. Cohorts of ~6. Celebration of portfolios.
@@ -727,6 +804,7 @@ These show up in every lesson:
   - `gwth-m1-artifacts-starter` — Claude Artifacts templates for L9–L13.
   - `gwth-m1-family-bot-starter` — Cowork folder + Claude Project + Zapier template for the capstone.
   - `gwth-m1-portfolio-starter` — Lovable / Notion portfolio template.
+  - `gwth-m1-cv-linkedin-starter` — CV template (PDF + Claude Artifact), LinkedIn rewrite prompts, "What I Built in 4 Weeks" Gamma carousel template, and the 10-question interview answer bank prompts.
 
 ---
 
