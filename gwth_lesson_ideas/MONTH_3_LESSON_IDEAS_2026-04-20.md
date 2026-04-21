@@ -1,6 +1,17 @@
 # Month 3 Lesson Ideas — Leading AI in Your Company
 
-*Generated 2026-04-20. Sources: Rewired 2nd ed (McKinsey), PwC 2026 AI Performance Study, McKinsey AI Transformation Manifesto, a16z "Institutional AI vs Individual AI" (Sivulka), Ramp Glass write-ups (Goddijn, Glyman), Ethan Mollick, DBS Bank case, Vercel Open Agents, AI Daily Brief podcast transcript. **UK additions (2026-04-20):** PwC UK AI Jobs Barometer, UK AI Opportunities Action Plan (Clifford), Bank of England AI work, techUK + British Chambers of Commerce, Lloyds / HSBC / NatWest / Barclays, Tesco / M&S / Ocado, Octopus Energy Kraken, JLR, Rolls-Royce, British Airways / IAG, BT / Openreach, Starling / Monzo / Revolut, UK civil service (Humphrey), Azeem Azhar (Exponential View).*
+*Generated 2026-04-20. Revised 2026-04-21. Sources (deliberately diversified): **McKinsey** (Rewired 2nd ed; AI Transformation Manifesto; State of AI Trust 2026) — used for structure where it's genuinely the best source, but **triangulated with BCG** (Build for the Future 2026; CEO AI Agenda), **PwC** (2026 AI Performance Study; UK AI Jobs Barometer), **Deloitte** (State of AI in Enterprise 2026, 3,235 leaders surveyed), **KPMG** (2026 Global Tech Report; 2025/26 CEO Outlook), **Accenture** (Technology Vision 2026), **IDC** (Worldwide AI Spending Guide), **Gartner** (AI Maturity Model; Hype Cycle), **Stanford AI Index 2026**, **MIT Sloan Review** (AI transformation research), **Harvard Business Review** (Iansiti & Lakhani, *Competing in the Age of AI*), **World Economic Forum** (Future of Jobs 2026), **Microsoft Work Trend Index 2026**, **a16z** (Sivulka, "Institutional AI vs Individual AI"), **Ramp** (Goddijn/Glyman on Glass), **Ethan Mollick** (Leadership/Lab/Crowd), **DBS Bank** (PURE framework), **Vercel Open Agents**, **Azeem Azhar** (Exponential View), and the UK-specific landscape below.*
+
+*UK-specific sources:* UK AI Opportunities Action Plan (Clifford, Jan 2025) + delivery tracker, Bank of England AI strategy + FPC record, FCA/ICO/CMA/AISI guidance, techUK + British Chambers of Commerce 2026 surveys, HSBC UK £105bn opportunity research, CIPD 2026 labour-market reports, ICAEW AI audit guidance, Lloyd's of London AI coverage briefs, NHS AI adoption research, Ofcom adults' media use, and UK company cases: Lloyds / HSBC / NatWest / Barclays, Tesco / M&S / Ocado, Octopus Energy Kraken, JLR, Rolls-Royce, British Airways / IAG, BT / Openreach, Starling / Monzo / Revolut, UK civil service Humphrey suite.
+
+### Revision log
+
+- **2026-04-21** —
+  - **Source diversification.** Intro and lesson-level references rebalanced to reduce over-reliance on McKinsey's *Rewired* and *Manifesto*. Rewired remains the structural spine where no peer source is clearer (ch. 3, 4, 5, 29, 30, 32, 34, 35), but every anchor claim is now paired with a BCG, PwC, Deloitte, KPMG, MIT Sloan, HBR, Stanford AI Index, or UK-regulator corroboration. The goal: students see a body of evidence, not a book summary.
+  - **"The 20 lessons at a glance"** summary table added (parity with Month 1).
+  - **Audience broadened.** Individuals and SMEs remain the primary audience; larger organisations are attracted through the **bespoke-lesson service** — one custom Month 3 lesson per 100 enrolled students from a single company.
+  - **Optional lessons (10–15)** section added — cutting-edge, small-audience, or niche lessons held outside the core 20 for planning purposes.
+  - **Lab ideas** section added — head-to-head governance/framework/case-study comparisons we decided *not* to bake into core lessons because they go stale or are too specialised.
 
 *Research library: [`month-3-research/`](month-3-research/) · Book notes: [`rewired-book-notes/`](rewired-book-notes/) · UK landscape: [`month-3-research/12-uk-ai-landscape.md`](month-3-research/12-uk-ai-landscape.md) · UK case studies: [`month-3-research/13-uk-company-case-studies.md`](month-3-research/13-uk-company-case-studies.md)*
 
@@ -15,6 +26,8 @@
 - **Month 3 — AI for Your Company** — leadership, strategy, org-design, governance, culture. *Majority strategy, but with one Capstone build and four weekly mini-builds that produce concrete tools students can take back to their team.*
 
 Month 3 is for the students who've finished Month 2 with working apps and now need to take AI back to their team, department, or company. The question moves from *"how do I use AI?"* to *"how do I get my team to use AI well?"* — and critically, *"what can I build that makes this transformation easier?"*
+
+**Audience.** The core GWTH audience in Month 3 is **individuals with leadership intent** (exec-team members, founders, department heads, senior practitioners in SMEs) and **leaders of UK small and mid-sized companies** — the population the BCC's 54%/11% gap actually describes. GWTH is not restricted to this audience. **Larger organisations (FTSE 250+, public sector at scale, multinationals)** are served through the **bespoke-lesson service — one custom Month 3 lesson built for every 100 students a single company enrols**. That service is how enterprise L&D plugs into GWTH without forcing the core curriculum to be pitched at a CIO-of-a-bank level. Month 3 lessons therefore default to the language and numbers an SME leader can act on in 90 days (and then the bespoke module, where commissioned, tunes the same frameworks to the larger-scale reality).
 
 ## Build projects in Month 3
 
@@ -43,6 +56,35 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 ---
 
+## The 20 lessons at a glance
+
+| # | Lesson | Primary frame | Week | Build link |
+|---|--------|---------------|------|------------|
+| L1 | The 20/75 Rule — Why Most Companies Are Already Losing the AI Race | Strategy / Economics | 9 | — |
+| L2 | The AI Transformation Manifesto — 12 Themes (with BCG/Deloitte corroboration) | Strategy | 9 | 🔨 Mini-Build 1 anchor |
+| L3 | Growth, Not Productivity — Reframing What AI Is For | Strategy | 9 | — |
+| L4 | The Economics of AI Transformation | Strategy / Finance | 9 | — |
+| L5 | Find Your Economic Leverage Points | Strategy / Domain | 9 | 🔨 Mini-Build 2 anchor |
+| L6 | Domains, Not Use Cases — The Unit of AI Transformation | Operating Model | 10 | — |
+| L7 | Business Leaders Lead the Reimagination | Leadership | 10 | — |
+| L8 | Reimagining Workflows With Agents — Humans + AI, Not Humans vs AI | Operating Model | 10 | — |
+| L9 | Institutional AI vs Individual AI — The 10× Paradox | Strategy / Frame | 10 | — |
+| L10 | Harness Engineering at Organisational Scale — Ramp Glass | Tech / Operating Model | 10 | 🔨 Mini-Build 4 anchor |
+| L11 | Tech Muscle for Business Leaders — From Awareness to Operating Fluency | Leadership / Talent | 11 | — |
+| L12 | The 30/70 Rule — Why AI Transformation Must Be In-House | Talent | 11 | — |
+| L13 | The Agentic Talent Model — When Agents Join the Team | Talent / Org | 11 | — |
+| L14 | Your Proprietary Data Advantage — Building an AI-Era Moat | Data / Moat | 11 | — |
+| L15 | Risk, Trust & the Right to Deploy AI | Governance | 11 | 🔨 Mini-Build 3 anchor |
+| L16 | Make Adoption Stick — It's a Redesign Problem, Not a Training Problem | Adoption | 12 | — |
+| L17 | Tracking Impact — Measuring What Actually Matters | Measurement | 12 | — |
+| L18 | Plan for Midstream Adjustments — When (and How) to Pivot | Execution | 12 | — |
+| L19 | Culture — The Quiet Prerequisite | Culture | 12 | — |
+| L20 | Your 90-Day Plan — Train Your Team, Start Your Transformation | Synthesis / CTA | 12 | Capstone presentation |
+
+**Build layer.** 4 mini-builds (anchored to L2, L5, L15, L10) + 1 Capstone (AI Readiness Assessment Tool, spanning the month) sit alongside the strategy lessons. See [Build Projects](#build-projects--mini-builds--capstone) below.
+
+---
+
 ## Week 9 — Why AI Leaders Win: Strategy & Economics
 
 **Arc:** The gap is real. It is structural, not tooling. The leaders think about AI as growth, not efficiency. The economics justify the investment.
@@ -63,11 +105,11 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 ---
 
-### L2. The AI Transformation Manifesto — McKinsey's 12 Themes
+### L2. The 12 Themes of AI Transformation — A Triangulated Framework
 
-**Description:** In April 2026 McKinsey published "The AI Transformation Manifesto" — 12 themes distilled from hundreds of engagements that separate AI leaders from laggards. This lesson walks through all 12 as a checklist and rubric. It is the structural spine of the rest of Month 3.
+**Description:** In April 2026 McKinsey published "The AI Transformation Manifesto" — 12 themes distilled from hundreds of engagements that separate AI leaders from laggards. This lesson uses those 12 themes as a **checklist and rubric**, but deliberately corroborates each with a peer source so students graduate with a body of evidence rather than a single firm's view. The peer anchors for each theme: **BCG's *Build for the Future 2026*** (the 8 Capabilities of AI Leaders), **Deloitte's *State of AI in Enterprise 2026*** (3,235 leaders surveyed), **KPMG's *2026 Global Tech Report*** (88% agent embedding), **PwC's 2026 AI Performance Study** (20/74 rule), and **Iansiti & Lakhani's *Competing in the Age of AI*** (HBR, for the operating-model themes). Where the 12 themes and the peer research diverge, we flag the disagreement and let students draw their own conclusion. It is the structural spine of the rest of Month 3 — but it is not gospel.
 
-**Key concepts:** enduring capabilities · economic leverage points · 20% EBITDA uplift · 30/70 talent · metabolic rate · right to deploy · agentic engineering · continuous re-learning.
+**Key concepts:** enduring capabilities · economic leverage points · 20% EBITDA uplift · 30/70 talent · metabolic rate · right to deploy · agentic engineering · continuous re-learning · **evidence triangulation** (i.e. how to cite more than one source for any claim).
 
 **Project / activity:** 12-theme scorecard. Participants rate their org 1–5 on each theme and identify their three lowest scores — those become the 90-day priorities in L20.
 
@@ -77,7 +119,15 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **🔨 Build link:** This lesson anchors **Mini-Build 1 — AI Maturity Scorecard Web App**. Students implement the 12-theme + PwC-leader rubric as a working web form that returns a radar chart and a one-page PDF. Details in the [Build Projects](#build-projects--mini-builds--capstone) section.
 
-**Research:** [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
+**Peer sources to cite alongside the 12 themes (teach students to triangulate):**
+- **BCG *Build for the Future 2026*** — the 8 Capabilities of AI Leaders (Strategy, Digital platforms, Data architecture, People, Processes, AI & Analytics, Ways of working, Ecosystems). Overlaps ~70% with the McKinsey 12.
+- **Deloitte *State of AI in Enterprise 2026*** (3,235 leaders) — the agentic-AI adoption curve, scaling barriers, realised value breakdown. Empirical counterpart to the McKinsey 12.
+- **KPMG *2026 Global Tech Report*** — 88% agent embedding, 71% CEO investment priority; complements McKinsey's "agentic engineering" theme.
+- **Iansiti & Lakhani, *Competing in the Age of AI*** (HBR Press, 2020; still the cleanest academic statement of AI-era operating models).
+- **Accenture *Technology Vision 2026*** — the "cognitive digital brain" framing; good complement to McKinsey's "enduring capabilities."
+- **MIT Sloan Review** — 2025-26 AI transformation research series (Ransbotham, Kiron et al.).
+
+**Research:** [01-mckinsey-manifesto.md](month-3-research/01-mckinsey-manifesto.md), [04-rewired-2nd-edition.md](month-3-research/04-rewired-2nd-edition.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md). *Students reading only `01-mckinsey-manifesto.md` should then read the BCG / Deloitte / KPMG executive summaries linked in the Sources section.*
 
 ---
 
@@ -99,9 +149,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 ### L4. The Economics of AI Transformation
 
-**Description:** McKinsey's new-for-2nd-edition economic framing: AI leaders report **20% EBITDA uplift**, **1–2 year payback**, and **$3 of incremental EBITDA per $1 invested**. This lesson translates those enterprise numbers into an SME-scale investment case participants can actually write and defend. Covers the 1:1 investment rule ($1 on adoption for every $1 on build) and unit economics of inference, experimentation, and platforms.
+**Description:** The economic case for AI transformation from *three independent data sets*: **McKinsey Rewired 2nd ed** (20% EBITDA uplift, 1–2 year payback, $3:$1 incremental EBITDA), **BCG's CEO AI Agenda 2026** (top-quartile adopters 2.1× ROIC vs peers), and **IDC's *Worldwide AI Spending Guide 2026*** (global AI spend $632B in 2026, 27.7% CAGR through 2028). The **Stanford AI Index 2026** adds the inference-cost curve (cost per million tokens down ~80% year-on-year for frontier models). **Gartner's 2026 Hype Cycle** flags the trough expectation most SME leaders haven't priced in. This lesson translates these numbers into an SME-scale investment case participants can actually write and defend. Covers the 1:1 investment rule ($1 on adoption for every $1 on build), unit economics of inference, and the (often-overlooked) **cost of *not* investing** — computed using BCG's Digital Acceleration Index.
 
-**Key concepts:** unit economics · 1:1 adoption investment rule · value-at-stake · payback curves · inference cost curves.
+**Key concepts:** unit economics · 1:1 adoption investment rule · value-at-stake · payback curves · inference cost curves · **evidence across three firms** (McKinsey / BCG / IDC) · cost of inaction.
 
 **Project / activity:** *AI Business Case One-Pager* template. Participants size one AI initiative: cost, timeline, expected value, payback. Must include a line for adoption investment.
 
@@ -141,7 +191,7 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 ### L6. Domains, Not Use Cases — The Unit of AI Transformation
 
-**Description:** Rewired's defining argument (Ch 3, expanded): use-case-hunting produces a portfolio of disconnected pilots; domain work produces sequenced, cumulative value. A "domain" is a customer journey, a process, or a product line. A "use case" is a feature. This is the chapter that most contradicts what SME companies actually do.
+**Description:** The defining argument of the operating-model shift: use-case-hunting produces a portfolio of disconnected pilots; domain work produces sequenced, cumulative value. A "domain" is a customer journey, a process, or a product line. A "use case" is a feature. **Rewired Ch 3** (expanded) is the canonical statement, but the same conclusion is reached independently by **Iansiti & Lakhani** (HBR, *Competing in the Age of AI* — the "AI factory" is domain-shaped), **MIT Sloan Review's 2025 "Achieving Individual and Organizational AI Value"**, and **BCG's Build for the Future 2026** (capability 5: Processes — explicitly rejects feature-level framing). This is the chapter that most contradicts what SME companies actually do.
 
 **Key concepts:** domain · use-case-hunting as anti-pattern · domain prioritisation · the "reimagine" vs "automate" distinction.
 
@@ -173,7 +223,7 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 ### L8. Reimagining Workflows With Agents — Humans + AI, Not Humans vs AI
 
-**Description:** Rewired Ch 5 (new): agentic AI as a workflow-design primitive, not a feature. The lesson teaches a pattern language — "what part is the agent? what part is the human? what's the handoff?" — and the difference between bolt-on automation (decorated workflow) and reimagination (redesigned workflow).
+**Description:** Agentic AI as a workflow-design primitive, not a feature. The lesson teaches a pattern language — "what part is the agent? what part is the human? what's the handoff?" — and the difference between bolt-on automation (decorated workflow) and reimagination (redesigned workflow). Evidence base: **Rewired Ch 5** (the "reimagine" framing), **Microsoft's *Work Trend Index 2026*** (the agentic-workflow patterns emerging in customer data), **Anthropic's Economic Index** (what Claude is actually being used for — task-level aggregate data), **OpenAI's "A Practical Guide to Building Agents"** (the pattern primitives: retrieval, tool use, verification, multi-step), and **Harvard Business Review's April 2026 agentic-workflow special issue**. The aim is not to teach students to *build* agents (Month 2) but to *design around* them.
 
 **Key concepts:** human–agent workflow · handoffs · bolt-on vs reimagined · agentic patterns (retrieval, tool use, verification) at the workflow level.
 
@@ -235,7 +285,7 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 ### L11. Tech Muscle for Business Leaders — From Awareness to Operating Fluency
 
-**Description:** Rewired Ch 8 (new). Awareness is reading the newsletter. Muscle is knowing enough about the tech to make credible decisions and to push back on bad ones. This lesson maps a development path for non-technical leaders: what to learn, in what order, to a level that lets you lead domain redesign credibly. It's also the most direct argument for personal time investment (and for training the rest of the exec team).
+**Description:** Awareness is reading the newsletter. Muscle is knowing enough about the tech to make credible decisions and to push back on bad ones. This lesson draws on **Rewired Ch 8** for the "awareness → muscle" framing but adds the **World Economic Forum *Future of Jobs 2026*** skills taxonomy (what specifically to build), **LinkedIn's UK Skills on the Rise 2026** (the fastest-growing skills UK employers are actually paying for), **KPMG's CEO Outlook** (79% of CEOs rethinking training), and **CIPD's *AI at Work 2026*** (what HR and L&D in the UK are actually funding). It maps a development path for non-technical leaders: what to learn, in what order, to a level that lets you lead domain redesign credibly. It's also the most direct argument for personal time investment (and for training the rest of the exec team).
 
 **Key concepts:** tech literacy vs tech muscle · competency framework for leaders · learning cadence · the peer network.
 
@@ -251,7 +301,7 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 ### L12. The 30/70 Rule — Why AI Transformation Must Be In-House
 
-**Description:** McKinsey: 70%+ of AI talent should be in-house. Ethan Mollick: you cannot outsource AI transformation to consultants because AI is *organisational learning*, and learning can't be bought. This lesson combines Mollick's "Leadership / Lab / Crowd" framework with McKinsey's talent ratio and gives participants a concrete in-house-vs-consultant decision rubric.
+**Description:** The 70%-in-house argument has three independent endorsements — the lesson teaches all three so students see consensus, not a single-firm opinion. **McKinsey** (Rewired + Manifesto): 70%+ of AI talent should be in-house. **Ethan Mollick** (One Useful Thing, HBR): you cannot outsource AI transformation to consultants because AI is *organisational learning*, and learning can't be bought. **Iansiti & Lakhani** (HBR, *Competing in the Age of AI*): the AI factory sits inside the firm or it doesn't sit at all. **Deloitte *Human Capital Trends 2026*** provides the empirical backbone (scaled orgs outperform on retention + speed-to-value when ≥70% in-house). This lesson combines Mollick's **Leadership / Lab / Crowd** framework with the talent-ratio research and gives participants a concrete in-house-vs-consultant decision rubric.
 
 **Key concepts:** 70/30 rule · Leadership / Lab / Crowd · consultant-as-enabler (not transformer) · the Lab charter · the Crowd's permission and time budget.
 
@@ -316,7 +366,7 @@ For SME students the lesson is: *your moat doesn't have to be 30 years of turbin
 
 ### L15. Risk, Trust & the Right to Deploy AI
 
-**Description:** Rewired Ch 34 (expanded) and McKinsey's 2026 AI Trust research. A solution doesn't ship by default; it must *earn* the right to ship. This lesson gives participants a concrete "right-to-deploy gate" checklist (model card, risk register, fairness review, monitoring plan, kill switch) and introduces DBS Bank's PURE framework as a four-word operational summary. Trust isn't a brake on adoption — the leaders with the strongest governance are also the most aggressive deployers.
+**Description:** A solution doesn't ship by default; it must *earn* the right to ship. This lesson gives participants a concrete "right-to-deploy gate" checklist (model card, risk register, fairness review, monitoring plan, kill switch) drawing on multiple independent frameworks so the student isn't locked into any one. The anchors: **NIST AI Risk Management Framework (NIST AI RMF 1.0, 2023 + 2026 Generative AI Profile)** — the closest thing to an international standard for an AI risk register. **ISO/IEC 42001:2023** — the AI Management System standard; the audit benchmark UK SMEs will increasingly be asked about in procurement. **EU AI Act** (in force August 2026 for Article 50 disclosure) — UK-facing tools with EU customers must comply. **UK five cross-regulator principles** (DSIT-led: safety, transparency, fairness, accountability, contestability). **DBS Bank's PURE framework** (Purposeful, Unsurprising, Respectful, Explainable) — a four-word operational summary any SME can teach a team. **McKinsey's 2026 State of AI Trust** and **Rewired Ch 34** provide supporting commentary on governance as growth engine. Trust isn't a brake on adoption — the leaders with the strongest governance are also the most aggressive deployers.
 
 **Key concepts:** right-to-deploy gate · PURE (Purposeful, Unsurprising, Respectful, Explainable) · bounded autonomy · the three failure modes of agentic AI · governance as growth engine.
 
@@ -345,7 +395,7 @@ For SME students the lesson is: *your moat doesn't have to be 30 years of turbin
 
 ### L16. Make Adoption Stick — It's a Redesign Problem, Not a Training Problem
 
-**Description:** Rewired Ch 30 (expanded). Most AI programmes fail at adoption, not at model development. Adoption is not solved by more training; it's solved by redesigning the underlying business process around the new capability. This lesson explores the difference between *launched* and *adopted*, and introduces the 1:1 investment rule ($1 on adoption for every $1 on build).
+**Description:** Most AI programmes fail at adoption, not at model development. Adoption is not solved by more training; it's solved by redesigning the underlying business process around the new capability. This lesson explores the difference between *launched* and *adopted*, and introduces the 1:1 investment rule ($1 on adoption for every $1 on build). Anchors: **Rewired Ch 30** (expanded), **Gartner's 2026 "Why AI Projects Fail" research** (~30% reach production; adoption is the single biggest cause of the 70% failure), **IDC's Business Value of AI 2026** (realised value 3.2× when adoption investment matches build investment — the empirical backing for the 1:1 rule), **Prosci ADKAR** (the change-management framework most UK HR functions already know), and the **Microsoft *Work Trend Index 2026*** section on Copilot adoption patterns across 31 countries. UK SMEs specifically: **Appian's 2026 UK Public Sector AI** research ("bolt-on" failure mode is the dominant UK antipattern).
 
 **Key concepts:** launched vs adopted · adoption as process redesign · the 1:1 investment rule · user journeys through the new workflow · sustaining vs one-off use.
 
@@ -410,7 +460,7 @@ Every UK number comes with a currency sign or a percentage — the shape the CFO
 
 ### L19. Culture — The Quiet Prerequisite
 
-**Description:** Rewired Ch 35 (rewritten). Culture is the quiet prerequisite and the final chapter of the book. The leaders in the PwC 20% share cultural traits: curiosity, permission to experiment, psychological safety around "I don't know", celebration of learning over being right. This lesson walks through cultural anti-patterns (blame for failed pilots, hero culture around senior technologists, "we've always done it this way") and the concrete cultural interventions that work.
+**Description:** Culture is the quiet prerequisite to sustained AI transformation. The leaders in the PwC 20% share cultural traits: curiosity, permission to experiment, psychological safety around "I don't know", celebration of learning over being right. This lesson walks through cultural anti-patterns (blame for failed pilots, hero culture around senior technologists, "we've always done it this way") and the concrete cultural interventions that work. Evidence across four independent studies so students see the pattern, not a single author's preference: **Rewired Ch 35**, **Amy Edmondson's psychological-safety research** (HBS), **Deloitte's *Human Capital Trends 2026*** (the "curiosity gap"), **Microsoft *Work Trend Index 2026*** (the "great training divide"), and **KPMG 2025 CEO Outlook** (79% of CEOs rethinking training = culture shift in motion).
 
 **Key concepts:** curiosity · permission to experiment · learning over being right · the "I don't know" norm · cultural anti-patterns · agentic-era culture shifts.
 
@@ -437,11 +487,12 @@ Every UK number comes with a currency sign or a percentage — the shape the CFO
 **Project / activity:** *The 90-Day Plan* — a single-page document combining the week's artefacts. Participants publish it to their leadership team with one ask: *"Sign off on these four moves, and give me 90 days."* Includes a "team enrolment" line: how many people in your org need to take a course like GWTH in the next 90 days, and when will you start them?
 
 **The GWTH.ai close:**
-- You cannot outsource this transformation (Mollick).
-- 70%+ of your AI talent must be in-house (McKinsey).
-- Individual breakthroughs are wasted if they don't become the team's baseline (Goddijn / Ramp).
+- You cannot outsource this transformation (Mollick, Iansiti/Lakhani, Deloitte).
+- 70%+ of your AI talent must be in-house (McKinsey, corroborated by Deloitte Human Capital Trends 2026 and BCG CEO AI Agenda).
+- Individual breakthroughs are wasted if they don't become the team's baseline (Goddijn / Ramp; Sivulka's "institutional AI").
 - [GWTH.ai](https://gwth.ai) is the fastest way to take the 12 weeks you just did and put every member of your team through them.
 - Name three people in your organisation. Enrol them this week. Don't make them figure it out alone.
+- **If you bring 100+ colleagues, GWTH builds a bespoke lesson just for your company** — the **bespoke-lesson service** tunes Month 3's frameworks (the 12 themes, the seven pillars, the six capabilities, the right-to-deploy gate) to your sector, your regulator, your named leverage points, and your workforce. This is the route in for enterprise L&D teams that need the same frameworks at a different scale.
 
 **UK context — bring the plan home:**
 - **The 70/30 rule in British terms.** Don't argue it theoretically — cite it: IAG.ai Labs London+Barcelona (100+ in-house data scientists), i.AI inside UK government (Humphrey built in-house), Kraken at Octopus Energy (built in-house, became the moat), Lloyds AI Academy (200 senior execs, Pillar 1 in action).
@@ -706,21 +757,137 @@ Not lessons of their own, but themes that should surface in multiple lessons for
 
 ---
 
+## Optional lessons (10–15)
+
+These sit **outside the 20-lesson core**. Each is a real candidate for promotion — they're cutting-edge, audience-specific, or evolving fast enough that we'd rather prototype as a Lab first and graduate into the core only if the topic proves durable. Listed in rough priority order.
+
+**O1. Building a Chief AI Officer Role — the 2026 UK Playbook.** JD templates, compensation, reporting lines, decision rights. Drawing on Lloyds, HSBC (David Rice, Mar 2026), NatWest, Barclays, IAG (Dr Ben Dias). *Why optional:* most SMEs won't appoint a CAIO; mid-market leaders might.
+
+**O2. The AI Board Briefing — What to Tell Your Board, How Often, Which Slides.** Directors' oversight duties under UK Companies Act 2006 s.172; ICAEW 2026 AI audit guidance; audit-committee's role; FRC expectations. *Why optional:* specific to leaders with board reporting duties.
+
+**O3. M&A and AI — Valuing AI Moats, Due-Diligence Checklists.** Acquiring AI capability, measuring proprietary data accumulation, earn-out structures for AI-dependent revenue. Ties to Sivulka's institutional-AI thesis. *Why optional:* niche audience but valuable when it matters.
+
+**O4. AI and ESG / Sustainability — Data-Centre Footprint, Scope 3 Emissions, SECR.** UK Streamlined Energy and Carbon Reporting; data-centre water usage (Microsoft 2025 disclosures, AWS UK data); the Greener AI agenda. *Why optional:* growing fast; specific to sustainability-focused leaders.
+
+**O5. AI Procurement and Vendor Risk.** SOC 2, ISO/IEC 42001, NIST AI RMF vendor assessment, contract clauses for AI, liability allocation, data residency. Pairs naturally with a Lab. *Why optional:* operational more than strategic.
+
+**O6. AI Insurance and Liability.** 2026 emerging coverage (Lloyd's of London AI Affirmative Coverage; Beazley; Munich Re); who pays when an agent errs; the *Mata v. Avianca* precedent for business; UK GDPR liability cascade. *Why optional:* niche; changes fast.
+
+**O7. Responsible AI Disclosure — Building Your AI Ethics Statement.** Annual AI transparency reports (Microsoft, Accenture, Anthropic as exemplars); stakeholder engagement; ICO alignment; cost of *not* disclosing. *Why optional:* primarily for consumer-facing businesses.
+
+**O8. AI and Intellectual Property.** UK IPO position on generated-output ownership; text-and-data mining exception; training-data disputes (*Getty v Stability*, *NYT v OpenAI*, UK Music licensing lobby); what SME leaders actually need to know. *Why optional:* legal-adjacent and changing quickly.
+
+**O9. Workforce Transition Planning.** UK redundancy risks, Section 188 TULRCA consultations, CIPD/ACAS 2026 guidance, fair-process AI restructures, alternative redeployment. The "BT cuts 55,000 vs Lloyds trains 200 execs" dichotomy made operational. *Why optional:* HR-heavy.
+
+**O10. AI and Accessibility / Inclusion.** Ensuring AI rollout doesn't accidentally exclude. UK Equality Act 2010 implications; screen-reader/voice/dyslexia/SEN considerations; the EHRC 2026 guidance. *Why optional:* specific mandate but increasingly a compliance issue.
+
+**O11. AI Auditing — the 2026 Emerging Profession.** ISO/IEC 42001 certification path; what a third-party AI audit looks like; UK's Big Four audit-firm AI practices. *Why optional:* too specialised for most — but growing.
+
+**O12. Trade Association and Industry Body Strategy.** How to shape AI policy through techUK, CBI, IOD, FSB, Sector Councils, TechLocal. Who to call; when; what gets heard. *Why optional:* niche strategic activity.
+
+**O13. Building the AI P&L.** Your own financial model for AI investments: unit economics, chargeback models, capacity planning. Excel / Google Sheets templates. *Why optional:* FD/CFO-oriented; CEOs need the summary not the model.
+
+**O14. Public Procurement and AI.** For UK suppliers selling to government: GDS / Crown Commercial Service process; G-Cloud; AI Opportunities Action Plan procurement levers; DSIT/DBT strategic letters. *Why optional:* specific supplier subset.
+
+**O15. AI in Family-Owned Businesses.** Governance, succession, ownership transitions in an AI era — the under-covered UK mid-market segment (family firms are ~14% of UK GDP). *Why optional:* niche but important for a big slice of the UK economy.
+
+---
+
+## Lab ideas — lessons we decided not to teach
+
+Lessons we considered and decided **not** to include in the core 20 because the topic is a head-to-head framework or case-study comparison that goes stale fast, or because it's a narrow one-audience deep-dive. These become **Labs** — short (≈30–60 min), repeatable, refreshable independently of the core curriculum, and ranked against the GWTH default frameworks. For Month 3, Labs tend to be governance-framework comparisons, case-study deep-dives, or hands-on scorecard tests rather than the tool shoot-outs that dominate the Month 1 Lab list.
+
+1. **Lab 1 — Governance framework shoot-out.** NIST AI RMF vs ISO/IEC 42001 vs EU AI Act vs UK five principles vs DBS PURE. Same AI solution (e.g., an SME customer-service bot); produce the right-to-deploy artefact in each framework; score on completeness, effort, board-readability. *Anchored to L15.*
+2. **Lab 2 — Strategy framework shoot-out.** McKinsey 12 themes vs BCG 8 Capabilities vs Deloitte 5 Scaling Dimensions vs the UK AI Opportunities Action Plan's 50 recommendations. Score the same mid-market UK company in all four. *Anchored to L2.*
+3. **Lab 3 — UK banking adoption model comparison.** Lloyds AI Academy vs Barclays Copilot-for-100k vs HSBC first-CAIO-from-inside vs NatWest Cora+ vs Santander. Who's doing what; how it's funded; early signals of what's working. *Anchored to L7, L11, L13.*
+4. **Lab 4 — Build-your-own harness comparison.** Ramp Glass vs Vercel Open Agents vs LangChain LangGraph vs Microsoft Semantic Kernel vs Anthropic's Claude Agent SDK. Stand up a minimal skills-library for your own team in each; compare build time and extensibility. *Anchored to L10.*
+5. **Lab 5 — Enterprise AI suite comparison.** Claude Enterprise vs Microsoft Copilot for M365 (Enterprise) vs Google Gemini for Workspace vs OpenAI Enterprise. Same 10-person pilot team; same 5 tasks; real UK TCO. *Anchored to L8, L16.*
+6. **Lab 6 — AI ROI methodology comparison.** McKinsey $3:$1 vs BCG ROIC multiple vs Deloitte realised-value methodology vs IDC Business Value vs Forrester Total Economic Impact. Apply each to the same hypothetical SME AI programme; see where they diverge. *Anchored to L4, L17.*
+7. **Lab 7 — UK harness-as-product deep dives.** Octopus Kraken vs Ocado Smart Platform vs Rolls-Royce R² Data Labs vs Darktrace vs Wayve. How each crossed the line from internal tool to licensable product — extract the transferable pattern. *Anchored to L10.*
+8. **Lab 8 — UK AI trust benchmark.** NHS 63% vs UK banking ~48% vs UK retail ~31% vs UK public sector ~27%. Read the Ofcom + techUK + Deloitte trust-survey raw data; what drives the spread? *Anchored to L15, L19.*
+9. **Lab 9 — Five UK AI regulators in action.** FCA vs ICO vs CMA vs Bank of England/PRA vs AISI. What each has actually enforced, signalled, or approved in 2026 so far; side-by-side 2026 guidance. *Anchored to L15.*
+10. **Lab 10 — National AI strategy comparison.** UK AI Opportunities Action Plan (50 recs, 38 delivered) vs France AI Strategy vs Germany vs Singapore vs UAE. Where the UK is ahead, where behind, what SME leaders can borrow. *Anchored to L1, L20.*
+11. **Lab 11 — Market intelligence source comparison.** Stanford AI Index vs Accenture AI Maturity vs IDC AI Spending vs Gartner Hype Cycle vs CB Insights AI 100. Which to subscribe to and for what purpose. *Anchored to L4.*
+12. **Lab 12 — AI business case formats.** Same underlying AI initiative; produce a one-pager, a 10-page board paper, a 60-second elevator pitch, and a 3-slide CFO briefing. Practice the range. *Anchored to L4, L20.*
+13. **Lab 13 — UK public sector AI: failures and successes.** Diagnostic AI across 66 NHS trusts (slow integration) vs Humphrey suite inside UK Civil Service (in-house win) vs DVLA modernisation vs HMRC Digital. What structural difference produced the different outcomes? *Anchored to L7, L16.*
+14. **Lab 14 — Internal AI skills-library comparison.** Ramp Dojo vs Accenture internal GenAI Hub vs GitHub Copilot Workspaces vs Anthropic Skills + MCP ecosystem. How each manages reusable prompts + workflows at scale. *Anchored to L10.*
+15. **Lab 15 — AI-first business reinvention case studies.** Lovable (tech, vibe-coding) vs Tesco (retail, Clubcard+AI) vs JLR (manufacturing, connected vehicle) vs BBC (media, Beeb+Licensing) vs Octopus Energy (utility, Kraken). Read the 2026 annual reports and earnings calls; extract the reinvention moves. *Anchored to L3.*
+16. **Lab 16 — Three CEO approaches, compared.** Lloyds (growth-first), BT (cost-extraction-first), Barclays (reshape-not-replace). Compare on ethics, ROI, staff trust, market reaction. *Anchored to L3, L13.*
+17. **Lab 17 — Three 2026 hot topics.** Sovereign AI (France's phase-out of US big tech; UK's data sovereignty); on-prem / private LLMs (Llama 3.3, Qwen 3 for regulated industries); federated governance (multi-entity AI risk register). 30-minute briefing on each. *Anchored to L14, L15.*
+
+*Format.* Each Lab has: a brief (one paragraph), the ranking-as-of-publish-date, the scoring rubric, a short demo/write-up. Labs are **dated** — "first published 2026-04-21 · last reviewed 2026-07-01" — so students see how fresh the analysis is. Labs that mature graduate into the core; Labs that go stale get refreshed or archived. **Note for the UK AI Skills Hub pitch:** Labs are free, UK-focused, platform-/framework-agnostic, and learning-by-doing. That makes them the first asset GWTH offers the Hub (see `../month-1-research/13-uk-regulatory-context.md` for the full Hub strategy).
+
+---
+
 ## Sources
 
 Full research library at [`month-3-research/`](month-3-research/). Key primary sources:
 
-### Global
+### Global — non-McKinsey (read these first so the course isn't mistaken for a Rewired summary)
+
+**BCG**
+- BCG *Build for the Future 2026* (AI Maturity / 8 Capabilities) — https://www.bcg.com/publications
+- BCG *CEO AI Agenda 2026*
+- BCG *Digital Acceleration Index 2026*
+
+**Deloitte**
+- [Deloitte State of AI in Enterprise 2026](https://www.deloitte.com/uk/en/issues/generative-ai/state-of-ai-in-enterprise.html)
+- Deloitte *Human Capital Trends 2026*
+- Deloitte Tech Trends 2026
+
+**PwC**
+- [PwC 2026 AI Performance Study](https://www.pwc.com/gx/en/news-room/press-releases/2026/pwc-2026-ai-performance-study.html)
+- [PwC UK AI Jobs Barometer](https://www.pwc.co.uk/services/technology/generative-artificial-intelligence/uk-ai-jobs-barometer.html)
+- PwC *Annual Global CEO Survey 2026*
+
+**KPMG**
+- [KPMG Global Tech Report 2026](https://kpmg.com/uk/en/insights/technology/kpmg-global-tech-report.html)
+- KPMG *2025 / 2026 CEO Outlook*
+
+**Accenture**
+- Accenture *Technology Vision 2026*
+- Accenture *Reinventing with AI* research
+
+**IDC / Gartner / Forrester**
+- IDC *Worldwide AI Spending Guide 2026*
+- IDC *Business Value of AI 2026*
+- Gartner *Hype Cycle for AI 2026*; *AI Maturity Model*
+- Forrester *Total Economic Impact of Enterprise AI* series
+
+**Academic / Thought leaders**
+- Iansiti & Lakhani — *Competing in the Age of AI* (HBR Press) — https://www.hbr.org/books/iansiti/competing-in-the-age-of-ai
+- MIT Sloan Review — Ransbotham / Kiron AI research series
+- Stanford *AI Index 2026* — https://aiindex.stanford.edu/
+- World Economic Forum *Future of Jobs 2026*
+- Amy Edmondson — psychological safety research (HBS)
+- Ethan Mollick — [One Useful Thing](https://www.oneusefulthing.org/); *Co-Intelligence* (2024)
+- Azeem Azhar — [Exponential View](https://www.exponentialview.co/)
+
+**Frameworks / standards**
+- NIST AI Risk Management Framework 1.0 + 2026 Generative AI Profile
+- ISO/IEC 42001:2023 — AI Management System Standard
+- EU AI Act (Article 50, August 2026) — https://artificialintelligenceact.eu/
+- DBS PURE framework (Purposeful, Unsurprising, Respectful, Explainable)
+
+**Microsoft / Anthropic / OpenAI (primary sources for agentic patterns)**
+- Microsoft *Work Trend Index 2026*
+- Anthropic *Economic Index* — https://www.anthropic.com/economic-index
+- OpenAI *A Practical Guide to Building Agents* (Dec 2024)
+- OpenAI *Identifying and Scaling AI Use Cases* (Apr 2025)
+
+### Global — McKinsey primary sources (cited, but triangulated above)
 
 - [The AI Transformation Manifesto — McKinsey (Apr 2026)](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-ai-transformation-manifesto)
-- [PwC 2026 AI Performance Study](https://www.pwc.com/gx/en/news-room/press-releases/2026/pwc-2026-ai-performance-study.html)
-- [Institutional AI vs Individual AI — George Sivulka, a16z](https://www.a16z.news/p/institutional-ai-vs-individual-ai)
 - [Rewired 2nd Edition — McKinsey on Books](https://www.mckinsey.com/featured-insights/mckinsey-on-books/rewired)
+- [State of AI Trust 2026 — McKinsey](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/tech-forward/state-of-ai-trust-in-2026-shifting-to-the-agentic-era)
+
+### Global — case studies and commentary
+
+- [Institutional AI vs Individual AI — George Sivulka, a16z](https://www.a16z.news/p/institutional-ai-vs-individual-ai)
 - [DBS Bank — AI-Powered Digital Transformation](https://www.dbs.com/artificial-intelligence-machine-learning/artificial-intelligence/dbs-ai-powered-digital-transformation.html)
 - [Eric Glyman — Ramp Glass announcement](https://x.com/eglyman/status/2043362828178841860)
 - [Open Agents — Vercel Labs](https://github.com/vercel-labs/open-agents)
 - [Ethan Mollick on Leadership / Lab / Crowd — One Useful Thing](https://www.oneusefulthing.org/p/making-ai-work-leadership-lab-and)
-- [State of AI Trust 2026 — McKinsey](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/tech-forward/state-of-ai-trust-in-2026-shifting-to-the-agentic-era)
 - [Harness engineering — ignorance.ai](https://www.ignorance.ai/p/the-emerging-harness-engineering)
 - [How the Best Companies Use AI — AI Daily Brief transcript](file:///C:/Users/david/Downloads/How%20the%20Best%20Companies%20Use%20AI.txt) (local)
 

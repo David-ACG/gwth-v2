@@ -1,6 +1,8 @@
 # Month 3 Research — Leading with AI in Companies
 
-*Assembled 2026-04-20. Source material for Month 3 of the GWTH course, which shifts from "building apps with AI" (Months 1–2) to "leading AI transformation in your organisation".*
+*Assembled 2026-04-20, updated 2026-04-21. Source material for Month 3 of the GWTH course, which shifts from "building apps with AI" (Months 1–2) to "leading AI transformation in your organisation".*
+
+**2026-04-21 note.** The core research folder leans heavily on McKinsey's *Rewired* 2nd ed + *AI Transformation Manifesto* because those are the clearest structural sources. The **lesson ideas doc** (`../MONTH_3_LESSON_IDEAS_2026-04-20.md`) now deliberately triangulates every McKinsey claim with BCG, Deloitte, PwC, KPMG, Accenture, IDC, Gartner, Stanford AI Index, MIT Sloan Review, HBR (Iansiti & Lakhani), World Economic Forum, Microsoft *Work Trend Index*, Anthropic *Economic Index*, OpenAI primary docs, NIST AI RMF, ISO/IEC 42001, EU AI Act, and UK-specific research (FCA / ICO / AISI / BoE / techUK / CBI / CIPD). Students should never graduate thinking Month 3 is a summary of one firm's book. See the Sources section of the lesson ideas doc for the full diversified list.
 
 ## Purpose
 
