@@ -1,6 +1,15 @@
 # Month 1 Lesson Ideas — AI for Your Life
 
-*Generated 2026-04-20. Supersedes `gwth-month1-redesign-v2-feb2026.md` (Feb 2026) and the `syllabus.json` Month 1 draft (Feb 2026).*
+*Generated 2026-04-20. Revised 2026-04-21. Supersedes `gwth-month1-redesign-v2-feb2026.md` (Feb 2026) and the `syllabus.json` Month 1 draft (Feb 2026).*
+
+### Revision log
+
+- **2026-04-21** —
+  - **Prescriptive tooling framing added.** New **L9: Your Building Toolkit — the GWTH Stack & Why We're Prescriptive** introduces the coding/building tools used across L10–L21 and explains the "big three + one challenger" assessment rule. Previous L9–L20 renumbered to L10–L21. Lesson count is now 21 (was 20); build count stays 15 (new L9 is a foundations/strategy lesson, not a build).
+  - **Audience broadened.** Primary audience is **individuals and SMEs**, but GWTH is not restricted to them — larger companies are served via the **bespoke-lesson service** (one custom lesson per 100 students a single company enrols).
+  - **Optional lessons** (up to 5) added as a planning placeholder for cutting-edge, small-audience, or not-yet-mainstream material that might graduate into the core later.
+  - **Lab ideas list** added — lessons we decided *not* to teach because the topic is a head-to-head tool comparison that goes stale quickly. Labs are a natural home for cutting-edge tool shoot-outs.
+  - **AI Skills Hub** references in L5 and the UK authority map updated to reflect the well-documented criticism the Hub received after launch (see `13-uk-regulatory-context.md` for the full record).
 
 *Sources (global): OpenAI "Identifying and Scaling AI Use Cases" (6 primitives, April 2025) · OpenAI "A Practical Guide to Building Agents" (Dec 2024) · Ethan Mollick "Co-Intelligence" + One Useful Thing substack · Andrej Karpathy on "English is the new programming language" / LLM OS · The AI Daily Brief (NLW) · Anthropic prompting + Claude Code docs · Lovable / Bolt / v0 / Replit docs · ElevenLabs, Ideogram, Midjourney docs · Zapier AI Agents / Make AI · Dummies Guide to Generative AI & LLMs.*
 
@@ -10,11 +19,13 @@
 
 **Why UK additions?** Month 1 is where students form their relationship with AI. Every concept, tool and case study has a UK-native anchor so students can look at what a British person, brand or regulator actually did — then compare to the global benchmark. Global examples are never removed; they are the context. UK examples are the applied reality.
 
+**Audience.** The core GWTH audience is **individuals and SMEs** — the 54% of UK firms using AI but the 11% using it deeply (BCC, March 2026), and the millions of UK adults (54%, Ofcom April 2026) who've opened ChatGPT once but don't yet use AI as a daily colleague. GWTH is not restricted to this audience. **Larger companies are served through GWTH's bespoke-lesson service — one custom lesson is produced for every 100 students a single company enrols.** That service is what attracts enterprise L&D to GWTH without compromising the main curriculum, which stays pitched at the individual/SME level where the biggest unmet need sits.
+
 ---
 
 ## Month mapping recap
 
-- **Month 1 — AI for Your Life** — foundations, first builds, automations for yourself. Change the way students *think* about AI, then get them building. **15 of 20 lessons have a build project.** Capstone: **Family AI Bot**.
+- **Month 1 — AI for Your Life** — foundations, first builds, automations for yourself. Change the way students *think* about AI, then get them building. **15 of 21 lessons have a build project** (the 6 non-build lessons are foundations, research/content, ideation, and the building-toolkit primer). Capstone: **Family AI Bot**.
 - **Month 2 — AI for Your Industry** — production apps: pipelines, data, integrations.
 - **Month 3 — AI for Your Company** — leadership, strategy, governance.
 
@@ -23,7 +34,7 @@ Month 1 exists to take someone whose entire AI experience is *"I've asked ChatGP
 1. **Thinks about AI as a knowledgeable colleague**, not a search engine.
 2. **Covers all six OpenAI primitives** (Research, Content, Coding/Building, Data Analysis, Ideation, Automation) — with a heavy bias toward *Building*.
 3. **Has shipped 15 simple hands-on builds** plus the Family AI Bot capstone.
-4. **Has a tool log**, a prompt library, a small portfolio, and the confidence to use AI for everything they can.
+4. **Has a committed tool stack**, a prompt library, a small portfolio, and the confidence to use AI for everything they can — backed by a Tool Log that ranks the alternatives they've tried against the GWTH defaults.
 
 ---
 
@@ -37,7 +48,7 @@ Almost everyone today thinks of ChatGPT as "Google with better search results." 
 
 ## Why building dominates the month
 
-OpenAI's "Identifying and Scaling AI Use Cases" (April 2025) distilled 300+ enterprise implementations into six fundamental use-case patterns — the **six AI primitives**: Content Creation, Research, Coding/Building, Data Analysis, Ideation & Strategy, Automation. Of these six, **Coding/Building has emerged as the single highest-leverage skill for individuals** — the one that took AI from "helpful assistant" to "I can make things that didn't exist before." Vibe coding with Claude Artifacts / Lovable / Bolt / v0 has become the new Microsoft Office — a baseline productivity skill everyone should own. We therefore cover all six primitives, but **15 of the 20 lessons include a build project**, and the capstone is a full end-to-end build.
+OpenAI's "Identifying and Scaling AI Use Cases" (April 2025) distilled 300+ enterprise implementations into six fundamental use-case patterns — the **six AI primitives**: Content Creation, Research, Coding/Building, Data Analysis, Ideation & Strategy, Automation. Of these six, **Coding/Building has emerged as the single highest-leverage skill for individuals** — the one that took AI from "helpful assistant" to "I can make things that didn't exist before." Vibe coding with Claude Artifacts / Lovable / Bolt / v0 has become the new Microsoft Office — a baseline productivity skill everyone should own. We therefore cover all six primitives, but **15 of the 21 lessons include a build project**, and the capstone is a full end-to-end build.
 
 This matches what the AI Daily Brief and OpenAI's own data show: of the six primitives, coding has by far the biggest *delta* between "leaders" and "laggards" in both company and individual productivity. Beginners who learn to build get to "I can make any tool I need" — a capability no other primitive provides.
 
@@ -45,7 +56,7 @@ This matches what the AI Daily Brief and OpenAI's own data show: of the six prim
 
 ---
 
-## The 20 lessons at a glance
+## The 21 lessons at a glance
 
 | # | Lesson | Primary primitive | Build? | Week |
 |---|--------|-------------------|-------|------|
@@ -57,20 +68,21 @@ This matches what the AI Daily Brief and OpenAI's own data show: of the six prim
 | L6 | Research with AI — find anything, fast | Research | Yes — *Life Research Project* | 2 |
 | L7 | Content creation — write anything, fast | Content | Yes — *Content Sprint* | 2 |
 | L8 | Content creation — images, audio & video | Content | Yes — *Visual Content Package* | 2 |
-| L9 | Build your first app — the moment everything changes | **Coding / Building** | Yes — *My First App* | 2 |
-| L10 | Build something bigger — tools that solve real problems | **Coding / Building** | Yes — *Personal Utility* | 2 |
-| L11 | Build your first website | **Coding / Building** | Yes — *My Website* | 3 |
-| L12 | Data analysis — ask questions, get answers | Data Analysis | Yes — *Personal Finance Analysis* | 3 |
-| L13 | Build a dashboard — combining primitives | Coding + Data | Yes — *My Dashboard* | 3 |
-| L14 | Meet the agents — AI that works while you sleep | Automation + Coding | Yes — *First Agent Task* | 3 |
-| L15 | Custom GPTs & Claude Projects — your personal AI assistant | Coding + Automation | Yes — *My Personal AI Assistant* | 3 |
-| L16 | Automation basics — Zapier, Make, n8n | Automation | Yes — *Save Yourself an Hour* | 4 |
-| L17 | Ideation & planning — designing your Family AI Bot | Ideation & Strategy | Yes — *Bot Blueprint* | 4 |
-| L18 | Transcription & extraction — teaching AI to listen | Research + Content | Yes — *Family Meeting v1* | 4 |
-| L19 | Building the processing engine + distribution | **Coding + Automation** | Yes — *Family Bot Working* | 4 |
-| L20 | Polishing, presenting & your month-1 portfolio | Content + Meta | Yes — *Portfolio + Family Bot Launch* | 4 |
+| L9 | **Your building toolkit — the GWTH stack & why we're prescriptive** | Foundations / Strategy | Activity — *Stack Commitment* | 2 |
+| L10 | Build your first app — the moment everything changes | **Coding / Building** | Yes — *My First App* | 2 |
+| L11 | Build something bigger — tools that solve real problems | **Coding / Building** | Yes — *Personal Utility* | 2 |
+| L12 | Build your first website | **Coding / Building** | Yes — *My Website* | 3 |
+| L13 | Data analysis — ask questions, get answers | Data Analysis | Yes — *Personal Finance Analysis* | 3 |
+| L14 | Build a dashboard — combining primitives | Coding + Data | Yes — *My Dashboard* | 3 |
+| L15 | Meet the agents — AI that works while you sleep | Automation + Coding | Yes — *First Agent Task* | 3 |
+| L16 | Custom GPTs & Claude Projects — your personal AI assistant | Coding + Automation | Yes — *My Personal AI Assistant* | 3 |
+| L17 | Automation basics — Zapier, Make, n8n | Automation | Yes — *Save Yourself an Hour* | 4 |
+| L18 | Ideation & planning — designing your Family AI Bot | Ideation & Strategy | Yes — *Bot Blueprint* | 4 |
+| L19 | Transcription & extraction — teaching AI to listen | Research + Content | Yes — *Family Meeting v1* | 4 |
+| L20 | Building the processing engine + distribution | **Coding + Automation** | Yes — *Family Bot Working* | 4 |
+| L21 | Polishing, presenting & your month-1 portfolio | Content + Meta | Yes — *Portfolio + Family Bot Launch* | 4 |
 
-**Build project count:** 20 of 20 lessons have a hands-on activity. **15 of those are code/tool builds** (L3, L7–L19 excluding L17, L20) — the rest are applied artefacts (wishlist, prompt library, research project, portfolio). The Capstone **Family AI Bot** is anchored in L17–L20 and demonstrated at the end of week 4.
+**Build project count:** 21 of 21 lessons have a hands-on activity. **15 of those are code/tool builds** (L3, L7, L8, L10–L17, L19, L20, L21) — the rest are applied artefacts or strategy work (wishlist, prompt library, research project, stack commitment, bot blueprint, portfolio). The Capstone **Family AI Bot** is anchored in L18–L21 and demonstrated at the end of week 4.
 
 ---
 
@@ -149,7 +161,7 @@ Install **Claude Desktop** (for Cowork and Projects later). Mobile apps on the p
 
 **Description:** Why most people's prompts fail: vague, contextless, unbriefed. The five elements of a strong brief: **Role · Context · Task · Format · Constraints**. Meta-prompting ("write me a prompt that…"). Few-shot examples ("here are three good ones — now do mine"). Chain-of-thought for beginners ("think step by step and explain your reasoning"). The **applied concept of context windows** — AI has a finite working memory; long chats decay; paste key information at the top; start a new chat for a new topic. Iterate don't restart: refine what AI gives you instead of starting over. Tone and style control ("write in British English", "match this voice sample").
 
-**Key concepts:** RCTFC framework · meta-prompting · few-shot · chain-of-thought · context windows · iterate-not-restart · system prompts vs user prompts (introduced lightly, returns in L15).
+**Key concepts:** RCTFC framework · meta-prompting · few-shot · chain-of-thought · context windows · iterate-not-restart · system prompts vs user prompts (introduced lightly, returns in L16).
 
 **Build / activity:** ***Prompt Makeover*** — take three mediocre prompts you've actually used with AI. Rewrite each using RCTFC. Run before/after on Claude. Save the five best improved prompts into your **Prompt Library** — a Notion page, Claude Project, or plain markdown file you'll grow throughout the course.
 
@@ -185,13 +197,15 @@ How to spot deepfakes (60-second version). A one-page **Personal AI Usage Policy
 
 **UK context:** Maps cleanly to the **five UK authorities** every learner should know exist: **ICO** (data protection + "disclose when users are talking to AI"), **NCSC** (security + prompt injection guidance), **FCA** (AI in financial services), **DSIT AISI — the AI Security Institute** (renamed from AI Safety Institute in 2025; tested 30+ frontier models in 2025), and **the AI Opportunities Action Plan** (Matt Clifford; 38 of 50 recs delivered at one-year mark, Jan 2026). These are *authorities to cite*, not documents a beginner has to read.
 
+**UK skills landscape — honest framing.** The **AI Skills Hub** (aiskillshub.org.uk, launched 28 Jan 2026 as part of the Action Plan's 10-million-worker target) is a directory students will encounter in UK press coverage. Be honest with students about what it is *and* what went wrong with it: of 600+ listed courses only 14 are benchmarked; 60% of courses are in fact paid despite "free" framing; some courses found to be 10–20 years old; one course taught US "fair use" doctrine that doesn't exist in UK copyright law and was pulled after *The Telegraph* broke the story; all 14 "badged" courses are from US big tech (Accenture, Amazon, Google, IBM, Microsoft, etc.); a parody site (aishillshub.org.uk) launched within weeks. Techosaurus's 5-flaws user test and Computer Weekly's sovereignty critique are worth a skim. Teaching point for beginners: a government directory is not a quality signal — check the age, provider, and UK relevance of anything you learn from. GWTH's own **free labs** (covered in L9 and referenced in `13-uk-regulatory-context.md`) are the counter-example: UK-focused, platform-agnostic, genuinely free.
+
 **Research:** [`07-ai-safety-five-rules.md`](month-1-research/07-ai-safety-five-rules.md), [`13-uk-regulatory-context.md`](month-1-research/13-uk-regulatory-context.md).
 
 ---
 
-## Week 2 — Research, Content, First Builds (L6–L10)
+## Week 2 — Research, Content, Toolkit, First Builds (L6–L11)
 
-**Arc:** *You can brief a colleague. Now put them to work. Three non-build lessons (research + content × 2) then the moment everything changes: your first build.*
+**Arc:** *You can brief a colleague. Now put them to work. Three non-build lessons (research + content × 2), then the building-tools primer so you commit to a stack, then the moment everything changes: your first build. End the week with a bigger build.*
 
 ### L6. Research with AI — Find Anything, Fast
 
@@ -249,7 +263,56 @@ How to spot deepfakes (60-second version). A one-page **Personal AI Usage Policy
 
 ---
 
-### L9. Build Your First App — the Moment Everything Changes 🔨
+### L9. Your Building Toolkit — the GWTH Stack & Why We're Prescriptive
+
+**Description:** The April 2026 AI tool landscape has hundreds of options for every job. "Here are 10 tools, pick one" is how the AI Skills Hub ended up with 600 courses and a string of critical reviews. GWTH does the opposite: **we prescribe a default tool for every job, teach you to master it, and only expose the alternatives in Labs** — short, repeatable head-to-head comparisons that can be refreshed when tools evolve without touching the core curriculum.
+
+**The big-three-plus-challenger rule.** When we assess any AI tool, we look at what **Google, OpenAI, and Anthropic** each offer, plus at most **one independent challenger** that wins on a specific axis (e.g., V0 for UI design, Ideogram for text-in-image, Lovable for no-code web apps). Anything further becomes a Lab.
+
+**The GWTH prescribed stack (April 2026).**
+
+| Job | GWTH default | Big-3 alternatives | Challenger (seen in Labs) | Why this default |
+|-----|-------------|---------------------|---------------------------|------------------|
+| General assistant | **Claude (Sonnet 4.6 / Opus 4.7)** | ChatGPT, Gemini | Perplexity | Best at writing + building + long context; covered in L3 |
+| Personal tools / first apps | **Claude Artifacts** (persistent 20 MB) | OpenAI Canvas, Gemini Canvas | — | Only one with persistent storage inside chat |
+| Shareable web apps | **Lovable** | (none from big-3 for no-code web) | Bolt.new, Replit Agent, v0 | 60% non-developer users; strong UK adoption; free tier |
+| Design prototypes | **Claude Design** | Google Stitch, ChatGPT Canvas | **v0** | Head-to-head decided per Lab (see Lab #1) |
+| Terminal / repo coding | **Claude Code** | OpenAI Codex, Gemini CLI | Cursor IDE | CLI is portable; Cursor still best IDE (seen in a Lab) |
+| Agent workspace | **Claude Cowork** | ChatGPT Agent, Gemini "Project Mariner" | — | Sandboxed + plugin marketplace (1,000+ skills) |
+| Browser agent | **Claude for Chrome** | ChatGPT Atlas (macOS only) | — | Chrome + Edge; UK Windows users can't use Atlas yet |
+| Transcription | **Whisper (via ChatGPT/Claude) or Fathom free** | Google Meet AI, Teams Copilot | Voxtral, Otter | Free or near-free + good enough for 95% of cases |
+| Image generation | **GPT Image 1.5 / Claude image / Gemini 3 Pro image** | (covered by the big three) | Ideogram (text-in-image), Midjourney (art), FLUX (API) | Big-three covers ~80% of beginner needs |
+| Voice / TTS | **ElevenLabs v3 Starter ($6/mo)** | Google TTS, ChatGPT voice | PlayHT, HeyGen voice | Most expressive; student-friendly price |
+| Video | **Google Veo 3.1** | (no Anthropic/OpenAI equivalent post-Sora) | Runway Gen-4.5, Kling 3.0, Seedance 2.0 | Only mainstream model with synced audio; bundled in Google AI Pro |
+| Automation | **Zapier** (with Copilot) | (none from big-3 do automation natively) | Make.com Maia, n8n 2.0 | Widest UK app ecosystem; cheapest learning curve |
+
+**Why prescribe at all?** The alternative produces three bad outcomes: (1) analysis paralysis — students spend more time choosing tools than using them, (2) shallow fluency across many tools instead of real skill in one, (3) constant tutorial rot because every article references a different stack. Mastering a reliable default is worth more than dabbling in a dozen.
+
+**Why these specific defaults?** They share four properties: available to UK consumers without a VPN, billed in a currency a UK student understands (USD with GBP conversion, or GBP direct), have a genuinely free or student-affordable tier, and interoperate cleanly (e.g., Claude Projects + Zapier + Google Calendar is a stable triangle used throughout the capstone).
+
+**Labs are where alternatives live.** Labs are short (≈20–40 min), repeatable, and can be refreshed independently of the core curriculum when tools change. They are also **genuinely free** and form the first thing GWTH pitches to the UK AI Skills Hub (see `13-uk-regulatory-context.md` for the AI Skills Hub strategy). The first few planned labs:
+
+1. **Claude Design vs Google Stitch vs v0** — design a website, a 3-slide deck, and a logo from the same brief. Judge on quality, speed, editability, export.
+2. **Lovable vs Bolt.new vs Replit Agent** — build the same simple web app (e.g., a booking form) three ways.
+3. **Claude Code vs OpenAI Codex vs Gemini CLI** — fix the same bug in the same repo three ways.
+4. **Midjourney V8 vs FLUX 2 vs Ideogram v3 vs GPT Image 1.5** — same brand brief, four images.
+5. **Zapier Agents vs Make Maia vs n8n 2.0** — same 3-step automation, same inputs.
+
+See the **Lab ideas** section at the end of this document for the full candidate list.
+
+**Key concepts:** prescriptive vs permissive teaching · the big-three-plus-challenger rule · the Lab-vs-Lesson distinction · Tool Log as your personal leaderboard · cost of analysis paralysis.
+
+**Build / activity:** ***Stack Commitment*** — fill in your personal GWTH stack sheet: for each job in the table above, declare which tool you're committing to for Month 1. One sentence per choice explaining *why* it wins for your situation. Save. You can switch after any Lab, but commit first — skill compounds on mastery, not shopping.
+
+**Mindset moment:** A fluent default beats a shallow dozen. Fork a Lab when you're curious; master the default first.
+
+**UK context:** The **UK AI Skills Hub** (launched 28 January 2026, aiskillshub.org.uk) tried the opposite approach — a directory of 600+ courses from 'anyone who submitted'. The result (Techosaurus, Computer Weekly, The Telegraph, January–April 2026): 60% of courses actually paid despite "free" framing, courses 10–20 years old, broken links, a copyright-law course teaching US "fair use" that doesn't exist in UK law, and all 14 "badged" courses from US big tech. A parody site (aishillshub.org.uk) launched within weeks. Ed Newton-Rex called it *"mostly rehashed sales propaganda written by big tech and low-quality slide decks meant for other countries."* The teaching point: a *short prescribed stack with Labs for head-to-head comparison* outperforms a long directory every time. UK learners get fewer tools, more skill. GWTH's own answer — pitching the Hub on the **free labs**, with the paid course sitting quietly behind as the natural next step — is what a good prescriptive approach looks like in public.
+
+**Research:** [`05-april-2026-tool-ecosystem.md`](month-1-research/05-april-2026-tool-ecosystem.md), [`11-vibe-coding-landscape.md`](month-1-research/11-vibe-coding-landscape.md), [`13-uk-regulatory-context.md`](month-1-research/13-uk-regulatory-context.md).
+
+---
+
+### L10. Build Your First App — the Moment Everything Changes 🔨
 
 **Description:** The most important lesson of the month. What **"vibe coding"** means: you describe what you want, AI builds it, no programming knowledge needed.
 
@@ -282,7 +345,7 @@ The iteration loop: *"That's great, but make the button bigger / add dark mode /
 
 ---
 
-### L10. Build Something Bigger — Tools That Solve Real Problems 🔨
+### L11. Build Something Bigger — Tools That Solve Real Problems 🔨
 
 **Description:** Beyond simple calculators: apps that **collect data**, **remember state**, and have **multiple views**. Design principles you get for free from AI: colour schemes, responsive layouts, professional typography. Multi-page apps. Saving and exporting: how to keep what you build (download HTML, save to local files, or publish with Lovable/Bolt for a shareable URL). Applied concept of **when to use what**: Claude Artifacts for quick personal tools, **Lovable/Bolt** for full web apps you want to share, **v0** for polished front-end prototypes, Claude Projects (later) for knowledge-pack apps.
 
@@ -302,11 +365,11 @@ The iteration loop: *"That's great, but make the button bigger / add dark mode /
 
 ---
 
-## Week 3 — Website, Data, Dashboard, Agents, Custom Assistants (L11–L15)
+## Week 3 — Website, Data, Dashboard, Agents, Custom Assistants (L12–L16)
 
 **Arc:** *You've built your first tools. Now publish one to the internet, learn to interrogate data, combine building with data analysis into a dashboard, meet your first agents, and build a custom assistant that knows things only you know.*
 
-### L11. Build Your First Website 🔨
+### L12. Build Your First Website 🔨
 
 **Description:** Every professional, freelancer and small business should have a web presence. Using AI to build a complete, professional website from a description. What makes a good landing page: headline → value proposition → social proof → call to action. Mobile-responsive design (AI handles this automatically). Images, branding, visual consistency. **Publishing** — free hosting: GitHub Pages, Netlify, Vercel, Cloudflare Pages. Custom domain basics (optional). A quick note about SEO basics without going deep.
 
@@ -325,7 +388,7 @@ The iteration loop: *"That's great, but make the button bigger / add dark mode /
 
 ---
 
-### L12. Data Analysis — Ask Questions, Get Answers
+### L13. Data Analysis — Ask Questions, Get Answers
 
 **Description:** Upload a spreadsheet/CSV to Claude or ChatGPT and ask questions in plain English. *"What are my top 5 expenses?"* / *"Show me the trend over six months"* / *"Which products are most profitable?"* AI-generated charts: bar, pie, line, heatmaps. **Data cleaning** — "this spreadsheet is a mess — fix it" (AI is eerily good at this). Applied concept: **structured vs unstructured data** — a spreadsheet is structured (rows and columns); a meeting transcript is unstructured (just words). *AI can convert one to the other.* This concept is the foundation of the Family AI Bot.
 
@@ -339,7 +402,7 @@ The iteration loop: *"That's great, but make the button bigger / add dark mode /
 
 ---
 
-### L13. Data Analysis — Build a Dashboard 🔨
+### L14. Data Analysis — Build a Dashboard 🔨
 
 **Description:** Combining two primitives: building + data analysis = **interactive dashboards**. Why dashboards beat spreadsheets: visual, interactive, shareable, impressive. Building a dashboard in Claude Artifacts: upload data → ask for a dashboard → iterate on design. Filters, dropdowns, tabs. Applied concept: **the power of combining primitives** — neither data analysis alone nor coding alone produces a good dashboard; together they do. This is the core GWTH insight.
 
@@ -353,7 +416,7 @@ The iteration loop: *"That's great, but make the button bigger / add dark mode /
 
 ---
 
-### L14. Meet the Agents — AI That Works While You Sleep 🔨
+### L15. Meet the Agents — AI That Works While You Sleep 🔨
 
 **Description:** What AI agents are: software that **takes actions** on your behalf, not just answers questions. The April 2026 landscape:
 
@@ -382,11 +445,11 @@ The "wow" is watching AI work autonomously on your machine.
 
 ---
 
-### L15. Custom GPTs & Claude Projects — Your Personal AI Assistant 🔨
+### L16. Custom GPTs & Claude Projects — Your Personal AI Assistant 🔨
 
 **Description:** Building a **Custom GPT** (ChatGPT) or **Claude Project** with specific knowledge and personality. Uploading your documents to create a domain-specific expert (your company handbook, your product catalogue, your study notes, your legal templates). Writing system instructions that define behaviour. Testing and refining. Real examples: a customer-service bot for an SME, a GCSE study tutor, a recipe advisor for your dietary restrictions, a personal writing coach. **This is the foundation for the Family AI Bot processing engine.** Applied concept: **system prompt vs user prompt** — the system prompt is permanent instructions the AI always follows; the user prompt is each individual question. This is how you create consistent, reliable AI behaviour.
 
-**Key concepts:** knowledge packs · system prompts · consistent behaviour · private assistants · the foundation for L18–L19.
+**Key concepts:** knowledge packs · system prompts · consistent behaviour · private assistants · the foundation for L19–L20.
 
 **Build / activity:** ***My Personal AI Assistant*** — build a Custom GPT *or* Claude Project that:
 - Has a clear role (tutor, advisor, assistant, coach, domain expert)
@@ -401,11 +464,11 @@ The "wow" is watching AI work autonomously on your machine.
 
 ---
 
-## Week 4 — Automation, Family Bot Ideation, Build, Polish (L16–L20)
+## Week 4 — Automation, Family Bot Ideation, Build, Polish (L17–L21)
 
 **Arc:** *Put all six primitives together into the Family AI Bot. Automate it. Ship it. Portfolio it.*
 
-### L16. Automation Basics — Zapier, Make, n8n 🔨
+### L17. Automation Basics — Zapier, Make, n8n 🔨
 
 **Description:** What automation means in practice: *"when X happens, do Y automatically"*. The April 2026 landscape:
 
@@ -425,7 +488,7 @@ Your first automation step-by-step (in Zapier Copilot, because it's the easiest)
 
 ---
 
-### L17. Ideation & Planning — Designing Your Family AI Bot
+### L18. Ideation & Planning — Designing Your Family AI Bot
 
 **Description:** Strategic thinking with AI — using AI as a **planning partner**, not just a task executor. Designing a system: **inputs → processing → outputs → distribution**. The Family AI Bot architecture:
 - **Input:** audio recording of a family meeting.
@@ -441,7 +504,7 @@ Using AI to brainstorm system design: *"I want a system that does X, Y, Z — he
 - A system diagram (hand-drawn or AI-generated)
 - A list of components you need to build
 - The tools you'll use for each component
-- A timeline across L18–L20
+- A timeline across L19–L21
 
 **UK context:** UK families with busy schedules (school runs, after-school clubs, grandparents, pets, shared lists with multiple parents). Real-world scenarios UK parents recognise. UK calendar integrations (Google Calendar, iCloud, Outlook 365 — all supported).
 
@@ -449,7 +512,7 @@ Using AI to brainstorm system design: *"I want a system that does X, Y, Z — he
 
 ---
 
-### L18. Transcription & Extraction — Teaching AI to Listen 🔨
+### L19. Transcription & Extraction — Teaching AI to Listen 🔨
 
 **Description:** How speech-to-text works (two-minute version: audio → model → text). The April 2026 options:
 
@@ -473,7 +536,7 @@ Quality factors: mic placement, quiet room, clear speech. **The extraction promp
 
 ---
 
-### L19. Building the Processing Engine + Distribution 🔨
+### L20. Building the Processing Engine + Distribution 🔨
 
 **Description:** **Building** the core of the Family AI Bot — the part that takes a transcript and produces structured outputs — *and* connecting it to the outside world. Three implementation paths:
 - **Cowork approach** (easiest): a folder with instructions; drop a transcript file in; Cowork processes it and creates `tasks.md`, `events.md`, `meals.md`, `shopping.md`.
@@ -492,7 +555,7 @@ Quality factors: mic placement, quiet room, clear speech. **The extraction promp
 
 ---
 
-### L20. Polishing, Presenting & Your Month-1 Portfolio 🔨
+### L21. Polishing, Presenting & Your Month-1 Portfolio 🔨
 
 **Description:** Design polish: making your Family Bot outputs look professional. Formatting the shopping list, meal plan and task list so they're a pleasure to read. Building a simple **"hub page"** that shows the latest outputs (web dashboard or Cowork-generated report). Creating a 2-minute demo: how to show someone what your bot does. Writing simple **instructions for your family** so they can use it without you. The **"teach someone else" test** — if you can explain your system to a non-technical family member, you understand it. Finally, assembling the **Month 1 Portfolio**: your best prompts, your research project, your content package, your apps, your dashboard, your Family Bot demo, and a personal statement *"Before GWTH, I… Now I…"*. This portfolio becomes a LinkedIn showcase, a CV attachment, and evidence for any employer that you can *actually do this*.
 
@@ -503,7 +566,7 @@ Quality factors: mic placement, quiet room, clear speech. **The extraction promp
 - **Assemble** the Month 1 Portfolio: structured Notion page / website / PDF with every artefact.
 - **Share** with one friend or colleague. Get one sentence of feedback. Record their reaction.
 
-**The GWTH training close.** *"You've just done in 20 lessons what most people never learn. Your colleagues, family, employer probably haven't. The next step — Month 2 — is turning this from personal productivity into team/company transformation. And you can bring people with you. [GWTH.ai](https://gwth.ai) is how you upskill the rest of your team."*
+**The GWTH training close.** *"You've just done in 21 lessons what most people never learn. Your colleagues, family, employer probably haven't. The next step — Month 2 — is turning this from personal productivity into team/company transformation. And you can bring people with you. [GWTH.ai](https://gwth.ai) is how you upskill the rest of your team — and if you bring 100+ colleagues, we'll build a bespoke lesson just for your company."*
 
 **UK context:** UK LinkedIn as the main portfolio distribution channel. UK employer recognition of AI skills on CVs rising sharply (LinkedIn UK data, CIPD surveys 2026). UK corporate L&D teams actively buying GWTH-style training.
 
@@ -513,27 +576,27 @@ Quality factors: mic placement, quiet room, clear speech. **The extraction promp
 
 ## Build projects — 15 builds + the Capstone
 
-Every lesson has a hands-on activity. **The 15 lessons below have a code/tool build.** The rest have applied artefacts (wishlist, prompt library, research project, bot blueprint, portfolio) that still require active work.
+Every lesson has a hands-on activity. **The 15 rows below have a code/tool build.** The other 6 lessons (L1, L2, L4, L5, L6, L9, L18) have applied artefacts or strategy work (wishlist, same-question test, prompt library, catch-the-hallucination, research project, stack commitment, bot blueprint).
 
 | # | Lesson | Build | Primary tool(s) | Time |
 |---|--------|-------|----------------|------|
 | 1 | L3 | Tool Log | Markdown / Notion | 20 min |
 | 2 | L7 | Content Sprint (email + social + long-form) | Claude / ChatGPT | 60 min |
-| 3 | L8 | Visual Content Package | DALL-E / Ideogram / ElevenLabs | 60 min |
-| 4 | L9 | **My First App** | Claude Artifacts | 60 min |
-| 5 | L10 | **Personal Utility** | Claude Artifacts / Lovable | 90 min |
-| 6 | L11 | **My Website** | Lovable / Bolt / v0 | 90 min |
-| 7 | L12 | Personal Finance Analysis | Claude / ChatGPT | 60 min |
-| 8 | L13 | **My Dashboard** | Claude Artifacts | 90 min |
-| 9 | L14 | First Agent Task | Claude Cowork | 60 min |
-| 10 | L15 | **My Personal AI Assistant** | Custom GPT / Claude Project | 90 min |
-| 11 | L16 | **Save Yourself an Hour** | Zapier / Make / n8n | 60 min |
-| 12 | L18 | Family Meeting v1 (extraction) | Whisper + Claude | 60 min |
-| 13 | L19 | **Processing Engine + Distribution** | Cowork / Artifacts / Lovable | 120 min |
-| 14 | L19 | Shopping-list / calendar integration | Zapier / Cowork plugin | 60 min |
-| 15 | L20 | **Portfolio page** | Lovable / Notion / Claude Artifacts | 90 min |
+| 3 | L8 | Visual Content Package | GPT Image 1.5 / Ideogram / ElevenLabs / Veo | 60 min |
+| 4 | L10 | **My First App** | Claude Artifacts | 60 min |
+| 5 | L11 | **Personal Utility** | Claude Artifacts / Lovable | 90 min |
+| 6 | L12 | **My Website** | Lovable / Bolt / v0 | 90 min |
+| 7 | L13 | Personal Finance Analysis | Claude / ChatGPT | 60 min |
+| 8 | L14 | **My Dashboard** | Claude Artifacts | 90 min |
+| 9 | L15 | First Agent Task | Claude Cowork | 60 min |
+| 10 | L16 | **My Personal AI Assistant** | Custom GPT / Claude Project | 90 min |
+| 11 | L17 | **Save Yourself an Hour** | Zapier / Make / n8n | 60 min |
+| 12 | L19 | Family Meeting v1 (extraction) | Whisper + Claude | 60 min |
+| 13 | L20 | **Processing Engine + Distribution** | Cowork / Artifacts / Lovable | 120 min |
+| 14 | L20 | Shopping-list / calendar integration | Zapier / Cowork plugin | 60 min |
+| 15 | L21 | **Portfolio page** | Lovable / Notion / Claude Artifacts | 90 min |
 
-**Capstone — Family AI Bot** (spans L17–L20; demoed at end of Week 4):
+**Capstone — Family AI Bot** (spans L18–L21; demoed at end of Week 4):
 
 **Spec.** Record your weekly family meeting. AI transcribes it, extracts tasks, books calendar events, creates a meal plan, and generates a shopping list. Automatically.
 
@@ -571,7 +634,7 @@ Every lesson has a hands-on activity. **The 15 lessons below have a code/tool bu
 - Multi-family support with separate sheets per household.
 - Weekly summary email that rolls up completed tasks.
 
-**Estimated total capstone time:** 6–10 hours across L17–L20.
+**Estimated total capstone time:** 6–10 hours across L18–L21.
 
 ---
 
@@ -579,21 +642,21 @@ Every lesson has a hands-on activity. **The 15 lessons below have a code/tool bu
 
 | Primitive | Primary lessons | Supporting role | Total exposure |
 |-----------|-----------------|-----------------|----------------|
-| **Coding / Building** 🔨 | L9, L10, L11, L13, L15, L19 = **6** | L3, L14, L16, L20 | 10 |
-| **Content Creation** | L7, L8 = **2** | L11, L18, L20 | 5 |
-| **Research & Analysis** | L6, L18 = **2** | L4, L17 | 4 |
-| **Data Analysis** | L12 = **1** | L13, L19 | 3 |
-| **Automation** | L14, L16, L19 = **3** | L15, L20 | 5 |
-| **Ideation & Strategy** | L17 = **1** | L1, L2, L20 | 4 |
-| **Foundations / Mindset** | L1, L2, L3, L4, L5 = **5** | — | 5 |
+| **Coding / Building** 🔨 | L10, L11, L12, L14, L16, L20 = **6** | L3, L9, L15, L17, L21 | 11 |
+| **Content Creation** | L7, L8 = **2** | L12, L19, L21 | 5 |
+| **Research & Analysis** | L6, L19 = **2** | L4, L18 | 4 |
+| **Data Analysis** | L13 = **1** | L14, L20 | 3 |
+| **Automation** | L15, L17, L20 = **3** | L16, L21 | 5 |
+| **Ideation & Strategy** | L18 = **1** | L1, L2, L9, L21 | 5 |
+| **Foundations / Mindset** | L1, L2, L3, L4, L5, L9 = **6** | — | 6 |
 
-*Coding/Building has 6 primary and 4 supporting lessons — more than any other primitive — matching the course's explicit priority.* Every capstone task combines at least two primitives; L19 combines all six, making the Family AI Bot the literal embodiment of the primitive framework.
+*Coding/Building has 6 primary and 5 supporting lessons — more than any other primitive — matching the course's explicit priority. L9 (Building Toolkit) is primary Foundations and supporting in both Coding/Building and Ideation/Strategy.* Every capstone task combines at least two primitives; L20 combines all six, making the Family AI Bot the literal embodiment of the primitive framework.
 
 ---
 
 ## Appendix A — "Your First AI Colleague" mindset exercises
 
-Five exercises that force the colleague-not-search mental shift through experience, not theory. Use them across L1–L5 as warm-ups and in the L21 review.
+Five exercises that force the colleague-not-search mental shift through experience, not theory. Use them across L1–L5 as warm-ups and revisit in the L21 portfolio retrospective.
 
 **A1. The £5,000 Consultant** — *"Describe a real current problem in your work or life that a consultant would charge £5,000 to solve. Now brief AI as if it's that consultant. Give it role, background, constraint, goal. Keep the conversation going for at least 20 minutes."* Shatters the one-query habit; students feel the depth gap between a four-word ask and a briefed session.
 
@@ -616,13 +679,14 @@ Instead of theory lessons, technical concepts are drip-fed *at the moment they b
 | Jagged frontier + AI-as-colleague | L2 | The mental model that makes everything else work |
 | Context windows | L4 | Why your long conversation is giving bad answers |
 | System prompts | L7 | Set once so AI always writes in your voice |
-| Structured vs unstructured data | L12 | Foundation of the Family Bot |
-| Primitive combination | L13 | The core GWTH insight |
-| Sandboxing / VMs | L14 | Why Cowork is safer than OpenClaw |
-| JSON | L18 | Format AI uses to structure extractions |
-| APIs (restaurant-order metaphor) | L19 | How your bot talks to Google Calendar |
-| Cron / scheduled triggers | L19 | How to run things on a schedule |
-| Prompt injection (60-second version) | L5 / L14 | Specific risk for agentic tools |
+| Big-3-plus-challenger rule | L9 | How we keep the tool list prescriptive |
+| Structured vs unstructured data | L13 | Foundation of the Family Bot |
+| Primitive combination | L14 | The core GWTH insight |
+| Sandboxing / VMs | L15 | Why Cowork is safer than OpenClaw |
+| JSON | L19 | Format AI uses to structure extractions |
+| APIs (restaurant-order metaphor) | L20 | How your bot talks to Google Calendar |
+| Cron / scheduled triggers | L20 | How to run things on a schedule |
+| Prompt injection (60-second version) | L5 / L15 | Specific risk for agentic tools |
 
 ---
 
@@ -632,19 +696,19 @@ These show up in every lesson:
 
 1. **AI is a colleague, not a search engine.** (Installed in L2, reinforced everywhere.)
 2. **Every brief needs Role, Context, Task, Format, Constraints.** (L4, referenced every lesson.)
-3. **Build more than you consume.** 15 of 20 lessons include a build. Students ship.
+3. **Build more than you consume.** 15 of 21 lessons include a build. Students ship.
 4. **British by default.** British English in every prompt-level system instruction. GBP pricing. UK tool alternatives where they exist. ICO/NCSC guidance woven in.
 5. **Verify by habit.** Rule 1 of AI safety. Re-stated every time citations appear.
 6. **Tool fluency, not loyalty.** Multi-assistant by design; tool log updated every lesson.
 7. **Your name → your stamp.** You're responsible for anything AI writes for you.
 8. **Portfolio-worthy.** Every build is something the student can show.
-9. **GWTH training recommendation.** Every lesson has a "bring your team along" — soft-sell. L20 is hard-sell.
+9. **GWTH training recommendation.** Every lesson has a "bring your team along" — soft-sell. L21 is hard-sell. The **bespoke-lesson service** (1 custom lesson per 100 students a company enrols) is the route in for larger organisations.
 
 ---
 
 ## Appendix D — Format & delivery notes for the GWTH team
 
-- **20 core lessons**, ~60 min each (30–45 min for foundations; 90 min for the bigger builds). Drop optional Week 5 "advanced" material into Month 2.
+- **21 core lessons**, ~60 min each (30–45 min for foundations; 90 min for the bigger builds). Plus up to **5 Optional lessons** (see section below) that sit outside the core sequence. Drop optional Week 5 "advanced" material into Month 2.
 - **Each lesson file:** short video (≤10 min), live demo video (≤15 min), written article, hands-on exercise, downloadable prompt(s), tool log update, quiz (3–5 questions).
 - **Weekly live build clinics (60 min)** — students bring their week's builds, GWTH instructor reviews on-screen, common problems solved for everyone.
 - **Month-end capstone showcase** — students present their Family AI Bot in 3 minutes. Cohorts of ~6. Celebration of portfolios.
@@ -653,6 +717,72 @@ These show up in every lesson:
   - `gwth-m1-artifacts-starter` — Claude Artifacts templates for L9–L13.
   - `gwth-m1-family-bot-starter` — Cowork folder + Claude Project + Zapier template for the capstone.
   - `gwth-m1-portfolio-starter` — Lovable / Notion portfolio template.
+
+---
+
+## Optional lessons (up to 5)
+
+These sit **outside the 21-lesson core sequence**. They exist for planning purposes — candidates to promote into the core later, or quietly retire if they never mature. Each is either too new, too specific to a small audience, or evolving too fast to bake into core teaching. They are closely related to Labs: several may graduate into Labs first, then into core lessons if they stick.
+
+**O1. AI-Built Mobile Apps — from Lovable/Expo to TestFlight/Play.**
+*Why optional:* mobile app vibe-coding became mainstream in Q1 2026 but the stack (Lovable Mobile, Expo Go, EAS Build, TestFlight/Play) still changes month-to-month. A student who wants a phone-first tool (shopping list, babysitter log, local tradesman invoicer) doesn't need this for the core but benefits hugely.
+*Primary audience:* parents, tradespeople, solopreneurs with phone-first customers.
+*Assumed prerequisites:* L9 (toolkit), L10 (first app), L12 (website).
+*Likely core candidate:* if adoption stays high through mid-2026, promote to L12.5 or L22 in a future revision.
+
+**O2. AI for Accessibility & SEND Support.**
+*Why optional:* audience is a specific subset (UK parents and teachers of children with SEN, adults with dyslexia / ADHD / visual or hearing impairment), but the AI unlock is unusually large — AI-assisted reading, speech-to-text for classroom use, voice-controlled interfaces, customised study tutors for dyslexia and autism.
+*Primary audience:* UK parents/teachers; adults with accessibility needs.
+*Assumed prerequisites:* L8 (multimodal content), L16 (custom assistants).
+*UK context:* ties to the UK Age Appropriate Design Code (ICO), the Equality Act 2010, and SEND tribunals.
+
+**O3. AI Voice Agents — Building a Phone-Answering Assistant.**
+*Why optional:* cutting edge in April 2026. ElevenLabs Agents, Vapi, Retell and newer entrants make real-time voice agents possible for a sole-trader phone line, but the tooling is not yet beginner-proof. Will almost certainly become mainstream in 2027.
+*Primary audience:* UK sole-traders (plumbers, electricians, tutors, private clinics, B&Bs) drowning in phone calls.
+*Assumed prerequisites:* L8 (TTS), L15 (agents), L17 (automation).
+*Likely core candidate:* promote to L15.5 or a Month-2 lesson once UK onshoring and accent handling improve.
+
+**O4. Side Hustles — From AI Idea to First £100.**
+*Why optional:* not universally relevant (many students already have the day job they want); and it's easy to blur into "make money online" genre content. But a well-run version of this is the single most-requested lesson in adjacent communities.
+*Primary audience:* UK individuals exploring a side income; aligned with Priestley's "Scorecasts/Score App" audience.
+*Assumed prerequisites:* the full Week-2 build arc.
+*Likely core candidate:* promote to L21.5 if the demo delta against L21 portfolio is big enough.
+
+**O5. Privacy-First Local AI — Ollama + LM Studio on Your Own Machine.**
+*Why optional:* small but passionate audience — ICO-minded professionals (solicitors, GPs, HR), privacy-curious individuals, anyone with strong UK data-sovereignty preferences. Covers running Llama 3.3, Qwen 3, Phi 4 locally via Ollama or LM Studio on Mac/Windows with reasonable hardware.
+*Primary audience:* UK regulated professionals; privacy-conscious home users.
+*Assumed prerequisites:* L3 (toolkit), L5 (safety), L16 (custom assistants).
+*UK context:* direct tie to ICO data controller guidance and NCSC secure-AI-dev; also the only way to guarantee no data leaves UK infrastructure.
+
+---
+
+## Lab ideas — candidates from lessons we decided not to teach
+
+Lessons we considered and decided **not** to include in the core 21, because the topic is a head-to-head tool comparison that goes stale fast, or because it's a narrow one-trick demo. **These become Labs instead.** Labs are short (≈20–40 min), repeatable, ranked head-to-head against the GWTH default, and refreshable without touching the core curriculum. They are also the first thing GWTH pitches to the UK AI Skills Hub — genuinely free, platform-agnostic, UK-focused. *Cross-reference:* each Lab also serves as a Tool-Log entry students drop into their L3 sheet.
+
+The starter list (first Lab is the user-requested one):
+
+1. **Lab 1 — Claude Design vs Google Stitch vs v0.** Same brief, three tools: (a) website landing page, (b) 3-slide deck, (c) logo + brand mark. Score on speed, quality, editability, export, cost. *GWTH default today: Claude Design; review quarterly.*
+2. **Lab 2 — Lovable vs Bolt.new vs Replit Agent.** Same small web app (e.g., a booking form or invoice generator), three no-code platforms.
+3. **Lab 3 — Whisper vs Voxtral vs Fathom on UK accents.** 5-minute sample with Scottish, Brummie, Scouse and Received Pronunciation speakers; score word error rate.
+4. **Lab 4 — Midjourney V8 vs FLUX 2 vs Ideogram v3 vs GPT Image 1.5.** UK brand brief (independent coffee shop in Leeds, say); judge aesthetic, text rendering, prompt fidelity.
+5. **Lab 5 — ElevenLabs v3 vs Google TTS vs ChatGPT voice.** 60-second audiobook sample from the same text; UK accent handling.
+6. **Lab 6 — Zapier Agents vs Make Maia vs n8n 2.0.** Same 3-step automation (e.g., form → Sheet → email); compare build time, TCO, UK data-sovereignty.
+7. **Lab 7 — Claude Code vs Cursor IDE vs Windsurf.** Same repo, same bug; measure time-to-fix and patch quality.
+8. **Lab 8 — Perplexity Deep Research vs ChatGPT Deep Research vs Claude Research.** Same UK research question (e.g., "Best ISA providers for a 35-year-old basic-rate taxpayer in 2026"); compare sources, depth, citation accuracy.
+9. **Lab 9 — Gamma vs Beautiful.ai vs Tome.** Same brief; output a polished 10-slide deck.
+10. **Lab 10 — Synthesia vs HeyGen vs D-ID.** 60-second UK corporate avatar video; judge lip sync, avatar realism, UK-accent TTS.
+11. **Lab 11 — Veo 3.1 vs Runway Gen-4.5 vs Kling 3.0 vs Seedance 2.0.** Same prompt ("A black cab pulling up outside a Leeds dental practice in morning rain"), compare fidelity and audio sync.
+12. **Lab 12 — Claude for Chrome vs ChatGPT Atlas (macOS) vs Perplexity Comet.** Same 5-task browser workflow; compare for UK Windows vs Mac users.
+13. **Lab 13 — Custom GPT vs Claude Project vs Google Gem.** Same knowledge pack (three PDFs); judge retrieval, personality persistence, export.
+14. **Lab 14 — Claude Code vs OpenAI Codex vs Gemini CLI.** Same repo, same task; judge diff quality and safety of changes.
+15. **Lab 15 — ChatGPT Agent vs Claude Cowork vs Google Project Mariner.** Same "organise this folder of 50 files" task.
+16. **Lab 16 — Ollama vs LM Studio vs Jan on a consumer laptop.** Same three model downloads; compare UX, RAM usage, prompt latency. *(Pairs with Optional O5.)*
+17. **Lab 17 — Apple Intelligence vs Samsung Galaxy AI vs Pixel Gemini Nano.** On-device UK consumer comparison for notification summaries, writing tools, photo edits.
+
+*Format.* Each Lab has: a brief (one paragraph), a default GWTH stack ranking as of the publish date, the scoring rubric, and a short demo video. Labs are **dated** — "Lab 1 · first published 2026-04-21 · last reviewed 2026-07-01" — so students know how fresh the ranking is. When a Lab goes stale, refresh it; when a topic matures, promote it to a Core lesson (and archive the Lab as historical).
+
+*Link to AI Skills Hub pitch.* These Labs — free, UK-focused, platform-agnostic, learning-by-doing — are what GWTH leads with when approaching the Hub (see `13-uk-regulatory-context.md` for the PwC/neighbour strategy). The paid course sits as the natural next step behind them.
 
 ---
 

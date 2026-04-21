@@ -1,6 +1,8 @@
 # Vibe Coding — the 2026 Landscape for Beginners
 
-Research spine for L9 (first app), L10 (bigger tool), L11 (website), L13 (dashboard).
+Research spine for L9 (Building Toolkit / prescriptive stack), L10 (first app), L11 (bigger tool), L12 (website), L14 (dashboard).
+
+**2026-04-21 update.** The GWTH Month 1 redesign introduced a **prescriptive default** for each building job (see L9 in the lesson ideas doc). The tables below rank each tool against the default. The rule: assess **Google + OpenAI + Anthropic + one challenger**; anything beyond becomes a Lab.
 
 ## Origin of the term
 
@@ -21,15 +23,19 @@ Collins Dictionary: **"vibe coding" Word of the Year 2025.**
 
 ## Tool landscape April 2026 (the beginner-facing stack)
 
-| Tool | Strength | Pricing | Use in Month 1 |
-|------|----------|---------|----------------|
-| **Claude Artifacts** | Zero-setup, now with **20 MB persistent storage per artifact** (2026) | Included in Claude Pro | L9 first build, L13 dashboard |
-| **Lovable** | Easiest end-to-end, Supabase-backed auth + DB | Free 5 msg/day; Pro $25 | L10 (stretch), L11 website |
-| **Bolt.new** | Fastest prompt-to-deployed app | Token-based from ~$20 | L10/L11 option |
-| **v0** | Best for polished Next.js UIs, deploys to Vercel | Free ($5); Pro $20/user | L11 option |
-| **Replit Agent** | Full-stack with DB + auth one-click | Core $20–25; heavy users hit $100+ | L10 option; mention only |
-| **Google AI Studio (Stitch)** | Vibe-coding mode for exploration | Free tier | Optional exploration |
-| **Cursor / Windsurf** | Proper IDEs — name-drop only | Pro $20 | Not in Month 1 |
+| Tool | Strength | Pricing | GWTH role | Use in Month 1 |
+|------|----------|---------|-----------|----------------|
+| **Claude Artifacts** | Zero-setup, now with **20 MB persistent storage per artifact** (2026) | Included in Claude Pro | **DEFAULT** for personal tools | L10 first build, L14 dashboard |
+| **Lovable** | Easiest end-to-end, Supabase-backed auth + DB | Free 5 msg/day; Pro $25 | **DEFAULT** for shareable web apps | L11 (stretch), L12 website |
+| **Bolt.new** | Fastest prompt-to-deployed app | Token-based from ~$20 | Challenger (Lab 2) | L11/L12 Lab option |
+| **v0** | Best for polished Next.js UIs, deploys to Vercel | Free ($5); Pro $20/user | Challenger (Lab 1 & 2) | L12 Lab option |
+| **Replit Agent** | Full-stack with DB + auth one-click | Core $20–25; heavy users hit $100+ | Challenger (Lab 2) | Lab option |
+| **Google Stitch (AI Studio)** | Design-mode vibe-coding for exploration | Free tier | Google challenger for design | **Lab 1** (design comparison) |
+| **Claude Design** | Anthropic's answer to Stitch/v0 in 2026 | Claude Pro | **DEFAULT** for design prototypes | **Lab 1** reference |
+| **Claude Code** | Terminal agent for deeper builds | Claude Pro / Max 5× ($100/mo) | **DEFAULT** for terminal coding | Month 2+, mention in L15 |
+| **OpenAI Codex (CLI)** | OpenAI's terminal agent | ChatGPT Plus/Pro | Big-3 alternative | Lab only |
+| **Gemini CLI** | Google's terminal agent | Google AI Pro | Big-3 alternative | Lab only |
+| **Cursor / Windsurf** | Proper IDEs | Pro $20 | Challenger (IDE-specific) | Lab 7 (coding IDE shoot-out) |
 
 **The three-layer 2026 workflow** to teach (without scaring beginners):
 

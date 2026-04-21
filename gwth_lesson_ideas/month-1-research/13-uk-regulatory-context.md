@@ -36,6 +36,89 @@ For L3 (tool choice + privacy), L5 (safety), L18 (family bot recording + childre
 - UK AI investment: £2.6 bn (2023) → £4.0 bn (2024) → £4.7 bn (2025).
 - Roadmap pivots in 2026 to deployment, sandboxes, priority-sector acceleration.
 
+## The AI Skills Hub — the Action Plan's most visible public artefact, and its most criticised
+
+**Launched 28 Jan 2026** as part of the expanded AI Skills Boost programme — target: upskill **10 million UK workers** by 2030. Every UK adult eligible for free, benchmarked AI courses via **aiskillshub.org.uk**. Operated by **PwC** under a **£4.2 M contract**. Government calls it the largest training programme since the Open University.
+
+### How it actually works
+- Online **directory / signposting service** — it does not host courses, it links to providers' own sites.
+- Two tiers: (1) the broad **AI Skills Hub** with 600+ courses, mix of free and paid; (2) the narrower **AI Skills Boost**, a badged set of just **14 courses** benchmarked against Skills England's AI-foundation-skills benchmark, completers get a government-backed virtual badge.
+- Founding partners (all US big tech + UK incumbents): Accenture, Amazon, Barclays, BT, Google, IBM, Intuit, Microsoft, Sage, SAS, Salesforce.
+- Jan 2026 additions: British Chambers of Commerce, Cisco, Cognizant, CBI, DfE, DWP, FSB, IOD, LGA, Multiverse, NHS, Pax8, techUK.
+- Initial sector focus: Agriculture/Food, Construction, Creative Industries, Transport/Logistics/Warehousing.
+
+### The criticism (well-documented across the UK press, Jan–Apr 2026)
+
+**Content & quality**
+- 595 of 600+ courses NOT benchmarked. Only 14 "badged."
+- ~60% of courses are in fact **paid**, despite the Hub positioning itself as free training.
+- Courses found to be **10+ years old**, some over 20.
+- Broken links; courses that don't exist or require attendance in rural Canada; a Microsoft "course" that's just a product manual; a supposed University of Edinburgh course not actually taught by them; content from "degree mills" flagged as AI-generated slop.
+
+**The UK copyright-law scandal**
+- A course on AI and copyright was pulled after it was found to teach **US "fair use"** — a doctrine that doesn't exist in UK law.
+- The course's creator (VinciWorks) stated they had **no contractual arrangement** with the Hub and were not consulted before their materials were posted.
+- Ed Newton-Rex called it *"laughably shocking"* that the government didn't hold the rights to use the IP in the first place.
+
+**Vendor lock-in / digital sovereignty**
+- All 14 badged courses from US big tech (Google teaches Gemini, Microsoft teaches Copilot, etc.).
+- *Computer Weekly*: the Hub is *"the opposite of positioning the UK as an AI maker, not an AI taker."*
+- Compared unfavourably to France's phase-out of US big-tech dependency.
+
+**User experience failures**
+- Free courses disappearing after completion of a pathway, replaced by paid Azure/Python certification content.
+- A reviewer was directed to a £750 AI Filmmakers masterclass and a £590 AI Advertising course.
+- "Beginner" pathways include advanced concepts like computational thinking and neural network architecture.
+- **No sandbox, no community, no ongoing support.**
+- Typical completion rates for self-paced online: **5–15%** vs 70–90% for instructor-led.
+
+**Structural criticisms**
+- Trains individuals but ignores organisational readiness.
+- *"AI Shills Hub"* parody site launched (aishillshub.org.uk).
+- Ed Newton-Rex: *"The AI Skills Hub seems mostly to consist of rehashed sales propaganda written by big tech and low-quality slide decks meant for other countries."*
+- Conservatives called it *"embarrassing"* and *"wasting taxpayers' money."*
+- Academics + AI-literacy groups published an open letter.
+
+### Key sources of criticism (for L5 + L9 citations)
+- *The Telegraph* — broke the original story.
+- *Computer Weekly* — sovereignty angle: https://www.computerweekly.com/opinion/The-UK-governments-AI-skills-programme-betrays-UK-workers-and-our-digital-sovereignty
+- *Techosaurus* — practitioner-led user testing, 5 critical flaws: https://www.techosaurus.co.uk/news/2026/01/30/we-tested-the-governments-ai/
+- *Charting Gen AI* / Graham Lovelace — copyright scandal: https://grahamlovelace.substack.com/p/exclusive-uk-government-is-embroiled
+- PwC delivery-partner announcement: https://www.pwc.co.uk/press-room/templates/pwc-uk-named-delivery-partner-for-uk-government-s-ai-skills-boos.html
+- Gov.uk announcement: https://www.gov.uk/government/news/free-ai-training-for-all-as-government-and-industry-programme-expands-to-provide-10-million-workers-with-key-ai-skills-by-2030
+
+## GWTH's AI Skills Hub strategy (for the go-to-market plan)
+
+GWTH.ai is well positioned to be listed on the Hub *precisely because* of the criticism: platform-agnostic, UK-focused, genuinely free at the Lab tier, with a transparent paid course (£29/mo first 3 months, £5/mo ongoing) that is **not** a bait-and-switch.
+
+**Pitch approach (lead with the free labs, not the course).**
+- For the Hub listing: pitch the **Lab library** only — no paywall, no US big-tech lock-in, no decade-old material.
+- The paid course sits behind as the natural next step. Transparent, honest, fundamentally different from what is being criticised.
+- Suggested pitch line to PwC: *"I run GWTH.ai, a UK-based AI education platform for beginners. I've seen the coverage. My courses are platform-agnostic, UK-focused, built for non-technical people, and the labs are genuinely free. That's exactly what the critics say is missing. I'd love to explore how we could work together."*
+
+**Skills England benchmark alignment (what to mirror in lesson/lab metadata).**
+- Understanding risks and consequences of using AI *(mapped to L5 and each Lab's risk section)*.
+- Creating prompts and adapting settings for generative AI tools *(L4)*.
+- Responsible and ethical AI use *(L5, L9's prescriptive-default framing, L15 agent safety)*.
+- Practical workplace application *(the entire build arc).*
+
+**PwC / neighbour strategy.** David's neighbour was a 20-year PwC consulting partner; two of his daughters currently work at PwC. Use him to understand PwC culture; ask the daughters to identify the AI Skills Hub engagement lead internally. Warm intro beats formal submission. Full strategy captured in `ai-skills-hub-gwth-strategy.md` (local notes file).
+
+**TechLocal funding.** £27 M as part of the £187 M TechFirst programme. Two competitions: (1) innovative AI degrees/graduate traineeships, (2) local-community tech jobs. Potential route to have the £29/mo GWTH course fully subsidised for target learners in specific UK regions — "GWTH.ai normally £29/mo, fully funded via TechLocal for learners in [region]." Research deadlines and eligibility; combine with PwC relationship if PwC also administers applications.
+
+**Action plan summary (short-term).**
+- Talk to neighbour; understand PwC culture; get his instincts on approach.
+- Ask daughters (gently) for the engagement lead's name.
+- Submit via the Hub Contact Us form as a parallel track.
+- Research TechLocal application process + deadlines.
+- Ensure GWTH Labs + course content metadata aligns with Skills England benchmark language.
+- Position for inclusion in the expanded AI Skills Boost (badged) programme when it widens in 2026-27.
+
+### Teaching use (inside Month 1)
+
+- **L5** — include an honest note that the Hub is real but has been criticised; a government directory is not a quality signal; students should check age/provider/UK-relevance of any course.
+- **L9** — the Hub is a case study of the *opposite* of prescriptive teaching: 600+ courses, no ranking, low completion. GWTH's Lab-plus-prescribed-default model is the fix.
+
 ## EU AI Act — UK-relevant dates
 
 - **Article 50 disclosure ("you're talking to AI")** — August 2026 milestone for EU-facing tools.
