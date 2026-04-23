@@ -199,33 +199,56 @@ Acceptance criteria (Phase 0):
 
 ### Phase 1 — MVP intake (the critical path)
 
-**Target:** 3–5 days after Phase 0. This is what replaces the manual FT/BBC workflow.
+**Target:** 5–7 days after Phase 0. This replaces the manual FT/BBC workflow end-to-end and includes Qdrant corpus integration (promoted from Phase 3) + single-step YouTube intake + UI workflow reminders.
+
+Key decisions (from David 2026-04-23 pm):
+- **LLM:** Claude Opus 4.7 via David's Claude Code subscription — `general-purpose` subagent with explicit web tools.
+- **Notification:** Telegram (async) + Assets-tab inline indicator (dashboard-native). Both.
+- **Subagent scope:** writes the idea file only. Never edits lesson / research / content files. `/plan` + `/build` from `GWTH_curriculum` do real edits.
+- **YouTube:** single-step — drop YouTube URL in VIP form, pipeline handles transcript fetch (youtube-transcript-api) with Whisper fallback, then proceeds end-to-end.
+- **Corpus coverage:** option (b) + (c) combined — subagent reads lesson-ideas MDs + matching research-folder files + runs a Qdrant RAG query. Option (a) is skipped.
 
 Deliverables:
 1. `vip_intake_service.py` — given `{asset_type, source_url or file_path, target_months[], category}`:
-   - fetch/normalise → save into `data/PDFs_manual_download/GWTH_Month_X/<category>/`
+   - fetch/normalise (URL → rendered HTML; PDF → stored; YouTube URL → transcript via youtube-transcript-api with Whisper fallback) → save into `data/PDFs_manual_download/GWTH_Month_X/<category>/`
    - write `.meta.md` stub
-   - trigger folder-scan for that subfolder (reuses existing Qdrant ingest)
+   - trigger folder-scan for that subfolder (reuses existing Qdrant ingest; asset is in Qdrant before research starts)
    - spawn `vip_research_agent`
    - when agent returns, call `vip_idea_writer` → writes markdown to **`GWTH_curriculum/kanban/0_idea/`**
    - append row to `GWTH_curriculum/kanban/vip-assets-index.json`
-   - fire Telegram notification with idea-file path
-2. `vip_research_agent.py` — wraps the Claude Code `Agent` tool with `general-purpose` subagent. **Explicit tools whitelist: `[Read, Grep, Glob, Bash, WebSearch, WebFetch]`**. Prompt template includes the 5 sub-tasks (summarise, fact-check, corpus-check, placements, open questions). Returns structured JSON.
-3. `vip_idea_writer.py` — renders the JSON → markdown via the template.
-4. `curriculum_kanban_reader.py` — reads `GWTH_curriculum/kanban/{0_idea,1_planning,2_testing,3_done}/*.md` and returns counts + last-modified + titles for the UI panel.
-5. Assets-tab **VIP Intake card** with a form (URL input, file drop, month radio, category dropdown, submit).
-6. Assets-tab **Curriculum Kanban card** — read-only 4-column layout showing idea/planning/testing/done item counts, with click-through to file:// links.
-7. API router (`/api/vip/submit`, `/api/vip/list`, `/api/curriculum/kanban`).
-8. Idea-file template at `GWTH_curriculum/kanban/templates/VIP_IDEA_TEMPLATE.md`.
-9. Integration test: submit a fake URL → verify idea file lands in `GWTH_curriculum/kanban/0_idea/` and index is updated.
+   - fire Telegram + Assets-tab notification with idea-file path
+2. `vip_youtube_fetcher.py` (part of intake service) — takes a YouTube URL, returns transcript text + metadata. Uses youtube-transcript-api first; falls back to Whisper-on-audio if no captions. Surfaces failure clearly (e.g. "private video, cannot fetch") rather than silently degrading.
+3. `vip_research_agent.py` — wraps the Claude Code `Agent` tool with `general-purpose` subagent, Claude Opus 4.7. **Explicit tools whitelist: `[Read, Grep, Glob, Bash, WebSearch, WebFetch]`.** The agent's 5 sub-tasks:
+   - **Summarise** the asset (3–5 bullets).
+   - **Fact-check** key claims via web search.
+   - **Read** `GWTH_curriculum/gwth_lesson_ideas/MONTH_{1,2,3}_LESSON_IDEAS_*.md` + relevant `month-{1,2,3}-research/*.md` files for proposed target months.
+   - **Query Qdrant** (see `vip_qdrant_query.py` below) for similar existing material — flags duplications + contradictions.
+   - **Propose placements** with file:line references.
+   Returns structured JSON. Logs token count + cost per run for observability.
+4. `vip_qdrant_query.py` — thin helper the subagent calls via Bash: given a natural-language query, returns top-K Qdrant hits with `source`, `file_path`, `chunk_text`, `score`. Uses existing `qdrant_service`. This is the RAG cross-check that David wants from day one.
+5. `vip_idea_writer.py` — renders the JSON → markdown via the template (template now includes a `Corpus cross-check` section listing existing-material hits).
+6. `curriculum_kanban_reader.py` — reads `GWTH_curriculum/kanban/{0_idea,1_planning,2_testing,3_done}/*.md` and returns counts + last-modified + titles for the UI panel.
+7. Assets-tab **VIP Intake card** with:
+   - Form: URL input, file drop (PDF), YouTube URL field, month checkboxes (M1/M2/M3), category dropdown, submit.
+   - **Inline workflow reminder** (collapsible panel, default expanded): *"After submit → (a) wait ~5 min for the idea file → (b) open `GWTH_curriculum/kanban/0_idea/` → (c) review the idea file → (d) in Claude Code from `C:\Projects\GWTH_curriculum`, run `/plan` then `/build`."* — rendered so David sees it every time without having to look it up.
+   - Progress indicator while research is running (spinner + "fetching → ingesting → researching → writing idea file").
+8. Assets-tab **Curriculum Kanban card** — read-only 4-column layout (0_idea / 1_planning / 2_testing / 3_done) with item counts + click-through to file:// links. Shows the "where am I" view for David without him switching repos.
+9. API router (`/api/vip/submit`, `/api/vip/list`, `/api/curriculum/kanban`, `/api/vip/progress/<id>` for the progress indicator).
+10. Idea-file template at `GWTH_curriculum/kanban/templates/VIP_IDEA_TEMPLATE.md` — includes a `Corpus cross-check` section populated by the Qdrant query.
+11. Integration test: submit a fake URL → verify (a) asset in Qdrant, (b) subagent called with correct tools + Qdrant query helper present, (c) idea file lands with non-empty corpus-cross-check section, (d) index updated.
 
 Acceptance criteria (Phase 1):
-- [ ] David can submit a URL from the Assets tab, and within 5 minutes a populated idea file appears in `GWTH_curriculum/kanban/0_idea/`.
-- [ ] The idea file uses the template structure above with a non-empty fact-check table.
-- [ ] The research subagent's tool list (logged on first message) **explicitly includes `WebSearch` and `WebFetch`**. This is the prior-session gap and must be verified, not assumed.
-- [ ] Running `/plan` from the GWTH_curriculum repo against the idea file produces a plan the user can execute with `/build`.
-- [ ] Curriculum Kanban card on the Assets tab shows the new entry within 30s of submission.
-- [ ] Telegram notification fires on completion.
+- [ ] David can submit a URL from the Assets tab, and within ~5 minutes a populated idea file appears in `GWTH_curriculum/kanban/0_idea/`.
+- [ ] The idea file uses the template structure with non-empty fact-check + corpus-cross-check + placement-proposals sections.
+- [ ] A YouTube URL submitted to the VIP form produces an ingested transcript end-to-end (no separate manual step).
+- [ ] The research subagent's tool list (logged on first message) **explicitly includes `WebSearch` and `WebFetch`**. Test fails loudly if missing.
+- [ ] The idea file's placement proposals cite at least 3 distinct `gwth_lesson_ideas/` locations (file + line range).
+- [ ] The corpus-cross-check section lists at least one Qdrant hit OR explicitly says "no prior material on this topic" — never empty.
+- [ ] Running `/plan` from the GWTH_curriculum repo against the idea file produces a plan David can execute with `/build`.
+- [ ] Curriculum Kanban card on the Assets tab shows the new entry within 30s.
+- [ ] Telegram notification fires on completion + Assets-tab shows a visible indicator.
+- [ ] Inline workflow reminder is visible and accurate (spot-checked by David on first real intake).
+- [ ] Per-asset token/cost log is written to `vip-assets-index.json` for observability.
 
 ### Phase 2 — Fact-check hardening
 
@@ -236,13 +259,14 @@ Acceptance criteria (Phase 1):
 - Add a `confidence` score per placement proposal (low/medium/high) based on how many corpus hits matched.
 - Handle paywalled sources: detect, surface in idea file with "fallback: David upload" note, don't fail the job.
 
-### Phase 3 — Corpus cross-check (Qdrant)
+### Phase 3 — Drift detection + quarterly re-analysis (repurposed)
 
-**Target:** +2 days after Phase 2.
+**Target:** +2 days after Phase 2. Originally "Qdrant corpus cross-check" but that's promoted into Phase 1. Phase 3 now covers the *longitudinal* concern instead.
 
-- Replace the "read lesson-ideas MDs directly" approach with a Qdrant query against the existing `GWTH_Month_1/2/3` collections.
-- Subagent proposes placements by similarity-searching the asset's key findings against existing lesson content.
-- Surfaces duplications ("You already have the Acemoglu quote at L1 M3") and contradictions ("Earlier citation said X, this asset says Y").
+- `vip_reanalyze_service.py` — given a VIP asset already in `3_done/`, re-run the research agent against the *current* corpus and produce a diff report: are the original placements still optimal given newer material? Has later material contradicted this asset? Are its quotes now duplicated elsewhere?
+- Quarterly job (or manual trigger from Assets tab) that runs re-analysis across the 10 most-cited VIP assets, produces a single "curriculum drift report" markdown in `GWTH_curriculum/kanban/reports/DRIFT_<date>.md`.
+- "Re-research this asset" button on done-list entries (one-off re-run).
+- Simple tone-audit: diff `gwth_lesson_ideas/MONTH_*` files against the same files 90 days ago; flag lessons that have changed >20% by word count — signals potential drift from repeated incremental edits.
 
 ### Phase 4 — UI polish + audit trail
 
@@ -279,14 +303,18 @@ Acceptance criteria (Phase 1):
 - `content/` — empty placeholder; populated as lessons/labs/projects are written
 
 ### In `1_gwthpipeline520` (new)
-- `app/services/vip_intake_service.py`
-- `app/services/vip_research_agent.py`
-- `app/services/vip_idea_writer.py`
-- `app/services/curriculum_kanban_reader.py`
+- `app/services/vip_intake_service.py` — orchestrator
+- `app/services/vip_research_agent.py` — Claude Opus 4.7 subagent wrapper
+- `app/services/vip_idea_writer.py` — template renderer
+- `app/services/vip_qdrant_query.py` — RAG helper for corpus cross-check (called by subagent via Bash)
+- `app/services/vip_youtube_fetcher.py` — youtube-transcript-api + Whisper fallback, single-step
+- `app/services/curriculum_kanban_reader.py` — reads GWTH_curriculum/kanban state for UI
 - `app/routers/vip_api.py`
 - `tests/test_vip_intake.py`
-- `tests/test_vip_research_agent.py`
+- `tests/test_vip_research_agent.py` — includes the assert-tools-include-WebSearch-WebFetch test
 - `tests/test_vip_idea_writer.py`
+- `tests/test_vip_qdrant_query.py`
+- `tests/test_vip_youtube_fetcher.py`
 - `tests/test_curriculum_kanban_reader.py`
 - `config/vip_categories.yaml` — enumerates allowed categories per month (seeded from existing `PDFs_manual_download/GWTH_Month_*` subfolders)
 - `config/paths.yaml` — records the `GWTH_curriculum` path so the pipeline knows where to write idea files (overridable via env var `GWTH_CURRICULUM_PATH`)
@@ -358,16 +386,20 @@ Proposed beads issues — Phase 0 + Phase 1. Filed in GWTH_V2 engineering beads 
 |---|---|---|
 | P1 | feature | VIP Intake — idea-file template + kanban docs (in GWTH_curriculum) |
 | P1 | feature | VIP Intake — `vip_idea_writer` service + tests (pipeline) |
-| P1 | feature | VIP Intake — `vip_research_agent` service with explicit web-tools whitelist + tests (pipeline) |
+| P1 | feature | VIP Intake — `vip_qdrant_query` helper for RAG cross-check + tests (pipeline) |
+| P1 | feature | VIP Intake — `vip_youtube_fetcher` single-step transcript + Whisper fallback + tests (pipeline) |
+| P1 | feature | VIP Intake — `vip_research_agent` service, Claude Opus 4.7, explicit web-tools whitelist, includes Qdrant query + lesson-ideas + research-folder read, token/cost logging + tests (pipeline) |
 | P1 | feature | VIP Intake — `vip_intake_service` orchestrator + tests (pipeline) |
 | P1 | feature | VIP Intake — `curriculum_kanban_reader` service + tests (pipeline) |
-| P1 | feature | VIP Intake — API router + Assets-tab UI cards (VIP Intake + Curriculum Kanban) |
-| P1 | task | VIP Intake — end-to-end integration test with fixture URL |
-| P2 | task | VIP Intake — Telegram notification on completion |
+| P1 | feature | VIP Intake — API router + Assets-tab **VIP Intake card** with inline workflow reminder + progress indicator |
+| P1 | feature | VIP Intake — Assets-tab **Curriculum Kanban card** (read-only 4-column view) |
+| P1 | task | VIP Intake — Telegram notification + Assets-tab indicator on completion |
+| P1 | task | VIP Intake — end-to-end integration test with fixture URL (verifies fact-check + corpus cross-check + placements) |
 | P2 | task | VIP Intake — dedupe-by-URL-hash on submit |
 | P2 | task | VIP Intake — CLAUDE.md updates across all three repos |
+| P2 | task | VIP Intake — soft cost cap (150K-token abort) + observable cost log |
 
-Dependencies: Phase 0 issues must finish before any Phase 1 issue can start (Phase 1 writes into the new repo). Within Phase 1: template + writer → research agent → orchestrator → curriculum_kanban_reader → UI → integration test.
+Dependencies: Phase 0 issues must finish before any Phase 1 issue can start (Phase 1 writes into the new repo). Within Phase 1: template → (writer + qdrant_query + youtube_fetcher in parallel) → research agent (uses all three) → orchestrator → curriculum_kanban_reader → UI cards → integration test + notification + cost cap.
 
 Phase 2–5 beads to be filed after Phase 1 ships.
 
@@ -376,11 +408,16 @@ Phase 2–5 beads to be filed after Phase 1 ships.
 ## 11. Timeline estimate
 
 - **Phase 0 (project split + migration):** ~1–2 hours. Mostly mechanical.
-- **Phase 1 (MVP intake):** ~3–5 days if focused (most work is services + tests; UI is ~half a day).
+- **Phase 1 (MVP intake + Qdrant + YouTube + UI reminders):** ~5–7 days if focused. Larger than the original Phase 1 because Qdrant integration and single-step YouTube are promoted in from later phases (per David's decisions 2026-04-23 pm).
 - **Phase 2 (fact-check hardening):** ~2 days.
-- **Phase 3 (Qdrant corpus cross-check):** ~2 days.
+- **Phase 3 (drift detection + quarterly re-analysis):** ~2 days.
 - **Phase 4 (UI polish + audit trail):** ~1 day.
 - **Phase 5 (extend to lessons/labs/projects):** triggered by lesson-writing milestone; ~2–3 days incremental.
+
+Cost considerations (Claude Opus 4.7, David's Claude Code subscription):
+- Each VIP research run: estimate ~40K–80K tokens input (asset + lesson-ideas MDs + research files + Qdrant hits) + 10–20 web fetches + ~10K–20K tokens output. Rough cost budget: meaningful but not wild.
+- David plans to upgrade Max 5 → Max 20 during lesson-writing. That window absorbs the cost of 50–100 VIP intakes cleanly.
+- Per-asset token + cost logged to `vip-assets-index.json` so the cost curve is visible. If a single run exceeds a 150K-token soft cap, the job stops and surfaces a warning (prevents runaway loops).
 
 ---
 

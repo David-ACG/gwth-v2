@@ -233,13 +233,13 @@ The existing GWTH_V2 kanban and pipeline kanban are *not* shown in this panel �
 
 ---
 
-## 7. Open questions for David
+## 7. Open questions — resolved by David 2026-04-23 pm
 
-1. **Which LLM for the research subagent?** Claude Opus 4.7 via Claude Code subagent (expensive, best quality) vs Claude API directly (same cost, scriptable) vs OpenAI/Groq (cheaper but less integrated). Recommendation: Claude Code subagent via `general-purpose` with explicit web tools — reuses existing auth, runs in same session.
-2. **Notification on idea-file ready?** Telegram (already wired) vs pipeline toast vs nothing (David just refreshes the Assets tab). Recommendation: Telegram short message with the idea-file path, since intake is async.
-3. **Should the subagent ever edit files directly, even lesson-ideas docs?** Current proposal: **no** — it only writes the idea file; David runs `/plan` + `/build` for actual edits. This matches current kanban discipline. If David wants a "fast-lane" for tiny edits (e.g. "just add this one quote to L22"), we can add a `--fast` flag later that skips `/plan` and goes straight to `/build`.
-4. **YouTube videos — which transcript source?** youtube-transcript-api is already in the pipeline (from `tab_youtube_sources.py` docs). Should be the default. Fall back to Whisper if no captions.
-5. **How much of the corpus should the subagent read before proposing placements?** Options: (a) only the 3 lesson-ideas MDs (fast, ~3K tokens each), (b) the lesson-ideas MDs plus matching research folder files (thorough, ~30K tokens), (c) RAG query against Qdrant (scalable, best long-term). Recommendation: start with (a), upgrade to (c) once lessons/labs/projects are written and the corpus is larger.
+1. **LLM for the research subagent — DECIDED: Claude Opus 4.7 via Claude Code subagent.** Uses David's Claude Code subscription; may upgrade Max 5 → Max 20 during the lesson-writing window. Cost is the upside-worth-paying — quality dominates the placement-proposal step. Plan logs per-asset token usage so the cost curve is visible.
+2. **Notification — DECIDED: Telegram short message + Assets-tab indicator.** Both, not either/or. Telegram for async "your idea file is ready" with the filepath; Assets-tab toast/row for in-dashboard visibility.
+3. **Subagent direct edits — DECIDED: NO, as proposed.** Research subagent only writes the idea file; curriculum `/plan` + `/build` from GWTH_curriculum repo does the actual lesson edits. **Extra requirement:** the Assets tab must carry an inline workflow reminder ("after submit: open idea file → run `/plan` in GWTH_curriculum → run `/build`") because David expects to forget the steps between uses. A `--fast` flag may be added later.
+4. **YouTube transcripts — DECIDED: youtube-transcript-api default, Whisper fallback, all inside the single-intake flow.** David drops a YouTube URL into the VIP Intake form and the pipeline handles transcript fetch + fallback + ingest + research end-to-end. No separate "fetch transcript first" step — that guarantees it gets forgotten.
+5. **Corpus coverage — DECIDED: (b) + (c) from day one.** Skip option (a). The research subagent reads lesson-ideas MDs **and** matching research-folder files **and** runs a Qdrant RAG query. This matches how the manual FT/BBC workflow actually ran. (c) is pulled forward from Phase 3 into Phase 1. Phase 3 is repurposed to drift-detection / quarterly re-analysis.
 
 ---
 
