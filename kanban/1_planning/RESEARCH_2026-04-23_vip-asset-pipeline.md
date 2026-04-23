@@ -44,9 +44,30 @@ This is the sibling of the existing **automated pipeline** (RSS / YouTube / soci
 
 ### 3.2 Where the proposal is over-built
 
-- **"A UI showing all the different stages that a new VIP asset goes through"** — if the stages map 1:1 onto kanban folders (`0_idea → 1_planning → 2_testing → 3_done`), we don't need new stage tracking. A VIP asset *is* a kanban item; its stage is its folder. One JSON file (`kanban/vip-assets-index.json`) is enough to render a dashboard view — no custom state machine.
-- **Two UIs for the same thing.** Kanban folders already *are* the source of truth for state. The Assets-tab view should *read* kanban, not duplicate it.
 - **"Claude then updates the syllabus and lessons and labs"** — in one step — is the highest-risk framing. Breaking it into "produce a proposed diff in a kanban prompt file → human approves → `/build` applies" is only marginally slower and eliminates the failure mode entirely.
+- **A custom state machine in the UI.** We can reuse the kanban folder pattern (0_idea → 1_planning → 2_testing → 3_done) as the state model. Each VIP asset *is* a kanban item; its stage is its folder. One JSON index file is enough to drive a dashboard view — no custom state machine needed.
+
+### 3.2a Revision after David's feedback (2026-04-23 pm)
+
+My first draft said "reuse the existing GWTH_V2/kanban folder". **This was wrong.** The existing GWTH_V2 kanban is for engineering the GWTH platform — building components, fixing bugs, shipping features. Curriculum curation is a fundamentally different kind of work:
+
+| Engineering kanban work | Curriculum kanban work |
+|---|---|
+| Build a React component | Add a Sunak quote to L22 |
+| Fix a Playwright flake | Integrate FT/Focaldata findings into Journey 1 |
+| Run `npm test`, deploy to P520 | Diff the MD, read the insertion in context |
+| Verify via browser at :3001 | Verify by reading the prose |
+| Uses TypeScript / tests / build pipeline | Uses markdown / semantic review only |
+
+Mixing them in one folder means:
+- `bd ready` surfaces React tickets next to "add this quote" tickets
+- `/plan` templates try to fit code-shaped work into content-shaped work (and vice-versa)
+- The audit trail in `3_done/` is noisy — you can't answer "what curriculum changed this month" without filtering
+- Two mental contexts collide every time you open the folder
+
+**Correct principle:** *reuse the workflow pattern*, don't reuse the same folder. Each kind of work gets its own kanban. This matches how the pipeline repo already has its own kanban and GWTH_V2 already has its own kanban — they share the pattern but have separate folders. Curriculum should get the same treatment.
+
+Section 5 below is rewritten accordingly.
 
 ### 3.3 Where the proposal is *under*-built
 
@@ -133,28 +154,65 @@ That's it. State is derived from which kanban folder the idea file currently liv
 
 ## 5. Project-structure question — where does this live?
 
-David asked whether to put this in GWTH_V2, the pipeline, or a new project. Analysis:
+David's position (after feedback): curriculum work must be *organisationally separated* from engineering work on GWTH and the pipeline. He floated two options — a new project folder, or a pipeline-UI surface that shows curriculum work separately. **The right answer is both, combined.** Here's the revised analysis.
 
-| Aspect | GWTH_V2 | Pipeline (`1_gwthpipeline520`) | New project |
-|---|---|---|---|
-| Target files (lesson ideas MDs) | ✅ native | via file-system | via file-system |
-| Kanban folders | ✅ native | separate repo | would duplicate |
-| `/plan` + `/build` commands | ✅ configured | no | would reconfigure |
-| NiceGUI dashboard | no | ✅ native | no |
-| Docling / Qdrant ingestion | no | ✅ native | no |
-| Research service / LLM orchestration | no | ✅ native | no |
-| Assets tab / freshness matrix | no | ✅ native | no |
-| Cost to add a feature | low for docs, high for UI | low for UI, moderate for docs | very high (bootstrapping) |
+### 5.1 Three concerns, three homes
 
-**Recommendation: split cleanly along existing lines.**
+| Concern | Home | Why |
+|---|---|---|
+| **Platform engineering** (Next.js app, auth, UI, tests, deploys) | `C:\Projects\GWTH_V2` (existing) | Already configured with /plan, /build, Playwright, Coolify |
+| **Pipeline engineering + ingestion + VIP orchestration** (Docling, Qdrant, NiceGUI dashboard, the new VIP intake service) | `C:\Projects\1_gwthpipeline520` (existing) | Already has the infrastructure; adding a tab and a service is marginal |
+| **Curriculum content + curriculum kanban** (lesson ideas, research folders, syllabus, lessons, labs, projects, VIP idea files) | `C:\Projects\GWTH_curriculum` (NEW) | Pure markdown workspace. No build. No tests. Verification = David reads the prose. Its own kanban, its own /plan, its own /build |
 
-- **Pipeline** owns: intake UI, research subagent orchestration, web fact-check, Qdrant ingest, writing the idea file. This is orchestration + ingestion, which is *exactly* what the pipeline does today.
-- **GWTH_V2** owns: the idea file (once written), kanban flow, `/plan` + `/build`, lesson-ideas doc edits, lesson / lab / project file edits. This is curriculum content, which is *exactly* what GWTH_V2 holds today.
-- **Interface between them:** the pipeline writes one markdown file to `C:/Projects/GWTH_V2/kanban/0_idea/` via a simple filesystem write. No API. No shared database. One-way handoff. Easy to test, easy to inspect, easy to bypass if something breaks.
+### 5.2 What moves
 
-**Do NOT create a third project.** Adds two more repos to maintain, another kanban to run, another CLAUDE.md, another set of env vars. The interface is already clean.
+From `GWTH_V2` → `GWTH_curriculum`:
+- `gwth_lesson_ideas/` (MONTH_{1,2,3}_LESSON_IDEAS_*.md, SYLLABUS_DIFF_*.md, month-{1,2,3}-research/, rewired-book-notes/, etc.)
+- Future: lesson content, lab content, project content, syllabus docs
+- A new `kanban/` (curriculum-only): 0_idea / 1_planning / 2_testing / 3_done, a curriculum-tuned CLAUDE.md, its own /plan and /build wiring
 
-**Keeping research / ideas folders separate from lesson / lab / project files** (which David explicitly wants) falls out naturally: the pipeline's subagent proposes edits to *both*, and the kanban prompt targets whichever set of files the current plan includes. Research docs get richer over time; lesson files get regenerated from them. Both coexist.
+GWTH_V2 keeps:
+- All `src/` (Next.js app, React components, API routes)
+- Its existing `kanban/` — which now handles *platform engineering only*
+- When lessons need to render in the app, they're imported from `../GWTH_curriculum/content/` at build time (simple copy step; no submodule, no npm package)
+
+Pipeline stays as is, plus gains:
+- VIP Intake card on Assets tab
+- Pipeline-side "Curriculum Kanban" view that *reads* `GWTH_curriculum/kanban/` and renders the state — single dashboard for curriculum work, without conflating it with engineering kanban
+
+### 5.3 Why this is better than my first draft
+
+- **Mental-context match.** David opens `GWTH_curriculum` when he wants to think about teaching content; opens `GWTH_V2` when he wants to think about platform engineering. Zero cross-contamination.
+- **Beads stays coherent.** Engineering beads in GWTH_V2 and pipeline stay focused on code; curriculum beads in GWTH_curriculum stay focused on lessons. `bd ready` gives a relevant answer in each context.
+- **Audit trails are clean.** "What curriculum changed this month" = `git log` in one repo. "What platform engineering shipped" = `git log` in another.
+- **Curriculum tooling can be tuned.** A curriculum `/plan` template cares about which lesson/journey/lab is being updated and what quote is being added. An engineering `/plan` template cares about test coverage and file paths. Different templates, different gates.
+- **Contract to pipeline stays trivial.** Pipeline writes one markdown file to `C:\Projects\GWTH_curriculum\kanban\0_idea\`. Still one filesystem write. Still no API. The destination just moved.
+
+### 5.4 Migration cost (one-time)
+
+- `git mv` `gwth_lesson_ideas/` from GWTH_V2 to GWTH_curriculum (preserves history)
+- Update pipeline README path references (2–3 mentions)
+- Update GWTH_V2 CLAUDE.md (remove `gwth_lesson_ideas/` references; add pointer to new repo)
+- Scaffold GWTH_curriculum: kanban folder tree, CLAUDE.md, run-kanban.sh variant, README
+- Update the VIP plan (Phase 0 step; already reflected in the plan doc)
+
+Total: ~1–2 hours of careful moves + commits in both repos. One-time.
+
+### 5.5 Ongoing cost (objection: "a third repo to maintain")
+
+- No CI/CD. No deploys. No build. No tests beyond markdown link checks.
+- CLAUDE.md is short (curriculum work is content-writing, not engineering).
+- Each curriculum session starts in one repo and stays there until David decides to run a platform build.
+- The *mental overhead* of having a third repo is lower than the *mental overhead* of conflating two kinds of work in one folder.
+
+### 5.6 Pipeline-UI surface of curriculum kanban
+
+The pipeline's Assets tab adds two cards:
+
+1. **VIP Intake** — the submit form (URL / PDF / YouTube) that writes into `GWTH_curriculum/kanban/0_idea/`. Identical to the original design; only the destination path changes.
+2. **Curriculum Kanban** — a read-only board showing the 4 folders of `GWTH_curriculum/kanban/` with item counts + last-modified dates. Click a row → opens the markdown in a local viewer. This gives David the "single dashboard for curriculum work" he wanted, without duplicating state: the folders are the source of truth.
+
+The existing GWTH_V2 kanban and pipeline kanban are *not* shown in this panel — they're engineering work, lived-in via Claude Code sessions in the respective repos.
 
 ---
 

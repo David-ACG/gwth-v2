@@ -2,8 +2,9 @@
 
 **Date:** 2026-04-23
 **Research:** [RESEARCH_2026-04-23_vip-asset-pipeline.md](./RESEARCH_2026-04-23_vip-asset-pipeline.md)
-**Spans projects:** `1_gwthpipeline520` (pipeline) + `GWTH_V2` (curriculum)
+**Spans projects:** `1_gwthpipeline520` (pipeline) + **NEW** `GWTH_curriculum` (curriculum content + kanban) + `GWTH_V2` (platform only, loses `gwth_lesson_ideas/`)
 **Status:** awaiting David's Gate-1 review, then break into beads
+**Revised:** 2026-04-23 pm — after David's feedback, curriculum work gets its own project rather than sharing the GWTH_V2 engineering kanban
 
 ---
 
@@ -19,13 +20,15 @@ Give David a one-click way to flag a curated article / URL / PDF / YouTube video
 
 ### In scope
 
+- New `GWTH_curriculum` project — scaffolded, with kanban folders, curriculum-tuned CLAUDE.md, /plan + /build wiring.
+- Migration of `gwth_lesson_ideas/` from GWTH_V2 to GWTH_curriculum (history preserved via `git mv` + paired commits).
 - Pipeline Assets-tab "VIP Intake" card (NiceGUI) for URL / PDF / YouTube intake.
-- Pipeline background job that fetches, ingests to Qdrant, runs a web-enabled research subagent, and writes a kanban idea file to `GWTH_V2/kanban/0_idea/`.
+- Pipeline Assets-tab "Curriculum Kanban" card — read-only view of `GWTH_curriculum/kanban/` folder state.
+- Pipeline background job that fetches, ingests to Qdrant, runs a web-enabled research subagent, and writes a kanban idea file to `GWTH_curriculum/kanban/0_idea/`.
 - Standard idea-file template with: summary, fact-check, corpus cross-check, placement proposals, open questions, source URL.
-- Recent-VIP-assets list in the Assets tab, reading from `kanban/vip-assets-index.json`.
 - Explicit web-tools config for the research subagent (fixes the prior-session gap where the subagent reported no web access).
 - Telegram notification when the idea file is ready.
-- Docs in both projects describing the contract between pipeline and GWTH_V2.
+- Docs in all three projects describing the contract: pipeline writes → GWTH_curriculum kanban; GWTH_V2 imports curriculum content at build time.
 
 ### Out of scope (explicitly not in v1)
 
@@ -44,36 +47,68 @@ Give David a one-click way to flag a curated article / URL / PDF / YouTube video
 
 ## 3. Architecture at a glance
 
+Three projects, three clean responsibilities.
+
 ```
 ┌─────────────────────── Pipeline (1_gwthpipeline520) ──────────────────────┐
 │                                                                            │
-│  app/tabs/tab_assets.py       ← adds "VIP Intake" card + recent list      │
+│  app/tabs/tab_assets.py       ← adds "VIP Intake" + "Curriculum Kanban"   │
 │  app/services/                                                             │
 │    vip_intake_service.py      ← NEW: orchestrates the flow                │
 │    vip_research_agent.py      ← NEW: spawns web-enabled Claude subagent   │
 │    vip_idea_writer.py         ← NEW: renders the idea-file template       │
-│  app/routers/vip_api.py       ← NEW: /api/vip/submit, /api/vip/list       │
+│    curriculum_kanban_reader.py ← NEW: reads GWTH_curriculum/kanban state  │
+│  app/routers/vip_api.py       ← NEW: /api/vip/submit, /api/vip/list,      │
+│                                       /api/curriculum/kanban              │
 │                                                                            │
 │  (reuses: folder_scanner_service, docling_service, qdrant_service,        │
 │           research_service for RAG helpers, external_content_service)     │
 │                                                                            │
-└─────────────────────────┬──────────────────────────────────────────────────┘
-                          │ filesystem write (one markdown file)
-                          ▼
-┌─────────────────────── GWTH_V2 ────────────────────────────────────────────┐
+└────────┬──────────────────────────────────────────────────────────────────┘
+         │ filesystem write (one markdown file + index entry)
+         ▼
+┌─────────────────────── GWTH_curriculum (NEW) ──────────────────────────────┐
 │                                                                            │
-│  kanban/0_idea/IDEA_<date>_vip-<slug>.md   ← pipeline writes this          │
-│  kanban/vip-assets-index.json              ← pipeline appends entry        │
-│  kanban/templates/                                                         │
-│    VIP_IDEA_TEMPLATE.md                    ← NEW: idea-file template       │
+│  kanban/                          ← curriculum-only kanban                 │
+│    0_idea/IDEA_<date>_vip-<slug>.md  ← pipeline writes here                │
+│    1_planning/                                                             │
+│    2_testing/                                                              │
+│    3_done/                                                                 │
+│    vip-assets-index.json                                                   │
+│    templates/VIP_IDEA_TEMPLATE.md                                          │
+│    KANBAN_RUNNER.md               ← curriculum-tuned (no npm test, no P520)│
+│    run-kanban.sh                                                           │
+│  gwth_lesson_ideas/               ← MOVED from GWTH_V2                     │
+│    MONTH_{1,2,3}_LESSON_IDEAS_*.md                                         │
+│    month-{1,2,3}-research/                                                 │
+│  content/                         ← future: written lessons / labs / projects│
+│  CLAUDE.md                        ← curriculum context, no build/test      │
+│  .beads/                          ← beads isolated from GWTH_V2            │
 │                                                                            │
-│  gwth_lesson_ideas/MONTH_{1,2,3}_LESSON_IDEAS_*.md  ← edited via /plan+build│
-│  gwth_lesson_ideas/month-{1,2,3}-research/*.md       ← edited via /plan+build│
+└────────┬───────────────────────────────────────────────────────────────────┘
+         │ build-time copy (simple file sync, no submodule)
+         ▼
+┌─────────────────────── GWTH_V2 (trimmed) ──────────────────────────────────┐
+│                                                                            │
+│  src/                             ← Next.js app (unchanged)                │
+│  kanban/                          ← PLATFORM ENGINEERING ONLY              │
+│  content/                         ← populated from GWTH_curriculum/content │
+│                                     by a build-time copy step              │
+│                                                                            │
+│  (gwth_lesson_ideas/ is REMOVED — lives in GWTH_curriculum now)            │
 │                                                                            │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Contract between projects:** one function, one output. Pipeline writes exactly two things — a markdown idea file + one JSON line in the index. Nothing else is shared.
+**Contract pipeline → curriculum:** one filesystem write per VIP intake — the idea markdown file plus one JSON index line. No API, no shared DB, one-way.
+
+**Contract curriculum → platform:** at GWTH_V2 build time, a script (`scripts/sync-content.ts`) copies `../GWTH_curriculum/content/**` into `GWTH_V2/content/`. Simple, auditable, no submodule.
+
+**What gets separated by this split:**
+
+- Engineering kanban (GWTH_V2, pipeline) stays focused on code, tests, deploys.
+- Curriculum kanban (GWTH_curriculum) stays focused on teaching content, quotes, placements.
+- The Pipeline UI is the *single dashboard* that shows both the VIP intake form and the curriculum kanban state — David doesn't have to context-switch between repos to see curriculum progress.
 
 ---
 
@@ -139,9 +174,32 @@ research_agent_log: <path to JSON log>
 
 ## 5. Phased delivery
 
+### Phase 0 — Project separation (prerequisite)
+
+**Target:** ~1–2 hours. Must ship before Phase 1 because Phase 1 writes into the new project's kanban.
+
+Deliverables:
+1. Create `C:\Projects\GWTH_curriculum\` repo with:
+   - `kanban/` (0_idea, 1_planning, 2_testing, 3_done), `KANBAN_RUNNER.md` tuned for curriculum work (no npm test, no P520 deploy, verification = "read the diff and the prose"), `run-kanban.sh`, `PLAN_TEMPLATE.md`, `PROMPT_TEMPLATE.md`.
+   - `CLAUDE.md` — curriculum context (editorial style, sources to cite, tone, hallmark phrases like "flat is the new up" to reuse consistently), markdown-only, no build system.
+   - `README.md` — explains what this repo is and what it is *not* (not the platform, not the pipeline).
+   - `.beads/` initialised.
+   - `.gitignore`, initial commit, pushed to a new GitHub repo (`David-ACG/gwth-curriculum` suggested).
+2. Move `gwth_lesson_ideas/` from `GWTH_V2/` to `GWTH_curriculum/gwth_lesson_ideas/` using `git mv` + paired commits on both repos (history preserved in the new repo; GWTH_V2 records the removal).
+3. Update references:
+   - `GWTH_V2/CLAUDE.md` — remove `gwth_lesson_ideas/` mentions, add pointer to GWTH_curriculum.
+   - `1_gwthpipeline520/data/PDFs_manual_download/GWTH_Month_*/README.md` — change "Related artefacts in GWTH_V2" section to point at GWTH_curriculum paths.
+4. Smoke test: run Claude Code from `GWTH_curriculum/` — verify `/plan` and `/build` use the new repo's kanban folder correctly; `bd ready` in the new repo shows an empty-but-healthy state.
+
+Acceptance criteria (Phase 0):
+- [ ] New repo exists locally and on GitHub; pushable.
+- [ ] `git log gwth_lesson_ideas/MONTH_1_LESSON_IDEAS_2026-04-20.md` in GWTH_curriculum shows the full history including the FT/BBC commits from today.
+- [ ] `/plan test` from GWTH_curriculum writes to `GWTH_curriculum/kanban/1_planning/`, not to GWTH_V2.
+- [ ] GWTH_V2 still builds (`npm run build`) — since nothing the app imports has been touched yet.
+
 ### Phase 1 — MVP intake (the critical path)
 
-**Target:** 3–5 days. This is what replaces the manual FT/BBC workflow.
+**Target:** 3–5 days after Phase 0. This is what replaces the manual FT/BBC workflow.
 
 Deliverables:
 1. `vip_intake_service.py` — given `{asset_type, source_url or file_path, target_months[], category}`:
@@ -149,23 +207,24 @@ Deliverables:
    - write `.meta.md` stub
    - trigger folder-scan for that subfolder (reuses existing Qdrant ingest)
    - spawn `vip_research_agent`
-   - when agent returns, call `vip_idea_writer` → writes markdown to GWTH_V2 kanban path
-   - append row to `vip-assets-index.json`
+   - when agent returns, call `vip_idea_writer` → writes markdown to **`GWTH_curriculum/kanban/0_idea/`**
+   - append row to `GWTH_curriculum/kanban/vip-assets-index.json`
    - fire Telegram notification with idea-file path
 2. `vip_research_agent.py` — wraps the Claude Code `Agent` tool with `general-purpose` subagent. **Explicit tools whitelist: `[Read, Grep, Glob, Bash, WebSearch, WebFetch]`**. Prompt template includes the 5 sub-tasks (summarise, fact-check, corpus-check, placements, open questions). Returns structured JSON.
 3. `vip_idea_writer.py` — renders the JSON → markdown via the template.
-4. Assets-tab **VIP Intake card** with a form (URL input, file drop, month radio, category dropdown, submit).
-5. Assets-tab **Recent VIP Assets** list reading `vip-assets-index.json`. Each row shows title, category, state (derived from kanban folder), last-modified date. Click → opens idea file in file:// link.
-6. API router (`/api/vip/submit`, `/api/vip/list`).
-7. Idea-file template at `GWTH_V2/kanban/templates/VIP_IDEA_TEMPLATE.md`.
-8. Integration test: submit a fake URL → verify idea file lands in `kanban/0_idea/` and index is updated.
+4. `curriculum_kanban_reader.py` — reads `GWTH_curriculum/kanban/{0_idea,1_planning,2_testing,3_done}/*.md` and returns counts + last-modified + titles for the UI panel.
+5. Assets-tab **VIP Intake card** with a form (URL input, file drop, month radio, category dropdown, submit).
+6. Assets-tab **Curriculum Kanban card** — read-only 4-column layout showing idea/planning/testing/done item counts, with click-through to file:// links.
+7. API router (`/api/vip/submit`, `/api/vip/list`, `/api/curriculum/kanban`).
+8. Idea-file template at `GWTH_curriculum/kanban/templates/VIP_IDEA_TEMPLATE.md`.
+9. Integration test: submit a fake URL → verify idea file lands in `GWTH_curriculum/kanban/0_idea/` and index is updated.
 
 Acceptance criteria (Phase 1):
-- [ ] David can submit a URL from the Assets tab, and within 5 minutes a populated idea file appears in `GWTH_V2/kanban/0_idea/`.
+- [ ] David can submit a URL from the Assets tab, and within 5 minutes a populated idea file appears in `GWTH_curriculum/kanban/0_idea/`.
 - [ ] The idea file uses the template structure above with a non-empty fact-check table.
 - [ ] The research subagent's tool list (logged on first message) **explicitly includes `WebSearch` and `WebFetch`**. This is the prior-session gap and must be verified, not assumed.
-- [ ] Running `/plan` against the idea file produces a plan the user can execute with `/build`.
-- [ ] Recent-VIP-assets list shows the new entry within 30s of submission.
+- [ ] Running `/plan` from the GWTH_curriculum repo against the idea file produces a plan the user can execute with `/build`.
+- [ ] Curriculum Kanban card on the Assets tab shows the new entry within 30s of submission.
 - [ ] Telegram notification fires on completion.
 
 ### Phase 2 — Fact-check hardening
@@ -197,40 +256,58 @@ Acceptance criteria (Phase 1):
 
 **Target:** triggered when the lesson files are written — per David, next few days.
 
-- Extend `vip_research_agent` placement-proposal logic to also target `app/(dashboard)/course/[slug]/lesson/[lessonSlug]/*.mdx` (or wherever lesson content lives).
-- Extend to lab files and project files as their structure firms up.
-- Research folder stays as the richest source of truth; lesson/lab/project files get *summaries* regenerated from research when asked.
+- Extend `vip_research_agent` placement-proposal logic to also target `GWTH_curriculum/content/lessons/*.md`, `GWTH_curriculum/content/labs/*.md`, and `GWTH_curriculum/content/projects/*.md` (or whatever structure emerges).
+- Add the build-time content-sync step in GWTH_V2 (`scripts/sync-content.ts`) that copies `../GWTH_curriculum/content/` into `GWTH_V2/content/` before `next build`. This keeps platform runtime decoupled from curriculum editing.
+- Research folders (in GWTH_curriculum) stay as the richest source of truth; lesson/lab/project files get *summaries* regenerated from research when asked.
+- Consider a "syllabus-diff" report: after N VIP asset integrations, produce a changelog showing which lessons received quotes/findings/sources since the last report. Supports editorial review.
 
 ---
 
 ## 6. Files affected
 
+### In `GWTH_curriculum` (NEW project — Phase 0)
+- `kanban/0_idea/`, `kanban/1_planning/`, `kanban/2_testing/`, `kanban/3_done/` (empty dirs with `.gitkeep`)
+- `kanban/KANBAN_RUNNER.md` — curriculum-tuned (no npm test, no P520 deploy, no Playwright; verification = prose review + diff)
+- `kanban/PLAN_TEMPLATE.md`, `kanban/PROMPT_TEMPLATE.md` — curriculum-shaped
+- `kanban/run-kanban.sh`
+- `kanban/templates/VIP_IDEA_TEMPLATE.md`
+- `kanban/vip-assets-index.json` (empty array at creation)
+- `kanban/docs/VIP_ASSET_CONTRACT.md` — documents what the pipeline writes, what David does with it, and how to diagnose failures without touching the pipeline
+- `CLAUDE.md` — curriculum context, editorial style, markdown-only
+- `README.md`, `.gitignore`, `.beads/`
+- `gwth_lesson_ideas/` — **moved** from GWTH_V2 via `git mv`, history preserved
+- `content/` — empty placeholder; populated as lessons/labs/projects are written
+
 ### In `1_gwthpipeline520` (new)
 - `app/services/vip_intake_service.py`
 - `app/services/vip_research_agent.py`
 - `app/services/vip_idea_writer.py`
+- `app/services/curriculum_kanban_reader.py`
 - `app/routers/vip_api.py`
 - `tests/test_vip_intake.py`
 - `tests/test_vip_research_agent.py`
 - `tests/test_vip_idea_writer.py`
+- `tests/test_curriculum_kanban_reader.py`
 - `config/vip_categories.yaml` — enumerates allowed categories per month (seeded from existing `PDFs_manual_download/GWTH_Month_*` subfolders)
+- `config/paths.yaml` — records the `GWTH_curriculum` path so the pipeline knows where to write idea files (overridable via env var `GWTH_CURRICULUM_PATH`)
 
 ### In `1_gwthpipeline520` (modified)
-- `app/tabs/tab_assets.py` — add VIP Intake card + Recent list at top
+- `app/tabs/tab_assets.py` — add VIP Intake card + Curriculum Kanban card
 - `app/service_registry.py` — register new services
 - `app/gwth_dashboard.py` — wire the router
+- `data/PDFs_manual_download/GWTH_Month_*/README.md` — update "Related artefacts" section to point at `GWTH_curriculum/gwth_lesson_ideas/` instead of `GWTH_V2/gwth_lesson_ideas/`
 
-### In `GWTH_V2` (new)
-- `kanban/templates/VIP_IDEA_TEMPLATE.md`
-- `kanban/vip-assets-index.json` (empty array at creation)
-- `kanban/docs/VIP_ASSET_CONTRACT.md` — documents what the pipeline writes, what David does with it, and how to diagnose failures without touching the pipeline
+### In `GWTH_V2` (modified only — no additions)
+- `CLAUDE.md` — remove `gwth_lesson_ideas/` references; add pointer to `GWTH_curriculum`
+- Delete: `gwth_lesson_ideas/` (moved to GWTH_curriculum)
 
-### In `GWTH_V2` (modified)
-- `kanban/KANBAN_RUNNER.md` — one paragraph referencing the VIP flow as an alternative source of idea files (beyond David manually creating them)
-- `CLAUDE.md` — note the VIP index file as a read source for AI sessions
+### Phase 5 (later) — `GWTH_V2` (new, only when lessons are rendered in-app)
+- `scripts/sync-content.ts` — build-time copy from `../GWTH_curriculum/content/` into `src/content/`
+- `next.config.ts` modification — run sync-content before build
+- `.gitignore` — ignore `src/content/` (it's generated from the sister repo)
 
 ### No changes needed
-- `/plan`, `/build`, `run-kanban.sh`, gate checklists — VIP idea files are just normal idea files. The workflow downstream is unchanged.
+- `/plan`, `/build`, `run-kanban.sh` machinery — they operate relative to the current repo's `kanban/` folder, which is correct behaviour for both engineering kanbans and the new curriculum kanban. Just run Claude Code from the right repo.
 
 ---
 
@@ -263,21 +340,34 @@ If Phase 1 misbehaves (e.g. writes malformed idea files, runaway API spend, wron
 
 ## 10. Beads breakdown (for David's review before creating issues)
 
-Proposed beads issues, Phase 1:
+Proposed beads issues — Phase 0 + Phase 1. Filed in GWTH_V2 engineering beads (since this is infrastructure work, not curriculum content work).
+
+### Phase 0 — Project separation
 
 | Prio | Type | Title |
 |---|---|---|
-| P1 | feature | VIP Intake — idea-file template + kanban docs (GWTH_V2) |
-| P1 | feature | VIP Intake — `vip_idea_writer` service + tests |
-| P1 | feature | VIP Intake — `vip_research_agent` service with explicit web-tools whitelist + tests |
-| P1 | feature | VIP Intake — `vip_intake_service` orchestrator + tests |
-| P1 | feature | VIP Intake — API router + Assets-tab UI card |
+| P1 | task | Phase 0 — Scaffold GWTH_curriculum repo (kanban, CLAUDE.md, run-kanban.sh, README, .beads) |
+| P1 | task | Phase 0 — Create GitHub repo `David-ACG/gwth-curriculum` and push initial commit |
+| P1 | task | Phase 0 — `git mv` gwth_lesson_ideas/ from GWTH_V2 to GWTH_curriculum (paired commits) |
+| P1 | task | Phase 0 — Update GWTH_V2/CLAUDE.md + pipeline READMEs for new paths |
+| P1 | task | Phase 0 — Smoke test /plan + /build in GWTH_curriculum repo |
+
+### Phase 1 — MVP intake
+
+| Prio | Type | Title |
+|---|---|---|
+| P1 | feature | VIP Intake — idea-file template + kanban docs (in GWTH_curriculum) |
+| P1 | feature | VIP Intake — `vip_idea_writer` service + tests (pipeline) |
+| P1 | feature | VIP Intake — `vip_research_agent` service with explicit web-tools whitelist + tests (pipeline) |
+| P1 | feature | VIP Intake — `vip_intake_service` orchestrator + tests (pipeline) |
+| P1 | feature | VIP Intake — `curriculum_kanban_reader` service + tests (pipeline) |
+| P1 | feature | VIP Intake — API router + Assets-tab UI cards (VIP Intake + Curriculum Kanban) |
 | P1 | task | VIP Intake — end-to-end integration test with fixture URL |
 | P2 | task | VIP Intake — Telegram notification on completion |
 | P2 | task | VIP Intake — dedupe-by-URL-hash on submit |
-| P2 | task | VIP Intake — CLAUDE.md + KANBAN_RUNNER.md updates |
+| P2 | task | VIP Intake — CLAUDE.md updates across all three repos |
 
-Dependencies: template + writer → research agent → orchestrator → UI → integration test.
+Dependencies: Phase 0 issues must finish before any Phase 1 issue can start (Phase 1 writes into the new repo). Within Phase 1: template + writer → research agent → orchestrator → curriculum_kanban_reader → UI → integration test.
 
 Phase 2–5 beads to be filed after Phase 1 ships.
 
@@ -285,20 +375,22 @@ Phase 2–5 beads to be filed after Phase 1 ships.
 
 ## 11. Timeline estimate
 
-- Phase 1: ~3–5 days if focused (most work is services + tests; UI is ~half a day).
-- Phase 2: ~2 days.
-- Phase 3: ~2 days.
-- Phase 4: ~1 day.
-- Phase 5: triggered by lesson-writing milestone; ~2–3 days incremental.
+- **Phase 0 (project split + migration):** ~1–2 hours. Mostly mechanical.
+- **Phase 1 (MVP intake):** ~3–5 days if focused (most work is services + tests; UI is ~half a day).
+- **Phase 2 (fact-check hardening):** ~2 days.
+- **Phase 3 (Qdrant corpus cross-check):** ~2 days.
+- **Phase 4 (UI polish + audit trail):** ~1 day.
+- **Phase 5 (extend to lessons/labs/projects):** triggered by lesson-writing milestone; ~2–3 days incremental.
 
 ---
 
 ## 12. Why this is the right shape
 
-- **It does not invent a parallel workflow.** It feeds David's existing kanban + `/plan` + `/build` loop with better raw material. Everything downstream is already battle-tested.
+- **It does not invent a parallel workflow.** It feeds David's existing kanban + `/plan` + `/build` loop with better raw material — but puts curriculum work in its own kanban so it doesn't collide with platform engineering.
 - **It puts the risk at the right gate.** Claude proposes; David approves at the idea-file stage, approves again at the plan stage, approves a third time at the testing stage. Three layers of human-in-the-loop before anything lands in master.
 - **It fills a specific, measured gap.** The recent FT/BBC work took ~45 minutes per article, mostly on mechanical ingestion + quote extraction + placement hunting. Phase 1 compresses that to ~5 min intake + ~10 min review.
-- **It scales with the curriculum.** When lessons/labs/projects are written, the same pipeline extends in Phase 5 without redesign.
+- **It cleanly separates curriculum from platform.** Engineering beads, engineering kanban, engineering context in GWTH_V2 / pipeline. Curriculum beads, curriculum kanban, curriculum context in GWTH_curriculum. Each context is coherent on its own.
+- **It scales with the curriculum.** When lessons/labs/projects are written in GWTH_curriculum/content/, the same pipeline extends in Phase 5 without redesign. The build-time content sync keeps the platform decoupled from curriculum editing rhythm.
 
 ---
 
