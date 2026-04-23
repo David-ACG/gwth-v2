@@ -6,6 +6,7 @@
 
 ### Revision log
 
+- **2026-04-23** — **FT/Focaldata "AI workforce divide" woven into the leadership argument.** Added the first release of the FT/Focaldata Workforce AI Tracker (Murgia & Burn-Murdoch, 23 Apr 2026; UK n=2,365 / US n=1,754) to: L1 (the 20/75 Rule — company-level divide now paired with the individual-level 60%/16% divide), L13 (Agentic Talent — the FT "bottom of the career pyramid erodes" warning becomes the ethical pivot of the lesson), L15 (Right to Deploy — Acemoglu's inequality quote becomes part of the governance case for "AI for everyone in the firm, not just the top decile"). Quotes added from Acemoglu (MIT), Pissarides (LSE), Chatterji (OpenAI), Frey (Oxford Internet Institute). Source ingested to the vector DB.
 - **2026-04-21** —
   - **Source diversification.** Intro and lesson-level references rebalanced to reduce over-reliance on McKinsey's *Rewired* and *Manifesto*. Rewired remains the structural spine where no peer source is clearer (ch. 3, 4, 5, 29, 30, 32, 34, 35), but every anchor claim is now paired with a BCG, PwC, Deloitte, KPMG, MIT Sloan, HBR, Stanford AI Index, or UK-regulator corroboration. The goal: students see a body of evidence, not a book summary.
   - **"The 20 lessons at a glance"** summary table added (parity with Month 1).
@@ -101,7 +102,9 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **UK context:** The British Chambers of Commerce's March 2026 survey shows **54% of UK firms using AI** (up from 25% in 2024) — but only **11% of UK SMEs use AI to a great extent** to streamline operations. Top UK adopter sectors: IT & telecoms (56%), media/marketing (53%). Laggards: real estate (11%), transport (15%), hospitality (18%), manufacturing (19%), retail (19%). **HSBC UK** estimates AI adoption could unlock **£105bn in additional revenue for UK mid-sized firms by 2030** — a UK-scale answer to PwC's global 20/74 finding. The UK version of the diagnostic question is sharper: *we know the upside — are we capturing it, or sitting on the £105bn?*
 
-**Research:** [02-pwc-ai-leaders-study.md](month-3-research/02-pwc-ai-leaders-study.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
+**The 20/75 Rule has a human counterpart.** The **FT/Focaldata Workforce AI Tracker** (Murgia & Burn-Murdoch, 23 April 2026; UK n=2,365 / US n=1,754) found that **more than 60% of top-10% earners use AI daily vs only 16% of the bottom 10%** — the same concentration pattern that PwC documents at the company level shows up, even more sharply, at the individual level *inside* companies. **Daron Acemoglu (MIT Nobel laureate)**: *"AI is going to increase inequality between labour and capital. That is almost for sure."* For the Month 3 leader this is the critical corollary of the 20/75 Rule: being in the top-20% of companies *and* having the AI value concentrated in the top 10% of *your own* employees is the default path. If you don't actively push AI down the pay distribution in your firm, you will replicate the FT's divide inside your walls — which is both a moral and a commercial problem (the 1-to-9 pay decile is often where your service quality, customer handoff, and repeat-purchase outcomes actually live).
+
+**Research:** [02-pwc-ai-leaders-study.md](month-3-research/02-pwc-ai-leaders-study.md), [11-podcast-transcript-summary.md](month-3-research/11-podcast-transcript-summary.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md), FT/Focaldata Workforce AI Tracker (23 Apr 2026).
 
 ---
 
@@ -324,9 +327,11 @@ Every lesson ends with a **"Bring your team along"** prompt. The argument is con
 
 **Description:** Rewired Ch 11 (new). Agents join teams as collaborators. The talent model has to describe new role shapes, new ratios, new performance measurement. If an agent is doing the junior analyst's work, what does the junior analyst do? (Answer: they supervise the agents — which is a different skill.) This lesson is deliberately forward-looking and flags that specific claims in this space will date fast.
 
-**Key concepts:** agents as team members · role redefinition · supervision as the new junior skill · performance measurement in mixed teams · org-chart implications.
+**The career-pyramid erosion warning (FT/Focaldata, April 2026).** The single sharpest finding in the first FT/Focaldata AI Workforce Tracker release (Murgia & Burn-Murdoch, 23 April 2026) is *not* the income divide — it is the age and tenure distribution. **The heaviest users of AI at work are not the youngest employees, but workers in their 30s with existing tenure.** AI, in the current generation of tools, **complements proficiency** rather than substitutes for it. OpenAI's chief economist **Ronni Chatterji** confirmed in the FT piece that ChatGPT's own usage data shows AI *"allowing established experts to be more productive."* That sounds positive until you read the corollary the FT and its expert panel flagged: *"AI may erode the bottom of the career pyramid, with some work previously done by junior staff now performed by AI at the behest of senior workers, leaving new staff unable to build up skills and expertise."* Chatterji himself: *"We have to go back to the education system and think about how we're going to set up the sort of incentives for people to acquire that kind of expertise, critical thinking. You [need] the deep expertise versus being a substitute . . . where you're outsourcing the thinking to a machine."* For the Month 3 leader, this is the ethics-meets-operations question at the heart of the agentic talent model: **if AI eats your graduate roles, where does your senior talent pipeline come from in 2030?** No org chart that answers "we'll hire seniors from the market" survives a decade of that answer being given by every firm simultaneously.
 
-**Project / activity:** Pick one team in the participant's org. Redesign its structure for a world where agents do 30–50% of the current junior work. What roles disappear? What roles emerge?
+**Key concepts:** agents as team members · role redefinition · supervision as the new junior skill · performance measurement in mixed teams · org-chart implications · **career-pyramid erosion (FT 2026)** · the senior-talent-pipeline problem · AI complements proficiency (why experience now compounds faster, not slower).
+
+**Project / activity:** Pick one team in the participant's org. Redesign its structure for a world where agents do 30–50% of the current junior work. What roles disappear? What roles emerge? **Extend the exercise:** write a one-paragraph "senior talent pipeline plan" — if agents do the work graduates used to do, where will your 2030 team leads come from? (Acceptable answers include: rotation programmes, apprenticeships, agent-supervision as a graduate role, reverse-mentoring, paid AI-training sprints. "We'll hire from the market" is disqualified.)
 
 **Bring your team along:** Share the redesign with the team. Their reaction is data. (If they panic, you have a culture problem to address before you have a tech problem to solve.)
 
@@ -385,7 +390,9 @@ For SME students the lesson is: *your moat doesn't have to be 30 years of turbin
 - **Public-trust benchmark**: the **NHS** commands a **63% net trust rating** — the highest of any UK organisation for AI use. Worth citing when students argue "nobody trusts AI".
 - Use **DBS's PURE framework** (Purposeful, Unsurprising, Respectful, Explainable) alongside the UK's five principles as a customer-facing distillation.
 
-**Research:** [09-ai-trust-right-to-deploy.md](month-3-research/09-ai-trust-right-to-deploy.md), [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md).
+**The inequality question belongs in the Right-to-Deploy conversation.** Governance isn't only about whether the model is safe *for the customer* — it is also about who *inside* the organisation is allowed to benefit from it. **Daron Acemoglu (MIT Nobel laureate), FT/Focaldata Workforce AI Tracker, 23 April 2026**: *"AI is going to increase inequality between labour and capital. That is almost for sure."* **Chris Pissarides (LSE Nobel)**, same article: *"The more intelligent technology we invent, the more your intelligence matters."* A right-to-deploy gate that checks model cards and kill switches but permits a firm to concentrate all AI productivity in the top 10% of its pay distribution has earned the right to ship the model and forfeited the right to claim responsible deployment. **Add a "distribution gate" to the template**: *"Who in this firm can use the AI capability being deployed, and who can't? If access correlates tightly with seniority or pay, why?"* The FT tracker finding that **corporate training is the single biggest driver of AI use at work** (and Google's evidence that a single training session *tripled* daily usage among women aged 55+) is the operational answer: a governance framework that mandates model cards but no training budget is half a framework.
+
+**Research:** [09-ai-trust-right-to-deploy.md](month-3-research/09-ai-trust-right-to-deploy.md), [07-dbs-bank-case-study.md](month-3-research/07-dbs-bank-case-study.md), [12-uk-ai-landscape.md](month-3-research/12-uk-ai-landscape.md), FT/Focaldata Workforce AI Tracker (23 Apr 2026).
 
 ---
 
@@ -868,6 +875,13 @@ Full research library at [`month-3-research/`](month-3-research/). Key primary s
 - Amy Edmondson — psychological safety research (HBS)
 - Ethan Mollick — [One Useful Thing](https://www.oneusefulthing.org/); *Co-Intelligence* (2024)
 - Azeem Azhar — [Exponential View](https://www.exponentialview.co/)
+- **Daron Acemoglu** (MIT, 2024 Nobel laureate in economics) — *Power and Progress* (2023); 2024–26 NBER working papers on AI and inequality (search "Acemoglu + Simple Macroeconomics of AI", NBER WP 32487)
+- **Chris Pissarides** (LSE, Nobel laureate in economics) — Pissarides Review on the Future of Work & Wellbeing (Institute for the Future of Work, ifow.org)
+- **Carl Benedikt Frey** (Oxford Internet Institute) — *The Technology Trap* (2019) + Oxford Martin School AI & labour research
+- **Brynjolfsson, Li & Raymond — "Generative AI at Work"** (QJE 2025 / NBER WP 31161) — call-centre RCT showing gains concentrated in less-experienced workers (the counter-finding to the FT high-earner thesis — teach both)
+
+**Financial journalism + polling (2026 currency)**
+- **Financial Times — "High earners race ahead on AI as workplace divide widens"** (Murgia & Burn-Murdoch, 23 Apr 2026) — first release of the **FT/Focaldata Workforce AI Tracker** (UK n=2,365 / US n=1,754, monthly). Canonical 2026 source for the 60% vs 16% adoption divide, the 20% gender gap, the "heaviest users are in their 30s" finding, and the "corporate training is the biggest driver" evidence. Quotes Acemoglu, Pissarides, Frey, Curto Millet (Google), Chatterji (OpenAI). *Used in L1, L13, L15.*
 
 **Frameworks / standards**
 - NIST AI Risk Management Framework 1.0 + 2026 Generative AI Profile
