@@ -6,6 +6,13 @@ Build GWTH v2, a student-facing learning platform where users can browse courses
 
 **Content model:** This is a single course delivered over 3 months (not a multi-course catalog). The mock data uses multiple courses for UI development, but the production site will feature one course with monthly content releases.
 
+## Sibling repos
+
+- **Curriculum content** (lesson ideas, research, syllabus, future lesson/lab/project files): `C:\Projects\GWTH_curriculum` ([David-ACG/gwth-curriculum](https://github.com/David-ACG/gwth-curriculum)). Moved out of `GWTH_V2/gwth_lesson_ideas/` on 2026-04-23 so curriculum editing and platform engineering live in separate kanban/beads scopes. The platform will import content from `../GWTH_curriculum/content/` at build time (sync script not yet wired — Phase 5 of the VIP-asset plan).
+- **Pipeline** (Docling → Qdrant ingestion, NiceGUI dashboard): `C:\Projects\1_gwthpipeline520` ([David-ACG/gwthpipeline520](https://github.com/David-ACG/gwthpipeline520)). Keeps Qdrant running with source material; GWTH_curriculum's `/vip-intake` skill queries it directly.
+
+**Do not edit lesson-ideas or research files from this repo** — they live in `GWTH_curriculum`. Switch sessions.
+
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router, React 19, React Compiler, Turbopack)
