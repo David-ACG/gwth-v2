@@ -4,10 +4,19 @@
 **Author:** David + Claude
 **Budget:** ~12–18 hours across ~4 sessions, staged around Claude Design's weekly quota reset
 **Related:**
-- [PLAN_2026-04-18_ai-design-workflow-experiment.md](./PLAN_2026-04-18_ai-design-workflow-experiment.md) — FractionalBuddy 3-way experiment (Track A = Claude Design)
+- [PLAN_2026-04-18_ai-design-workflow-experiment.md](./PLAN_2026-04-18_ai-design-workflow-experiment.md) — FractionalBuddy 3-way experiment (Track A = Claude Design) — **paused**; GWTH is higher priority
 - [RESEARCH_2026-04-15_ai-design-workflow.md](./RESEARCH_2026-04-15_ai-design-workflow.md)
 - [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)
-- [HANDOFF_2026-04-20_trackA-dashboard-next.md](../../../fractionalbuddy-site/HANDOFF_2026-04-20_trackA-dashboard-next.md) — live Track A state (quota, dead-ends, wins)
+- [HANDOFF_2026-04-20_trackA-dashboard-next.md](../../../fractionalbuddy-site/HANDOFF_2026-04-20_trackA-dashboard-next.md) — Track A state at pause (quota, dead-ends, wins — still valid methodology source)
+
+---
+
+## 0. Decisions Received — 2026-04-24
+
+- **FB experiment paused** — GWTH redesign is the higher-priority workstream. No parallel-quota conflict.
+- **Fresh Claude Design quota cycle.** Meter reset Thursday 2026-04-23 ~11:00 (earlier than the UI's advertised Sunday 09:00). David reports **100% free quota for ~1 week**. Plan can start immediately.
+- **OKLCH Graphite Warm palette is NOT sacred.** Claude Design may replace it wholesale; CLAUDE.md's Design System section will be updated in Phase 3 to match whatever lands.
+- **All 13 original assumptions (§15) hold.** One adjustment: **Recraft is no longer the default vector tool** — David has no FB-era experience with it. Plan §5 is now tool-agnostic for the vector-finalisation step and adds the **new OpenAI image tool (released 2026-04-23)** as a curiosity-driven option David wants to try.
 
 ---
 
@@ -112,23 +121,40 @@ Goal: produce a distinct GWTH.ai wordmark + icon mark + favicon set without burn
 - Try **Gemini Stitch** first; fallbacks below if it's weak on logo work specifically
 - Logo needs: primary horizontal wordmark, stacked variant, icon-only mark, dark-mode variant; SVG + PNG @ 512/256/128; favicon (32px ICO + 180 apple-touch + 512 PNG + `site.webmanifest`)
 
-### 5.2 Tool options, ranked
+### 5.2 Tool options
 
-1. **Gemini Stitch** (`stitch.withgoogle.com`) — free, generates whole brand systems. Not its primary strength (it's a page mockup tool), but worth trying because David already has it from the FB experiment. Strong when given a written brand brief + palette.
-2. **Recraft** (already have access in `C:/Projects/GWTH_V2/recraft`) — vector-first, free tier covers small logo work. Use for **vector finalisation** of whichever concept direction wins, even if Stitch generated it.
-3. **Gemini's free image generation** (in Gemini app) — useful for concept sketches, not final vectors.
-4. **realfavicongenerator.net** — free, turns any 512×512 PNG into the full favicon set with `site.webmanifest`. Essential final step regardless of which tool produced the logo.
+Two stages to the logo pipeline — **concept generation** (what should the mark look like?) and **vector finalisation** (clean SVG output). Concept stage is idea-hunting; finalisation is precision. Different tools win on each.
+
+**Concept generation — try in this order, stop at the first one that produces something you'd ship:**
+
+| # | Tool | Known quantity? | Why try it |
+|---|---|---|---|
+| 1 | **Gemini Stitch** (`stitch.withgoogle.com`) | Yes — David used it for FB | Free; generates multi-direction concepts from a brand brief; low friction. |
+| 2 | **OpenAI image tool** (released 2026-04-23) | No — curiosity try | Brand-new; David wants to evaluate it. No strong case for it yet; treat as a bonus exploration slot, not a critical path. Hard time-box: 30 min. If it doesn't produce a usable direction in 30 min, fall back. |
+| 3 | **Gemini app's built-in image generation** | Yes (general Gemini usage) | Useful for cheap iteration and concept sketches when Stitch or OpenAI tool outputs need nudging. |
+
+**Vector finalisation — tool choice deferred to after concept wins:**
+
+Once a concept direction is picked, the winning image needs to become clean SVG (horizontal wordmark, stacked, icon-only, dark-mode variant). Options:
+- **Hand-trace in Figma / Inkscape** — zero-cost, fully controlled, slowest. Default if we have time.
+- **Recraft** (access in `C:/Projects/GWTH_V2/recraft`) — vector-first AI tool. Not used on FB, so unknown quality for this specific hand. Flag as experimental; evaluate 20 min; abandon if poor.
+- **SVGTrace / vectorizer.ai** — raster-to-vector bitmap tracers. Decent for simple, high-contrast logos.
+
+**Favicon generation — no decision needed:** realfavicongenerator.net. Free, takes a 512×512 PNG, outputs the full favicon set + `site.webmanifest`.
 
 ### 5.3 Workflow
 
 1. **Brand brief (30 min)** — pair session with Claude Code: nail who the GWTH.ai student is, the voice, and the "not-list" (what GWTH is NOT). Use FB's `BRAND_BRIEF.md` as the structural template. Save to `kanban/design-artefacts/2026-04-24/brand-brief.md`.
-2. **Concept generation (30-45 min)** — Gemini Stitch with the brand brief + desired palette range. Generate 6-10 logo directions. Screenshot top 2-3.
-3. **Vector finalisation (30-45 min)** — Recraft: recreate chosen direction as clean SVG with (a) horizontal wordmark, (b) stacked variant, (c) icon-only mark, (d) dark-mode variant. Export SVG + 512/256/128 PNG.
-4. **Favicon generation (15 min)** — realfavicongenerator.net from the 512×512 PNG. Outputs drop into `public/` (keeping the existing `icon.svg`, `apple-touch-icon.png`, `favicon.ico`, `site.webmanifest` — overwrite in place).
-5. **Commit** — new logo files + replacing/updating `public/logo-spiral*.svg` ONLY IF Claude Design's Phase 1 output wants them gone. Default: keep the spirals as an atmospheric asset, not the logo.
+2. **Concept generation (30-60 min)** — Start with Gemini Stitch + the brand brief. If the output isn't earning its keep in 30 min, switch to OpenAI's new image tool for another 30 min (David's curiosity slot). Pick the strongest direction across both.
+3. **Vector finalisation (30-60 min)** — Decide at the end of step 2 based on what the winning concept looks like:
+   - Simple geometric mark → hand-trace in Figma (fastest)
+   - Complex illustrative mark → try Recraft (time-box 20 min), fall back to SVGTrace, fall back to manual
+   - Output: (a) horizontal wordmark SVG, (b) stacked variant SVG, (c) icon-only SVG, (d) dark-mode SVG variant, plus 512/256/128 PNG exports
+4. **Favicon generation (15 min)** — realfavicongenerator.net from the 512×512 PNG. Drops into `public/` (overwriting existing `icon.svg` / `apple-touch-icon.png` / `favicon.ico` / `site.webmanifest`).
+5. **Commit** — new logo files. `public/logo-spiral*.svg` stays in place for now — decision on whether to delete them waits until Claude Design has weighed in during Phase 1 (it may want them as atmospheric assets).
 
 ### 5.4 Time budget
-**2–3 hours total for Phase 0.** If Stitch fails to produce anything usable in 45 min, escalate to the fallbacks in §5.2 — don't sink an extra hour chasing Stitch.
+**2–3 hours total for Phase 0.** If Stitch + OpenAI-tool both produce nothing usable in 60 min combined, the problem is the brand brief, not the tool — pause and rewrite the brief before continuing.
 
 ### 5.5 Exit criteria for Phase 0
 - [ ] Wordmark SVG at `public/logo.svg`
@@ -300,7 +326,7 @@ Dependencies: 1a → 1b → 2a → 2b → 3 → 4. Phase 0 is independent and ca
 
 | Risk | Likelihood | Mitigation |
 |---|---|---|
-| Claude Design hits weekly quota mid-POC | **High** (FB Track A burned 77% on one page before optimising seed re-use) | Start POC after Sun 2026-04-26 reset; reuse conversation across pages; be ready to pause for next reset if Phase 2 stalls |
+| Claude Design hits weekly quota mid-POC | **Medium** — 100% quota free as of 2026-04-24 (Thursday reset). Full cycle available for GWTH. FB's 77%-for-one-page number was without seed-reuse discipline. | Reuse one conversation across both pages (FB Track A learning); screenshot the meter at Phase 1 close to see actual burn; be ready to pause for next reset if Phase 2 stalls |
 | Gemini Stitch produces weak logo output | Medium | Fall back to Recraft directly; brand brief is the real work — any tool can execute once the brief is sharp |
 | Claude Design's palette recommendation conflicts with current Graphite Warm | Medium | Default stance is "defend current palette"; only swap if Claude Design's output is materially better AND implementation is straightforward |
 | Implementation breaks existing routes not in POC scope | Medium | Replace page contents in place; don't touch layout wrappers, shared components in `src/components/ui/`, or `lib/` unless the bundle explicitly demands it |
@@ -315,12 +341,12 @@ Dependencies: 1a → 1b → 2a → 2b → 3 → 4. Phase 0 is independent and ca
 
 1. **FB experiment's synthesis is NOT required to gate this POC.** Track A Claude Design has already shipped one page at desktop perf 96, which is enough confidence. If FB synthesis lands mid-POC and contradicts this, we pause and re-plan.
 2. **GWTH_V2's `master` branch is clean and deployable to P520 right now.** (The `git status` at session start shows M on one curriculum file + new screenshots — need to confirm none of that is intermixed with stale experimental code that would interfere with a fresh redesign branch.)
-3. **Claude Design Max plan quota resets Sun 2026-04-26 09:00 UK time.** Lifted from FB HANDOFF. Verify the meter before starting.
+3. **Claude Design Max plan quota reset happened early — Thursday 2026-04-23 ~11:00 UK** (confirmed by David), not the advertised Sunday 09:00. 100% free quota available for this POC. Next reset is presumably Thursday 2026-04-30 but verify the meter at Phase 1 start since the reset day seems unstable.
 4. **Gemini Stitch is accessible** (David has used it for the FB experiment, so assumption stands).
 5. **P520 Coolify app `xw4csk0ssos8800kws0cswwk`** (GWTH_V2 test) is the deploy target for the new branch — verify a preview environment isn't needed.
 6. **Production `gwth.ai` on Hetzner stays untouched** until a separate "launch" plan promotes the redesign. This POC is local-only.
 7. **The existing design-system content in CLAUDE.md** (OKLCH palette, Graphite Warm dark mode, cascading spiral animation) is the **current state**, not sacred. Claude Design may propose changes; human judgement decides whether to adopt.
-8. **David's preferred logo tool order:** Gemini Stitch → Recraft → fallback to hand-sketch + Recraft if both AI tools struggle.
+8. **David's logo tool preference (updated 2026-04-24):** Gemini Stitch first, OpenAI's newly-released image tool (2026-04-23) as a curiosity slot, Gemini app for cheap iteration. Recraft is NOT a default (never used on FB — unknown quantity); evaluate only if a concept needs vector cleanup and manual tracing isn't fast enough.
 9. **No backend changes are needed.** Supabase stubs as-is. Auth providers as-is. Redesign is purely visual + structural.
 10. **`/impeccable` Tier 1 skills** (from RESEARCH_2026-04-16) can be installed globally to run `/audit /critique /polish` per page — but are NOT a blocker. If they're not installed, Phase 4 verify is a manual visual review + Playwright smoke test.
 11. **Kanban gate sequence applies** per `~/.claude/rules/03-kanban-gates.md`: one PROMPT file per implementation phase, gate 3 (implementation notes) + gate 4 (testing checklist) appended to each prompt before moving to `2_testing/`.
@@ -331,14 +357,17 @@ Dependencies: 1a → 1b → 2a → 2b → 3 → 4. Phase 0 is independent and ca
 
 ## 16. Open Questions for David
 
-1. **FB experiment status check.** Where is FractionalBuddy Track A right now? Has the Dashboard page shipped? Does starting the GWTH POC now create a quota conflict with finishing FB?
-2. **Start date.** Green-light to start Phase 0 (logo) before Sun 2026-04-26 09:00 reset (quota-independent), or wait until after the reset to keep everything on one quota cycle?
-3. **Current gwth.ai design-system investment.** The OKLCH Graphite Warm palette + cascading spiral animation took work. Is any of it **off-limits for Claude Design to change**, or is everything up for grabs?
-4. **Logo direction cues.** Any stylistic lean? e.g. wordmark-only vs icon-forward; serif vs sans; wave/motion metaphor (matches "GO WHERE THE HUMANS") vs more abstract. This is for the Phase 0 brand brief.
-5. **Scope confirmation.** Is the student dashboard the only dashboard in scope, or do you also want the landing-page-above-the-fold hero to be treated as a separate explicit deliverable?
-6. **Impeccable install.** Want me to install the `/impeccable` Tier 1 skills globally now (one-off setup per the research file) so Phase 4 can use `/audit /critique /polish`? It's a sunk-cost-zero install but it does touch `~/.claude/`.
-7. **Credit headroom.** After FB's ~40pp homepage + dashboard-in-progress, how much weekly Claude Design quota do you realistically want to budget for GWTH? Two pages might need 30-45pp; we should know the cap before committing.
-8. **P520 deploy timing.** Deploy after each page (Phase 1b AND Phase 2b) or batch a single deploy after both pages are built to save Coolify trigger time?
+### Decided (2026-04-24)
+1. ✅ **FB experiment status** — **paused**; GWTH is higher priority. No quota conflict.
+2. ✅ **Start date** — **start immediately**. Quota reset early on Thursday 2026-04-23; full cycle free.
+3. ✅ **Current design-system sacredness** — **nothing is off-limits**. Claude Design may replace the OKLCH Graphite Warm palette, the cascading spiral, typography, anything.
+7. ✅ **Credit headroom** — **100% of the weekly allowance** budgeted for GWTH. FB is paused.
+
+### Still open — please answer before Phase 0 starts
+4. **Logo direction cues.** Any stylistic lean for the brand brief? e.g. wordmark-only vs icon-forward; serif vs sans; wave/motion metaphor (matches "GO WHERE THE HUMANS" positioning) vs more abstract geometric. One sentence is enough.
+5. **Scope confirmation.** Student dashboard is the only dashboard in scope — agreed? Or does the landing-page hero need to be called out as its own explicit deliverable separate from the rest of the homepage?
+6. **Impeccable install.** Want me to install the `/impeccable` Tier 1 skills globally (`~/.claude/` install per [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)) so Phase 4 verify can run `/audit /critique /polish`? One-off ~5 min install, cost zero, touches only `~/.claude/`.
+8. **P520 deploy timing.** Deploy after each page (Phase 1b and Phase 2b independently) so you can review homepage before committing to the dashboard direction — or batch a single deploy after both pages are built?
 
 ---
 
