@@ -1,0 +1,358 @@
+# PLAN — GWTH.ai Redesign POC (Claude Design)
+
+**Date:** 2026-04-24
+**Author:** David + Claude
+**Budget:** ~12–18 hours across ~4 sessions, staged around Claude Design's weekly quota reset
+**Related:**
+- [PLAN_2026-04-18_ai-design-workflow-experiment.md](./PLAN_2026-04-18_ai-design-workflow-experiment.md) — FractionalBuddy 3-way experiment (Track A = Claude Design)
+- [RESEARCH_2026-04-15_ai-design-workflow.md](./RESEARCH_2026-04-15_ai-design-workflow.md)
+- [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)
+- [HANDOFF_2026-04-20_trackA-dashboard-next.md](../../../fractionalbuddy-site/HANDOFF_2026-04-20_trackA-dashboard-next.md) — live Track A state (quota, dead-ends, wins)
+
+---
+
+## 1. Purpose
+
+Use **Claude Design** (single-tool, not a shootout) to produce a redesigned GWTH.ai student platform, starting as a **2-page POC** (marketing homepage + student dashboard). Land the POC on the local GWTH_V2 version hosted at **http://192.168.178.50:3001** (P520), validated by David in the browser. The production `gwth.ai` on Hetzner stays locked for launch and is not touched by this plan.
+
+**Why Claude Design only (not the 3-way):** FractionalBuddy already IS the 3-way shootout. Running a second shootout on GWTH would duplicate effort and burn quota. Once FB's synthesis lands, GWTH either confirms Track A won and we proceed, or switches lead tool with a new plan.
+
+**Why only 2 pages for the POC:** If Claude Design gets the homepage and the student dashboard right, the **visual grammar** (type scale, colour tokens, component shapes, animation vocabulary) propagates cleanly to the remaining pages (`/courses`, `/lessons/[slug]`, `/labs`, `/progress`, `/settings`, auth, marketing long-tail). Those pages can then be implemented directly in Claude Code using the handoff bundle as the style bible — no more Claude Design credits required.
+
+---
+
+## 2. Scope
+
+### In scope
+1. **Phase 0 — Logo + favicon** (not Claude Design; credit-preserving alternative)
+2. **Phase 1 — Marketing homepage redesign** via Claude Design (route `/`)
+3. **Phase 2 — Student dashboard redesign** via Claude Design (route `/dashboard`)
+4. **Phase 3 — Brand kit commit** (globals.css tokens, fonts, logo swap) to a new branch
+5. **Phase 4 — P520 deploy** of the new branch for David's browser review
+6. **Phase 5 — Lessons learned + style bible** for the rest of the site (homework for Claude Code later, NOT this plan)
+
+### Out of scope (explicitly)
+- Production gwth.ai on Hetzner — locked until launch
+- Other routes (`/courses`, `/lessons/[slug]`, `/labs`, `/progress`, `/settings`, `/pricing`, auth, etc.)
+- Backend, auth, data model changes — platform stays on Supabase stubs as today
+- A second design-tool shootout — FB is doing that
+- Rewriting the site copy from scratch (voice stays close to current; logo brief may sharpen positioning but site copy is not the experiment)
+
+---
+
+## 3. Pre-Flight Decisions
+
+These are the things that must be settled before Phase 0 can start. Each has a default; David can override.
+
+| # | Decision | Default | Notes |
+|---|---|---|---|
+| D1 | **Run POC before or after FB verdict?** | **Before.** Use FB Track A learnings (below) as the methodology; don't block on full synthesis. | FB synthesis is days away. If Claude Design lost FB outright, we'd need that signal before burning GWTH quota — but Track A's homepage shipped at desktop perf 96, which is enough confidence to proceed. |
+| D2 | **Branch strategy on GWTH_V2** | New branch `experiment/redesign-poc-2026-04` off `master` | Matches FB pattern. Keeps `master` clean until David approves in the browser. |
+| D3 | **Deploy target for review** | P520 at http://192.168.178.50:3001 via the existing Coolify app | Matches the project's verification convention from `~/.claude/rules/03-kanban-gates.md`. |
+| D4 | **Keep or replace the cascading spiral animation?** | **Keep the animation primitive** (6-layer blur system is good); treat it as a resource Claude Design can choose to use, reject, or restyle. | Don't ask Claude Design to rebuild the spiral from scratch — that's wasted quota. |
+| D5 | **Replace the OKLCH Graphite Warm palette?** | **Open** — Claude Design may recommend a new palette derived from the new logo. If the output is close to current, we keep current; if materially different, we commit the new palette. | The existing palette in `CLAUDE.md` lines ~200-260 was thoughtfully built. Default stance is "defend it"; burden of proof is on Claude Design to earn the switch. |
+| D6 | **Student dashboard target** | The dashboard under `src/app/(dashboard)/dashboard/page.tsx` | This is the one David has been iterating on. No confusion about which dashboard. |
+| D7 | **Claude Design conversation strategy** | **Reuse one conversation across homepage + dashboard** (FB Track A pattern; saves ~5-7pp per page on seed re-upload) | Cross-page context is a feature for a site redesign — we *want* them to feel like one product. |
+| D8 | **Gemini QA?** | **Skip.** FB Track A hit 85% hallucination rate on Gemini screenshot-only QA (11/12 findings were about Tailwind classes that don't exist in the codebase) | Replace with `/impeccable audit /critique /polish` from the Tier 1 tools in the research file, or manual Playwright verification + David's own review. |
+
+---
+
+## 4. Methodology (Lifted from FB Track A with GWTH-specific tweaks)
+
+Use the 4-phase flow proven on FB homepage:
+
+### Phase structure per page
+
+1. **Explore (Claude Design)** — 25–40 min
+   - claude.ai/design, seeded with: brand brief + globals.css + CLAUDE.md + 2-3 representative existing components + current page screenshot
+   - Produce 2-3 interactive variants, pick one
+   - Export handoff bundle → `kanban/design-artefacts/YYYY-MM-DD/<page>.bundle.md`
+   - Screenshot mocks → `kanban/design-artefacts/YYYY-MM-DD/<page>-light.png` + `-dark.png`
+
+2. **Component sourcing** — 10–20 min
+   - Walk the bundle's component list. Prefer existing primitives in `src/components/ui/` first (FB homepage needed zero new shadcn components — worth checking here too).
+   - If the bundle needs something missing: `npx shadcn add <component>` or 21st.dev Magic MCP via `/ui <desc>`
+
+3. **Implementation (Claude Code)** — 45–90 min
+   - Implement using the bundle as the canonical source. Bundle > screenshot for ambiguity resolution.
+   - Must produce both light + dark themes from the bundle's token spec
+   - Commit on `experiment/redesign-poc-2026-04`
+
+4. **Verify + close** — 20–40 min
+   - `npm run build && npm start` on P520 (Coolify redeploy)
+   - David reviews in the browser at http://192.168.178.50:3001
+   - Playwright smoke test via project convention (kanban gate 3)
+   - Run `/impeccable audit` + `/critique` if installed; document findings
+   - Capture final screenshots: desktop 1440 + mobile 375 × light + dark = 4 per page
+   - Append implementation notes to the prompt file per kanban gate 3/4
+
+### Dead ends — do NOT retry (from FB HANDOFF)
+
+- **`npm run dev` segfaults on Windows/bash/Node 22** → use `node ./node_modules/next/dist/bin/next dev --turbopack -p 3001`
+- **Dev-mode Lighthouse is meaningless** → always build + start for performance numbers
+- **Gemini screenshot-only QA hallucinates ~85% of the time** → skip entirely for this POC
+- **`as Type` casts on Supabase `.data` fail type-check in Next 16** → fix is `as unknown as Type` if encountered
+
+### Credits + cost estimate
+
+- **Claude Design:** ~30-40pp of weekly quota for 2 pages (FB homepage alone was ~40pp; dashboard + homepage reusing seed should be lower per-page). Plan assumes **starting after the Sun 2026-04-26 09:00 reset** unless FB leaves substantial headroom.
+- **Gemini Advanced:** skipped (see D8)
+- **21st.dev Magic MCP:** free tier (100 credits/mo) should cover any stray component
+- **Logo tool:** free (Gemini Stitch or alternative — see §5)
+- **Estimated total cost: $0 out-of-pocket**, one week's Claude Design Max quota
+
+---
+
+## 5. Phase 0 — Logo + Favicon (Non-Claude-Design)
+
+Goal: produce a distinct GWTH.ai wordmark + icon mark + favicon set without burning Claude Design credits.
+
+### 5.1 Constraints from David
+- Do NOT use Claude Design (lost ~30% of weekly quota on FB logo — too expensive)
+- Try **Gemini Stitch** first; fallbacks below if it's weak on logo work specifically
+- Logo needs: primary horizontal wordmark, stacked variant, icon-only mark, dark-mode variant; SVG + PNG @ 512/256/128; favicon (32px ICO + 180 apple-touch + 512 PNG + `site.webmanifest`)
+
+### 5.2 Tool options, ranked
+
+1. **Gemini Stitch** (`stitch.withgoogle.com`) — free, generates whole brand systems. Not its primary strength (it's a page mockup tool), but worth trying because David already has it from the FB experiment. Strong when given a written brand brief + palette.
+2. **Recraft** (already have access in `C:/Projects/GWTH_V2/recraft`) — vector-first, free tier covers small logo work. Use for **vector finalisation** of whichever concept direction wins, even if Stitch generated it.
+3. **Gemini's free image generation** (in Gemini app) — useful for concept sketches, not final vectors.
+4. **realfavicongenerator.net** — free, turns any 512×512 PNG into the full favicon set with `site.webmanifest`. Essential final step regardless of which tool produced the logo.
+
+### 5.3 Workflow
+
+1. **Brand brief (30 min)** — pair session with Claude Code: nail who the GWTH.ai student is, the voice, and the "not-list" (what GWTH is NOT). Use FB's `BRAND_BRIEF.md` as the structural template. Save to `kanban/design-artefacts/2026-04-24/brand-brief.md`.
+2. **Concept generation (30-45 min)** — Gemini Stitch with the brand brief + desired palette range. Generate 6-10 logo directions. Screenshot top 2-3.
+3. **Vector finalisation (30-45 min)** — Recraft: recreate chosen direction as clean SVG with (a) horizontal wordmark, (b) stacked variant, (c) icon-only mark, (d) dark-mode variant. Export SVG + 512/256/128 PNG.
+4. **Favicon generation (15 min)** — realfavicongenerator.net from the 512×512 PNG. Outputs drop into `public/` (keeping the existing `icon.svg`, `apple-touch-icon.png`, `favicon.ico`, `site.webmanifest` — overwrite in place).
+5. **Commit** — new logo files + replacing/updating `public/logo-spiral*.svg` ONLY IF Claude Design's Phase 1 output wants them gone. Default: keep the spirals as an atmospheric asset, not the logo.
+
+### 5.4 Time budget
+**2–3 hours total for Phase 0.** If Stitch fails to produce anything usable in 45 min, escalate to the fallbacks in §5.2 — don't sink an extra hour chasing Stitch.
+
+### 5.5 Exit criteria for Phase 0
+- [ ] Wordmark SVG at `public/logo.svg`
+- [ ] Icon-only SVG at `public/icon.svg` (overwrites existing spiral icon if we're replacing)
+- [ ] Dark-mode variant SVG at `public/logo-dark.svg`
+- [ ] Favicon set regenerated: `favicon.ico`, `apple-touch-icon.png`, `site.webmanifest`, 192/512 PNG
+- [ ] `brand-brief.md` committed
+- [ ] All committed on `experiment/redesign-poc-2026-04`
+
+---
+
+## 6. Phase 1 — Marketing Homepage (Claude Design)
+
+### 6.1 Seed bundle (upload to claude.ai/design)
+- `public/logo.svg` + `public/icon.svg` (from Phase 0)
+- `src/app/globals.css` — full OKLCH palette, fonts, radius
+- `CLAUDE.md` — especially the Design System section
+- 3 representative components:
+  - `src/components/landing/hero-section.tsx` (current hero w/ spirals)
+  - `src/components/ui/button.tsx` + `src/components/ui/card.tsx` (baseline primitives)
+  - `src/components/layout/site-header.tsx` (if present — else whichever wraps public routes)
+- Baseline screenshot: capture current `/` from local dev server at 1440×900 light + dark, save to `kanban/design-artefacts/2026-04-24/homepage-baseline-{light,dark}.png`
+- Brand brief (from Phase 0)
+- 1-paragraph positioning: "GWTH.ai is a 3-month student-facing learning platform for people who want to GO WHERE THE HUMANS work with AI. Students browse one core curriculum, complete labs, track progress, earn a certificate. UK-first; evidence-based; CIPD-aligned."
+
+### 6.2 Ask Claude Design to deliver
+- Full-page hero + features + proof + CTA + footer
+- **Both themes explicitly** (not just dark) — GWTH_V2 defaults to light with a Graphite Warm dark mode
+- Component list with justifications (what's a shadcn primitive, what's custom)
+- Handoff bundle in markdown format (FB pattern)
+
+### 6.3 Claude Code implementation notes
+- Target route: `src/app/(public)/page.tsx` (already exists — replace contents)
+- Reuse the layout wrapper at `src/app/(public)/layout.tsx`
+- Preserve `generateMetadata` and JSON-LD structured data per CLAUDE.md §20-21
+- Apply `/impeccable /audit /critique` after implementation if installed
+- DO NOT delete the cascading spiral files in `public/` until Phase 2 is also done — the dashboard may still want them
+
+### 6.4 Acceptance criteria
+- [ ] Page loads at http://192.168.178.50:3001 without console errors
+- [ ] `npm run build` succeeds
+- [ ] Lighthouse (prod) Perf ≥ 85 desktop, Accessibility ≥ 90
+- [ ] Responsive at 375 / 768 / 1440
+- [ ] Light + dark both correct
+- [ ] `next.config.ts` workaround flags from FB (ignoreBuildErrors / ignoreDuringBuilds) applied ONLY if needed, flagged with inline comment
+- [ ] Baseline + final screenshots committed
+
+---
+
+## 7. Phase 2 — Student Dashboard (Claude Design, same conversation)
+
+### 7.1 Seed additions (same conversation as Phase 1)
+- Baseline screenshot of current `/dashboard` at 1440×900 light + dark
+- The Phase 1 handoff bundle (so Claude Design can maintain visual consistency)
+- Dashboard-specific brief: what widgets matter, what the MVP does well, what to improve (FB dashboard.md template)
+
+### 7.2 Required widgets (today's state — keep or improve, don't drop)
+- Course progress cards with progress rings
+- Study streak calendar (GitHub-style heatmap)
+- Recent activity feed
+- Bookmarked lessons/labs
+- Quick actions (resume lesson, start lab, view next assignment)
+
+### 7.3 Target route
+`src/app/(dashboard)/dashboard/page.tsx` (existing — replace contents, keep the `(dashboard)/layout.tsx` sidebar + header wrapper)
+
+### 7.4 Acceptance criteria (same as §6.4 plus)
+- [ ] Sidebar navigation still works (layout wrapper untouched or improved, not broken)
+- [ ] Mobile: sidebar becomes Sheet per CLAUDE.md convention
+- [ ] Empty states render for zero-progress users
+
+---
+
+## 8. Phase 3 — Brand Kit Commit
+
+Once Phase 1 + 2 both pass David's browser review:
+
+1. Lift the palette, typography, spacing, and motion choices from the handoff bundles into `src/app/globals.css`
+2. Update `src/lib/config.ts` if layout dimensions changed
+3. Write a one-page `STYLE_BIBLE.md` at `docs/design-system/STYLE_BIBLE.md` referencing the bundles as the source of truth — this is the artefact future Claude Code sessions use to redesign the remaining routes WITHOUT burning more Claude Design credits
+4. If the new palette materially differs from the current CLAUDE.md Graphite Warm palette, **update CLAUDE.md's Design System section** to reflect it — otherwise CLAUDE.md misleads future sessions
+
+---
+
+## 9. Phase 4 — P520 Deploy + Review
+
+Following the project's established pattern:
+
+```bash
+# From GWTH_V2 on experiment/redesign-poc-2026-04
+git push origin experiment/redesign-poc-2026-04
+
+# Trigger P520 Coolify deploy (command from ~/.claude/rules/04-infrastructure.md)
+ssh p520 'docker exec coolify php artisan tinker --execute="..."'
+```
+
+Then:
+1. David opens http://192.168.178.50:3001/
+2. David opens http://192.168.178.50:3001/dashboard
+3. Tick the kanban gate-4 checklist in the prompt file
+4. If approved → merge `experiment/redesign-poc-2026-04` → `master` (NOT to Hetzner production yet; production stays locked until launch)
+
+---
+
+## 10. Phase 5 — Lessons Learned (Lightweight)
+
+After the POC lands:
+- Append a "GWTH POC Results" section to [RESEARCH_2026-04-15_ai-design-workflow.md](./RESEARCH_2026-04-15_ai-design-workflow.md) with: quota used, time used, quality verdict, STYLE_BIBLE link
+- This feeds FB's own §9 synthesis — real evidence that Claude Design can carry a redesign end to end
+
+Not in scope: a full lab write-up like FB's. That's FB's deliverable, not this POC's.
+
+---
+
+## 11. Files Affected
+
+| Path | Change |
+|---|---|
+| `public/logo.svg`, `public/icon.svg`, `public/logo-dark.svg` | NEW/REPLACE — Phase 0 |
+| `public/favicon.ico`, `public/apple-touch-icon.png`, `public/site.webmanifest`, `public/web-app-manifest-*.png` | REPLACE — Phase 0 |
+| `public/logo-spiral*.svg` | POSSIBLY REMOVE (depends on Claude Design's call — default: keep) |
+| `src/app/(public)/page.tsx` | REPLACE — Phase 1 |
+| `src/app/(public)/layout.tsx` | LIKELY UNCHANGED (wrapper pattern stable) |
+| `src/components/landing/hero-section.tsx` | REPLACE/DELETE — new homepage may not need it |
+| `src/components/landing/waitlist-form.tsx` | LIKELY PRESERVE — still needed for email capture |
+| `src/app/(dashboard)/dashboard/page.tsx` | REPLACE — Phase 2 |
+| `src/app/(dashboard)/layout.tsx` | LIKELY UNCHANGED |
+| `src/components/` new subfolders (`marketing/`, `dashboard/`) | NEW — Phase 1 + 2 per FB pattern |
+| `src/app/globals.css` | UPDATE if palette/type changes — Phase 3 |
+| `src/lib/config.ts` | UPDATE if layout dimensions change — Phase 3 |
+| `docs/design-system/STYLE_BIBLE.md` | NEW — Phase 3 |
+| `CLAUDE.md` | UPDATE Design System section IF palette changed — Phase 3 |
+| `kanban/design-artefacts/2026-04-24/` | NEW folder — brand-brief, baselines, mocks, bundles, final screenshots |
+
+---
+
+## 12. Beads Breakdown
+
+When the plan is approved, create these beads issues (all under a parent epic):
+
+1. **GWTH-POC-0** — Phase 0: Logo + favicon via Gemini Stitch + Recraft + realfavicongenerator
+2. **GWTH-POC-1a** — Phase 1: Homepage Claude Design exploration + bundle export
+3. **GWTH-POC-1b** — Phase 1: Homepage Claude Code implementation + P520 deploy + gate 3/4
+4. **GWTH-POC-2a** — Phase 2: Dashboard Claude Design exploration (same conversation)
+5. **GWTH-POC-2b** — Phase 2: Dashboard Claude Code implementation + P520 deploy + gate 3/4
+6. **GWTH-POC-3** — Phase 3: Brand kit commit + STYLE_BIBLE.md
+7. **GWTH-POC-4** — Phase 5: Append results to RESEARCH_2026-04-15
+
+Dependencies: 1a → 1b → 2a → 2b → 3 → 4. Phase 0 is independent and can run parallel to 1a prep.
+
+---
+
+## 13. Timeline
+
+| When | What | Duration | Session |
+|---|---|---|---|
+| Day 1 | **Phase 0** — Logo + favicon (Gemini Stitch → Recraft → favicon gen) | 2–3 h | GWTH_V2 (fresh) |
+| Day 2 AM | **Phase 1a** — Homepage Claude Design exploration | 1–1.5 h | claude.ai/design browser tab + GWTH_V2 session for bundle save |
+| Day 2 PM | **Phase 1b** — Homepage Claude Code implementation + P520 deploy + review | 2–3 h | GWTH_V2 (fresh) |
+| Day 3 AM | **Phase 2a** — Dashboard Claude Design (same conversation) | 45–60 min | claude.ai/design (reused tab) + GWTH_V2 session |
+| Day 3 PM | **Phase 2b** — Dashboard Claude Code implementation + P520 deploy + review | 2–3 h | GWTH_V2 (fresh) |
+| Day 4 | **Phase 3 + 5** — Brand kit commit + STYLE_BIBLE + research append | 2–3 h | GWTH_V2 (fresh) |
+
+**Total: ~12–18 h across 4 days.** Days 2–3 are quota-dependent — if Claude Design hits the weekly limit, pause until Sun 09:00 reset.
+
+---
+
+## 14. Risks & Mitigations
+
+| Risk | Likelihood | Mitigation |
+|---|---|---|
+| Claude Design hits weekly quota mid-POC | **High** (FB Track A burned 77% on one page before optimising seed re-use) | Start POC after Sun 2026-04-26 reset; reuse conversation across pages; be ready to pause for next reset if Phase 2 stalls |
+| Gemini Stitch produces weak logo output | Medium | Fall back to Recraft directly; brand brief is the real work — any tool can execute once the brief is sharp |
+| Claude Design's palette recommendation conflicts with current Graphite Warm | Medium | Default stance is "defend current palette"; only swap if Claude Design's output is materially better AND implementation is straightforward |
+| Implementation breaks existing routes not in POC scope | Medium | Replace page contents in place; don't touch layout wrappers, shared components in `src/components/ui/`, or `lib/` unless the bundle explicitly demands it |
+| P520 deploy fails | Low-medium | Same Coolify flow as existing deployments; if it breaks, fall back to local `next build && next start` for David's review |
+| FB experiment's synthesis reveals Claude Design LOST on one of the pages GWTH needs | Medium | If FB synthesis lands before Phase 2 and shows a tool-page-fit issue, pause GWTH Phase 2 and re-plan |
+| Spiral animation files conflict with new logo direction | Low | Keep spirals in `public/` until both pages shipped; decide in Phase 3 whether to remove or keep as atmospheric asset |
+| `next.config.ts` typescript ignore flags linger from FB | Low | These flags only exist in fractionalbuddy-site's branch, NOT GWTH_V2. Confirm fresh state at Phase 1 start. |
+
+---
+
+## 15. Assumptions (flag if any are wrong)
+
+1. **FB experiment's synthesis is NOT required to gate this POC.** Track A Claude Design has already shipped one page at desktop perf 96, which is enough confidence. If FB synthesis lands mid-POC and contradicts this, we pause and re-plan.
+2. **GWTH_V2's `master` branch is clean and deployable to P520 right now.** (The `git status` at session start shows M on one curriculum file + new screenshots — need to confirm none of that is intermixed with stale experimental code that would interfere with a fresh redesign branch.)
+3. **Claude Design Max plan quota resets Sun 2026-04-26 09:00 UK time.** Lifted from FB HANDOFF. Verify the meter before starting.
+4. **Gemini Stitch is accessible** (David has used it for the FB experiment, so assumption stands).
+5. **P520 Coolify app `xw4csk0ssos8800kws0cswwk`** (GWTH_V2 test) is the deploy target for the new branch — verify a preview environment isn't needed.
+6. **Production `gwth.ai` on Hetzner stays untouched** until a separate "launch" plan promotes the redesign. This POC is local-only.
+7. **The existing design-system content in CLAUDE.md** (OKLCH palette, Graphite Warm dark mode, cascading spiral animation) is the **current state**, not sacred. Claude Design may propose changes; human judgement decides whether to adopt.
+8. **David's preferred logo tool order:** Gemini Stitch → Recraft → fallback to hand-sketch + Recraft if both AI tools struggle.
+9. **No backend changes are needed.** Supabase stubs as-is. Auth providers as-is. Redesign is purely visual + structural.
+10. **`/impeccable` Tier 1 skills** (from RESEARCH_2026-04-16) can be installed globally to run `/audit /critique /polish` per page — but are NOT a blocker. If they're not installed, Phase 4 verify is a manual visual review + Playwright smoke test.
+11. **Kanban gate sequence applies** per `~/.claude/rules/03-kanban-gates.md`: one PROMPT file per implementation phase, gate 3 (implementation notes) + gate 4 (testing checklist) appended to each prompt before moving to `2_testing/`.
+12. **Beads is the task tracker**, not TodoWrite / TaskCreate / markdown TODO lists.
+13. **Playwright verification** uses the pytest-playwright CLI pattern from `~/.claude/rules/05-browser-testing.md`, not the Playwright MCP.
+
+---
+
+## 16. Open Questions for David
+
+1. **FB experiment status check.** Where is FractionalBuddy Track A right now? Has the Dashboard page shipped? Does starting the GWTH POC now create a quota conflict with finishing FB?
+2. **Start date.** Green-light to start Phase 0 (logo) before Sun 2026-04-26 09:00 reset (quota-independent), or wait until after the reset to keep everything on one quota cycle?
+3. **Current gwth.ai design-system investment.** The OKLCH Graphite Warm palette + cascading spiral animation took work. Is any of it **off-limits for Claude Design to change**, or is everything up for grabs?
+4. **Logo direction cues.** Any stylistic lean? e.g. wordmark-only vs icon-forward; serif vs sans; wave/motion metaphor (matches "GO WHERE THE HUMANS") vs more abstract. This is for the Phase 0 brand brief.
+5. **Scope confirmation.** Is the student dashboard the only dashboard in scope, or do you also want the landing-page-above-the-fold hero to be treated as a separate explicit deliverable?
+6. **Impeccable install.** Want me to install the `/impeccable` Tier 1 skills globally now (one-off setup per the research file) so Phase 4 can use `/audit /critique /polish`? It's a sunk-cost-zero install but it does touch `~/.claude/`.
+7. **Credit headroom.** After FB's ~40pp homepage + dashboard-in-progress, how much weekly Claude Design quota do you realistically want to budget for GWTH? Two pages might need 30-45pp; we should know the cap before committing.
+8. **P520 deploy timing.** Deploy after each page (Phase 1b AND Phase 2b) or batch a single deploy after both pages are built to save Coolify trigger time?
+
+---
+
+## Review Checklist — 2026-04-24
+- [ ] Scope is correctly bounded (2 pages POC, rest defers to STYLE_BIBLE for later)
+- [ ] Technical approach matches GWTH_V2's Next.js 16 / Tailwind v4 / shadcn/ui / Motion stack
+- [ ] Files affected list is complete and accurate
+- [ ] Acceptance criteria match project's existing gate conventions
+- [ ] No unexpected dependencies introduced (no new paid services beyond what's already in play)
+- [ ] Estimated complexity (~12-18 h) feels right
+- [ ] FB Track A learnings are applied, not ignored
+- [ ] Phase 0 logo path avoids Claude Design credits as David requested
+- [ ] Plan explicitly does NOT touch production gwth.ai
+- [ ] Assumptions list captures the stuff that could go wrong if misaligned
+- [ ] Open questions are real decisions David needs to make, not information I could have found
+
+**Review this plan:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PLAN_2026-04-24_gwth-redesign-poc.md`
