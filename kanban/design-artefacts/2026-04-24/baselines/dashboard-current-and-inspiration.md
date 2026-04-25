@@ -54,6 +54,30 @@ All from `src/lib/data/*` mock layer. Real backend will be wired separately. Kee
 - **Subscription state branching** keeps the page useful for visitors AND subscribers without a separate paywalled `/dashboard` route.
 - **Existing primitives are good** — `ProgressRing`, `StatusBadge`, shadcn `Card`/`Progress`/`Badge`, Lucide icons, `formatProgress` / `formatRelativeDate` utilities.
 
+### 0.5b Existing Dynamic Score (pre-built but absent from dashboard today)
+
+Already exists in code, surfaced only on `/progress`:
+
+```ts
+// src/lib/types.ts
+interface DynamicScore {
+  overallScore       // 1.5 pts per lesson, decays if content not reviewed
+  maxPossibleScore   // ceiling based on completed lessons
+  percentile         // 0–100, peer-rank percentile
+  curiosityIndex     // 0–1, ratio of optional/advanced lessons explored
+  consistencyScore   // 0–100, regularity of study sessions
+  improvementRate    // -100 to 100, quiz-score trend
+  scoreHistory       // {date, score}[] for chart
+}
+```
+
+Marketing copy on `/` and `/pricing` already commits to:
+- *"Dynamic scores that employers can verify"*
+- *"Scores decay if you stop"* — explicit decay mechanic
+- *"Dynamic certification scores employers can verify"*
+
+**Critical for redesign:** Dynamic Score is **core to GWTH's value proposition** — it's the credential students share on LinkedIn that signals to employers they're current. It is NOT a leaderboard or XP gimmick; it is a measured-capability score with verification. Distinguish carefully from §4b (which bans peer-ranking leaderboards). See §3f1 (new) below.
+
 ### 0.6 What's notably absent / weak today
 
 (Candidates for the Phase 2 improvement list — David picks from §5.)
@@ -263,6 +287,23 @@ For each widget: **what / when / who does it well / trade-offs**. GWTH-specific 
 
 ### 3f. Achievement widgets
 
+**Dynamic Score (GWTH-specific, already in code)** — *the load-bearing widget for the GWTH credential story*
+- *What:* A measured-capability score per student (overall + sub-metrics: curiosity, consistency, improvement). Already implemented in `src/lib/types.ts` + `mock-data.ts` + rendered on `/progress`.
+- *When:* Belongs on the dashboard hero strip in addition to `/progress`. It is **the** thing employers look at on a shared LinkedIn link, so the dashboard should make it visible-but-calm — not a giant gamified number, not a hidden footer stat.
+- *How to surface:*
+  - **Primary tile (~⅓ width on desktop):** big number ("23 / 36") + 12-week sparkline (`scoreHistory`) + delta vs last week + small `Share to LinkedIn` link.
+  - Click-through to `/progress` for the full breakdown (curiosity / consistency / improvement / percentile chart).
+  - Sonner toast when score changes ("+1.5 — Lesson 3.2 complete"); no full-screen celebrations (anti-§4h).
+- *Trade-offs / design decisions still open:*
+  - **Percentile field** — `dynamicScore.percentile` is a peer-rank number, which crosses the leaderboard line if shown publicly. Three options:
+    - (a) Keep `percentile` private to the student (don't render on shared LinkedIn card)
+    - (b) Reframe as bands ("ahead of cohort" / "with cohort" / "catching up") rather than a number
+    - (c) Drop `percentile` from view entirely; rely on absolute score + capability sub-metrics
+  - **Decay framing** — pricing copy commits to "scores decay if you stop." Decay is honest, but the dashboard should warn before a decay event ("Your score will decay 0.3 if no activity in 3 days") rather than punish silently. The line between "useful prompt" and "Duolingo streak shame" is narrow — frame as a credential maintenance cue, not anxiety bait.
+  - **Verification surface** — "employers can verify" implies a public credential URL with score + audit trail. Treat the dashboard widget as a one-click route to that URL; the URL itself is a separate design.
+- *Anti-pattern boundary:* This is NOT XP/leaderboards/public ranking (banned in §4b). It is a verified credential like an Accredible-style digital badge but updated continuously rather than awarded once. Keep the language calibrated to "credential" / "score" rather than "XP" / "level" / "rank."
+- *Source:* GWTH-internal (existing code + marketing copy). For comparable verification-credential patterns: [Accredible](https://www.accredible.com/blog/what-is-a-digital-badge), [Open Badges spec](https://openbadges.org/), LinkedIn Learning's badge integration.
+
 **Certificates earned**
 - *What:* Display of completed-course credentials.
 - *When:* `/progress` page, prominent on completion. Not the dashboard hero.
@@ -346,6 +387,10 @@ For each widget: **what / when / who does it well / trade-offs**. GWTH-specific 
 - **Why it fails:** Activates loss-avoidance for the 90% who aren't top-10. Yu-kai Chou: "A poorly designed leaderboard demotivates the majority to energise the few." 43.8% of leaderboard users engage in upward comparison amplifying inadequacy ([source](https://yukaichou.com/advanced-gamification/how-to-design-effective-leaderboards-boosting-motivation-and-engagement/)).
 - **For GWTH specifically:** AI-anxious mid-career professionals are *exactly* the audience this hurts most. They're already comparing themselves down to "those AI-native kids."
 - **Replace with:** aggregate cohort progress bands, peer questions, "5 others working through this lesson today."
+- **Carve-out — GWTH's Dynamic Score is NOT a leaderboard.** It is a per-student verified credential (see §3f1). The distinction:
+  - **Leaderboard (banned)** = ranking visible to others; identity attached; activates upward social comparison.
+  - **Dynamic Score (kept)** = measured capability per student; visible on the student's own surfaces and on a credential URL the student chooses to share; no ranking-against-named-peers visible.
+  - The `dynamicScore.percentile` field is the one place this carve-out is fragile — it's a peer-rank number. Resolve at design time using one of the three options in §3f1 (private to student / banded language / drop entirely).
 
 ### 4c. Density-by-default
 - **What it looks like:** Power-BI-style 9-widgets-on-load, every chart visible at once.
@@ -395,15 +440,16 @@ Given:
 
 ### 5a. Recommended dashboard composition (subscriber view)
 
-**Above the fold (priority 1 — must answer "what do I do next?"):**
+**Above the fold (priority 1 — must answer "what do I do next?" + surface the credential):**
 
-1. **Hero "Continue" card** — full-width on mobile, ~⅔ width on desktop. Shows current lesson title, progress bar within that lesson, primary CTA "Continue Lesson 4.2". On the right ⅓: a course-level progress ring (Module N of 3, X% overall).
-2. **Right rail / under hero on mobile — "What's next"** — small card: next lesson + estimated time + difficulty. Or, if user is at end of available content: "Module 2 unlocks Friday 30 April."
+1. **Hero "Continue" card** — full-width on mobile, ~⅔ width on desktop. Shows current lesson title, progress-within-lesson bar, primary CTA "Continue Lesson 4.2". On the right ⅓: a course-level progress ring (Module N of 3, X% overall).
+2. **Dynamic Score tile** (parallel to the Continue hero on desktop, stacked below on mobile) — big number ("23 / 36"), 12-week sparkline of `scoreHistory`, delta vs last week, small "Share" link to credential URL. See §3f1 for the percentile-framing decision still open.
+3. **"What's next" card** — next lesson title + estimated time + difficulty, or "Module 2 unlocks Friday 30 April" when caught up. Smaller, supporting role.
 
 **Mid-page (priority 2 — orientation):**
 
-3. **KPI strip — 4 cards max.** Suggested: "Lessons complete (e.g. 7/24)" | "Hours this week (calm progress, no goal-shaming)" | "Latest quiz score" | "Days active this week (no consecutive-streak nonsense)." Sparklines optional and only over 4-week windows.
-4. **Activity heatmap** — 12-week GitHub-style grid. Retrospective-only framing. "23 sessions in April." Replaces / reframes the existing `StudyStreakCalendar`.
+4. **KPI strip — 4 cards max.** Suggested: "Lessons complete (e.g. 7/24)" | "Curiosity Index" (sub-metric of Dynamic Score, optional/advanced lessons explored) | "Latest quiz score" | "Sessions this week" (no consecutive-day streak). Sparklines over 4-week windows where data permits.
+5. **Activity heatmap** — 12-week GitHub-style grid. Retrospective-only framing. "23 sessions in April." Replaces / reframes the existing `StudyStreakCalendar` (rename → "Activity"; drop any consecutive-day counter).
 
 **Below (priority 3 — context, not action):**
 
@@ -557,17 +603,27 @@ This is the [NN/g empty-states pattern](https://www.nngroup.com/articles/empty-s
 
 ---
 
-## 7. David's decisions to make before Phase 2a
+## 7. David's decisions
 
-This doc is a menu, not a spec. Before Phase 2a (Claude Design dashboard exploration) needs to answer:
+This doc is a menu, not a spec. Decisions made 2026-04-25 marked ✅ DECIDED; the rest still need a call before Phase 2a.
 
-1. **Streak counter — keep, reframe, or remove?** Default recommendation: rename `StudyStreakCalendar` → "Activity heatmap"; remove the prominent days-in-a-row counter; keep the 12-week grid as a retrospective-only signal.
-2. **Cohort widget — include now or defer?** Depends on whether GWTH has a community surface ready (Discord / Circle / Slack / built-in). If not, defer.
-3. **Hours / time-spent KPI — include?** Risks self-judgement framing. Default: include with calm phrasing ("Time exploring this week"); replace if testing shows otherwise.
-4. **Cmd+K is wired already — does the new header design need to make it more discoverable?** (e.g. visible `⌘K` hint.)
-5. **Visitor-state framing — keep "locked + subscribe" or pivot to "Module 1 preview + try Lesson 1.1 free"?** The latter is closer to Brilliant / Coursera; the former is closer to the current.
-6. **Lapsed-state design — keep red banner or soften?** Default: soften copy, render the subscriber state below (since they still have grace-period access).
-7. **Empty / first-load state — invest in a separate first-time-user flow, or default to the standard subscriber view with empty cells?** First-time-user flow is highest-impact but a separate design unit.
+1. ✅ **Streak counter — REFRAME** (David 2026-04-25). Rename `StudyStreakCalendar` → "Activity"; drop the prominent consecutive-day counter; keep the 12-week heatmap as a retrospective signal.
+2. ✅ **Leaderboards / public XP / public ranking — SKIP** (David 2026-04-25), with a **carve-out for GWTH's Dynamic Score** (§3f1, §4b). Personal credential the student can share to LinkedIn for employer verification = core to the GWTH offer = KEEP and surface prominently. Per-student, not peer-ranked.
+3. ✅ **Productivity tools (Linear / Notion / Vercel / Stripe / Supabase) over e-learning incumbents (Coursera / Udemy / LinkedIn Learning)** as visual references (David 2026-04-25). Phase 2a Claude Design seed will lead with the productivity-tool aesthetic.
+4. ✅ **"Continue Lesson X.Y" hero card replaces the generic CTA** (David 2026-04-25). Highest-priority addition.
+
+**Still open — please answer before Phase 2a starts:**
+
+5. **`dynamicScore.percentile` framing.** It's a peer-rank number (0–100), which crosses the leaderboard line if shown publicly. Three options:
+   - (a) Keep `percentile` private to the student only (don't render on the shared LinkedIn credential card)
+   - (b) Reframe as bands ("ahead of cohort" / "with cohort" / "catching up") rather than a number
+   - (c) Drop `percentile` from view entirely; rely on absolute score + capability sub-metrics
+6. **Cohort widget — include now or defer?** Depends on whether a community surface (Discord / Circle / Slack / built-in) is ready. If not, defer to v2.
+7. **"Hours / time-spent" KPI vs "Sessions this week" KPI.** Hours risks self-judgement framing; sessions is calmer. Pick one for the KPI strip, or include both?
+8. **Cmd+K discoverability.** Already wired. Does the new header need a visible `⌘K` hint button (Linear/Vercel pattern), or is the keyboard-only behaviour fine?
+9. **Visitor-state framing — keep "locked + subscribe" or pivot to "Module 1 preview, try Lesson 1.1 free"?** The latter is closer to Brilliant / Coursera; the former is closer to the current.
+10. **Lapsed-state design — keep red banner or soften?** Default recommendation: soften copy, render the subscriber state below (still grace-period access).
+11. **First-time-user flow — invest in a separate empty-state design, or use the standard subscriber view with empty cells?** Separate flow is higher-impact but a separate design unit (more Claude Design quota).
 
 ---
 
