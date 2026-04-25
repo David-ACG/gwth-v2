@@ -151,7 +151,7 @@ Once a concept direction is picked, the winning image needs to become clean SVG 
 1. **Brand brief (30 min)** — pair session with Claude Code: nail who the GWTH.ai student is, the voice, and the "not-list" (what GWTH is NOT). Use FB's `BRAND_BRIEF.md` as the structural template. Save to `kanban/design-artefacts/2026-04-24/brand-brief.md`.
 2. **Concept generation (45-75 min)** — Generate **both directions** in parallel since the brand brief is intentionally undecided on wordmark-vs-icon-forward:
    - **Wordmark-only set** (4-6 concepts) — typography-led; one serif option, one humanist sans, one geometric sans
-   - **Icon-forward set** (4-6 concepts) — symbol-led; one motion/wave metaphor (matches "GO WHERE THE HUMANS"), one abstract geometric, one literal-but-restrained
+   - **Icon-forward set** (4-6 concepts) — symbol-led; one motion/connection metaphor (the "tech + humans" pairing), one abstract geometric, one literal-but-restrained
    - Start with Gemini Stitch (~30 min) for both sets. Then time-box 30 min with OpenAI's new image tool (curiosity slot) — if it produces a clearly better candidate in either direction, fold it in.
    - Pick **one winner across both directions**, not one from each. The chosen direction is the one that David + Claude Code agree communicates the brand best in 5 seconds.
 3. **Vector finalisation (30-60 min)** — Decide at the end of step 2 based on what the winning concept looks like:
@@ -186,7 +186,7 @@ Once a concept direction is picked, the winning image needs to become clean SVG 
   - `src/components/layout/site-header.tsx` (if present — else whichever wraps public routes)
 - Baseline screenshot: capture current `/` from local dev server at 1440×900 light + dark, save to `kanban/design-artefacts/2026-04-24/homepage-baseline-{light,dark}.png`
 - Brand brief (from Phase 0)
-- 1-paragraph positioning: "GWTH.ai is a 3-month student-facing learning platform for people who want to GO WHERE THE HUMANS work with AI. Students browse one core curriculum, complete labs, track progress, earn a certificate. UK-first; evidence-based; CIPD-aligned."
+- 1-paragraph positioning: "GWTH.ai is a 3-month learning platform that helps working UK professionals use AI in their jobs. Students follow one core curriculum, complete hands-on labs, track progress, and earn a verified Dynamic Score they can share to LinkedIn. UK-first, evidence-based (CIPD-aligned), aimed at mid-career professionals — not bootcamp dropouts or teenagers." (GWTH stands for *Growth With Tech and Humans* — the acronym expansion can appear in About / footer if useful, but is not a hero tagline.)
 
 ### 6.2 Ask Claude Design to deliver
 - Full-page hero + features + proof + CTA + footer
