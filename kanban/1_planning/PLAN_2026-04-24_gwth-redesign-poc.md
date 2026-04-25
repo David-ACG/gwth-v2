@@ -14,7 +14,7 @@
 ## 0. Decisions Received — 2026-04-24
 
 - **FB experiment paused** — GWTH redesign is the higher-priority workstream. No parallel-quota conflict.
-- **Fresh Claude Design quota cycle.** Meter reset Thursday 2026-04-23 ~11:00 (earlier than the UI's advertised Sunday 09:00). David reports **100% free quota for ~1 week**. Plan can start immediately.
+- **Fresh Claude Design quota cycle.** Settings/Usage tab on 2026-04-25 confirms **Claude Design: 0% used, plan Max (5x), weekly reset Sat 02:00 AM**. (The earlier "Thursday 11:00" observation was either a misread or a one-off — Saturday is the authoritative reset going forward.) Baseline screenshot at `kanban/design-artefacts/2026-04-24/quota-snapshots/2026-04-25_pre-poc-start.jpg`. Plan can start immediately.
 - **OKLCH Graphite Warm palette is NOT sacred.** Claude Design may replace it wholesale; CLAUDE.md's Design System section will be updated in Phase 3 to match whatever lands.
 - **Logo direction — explore both** (wordmark-only AND icon-forward, multiple type/metaphor angles). No pre-commitment in the brand brief; Phase 0 picks the winner at the end of concept generation, not the start.
 - **POC scope is exactly 2 pages — homepage + student dashboard.** Confirmed.
