@@ -198,7 +198,11 @@
       "WebFetch(domain:resend.com)",
       "Bash(curl:*)",
       "Bash(printf '%s' 'sk_21a6919a600dc3bfba752efee244a8948e1b1ead24f488a8')",
-      "Bash(ssh p520 'docker exec coolify php artisan tinker --execute=\"\":*)"
+      "Bash(ssh p520 'docker exec coolify php artisan tinker --execute=\"\":*)",
+      "Bash(mkdir -p ~/.claude/skills/impeccable)",
+      "Bash(cp -r /c/Projects/_tools/impeccable/source/skills/impeccable/. ~/.claude/skills/impeccable/)",
+      "Bash(rm -rf ~/.claude/skills/impeccable)",
+      "Bash(cp -r /c/Projects/_tools/impeccable/dist/claude-code/.claude/skills/impeccable ~/.claude/skills/impeccable)"
     ]
   },
   "enableAllProjectMcpServers": true,
