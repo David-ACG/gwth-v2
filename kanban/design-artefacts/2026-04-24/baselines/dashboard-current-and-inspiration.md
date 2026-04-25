@@ -79,7 +79,7 @@ The existing `DynamicScore` type in `src/lib/types.ts` reflects an earlier, more
 |---|---|
 | `overallScore` | ✅ Keep — this IS the 100-relative number |
 | `maxPossibleScore` | ❓ Re-purpose — under the new scheme, max is "100 + all optional lessons completed" |
-| `percentile` | 🚫 **Probably redundant** — the score itself encodes capability without ranking. Recommend dropping. (See §3f1 + §7 Q5.) |
+| `percentile` | 🚫 **DROP** (David 2026-04-25). Remove from rendered UI; flag for removal from the type in a Phase 2b cleanup. The 100-point score is the legible signal — peer-rank is redundant and crosses the leaderboard line. |
 | `curiosityIndex` | ✅ Keep — maps to "optional lessons taken" / >100 territory |
 | `consistencyScore` | ❓ Question — does this matter to employers? Or is it noise? |
 | `improvementRate` | ❓ Question — same. |
@@ -314,7 +314,7 @@ For each widget: **what / when / who does it well / trade-offs**. GWTH-specific 
   - The shared page renders: current score, what 100 means, the student's name, the date the score was last verified, and a list of completed mandatory + optional content (no peer comparison)
   - This is the credential employers click / scan to verify
 - *Decisions resolved (David 2026-04-25):*
-  - **Q5 percentile** — the new 100-point scheme makes peer-rank `percentile` redundant; the score itself encodes capability. Recommend **dropping `percentile`** from the rendered widget (and likely from the type). Pending final confirmation in §7 Q5.
+  - **Q5 percentile — DROP** (David 2026-04-25). Removed from rendered widget. Flag for type-cleanup in a Phase 2b follow-up.
 - *Open implementation questions (Phase 2b — not blocking design):*
   - Does `consistencyScore` add anything employers care about under the new scheme, or is it noise?
   - Does `improvementRate` survive in the new scheme, or is it covered by the score-delta + sparkline?
@@ -466,7 +466,7 @@ Given:
 
 **Mid-page (priority 2 — orientation):**
 
-4. **KPI strip — 4 cards (David 2026-04-25, Q7).** Confirmed: "Hours this week" | "Sessions this week" | "Score change this week" (delta on Dynamic Score) | one more (suggest: "Lessons complete this week" or "Latest quiz score"). Sparklines over 4-week windows where data permits.
+4. **KPI strip — exactly 3 cards (David 2026-04-25, Q7c).** "Hours this week" | "Sessions this week" | "Score change this week" (delta on Dynamic Score). Sparklines over 4-week windows where data permits. Resist adding a 4th — three is enough; spacious ≠ empty.
 5. **Activity heatmap** — 12-week GitHub-style grid. Retrospective-only framing. "23 sessions in April." Replaces / reframes the existing `StudyStreakCalendar` (rename → "Activity"; drop any consecutive-day counter).
 
 **Below (priority 3 — context, not action):**
@@ -632,20 +632,17 @@ This doc is a menu, not a spec. Decisions made 2026-04-25 marked ✅ DECIDED; th
 
 **Decided 2026-04-25 (continued):**
 
-5. ✅ **Dynamic Score scheme — 100-point system.** 100 = mandatory lessons + 3 capstone projects. >100 = optional lessons. <100 = incomplete or decayed. To pass a lesson, answer 3 questions. QR code + shareable URL on `/progress`. Implication for `percentile`: **drop it** — the score itself is the legible signal. (See §0.5b + §3f1.)
+5. ✅ **Dynamic Score scheme — 100-point system.** 100 = mandatory lessons + 3 capstone projects. >100 = optional lessons. <100 = incomplete or decayed. To pass a lesson, answer 3 questions. QR code + shareable URL on `/progress`. **Drop `percentile`** entirely — score itself is the legible signal. (See §0.5b + §3f1.)
 6. ✅ **Cohort widget — defer to v2.**
-7. ✅ **KPI strip — both hours and sessions, plus score-change-this-week.** (Plus a 4th — suggested "Lessons complete this week" or "Latest quiz score.")
+7. ✅ **KPI strip — exactly 3 cards (Q7c):** hours this week + sessions this week + score change this week.
+8. ✅ **Ctrl+K — keyboard-only (Q8b).** No visible hint button in the header. `SearchPalette` already wired; power users will discover.
 9. ✅ **Visitor framing — keep "locked + subscribe."** Until all lessons are written, preview-mode is premature.
 
-**Still open:**
+**Still deferred (David 2026-04-25 — answer later):**
 
-8. **Ctrl+K (Cmd+K on Mac) command palette discoverability.** This is the keyboard-triggered search overlay used by Linear, Notion, Vercel, Cursor, VS Code, etc. Already wired in GWTH (`SearchPalette` in the dashboard layout) — pressing the shortcut opens a search box for jumping to lessons / labs / settings. Question: should the new header show a **visible "Ctrl K" button hint** so people discover it (Linear / Vercel pattern), or rely on keyboard-only?
-   - (a) Visible button in the header
-   - (b) Keyboard-only (assumes power users will discover it)
-
-10. **Lapsed-state design — keep red banner or soften?** Deferred for now (David 2026-04-25 — answer later).
-11. **First-time-user flow — invest in a separate empty-state design, or use the standard subscriber view with empty cells?** Deferred for now (David 2026-04-25 — answer later).
-12. **Cohort / team enrolment infrastructure** (brand brief journey #7 question). Deferred.
+10. **Lapsed-state design** — keep red banner or soften?
+11. **First-time-user flow** — separate empty-state design or standard view with empty cells?
+12. **Cohort / team enrolment infrastructure** (brand brief journey #7 question).
 
 ---
 
