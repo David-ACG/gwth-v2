@@ -16,6 +16,10 @@
 - **FB experiment paused** — GWTH redesign is the higher-priority workstream. No parallel-quota conflict.
 - **Fresh Claude Design quota cycle.** Meter reset Thursday 2026-04-23 ~11:00 (earlier than the UI's advertised Sunday 09:00). David reports **100% free quota for ~1 week**. Plan can start immediately.
 - **OKLCH Graphite Warm palette is NOT sacred.** Claude Design may replace it wholesale; CLAUDE.md's Design System section will be updated in Phase 3 to match whatever lands.
+- **Logo direction — explore both** (wordmark-only AND icon-forward, multiple type/metaphor angles). No pre-commitment in the brand brief; Phase 0 picks the winner at the end of concept generation, not the start.
+- **POC scope is exactly 2 pages — homepage + student dashboard.** Confirmed.
+- **Install Impeccable Tier 1 skills globally** (`/audit /critique /polish`) before Phase 4 verify. Side-task, runs in parallel with Phase 0.
+- **Per-page deploy gate.** Deploy + review after homepage; check Claude Design quota burn at that point; decide whether to continue to dashboard or pause for next reset based on actual consumption (NOT projected).
 - **All 13 original assumptions (§15) hold.** One adjustment: **Recraft is no longer the default vector tool** — David has no FB-era experience with it. Plan §5 is now tool-agnostic for the vector-finalisation step and adds the **new OpenAI image tool (released 2026-04-23)** as a curiosity-driven option David wants to try.
 
 ---
@@ -145,7 +149,11 @@ Once a concept direction is picked, the winning image needs to become clean SVG 
 ### 5.3 Workflow
 
 1. **Brand brief (30 min)** — pair session with Claude Code: nail who the GWTH.ai student is, the voice, and the "not-list" (what GWTH is NOT). Use FB's `BRAND_BRIEF.md` as the structural template. Save to `kanban/design-artefacts/2026-04-24/brand-brief.md`.
-2. **Concept generation (30-60 min)** — Start with Gemini Stitch + the brand brief. If the output isn't earning its keep in 30 min, switch to OpenAI's new image tool for another 30 min (David's curiosity slot). Pick the strongest direction across both.
+2. **Concept generation (45-75 min)** — Generate **both directions** in parallel since the brand brief is intentionally undecided on wordmark-vs-icon-forward:
+   - **Wordmark-only set** (4-6 concepts) — typography-led; one serif option, one humanist sans, one geometric sans
+   - **Icon-forward set** (4-6 concepts) — symbol-led; one motion/wave metaphor (matches "GO WHERE THE HUMANS"), one abstract geometric, one literal-but-restrained
+   - Start with Gemini Stitch (~30 min) for both sets. Then time-box 30 min with OpenAI's new image tool (curiosity slot) — if it produces a clearly better candidate in either direction, fold it in.
+   - Pick **one winner across both directions**, not one from each. The chosen direction is the one that David + Claude Code agree communicates the brand best in 5 seconds.
 3. **Vector finalisation (30-60 min)** — Decide at the end of step 2 based on what the winning concept looks like:
    - Simple geometric mark → hand-trace in Figma (fastest)
    - Complex illustrative mark → try Recraft (time-box 20 min), fall back to SVGTrace, fall back to manual
@@ -154,7 +162,7 @@ Once a concept direction is picked, the winning image needs to become clean SVG 
 5. **Commit** — new logo files. `public/logo-spiral*.svg` stays in place for now — decision on whether to delete them waits until Claude Design has weighed in during Phase 1 (it may want them as atmospheric assets).
 
 ### 5.4 Time budget
-**2–3 hours total for Phase 0.** If Stitch + OpenAI-tool both produce nothing usable in 60 min combined, the problem is the brand brief, not the tool — pause and rewrite the brief before continuing.
+**2.5–3.5 hours total for Phase 0** (slightly longer than the original 2-3 h estimate because we're exploring both wordmark-only AND icon-forward in parallel — David's Q4 answer). If Stitch + OpenAI-tool both produce nothing usable in 75 min combined, the problem is the brand brief, not the tool — pause and rewrite the brief before continuing.
 
 ### 5.5 Exit criteria for Phase 0
 - [ ] Wordmark SVG at `public/logo.svg`
@@ -355,19 +363,16 @@ Dependencies: 1a → 1b → 2a → 2b → 3 → 4. Phase 0 is independent and ca
 
 ---
 
-## 16. Open Questions for David
+## 16. Open Questions for David — All Decided (2026-04-24)
 
-### Decided (2026-04-24)
 1. ✅ **FB experiment status** — **paused**; GWTH is higher priority. No quota conflict.
 2. ✅ **Start date** — **start immediately**. Quota reset early on Thursday 2026-04-23; full cycle free.
 3. ✅ **Current design-system sacredness** — **nothing is off-limits**. Claude Design may replace the OKLCH Graphite Warm palette, the cascading spiral, typography, anything.
+4. ✅ **Logo direction cues** — **try both**. Brand brief stays undecided on wordmark-vs-icon; Phase 0 explores both in parallel and picks the winner from the combined pool. See updated §5.3 step 2.
+5. ✅ **Scope confirmation** — **homepage + student dashboard only**. Hero is part of the homepage deliverable, not separate.
+6. ✅ **Impeccable install** — **yes**. Install Tier 1 skills globally before Phase 4. Treat as a side-task that runs in parallel with Phase 0; not a blocker.
 7. ✅ **Credit headroom** — **100% of the weekly allowance** budgeted for GWTH. FB is paused.
-
-### Still open — please answer before Phase 0 starts
-4. **Logo direction cues.** Any stylistic lean for the brand brief? e.g. wordmark-only vs icon-forward; serif vs sans; wave/motion metaphor (matches "GO WHERE THE HUMANS" positioning) vs more abstract geometric. One sentence is enough.
-5. **Scope confirmation.** Student dashboard is the only dashboard in scope — agreed? Or does the landing-page hero need to be called out as its own explicit deliverable separate from the rest of the homepage?
-6. **Impeccable install.** Want me to install the `/impeccable` Tier 1 skills globally (`~/.claude/` install per [RESEARCH_2026-04-16_claude-code-design-skills.md](./RESEARCH_2026-04-16_claude-code-design-skills.md)) so Phase 4 verify can run `/audit /critique /polish`? One-off ~5 min install, cost zero, touches only `~/.claude/`.
-8. **P520 deploy timing.** Deploy after each page (Phase 1b and Phase 2b independently) so you can review homepage before committing to the dashboard direction — or batch a single deploy after both pages are built?
+8. ✅ **P520 deploy timing** — **deploy after each page**. Review homepage on P520, then check Claude Design quota burn at that gate before committing to Phase 2. Quota-aware, not date-aware.
 
 ---
 
