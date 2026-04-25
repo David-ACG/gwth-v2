@@ -54,29 +54,43 @@ All from `src/lib/data/*` mock layer. Real backend will be wired separately. Kee
 - **Subscription state branching** keeps the page useful for visitors AND subscribers without a separate paywalled `/dashboard` route.
 - **Existing primitives are good** — `ProgressRing`, `StatusBadge`, shadcn `Card`/`Progress`/`Badge`, Lucide icons, `formatProgress` / `formatRelativeDate` utilities.
 
-### 0.5b Existing Dynamic Score (pre-built but absent from dashboard today)
+### 0.5b Dynamic Score — the canonical scoring system (David 2026-04-25)
 
-Already exists in code, surfaced only on `/progress`:
+The existing `DynamicScore` type in `src/lib/types.ts` reflects an earlier, more abstract design (`percentile`, `curiosityIndex`, `consistencyScore`, `improvementRate`). David's clarified mental model is **simpler and more concrete**:
 
-```ts
-// src/lib/types.ts
-interface DynamicScore {
-  overallScore       // 1.5 pts per lesson, decays if content not reviewed
-  maxPossibleScore   // ceiling based on completed lessons
-  percentile         // 0–100, peer-rank percentile
-  curiosityIndex     // 0–1, ratio of optional/advanced lessons explored
-  consistencyScore   // 0–100, regularity of study sessions
-  improvementRate    // -100 to 100, quiz-score trend
-  scoreHistory       // {date, score}[] for chart
-}
-```
+**The 100-point target system:**
 
-Marketing copy on `/` and `/pricing` already commits to:
-- *"Dynamic scores that employers can verify"*
-- *"Scores decay if you stop"* — explicit decay mechanic
-- *"Dynamic certification scores employers can verify"*
+| Condition | Score |
+|---|---|
+| Student completes **all mandatory lessons** AND posts screenshots of all **3 capstone projects** | **100 points** |
+| Student goes above and beyond — completes **optional lessons** | **>100 points** |
+| Student fails to complete mandatory lessons | **<100 points** |
+| Lessons get updated and student doesn't retake them | **score decays below 100** |
 
-**Critical for redesign:** Dynamic Score is **core to GWTH's value proposition** — it's the credential students share on LinkedIn that signals to employers they're current. It is NOT a leaderboard or XP gimmick; it is a measured-capability score with verification. Distinguish carefully from §4b (which bans peer-ranking leaderboards). See §3f1 (new) below.
+**To pass a lesson:** answer the 3 questions embedded in the lesson.
+
+**Why this design:** the score itself is a single legible number. 100 = "this person finished what they were supposed to." >100 = "this person went further." <100 = "this person hasn't kept up." That clarity is the credential's value to employers.
+
+**Sharing mechanism:** the score page generates a **QR code + shareable URL** the student can post on LinkedIn. Employers scan or click → land on the verified score page (with explanation of what 100 means and what's been done).
+
+**Implication for the existing `DynamicScore` type fields:**
+
+| Field | Status under new scheme |
+|---|---|
+| `overallScore` | ✅ Keep — this IS the 100-relative number |
+| `maxPossibleScore` | ❓ Re-purpose — under the new scheme, max is "100 + all optional lessons completed" |
+| `percentile` | 🚫 **Probably redundant** — the score itself encodes capability without ranking. Recommend dropping. (See §3f1 + §7 Q5.) |
+| `curiosityIndex` | ✅ Keep — maps to "optional lessons taken" / >100 territory |
+| `consistencyScore` | ❓ Question — does this matter to employers? Or is it noise? |
+| `improvementRate` | ❓ Question — same. |
+| `scoreHistory` | ✅ Keep — sparkline + decay-over-time visualisation |
+
+Marketing copy already published on `/` + `/pricing`:
+- *"Dynamic scores that employers can verify"* ✅ matches new scheme
+- *"Scores decay if you stop"* ✅ matches new scheme (decay = lessons updated, not retaken)
+- *"Keep your dynamic score as high as possible — scores decay if you stop"* ✅
+
+**Critical for the dashboard redesign:** Dynamic Score is **the** credential — visible on the dashboard hero strip, primary sharing CTA via QR / link, click-through to a fuller `/progress` view. It is NOT a leaderboard. The redesign must make this distinction obvious in the visual treatment. See §3f1 below for the widget spec.
 
 ### 0.6 What's notably absent / weak today
 
@@ -287,22 +301,26 @@ For each widget: **what / when / who does it well / trade-offs**. GWTH-specific 
 
 ### 3f. Achievement widgets
 
-**Dynamic Score (GWTH-specific, already in code)** — *the load-bearing widget for the GWTH credential story*
-- *What:* A measured-capability score per student (overall + sub-metrics: curiosity, consistency, improvement). Already implemented in `src/lib/types.ts` + `mock-data.ts` + rendered on `/progress`.
-- *When:* Belongs on the dashboard hero strip in addition to `/progress`. It is **the** thing employers look at on a shared LinkedIn link, so the dashboard should make it visible-but-calm — not a giant gamified number, not a hidden footer stat.
-- *How to surface:*
-  - **Primary tile (~⅓ width on desktop):** big number ("23 / 36") + 12-week sparkline (`scoreHistory`) + delta vs last week + small `Share to LinkedIn` link.
-  - Click-through to `/progress` for the full breakdown (curiosity / consistency / improvement / percentile chart).
+**Dynamic Score (the GWTH credential — see §0.5b for the canonical 100-point system)**
+- *What:* A measured-capability score per student. **100 points** = mandatory lessons + 3 capstone projects complete. **>100** = optional lessons completed. **<100** = mandatory lessons not done OR lessons updated and not retaken (decay). To pass a lesson the student must answer the 3 embedded questions.
+- *When:* Belongs on the dashboard hero strip in addition to `/progress`. It is **the** thing employers see on a shared LinkedIn link.
+- *How to surface on the dashboard:*
+  - **Primary tile (~⅓ width on desktop):** big number ("87 / 100") + state pill ("On track" / "Ahead" / "Behind") + 12-week sparkline (`scoreHistory`) + week-on-week delta + a `Share` button that opens the QR-code / shareable-URL modal.
+  - **Decay warning when applicable** — a calm "3 lessons updated since you last reviewed — score will decay 2 points in 7 days unless you retake" prompt. Information, not anxiety bait. (Distinguish from §4a streak shame.)
+  - Click-through to `/progress` for the full breakdown (sub-metrics, history, capstone screenshots, the QR / share page).
   - Sonner toast when score changes ("+1.5 — Lesson 3.2 complete"); no full-screen celebrations (anti-§4h).
-- *Trade-offs / design decisions still open:*
-  - **Percentile field** — `dynamicScore.percentile` is a peer-rank number, which crosses the leaderboard line if shown publicly. Three options:
-    - (a) Keep `percentile` private to the student (don't render on shared LinkedIn card)
-    - (b) Reframe as bands ("ahead of cohort" / "with cohort" / "catching up") rather than a number
-    - (c) Drop `percentile` from view entirely; rely on absolute score + capability sub-metrics
-  - **Decay framing** — pricing copy commits to "scores decay if you stop." Decay is honest, but the dashboard should warn before a decay event ("Your score will decay 0.3 if no activity in 3 days") rather than punish silently. The line between "useful prompt" and "Duolingo streak shame" is narrow — frame as a credential maintenance cue, not anxiety bait.
-  - **Verification surface** — "employers can verify" implies a public credential URL with score + audit trail. Treat the dashboard widget as a one-click route to that URL; the URL itself is a separate design.
-- *Anti-pattern boundary:* This is NOT XP/leaderboards/public ranking (banned in §4b). It is a verified credential like an Accredible-style digital badge but updated continuously rather than awarded once. Keep the language calibrated to "credential" / "score" rather than "XP" / "level" / "rank."
-- *Source:* GWTH-internal (existing code + marketing copy). For comparable verification-credential patterns: [Accredible](https://www.accredible.com/blog/what-is-a-digital-badge), [Open Badges spec](https://openbadges.org/), LinkedIn Learning's badge integration.
+- *Linked share mechanism (per David 2026-04-25):*
+  - Dashboard tile and `/progress` page both expose a **QR code + canonical shareable URL** for posting to LinkedIn
+  - The shared page renders: current score, what 100 means, the student's name, the date the score was last verified, and a list of completed mandatory + optional content (no peer comparison)
+  - This is the credential employers click / scan to verify
+- *Decisions resolved (David 2026-04-25):*
+  - **Q5 percentile** — the new 100-point scheme makes peer-rank `percentile` redundant; the score itself encodes capability. Recommend **dropping `percentile`** from the rendered widget (and likely from the type). Pending final confirmation in §7 Q5.
+- *Open implementation questions (Phase 2b — not blocking design):*
+  - Does `consistencyScore` add anything employers care about under the new scheme, or is it noise?
+  - Does `improvementRate` survive in the new scheme, or is it covered by the score-delta + sparkline?
+  - The QR / share page is a separate page-design unit (not in Phase 2 dashboard scope) — flag for a follow-up plan.
+- *Anti-pattern boundary:* This is NOT XP / leaderboards / public ranking (banned in §4b). It is a verified credential like an Accredible-style digital badge — but **continuously updated** rather than awarded once. Keep the language calibrated to "credential" / "score" rather than "XP" / "level" / "rank."
+- *Source:* GWTH-internal (David's clarification 2026-04-25 + existing code + published marketing copy). For comparable verification-credential patterns: [Accredible](https://www.accredible.com/blog/what-is-a-digital-badge), [Open Badges spec](https://openbadges.org/), LinkedIn Learning's badge integration.
 
 **Certificates earned**
 - *What:* Display of completed-course credentials.
@@ -448,7 +466,7 @@ Given:
 
 **Mid-page (priority 2 — orientation):**
 
-4. **KPI strip — 4 cards max.** Suggested: "Lessons complete (e.g. 7/24)" | "Curiosity Index" (sub-metric of Dynamic Score, optional/advanced lessons explored) | "Latest quiz score" | "Sessions this week" (no consecutive-day streak). Sparklines over 4-week windows where data permits.
+4. **KPI strip — 4 cards (David 2026-04-25, Q7).** Confirmed: "Hours this week" | "Sessions this week" | "Score change this week" (delta on Dynamic Score) | one more (suggest: "Lessons complete this week" or "Latest quiz score"). Sparklines over 4-week windows where data permits.
 5. **Activity heatmap** — 12-week GitHub-style grid. Retrospective-only framing. "23 sessions in April." Replaces / reframes the existing `StudyStreakCalendar` (rename → "Activity"; drop any consecutive-day counter).
 
 **Below (priority 3 — context, not action):**
@@ -612,18 +630,22 @@ This doc is a menu, not a spec. Decisions made 2026-04-25 marked ✅ DECIDED; th
 3. ✅ **Productivity tools (Linear / Notion / Vercel / Stripe / Supabase) over e-learning incumbents (Coursera / Udemy / LinkedIn Learning)** as visual references (David 2026-04-25). Phase 2a Claude Design seed will lead with the productivity-tool aesthetic.
 4. ✅ **"Continue Lesson X.Y" hero card replaces the generic CTA** (David 2026-04-25). Highest-priority addition.
 
-**Still open — please answer before Phase 2a starts:**
+**Decided 2026-04-25 (continued):**
 
-5. **`dynamicScore.percentile` framing.** It's a peer-rank number (0–100), which crosses the leaderboard line if shown publicly. Three options:
-   - (a) Keep `percentile` private to the student only (don't render on the shared LinkedIn credential card)
-   - (b) Reframe as bands ("ahead of cohort" / "with cohort" / "catching up") rather than a number
-   - (c) Drop `percentile` from view entirely; rely on absolute score + capability sub-metrics
-6. **Cohort widget — include now or defer?** Depends on whether a community surface (Discord / Circle / Slack / built-in) is ready. If not, defer to v2.
-7. **"Hours / time-spent" KPI vs "Sessions this week" KPI.** Hours risks self-judgement framing; sessions is calmer. Pick one for the KPI strip, or include both?
-8. **Cmd+K discoverability.** Already wired. Does the new header need a visible `⌘K` hint button (Linear/Vercel pattern), or is the keyboard-only behaviour fine?
-9. **Visitor-state framing — keep "locked + subscribe" or pivot to "Module 1 preview, try Lesson 1.1 free"?** The latter is closer to Brilliant / Coursera; the former is closer to the current.
-10. **Lapsed-state design — keep red banner or soften?** Default recommendation: soften copy, render the subscriber state below (still grace-period access).
-11. **First-time-user flow — invest in a separate empty-state design, or use the standard subscriber view with empty cells?** Separate flow is higher-impact but a separate design unit (more Claude Design quota).
+5. ✅ **Dynamic Score scheme — 100-point system.** 100 = mandatory lessons + 3 capstone projects. >100 = optional lessons. <100 = incomplete or decayed. To pass a lesson, answer 3 questions. QR code + shareable URL on `/progress`. Implication for `percentile`: **drop it** — the score itself is the legible signal. (See §0.5b + §3f1.)
+6. ✅ **Cohort widget — defer to v2.**
+7. ✅ **KPI strip — both hours and sessions, plus score-change-this-week.** (Plus a 4th — suggested "Lessons complete this week" or "Latest quiz score.")
+9. ✅ **Visitor framing — keep "locked + subscribe."** Until all lessons are written, preview-mode is premature.
+
+**Still open:**
+
+8. **Ctrl+K (Cmd+K on Mac) command palette discoverability.** This is the keyboard-triggered search overlay used by Linear, Notion, Vercel, Cursor, VS Code, etc. Already wired in GWTH (`SearchPalette` in the dashboard layout) — pressing the shortcut opens a search box for jumping to lessons / labs / settings. Question: should the new header show a **visible "Ctrl K" button hint** so people discover it (Linear / Vercel pattern), or rely on keyboard-only?
+   - (a) Visible button in the header
+   - (b) Keyboard-only (assumes power users will discover it)
+
+10. **Lapsed-state design — keep red banner or soften?** Deferred for now (David 2026-04-25 — answer later).
+11. **First-time-user flow — invest in a separate empty-state design, or use the standard subscriber view with empty cells?** Deferred for now (David 2026-04-25 — answer later).
+12. **Cohort / team enrolment infrastructure** (brand brief journey #7 question). Deferred.
 
 ---
 
