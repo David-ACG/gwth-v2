@@ -299,19 +299,22 @@ Not in scope: a full lab write-up like FB's. That's FB's deliverable, not this P
 
 ---
 
-## 12. Beads Breakdown
+## 12. Beads Breakdown — Created 2026-04-24
 
-When the plan is approved, create these beads issues (all under a parent epic):
+| Beads ID | Phase | Title | Deps |
+|---|---|---|---|
+| `beads_GWTH-suy` | Pre-flight | Branch + baselines + artefact folder | — |
+| `beads_GWTH-72z` | Side-task | Install Impeccable Tier 1 skills globally | — (parallel) |
+| `beads_GWTH-bm5` | Phase 0 | Logo + favicon (Stitch + OpenAI tool; both directions) | suy |
+| `beads_GWTH-6om` | Phase 1a | Homepage exploration in Claude Design | bm5 |
+| `beads_GWTH-w5y` | Phase 1b | Homepage implementation + P520 deploy + Gate 3/4 | 6om, 72z |
+| `beads_GWTH-9t0` | Quota gate | Review homepage burn before Phase 2 | w5y |
+| `beads_GWTH-eay` | Phase 2a | Dashboard exploration (same Claude Design conversation) | 9t0 |
+| `beads_GWTH-m0s` | Phase 2b | Dashboard implementation + P520 deploy + Gate 3/4 | eay |
+| `beads_GWTH-6if` | Phase 3 | Brand kit commit + STYLE_BIBLE.md | m0s |
+| `beads_GWTH-32e` | Phase 5 | Append results to design-workflow research | 6if |
 
-1. **GWTH-POC-0** — Phase 0: Logo + favicon via Gemini Stitch + Recraft + realfavicongenerator
-2. **GWTH-POC-1a** — Phase 1: Homepage Claude Design exploration + bundle export
-3. **GWTH-POC-1b** — Phase 1: Homepage Claude Code implementation + P520 deploy + gate 3/4
-4. **GWTH-POC-2a** — Phase 2: Dashboard Claude Design exploration (same conversation)
-5. **GWTH-POC-2b** — Phase 2: Dashboard Claude Code implementation + P520 deploy + gate 3/4
-6. **GWTH-POC-3** — Phase 3: Brand kit commit + STYLE_BIBLE.md
-7. **GWTH-POC-4** — Phase 5: Append results to RESEARCH_2026-04-15
-
-Dependencies: 1a → 1b → 2a → 2b → 3 → 4. Phase 0 is independent and can run parallel to 1a prep.
+Currently unblocked (`bd ready`): **suy** (pre-flight) and **72z** (Impeccable install). Both can start in parallel.
 
 ---
 
@@ -373,6 +376,30 @@ Dependencies: 1a → 1b → 2a → 2b → 3 → 4. Phase 0 is independent and ca
 6. ✅ **Impeccable install** — **yes**. Install Tier 1 skills globally before Phase 4. Treat as a side-task that runs in parallel with Phase 0; not a blocker.
 7. ✅ **Credit headroom** — **100% of the weekly allowance** budgeted for GWTH. FB is paused.
 8. ✅ **P520 deploy timing** — **deploy after each page**. Review homepage on P520, then check Claude Design quota burn at that gate before committing to Phase 2. Quota-aware, not date-aware.
+
+---
+
+## 17. Execution Mode — Interactive (Decided 2026-04-24)
+
+This POC deliberately deviates from the standard `/build` headless pipeline.
+
+**Why:** Claude Design output is unpredictable enough that a headless fresh-session-per-prompt run would produce stale or wrong implementations. Each phase produces information that should refine the next (winning logo direction → palette → component grammar → dashboard layout). Quota awareness needs human-in-the-loop.
+
+**How it differs:**
+
+| Standard `/build` flow | This POC's interactive flow |
+|---|---|
+| `1_planning/PROMPT_*.md` per task, reviewed at Gate 2 | **Skipped** — beads descriptions + this plan are the spec |
+| Fresh session per prompt via `run-kanban.sh` | **Same session(s)**; conversation is the audit trail |
+| Autonomous; questions are violations | **Questions encouraged** in both directions |
+| Plan locked at start | **Plan is a living doc** — David updates it as decisions arrive (see §0 Decisions Received and §16 for the pattern) |
+| Gate 3/4 still apply | **Gate 3/4 still apply** — append implementation notes + testing checklist to the prompt-equivalent record (this plan's per-phase entries) |
+
+**Beads is the running task tracker.** `bd update <id> --claim` when starting a phase; `bd close <id>` when done; `bd update <id> --notes="..."` to capture findings that don't belong in the plan.
+
+**The plan is updated** whenever a decision changes scope — add a dated bullet to §0 Decisions Received and link to the relevant section.
+
+**Session boundary rule (the only exception):** The build session(s) and this planning session can overlap freely, but heavy compaction events (`/compact`) should land at phase boundaries — between Phase 0 and Phase 1a, between Phase 1b and Phase 2a, etc. Mid-phase compaction loses Claude Design conversation context.
 
 ---
 
