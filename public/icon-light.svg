@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="GWTH.ai">
   <title>GWTH.ai icon</title>
-  <desc>GWTH icon mark — dark mode. Circular ring in warm off-white with upper-right gap. Mint up-right arrow exits through gap. Designed to sit on warm charcoal #191817.</desc>
+  <desc>GWTH icon mark — light mode. Warm-charcoal ring with upper-right gap. Darker-mint up-right arrow exits through gap. Designed to sit on warm off-white #FAF8F4.</desc>
 
-  <path fill="#FAF8F4"
+  <path fill="#191817"
         d="M 66.9 13.75
            A 40 40 0 1 0 86.25 33.1
            L 73.56 39.01
            A 26 26 0 1 1 60.99 26.44
            Z"/>
 
-  <g fill="#1CBA93" transform="translate(50 50) rotate(-45)">
+  <g fill="#0E9F76" transform="translate(50 50) rotate(-45)">
     <path d="M -22 -5.5 L 12 -5.5 L 12 -11 L 32 0 L 12 11 L 12 5.5 L -22 5.5 Z"/>
   </g>
 </svg>
