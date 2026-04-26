@@ -8,6 +8,7 @@ Tracks Claude Design weekly-quota usage across the POC. Every quota snapshot is 
 |---|---|---|---|---|
 | `2026-04-25_pre-poc-start.jpg` | Pre-Phase-0 baseline | Max (5x) | **0%** | "You haven't used Claude Design yet". Weekly reset = Sat 2:00 AM. Current session 35% used (Claude Code, separate). All models 4% used weekly. Extra usage £20.92 of £50 cap (resets May 1). |
 | `2026-04-26_phase-0-logo-pivot.jpg` | Mid-Phase-0 (logo SVG attempt abandoned) | Max (5x) | **18%** | Spent on attempting SVG vectorisation of the locked logo concept. Claude Design hit NaN geometry bugs and slow iteration; David pivoted to PNG for the POC. **18% is sunk cost.** All models 9%, Sonnet 0%, current session 29%, extra usage £20.92 / £50 (42%). Reset confirmed Sat 02:00 AM. |
+| `2026-04-27_phase-1a-end.jpg` | End of Phase 1a (homepage exploration) | Max (5x) | **70%** | Phase 1a delivered a high-fidelity bundle: 2 directions (A editorial/mint, B active/aqua), shared tokens, full data.js, JSX components, processed PNGs. **Phase 1a burn = 52 percentage points** (18% → 70%). Bundle quality high enough to make this worth it, but Phase 2a (dashboard) now has only 30% headroom before Sat 02:00 reset. All models 10%, Sonnet 0%, current session 5%. |
 
 ## Lesson learned (2026-04-26)
 
@@ -21,3 +22,4 @@ The plan §0 originally noted "Thursday 2026-04-23 ~11:00" reset based on David'
 
 - **Quota gate (`beads_GWTH-9t0`)** runs after Phase 1b (homepage shipped). Compare against this baseline.
 - Decision rule from plan §0 / §17: <50% burn → straight to Phase 2. 50–75% → proceed but flag. >75% → pause until Sat 02:00 reset.
+- **Status as of 2026-04-27**: 70% used → **proceed-but-flag**. Phase 1b (Claude Code implementation, no Claude Design quota) and Phase 2a (dashboard exploration, ~25% budget) should fit in the remaining 30% only if disciplined. Likely outcome: Phase 2a runs after Sat 02:00 reset on a fresh quota.
