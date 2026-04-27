@@ -208,7 +208,7 @@
     pointer-events: none;
   }
   .ring-num {
-    font-size: 72px; font-weight: 800;
+    font-size: 64px; font-weight: 800;
     line-height: 1; letter-spacing: -0.05em;
     font-feature-settings: 'tnum';
     background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -216,48 +216,23 @@
     -webkit-text-fill-color: transparent;
     color: transparent;
   }
-  .ring-num-suffix {
-    font-size: 10px; font-weight: 600;
+  /* Tier label — sits INSIDE the ring, below the number */
+  .ring-tier {
+    margin-top: 6px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-feature-settings: 'tnum';
     color: var(--muted-foreground);
-    text-transform: uppercase; letter-spacing: 0.12em;
-    margin-top: 4px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* Status badge — sits BELOW ring, not inside */
-  .status-row { display: flex; justify-content: center; margin-top: 14px; }
-  .status-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 0.02em;
-    background: var(--muted);
-    color: var(--muted-foreground);
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
     white-space: nowrap;
+    transition: color 0.3s ease;
   }
-  .status-badge .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
-  }
-  .status-badge.pass {
-    background: oklch(0.6 0.18 145 / 0.10);
-    color: var(--success);
-    border-color: oklch(0.6 0.18 145 / 0.22);
-  }
-  .status-badge.elite {
-    background: linear-gradient(135deg, oklch(0.7 0.18 220 / 0.12), oklch(0.65 0.16 165 / 0.12));
-    color: var(--primary);
-    border-color: oklch(0.7 0.18 220 / 0.28);
-    box-shadow: 0 0 16px oklch(0.65 0.16 165 / 0.18);
-  }
-  .status-badge.decay {
-    background: oklch(0.75 0.15 75 / 0.12);
-    color: var(--warning);
-    border-color: oklch(0.75 0.15 75 / 0.26);
+  .ring-tier.pass { color: var(--success); }
+  .ring-tier.elite {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 
   @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.025); } }
@@ -454,8 +429,8 @@
         <div class="example-pill">Example</div>
 
         <div class="score-brand">
-          <img src="icon.png" alt="GWTH" class="score-logo light" />
-          <img src="icon-light.png" alt="GWTH" class="score-logo dark" />
+          <img src="icon-light.png" alt="GWTH" class="score-logo light" />
+          <img src="icon.png" alt="GWTH" class="score-logo dark" />
           <div class="score-title">GWTH Score</div>
         </div>
 
@@ -473,14 +448,7 @@
           </svg>
           <div class="ring-center">
             <div class="ring-num" id="ring-num">104</div>
-            <div class="ring-num-suffix">Score</div>
-          </div>
-        </div>
-
-        <div class="status-row">
-          <div class="status-badge pass" id="status-badge">
-            <span class="dot" aria-hidden="true"></span>
-            <span id="status-text">Top 1%</span>
+            <div class="ring-tier pass" id="ring-tier">Top 1%</div>
           </div>
         </div>
 
@@ -492,9 +460,8 @@
                 <stop offset="100%" stop-color="oklch(0.7 0.18 220 / 0)" />
               </linearGradient>
             </defs>
-            <line x1="0" x2="300" y1="20" y2="20" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,4" opacity="0.45" />
-            <text x="296" y="14" text-anchor="end" font-size="9" fill="var(--muted-foreground)" font-weight="600" font-family="JetBrains Mono, monospace">TOP 1%</text>
             <polygon id="spark-fill-poly" fill="url(#spark-fill)" points="" />
+            <line x1="0" x2="300" y1="20" y2="20" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,4" opacity="0.55" />
             <polyline id="spark-main" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="" />
             <line id="spark-decay" stroke="var(--warning)" stroke-width="3" stroke-linecap="round" x1="0" y1="0" x2="0" y2="0" style="display:none" />
             <circle id="spark-dot" cx="280" cy="20" r="4" fill="var(--primary)">
@@ -572,8 +539,7 @@
   const ringProg = document.getElementById('ring-progress');
   const ringHalo = document.getElementById('ring-halo');
   const ringNum = document.getElementById('ring-num');
-  const statusBadge = document.getElementById('status-badge');
-  const statusText = document.getElementById('status-text');
+  const ringTier = document.getElementById('ring-tier');
   const sparkMain = document.getElementById('spark-main');
   const sparkFillPoly = document.getElementById('spark-fill-poly');
   const sparkDecay = document.getElementById('spark-decay');
@@ -585,9 +551,9 @@
 
   const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
 
-  function setBadge(text, kind) {
-    statusText.textContent = text;
-    statusBadge.className = 'status-badge ' + kind;
+  function setTier(text, kind) {
+    ringTier.textContent = text;
+    ringTier.className = 'ring-tier ' + kind;
   }
 
   function apply(score, history) {
@@ -606,20 +572,14 @@
     }
     ringNum.textContent = score;
 
-    const wasInTopHalf = history.slice(0, -1).some(v => v >= TIER_TOP_05);
-    const wasInTop1 = history.slice(0, -1).some(v => v >= TIER_TOP_1);
-    const wasInTop5 = history.slice(0, -1).some(v => v >= TIER_TOP_5);
-
     if (score >= TIER_TOP_05) {
-      setBadge('Top 0.5%', 'elite');
+      setTier('Top 0.5%', 'elite');
     } else if (score >= TIER_TOP_1) {
-      setBadge(wasInTopHalf ? 'Top 1% · slipping' : 'Top 1%', wasInTopHalf ? 'decay' : 'pass');
+      setTier('Top 1%', 'pass');
     } else if (score >= TIER_TOP_5) {
-      setBadge(wasInTop1 ? 'Top 5% · slipping' : 'Top 5%', wasInTop1 ? 'decay' : 'pass');
-    } else if (wasInTop5) {
-      setBadge('Slipping from top 5%', 'decay');
+      setTier('Top 5%', 'pass');
     } else {
-      setBadge('Working towards top 5%', '');
+      setTier('Working towards', '');
     }
 
     const yFor = v => 56 - ((v - 50) / 80) * 56;
