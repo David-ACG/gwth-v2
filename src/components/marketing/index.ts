@@ -3,7 +3,3 @@
  */
 
 export { MotionSection } from "./motion-section"
-export { CourseJsonLd } from "./json-ld/course-jsonld"
-export { Hero } from "./hero/hero"
-export { ResearchStrip } from "./research-strip/research-strip"
-export { JourneyGrid } from "./journey-grid/journey-grid"
