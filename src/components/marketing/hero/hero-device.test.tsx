@@ -29,9 +29,30 @@ describe("HeroDevice", () => {
     expect(figcaption?.textContent ?? "").toMatch(/your actual GWTH Score/i)
   })
 
-  it("includes the Example score pill (rendered by ScoreVis)", () => {
+  it("includes the GWTH brand mark header above the score ring", () => {
     const { container } = render(<HeroDevice />)
-    expect(container.textContent ?? "").toMatch(/Example score/i)
+    const brand = container.querySelector('[data-role="score-card-brand"]')
+    expect(brand).not.toBeNull()
+    const img = brand?.querySelector("img")
+    expect(img).not.toBeNull()
+    expect(img?.getAttribute("alt")).toBe("GWTH")
+    expect(brand?.textContent ?? "").toMatch(/GWTH Score/i)
+  })
+
+  it("includes the Example pill on the score card", () => {
+    const { container } = render(<HeroDevice />)
+    const pill = container.querySelector(
+      '[data-role="score-card-example-pill"]'
+    )
+    expect(pill).not.toBeNull()
+    expect(pill?.textContent ?? "").toMatch(/Example/i)
+  })
+
+  it("mounts the ScoreExplainer collapsible panel", () => {
+    const { container } = render(<HeroDevice />)
+    expect(
+      container.querySelector('[data-role="score-explainer"]')
+    ).not.toBeNull()
   })
 
   it("includes the gwth.ai/dashboard URL bar text", () => {

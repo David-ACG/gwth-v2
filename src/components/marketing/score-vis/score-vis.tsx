@@ -3,12 +3,11 @@
 import * as React from "react"
 import { motion, useReducedMotion } from "motion/react"
 import { cn } from "@/lib/utils"
-import { EXAMPLE_SUB_SCORES } from "./example-data"
 
 export type ScoreVisSize = "sm" | "md" | "lg"
 
 export type ScoreVisProps = {
-  /** Current score value (0..130). 100 is the pass line by default. */
+  /** Current score value. 100 is the pass line by default; ladder runs 80/100/130. */
   value: number
   /** Pass-line threshold; defaults to 100. Bonus halo fills 100..130. */
   passLine?: number
@@ -22,58 +21,38 @@ export type ScoreVisProps = {
   className?: string
 }
 
-const SIZE_CONFIG: Record<ScoreVisSize, { outer: number; ring: number; stroke: number }> = {
-  sm: { outer: 120, ring: 48, stroke: 10 },
-  md: { outer: 180, ring: 72, stroke: 12 },
-  lg: { outer: 240, ring: 96, stroke: 14 },
+const SIZE_CONFIG: Record<
+  ScoreVisSize,
+  { outer: number; ring: number; stroke: number; sparkW: number; sparkH: number }
+> = {
+  sm: { outer: 120, ring: 48, stroke: 10, sparkW: 160, sparkH: 56 },
+  md: { outer: 180, ring: 72, stroke: 12, sparkW: 220, sparkH: 56 },
+  lg: { outer: 240, ring: 96, stroke: 14, sparkW: 280, sparkH: 56 },
 }
 
-const SPARKLINE_WIDTH = 120
-const SPARKLINE_HEIGHT = 24
-const SPARKLINE_RANGE_MIN = 60
-const SPARKLINE_RANGE_MAX = 130
+const PASS_Y = 20
+const TOP_Y = 6
+const PASS_SCORE = 100
+const TOP_SCORE = 145
 
 const clamp = (n: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, n))
 
 /**
- * Population-percentile subtitle. The score is a percentile against the wider
- * population for applied AI:
- *   - 120+ → top 0.25%
- *   - 110..119 → top 0.5%
- *   - 100..109 → top 1% (the pass-line)
- *   - <100 with any prior history >= passLine → "Slipping from top 1%"
- *   - <100 with history never above passLine → "Working towards top 1%"
- *
- * The "Slipping" state is what the platform's "Stay Current" tier exists to
- * prevent: the score decays as curriculum updates and inactivity erode the
- * student's percentile.
+ * Tier subtitle using the locked 80/100/130 ladder. The sparkline
+ * shape (and amber decay segment) communicates "slipping" visually,
+ * so the label is kept to a static tier name.
  */
-const subtitleFor = (value: number, passLine: number, history: readonly number[]): string => {
-  if (value >= 120) return "Top 0.25%"
-  if (value >= 110) return "Top 0.5%"
-  if (value >= passLine) return "Top 1%"
-  const wasAbove = history.some((v) => v >= passLine)
-  return wasAbove ? "Slipping from top 1%" : "Working towards top 1%"
+const subtitleFor = (value: number): string => {
+  if (value >= 130) return "Top 0.5%"
+  if (value >= 100) return "Top 1%"
+  if (value >= 80) return "Top 5%"
+  return "Working towards"
 }
 
-const buildSparklinePath = (history: readonly number[]): string => {
-  if (history.length === 0) return ""
-  const stepX = history.length > 1 ? SPARKLINE_WIDTH / (history.length - 1) : SPARKLINE_WIDTH
-  const range = SPARKLINE_RANGE_MAX - SPARKLINE_RANGE_MIN
-  return history
-    .map((v, i) => {
-      const x = i * stepX
-      const norm = (clamp(v, SPARKLINE_RANGE_MIN, SPARKLINE_RANGE_MAX) - SPARKLINE_RANGE_MIN) / range
-      const y = SPARKLINE_HEIGHT - norm * SPARKLINE_HEIGHT
-      return `${i === 0 ? "M" : "L"}${x.toFixed(2)} ${y.toFixed(2)}`
-    })
-    .join(" ")
-}
-
-const sparklineYForValue = (v: number): number => {
-  const range = SPARKLINE_RANGE_MAX - SPARKLINE_RANGE_MIN
-  const norm = (clamp(v, SPARKLINE_RANGE_MIN, SPARKLINE_RANGE_MAX) - SPARKLINE_RANGE_MIN) / range
-  return SPARKLINE_HEIGHT - norm * SPARKLINE_HEIGHT
+const tierKindFor = (value: number): "elite" | "pass" | "muted" => {
+  if (value >= 130) return "elite"
+  if (value >= 80) return "pass"
+  return "muted"
 }
 
 const lastSegmentDecays = (history: readonly number[], passLine: number): boolean => {
@@ -85,20 +64,24 @@ const lastSegmentDecays = (history: readonly number[], passLine: number): boolea
 }
 
 /**
- * Freshness Ring + Sparkline score widget.
+ * Freshness Ring + Sparkline score widget (v2).
  *
  * Shows the current score as a stroked SVG arc that fills 0 → passLine
  * (the top-1% line). When `value > passLine`, a second halo arc overlays
- * the bonus zone (100 → 130, top 0.5% and top 0.25% tiers). Beneath the
- * ring, a 3-month sparkline draws history with a top-1% reference line
- * and an amber decay segment when the most recent point slips below it.
+ * the bonus zone (100 → 130, top 0.5% tier). Beneath the ring, a 3-month
+ * sparkline draws history with a top-1% reference line, a primary→accent
+ * gradient fill underneath, and an amber decay segment when the most
+ * recent point slips below the pass line.
+ *
+ * Visual updates over v1:
+ *   - Ring stroke uses a primary→accent linear gradient (tier elite).
+ *   - Score number uses a primary→accent text gradient.
+ *   - Tier label sits inside the ring, below the number.
+ *   - Sparkline y-mapping is two-segment piecewise so elite scores reach
+ *     the top of the viewBox without clipping the dashed pass-line.
  *
  * Respects `prefers-reduced-motion` for the pulse-on-crossing animation
  * and the sparkline progressive draw.
- *
- * The "Example score" pill in the top-right and the visually-hidden
- * sub-score `<dl>` keep the widget honest about the placeholder data
- * (see ./example-data.ts).
  */
 export function ScoreVis({
   value,
@@ -113,6 +96,9 @@ export function ScoreVis({
   const r = cfg.ring
   const C = 2 * Math.PI * r
   const center = cfg.outer / 2
+  const sparkW = cfg.sparkW
+  const sparkH = cfg.sparkH
+  const bottomY = sparkH
 
   const primaryFraction = clamp(value / passLine, 0, 1)
   const primaryOffset = C * (1 - primaryFraction)
@@ -120,14 +106,49 @@ export function ScoreVis({
   const haloFraction = clamp((value - passLine) / 30, 0, 1)
   const haloOffset = C * (1 - haloFraction)
 
-  const subtitle = subtitleFor(value, passLine, history)
+  const subtitle = subtitleFor(value)
+  const tierKind = tierKindFor(value)
   const decay = lastSegmentDecays(history, passLine)
-  const sparkPath = buildSparklinePath(history)
-  const passLineY = sparklineYForValue(passLine)
+
+  // IDs must be size-suffixed so multiple instances on the page don't collide.
+  const gradId = `score-ring-grad-${size}`
+  const fillGradId = `score-spark-fill-${size}`
+
+  const sparklineYForValue = (v: number): number =>
+    v >= PASS_SCORE
+      ? PASS_Y - clamp((v - PASS_SCORE) / (TOP_SCORE - PASS_SCORE), 0, 1) * (PASS_Y - TOP_Y)
+      : bottomY - clamp(v / PASS_SCORE, 0, 1) * (bottomY - PASS_Y)
+
+  const buildPoints = (hist: readonly number[]): string => {
+    if (hist.length === 0) return ""
+    const stepX = hist.length > 1 ? sparkW / (hist.length - 1) : sparkW
+    return hist
+      .map((v, i) => `${(i * stepX).toFixed(2)},${sparklineYForValue(v).toFixed(2)}`)
+      .join(" ")
+  }
+
+  const buildPath = (hist: readonly number[]): string => {
+    if (hist.length === 0) return ""
+    const stepX = hist.length > 1 ? sparkW / (hist.length - 1) : sparkW
+    return hist
+      .map((v, i) => {
+        const x = i * stepX
+        const y = sparklineYForValue(v)
+        return `${i === 0 ? "M" : "L"}${x.toFixed(2)} ${y.toFixed(2)}`
+      })
+      .join(" ")
+  }
+
+  const sparkPath = buildPath(history)
+  const sparkPolyPoints = buildPoints(history)
+  const sparkFillPolygon = sparkPolyPoints
+    ? `${sparkPolyPoints} ${sparkW},${bottomY} 0,${bottomY}`
+    : ""
+  const passLineY = PASS_Y
 
   const decaySegmentPath = (() => {
     if (!decay || history.length < 2) return null
-    const stepX = history.length > 1 ? SPARKLINE_WIDTH / (history.length - 1) : SPARKLINE_WIDTH
+    const stepX = history.length > 1 ? sparkW / (history.length - 1) : sparkW
     const i = history.length - 1
     const prevValue = history[i - 1]
     const lastValue = history[i]
@@ -140,8 +161,7 @@ export function ScoreVis({
   })()
 
   const computedAriaLabel =
-    ariaLabel ??
-    `GWTH Score example: ${value}, ${subtitle.toLowerCase()} of the population for applied AI. Illustrative only.`
+    ariaLabel ?? `GWTH Score example: ${value}, ${subtitle}. Illustrative only.`
 
   const ringSvg = (
     <svg
@@ -151,6 +171,19 @@ export function ScoreVis({
       aria-hidden="true"
       className="block"
     >
+      <defs>
+        <linearGradient
+          id={gradId}
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+          gradientTransform="rotate(45)"
+        >
+          <stop offset="0%" stopColor="var(--primary)" />
+          <stop offset="100%" stopColor="var(--accent)" />
+        </linearGradient>
+      </defs>
       <circle
         cx={center}
         cy={center}
@@ -165,7 +198,7 @@ export function ScoreVis({
         cy={center}
         r={r}
         fill="none"
-        stroke="var(--primary)"
+        stroke={`url(#${gradId})`}
         strokeWidth={cfg.stroke}
         strokeLinecap="round"
         strokeDasharray={C}
@@ -184,7 +217,8 @@ export function ScoreVis({
           strokeLinecap="round"
           strokeDasharray={C}
           strokeDashoffset={haloOffset}
-          opacity={0.85}
+          opacity={0.9}
+          style={{ filter: "drop-shadow(0 0 10px oklch(0.65 0.16 165 / 0.45))" }}
           transform={`rotate(-90 ${center} ${center})`}
         />
       )}
@@ -208,6 +242,14 @@ export function ScoreVis({
     </motion.div>
   )
 
+  const tierClass = cn(
+    "mt-1 text-[11px] font-bold uppercase leading-none tracking-[0.06em] tabular-nums",
+    tierKind === "elite" &&
+      "bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent",
+    tierKind === "pass" && "text-success",
+    tierKind === "muted" && "text-muted-foreground"
+  )
+
   return (
     <div
       role="img"
@@ -215,23 +257,19 @@ export function ScoreVis({
       className={cn("relative inline-flex flex-col items-center gap-3", className)}
       style={{ fontFeatureSettings: "'tnum'" }}
     >
-      <span className="absolute right-0 top-0 rounded-full bg-muted/80 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        Example score
-      </span>
-
       <div className="relative" style={{ width: cfg.outer, height: cfg.outer }}>
         {ringWrapper}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span
-            className="font-semibold leading-none text-foreground"
+            className="bg-gradient-to-br from-primary to-accent bg-clip-text font-extrabold leading-none tracking-[-0.04em] text-transparent"
             style={{
               fontFeatureSettings: "'tnum'",
-              fontSize: size === "lg" ? "3.5rem" : size === "md" ? "2.75rem" : "1.75rem",
+              fontSize: size === "lg" ? "4rem" : size === "md" ? "3rem" : "2rem",
             }}
           >
             {value}
           </span>
-          <span className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <span data-role="ring-tier-label" className={tierClass}>
             {subtitle}
           </span>
         </div>
@@ -239,28 +277,42 @@ export function ScoreVis({
 
       <svg
         data-role="sparkline"
-        width={SPARKLINE_WIDTH}
-        height={SPARKLINE_HEIGHT}
-        viewBox={`0 0 ${SPARKLINE_WIDTH} ${SPARKLINE_HEIGHT}`}
+        width={sparkW}
+        height={sparkH}
+        viewBox={`0 0 ${sparkW} ${sparkH}`}
+        preserveAspectRatio="none"
         aria-hidden="true"
         className="block"
       >
+        <defs>
+          <linearGradient id={fillGradId} x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.28} />
+            <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        {sparkFillPolygon && (
+          <polygon
+            data-role="sparkline-fill"
+            points={sparkFillPolygon}
+            fill={`url(#${fillGradId})`}
+          />
+        )}
         <line
           x1={0}
-          x2={SPARKLINE_WIDTH}
+          x2={sparkW}
           y1={passLineY}
           y2={passLineY}
           stroke="var(--muted-foreground)"
           strokeWidth={1}
-          strokeDasharray="2 3"
-          opacity={0.6}
+          strokeDasharray="3 4"
+          opacity={0.55}
         />
         {sparkPath && !prefersReduced && (
           <motion.path
             d={sparkPath}
             fill="none"
             stroke="var(--primary)"
-            strokeWidth={1.5}
+            strokeWidth={2.5}
             strokeLinejoin="round"
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
@@ -274,7 +326,7 @@ export function ScoreVis({
             d={sparkPath}
             fill="none"
             stroke="var(--primary)"
-            strokeWidth={1.5}
+            strokeWidth={2.5}
             strokeLinejoin="round"
             strokeLinecap="round"
           />
@@ -285,20 +337,11 @@ export function ScoreVis({
             d={decaySegmentPath}
             fill="none"
             stroke="var(--warning)"
-            strokeWidth={2}
+            strokeWidth={3}
             strokeLinecap="round"
           />
         )}
       </svg>
-
-      <dl className="sr-only">
-        {EXAMPLE_SUB_SCORES.map((s) => (
-          <div key={s.label}>
-            <dt>{s.label}</dt>
-            <dd>{s.value}</dd>
-          </div>
-        ))}
-      </dl>
     </div>
   )
 }
