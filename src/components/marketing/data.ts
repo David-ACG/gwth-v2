@@ -227,8 +227,16 @@ export const UK_STATS: readonly UkStat[] = [
 
 // ─── Curriculum (sourced from MONTH_CONFIGS in src/lib/config.ts) ───────────
 
-const totalLessonsForMonth = (idx: number): number => {
+const monthAt = (idx: number) => {
   const m = MONTH_CONFIGS[idx]
+  if (!m) {
+    throw new Error(`MONTH_CONFIGS[${idx}] is undefined — config and marketing data out of sync`)
+  }
+  return m
+}
+
+const totalLessonsForMonth = (idx: number): number => {
+  const m = monthAt(idx)
   return m.mandatoryLessons + m.optionalLessons
 }
 
@@ -237,21 +245,21 @@ export const CURRICULUM: readonly CurriculumModule[] = [
     m: "Month 1",
     t: "Personal AI Mastery",
     d: `${totalLessonsForMonth(0)} lessons · ${totalLessonsForMonth(0)} projects`,
-    capstone: MONTH_CONFIGS[0].capstoneName,
+    capstone: monthAt(0).capstoneName,
     capstoneSub: "Transcription · task extraction · meal planning · shopping lists",
   },
   {
     m: "Month 2",
     t: "Professional & Industry",
-    d: `${MONTH_CONFIGS[1].mandatoryLessons} mandatory + ${MONTH_CONFIGS[1].optionalLessons} optional · industry tracks`,
-    capstone: MONTH_CONFIGS[1].capstoneName,
+    d: `${monthAt(1).mandatoryLessons} mandatory + ${monthAt(1).optionalLessons} optional · industry tracks`,
+    capstone: monthAt(1).capstoneName,
     capstoneSub: "Production-grade · trained on real business data",
   },
   {
     m: "Month 3",
     t: "Enterprise Transformation",
-    d: `${MONTH_CONFIGS[2].mandatoryLessons} mandatory + ${MONTH_CONFIGS[2].optionalLessons} optional · multi-agent + governance`,
-    capstone: MONTH_CONFIGS[2].capstoneName,
+    d: `${monthAt(2).mandatoryLessons} mandatory + ${monthAt(2).optionalLessons} optional · multi-agent + governance`,
+    capstone: monthAt(2).capstoneName,
     capstoneSub: "Maturity evaluation · roadmap generation",
   },
 ]

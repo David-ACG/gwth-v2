@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import * as React from "react"
 import { render } from "@testing-library/react"
 import { ScoreVis } from "./score-vis"
 
@@ -90,15 +91,14 @@ describe("ScoreVis — reduced motion", () => {
         {
           get: (_target, key: string) => {
             const Component = (props: Record<string, unknown>) => {
-              const stripped = { ...props }
+              const stripped: Record<string, unknown> = { ...props }
               delete stripped.initial
               delete stripped.animate
               delete stripped.transition
               delete stripped.whileInView
               delete stripped.viewport
               delete stripped.exit
-              const Tag = key as unknown as keyof JSX.IntrinsicElements
-              return <Tag {...stripped} />
+              return React.createElement(key, stripped)
             }
             Component.displayName = `motion.${key}`
             return Component

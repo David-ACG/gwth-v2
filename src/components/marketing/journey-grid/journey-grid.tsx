@@ -14,6 +14,9 @@ export function JourneyGrid() {
   const rowOne = JOURNEYS.slice(0, 3)
   const rowTwo = JOURNEYS.slice(3, 6)
   const rowThree = JOURNEYS[6]
+  if (!rowThree) {
+    throw new Error("JOURNEYS must contain at least 7 entries — see marketing/data.ts")
+  }
 
   return (
     <MotionSection data-section="journey" className="py-20 md:py-28">

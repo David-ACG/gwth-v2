@@ -39,7 +39,9 @@ const subtitleFor = (value: number, passLine: number, history: readonly number[]
   if (history.length >= 2) {
     const prev = history[history.length - 2]
     const last = history[history.length - 1]
-    if (prev >= passLine && last < passLine) return "Decaying"
+    if (prev !== undefined && last !== undefined && prev >= passLine && last < passLine) {
+      return "Decaying"
+    }
   }
   return value >= passLine ? "Passing" : "Building"
 }
@@ -68,6 +70,7 @@ const lastSegmentDecays = (history: readonly number[], passLine: number): boolea
   if (history.length < 2) return false
   const prev = history[history.length - 2]
   const last = history[history.length - 1]
+  if (prev === undefined || last === undefined) return false
   return prev >= passLine && last < passLine
 }
 
@@ -116,10 +119,13 @@ export function ScoreVis({
     if (!decay || history.length < 2) return null
     const stepX = history.length > 1 ? SPARKLINE_WIDTH / (history.length - 1) : SPARKLINE_WIDTH
     const i = history.length - 1
+    const prevValue = history[i - 1]
+    const lastValue = history[i]
+    if (prevValue === undefined || lastValue === undefined) return null
     const xPrev = (i - 1) * stepX
     const xLast = i * stepX
-    const yPrev = sparklineYForValue(history[i - 1])
-    const yLast = sparklineYForValue(history[i])
+    const yPrev = sparklineYForValue(prevValue)
+    const yLast = sparklineYForValue(lastValue)
     return `M${xPrev.toFixed(2)} ${yPrev.toFixed(2)} L${xLast.toFixed(2)} ${yLast.toFixed(2)}`
   })()
 
