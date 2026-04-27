@@ -582,7 +582,15 @@
       setTier('Working towards', '');
     }
 
-    const yFor = v => 56 - ((v - 50) / 80) * 56;
+    // Two-segment y-mapping anchored at the pass-line so headroom for
+    // elite scores (up to 145) is preserved without re-flowing the
+    // dashed pass-line position. PASS_Y must match the y of the
+    // dashed line in the SVG (y=20).
+    const PASS_Y = 20, TOP_Y = 6, BOTTOM_Y = 56;
+    const PASS_SCORE = 100, TOP_SCORE = 145;
+    const yFor = v => v >= PASS_SCORE
+      ? PASS_Y - clamp((v - PASS_SCORE) / (TOP_SCORE - PASS_SCORE), 0, 1) * (PASS_Y - TOP_Y)
+      : BOTTOM_Y - clamp(v / PASS_SCORE, 0, 1) * (BOTTOM_Y - PASS_Y);
     const xFor = (i, len) => (i / (len - 1)) * 300;
     const linePts = history.map((v, i) => `${xFor(i, history.length).toFixed(1)},${yFor(v).toFixed(1)}`);
     sparkMain.setAttribute('points', linePts.join(' '));
