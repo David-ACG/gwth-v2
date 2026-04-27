@@ -12,7 +12,7 @@ export type ScoreVisProps = {
   value: number
   /** Pass-line threshold; defaults to 100. Bonus halo fills 100..130. */
   passLine?: number
-  /** History points used to render the 30-day sparkline. */
+  /** History points used to render the 3-month sparkline. */
   history?: readonly number[]
   /** Size preset. sm=120px / md=180px / lg=240px outer ring. */
   size?: ScoreVisSize
@@ -35,15 +35,25 @@ const SPARKLINE_RANGE_MAX = 130
 
 const clamp = (n: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, n))
 
+/**
+ * Population-percentile subtitle. The score is a percentile against the wider
+ * population for applied AI:
+ *   - 120+ → top 0.25%
+ *   - 110..119 → top 0.5%
+ *   - 100..109 → top 1% (the pass-line)
+ *   - <100 with any prior history >= passLine → "Slipping from top 1%"
+ *   - <100 with history never above passLine → "Working towards top 1%"
+ *
+ * The "Slipping" state is what the platform's "Stay Current" tier exists to
+ * prevent: the score decays as curriculum updates and inactivity erode the
+ * student's percentile.
+ */
 const subtitleFor = (value: number, passLine: number, history: readonly number[]): string => {
-  if (history.length >= 2) {
-    const prev = history[history.length - 2]
-    const last = history[history.length - 1]
-    if (prev !== undefined && last !== undefined && prev >= passLine && last < passLine) {
-      return "Decaying"
-    }
-  }
-  return value >= passLine ? "Passing" : "Building"
+  if (value >= 120) return "Top 0.25%"
+  if (value >= 110) return "Top 0.5%"
+  if (value >= passLine) return "Top 1%"
+  const wasAbove = history.some((v) => v >= passLine)
+  return wasAbove ? "Slipping from top 1%" : "Working towards top 1%"
 }
 
 const buildSparklinePath = (history: readonly number[]): string => {
@@ -77,11 +87,11 @@ const lastSegmentDecays = (history: readonly number[], passLine: number): boolea
 /**
  * Freshness Ring + Sparkline score widget.
  *
- * Shows the current score as a stroked SVG arc that fills 0 → passLine.
- * When `value > passLine`, a second halo arc overlays the bonus zone
- * (100 → 130). Beneath the ring, a 30-day sparkline draws history with
- * a pass-line reference and an amber decay segment when the most recent
- * point crosses the pass-line downward.
+ * Shows the current score as a stroked SVG arc that fills 0 → passLine
+ * (the top-1% line). When `value > passLine`, a second halo arc overlays
+ * the bonus zone (100 → 130, top 0.5% and top 0.25% tiers). Beneath the
+ * ring, a 3-month sparkline draws history with a top-1% reference line
+ * and an amber decay segment when the most recent point slips below it.
  *
  * Respects `prefers-reduced-motion` for the pulse-on-crossing animation
  * and the sparkline progressive draw.
@@ -129,10 +139,9 @@ export function ScoreVis({
     return `M${xPrev.toFixed(2)} ${yPrev.toFixed(2)} L${xLast.toFixed(2)} ${yLast.toFixed(2)}`
   })()
 
-  const stateLabel = value >= passLine ? "currently passing" : "currently below pass line"
   const computedAriaLabel =
     ariaLabel ??
-    `GWTH Score example: ${value} out of ${passLine}, ${stateLabel}. Illustrative only.`
+    `GWTH Score example: ${value}, ${subtitle.toLowerCase()} of the population for applied AI. Illustrative only.`
 
   const ringSvg = (
     <svg
