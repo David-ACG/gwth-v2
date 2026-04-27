@@ -14,6 +14,10 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Old site scripts are archived docs, not production code
     "docs/old-site/**",
+    // Kanban design artefacts (concept JSX, baseline scripts) are research files, not shipped code
+    "kanban/**",
+    // Unrelated sub-project, has its own toolchain
+    "gwth_projects/**",
   ]),
 ]);
 
