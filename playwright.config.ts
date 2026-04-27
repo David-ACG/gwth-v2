@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: "html",
   timeout: 60000,
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000",
     trace: "on-first-retry",
     navigationTimeout: 45000,
   },
@@ -29,11 +29,20 @@ export default defineConfig({
       name: "mobile-chromium",
       use: { ...devices["Pixel 5"] },
     },
+    {
+      name: "mobile-dark",
+      use: {
+        ...devices["Pixel 5"],
+        colorScheme: "dark",
+      },
+    },
   ],
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 60000,
-  },
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : {
+        command: "npm run dev",
+        url: "http://localhost:3000",
+        reuseExistingServer: !process.env.CI,
+        timeout: 60000,
+      },
 })
