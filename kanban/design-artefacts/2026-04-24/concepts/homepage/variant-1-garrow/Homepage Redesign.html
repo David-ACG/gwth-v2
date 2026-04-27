@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GWTH.ai · Variant 1 (G-arrow logo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="styles-dirB.css?v=5" />
+  <link rel="stylesheet" href="styles-extras.css?v=5" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: #2a2a2a; color: #ddd; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; }
+    .stack { display: flex; flex-direction: column; gap: 48px; padding: 32px; }
+    .stack h1 { color: #fff; margin: 0 0 4px; font-size: 22px; }
+    .stack p.lead { color: #aaa; margin: 0 0 24px; font-size: 13px; max-width: 900px; }
+    .row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+    .frame { box-shadow: 0 0 0 1px #444, 0 16px 40px -16px #000; border-radius: 8px; overflow: hidden; background: #fff; }
+    .frame-label { padding: 8px 12px; background: #1a1a1a; color: #ccc; font-size: 11px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; display: flex; justify-content: space-between; }
+    .scroll { overflow: auto; }
+    .desktop { width: 1440px; height: 760px; }
+    .mobile { width: 375px; height: 760px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="components/data.js"></script>
+  <script type="text/babel" src="components/logo.jsx"></script>
+  <script type="text/babel" src="components/dirB.jsx"></script>
+
+  <script type="text/babel" data-presets="env,react">
+    const Frame = ({ label, kind, theme, children }) => (
+      <div className="frame">
+        <div className="frame-label"><span>{label}</span><span>{theme}</span></div>
+        <div className={`scroll ${kind}`}>{children}</div>
+      </div>
+    );
+
+    const App = () => (
+      <div className="stack">
+        <header>
+          <h1>GWTH.ai · Variant 1 — G-arrow logo</h1>
+          <p className="lead">
+            Direction B layout (Stripe/Supabase-flavoured). Uses the locked G-arrow PNG wordmark.
+            Real curriculum, real pricing, real nav from the live gwth.ai source. Scroll inside each
+            frame to see the full page.
+          </p>
+        </header>
+
+        <section>
+          <h2 style={{color: '#fff', fontSize: 16, margin: '0 0 12px'}}>Desktop · 1440</h2>
+          <div className="row">
+            <Frame label="Desktop · Dark · 1440" kind="desktop" theme="dark">
+              <DirB theme="dark" viewport="desktop" />
+            </Frame>
+            <Frame label="Desktop · Light · 1440" kind="desktop" theme="light">
+              <DirB theme="light" viewport="desktop" />
+            </Frame>
+          </div>
+        </section>
+
+        <section>
+          <h2 style={{color: '#fff', fontSize: 16, margin: '0 0 12px'}}>Mobile · 375</h2>
+          <div className="row">
+            <Frame label="Mobile · Dark · 375" kind="mobile" theme="dark">
+              <DirB theme="dark" viewport="mobile" />
+            </Frame>
+            <Frame label="Mobile · Light · 375" kind="mobile" theme="light">
+              <DirB theme="light" viewport="mobile" />
+            </Frame>
+          </div>
+        </section>
+      </div>
+    );
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

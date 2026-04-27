@@ -1,0 +1,243 @@
+/* ============================================
+   GWTH.ai — Design tokens (shared across both directions)
+   ============================================ */
+
+:root {
+  /* Locked brand colors */
+  --aqua: #33BBFF;
+  --mint: #1CBA93;
+  --charcoal: #191817;
+
+  /* Aqua scale */
+  --aqua-50:  #EDF9FF;
+  --aqua-100: #D1F0FF;
+  --aqua-300: #7DD2FF;
+  --aqua-500: #33BBFF;
+  --aqua-600: #0FA3EB;
+  --aqua-700: #0586C7;
+
+  /* Mint scale */
+  --mint-50:  #E8FAF3;
+  --mint-100: #C7F1E0;
+  --mint-300: #6BD9B5;
+  --mint-500: #1CBA93;
+  --mint-600: #0F9A78;
+  --mint-700: #0B7860;
+
+  /* Warm neutrals — hue 60 (warmer than gray) */
+  --ink-0:    #FFFFFF;
+  --ink-25:   #FBFAF8;
+  --ink-50:   #F5F4F1;
+  --ink-100:  #ECEBE6;
+  --ink-200:  #DEDCD5;
+  --ink-300:  #C2BFB6;
+  --ink-400:  #95918A;
+  --ink-500:  #6E6B65;
+  --ink-600:  #4A4844;
+  --ink-700:  #2D2C2A;
+  --ink-800:  #1F1E1C;
+  --ink-900:  #191817;
+  --ink-950:  #100F0E;
+
+  /* Type stack */
+  --font-sans: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+/* ============================================
+   Light theme (default within .theme-light)
+   ============================================ */
+.theme-light {
+  --bg:          var(--ink-25);
+  --bg-elev:     #FFFFFF;
+  --bg-muted:    var(--ink-50);
+  --bg-inset:    var(--ink-100);
+  --border:      var(--ink-200);
+  --border-soft: var(--ink-100);
+  --border-strong: var(--ink-300);
+  --fg:          var(--ink-900);
+  --fg-muted:    var(--ink-500);
+  --fg-soft:     var(--ink-400);
+  --accent:      var(--mint-500);
+  --accent-2:    var(--aqua-500);
+  --accent-fg:   #FFFFFF;
+  --grid-line:   rgba(25,24,23,0.04);
+  --shadow-sm:   0 1px 2px rgba(25,24,23,0.04);
+  --shadow-md:   0 8px 24px -8px rgba(25,24,23,0.08), 0 2px 4px rgba(25,24,23,0.04);
+  --shadow-lg:   0 20px 60px -20px rgba(25,24,23,0.18), 0 8px 24px -8px rgba(25,24,23,0.08);
+  color-scheme: light;
+}
+
+.theme-dark {
+  --bg:          var(--ink-900);
+  --bg-elev:     #1F1E1C;
+  --bg-muted:    #1B1A19;
+  --bg-inset:    #131211;
+  --border:      #2D2C2A;
+  --border-soft: #232220;
+  --border-strong: #3A3936;
+  --fg:          #EDEAE6;
+  --fg-muted:    #95918A;
+  --fg-soft:     #6E6B65;
+  --accent:      var(--mint-500);
+  --accent-2:    var(--aqua-500);
+  --accent-fg:   var(--ink-900);
+  --grid-line:   rgba(255,255,255,0.03);
+  --shadow-sm:   0 1px 0 rgba(255,255,255,0.03);
+  --shadow-md:   0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-lg:   0 30px 80px -20px rgba(0,0,0,0.6), 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+  color-scheme: dark;
+}
+
+/* ============================================
+   Reset + base
+   ============================================ */
+.gwth, .gwth * {
+  box-sizing: border-box;
+}
+.gwth {
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  font-variant-ligatures: contextual;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
+  color: var(--fg);
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+.gwth p { margin: 0; }
+.gwth h1, .gwth h2, .gwth h3, .gwth h4, .gwth h5 { margin: 0; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+.gwth a { color: inherit; text-decoration: none; }
+.gwth button { font: inherit; cursor: pointer; }
+.gwth ul { margin: 0; padding: 0; list-style: none; }
+
+/* Mono labels */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ============================================
+   GWTH wordmark — inline SVG, color-controlled
+   ============================================ */
+.gwth-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: 24px;
+}
+.gwth-mark svg { height: 100%; width: auto; display: block; }
+
+/* PNG-based wordmark — pre-cropped, alpha-keyed PNGs (transparent bg).
+   Show -for-light on light surfaces, -for-dark on dark surfaces. */
+.gwth-mark--png { display: inline-flex; align-items: center; }
+.gwth-mark--png .gwth-logo { height: 100%; width: auto; }
+
+.gwth-mark--png .gwth-logo--for-dark  { display: none; }
+.gwth-mark--png .gwth-logo--for-light { display: block; }
+.theme-dark .gwth-mark--png .gwth-logo--for-light { display: none; }
+.theme-dark .gwth-mark--png .gwth-logo--for-dark  { display: block; }
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border: 1px solid transparent;
+  transition: background 120ms, border-color 120ms, color 120ms;
+  white-space: nowrap;
+}
+.btn--sm { height: 32px; padding: 0 12px; font-size: 13px; border-radius: 6px; }
+.btn--lg { height: 48px; padding: 0 22px; font-size: 15px; border-radius: 10px; }
+.gwth.theme-light .btn--primary,
+.theme-light .gwth .btn--primary,
+.theme-light a.btn--primary {
+  background: var(--ink-900) !important;
+  color: var(--ink-25) !important;
+  border-color: var(--ink-900) !important;
+}
+.gwth.theme-dark .btn--primary,
+.theme-dark .gwth .btn--primary,
+.theme-dark a.btn--primary,
+.theme-dark .btn.btn--primary {
+  background: #FBFAF8 !important;
+  color: #191817 !important;
+  border-color: #FBFAF8 !important;
+}
+.gwth.theme-light .btn--primary,
+.theme-light .gwth .btn--primary,
+.theme-light a.btn--primary,
+.theme-light .btn.btn--primary {
+  background: #191817 !important;
+  color: #FBFAF8 !important;
+  border-color: #191817 !important;
+}
+.gwth.theme-light .btn--primary:hover,
+.theme-light .gwth .btn--primary:hover { background: var(--ink-700) !important; border-color: var(--ink-700) !important; }
+.gwth.theme-dark .btn--primary:hover,
+.theme-dark .gwth .btn--primary:hover { background: var(--ink-100) !important; border-color: var(--ink-100) !important; }
+.btn--accent {
+  background: var(--mint-500);
+  color: #052B22;
+  border-color: var(--mint-500);
+}
+.btn--accent:hover { background: var(--mint-600); }
+.btn--ghost {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--border);
+}
+.btn--ghost:hover { background: var(--bg-muted); border-color: var(--border-strong); }
+.btn--link {
+  background: transparent;
+  color: var(--fg);
+  height: auto;
+  padding: 0;
+  border: none;
+}
+.btn--link:hover { color: var(--mint-600); }
+.theme-dark .btn--link:hover { color: var(--mint-300); }
+
+/* Arrow indicator inside btn */
+.btn .arrow {
+  width: 14px; height: 14px;
+  transition: transform 200ms;
+}
+.btn:hover .arrow { transform: translateX(2px); }
+
+/* ============================================
+   Background grid (very subtle)
+   ============================================ */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.bg-dotgrid {
+  background-image: radial-gradient(circle, var(--grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Focus ring */
+.gwth :focus-visible {
+  outline: 2px solid var(--mint-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
