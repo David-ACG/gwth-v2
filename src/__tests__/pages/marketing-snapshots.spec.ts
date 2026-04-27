@@ -1,6 +1,19 @@
 import { test, expect } from "@playwright/test"
 
-const SECTIONS = ["hero", "research-strip", "journey"] as const
+const SECTIONS = [
+  "nav",
+  "hero",
+  "research-strip",
+  "journey",
+  "pillars",
+  "curriculum-vis",
+  "score-vis",
+  "prompt-vis",
+  "research-stats",
+  "pricing",
+  "final-cta",
+  "footer",
+] as const
 const THEMES = ["light", "dark"] as const
 
 const MASK_SELECTORS = [

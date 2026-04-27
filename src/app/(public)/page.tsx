@@ -3,6 +3,11 @@ import { CourseJsonLd } from "@/components/marketing/json-ld/course-jsonld"
 import { Hero } from "@/components/marketing/hero/hero"
 import { ResearchStrip } from "@/components/marketing/research-strip/research-strip"
 import { JourneyGrid } from "@/components/marketing/journey-grid/journey-grid"
+import { ProductPillars } from "@/components/marketing/product-pillars/product-pillars"
+import { ResearchStats } from "@/components/marketing/research-stats/research-stats"
+import { PricingCards } from "@/components/marketing/pricing-cards/pricing-cards"
+import { FinalCTA } from "@/components/marketing/final-cta/final-cta"
+import { MarketingFooter } from "@/components/marketing/marketing-footer/marketing-footer"
 
 export const metadata: Metadata = {
   title: "GWTH.ai | Learn to Build with AI",
@@ -16,9 +21,10 @@ export const metadata: Metadata = {
 /**
  * Marketing homepage — Phase 1b composition.
  *
- * PROMPT-A ships Hero + ResearchStrip + JourneyGrid + CourseJsonLd.
- * The remaining sections render as placeholder stubs so the snapshot
- * harness has scaffolding ahead of PROMPT-B filling them in.
+ * 12 sections in order: Hero → ResearchStrip → JourneyGrid →
+ * ProductPillars (mounts CurriculumVis, ScoreVis, PromptVis as row
+ * children) → ResearchStats → PricingCards → FinalCTA → MarketingFooter.
+ * The CourseJsonLd component emits the only JSON-LD script on the page.
  */
 export default function HomePage() {
   return (
@@ -27,15 +33,11 @@ export default function HomePage() {
       <Hero />
       <ResearchStrip />
       <JourneyGrid />
-      {/* PROMPT-B placeholders */}
-      <section data-section="pillars" />
-      <section data-section="curriculum-vis" />
-      <section data-section="score-vis" />
-      <section data-section="prompt-vis" />
-      <section data-section="research-stats" />
-      <section data-section="pricing" />
-      <section data-section="final-cta" />
-      <section data-section="footer" />
+      <ProductPillars />
+      <ResearchStats />
+      <PricingCards />
+      <FinalCTA />
+      <MarketingFooter />
     </>
   )
 }

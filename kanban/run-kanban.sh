@@ -157,12 +157,20 @@ DO NOT deploy to Hetzner production — that happens separately after user verif
 
 $CONTENT"
 
-    if claude --dangerously-skip-permissions "$PROMPT"; then
+    # Pipe via temp file + stdin to avoid Windows bash argv length limit
+    # (positional argv would fail with "Argument list too long" for prompt
+    # bodies > ~10-15KB after the header is prepended).
+    TMPFILE=$(mktemp)
+    cat > "$TMPFILE" <<<"$PROMPT"
+
+    if claude --dangerously-skip-permissions < "$TMPFILE"; then
+        rm -f "$TMPFILE"
         mv "$FILE" "$TESTING/$NAME"
         echo ""
         echo "MOVED $NAME -> 2_testing"
         COMPLETED=$((COMPLETED + 1))
     else
+        rm -f "$TMPFILE"
         echo ""
         echo "FAILED $NAME (leaving in 1_planning)"
         FAILED=$((FAILED + 1))
