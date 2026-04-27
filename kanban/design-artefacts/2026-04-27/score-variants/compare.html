@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH Score Widget — Pick a variant</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #1a1a1a; color: #ddd; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; height: 100%; overflow: hidden; }
+  header { padding: 14px 24px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+  header .links { font-size: 12px; }
+  header .links a { color: #88c; margin-left: 14px; text-decoration: none; }
+  header .links a:hover { text-decoration: underline; }
+  header .summary { font-size: 12px; color: #999; max-width: 600px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; height: calc(100vh - 56px); }
+  .pane { border-right: 1px solid #333; display: flex; flex-direction: column; min-height: 0; }
+  .pane:last-child { border-right: none; }
+  .pane-head { padding: 10px 16px; background: #232323; border-bottom: 1px solid #333; font-size: 12px; font-weight: 600; }
+  .pane-head .pill { font-size: 10px; padding: 2px 8px; border-radius: 999px; margin-left: 8px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+  .pill-A { background: rgba(245,158,11,0.18); color: #f59e0b; }
+  .pill-B { background: rgba(28,186,147,0.22); color: #5cc8a8; }
+  .pill-C { background: rgba(91,155,245,0.20); color: #5b9bf5; }
+  .pane-borrows { color: #888; font-weight: 400; font-size: 11px; margin-top: 4px; }
+  iframe { flex: 1; width: 100%; border: 0; background: #2a2a2a; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>GWTH Score Widget — pick a variant</h1>
+    <div class="summary">3 ways to visualise the decay-aware score. Click the scenario chips inside each variant to flip between states. Theme toggle inside each variant too. My recommendation: <strong style="color:#5cc8a8">B (Freshness Ring)</strong> — the only one that does all four jobs in one frame (current value, pass line, passing-or-not, decay direction).</div>
+  </div>
+  <div class="links">
+    <a href="variant-A-gauge/index.html" target="_blank">Open A</a>
+    <a href="variant-B-ring/index.html" target="_blank">Open B</a>
+    <a href="variant-C-curve/index.html" target="_blank">Open C</a>
+  </div>
+</header>
+<div class="grid">
+  <div class="pane">
+    <div class="pane-head">
+      Variant A — Pass-Line Gauge<span class="pill pill-A">FICO + Lighthouse</span>
+      <div class="pane-borrows">Horizontal bar 0–130, three coloured bands, "PASS" tick at 100, ghost trail = 30 days ago. Cheapest to build. Static feel.</div>
+    </div>
+    <iframe src="variant-A-gauge/index.html"></iframe>
+  </div>
+  <div class="pane">
+    <div class="pane-head">
+      Variant B — Freshness Ring + Sparkline<span class="pill pill-B">Apple + Strava (recommended)</span>
+      <div class="pane-borrows">Closed ring at 100 + over-fill halo for &gt;100. Sparkline below with dashed pass-line; last segment goes amber on cross-down. Medium cost. All 4 jobs in one frame.</div>
+    </div>
+    <iframe src="variant-B-ring/index.html"></iframe>
+  </div>
+  <div class="pane">
+    <div class="pane-head">
+      Variant C — Fitness/Form Curve<span class="pill pill-C">Strava timeline</span>
+      <div class="pane-borrows">90-day line chart, dashed pass-line, line goes amber when below. Most distinctive but asks the visitor to read a chart. High build cost. Empty until data exists.</div>
+    </div>
+    <iframe src="variant-C-curve/index.html"></iframe>
+  </div>
+</div>
+</body>
+</html>
