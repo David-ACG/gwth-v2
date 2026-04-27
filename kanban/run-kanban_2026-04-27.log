@@ -26,3 +26,31 @@ Found 3 prompt(s) to process:
 RUNNING: PROMPT_2026-04-27_phase-1b-A-foundation.md
 ========================================
 
+Terminated
+
+FAILED PROMPT_2026-04-27_phase-1b-A-foundation.md (leaving in 1_planning)
+
+========================================
+RUNNING: PROMPT_2026-04-27_phase-1b-B-products.md
+========================================
+
+kanban/run-kanban.sh: line 59: 22487 Killed                  claude --dangerously-skip-permissions "$PROMPT"
+
+FAILED PROMPT_2026-04-27_phase-1b-B-products.md (leaving in 1_planning)
+
+========================================
+RUNNING: PROMPT_2026-04-27_phase-1b-C-polish-deploy.md
+========================================
+
+kanban/run-kanban.sh: line 59: 22656 Killed                  claude --dangerously-skip-permissions "$PROMPT"
+
+FAILED PROMPT_2026-04-27_phase-1b-C-polish-deploy.md (leaving in 1_planning)
+
+========================================
+ALL PROMPTS PROCESSED
+  Completed: 0
+  Failed:    3
+========================================
+
+Syncing Beads closures to Linear...
+WARNING: Linear sync failed (non-fatal).
