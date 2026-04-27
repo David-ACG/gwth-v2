@@ -47,9 +47,11 @@
 
   /* === RING WIDGET === */
   .ring-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; }
+  .ring-brand { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 14px; }
+  .ring-logo { width: 36px; height: 36px; display: block; }
   .ring-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .ring-title { font-size: 13px; font-weight: 600; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.05em; }
-  .example-pill { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: var(--muted); color: var(--muted-fg); font-weight: 600; letter-spacing: 0.05em; }
+  .ring-title { font-size: 13px; font-weight: 600; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.06em; }
+  .example-pill { position: absolute; top: 16px; right: 16px; font-size: 10px; padding: 3px 8px; border-radius: 999px; background: var(--muted); color: var(--muted-fg); font-weight: 600; letter-spacing: 0.05em; }
 
   .ring-stack { display: grid; place-items: center; padding: 8px 0 12px; }
   .ring-svg { width: 200px; height: 200px; transform: rotate(-90deg); }
@@ -58,7 +60,7 @@
   .ring-halo { stroke: var(--accent); stroke-width: 14; fill: none; stroke-linecap: round; opacity: 0.85; filter: drop-shadow(0 0 8px var(--accent)); transition: stroke-dashoffset 1s ease; }
   .ring-center { position: absolute; display: grid; place-items: center; }
   .ring-num { font-size: 56px; font-weight: 700; line-height: 1; font-feature-settings: 'tnum'; letter-spacing: -0.02em; }
-  .ring-status { color: var(--muted-fg); font-size: 12px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  .ring-status { color: var(--muted-fg); font-size: 11px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; white-space: nowrap; }
   .ring-status.pass { color: var(--success); }
   .ring-status.decay { color: var(--warning); }
 
@@ -70,6 +72,18 @@
   .spark svg { width: 100%; height: 60px; }
   .spark-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted-fg); margin-top: 4px; font-feature-settings: 'tnum'; }
   .pass-line-label { position: absolute; right: 4px; font-size: 10px; color: var(--muted-fg); }
+
+  /* === EMPLOYER MESSAGING PANEL === */
+  .about-panel { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .about-title { font-size: 11px; font-weight: 700; color: var(--fg); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .about-title-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .about-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .about-item { display: flex; gap: 10px; align-items: flex-start; font-size: 12px; line-height: 1.45; color: var(--fg); }
+  .about-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; background: oklch(0.7 0.18 220 / 0.10); color: var(--primary); display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+  .about-icon.mint { background: oklch(0.65 0.16 165 / 0.12); color: var(--accent); }
+  .about-icon.amber { background: oklch(0.75 0.15 75 / 0.14); color: var(--warning); }
+  .about-key { font-weight: 600; color: var(--fg); }
+  .about-num { font-weight: 700; font-feature-settings: 'tnum'; color: var(--primary); }
 
   .caveat { margin-top: 14px; font-size: 11px; color: var(--muted-fg); font-style: italic; line-height: 1.4; }
 
@@ -90,10 +104,10 @@
   <div class="toolbar"><button class="toggle" onclick="document.body.classList.toggle('dark')">Toggle theme</button></div>
 
   <div class="scenarios">
-    <button class="scenario" data-score="92"  data-history="100,98,102,105,108,103,99,95,93,92">Below pass (decaying)</button>
-    <button class="scenario active" data-score="104" data-history="118,115,112,110,108,106,105,104,103,104">Passing, slipping</button>
-    <button class="scenario" data-score="120" data-history="80,85,90,95,100,108,114,118,120,120">Bonus zone</button>
-    <button class="scenario" data-score="100" data-history="80,85,88,92,95,97,99,99,100,100">Just hit pass</button>
+    <button class="scenario" data-score="135" data-history="40,55,70,85,98,108,118,125,130,132,134,135">Top 0.5% (135)</button>
+    <button class="scenario active" data-score="104" data-history="40,55,70,85,98,110,118,120,118,114,108,104">Top 1%, slipping (104, was 120)</button>
+    <button class="scenario" data-score="88"  data-history="35,50,65,78,90,100,105,108,100,95,92,88">Top 5% (88, slipping from 1%)</button>
+    <button class="scenario" data-score="65"  data-history="20,30,40,48,55,60,62,64,66,65,66,65">Working towards top 5% (65)</button>
   </div>
 
   <div class="device">
@@ -111,9 +125,10 @@
       </div>
 
       <div class="ring-card">
-        <div class="ring-header">
+        <div class="example-pill">EXAMPLE</div>
+        <div class="ring-brand">
+          <img src="icon.png" alt="GWTH" class="ring-logo" />
           <div class="ring-title">GWTH Score</div>
-          <div class="example-pill">EXAMPLE</div>
         </div>
 
         <div class="ring-grid-pos">
@@ -132,9 +147,9 @@
 
         <div class="spark">
           <svg viewBox="0 0 300 60" preserveAspectRatio="none">
-            <!-- Pass line -->
+            <!-- Pass line at top 1% threshold -->
             <line x1="0" x2="300" y1="20" y2="20" stroke="var(--muted-fg)" stroke-width="1" stroke-dasharray="4,4" opacity="0.5" />
-            <text x="296" y="16" text-anchor="end" font-size="9" fill="var(--muted-fg)">100</text>
+            <text x="296" y="16" text-anchor="end" font-size="9" fill="var(--muted-fg)" font-weight="600">TOP 1%</text>
             <!-- Sparkline -->
             <polyline id="spark-main" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="" />
             <line id="spark-decay" stroke="var(--warning)" stroke-width="3" stroke-linecap="round" x1="0" y1="0" x2="0" y2="0" style="display:none" />
@@ -144,7 +159,33 @@
           </svg>
         </div>
         <div class="spark-axis">
-          <span>30 days ago</span><span>today</span>
+          <span>3 months ago</span><span>today</span>
+        </div>
+
+        <div class="about-panel">
+          <div class="about-title"><span class="about-title-dot"></span>What this score tells an employer</div>
+          <ul class="about-list">
+            <li class="about-item">
+              <div class="about-icon">↻</div>
+              <div><span class="about-key">Always current.</span> Lessons are updated constantly so students stay on the cutting edge — and the score <em>decays</em> if they don't keep up.</div>
+            </li>
+            <li class="about-item">
+              <div class="about-icon mint">⚒</div>
+              <div><span class="about-key">Hands-on, not lectured.</span> Reaching <span class="about-num">100</span> means completing <span class="about-num">94</span>+ hands-on projects across 3 modules — no passive watching.</div>
+            </li>
+            <li class="about-item">
+              <div class="about-icon">✓</div>
+              <div><span class="about-key">Tested, not assumed.</span> Every lesson has check questions; the course requires <span class="about-num">3</span> capstone projects to graduate.</div>
+            </li>
+            <li class="about-item">
+              <div class="about-icon mint">📅</div>
+              <div><span class="about-key">Paced, not crammed.</span> The course is <span class="about-num">3 months</span>; lessons release in stages — no shortcuts, no rushing through.</div>
+            </li>
+            <li class="about-item">
+              <div class="about-icon amber">⚠</div>
+              <div><span class="about-key">A high score is a recent score.</span> Above <span class="about-num">100</span> means top 1% of applied-AI practitioners <em>today</em>, not when they enrolled.</div>
+            </li>
+          </ul>
         </div>
 
         <div class="caveat">Illustrative — your actual GWTH Score reflects verified work.</div>
@@ -186,17 +227,31 @@
 
     ringNum.textContent = score;
 
-    // Status logic
-    const N = history.length;
-    const crossesDown = N >= 2 && history[N-2] >= passLine && history[N-1] < passLine;
-    if (score >= passLine) {
-      ringPill.textContent = 'Passing';
+    // Status logic — population-percentile framing
+    //   80   → Top 5%
+    //   100  → Top 1% (the pass-line — 100 mandatory completion target)
+    //   130+ → Top 0.5% (achievable only via optional lessons + sustained work)
+    const TIER_TOP_05 = 130;
+    const TIER_TOP_1  = 100;
+    const TIER_TOP_5  = 80;
+    const wasInTopHalf = history.slice(0, -1).some(v => v >= TIER_TOP_05);
+    const wasInTop1    = history.slice(0, -1).some(v => v >= TIER_TOP_1);
+    const wasInTop5    = history.slice(0, -1).some(v => v >= TIER_TOP_5);
+
+    if (score >= TIER_TOP_05) {
+      ringPill.textContent = 'Top 0.5%';
       ringPill.className = 'ring-status pass';
-    } else if (crossesDown) {
-      ringPill.textContent = 'Decaying';
+    } else if (score >= TIER_TOP_1) {
+      ringPill.textContent = wasInTopHalf ? 'Top 1% · slipping' : 'Top 1%';
+      ringPill.className = wasInTopHalf ? 'ring-status decay' : 'ring-status pass';
+    } else if (score >= TIER_TOP_5) {
+      ringPill.textContent = wasInTop1 ? 'Top 5% · slipping' : 'Top 5%';
+      ringPill.className = wasInTop1 ? 'ring-status decay' : 'ring-status pass';
+    } else if (wasInTop5) {
+      ringPill.textContent = 'Slipping from top 5%';
       ringPill.className = 'ring-status decay';
     } else {
-      ringPill.textContent = 'Building';
+      ringPill.textContent = 'Working towards top 5%';
       ringPill.className = 'ring-status';
     }
 
@@ -233,7 +288,7 @@
   }));
 
   // Initial render — match active scenario
-  apply(104, [118,115,112,110,108,106,105,104,103,104]);
+  apply(104, [55,68,80,90,98,108,116,118,116,112,108,104]);
 </script>
 </body>
 </html>
