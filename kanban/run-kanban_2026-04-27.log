@@ -1,0 +1,28 @@
+========================================
+BEADS STATUS:
+  Open:                   10
+  In Progress:            0
+  Blocked:                8
+  Ready to Work:          2
+
+READY TO WORK:
+○ beads_GWTH-t58 ● P1 VIP Intake - first real /vip-intake invocation end-to-end
+○ beads_GWTH-2yl ● P2 POC Phase 1b PROMPT-A: Foundation + Hero + JourneyGrid
+
+--------------------------------------------------------------------------------
+Ready: 2 issues with no active blockers
+
+Status: ○ open  ◐ in_progress  ● blocked  ✓ closed  ❄ deferred
+========================================
+
+========================================
+Found 3 prompt(s) to process:
+  - PROMPT_2026-04-27_phase-1b-A-foundation.md
+  - PROMPT_2026-04-27_phase-1b-B-products.md
+  - PROMPT_2026-04-27_phase-1b-C-polish-deploy.md
+========================================
+
+========================================
+RUNNING: PROMPT_2026-04-27_phase-1b-A-foundation.md
+========================================
+
