@@ -36,11 +36,13 @@ const ROW_CONFIGS: readonly RowConfig[] = [
       "Decays — keeps it honest",
     ],
     vis: (
-      <ScoreVis
-        value={EXAMPLE_SCORE_VALUE}
-        history={EXAMPLE_SCORE_HISTORY}
-        size="lg"
-      />
+      <div data-section="score-vis" className="inline-flex">
+        <ScoreVis
+          value={EXAMPLE_SCORE_VALUE}
+          history={EXAMPLE_SCORE_HISTORY}
+          size="lg"
+        />
+      </div>
     ),
   },
   {
