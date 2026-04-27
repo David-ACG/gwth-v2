@@ -258,3 +258,5 @@ All committed under `public/` on `experiment/redesign-poc-2026-04`, with the `ka
 | 2026-04-25 | Skip leaderboards / public XP / streak shaming entirely | David (dashboard synthesis discussion) |
 | 2026-04-25 | Keep Dynamic Score (per-student verified credential — NOT a leaderboard) | David |
 | 2026-04-25 | Productivity-tool visual references (Linear / Notion / Vercel / Stripe / Supabase) | David |
+| 2026-04-27 | Phase 1a homepage: Variant 1 (G-arrow logo + Direction B layout) chosen over Variant 2 (windmill) | David — see `concepts/homepage/DECISION.md` |
+| 2026-04-27 | dirB layout adopted as the homepage source of truth for Phase 1b implementation | David |
