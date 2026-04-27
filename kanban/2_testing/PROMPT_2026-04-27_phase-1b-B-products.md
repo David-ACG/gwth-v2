@@ -327,3 +327,12 @@ Commit any final fixes.
 Open http://192.168.178.50:3001 in light AND dark mode, scroll the full homepage top-to-bottom, and tick the boxes above. The drift-sentinel pricing test runs in CI; visual confirmation that £29 / £87 / £7.50 still match `src/lib/config.ts` is the high-value check.
 
 **Review this file:** `file:///C:/Projects/GWTH_V2/kanban/2_testing/PROMPT_2026-04-27_phase-1b-B-products.md`
+
+---
+## Deploy Notes — 2026-04-27 22:55
+- **Deploy:** P520 deploy queue #88 (initial branch switch) + #89 (score-vis data-section fix) — both finished cleanly.
+- **Coolify config change:** P520 app (`xw4csk0ssos8800kws0cswwk`) was configured to deploy `master`; switched to `experiment/redesign-poc-2026-04` so the test server reflects this branch's work.
+- **Branch push:** experiment branch pushed to `origin/experiment/redesign-poc-2026-04` so Coolify can pull. Consistent with the Phase 1b POC workflow note that this is an ephemeral branch — origin push was required so Coolify could build, but no merge to master.
+- **Health:** `/api/health` 200 OK at 21:55 UTC.
+- **All 12 data-sections verified in deployed HTML:** `nav`, `hero`, `research-strip`, `journey`, `pillars`, `curriculum-vis`, `score-vis`, `prompt-vis`, `research-stats`, `pricing`, `final-cta`, `footer`.
+- **Late fix included in deploy #89:** ProductPillars row 2 now wraps its `<ScoreVis>` instance in a `<div data-section="score-vis">` so the snapshot harness can target it without modifying the PROMPT-A `score-vis/` module.
