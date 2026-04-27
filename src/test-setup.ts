@@ -15,6 +15,6 @@ if (typeof globalThis.IntersectionObserver === "undefined") {
     readonly rootMargin: string = "0px"
     readonly thresholds: ReadonlyArray<number> = [0]
   }
-  // @ts-expect-error — assigning a stub onto a missing global at runtime
-  globalThis.IntersectionObserver = IntersectionObserverStub
+  ;(globalThis as unknown as { IntersectionObserver: unknown }).IntersectionObserver =
+    IntersectionObserverStub
 }

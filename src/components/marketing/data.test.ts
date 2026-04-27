@@ -44,16 +44,22 @@ describe("marketing/data — JOURNEYS", () => {
 
 describe("marketing/data — PRICING (drift sentinel vs lib/config)", () => {
   it("course tier price matches COURSE_MONTHLY_PRICE", () => {
-    expect(PRICING[1].pricePence).toBe(COURSE_MONTHLY_PRICE * 100)
+    const tier = PRICING[1]
+    expect(tier).toBeDefined()
+    expect(tier!.pricePence).toBe(COURSE_MONTHLY_PRICE * 100)
   })
 
   it("stay tier price matches ONGOING_MONTHLY_PRICE", () => {
-    expect(PRICING[2].pricePence).toBe(Math.round(ONGOING_MONTHLY_PRICE * 100))
+    const tier = PRICING[2]
+    expect(tier).toBeDefined()
+    expect(tier!.pricePence).toBe(Math.round(ONGOING_MONTHLY_PRICE * 100))
   })
 
   it("free tier is £0", () => {
-    expect(PRICING[0].pricePence).toBe(0)
-    expect(PRICING[0].price).toBe("£0")
+    const tier = PRICING[0]
+    expect(tier).toBeDefined()
+    expect(tier!.pricePence).toBe(0)
+    expect(tier!.price).toBe("£0")
   })
 
   it("every tier has a valid CTA href", () => {
