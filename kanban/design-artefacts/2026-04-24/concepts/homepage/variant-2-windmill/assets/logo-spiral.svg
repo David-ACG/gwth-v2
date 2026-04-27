@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!--
+    GWTH.ai - Logo Spiral / Aperture Design
+    7 flowing curved blades in aqua → mint → teal spectrum
+    Matches the GWTH Student design system colors
+  -->
+  <defs>
+    <path id="blade" d="M-10,0 C-48,-58 -108,-138 -72,-196 C-38,-186 -18,-108 10,-38 C18,-14 10,0 -10,0"/>
+  </defs>
+
+  <g transform="translate(256,256)">
+    <!-- Blade 1 - Deep Teal -->
+    <use href="#blade" fill="#0D4F4F" transform="rotate(0)"/>
+    <!-- Blade 2 - Teal -->
+    <use href="#blade" fill="#0E7C7B" transform="rotate(51.43)"/>
+    <!-- Blade 3 - Mint -->
+    <use href="#blade" fill="#1CBA93" transform="rotate(102.86)"/>
+    <!-- Blade 4 - Aqua Green -->
+    <use href="#blade" fill="#22D3A7" transform="rotate(154.29)"/>
+    <!-- Blade 5 - Primary Aqua -->
+    <use href="#blade" fill="#33BBFF" transform="rotate(205.71)"/>
+    <!-- Blade 6 - Sky Blue -->
+    <use href="#blade" fill="#5B9BF5" transform="rotate(257.14)"/>
+    <!-- Blade 7 - Indigo Blue -->
+    <use href="#blade" fill="#4A6CF7" transform="rotate(308.57)"/>
+  </g>
+</svg>
