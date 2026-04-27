@@ -19,12 +19,17 @@ const DEFAULT_TRANSITION: MotionProps["transition"] = { duration: 0.5 }
 /**
  * Reduced-motion-aware wrapper around `motion.section`.
  *
- * When the user prefers reduced motion, renders a plain `<section>` with no
- * animation props applied. Otherwise applies the supplied (or default)
- * Motion props for a subtle scroll-reveal entrance.
+ * Renders a plain `<section>` on the server and during the first client
+ * render so the section is fully visible (no opacity:0 from Motion's
+ * initial state) before any animation logic runs. After mount, if the
+ * user does not prefer reduced motion, upgrades to `motion.section`
+ * with the supplied (or default) scroll-reveal props.
  *
- * This is the single enforcement point for WCAG 2.3.3 in the marketing/
- * module — section components must not import `motion.<element>` directly.
+ * This SSR-first pattern avoids the hydration trap where motion.section
+ * applies inline `style="opacity:0"` on the server, the user prefers
+ * reduced motion, and the animate transition never runs — leaving the
+ * section invisible. It's also the single enforcement point for
+ * WCAG 2.3.3 in the marketing/ module.
  */
 export function MotionSection({
   initial = DEFAULT_INITIAL,
@@ -34,9 +39,14 @@ export function MotionSection({
   children,
   ...sectionProps
 }: MotionSectionProps) {
+  const [mounted, setMounted] = React.useState(false)
   const prefersReduced = useReducedMotion()
 
-  if (prefersReduced) {
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted || prefersReduced) {
     return <section {...sectionProps}>{children}</section>
   }
 
