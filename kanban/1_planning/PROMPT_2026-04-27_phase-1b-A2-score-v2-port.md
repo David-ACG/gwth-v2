@@ -298,3 +298,64 @@ After all 5 steps land, follow the standard pipeline header that the runner prep
 - P520 deploy returns 200 from `/api/health`
 - `bd close beads_GWTH-85b` after all green
 - PROMPT file moved to `2_testing/` (the runner does this automatically on success)
+
+---
+## Implementation Notes — 2026-04-27 22:58
+- **Commit:** `e5f5cd4` — feat(score-vis): port v2 widget — 80/100/130 ladder + collapsible employer panel
+- **Tests:** 224 / 224 passed (vitest run, 32 test files)
+- **Verification URL:** http://192.168.178.50:3001 (P520 test)
+- **Playwright check:** Skipped — no headed browser available in this autonomous build session. Curled homepage HTML for v2 markers and confirmed presence of `score-explainer`, `score-card-brand`, `GWTH Score`, `Top 1%`, and `gwth.ai/dashboard` text on the rendered page.
+- **Changes summary:**
+  - Patched `src/components/marketing/score-vis/score-vis.tsx` to v2:
+    - Replaced 100/110/120 ladder with locked 80/100/130 ladder (`Top 0.5%` / `Top 1%` / `Top 5%` / `Working towards`).
+    - Ring stroke now uses a primary→accent linear gradient (size-suffixed `id` so multiple instances don't collide); halo arc keeps solid accent stroke + drop-shadow.
+    - Score number uses primary→accent text gradient (`bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent`), `font-extrabold`, `tracking-[-0.04em]`.
+    - New tier label `[data-role="ring-tier-label"]` rendered inside the ring; colours: elite=text-gradient, pass (Top 1% / Top 5%)=`text-success`, muted=`text-muted-foreground`.
+    - Two-segment piecewise sparkline `y` mapping anchored at the pass-line (PASS_Y=20, TOP_Y=6, BOTTOM_Y=56) with TOP_SCORE=145.
+    - Sparkline width is now size-proportional (sm=160, md=220, lg=280); height 56.
+    - Added gradient fill polygon under the sparkline (`[data-role="sparkline-fill"]`).
+    - Dropped the in-SVG "TOP 1%" text label, the visually-hidden `<dl>` of sub-scores, and the old "Slipping from top 1%" / "Working towards top 1%" copy.
+    - Updated `aria-label` to `\`GWTH Score example: ${value}, ${subtitle}. Illustrative only.\``.
+  - Created `src/components/marketing/score-explainer/score-explainer.tsx` — collapsible employer-credibility panel using shadcn-style Radix `Collapsible`. Five locked bullets; numbers (94 hands-on, 3 months, 3 capstones) derived from `src/lib/config.ts`.
+  - Created `src/components/ui/collapsible.tsx` — Radix Collapsible primitive wrapper matching the project's UI-component pattern.
+  - Added `--animate-collapsible-down` / `--animate-collapsible-up` Tailwind v4 theme animations + their `@keyframes` to `src/app/globals.css`.
+  - Updated `src/components/marketing/hero/hero-device.tsx`:
+    - New theme-aware `GwthMark` (next-themes + mounted guard for hydration safety): light theme renders `/icon-light.png`, dark renders `/icon.png`.
+    - Score card now structured as: example pill → brand mark + "GWTH SCORE" label → ScoreVis ring → "3 months ago / today" axis → ScoreExplainer.
+  - Updated tests:
+    - `score-vis.test.tsx` — full v2 ladder coverage, gradient fill polygon, two-segment y-mapping sanity for elite + sub-pass scores, decay-rule re-anchored on actual crossings.
+    - `score-explainer.test.tsx` — 9 tests covering structure (when open), trigger labelling, default-collapsed state, click + keyboard activation, and bullet count.
+    - `hero-device.test.tsx` — asserts new brand-mark header (`data-role="score-card-brand"`), example pill, and ScoreExplainer mount.
+- **Deviations from plan:**
+  - Prompt suggested asserting that the slipping case (`value=104, history=[..., 114, 104]`) renders the amber decay segment. The decay rule is `prev >= passLine && last < passLine`; both 114 and 104 are above 100, so no crossing fires. Test was rewritten to:
+    1. Confirm decay renders in a Top-5%-slipping case where the segment actually crosses (102 → 88).
+    2. Confirm decay does NOT render at value=104 with history `[..., 114, 104]`.
+  - Skipped Playwright snapshot regen — running headed Chromium / Docker Playwright was not viable in this autonomous build session. Snapshots will need regenerating on next visual-regression run; recorded as a follow-up below.
+  - Left `EXAMPLE_SUB_SCORES` in `score-vis/example-data.ts` unused for now per the prompt instruction ("a follow-up may surface it elsewhere"). Single dead export; harmless.
+- **Follow-up issues:**
+  - Regenerate Playwright marketing-snapshot baselines on next snapshot run (geometry, copy, and structure of the score widget all changed).
+
+---
+## Testing Checklist — 2026-04-27 22:58
+**Check the changes:** http://192.168.178.50:3001
+- [ ] Page loads without errors
+- [ ] Hero device renders the v2 score widget — gradient ring, gradient score number "104", `Top 1%` tier label inside the ring (green text)
+- [ ] Sparkline shows the gradient fill polygon under the line, the dashed pass-line at y=20, and the amber decay segment is hidden for the default 104 example
+- [ ] GWTH brand mark is visible above "GWTH SCORE" mono uppercase label inside the score card
+- [ ] Theme toggle: light mode shows `icon-light.png`; dark mode shows `icon.png` (ring + score-number gradients also recolour)
+- [ ] "What this score tells an employer" toggle is present, **collapsed by default**, with chevron-down icon
+- [ ] Clicking the toggle expands smoothly, reveals 5 bullets (Always current, Hands-on, Tested, Paced, A high score is a recent score), chevron rotates 180°, border switches to primary
+- [ ] Pressing Tab to focus the toggle then Enter opens the panel (keyboard accessible)
+- [ ] Mobile responsive — score card stays compact at narrow widths; toggle panel and bullets reflow without overlap
+- [ ] No console errors (open DevTools → Console)
+
+### Actions for David
+1. Visit http://192.168.178.50:3001 in your browser.
+2. Verify the score widget matches the canonical mock at `kanban/design-artefacts/2026-04-27/score-variants/variant-B-ring/option-2-collapsible.html`, side-by-side if helpful.
+3. Tick through the testing checklist above. Pay particular attention to:
+   - Logo theme-swap (light/dark)
+   - Collapsible expand/collapse animation
+   - Sparkline gradient fill is visible (not flat)
+4. If everything passes, the next prompts (`PROMPT-B`, `PROMPT-C`) become eligible. PROMPT-B (`beads_GWTH-l3i`) is already closed; the Phase 1b epic (`beads_GWTH-w5y`) is still open and now unblocked from the A2 dependency.
+
+**Review this file:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PROMPT_2026-04-27_phase-1b-A2-score-v2-port.md`
