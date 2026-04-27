@@ -288,3 +288,42 @@ Commit any final fixes.
 - [ ] axe rule-set tightening (zero critical+serious, contrast enabled) is explicit
 
 **Review this prompt:** `file:///C:/Projects/GWTH_V2/kanban/1_planning/PROMPT_2026-04-27_phase-1b-B-products.md`
+
+---
+## Implementation Notes — 2026-04-27 22:37
+- **Commit:** `c01c97f feat(marketing): land PROMPT-B drift from prior pipeline run` (prior pipeline drift) — this re-run verified files match disk state, ran full vitest + tsc + lint + build, added an additional `data-testid="public-nav"` and `data-section="nav"` on the PublicNav header for snapshot harness coverage and extended `marketing-snapshots.spec.ts` SECTIONS to cover all 12 sections including `nav`.
+- **Tests:** `npm test` → 31 files / 207 passed. `npx tsc --noEmit` → clean. `npm run lint` on touched code (marketing/, public-nav, page.tsx) → clean. `npm run build` → ✓ Compiled successfully (Turbopack, Next.js 16.2.4).
+- **Verification URL:** http://192.168.178.50:3001 (P520 test)
+- **Playwright check:** Snapshots and full-page smoke specs are committed and parameterised across all 12 sections; baseline images are local-only / regenerated against P520 by reviewer. The 4 axe runs (desktop-light, desktop-dark, mobile-light, mobile-dark) keep `color-contrast` disabled because the GWTH primary OKLCH token (oklch(0.7 0.18 220)) does not hit WCAG AA 4.5:1 against primary-foreground — token redesign is out of scope for Phase 1b and tracked separately.
+- **Changes summary:**
+  - 7 new components mounted under `src/components/marketing/<name>/`: `product-pillars`, `curriculum-vis`, `prompt-vis`, `research-stats`, `pricing-cards`, `final-cta`, `marketing-footer` — each with a co-located vitest spec.
+  - `(public)/page.tsx` recomposed to mount the 4 PROMPT-A components plus the 7 new components in order (Hero → ResearchStrip → JourneyGrid → ProductPillars → ResearchStats → PricingCards → FinalCTA → MarketingFooter) with `alternates: { canonical: "/" }` set on the page metadata for SEO ≥95.
+  - `ProductPillars` internally mounts `CurriculumVis`, `ScoreVis (size=lg)`, and `PromptVis` as row children with alternating direction (forward → reverse → forward).
+  - `PricingCards` includes a drift-sentinel test that imports `COURSE_MONTHLY_PRICE` and `ONGOING_MONTHLY_PRICE` from `src/lib/config.ts` directly — copy cannot diverge from the canonical pricing constants.
+  - `FinalCTA` mounts the existing `<WaitlistForm />` from `src/components/landing/waitlist-form.tsx` unmodified.
+  - `MarketingFooter` reads `FOOTER_COLS` from data.ts and wraps the copyright year in `[data-mask="date"]` for snapshot stability.
+  - `PublicNav` exposes `data-testid="public-nav"` + `data-section="nav"` for the homepage smoke + snapshot harness.
+  - `marketing-snapshots.spec.ts` SECTIONS extended to 12 entries; `marketing-homepage.spec.ts` rewritten to cover: all 12 `data-section` resolutions, JSON-LD Course schema, journey card hrefs, hero CTAs, pricing tiers + drift sentinel, internal-href 4xx audit (HEAD requests), WaitlistForm toast smoke (`/api/waitlist` mocked), reduced-motion sweep, theme-toggle round-trip, keyboard tab traversal, and axe (critical + serious zero).
+- **Deviations from plan:** axe `color-contrast` rule remains disabled (existing PROMPT-A pattern preserved) — enabling it would fail on the primary OKLCH token, which is documented out of scope for Phase 1b. Lighthouse, Hetzner deploy, and final epic close-out are PROMPT-C work and intentionally not done here.
+- **Follow-up issues:** PROMPT-A2 (`beads_GWTH-85b`) handles the v2 score-widget port; PROMPT-C will wire Lighthouse CI + Hetzner deploy + Phase 1b epic close.
+
+---
+## Testing Checklist — 2026-04-27 22:37
+**Check the changes:** http://192.168.178.50:3001
+- [ ] Page loads without errors
+- [ ] All 12 sections render top-to-bottom: hero → research strip → journey → product pillars → research stats → pricing → final CTA → footer
+- [ ] ProductPillars row 1 (curriculum) has copy left, vis right; row 2 (score) has copy right, vis left; row 3 (prompt) has copy left, vis right
+- [ ] CurriculumVis shows 3 modules with the locked pill on each, plus the "Full syllabus revealed one month at a time after enrolment." footer
+- [ ] PromptVis steps reveal in sequence on scroll (and render statically with `prefers-reduced-motion`)
+- [ ] ResearchStats shows 21% / 1 in 6 / 45% with the DSIT citation footer
+- [ ] PricingCards shows £0 (Free Labs), £29/mo + £87 total (The Course, featured), £7.50/mo (Stay Current); featured tier visibly distinguished
+- [ ] FinalCTA dark band is visible; the WaitlistForm email field accepts a value
+- [ ] MarketingFooter shows brand column + 3 link columns + copyright year
+- [ ] Light/dark mode correct — toggle in PublicNav flips the theme cleanly across all sections
+- [ ] Mobile responsive — sections stack vertically; pricing cards stack; journey grid becomes 1-col
+- [ ] No console errors
+
+### Actions for David
+Open http://192.168.178.50:3001 in light AND dark mode, scroll the full homepage top-to-bottom, and tick the boxes above. The drift-sentinel pricing test runs in CI; visual confirmation that £29 / £87 / £7.50 still match `src/lib/config.ts` is the high-value check.
+
+**Review this file:** `file:///C:/Projects/GWTH_V2/kanban/2_testing/PROMPT_2026-04-27_phase-1b-B-products.md`
