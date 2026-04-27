@@ -28,13 +28,38 @@ test.describe("Marketing per-section snapshots", () => {
           colorScheme: theme,
           reducedMotion: "reduce",
         })
+        // Pre-set next-themes' localStorage entry so the html element
+        // gets `class="dark"` synchronously on first paint (avoids the
+        // theme-application race that flakes parallel runs).
+        await page.addInitScript((t) => {
+          try {
+            localStorage.setItem("theme", t)
+          } catch {
+            /* localStorage unavailable in some contexts — fine */
+          }
+        }, theme)
         await page.goto("/", { waitUntil: "domcontentloaded" })
         await page.waitForLoadState("networkidle").catch(() => {})
         await page.evaluate(() => document.fonts.ready)
 
+        // Confirm the html element is in the expected theme before
+        // continuing — guards against next-themes hydration races.
+        await page.waitForFunction(
+          (expected) => {
+            const html = document.documentElement
+            return expected === "dark"
+              ? html.classList.contains("dark")
+              : !html.classList.contains("dark")
+          },
+          theme,
+          { timeout: 5000 }
+        )
+
         const target = page.locator(`[data-section="${section}"]`)
         await target.scrollIntoViewIfNeeded()
-        await page.waitForTimeout(300)
+        // Allow Motion's whileInView re-render and any hover-state
+        // transitions to settle.
+        await page.waitForTimeout(800)
 
         const masks = MASK_SELECTORS.flatMap((sel) => {
           const loc = page.locator(sel)
