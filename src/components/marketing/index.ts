@@ -3,3 +3,4 @@
  */
 
 export { MotionSection } from "./motion-section"
+export { CourseJsonLd } from "./json-ld/course-jsonld"
