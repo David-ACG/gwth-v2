@@ -124,14 +124,64 @@ describe("ScoreVis — accessibility", () => {
     const label = root!.getAttribute("aria-label") ?? ""
     expect(label).toContain("Illustrative only")
     expect(label).toContain("92")
-    expect(label).toContain("currently below pass line")
+    expect(label.toLowerCase()).toContain("working towards top 1%")
   })
 
-  it("aria-label reflects passing state when value >= passLine", () => {
+  it("aria-label reflects top-0.5% framing at value=110", () => {
     const { container } = render(<ScoreVis value={110} />)
     const root = container.querySelector('[role="img"]')
     const label = root!.getAttribute("aria-label") ?? ""
-    expect(label).toContain("currently passing")
+    expect(label.toLowerCase()).toContain("top 0.5%")
+  })
+
+  it("aria-label reflects top-1% framing at value=104", () => {
+    const { container } = render(<ScoreVis value={104} />)
+    const root = container.querySelector('[role="img"]')
+    const label = root!.getAttribute("aria-label") ?? ""
+    expect(label.toLowerCase()).toContain("top 1%")
+  })
+})
+
+describe("ScoreVis — percentile subtitle framing", () => {
+  const subtitleOf = (container: HTMLElement): string | undefined => {
+    // The subtitle sits inside the ring's centred overlay — find the small
+    // uppercase label sibling of the score number.
+    const small = container.querySelector(
+      ".text-xs.font-medium.uppercase.tracking-wide.text-muted-foreground"
+    )
+    return small?.textContent?.trim()
+  }
+
+  it("renders 'Top 0.25%' at value=120", () => {
+    const { container } = render(<ScoreVis value={120} />)
+    expect(subtitleOf(container)).toBe("Top 0.25%")
+  })
+
+  it("renders 'Top 0.5%' at value=110", () => {
+    const { container } = render(<ScoreVis value={110} />)
+    expect(subtitleOf(container)).toBe("Top 0.5%")
+  })
+
+  it("renders 'Top 1%' at value=100 and value=104", () => {
+    const a = render(<ScoreVis value={100} />)
+    expect(subtitleOf(a.container)).toBe("Top 1%")
+    a.unmount()
+    const b = render(<ScoreVis value={104} />)
+    expect(subtitleOf(b.container)).toBe("Top 1%")
+  })
+
+  it("renders 'Slipping from top 1%' when value<100 and history touched 100+", () => {
+    const { container } = render(
+      <ScoreVis value={92} history={[88, 96, 102, 108, 105, 92]} />
+    )
+    expect(subtitleOf(container)).toBe("Slipping from top 1%")
+  })
+
+  it("renders 'Working towards top 1%' when value<100 and history never reached 100", () => {
+    const { container } = render(
+      <ScoreVis value={78} history={[55, 65, 72, 78, 82, 78]} />
+    )
+    expect(subtitleOf(container)).toBe("Working towards top 1%")
   })
 })
 

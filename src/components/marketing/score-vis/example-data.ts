@@ -9,23 +9,28 @@
  * misled into reading these as real assessment outcomes.
  */
 
-export const EXAMPLE_SCORE_VALUE = 92
+/**
+ * Default example score — sits at 104 to land in the "Top 1%" subtitle
+ * with the sparkline showing recent slip from a higher peak. This tells
+ * the most expressive story for a 5-second hero glance: visitor sees a
+ * passing score (top 1%), notices the curve trending down, and
+ * intuitively understands the "Stay Current" pitch.
+ */
+export const EXAMPLE_SCORE_VALUE = 104
 
 /**
- * 30-day history trending around 92 with a gentle build-up. Values
- * stay above the pass-line so the example renders the "Passing" state
- * by default. Decay-state coverage lives in the test file via
- * synthetic histories.
+ * 3-month history (12 weekly points) showing earn-up to ~118 (top 0.5%)
+ * then a slip back to 104 today. Last point stays above the pass-line
+ * so the default render is "Top 1%" not "Slipping". Decay-state coverage
+ * lives in the test file via synthetic histories.
  */
 export const EXAMPLE_SCORE_HISTORY: readonly number[] = [
-  78, 80, 81, 79, 82, 83, 85, 84, 86, 88,
-  89, 90, 88, 87, 89, 91, 90, 92, 93, 91,
-  92, 94, 93, 92, 91, 92, 93, 94, 92, 92,
+  55, 68, 80, 90, 98, 108, 116, 118, 116, 112, 108, 104,
 ]
 
 export const EXAMPLE_SUB_SCORES = [
-  { label: "Personal AI", value: 92 },
-  { label: "Professional", value: 78 },
-  { label: "Enterprise", value: 64 },
-  { label: "Tech Radar", value: 71 },
+  { label: "Personal AI", value: 104 },
+  { label: "Professional", value: 96 },
+  { label: "Enterprise", value: 82 },
+  { label: "Tech Radar", value: 88 },
 ] as const
