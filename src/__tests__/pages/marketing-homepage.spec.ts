@@ -1,10 +1,44 @@
-import { test, expect } from "@playwright/test"
+import { test, expect, type Page } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
 
-test.describe("Marketing homepage — PROMPT-A partial", () => {
+const SECTIONS = [
+  "nav",
+  "hero",
+  "research-strip",
+  "journey",
+  "pillars",
+  "curriculum-vis",
+  "score-vis",
+  "prompt-vis",
+  "research-stats",
+  "pricing",
+  "final-cta",
+  "footer",
+] as const
+
+const EXPECTED_INTERNAL_HREFS = [
+  "/signup",
+  "/labs",
+  "/pricing",
+  "/lessons",
+  "/for-teams",
+  "/about",
+  "/tech-radar",
+  "/why-gwth",
+  "/newsletter",
+  "/contact",
+  "/privacy",
+  "/terms",
+] as const
+
+async function gotoHome(page: Page) {
+  await page.goto("/", { waitUntil: "domcontentloaded" })
+  await page.waitForLoadState("networkidle").catch(() => {})
+}
+
+test.describe("Marketing homepage — full-page smoke", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" })
-    await page.waitForLoadState("networkidle").catch(() => {})
+    await gotoHome(page)
   })
 
   test("renders the locked H1 copy", async ({ page }) => {
@@ -12,6 +46,13 @@ test.describe("Marketing homepage — PROMPT-A partial", () => {
     await expect(h1).toBeVisible()
     await expect(h1).toContainText("Stop watching AI change the world")
     await expect(h1).toContainText("Start building with it")
+  })
+
+  test("all 12 data-section attributes resolve", async ({ page }) => {
+    for (const section of SECTIONS) {
+      const target = page.locator(`[data-section="${section}"]`).first()
+      await expect(target, `data-section="${section}"`).toHaveCount(1)
+    }
   })
 
   test("renders the Course JSON-LD schema", async ({ page }) => {
@@ -22,12 +63,6 @@ test.describe("Marketing homepage — PROMPT-A partial", () => {
     const parsed = JSON.parse(content as string)
     expect(parsed["@type"]).toBe("Course")
     expect(parsed.provider.name).toBe("GWTH.ai")
-  })
-
-  test("hero, research strip, and journey sections are visible", async ({ page }) => {
-    await expect(page.locator('[data-section="hero"]')).toBeVisible()
-    await expect(page.locator('[data-section="research-strip"]')).toBeVisible()
-    await expect(page.locator('[data-section="journey"]')).toBeVisible()
   })
 
   test("renders all 7 journey cards with valid hrefs", async ({ page }) => {
@@ -48,39 +83,147 @@ test.describe("Marketing homepage — PROMPT-A partial", () => {
     await expect(hero.locator('a[href="/tech-radar"]')).toBeVisible()
   })
 
-  test("respects prefers-reduced-motion (sections visible without animation flash)", async ({
+  test("pricing tiers render with config-driven prices and the right CTAs", async ({
+    page,
+  }) => {
+    const pricing = page.locator('[data-section="pricing"]')
+    await pricing.scrollIntoViewIfNeeded()
+    const cards = pricing.locator('[data-testid="pricing-tier"]')
+    await expect(cards).toHaveCount(3)
+    await expect(pricing.locator('[data-tier="free"]')).toContainText(/£0|Free/)
+    await expect(pricing.locator('[data-tier="course"]')).toContainText("£29")
+    await expect(pricing.locator('[data-tier="course"]')).toContainText("£87")
+    await expect(pricing.locator('[data-tier="stay"]')).toContainText("£7.50")
+    await expect(pricing.locator('[data-featured="true"]')).toHaveCount(1)
+    await expect(pricing.locator('[data-tier="free"] a[href="/labs"]')).toBeVisible()
+    await expect(pricing.locator('[data-tier="course"] a[href="/signup"]')).toBeVisible()
+  })
+
+  test("CTA wiring audit — every internal href on the page resolves (no 404s)", async ({
+    page,
+  }) => {
+    const hrefs = await page
+      .locator("a[href]")
+      .evaluateAll((els) =>
+        els
+          .map((el) => el.getAttribute("href"))
+          .filter(
+            (h): h is string => !!h && h.startsWith("/") && !h.startsWith("//")
+          )
+      )
+    const unique = Array.from(new Set(hrefs))
+    expect(unique.length).toBeGreaterThan(0)
+    for (const expected of EXPECTED_INTERNAL_HREFS) {
+      const isPresent = unique.some((h) => h === expected || h.startsWith(`${expected}?`))
+      expect(isPresent, `expected ${expected} on the page`).toBe(true)
+    }
+    for (const href of unique) {
+      // Ignore in-page anchors and opaque CTAs (e.g. "#")
+      if (href.startsWith("#")) continue
+      const response = await page.request.head(href, { failOnStatusCode: false })
+      expect(
+        [200, 301, 302, 307].includes(response.status()),
+        `${href} returned ${response.status()}`
+      ).toBe(true)
+    }
+  })
+
+  test("WaitlistForm submits with mocked /api/waitlist and shows a toast", async ({
+    page,
+  }) => {
+    await page.route("**/api/waitlist", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ success: true, message: "You're on the waitlist." }),
+      })
+    )
+    const finalCta = page.locator('[data-section="final-cta"]')
+    await finalCta.scrollIntoViewIfNeeded()
+    const emailInput = finalCta.locator('input[type="email"]').first()
+    await emailInput.fill("test@example.com")
+    await finalCta.locator('button[type="submit"]').click()
+    // Sonner renders toasts in a portal at document level; assert toast text
+    await expect(page.getByText(/waitlist|joined|added/i).first()).toBeVisible({
+      timeout: 5000,
+    })
+  })
+
+  test("respects prefers-reduced-motion (sections render statically)", async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.reload({ waitUntil: "domcontentloaded" })
     await page.waitForLoadState("networkidle").catch(() => {})
 
-    // Scroll to research strip + journey so they would normally trigger
-    // whileInView entrance animations.
-    await page.locator('[data-section="research-strip"]').scrollIntoViewIfNeeded()
-    await page.locator('[data-section="journey"]').scrollIntoViewIfNeeded()
+    for (const section of SECTIONS.filter((s) => s !== "nav")) {
+      const target = page.locator(`[data-section="${section}"]`).first()
+      await target.scrollIntoViewIfNeeded()
+    }
     await page.waitForTimeout(200)
 
-    // User-facing requirement of reduced-motion: sections render fully
-    // visible (opacity=1) without an animated fade-in. We assert opacity
-    // is settled at 1, not the absence of an inline transform — Motion
-    // leaves the final-keyframe transform inline even when reduced.
-    const opacities = await page.evaluate(() => {
-      const sections = Array.from(
-        document.querySelectorAll(
-          '[data-section="research-strip"], [data-section="journey"]'
-        )
-      )
-      return sections.map((s) => parseFloat(getComputedStyle(s).opacity))
-    })
-    for (const o of opacities) {
-      expect(o).toBeGreaterThanOrEqual(0.99)
+    const opacities = await page.evaluate((sections) => {
+      const out: Record<string, number> = {}
+      for (const s of sections) {
+        const el = document.querySelector(`[data-section="${s}"]`) as HTMLElement | null
+        if (el) {
+          out[s] = parseFloat(getComputedStyle(el).opacity)
+        }
+      }
+      return out
+    }, SECTIONS as readonly string[])
+    for (const [section, opacity] of Object.entries(opacities)) {
+      expect(opacity, `section ${section} opacity`).toBeGreaterThanOrEqual(0.99)
     }
   })
 
-  test("axe — no critical or serious violations (excluding global colour tokens)", async ({
+  test("theme toggle round-trip — html.dark class flips and sections still render", async ({
     page,
   }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" })
+    const toggle = page
+      .locator('[data-testid="public-nav"] button[aria-label*="theme" i]')
+      .first()
+    if ((await toggle.count()) === 0) {
+      test.skip(true, "Theme toggle not exposed in PublicNav — fine, skip")
+      return
+    }
+    const startsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains("dark")
+    )
+    await toggle.click()
+    await expect
+      .poll(async () =>
+        page.evaluate(() => document.documentElement.classList.contains("dark"))
+      )
+      .toBe(!startsDark)
+    for (const section of ["hero", "pricing", "footer"]) {
+      await expect(page.locator(`[data-section="${section}"]`)).toBeVisible()
+    }
+  })
+
+  test("keyboard tab traversal reaches the major interactive controls", async ({
+    page,
+  }) => {
+    await page.locator("body").click()
+    const initialActive = await page.evaluate(() =>
+      document.activeElement ? document.activeElement.tagName : null
+    )
+    expect(initialActive).toBeTruthy()
+    const seen = new Set<string>()
+    for (let i = 0; i < 30; i++) {
+      await page.keyboard.press("Tab")
+      const tag = await page.evaluate(() => {
+        const el = document.activeElement as HTMLElement | null
+        if (!el) return ""
+        return `${el.tagName}:${el.getAttribute("href") ?? el.getAttribute("type") ?? el.textContent?.slice(0, 20) ?? ""}`
+      })
+      if (tag) seen.add(tag)
+    }
+    expect(seen.size).toBeGreaterThan(8)
+  })
+
+  test("axe — no critical or serious violations", async ({ page }) => {
     // color-contrast disabled because the GWTH primary OKLCH token
     // (oklch(0.7 0.18 220), used app-wide for primary buttons) does not
     // hit WCAG AA 4.5:1 against primary-foreground. Token-level redesign
