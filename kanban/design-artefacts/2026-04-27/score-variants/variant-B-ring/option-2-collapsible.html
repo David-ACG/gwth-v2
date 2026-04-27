@@ -192,36 +192,73 @@
   }
 
   /* ── Ring widget ────────────────────────────────────────────── */
-  .ring-stack { position: relative; display: grid; place-items: center; height: 200px; }
+  .ring-stack { position: relative; display: grid; place-items: center; height: 196px; }
   .ring-stack > * { grid-area: 1 / 1; }
-  .ring-svg { width: 200px; height: 200px; transform: rotate(-90deg); }
-  .ring-bg { stroke: var(--muted); stroke-width: 12; fill: none; }
-  .ring-progress { stroke: var(--primary); stroke-width: 12; fill: none; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .ring-svg { width: 196px; height: 196px; transform: rotate(-90deg); }
+  .ring-bg { stroke: var(--muted); stroke-width: 11; fill: none; }
+  .ring-progress { stroke: url(#ring-grad); stroke-width: 11; fill: none; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
   .ring-halo {
-    stroke: var(--accent); stroke-width: 12; fill: none; stroke-linecap: round;
-    opacity: 0.85;
-    filter: drop-shadow(0 0 8px var(--accent));
+    stroke: var(--accent); stroke-width: 11; fill: none; stroke-linecap: round;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 10px oklch(0.65 0.16 165 / 0.45));
     transition: stroke-dashoffset 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .ring-center { display: grid; place-items: center; gap: 4px; pointer-events: none; }
+  .ring-center {
+    display: grid; place-items: center; gap: 0;
+    pointer-events: none;
+  }
   .ring-num {
-    font-size: 56px; font-weight: 800;
-    line-height: 1; letter-spacing: -0.04em;
+    font-size: 72px; font-weight: 800;
+    line-height: 1; letter-spacing: -0.05em;
     font-feature-settings: 'tnum';
     background: linear-gradient(135deg, var(--primary), var(--accent));
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
   }
-  .ring-status {
-    font-size: 10px; font-weight: 700;
+  .ring-num-suffix {
+    font-size: 10px; font-weight: 600;
     color: var(--muted-foreground);
-    text-transform: uppercase; letter-spacing: 0.1em;
-    white-space: nowrap;
-    margin-top: 2px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
   }
-  .ring-status.pass { color: var(--success); }
-  .ring-status.decay { color: var(--warning); }
+
+  /* Status badge — sits BELOW ring, not inside */
+  .status-row { display: flex; justify-content: center; margin-top: 14px; }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.02em;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .status-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+  .status-badge.pass {
+    background: oklch(0.6 0.18 145 / 0.10);
+    color: var(--success);
+    border-color: oklch(0.6 0.18 145 / 0.22);
+  }
+  .status-badge.elite {
+    background: linear-gradient(135deg, oklch(0.7 0.18 220 / 0.12), oklch(0.65 0.16 165 / 0.12));
+    color: var(--primary);
+    border-color: oklch(0.7 0.18 220 / 0.28);
+    box-shadow: 0 0 16px oklch(0.65 0.16 165 / 0.18);
+  }
+  .status-badge.decay {
+    background: oklch(0.75 0.15 75 / 0.12);
+    color: var(--warning);
+    border-color: oklch(0.75 0.15 75 / 0.26);
+  }
 
   @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.025); } }
   .pulse-anim { animation: pulse 3s ease-in-out infinite; transform-origin: center; }
@@ -394,8 +431,8 @@
 
   <div class="scenarios">
     <button class="scenario" data-score="135" data-history="40,55,70,85,98,108,118,125,130,132,134,135">Top 0.5%</button>
-    <button class="scenario active" data-score="104" data-history="40,55,70,85,98,110,118,120,118,114,108,104">Top 1% slipping</button>
-    <button class="scenario" data-score="88"  data-history="35,50,65,78,90,100,105,108,100,95,92,88">Top 5%</button>
+    <button class="scenario active" data-score="104" data-history="40,55,70,90,108,118,128,135,130,122,114,104">Top 1% slipping</button>
+    <button class="scenario" data-score="88"  data-history="35,50,65,78,90,100,108,112,105,98,92,88">Top 5% slipping</button>
     <button class="scenario" data-score="65"  data-history="20,30,40,48,55,60,62,64,66,65,66,65">Working towards</button>
   </div>
 
@@ -423,21 +460,41 @@
         </div>
 
         <div class="ring-stack">
-          <svg viewBox="0 0 200 200" class="ring-svg pulse-anim">
+          <svg viewBox="0 0 200 200" class="ring-svg pulse-anim" aria-hidden="true">
+            <defs>
+              <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(45)">
+                <stop offset="0%" stop-color="oklch(0.7 0.18 220)" />
+                <stop offset="100%" stop-color="oklch(0.65 0.16 165)" />
+              </linearGradient>
+            </defs>
             <circle cx="100" cy="100" r="86" class="ring-bg" />
             <circle cx="100" cy="100" r="86" class="ring-progress" id="ring-progress" stroke-dasharray="540.354" stroke-dashoffset="0" />
             <circle cx="100" cy="100" r="86" class="ring-halo" id="ring-halo" stroke-dasharray="540.354" stroke-dashoffset="453" />
           </svg>
           <div class="ring-center">
             <div class="ring-num" id="ring-num">104</div>
-            <div class="ring-status pass" id="ring-pill">Top 1%</div>
+            <div class="ring-num-suffix">Score</div>
+          </div>
+        </div>
+
+        <div class="status-row">
+          <div class="status-badge pass" id="status-badge">
+            <span class="dot" aria-hidden="true"></span>
+            <span id="status-text">Top 1%</span>
           </div>
         </div>
 
         <div class="spark">
           <svg viewBox="0 0 300 56" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="spark-fill" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="oklch(0.7 0.18 220 / 0.28)" />
+                <stop offset="100%" stop-color="oklch(0.7 0.18 220 / 0)" />
+              </linearGradient>
+            </defs>
             <line x1="0" x2="300" y1="20" y2="20" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,4" opacity="0.45" />
             <text x="296" y="14" text-anchor="end" font-size="9" fill="var(--muted-foreground)" font-weight="600" font-family="JetBrains Mono, monospace">TOP 1%</text>
+            <polygon id="spark-fill-poly" fill="url(#spark-fill)" points="" />
             <polyline id="spark-main" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="" />
             <line id="spark-decay" stroke="var(--warning)" stroke-width="3" stroke-linecap="round" x1="0" y1="0" x2="0" y2="0" style="display:none" />
             <circle id="spark-dot" cx="280" cy="20" r="4" fill="var(--primary)">
@@ -515,8 +572,10 @@
   const ringProg = document.getElementById('ring-progress');
   const ringHalo = document.getElementById('ring-halo');
   const ringNum = document.getElementById('ring-num');
-  const ringPill = document.getElementById('ring-pill');
+  const statusBadge = document.getElementById('status-badge');
+  const statusText = document.getElementById('status-text');
   const sparkMain = document.getElementById('spark-main');
+  const sparkFillPoly = document.getElementById('spark-fill-poly');
   const sparkDecay = document.getElementById('spark-decay');
   const sparkDot = document.getElementById('spark-dot');
   const scenarios = document.querySelectorAll('.scenario');
@@ -525,6 +584,11 @@
   ringHalo.setAttribute('stroke-dasharray', C);
 
   const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+
+  function setBadge(text, kind) {
+    statusText.textContent = text;
+    statusBadge.className = 'status-badge ' + kind;
+  }
 
   function apply(score, history) {
     const passLine = 100;
@@ -547,22 +611,23 @@
     const wasInTop5 = history.slice(0, -1).some(v => v >= TIER_TOP_5);
 
     if (score >= TIER_TOP_05) {
-      ringPill.textContent = 'Top 0.5%'; ringPill.className = 'ring-status pass';
+      setBadge('Top 0.5%', 'elite');
     } else if (score >= TIER_TOP_1) {
-      ringPill.textContent = wasInTopHalf ? 'Top 1% · slipping' : 'Top 1%';
-      ringPill.className = wasInTopHalf ? 'ring-status decay' : 'ring-status pass';
+      setBadge(wasInTopHalf ? 'Top 1% · slipping' : 'Top 1%', wasInTopHalf ? 'decay' : 'pass');
     } else if (score >= TIER_TOP_5) {
-      ringPill.textContent = wasInTop1 ? 'Top 5% · slipping' : 'Top 5%';
-      ringPill.className = wasInTop1 ? 'ring-status decay' : 'ring-status pass';
+      setBadge(wasInTop1 ? 'Top 5% · slipping' : 'Top 5%', wasInTop1 ? 'decay' : 'pass');
     } else if (wasInTop5) {
-      ringPill.textContent = 'Slipping from top 5%'; ringPill.className = 'ring-status decay';
+      setBadge('Slipping from top 5%', 'decay');
     } else {
-      ringPill.textContent = 'Working towards top 5%'; ringPill.className = 'ring-status';
+      setBadge('Working towards top 5%', '');
     }
 
     const yFor = v => 56 - ((v - 50) / 80) * 56;
     const xFor = (i, len) => (i / (len - 1)) * 300;
-    sparkMain.setAttribute('points', history.map((v, i) => `${xFor(i, history.length).toFixed(1)},${yFor(v).toFixed(1)}`).join(' '));
+    const linePts = history.map((v, i) => `${xFor(i, history.length).toFixed(1)},${yFor(v).toFixed(1)}`);
+    sparkMain.setAttribute('points', linePts.join(' '));
+    // Filled gradient polygon: trace line + close to bottom corners
+    sparkFillPoly.setAttribute('points', linePts.join(' ') + ` 300,56 0,56`);
 
     const lastCross = history[history.length - 2] >= passLine && history[history.length - 1] < passLine;
     if (lastCross) {
@@ -584,7 +649,7 @@
     btn.classList.add('active');
     apply(+btn.dataset.score, btn.dataset.history.split(',').map(Number));
   }));
-  apply(104, [40,55,70,85,98,110,118,120,118,114,108,104]);
+  apply(104, [40,55,70,90,108,118,128,135,130,122,114,104]);
 
   // Toggle the collapsible panel
   const toggle = document.getElementById('panel-toggle');
