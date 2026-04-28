@@ -148,6 +148,16 @@ const VARIANTS: readonly Variant[] = [
     group: "e2-family",
     gradients: "without",
   },
+  {
+    slug: "v-e-2-f",
+    name: "E2-F · Earthen Hybrid",
+    summary:
+      "Light mode = refined E2-E (lighter near-white, sage postscript). Dark mode = E2-A Linen scheme (navy + gold + brick) but with charcoal stone Section 03 (#343230) and dark forest sage postscript (#394f36).",
+    accent: "oklch(0.82 0.14 75)",
+    panel: "oklch(0.36 0.05 145)",
+    group: "e2-family",
+    gradients: "without",
+  },
 ]
 
 export default function RedesignIndex() {

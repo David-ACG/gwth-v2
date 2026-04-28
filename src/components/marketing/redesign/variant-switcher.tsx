@@ -26,6 +26,7 @@ const VARIANTS = [
   { slug: "v-e-2-c", label: "E2-C · Cottage" },
   { slug: "v-e-2-d", label: "E2-D · Bronze" },
   { slug: "v-e-2-e", label: "E2-E · Stone" },
+  { slug: "v-e-2-f", label: "E2-F · Hybrid" },
 ] as const
 
 /**

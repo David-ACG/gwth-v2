@@ -953,6 +953,64 @@
   --variant-warm-panel-fg: oklch(0.2 0.005 75);
 }
 
+/* Variant E2-F — Earthen Hybrid
+   Light mode = refined E2-E (lighter near-white bg, brick CTA, sage
+   postscript). Dark mode = E2-A Linen scheme (navy bg, gold accents,
+   deeper brick CTA) but with two section overrides:
+   - Section 03 (UK Stats drench) → charcoal warm grey #343230
+   - Postscript panel → dark forest sage #394f36
+   User-curated combination (2026-04-28). */
+[data-variant="e2-f"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.965 0.004 75);
+  --foreground: oklch(0.22 0.008 75);
+  --card: oklch(0.99 0.003 75);
+  --card-foreground: oklch(0.22 0.008 75);
+  --primary: oklch(0.45 0.14 28);
+  --primary-foreground: oklch(0.98 0.005 75);
+  --ring: oklch(0.45 0.14 28);
+  --info: oklch(0.45 0.14 28);
+  --info-foreground: oklch(0.98 0.005 75);
+  --accent: oklch(0.45 0.14 28);
+  --accent-foreground: oklch(0.98 0.005 75);
+  --variant-warm: oklch(0.72 0.13 80);
+  --variant-warm-fg: oklch(0.2 0.04 60);
+  --muted: oklch(0.92 0.005 75);
+  --muted-foreground: oklch(0.42 0.012 75);
+  --border: oklch(0.86 0.008 75);
+  --variant-drench-bg: oklch(0.32 0.005 75);
+  --variant-drench-fg: oklch(0.96 0.005 75);
+  --variant-panel-bg: oklch(0.6 0.05 145);
+  --variant-panel-fg: oklch(0.16 0.008 75);
+  --variant-warm-panel-bg: oklch(0.72 0.13 80);
+  --variant-warm-panel-fg: oklch(0.2 0.04 60);
+}
+.dark [data-variant="e2-f"] {
+  --background: oklch(0.18 0.025 250);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.22 0.025 250);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.5 0.17 28);
+  --primary-foreground: oklch(0.96 0.012 80);
+  --ring: oklch(0.5 0.17 28);
+  --info: oklch(0.5 0.17 28);
+  --info-foreground: oklch(0.96 0.012 80);
+  --accent: oklch(0.5 0.17 28);
+  --accent-foreground: oklch(0.96 0.012 80);
+  --variant-warm: oklch(0.82 0.14 75);
+  --variant-warm-fg: oklch(0.18 0.025 250);
+  --muted: oklch(0.25 0.025 250);
+  --muted-foreground: oklch(0.72 0.018 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.27 0.005 75);
+  --variant-drench-fg: oklch(0.96 0.005 75);
+  --variant-panel-bg: oklch(0.36 0.05 145);
+  --variant-panel-fg: oklch(0.95 0.008 145);
+  --variant-warm-panel-bg: oklch(0.62 0.14 75);
+  --variant-warm-panel-fg: oklch(0.18 0.025 250);
+}
+
 /* Variant utility classes — used by the redesign sections. */
 @layer utilities {
   .variant-drench {
