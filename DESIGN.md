@@ -213,7 +213,26 @@ GWTH is a **flat-by-default** system with one shadow vocabulary, used sparingly.
 
 **The 2-Pixel Hover Rule.** Hover lift is exactly 2 pixels (`translate-y-[-2px]`). Larger lifts read as bouncy / elastic; smaller lifts feel arbitrary. 2px is the system-wide commitment.
 
-## 5. Components
+## 5. Spacing & Rhythm
+
+Spacing carries the page's pace. Tight bands compress, generous sections breathe; alternation creates rhythm, uniformity creates monotony. The base scale lives in the `spacing` tokens (`micro` 0.25rem → `section` 7rem). Use the named tokens, not raw rem values.
+
+### Section Padding Scale
+
+Four vertical-padding presets define the homepage cadence:
+
+- **Marquee** (`py-24 md:py-32`, ~6rem / 8rem): Sections that are the artefact. ProductPillars (the score widget + named pillars) and FinalCTA (closing emphasis on the dark band). The page breathes around them.
+- **Standard** (`py-20 md:py-28`, 5rem / 7rem = `spacing.section`): Default for content destinations. Hero, JourneyGrid, PricingCards. The canonical 7rem pulse.
+- **Supporting** (`py-16 md:py-24` or `py-16 md:py-20`): Sections that ride between marquees. ResearchStats (a stats list, not a destination), MarketingFooter. Compressed so the marquee lift is felt by contrast.
+- **Band** (`py-10`): Single-line strip elements. ResearchStrip. Reads as a band, not a section.
+
+### Named Rules
+
+**The Rhythm Rule.** Homepage sections must vary their vertical padding across at least three of the four presets above. Shipping every section at the same `py-*` value flattens the page into a uniform scroll: the eye loses cadence and every section reads as equal weight, which means none of them read as primary. Lift the marquees, compress the supporting tiles, and let bands stay narrow. As of 2026-04-28 the homepage runs `py-28 → py-10 → py-28 → py-32 → py-24 → py-28 → py-32 → py-20` at md+, a tightened-then-lifted cadence anchored on ProductPillars and FinalCTA.
+
+**The Token-Only Rule.** Internal spacing inside components uses the named tokens (`spacing.xs` through `spacing.2xl`), not raw rem or px values. The token scale is the system's vocabulary; circumventing it produces drift across surfaces.
+
+## 6. Components
 
 For each component, lead with its character; specify shape, color, states, and any distinctive behaviour.
 
@@ -257,7 +276,7 @@ On journey cards with a `stat`, the value renders inside a tinted callout matchi
 ### Hero Device (signature)
 A browser-frame mock — three `size-2.5` traffic-light dots (destructive/warning/success at 70% opacity), a mono URL chip showing `gwth.ai/score`, then a profile card with a score widget at its centre. The score widget itself is the bordered tinted callout on a `bg-muted/40` surface; it's the only place on the homepage where a single visual element earns a `shadow-xl`. Every other component in the system is flatter than this. The hero device is the artefact the entire page is selling.
 
-## 6. Do's and Don'ts
+## 7. Do's and Don'ts
 
 ### Do:
 - **Do** use OKLCH for every colour value. Never `#000`, never `#fff`, never raw HSL.
@@ -269,6 +288,7 @@ A browser-frame mock — three `size-2.5` traffic-light dots (destructive/warnin
 - **Do** cite UK sources by name (DSIT, ONS, CIPD, BCS) next to every stat.
 - **Do** ship light + dark from day one — every new component must work in both.
 - **Do** lift cards exactly 2 pixels on hover, with a 200ms ease-out transition.
+- **Do** vary section padding across at least three of the four presets per page (Marquee / Standard / Supporting / Band). See §5 Rhythm Rule.
 - **Do** respect `prefers-reduced-motion` — every Motion entrance is gated by `useReducedMotion`.
 
 ### Don't:
@@ -282,6 +302,7 @@ A browser-frame mock — three `size-2.5` traffic-light dots (destructive/warnin
 - **Don't** use em dashes in body copy (the AI tell). Use commas, colons, semicolons, periods, or parentheses.
 - **Don't** UPPERCASE buttons or CTAs. Sentence case only.
 - **Don't** put a shadow on a section background, a button at rest, or body text. Shadows are state-driven only (hover, hero-device emphasis).
+- **Don't** ship every section at the same `py-*` value. Uniform spacing flattens cadence and the eye reads every section as equal weight. See §5 Rhythm Rule.
 - **Don't** wrap everything in a card. Most things don't need one. Nested cards are always wrong.
 - **Don't** use modal as the first thought. Exhaust inline / progressive alternatives first.
 - **Don't** propose, attempt, or render any SVG variant of the GWTH logo. The PNGs are locked. Set 2026-04-28.

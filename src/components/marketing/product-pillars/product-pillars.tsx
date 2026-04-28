@@ -82,7 +82,7 @@ const ROW_CONFIGS: readonly RowConfig[] = [
  */
 export function ProductPillars() {
   return (
-    <MotionSection data-section="pillars" className="py-20 md:py-28">
+    <MotionSection data-section="pillars" className="py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">

@@ -33,7 +33,7 @@ export function FinalCTA() {
   return (
     <section
       data-section="final-cta"
-      className="bg-foreground py-20 text-background md:py-28"
+      className="bg-foreground py-24 text-background md:py-32"
     >
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">

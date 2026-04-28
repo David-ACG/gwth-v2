@@ -9,7 +9,7 @@ import { UK_STATS, RESEARCH_SOURCES } from "@/components/marketing/data"
  */
 export function ResearchStats() {
   return (
-    <MotionSection data-section="research-stats" className="py-20 md:py-28">
+    <MotionSection data-section="research-stats" className="py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
