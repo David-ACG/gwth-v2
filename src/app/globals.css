@@ -226,6 +226,162 @@
 }
 
 /* =================================================================
+   REDESIGN VARIANTS — scoped token overrides for /redesign/v-*.
+   Each variant scope only fires inside `<div data-variant="X">` so the
+   production homepage at `/` is untouched.
+   ================================================================= */
+
+/* Variant A — Field Notebook
+   Light canonical. Mint drench mid-page. Aqua reserved for primary CTA.
+   Type: Albert Sans (Inter alternative, geometric humanist) + JetBrains Mono. */
+[data-variant="a"] {
+  --font-sans: var(--font-albert), "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --variant-drench-bg: oklch(0.65 0.16 165);
+  --variant-drench-fg: oklch(0.18 0.04 175);
+  --variant-panel-bg: oklch(0.18 0.04 175);
+  --variant-panel-fg: oklch(0.95 0.04 165);
+  --variant-cream: oklch(0.97 0.012 80);
+}
+.dark [data-variant="a"] {
+  --variant-drench-bg: oklch(0.55 0.14 165);
+  --variant-drench-fg: oklch(0.97 0.01 165);
+  --variant-panel-bg: oklch(0.13 0.01 175);
+  --variant-panel-fg: oklch(0.93 0.04 165);
+  --variant-cream: oklch(0.21 0.005 60);
+}
+
+/* Variant B — Modern Technical
+   Dark canonical. Aqua-drench hero. Tight density, mono labels.
+   Type: Geist Sans + Geist Mono. */
+[data-variant="b"] {
+  --font-sans: var(--font-geist), "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  --variant-drench-bg: oklch(0.7 0.18 220);
+  --variant-drench-fg: oklch(0.16 0.04 220);
+  --variant-panel-bg: oklch(0.18 0.04 220);
+  --variant-panel-fg: oklch(0.97 0.005 220);
+  --variant-grid-line: oklch(0.7 0.18 220 / 0.16);
+}
+.dark [data-variant="b"] {
+  --variant-drench-bg: oklch(0.65 0.18 220);
+  --variant-drench-fg: oklch(0.13 0.03 220);
+  --variant-panel-bg: oklch(0.13 0.02 220);
+  --variant-panel-fg: oklch(0.97 0.005 220);
+  --variant-grid-line: oklch(0.75 0.16 220 / 0.18);
+}
+
+/* Variant C — Quiet Essay
+   Warm cream surface, serif body. Burnt Sienna replaces Aqua as primary.
+   Type: Source Serif 4 (body) + Manrope (display + UI). */
+[data-variant="c"] {
+  --font-sans: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), "Source Serif 4", ui-serif, Georgia, serif;
+  --background: oklch(0.965 0.015 80);
+  --foreground: oklch(0.22 0.025 60);
+  --card: oklch(0.985 0.01 80);
+  --card-foreground: oklch(0.22 0.025 60);
+  --primary: oklch(0.62 0.13 40);
+  --primary-foreground: oklch(0.985 0.008 60);
+  --ring: oklch(0.62 0.13 40);
+  --info: oklch(0.62 0.13 40);
+  --info-foreground: oklch(0.985 0.008 60);
+  --accent: oklch(0.55 0.08 175);
+  --accent-foreground: oklch(0.985 0.008 60);
+  --muted: oklch(0.93 0.018 80);
+  --muted-foreground: oklch(0.45 0.025 60);
+  --border: oklch(0.88 0.025 60);
+  --variant-drench-bg: oklch(0.62 0.13 40);
+  --variant-drench-fg: oklch(0.985 0.01 80);
+  --variant-panel-bg: oklch(0.21 0.025 60);
+  --variant-panel-fg: oklch(0.95 0.018 80);
+}
+.dark [data-variant="c"] {
+  --background: oklch(0.18 0.012 60);
+  --foreground: oklch(0.93 0.018 80);
+  --card: oklch(0.22 0.012 60);
+  --card-foreground: oklch(0.93 0.018 80);
+  --primary: oklch(0.72 0.14 40);
+  --primary-foreground: oklch(0.18 0.012 60);
+  --ring: oklch(0.72 0.14 40);
+  --info: oklch(0.72 0.14 40);
+  --info-foreground: oklch(0.18 0.012 60);
+  --accent: oklch(0.7 0.07 175);
+  --accent-foreground: oklch(0.18 0.012 60);
+  --muted: oklch(0.24 0.012 60);
+  --muted-foreground: oklch(0.7 0.018 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.55 0.14 40);
+  --variant-drench-fg: oklch(0.97 0.012 80);
+  --variant-panel-bg: oklch(0.14 0.012 60);
+  --variant-panel-fg: oklch(0.95 0.018 80);
+}
+
+/* Variant D — Supportive Learning
+   Light canonical. Soft Warm Coral as primary, Ink-Deep-Teal panel.
+   Type: Figtree (humanist sans) + JetBrains Mono. */
+[data-variant="d"] {
+  --font-sans: var(--font-figtree), "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --background: oklch(0.985 0.008 80);
+  --foreground: oklch(0.2 0.03 175);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.03 175);
+  --primary: oklch(0.7 0.16 25);
+  --primary-foreground: oklch(0.985 0.008 80);
+  --ring: oklch(0.7 0.16 25);
+  --info: oklch(0.7 0.16 25);
+  --info-foreground: oklch(0.985 0.008 80);
+  --accent: oklch(0.65 0.16 165);
+  --accent-foreground: oklch(0.985 0.008 80);
+  --muted: oklch(0.94 0.012 80);
+  --muted-foreground: oklch(0.48 0.025 60);
+  --border: oklch(0.89 0.018 60);
+  --variant-drench-bg: oklch(0.78 0.12 25);
+  --variant-drench-fg: oklch(0.2 0.03 175);
+  --variant-panel-bg: oklch(0.18 0.04 175);
+  --variant-panel-fg: oklch(0.97 0.012 80);
+}
+.dark [data-variant="d"] {
+  --background: oklch(0.18 0.008 60);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.22 0.008 60);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.78 0.13 25);
+  --primary-foreground: oklch(0.18 0.008 60);
+  --ring: oklch(0.78 0.13 25);
+  --info: oklch(0.78 0.13 25);
+  --info-foreground: oklch(0.18 0.008 60);
+  --accent: oklch(0.75 0.14 165);
+  --accent-foreground: oklch(0.18 0.008 60);
+  --muted: oklch(0.25 0.008 60);
+  --muted-foreground: oklch(0.7 0.015 60);
+  --border: oklch(1 0 0 / 12%);
+  --variant-drench-bg: oklch(0.7 0.14 25);
+  --variant-drench-fg: oklch(0.18 0.008 60);
+  --variant-panel-bg: oklch(0.13 0.005 60);
+  --variant-panel-fg: oklch(0.94 0.012 80);
+}
+
+/* Variant utility classes — used by the redesign sections. */
+@layer utilities {
+  .variant-drench {
+    background-color: var(--variant-drench-bg);
+    color: var(--variant-drench-fg);
+  }
+  .variant-panel {
+    background-color: var(--variant-panel-bg);
+    color: var(--variant-panel-fg);
+  }
+  .variant-cream-bg {
+    background-color: var(--variant-cream, var(--muted));
+  }
+  /* Variant C uses Source Serif 4 for body lead and long-form. The class
+     is applied locally so display/UI keeps Manrope. */
+  .variant-serif {
+    font-family: var(--font-serif, var(--font-sans));
+  }
+}
+
+/* =================================================================
    BASE LAYER
    ================================================================= */
 

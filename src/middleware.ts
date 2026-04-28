@@ -44,6 +44,7 @@ const PASSWORD_EXEMPT_PATHS = [
   "/access",     // The password page itself
   "/auth",       // OAuth callback
   "/api",        // API routes
+  "/redesign",   // Internal homepage redesign review (noindex, removed at promotion)
 ]
 
 /**
