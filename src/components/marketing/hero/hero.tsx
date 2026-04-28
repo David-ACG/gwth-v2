@@ -29,8 +29,9 @@ export function Hero() {
             <p className="mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
               Learn to build apps, automate workflows, research faster, create content,
               analyse data, and solve real problems using AI — all in plain English.
-              Built in the UK by practitioners, not marketers. Independent of any vendor
-              or government programme.
+              Every project you complete updates your GWTH Score: a dynamic, verifiable
+              credential UK employers can check on the spot. Built by practitioners, not
+              marketers — independent of any vendor or government programme.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
