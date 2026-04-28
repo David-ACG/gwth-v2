@@ -26,13 +26,15 @@ describe("CurriculumVis", () => {
     }
   })
 
-  it("renders a locked pill on every module card", () => {
+  it("conveys the locked state once at the card level (not per module)", () => {
     const { container } = render(<CurriculumVis />)
+    const root = container.querySelector('[data-section="curriculum-vis"]')
+    expect(root?.textContent ?? "").toMatch(/locked · sign up to view/i)
     const modules = Array.from(
       container.querySelectorAll('[data-testid="curriculum-module"]')
     )
     for (const m of modules) {
-      expect(m.textContent ?? "").toMatch(/locked/i)
+      expect(m.textContent ?? "").not.toMatch(/locked/i)
     }
   })
 
