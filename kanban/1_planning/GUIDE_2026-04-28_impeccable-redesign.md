@@ -15,7 +15,23 @@ You're the designer. Impeccable is the design language and the variant generator
 
 ## Part 0 — One-time setup (5 min)
 
-1. **Install Impeccable** (skill is published as a Claude Code skill — global, all projects):
+### Warp layout
+
+You need **two Warp tabs** open in `C:\Projects\GWTH_V2`, plus a browser. Set them up before doing anything else:
+
+| Tab | Purpose | Command |
+|---|---|---|
+| Tab 1 | Claude Code session (fresh, inside GWTH_V2) | `cd C:\Projects\GWTH_V2 && claude` |
+| Tab 2 | Dev server (long-running, leave alone) | `cd C:\Projects\GWTH_V2 && npm run dev` |
+| Browser | Live Mode target | `http://localhost:3000` |
+
+**Important:** start a *new* Claude Code session in Tab 1 — don't reuse a session from another project. GWTH_V2's `CLAUDE.md`, the existing `DESIGN.md` / `PRODUCT.md`, and project-specific memory only load when Claude Code is launched from this directory.
+
+(If you prefer Warp split panes over tabs, `Ctrl+D` for vertical split works too. The dev-server tab doesn't need to be visible — just running.)
+
+### Then in Tab 1
+
+1. **Install Impeccable** if not already (global skill — install once, available in all projects):
    ```bash
    npx skills add pbakaus/impeccable
    ```
@@ -23,11 +39,7 @@ You're the designer. Impeccable is the design language and the variant generator
    ```bash
    git checkout -b redesign/impeccable-homepage
    ```
-3. **Start the dev server** in a separate terminal — Impeccable Live needs it live:
-   ```bash
-   npm run dev   # http://localhost:3000
-   ```
-4. **Open the page in a browser** (Edge/Chrome). Live Mode talks to a localhost endpoint.
+3. **Confirm dev server is up** — Tab 2 should show the Next.js compiled output and `http://localhost:3000` should load in the browser.
 
 ---
 
