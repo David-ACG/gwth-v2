@@ -991,12 +991,12 @@
   --foreground: oklch(0.94 0.012 80);
   --card: oklch(0.22 0.025 250);
   --card-foreground: oklch(0.94 0.012 80);
-  --primary: oklch(0.5 0.17 28);
+  --primary: #c64f51;
   --primary-foreground: oklch(0.96 0.012 80);
-  --ring: oklch(0.5 0.17 28);
-  --info: oklch(0.5 0.17 28);
+  --ring: #c64f51;
+  --info: #c64f51;
   --info-foreground: oklch(0.96 0.012 80);
-  --accent: oklch(0.5 0.17 28);
+  --accent: #c64f51;
   --accent-foreground: oklch(0.96 0.012 80);
   --variant-warm: oklch(0.82 0.14 75);
   --variant-warm-fg: oklch(0.18 0.025 250);
