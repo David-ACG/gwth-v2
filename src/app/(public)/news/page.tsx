@@ -78,10 +78,6 @@ export default async function NewsPage({
       <section className="border-b bg-muted/30 py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              <Newspaper className="size-4" />
-              Community News
-            </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               AI News & Votes
             </h1>
