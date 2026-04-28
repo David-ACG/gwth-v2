@@ -18,7 +18,7 @@ export function CurriculumVis() {
         <span className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
           curriculum.gwth.ai · sample plan
         </span>
-        <span className="rounded-full bg-muted px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+        <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
           Locked · sign up to view
         </span>
       </div>
@@ -49,11 +49,6 @@ export function CurriculumVis() {
                 {module.capstoneSub}
               </span>
             </div>
-
-            <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-muted-foreground/60" aria-hidden="true" />
-              Locked · sign up to view
-            </span>
           </article>
         ))}
       </div>
