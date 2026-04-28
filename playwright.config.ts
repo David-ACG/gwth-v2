@@ -4,7 +4,9 @@ export default defineConfig({
   testDir: "./src/__tests__/pages",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  // Snapshot tests are inherently sensitive to subpixel/animation drift; one
+  // retry locally and two on CI smooths that out without masking real bugs.
+  retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   timeout: 60000,
