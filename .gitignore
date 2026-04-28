@@ -66,3 +66,4 @@ next-env.d.ts
 
 # Lighthouse CI local artefacts (HTML + JSON reports per run)
 .lighthouseci/
+.snagging/
