@@ -4,10 +4,10 @@ import { JourneyGrid } from "./journey-grid"
 import { JOURNEYS } from "@/components/marketing/data"
 
 describe("JourneyGrid", () => {
-  it("renders exactly 7 journey cards", () => {
+  it("renders exactly 9 journey cards", () => {
     const { container } = render(<JourneyGrid />)
     const cards = container.querySelectorAll('[data-testid="journey-card"]')
-    expect(cards.length).toBe(7)
+    expect(cards.length).toBe(9)
   })
 
   it("each card href matches the corresponding JOURNEYS entry", () => {
@@ -48,7 +48,7 @@ describe("JourneyGrid", () => {
         expect(classes).toContain("text-primary")
       }
     }
-    // Sanity: both accents represented across the 7 cards
+    // Sanity: both accents represented across the 9 cards
     expect(seenAccents.has("mint") && seenAccents.has("aqua")).toBe(true)
   })
 
@@ -57,13 +57,13 @@ describe("JourneyGrid", () => {
     expect(container.querySelector('[data-section="journey"]')).not.toBeNull()
   })
 
-  it("renders three rows with the expected counts (3+3+1)", () => {
+  it("renders three rows with the expected counts (3+3+3)", () => {
     const { container } = render(<JourneyGrid />)
     const r1 = container.querySelectorAll('[data-row="1"] [data-testid="journey-card"]')
     const r2 = container.querySelectorAll('[data-row="2"] [data-testid="journey-card"]')
     const r3 = container.querySelectorAll('[data-row="3"] [data-testid="journey-card"]')
     expect(r1.length).toBe(3)
     expect(r2.length).toBe(3)
-    expect(r3.length).toBe(1)
+    expect(r3.length).toBe(3)
   })
 })
