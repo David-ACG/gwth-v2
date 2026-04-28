@@ -27,7 +27,7 @@ const ROW_CONFIGS: readonly RowConfig[] = [
       "Step-by-step video for every project",
     ],
     vis: <CurriculumVis />,
-    cta: { label: "View the curriculum", href: "/lessons" },
+    cta: { label: "Lessons", href: "/lessons" },
   },
   {
     bullets: [
@@ -47,7 +47,7 @@ const ROW_CONFIGS: readonly RowConfig[] = [
   },
   {
     bullets: [
-      "Use Claude, ChatGPT, n8n, Zapier",
+      "Use Claude, ChatGPT, n8n",
       "Tools you already pay for",
       "Write a brief, ship a workflow",
     ],
@@ -73,7 +73,7 @@ export function ProductPillars() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            94 projects. One score. Plain English in.
+            94 projects. One score. Plain English.
           </h2>
         </div>
 

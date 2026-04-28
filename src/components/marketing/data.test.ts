@@ -13,8 +13,8 @@ import {
 import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 
 describe("marketing/data — JOURNEYS", () => {
-  it("contains exactly 7 journeys", () => {
-    expect(JOURNEYS.length).toBe(7)
+  it("contains exactly 9 journeys", () => {
+    expect(JOURNEYS.length).toBe(9)
   })
 
   it("every journey has the required string fields populated", () => {

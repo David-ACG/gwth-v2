@@ -223,7 +223,7 @@ export const PRODUCT_PILLARS: readonly ProductPillar[] = [
     label: "No coding required",
     title: "If you can describe what you want, you can build it.",
     body:
-      "Plain English in, working AI tools out. We assume zero Python. Tools you already pay for — Claude, ChatGPT, n8n, Zapier — used the way professionals actually use them.",
+      "Plain English in, working AI tools out. We assume zero Python. Tools you already pay for — Claude, ChatGPT, n8n — used the way professionals actually use them.",
   },
 ]
 

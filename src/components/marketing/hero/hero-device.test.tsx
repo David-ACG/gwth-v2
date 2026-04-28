@@ -55,10 +55,10 @@ describe("HeroDevice", () => {
     ).not.toBeNull()
   })
 
-  it("includes the gwth.ai/dashboard URL bar text", () => {
+  it("includes the gwth.ai/score URL bar text", () => {
     const { container } = render(<HeroDevice />)
     const urlBar = Array.from(container.querySelectorAll("span")).find((el) =>
-      (el.textContent ?? "").includes("gwth.ai/dashboard")
+      (el.textContent ?? "").includes("gwth.ai/score")
     )
     expect(urlBar).toBeDefined()
   })
