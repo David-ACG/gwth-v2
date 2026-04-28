@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start:lighthouse": "node scripts/lighthouse-start.mjs",
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",

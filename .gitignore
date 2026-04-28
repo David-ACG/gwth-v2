@@ -62,3 +62,6 @@ next-env.d.ts
 # Dolt database files (added by bd init)
 .dolt/
 *.db
+
+# Lighthouse CI local artefacts (HTML + JSON reports per run)
+.lighthouseci/

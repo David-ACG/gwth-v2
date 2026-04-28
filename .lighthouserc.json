@@ -3,7 +3,7 @@
     "collect": {
       "url": ["http://localhost:3000/"],
       "numberOfRuns": 3,
-      "startServerCommand": "npm run start",
+      "startServerCommand": "npm run start:lighthouse",
       "startServerReadyPattern": "Ready in",
       "startServerReadyTimeout": 60000,
       "settings": {

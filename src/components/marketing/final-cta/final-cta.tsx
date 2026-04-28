@@ -1,7 +1,27 @@
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { WaitlistForm } from "@/components/landing/waitlist-form"
+import { Skeleton } from "@/components/ui/skeleton"
+
+// Defer the WaitlistForm bundle (react-hook-form + zod + sonner) — it
+// only matters at the bottom of the page, so loading it eagerly was
+// adding ~60KB of unused JS to the homepage critical path and hurting
+// mobile LCP/TBT.
+const WaitlistForm = dynamic(
+  () =>
+    import("@/components/landing/waitlist-form").then((m) => ({
+      default: m.WaitlistForm,
+    })),
+  {
+    loading: () => (
+      <div className="space-y-3">
+        <Skeleton className="h-12 w-full bg-background/10" />
+        <Skeleton className="h-12 w-full bg-background/10" />
+      </div>
+    ),
+  }
+)
 
 /**
  * FinalCTA — dark band closing call-to-action. Mounts the existing

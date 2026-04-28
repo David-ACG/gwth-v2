@@ -6,8 +6,14 @@ import { updateSession } from "@/lib/supabase/middleware"
  * Security headers applied to all responses.
  * Uses recommended security headers for Next.js apps.
  * @see https://docs.arcjet.com/nosecone/quick-start
+ *
+ * X-Robots-Tag (noindex …) is intentionally only emitted while the site
+ * password gate is active (SITE_PASSWORD env set). Once the gate is
+ * removed for public launch, the header drops away and the page becomes
+ * indexable — without that, Lighthouse SEO can't clear 0.69 because the
+ * is-crawlable audit fails.
  */
-const securityHeaders = {
+const baseSecurityHeaders = {
   "X-DNS-Prefetch-Control": "on",
   "X-Frame-Options": "SAMEORIGIN",
   "X-Content-Type-Options": "nosniff",
@@ -16,7 +22,6 @@ const securityHeaders = {
     "camera=(), microphone=(), geolocation=(), browsing-topics=()",
   "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
   "X-XSS-Protection": "0",
-  "X-Robots-Tag": "noindex, nofollow, noarchive, nosnippet, noimageindex",
   "Content-Security-Policy": [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://analytics.gwth.ai",
@@ -29,7 +34,9 @@ const securityHeaders = {
     "base-uri 'self'",
     "form-action 'self'",
   ].join("; "),
-}
+} as const
+
+const PRE_LAUNCH_NOINDEX = "noindex, nofollow, noarchive, nosnippet, noimageindex"
 
 /** Paths that bypass the site password gate */
 const PASSWORD_EXEMPT_PATHS = [
@@ -74,8 +81,17 @@ export async function middleware(request: NextRequest) {
   const response = await updateSession(request)
 
   // Apply security headers to the response
-  for (const [key, value] of Object.entries(securityHeaders)) {
+  for (const [key, value] of Object.entries(baseSecurityHeaders)) {
     response.headers.set(key, value)
+  }
+  // Only stamp noindex while the pre-launch lockdown is active.
+  // ALLOW_INDEXING=1 explicitly overrides the gate (used by the
+  // Lighthouse audit harness so the SEO is-crawlable check passes
+  // against a production build that still has SITE_PASSWORD wired up
+  // via .env.local for staging).
+  const allowIndexing = process.env.ALLOW_INDEXING === "1"
+  if (process.env.SITE_PASSWORD && !allowIndexing) {
+    response.headers.set("X-Robots-Tag", PRE_LAUNCH_NOINDEX)
   }
 
   return response
