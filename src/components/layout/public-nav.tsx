@@ -1,7 +1,10 @@
 "use client"
 
+import * as React from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -56,8 +59,8 @@ export function PublicNav({ user }: PublicNavProps) {
       className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-lg"
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-xl font-bold text-gradient">
-          GWTH.ai
+        <Link href="/" aria-label="GWTH.ai home" className="flex items-center">
+          <BrandWordmark />
         </Link>
 
         {/* Desktop nav */}
@@ -185,5 +188,31 @@ export function PublicNav({ user }: PublicNavProps) {
         </div>
       </nav>
     </header>
+  )
+}
+
+/**
+ * Theme-aware GWTH.ai wordmark for the public nav. Uses the tightly-cropped
+ * PNGs (~5:1 aspect): logo-light-cropped.png on light, logo_dark-cropped.png
+ * on dark. Renders during SSR / first paint as the light variant to avoid
+ * hydration mismatch, then swaps to dark after `mounted` flips true.
+ */
+function BrandWordmark() {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
+  const src =
+    mounted && resolvedTheme === "dark"
+      ? "/logo_dark-cropped.png"
+      : "/logo-light-cropped.png"
+  return (
+    <Image
+      src={src}
+      alt="GWTH.ai"
+      width={160}
+      height={32}
+      priority
+      className="h-7 w-auto sm:h-8"
+    />
   )
 }
