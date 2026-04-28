@@ -207,7 +207,9 @@
       "Bash(cp \"C:/Users/david/.claude/image-cache/7343f4e1-7217-4877-a509-c9adeddcbc42/9.png\" \"C:/Projects/GWTH_V2/kanban/design-artefacts/2026-04-24/concepts/wordmark/stitch-A-arrow-G-v3-light.png\")",
       "Bash(cp \"C:/Users/david/.claude/image-cache/7343f4e1-7217-4877-a509-c9adeddcbc42/10.png\" \"C:/Projects/GWTH_V2/kanban/design-artefacts/2026-04-24/concepts/icon/stitch-A-icon-only-FAIL-v1.png\")",
       "Bash(cp \"/c/Users/david/.claude/image-cache/7343f4e1-7217-4877-a509-c9adeddcbc42/14.png\" \"kanban/design-artefacts/2026-04-24/concepts/wordmark/canonical-2026-04-26-dark.png\")",
-      "Bash(cp \"/c/Users/david/.claude/image-cache/7343f4e1-7217-4877-a509-c9adeddcbc42/15.png\" \"kanban/design-artefacts/2026-04-24/concepts/wordmark/canonical-2026-04-26-light.png\")"
+      "Bash(cp \"/c/Users/david/.claude/image-cache/7343f4e1-7217-4877-a509-c9adeddcbc42/15.png\" \"kanban/design-artefacts/2026-04-24/concepts/wordmark/canonical-2026-04-26-light.png\")",
+      "Bash(cp C:/Users/david/.claude/skills/snagging/annotator.html C:/Projects/GWTH_V2/.snagging/2026-04-28-1140/annotator.html)",
+      "Bash(sed -i \"s|/\\\\* SCREENSHOTS_PLACEHOLDER \\\\*/|const SCREENSHOTS = ['after/desktop-light.png','after/desktop-dark.png','after/mobile-light.png','after/mobile-dark.png','after/fold-desktop-light.png','after/fold-desktop-dark.png','after/fold-mobile-light.png'];|\" C:/Projects/GWTH_V2/.snagging/2026-04-28-1140/annotator.html)"
     ]
   },
   "enableAllProjectMcpServers": true,
