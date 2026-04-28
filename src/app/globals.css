@@ -905,9 +905,9 @@
 [data-variant="e2-e"] {
   --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
-  --background: oklch(0.94 0.005 75);
+  --background: oklch(0.965 0.004 75);
   --foreground: oklch(0.22 0.008 75);
-  --card: oklch(0.97 0.004 75);
+  --card: oklch(0.99 0.003 75);
   --card-foreground: oklch(0.22 0.008 75);
   --primary: oklch(0.45 0.14 28);
   --primary-foreground: oklch(0.98 0.005 75);
@@ -918,9 +918,9 @@
   --accent-foreground: oklch(0.98 0.005 75);
   --variant-warm: oklch(0.72 0.13 80);
   --variant-warm-fg: oklch(0.2 0.04 60);
-  --muted: oklch(0.9 0.006 75);
+  --muted: oklch(0.92 0.005 75);
   --muted-foreground: oklch(0.42 0.012 75);
-  --border: oklch(0.84 0.008 75);
+  --border: oklch(0.86 0.008 75);
   --variant-drench-bg: oklch(0.32 0.005 75);
   --variant-drench-fg: oklch(0.96 0.005 75);
   --variant-panel-bg: oklch(0.6 0.05 145);
@@ -933,12 +933,12 @@
   --foreground: oklch(0.94 0.005 75);
   --card: oklch(0.24 0.005 75);
   --card-foreground: oklch(0.94 0.005 75);
-  --primary: oklch(0.6 0.16 22);
+  --primary: oklch(0.5 0.17 28);
   --primary-foreground: oklch(0.96 0.005 75);
-  --ring: oklch(0.6 0.16 22);
-  --info: oklch(0.6 0.16 22);
+  --ring: oklch(0.5 0.17 28);
+  --info: oklch(0.5 0.17 28);
   --info-foreground: oklch(0.96 0.005 75);
-  --accent: oklch(0.6 0.16 22);
+  --accent: oklch(0.5 0.17 28);
   --accent-foreground: oklch(0.96 0.005 75);
   --variant-warm: oklch(0.8 0.14 80);
   --variant-warm-fg: oklch(0.2 0.005 75);
