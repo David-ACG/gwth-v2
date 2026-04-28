@@ -11,6 +11,21 @@ const VARIANTS = [
   { slug: "v-b", label: "B · Modern Technical" },
   { slug: "v-c", label: "C · Quiet Essay" },
   { slug: "v-d", label: "D · Supportive Learning" },
+  { slug: "v-e", label: "E · Civic Press" },
+  { slug: "v-f", label: "F · Soft Practitioner" },
+  { slug: "v-g", label: "G · Architectural" },
+  { slug: "v-h", label: "H · Editorial Premium" },
+  { slug: "v-a-1", label: "A1 · Refined" },
+  { slug: "v-a-2", label: "A2 · Annotated" },
+  { slug: "v-a-3", label: "A3 · Bold" },
+  { slug: "v-e-1", label: "E1 · Refined" },
+  { slug: "v-e-2", label: "E2 · Plus Gold" },
+  { slug: "v-e-3", label: "E3 · Tonal" },
+  { slug: "v-e-2-a", label: "E2-A · Linen" },
+  { slug: "v-e-2-b", label: "E2-B · Forest" },
+  { slug: "v-e-2-c", label: "E2-C · Cottage" },
+  { slug: "v-e-2-d", label: "E2-D · Bronze" },
+  { slug: "v-e-2-e", label: "E2-E · Stone" },
 ] as const
 
 /**
@@ -51,14 +66,14 @@ export function VariantSwitcher() {
               href={`/redesign/${v.slug}`}
               aria-current={isActive ? "page" : undefined}
               className={
-                "whitespace-nowrap rounded-full px-3 py-1.5 transition-colors " +
+                "whitespace-nowrap rounded-full px-2.5 py-1 transition-colors lg:px-3 lg:py-1.5 " +
                 (isActive
                   ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
                   : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800")
               }
             >
-              <span className="sm:hidden">{v.label.slice(0, 1)}</span>
-              <span className="hidden sm:inline">{v.label}</span>
+              <span className="lg:hidden">{v.label.split("·")[0]?.trim() ?? ""}</span>
+              <span className="hidden lg:inline">{v.label}</span>
             </Link>
           )
         })}

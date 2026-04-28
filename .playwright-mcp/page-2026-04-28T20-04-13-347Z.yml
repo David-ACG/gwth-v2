@@ -1,0 +1,393 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "GWTH.ai The AI Field Manual" [ref=e5] [cursor=pointer]:
+          - /url: /redesign/v-e-2
+          - generic [ref=e6]: GWTH.ai
+          - generic [ref=e7]: The AI Field Manual
+        - navigation [ref=e8]:
+          - link "Course" [ref=e9] [cursor=pointer]:
+            - /url: "#course"
+          - link "Credential" [ref=e10] [cursor=pointer]:
+            - /url: "#credential"
+          - link "Research" [ref=e11] [cursor=pointer]:
+            - /url: "#stats"
+          - link "Pricing" [ref=e12] [cursor=pointer]:
+            - /url: "#pricing"
+        - link "Get started" [ref=e13] [cursor=pointer]:
+          - /url: /signup
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: Vol I · Issue No. 01
+          - generic [ref=e18]: The Practitioner’s Edition
+          - generic [ref=e19]: gwth.ai · Spring 2026
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - heading "Stop watching AI change the world." [level=1] [ref=e22]
+            - paragraph [ref=e23]: Start building with it.
+            - generic [ref=e24]:
+              - paragraph [ref=e25]: A 3-month AI course and a dynamic, verifiable credential. Five hours a week, ninety-four hands-on projects, plain English.
+              - paragraph [ref=e26]: Every project you ship updates a credential UK employers can check on the spot. No PDFs. No faked dates.
+            - generic [ref=e27]:
+              - link "Get started" [ref=e28] [cursor=pointer]:
+                - /url: /signup
+                - text: Get started
+                - img [ref=e29]
+              - link "Read more" [ref=e31] [cursor=pointer]:
+                - /url: "#credential"
+            - figure "— From §3 The Credential" [ref=e32]:
+              - blockquote [ref=e33]: “If you can describe what you want, you can build it.”
+              - generic [ref=e34]: — From §3 The Credential
+          - figure "Illustrative — your actual GWTH Score reflects verified work." [ref=e36]:
+            - generic [ref=e37]:
+              - generic [ref=e42]: gwth.ai/score
+              - generic [ref=e43]:
+                - generic [ref=e44]:
+                  - generic [ref=e45]: AE
+                  - generic [ref=e46]:
+                    - generic [ref=e47]: Alex Example
+                    - generic [ref=e48]: Operations Lead · UK
+                - generic [ref=e49]:
+                  - generic [ref=e50]: Example
+                  - generic [ref=e51]:
+                    - img "GWTH" [ref=e52]
+                    - generic [ref=e53]: GWTH Score
+                  - 'img "GWTH Score example: 104, Top 1%. Illustrative only." [ref=e55]':
+                    - generic [ref=e56]:
+                      - img [ref=e58]
+                      - generic [ref=e62]:
+                        - generic [ref=e63]: "104"
+                        - generic [ref=e64]: Top 1%
+                    - img [ref=e65]
+                  - generic [ref=e68]:
+                    - generic [ref=e69]: 3 months ago
+                    - generic [ref=e70]: today
+                  - button "What this score tells an employer 5 reasons it's credible" [ref=e73]:
+                    - generic [ref=e74]:
+                      - img [ref=e76]
+                      - generic [ref=e78]:
+                        - generic [ref=e79]: What this score tells an employer
+                        - generic [ref=e80]: 5 reasons it's credible
+                    - img [ref=e81]
+            - generic [ref=e83]: Illustrative — your actual GWTH Score reflects verified work.
+      - generic [ref=e85]:
+        - generic [ref=e86]: Built around UK research from
+        - list [ref=e87]:
+          - listitem [ref=e88]: DSIT
+          - listitem [ref=e89]: ONS
+          - listitem [ref=e90]: CIPD
+          - listitem [ref=e91]: BCS
+          - listitem [ref=e92]: Tech UK
+          - listitem [ref=e93]: Innovate UK
+    - generic [ref=e96]:
+      - generic [ref=e97]:
+        - paragraph [ref=e98]: Section 01
+        - heading "94 projects. One score. Plain English." [level=2] [ref=e99]:
+          - text: 94 projects.
+          - text: One score.
+          - text: Plain English.
+      - list [ref=e100]:
+        - listitem [ref=e101]:
+          - generic [ref=e102]:
+            - paragraph [ref=e103]: § 01
+            - paragraph [ref=e104]: 94 hands-on projects
+          - generic [ref=e105]:
+            - heading "Three months. Three modules. 94 things you actually build." [level=3] [ref=e106]
+            - paragraph [ref=e107]: Five hours a week. Async-first, so it works around the day job. Every lesson ends with a step-by-step video walkthrough where the instructor builds the project alongside you.
+        - listitem [ref=e108]:
+          - generic [ref=e109]:
+            - paragraph [ref=e110]: § 02
+            - paragraph [ref=e111]: Dynamic Score
+          - generic [ref=e112]:
+            - heading "A verifiable credential that updates as you build." [level=3] [ref=e113]
+            - paragraph [ref=e114]: "Your Dynamic Score updates as you complete projects, and decays if you stop. Share it on LinkedIn. Employers can verify it on the spot: no PDFs, no faked completion dates."
+        - listitem [ref=e115]:
+          - generic [ref=e116]:
+            - paragraph [ref=e117]: § 03
+            - paragraph [ref=e118]: No coding required
+          - generic [ref=e119]:
+            - heading "If you can describe what you want, you can build it." [level=3] [ref=e120]
+            - paragraph [ref=e121]: Plain English in, working AI tools out. We assume zero Python. Tools you already pay for (Claude, ChatGPT, n8n), used the way professionals actually use them.
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - paragraph [ref=e125]: Section 02 — Six readers
+        - heading "Different reasons. Same course." [level=2] [ref=e126]
+      - list [ref=e127]:
+        - listitem [ref=e128]:
+          - link "Worried No. 01 You are worried AI will take your job Someone who knows how to use AI will be more productive than you. This course makes you that person. In three months, you will be the one your team asks for help. See pricing" [ref=e129] [cursor=pointer]:
+            - /url: /pricing
+            - generic [ref=e130]:
+              - generic [ref=e131]: Worried
+              - generic [ref=e132]: No. 01
+            - heading "You are worried AI will take your job" [level=3] [ref=e133]
+            - paragraph [ref=e134]: Someone who knows how to use AI will be more productive than you. This course makes you that person. In three months, you will be the one your team asks for help.
+            - generic [ref=e135]:
+              - text: See pricing
+              - img [ref=e136]
+        - listitem [ref=e138]:
+          - link "Reskilling No. 02 You have been made redundant and need to reskill Five hours a week for three months. Every project you build goes in your portfolio. Every score is verifiable. UK employers are hiring for exactly these skills — and only 21% of UK workers feel confident using AI. That gap is your opportunity. 21% — of UK workers feel confident using AI. See pricing" [ref=e139] [cursor=pointer]:
+            - /url: /pricing
+            - generic [ref=e140]:
+              - generic [ref=e141]: Reskilling
+              - generic [ref=e142]: No. 02
+            - heading "You have been made redundant and need to reskill" [level=3] [ref=e143]
+            - paragraph [ref=e144]: Five hours a week for three months. Every project you build goes in your portfolio. Every score is verifiable. UK employers are hiring for exactly these skills — and only 21% of UK workers feel confident using AI. That gap is your opportunity.
+            - paragraph [ref=e145]: 21% — of UK workers feel confident using AI.
+            - generic [ref=e146]:
+              - text: See pricing
+              - img [ref=e147]
+        - listitem [ref=e149]:
+          - link "Small business No. 03 You run a small business UK micro businesses are 45% less likely to adopt AI than large companies. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant — you will be able to do it all yourself. 45% — less likely to adopt AI than large companies. See pricing" [ref=e150] [cursor=pointer]:
+            - /url: /pricing
+            - generic [ref=e151]:
+              - generic [ref=e152]: Small business
+              - generic [ref=e153]: No. 03
+            - heading "You run a small business" [level=3] [ref=e154]
+            - paragraph [ref=e155]: UK micro businesses are 45% less likely to adopt AI than large companies. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant — you will be able to do it all yourself.
+            - paragraph [ref=e156]: 45% — less likely to adopt AI than large companies.
+            - generic [ref=e157]:
+              - text: See pricing
+              - img [ref=e158]
+        - listitem [ref=e160]:
+          - link "Parent No. 04 You are a parent thinking about the future AI fluency will not be a nice-to-have — it will be table stakes. No coding required. If your teenager can describe what they want, they can build with AI. Try a free lab" [ref=e161] [cursor=pointer]:
+            - /url: /labs
+            - generic [ref=e162]:
+              - generic [ref=e163]: Parent
+              - generic [ref=e164]: No. 04
+            - heading "You are a parent thinking about the future" [level=3] [ref=e165]
+            - paragraph [ref=e166]: AI fluency will not be a nice-to-have — it will be table stakes. No coding required. If your teenager can describe what they want, they can build with AI.
+            - generic [ref=e167]:
+              - text: Try a free lab
+              - img [ref=e168]
+        - listitem [ref=e170]:
+          - link "Upgrading No. 05 You already use AI but know there is more ChatGPT for emails. Claude for first drafts. You suspect you're scratching the surface — and you are. The gap between casual user and capable practitioner is bigger than it looks. Five hours a week for three months, and you will not just use AI — you will design with it, automate with it, ship with it. See pricing" [ref=e171] [cursor=pointer]:
+            - /url: /pricing
+            - generic [ref=e172]:
+              - generic [ref=e173]: Upgrading
+              - generic [ref=e174]: No. 05
+            - heading "You already use AI but know there is more" [level=3] [ref=e175]
+            - paragraph [ref=e176]: ChatGPT for emails. Claude for first drafts. You suspect you're scratching the surface — and you are. The gap between casual user and capable practitioner is bigger than it looks. Five hours a week for three months, and you will not just use AI — you will design with it, automate with it, ship with it.
+            - generic [ref=e177]:
+              - text: See pricing
+              - img [ref=e178]
+        - listitem [ref=e180]:
+          - link "Income No. 06 You know AI fluency is now worth more AI is one of the highest-premium skill sets in the UK job market right now. Three months, every project in your portfolio, every score on your verifiable Dynamic Score. Show up to your next salary conversation — or your next interview — with proof. See pricing" [ref=e181] [cursor=pointer]:
+            - /url: /pricing
+            - generic [ref=e182]:
+              - generic [ref=e183]: Income
+              - generic [ref=e184]: No. 06
+            - heading "You know AI fluency is now worth more" [level=3] [ref=e185]
+            - paragraph [ref=e186]: AI is one of the highest-premium skill sets in the UK job market right now. Three months, every project in your portfolio, every score on your verifiable Dynamic Score. Show up to your next salary conversation — or your next interview — with proof.
+            - generic [ref=e187]:
+              - text: See pricing
+              - img [ref=e188]
+    - generic [ref=e192]:
+      - generic [ref=e193]:
+        - paragraph [ref=e194]: Section 03 — The UK gap
+        - heading "UK workers and businesses are falling behind on AI." [level=2] [ref=e195]
+        - paragraph [ref=e196]: Three figures from named UK research bodies. Citation attached to every number.
+      - generic [ref=e197]:
+        - article [ref=e198]:
+          - generic [ref=e199]: 21%
+          - generic [ref=e200]:
+            - paragraph [ref=e201]: of UK workers feel confident using AI at work.
+            - paragraph [ref=e202]: "Source: DSIT, Jan 2026 · Citation no. 01"
+        - article [ref=e203]:
+          - generic [ref=e204]: 1 in 6
+          - generic [ref=e205]:
+            - paragraph [ref=e206]: UK businesses were using AI as of mid-2025.
+            - paragraph [ref=e207]: "Source: DSIT, Jan 2026 · Citation no. 02"
+        - article [ref=e208]:
+          - generic [ref=e209]: 45%
+          - generic [ref=e210]:
+            - paragraph [ref=e211]: less likely for micro businesses to adopt AI vs large firms.
+            - paragraph [ref=e212]: "Source: DSIT, Jan 2026 · Citation no. 03"
+    - generic [ref=e214]:
+      - generic [ref=e215]:
+        - paragraph [ref=e216]: Section 04 — Pricing
+        - heading "Less than the cost of one hour with an AI consultant." [level=2] [ref=e217]
+      - generic [ref=e218]:
+        - article [ref=e219]:
+          - generic [ref=e220]: Free Labs
+          - generic [ref=e221]:
+            - generic [ref=e222]: £0
+            - generic [ref=e223]: forever — no card required
+          - list [ref=e224]:
+            - listitem [ref=e225]:
+              - img [ref=e226]
+              - generic [ref=e228]: Access to all free labs
+            - listitem [ref=e229]:
+              - img [ref=e230]
+              - generic [ref=e232]: Build real projects with AI
+            - listitem [ref=e233]:
+              - img [ref=e234]
+              - generic [ref=e236]: No credit card required
+            - listitem [ref=e237]:
+              - img [ref=e238]
+              - generic [ref=e240]: No time limit — free forever
+          - link "Try a Free Lab" [ref=e241] [cursor=pointer]:
+            - /url: /labs
+        - article [ref=e242]:
+          - generic [ref=e243]: The Course
+          - generic [ref=e244]: ★ Most Popular
+          - generic [ref=e245]:
+            - generic [ref=e246]: £29
+            - generic [ref=e247]: /mo for 3 months · £87 total
+          - list [ref=e248]:
+            - listitem [ref=e249]:
+              - img [ref=e250]
+              - generic [ref=e252]: 94 hands-on projects with video walkthroughs
+            - listitem [ref=e253]:
+              - img [ref=e254]
+              - generic [ref=e256]: 3 portfolio-ready capstone projects
+            - listitem [ref=e257]:
+              - img [ref=e258]
+              - generic [ref=e260]: Industry-specific modules for your field
+            - listitem [ref=e261]:
+              - img [ref=e262]
+              - generic [ref=e264]: Dynamic scores employers can verify
+            - listitem [ref=e265]:
+              - img [ref=e266]
+              - generic [ref=e268]: Content updated every day — never stale
+            - listitem [ref=e269]:
+              - img [ref=e270]
+              - generic [ref=e272]: Tech Radar — 60+ tools tracked daily
+            - listitem [ref=e273]:
+              - img [ref=e274]
+              - generic [ref=e276]: No ads, no upsells, no hidden tier
+          - link "Join the Waitlist" [ref=e277] [cursor=pointer]:
+            - /url: /signup
+        - article [ref=e278]:
+          - generic [ref=e279]: Stay Current
+          - generic [ref=e280]:
+            - generic [ref=e281]: £7.50
+            - generic [ref=e282]: /mo after the course
+          - list [ref=e283]:
+            - listitem [ref=e284]:
+              - img [ref=e285]
+              - generic [ref=e287]: Keep your Dynamic Score current — scores decay if you stop
+            - listitem [ref=e288]:
+              - img [ref=e289]
+              - generic [ref=e291]: ~5 hours of new content every month
+            - listitem [ref=e292]:
+              - img [ref=e293]
+              - generic [ref=e295]: Work through the optional lessons you skipped
+            - listitem [ref=e296]:
+              - img [ref=e297]
+              - generic [ref=e299]: New tools added to Tech Radar as they launch
+            - listitem [ref=e300]:
+              - img [ref=e301]
+              - generic [ref=e303]: Score history and progression analytics
+            - listitem [ref=e304]:
+              - img [ref=e305]
+              - generic [ref=e307]: Cancel anytime — no lock-in
+          - button "Included after course" [disabled] [ref=e308]
+      - paragraph [ref=e309]: Stay Current opens after the course — keeps your score current and your knowledge updated.
+    - generic [ref=e312]:
+      - paragraph [ref=e313]: Postscript
+      - heading "The credential decays if you stop. So does the gap." [level=2] [ref=e314]:
+        - text: The credential decays
+        - text: if you stop.
+        - text: So does the gap.
+      - paragraph [ref=e315]: Five hours a week. Ninety-four projects. Start free, decide later.
+      - generic [ref=e316]:
+        - link "Get started" [ref=e317] [cursor=pointer]:
+          - /url: /signup
+          - text: Get started
+          - img [ref=e318]
+        - link "Try a free lab" [ref=e320] [cursor=pointer]:
+          - /url: /labs
+    - contentinfo [ref=e321]:
+      - generic [ref=e322]:
+        - generic [ref=e323]:
+          - generic [ref=e324]:
+            - img "GWTH.ai" [ref=e325]
+            - paragraph [ref=e326]: A three-month AI course and verifiable credential. Built around UK research.
+          - generic [ref=e327]:
+            - generic [ref=e328]:
+              - heading "Course" [level=3] [ref=e329]
+              - list [ref=e330]:
+                - listitem [ref=e331]:
+                  - link "Lessons" [ref=e332] [cursor=pointer]:
+                    - /url: /lessons
+                - listitem [ref=e333]:
+                  - link "Free labs" [ref=e334] [cursor=pointer]:
+                    - /url: /labs
+                - listitem [ref=e335]:
+                  - link "Pricing" [ref=e336] [cursor=pointer]:
+                    - /url: /pricing
+            - generic [ref=e337]:
+              - heading "Company" [level=3] [ref=e338]
+              - list [ref=e339]:
+                - listitem [ref=e340]:
+                  - link "About" [ref=e341] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e342]:
+                  - link "Contact" [ref=e343] [cursor=pointer]:
+                    - /url: /contact
+            - generic [ref=e344]:
+              - heading "Legal" [level=3] [ref=e345]
+              - list [ref=e346]:
+                - listitem [ref=e347]:
+                  - link "Privacy" [ref=e348] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e349]:
+                  - link "Terms" [ref=e350] [cursor=pointer]:
+                    - /url: /terms
+        - generic [ref=e351]:
+          - generic [ref=e352]: © 2026 GWTH.ai · Made in the UK
+          - generic [ref=e353]: E2 · Civic Press · Plus Warm Gold · Vol I
+  - navigation "Redesign variant switcher" [ref=e355]:
+    - generic [ref=e356]:
+      - link "Index" [ref=e357] [cursor=pointer]:
+        - /url: /redesign
+      - link "A · Field Notebook" [ref=e358] [cursor=pointer]:
+        - /url: /redesign/v-a
+      - link "B · Modern Technical" [ref=e359] [cursor=pointer]:
+        - /url: /redesign/v-b
+      - link "C · Quiet Essay" [ref=e360] [cursor=pointer]:
+        - /url: /redesign/v-c
+      - link "D · Supportive Learning" [ref=e361] [cursor=pointer]:
+        - /url: /redesign/v-d
+      - link "E · Civic Press" [ref=e362] [cursor=pointer]:
+        - /url: /redesign/v-e
+      - link "F · Soft Practitioner" [ref=e363] [cursor=pointer]:
+        - /url: /redesign/v-f
+      - link "G · Architectural" [ref=e364] [cursor=pointer]:
+        - /url: /redesign/v-g
+      - link "H · Editorial Premium" [ref=e365] [cursor=pointer]:
+        - /url: /redesign/v-h
+      - link "A1 · Refined" [ref=e366] [cursor=pointer]:
+        - /url: /redesign/v-a-1
+      - link "A2 · Annotated" [ref=e367] [cursor=pointer]:
+        - /url: /redesign/v-a-2
+      - link "A3 · Bold" [ref=e368] [cursor=pointer]:
+        - /url: /redesign/v-a-3
+      - link "E1 · Refined" [ref=e369] [cursor=pointer]:
+        - /url: /redesign/v-e-1
+      - link "E2 · Plus Gold" [ref=e370] [cursor=pointer]:
+        - /url: /redesign/v-e-2
+      - link "E3 · Tonal" [ref=e371] [cursor=pointer]:
+        - /url: /redesign/v-e-3
+      - link "E2-A · Linen" [ref=e372] [cursor=pointer]:
+        - /url: /redesign/v-e-2-a
+      - link "E2-B · Forest" [ref=e373] [cursor=pointer]:
+        - /url: /redesign/v-e-2-b
+      - link "E2-C · Cottage" [ref=e374] [cursor=pointer]:
+        - /url: /redesign/v-e-2-c
+      - link "E2-D · Bronze" [ref=e375] [cursor=pointer]:
+        - /url: /redesign/v-e-2-d
+      - link "E2-E · Stone" [ref=e376] [cursor=pointer]:
+        - /url: /redesign/v-e-2-e
+      - button "Switch to dark mode" [ref=e377]:
+        - img [ref=e378]
+      - link "Live homepage" [ref=e380] [cursor=pointer]:
+        - /url: /
+        - text: Live homepage
+        - img [ref=e381]
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e385]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e392] [cursor=pointer]:
+    - img [ref=e393]

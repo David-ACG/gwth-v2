@@ -8,6 +8,13 @@ import {
   Source_Serif_4,
   Manrope,
   Figtree,
+  Vollkorn,
+  Public_Sans,
+  Bricolage_Grotesque,
+  Bebas_Neue,
+  Hanken_Grotesk,
+  Domine,
+  Onest,
 } from "next/font/google"
 import Script from "next/script"
 import { RootProvider } from "@/providers/root-provider"
@@ -66,6 +73,49 @@ const figtree = Figtree({
   display: "swap",
 })
 
+const vollkorn = Vollkorn({
+  subsets: ["latin"],
+  variable: "--font-vollkorn",
+  display: "swap",
+})
+
+const publicSans = Public_Sans({
+  subsets: ["latin"],
+  variable: "--font-public-sans",
+  display: "swap",
+})
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+  display: "swap",
+})
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  variable: "--font-bebas",
+  weight: "400",
+  display: "swap",
+})
+
+const hanken = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-hanken",
+  display: "swap",
+})
+
+const domine = Domine({
+  subsets: ["latin"],
+  variable: "--font-domine",
+  display: "swap",
+})
+
+const onest = Onest({
+  subsets: ["latin"],
+  variable: "--font-onest",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: {
     default: "GWTH.ai | Learn to Build with AI",
@@ -111,7 +161,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${albertSans.variable} ${geist.variable} ${geistMono.variable} ${sourceSerif.variable} ${manrope.variable} ${figtree.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${albertSans.variable} ${geist.variable} ${geistMono.variable} ${sourceSerif.variable} ${manrope.variable} ${figtree.variable} ${vollkorn.variable} ${publicSans.variable} ${bricolage.variable} ${bebasNeue.variable} ${hanken.variable} ${domine.variable} ${onest.variable}`}
       suppressHydrationWarning
     >
       <head>

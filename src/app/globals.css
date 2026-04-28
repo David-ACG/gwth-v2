@@ -361,6 +361,598 @@
   --variant-panel-fg: oklch(0.94 0.012 80);
 }
 
+/* Variant E — Civic Press · NO GRADIENTS
+   Warm cream surface, deep navy carrier, burgundy accent, civic / GOV.UK
+   lineage. --primary and --accent collapsed to one colour so the score
+   widget's internal gradient renders flat.
+   Type: Vollkorn (body, serif) + Public Sans (display, UI). */
+[data-variant="e"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.96 0.012 80);
+  --foreground: oklch(0.2 0.04 250);
+  --card: oklch(0.99 0.008 80);
+  --card-foreground: oklch(0.2 0.04 250);
+  --primary: oklch(0.42 0.13 22);
+  --primary-foreground: oklch(0.98 0.008 80);
+  --ring: oklch(0.42 0.13 22);
+  --info: oklch(0.42 0.13 22);
+  --info-foreground: oklch(0.98 0.008 80);
+  /* Accent collapsed to primary so the score widget gradient renders as
+     a single colour — preserves the no-gradient brief for variant E. */
+  --accent: oklch(0.42 0.13 22);
+  --accent-foreground: oklch(0.98 0.008 80);
+  --muted: oklch(0.92 0.012 80);
+  --muted-foreground: oklch(0.42 0.04 250);
+  --border: oklch(0.85 0.025 250);
+  --variant-drench-bg: oklch(0.25 0.06 250);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.42 0.13 22);
+  --variant-panel-fg: oklch(0.98 0.008 80);
+}
+.dark [data-variant="e"] {
+  --background: oklch(0.18 0.025 250);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.22 0.025 250);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.7 0.13 22);
+  --primary-foreground: oklch(0.18 0.025 250);
+  --ring: oklch(0.7 0.13 22);
+  --info: oklch(0.7 0.13 22);
+  --info-foreground: oklch(0.18 0.025 250);
+  --accent: oklch(0.7 0.13 22);
+  --accent-foreground: oklch(0.18 0.025 250);
+  --muted: oklch(0.25 0.025 250);
+  --muted-foreground: oklch(0.7 0.018 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.32 0.07 250);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.55 0.14 22);
+  --variant-panel-fg: oklch(0.98 0.008 80);
+}
+
+/* Variant F — Soft Practitioner · WITH gradients
+   Pastel multi-tone (peach / sage / lavender). Bricolage Grotesque
+   single-family. Soft section washes — most "supportive learning" of all.
+   Type: Bricolage Grotesque throughout. */
+[data-variant="f"] {
+  --font-sans: var(--font-bricolage), "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --background: oklch(0.985 0.008 50);
+  --foreground: oklch(0.22 0.025 280);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.025 280);
+  --primary: oklch(0.58 0.18 290);
+  --primary-foreground: oklch(0.985 0.008 50);
+  --ring: oklch(0.58 0.18 290);
+  --info: oklch(0.58 0.18 290);
+  --info-foreground: oklch(0.985 0.008 50);
+  --accent: oklch(0.62 0.13 145);
+  --accent-foreground: oklch(0.22 0.025 280);
+  --muted: oklch(0.95 0.014 50);
+  --muted-foreground: oklch(0.45 0.025 280);
+  --border: oklch(0.88 0.018 50);
+  --variant-peach: oklch(0.92 0.05 50);
+  --variant-sage: oklch(0.92 0.04 145);
+  --variant-lavender: oklch(0.92 0.04 290);
+  --variant-drench-bg: oklch(0.92 0.04 290);
+  --variant-drench-fg: oklch(0.22 0.025 280);
+  --variant-panel-bg: oklch(0.92 0.05 50);
+  --variant-panel-fg: oklch(0.22 0.025 280);
+}
+.dark [data-variant="f"] {
+  --background: oklch(0.19 0.012 280);
+  --foreground: oklch(0.94 0.012 50);
+  --card: oklch(0.23 0.014 280);
+  --card-foreground: oklch(0.94 0.012 50);
+  --primary: oklch(0.72 0.16 290);
+  --primary-foreground: oklch(0.19 0.012 280);
+  --ring: oklch(0.72 0.16 290);
+  --info: oklch(0.72 0.16 290);
+  --info-foreground: oklch(0.19 0.012 280);
+  --accent: oklch(0.72 0.13 145);
+  --accent-foreground: oklch(0.19 0.012 280);
+  --muted: oklch(0.26 0.014 280);
+  --muted-foreground: oklch(0.7 0.018 50);
+  --border: oklch(1 0 0 / 14%);
+  --variant-peach: oklch(0.32 0.05 50);
+  --variant-sage: oklch(0.30 0.04 145);
+  --variant-lavender: oklch(0.30 0.04 290);
+  --variant-drench-bg: oklch(0.30 0.04 290);
+  --variant-drench-fg: oklch(0.94 0.012 50);
+  --variant-panel-bg: oklch(0.32 0.05 50);
+  --variant-panel-fg: oklch(0.94 0.012 50);
+}
+
+/* Variant G — Architectural · NO GRADIENTS
+   Solid colour blocks per section. Big Shoulders Display (display) +
+   Hanken Grotesk (body). Black + warm cream + saturated ochre. Mid-
+   century / Bauhaus / Eye-magazine grid. Accent collapsed to primary
+   so score widget renders flat. */
+[data-variant="g"] {
+  --font-sans: var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bebas), "Bebas Neue", ui-sans-serif, sans-serif;
+  --background: oklch(0.95 0.025 80);
+  --foreground: oklch(0.15 0.012 60);
+  --card: oklch(0.98 0.018 80);
+  --card-foreground: oklch(0.15 0.012 60);
+  --primary: oklch(0.65 0.16 70);
+  --primary-foreground: oklch(0.15 0.012 60);
+  --ring: oklch(0.65 0.16 70);
+  --info: oklch(0.65 0.16 70);
+  --info-foreground: oklch(0.15 0.012 60);
+  --accent: oklch(0.65 0.16 70);
+  --accent-foreground: oklch(0.15 0.012 60);
+  --muted: oklch(0.91 0.025 80);
+  --muted-foreground: oklch(0.4 0.012 60);
+  --border: oklch(0.15 0.012 60);
+  --variant-drench-bg: oklch(0.65 0.16 70);
+  --variant-drench-fg: oklch(0.15 0.012 60);
+  --variant-panel-bg: oklch(0.15 0.012 60);
+  --variant-panel-fg: oklch(0.95 0.025 80);
+}
+.dark [data-variant="g"] {
+  --background: oklch(0.16 0.008 60);
+  --foreground: oklch(0.93 0.025 80);
+  --card: oklch(0.2 0.008 60);
+  --card-foreground: oklch(0.93 0.025 80);
+  --primary: oklch(0.78 0.15 70);
+  --primary-foreground: oklch(0.16 0.008 60);
+  --ring: oklch(0.78 0.15 70);
+  --info: oklch(0.78 0.15 70);
+  --info-foreground: oklch(0.16 0.008 60);
+  --accent: oklch(0.78 0.15 70);
+  --accent-foreground: oklch(0.16 0.008 60);
+  --muted: oklch(0.23 0.008 60);
+  --muted-foreground: oklch(0.7 0.025 80);
+  --border: oklch(0.93 0.025 80);
+  --variant-drench-bg: oklch(0.78 0.15 70);
+  --variant-drench-fg: oklch(0.16 0.008 60);
+  --variant-panel-bg: oklch(0.93 0.025 80);
+  --variant-panel-fg: oklch(0.16 0.008 60);
+}
+
+/* Variant H — Editorial Premium · WITH gradients
+   Deep emerald carrier, warm cream surface, mustard accent. Mood-rich
+   editorial / Stripe Press / Linear-blog premium feel. Subtle gradient
+   overlays on hero and section transitions.
+   Type: Domine (display serif) + Onest (body sans). */
+[data-variant="h"] {
+  --font-sans: var(--font-onest), "Onest", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-domine), "Domine", ui-serif, Georgia, serif;
+  --background: oklch(0.97 0.012 80);
+  --foreground: oklch(0.22 0.04 165);
+  --card: oklch(0.99 0.008 80);
+  --card-foreground: oklch(0.22 0.04 165);
+  --primary: oklch(0.36 0.09 165);
+  --primary-foreground: oklch(0.97 0.012 80);
+  --ring: oklch(0.36 0.09 165);
+  --info: oklch(0.36 0.09 165);
+  --info-foreground: oklch(0.97 0.012 80);
+  --accent: oklch(0.78 0.15 75);
+  --accent-foreground: oklch(0.22 0.04 165);
+  --muted: oklch(0.93 0.014 80);
+  --muted-foreground: oklch(0.4 0.04 165);
+  --border: oklch(0.86 0.02 80);
+  --variant-drench-bg: oklch(0.3 0.08 165);
+  --variant-drench-fg: oklch(0.97 0.012 80);
+  --variant-panel-bg: oklch(0.78 0.15 75);
+  --variant-panel-fg: oklch(0.22 0.04 165);
+}
+.dark [data-variant="h"] {
+  --background: oklch(0.16 0.04 165);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.2 0.04 165);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.78 0.13 165);
+  --primary-foreground: oklch(0.16 0.04 165);
+  --ring: oklch(0.78 0.13 165);
+  --info: oklch(0.78 0.13 165);
+  --info-foreground: oklch(0.16 0.04 165);
+  --accent: oklch(0.82 0.15 75);
+  --accent-foreground: oklch(0.16 0.04 165);
+  --muted: oklch(0.22 0.04 165);
+  --muted-foreground: oklch(0.7 0.014 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.4 0.09 165);
+  --variant-drench-fg: oklch(0.94 0.012 80);
+  --variant-panel-bg: oklch(0.7 0.15 75);
+  --variant-panel-fg: oklch(0.16 0.04 165);
+}
+
+/* Variant E2 — Plus Warm Gold · NO GRADIENTS
+   Inherits E's palette but adds a third accent: warm mustard /
+   gold. Used on chapter byline numbers, Stay Current tier panel,
+   pull-quote bg, and stat-number tinting on the navy drench. */
+[data-variant="e2"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.96 0.012 80);
+  --foreground: oklch(0.2 0.04 250);
+  --card: oklch(0.99 0.008 80);
+  --card-foreground: oklch(0.2 0.04 250);
+  --primary: oklch(0.42 0.13 22);
+  --primary-foreground: oklch(0.98 0.008 80);
+  --ring: oklch(0.42 0.13 22);
+  --info: oklch(0.42 0.13 22);
+  --info-foreground: oklch(0.98 0.008 80);
+  --accent: oklch(0.42 0.13 22);
+  --accent-foreground: oklch(0.98 0.008 80);
+  --variant-warm: oklch(0.74 0.13 75);
+  --variant-warm-fg: oklch(0.18 0.04 60);
+  --muted: oklch(0.92 0.012 80);
+  --muted-foreground: oklch(0.42 0.04 250);
+  --border: oklch(0.85 0.025 250);
+  --variant-drench-bg: oklch(0.25 0.06 250);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.42 0.13 22);
+  --variant-panel-fg: oklch(0.98 0.008 80);
+  --variant-warm-panel-bg: oklch(0.74 0.13 75);
+  --variant-warm-panel-fg: oklch(0.2 0.04 60);
+}
+.dark [data-variant="e2"] {
+  --background: oklch(0.18 0.025 250);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.22 0.025 250);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.7 0.13 22);
+  --primary-foreground: oklch(0.18 0.025 250);
+  --ring: oklch(0.7 0.13 22);
+  --info: oklch(0.7 0.13 22);
+  --info-foreground: oklch(0.18 0.025 250);
+  --accent: oklch(0.7 0.13 22);
+  --accent-foreground: oklch(0.18 0.025 250);
+  --variant-warm: oklch(0.82 0.14 75);
+  --variant-warm-fg: oklch(0.18 0.025 250);
+  --muted: oklch(0.25 0.025 250);
+  --muted-foreground: oklch(0.7 0.018 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.32 0.07 250);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.55 0.14 22);
+  --variant-panel-fg: oklch(0.98 0.008 80);
+  --variant-warm-panel-bg: oklch(0.62 0.14 75);
+  --variant-warm-panel-fg: oklch(0.18 0.025 250);
+}
+
+/* Variant E3 — Tonal Sections · NO GRADIENTS
+   Inherits E's two-colour palette (navy + burgundy) but adds five
+   solid section tints — cream / parchment / stone / sage / clay —
+   each used as a distinct section background. No gradient anywhere. */
+[data-variant="e3"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.96 0.012 80);
+  --foreground: oklch(0.2 0.04 250);
+  --card: oklch(0.99 0.008 80);
+  --card-foreground: oklch(0.2 0.04 250);
+  --primary: oklch(0.42 0.13 22);
+  --primary-foreground: oklch(0.98 0.008 80);
+  --ring: oklch(0.42 0.13 22);
+  --info: oklch(0.42 0.13 22);
+  --info-foreground: oklch(0.98 0.008 80);
+  --accent: oklch(0.42 0.13 22);
+  --accent-foreground: oklch(0.98 0.008 80);
+  --muted: oklch(0.92 0.012 80);
+  --muted-foreground: oklch(0.42 0.04 250);
+  --border: oklch(0.85 0.025 250);
+  --variant-drench-bg: oklch(0.25 0.06 250);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.42 0.13 22);
+  --variant-panel-fg: oklch(0.98 0.008 80);
+  /* Five tonal section tints — all desaturated near-cream, distinct hue */
+  --variant-tone-cream: oklch(0.96 0.012 80);
+  --variant-tone-parchment: oklch(0.93 0.022 60);
+  --variant-tone-stone: oklch(0.91 0.014 250);
+  --variant-tone-sage: oklch(0.93 0.025 145);
+  --variant-tone-clay: oklch(0.93 0.027 30);
+}
+.dark [data-variant="e3"] {
+  --background: oklch(0.18 0.025 250);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.22 0.025 250);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.7 0.13 22);
+  --primary-foreground: oklch(0.18 0.025 250);
+  --ring: oklch(0.7 0.13 22);
+  --info: oklch(0.7 0.13 22);
+  --info-foreground: oklch(0.18 0.025 250);
+  --accent: oklch(0.7 0.13 22);
+  --accent-foreground: oklch(0.18 0.025 250);
+  --muted: oklch(0.25 0.025 250);
+  --muted-foreground: oklch(0.7 0.018 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.32 0.07 250);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.55 0.14 22);
+  --variant-panel-fg: oklch(0.98 0.008 80);
+  --variant-tone-cream: oklch(0.18 0.025 250);
+  --variant-tone-parchment: oklch(0.22 0.025 60);
+  --variant-tone-stone: oklch(0.21 0.025 250);
+  --variant-tone-sage: oklch(0.22 0.022 145);
+  --variant-tone-clay: oklch(0.22 0.025 30);
+}
+
+/* E2 plus Gold sub-variants (a–e). Five earthier directions of E2,
+   each fixing the feedback from the original review: cooler/warmer
+   off-white backgrounds (no pink), gold tag chips on Section 02 cards,
+   brick or terracotta CTA, no large red postscript panel, deeper
+   non-pink dark-mode primary. */
+
+/* Variant E2-A — Linen Civic
+   E2 with the pinkness fixed: cooler linen off-white background,
+   navy drench preserved, brick-red CTA, mustard gold postscript
+   instead of the red burgundy panel. Closest to E2 with feedback fixes. */
+[data-variant="e2-a"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.965 0.005 95);
+  --foreground: oklch(0.2 0.04 250);
+  --card: oklch(0.99 0.005 95);
+  --card-foreground: oklch(0.2 0.04 250);
+  --primary: oklch(0.45 0.14 28);
+  --primary-foreground: oklch(0.98 0.005 95);
+  --ring: oklch(0.45 0.14 28);
+  --info: oklch(0.45 0.14 28);
+  --info-foreground: oklch(0.98 0.005 95);
+  --accent: oklch(0.45 0.14 28);
+  --accent-foreground: oklch(0.98 0.005 95);
+  --variant-warm: oklch(0.74 0.13 75);
+  --variant-warm-fg: oklch(0.2 0.04 60);
+  --muted: oklch(0.92 0.008 95);
+  --muted-foreground: oklch(0.42 0.04 250);
+  --border: oklch(0.85 0.025 250);
+  --variant-drench-bg: oklch(0.25 0.06 250);
+  --variant-drench-fg: oklch(0.965 0.005 95);
+  --variant-panel-bg: oklch(0.74 0.13 75);
+  --variant-panel-fg: oklch(0.2 0.04 60);
+  --variant-warm-panel-bg: oklch(0.74 0.13 75);
+  --variant-warm-panel-fg: oklch(0.2 0.04 60);
+}
+.dark [data-variant="e2-a"] {
+  --background: oklch(0.18 0.025 250);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.22 0.025 250);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.6 0.16 22);
+  --primary-foreground: oklch(0.96 0.012 80);
+  --ring: oklch(0.6 0.16 22);
+  --info: oklch(0.6 0.16 22);
+  --info-foreground: oklch(0.96 0.012 80);
+  --accent: oklch(0.6 0.16 22);
+  --accent-foreground: oklch(0.96 0.012 80);
+  --variant-warm: oklch(0.82 0.14 75);
+  --variant-warm-fg: oklch(0.18 0.025 250);
+  --muted: oklch(0.25 0.025 250);
+  --muted-foreground: oklch(0.72 0.018 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.3 0.06 250);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.62 0.14 75);
+  --variant-panel-fg: oklch(0.18 0.025 250);
+  --variant-warm-panel-bg: oklch(0.62 0.14 75);
+  --variant-warm-panel-fg: oklch(0.18 0.025 250);
+}
+
+/* Variant E2-B — Forest Editorial
+   Same scaffold, deep forest green carrier replaces navy. Linen bg,
+   brick CTA, oat-parchment postscript. For people who preferred green
+   over blue in the Civic Press feedback. */
+[data-variant="e2-b"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.965 0.005 95);
+  --foreground: oklch(0.22 0.03 155);
+  --card: oklch(0.99 0.005 95);
+  --card-foreground: oklch(0.22 0.03 155);
+  --primary: oklch(0.45 0.14 28);
+  --primary-foreground: oklch(0.98 0.005 95);
+  --ring: oklch(0.45 0.14 28);
+  --info: oklch(0.45 0.14 28);
+  --info-foreground: oklch(0.98 0.005 95);
+  --accent: oklch(0.45 0.14 28);
+  --accent-foreground: oklch(0.98 0.005 95);
+  --variant-warm: oklch(0.72 0.13 80);
+  --variant-warm-fg: oklch(0.2 0.04 60);
+  --muted: oklch(0.92 0.012 145);
+  --muted-foreground: oklch(0.4 0.04 155);
+  --border: oklch(0.85 0.025 145);
+  --variant-drench-bg: oklch(0.3 0.06 155);
+  --variant-drench-fg: oklch(0.96 0.005 95);
+  --variant-panel-bg: oklch(0.92 0.025 75);
+  --variant-panel-fg: oklch(0.22 0.03 155);
+  --variant-warm-panel-bg: oklch(0.72 0.13 80);
+  --variant-warm-panel-fg: oklch(0.2 0.04 60);
+}
+.dark [data-variant="e2-b"] {
+  --background: oklch(0.18 0.02 155);
+  --foreground: oklch(0.94 0.012 80);
+  --card: oklch(0.22 0.025 155);
+  --card-foreground: oklch(0.94 0.012 80);
+  --primary: oklch(0.6 0.16 22);
+  --primary-foreground: oklch(0.96 0.012 80);
+  --ring: oklch(0.6 0.16 22);
+  --info: oklch(0.6 0.16 22);
+  --info-foreground: oklch(0.96 0.012 80);
+  --accent: oklch(0.6 0.16 22);
+  --accent-foreground: oklch(0.96 0.012 80);
+  --variant-warm: oklch(0.8 0.14 80);
+  --variant-warm-fg: oklch(0.18 0.02 155);
+  --muted: oklch(0.24 0.025 155);
+  --muted-foreground: oklch(0.72 0.018 80);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.3 0.06 155);
+  --variant-drench-fg: oklch(0.96 0.012 80);
+  --variant-panel-bg: oklch(0.32 0.04 75);
+  --variant-panel-fg: oklch(0.94 0.012 80);
+  --variant-warm-panel-bg: oklch(0.6 0.14 80);
+  --variant-warm-panel-fg: oklch(0.18 0.02 155);
+}
+
+/* Variant E2-C — English Cottage
+   Plain English Kitchens / English country house energy. Oat parchment
+   bg, sage drench (muted, not bright), terracotta CTA replacing brick,
+   espresso brown postscript panel. The most explicitly earthy. */
+[data-variant="e2-c"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.945 0.015 75);
+  --foreground: oklch(0.22 0.02 60);
+  --card: oklch(0.97 0.012 75);
+  --card-foreground: oklch(0.22 0.02 60);
+  --primary: oklch(0.5 0.13 32);
+  --primary-foreground: oklch(0.98 0.012 75);
+  --ring: oklch(0.5 0.13 32);
+  --info: oklch(0.5 0.13 32);
+  --info-foreground: oklch(0.98 0.012 75);
+  --accent: oklch(0.5 0.13 32);
+  --accent-foreground: oklch(0.98 0.012 75);
+  --variant-warm: oklch(0.72 0.13 80);
+  --variant-warm-fg: oklch(0.22 0.02 60);
+  --muted: oklch(0.91 0.018 75);
+  --muted-foreground: oklch(0.42 0.025 60);
+  --border: oklch(0.83 0.02 75);
+  --variant-drench-bg: oklch(0.42 0.04 130);
+  --variant-drench-fg: oklch(0.96 0.012 75);
+  --variant-panel-bg: oklch(0.28 0.025 60);
+  --variant-panel-fg: oklch(0.94 0.012 75);
+  --variant-warm-panel-bg: oklch(0.72 0.13 80);
+  --variant-warm-panel-fg: oklch(0.22 0.02 60);
+}
+.dark [data-variant="e2-c"] {
+  --background: oklch(0.18 0.018 60);
+  --foreground: oklch(0.94 0.012 75);
+  --card: oklch(0.22 0.018 60);
+  --card-foreground: oklch(0.94 0.012 75);
+  --primary: oklch(0.62 0.14 32);
+  --primary-foreground: oklch(0.96 0.012 75);
+  --ring: oklch(0.62 0.14 32);
+  --info: oklch(0.62 0.14 32);
+  --info-foreground: oklch(0.96 0.012 75);
+  --accent: oklch(0.62 0.14 32);
+  --accent-foreground: oklch(0.96 0.012 75);
+  --variant-warm: oklch(0.8 0.14 80);
+  --variant-warm-fg: oklch(0.18 0.018 60);
+  --muted: oklch(0.24 0.018 60);
+  --muted-foreground: oklch(0.72 0.02 75);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.4 0.04 130);
+  --variant-drench-fg: oklch(0.96 0.012 75);
+  --variant-panel-bg: oklch(0.3 0.025 60);
+  --variant-panel-fg: oklch(0.94 0.012 75);
+  --variant-warm-panel-bg: oklch(0.6 0.14 80);
+  --variant-warm-panel-fg: oklch(0.18 0.018 60);
+}
+
+/* Variant E2-D — Soho Bronze
+   Warm cream bg, deep espresso brown drench, bronze gold variant-warm,
+   brick CTA, bronze gold postscript panel. Soho House / leather-and-velvet
+   register, photo-friendly. */
+[data-variant="e2-d"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.95 0.012 65);
+  --foreground: oklch(0.22 0.025 50);
+  --card: oklch(0.98 0.008 65);
+  --card-foreground: oklch(0.22 0.025 50);
+  --primary: oklch(0.45 0.14 28);
+  --primary-foreground: oklch(0.98 0.012 65);
+  --ring: oklch(0.45 0.14 28);
+  --info: oklch(0.45 0.14 28);
+  --info-foreground: oklch(0.98 0.012 65);
+  --accent: oklch(0.45 0.14 28);
+  --accent-foreground: oklch(0.98 0.012 65);
+  --variant-warm: oklch(0.7 0.12 70);
+  --variant-warm-fg: oklch(0.22 0.025 50);
+  --muted: oklch(0.91 0.015 65);
+  --muted-foreground: oklch(0.42 0.03 50);
+  --border: oklch(0.85 0.02 65);
+  --variant-drench-bg: oklch(0.27 0.025 50);
+  --variant-drench-fg: oklch(0.96 0.012 65);
+  --variant-panel-bg: oklch(0.7 0.12 70);
+  --variant-panel-fg: oklch(0.22 0.025 50);
+  --variant-warm-panel-bg: oklch(0.7 0.12 70);
+  --variant-warm-panel-fg: oklch(0.22 0.025 50);
+}
+.dark [data-variant="e2-d"] {
+  --background: oklch(0.2 0.022 50);
+  --foreground: oklch(0.94 0.012 65);
+  --card: oklch(0.24 0.025 50);
+  --card-foreground: oklch(0.94 0.012 65);
+  --primary: oklch(0.6 0.16 22);
+  --primary-foreground: oklch(0.96 0.012 65);
+  --ring: oklch(0.6 0.16 22);
+  --info: oklch(0.6 0.16 22);
+  --info-foreground: oklch(0.96 0.012 65);
+  --accent: oklch(0.6 0.16 22);
+  --accent-foreground: oklch(0.96 0.012 65);
+  --variant-warm: oklch(0.78 0.13 70);
+  --variant-warm-fg: oklch(0.2 0.022 50);
+  --muted: oklch(0.27 0.025 50);
+  --muted-foreground: oklch(0.72 0.018 65);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.32 0.03 50);
+  --variant-drench-fg: oklch(0.96 0.012 65);
+  --variant-panel-bg: oklch(0.58 0.13 70);
+  --variant-panel-fg: oklch(0.2 0.022 50);
+  --variant-warm-panel-bg: oklch(0.58 0.13 70);
+  --variant-warm-panel-fg: oklch(0.2 0.022 50);
+}
+
+/* Variant E2-E — Stone & Sage
+   Most neutral / photo-friendly of the family. Warm stone bg,
+   charcoal-stone drench (almost no hue), mustard gold accent,
+   brick CTA, soft sage postscript panel. OKA / muted-editorial. */
+[data-variant="e2-e"] {
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
+  --background: oklch(0.94 0.005 75);
+  --foreground: oklch(0.22 0.008 75);
+  --card: oklch(0.97 0.004 75);
+  --card-foreground: oklch(0.22 0.008 75);
+  --primary: oklch(0.45 0.14 28);
+  --primary-foreground: oklch(0.98 0.005 75);
+  --ring: oklch(0.45 0.14 28);
+  --info: oklch(0.45 0.14 28);
+  --info-foreground: oklch(0.98 0.005 75);
+  --accent: oklch(0.45 0.14 28);
+  --accent-foreground: oklch(0.98 0.005 75);
+  --variant-warm: oklch(0.72 0.13 80);
+  --variant-warm-fg: oklch(0.2 0.04 60);
+  --muted: oklch(0.9 0.006 75);
+  --muted-foreground: oklch(0.42 0.012 75);
+  --border: oklch(0.84 0.008 75);
+  --variant-drench-bg: oklch(0.32 0.005 75);
+  --variant-drench-fg: oklch(0.96 0.005 75);
+  --variant-panel-bg: oklch(0.6 0.05 145);
+  --variant-panel-fg: oklch(0.16 0.008 75);
+  --variant-warm-panel-bg: oklch(0.72 0.13 80);
+  --variant-warm-panel-fg: oklch(0.2 0.04 60);
+}
+.dark [data-variant="e2-e"] {
+  --background: oklch(0.2 0.005 75);
+  --foreground: oklch(0.94 0.005 75);
+  --card: oklch(0.24 0.005 75);
+  --card-foreground: oklch(0.94 0.005 75);
+  --primary: oklch(0.6 0.16 22);
+  --primary-foreground: oklch(0.96 0.005 75);
+  --ring: oklch(0.6 0.16 22);
+  --info: oklch(0.6 0.16 22);
+  --info-foreground: oklch(0.96 0.005 75);
+  --accent: oklch(0.6 0.16 22);
+  --accent-foreground: oklch(0.96 0.005 75);
+  --variant-warm: oklch(0.8 0.14 80);
+  --variant-warm-fg: oklch(0.2 0.005 75);
+  --muted: oklch(0.25 0.005 75);
+  --muted-foreground: oklch(0.72 0.012 75);
+  --border: oklch(1 0 0 / 14%);
+  --variant-drench-bg: oklch(0.32 0.005 75);
+  --variant-drench-fg: oklch(0.96 0.005 75);
+  --variant-panel-bg: oklch(0.4 0.05 145);
+  --variant-panel-fg: oklch(0.94 0.005 75);
+  --variant-warm-panel-bg: oklch(0.6 0.14 80);
+  --variant-warm-panel-fg: oklch(0.2 0.005 75);
+}
+
 /* Variant utility classes — used by the redesign sections. */
 @layer utilities {
   .variant-drench {
@@ -378,6 +970,51 @@
      is applied locally so display/UI keeps Manrope. */
   .variant-serif {
     font-family: var(--font-serif, var(--font-sans));
+  }
+  /* Variant G uses Big Shoulders Display for the H1 / Display roles. */
+  .variant-display {
+    font-family: var(--font-display, var(--font-sans));
+  }
+  /* Variant F section tints — pastel multi-tone */
+  .variant-peach {
+    background-color: var(--variant-peach, var(--muted));
+    color: var(--variant-panel-fg, var(--foreground));
+  }
+  .variant-sage {
+    background-color: var(--variant-sage, var(--muted));
+    color: var(--variant-panel-fg, var(--foreground));
+  }
+  .variant-lavender {
+    background-color: var(--variant-lavender, var(--muted));
+    color: var(--variant-panel-fg, var(--foreground));
+  }
+  /* Variant E2 warm-gold accent + warm panel */
+  .variant-warm-text {
+    color: var(--variant-warm, var(--primary));
+  }
+  .variant-warm-bg {
+    background-color: var(--variant-warm, var(--primary));
+    color: var(--variant-warm-fg, var(--primary-foreground));
+  }
+  .variant-warm-panel {
+    background-color: var(--variant-warm-panel-bg, var(--variant-warm, var(--primary)));
+    color: var(--variant-warm-panel-fg, var(--primary-foreground));
+  }
+  /* Variant E3 tonal section tints */
+  .variant-tone-cream {
+    background-color: var(--variant-tone-cream, var(--background));
+  }
+  .variant-tone-parchment {
+    background-color: var(--variant-tone-parchment, var(--muted));
+  }
+  .variant-tone-stone {
+    background-color: var(--variant-tone-stone, var(--muted));
+  }
+  .variant-tone-sage {
+    background-color: var(--variant-tone-sage, var(--muted));
+  }
+  .variant-tone-clay {
+    background-color: var(--variant-tone-clay, var(--muted));
   }
 }
 
