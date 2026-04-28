@@ -173,7 +173,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Proof",
     title: "You want proof that you are fluent in Applied AI",
     body:
-      "Every lesson and project you complete lifts your verifiable Dynamic Score. Share it on LinkedIn, link it on your CV — UK employers can verify it on the spot. No PDFs, no faked completion dates, no one-shot certificate that goes stale a month after issue.",
+      "Every lesson and project you complete lifts your verifiable Dynamic Score. Share it on LinkedIn, link it on your CV: UK employers can verify it on the spot. No PDFs, no faked completion dates, no one-shot certificate that goes stale a month after issue.",
     accent: "aqua",
     cta: "See pricing",
     href: "/pricing",
@@ -183,7 +183,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Keeping up",
     title: "You spend too much time keeping up with AI",
     body:
-      "Even Andrej Karpathy admits keeping up is exhausting. Three months gets you up to date. After that, £7.50/month keeps you there — weekly summaries of what changed, and which lessons to revisit.",
+      "Even Andrej Karpathy admits keeping up is exhausting. Three months gets you up to date. After that, £7.50/month keeps you there: weekly summaries of what changed, and which lessons to revisit.",
     accent: "mint",
     stat: { value: "£7.50/mo", label: "Stay Current after the first three months" },
     cta: "See pricing",
@@ -216,14 +216,14 @@ export const PRODUCT_PILLARS: readonly ProductPillar[] = [
     label: "Dynamic Score",
     title: "A verifiable credential that updates as you build.",
     body:
-      "Your Dynamic Score updates as you complete projects, and decays if you stop. Share it on LinkedIn. Employers can verify it on the spot — no PDFs, no faked completion dates.",
+      "Your Dynamic Score updates as you complete projects, and decays if you stop. Share it on LinkedIn. Employers can verify it on the spot: no PDFs, no faked completion dates.",
   },
   {
     n: "03",
     label: "No coding required",
     title: "If you can describe what you want, you can build it.",
     body:
-      "Plain English in, working AI tools out. We assume zero Python. Tools you already pay for — Claude, ChatGPT, n8n — used the way professionals actually use them.",
+      "Plain English in, working AI tools out. We assume zero Python. Tools you already pay for (Claude, ChatGPT, n8n), used the way professionals actually use them.",
   },
 ]
 
