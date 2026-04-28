@@ -32,16 +32,29 @@ const ROW_CONFIGS: readonly RowConfig[] = [
   {
     bullets: [
       "One-click LinkedIn embed",
-      "Public verify URL · no PDFs",
-      "Decays — keeps it honest",
+      "Public verify URL, no PDFs",
+      "Decays if you stop, keeps it honest",
     ],
     vis: (
-      <div data-section="score-vis" className="inline-flex">
-        <ScoreVis
-          value={EXAMPLE_SCORE_VALUE}
-          history={EXAMPLE_SCORE_HISTORY}
-          size="lg"
-        />
+      <div
+        data-section="score-vis"
+        className="rounded-2xl border border-border bg-card p-6 shadow-sm"
+      >
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
+            gwth.ai/score · alex example
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+            Live · updates as you build
+          </span>
+        </div>
+        <div className="mt-5 flex justify-center">
+          <ScoreVis
+            value={EXAMPLE_SCORE_VALUE}
+            history={EXAMPLE_SCORE_HISTORY}
+            size="lg"
+          />
+        </div>
       </div>
     ),
   },
