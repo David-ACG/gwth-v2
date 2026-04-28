@@ -29,9 +29,14 @@ export function Hero() {
             <p className="mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
               Learn to build apps, automate workflows, research faster, create content,
               analyse data, and solve real problems using AI — all in plain English.
-              Every project you complete updates your GWTH Score: a dynamic, verifiable
-              credential UK employers can check on the spot. Built by practitioners, not
-              marketers — independent of any vendor or government programme.
+            </p>
+            <p className="mt-4 max-w-xl text-lg text-muted-foreground sm:text-xl">
+              Every lesson and project you complete updates your GWTH Score: a dynamic,
+              verifiable credential UK employers can check on the spot.
+            </p>
+            <p className="mt-4 max-w-xl text-lg text-muted-foreground sm:text-xl">
+              Built by practitioners, not marketers — independent of any vendor or
+              government programme.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
