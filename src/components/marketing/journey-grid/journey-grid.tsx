@@ -3,8 +3,8 @@ import { JOURNEYS } from "@/components/marketing/data"
 import { JourneyCard } from "./journey-card"
 
 /**
- * 7-card journey grid. Desktop: 3+3+1 (3 cols on rows 1 & 2; the 7th
- * card spans full width as row 3). Mobile: single column.
+ * 9-card journey grid. Desktop: 3+3+3 (3 cols across 3 rows). Mobile:
+ * single column.
  *
  * Section-level entrance animation comes from MotionSection (gated on
  * prefers-reduced-motion). Per-card hover lift uses the global
@@ -13,9 +13,9 @@ import { JourneyCard } from "./journey-card"
 export function JourneyGrid() {
   const rowOne = JOURNEYS.slice(0, 3)
   const rowTwo = JOURNEYS.slice(3, 6)
-  const rowThree = JOURNEYS[6]
-  if (!rowThree) {
-    throw new Error("JOURNEYS must contain at least 7 entries — see marketing/data.ts")
+  const rowThree = JOURNEYS.slice(6, 9)
+  if (rowThree.length !== 3) {
+    throw new Error("JOURNEYS must contain at least 9 entries — see marketing/data.ts")
   }
 
   return (
@@ -26,7 +26,7 @@ export function JourneyGrid() {
             Whichever line you&apos;re standing on, the work is the same.
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Seven journeys, one course, one Dynamic Score. Pick the row that fits — they
+            Nine journeys, one course, one Dynamic Score. Pick the row that fits — they
             all end up at the same proof.
           </p>
         </div>
@@ -45,7 +45,9 @@ export function JourneyGrid() {
           </div>
 
           <div data-row="3" className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <JourneyCard journey={rowThree} wide />
+            {rowThree.map((journey) => (
+              <JourneyCard key={journey.n} journey={journey} />
+            ))}
           </div>
         </div>
       </div>

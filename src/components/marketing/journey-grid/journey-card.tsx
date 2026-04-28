@@ -8,30 +8,36 @@ const accentClasses: Record<Journey["accent"], string> = {
   aqua: "bg-primary/10 text-primary",
 }
 
+const statClasses: Record<Journey["accent"], string> = {
+  mint: "bg-accent/10 text-accent",
+  aqua: "bg-primary/10 text-primary",
+}
+
 type JourneyCardProps = {
   /** The journey to render. */
   journey: Journey
-  /** Whether this card spans the full width of the grid (the 7th card). */
-  wide?: boolean
 }
 
 /**
  * Single journey card for JourneyGrid. The whole card is a link — there
  * is no inner-CTA link, so keyboard tab order stays linear (one stop per
- * card).
+ * card). A subtle chevron in the top-right hints at click affordance
+ * without the per-card "See pricing" text-CTA that read as messy.
  */
-export function JourneyCard({ journey, wide = false }: JourneyCardProps) {
+export function JourneyCard({ journey }: JourneyCardProps) {
   return (
     <Link
       href={journey.href}
       data-testid="journey-card"
       data-accent={journey.accent}
-      className={cn(
-        "hover-lift group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md",
-        wide && "lg:col-span-3"
-      )}
+      className="hover-lift group relative flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
     >
-      <div className="flex items-center justify-between">
+      <ArrowRight
+        aria-hidden="true"
+        className="absolute right-5 top-5 size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+      />
+
+      <div className="flex items-center justify-between gap-3 pr-7">
         <span className="font-mono text-xs text-muted-foreground">{journey.n}</span>
         <span
           className={cn(
@@ -49,23 +55,17 @@ export function JourneyCard({ journey, wide = false }: JourneyCardProps) {
 
       <p className="mt-3 flex-1 text-sm text-muted-foreground">{journey.body}</p>
 
-      <div className="mt-5 flex items-end justify-between gap-4">
-        {journey.stat ? (
-          <div className="min-w-0">
-            <div className="text-xl font-bold text-foreground">{journey.stat.value}</div>
-            <div className="truncate text-xs text-muted-foreground">
-              {journey.stat.label}
-            </div>
-          </div>
-        ) : (
-          <span aria-hidden="true" />
-        )}
-
-        <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground transition-transform group-hover:translate-x-0.5">
-          {journey.cta}
-          <ArrowRight className="size-4" />
-        </span>
-      </div>
+      {journey.stat ? (
+        <div
+          className={cn(
+            "mt-5 rounded-xl px-4 py-3",
+            statClasses[journey.accent]
+          )}
+        >
+          <div className="text-2xl font-bold leading-tight">{journey.stat.value}</div>
+          <div className="mt-0.5 text-xs text-current/80">{journey.stat.label}</div>
+        </div>
+      ) : null}
     </Link>
   )
 }

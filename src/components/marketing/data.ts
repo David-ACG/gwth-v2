@@ -170,6 +170,27 @@ export const JOURNEYS: readonly Journey[] = [
   },
   {
     n: "07",
+    tag: "Proof",
+    title: "You want proof that you are fluent in Applied AI",
+    body:
+      "Every lesson and project you complete lifts your verifiable Dynamic Score. Share it on LinkedIn, link it on your CV — UK employers can verify it on the spot. No PDFs, no faked completion dates, no one-shot certificate that goes stale a month after issue.",
+    accent: "aqua",
+    cta: "See pricing",
+    href: "/pricing",
+  },
+  {
+    n: "08",
+    tag: "Keeping up",
+    title: "You spend too much time keeping up with AI",
+    body:
+      "Even Andrej Karpathy admits keeping up is exhausting. Three months gets you up to date. After that, £7.50/month keeps you there — weekly summaries of what changed, and which lessons to revisit.",
+    accent: "mint",
+    stat: { value: "£7.50/mo", label: "Stay Current after the first three months" },
+    cta: "See pricing",
+    href: "/pricing",
+  },
+  {
+    n: "09",
     tag: "Team lead",
     title: "You lead a team and your competitors are moving faster",
     body:
