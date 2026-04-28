@@ -13,7 +13,7 @@ export function ResearchStrip() {
       className="border-y border-border bg-muted/40 py-10"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="text-center font-mono text-xs uppercase tracking-wide text-muted-foreground">
+        <p className="text-center text-sm font-medium text-muted-foreground">
           Built around UK research
         </p>
         <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-12">

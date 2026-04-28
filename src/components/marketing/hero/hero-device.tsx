@@ -55,7 +55,7 @@ export function HeroDevice() {
           <span className="size-2.5 rounded-full bg-warning/70" aria-hidden="true" />
           <span className="size-2.5 rounded-full bg-success/70" aria-hidden="true" />
           <span className="ml-3 truncate rounded-md bg-muted px-2 py-1 font-mono text-[11px] text-muted-foreground">
-            gwth.ai/dashboard
+            gwth.ai/score
           </span>
         </div>
 
