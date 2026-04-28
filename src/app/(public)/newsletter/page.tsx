@@ -34,9 +34,6 @@ export default function NewsletterPage() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-6 inline-flex rounded-full bg-primary/10 p-3">
-            <Mail className="size-8 text-primary" />
-          </div>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             The GWTH Weekly
           </h1>

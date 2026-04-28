@@ -21,11 +21,6 @@ export function Hero() {
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <div className="max-w-2xl">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
-              Built in the UK · For the world
-            </span>
-
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               Stop watching AI change the world.{" "}
               <span className="text-gradient">Start building with it.</span>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, Radar, BarChart3, Clock, Layers } from "lucide-react"
+import { ArrowRight, BarChart3, Clock, Layers } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   getTechRadarTools,
@@ -58,10 +58,6 @@ export default function TechRadarPage() {
       <section className="border-b bg-muted/30 py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              <Radar className="size-4" />
-              Live Intelligence
-            </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               GWTH Tech Radar
             </h1>
