@@ -22,6 +22,15 @@ const STAGGER_SECONDS = 0.2
  */
 export function PromptVis() {
   const prefersReduced = useReducedMotion()
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+  // Render the static (non-animated) variant until mount so the SSR/hydration
+  // pass and the first client paint are visually identical. Without this the
+  // motion.li children land with `initial={{ opacity: 0 }}` inline styles for
+  // a frame, which causes mobile snapshot flake.
+  const animate = mounted && !prefersReduced
 
   return (
     <div
@@ -62,7 +71,7 @@ export function PromptVis() {
               const dotClass = `mt-1 inline-block size-1.5 shrink-0 rounded-full ${
                 isFinal ? "bg-accent" : "bg-primary"
               }`
-              if (prefersReduced) {
+              if (!animate) {
                 return (
                   <li key={step} data-testid="prompt-step" className={stepClass}>
                     <span className={dotClass} aria-hidden="true" />
