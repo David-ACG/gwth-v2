@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Snagging Annotator</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; margin: 0; display: flex; height: 100vh; background: #1f2937; color: #f3f4f6; }
+  #sidebar { width: 220px; padding: 12px; background: #111827; overflow-y: auto; border-right: 1px solid #374151; }
+  #sidebar h3 { margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; color: #9ca3af; letter-spacing: 0.05em; }
+  #sidebar .thumb { display: block; cursor: pointer; margin-bottom: 8px; border: 2px solid transparent; border-radius: 4px; overflow: hidden; }
+  #sidebar .thumb img { display: block; width: 100%; }
+  #sidebar .thumb.active { border-color: #2563eb; }
+  #sidebar .thumb .label { padding: 4px 6px; font-size: 11px; background: #1f2937; color: #d1d5db; word-break: break-all; }
+  #main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  #toolbar { padding: 8px 12px; background: #111827; border-bottom: 1px solid #374151; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  #toolbar button { padding: 6px 12px; background: #374151; color: #f3f4f6; border: 1px solid #4b5563; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  #toolbar button:hover { background: #4b5563; }
+  #toolbar button.active { background: #2563eb; border-color: #1d4ed8; }
+  #toolbar #save { background: #059669; border-color: #047857; margin-left: auto; }
+  #toolbar #save:hover { background: #047857; }
+  #toolbar #status { color: #9ca3af; font-size: 12px; margin-left: 8px; }
+  #toolbar input[type="color"] { width: 32px; height: 28px; border: none; background: transparent; cursor: pointer; }
+  #canvas-wrap { flex: 1; overflow: auto; background: #4b5563; padding: 16px; }
+  canvas { display: block; cursor: crosshair; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  #notes { width: 320px; padding: 12px; background: #111827; border-left: 1px solid #374151; overflow-y: auto; }
+  #notes h3 { margin: 0 0 6px 0; font-size: 12px; text-transform: uppercase; color: #9ca3af; letter-spacing: 0.05em; }
+  #notes textarea { width: 100%; min-height: 140px; padding: 8px; background: #1f2937; color: #f3f4f6; border: 1px solid #374151; border-radius: 4px; font-family: inherit; font-size: 13px; resize: vertical; }
+  #snag-summary { margin-top: 16px; padding: 8px; background: #1f2937; border-radius: 4px; font-size: 12px; }
+  #snag-summary .item { padding: 4px 0; border-bottom: 1px solid #374151; }
+  #snag-summary .item:last-child { border-bottom: none; }
+  #snag-summary .count { color: #60a5fa; font-weight: 600; }
+  .empty { color: #6b7280; font-size: 12px; padding: 16px; text-align: center; }
+</style>
+</head>
+<body>
+  <div id="sidebar">
+    <h3>Screenshots</h3>
+    <div id="thumbs"></div>
+  </div>
+  <div id="main">
+    <div id="toolbar">
+      <button id="tool-rect" class="active">Rectangle</button>
+      <button id="tool-arrow">Arrow</button>
+      <button id="tool-text">Text</button>
+      <input type="color" id="color" value="#dc2626" title="Annotation colour">
+      <button id="undo">Undo</button>
+      <button id="clear">Clear current</button>
+      <button id="save">Save annotations.json</button>
+      <span id="status"></span>
+    </div>
+    <div id="canvas-wrap"><canvas id="canvas" width="800" height="400"></canvas></div>
+  </div>
+  <div id="notes">
+    <h3>Notes for current image</h3>
+    <textarea id="note-text" placeholder="What's wrong on this page?"></textarea>
+    <div id="snag-summary"><div class="empty">No annotations yet</div></div>
+  </div>
+
+<script>
+// Replace this line at write-time with: const SCREENSHOTS = ["before/1_logo.png", ...];
+const SCREENSHOTS = ['after/desktop-light.png','after/desktop-dark.png','after/mobile-light.png','after/mobile-dark.png','after/fold-desktop-light.png','after/fold-desktop-dark.png','after/fold-mobile-light.png','after/journey-section-light.png','after/journey-section-dark.png'];
+if (typeof SCREENSHOTS === "undefined") { window.SCREENSHOTS = []; }
+
+const annotations = {};   // { filename: { notes: "", shapes: [...] } }
+let current = null;
+let tool = "rect";
+let color = "#dc2626";
+let drawing = false;
+let startX = 0, startY = 0;
+let preview = null;       // shape currently being dragged
+const img = new Image();
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function loadImage(filename) {
+  current = filename;
+  if (!annotations[filename]) annotations[filename] = { notes: "", shapes: [] };
+  document.getElementById("note-text").value = annotations[filename].notes;
+  img.onload = () => {
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    redraw();
+  };
+  img.src = filename;
+  document.querySelectorAll("#thumbs .thumb").forEach(el => {
+    el.classList.toggle("active", el.dataset.file === filename);
+  });
+  updateSummary();
+}
+
+function redraw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (img.complete && img.naturalWidth > 0) ctx.drawImage(img, 0, 0);
+  const shapes = annotations[current]?.shapes || [];
+  shapes.forEach(s => drawShape(s));
+  if (preview) drawShape(preview);
+}
+
+function drawShape(s) {
+  ctx.strokeStyle = s.color || "#dc2626";
+  ctx.fillStyle = s.color || "#dc2626";
+  ctx.lineWidth = 3;
+  ctx.font = "20px sans-serif";
+  if (s.type === "rect") {
+    ctx.strokeRect(s.x, s.y, s.w, s.h);
+  } else if (s.type === "arrow") {
+    drawArrow(s.x1, s.y1, s.x2, s.y2);
+  } else if (s.type === "text") {
+    ctx.fillText(s.text, s.x, s.y);
+  }
+}
+
+function drawArrow(x1, y1, x2, y2) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  const head = 14;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - head * Math.cos(angle - Math.PI / 6), y2 - head * Math.sin(angle - Math.PI / 6));
+  ctx.lineTo(x2 - head * Math.cos(angle + Math.PI / 6), y2 - head * Math.sin(angle + Math.PI / 6));
+  ctx.closePath();
+  ctx.fill();
+}
+
+function canvasCoords(e) {
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width / rect.width;
+  const sy = canvas.height / rect.height;
+  return { x: (e.clientX - rect.left) * sx, y: (e.clientY - rect.top) * sy };
+}
+
+canvas.addEventListener("mousedown", e => {
+  if (!current) return;
+  const { x, y } = canvasCoords(e);
+  if (tool === "text") {
+    const text = prompt("Text:");
+    if (text && text.trim()) {
+      annotations[current].shapes.push({ type: "text", x, y, text: text.trim(), color });
+      redraw(); updateSummary();
+    }
+    return;
+  }
+  drawing = true;
+  startX = x; startY = y;
+});
+
+canvas.addEventListener("mousemove", e => {
+  if (!drawing) return;
+  const { x, y } = canvasCoords(e);
+  if (tool === "rect") {
+    preview = { type: "rect", x: startX, y: startY, w: x - startX, h: y - startY, color };
+  } else if (tool === "arrow") {
+    preview = { type: "arrow", x1: startX, y1: startY, x2: x, y2: y, color };
+  }
+  redraw();
+});
+
+canvas.addEventListener("mouseup", e => {
+  if (!drawing) return;
+  drawing = false;
+  if (preview && Math.abs((preview.w || 0) + (preview.h || 0) + ((preview.x2||0) - (preview.x1||0)) + ((preview.y2||0) - (preview.y1||0))) > 5) {
+    annotations[current].shapes.push(preview);
+  }
+  preview = null;
+  redraw(); updateSummary();
+});
+
+canvas.addEventListener("mouseleave", () => { drawing = false; preview = null; redraw(); });
+
+function setTool(t) {
+  tool = t;
+  document.querySelectorAll("#toolbar button[id^='tool-']").forEach(b => b.classList.toggle("active", b.id === `tool-${t}`));
+}
+document.getElementById("tool-rect").onclick = () => setTool("rect");
+document.getElementById("tool-arrow").onclick = () => setTool("arrow");
+document.getElementById("tool-text").onclick = () => setTool("text");
+document.getElementById("color").addEventListener("input", e => color = e.target.value);
+document.getElementById("undo").onclick = () => {
+  annotations[current]?.shapes.pop();
+  redraw(); updateSummary();
+};
+document.getElementById("clear").onclick = () => {
+  if (annotations[current]) annotations[current].shapes = [];
+  redraw(); updateSummary();
+};
+document.getElementById("note-text").addEventListener("input", e => {
+  if (current) { annotations[current].notes = e.target.value; updateSummary(); }
+});
+document.getElementById("save").onclick = () => {
+  const data = { savedAt: new Date().toISOString(), annotations };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "annotations.json";
+  a.click();
+  document.getElementById("status").textContent = "Saved — drop annotations.json into the .snagging/<run-id>/ dir.";
+};
+
+function updateSummary() {
+  const el = document.getElementById("snag-summary");
+  const entries = Object.entries(annotations).filter(([_, v]) => (v.notes && v.notes.trim()) || v.shapes.length);
+  if (!entries.length) { el.innerHTML = '<div class="empty">No annotations yet</div>'; return; }
+  el.innerHTML = entries.map(([f, v]) => `
+    <div class="item">
+      <div><span class="count">${v.shapes.length}</span> shapes — ${f.split("/").pop()}</div>
+      ${v.notes ? `<div style="color:#9ca3af; margin-top:2px;">${v.notes.slice(0, 80)}${v.notes.length > 80 ? "…" : ""}</div>` : ""}
+    </div>
+  `).join("");
+}
+
+// Render thumbnails
+const thumbs = document.getElementById("thumbs");
+if (SCREENSHOTS.length === 0) {
+  thumbs.innerHTML = '<div class="empty">No screenshots — run the skill from a snagging session.</div>';
+} else {
+  SCREENSHOTS.forEach(file => {
+    const wrap = document.createElement("div");
+    wrap.className = "thumb";
+    wrap.dataset.file = file;
+    wrap.onclick = () => loadImage(file);
+    wrap.innerHTML = `<img src="${file}" alt=""><div class="label">${file.split("/").pop()}</div>`;
+    thumbs.appendChild(wrap);
+  });
+  loadImage(SCREENSHOTS[0]);
+}
+</script>
+</body>
+</html>
