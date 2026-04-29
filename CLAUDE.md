@@ -21,7 +21,7 @@ Backend, auth, database, and payment choices are decided separately. Build the f
 
 See `.claude/rules/tech-stack.md` for `next.config.ts`, ESLint flat config, TypeScript settings, and environment-variables guidance (loaded automatically when editing those files).
 
-## File Structure (top-level)
+## File Structure
 
 ```
 src/
@@ -37,7 +37,9 @@ src/
 
 Each directory under `components/` is a feature module. Components in `components/course/` should not import from `components/lab/`. Shared utilities go in `components/shared/` or `lib/`. Each component directory gets a brief `README.md`.
 
-## Architecture Principles (always-on)
+## Architecture Principles
+
+These are the always-on subset that applies project-wide. Subtree-specific principles (data-layer abstraction, route-group structure, dynamic imports) live in the relevant rule file.
 
 - **Server Components by default.** Only use `"use client"` for interactive elements (video player, quiz, sidebar toggle, theme toggle, forms).
 - **React Compiler enabled.** Let the compiler handle memoization — do NOT manually use `useMemo`, `useCallback`, or `React.memo`.

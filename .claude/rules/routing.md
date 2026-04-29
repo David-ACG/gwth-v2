@@ -10,7 +10,9 @@ paths:
 
 Loaded automatically when editing files under `src/app/**`.
 
-## Public (no auth)
+## Pages & Routes
+
+### Public (no auth)
 
 - `/` — Landing page with hero, features, testimonials, pricing preview
 - `/pricing` — Plans comparison (Free / Pro / Team)
@@ -19,7 +21,7 @@ Loaded automatically when editing files under `src/app/**`.
 - `/signup` — Registration
 - `/forgot-password` — Password reset flow
 
-## Student Dashboard (authenticated)
+### Student Dashboard (authenticated)
 
 - `/dashboard` — Overview: course cards, progress rings, recent activity, study streak calendar, bookmarked items
 - `/courses` — Browse all courses (filterable by category, difficulty, search)
@@ -40,7 +42,7 @@ Loaded automatically when editing files under `src/app/**`.
 - `/bookmarks` — Saved lessons and labs
 - `/notifications` — Notification center (achievements, reminders, announcements)
 
-## Admin (separate admin panel — phase 2)
+### Admin (separate admin panel — phase 2)
 
 - Content management for courses, lessons, labs
 - User management, analytics dashboard
