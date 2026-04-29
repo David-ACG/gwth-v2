@@ -4,15 +4,20 @@ import * as React from "react"
  * Inline GWTH.ai vector logo. Two-colour: wordmark (G + WTH + ai)
  * and accent (the arrow inside the G + dot on the i + dot on the a).
  *
- * Both colours are controllable so a swatch picker / theme provider
- * can recolour the mark without touching the SVG file. The static
- * `/logo-gwth.svg` keeps the original brand colours for any non-React
- * usage (favicons, OG images, emails).
+ * Defaults to the locked brand CSS variables `--logo-wordmark` and
+ * `--logo-accent` (defined in `globals.css` for both light and dark
+ * modes, decision recorded 2026-04-29 via /logo_picker). Consumers
+ * can still override via the `wordmarkColor` / `accentColor` props
+ * — used by the live colour explorer and any one-off contexts that
+ * need a different treatment (mono print, OG images, etc.).
+ *
+ * The static `/logo-gwth.svg` keeps the original brand colours for
+ * any non-React usage (favicons, OG images, emails).
  */
 export type LogoGwthProps = {
-  /** Hex/colour for the GWTH.ai wordmark glyphs. */
+  /** Hex/colour for the GWTH.ai wordmark glyphs. Defaults to `var(--logo-wordmark)`. */
   wordmarkColor?: string
-  /** Hex/colour for the arrow inside the G plus the two accent dots. */
+  /** Hex/colour for the arrow inside the G plus the two accent dots. Defaults to `var(--logo-accent)`. */
   accentColor?: string
   /** Width in CSS units; height auto-scales (aspect ≈ 5.69:1). */
   width?: number | string
@@ -22,8 +27,8 @@ export type LogoGwthProps = {
 }
 
 export function LogoGwth({
-  wordmarkColor = "#010101",
-  accentColor = "#36bc99",
+  wordmarkColor = "var(--logo-wordmark)",
+  accentColor = "var(--logo-accent)",
   width,
   title = "GWTH.ai",
   className,

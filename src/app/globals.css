@@ -27,7 +27,8 @@
    ================================================================= */
 
 @theme inline {
-  --animate-collapsible-down: collapsible-down 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-collapsible-down: collapsible-down 300ms
+    cubic-bezier(0.4, 0, 0.2, 1);
   --animate-collapsible-up: collapsible-up 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
   --color-background: var(--background);
@@ -159,6 +160,13 @@
   --grade-c: oklch(0.75 0.15 75);
   --grade-d: oklch(0.65 0.18 50);
   --grade-f: oklch(0.577 0.245 27.325);
+
+  /* Locked GWTH.ai logo colours (chosen 2026-04-29 via /logo_picker).
+     Wordmark = "GWTH.ai" glyphs. Accent = arrow-in-G + dots on i and a.
+     Light mode: deep forest wordmark + terracotta accent on near-white.
+     Dark mode:  warm off-white wordmark + same terracotta accent. */
+  --logo-wordmark: #22301f;
+  --logo-accent: #a94c2e;
 }
 
 /* =================================================================
@@ -229,6 +237,10 @@
   --grade-d: oklch(0.7 0.16 50);
   --grade-f: oklch(0.704 0.191 22.216);
 
+  /* Logo: warm off-white wordmark for dark mode; terracotta accent unchanged. */
+  --logo-wordmark: #edeae6;
+  --logo-accent: #a94c2e;
+
   color-scheme: dark;
 }
 
@@ -242,7 +254,8 @@
    Light canonical. Mint drench mid-page. Aqua reserved for primary CTA.
    Type: Albert Sans (Inter alternative, geometric humanist) + JetBrains Mono. */
 [data-variant="a"] {
-  --font-sans: var(--font-albert), "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-albert), "Albert Sans", ui-sans-serif, system-ui, sans-serif;
   --variant-drench-bg: oklch(0.65 0.16 165);
   --variant-drench-fg: oklch(0.18 0.04 175);
   --variant-panel-bg: oklch(0.18 0.04 175);
@@ -281,8 +294,10 @@
    Warm cream surface, serif body. Burnt Sienna replaces Aqua as primary.
    Type: Source Serif 4 (body) + Manrope (display + UI). */
 [data-variant="c"] {
-  --font-sans: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-source-serif), "Source Serif 4", ui-serif, Georgia, serif;
+  --font-sans:
+    var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-serif:
+    var(--font-source-serif), "Source Serif 4", ui-serif, Georgia, serif;
   --background: oklch(0.965 0.015 80);
   --foreground: oklch(0.22 0.025 60);
   --card: oklch(0.985 0.01 80);
@@ -327,7 +342,8 @@
    Light canonical. Soft Warm Coral as primary, Ink-Deep-Teal panel.
    Type: Figtree (humanist sans) + JetBrains Mono. */
 [data-variant="d"] {
-  --font-sans: var(--font-figtree), "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-figtree), "Figtree", ui-sans-serif, system-ui, sans-serif;
   --background: oklch(0.985 0.008 80);
   --foreground: oklch(0.2 0.03 175);
   --card: oklch(1 0 0);
@@ -374,7 +390,8 @@
    widget's internal gradient renders flat.
    Type: Vollkorn (body, serif) + Public Sans (display, UI). */
 [data-variant="e"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.96 0.012 80);
   --foreground: oklch(0.2 0.04 250);
@@ -423,7 +440,9 @@
    single-family. Soft section washes — most "supportive learning" of all.
    Type: Bricolage Grotesque throughout. */
 [data-variant="f"] {
-  --font-sans: var(--font-bricolage), "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-bricolage), "Bricolage Grotesque", ui-sans-serif, system-ui,
+    sans-serif;
   --background: oklch(0.985 0.008 50);
   --foreground: oklch(0.22 0.025 280);
   --card: oklch(1 0 0);
@@ -462,9 +481,9 @@
   --muted-foreground: oklch(0.7 0.018 50);
   --border: oklch(1 0 0 / 14%);
   --variant-peach: oklch(0.32 0.05 50);
-  --variant-sage: oklch(0.30 0.04 145);
-  --variant-lavender: oklch(0.30 0.04 290);
-  --variant-drench-bg: oklch(0.30 0.04 290);
+  --variant-sage: oklch(0.3 0.04 145);
+  --variant-lavender: oklch(0.3 0.04 290);
+  --variant-drench-bg: oklch(0.3 0.04 290);
   --variant-drench-fg: oklch(0.94 0.012 50);
   --variant-panel-bg: oklch(0.32 0.05 50);
   --variant-panel-fg: oklch(0.94 0.012 50);
@@ -476,7 +495,8 @@
    century / Bauhaus / Eye-magazine grid. Accent collapsed to primary
    so score widget renders flat. */
 [data-variant="g"] {
-  --font-sans: var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bebas), "Bebas Neue", ui-sans-serif, sans-serif;
   --background: oklch(0.95 0.025 80);
   --foreground: oklch(0.15 0.012 60);
@@ -571,7 +591,8 @@
    gold. Used on chapter byline numbers, Stay Current tier panel,
    pull-quote bg, and stat-number tinting on the navy drench. */
 [data-variant="e2"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.96 0.012 80);
   --foreground: oklch(0.2 0.04 250);
@@ -626,7 +647,8 @@
    solid section tints — cream / parchment / stone / sage / clay —
    each used as a distinct section background. No gradient anywhere. */
 [data-variant="e3"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.96 0.012 80);
   --foreground: oklch(0.2 0.04 250);
@@ -690,7 +712,8 @@
    navy drench preserved, brick-red CTA, mustard gold postscript
    instead of the red burgundy panel. Closest to E2 with feedback fixes. */
 [data-variant="e2-a"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.965 0.005 95);
   --foreground: oklch(0.2 0.04 250);
@@ -745,7 +768,8 @@
    brick CTA, oat-parchment postscript. For people who preferred green
    over blue in the Civic Press feedback. */
 [data-variant="e2-b"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.965 0.005 95);
   --foreground: oklch(0.22 0.03 155);
@@ -800,7 +824,8 @@
    bg, sage drench (muted, not bright), terracotta CTA replacing brick,
    espresso brown postscript panel. The most explicitly earthy. */
 [data-variant="e2-c"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.945 0.015 75);
   --foreground: oklch(0.22 0.02 60);
@@ -855,7 +880,8 @@
    brick CTA, bronze gold postscript panel. Soho House / leather-and-velvet
    register, photo-friendly. */
 [data-variant="e2-d"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.95 0.012 65);
   --foreground: oklch(0.22 0.025 50);
@@ -913,7 +939,8 @@
    - Dark postscript panel:  #22301f (near-black forest)
    - Primary CTA (both):     #a94c2e (terracotta) */
 [data-variant="e2-e"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.965 0.004 75);
   --foreground: oklch(0.22 0.008 75);
@@ -971,7 +998,8 @@
    - Postscript panel → dark forest sage #394f36
    User-curated combination (2026-04-28). */
 [data-variant="e2-f"] {
-  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
   --background: oklch(0.965 0.004 75);
   --foreground: oklch(0.22 0.008 75);
@@ -1065,7 +1093,10 @@
     color: var(--variant-warm-fg, var(--primary-foreground));
   }
   .variant-warm-panel {
-    background-color: var(--variant-warm-panel-bg, var(--variant-warm, var(--primary)));
+    background-color: var(
+      --variant-warm-panel-bg,
+      var(--variant-warm, var(--primary))
+    );
     color: var(--variant-warm-panel-fg, var(--primary-foreground));
   }
   /* Variant E3 tonal section tints */
@@ -1101,10 +1132,17 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-semibold tracking-tight;
   }
 
@@ -1116,7 +1154,8 @@
     @apply bg-primary/20 text-foreground;
   }
 
-  pre, code {
+  pre,
+  code {
     font-family: var(--font-mono);
   }
 
