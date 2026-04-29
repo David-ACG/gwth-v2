@@ -1,7 +1,16 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, beforeEach, afterEach } from "vitest"
 import robots from "./robots"
 
 describe("robots.txt", () => {
+  const previous = process.env.ALLOW_INDEXING
+  beforeEach(() => {
+    delete process.env.ALLOW_INDEXING
+  })
+  afterEach(() => {
+    if (previous === undefined) delete process.env.ALLOW_INDEXING
+    else process.env.ALLOW_INDEXING = previous
+  })
+
   it("blocks all user agents from all paths", () => {
     const result = robots()
     expect(result.rules).toBeDefined()
@@ -28,5 +37,15 @@ describe("robots.txt", () => {
   it("does not expose a sitemap", () => {
     const result = robots()
     expect(result.sitemap).toBeUndefined()
+  })
+
+  it("allows all crawlers when ALLOW_INDEXING=1", () => {
+    process.env.ALLOW_INDEXING = "1"
+    const result = robots()
+    const rules = result.rules as Array<{ userAgent: string; allow?: string; disallow?: string }>
+    expect(rules.length).toBe(1)
+    expect(rules[0].userAgent).toBe("*")
+    expect(rules[0].allow).toBe("/")
+    expect(rules[0].disallow).toBeUndefined()
   })
 })

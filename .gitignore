@@ -62,4 +62,10 @@ next-env.d.ts
 # Dolt database files (added by bd init)
 .dolt/
 *.db
+<<<<<<< HEAD
 .scratch/
+=======
+
+# Lighthouse CI local artefacts (HTML + JSON reports per run)
+.lighthouseci/
+>>>>>>> 69bd44f (perf(homepage): pass Lighthouse desktop gates + ALLOW_INDEXING harness)

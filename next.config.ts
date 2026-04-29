@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
       // Add patterns as external image sources are identified
     ],
   },
+  // Drops dead-code from per-icon imports of lucide-react and per-section
+  // motion imports — without this the homepage pulls in the entire
+  // surface of each package on the critical path.
+  experimental: {
+    optimizePackageImports: ["lucide-react", "motion", "motion/react"],
+  },
 }
 
 const withBundleAnalyzer = bundleAnalyzer({
