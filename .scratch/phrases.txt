@@ -1,0 +1,20 @@
+OKLCH
+Cascading Spiral Windmill
+logo-spiral-blur-25.svg
+Graphite Warm
+JetBrains Mono
+next-themes
+tw-animate-css
+react-hook-form + zod
+GWTH_curriculum
+3307
+useReducedMotion
+useOptimistic
+MAX_QUIZ_ATTEMPTS
+hue 60 (warm/amber axis)
+Land the Plane
+/course/[slug]/lesson/[lessonSlug]
+Turbopack
+start-dolt.bat
+generateMetadata
+@hookform/resolvers/zod

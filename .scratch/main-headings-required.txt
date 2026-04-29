@@ -1,0 +1,46 @@
+# GWTH v2 — Student Learning Platform
+# Start the Dolt server
+## Architecture Principles
+## Beads Issue Tracking
+## Design System
+## File Structure
+## Form Validation Patterns
+## Important Notes
+## Kanban Workflow
+## Pages & Routes
+## Phase 1 Deliverables (build this first)
+## Project Overview
+## Sibling repos
+## Tech Stack
+### "Land the Plane" Protocol
+### Abstraction & Boundaries
+### Accessibility
+### Additional Background Effects
+### Admin (separate admin panel — phase 2)
+### Background Effects — Cascading Spiral Windmill
+### Core
+### Core Rules
+### Documentation Standards
+### Dolt Server Dependency
+### Environment Variables
+### Error Handling & Resilience
+### ESLint
+### Font Loading
+### Foundation
+### Image Optimization
+### Layout Dimensions
+### Loading Spinners
+### Naming Conventions
+### next.config.ts
+### Pages
+### Performance
+### Public (no auth)
+### Quality
+### Quick Reference
+### Route Transition Indicator
+### SEO & Metadata
+### Student Dashboard (authenticated)
+### Testing Strategy
+### Theme Colors (OKLCH — CSS custom properties)
+### TypeScript
+### Typography

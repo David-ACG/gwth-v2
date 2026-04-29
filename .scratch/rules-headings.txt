@@ -1,0 +1,47 @@
+# .env.local (gitignored — backend secrets only)
+# Data Layer — Domain Model
+# Design System
+# Future: NEXT_PUBLIC_* for client-side config, everything else server-only
+# Middleware & Root Layout
+# No env vars needed for Phase 1 (mock data)
+# Routing — Pages, Routes, SEO
+# Tech Stack — Configuration Detail
+## Additional Background Effects
+## Admin (separate admin panel — phase 2)
+## Animation & Motion
+## Background Effects — Cascading Spiral Windmill
+## Component Library
+## Constants
+## Data layer abstraction (architectural rule)
+## Domain Model (reference — shapes the UI, not the database)
+## Empty States
+## Environment Variables
+## ESLint
+## File structure (under `src/lib/`)
+## File structure detail (under `src/app/`)
+## Font Loading
+## Image Optimization
+## Layout Dimensions
+## Loading Spinners
+## Middleware
+## next.config.ts
+## Performance — page-level
+## Public (no auth)
+## Root Layout
+## Route group structure
+## Route Transition Indicator
+## SEO & Metadata
+## Student Dashboard (authenticated)
+## Theme Colors (OKLCH — CSS custom properties)
+## TypeScript
+## Typography
+## URL search params
+### Bookmark
+### Certificate
+### Course
+### Lab
+### Lesson
+### Note
+### Notification
+### Progress (per user)
+### Study Streak

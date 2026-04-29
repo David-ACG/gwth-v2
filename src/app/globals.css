@@ -8,7 +8,14 @@
  * Accent (Mint): oklch(0.65 0.16 165) / #1CBA93
  */
 
-@import "tailwindcss";
+/* `source(none)` disables Tailwind v4's auto-source-detection, which
+   walks the entire workspace and chokes on at least one file outside
+   `src/` with a sequence its CSS-variable unescaper interprets as a
+   codepoint > 0x10FFFF (`String.fromCodePoint(16707002)` throws).
+   The explicit `@source` glob below scopes scanning to `src/`, which
+   is where every class name and CSS variable reference lives anyway. */
+@import "tailwindcss" source(none);
+@source "../**/*.{ts,tsx,js,jsx,html,mdx}";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 

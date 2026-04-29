@@ -46,6 +46,7 @@ const PASSWORD_EXEMPT_PATHS = [
   "/api",        // API routes
   "/redesign",   // Internal homepage redesign review (noindex, removed at promotion)
   "/redesign_v2", // E2-E palette explorer (noindex, removed at promotion)
+  "/logo_picker", // Vector logo colour explorer (noindex, removed at promotion)
 ]
 
 /**

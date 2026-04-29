@@ -1,0 +1,64 @@
+# .env.local (gitignored — backend secrets only)
+# Future: NEXT_PUBLIC_* for client-side config, everything else server-only
+# GWTH v2 — Student Learning Platform
+# No env vars needed for Phase 1 (mock data)
+# Start the Dolt server
+## Animation & Motion
+## Architecture Principles
+## Beads Issue Tracking
+## Component Library
+## Design System
+## Domain Model (reference — shapes the UI, not the database)
+## Empty States
+## File Structure
+## Form Validation Patterns
+## Important Notes
+## Kanban Workflow
+## Middleware
+## Pages & Routes
+## Phase 1 Deliverables (build this first)
+## Project Overview
+## Root Layout
+## Sibling repos
+## Tech Stack
+### "Land the Plane" Protocol
+### Abstraction & Boundaries
+### Accessibility
+### Additional Background Effects
+### Admin (separate admin panel — phase 2)
+### Background Effects — Cascading Spiral Windmill
+### Bookmark
+### Certificate
+### Core
+### Core Rules
+### Course
+### Documentation Standards
+### Dolt Server Dependency
+### Environment Variables
+### Error Handling & Resilience
+### ESLint
+### Font Loading
+### Foundation
+### Image Optimization
+### Lab
+### Layout Dimensions
+### Lesson
+### Loading Spinners
+### Naming Conventions
+### next.config.ts
+### Note
+### Notification
+### Pages
+### Performance
+### Progress (per user)
+### Public (no auth)
+### Quality
+### Quick Reference
+### Route Transition Indicator
+### SEO & Metadata
+### Student Dashboard (authenticated)
+### Study Streak
+### Testing Strategy
+### Theme Colors (OKLCH — CSS custom properties)
+### TypeScript
+### Typography
