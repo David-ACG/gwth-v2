@@ -900,8 +900,11 @@
 
 /* Variant E2-E — Stone & Sage
    Most neutral / photo-friendly of the family. Warm stone bg,
-   charcoal-stone drench (almost no hue), mustard gold accent,
-   brick CTA, soft sage postscript panel. OKA / muted-editorial. */
+   charcoal-stone drench (almost no hue), mustard gold accent.
+   Locked colours from /redesign_v2 swatch picker (2026-04-29):
+   - Light postscript panel: #8a8170 (warm stone, replaces sage)
+   - Dark postscript panel:  #22301f (near-black forest)
+   - Primary CTA (both):     #a94c2e (terracotta) */
 [data-variant="e2-e"] {
   --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-vollkorn), "Vollkorn", ui-serif, Georgia, serif;
@@ -909,12 +912,12 @@
   --foreground: oklch(0.22 0.008 75);
   --card: oklch(0.99 0.003 75);
   --card-foreground: oklch(0.22 0.008 75);
-  --primary: oklch(0.45 0.14 28);
+  --primary: #a94c2e;
   --primary-foreground: oklch(0.98 0.005 75);
-  --ring: oklch(0.45 0.14 28);
-  --info: oklch(0.45 0.14 28);
+  --ring: #a94c2e;
+  --info: #a94c2e;
   --info-foreground: oklch(0.98 0.005 75);
-  --accent: oklch(0.45 0.14 28);
+  --accent: #a94c2e;
   --accent-foreground: oklch(0.98 0.005 75);
   --variant-warm: oklch(0.72 0.13 80);
   --variant-warm-fg: oklch(0.2 0.04 60);
@@ -923,7 +926,7 @@
   --border: oklch(0.86 0.008 75);
   --variant-drench-bg: oklch(0.32 0.005 75);
   --variant-drench-fg: oklch(0.96 0.005 75);
-  --variant-panel-bg: oklch(0.6 0.05 145);
+  --variant-panel-bg: #8a8170;
   --variant-panel-fg: oklch(0.16 0.008 75);
   --variant-warm-panel-bg: oklch(0.72 0.13 80);
   --variant-warm-panel-fg: oklch(0.2 0.04 60);
@@ -933,12 +936,12 @@
   --foreground: oklch(0.94 0.005 75);
   --card: oklch(0.24 0.005 75);
   --card-foreground: oklch(0.94 0.005 75);
-  --primary: oklch(0.5 0.17 28);
+  --primary: #a94c2e;
   --primary-foreground: oklch(0.96 0.005 75);
-  --ring: oklch(0.5 0.17 28);
-  --info: oklch(0.5 0.17 28);
+  --ring: #a94c2e;
+  --info: #a94c2e;
   --info-foreground: oklch(0.96 0.005 75);
-  --accent: oklch(0.5 0.17 28);
+  --accent: #a94c2e;
   --accent-foreground: oklch(0.96 0.005 75);
   --variant-warm: oklch(0.8 0.14 80);
   --variant-warm-fg: oklch(0.2 0.005 75);
@@ -947,8 +950,8 @@
   --border: oklch(1 0 0 / 14%);
   --variant-drench-bg: oklch(0.32 0.005 75);
   --variant-drench-fg: oklch(0.96 0.005 75);
-  --variant-panel-bg: oklch(0.4 0.05 145);
-  --variant-panel-fg: oklch(0.94 0.005 75);
+  --variant-panel-bg: #22301f;
+  --variant-panel-fg: oklch(0.95 0.008 145);
   --variant-warm-panel-bg: oklch(0.6 0.14 80);
   --variant-warm-panel-fg: oklch(0.2 0.005 75);
 }

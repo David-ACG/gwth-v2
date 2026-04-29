@@ -37,7 +37,7 @@ const LIGHT_PANEL_OPTIONS: readonly Swatch[] = [
   { hex: "#888556", label: "Mustard olive" },
   { hex: "#7a7a5a", label: "Khaki" },
   { hex: "#807a68", label: "Warm taupe" },
-  { hex: "#8a8170", label: "Warm stone" },
+  { hex: "#8a8170", label: "Warm stone (locked)" },
   { hex: "#74725a", label: "Deep olive" },
   { hex: "#605c4f", label: "Dark khaki" },
   { hex: "#9b9683", label: "Sand olive" },
@@ -56,11 +56,12 @@ const DARK_PANEL_OPTIONS: readonly Swatch[] = [
   { hex: "#3d4d35", label: "Olive forest" },
   { hex: "#4a5a44", label: "Lighter sage" },
   { hex: "#314634", label: "Pine" },
-  { hex: "#22301f", label: "Near-black forest" },
+  { hex: "#22301f", label: "Near-black forest (locked)" },
 ] as const
 
 const PRIMARY_OPTIONS: readonly Swatch[] = [
-  { hex: "#a92a20", label: "Deeper brick (current)" },
+  { hex: "#a94c2e", label: "Terracotta (locked)" },
+  { hex: "#a92a20", label: "Deeper brick" },
   { hex: "#c64f51", label: "Vibrant red (E2-F dark)" },
   { hex: "#b8392b", label: "Mid brick" },
   { hex: "#9c2c1e", label: "Darker brick" },
@@ -130,9 +131,11 @@ export function PaletteExplorer() {
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
 
-  const [lightPanel, setLightPanel] = React.useState("#6f876c")
-  const [darkPanel, setDarkPanel] = React.useState("#2f442c")
-  const [primary, setPrimary] = React.useState("#a92a20")
+  // Defaults match the locked E2-E palette (2026-04-29) so the test
+  // audience opens the page on the chosen baseline and can A/B from there.
+  const [lightPanel, setLightPanel] = React.useState("#8a8170")
+  const [darkPanel, setDarkPanel] = React.useState("#22301f")
+  const [primary, setPrimary] = React.useState("#a94c2e")
 
   const isDark = mounted && resolvedTheme === "dark"
   const activePanel = isDark ? darkPanel : lightPanel
