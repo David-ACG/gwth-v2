@@ -164,20 +164,40 @@ export default function RedesignIndex() {
   return (
     <div className="min-h-screen bg-neutral-50 px-6 py-16 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
       <div className="mx-auto max-w-5xl">
+        <div className="mb-10 flex flex-col gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-amber-700 dark:bg-amber-950/40">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-amber-800 dark:text-amber-300">
+              archived · 2026-04-29
+            </p>
+            <p className="mt-1 text-sm text-amber-900 dark:text-amber-100">
+              The full variant exploration below is kept for reference. Active
+              colour tuning has moved to the E2-E palette explorer.
+            </p>
+          </div>
+          <Link
+            href="/redesign_v2"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border-2 border-amber-900 bg-amber-900 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.14em] text-amber-50 transition-colors hover:bg-transparent hover:text-amber-900 dark:border-amber-300 dark:bg-amber-300 dark:text-amber-950 dark:hover:bg-transparent dark:hover:text-amber-300"
+          >
+            Open redesign_v2
+            <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Link>
+        </div>
+
         <div className="max-w-2xl">
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-neutral-500">
-            redesign / impeccable-homepage
+            redesign / impeccable-homepage · archived
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
             Style worlds under review.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
             All variants ship the same information architecture and the same
-            Score-widget hero, so the comparison is purely about typography,
-            palette, and pace. The current focus is the E2 plus Gold family
-            below — five earthier sub-variants of E2 built from feedback (less
-            pink, no large red postscript, gold accents in Section 02, deeper
-            non-pink dark-mode CTA).
+            Score-widget hero. The exploration concluded with E2-E (Stone &amp; Sage)
+            as the chosen base; ongoing colour tuning happens on{" "}
+            <Link href="/redesign_v2" className="underline underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100">
+              /redesign_v2
+            </Link>
+            .
           </p>
           <p className="mt-3 max-w-xl text-sm text-neutral-500">
             Each variant works in light + dark and at 412 / 768 / 1280+ viewports.
