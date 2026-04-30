@@ -161,12 +161,14 @@
   --grade-d: oklch(0.65 0.18 50);
   --grade-f: oklch(0.577 0.245 27.325);
 
-  /* Locked GWTH.ai logo colours (chosen 2026-04-29 via /logo_picker).
-     Wordmark = "GWTH.ai" glyphs. Accent = arrow-in-G + dots on i and a.
-     Light mode: deep forest wordmark + terracotta accent on near-white.
-     Dark mode:  warm off-white wordmark + same terracotta accent. */
+  /* Locked GWTH.ai logo colours (chosen 2026-04-30 via /logo_picker
+     after a wider-audience review revised the accent from terracotta
+     to bright gold). Wordmark = "GWTH.ai" glyphs. Accent = arrow-in-G
+     + dots on i and a.
+     Light mode: deep forest wordmark + bright gold accent on near-white.
+     Dark mode:  warm off-white wordmark + same bright gold accent. */
   --logo-wordmark: #22301f;
-  --logo-accent: #a94c2e;
+  --logo-accent: #d4a73c;
 }
 
 /* =================================================================
@@ -237,9 +239,9 @@
   --grade-d: oklch(0.7 0.16 50);
   --grade-f: oklch(0.704 0.191 22.216);
 
-  /* Logo: warm off-white wordmark for dark mode; terracotta accent unchanged. */
+  /* Logo: warm off-white wordmark for dark mode; bright gold accent unchanged. */
   --logo-wordmark: #edeae6;
-  --logo-accent: #a94c2e;
+  --logo-accent: #d4a73c;
 
   color-scheme: dark;
 }
