@@ -10,22 +10,31 @@ import { PRICING } from "@/components/marketing/data"
  * src/lib/config.ts via marketing/data.ts so the marketing copy cannot
  * drift from the canonical pricing constants. The middle tier is
  * highlighted via `data-featured="true"` and a primary border.
+ *
+ * @param headingless When true, skips the section heading + subhead so a
+ *                    dedicated /pricing page can supply its own page-level
+ *                    H1 above the grid. Default false (homepage usage).
  */
-export function PricingCards() {
+export function PricingCards({ headingless = false }: { headingless?: boolean } = {}) {
   return (
-    <MotionSection data-section="pricing" className="py-20 md:py-28">
+    <MotionSection
+      data-section="pricing"
+      className={headingless ? "pb-16 md:pb-20" : "py-20 md:py-28"}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Less than the cost of one hour with an AI consultant.
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Start free. Learn everything in 3 months. Stay current for less than a
-            flat white.
-          </p>
-        </div>
+        {!headingless && (
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Less than the cost of one hour with an AI consultant.
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Start free. Learn everything in 3 months. Stay current for less than a
+              flat white.
+            </p>
+          </div>
+        )}
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className={cn("grid gap-6 lg:grid-cols-3", !headingless && "mt-14")}>
           {PRICING.map((tier) => {
             const featured = Boolean(tier.flag)
             return (
