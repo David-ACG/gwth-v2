@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { CheckCircle2, ArrowRight, Radar } from "lucide-react"
+import { CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react"
 import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
 
 /**
@@ -74,9 +74,9 @@ export function SignupForm() {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button className="gap-2" asChild>
-              <Link href="/tech-radar">
-                <Radar className="size-4" />
-                Explore the Tech Radar
+              <Link href="/why-gwth">
+                <ShieldCheck className="size-4" />
+                Why GWTH
               </Link>
             </Button>
             <Button variant="outline" className="gap-2" asChild>

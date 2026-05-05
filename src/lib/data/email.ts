@@ -89,13 +89,13 @@ function buildWaitlistEmailHtml(name: string): string {
         <p style="margin:0 0 12px;color:#0F2624;font-size:14px;font-weight:600;">What you will get:</p>
         <table style="width:100%;border-collapse:collapse;">
           <tr>
-            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; 94 hands-on projects — no theory, no fluff</td>
+            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; Hands-on projects — no theory, no fluff</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; Video walkthroughs for every single project</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; 60+ AI tools tracked and compared daily</td>
+            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; UK-focused examples for work, family, and real local life</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; Content updated every day so your skills never go stale</td>
@@ -107,12 +107,12 @@ function buildWaitlistEmailHtml(name: string): string {
       </div>
 
       <p style="margin:0 0 24px;color:#5E6E85;font-size:16px;line-height:1.6;">
-        In the meantime, feel free to explore the <a href="https://gwth.ai/tech-radar" style="color:#33BBFF;text-decoration:none;font-weight:500;">Tech Radar</a> — it is live right now and tracks 60+ AI tools daily.
+        In the meantime, feel free to read <a href="https://gwth.ai/why-gwth" style="color:#33BBFF;text-decoration:none;font-weight:500;">why GWTH exists</a> and how the course is being built for UK learners first.
       </p>
 
       <!-- CTA -->
       <div style="text-align:center;margin:32px 0 8px;">
-        <a href="https://gwth.ai/tech-radar" style="display:inline-block;background:#33BBFF;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:600;">Explore the Tech Radar</a>
+        <a href="https://gwth.ai/why-gwth" style="display:inline-block;background:#33BBFF;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:600;">Why GWTH</a>
       </div>
     </div>
 

@@ -64,14 +64,14 @@ export default function TermsPage() {
             <ul>
               <li>Access to course materials, video content, and interactive labs.</li>
               <li>Progress tracking, skill scoring, and certification.</li>
-              <li>The GWTH Tech Radar — a daily-updated directory of AI tools.</li>
+              <li>GWTH Score, assessments, and course progress features.</li>
               <li>Team administration features for group subscriptions.</li>
             </ul>
 
             <h2 id="ip">2. Intellectual Property</h2>
             <p>
               All content on GWTH.ai — including course materials, videos, text,
-              graphics, logos, assessments, and the Tech Radar — is the
+              graphics, logos, assessments, and score systems — is the
               intellectual property of GWTH.ai and is protected by copyright and
               other intellectual property laws.
             </p>

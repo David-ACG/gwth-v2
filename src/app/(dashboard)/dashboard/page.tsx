@@ -17,7 +17,7 @@ import {
   ArrowRight,
   FlaskConical,
   Lock,
-  Radar,
+  ShieldCheck,
 } from "lucide-react"
 import { formatRelativeDate, formatProgress } from "@/lib/utils"
 import { COURSE_MONTHLY_PRICE, MONTH_CONFIGS } from "@/lib/config"
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 /**
  * Dashboard overview page. Shows different content based on subscription state:
  * - Registered (free): Labs, course teaser, subscribe CTA
- * - Subscriber: Course progress, current lesson, study streak, dynamic score
+ * - Subscriber: Course progress, current lesson, study streak, GWTH Score
  * - Lapsed: Grace period warning, re-subscribe CTA
  */
 export default async function DashboardPage() {
@@ -188,8 +188,8 @@ export default async function DashboardPage() {
                     GWTH — Applied AI Skills
                   </h3>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    94 hands-on projects across 3 months. Build apps, automate
-                    workflows, and solve real problems using AI — all in plain
+                    Hands-on projects across 3 months. Build apps, automate
+                    workflows, and solve real problems using AI in plain
                     English.
                   </p>
                   <div className="mt-4 flex flex-wrap gap-3">
@@ -234,17 +234,18 @@ export default async function DashboardPage() {
           <Card>
             <CardContent className="flex items-center gap-4 p-6">
               <div className="rounded-lg bg-primary/10 p-3">
-                <Radar className="size-5 text-primary" />
+                <ShieldCheck className="size-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold">Tech Radar</h3>
+                <h3 className="font-semibold">Why GWTH</h3>
                 <p className="text-sm text-muted-foreground">
-                  60+ AI tools tracked and evaluated daily.
+                  A UK-focused course built around real projects and a
+                  verifiable score.
                 </p>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/tech-radar">
-                  Explore <ArrowRight className="ml-1 size-3" />
+                <Link href="/why-gwth">
+                  Read <ArrowRight className="ml-1 size-3" />
                 </Link>
               </Button>
             </CardContent>
