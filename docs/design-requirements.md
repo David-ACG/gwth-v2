@@ -1,5 +1,12 @@
 # GWTH.ai — Design Requirements
 
+> **Stale status note, 2026-05-05:** This February design spec is historical.
+> The active product direction is `docs/product-source-of-truth-2026-05-04.md`
+> and `PRODUCT.md`. Any mention here of global launch positioning, USD/$37.50
+> pricing, public Tech Radar as a launch pillar, "no coding required" as an
+> absolute claim, daily updates, or a fixed 94-project promise is superseded for
+> the UK beta.
+
 > A complete specification for designing and building all student-facing pages — both the public marketing site and the authenticated learning platform.
 >
 > **Audience for this document:** Claude Code or any developer building the GWTH v2 frontend.
@@ -30,6 +37,7 @@
 GWTH.ai is a **single course** delivered over 3 months that teaches applied AI skills to non-technical people. Students learn to build apps, automate workflows, research faster, create content, analyse data, and solve real problems using AI — all in plain English, with no coding.
 
 **Key facts:**
+
 - One course, not a marketplace of courses
 - 94 hands-on projects across 3 months (24 + 35 + 35)
 - Every lesson ends with a project AND a video walkthrough by the instructor
@@ -49,6 +57,7 @@ There are **5 user states** that determine what a user can see and do. Every pag
 ### 2.1 Visitor (not logged in)
 
 **Can access:**
+
 - Landing page (`/`)
 - About page (`/about`)
 - Pricing page (`/pricing`)
@@ -59,12 +68,14 @@ There are **5 user states** that determine what a user can see and do. Every pag
 - Forgot password (`/forgot-password`)
 
 **Cannot access:**
+
 - Labs (browsing or viewing)
 - Syllabus / course content
 - Dashboard
 - Any authenticated page
 
 **Key behaviour:**
+
 - Attempting to visit any authenticated route redirects to `/login` with a `?redirect=` param
 - The landing page, pricing page, and about page must sell the course without showing the full curriculum
 - CTAs push toward free registration ("Create a free account to try the labs")
@@ -72,6 +83,7 @@ There are **5 user states** that determine what a user can see and do. Every pag
 ### 2.2 Registered User (free account, no subscription)
 
 **Can access:**
+
 - Everything a Visitor can, plus:
 - Labs listing (`/labs`) — browse and complete free labs
 - Lab viewer (`/labs/[slug]`) — full lab content for non-premium labs
@@ -82,12 +94,14 @@ There are **5 user states** that determine what a user can see and do. Every pag
 - Notifications (`/notifications`)
 
 **Cannot access:**
+
 - Course syllabus / lesson listing
 - Any lesson content
 - Course detail page content (beyond a teaser/upsell)
 - Progress page (no course progress to show)
 
 **Key behaviour:**
+
 - Dashboard shows a prominent but non-aggressive subscription CTA
 - Labs are the primary content available — positioned as a "try before you buy" experience
 - Premium labs (`isPremium: true`) show a lock icon and subscription prompt
@@ -96,6 +110,7 @@ There are **5 user states** that determine what a user can see and do. Every pag
 ### 2.3 Subscriber — Month 1 (first payment of $37.50)
 
 **Can access:**
+
 - Everything a Registered User can, plus:
 - Course detail page (`/course/[slug]`) — shows Month 1 sections and lessons only
 - Month 1 lessons (`/course/[slug]/lesson/[lessonSlug]`) — all 24 lessons
@@ -104,10 +119,12 @@ There are **5 user states** that determine what a user can see and do. Every pag
 - Full search results for Month 1 content
 
 **Cannot access:**
+
 - Month 2 lessons and sections (shown as locked with "Available after your second month")
 - Month 3 lessons and sections (shown as locked with "Available after your third month")
 
 **Key behaviour:**
+
 - Course syllabus page shows Month 1 sections expanded/accessible, Month 2 and 3 collapsed with lock icons
 - Month 2/3 section headers are visible (students can see what's coming) but lessons within are hidden
 - The section title for Month 2 shows "Unlocks after your second payment" and Month 3 shows "Unlocks after your third payment"
@@ -115,15 +132,18 @@ There are **5 user states** that determine what a user can see and do. Every pag
 ### 2.4 Subscriber — Month 2 (second payment of $37.50)
 
 **Can access:**
+
 - Everything from Month 1, plus:
 - Month 2 sections and lessons (20 mandatory + 15 optional)
 - Month 2 progress data
 - Month 2 industry specialisation selection
 
 **Cannot access:**
+
 - Month 3 lessons and sections (locked, "Available after your third month")
 
 **Key behaviour:**
+
 - Course syllabus page shows Month 1 and 2 sections accessible, Month 3 locked
 - Optional lessons in Month 2 are clearly marked as optional with a different visual treatment
 - Students choose 3-5 optional lessons based on their industry/goals
@@ -131,6 +151,7 @@ There are **5 user states** that determine what a user can see and do. Every pag
 ### 2.5 Subscriber — Month 3 (third payment of $37.50)
 
 **Can access:**
+
 - Full course content — all 3 months, all lessons, all optional content
 - Full progress and scoring
 - Certificate generation (upon completion)
@@ -138,12 +159,14 @@ There are **5 user states** that determine what a user can see and do. Every pag
 ### 2.6 Ongoing Subscriber ($7.50/month after Month 3)
 
 **Can access:**
+
 - Same as Month 3 subscriber — full course content
 - Updated lessons and new content as it's published
 - Dynamic score maintenance (score stays current)
 - Certificate access
 
 **Key behaviour:**
+
 - Content continues to be updated daily. Students on ongoing access see new/updated lessons
 - Their dynamic score reflects current tool landscape
 
@@ -152,11 +175,13 @@ There are **5 user states** that determine what a user can see and do. Every pag
 **Grace period: 14 days** with email reminders at day 1, 7, and 12.
 
 **During grace period:**
+
 - Full access continues (read-only is confusing — just maintain access)
 - A non-dismissable but non-blocking banner appears at the top: "Your payment method needs updating. Update payment to continue access."
 - Reminders via email at day 1, 7, and 12
 
 **After grace period:**
+
 - Access reverts to Registered User level (labs only, no course content)
 - Dashboard shows "Your subscription has lapsed" with a clear resubscribe CTA
 - Progress data is preserved (not deleted) — restoring subscription restores access to all previously unlocked months
@@ -168,12 +193,12 @@ There are **5 user states** that determine what a user can see and do. Every pag
 
 ### 3.1 Pricing
 
-| Phase | Price | Duration | What unlocks |
-|-------|-------|----------|-------------|
-| Month 1 | $37.50/month | 1 month | 24 lessons + all labs |
-| Month 2 | $37.50/month | 1 month | 35 additional lessons (cumulative with Month 1) |
-| Month 3 | $37.50/month | 1 month | 35 additional lessons (full course unlocked) |
-| Ongoing | $7.50/month | Recurring | Continued access to all content + updates |
+| Phase   | Price        | Duration  | What unlocks                                    |
+| ------- | ------------ | --------- | ----------------------------------------------- |
+| Month 1 | $37.50/month | 1 month   | 24 lessons + all labs                           |
+| Month 2 | $37.50/month | 1 month   | 35 additional lessons (cumulative with Month 1) |
+| Month 3 | $37.50/month | 1 month   | 35 additional lessons (full course unlocked)    |
+| Ongoing | $7.50/month  | Recurring | Continued access to all content + updates       |
 
 ### 3.2 Rules
 
@@ -243,17 +268,20 @@ Course (single course: "GWTH — Applied AI Skills")
 Every lesson has three tabs in the viewer:
 
 **Learn Tab:**
+
 - Introductory video (instructor-led)
 - Rich text content (markdown with code blocks highlighted via Shiki)
 - Audio version (optional — for listening on the go)
 - Resources (links, downloads, articles)
 
 **Build Tab:**
+
 - Build-along video (instructor builds the project step by step)
 - Step-by-step written instructions
 - The deliverable is a real, usable project (not a toy exercise)
 
 **Quiz Tab:**
+
 - Multiple-choice questions testing comprehension
 - Immediate feedback with explanations
 - Score contributes to dynamic scoring system
@@ -261,11 +289,11 @@ Every lesson has three tabs in the viewer:
 
 ### 4.3 Capstone Projects
 
-| Month | Capstone | Domain | Description |
-|-------|----------|--------|-------------|
-| 1 | Family AI Bot | familyaibot.com | Records family meetings → transcribes → extracts tasks, events, meals, shopping list → distributes automatically |
-| 2 | AI Customer-Support Chatbot | askmyco.com | RAG-powered chatbot trained on company data, deployed on a real website |
-| 3 | AI Readiness Assessment Tool | askevery.one | Voice agent that interviews organisations about AI maturity, generates transformation roadmaps |
+| Month | Capstone                     | Domain          | Description                                                                                                      |
+| ----- | ---------------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 1     | Family AI Bot                | familyaibot.com | Records family meetings → transcribes → extracts tasks, events, meals, shopping list → distributes automatically |
+| 2     | AI Customer-Support Chatbot  | askmyco.com     | RAG-powered chatbot trained on company data, deployed on a real website                                          |
+| 3     | AI Readiness Assessment Tool | askevery.one    | Voice agent that interviews organisations about AI maturity, generates transformation roadmaps                   |
 
 ### 4.4 Labs
 
@@ -280,6 +308,7 @@ Labs are standalone, hands-on projects separate from the course curriculum.
 ### 4.5 Tech Radar
 
 A public-facing tool tracking 47+ AI tools across 16 categories:
+
 - Updated daily via automated scanner
 - Shows: tool name, category, status (GA/Beta/Alpha/Deprecated), cost tier, which lessons reference it
 - Accessible to everyone (no login required)
@@ -299,12 +328,12 @@ A public-facing tool tracking 47+ AI tools across 16 categories:
 
 ### 5.2 Additional Metrics
 
-| Metric | Description |
-|--------|-------------|
-| **AI Skill Percentile** | How the student's composite score compares to all other students |
-| **Curiosity Index** | How often the student explores optional or advanced lessons |
-| **Consistency Score** | How regularly the student learns and completes lessons (streak-based) |
-| **Improvement Rate** | How the student's performance trends over time |
+| Metric                  | Description                                                           |
+| ----------------------- | --------------------------------------------------------------------- |
+| **AI Skill Percentile** | How the student's composite score compares to all other students      |
+| **Curiosity Index**     | How often the student explores optional or advanced lessons           |
+| **Consistency Score**   | How regularly the student learns and completes lessons (streak-based) |
+| **Improvement Rate**    | How the student's performance trends over time                        |
 
 ### 5.3 Display
 
@@ -375,6 +404,7 @@ These pages are accessible to everyone (no login required).
 **Purpose:** Build trust. Tell the GWTH story.
 
 **Content:**
+
 - Who built GWTH and why (25 years solution architecture + AI-first from day one)
 - The independence promise (no ads, sponsors, vendor partnerships)
 - The "agentic mindset" philosophy (prompt → evaluate → improve → repeat)
@@ -386,6 +416,7 @@ These pages are accessible to everyone (no login required).
 **Purpose:** Clear pricing with no confusion.
 
 **Content:**
+
 - Single plan breakdown (no tiered comparison needed — it's one course):
   - $37.50/month for 3 months
   - $7.50/month ongoing after completion
@@ -400,6 +431,7 @@ These pages are accessible to everyone (no login required).
 **Purpose:** Sell GWTH to HR directors, team leaders, and business owners.
 
 **Content (from `for-employers-and-teams.md`):**
+
 - Business case: 34% better retention, 1.5x revenue growth for early AI adopters
 - Why GWTH vs vendor training (vendor-neutral, dynamic scoring, daily updates)
 - What teams learn per month (Month 1: personal AI mastery, Month 2: industry application, Month 3: enterprise transformation)
@@ -413,6 +445,7 @@ These pages are accessible to everyone (no login required).
 **Purpose:** Public reference tool. Builds trust and demonstrates expertise.
 
 **Content:**
+
 - Searchable/filterable grid of 47+ AI tools
 - Categories (16): LLMs, Coding Agents, Image Generation, Automation, TTS, etc.
 - For each tool: name, category, status (GA/Beta/Alpha/Deprecated), cost tier, brief description, which lessons reference it
@@ -424,6 +457,7 @@ These pages are accessible to everyone (no login required).
 **Purpose:** Low-friction email capture.
 
 **Content:**
+
 - One email per week: practical AI tip, Tech Radar updates, course news
 - No spam, no sales pressure
 - One-click unsubscribe
@@ -433,12 +467,14 @@ These pages are accessible to everyone (no login required).
 ### 6.7 Auth Pages
 
 **Login (`/login`):**
+
 - Email + password form
 - "Forgot password?" link
 - "Don't have an account? Sign up" link
 - Social login buttons (if implemented — design for it, wire later)
 
 **Sign Up (`/signup`):**
+
 - Name, email, password form
 - Terms of service checkbox
 - "Already have an account? Log in" link
@@ -446,6 +482,7 @@ These pages are accessible to everyone (no login required).
 - No credit card required at signup
 
 **Forgot Password (`/forgot-password`):**
+
 - Email input
 - "Check your email" confirmation state
 
@@ -464,6 +501,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Content varies by user state:**
 
 **For Registered (free) users:**
+
 - Welcome message with name
 - "Your Labs" section — grid of available free labs with progress indicators
 - Subscription CTA card: "Unlock the full course — 94 projects, video walkthroughs, dynamic scoring" with "Subscribe" button
@@ -471,6 +509,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 - Recent activity (labs started/completed)
 
 **For Month 1 subscribers:**
+
 - Course progress card with progress ring (% of Month 1 completed)
 - "Continue where you left off" — link to current lesson
 - Month 1 lesson grid with completion status
@@ -480,17 +519,20 @@ These pages require login. Access level varies by subscription state (see Sectio
 - Dynamic score display
 
 **For Month 2 subscribers:**
+
 - Same as Month 1 plus Month 2 progress
 - Industry specialisation selector (if not yet chosen)
 - Optional lessons browsing
 
 **For Month 3 / Ongoing subscribers:**
+
 - Full course progress across all 3 months
 - All scoring metrics (percentile, curiosity, consistency, improvement)
 - Certificate status (if course completed)
 - Updated/new content indicators
 
 **For Lapsed subscribers:**
+
 - Non-dismissable payment banner at top
 - During grace period: full access with banner
 - After grace period: reverts to Registered user view with "Resubscribe to restore access" CTA
@@ -504,6 +546,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Layout:**
 
 **For subscribers:**
+
 - Course header: title, description, overall progress ring, total time spent
 - Month tabs or sections: Month 1 | Month 2 | Month 3
 - Each month shows:
@@ -528,6 +571,7 @@ These pages require login. Access level varies by subscription state (see Sectio
   - Recommendation: "Choose 3-5 optional lessons that match your goals"
 
 **For registered (free) users:**
+
 - Course header with blurred/teaser content
 - "Subscribe to unlock the course" CTA
 - Maybe show Month 1 section titles (no lesson details) as a teaser
@@ -539,6 +583,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** Subscribers with access to the relevant month only.
 
 **Layout:**
+
 - **Left sidebar (desktop) / Sheet (mobile):** Course navigation tree
   - Sections → Lessons with progress dots
   - Current lesson highlighted
@@ -557,12 +602,14 @@ These pages require login. Access level varies by subscription state (see Sectio
   - Persisted per user per lesson
 
 **Video player:**
+
 - Lazy loaded (`next/dynamic`)
 - Responsive aspect ratio
 - Graceful fallback if video fails to load
 - Both Learn and Build tabs have separate videos
 
 **Quiz engine:**
+
 - Multiple choice questions
 - Immediate feedback after each answer (correct/incorrect + explanation)
 - Overall score shown at end
@@ -577,6 +624,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** Registered users and above.
 
 **Layout:**
+
 - Grid of lab cards
 - Filters: difficulty (beginner/intermediate/advanced), category, technology, search
 - Filters sync to URL params (shareable/bookmarkable filtered views)
@@ -591,6 +639,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** Registered users for free labs. Subscribers for premium labs.
 
 **Layout:**
+
 - Lab header: title, description, difficulty, duration, technologies, learning outcomes
 - Step-by-step instructions with step tracker (progress through steps)
 - Main content area with markdown instructions
@@ -605,6 +654,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** Subscribers only.
 
 **Layout:**
+
 - **Overall progress section:**
   - Course progress ring (overall %)
   - Lessons completed / total
@@ -636,6 +686,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** All authenticated users.
 
 **Layout:**
+
 - Avatar (upload/change)
 - Name, email, bio
 - Subscription status
@@ -650,6 +701,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** All authenticated users.
 
 **Layout:**
+
 - **Account:** Name, email, password change
 - **Subscription:**
   - Current plan status
@@ -672,6 +724,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** All authenticated users.
 
 **Layout:**
+
 - Two sections: Bookmarked Lessons / Bookmarked Labs
 - Each item shows: title, status, when bookmarked
 - Click navigates to the lesson/lab
@@ -685,11 +738,13 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** All authenticated users.
 
 **Types:**
+
 - **Achievement:** "You completed Month 1!" / "5-day study streak!" / "New high score on L8 quiz"
 - **Reminder:** "You haven't studied in 3 days" / "New content available in L12"
 - **Announcement:** "New lab published: Build a Personal CRM" / "Tech Radar update: GPT-5.4 released"
 
 **Layout:**
+
 - Chronological list
 - Unread indicator (bold + dot)
 - "Mark all as read" button
@@ -703,6 +758,7 @@ These pages require login. Access level varies by subscription state (see Sectio
 **Access:** All authenticated users. Results filtered by access level.
 
 **Layout:**
+
 - Command palette (shadcn Command component)
 - Searches: lessons (if subscriber), labs, settings pages
 - Shows: title, type badge, status
@@ -877,13 +933,13 @@ These messages should be consistently reinforced across the UI:
 
 When messaging touches these audiences, use these angles:
 
-| Audience | Key angle |
-|----------|-----------|
-| Worried about job loss | "The person who knows how to use AI will be more productive" |
-| Made redundant | "Skills that make you hirable now. Every project goes in your portfolio." |
-| Business owners | "Your competitors are already using AI. 5 hours/week to catch up." |
-| Parents | "AI fluency will be table stakes. No coding needed." |
-| Employers | "Companies investing in AI training retain 34% more staff." |
+| Audience               | Key angle                                                                 |
+| ---------------------- | ------------------------------------------------------------------------- |
+| Worried about job loss | "The person who knows how to use AI will be more productive"              |
+| Made redundant         | "Skills that make you hirable now. Every project goes in your portfolio." |
+| Business owners        | "Your competitors are already using AI. 5 hours/week to catch up."        |
+| Parents                | "AI fluency will be table stakes. No coding needed."                      |
+| Employers              | "Companies investing in AI training retain 34% more staff."               |
 
 ### 10.4 What NOT to Say
 
@@ -902,16 +958,16 @@ The full design system is defined in `src/app/globals.css` and documented in `CL
 
 ### 11.1 Colors (OKLCH)
 
-| Role | Light Mode | Dark Mode ("Graphite Warm") |
-|------|-----------|---------------------------|
-| Background | `oklch(0.98 0 0)` near-white | `oklch(0.17 0.005 60)` warm charcoal |
-| Foreground | `oklch(0.18 0.04 175)` dark teal | `oklch(0.93 0.008 60)` warm off-white |
-| Primary | `oklch(0.7 0.18 220)` bright aqua | `oklch(0.75 0.16 220)` lighter aqua |
-| Accent | `oklch(0.65 0.16 165)` mint green | `oklch(0.75 0.14 165)` lighter mint |
-| Card | `oklch(1 0 0)` white | `oklch(0.21 0.005 60)` slightly lighter than bg |
-| Destructive | Red | Red |
-| Success | Green | Green |
-| Warning | Amber | Amber |
+| Role        | Light Mode                        | Dark Mode ("Graphite Warm")                     |
+| ----------- | --------------------------------- | ----------------------------------------------- |
+| Background  | `oklch(0.98 0 0)` near-white      | `oklch(0.17 0.005 60)` warm charcoal            |
+| Foreground  | `oklch(0.18 0.04 175)` dark teal  | `oklch(0.93 0.008 60)` warm off-white           |
+| Primary     | `oklch(0.7 0.18 220)` bright aqua | `oklch(0.75 0.16 220)` lighter aqua             |
+| Accent      | `oklch(0.65 0.16 165)` mint green | `oklch(0.75 0.14 165)` lighter mint             |
+| Card        | `oklch(1 0 0)` white              | `oklch(0.21 0.005 60)` slightly lighter than bg |
+| Destructive | Red                               | Red                                             |
+| Success     | Green                             | Green                                           |
+| Warning     | Amber                             | Amber                                           |
 
 ### 11.2 Typography
 
@@ -929,22 +985,22 @@ The full design system is defined in `src/app/globals.css` and documented in `CL
 
 ### 11.4 Status Colors
 
-| Status | Color |
-|--------|-------|
-| Completed | Green (success) |
-| In-progress | Aqua (primary) |
-| Available / Not started | Grey (muted) |
-| Locked | Dark grey with lock icon |
+| Status                  | Color                    |
+| ----------------------- | ------------------------ |
+| Completed               | Green (success)          |
+| In-progress             | Aqua (primary)           |
+| Available / Not started | Grey (muted)             |
+| Locked                  | Dark grey with lock icon |
 
 ### 11.5 Grade Colors
 
-| Grade | Color |
-|-------|-------|
-| A (90-100) | Green |
-| B (80-89) | Mint |
-| C (70-79) | Amber |
-| D (60-69) | Orange |
-| F (<60) | Red |
+| Grade      | Color  |
+| ---------- | ------ |
+| A (90-100) | Green  |
+| B (80-89)  | Mint   |
+| C (70-79)  | Amber  |
+| D (60-69)  | Orange |
+| F (<60)    | Red    |
 
 ### 11.6 Animation
 
@@ -958,6 +1014,7 @@ The full design system is defined in `src/app/globals.css` and documented in `CL
 ### 11.7 Components
 
 Use shadcn/ui as the component foundation. Key custom components:
+
 - `CourseCard` — thumbnail, title, progress bar, lesson count
 - `ProgressRing` — circular SVG with Motion animation
 - `StatusBadge` — colored badge with icon + text
@@ -979,67 +1036,67 @@ Use shadcn/ui as the component foundation. Key custom components:
 
 ### Capstone Projects by Month
 
-| Month | Project | Domain | Description |
-|-------|---------|--------|-------------|
-| 1 | Family AI Bot | familyaibot.com | Records meetings → transcribes → extracts tasks, calendar events, meal plans, shopping lists → distributes automatically |
-| 2 | AI Customer-Support Chatbot | askmyco.com | RAG-powered chatbot trained on company data with citation-backed answers |
-| 3 | AI Readiness Assessment Tool | askevery.one | Voice agent that interviews organisations about AI maturity and generates transformation roadmaps |
+| Month | Project                      | Domain          | Description                                                                                                              |
+| ----- | ---------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 1     | Family AI Bot                | familyaibot.com | Records meetings → transcribes → extracts tasks, calendar events, meal plans, shopping lists → distributes automatically |
+| 2     | AI Customer-Support Chatbot  | askmyco.com     | RAG-powered chatbot trained on company data with citation-backed answers                                                 |
+| 3     | AI Readiness Assessment Tool | askevery.one    | Voice agent that interviews organisations about AI maturity and generates transformation roadmaps                        |
 
 ### Smaller Projects (Selection)
 
-| Month | Project | Domain | Description |
-|-------|---------|--------|-------------|
-| 1 | Superwhisper Clone | lowhisper.com | Private speech-to-text tool |
-| 1 | Blog Post Writer | blogbot.app | AI agents that write posts from YouTube/tweets |
-| 1 | Prompt Saver | cheatprompt.dev | Save, organise, and share AI prompts |
-| 1 | Research Comparison Site | bestrobotmop.com | AI-powered product comparison website |
-| 1 | Brag Manager | bragmanager.com | Professional accomplishments tracker |
-| 1 | Blog Site | eyeonai.dev | AI news blog with AI-assisted publishing |
-| 1 | Deck Creator | firstcalldeck.com | Research to slide deck automation |
-| 1 | Goal Planner | goalsfor.me | AI-assisted personal goal planning |
-| 1 | Grocery Agent | groceryshoppingagent.com | AI grocery list builder from meal plans |
-| 1 | Recipe Unboxer | recipeunboxed.com | Extract ingredients from recipes into shopping lists |
-| 2 | Sleep Music | talktosleep.com | AI-generated sleep music with Spotify distribution |
-| 2 | SEO for AI | sitegeo.net | SEO strategies for AI-first search |
-| 2 | C. Diff Guide | cdiffguide.com | Medical research aggregator for C. difficile |
-| 2 | Employment Law Buddy | employmentlawbuddy.com | AI legal research for employment law |
-| 2 | Health Logger | healthlog.app | Health tracking with AI insights |
-| 2 | Hybrid Whiteboard | whiteboard.bot | Camera-to-screen whiteboard sharing |
-| 2 | Share Trajectory | sharetrajectory.com | AI-powered stock analysis and recommendations |
-| 2 | Travel Planner | stagsguide.co.uk | AI travel planning for group events |
-| 2 | Video CV | myvideo.cv | CV-to-video conversion service |
-| 3 | Transformation Planner | productarchitect.dev | AI business transformation roadmap generator |
-| 3 | Idea Grading | ideagrading.com | AI tool to evaluate and rank transformation ideas |
-| 3 | Transcript RAG | aitranscriptionhub.com | Company RAG system for meeting transcripts |
+| Month | Project                  | Domain                   | Description                                          |
+| ----- | ------------------------ | ------------------------ | ---------------------------------------------------- |
+| 1     | Superwhisper Clone       | lowhisper.com            | Private speech-to-text tool                          |
+| 1     | Blog Post Writer         | blogbot.app              | AI agents that write posts from YouTube/tweets       |
+| 1     | Prompt Saver             | cheatprompt.dev          | Save, organise, and share AI prompts                 |
+| 1     | Research Comparison Site | bestrobotmop.com         | AI-powered product comparison website                |
+| 1     | Brag Manager             | bragmanager.com          | Professional accomplishments tracker                 |
+| 1     | Blog Site                | eyeonai.dev              | AI news blog with AI-assisted publishing             |
+| 1     | Deck Creator             | firstcalldeck.com        | Research to slide deck automation                    |
+| 1     | Goal Planner             | goalsfor.me              | AI-assisted personal goal planning                   |
+| 1     | Grocery Agent            | groceryshoppingagent.com | AI grocery list builder from meal plans              |
+| 1     | Recipe Unboxer           | recipeunboxed.com        | Extract ingredients from recipes into shopping lists |
+| 2     | Sleep Music              | talktosleep.com          | AI-generated sleep music with Spotify distribution   |
+| 2     | SEO for AI               | sitegeo.net              | SEO strategies for AI-first search                   |
+| 2     | C. Diff Guide            | cdiffguide.com           | Medical research aggregator for C. difficile         |
+| 2     | Employment Law Buddy     | employmentlawbuddy.com   | AI legal research for employment law                 |
+| 2     | Health Logger            | healthlog.app            | Health tracking with AI insights                     |
+| 2     | Hybrid Whiteboard        | whiteboard.bot           | Camera-to-screen whiteboard sharing                  |
+| 2     | Share Trajectory         | sharetrajectory.com      | AI-powered stock analysis and recommendations        |
+| 2     | Travel Planner           | stagsguide.co.uk         | AI travel planning for group events                  |
+| 2     | Video CV                 | myvideo.cv               | CV-to-video conversion service                       |
+| 3     | Transformation Planner   | productarchitect.dev     | AI business transformation roadmap generator         |
+| 3     | Idea Grading             | ideagrading.com          | AI tool to evaluate and rank transformation ideas    |
+| 3     | Transcript RAG           | aitranscriptionhub.com   | Company RAG system for meeting transcripts           |
 
 ### Month 1 Lesson Titles (24 lessons)
 
-| # | Title | Duration |
-|---|-------|----------|
-| L1 | Welcome to GWTH — What AI Can Actually Do For You | 45 min |
-| L2 | Your AI Toolkit — Set Up Once, Use Forever | 45 min |
-| L3 | Getting Great Results — The Prompting Skills That Matter | 60 min |
-| L4 | AI Safety in 60 Seconds — Just the Rules That Matter | 30 min |
-| L5 | Research with AI — Find Anything, Fast | 45 min |
-| L6 | Content Creation — Write Anything, Fast | 45 min |
-| L7 | Content Creation — Images, Audio & Video | 45 min |
-| L8 | Build Your First App — The Moment Everything Changes | 60 min |
-| L9 | Build Something Bigger — Tools That Solve Real Problems | 60 min |
-| L10 | Build Your First Website | 60 min |
-| L11 | Data Analysis — Ask Questions, Get Answers | 60 min |
-| L12 | Build a Dashboard — Your Data, Visualised | 60 min |
-| L13 | AI Agents — Your New Digital Assistants | 45 min |
-| L14 | Custom GPTs and Project-Specific AI | 45 min |
-| L15 | Automation Basics — Make AI Work While You Sleep | 60 min |
-| L16 | Family AI Bot — Plan & Design (Capstone Pt.1) | 45 min |
-| L17 | Family AI Bot — Record & Transcribe (Capstone Pt.2) | 60 min |
-| L18 | Family AI Bot — Process & Extract (Capstone Pt.3) | 60 min |
-| L19 | Family AI Bot — Distribute & Automate (Capstone Pt.4) | 60 min |
-| L20 | Family AI Bot — Polish & Present (Capstone Pt.5) | 45 min |
-| L21 | Portfolio Review — Show Off What You've Built | 45 min |
-| L22 | Advanced Building — When Simple Isn't Enough | 60 min |
-| L23 | OpenClaw Deep Dive — Power and Responsibility | 60 min |
-| L24 | Content Systems — From One-Off to Pipeline | 60 min |
+| #   | Title                                                    | Duration |
+| --- | -------------------------------------------------------- | -------- |
+| L1  | Welcome to GWTH — What AI Can Actually Do For You        | 45 min   |
+| L2  | Your AI Toolkit — Set Up Once, Use Forever               | 45 min   |
+| L3  | Getting Great Results — The Prompting Skills That Matter | 60 min   |
+| L4  | AI Safety in 60 Seconds — Just the Rules That Matter     | 30 min   |
+| L5  | Research with AI — Find Anything, Fast                   | 45 min   |
+| L6  | Content Creation — Write Anything, Fast                  | 45 min   |
+| L7  | Content Creation — Images, Audio & Video                 | 45 min   |
+| L8  | Build Your First App — The Moment Everything Changes     | 60 min   |
+| L9  | Build Something Bigger — Tools That Solve Real Problems  | 60 min   |
+| L10 | Build Your First Website                                 | 60 min   |
+| L11 | Data Analysis — Ask Questions, Get Answers               | 60 min   |
+| L12 | Build a Dashboard — Your Data, Visualised                | 60 min   |
+| L13 | AI Agents — Your New Digital Assistants                  | 45 min   |
+| L14 | Custom GPTs and Project-Specific AI                      | 45 min   |
+| L15 | Automation Basics — Make AI Work While You Sleep         | 60 min   |
+| L16 | Family AI Bot — Plan & Design (Capstone Pt.1)            | 45 min   |
+| L17 | Family AI Bot — Record & Transcribe (Capstone Pt.2)      | 60 min   |
+| L18 | Family AI Bot — Process & Extract (Capstone Pt.3)        | 60 min   |
+| L19 | Family AI Bot — Distribute & Automate (Capstone Pt.4)    | 60 min   |
+| L20 | Family AI Bot — Polish & Present (Capstone Pt.5)         | 45 min   |
+| L21 | Portfolio Review — Show Off What You've Built            | 45 min   |
+| L22 | Advanced Building — When Simple Isn't Enough             | 60 min   |
+| L23 | OpenClaw Deep Dive — Power and Responsibility            | 60 min   |
+| L24 | Content Systems — From One-Off to Pipeline               | 60 min   |
 
 ### Month 2 Topics (20 mandatory + 15 optional)
 

@@ -1,5 +1,11 @@
 # GWTH v2 — Architecture Plan
 
+> **Stale status note, 2026-05-05:** This architecture plan is useful for
+> infrastructure history, but product/pricing details are no longer authoritative.
+> Use `docs/product-source-of-truth-2026-05-04.md` and `PRODUCT.md` for the UK
+> beta: £29/month course access, £7.50/month Stay Current, GWTH Score, and Tech
+> Radar deferred from public beta launch messaging.
+
 > The complete backend architecture for the GWTH student learning platform.
 > Complements the [Design Requirements](../design-requirements.md) (frontend spec) and [CLAUDE.md](../../CLAUDE.md) (project conventions).
 >
@@ -23,14 +29,14 @@
 
 Ordered by priority (from the founder's requirements):
 
-| # | Principle | What It Means in Practice |
-|---|-----------|--------------------------|
-| 1 | **Extremely robust** | Battle-tested libraries. Error boundaries everywhere. Graceful degradation. No single points of failure. |
-| 2 | **AI-coding native** | Every service must work exceptionally well with Claude Code and Claude. MCP servers where available. Excellent documentation that AI models can reason about. We teach this stack in the course — it must be a model of AI-assisted development. |
-| 3 | **Fast** | Sub-2.5s LCP. HLS adaptive streaming for video. CDN for static assets. Server in Germany for UK/EU audience. |
-| 4 | **Good value** | Under £50/month additional infrastructure cost at launch. Free tiers where possible. Self-host when the value proposition of managed services is unclear. |
-| 5 | **Secure** | GDPR-compliant. Encrypted at rest and in transit. Row-level security on all user data. Signed URLs for video content. No secrets in code. |
-| 6 | **Beautiful** | The frontend (already built) handles this. Backend must not constrain the frontend — fast APIs, real-time capabilities, flexible data model. |
+| #   | Principle            | What It Means in Practice                                                                                                                                                                                                                        |
+| --- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | **Extremely robust** | Battle-tested libraries. Error boundaries everywhere. Graceful degradation. No single points of failure.                                                                                                                                         |
+| 2   | **AI-coding native** | Every service must work exceptionally well with Claude Code and Claude. MCP servers where available. Excellent documentation that AI models can reason about. We teach this stack in the course — it must be a model of AI-assisted development. |
+| 3   | **Fast**             | Sub-2.5s LCP. HLS adaptive streaming for video. CDN for static assets. Server in Germany for UK/EU audience.                                                                                                                                     |
+| 4   | **Good value**       | Under £50/month additional infrastructure cost at launch. Free tiers where possible. Self-host when the value proposition of managed services is unclear.                                                                                        |
+| 5   | **Secure**           | GDPR-compliant. Encrypted at rest and in transit. Row-level security on all user data. Signed URLs for video content. No secrets in code.                                                                                                        |
+| 6   | **Beautiful**        | The frontend (already built) handles this. Backend must not constrain the frontend — fast APIs, real-time capabilities, flexible data model.                                                                                                     |
 
 ### AI-Coding Requirement
 
@@ -44,31 +50,31 @@ This is both a development principle and a business requirement. GWTH teaches pe
 
 ## 2. Technology Stack Summary
 
-| Layer | Technology | MCP Server | Monthly Cost | Phase |
-|-------|-----------|------------|-------------|-------|
-| **Frontend** | Next.js 16, React 19, Tailwind v4, shadcn/ui | N/A (built-in) | Free | Done |
-| **Auth** | Supabase Auth | Yes (`@supabase/mcp`) | Free tier | Phase 2 |
-| **Database** | Supabase PostgreSQL | Yes (`@supabase/mcp`) | Free → $25 | Phase 2 |
-| **File Storage** | Supabase Storage | Yes (`@supabase/mcp`) | Free (1 GB) | Phase 2 |
-| **ORM/Queries** | Supabase JS client + generated types | Via Supabase MCP | Free | Phase 2 |
-| **Payments** | Stripe | Yes (`stripe/agent-toolkit`) | Tx fees only | Phase 2 |
-| **Video Delivery** | Self-hosted HLS (FFmpeg + Nginx) | N/A | Free | Phase 2 |
-| **Video CDN** | Bunny CDN | No | ~£1-5 | Phase 3 |
-| **Email (transactional)** | Resend | No (clean REST API) | Free (3,000/mo) | Phase 2 |
-| **Email (marketing)** | MailerLite | No (clean REST API) | Free (<1,000 subs) | Phase 2 |
-| **Error Tracking** | Sentry | Yes (`@sentry/mcp-server`) | Free (5K events) | Phase 2 |
-| **Uptime Monitoring** | Uptime Kuma (self-hosted) | No | Free | Phase 2 |
-| **Analytics** | Plausible (self-hosted) | No | Free | Phase 2 |
-| **CI/CD** | GitHub Actions + Coolify webhooks | Yes (GitHub built-in) | Free (2,000 min) | Done |
-| **Project Management** | Linear | Yes (`@linear/sdk`) | Free tier | Now |
-| **Deployment** | Coolify (self-hosted) | No | Free | Done |
-| **Code Quality** | Knip, CodeQL, Commitlint, noUncheckedIndexedAccess | N/A | Free | Done |
-| **Security Scanning** | CodeQL, Dependabot, DOMPurify, Security Headers | N/A | Free | Done |
-| **Dependency Mgmt** | Renovate, Dependabot | N/A | Free | Done |
-| **AI Code Review** | CodeRabbit (free tier) | N/A | Free | Done |
-| **Performance** | Bundle Analyzer, Lighthouse CI, Web Vitals | N/A | Free | Done |
-| **Test Quality** | Vitest coverage thresholds, fast-check | N/A | Free | Done |
-| **DX Automation** | Husky, lint-staged, Claude Code hooks | N/A | Free | Done |
+| Layer                     | Technology                                         | MCP Server                   | Monthly Cost       | Phase   |
+| ------------------------- | -------------------------------------------------- | ---------------------------- | ------------------ | ------- |
+| **Frontend**              | Next.js 16, React 19, Tailwind v4, shadcn/ui       | N/A (built-in)               | Free               | Done    |
+| **Auth**                  | Supabase Auth                                      | Yes (`@supabase/mcp`)        | Free tier          | Phase 2 |
+| **Database**              | Supabase PostgreSQL                                | Yes (`@supabase/mcp`)        | Free → $25         | Phase 2 |
+| **File Storage**          | Supabase Storage                                   | Yes (`@supabase/mcp`)        | Free (1 GB)        | Phase 2 |
+| **ORM/Queries**           | Supabase JS client + generated types               | Via Supabase MCP             | Free               | Phase 2 |
+| **Payments**              | Stripe                                             | Yes (`stripe/agent-toolkit`) | Tx fees only       | Phase 2 |
+| **Video Delivery**        | Self-hosted HLS (FFmpeg + Nginx)                   | N/A                          | Free               | Phase 2 |
+| **Video CDN**             | Bunny CDN                                          | No                           | ~£1-5              | Phase 3 |
+| **Email (transactional)** | Resend                                             | No (clean REST API)          | Free (3,000/mo)    | Phase 2 |
+| **Email (marketing)**     | MailerLite                                         | No (clean REST API)          | Free (<1,000 subs) | Phase 2 |
+| **Error Tracking**        | Sentry                                             | Yes (`@sentry/mcp-server`)   | Free (5K events)   | Phase 2 |
+| **Uptime Monitoring**     | Uptime Kuma (self-hosted)                          | No                           | Free               | Phase 2 |
+| **Analytics**             | Plausible (self-hosted)                            | No                           | Free               | Phase 2 |
+| **CI/CD**                 | GitHub Actions + Coolify webhooks                  | Yes (GitHub built-in)        | Free (2,000 min)   | Done    |
+| **Project Management**    | Linear                                             | Yes (`@linear/sdk`)          | Free tier          | Now     |
+| **Deployment**            | Coolify (self-hosted)                              | No                           | Free               | Done    |
+| **Code Quality**          | Knip, CodeQL, Commitlint, noUncheckedIndexedAccess | N/A                          | Free               | Done    |
+| **Security Scanning**     | CodeQL, Dependabot, DOMPurify, Security Headers    | N/A                          | Free               | Done    |
+| **Dependency Mgmt**       | Renovate, Dependabot                               | N/A                          | Free               | Done    |
+| **AI Code Review**        | CodeRabbit (free tier)                             | N/A                          | Free               | Done    |
+| **Performance**           | Bundle Analyzer, Lighthouse CI, Web Vitals         | N/A                          | Free               | Done    |
+| **Test Quality**          | Vitest coverage thresholds, fast-check             | N/A                          | Free               | Done    |
+| **DX Automation**         | Husky, lint-staged, Claude Code hooks              | N/A                          | Free               | Done    |
 
 **MCP-enabled core services:** Supabase (auth + DB + storage), Stripe, Sentry, Linear, GitHub — 5 services with direct Claude Code integration.
 
@@ -207,6 +213,7 @@ sequenceDiagram
 **Decision:** Use Supabase as a unified backend-as-a-service rather than assembling separate services (Auth.js + Prisma + MinIO).
 
 **Why:**
+
 - **One MCP for three services.** The Supabase MCP lets Claude Code manage auth, database, and storage from a single integration. This is a significant productivity multiplier for AI-assisted development.
 - **Row Level Security.** RLS policies enforce access control at the database level — a user literally cannot read another user's notes or progress, even if there's a bug in the application code.
 - **Type generation.** `supabase gen types typescript` auto-generates TypeScript types from the database schema, keeping the frontend in sync without manual type definitions.
@@ -214,18 +221,21 @@ sequenceDiagram
 - **Course alignment.** Supabase is one of the most popular tools for AI-assisted app building. Teaching it in the course is natural.
 
 **Alternatives considered:**
+
 - **Auth.js v5 + Prisma + MinIO:** More flexible, no vendor lock-in, but three separate tools to configure and maintain. No unified MCP. More setup time.
 - **Neon (database only) + Auth.js + S3:** Neon has its own MCP, but you'd still need separate auth and storage solutions.
 
 **Risks and mitigations:**
-- *Vendor lock-in:* Mitigated by keeping the `lib/data/` abstraction layer. All Supabase queries are in `lib/data/*.ts` files — never in components. Swapping to Prisma requires changing only the data layer.
-- *Free tier limits (500 MB):* Sufficient for 5,000 users. Course content is in the filesystem (video) and markdown (synced from pipeline). Database stores user data, progress, and metadata — not content.
+
+- _Vendor lock-in:_ Mitigated by keeping the `lib/data/` abstraction layer. All Supabase queries are in `lib/data/*.ts` files — never in components. Swapping to Prisma requires changing only the data layer.
+- _Free tier limits (500 MB):_ Sufficient for 5,000 users. Course content is in the filesystem (video) and markdown (synced from pipeline). Database stores user data, progress, and metadata — not content.
 
 ### 4.2 Self-Hosted HLS Video (Not a Managed Platform)
 
 **Decision:** Encode videos to HLS on the P520 pipeline, deploy HLS segments to Hetzner, serve via Nginx with signed URLs.
 
 **Why:**
+
 - **£0/month.** Within the £50 budget. Managed platforms (Mux at ~$42/month for 8,000 minutes, Cloudflare Stream at ~$42/month) would consume almost the entire infrastructure budget.
 - **Pipeline integration.** The P520 pipeline already uses FFmpeg. Adding HLS encoding is a natural extension (a few FFmpeg flags).
 - **"Good enough" protection.** Signed URLs + CORS + no download button prevents casual copying. Not DRM, but adequate for the threat model.
@@ -234,6 +244,7 @@ sequenceDiagram
 **Disk:** Both servers have 3.6 TB, with up to 2 TB allocatable. All 3 qualities (480p + 720p + 1080p) = ~720 GB, fitting comfortably from day one.
 
 **Growth path:**
+
 1. **Phase 2 (launch):** Self-hosted HLS on Hetzner with all 3 quality levels.
 2. **Phase 3 (>1,000 users):** Add Bunny CDN (~£1-5/month) in front for edge caching.
 3. **Phase 4 (global/mobile):** Evaluate Bunny Stream or Mux when revenue justifies it and mobile app needs a native SDK.
@@ -243,6 +254,7 @@ sequenceDiagram
 **Decision:** Stripe UK entity, charging in USD, with Stripe Tax and Stripe's built-in dunning for payment failures.
 
 **Why:**
+
 - **Most robust payment processor.** Handles the $37.50 × 3 → $7.50 ongoing pricing model cleanly.
 - **Stripe MCP available.** Claude Code can interact with Stripe's API directly.
 - **Stripe Tax.** Already used on v1. Handles VAT automatically. 0.5% per transaction is reasonable.
@@ -250,6 +262,7 @@ sequenceDiagram
 - **No cheaper alternative.** Paddle/LemonSqueezy handle EU VAT as merchant of record but take a larger cut (5-8%) and have worse developer experience.
 
 **Implementation approach:**
+
 - Create subscription at $37.50/month via Stripe Checkout
 - Track `payment_count` in the database, incremented by `invoice.payment_succeeded` webhook
 - After 3rd successful payment, update subscription price to $7.50/month via API
@@ -261,10 +274,12 @@ sequenceDiagram
 **Decision:** Split email into two providers optimised for their use case.
 
 **Why:**
+
 - **Resend:** React Email templates (JSX-based email authoring that integrates with the Next.js codebase), excellent deliverability, clean API. Free tier: 3,000 emails/month (covers password resets, payment receipts, study reminders for <500 active users).
 - **MailerLite:** Purpose-built for newsletters and nurture sequences. Visual editor for marketing emails. Free tier: 1,000 subscribers, 12,000 emails/month. Already referenced in the existing `.env.local.example`.
 
 **Alternatives considered:**
+
 - **MailerSend** (also in `.env.local.example`): Good but Resend has better DX for developers using AI coding (JSX templates vs. HTML templates).
 - **Postmark:** Excellent deliverability but no free tier.
 - **Single provider for both:** Possible with Resend (it can do marketing too), but MailerLite's visual editor is better for crafting marketing campaigns.
@@ -278,6 +293,7 @@ sequenceDiagram
 **Yes. Use HLS streaming with signed URLs.**
 
 Self-hosted on Hetzner, encoded by the P520 pipeline via FFmpeg. This gives you:
+
 - **Adaptive bitrate** — 480p/720p/1080p variants, player auto-selects based on connection
 - **Casual copy protection** — signed URLs expire after 4 hours, CORS restricts to your domain, no download button
 - **Mobile-ready** — HLS is the native streaming format for iOS/Safari. When you build the mobile app, the same HLS streams work natively
@@ -289,7 +305,7 @@ Self-hosted on Hetzner, encoded by the P520 pipeline via FFmpeg. This gives you:
 
 **Yes. Using the free tier.**
 
-*Updated 2026-02-20:* Originally the recommendation was "no" due to marginal value for a solo developer. After further research, the free tier provides PR summarisation and basic reviews at zero cost — worth having as a "second pair of eyes" alongside Claude Code. The `.coderabbit.yaml` config file provides path-specific review instructions (e.g., stricter checks on `lib/data/` and `app/` routes).
+_Updated 2026-02-20:_ Originally the recommendation was "no" due to marginal value for a solo developer. After further research, the free tier provides PR summarisation and basic reviews at zero cost — worth having as a "second pair of eyes" alongside Claude Code. The `.coderabbit.yaml` config file provides path-specific review instructions (e.g., stricter checks on `lib/data/` and `app/` routes).
 
 **Also implemented:** CodeQL (free GitHub security scanning) runs weekly and on every push/PR, catching security vulnerabilities that CodeRabbit doesn't focus on. Both tools complement each other — CodeRabbit for code quality, CodeQL for security.
 
@@ -298,6 +314,7 @@ Self-hosted on Hetzner, encoded by the P520 pipeline via FFmpeg. This gives you:
 **Yes. Continue using Linear on the free tier.**
 
 You're already using it, found it helpful for prioritisation, and it has an MCP server for Claude Code integration. The free tier covers solo development. Benefits:
+
 - **Structured work tracking** — epics for architecture phases, issues for individual tasks
 - **Linear MCP** — Claude Code can read/create issues, which means your AI assistant understands your project backlog
 - **Audit trail** — when things go wrong, you can trace decisions back to the issue that spawned them
@@ -311,53 +328,54 @@ A comprehensive quality and automation stack was implemented alongside Phase 1. 
 
 ### What's Running Now
 
-| Category | Tools | Where |
-|----------|-------|-------|
-| **CI/CD Pipeline** | GitHub Actions (lint → typecheck → knip → test → build → deploy) | `.github/workflows/ci.yml` |
-| **Security Scanning** | CodeQL (weekly + on push/PR) | `.github/workflows/codeql.yml` |
-| **Dependency Updates** | Dependabot + Renovate (auto-merge patches) | `.github/dependabot.yml`, `renovate.json` |
-| **AI Code Review** | CodeRabbit (free tier, auto-reviews PRs) | `.coderabbit.yaml` |
-| **Pre-commit** | Husky + lint-staged (ESLint fix + Prettier) | `.husky/pre-commit` |
-| **Commit Messages** | Commitlint (conventional commits enforced) | `.husky/commit-msg`, `.commitlintrc.json` |
-| **Post-merge** | Auto `npm install` after pulling changes | `.husky/post-merge` |
-| **Dead Code** | Knip (unused files, exports, dependencies) | `knip.json` |
-| **Security Headers** | HSTS, CSP, X-Frame-Options, etc. via middleware | `src/middleware.ts` |
-| **XSS Protection** | DOMPurify sanitisation on markdown HTML | `src/components/shared/markdown-renderer.tsx` |
-| **TypeScript Strictness** | `noUncheckedIndexedAccess` (array access returns `T \| undefined`) | `tsconfig.json` |
-| **Test Coverage** | Vitest thresholds (40% lines/functions/statements, 35% branches) | `vitest.config.ts` |
-| **Web Vitals** | `useReportWebVitals` with colour-coded console output | `src/components/shared/web-vitals.tsx` |
-| **Bundle Analysis** | `@next/bundle-analyzer` (run with `ANALYZE=true`) | `next.config.ts` |
-| **Claude Code Hooks** | Stop hook (auto-commit with test gate), PostToolUse hook (lint on edit) | `.claude/hooks/` |
+| Category                  | Tools                                                                   | Where                                         |
+| ------------------------- | ----------------------------------------------------------------------- | --------------------------------------------- |
+| **CI/CD Pipeline**        | GitHub Actions (lint → typecheck → knip → test → build → deploy)        | `.github/workflows/ci.yml`                    |
+| **Security Scanning**     | CodeQL (weekly + on push/PR)                                            | `.github/workflows/codeql.yml`                |
+| **Dependency Updates**    | Dependabot + Renovate (auto-merge patches)                              | `.github/dependabot.yml`, `renovate.json`     |
+| **AI Code Review**        | CodeRabbit (free tier, auto-reviews PRs)                                | `.coderabbit.yaml`                            |
+| **Pre-commit**            | Husky + lint-staged (ESLint fix + Prettier)                             | `.husky/pre-commit`                           |
+| **Commit Messages**       | Commitlint (conventional commits enforced)                              | `.husky/commit-msg`, `.commitlintrc.json`     |
+| **Post-merge**            | Auto `npm install` after pulling changes                                | `.husky/post-merge`                           |
+| **Dead Code**             | Knip (unused files, exports, dependencies)                              | `knip.json`                                   |
+| **Security Headers**      | HSTS, CSP, X-Frame-Options, etc. via middleware                         | `src/middleware.ts`                           |
+| **XSS Protection**        | DOMPurify sanitisation on markdown HTML                                 | `src/components/shared/markdown-renderer.tsx` |
+| **TypeScript Strictness** | `noUncheckedIndexedAccess` (array access returns `T \| undefined`)      | `tsconfig.json`                               |
+| **Test Coverage**         | Vitest thresholds (40% lines/functions/statements, 35% branches)        | `vitest.config.ts`                            |
+| **Web Vitals**            | `useReportWebVitals` with colour-coded console output                   | `src/components/shared/web-vitals.tsx`        |
+| **Bundle Analysis**       | `@next/bundle-analyzer` (run with `ANALYZE=true`)                       | `next.config.ts`                              |
+| **Claude Code Hooks**     | Stop hook (auto-commit with test gate), PostToolUse hook (lint on edit) | `.claude/hooks/`                              |
 
 ### Still Needs Manual Setup (GitHub Apps)
 
 These have config files ready but require browser installation:
+
 1. **Renovate** — [github.com/apps/renovate](https://github.com/apps/renovate)
 2. **CodeRabbit** — [github.com/apps/coderabbitai](https://github.com/apps/coderabbitai)
 3. **Socket Security** — [github.com/apps/socket-security](https://github.com/apps/socket-security)
 
 ### Future Quality Tools (from Research)
 
-| Tool | Category | When | Reference |
-|------|----------|------|-----------|
-| Sentry | Error tracking + session replay | Phase 4 launch | Research §6.1 |
-| PostHog | Product analytics + feature flags | Phase 4 launch | Research §6.2 |
-| Lighthouse CI | Automated performance scoring in CI | Phase 4 launch | Research §2.1 |
-| Storybook | Component development + documentation | Phase 5 growth | Research §4.1 |
-| k6 | Load testing before launch | Phase 4 beta | Research §5.4 |
-| Arcjet | Bot protection + rate limiting | Phase 4 security | Research §3.3 |
-| Stryker | Mutation testing for test quality | Phase 5 growth | Research §5.1 |
+| Tool          | Category                              | When             | Reference     |
+| ------------- | ------------------------------------- | ---------------- | ------------- |
+| Sentry        | Error tracking + session replay       | Phase 4 launch   | Research §6.1 |
+| PostHog       | Product analytics + feature flags     | Phase 4 launch   | Research §6.2 |
+| Lighthouse CI | Automated performance scoring in CI   | Phase 4 launch   | Research §2.1 |
+| Storybook     | Component development + documentation | Phase 5 growth   | Research §4.1 |
+| k6            | Load testing before launch            | Phase 4 beta     | Research §5.4 |
+| Arcjet        | Bot protection + rate limiting        | Phase 4 security | Research §3.3 |
+| Stryker       | Mutation testing for test quality     | Phase 5 growth   | Research §5.1 |
 
 ---
 
 ## 7. Related Documents
 
-| Document | What It Covers |
-|----------|---------------|
-| [Technology Decisions](./technology-decisions.md) | Detailed rationale for every technology choice, alternatives considered, MCP availability |
-| [Infrastructure & Deployment](./infrastructure-and-deployment.md) | Server topology, VM configuration, Coolify setup, networking, backups, monitoring |
-| [Implementation Roadmap](./implementation-roadmap.md) | Phased rollout plan with cost projections at each phase |
-| [Design Requirements](../design-requirements.md) | Frontend spec — pages, components, user flows, content model |
-| [Quality Tools Research](../research-quality-tools-2025-2026.md) | Comprehensive research on quality, security, performance, and DX tools (2025-2026) |
-| [Automation Setup Guide](../automation-setup-guide.md) | Reusable guide for setting up the full CI/CD and quality automation stack |
-| [CLAUDE.md](../../CLAUDE.md) | Project conventions, coding standards, design system |
+| Document                                                          | What It Covers                                                                            |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| [Technology Decisions](./technology-decisions.md)                 | Detailed rationale for every technology choice, alternatives considered, MCP availability |
+| [Infrastructure & Deployment](./infrastructure-and-deployment.md) | Server topology, VM configuration, Coolify setup, networking, backups, monitoring         |
+| [Implementation Roadmap](./implementation-roadmap.md)             | Phased rollout plan with cost projections at each phase                                   |
+| [Design Requirements](../design-requirements.md)                  | Frontend spec — pages, components, user flows, content model                              |
+| [Quality Tools Research](../research-quality-tools-2025-2026.md)  | Comprehensive research on quality, security, performance, and DX tools (2025-2026)        |
+| [Automation Setup Guide](../automation-setup-guide.md)            | Reusable guide for setting up the full CI/CD and quality automation stack                 |
+| [CLAUDE.md](../../CLAUDE.md)                                      | Project conventions, coding standards, design system                                      |

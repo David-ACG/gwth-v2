@@ -1,5 +1,11 @@
 # Implementation Roadmap
 
+> **Stale status note, 2026-05-05:** This roadmap is historical and still useful
+> for infrastructure sequencing, but its pricing, launch timing, and Stripe
+> lifecycle details pre-date the May 2026 UK beta plan. Current direction is
+> `docs/product-source-of-truth-2026-05-04.md`, `PRODUCT.md`, and
+> `kanban/1_planning/PLAN_2026-05-04_beta-launch-23-may.md`.
+
 > Phased rollout plan for GWTH v2 backend integration, with cost projections at each phase.
 >
 > Last updated: 2026-02-20
@@ -67,6 +73,7 @@ gantt
 **Status: Done** (all checkpoints passing — 32/32 tests, 0 TypeScript errors, ESLint clean, Knip clean)
 
 ### Frontend
+
 - Next.js 16 frontend with all pages (public + dashboard)
 - shadcn/ui component library with custom components
 - Design system (OKLCH colours, Graphite Warm dark mode, cascading spiral)
@@ -80,6 +87,7 @@ gantt
 - Dev toolbar for testing subscription states
 
 ### Quality & Automation Infrastructure
+
 - **CI/CD pipeline:** GitHub Actions (audit → lint → typecheck → knip → test → build → deploy to Hetzner + P520)
 - **Security scanning:** CodeQL (weekly + on push/PR), Dependabot (auto-PRs for vulnerable deps)
 - **Dependency updates:** Renovate config (auto-merge patches), Dependabot config
@@ -116,6 +124,7 @@ gantt
 - [ ] Set up Supabase MCP in Claude Code configuration
 
 **Environment variables:**
+
 ```bash
 # .env.local
 NEXT_PUBLIC_SUPABASE_URL=https://PROJECT.supabase.co
@@ -143,6 +152,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...  # Server-side only, never expose
 - [ ] Test all auth flows (signup, login, logout, password reset, social)
 
 **Database trigger for profile creation:**
+
 ```sql
 -- Auto-create profile when user signs up
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -193,29 +203,32 @@ This is the critical step — replacing mock data functions with real Supabase q
 - [ ] Add integration tests for Supabase queries
 
 **Example migration (courses.ts):**
+
 ```typescript
 // Before (mock)
 export async function getCourse(slug: string): Promise<Course | null> {
-  return MOCK_COURSES.find(c => c.slug === slug) ?? null
+  return MOCK_COURSES.find((c) => c.slug === slug) ?? null;
 }
 
 // After (Supabase)
 export async function getCourse(slug: string): Promise<Course | null> {
-  const supabase = await createClient()
+  const supabase = await createClient();
   const { data, error } = await supabase
-    .from('courses')
-    .select(`
+    .from("courses")
+    .select(
+      `
       *,
       sections (
         *,
         lessons (*)
       )
-    `)
-    .eq('slug', slug)
-    .single()
+    `,
+    )
+    .eq("slug", slug)
+    .single();
 
-  if (error || !data) return null
-  return mapCourseFromDb(data)
+  if (error || !data) return null;
+  return mapCourseFromDb(data);
 }
 ```
 
@@ -245,6 +258,7 @@ export async function getCourse(slug: string): Promise<Course | null> {
 - [ ] Test grace period and lapse flow
 
 **Stripe Products:**
+
 ```
 Product: "GWTH — Applied AI Skills"
 ├── Price ID (course): $37.50/month recurring
@@ -333,25 +347,26 @@ Both the P520 and Hetzner have 3.6 TB disk, with up to 2 TB allocatable to the G
 - [ ] Test full pipeline-to-website content flow
 
 **Sync interface:**
+
 ```typescript
 // What the pipeline sends
 interface LessonSyncPayload {
-  month: number
-  lesson_number: number
-  slug: string
-  title: string
-  description: string
-  duration_minutes: number
-  difficulty: string
-  learn_content: string        // Markdown
-  build_instructions: object   // Step-by-step JSON
-  questions: object            // Quiz JSON
-  resources: object            // Links JSON
-  intro_video_path: string     // Relative HLS path
-  build_video_path: string     // Relative HLS path
-  audio_file_path: string      // Relative path
-  audio_duration_seconds: number
-  checksum: string             // SHA256 of content
+  month: number;
+  lesson_number: number;
+  slug: string;
+  title: string;
+  description: string;
+  duration_minutes: number;
+  difficulty: string;
+  learn_content: string; // Markdown
+  build_instructions: object; // Step-by-step JSON
+  questions: object; // Quiz JSON
+  resources: object; // Links JSON
+  intro_video_path: string; // Relative HLS path
+  build_video_path: string; // Relative HLS path
+  audio_file_path: string; // Relative path
+  audio_duration_seconds: number;
+  checksum: string; // SHA256 of content
 }
 ```
 
@@ -376,12 +391,14 @@ interface LessonSyncPayload {
 **Duration:** 2-3 days
 
 Already done (Phase 1):
+
 - [x] Web Vitals reporting component in root layout (`src/components/shared/web-vitals.tsx`)
 - [x] CodeQL security scanning (`.github/workflows/codeql.yml`)
 - [x] Dependabot vulnerability alerts (`.github/dependabot.yml`)
 - [x] Lighthouse CI config ready (`lighthouserc.js`)
 
 Still to do:
+
 - [ ] Deploy Uptime Kuma via Coolify
 - [ ] Configure all monitors (website, API, video, Supabase, pipeline)
 - [ ] Connect Telegram alerts
@@ -399,6 +416,7 @@ Still to do:
 **Duration:** 1-2 days
 
 Already done (Phase 1):
+
 - [x] Security headers in middleware (HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
 - [x] DOMPurify XSS sanitisation on markdown HTML rendering
 - [x] CodeQL semantic security scanning (weekly + on push/PR)
@@ -408,6 +426,7 @@ Already done (Phase 1):
 - [x] GitHub Secrets configured for CI deploy jobs (no secrets in code)
 
 Still to do:
+
 - [ ] Update CSP in middleware to allow Supabase, Stripe, Plausible, video domains
 - [ ] Consider Nosecone for type-safe CSP management (see [research §3.1](../research-quality-tools-2025-2026.md))
 - [ ] Configure Arcjet for bot protection + rate limiting (see [research §3.3](../research-quality-tools-2025-2026.md))
@@ -462,35 +481,35 @@ Still to do:
 
 ### After Launch (3-12 months)
 
-| Initiative | Trigger | Description |
-|-----------|---------|-------------|
-| **Bunny CDN** | >200 concurrent viewers or US users | Add CDN in front of Nginx for video edge caching. ~£3-5/month. |
-| **Supabase Pro** | >500 MB database or need PITR | Upgrade from free tier. $25/month. |
-| **Resend Pro** | >3,000 emails/month (~500 active users) | Upgrade from free tier. $20/month. |
-| **Performance audit** | After 1,000 users | Optimise slow queries, add caching (Supabase edge caching or Redis). |
-| **Mobile app research** | After 6 months | Evaluate React Native or Expo for iOS/Android app. HLS video works natively. |
-| **Offline video + DRM** | With mobile app | Add FairPlay (iOS) + Widevine (Android) via Mux or Bitmovin. Enables offline downloads with content protection. Existing HLS segments are reused — just adds an encryption wrapper. ~£100+/month. |
-| **Enterprise features** | First team customer | Admin dashboard, team billing, progress reporting. |
-| **Content search** | User feedback | Full-text search across lessons using Supabase pg_trgm or vector search. |
+| Initiative              | Trigger                                 | Description                                                                                                                                                                                       |
+| ----------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Bunny CDN**           | >200 concurrent viewers or US users     | Add CDN in front of Nginx for video edge caching. ~£3-5/month.                                                                                                                                    |
+| **Supabase Pro**        | >500 MB database or need PITR           | Upgrade from free tier. $25/month.                                                                                                                                                                |
+| **Resend Pro**          | >3,000 emails/month (~500 active users) | Upgrade from free tier. $20/month.                                                                                                                                                                |
+| **Performance audit**   | After 1,000 users                       | Optimise slow queries, add caching (Supabase edge caching or Redis).                                                                                                                              |
+| **Mobile app research** | After 6 months                          | Evaluate React Native or Expo for iOS/Android app. HLS video works natively.                                                                                                                      |
+| **Offline video + DRM** | With mobile app                         | Add FairPlay (iOS) + Widevine (Android) via Mux or Bitmovin. Enables offline downloads with content protection. Existing HLS segments are reused — just adds an encryption wrapper. ~£100+/month. |
+| **Enterprise features** | First team customer                     | Admin dashboard, team billing, progress reporting.                                                                                                                                                |
+| **Content search**      | User feedback                           | Full-text search across lessons using Supabase pg_trgm or vector search.                                                                                                                          |
 
 ### Quality & DX Improvements (from [Quality Tools Research](../research-quality-tools-2025-2026.md))
 
-| Initiative | Priority | Trigger | Description |
-|-----------|----------|---------|-------------|
-| **Storybook** | HIGH | After 20+ custom components | Component development environment + visual documentation. `@storybook/nextjs-vite`. |
-| **PPR (Partial Prerendering)** | HIGH | Phase 4 performance tuning | Static shell + dynamic streaming for dashboard pages. Built into Next.js 16. |
-| **Dynamic OG images** | HIGH | Before launch SEO | Auto-generated social preview images per course/lesson via `next/og`. |
-| **JSON-LD structured data** | HIGH | Before launch SEO | Schema.org Course + LearningResource markup for Google rich results. |
-| **Stryker mutation testing** | HIGH | After 70%+ coverage | Verify test effectiveness beyond code coverage numbers. |
-| **k6 load testing** | HIGH | Beta testing phase | Simulate concurrent users to find capacity limits on Coolify/Docker setup. |
-| **Chromatic** | MEDIUM | If Storybook adopted | Visual regression testing. Free: 5,000 snapshots/month. |
-| **CSS Container Queries** | MEDIUM | Component refinement | Component-level responsive design for cards and widgets. |
-| **View Transitions API** | MEDIUM | After launch polish | Browser-native page transitions (experimental in React 19/Next.js 16). |
-| **PWA manifest** | MEDIUM | User request | Installable app + offline lesson reading. Use Serwist. |
-| **Guidepup screen reader testing** | HIGH | Accessibility audit | Automated NVDA/VoiceOver testing with Playwright. |
-| **Biome** | LOW | If ESLint causes friction | Replace ESLint + Prettier with 10-25x faster Rust toolchain. |
-| **Partytown** | HIGH | If analytics scripts impact CWV | Offload third-party scripts to web worker. |
-| **Arcjet full security** | HIGH | Post-launch hardening | Bot protection, advanced rate limiting, Shield WAF. |
+| Initiative                         | Priority | Trigger                         | Description                                                                         |
+| ---------------------------------- | -------- | ------------------------------- | ----------------------------------------------------------------------------------- |
+| **Storybook**                      | HIGH     | After 20+ custom components     | Component development environment + visual documentation. `@storybook/nextjs-vite`. |
+| **PPR (Partial Prerendering)**     | HIGH     | Phase 4 performance tuning      | Static shell + dynamic streaming for dashboard pages. Built into Next.js 16.        |
+| **Dynamic OG images**              | HIGH     | Before launch SEO               | Auto-generated social preview images per course/lesson via `next/og`.               |
+| **JSON-LD structured data**        | HIGH     | Before launch SEO               | Schema.org Course + LearningResource markup for Google rich results.                |
+| **Stryker mutation testing**       | HIGH     | After 70%+ coverage             | Verify test effectiveness beyond code coverage numbers.                             |
+| **k6 load testing**                | HIGH     | Beta testing phase              | Simulate concurrent users to find capacity limits on Coolify/Docker setup.          |
+| **Chromatic**                      | MEDIUM   | If Storybook adopted            | Visual regression testing. Free: 5,000 snapshots/month.                             |
+| **CSS Container Queries**          | MEDIUM   | Component refinement            | Component-level responsive design for cards and widgets.                            |
+| **View Transitions API**           | MEDIUM   | After launch polish             | Browser-native page transitions (experimental in React 19/Next.js 16).              |
+| **PWA manifest**                   | MEDIUM   | User request                    | Installable app + offline lesson reading. Use Serwist.                              |
+| **Guidepup screen reader testing** | HIGH     | Accessibility audit             | Automated NVDA/VoiceOver testing with Playwright.                                   |
+| **Biome**                          | LOW      | If ESLint causes friction       | Replace ESLint + Prettier with 10-25x faster Rust toolchain.                        |
+| **Partytown**                      | HIGH     | If analytics scripts impact CWV | Offload third-party scripts to web worker.                                          |
+| **Arcjet full security**           | HIGH     | Post-launch hardening           | Bot protection, advanced rate limiting, Shield WAF.                                 |
 
 ---
 
@@ -498,36 +517,37 @@ Still to do:
 
 ### Phase 2-4: Pre-Launch and Launch (0-100 users)
 
-| Service | Monthly Cost | Notes |
-|---------|-------------|-------|
-| Hetzner Dedicated Server | Already paid | Proxmox host |
-| Supabase (free tier) | £0 | 500 MB DB, 1 GB storage, 50K MAU |
-| Stripe | Transaction fees only | ~2.5% + 20p per payment |
-| Stripe Tax | 0.5% per transaction | Automatic VAT |
-| Resend (free tier) | £0 | 3,000 emails/month |
-| MailerLite (free tier) | £0 | 1,000 subscribers |
-| Sentry (free tier) | £0 | 5,000 errors/month |
-| Uptime Kuma | £0 | Self-hosted |
-| Plausible | £0 | Self-hosted |
-| GitHub Actions | £0 | Free tier (2,000 min) |
-| Linear (free tier) | £0 | Unlimited issues |
-| Domain (gwth.ai) | ~£2 | Annual, amortised |
-| **Total** | **~£2/month** | + Stripe transaction fees |
+| Service                  | Monthly Cost          | Notes                            |
+| ------------------------ | --------------------- | -------------------------------- |
+| Hetzner Dedicated Server | Already paid          | Proxmox host                     |
+| Supabase (free tier)     | £0                    | 500 MB DB, 1 GB storage, 50K MAU |
+| Stripe                   | Transaction fees only | ~2.5% + 20p per payment          |
+| Stripe Tax               | 0.5% per transaction  | Automatic VAT                    |
+| Resend (free tier)       | £0                    | 3,000 emails/month               |
+| MailerLite (free tier)   | £0                    | 1,000 subscribers                |
+| Sentry (free tier)       | £0                    | 5,000 errors/month               |
+| Uptime Kuma              | £0                    | Self-hosted                      |
+| Plausible                | £0                    | Self-hosted                      |
+| GitHub Actions           | £0                    | Free tier (2,000 min)            |
+| Linear (free tier)       | £0                    | Unlimited issues                 |
+| Domain (gwth.ai)         | ~£2                   | Annual, amortised                |
+| **Total**                | **~£2/month**         | + Stripe transaction fees        |
 
 ### Phase 5: Growth (100-5,000 users)
 
-| Service | Monthly Cost | Trigger |
-|---------|-------------|---------|
-| Supabase Pro | £20 ($25) | >500 MB DB or need daily backups |
-| Bunny CDN | £3-5 | >200 concurrent video viewers |
-| Resend Pro | £16 ($20) | >500 active users sending emails |
-| MailerLite Growing | £8 ($10) | >1,000 newsletter subscribers |
-| Sentry Team | £21 ($26) | >5,000 errors or need session replay |
-| **Total** | **~£50-70/month** | At ~2,000-3,000 active users |
+| Service            | Monthly Cost      | Trigger                              |
+| ------------------ | ----------------- | ------------------------------------ |
+| Supabase Pro       | £20 ($25)         | >500 MB DB or need daily backups     |
+| Bunny CDN          | £3-5              | >200 concurrent video viewers        |
+| Resend Pro         | £16 ($20)         | >500 active users sending emails     |
+| MailerLite Growing | £8 ($10)          | >1,000 newsletter subscribers        |
+| Sentry Team        | £21 ($26)         | >5,000 errors or need session replay |
+| **Total**          | **~£50-70/month** | At ~2,000-3,000 active users         |
 
 ### Revenue vs. Cost at Scale
 
 At 1,000 subscribers:
+
 - **Revenue:** ~1,000 × $37.50 = $37,500/month (minus churn, some at $7.50)
 - **Infrastructure cost:** ~£50/month
 - **Margin:** >99%
@@ -543,12 +563,18 @@ The infrastructure costs are negligible relative to revenue at any meaningful sc
 Configure these in your Claude Code MCP settings:
 
 #### Supabase MCP
+
 ```json
 {
   "mcpServers": {
     "supabase": {
       "command": "npx",
-      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--access-token", "YOUR_SUPABASE_PAT"]
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "YOUR_SUPABASE_PAT"
+      ]
     }
   }
 }
@@ -557,12 +583,19 @@ Configure these in your Claude Code MCP settings:
 **Capabilities:** Create/alter tables, write RLS policies, run SQL queries, inspect data, manage migrations.
 
 #### Stripe MCP
+
 ```json
 {
   "mcpServers": {
     "stripe": {
       "command": "npx",
-      "args": ["-y", "@stripe/agent-toolkit@latest", "mcp", "--api-key", "YOUR_STRIPE_SECRET_KEY"]
+      "args": [
+        "-y",
+        "@stripe/agent-toolkit@latest",
+        "mcp",
+        "--api-key",
+        "YOUR_STRIPE_SECRET_KEY"
+      ]
     }
   }
 }
@@ -571,12 +604,18 @@ Configure these in your Claude Code MCP settings:
 **Capabilities:** Create products/prices, manage subscriptions, inspect invoices and webhook events, test payment flows.
 
 #### Sentry MCP
+
 ```json
 {
   "mcpServers": {
     "sentry": {
       "command": "npx",
-      "args": ["-y", "@sentry/mcp-server-sentry@latest", "--auth-token", "YOUR_SENTRY_TOKEN"]
+      "args": [
+        "-y",
+        "@sentry/mcp-server-sentry@latest",
+        "--auth-token",
+        "YOUR_SENTRY_TOKEN"
+      ]
     }
   }
 }
@@ -585,6 +624,7 @@ Configure these in your Claude Code MCP settings:
 **Capabilities:** List and inspect issues, view stack traces, search errors, check release health.
 
 #### Linear MCP
+
 ```json
 {
   "mcpServers": {
@@ -603,27 +643,29 @@ Configure these in your Claude Code MCP settings:
 ### Verification
 
 After configuring MCPs, verify in Claude Code:
+
 ```
 /mcp
 ```
+
 Should show all 4 MCP servers connected with their available tools.
 
 ---
 
 ## 9. Risk Register
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-| **Supabase free tier limits hit** | Medium (at 3,000+ users) | Low | Upgrade to Pro ($25/mo) or self-host. Data layer abstraction makes migration clean. |
-| **Video storage growth** | Low (720 GB of 2 TB used at full library) | Low | Both servers have 3.6 TB total. 2 TB allocated. Monitor disk usage as new content is added. |
-| **Stripe webhook failures** | Low | High | Stripe retries webhooks for 3 days. Implement idempotency keys. Log all events. |
-| **Pipeline sync breaks** | Medium | Medium | Content sync is additive (new/updated lessons). Existing content unaffected. Manifest checksums detect corruption. |
-| **Supabase outage** | Low | High | Supabase has 99.9% SLA on Pro. Free tier has no SLA. Upgrade to Pro before launch if concerned. |
-| **Video HLS encoding quality** | Low | Medium | Test with real videos before launch. Adjust FFmpeg CRF/bitrate params. Use ABR to handle varied connections. |
-| **GDPR complaint** | Low | High | Privacy policy, data export, account deletion all implemented before launch. DPAs signed with all processors. |
-| **Payment fraud** | Low | Medium | Stripe Radar (included) handles fraud detection. Enable 3D Secure for additional protection. |
-| **npm supply chain attack** | Medium | High | Dependabot + `npm audit` in CI detect known vulns. Socket Security GitHub App detects typosquatting and suspicious packages. `npm ci` enforces lockfile integrity. Renovate auto-merges only patch/minor updates. |
-| **Regression from dependency update** | Medium | Low | CI runs full test suite before deploy. Auto-merge only for patches with passing CI. Major updates require manual review. |
+| Risk                                  | Likelihood                                | Impact | Mitigation                                                                                                                                                                                                        |
+| ------------------------------------- | ----------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Supabase free tier limits hit**     | Medium (at 3,000+ users)                  | Low    | Upgrade to Pro ($25/mo) or self-host. Data layer abstraction makes migration clean.                                                                                                                               |
+| **Video storage growth**              | Low (720 GB of 2 TB used at full library) | Low    | Both servers have 3.6 TB total. 2 TB allocated. Monitor disk usage as new content is added.                                                                                                                       |
+| **Stripe webhook failures**           | Low                                       | High   | Stripe retries webhooks for 3 days. Implement idempotency keys. Log all events.                                                                                                                                   |
+| **Pipeline sync breaks**              | Medium                                    | Medium | Content sync is additive (new/updated lessons). Existing content unaffected. Manifest checksums detect corruption.                                                                                                |
+| **Supabase outage**                   | Low                                       | High   | Supabase has 99.9% SLA on Pro. Free tier has no SLA. Upgrade to Pro before launch if concerned.                                                                                                                   |
+| **Video HLS encoding quality**        | Low                                       | Medium | Test with real videos before launch. Adjust FFmpeg CRF/bitrate params. Use ABR to handle varied connections.                                                                                                      |
+| **GDPR complaint**                    | Low                                       | High   | Privacy policy, data export, account deletion all implemented before launch. DPAs signed with all processors.                                                                                                     |
+| **Payment fraud**                     | Low                                       | Medium | Stripe Radar (included) handles fraud detection. Enable 3D Secure for additional protection.                                                                                                                      |
+| **npm supply chain attack**           | Medium                                    | High   | Dependabot + `npm audit` in CI detect known vulns. Socket Security GitHub App detects typosquatting and suspicious packages. `npm ci` enforces lockfile integrity. Renovate auto-merges only patch/minor updates. |
+| **Regression from dependency update** | Medium                                    | Low    | CI runs full test suite before deploy. Auto-merge only for patches with passing CI. Major updates require manual review.                                                                                          |
 
 ---
 
@@ -645,6 +687,7 @@ Total estimated time: **6-7 weeks** from start of Phase 2 to launch, working ful
 ### Quality Tools Reference
 
 For full details on all quality tools (implemented and planned), see:
+
 - [Quality Tools Research](../research-quality-tools-2025-2026.md) — comprehensive research with rationale, setup guides, and priority matrix
 - [Automation Setup Guide](../automation-setup-guide.md) — reusable guide for setting up the full automation stack
 - [Technology Decisions §15](./technology-decisions.md#15-quality--automation-tooling) — detailed documentation of implemented tools

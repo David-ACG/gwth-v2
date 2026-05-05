@@ -1,5 +1,10 @@
 # GWTH v2 — Student Learning Platform
 
+> **Current product source:** `docs/product-source-of-truth-2026-05-04.md` and
+> `PRODUCT.md` override older implementation notes. For the UK beta, use
+> £29/month course access, £7.50/month Stay Current, GWTH Score, Tech Radar
+> deferred from public launch messaging, and coding/building as a course spine.
+
 ## Project Overview
 
 Build GWTH v2, a student-facing learning platform where users can browse courses, view lessons (video + text + audio), complete labs, track progress, and take quizzes. This is a full rebuild — clean, modern, and properly architected from scratch.
@@ -17,7 +22,7 @@ Build GWTH v2, a student-facing learning platform where users can browse courses
 
 Next.js 16 (App Router, React 19, React Compiler, Turbopack) + TypeScript strict + Tailwind v4 + shadcn/ui (new-york, unified `radix-ui`) + Motion (motion.dev) + tw-animate-css + lucide-react + Sonner + next-themes + Shiki + react-hook-form + zod. Matches the agilecommerce.ai stack (`next@16.1.4`, `react@19.2.3`, `tailwindcss@^4`).
 
-Backend, auth, database, and payment choices are decided separately. Build the frontend with clean data-fetching abstractions so any backend can be plugged in later.
+Backend, auth, database, and payment foundations now use Supabase and Stripe. Keep clean data-fetching abstractions, but do not assume the site is frontend-only.
 
 See `.claude/rules/tech-stack.md` for `next.config.ts`, ESLint flat config, TypeScript settings, and environment-variables guidance (loaded automatically when editing those files).
 
@@ -59,7 +64,7 @@ All forms use react-hook-form + zod. Define a zod schema in `lib/validations.ts`
 ## Important Notes
 
 - This is a FRESH project. Do not copy v1 code — rebuild properly.
-- **No backend dependencies.** No database ORM, no auth library, no payment SDK. Build the entire frontend against mock data and abstract interfaces. The backend will be chosen and integrated separately.
+- **Backend dependencies exist.** Supabase and Stripe are now part of the beta implementation. Keep abstractions clean and retain graceful mock/local fallbacks where useful, but do not remove backend integrations as "future work".
 - **Robust architecture.** Error boundaries on every route group. Loading skeletons on every page. Graceful fallbacks for missing media. No component should crash the page.
 - **Well-documented.** JSDoc on every export. README per component module. Inline comments explaining _why_, not _what_.
 - All colors must use CSS custom properties. Never hardcode hex values in components.
@@ -130,10 +135,10 @@ C:\Users\david\AppData\Local\beads\start-dolt.bat
 
 These load automatically when Claude reads matching files:
 
-| Rule | Loads when working with |
-|---|---|
-| `.claude/rules/tech-stack.md` | `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `postcss.config.mjs`, `package.json` |
-| `.claude/rules/design-system.md` | `src/components/**/*.tsx`, global CSS files |
-| `.claude/rules/routing.md` | files under `src/app/**` |
-| `.claude/rules/data-layer.md` | files under `src/lib/**` |
-| `.claude/rules/middleware-and-layout.md` | `src/middleware.ts`, `src/app/layout.tsx` |
+| Rule                                     | Loads when working with                                                                      |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `.claude/rules/tech-stack.md`            | `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `postcss.config.mjs`, `package.json` |
+| `.claude/rules/design-system.md`         | `src/components/**/*.tsx`, global CSS files                                                  |
+| `.claude/rules/routing.md`               | files under `src/app/**`                                                                     |
+| `.claude/rules/data-layer.md`            | files under `src/lib/**`                                                                     |
+| `.claude/rules/middleware-and-layout.md` | `src/middleware.ts`, `src/app/layout.tsx`                                                    |

@@ -1,5 +1,10 @@
 # Product
 
+> Current source of truth: `docs/product-source-of-truth-2026-05-04.md`.
+> Older docs may still mention global launch, USD pricing, public Tech Radar,
+> "no coding required", or a fixed 94-project promise; those are stale for the
+> UK beta unless this file and the May 4 source repeat them.
+
 ## Register
 
 brand
@@ -46,7 +51,7 @@ This is NOT what GWTH.ai should look or feel like:
 
 1. **Show the work, don't claim it.** If a stat appears (21% / 1 in 6 / 45%), it cites DSIT, ONS, or another named UK source. If we say the credential is verifiable, the homepage demonstrates the verify URL pattern. If we say learners can move toward the top 1% for applied AI skill, the product needs a visible GWTH benchmark rubric and external research map. Every claim has an artefact next to it.
 
-2. **Plain English ≥ jargon.** Headings are short, declarative, parallel ("Different reasons. Same course." / "94 projects. One score. Plain English."). No "empowering" / "leverage" / "synergy". No em dashes (the AI tell). Sentences a UK adult could read aloud at a kitchen table without flinching.
+2. **Plain English ≥ jargon.** Headings are short, declarative, parallel ("Different reasons. Same course." / "Real projects. One score. Plain English."). No "empowering" / "leverage" / "synergy". No em dashes (the AI tell). Sentences a UK adult could read aloud at a kitchen table without flinching.
 
 3. **Proof over promise.** The hero device shows a real-shaped GWTH Score (with the "Illustrative" caveat right below). Pricing tiers are exact (£0 labs / £29/mo starter course access / £7.50/mo Stay Current) without pushing a total course price. The credential says when it decays and why — honesty as a moat against certificate mills.
 
