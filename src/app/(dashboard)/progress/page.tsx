@@ -24,7 +24,7 @@ import { formatDuration, formatProgress, getGradeFromScore } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "Progress",
-  description: "Track your learning progress, dynamic score, and achievements.",
+  description: "Track your learning progress, GWTH Score, and achievements.",
 }
 
 export default async function ProgressPage() {
@@ -57,14 +57,14 @@ export default async function ProgressPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Progress</h1>
         <p className="mt-1 text-muted-foreground">
-          Track your learning journey and dynamic score
+          Track your learning journey and GWTH Score
         </p>
       </div>
 
-      {/* Dynamic Score */}
+      {/* GWTH Score */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold">Dynamic Score</h2>
+          <h2 className="text-lg font-semibold">GWTH Score</h2>
           <p className="mt-1 text-xs text-muted-foreground">
             Your score reflects current competence. It grows as you learn and
             decays if updated content is not reviewed.

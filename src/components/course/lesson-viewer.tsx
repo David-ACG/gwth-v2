@@ -8,6 +8,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { BookmarkButton } from "@/components/shared/bookmark-button"
 import { AudioBar } from "@/components/lesson"
 import { useProgress } from "@/hooks/use-progress"
+import {
+  getLessonCompletionStatus,
+  INTRO_VIDEO_COMPLETION_THRESHOLD,
+} from "@/lib/progress/completion"
 import { toast } from "sonner"
 import {
   ArrowLeft,
@@ -102,14 +106,38 @@ export function LessonViewer({
   initialBookmarked,
 }: LessonViewerProps) {
   const [showNotes, setShowNotes] = useState(false)
-  const { progress, markComplete, submitQuizScore, isPending } =
-    useProgress(initialProgress)
+  const {
+    progress,
+    markComplete,
+    submitQuizScore,
+    updateIntroVideoProgress,
+    isPending,
+  } = useProgress(initialProgress)
 
   const sections = buildSections(lesson)
+  const completionStatus = getLessonCompletionStatus({
+    hasIntroVideo: Boolean(lesson.introVideoUrl),
+    questionCount: lesson.questions.length,
+    introVideoProgress: progress?.introVideoProgress ?? 0,
+    bestQuizScore: progress?.bestQuizScore ?? null,
+  })
 
   function handleMarkComplete() {
+    if (!completionStatus.canComplete) {
+      toast.error(completionStatus.missingReasons[0] ?? "Lesson is not ready yet")
+      return
+    }
     markComplete(lesson.id)
     toast.success("Lesson marked as complete!")
+  }
+
+  function handleIntroVideoProgress(videoProgress: number) {
+    if (
+      videoProgress >= INTRO_VIDEO_COMPLETION_THRESHOLD &&
+      (progress?.introVideoProgress ?? 0) < INTRO_VIDEO_COMPLETION_THRESHOLD
+    ) {
+      updateIntroVideoProgress(lesson.id, videoProgress)
+    }
   }
 
   function handleQuizSubmit(score: number) {
@@ -213,6 +241,7 @@ export function LessonViewer({
                   <VideoPlayer
                     src={lesson.introVideoUrl!}
                     title={`${lesson.title} — Introduction`}
+                    onProgressChange={handleIntroVideoProgress}
                   />
                   <p className="mt-3 text-sm text-muted-foreground">
                     {lesson.description}
@@ -326,14 +355,21 @@ export function LessonViewer({
           </div>
           <div className="flex items-center gap-2">
             {!progress?.isCompleted && (
-              <Button
-                onClick={handleMarkComplete}
-                disabled={isPending}
-                size="sm"
-              >
-                <CheckCircle2 className="mr-1 size-4" />
-                Mark Complete
-              </Button>
+              <div className="flex flex-col items-end gap-1">
+                <Button
+                  onClick={handleMarkComplete}
+                  disabled={isPending || !completionStatus.canComplete}
+                  size="sm"
+                >
+                  <CheckCircle2 className="mr-1 size-4" />
+                  Mark Complete
+                </Button>
+                {!completionStatus.canComplete && (
+                  <p className="max-w-64 text-right text-xs text-muted-foreground">
+                    {completionStatus.missingReasons.join(" · ")}
+                  </p>
+                )}
+              </div>
             )}
             {nextLesson && (
               <Button size="sm" asChild>

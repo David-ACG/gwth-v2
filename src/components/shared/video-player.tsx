@@ -18,6 +18,8 @@ interface VideoPlayerProps {
   poster?: string
   /** Additional CSS classes for the container */
   className?: string
+  /** Called with watched progress as a fraction from 0 to 1 */
+  onProgressChange?: (progress: number) => void
 }
 
 /**
@@ -28,7 +30,13 @@ interface VideoPlayerProps {
  * Includes a timeout fallback for URLs that silently fail.
  * Designed to be loaded via next/dynamic for code-splitting.
  */
-export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps) {
+export function VideoPlayer({
+  src,
+  title,
+  poster,
+  className,
+  onProgressChange,
+}: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
@@ -55,7 +63,9 @@ export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps)
 
     function handleTimeUpdate() {
       if (video && video.duration) {
-        setProgress((video.currentTime / video.duration) * 100)
+        const progressFraction = video.currentTime / video.duration
+        setProgress(progressFraction * 100)
+        onProgressChange?.(progressFraction)
       }
     }
 
@@ -83,7 +93,7 @@ export function VideoPlayer({ src, title, poster, className }: VideoPlayerProps)
       video.removeEventListener("ended", handleEnded)
       clearTimeout(timeout)
     }
-  }, [src])
+  }, [src, onProgressChange])
 
   function handlePlayPause() {
     const video = videoRef.current
