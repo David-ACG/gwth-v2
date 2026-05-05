@@ -44,8 +44,10 @@ describe("robots.txt", () => {
     const result = robots()
     const rules = result.rules as Array<{ userAgent: string; allow?: string; disallow?: string }>
     expect(rules.length).toBe(1)
-    expect(rules[0].userAgent).toBe("*")
-    expect(rules[0].allow).toBe("/")
-    expect(rules[0].disallow).toBeUndefined()
+    const rule = rules[0]
+    expect(rule).toBeDefined()
+    expect(rule!.userAgent).toBe("*")
+    expect(rule!.allow).toBe("/")
+    expect(rule!.disallow).toBeUndefined()
   })
 })
