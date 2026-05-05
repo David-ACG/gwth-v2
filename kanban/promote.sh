@@ -8,10 +8,20 @@ PROJECT_ROOT="$(pwd)"
 TESTING="$PROJECT_ROOT/kanban/2_testing"
 DONE="$PROJECT_ROOT/kanban/3_done"
 
-HETZNER_COOLIFY="http://195.201.177.66:8000"
-APP_UUID="tw0cc8oc0w4scwoccs0cw0go"
-API_TOKEN="2|uKyrlgQXkxsAZIwMY0FJugLsZmIN3tjN5qsTekwFaedd0d74"
-HEALTH_URL="https://gwth.ai/api/health"
+HETZNER_COOLIFY="${HETZNER_COOLIFY:-http://195.201.177.66:8000}"
+APP_UUID="${COOLIFY_APP_UUID:-}"
+API_TOKEN="${COOLIFY_TOKEN:-}"
+HEALTH_URL="${HETZNER_HEALTH_URL:-https://gwth.ai/api/health}"
+
+if [ -z "$APP_UUID" ]; then
+    echo "ERROR: COOLIFY_APP_UUID is required."
+    exit 1
+fi
+
+if [ -z "$API_TOKEN" ]; then
+    echo "ERROR: COOLIFY_TOKEN is required."
+    exit 1
+fi
 
 # Verify folders exist
 if [ ! -d "$TESTING" ]; then

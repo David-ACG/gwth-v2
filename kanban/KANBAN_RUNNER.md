@@ -119,6 +119,18 @@ bash kanban/deploy-p520.sh
 bash kanban/deploy-hetzner.sh
 ```
 
+Requires local environment variables:
+
+```bash
+export COOLIFY_APP_UUID="..."
+export COOLIFY_TOKEN="..."
+# Optional overrides:
+export HETZNER_COOLIFY="http://195.201.177.66:8000"
+export HETZNER_HEALTH_URL="https://gwth.ai/api/health"
+```
+
+Do not commit real Coolify tokens. GitHub Actions uses repository secrets for production deployment.
+
 ## Templates
 
 - `PLAN_TEMPLATE.md` — Structure for plan files (includes Gate 1 placeholder)
