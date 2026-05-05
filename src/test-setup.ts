@@ -4,9 +4,9 @@ import "@testing-library/jest-dom/vitest"
 // requires. Provide a minimal stub so components using `whileInView` can mount.
 if (typeof globalThis.IntersectionObserver === "undefined") {
   class IntersectionObserverStub {
-    constructor(_cb: IntersectionObserverCallback, _opts?: IntersectionObserverInit) {}
-    observe(_el: Element) {}
-    unobserve(_el: Element) {}
+    constructor() {}
+    observe() {}
+    unobserve() {}
     disconnect() {}
     takeRecords(): IntersectionObserverEntry[] {
       return []

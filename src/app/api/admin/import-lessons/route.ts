@@ -44,7 +44,7 @@ async function importLesson(
 ): Promise<PipelineImportResult> {
   try {
     // Try the RPC function first (created in migration 003)
-    const { data, error } = await supabase.rpc("upsert_lesson_from_pipeline", {
+    const { error } = await supabase.rpc("upsert_lesson_from_pipeline", {
       p_lesson: lesson as unknown as Record<string, unknown>,
       p_questions: lesson.questions as unknown as Record<string, unknown>[],
       p_resources: lesson.resources as unknown as Record<string, unknown>[],
