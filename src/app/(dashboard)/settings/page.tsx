@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { getMockUser } from "@/lib/auth"
+import { getDashboardUser } from "@/lib/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -11,6 +10,7 @@ import {
   GRACE_PERIOD_DAYS,
 } from "@/lib/config"
 import { CreditCard, AlertTriangle, ExternalLink } from "lucide-react"
+import { BillingActions } from "@/components/billing/billing-actions"
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -42,7 +42,7 @@ function getSubscriptionVariant(
 }
 
 export default async function SettingsPage() {
-  const user = await getMockUser()
+  const user = await getDashboardUser()
   const state = user?.subscriptionState ?? "visitor"
 
   return (
@@ -123,12 +123,15 @@ export default async function SettingsPage() {
               <p className="text-sm font-medium">Ready to start the course?</p>
               <p className="mt-1 text-xs text-muted-foreground">
                 Subscribe for £{COURSE_MONTHLY_PRICE.toFixed(2)}/month to
-                unlock the full course, monthly content, and dynamic scoring.
+                unlock the course one month at a time, with GWTH Score tracking
+                as you progress.
               </p>
-              <Button size="sm" className="mt-3" asChild>
-                <Link href="/pricing">View Pricing</Link>
-              </Button>
+              <BillingActions state={state} className="mt-3" />
             </div>
+          )}
+
+          {["month1", "month2", "month3", "ongoing"].includes(state) && (
+            <BillingActions state={state} />
           )}
         </CardContent>
       </Card>

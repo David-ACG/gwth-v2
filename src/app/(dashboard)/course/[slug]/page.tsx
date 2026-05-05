@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getCourse } from "@/lib/data/courses"
 import { getCourseProgress } from "@/lib/data/progress"
-import { getMockUser, canAccessMonth } from "@/lib/auth"
+import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import {
@@ -48,12 +48,10 @@ export default async function CourseDetailPage({ params }: PageProps) {
   const [course, progress, user] = await Promise.all([
     getCourse(slug),
     getCourseProgress(slug),
-    getMockUser(),
+    getDashboardUser(),
   ])
 
   if (!course) notFound()
-
-  const state = user?.subscriptionState ?? "visitor"
 
   const totalLessons = course.sections.reduce(
     (sum, s) => sum + s.lessons.length,
@@ -65,7 +63,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
     month: month as 1 | 2 | 3,
     config: MONTH_CONFIGS.find((m) => m.month === month)!,
     sections: course.sections.filter((s) => s.month === month),
-    canAccess: canAccessMonth(state, month as 1 | 2 | 3),
+    canAccess: user ? canUserAccessMonth(user, month as 1 | 2 | 3) : false,
   }))
 
   return (

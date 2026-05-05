@@ -4,7 +4,7 @@ import { getCourses } from "@/lib/data/courses"
 import { getAllCourseProgress, getStreak } from "@/lib/data/progress"
 import { getBookmarks } from "@/lib/data/bookmarks"
 import { getNotifications } from "@/lib/data/notifications"
-import { getMockUser, canAccessCourse } from "@/lib/auth"
+import { getDashboardUser, canUserAccessCourse } from "@/lib/auth"
 import { ProgressRing } from "@/components/progress/progress-ring"
 import { StudyStreakCalendar } from "@/components/progress/study-streak-calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   const [user, courses, courseProgress, streak, bookmarks, notifications] =
     await Promise.all([
-      getMockUser(),
+      getDashboardUser(),
       getCourses(),
       getAllCourseProgress(),
       getStreak(),
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
     ])
 
   const state = user?.subscriptionState ?? "visitor"
-  const hasCourseAccess = canAccessCourse(state)
+  const hasCourseAccess = user ? canUserAccessCourse(user) : false
   const course = courses[0] // Single GWTH course
   const progress = courseProgress.find((p) => p.courseId === course?.id)
   const unreadNotifications = notifications.filter((n) => !n.read)

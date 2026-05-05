@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { getMockUser } from "@/lib/auth"
+import { getDashboardUser } from "@/lib/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -11,7 +11,11 @@ export const metadata: Metadata = {
 }
 
 export default async function ProfilePage() {
-  const user = await getMockUser()
+  const user = await getDashboardUser()
+
+  if (!user) {
+    return null
+  }
 
   return (
     <div className="space-y-6">
