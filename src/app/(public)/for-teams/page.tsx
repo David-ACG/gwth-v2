@@ -7,7 +7,6 @@ import {
   ArrowRight,
   MessageSquare,
   Check,
-  Radar,
   Zap,
   ListChecks,
   Clock,
@@ -23,7 +22,6 @@ import {
 import {
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
-  TOTAL_COURSE_COST,
   TOTAL_MANDATORY_LESSONS,
   TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
@@ -32,7 +30,7 @@ import { UK_STATS, RESEARCH_SOURCES } from "@/components/marketing/data"
 export const metadata: Metadata = {
   title: "AI Training for UK Teams",
   description:
-    "Upskill your UK team with hands-on AI training. 94 projects, no coding required, vendor-neutral. Choose the syllabus that fits each role. £29/month per person for 3 months.",
+    "A light UK teams path for applied AI training. Beginner-to-advanced lessons, practical projects, GWTH Score, and £29/month starter pricing in GBP.",
 }
 
 type WhyItem = {
@@ -50,15 +48,15 @@ const whyGwth: readonly WhyItem[] = [
   },
   {
     icon: Trophy,
-    title: "94 hands-on projects with video walkthroughs",
+    title: "Practical projects with walkthroughs",
     description:
-      "Not slides. Not theory. Every lesson ends with a real project your team members build themselves, with a step-by-step video walkthrough for every single one.",
+      "Not slides. Not theory. Lessons build towards real outputs your team members can use, show, or adapt at work.",
   },
   {
     icon: Users,
-    title: "No coding required",
+    title: "Beginner-friendly, then builder-ready",
     description:
-      "Everything is built by describing what you want in plain English. Your marketing team, your operations team, your finance team — they can all do this.",
+      "Month 1 starts in plain English. Later lessons introduce AI-assisted coding and building patterns for teams ready to go deeper.",
   },
   {
     icon: ListChecks,
@@ -66,16 +64,16 @@ const whyGwth: readonly WhyItem[] = [
     description: `${TOTAL_MANDATORY_LESSONS} essential lessons are mandatory. ${TOTAL_OPTIONAL_LESSONS} optional lessons cover industry-specific and advanced topics. Team admins assign the right optional lessons to each role — no one wastes time on irrelevant content.`,
   },
   {
-    icon: Radar,
-    title: "Vendor-neutral (Tech Radar tracks 60+ tools)",
+    icon: Shield,
+    title: "Vendor-neutral applied AI",
     description:
-      "We do not sell tools. Our Tech Radar evaluates 60+ AI tools every day so your team learns the best option, not the one that paid for placement.",
+      "We do not sell tools. Your team learns transferable AI skills, not product-specific workflows that become obsolete.",
   },
   {
     icon: BarChart3,
-    title: "Dynamic certification",
+    title: "GWTH Score",
     description:
-      "Our scores reflect current competence, not a one-time exam. When tools change, assessments update. Scores that are six months old look six months old.",
+      "The score reflects completion, demonstrated applied skill, and currentness rather than a one-time certificate.",
   },
   {
     icon: Shield,
@@ -88,17 +86,17 @@ const whyGwth: readonly WhyItem[] = [
 const months = [
   {
     month: 1,
-    title: "Personal AI Mastery",
+    title: "Foundations",
     lessons: "24 mandatory",
     description:
-      "From first AI conversation to building real tools — apps, websites, dashboards, research projects, and automations — by typing plain English.",
+      "Move beyond using ChatGPT like Google. Learn AI foundations, the six primitives, and practical AI-assisted building.",
   },
   {
     month: 2,
-    title: "Professional & Industry Application",
+    title: "Apps, Workflows & Consulting",
     lessons: "20 mandatory + 15 optional",
     description:
-      "Industry-specific modules for healthcare, legal, finance, travel, creative, marketing, and HR. Your team builds applications that solve problems in their actual field.",
+      "Go deeper into building, workflows, small-business use cases, and consultant-level applied AI skills.",
   },
   {
     month: 3,
@@ -126,22 +124,22 @@ const faqs = [
   },
   {
     question: "What is the ROI?",
-    answer: `The entire course costs £${TOTAL_COURSE_COST.toFixed(2)} per person over 3 months — less than 5 hours of an employee earning £30,000 a year. By Month 1, your team will be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives. The course pays for itself in the first week.`,
+    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE.toFixed(2)}/month per person, with monthly access rather than an annual lock-in. By Month 1, your team should be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives.`,
   },
   {
     question: "Our team is not technical. Is this appropriate?",
     answer:
-      "This course was designed specifically for non-technical people. No coding. No command line. No technical prerequisites. Everything is built by describing what you want in plain English. If your team can write an email, they can complete this course.",
+      "This course starts with non-technical people in mind. Month 1 uses plain English and practical AI patterns, then later lessons introduce AI-assisted coding and stronger building techniques for people ready to go deeper.",
   },
   {
     question: "How is this different from vendor-specific training?",
     answer:
-      "Vendor training teaches you one tool. We teach the skill of working with AI, using whichever tool is best for the job. Our Tech Radar tracks 60+ tools daily — when something better appears, we update the course immediately. Your team learns transferable skills, not product-specific workflows that become obsolete.",
+      "Vendor training teaches you one tool. GWTH teaches the skill of working with AI, using whichever tool is best for the job. Your team learns transferable skills, not product-specific workflows that become obsolete.",
   },
   {
     question: "How does this compare to the government's AI Skills Boost?",
     answer:
-      "The government programme covers AI awareness basics in 20 minutes to 9 hours. That is roughly equivalent to our first two weeks. GWTH goes dramatically further — 94 hands-on projects, industry-specific modules, enterprise transformation, and content updated every day. Many teams complete the free government badge first, then use GWTH for the comprehensive skills their people actually need.",
+      "The government programme covers AI awareness basics in 20 minutes to 9 hours. GWTH goes further with structured lessons, practical projects, AI-assisted building, and enterprise transformation. Many teams complete the free government badge first, then use GWTH for the skills their people actually need.",
   },
   {
     question: "Can employees complete this during working hours?",
@@ -265,9 +263,9 @@ export default function ForTeamsPage() {
               At £{COURSE_MONTHLY_PRICE.toFixed(2)}/month for 3 months, the entire
               course costs{" "}
               <strong className="text-foreground">
-                £{TOTAL_COURSE_COST.toFixed(2)} per person
+                £{COURSE_MONTHLY_PRICE.toFixed(2)}/month per person
               </strong>
-              . That is less than 5 hours of an employee earning £30,000 a year.
+              . That is deliberately priced below even a short consultant call.
             </p>
           </div>
           <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
@@ -457,9 +455,8 @@ export default function ForTeamsPage() {
                 </span>
               </div>
               <p className="mt-2 text-sm text-muted-foreground">
-                for 3 months (£{TOTAL_COURSE_COST.toFixed(2)} total per person),
-                then £{ONGOING_MONTHLY_PRICE.toFixed(2)}/month ongoing for
-                continued access and live skill scores.
+                per course month, then £{ONGOING_MONTHLY_PRICE.toFixed(2)}/month
+                optional Stay Current access after course access ends.
               </p>
             </div>
             <ul className="mt-8 space-y-3">
@@ -537,12 +534,6 @@ export default function ForTeamsPage() {
               <Link href="/contact" className="gap-2">
                 <MessageSquare className="size-4" aria-hidden="true" />
                 Get in Touch
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/tech-radar" className="gap-2">
-                <Radar className="size-4" aria-hidden="true" />
-                Browse the Tech Radar
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>

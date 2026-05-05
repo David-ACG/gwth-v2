@@ -7,22 +7,22 @@ describe("Hero", () => {
     const { container } = render(<Hero />)
     const h1 = container.querySelector("h1")
     expect(h1).not.toBeNull()
-    expect(h1?.textContent ?? "").toContain("Stop watching AI change the world.")
-    expect(h1?.textContent ?? "").toContain("Start building with it.")
+    expect(h1?.textContent ?? "").toContain("From ChatGPT basics")
+    expect(h1?.textContent ?? "").toContain("serious applied AI skill")
   })
 
   it("renders the primary CTA pointing at /signup", () => {
     const { container } = render(<Hero />)
     const primaryCta = container.querySelector('a[href="/signup"]')
     expect(primaryCta).not.toBeNull()
-    expect(primaryCta?.textContent?.trim()).toBe("Get started")
+    expect(primaryCta?.textContent?.trim()).toBe("Join the waitlist")
   })
 
-  it("renders the secondary CTA pointing at /tech-radar", () => {
+  it("renders the secondary CTA pointing at /labs", () => {
     const { container } = render(<Hero />)
-    const secondaryCta = container.querySelector('a[href="/tech-radar"]')
+    const secondaryCta = container.querySelector('a[href="/labs"]')
     expect(secondaryCta).not.toBeNull()
-    expect(secondaryCta?.textContent?.trim()).toBe("Explore the Tech Radar")
+    expect(secondaryCta?.textContent?.trim()).toBe("Try a free lab")
   })
 
   it("renders exactly one HeroDevice instance", () => {

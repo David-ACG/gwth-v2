@@ -28,8 +28,8 @@ export function PricingCards({ headingless = false }: { headingless?: boolean } 
               Less than the cost of one hour with an AI consultant.
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Start free. Learn everything in 3 months. Stay current for less than a
-              flat white.
+              Start free. Unlock one course month at a time. Stay current for less
+              than a flat white.
             </p>
           </div>
         )}
@@ -107,7 +107,7 @@ export function PricingCards({ headingless = false }: { headingless?: boolean } 
         </div>
 
         <p className="mt-10 text-center font-mono text-xs text-muted-foreground">
-          No yearly price · Cancel anytime · No lock-in · Same per-person price for
+          No yearly price · Cancel anytime · No lock-in · UK-first pricing for
           teams
         </p>
       </div>

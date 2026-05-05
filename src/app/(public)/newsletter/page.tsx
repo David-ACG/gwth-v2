@@ -1,6 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
-import { Mail, Check, ArrowRight, Radar } from "lucide-react"
+import { Mail, Check, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,12 +9,12 @@ import { Label } from "@/components/ui/label"
 export const metadata: Metadata = {
   title: "Newsletter",
   description:
-    "The GWTH Weekly — one email per week with a practical AI tip, tool updates from the Tech Radar, and course previews. No spam. No sales pressure.",
+    "The GWTH Weekly: one email per week with a practical AI tip, useful tool notes, and course previews. No spam. No sales pressure.",
 }
 
 const includes = [
   "A practical AI tip you can use that day",
-  "Tool updates from the GWTH Tech Radar (60+ tools tracked daily)",
+  "Useful tool notes when something materially changes",
   "Course updates and new content previews",
 ]
 
@@ -120,10 +120,7 @@ export default function NewsletterPage() {
               </Link>
             </Button>
             <Button variant="outline" className="gap-2" asChild>
-              <Link href="/tech-radar">
-                <Radar className="size-4" />
-                Browse the Tech Radar
-              </Link>
+              <Link href="/pricing">See pricing</Link>
             </Button>
           </div>
         </div>

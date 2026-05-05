@@ -8,7 +8,6 @@ const footerLinks = [
       { href: "/pricing", label: "Pricing" },
       { href: "/why-gwth", label: "Why GWTH" },
       { href: "/for-teams", label: "For Teams" },
-      { href: "/tech-radar", label: "Tech Radar" },
       { href: "/contact", label: "Contact" },
     ],
   },
@@ -45,9 +44,8 @@ export function Footer() {
               {APP_NAME}
             </Link>
             <p className="mt-2 text-sm text-muted-foreground">
-              UK-based AI training. Learn to build apps, automate workflows, and
-              solve real problems using AI — all in plain English. No coding
-              required.
+              UK-focused applied AI training. Learn to research, automate,
+              analyse, and build practical tools with AI-assisted coding.
             </p>
           </div>
           {footerLinks.map((group) => (

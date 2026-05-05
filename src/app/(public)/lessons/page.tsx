@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = {
   title: "Lessons",
   description:
-    "94 hands-on AI lessons across 3 months. Video walkthroughs, real projects, dynamic scoring. No coding experience required.",
+    "A three-month applied AI syllabus with 64 core lessons, 30 optional go-deeper lessons, practical projects, and a verifiable GWTH Score.",
 }
 
 const features = [
@@ -32,13 +32,13 @@ const features = [
   },
   {
     icon: FlaskConical,
-    title: `${TOTAL_MANDATORY_LESSONS + TOTAL_OPTIONAL_LESSONS} Projects`,
+    title: `${TOTAL_MANDATORY_LESSONS + TOTAL_OPTIONAL_LESSONS} Lessons`,
     description:
-      "Build real apps, automations, and tools — not toy exercises. Every project works.",
+      "Build real apps, automations, and tools, not toy exercises. Every month moves towards practical proof.",
   },
   {
     icon: BarChart3,
-    title: "Dynamic Scoring",
+    title: "GWTH Score",
     description:
       "Your score reflects what you know now, not what you knew last month. Content updates keep you current.",
   },
@@ -66,9 +66,9 @@ export default function LessonsPage() {
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
               {TOTAL_MANDATORY_LESSONS} mandatory lessons + {TOTAL_OPTIONAL_LESSONS}{" "}
-              optional deep-dives across 3 months. Go from your first AI
-              conversation to deploying enterprise systems — by typing plain
-              English.
+              optional deep-dives across 3 months. Start with ChatGPT basics,
+              then build towards AI-assisted coding, practical projects, and
+              enterprise transformation.
             </p>
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Button size="lg" className="gap-2" asChild>

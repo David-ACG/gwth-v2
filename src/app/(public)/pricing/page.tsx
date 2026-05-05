@@ -30,8 +30,8 @@ export default function PricingPage() {
             Less than the cost of one hour with an AI consultant.
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">
-            Start free. Learn everything in 3 months. Stay current for less than a
-            flat white.
+            Start free. Unlock one course month at a time. Stay current for less
+            than a flat white.
           </p>
         </div>
       </section>
@@ -51,8 +51,8 @@ export default function PricingPage() {
             <p className="mt-3 text-sm leading-relaxed text-foreground">
               We are currently accepting earlybird testers. Create a free account
               to join the waiting list and be first to access the course when it
-              launches. We are launching in the UK first; international pricing
-              in USD and EUR will follow.
+              launches. GWTH is built around UK examples, research, and GBP
+              pricing; other countries are launching soon.
             </p>
           </div>
           <div>

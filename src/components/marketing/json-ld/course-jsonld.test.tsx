@@ -17,7 +17,7 @@ describe("CourseJsonLd", () => {
     const payload = JSON.parse(script!.textContent ?? "")
     expect(payload["@context"]).toBe("https://schema.org")
     expect(payload["@type"]).toBe("Course")
-    expect(payload.name).toBe("GWTH — Applied AI Skills")
+    expect(payload.name).toBe("GWTH.ai Applied AI Course")
     expect(payload.provider["@type"]).toBe("Organization")
     expect(payload.provider.name).toBe("GWTH.ai")
     expect(payload.provider.url).toBe("https://gwth.ai")
@@ -27,7 +27,7 @@ describe("CourseJsonLd", () => {
     const { container } = render(<CourseJsonLd />)
     const script = container.querySelector('script[type="application/ld+json"]')
     expect(script?.textContent).toMatchInlineSnapshot(
-      `"{"@context":"https://schema.org","@type":"Course","name":"GWTH — Applied AI Skills","description":"Learn to build apps, automate workflows, and solve real problems using AI. 94 hands-on projects across 3 months. No coding required.","provider":{"@type":"Organization","name":"GWTH.ai","url":"https://gwth.ai"}}"`
+      `"{"@context":"https://schema.org","@type":"Course","name":"GWTH.ai Applied AI Course","description":"A UK-focused beginner-to-advanced applied AI course covering ChatGPT basics, research, automation, AI-assisted coding, projects, capstones, and a verifiable GWTH Score.","provider":{"@type":"Organization","name":"GWTH.ai","url":"https://gwth.ai"}}"` 
     )
   })
 })

@@ -23,13 +23,13 @@ describe("PricingCards", () => {
     expect(free?.textContent ?? "").toMatch(/£0|Free/)
   })
 
-  it("The Course card shows £29 monthly and £87 total (drift sentinel)", () => {
+  it("The Course card shows £29 monthly without a prominent £87 total", () => {
     const { container } = render(<PricingCards />)
     const course = container.querySelector('[data-tier="course"]')
     expect(course).not.toBeNull()
     const text = course?.textContent ?? ""
     expect(text).toContain(`£${COURSE_MONTHLY_PRICE}`)
-    expect(text).toContain(`£${COURSE_MONTHLY_PRICE * 3}`)
+    expect(text).not.toContain(`£${COURSE_MONTHLY_PRICE * 3}`)
   })
 
   it("Stay Current card shows £7.50 monthly (drift sentinel)", () => {

@@ -22,29 +22,29 @@ export function Hero() {
         <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              Stop watching AI change the world.{" "}
-              <span className="text-gradient">Start building with it.</span>
+              From ChatGPT basics to{" "}
+              <span className="text-gradient">serious applied AI skill.</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
-              Learn to build apps, automate workflows, research faster, create content,
-              analyse data, and solve real problems using AI — all in plain English.
+              Learn to research faster, automate workflows, analyse data, create
+              useful content, and build practical tools with AI-assisted coding.
             </p>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground sm:text-xl">
-              Every lesson and project you complete updates your GWTH Score: a dynamic,
-              verifiable credential UK employers can check on the spot.
+              Start as a beginner. Move towards top 1% applied AI capability through
+              lessons, Q&A, projects, capstones, and a verifiable GWTH Score.
             </p>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground sm:text-xl">
-              Built by practitioners, not marketers — independent of any vendor or
-              government programme.
+              Built around UK examples, UK research, and GBP pricing. Anyone can join;
+              other countries are launching soon.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Button size="lg" asChild>
-                <Link href="/signup">Get started</Link>
+                <Link href="/signup">Join the waitlist</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/tech-radar">Explore the Tech Radar</Link>
+                <Link href="/labs">Try a free lab</Link>
               </Button>
             </div>
           </div>

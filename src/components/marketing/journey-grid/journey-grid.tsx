@@ -26,7 +26,7 @@ export function JourneyGrid() {
             Different reasons. Same course.
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Nine journeys, one course, one Dynamic Score. Pick the row that fits — they
+            Nine journeys, one course, one GWTH Score. Pick the row that fits, they
             all end up at the same proof.
           </p>
         </div>

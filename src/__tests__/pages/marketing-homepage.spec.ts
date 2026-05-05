@@ -23,7 +23,6 @@ const EXPECTED_INTERNAL_HREFS = [
   "/lessons",
   "/for-teams",
   "/about",
-  "/tech-radar",
   "/why-gwth",
   "/newsletter",
   "/contact",
@@ -44,8 +43,8 @@ test.describe("Marketing homepage — full-page smoke", () => {
   test("renders the locked H1 copy", async ({ page }) => {
     const h1 = page.locator("h1").first()
     await expect(h1).toBeVisible()
-    await expect(h1).toContainText("Stop watching AI change the world")
-    await expect(h1).toContainText("Start building with it")
+    await expect(h1).toContainText("From ChatGPT basics")
+    await expect(h1).toContainText("serious applied AI skill")
   })
 
   test("all 12 data-section attributes resolve", async ({ page }) => {
@@ -65,9 +64,9 @@ test.describe("Marketing homepage — full-page smoke", () => {
     expect(parsed.provider.name).toBe("GWTH.ai")
   })
 
-  test("renders all 7 journey cards with valid hrefs", async ({ page }) => {
+  test("renders all 9 journey cards with valid hrefs", async ({ page }) => {
     const cards = page.locator('[data-testid="journey-card"]')
-    await expect(cards).toHaveCount(7)
+    await expect(cards).toHaveCount(9)
     const hrefs = await cards.evaluateAll((els) =>
       els.map((el) => el.getAttribute("href"))
     )
@@ -77,10 +76,10 @@ test.describe("Marketing homepage — full-page smoke", () => {
     }
   })
 
-  test("hero CTAs link to /signup and /tech-radar", async ({ page }) => {
+  test("hero CTAs link to /signup and /labs", async ({ page }) => {
     const hero = page.locator('[data-section="hero"]')
     await expect(hero.locator('a[href="/signup"]')).toBeVisible()
-    await expect(hero.locator('a[href="/tech-radar"]')).toBeVisible()
+    await expect(hero.locator('a[href="/labs"]')).toBeVisible()
   })
 
   test("pricing tiers render with config-driven prices and the right CTAs", async ({
@@ -92,7 +91,7 @@ test.describe("Marketing homepage — full-page smoke", () => {
     await expect(cards).toHaveCount(3)
     await expect(pricing.locator('[data-tier="free"]')).toContainText(/£0|Free/)
     await expect(pricing.locator('[data-tier="course"]')).toContainText("£29")
-    await expect(pricing.locator('[data-tier="course"]')).toContainText("£87")
+    await expect(pricing.locator('[data-tier="course"]')).not.toContainText("£87")
     await expect(pricing.locator('[data-tier="stay"]')).toContainText("£7.50")
     await expect(pricing.locator('[data-featured="true"]')).toHaveCount(1)
     await expect(pricing.locator('[data-tier="free"] a[href="/labs"]')).toBeVisible()

@@ -10,9 +10,9 @@ import { FinalCTA } from "@/components/marketing/final-cta/final-cta"
 import { MarketingFooter } from "@/components/marketing/marketing-footer/marketing-footer"
 
 export const metadata: Metadata = {
-  title: "GWTH.ai | Learn to Build with AI",
+  title: "GWTH.ai | Beginner-to-Advanced Applied AI",
   description:
-    "Learn to build apps, automate workflows, and solve real problems using AI — all in plain English. No coding required. 94 hands-on projects across 3 months.",
+    "A UK-focused applied AI course that takes you from ChatGPT basics to serious practical skill: building, research, coding with AI, projects, and a verifiable GWTH Score.",
   alternates: {
     canonical: "/",
   },

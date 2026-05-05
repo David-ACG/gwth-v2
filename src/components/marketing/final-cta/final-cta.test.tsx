@@ -18,8 +18,8 @@ describe("FinalCTA", () => {
   it("renders the locked headline", () => {
     const { container } = render(<FinalCTA />)
     const text = container.textContent ?? ""
-    expect(text).toContain("The best time to learn AI was six months ago")
-    expect(text).toContain("The second best time is right now")
+    expect(text).toContain("The AI gap is still early enough to close")
+    expect(text).toContain("Start with Month 1")
   })
 
   it("mounts the WaitlistForm (renders an email input)", async () => {

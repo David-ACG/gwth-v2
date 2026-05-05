@@ -22,9 +22,9 @@ type RowConfig = {
 const ROW_CONFIGS: readonly RowConfig[] = [
   {
     bullets: [
-      "Personal AI · Professional · Enterprise",
-      "3 portfolio-ready capstones",
-      "Step-by-step video for every project",
+      "Month 1 foundations and practical AI",
+      "Month 2 apps, workflows, and consulting",
+      "Month 3 enterprise AI transformation",
     ],
     vis: <CurriculumVis />,
     cta: { label: "Lessons", href: "/lessons" },
@@ -45,7 +45,7 @@ const ROW_CONFIGS: readonly RowConfig[] = [
             gwth.ai/score · alex example
           </span>
           <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-            Live · updates as you build
+            Live · updates as you stay current
           </span>
         </div>
         <div className="mt-5 flex justify-center">
@@ -61,8 +61,8 @@ const ROW_CONFIGS: readonly RowConfig[] = [
   {
     bullets: [
       "Use Claude, ChatGPT, n8n",
-      "Tools you already pay for",
-      "Write a brief, ship a workflow",
+      "Start in plain English",
+      "Build apps, workflows, and research systems",
     ],
     vis: <PromptVis />,
   },
@@ -86,7 +86,7 @@ export function ProductPillars() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            94 projects. One score. Plain English.
+            Three months. One score. Applied AI that compounds.
           </h2>
         </div>
 

@@ -29,8 +29,8 @@ export const EXAMPLE_SCORE_HISTORY: readonly number[] = [
 ]
 
 export const EXAMPLE_SUB_SCORES = [
-  { label: "Personal AI", value: 104 },
-  { label: "Professional", value: 96 },
-  { label: "Enterprise", value: 82 },
-  { label: "Tech Radar", value: 88 },
+  { label: "Foundations", value: 104 },
+  { label: "Building", value: 96 },
+  { label: "Capstones", value: 82 },
+  { label: "Currentness", value: 88 },
 ] as const

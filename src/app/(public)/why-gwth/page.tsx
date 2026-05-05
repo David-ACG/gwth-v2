@@ -14,7 +14,7 @@ import { COURSE_MONTHLY_PRICE } from "@/lib/config"
 export const metadata: Metadata = {
   title: "Why GWTH | Beyond the Government AI Skills Boost",
   description:
-    "The UK government's AI Skills Boost covers the basics. GWTH.ai goes dramatically further with 94 hands-on projects, vendor-neutral training, and enterprise transformation over 3 months.",
+    "The UK government's AI Skills Boost covers the basics. GWTH.ai goes further with structured applied AI lessons, practical projects, vendor-neutral training, and enterprise transformation.",
 }
 
 /** Press quotes with source attribution, all sourced from research files. */
@@ -78,7 +78,7 @@ const comparisonRows = [
     dimension: "Number of courses",
     boost: "14 benchmarked courses",
     marketplace: "600+ courses from mixed providers",
-    gwth: "1 structured programme (94 projects)",
+    gwth: "1 structured applied AI course",
     gwthAdvantage: true,
   },
   {
@@ -92,7 +92,7 @@ const comparisonRows = [
     dimension: "Quality control",
     boost: "Benchmarked by Skills England",
     marketplace: "No oversight \u2014 courses with outdated content, US legal frameworks, and misleading \u2018free\u2019 labels that redirect to paid subscriptions",
-    gwth: "Every lesson reviewed and updated daily",
+    gwth: "Lessons reviewed when tools or techniques materially change",
     gwthAdvantage: true,
   },
   {
@@ -106,7 +106,7 @@ const comparisonRows = [
     dimension: "Hands-on projects",
     boost: "None",
     marketplace: "Occasional exercises",
-    gwth: "94 projects with video walkthroughs",
+    gwth: "Practical projects and walkthroughs",
     gwthAdvantage: true,
   },
   {
@@ -120,7 +120,7 @@ const comparisonRows = [
     dimension: "Content freshness",
     boost: "Static, some courses from 2023\u20132024",
     marketplace: "Some courses 10+ years old",
-    gwth: "Updated every day via Tech Radar",
+    gwth: "Updated when practical skill or currentness changes",
     gwthAdvantage: true,
   },
   {
@@ -141,7 +141,7 @@ const comparisonRows = [
     dimension: "Assessment",
     boost: "Badge on completion",
     marketplace: "Varies \u2014 some offer certificates, some do not",
-    gwth: "Dynamic scoring that stays current",
+    gwth: "GWTH Score that stays current",
     gwthAdvantage: true,
   },
   {
@@ -168,7 +168,7 @@ const stats = [
     value: "\u00A3400bn",
     label: "potential AI contribution to UK economy by 2030",
   },
-  { value: "94", label: "hands-on projects in the GWTH course" },
+  { value: "94", label: "core and go-deeper lessons in the current structure" },
 ]
 
 /**
@@ -188,7 +188,7 @@ export default function WhyGwthPage() {
             "@type": "WebPage",
             name: "Why GWTH | Beyond the Government AI Skills Boost",
             description:
-              "The UK government's AI Skills Boost covers the basics. GWTH.ai goes dramatically further with 94 hands-on projects, vendor-neutral training, and enterprise transformation over 3 months.",
+              "The UK government's AI Skills Boost covers the basics. GWTH.ai goes further with structured applied AI lessons, practical projects, vendor-neutral training, and enterprise transformation.",
             url: "https://gwth.ai/why-gwth",
             provider: {
               "@type": "Organization",
@@ -491,9 +491,8 @@ export default function WhyGwthPage() {
                 confident and capable with AI.
               </p>
               <p>
-                GWTH covers everything the government programme does in the first
-                two weeks of Month&nbsp;1. The remaining ten weeks go dramatically
-                further &mdash; from advanced prompting and vendor-neutral tool
+                GWTH covers the foundations, then moves further through Month 1,
+                Month 2, and Month 3: from advanced prompting and vendor-neutral tool
                 evaluation to building real applications, automating workflows,
                 and analysing data with AI.
               </p>
@@ -521,9 +520,9 @@ export default function WhyGwthPage() {
             Start Where the Government Stops
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            The foundation is free. The transformation is
-            &pound;{COURSE_MONTHLY_PRICE.toFixed(2)}/month for 3 months. 94
-            projects, vendor-neutral, updated every day, built in the UK.
+            The foundation is free. The transformation starts at
+            &pound;{COURSE_MONTHLY_PRICE.toFixed(2)}/month. Structured lessons,
+            practical projects, vendor-neutral, built for the UK.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button size="lg" className="gap-2" asChild>

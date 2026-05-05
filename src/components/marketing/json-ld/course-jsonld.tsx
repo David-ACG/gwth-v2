@@ -13,9 +13,9 @@
 const COURSE_JSON_LD_PAYLOAD = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "GWTH — Applied AI Skills",
+  name: "GWTH.ai Applied AI Course",
   description:
-    "Learn to build apps, automate workflows, and solve real problems using AI. 94 hands-on projects across 3 months. No coding required.",
+    "A UK-focused beginner-to-advanced applied AI course covering ChatGPT basics, research, automation, AI-assisted coding, projects, capstones, and a verifiable GWTH Score.",
   provider: {
     "@type": "Organization",
     name: "GWTH.ai",

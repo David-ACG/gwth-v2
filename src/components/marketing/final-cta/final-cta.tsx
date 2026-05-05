@@ -37,12 +37,12 @@ export function FinalCTA() {
     >
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-          The best time to learn AI was six months ago.
+          The AI gap is still early enough to close.
           <br />
-          <span className="text-primary">The second best time is right now.</span>
+          <span className="text-primary">Start with Month 1.</span>
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-background/80">
-          Join the waitlist for the next cohort. No card required for free labs.
+          Join the waitlist for the UK beta. No card required for free labs.
         </p>
 
         <div className="mx-auto mt-10 max-w-md">

@@ -11,13 +11,12 @@ import {
   Code2,
   Wrench,
   ArrowRight,
-  Radar,
 } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "GWTH.ai is an independent AI course built by practitioners, not marketers. 94 projects, 60+ tools tracked daily, updated every day. No sponsors, no ads, no vendor partnerships.",
+    "GWTH.ai is an independent UK-focused applied AI course built by practitioners, not marketers. Beginner-to-advanced lessons, practical projects, and a verifiable GWTH Score.",
 }
 
 const principles = [
@@ -55,23 +54,23 @@ const differentiators = [
   {
     icon: RefreshCw,
     color: "#0E7C7B",
-    title: "Updated every day",
+    title: "Built to stay current",
     description:
-      "Our Tech Radar scans 60+ AI tools every single day. When a tool gets replaced by something better, we update the lesson that same day. Most courses are out of date before you finish them. Ours never is.",
+      "When a tool or technique changes enough to affect practical skill, the relevant lesson can be updated and your GWTH Score reflects whether you stayed current.",
   },
   {
     icon: Trophy,
     color: "#F59E0B",
-    title: "Dynamic scoring that stays current",
+    title: "GWTH Score that stays current",
     description:
-      "Your scores are not a snapshot of what you knew on test day. They are living assessments tied to the tools that exist right now. When the landscape shifts, your scores update to reflect current relevance.",
+      "Your score is not a snapshot of what you knew on test day. It reflects completion, demonstrated applied skill, and currentness.",
   },
   {
     icon: Heart,
     color: "#E53935",
-    title: "Video walkthroughs for every project",
+    title: "Projects that prove applied skill",
     description:
-      "Every single one of the 94 projects includes a step-by-step video where the instructor builds it alongside you. You are never left staring at a blank screen wondering what to do next.",
+      "Lessons are built around practical outputs, with walkthroughs where they help. You are not left staring at a blank screen wondering what to do next.",
   },
   {
     icon: Wrench,
@@ -83,8 +82,8 @@ const differentiators = [
 ]
 
 const stats = [
-  { value: "94", label: "Hands-on projects" },
-  { value: "60+", label: "Tools tracked daily" },
+  { value: "64", label: "Core lessons" },
+  { value: "30", label: "Go-deeper lessons" },
   { value: "3", label: "Months to completion" },
   { value: "3", label: "Capstone projects" },
   { value: "UK", label: "Based & built" },
@@ -446,10 +445,7 @@ export default function AboutPage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="gap-2" asChild>
-              <Link href="/tech-radar">
-                <Radar className="size-4" />
-                Browse the Tech Radar
-              </Link>
+              <Link href="/pricing">See pricing</Link>
             </Button>
           </div>
         </div>

@@ -31,9 +31,9 @@ describe("PricingPage", () => {
     expect(screen.getByText("£7.50")).toBeInTheDocument()
   })
 
-  it("displays the total course cost in the per-tier line", () => {
+  it("does not prominently display the total course cost in the per-tier line", () => {
     render(<PricingPage />)
-    expect(screen.getByText(/£87 total/)).toBeInTheDocument()
+    expect(screen.queryByText(/£87 total/)).not.toBeInTheDocument()
   })
 
   it("displays free tier price", () => {
@@ -43,7 +43,7 @@ describe("PricingPage", () => {
 
   it("renders Stay Current advantages from the shared PRICING data", () => {
     render(<PricingPage />)
-    expect(screen.getByText(/scores decay if you stop/)).toBeInTheDocument()
+    expect(screen.getByText(/GWTH Score current/)).toBeInTheDocument()
     expect(
       screen.getByText(/5 hours of new content every month/)
     ).toBeInTheDocument()
@@ -66,9 +66,9 @@ describe("PricingPage", () => {
     ).toBeInTheDocument()
   })
 
-  it("has Most Popular flag on the featured tier", () => {
+  it("has starter pricing flag on the featured tier", () => {
     render(<PricingPage />)
-    expect(screen.getByText("Most Popular")).toBeInTheDocument()
+    expect(screen.getByText("Starter pricing")).toBeInTheDocument()
   })
 
   it("has For Teams section with contact link and learn-more link", () => {
