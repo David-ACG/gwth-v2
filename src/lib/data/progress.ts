@@ -100,7 +100,7 @@ export async function getStreak(): Promise<StudyStreak> {
 }
 
 /**
- * Fetches the user's dynamic score data.
+ * Fetches the user's GWTH Score data.
  */
 export async function getDynamicScore(): Promise<DynamicScore> {
   return { ...mockDynamicScore }

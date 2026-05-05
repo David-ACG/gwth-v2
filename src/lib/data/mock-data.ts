@@ -1845,7 +1845,7 @@ export const mockNotifications: Notification[] = [
   },
 ]
 
-// ─── Dynamic Score ────────────────────────────────────────────────────────────
+// ─── GWTH Score ───────────────────────────────────────────────────────────────
 
 export const mockDynamicScore: DynamicScore = {
   overallScore: 18,
