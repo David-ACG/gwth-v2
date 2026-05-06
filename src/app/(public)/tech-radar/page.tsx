@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Tech Radar",
   description:
     "Track 60+ AI tools daily with the GWTH Tech Radar. Independent reviews, no vendor partnerships. See what is GA, Beta, Alpha, and trending right now.",
+  robots: { index: false, follow: false },
 }
 
 /**

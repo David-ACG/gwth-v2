@@ -1,12 +1,14 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { ArrowLeft } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Lesson UI Demos | GWTH.ai",
   description: "Demo lesson page variants exploring different visual treatments.",
+  robots: { index: false, follow: false },
 }
 
 /**

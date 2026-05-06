@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Demo — Lesson UI Components",
   description:
     "Preview of all lesson UI foundation components in the new 5-section layout.",
+  robots: { index: false, follow: false },
 }
 
 /**
