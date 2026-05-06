@@ -118,19 +118,19 @@ const onest = Onest({
 
 export const metadata: Metadata = {
   title: {
-    default: "GWTH.ai | Learn to Build with AI",
+    default: "GWTH.ai | Applied AI Course for the UK",
     template: "%s | GWTH.ai",
   },
   description:
-    "Master AI development with hands-on courses, labs, and real-world projects.",
+    "A UK-focused applied AI course for beginners moving from ChatGPT basics to practical research, building, automation, and verifiable AI capability.",
   metadataBase: new URL("https://gwth.ai"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "GWTH.ai | Learn to Build with AI",
+    title: "GWTH.ai | Applied AI Course for the UK",
     description:
-      "Master AI development with hands-on courses, labs, and real-world projects.",
+      "A UK-focused applied AI course for beginners moving from ChatGPT basics to practical research, building, automation, and verifiable AI capability.",
     url: "https://gwth.ai",
     siteName: "GWTH.ai",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
