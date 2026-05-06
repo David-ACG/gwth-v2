@@ -302,7 +302,7 @@ export default function WhyGwthPage() {
             {pressQuotes.map((item) => (
               <Card
                 key={item.quote}
-                className="border-l-4 border-l-primary"
+                className="border-primary/20 bg-primary/5"
               >
                 <CardContent className="p-6">
                   <div className="flex gap-3">

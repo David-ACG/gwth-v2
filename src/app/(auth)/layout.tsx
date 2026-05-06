@@ -13,7 +13,7 @@ export default function AuthLayout({
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <Link
         href="/"
-        className="mb-8 text-2xl font-bold text-gradient"
+        className="mb-8 text-2xl font-bold text-primary"
       >
         GWTH.ai
       </Link>

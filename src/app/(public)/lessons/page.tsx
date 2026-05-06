@@ -97,7 +97,7 @@ export default function LessonsPage() {
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             {MONTH_CONFIGS.map((month) => (
               <Card key={month.month} className="relative overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary to-accent" />
+                <div className="absolute inset-x-0 top-0 h-1 bg-primary" />
                 <CardContent className="p-6">
                   <div className="mb-3 flex items-center gap-2">
                     <Layers className="size-5 text-primary" />
