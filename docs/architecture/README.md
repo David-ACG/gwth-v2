@@ -338,7 +338,7 @@ A comprehensive quality and automation stack was implemented alongside Phase 1. 
 | **Commit Messages**       | Commitlint (conventional commits enforced)                              | `.husky/commit-msg`, `.commitlintrc.json`     |
 | **Post-merge**            | Auto `npm install` after pulling changes                                | `.husky/post-merge`                           |
 | **Dead Code**             | Knip (unused files, exports, dependencies)                              | `knip.json`                                   |
-| **Security Headers**      | HSTS, CSP, X-Frame-Options, etc. via middleware                         | `src/middleware.ts`                           |
+| **Security Headers**      | HSTS, CSP, X-Frame-Options, etc. via proxy                              | `src/proxy.ts`                                |
 | **XSS Protection**        | DOMPurify sanitisation on markdown HTML                                 | `src/components/shared/markdown-renderer.tsx` |
 | **TypeScript Strictness** | `noUncheckedIndexedAccess` (array access returns `T \| undefined`)      | `tsconfig.json`                               |
 | **Test Coverage**         | Vitest thresholds (40% lines/functions/statements, 35% branches)        | `vitest.config.ts`                            |

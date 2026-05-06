@@ -110,14 +110,14 @@ export async function requireAuth() {
 - **GitHub:** OAuth App via GitHub Settings. Straightforward setup.
 - **Email/Password:** Built-in. Email verification configurable (enable for production).
 
-### Middleware Integration
+### Proxy Integration
 
 ```typescript
-// middleware.ts — Updated to use Supabase Auth
+// proxy.ts - Updated to use Supabase Auth
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -1179,9 +1179,9 @@ export async function DELETE(request: NextRequest) {
 
 **npm:** `isomorphic-dompurify`. Docs: [github.com/cure53/DOMPurify](https://github.com/cure53/DOMPurify)
 
-#### Security Headers — Middleware
+#### Security Headers - Proxy
 
-**What:** Comprehensive security headers applied to all responses via `src/middleware.ts`:
+**What:** Comprehensive security headers applied to all responses via `src/proxy.ts`:
 
 | Header                    | Value                                                                                                                                                                                          |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

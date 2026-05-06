@@ -71,12 +71,12 @@ graph TB
 
 ### Resource Allocation
 
-| Resource | Allocation | Notes |
-|----------|-----------|-------|
-| RAM | 64 GB | More than sufficient. Next.js standalone uses ~256-512 MB. Nginx, Kuma, Plausible are lightweight. |
-| CPU | 8 cores (from host) | Adjust based on Proxmox host total. 4 cores minimum. |
-| Disk | 1.5-2 TB (from 3.6 TB host) | 50 GB OS + containers, ~720 GB video HLS files (all 3 qualities), remainder for backups and growth. |
-| Network | Host bridge | Full host network speed. |
+| Resource | Allocation                  | Notes                                                                                               |
+| -------- | --------------------------- | --------------------------------------------------------------------------------------------------- |
+| RAM      | 64 GB                       | More than sufficient. Next.js standalone uses ~256-512 MB. Nginx, Kuma, Plausible are lightweight.  |
+| CPU      | 8 cores (from host)         | Adjust based on Proxmox host total. 4 cores minimum.                                                |
+| Disk     | 1.5-2 TB (from 3.6 TB host) | 50 GB OS + containers, ~720 GB video HLS files (all 3 qualities), remainder for backups and growth. |
+| Network  | Host bridge                 | Full host network speed.                                                                            |
 
 ### Operating System
 
@@ -119,12 +119,12 @@ curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
 
 ### Resource Allocation
 
-| Resource | Allocation | Notes |
-|----------|-----------|-------|
-| RAM | 64 GB | Generous for dev. Shares host with Pipeline VM. |
-| CPU | 8 cores | From host's total. |
-| Disk | 1.5-2 TB (from 3.6 TB host) | Mirrors production video library. Shared host with Pipeline VM. |
-| Network | Bridge to host | Accessible at 192.168.178.50 (or dedicated IP on KVM bridge). |
+| Resource | Allocation                  | Notes                                                           |
+| -------- | --------------------------- | --------------------------------------------------------------- |
+| RAM      | 64 GB                       | Generous for dev. Shares host with Pipeline VM.                 |
+| CPU      | 8 cores                     | From host's total.                                              |
+| Disk     | 1.5-2 TB (from 3.6 TB host) | Mirrors production video library. Shared host with Pipeline VM. |
+| Network  | Bridge to host              | Accessible at 192.168.178.50 (or dedicated IP on KVM bridge).   |
 
 ### Purpose
 
@@ -135,6 +135,7 @@ curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
 ### Coolify Dev Configuration
 
 Mirrors production but with:
+
 - Supabase project: separate dev project (free tier allows 2 projects)
 - Stripe: test mode keys
 - Video: points to dev HLS directory
@@ -146,12 +147,12 @@ Mirrors production but with:
 
 ### Services to Deploy
 
-| Service | Image | Port | Persistent Volume |
-|---------|-------|------|-------------------|
-| **Next.js App** | Built from repo (`output: standalone`) | 3000 | None (stateless) |
-| **Nginx Video** | `nginx:alpine` | 443 (video subdomain) | `/var/www/gwth-videos` |
-| **Uptime Kuma** | `louislam/uptime-kuma:1` | 3001 | `/data` (SQLite DB) |
-| **Plausible** | `ghcr.io/plausible/community-edition:v2` | 8008 | `/data` (ClickHouse + Postgres) |
+| Service         | Image                                    | Port                  | Persistent Volume               |
+| --------------- | ---------------------------------------- | --------------------- | ------------------------------- |
+| **Next.js App** | Built from repo (`output: standalone`)   | 3000                  | None (stateless)                |
+| **Nginx Video** | `nginx:alpine`                           | 443 (video subdomain) | `/var/www/gwth-videos`          |
+| **Uptime Kuma** | `louislam/uptime-kuma:1`                 | 3001                  | `/data` (SQLite DB)             |
+| **Plausible**   | `ghcr.io/plausible/community-edition:v2` | 8008                  | `/data` (ClickHouse + Postgres) |
 
 ### Next.js Deployment via Coolify
 
@@ -199,6 +200,7 @@ CMD ["node", "server.js"]
 ### Coolify Deploy Commands
 
 **Production (Hetzner):**
+
 ```bash
 # Trigger deploy via API (same as CLAUDE.md)
 curl -s "http://195.201.177.66:8000/api/v1/deploy?uuid=<APP_UUID>&force=false" \
@@ -206,6 +208,7 @@ curl -s "http://195.201.177.66:8000/api/v1/deploy?uuid=<APP_UUID>&force=false" \
 ```
 
 **Dev/Test (P520):**
+
 ```bash
 # Via SSH tinker (same as CLAUDE.md)
 ssh p520 'docker exec coolify php artisan tinker --execute="..."'
@@ -217,12 +220,12 @@ ssh p520 'docker exec coolify php artisan tinker --execute="..."'
 
 ### Domain Configuration
 
-| Domain | Points To | Purpose |
-|--------|----------|---------|
-| `gwth.ai` | Hetzner IP (Coolify reverse proxy) | Main website |
-| `video.gwth.ai` | Hetzner IP (Nginx) | HLS video delivery |
-| `status.gwth.ai` | Hetzner IP (Uptime Kuma) | Public status page |
-| `analytics.gwth.ai` | Hetzner IP (Plausible) | Self-hosted analytics |
+| Domain              | Points To                          | Purpose               |
+| ------------------- | ---------------------------------- | --------------------- |
+| `gwth.ai`           | Hetzner IP (Coolify reverse proxy) | Main website          |
+| `video.gwth.ai`     | Hetzner IP (Nginx)                 | HLS video delivery    |
+| `status.gwth.ai`    | Hetzner IP (Uptime Kuma)           | Public status page    |
+| `analytics.gwth.ai` | Hetzner IP (Plausible)             | Self-hosted analytics |
 
 ### SSL/TLS
 
@@ -277,14 +280,14 @@ graph TB
 
 ### Total Resource Usage (Production)
 
-| Container | RAM | CPU (typical) |
-|-----------|-----|---------------|
-| Traefik | 64 MB | <1% |
-| Next.js | 512 MB | 2-5% |
-| Nginx | 64 MB | <1% |
-| Uptime Kuma | 128 MB | <1% |
-| Plausible + ClickHouse + Postgres | 1,280 MB | 1-3% |
-| **Total** | **~2 GB** | **<10%** |
+| Container                         | RAM       | CPU (typical) |
+| --------------------------------- | --------- | ------------- |
+| Traefik                           | 64 MB     | <1%           |
+| Next.js                           | 512 MB    | 2-5%          |
+| Nginx                             | 64 MB     | <1%           |
+| Uptime Kuma                       | 128 MB    | <1%           |
+| Plausible + ClickHouse + Postgres | 1,280 MB  | 1-3%          |
+| **Total**                         | **~2 GB** | **<10%**      |
 
 **64 GB VM is vastly oversized for current needs.** This is intentional — leaves headroom for growth, video transcoding, and additional services. Consider starting with 16-32 GB and scaling up.
 
@@ -313,12 +316,12 @@ flowchart LR
 
 ### Database Backups
 
-| What | How | Frequency | Retention | Stored On |
-|------|-----|-----------|-----------|-----------|
-| **Supabase DB** (free tier) | Manual `pg_dump` via cron | Daily | 30 days | P520 10TB SATA |
-| **Supabase DB** (Pro tier) | Built-in daily + 7-day PITR | Automatic | 7 days PITR | Supabase cloud |
-| **Video HLS files** | rsync from Hetzner to P520 | After each deploy | Indefinite | P520 10TB SATA |
-| **Docker volumes** | rsync from Hetzner to P520 | Daily | 30 days | P520 10TB SATA |
+| What                        | How                         | Frequency         | Retention   | Stored On      |
+| --------------------------- | --------------------------- | ----------------- | ----------- | -------------- |
+| **Supabase DB** (free tier) | Manual `pg_dump` via cron   | Daily             | 30 days     | P520 10TB SATA |
+| **Supabase DB** (Pro tier)  | Built-in daily + 7-day PITR | Automatic         | 7 days PITR | Supabase cloud |
+| **Video HLS files**         | rsync from Hetzner to P520  | After each deploy | Indefinite  | P520 10TB SATA |
+| **Docker volumes**          | rsync from Hetzner to P520  | Daily             | 30 days     | P520 10TB SATA |
 
 ### Proxmox Backup Server
 
@@ -363,68 +366,72 @@ echo "$(date): Backup completed — gwth_v2_$DATE.dump.gz" >> "$BACKUP_DIR/backu
 
 ### Overview
 
-| Tool | What It Monitors | Alerts Via | Status |
-|------|-----------------|-----------|--------|
-| **Web Vitals** | LCP, CLS, INP, FCP, TTFB (real user metrics) | Console (dev), PostHog/Sentry (prod) | Done |
-| **CodeQL** | Security vulnerabilities in JS/TS code | GitHub Security tab | Done |
-| **Dependabot** | Known dependency vulnerabilities | GitHub PRs | Done |
-| **Sentry** | Runtime errors, performance, session replays | Email + Telegram (via webhook) | Phase 4 |
-| **Uptime Kuma** | Endpoint availability, response times | Telegram | Phase 4 |
-| **Plausible** | Traffic, conversions, referrers | Dashboard only (no alerts) | Phase 4 |
-| **Coolify** | Container health, resource usage | Built-in notifications | Done |
-| **Stripe Dashboard** | Payment success rates, MRR, churn | Email | Phase 2 |
+| Tool                 | What It Monitors                             | Alerts Via                           | Status  |
+| -------------------- | -------------------------------------------- | ------------------------------------ | ------- |
+| **Web Vitals**       | LCP, CLS, INP, FCP, TTFB (real user metrics) | Console (dev), PostHog/Sentry (prod) | Done    |
+| **CodeQL**           | Security vulnerabilities in JS/TS code       | GitHub Security tab                  | Done    |
+| **Dependabot**       | Known dependency vulnerabilities             | GitHub PRs                           | Done    |
+| **Sentry**           | Runtime errors, performance, session replays | Email + Telegram (via webhook)       | Phase 4 |
+| **Uptime Kuma**      | Endpoint availability, response times        | Telegram                             | Phase 4 |
+| **Plausible**        | Traffic, conversions, referrers              | Dashboard only (no alerts)           | Phase 4 |
+| **Coolify**          | Container health, resource usage             | Built-in notifications               | Done    |
+| **Stripe Dashboard** | Payment success rates, MRR, churn            | Email                                | Phase 2 |
 
 ### Sentry Configuration
 
 ```typescript
 // sentry.client.config.ts
-import * as Sentry from '@sentry/nextjs'
+import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  tracesSampleRate: 0.1,        // 10% of requests for performance
-  replaysSessionSampleRate: 0,   // No session replays on free tier
+  tracesSampleRate: 0.1, // 10% of requests for performance
+  replaysSessionSampleRate: 0, // No session replays on free tier
   replaysOnErrorSampleRate: 1.0, // 100% replay on errors
-})
+});
 ```
 
 ### Uptime Kuma Monitors
 
 Configure via the Uptime Kuma web UI after deployment:
 
-| Monitor | Type | URL/Host | Interval | Expected |
-|---------|------|----------|----------|----------|
-| Website | HTTP(s) | `https://gwth.ai` | 60s | 200 |
-| API Health | HTTP(s) | `https://gwth.ai/api/health` | 60s | 200 + JSON |
-| Video Server | HTTP(s) | `https://video.gwth.ai/health` | 60s | 200 |
-| Supabase | TCP Port | `db.PROJECT.supabase.co:5432` | 300s | Open |
-| P520 Pipeline | HTTP(s) | `http://192.168.178.50:8088/health` | 300s | 200 |
+| Monitor       | Type     | URL/Host                            | Interval | Expected   |
+| ------------- | -------- | ----------------------------------- | -------- | ---------- |
+| Website       | HTTP(s)  | `https://gwth.ai`                   | 60s      | 200        |
+| API Health    | HTTP(s)  | `https://gwth.ai/api/health`        | 60s      | 200 + JSON |
+| Video Server  | HTTP(s)  | `https://video.gwth.ai/health`      | 60s      | 200        |
+| Supabase      | TCP Port | `db.PROJECT.supabase.co:5432`       | 300s     | Open       |
+| P520 Pipeline | HTTP(s)  | `http://192.168.178.50:8088/health` | 300s     | 200        |
 
 ### Health Check Endpoint
 
 ```typescript
 // app/api/health/route.ts
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
-  const checks: Record<string, string> = {}
+  const checks: Record<string, string> = {};
 
   // Database connectivity
   try {
-    const supabase = await createClient()
-    const { error } = await supabase.from('profiles').select('id').limit(1)
-    checks.database = error ? 'unhealthy' : 'healthy'
+    const supabase = await createClient();
+    const { error } = await supabase.from("profiles").select("id").limit(1);
+    checks.database = error ? "unhealthy" : "healthy";
   } catch {
-    checks.database = 'unreachable'
+    checks.database = "unreachable";
   }
 
-  const allHealthy = Object.values(checks).every(v => v === 'healthy')
+  const allHealthy = Object.values(checks).every((v) => v === "healthy");
 
   return Response.json(
-    { status: allHealthy ? 'healthy' : 'degraded', checks, timestamp: new Date().toISOString() },
-    { status: allHealthy ? 200 : 503 }
-  )
+    {
+      status: allHealthy ? "healthy" : "degraded",
+      checks,
+      timestamp: new Date().toISOString(),
+    },
+    { status: allHealthy ? 200 : 503 },
+  );
 }
 ```
 
@@ -434,53 +441,53 @@ export async function GET() {
 
 ### Server Level
 
-| Measure | Implementation |
-|---------|---------------|
-| **SSH key only** | Disable password auth in `/etc/ssh/sshd_config` |
-| **Non-standard SSH port** | Hetzner uses port 111 (already configured) |
-| **Fail2ban** | Auto-ban IPs after 5 failed SSH attempts |
-| **UFW firewall** | Only ports 22, 80, 443, 8000 open |
-| **Unattended upgrades** | Auto-install security patches |
-| **Docker security** | Non-root container users, read-only filesystems where possible |
+| Measure                   | Implementation                                                 |
+| ------------------------- | -------------------------------------------------------------- |
+| **SSH key only**          | Disable password auth in `/etc/ssh/sshd_config`                |
+| **Non-standard SSH port** | Hetzner uses port 111 (already configured)                     |
+| **Fail2ban**              | Auto-ban IPs after 5 failed SSH attempts                       |
+| **UFW firewall**          | Only ports 22, 80, 443, 8000 open                              |
+| **Unattended upgrades**   | Auto-install security patches                                  |
+| **Docker security**       | Non-root container users, read-only filesystems where possible |
 
 ### Application Level (Implemented)
 
-| Measure | Implementation | Status |
-|---------|---------------|--------|
-| **HTTPS everywhere** | Coolify/Traefik handles TLS termination with Let's Encrypt | Phase 4 |
-| **Security headers** | HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy via `src/middleware.ts` | Done |
-| **XSS sanitisation** | DOMPurify (`isomorphic-dompurify`) wraps all `dangerouslySetInnerHTML` output in `markdown-renderer.tsx` | Done |
-| **CodeQL scanning** | Semantic security analysis on every push/PR + weekly scan | Done |
-| **Dependency scanning** | Dependabot auto-PRs for vulnerable deps, `npm audit --audit-level=high` in CI | Done |
-| **Rate limiting** | Nginx rate limiting on video endpoints, Next.js rate limiting on API routes | Phase 4 |
-| **Input validation** | Zod schemas on all API inputs (already in `lib/validations.ts`) | Done |
-| **SQL injection** | Prevented by Supabase parameterised queries (never raw SQL with user input) | Phase 2 |
-| **XSS prevention** | React auto-escapes by default. CSP headers. DOMPurify on markdown content. | Done |
-| **CSRF** | Supabase Auth uses httpOnly cookies with SameSite=Lax | Phase 2 |
-| **security.txt** | Vulnerability disclosure at `/.well-known/security.txt` | Done |
+| Measure                 | Implementation                                                                                             | Status  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------- | ------- |
+| **HTTPS everywhere**    | Coolify/Traefik handles TLS termination with Let's Encrypt                                                 | Phase 4 |
+| **Security headers**    | HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy via `src/proxy.ts` | Done    |
+| **XSS sanitisation**    | DOMPurify (`isomorphic-dompurify`) wraps all `dangerouslySetInnerHTML` output in `markdown-renderer.tsx`   | Done    |
+| **CodeQL scanning**     | Semantic security analysis on every push/PR + weekly scan                                                  | Done    |
+| **Dependency scanning** | Dependabot auto-PRs for vulnerable deps, `npm audit --audit-level=high` in CI                              | Done    |
+| **Rate limiting**       | Nginx rate limiting on video endpoints, Next.js rate limiting on API routes                                | Phase 4 |
+| **Input validation**    | Zod schemas on all API inputs (already in `lib/validations.ts`)                                            | Done    |
+| **SQL injection**       | Prevented by Supabase parameterised queries (never raw SQL with user input)                                | Phase 2 |
+| **XSS prevention**      | React auto-escapes by default. CSP headers. DOMPurify on markdown content.                                 | Done    |
+| **CSRF**                | Supabase Auth uses httpOnly cookies with SameSite=Lax                                                      | Phase 2 |
+| **security.txt**        | Vulnerability disclosure at `/.well-known/security.txt`                                                    | Done    |
 
 ### Secrets Management
 
-| Secret | Where Stored | Who Has Access |
-|--------|-------------|---------------|
-| Supabase keys | Coolify env vars | Coolify dashboard only |
-| Stripe keys | Coolify env vars | Coolify dashboard only |
-| Video signing secret | Coolify env vars | Coolify dashboard only |
-| Resend API key | Coolify env vars | Coolify dashboard only |
-| Sentry DSN | Coolify env vars (public DSN is OK client-side) | Public (by design) |
-| SSH keys | `~/.ssh/` on dev machine | Local only |
-| GitHub Secrets | GitHub repo settings | Repo admins only |
+| Secret               | Where Stored                                    | Who Has Access         |
+| -------------------- | ----------------------------------------------- | ---------------------- |
+| Supabase keys        | Coolify env vars                                | Coolify dashboard only |
+| Stripe keys          | Coolify env vars                                | Coolify dashboard only |
+| Video signing secret | Coolify env vars                                | Coolify dashboard only |
+| Resend API key       | Coolify env vars                                | Coolify dashboard only |
+| Sentry DSN           | Coolify env vars (public DSN is OK client-side) | Public (by design)     |
+| SSH keys             | `~/.ssh/` on dev machine                        | Local only             |
+| GitHub Secrets       | GitHub repo settings                            | Repo admins only       |
 
 **GitHub Secrets configured for CI deploy jobs:** `COOLIFY_APP_UUID`, `COOLIFY_TOKEN`, `P520_HOST`, `P520_USER`, `P520_SSH_KEY`, `P520_APP_UUID`.
 
 **Never in code. Never in `.env` committed to git. Always in Coolify environment variables (runtime) or GitHub Secrets (CI).**
 
-### Security Headers (Implemented in middleware.ts)
+### Security Headers (Implemented in proxy.ts)
 
-Security headers are applied to all responses via Next.js middleware (`src/middleware.ts`), not `next.config.ts`. This allows dynamic CSP updates per request when needed.
+Security headers are applied to all responses via Next.js Proxy (`src/proxy.ts`), not `next.config.ts`. This allows dynamic CSP updates per request when needed.
 
 ```typescript
-// src/middleware.ts — Actual implementation (simplified)
+// src/proxy.ts - Actual implementation (simplified)
 const securityHeaders: Record<string, string> = {
   "X-DNS-Prefetch-Control": "on",
   "X-Frame-Options": "SAMEORIGIN",
@@ -497,10 +504,11 @@ const securityHeaders: Record<string, string> = {
     "connect-src 'self'",
     "frame-ancestors 'none'",
   ].join("; "),
-}
+};
 ```
 
 **CSP will be updated in Phase 2-4** to allow:
+
 - `https://plausible.gwth.ai` in `script-src` (analytics)
 - `https://*.supabase.co` in `img-src` and `connect-src` (auth + storage)
 - `wss://*.supabase.co` in `connect-src` (realtime)

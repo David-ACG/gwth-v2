@@ -61,10 +61,10 @@ function isPasswordExempt(pathname: string): boolean {
 }
 
 /**
- * Middleware: applies security headers, enforces site password gate,
+ * Proxy: applies security headers, enforces site password gate,
  * refreshes Supabase auth sessions, and protects dashboard routes.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Site password gate: redirect to /access if no site_access cookie
