@@ -14,7 +14,6 @@ import {
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
   MONTH_CONFIGS,
-  TOTAL_COURSE_COST,
 } from "@/lib/config"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -143,7 +142,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Parent",
     title: "You are a parent thinking about the future",
     body:
-      "AI fluency will not be a nice-to-have — it will be table stakes. No coding required. If your teenager can describe what they want, they can build with AI.",
+      "AI fluency will not be a nice-to-have — it will be table stakes. Start with plain English, then learn the practical building and AI-assisted coding patterns that make ideas real.",
     accent: "aqua",
     cta: "Try a free lab",
     href: "/labs",
@@ -163,7 +162,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Income",
     title: "You know AI fluency is now worth more",
     body:
-      "AI is one of the highest-premium skill sets in the UK job market right now. Three months, every project in your portfolio, every score on your verifiable Dynamic Score. Show up to your next salary conversation — or your next interview — with proof.",
+      "AI is one of the highest-premium skill sets in the UK job market right now. Three months, real artefacts in your portfolio, every score on your verifiable GWTH Score. Show up to your next salary conversation — or your next interview — with proof.",
     accent: "aqua",
     cta: "See pricing",
     href: "/pricing",
@@ -173,7 +172,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Proof",
     title: "You want proof that you are fluent in Applied AI",
     body:
-      "Every lesson and project you complete lifts your verifiable Dynamic Score. Share it on LinkedIn, link it on your CV: UK employers can verify it on the spot. No PDFs, no faked completion dates, no one-shot certificate that goes stale a month after issue.",
+      "Every completed lesson, Q&A pass, capstone, and current update lifts your verifiable GWTH Score. Share it on LinkedIn, link it on your CV: employers can verify it on the spot. No PDFs, no faked completion dates, no one-shot certificate that goes stale a month after issue.",
     accent: "aqua",
     cta: "See pricing",
     href: "/pricing",
@@ -194,7 +193,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Team lead",
     title: "You lead a team and your competitors are moving faster",
     body:
-      "The bottleneck is not the tools — it is whether your team can actually use them well. The course works for individual employees and for whole teams ready to upskill together. Visit For Teams for syllabus control, admin dashboards, and bespoke modules for 100+.",
+      "The bottleneck is not the tools — it is whether your team can actually use them well. The beta is individual-first, with a light For Teams path for managers who want to talk about future group access.",
     accent: "mint",
     cta: "For Teams",
     href: "/for-teams",
@@ -206,24 +205,24 @@ export const JOURNEYS: readonly Journey[] = [
 export const PRODUCT_PILLARS: readonly ProductPillar[] = [
   {
     n: "01",
-    label: "94 hands-on projects",
-    title: "Three months. Three modules. 94 things you actually build.",
+    label: "64 core lessons. 30 go-deeper lessons.",
+    title: "Three months. Three levels of applied AI capability.",
     body:
-      "Five hours a week. Async-first, so it works around the day job. Every lesson ends with a step-by-step video walkthrough where the instructor builds the project alongside you.",
+      "Five hours a week. Async-first, so it works around the day job. Month 1 moves you beyond ChatGPT-as-Google. Month 2 turns that into apps and consulting skill. Month 3 moves into enterprise transformation.",
   },
   {
     n: "02",
-    label: "Dynamic Score",
-    title: "A verifiable credential that updates as you build.",
+    label: "GWTH Score",
+    title: "A verifiable credential that updates as you stay current.",
     body:
-      "Your Dynamic Score updates as you complete projects, and decays if you stop. Share it on LinkedIn. Employers can verify it on the spot: no PDFs, no faked completion dates.",
+      "Your GWTH Score reflects completion, applied skill, and currentness. Share it on LinkedIn. Employers can verify your current score and trajectory on the spot: no PDFs, no faked completion dates.",
   },
   {
     n: "03",
-    label: "No coding required",
-    title: "If you can describe what you want, you can build it.",
+    label: "Coding with AI",
+    title: "Start in plain English. Build your way into code.",
     body:
-      "Plain English in, working AI tools out. We assume zero Python. Tools you already pay for (Claude, ChatGPT, n8n), used the way professionals actually use them.",
+      "The course assumes you start as a beginner, then teaches AI-assisted building and coding through tools people actually use: Claude, ChatGPT, Codex, automation tools, and practical project workflows.",
   },
 ]
 
@@ -271,10 +270,10 @@ export const CURRICULUM: readonly CurriculumModule[] = [
   },
   {
     m: "Month 2",
-    t: "Professional & Industry",
+    t: "Apps, Workflows & Consulting",
     d: `${monthAt(1).mandatoryLessons} mandatory + ${monthAt(1).optionalLessons} optional · industry tracks`,
-    capstone: monthAt(1).capstoneName,
-    capstoneSub: "Production-grade · trained on real business data",
+    capstone: `${monthAt(1).capstoneName} + FractionalBuddy`,
+    capstoneSub: "Customer support · consulting toolkit · real business data",
   },
   {
     m: "Month 3",
@@ -305,17 +304,17 @@ export const PRICING: readonly PricingTier[] = [
   {
     id: "course",
     badge: "The Course",
-    flag: "Most Popular",
+    flag: "Starter pricing",
     price: `£${COURSE_MONTHLY_PRICE}`,
     pricePence: COURSE_MONTHLY_PRICE * 100,
-    per: `/mo for 3 months · £${TOTAL_COURSE_COST} total`,
+    per: "/mo · unlock one month at a time",
     features: [
-      "94 hands-on projects with video walkthroughs",
-      "3 portfolio-ready capstone projects",
+      "Full Month 1 at beta launch; Months 2 and 3 follow",
+      "64 core lessons plus 30 go-deeper optional lessons",
+      "Capstones for AskMyCo, FractionalBuddy, and AskEveryone",
       "Industry-specific modules for your field",
-      "Dynamic scores employers can verify",
-      "Content updated every day — never stale",
-      "Tech Radar — 60+ tools tracked daily",
+      "GWTH Score employers can verify",
+      "Starter price may rise after beta",
       "No ads, no upsells, no hidden tier",
     ],
     cta: { label: "Join the Waitlist", href: "/signup", style: "accent2" },
@@ -327,10 +326,9 @@ export const PRICING: readonly PricingTier[] = [
     pricePence: Math.round(ONGOING_MONTHLY_PRICE * 100),
     per: "/mo after the course",
     features: [
-      "Keep your Dynamic Score current — scores decay if you stop",
+      "Keep your GWTH Score current when lessons significantly change",
       "~5 hours of new content every month",
       "Work through the optional lessons you skipped",
-      "New tools added to Tech Radar as they launch",
       "Score history and progression analytics",
       "Cancel anytime — no lock-in",
     ],
@@ -341,10 +339,10 @@ export const PRICING: readonly PricingTier[] = [
 // ─── Score categories (illustrative — see score-vis/example-data.ts) ────────
 
 export const SCORE_CATEGORIES: readonly ScoreCategory[] = [
-  { l: "Personal AI", v: 92 },
-  { l: "Professional", v: 78 },
-  { l: "Enterprise", v: 64 },
-  { l: "Tech Radar", v: 71 },
+  { l: "Foundations", v: 92 },
+  { l: "Building", v: 78 },
+  { l: "Capstones", v: 64 },
+  { l: "Currentness", v: 71 },
 ]
 
 // ─── Navigation links ───────────────────────────────────────────────────────
@@ -366,7 +364,6 @@ export const FOOTER_COLS: readonly FooterCol[] = [
       { label: "Lessons", href: "/lessons" },
       { label: "Free Labs", href: "/labs" },
       { label: "Pricing", href: "/pricing" },
-      { label: "Tech Radar", href: "/tech-radar" },
       { label: "For Teams", href: "/for-teams" },
     ],
   },

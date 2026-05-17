@@ -5,13 +5,13 @@ const SECTIONS = [
   "nav",
   "hero",
   "research-strip",
-  "journey",
   "pillars",
-  "curriculum-vis",
+  "journey",
   "score-vis",
-  "prompt-vis",
-  "research-stats",
+  "lesson-preview",
+  "curriculum",
   "pricing",
+  "faq",
   "final-cta",
   "footer",
 ] as const
@@ -23,7 +23,6 @@ const EXPECTED_INTERNAL_HREFS = [
   "/lessons",
   "/for-teams",
   "/about",
-  "/tech-radar",
   "/why-gwth",
   "/newsletter",
   "/contact",
@@ -65,9 +64,9 @@ test.describe("Marketing homepage — full-page smoke", () => {
     expect(parsed.provider.name).toBe("GWTH.ai")
   })
 
-  test("renders all 7 journey cards with valid hrefs", async ({ page }) => {
+  test("renders all 9 journey cards with valid hrefs", async ({ page }) => {
     const cards = page.locator('[data-testid="journey-card"]')
-    await expect(cards).toHaveCount(7)
+    await expect(cards).toHaveCount(9)
     const hrefs = await cards.evaluateAll((els) =>
       els.map((el) => el.getAttribute("href"))
     )
@@ -77,10 +76,10 @@ test.describe("Marketing homepage — full-page smoke", () => {
     }
   })
 
-  test("hero CTAs link to /signup and /tech-radar", async ({ page }) => {
+  test("hero CTAs link to /signup and /labs", async ({ page }) => {
     const hero = page.locator('[data-section="hero"]')
     await expect(hero.locator('a[href="/signup"]')).toBeVisible()
-    await expect(hero.locator('a[href="/tech-radar"]')).toBeVisible()
+    await expect(hero.locator('a[href="/labs"]')).toBeVisible()
   })
 
   test("pricing tiers render with config-driven prices and the right CTAs", async ({
@@ -92,7 +91,7 @@ test.describe("Marketing homepage — full-page smoke", () => {
     await expect(cards).toHaveCount(3)
     await expect(pricing.locator('[data-tier="free"]')).toContainText(/£0|Free/)
     await expect(pricing.locator('[data-tier="course"]')).toContainText("£29")
-    await expect(pricing.locator('[data-tier="course"]')).toContainText("£87")
+    await expect(pricing.locator('[data-tier="course"]')).not.toContainText("£87")
     await expect(pricing.locator('[data-tier="stay"]')).toContainText("£7.50")
     await expect(pricing.locator('[data-featured="true"]')).toHaveCount(1)
     await expect(pricing.locator('[data-tier="free"] a[href="/labs"]')).toBeVisible()
@@ -128,25 +127,11 @@ test.describe("Marketing homepage — full-page smoke", () => {
     }
   })
 
-  test("WaitlistForm submits with mocked /api/waitlist and shows a toast", async ({
-    page,
-  }) => {
-    await page.route("**/api/waitlist", (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({ success: true, message: "You're on the waitlist." }),
-      })
-    )
+  test("final CTA links to signup and pricing", async ({ page }) => {
     const finalCta = page.locator('[data-section="final-cta"]')
     await finalCta.scrollIntoViewIfNeeded()
-    const emailInput = finalCta.locator('input[type="email"]').first()
-    await emailInput.fill("test@example.com")
-    await finalCta.locator('button[type="submit"]').click()
-    // Sonner renders toasts in a portal at document level; assert toast text
-    await expect(page.getByText(/waitlist|joined|added/i).first()).toBeVisible({
-      timeout: 5000,
-    })
+    await expect(finalCta.locator('a[href="/signup"]')).toBeVisible()
+    await expect(finalCta.locator('a[href="/pricing"]')).toBeVisible()
   })
 
   test("respects prefers-reduced-motion (sections render statically)", async ({

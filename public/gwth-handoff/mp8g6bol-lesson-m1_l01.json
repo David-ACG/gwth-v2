@@ -1,0 +1,936 @@
+{
+  "id": "m1_l01",
+  "slug": "m1_l01_welcome_to_gwth_six_ways_ai_can_give_you_superpowers",
+  "module": {
+    "id": "m1",
+    "title": "Month 1"
+  },
+  "title": "Welcome to GWTH - Six Ways AI Can Give You Superpowers",
+  "lead": "For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without.",
+  "kicker": null,
+  "author": {
+    "name": null,
+    "role": null,
+    "avatar": null
+  },
+  "readMinutes": null,
+  "level": "beginner",
+  "updatedAt": "2026-05-10",
+  "position": {
+    "index": 1,
+    "total": 26
+  },
+  "prev": null,
+  "next": {
+    "id": "m1_l02",
+    "title": "Your AI Colleague - How to Get Brilliant Help Without Giving Up Your Judgement"
+  },
+  "heroImage": null,
+  "pages": [
+    {
+      "id": "p1",
+      "kind": "cover",
+      "sectionNumber": null,
+      "heading": null,
+      "blocks": []
+    },
+    {
+      "id": "p2",
+      "kind": "section",
+      "sectionNumber": null,
+      "heading": null,
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without."
+        },
+        {
+          "type": "paragraph",
+          "text": "That could mean drafting a difficult letter, making sense of a confusing bill, planning a project, getting your CV moving again, helping a family member understand an official form, or building a useful tool, workflow, or app you always assumed was beyond you."
+        },
+        {
+          "type": "paragraph",
+          "text": "In the last two years, that has started to change. Ordinary people in the UK, not just engineers, founders, or people working in big technology companies, now have a new option. They can ask for help from AI, shape the answer, try again, and make something useful from a blank page."
+        },
+        {
+          "type": "paragraph",
+          "text": "This course is about that shift, and it has a much more ambitious end goal than simply helping you \"try AI\". If you complete the course and do the projects, the aim is to put you in the top 1% of people in the UK for practical, applied AI ability. Not theory. Not buzzwords. The real skill of using AI to research, write, analyse, build, automate, test, and create useful things that other people can see."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-01.png",
+            "width": 1672,
+            "height": 941,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Paper-craft overview of GWTH projects and AI confidence",
+          "caption": null,
+          "figureNumber": "01",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "The course is written first for non-technical adults. You do not need to be a programmer, data analyst, or IT person to start. But it is also useful if you are already technical and want to broaden what you can do. A developer may use it to become better at research, product thinking, business workflows, communication, and AI-assisted delivery. A marketer, accountant, operations manager, teacher, charity worker, or small business owner may use it to build tools they would never have attempted before."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where work is heading. In the next year or two, many more people will become practical generalists. Not because everyone suddenly becomes an expert in everything, but because AI lets people step outside their old job boundaries with guidance. We can already see the shape of this in companies using AI and low-code tools. Anthropic has described non-technical teams such as marketing and data using AI coding tools to build tools and work through complex multi-step tasks. In the UK, companies such as Shell and Lloyds Banking Group have shown a similar direction with business employees building apps, automations, and AI-supported tools that help colleagues across the organisation."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the kind of confidence GWTH is trying to build. You may arrive as a beginner, but the point is not to stay in a beginner box. The point is to become someone who can cross boundaries: from idea to tool, from messy problem to clear plan, from useful prompt to working project."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 1 gives you the foundations and your first serious proof. You will learn how AI works well enough to use it properly, how to work with it as a colleague, how to choose tools, and how to use the six superpowers in real tasks. You will create practical artefacts such as research briefs, personal content, a first useful tool, a dashboard, career assets, and a FamilyBot-style project that can listen, organise, and share useful household or team information."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 2 moves from personal prototypes to business-ready AI tools. You will learn how to organise projects professionally, keep versions of your work, store real data safely, publish working apps, test that they behave properly, and build AI systems that answer from trusted company information rather than guessing. You will also learn how businesses can make themselves easier for AI search and shopping assistants to understand. The two big capstone routes are a company knowledge and support assistant, called AskMyCo, and an AI business-consultant assistant, called FractionalBuddy. Those names will make sense later. For now, the important point is simple: you will build things that could be useful to an employer, a client, a small business, or a future collaborator."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 3 is where the work becomes transformation-level. You will build towards an AI Readiness Assessment Tool: a system that can interview people in an organisation, capture spoken or written answers, organise the evidence, find patterns across teams, score how ready the organisation is for AI, and generate a practical roadmap and executive report. That is not a toy project. It is the kind of thing an AI transformation consultant would want in their toolkit."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-02.png",
+            "width": 1423,
+            "height": 763,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Three-month GWTH roadmap from foundations to transformation-level project work",
+          "caption": null,
+          "figureNumber": "02",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "If some of those words feel unfamiliar, that is completely fine. You have not started the course yet. You are not expected to know how a company knowledge assistant works, how an app gets published, or how an AI readiness tool is built today. The point of this first lesson is to show you where the path leads, not to ask you to understand every signpost before you have taken the first step."
+        },
+        {
+          "type": "paragraph",
+          "text": "Across the course, your GWTH Score will help you see progress. It is not a school mark. Think of it as a practical signal of your applied AI ability: how confident you are, how good your judgement is, how up to date your skills are, and how much useful work you have actually created. Over time, that can become valuable career evidence. It gives you a clearer way to say, \"I do not just follow AI news; I can use AI well, across real tasks.\" If you want to show it to an employer, client, manager, collaborator, or your own network, you can. If you prefer to keep it private and use it only to guide your own progress, that is completely fine too."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end, the aim is not that you have watched a set of videos. The aim is that you have a portfolio of useful work, a way to explain what you can now do, and enough practical confidence to be one of the people in your workplace, family, business, or local community who genuinely understands how to put AI to work."
+        },
+        {
+          "type": "paragraph",
+          "text": "The course is not about chasing every new tool or pretending AI is magic. It is about learning how to use AI in ordinary life, with your judgement still firmly in charge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Welcome to GWTH."
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "kind": "section",
+      "sectionNumber": "§ 1",
+      "heading": "What this lesson is, and what it is not",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "We start with the map, because the tools make more sense once you know what they are for."
+        },
+        {
+          "type": "paragraph",
+          "text": "This first lesson is not a chatbot comparison. We will not be ranking tools, choosing subscriptions, or showing you every button on a screen. Those things matter later, but they are not the best place to begin."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end, you should have a clear first map of the course: what GWTH is for, the six main ways AI can be useful in your work and home life, and the simple habit that keeps you in charge from day one."
+        },
+        {
+          "type": "paragraph",
+          "text": "You will also leave with your first practical task: a short personal document called *My AI Superpowers Wishlist*. It is the first thing in your GWTH portfolio, and it will help shape the rest of Month 1."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nothing here assumes you are technical. It does assume you are capable, curious, and busy. That is the level this course is written for."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-03.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Lesson 1 focus: course map, six superpowers, and first portfolio wishlist",
+          "caption": null,
+          "figureNumber": "03",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "kind": "section",
+      "sectionNumber": "§ 2",
+      "heading": "What GWTH stands for",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "GWTH is short for *Growth With Tech and Humans*. The order of those words matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Growth** comes first because growth is the point. The aim is not novelty, gadgets, or keeping up with whatever is trending this week. We are here because there are things you want to do at work, at home, for yourself, or for your family, and AI can now help you do some of them better, sooner, or with more confidence than before."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Tech** comes second because technology is the lever, not the hero. You will hear a lot about model versions, benchmarks, agents, and feature launches. Most of that does not matter at the start. What matters is that a small set of AI abilities has become good enough, affordable enough, and easy enough to be useful in real life."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Humans** comes last because humans decide what matters. AI can draft, summarise, compare, suggest, organise, and sometimes build. It cannot decide what a good life looks like for you. It cannot know which family trade-off you will regret, what tone feels respectful in your workplace, or whether a plan fits the week you are actually living through."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is why one line sits underneath this whole course:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "**AI suggests. Humans decide.**",
+          "attribution": null
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-04.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Growth With Tech and Humans pillars with the rule AI suggests, humans decide",
+          "caption": null,
+          "figureNumber": "04",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "AI can be fast, fluent, and surprisingly useful. But you remain the adult in the room."
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "kind": "section",
+      "sectionNumber": "§ 3",
+      "heading": "Why this matters now, in the UK",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three things are true at the same time in 2026."
+        },
+        {
+          "type": "paragraph",
+          "text": "The first is that AI is already here, but most people have not yet built the habit of using it in everyday work and life. According to Ofcom's *Online Nation 2025* report, roughly three in ten UK adults aged 16 and over had actively used a generative AI service. That means around seven in ten had not. So if you are starting today, you are not behind: most people are still learning how to use AI in everyday work and life."
+        },
+        {
+          "type": "paragraph",
+          "text": "At the same time, many people are meeting AI without choosing to. Ofcom also found that AI-written summaries were appearing at the top of many UK Google searches, and more than half of UK adults said they saw those summaries often. So even if you have never opened a chatbot, AI may already be shaping the first answer you see when you search for something."
+        },
+        {
+          "type": "paragraph",
+          "text": "The second thing is that the UK has decided to take AI skills seriously. The government's *AI Opportunities Action Plan* talks about the UK becoming an AI maker, not just an AI taker. Follow-up government reporting describes more than a million free AI courses delivered, with a target of upskilling ten million UK workers by 2030."
+        },
+        {
+          "type": "paragraph",
+          "text": "That does not mean everyone needs to become an AI engineer. The same government analysis describes three broad groups. There are AI experts, who build the systems. There are AI specialists, who help organisations put the systems to work. And then there is a much larger group: AI implementers."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI implementers are people who use AI to do their existing work better. That might be a teaching assistant, a small business owner, a project manager, a charity administrator, a carer, a receptionist, a designer, a sales manager, or someone trying to get back into work after time away."
+        },
+        {
+          "type": "paragraph",
+          "text": "That group is where most of us live."
+        },
+        {
+          "type": "paragraph",
+          "text": "The evidence so far is not a simple story of robots replacing people. It is more often a story of tasks changing inside jobs. In the ONS Business Insights and Conditions Survey published on 2 April 2026, 26% of businesses reported using at least one type of AI technology, up eight percentage points from late March 2025. In the same wave, 5% of businesses using AI said their workforce headcount had reduced because of AI technologies."
+        },
+        {
+          "type": "paragraph",
+          "text": "The third thing is that the boundary between \"technical\" and \"non-technical\" work is already moving. People in marketing, finance, operations, customer service, education, and management are beginning to build, automate, analyse, and test things that used to sit somewhere else in the organisation. They still need judgement, domain knowledge, taste, care, and responsibility. AI does not remove those things. It helps people turn them into working outputs."
+        },
+        {
+          "type": "paragraph",
+          "text": "So the practical question is not \"will AI replace everyone?\" The better question is: \"Which parts of my life and work could become easier, clearer, faster, or more ambitious if I learnt to use this well?\""
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the gap GWTH exists to close."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-05.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "UK 2026 AI skills context: most adults are still learning, AI is shaping everyday work and life, non-technical people can build useful outputs",
+          "caption": null,
+          "figureNumber": "05",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p6",
+      "kind": "section",
+      "sectionNumber": "§ 4",
+      "heading": "The six AI superpowers",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "So what can AI actually do for an ordinary person in 2026?"
+        },
+        {
+          "type": "paragraph",
+          "text": "We will use six categories. They are not scientific laws. They are a practical map. Six is enough to cover the important ground, and few enough to remember."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-06.png",
+            "width": 1313,
+            "height": 830,
+            "aspect": "3:2"
+          },
+          "svg": null,
+          "alt": "The six AI superpowers: research, content, thinking, building, data and automation",
+          "caption": null,
+          "figureNumber": "06",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "For each one, I will explain what it is, where it shows up in real UK life, and the simple checking habit that keeps you safe."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.1 Research"
+        },
+        {
+          "type": "paragraph",
+          "text": "Research means finding things out, summarising long things into short things, comparing options, and helping you understand a topic that is new or messy."
+        },
+        {
+          "type": "paragraph",
+          "text": "This could be a confusing energy-tariff change. It could be a school's attendance policy. It could be comparing broadband providers in your area without giving up a whole Saturday. It could be catching up on a topic like dementia care, solar batteries, tax-free childcare, or the rules around a particular benefit, so that you can have a more informed conversation with someone else."
+        },
+        {
+          "type": "paragraph",
+          "text": "The important point is that AI can reduce the fog. It can read quickly, pull out themes, explain things in plainer English, and say, \"Here are the three things that seem to matter most.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "But research is also where the first verification habit matters most."
+        },
+        {
+          "type": "paragraph",
+          "text": "For anything involving money, health, law, public services, or someone else's wellbeing, check the original source before acting. AI can help you understand a document, but it is not the document. It can summarise a council page, but it is not the council page. It can explain an NHS letter, but it is not the clinician."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to get your bearings. Then check the source that actually has authority."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-07.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Research superpower: reduce the fog, then check the original source",
+          "caption": null,
+          "figureNumber": "07",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.2 Content"
+        },
+        {
+          "type": "paragraph",
+          "text": "Content means writing and rewriting. Drafting, improving, translating, shortening, softening, strengthening, and making a piece of writing fit the person who will read it."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where many people first feel AI becoming useful."
+        },
+        {
+          "type": "paragraph",
+          "text": "You might ask it to draft a polite but firm complaint to your council. You might turn a panicky late-night email into a calm version you can send on Monday morning. You might ask it to rewrite your CV after a long break from paid work. You might use it to explain an insurance claim clearly, translate a letter for a neighbour, or find the right first sentence for something emotional, like a eulogy, a wedding speech, or a message of condolence."
+        },
+        {
+          "type": "paragraph",
+          "text": "The danger with AI writing is that it can sound smooth while not sounding like you. It may be too formal, too cheerful, too American, too corporate, or simply too vague."
+        },
+        {
+          "type": "paragraph",
+          "text": "So the content habit is simple: read it out loud before you send it. If the words sound like someone pretending to be you, change them. If a sentence makes a claim you would not defend, remove it. If the tone is wrong for the person receiving it, reshape it. One useful meta-prompt is to ask the AI to interview you first: \"Ask me three questions about the audience, tone, and point before you draft.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "AI can get you past the blank page. You still own the voice."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-08.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Content superpower: AI helps draft, the human keeps the voice",
+          "caption": null,
+          "figureNumber": "08",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.3 Thinking"
+        },
+        {
+          "type": "paragraph",
+          "text": "Thinking means using AI as a patient sounding board. Not because it knows your life better than you do, but because it can help you slow a problem down."
+        },
+        {
+          "type": "paragraph",
+          "text": "You might say, \"I am thinking of going part-time. Help me list the trade-offs honestly.\" Or, \"We are trying to decide whether Mum needs more care. What questions are we forgetting to ask?\" Or, \"I have eighteen things on my to-do list and three hours. Help me sort what matters most.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "This is one of the most valuable uses of AI, and one of the least obvious. Many beginners think AI is mainly there to give answers, but often it is better at helping you ask better questions."
+        },
+        {
+          "type": "paragraph",
+          "text": "It can help you compare options. It can challenge an assumption. It can show you what a reasonable person on the other side might say. It can turn a worry into a list, and a list into a plan. Here too, meta-prompting helps: before asking for advice, ask the AI what it needs to know to give you a better answer."
+        },
+        {
+          "type": "paragraph",
+          "text": "The thinking habit is to ask one follow-up question before you accept the answer:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "\"What would change your answer?\"",
+          "attribution": null
+        },
+        {
+          "type": "paragraph",
+          "text": "or:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "\"What would someone who disagreed with you say?\"",
+          "attribution": null
+        },
+        {
+          "type": "paragraph",
+          "text": "Those questions are powerful because AI often sounds certain. Asking it to explain what might weaken its answer makes the advice less shiny and more useful."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-09.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Thinking superpower: use AI as a sounding board and ask what would change the answer",
+          "caption": null,
+          "figureNumber": "09",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.4 Building"
+        },
+        {
+          "type": "paragraph",
+          "text": "Building means turning an idea into something useful: start small, test it, then grow it into a stronger tool, workflow, app, or AI system when the need is real."
+        },
+        {
+          "type": "paragraph",
+          "text": "That might be a checklist, a tracker, a spreadsheet, a reusable prompt, a simple web page, or a tiny tool that does one job for you. You do not need to start by writing code yourself. In many cases, AI can write the first version and explain what it has done."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the superpower many beginners assume is \"not for people like me\". It is. Not because everyone needs to become a software developer, but because the first version of a tool, workflow, or app is now much easier to make, and those first versions can grow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Imagine a packing checklist that asks where you are going, who is coming, and what the weather is likely to be. Imagine a reading-log tracker for a child that spots when the routine has slipped. Imagine a button that rewrites an email kinder, firmer, or shorter. Imagine a simple website for an allotment committee, a charity event, a local club, or a family history project."
+        },
+        {
+          "type": "paragraph",
+          "text": "None of those needs to be a business, and none of them needs to be impressive on LinkedIn. They are useful because they remove friction from real life."
+        },
+        {
+          "type": "paragraph",
+          "text": "The building habit is: test it with real examples before you trust it. AI can produce a tool that looks right but behaves wrongly in a corner you did not notice. Try the boring cases. Try the awkward cases. Try the thing you will actually use next Tuesday. Start small, test it with real examples, and then grow the useful parts iteratively."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-10.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Building superpower: start small, test, improve, and grow useful tools iteratively",
+          "caption": null,
+          "figureNumber": "10",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.5 Data"
+        },
+        {
+          "type": "paragraph",
+          "text": "Data means asking plain-English questions of spreadsheets, tables, lists, forms, survey answers, or messy notes."
+        },
+        {
+          "type": "paragraph",
+          "text": "You might upload a simple spreadsheet and ask, \"Where does most of this spending go?\" You might paste 200 customer reviews and ask, \"What are the three things people keep complaining about?\" You might take a parent survey and ask, \"What are the most common themes, and what are two comments that show each theme?\" You might look at a sleep tracker, exercise log, or timesheet and ask what changed in November."
+        },
+        {
+          "type": "paragraph",
+          "text": "This does not mean blindly trusting a chart. It means using AI to help you see patterns that would take longer by hand."
+        },
+        {
+          "type": "paragraph",
+          "text": "The data habit is to check a few rows yourself and make sure the totals still make sense. If a column has been misread, the answer can look polished and still be wrong. Open a few original rows, compare the totals, and ask which rows or assumptions created any surprising chart."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI can help you see the pattern. You still check whether the pattern is real."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-11.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Data superpower: find patterns, open original rows, and check totals",
+          "caption": null,
+          "figureNumber": "11",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.6 Automation and agents"
+        },
+        {
+          "type": "paragraph",
+          "text": "Automation means AI doing a chain of small steps for you. You may also hear the word \"agent\". In plain English, an agent is an AI system that can carry out more than one step towards a goal, often using tools along the way."
+        },
+        {
+          "type": "paragraph",
+          "text": "For example, one click might turn a meeting recording into notes, action points, and a draft follow-up email. A weekly briefing might collect the important messages from your inbox and group them by topic. A small business owner might ask an AI assistant to draft replies to routine enquiries, leaving only the unusual ones for a human. A research assistant might read a set of articles and return a summary while you do something else."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the newest of the six superpowers, and it is moving quickly. It is also the one where beginners need the clearest boundary."
+        },
+        {
+          "type": "paragraph",
+          "text": "The beginner automation habit is this: do not let AI take the final action on anything that matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "If something sends, pays, posts, files, signs, deletes, books, or commits you to a decision, you click the final button. AI can prepare the action. You approve it. Later, some automations can approve low-risk cases against clear criteria; while learning, keep human approval for anything consequential."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-12.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Automation superpower: AI prepares, criteria handle low risk, humans approve consequences",
+          "caption": null,
+          "figureNumber": "12",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "That single rule prevents a lot of trouble."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Pause for a moment"
+        },
+        {
+          "type": "paragraph",
+          "text": "If I gave you a Saturday afternoon and said, \"Use AI for one useful thing\", which of the six would you reach for first?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Research. Content. Thinking. Building. Data. Automation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep your answer in mind. You will use it in your first project."
+        }
+      ]
+    },
+    {
+      "id": "p7",
+      "kind": "section",
+      "sectionNumber": "§ 5",
+      "heading": "The honest limits: the jagged frontier",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Before we go further, there is one limit worth naming clearly."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI is powerful, but it is uneven. It is brilliant at some tasks that look hard, and surprisingly poor at some tasks that look easy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Researchers often call this the *jagged frontier*. Imagine a border on a map, but instead of a neat line, it has spikes, dents, and odd corners. On one side are tasks AI can handle well. On the other side are tasks where it becomes unreliable. The awkward part is that the border is not always obvious until you cross it."
+        },
+        {
+          "type": "paragraph",
+          "text": "One well-known Harvard Business School study showed this clearly. Researchers gave experienced consultants access to AI for a set of real consulting tasks. On many tasks, the AI-assisted consultants did better: more tasks completed, faster, and at higher quality. But on a task designed to sit just outside what AI could reliably handle, the AI-assisted group did worse than the group without AI."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the lesson. AI help can make you better. It can also make a wrong answer feel more convincing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Three honest things follow from that."
+        },
+        {
+          "type": "paragraph",
+          "text": "First, AI can invent details. People often call this \"hallucination\". It means the system produces an answer that sounds fluent but is not true, or is not supported by the information it was given."
+        },
+        {
+          "type": "paragraph",
+          "text": "Second, AI can sound certain when it should be cautious. It often tries to be helpful, agreeable, and confident. That can be useful when you need momentum, but risky when you need accuracy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Third, the frontier is moving. Things that were not possible eighteen months ago are now ordinary. Things that are unreliable today may improve in six months. So the question is not simply, \"Can AI do this?\" The better question is, \"Can AI do this well enough today, for this situation, with the checks I can apply?\""
+        },
+        {
+          "type": "paragraph",
+          "text": "That is why the GWTH rule matters:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "**AI suggests. Humans decide.**",
+          "attribution": null
+        },
+        {
+          "type": "paragraph",
+          "text": "If you leave this lesson thinking AI is magic, you will be disappointed. If you leave thinking it is pointless, you will miss useful opportunities. The grown-up position is more practical: AI is a powerful, uneven tool. The people who learn to use it well will often have an advantage. But nobody is being asked to hand over their judgement."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-13.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Jagged frontier: ask whether AI can do this well enough today with checks",
+          "caption": null,
+          "figureNumber": "13",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p8",
+      "kind": "section",
+      "sectionNumber": "§ 6",
+      "heading": "Demonstration: a council letter",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Let us make this concrete."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the kind of letter that can sit on the kitchen table for a fortnight. Not because it is impossible to understand, but because it takes concentration, and life is already full."
+        },
+        {
+          "type": "paragraph",
+          "text": "Here is the sort of prompt I might type into a chatbot. The wording matters because it gives the AI a clear job and clear boundaries."
+        },
+        {
+          "type": "paragraph",
+          "text": "*[on screen, in a code-style box:]*"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "I'm a UK adult and I've received this council parking-permit letter.\nPlease do four things, in this order:\n\n1. Summarise the letter in plain English in five lines or fewer.\n2. List the actions I need to take, with dates.\n3. Tell me anything that is unclear or that I should check on the council's website before acting.\n4. If I want to challenge the fee increase, draft a polite, clear paragraph in British English that I can use as a starting point.\n\nDo not invent details. If the letter doesn't say something, say \"not stated\".",
+          "caption": null
+        },
+        {
+          "type": "paragraph",
+          "text": "There are five useful choices in that prompt."
+        },
+        {
+          "type": "paragraph",
+          "text": "I said I am in the UK. I asked for a short plain-English summary. I gave the outputs in a numbered order. I asked for British English. And I added the most important line: \"Do not invent details. If the letter doesn't say something, say 'not stated'.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "That last line is not magic, but it helps. It tells the AI that gaps matter."
+        },
+        {
+          "type": "paragraph",
+          "text": "The AI might then give me a summary, an action list, a list of things to check, and a draft challenge paragraph. None of that is the final answer. My job is to compare the summary against the original letter, check the dates, go to the council website if needed, and decide whether the draft paragraph says what I mean."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the whole course in miniature: AI makes the fog thinner, and you decide what to do."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-14.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Council letter demonstration as Excalidraw prompt structure: summarise, list actions, flag checks, draft paragraph",
+          "caption": null,
+          "figureNumber": "14",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p9",
+      "kind": "section",
+      "sectionNumber": "§ 7",
+      "heading": "The shape of the course",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This first lesson matters because it is the doorway into the whole course, so the wider promise needs to be clear."
+        },
+        {
+          "type": "paragraph",
+          "text": "GWTH is not a three-day introduction stretched across three months. It is a practical progression from beginner confidence to serious applied AI capability. The course starts gently because that is the right way to teach, but the destination is ambitious: by the end, if you have done the work, the aim is that you are in the top 1% of UK adults for applied AI."
+        },
+        {
+          "type": "paragraph",
+          "text": "That does not mean you know more AI trivia than everyone else. It means you can do things most people still cannot do. You can brief AI properly, check it, use different tools for different jobs, build useful tools and apps from small tested starts, work with data, create useful content, design AI helpers and repeatable workflows, test what you make, and explain your work clearly enough that someone else can trust it."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Month 1 is foundation, confidence, and visible proof.** You start with the six superpowers, the AI colleague model, and the useful parts of how AI works: context windows, models, memory, privacy, subscriptions, APIs, and multimodal inputs. Then you use those ideas in practical lessons on research, content, thinking, building, data, automation, and agents."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 1 also includes work that matters for jobs and confidence. You will improve career assets such as a CV or LinkedIn profile, practise job-search and interview support, make ideas visible through presentations or simple web pages, build a dashboard, learn about AI power tools such as connectors and command-line tools, and choose a sensible coding or building stack. The capstone is a FamilyBot or Team Meeting Bot style project: a helpful AI system that can take voice notes or meetings, turn them into text, extract tasks, meals, events, shopping or actions, and share useful outputs in a way real people can use."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end of Month 1, you should already have proof. Not just notes, but a portfolio: prompts, checked research, improved writing, a first tool, career assets, a dashboard or page, and a personal AI helper project. You should feel that AI is no longer something happening \"out there\". It is something you can direct."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-15.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Month 1 portfolio proof stack: prompts, research, writing, tool, dashboard, AI helper project",
+          "caption": null,
+          "figureNumber": "15",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "**Month 2 is where you become a practical AI builder.** The work moves from personal prototypes to business-ready tools. You learn how to write a clear brief for an app, keep the project organised, use AI coding assistants, save your work properly, store customer or business information in a database, publish an app so other people can try it, test it in a browser, protect private information, manage cost, and work at a pace that does not overwhelm you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 2 also teaches the business-grade versions of the superpowers. Research becomes a company knowledge system: instead of asking AI to guess from memory, you build a tool that searches trusted documents and answers with evidence. Building becomes working app development. Data becomes dashboards, reports, and quality checks. Automation becomes workflows where AI can carry out steps, but a human still approves anything important. Content becomes brand assets, proposals, slide decks, and websites. You will also learn how UK businesses can make their products and services easier for AI assistants to understand, compare, and recommend."
+        },
+        {
+          "type": "paragraph",
+          "text": "The two main Month 2 capstone routes make that concrete. One is a company knowledge and support assistant, which we call AskMyCo. Imagine a small business, charity, or team being able to ask questions about its own policies, services, FAQs, documents, and processes, and get answers with links back to the evidence. The other is an AI business-consultant assistant, which we call FractionalBuddy. Imagine a tool that helps a team understand a problem, plan next steps, research options, write useful documents, and keep human approval in the loop. These are not pretend exercises. They are portfolio projects that can support a job move, an internal promotion conversation, a freelance offer, or a small-business consultancy pitch."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Month 3 is transformation-level work.** This is where the course moves from \"I can build useful AI tools\" to \"I can help an organisation understand what to do with AI.\" The main capstone is an AI Readiness Assessment Tool. It is designed to interview people in a business, gather evidence, understand workflows and blockers, organise what it learns into a searchable knowledge base, find themes across teams, score how ready the organisation is for AI, and generate a practical transformation roadmap."
+        },
+        {
+          "type": "paragraph",
+          "text": "That Month 3 project brings together spoken interviews, consent and UK governance, company knowledge systems, pattern-finding, readiness scoring, cost and impact thinking, workflow redesign, AI helpers that can carry out steps safely, model choices, adoption planning, dashboards, executive reports, and a 90-day AI champion playbook. It is advanced, but it is built step by step from skills you have already practised."
+        },
+        {
+          "type": "paragraph",
+          "text": "Again, do not worry if some of that sounds like a lot. It is a lot. That is why the course takes you there gradually. At this stage, you only need to understand the promise: we start with ordinary tasks, then build towards serious projects that would put you far ahead of most people who have only used AI as a search box or a writing shortcut."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where the career value becomes much more visible. GWTH cannot promise anyone a job or a promotion; no honest course can. What it can do is help you build evidence that you are not just interested in AI, you can use it. More than that, you can use it across research, content, data, building, automation, agents, governance, and transformation. That matters in interviews, appraisals, small-business conversations, career changes, freelance work, and consultancy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Across all three months, your GWTH Score gives you a way to see that growth. It is not a school mark and not a leaderboard. It is a practical scorecard for confidence, judgement, tool use, project work, safety habits, portfolio evidence, and how current your AI skills are becoming. For your career, that matters because AI ability is hard to prove with vague phrases like \"I am good with AI\". A visible score, backed by real projects, gives you something stronger: evidence that you are building, testing, improving, and staying up to date. You may choose to show it off when it helps you, or keep it private when it does not. The score belongs to you."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-16.png",
+            "width": 1672,
+            "height": 941,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Paper-craft GWTH Score and portfolio evidence card",
+          "caption": null,
+          "figureNumber": "16",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the journey: from beginner to someone with serious applied AI proof. Not scary, not theoretical, and not easy in the shallow sense. Useful, ambitious, and built one project at a time."
+        }
+      ]
+    },
+    {
+      "id": "p10",
+      "kind": "practice",
+      "sectionNumber": "§ 8",
+      "heading": "Your first project: the Superpowers Wishlist",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Build section below is where you actually make the first portfolio artefact: *My AI Superpowers Wishlist*."
+        },
+        {
+          "type": "paragraph",
+          "text": "For now, the important idea is simple. Before you choose tools, name the useful things you want AI to help with across work, career, home, family, hobbies, confidence, and admin. The six superpowers are the map. Your wishlist is the route."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end of the course, the goal is not that you have watched a lot of videos. The goal is that many of the useful things on your list have started moving, because you learnt how to work with AI without handing it the steering wheel."
+        }
+      ]
+    },
+    {
+      "id": "p11",
+      "kind": "section",
+      "sectionNumber": "§ 9",
+      "heading": "Recap",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three things to take with you. GWTH is human-first: AI is the lever, and you decide what to lift. The six superpowers give you a practical map: research, content, thinking, building, data, and automation. And the frontier is jagged, which means AI is excellent at some things and unreliable at others. That is why the rule matters: AI suggests, humans decide."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-17.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Lesson 1 recap: human-first, six superpowers, jagged frontier, humans decide",
+          "caption": null,
+          "figureNumber": "17",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "Most UK adults are still learning how to use generative AI in everyday work and life. You are not behind."
+        }
+      ]
+    },
+    {
+      "id": "p12",
+      "kind": "section",
+      "sectionNumber": "§ 10",
+      "heading": "Bridge to L02",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Next lesson is *Your AI Colleague: How to Get Brilliant Help Without Giving Up Your Judgement*."
+        },
+        {
+          "type": "paragraph",
+          "text": "We will treat AI not as a magic answer machine, but as a very fast colleague: useful, tireless, sometimes surprising, and occasionally wrong about something obvious."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bring your wishlist. We will use it in the first activity."
+        },
+        {
+          "type": "paragraph",
+          "text": "See you there."
+        }
+      ]
+    }
+  ],
+  "footnotes": [],
+  "notes": []
+}

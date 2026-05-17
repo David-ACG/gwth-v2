@@ -1,5 +1,10 @@
 import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
+import {
+  Inter,
+  JetBrains_Mono,
+  Source_Sans_3,
+  Source_Serif_4,
+} from "next/font/google"
 import Script from "next/script"
 import { RootProvider } from "@/providers/root-provider"
 import { RouteProgress } from "@/components/shared/route-progress"
@@ -17,21 +22,33 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
 })
 
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-source-serif",
+  display: "swap",
+})
+
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-source-sans",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: {
-    default: "GWTH.ai | Learn to Build with AI",
+    default: "GWTH.ai | Applied AI Course for the UK",
     template: "%s | GWTH.ai",
   },
   description:
-    "Master AI development with hands-on courses, labs, and real-world projects.",
+    "A UK-focused applied AI course for beginners moving from ChatGPT basics to practical research, building, automation, and verifiable AI capability.",
   metadataBase: new URL("https://gwth.ai"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "GWTH.ai | Learn to Build with AI",
+    title: "GWTH.ai | Applied AI Course for the UK",
     description:
-      "Master AI development with hands-on courses, labs, and real-world projects.",
+      "A UK-focused applied AI course for beginners moving from ChatGPT basics to practical research, building, automation, and verifiable AI capability.",
     url: "https://gwth.ai",
     siteName: "GWTH.ai",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -62,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${sourceSerif.variable} ${sourceSans.variable}`}
       suppressHydrationWarning
     >
       <head>

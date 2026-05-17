@@ -5,79 +5,93 @@ import PricingPage from "./page"
 afterEach(cleanup)
 
 describe("PricingPage", () => {
-  it("renders the page heading", () => {
+  it("renders the page heading as h1", () => {
+    render(<PricingPage />)
+    const h1 = screen.getByRole("heading", {
+      level: 1,
+      name: /Three ways to learn\. Start free\./,
+    })
+    expect(h1).toBeInTheDocument()
+  })
+
+  it("renders the three redesigned pricing tiers", () => {
     render(<PricingPage />)
     expect(
-      screen.getByText(
-        "Less than the cost of one hour with an AI consultant."
-      )
+      screen.getByRole("heading", { level: 3, name: "Free Labs" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Member" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Teams" })
     ).toBeInTheDocument()
   })
 
-  it("renders three pricing tier cards", () => {
-    render(<PricingPage />)
-    expect(screen.getByText("Free Labs")).toBeInTheDocument()
-    expect(screen.getByText("The Course")).toBeInTheDocument()
-    expect(screen.getByText("Stay Current")).toBeInTheDocument()
-  })
-
-  it("displays the course monthly price", () => {
-    render(<PricingPage />)
-    expect(screen.getByText("£29.00")).toBeInTheDocument()
-  })
-
-  it("displays the ongoing monthly price", () => {
-    render(<PricingPage />)
-    expect(screen.getByText("£7.50")).toBeInTheDocument()
-  })
-
-  it("displays the total course cost", () => {
-    render(<PricingPage />)
-    expect(screen.getByText(/£87\.00 total/)).toBeInTheDocument()
-  })
-
-  it("displays free tier price", () => {
+  it("displays free, member, and team pricing", () => {
     render(<PricingPage />)
     expect(screen.getByText("£0")).toBeInTheDocument()
+    expect(screen.getByText("£29")).toBeInTheDocument()
+    expect(screen.getByText("Same")).toBeInTheDocument()
   })
 
-  it("renders Stay Current advantages", () => {
+  it("does not prominently display the total course cost in the per-tier line", () => {
     render(<PricingPage />)
-    expect(
-      screen.getByText(/scores decay if you stop/)
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(/5 hours of new content every month/)
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(/30 optional lessons/)
-    ).toBeInTheDocument()
+    expect(screen.queryByText(/£87 total/)).not.toBeInTheDocument()
   })
 
-  it("has Join the Waitlist CTA for free tier", () => {
+  it("keeps Stay Current as an optional post-course refresh offer", () => {
+    render(<PricingPage />)
+    expect(screen.getByText(/Stay Current remains available/)).toBeInTheDocument()
+    expect(screen.getByText("Stay Current refreshes")).toBeInTheDocument()
+    expect(screen.getByText("Available after course")).toBeInTheDocument()
+  })
+
+  it("has Try a Free Lab CTA on the free tier", () => {
+    render(<PricingPage />)
+    expect(screen.getByRole("link", { name: "Try a Free Lab" })).toHaveAttribute(
+      "href",
+      "/labs"
+    )
+  })
+
+  it("has Join the Waitlist CTA on the member tier", () => {
     render(<PricingPage />)
     expect(
       screen.getByRole("link", { name: "Join the Waitlist" })
-    ).toBeInTheDocument()
+    ).toHaveAttribute("href", "/signup")
   })
 
-  it("has Join the Earlybird Waitlist CTA for course tier", () => {
+  it("has Talk to us CTA on the team tier", () => {
+    render(<PricingPage />)
+    expect(screen.getByRole("link", { name: /Talk to us/i })).toHaveAttribute(
+      "href",
+      "/contact"
+    )
+  })
+
+  it("has For Teams section with contact link and learn-more link", () => {
     render(<PricingPage />)
     expect(
-      screen.getByRole("link", { name: /Join the Earlybird Waitlist/ })
+      screen.getByRole("heading", {
+        level: 2,
+        name: /Same learner experience\. More visibility for managers\./i,
+      })
     ).toBeInTheDocument()
-  })
-
-  it("has Most Popular badge on course tier", () => {
-    render(<PricingPage />)
-    expect(screen.getByText("Most Popular")).toBeInTheDocument()
-  })
-
-  it("has For Teams section with contact link", () => {
-    render(<PricingPage />)
-    expect(screen.getByText("For Teams")).toBeInTheDocument()
     expect(
-      screen.getByRole("link", { name: /Get in Touch/ })
+      screen.getByRole("link", { name: /Contact GWTH/i })
     ).toBeInTheDocument()
+    expect(
+      screen.getByRole("link", { name: /Learn about teams/i })
+    ).toBeInTheDocument()
+  })
+
+  it("renders the redesigned comparison table", () => {
+    render(<PricingPage />)
+    expect(screen.getByRole("columnheader", { name: "Feature" })).toBeInTheDocument()
+    expect(screen.getByRole("columnheader", { name: "Free" })).toBeInTheDocument()
+    expect(screen.getByRole("columnheader", { name: "Member" })).toBeInTheDocument()
+    expect(screen.getByRole("columnheader", { name: "Team" })).toBeInTheDocument()
+    expect(screen.getByText("Admin dashboard")).toBeInTheDocument()
+    expect(screen.getByText("Included for 5+")).toBeInTheDocument()
   })
 })
