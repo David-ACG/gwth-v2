@@ -155,17 +155,17 @@ For more details, see README.md and docs/QUICKSTART.md.
 
 Website work is tracked as `track: website` tasks (W-prefixed ids) on the
 launch board at http://192.168.178.50:8090/, defined in
-`/home/david/projects/1_gwthpipeline520/end_to_end_plan_pipeline+gwth/launch_tracks.yaml`.
+`/home/david/projects/GWTH-launch-plan/launch_tracks.yaml`.
 
 Whenever a session in this repo advances a website task, record it before
 finishing:
 
 ```bash
-python3 /home/david/projects/1_gwthpipeline520/scripts/update_launch_task.py \
+python3 /home/david/projects/GWTH-launch-plan/scripts/update_launch_task.py \
   <ID> --progress <0-100> --note "what moved"
 # add --status done when the task is complete
 ```
 
 Never hand-edit `launch_progress.yaml` (the script-written overlay), and
 never edit `launch_tracks.yaml` just to tick progress. Commit and push the
-overlay change in the pipeline repo.
+overlay change in the launch-plan repo (`cd /home/david/projects/GWTH-launch-plan`).

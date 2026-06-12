@@ -147,13 +147,13 @@ These load automatically when Claude reads matching files:
 
 The cross-repo launch board at http://192.168.178.50:8090/ tracks website
 work as `track: website` tasks (W-prefixed ids) in
-`/home/david/projects/1_gwthpipeline520/end_to_end_plan_pipeline+gwth/launch_tracks.yaml`.
+`/home/david/projects/GWTH-launch-plan/launch_tracks.yaml`.
 
 **Whenever work in a GWTH-v2 session advances a website task (W1, W2, ...),
 record it before finishing the session:**
 
 ```bash
-python3 /home/david/projects/1_gwthpipeline520/scripts/update_launch_task.py \
+python3 /home/david/projects/GWTH-launch-plan/scripts/update_launch_task.py \
   <ID> --progress <0-100> --note "what moved"
 # add --status done when the task is complete
 ```
@@ -162,5 +162,5 @@ python3 /home/david/projects/1_gwthpipeline520/scripts/update_launch_task.py \
 - Never edit `launch_tracks.yaml` just to tick progress — the script is the
   only progress channel. Edit the tracks file only to change task
   definitions (title, summary, next_prompt, model, ordering).
-- Commit and push the resulting overlay change in the pipeline repo
-  (`cd /home/david/projects/1_gwthpipeline520`).
+- Commit and push the resulting overlay change in the launch-plan repo
+  (`cd /home/david/projects/GWTH-launch-plan`).
