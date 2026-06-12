@@ -170,7 +170,7 @@ Implement <feature name> for the GWTH v2 student learning platform. This is a Ne
 Before saving either file, verify:
 
 - [ ] The plan references the correct GWTH v2 tech stack (Next.js 16, React 19, TypeScript strict, Tailwind v4, shadcn/ui, Motion, Sonner, Shiki, mock data)
-- [ ] File paths use `src/` prefix and match the project's file structure from CLAUDE.md
+- [ ] File paths use `src/` prefix and match the project's file structure from `CLAUDE.md` and `.claude/rules/*.md`
 - [ ] The prompt is self-contained — a developer could implement it with no other context
 - [ ] Acceptance criteria are testable and specific (not vague like "looks good")
 - [ ] Architecture notes address RSC vs client component decisions explicitly
@@ -185,7 +185,7 @@ Before saving either file, verify:
 1. `cat C:\Projects\GWTH_V2\kanban\KANBAN_RUNNER.md` — load workflow rules
 2. List files in `C:\Projects\GWTH_V2\kanban\0_idea\` — identify the idea to process
 3. Read the idea file
-4. Analyze the idea against the GWTH v2 CLAUDE.md to understand affected components, routes, and lib functions
+4. Analyze the idea against `CLAUDE.md` plus all `.claude/rules/*.md` files to understand affected components, routes, and lib functions
 5. Write the plan file to `C:\Projects\GWTH_V2\kanban\1_planning\PLAN_YYYY-MM-DD_<slug>.md`, then append the Gate 1 review checklist (see global CLAUDE.md for format)
 6. Write the prompt file to `C:\Projects\GWTH_V2\kanban\1_planning\PROMPT_YYYY-MM-DD_<slug>.md`, then append the Gate 2 review checklist (see global CLAUDE.md for format)
 7. **Archive** (MOVE, not delete) the original idea file to `kanban/3_done/IDEA_YYYY-MM-DD_<slug>.md`
