@@ -1,5 +1,17 @@
 # Technology Decisions
 
+> **Superseded for the data layer, 2026-06-12:** Supabase is OUT for
+> application data (cost) — see
+> `docs/architecture/DECISION_2026-06-12_database-off-supabase.md`.
+> Persistence is self-hosted PostgreSQL + Prisma; Supabase Auth remains for
+> the beta only.
+
+> **Stale status note, 2026-05-05:** This February architecture record contains
+> historical USD/$37.50 pricing and earlier product assumptions. Current beta
+> product direction lives in `docs/product-source-of-truth-2026-05-04.md` and
+> `PRODUCT.md`; use GBP pricing and the GWTH Score language there unless a newer
+> dated source overrides it.
+
 > Detailed rationale for every technology choice in the GWTH v2 stack.
 > Each decision includes: what it is, why it was chosen, alternatives considered, MCP/AI-coding status, cost, and risks.
 >
@@ -35,61 +47,66 @@ Supabase Auth (powered by GoTrue) provides email/password authentication, social
 
 ### Why Chosen
 
-| Criterion | Score | Notes |
-|-----------|-------|-------|
-| Robustness | High | GoTrue is battle-tested (used by Supabase's 1M+ projects). Handles edge cases like account linking, email verification, password reset out of the box. |
-| AI-coding | Excellent | Supabase MCP allows Claude Code to manage auth configuration. Extensive documentation. Claude has deep training data on Supabase Auth patterns. |
-| Speed | Fast | JWT-based sessions. No database lookup on every request (JWT verified locally). |
-| Cost | Free | Included in Supabase free tier. 50,000 MAU limit. |
-| Security | Strong | Bcrypt password hashing. PKCE flow for OAuth. Configurable session duration. MFA support (future). |
+| Criterion  | Score     | Notes                                                                                                                                                  |
+| ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Robustness | High      | GoTrue is battle-tested (used by Supabase's 1M+ projects). Handles edge cases like account linking, email verification, password reset out of the box. |
+| AI-coding  | Excellent | Supabase MCP allows Claude Code to manage auth configuration. Extensive documentation. Claude has deep training data on Supabase Auth patterns.        |
+| Speed      | Fast      | JWT-based sessions. No database lookup on every request (JWT verified locally).                                                                        |
+| Cost       | Free      | Included in Supabase free tier. 50,000 MAU limit.                                                                                                      |
+| Security   | Strong    | Bcrypt password hashing. PKCE flow for OAuth. Configurable session duration. MFA support (future).                                                     |
 
 ### Implementation
 
 ```typescript
 // lib/supabase/server.ts — Server-side Supabase client
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 export async function createClient() {
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() { return cookieStore.getAll() },
+        getAll() {
+          return cookieStore.getAll();
+        },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options))
+            cookieStore.set(name, value, options),
+          );
         },
       },
-    }
-  )
+    },
+  );
 }
 ```
 
 ```typescript
 // lib/auth.ts — Updated auth abstraction (replaces mock)
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from "@/lib/supabase/server";
 
 export async function getCurrentUser() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return null
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
 
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
 
-  return { ...user, ...profile }
+  return { ...user, ...profile };
 }
 
 export async function requireAuth() {
-  const user = await getCurrentUser()
-  if (!user) redirect('/login')
-  return user
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+  return user;
 }
 ```
 
@@ -99,53 +116,57 @@ export async function requireAuth() {
 - **GitHub:** OAuth App via GitHub Settings. Straightforward setup.
 - **Email/Password:** Built-in. Email verification configurable (enable for production).
 
-### Middleware Integration
+### Proxy Integration
 
 ```typescript
-// middleware.ts — Updated to use Supabase Auth
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+// proxy.ts - Updated to use Supabase Auth
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({ request })
+export async function proxy(request: NextRequest) {
+  const response = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() { return request.cookies.getAll() },
+        getAll() {
+          return request.cookies.getAll();
+        },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value)
-            response.cookies.set(name, value, options)
-          })
+            request.cookies.set(name, value);
+            response.cookies.set(name, value, options);
+          });
         },
       },
-    }
-  )
+    },
+  );
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Redirect unauthenticated users from protected routes
-  if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
-    const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
-    return NextResponse.redirect(loginUrl)
+  if (!user && request.nextUrl.pathname.startsWith("/dashboard")) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  return response
+  return response;
 }
 ```
 
 ### Alternatives Considered
 
-| Alternative | Why Not |
-|-------------|---------|
+| Alternative               | Why Not                                                                                                                                                                                            |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Auth.js v5 (NextAuth)** | More widespread but: Credentials provider has edge cases with sessions, no unified MCP (separate from DB), more configuration complexity. Would require separate Prisma setup for session storage. |
-| **Better Auth** | Excellent TypeScript-first DX, but newer with smaller community. Less AI training data. No MCP. |
-| **Clerk** | Best DX in the industry, but $25/month at 1,000 MAU. Exceeds budget for auth alone. |
-| **Lucia Auth** | Deprecated — maintainer recommends building your own. |
+| **Better Auth**           | Excellent TypeScript-first DX, but newer with smaller community. Less AI training data. No MCP.                                                                                                    |
+| **Clerk**                 | Best DX in the industry, but $25/month at 1,000 MAU. Exceeds budget for auth alone.                                                                                                                |
+| **Lucia Auth**            | Deprecated — maintainer recommends building your own.                                                                                                                                              |
 
 ---
 
@@ -157,31 +178,31 @@ Managed PostgreSQL 15 hosted by Supabase. Includes PostgREST (auto-generated RES
 
 ### Why Chosen
 
-| Criterion | Score | Notes |
-|-----------|-------|-------|
-| Robustness | Excellent | PostgreSQL is the most robust open-source database. Supabase manages backups, upgrades, and availability. |
-| AI-coding | Excellent | Supabase MCP lets Claude Code create tables, write migrations, run queries, and inspect data directly. Claude has extensive PostgreSQL and Supabase training data. |
-| Speed | Fast | Connection pooling via Supavisor. Server in eu-central-1 (Frankfurt) — same region as Hetzner. |
-| Cost | Free → $25/mo | Free tier: 500 MB, unlimited API requests. Pro: $25/month for 8 GB, daily backups, 7-day PITR. |
-| Security | Strong | SSL connections enforced. RLS policies on every table. Encrypted at rest. SOC 2 Type II certified. |
+| Criterion  | Score         | Notes                                                                                                                                                              |
+| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Robustness | Excellent     | PostgreSQL is the most robust open-source database. Supabase manages backups, upgrades, and availability.                                                          |
+| AI-coding  | Excellent     | Supabase MCP lets Claude Code create tables, write migrations, run queries, and inspect data directly. Claude has extensive PostgreSQL and Supabase training data. |
+| Speed      | Fast          | Connection pooling via Supavisor. Server in eu-central-1 (Frankfurt) — same region as Hetzner.                                                                     |
+| Cost       | Free → $25/mo | Free tier: 500 MB, unlimited API requests. Pro: $25/month for 8 GB, daily backups, 7-day PITR.                                                                     |
+| Security   | Strong        | SSL connections enforced. RLS policies on every table. Encrypted at rest. SOC 2 Type II certified.                                                                 |
 
 ### Free Tier Capacity
 
 For 5,000 users, estimated database size:
 
-| Table | Rows (est.) | Size (est.) |
-|-------|------------|-------------|
-| profiles | 5,000 | ~2 MB |
-| lesson_progress | 50,000 (10/user avg) | ~5 MB |
-| lab_progress | 15,000 | ~2 MB |
-| bookmarks | 10,000 | ~1 MB |
-| notes | 5,000 | ~5 MB |
-| notifications | 25,000 | ~3 MB |
-| study_streaks | 5,000 | ~1 MB |
-| daily_activity | 100,000 | ~10 MB |
-| score_history | 50,000 | ~5 MB |
-| Content tables | ~200 rows | ~1 MB |
-| **Total** | | **~35 MB** |
+| Table           | Rows (est.)          | Size (est.) |
+| --------------- | -------------------- | ----------- |
+| profiles        | 5,000                | ~2 MB       |
+| lesson_progress | 50,000 (10/user avg) | ~5 MB       |
+| lab_progress    | 15,000               | ~2 MB       |
+| bookmarks       | 10,000               | ~1 MB       |
+| notes           | 5,000                | ~5 MB       |
+| notifications   | 25,000               | ~3 MB       |
+| study_streaks   | 5,000                | ~1 MB       |
+| daily_activity  | 100,000              | ~10 MB      |
+| score_history   | 50,000               | ~5 MB       |
+| Content tables  | ~200 rows            | ~1 MB       |
+| **Total**       |                      | **~35 MB**  |
 
 **500 MB is more than sufficient.** The database stores user data and metadata, not content (videos are on the filesystem, lesson markdown is synced from the pipeline).
 
@@ -232,15 +253,16 @@ Migrations are stored in `supabase/migrations/` and committed to git. The Supaba
 
 ### Alternatives Considered
 
-| Alternative | Why Not |
-|-------------|---------|
-| **Neon** | Excellent managed Postgres with branching. Has its own MCP. But no auth or storage — would need separate services, adding complexity. |
+| Alternative                        | Why Not                                                                                                                                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Neon**                           | Excellent managed Postgres with branching. Has its own MCP. But no auth or storage — would need separate services, adding complexity.                                           |
 | **Self-hosted Postgres (Coolify)** | Free, full control. But: you manage backups, upgrades, monitoring. No RLS tooling. No MCP integration for database inspection. The user explicitly preferred managed initially. |
-| **PlanetScale** | MySQL-based (not Postgres). No RLS. Deprecated free tier. |
+| **PlanetScale**                    | MySQL-based (not Postgres). No RLS. Deprecated free tier.                                                                                                                       |
 
 ### Exit Strategy
 
 If Supabase costs exceed budget:
+
 1. Export schema and data via `pg_dump`
 2. Import into self-hosted Postgres on Hetzner (via Coolify)
 3. Replace `@supabase/ssr` with direct `pg` client or Prisma
@@ -259,11 +281,11 @@ S3-compatible object storage integrated with Supabase Auth. Supports public and 
 
 ### Use Cases
 
-| Bucket | Access | Content |
-|--------|--------|---------|
-| `avatars` | Public (with transformation) | User profile photos |
-| `certificates` | Private (signed URLs) | Generated certificate PDFs |
-| `resources` | Private (authenticated) | Lab downloads, PDF resources |
+| Bucket         | Access                       | Content                      |
+| -------------- | ---------------------------- | ---------------------------- |
+| `avatars`      | Public (with transformation) | User profile photos          |
+| `certificates` | Private (signed URLs)        | Generated certificate PDFs   |
+| `resources`    | Private (authenticated)      | Lab downloads, PDF resources |
 
 ### Free Tier
 
@@ -530,6 +552,7 @@ Stripe handles subscription billing, payment processing, tax calculation (Stripe
 ### MCP Integration
 
 The `stripe/agent-toolkit` MCP server lets Claude Code:
+
 - Create and manage products/prices
 - Inspect subscriptions and invoices
 - Debug webhook events
@@ -561,13 +584,13 @@ Product: "GWTH — Applied AI Skills"
 
 ### Webhook Events to Handle
 
-| Event | Action |
-|-------|--------|
-| `checkout.session.completed` | Create profile record, set `subscription_state = 'month1'` |
-| `invoice.payment_succeeded` | Increment `payment_count`. Update `subscription_state`. After 3rd, switch to $7.50 price. |
-| `invoice.payment_failed` | Set `grace_period_end`. Show payment banner. Send Resend email. |
-| `customer.subscription.updated` | Sync `current_period_end`. Handle price changes. |
-| `customer.subscription.deleted` | Set `subscription_state = 'lapsed'`. Preserve all user data. |
+| Event                           | Action                                                                                    |
+| ------------------------------- | ----------------------------------------------------------------------------------------- |
+| `checkout.session.completed`    | Create profile record, set `subscription_state = 'month1'`                                |
+| `invoice.payment_succeeded`     | Increment `payment_count`. Update `subscription_state`. After 3rd, switch to $7.50 price. |
+| `invoice.payment_failed`        | Set `grace_period_end`. Show payment banner. Send Resend email.                           |
+| `customer.subscription.updated` | Sync `current_period_end`. Handle price changes.                                          |
+| `customer.subscription.deleted` | Set `subscription_state = 'lapsed'`. Preserve all user data.                              |
 
 ### Stripe Tax
 
@@ -579,10 +602,10 @@ Product: "GWTH — Applied AI Skills"
 
 ### Alternatives Considered
 
-| Alternative | Why Not |
-|-------------|---------|
-| **Paddle / LemonSqueezy** | Merchant of record (handles VAT for you) but: 5-8% per transaction vs. ~2.5% for Stripe + Tax. Worse developer experience. Less AI training data. No MCP. |
-| **Stripe Subscription Schedules** | Cleaner for the 3-phase pricing model but harder to debug. Simple `payment_count` approach with manual price update is more transparent. |
+| Alternative                       | Why Not                                                                                                                                                   |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Paddle / LemonSqueezy**         | Merchant of record (handles VAT for you) but: 5-8% per transaction vs. ~2.5% for Stripe + Tax. Worse developer experience. Less AI training data. No MCP. |
+| **Stripe Subscription Schedules** | Cleaner for the 3-phase pricing model but harder to debug. Simple `payment_count` approach with manual price update is more transparent.                  |
 
 ---
 
@@ -653,23 +676,23 @@ EOF
 
 ```typescript
 // lib/video.ts — Generate signed HLS URLs
-import crypto from 'crypto'
+import crypto from "crypto";
 
-const VIDEO_SECRET = process.env.VIDEO_SIGNING_SECRET!
-const VIDEO_BASE_URL = process.env.VIDEO_BASE_URL! // https://video.gwth.ai
+const VIDEO_SECRET = process.env.VIDEO_SIGNING_SECRET!;
+const VIDEO_BASE_URL = process.env.VIDEO_BASE_URL!; // https://video.gwth.ai
 
 /**
  * Generates a signed URL for an HLS master playlist.
  * URL expires after 4 hours to prevent link sharing.
  */
 export function getSignedVideoUrl(videoPath: string): string {
-  const expires = Math.floor(Date.now() / 1000) + (4 * 60 * 60) // 4 hours
+  const expires = Math.floor(Date.now() / 1000) + 4 * 60 * 60; // 4 hours
   const signature = crypto
-    .createHmac('sha256', VIDEO_SECRET)
+    .createHmac("sha256", VIDEO_SECRET)
     .update(`${videoPath}${expires}`)
-    .digest('hex')
+    .digest("hex");
 
-  return `${VIDEO_BASE_URL}/${videoPath}?expires=${expires}&sig=${signature}`
+  return `${VIDEO_BASE_URL}/${videoPath}?expires=${expires}&sig=${signature}`;
 }
 ```
 
@@ -721,7 +744,7 @@ Update the existing `VideoPlayer` component to use `hls.js`:
 
 ```typescript
 // components/shared/video-player.tsx — HLS-aware player
-import Hls from 'hls.js'
+import Hls from "hls.js";
 
 // hls.js handles adaptive bitrate selection automatically
 // Falls back to native HLS on Safari/iOS (no hls.js needed)
@@ -730,49 +753,52 @@ import Hls from 'hls.js'
 
 ### Protection Summary
 
-| Protection | What It Prevents |
-|-----------|-----------------|
-| Signed URLs (4h expiry) | Link sharing — shared links expire |
-| CORS (gwth.ai only) | Embedding player on other sites |
-| No download button | Casual "right-click save" |
+| Protection                   | What It Prevents                                             |
+| ---------------------------- | ------------------------------------------------------------ |
+| Signed URLs (4h expiry)      | Link sharing — shared links expire                           |
+| CORS (gwth.ai only)          | Embedding player on other sites                              |
+| No download button           | Casual "right-click save"                                    |
 | HLS segments (not full file) | Must download hundreds of .ts files and stitch them together |
-| Rate limiting | Automated bulk downloading |
+| Rate limiting                | Automated bulk downloading                                   |
 
 **What it does NOT prevent:** A determined user with dev tools can still capture segments. Full DRM (Widevine/FairPlay) would prevent this but costs $100+/month and adds significant complexity.
 
 ### Growth Path
 
-| Phase | Action | Cost |
-|-------|--------|------|
-| Launch | Self-hosted HLS on Hetzner (all 3 qualities: 480p/720p/1080p). ~720 GB on 2 TB disk. | Free |
-| 500+ concurrent viewers | Add Bunny CDN for edge caching | ~£3-5/mo |
-| Global audience | Evaluate Bunny Stream for built-in HLS + CDN | ~£10-15/mo |
-| Mobile app | Evaluate Mux for native SDK support | ~£50+/mo |
+| Phase                   | Action                                                                               | Cost       |
+| ----------------------- | ------------------------------------------------------------------------------------ | ---------- |
+| Launch                  | Self-hosted HLS on Hetzner (all 3 qualities: 480p/720p/1080p). ~720 GB on 2 TB disk. | Free       |
+| 500+ concurrent viewers | Add Bunny CDN for edge caching                                                       | ~£3-5/mo   |
+| Global audience         | Evaluate Bunny Stream for built-in HLS + CDN                                         | ~£10-15/mo |
+| Mobile app              | Evaluate Mux for native SDK support                                                  | ~£50+/mo   |
 
 ### Mobile App & Offline Viewing
 
 The current HLS architecture is the correct foundation for future offline video support, but offline playback with content protection requires DRM — which is a separate decision for the mobile app phase.
 
 **How offline viewing works with HLS:**
+
 - iOS supports HLS offline downloads natively via `AVAssetDownloadTask` (AVFoundation)
 - Android supports it via ExoPlayer's download manager
 - HLS segments (.ts files) can be cached on-device for playback without a network connection
 
 **The content protection tension:**
 
-| Approach | Offline? | Protected? | Cost |
-|----------|----------|-----------|------|
-| Current HLS + signed URLs | No (streaming only) | "Good enough" — signed URLs, CORS, no download button | Free |
-| HLS download without DRM | Yes | No — user has raw .ts files on device, trivially copyable | Free |
-| HLS + FairPlay (iOS) + Widevine (Android) | Yes | Yes — encrypted, device-locked, expiry-controlled | £100+/mo (Mux/Bitmovin) |
+| Approach                                  | Offline?            | Protected?                                                | Cost                    |
+| ----------------------------------------- | ------------------- | --------------------------------------------------------- | ----------------------- |
+| Current HLS + signed URLs                 | No (streaming only) | "Good enough" — signed URLs, CORS, no download button     | Free                    |
+| HLS download without DRM                  | Yes                 | No — user has raw .ts files on device, trivially copyable | Free                    |
+| HLS + FairPlay (iOS) + Widevine (Android) | Yes                 | Yes — encrypted, device-locked, expiry-controlled         | £100+/mo (Mux/Bitmovin) |
 
 **Why this doesn't need to be solved now:**
+
 - Signed URLs expire after 4 hours, preventing casual link sharing for streaming — adequate for web launch
 - Offline downloads are a mobile app feature (6+ months away)
-- DRM requires encrypted HLS packaging, which wraps the *same segments* we're already encoding — no wasted work
+- DRM requires encrypted HLS packaging, which wraps the _same segments_ we're already encoding — no wasted work
 - Revenue at the mobile app stage will justify the cost of a DRM-capable platform (Mux, Bitmovin)
 
 **Upgrade path when mobile app is built:**
+
 1. Keep existing HLS segments (already encoded at 480p/720p/1080p)
 2. Add DRM packaging step — encrypt segments with FairPlay (iOS) and Widevine (Android) keys
 3. Use a managed service (Mux or Bitmovin) for DRM key exchange and license management
@@ -797,17 +823,17 @@ Resend is a modern email delivery service with a developer-friendly API and Reac
 
 ### Use Cases
 
-| Email Type | Trigger | Template |
-|-----------|---------|----------|
-| Welcome | User signs up | Welcome message + how to get started |
-| Password reset | User requests reset | Reset link (6h expiry) |
-| Payment receipt | `invoice.payment_succeeded` | Receipt with amount and period |
-| Payment failed | `invoice.payment_failed` | Update payment method link |
-| Grace period reminder | Day 1, 7, 12 | Escalating urgency |
-| Lesson completed | Student marks complete | Encouragement + next lesson |
-| Study streak milestone | 7, 30, 60, 90 days | Achievement celebration |
-| Month unlocked | 2nd/3rd payment | New content available |
-| Score update | Weekly digest | Score changes, percentile |
+| Email Type             | Trigger                     | Template                             |
+| ---------------------- | --------------------------- | ------------------------------------ |
+| Welcome                | User signs up               | Welcome message + how to get started |
+| Password reset         | User requests reset         | Reset link (6h expiry)               |
+| Payment receipt        | `invoice.payment_succeeded` | Receipt with amount and period       |
+| Payment failed         | `invoice.payment_failed`    | Update payment method link           |
+| Grace period reminder  | Day 1, 7, 12                | Escalating urgency                   |
+| Lesson completed       | Student marks complete      | Encouragement + next lesson          |
+| Study streak milestone | 7, 30, 60, 90 days          | Achievement celebration              |
+| Month unlocked         | 2nd/3rd payment             | New content available                |
+| Score update           | Weekly digest               | Score changes, percentile            |
 
 ### Cost
 
@@ -857,11 +883,11 @@ Sentry captures runtime errors, performance data, and session replays from both 
 
 ### Why Chosen
 
-| Criterion | Score | Notes |
-|-----------|-------|-------|
-| Robustness | Industry standard | Used by millions of apps. Handles Next.js SSR + client errors. |
-| AI-coding | Excellent | Sentry MCP (`@sentry/mcp-server`) lets Claude Code inspect errors, stack traces, and performance data directly. |
-| Cost | Free | Free tier: 5,000 errors/month, 10,000 transactions/month. |
+| Criterion  | Score             | Notes                                                                                                           |
+| ---------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| Robustness | Industry standard | Used by millions of apps. Handles Next.js SSR + client errors.                                                  |
+| AI-coding  | Excellent         | Sentry MCP (`@sentry/mcp-server`) lets Claude Code inspect errors, stack traces, and performance data directly. |
+| Cost       | Free              | Free tier: 5,000 errors/month, 10,000 transactions/month.                                                       |
 
 ### Configuration
 
@@ -876,6 +902,7 @@ SENTRY_PROJECT=gwth-v2
 ```
 
 Sentry's Next.js SDK automatically instruments:
+
 - Server-side rendering errors
 - Client-side React errors (caught by error boundaries)
 - API route errors
@@ -898,14 +925,14 @@ Self-hosted uptime monitoring tool. Checks endpoints at configurable intervals a
 
 ### Monitors to Configure
 
-| Monitor | URL | Interval | Alert |
-|---------|-----|----------|-------|
-| Website | `https://gwth.ai` | 60s | Telegram |
-| API health | `https://gwth.ai/api/health` | 60s | Telegram |
-| Video server | `https://video.gwth.ai/health` | 60s | Telegram |
-| Supabase | DB connection check | 300s | Telegram |
-| Stripe webhooks | Webhook endpoint | 300s | Telegram |
-| Pipeline (P520) | `http://192.168.178.50:8088/health` | 300s | Telegram |
+| Monitor         | URL                                 | Interval | Alert    |
+| --------------- | ----------------------------------- | -------- | -------- |
+| Website         | `https://gwth.ai`                   | 60s      | Telegram |
+| API health      | `https://gwth.ai/api/health`        | 60s      | Telegram |
+| Video server    | `https://video.gwth.ai/health`      | 60s      | Telegram |
+| Supabase        | DB connection check                 | 300s     | Telegram |
+| Stripe webhooks | Webhook endpoint                    | 300s     | Telegram |
+| Pipeline (P520) | `http://192.168.178.50:8088/health` | 300s     | Telegram |
 
 ---
 
@@ -975,35 +1002,38 @@ flowchart LR
 ### GitHub Actions Workflows
 
 **Main CI (`ci.yml`):**
+
 - **Trigger:** Push to master, PRs against master
 - **Concurrency:** Cancels in-progress runs for same ref
 - **Check job:** npm audit → lint → typecheck → knip (unused code) → unit tests → build
 - **Deploy jobs:** Parallel deploy to Hetzner (Coolify API) and P520 (SSH tinker) — only on master push after check passes
 
 **CodeQL (`codeql.yml`):**
+
 - **Trigger:** Push to master, PRs, weekly Monday scan (cron)
 - **Purpose:** Semantic security analysis for JavaScript/TypeScript vulnerabilities
 
 **Dependabot (`dependabot.yml`):**
+
 - **Purpose:** Automatic PRs for npm and GitHub Actions dependency vulnerabilities
 - **Schedule:** Weekly, grouped by type (production deps, dev deps, GitHub Actions)
 
 ### Local Automation (Claude Code Hooks)
 
-| Hook | Trigger | What It Does |
-|------|---------|-------------|
-| Stop hook | Claude Code finishes a response | Runs `npm test`, auto-commits if passing, blocks if failing |
-| PostToolUse hook | Write or Edit tool used on .ts/.tsx | Runs ESLint on the changed file |
+| Hook             | Trigger                             | What It Does                                                |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------- |
+| Stop hook        | Claude Code finishes a response     | Runs `npm test`, auto-commits if passing, blocks if failing |
+| PostToolUse hook | Write or Edit tool used on .ts/.tsx | Runs ESLint on the changed file                             |
 
 Config: `.claude/settings.local.json`, scripts in `.claude/hooks/`
 
 ### Local Automation (Husky + lint-staged)
 
-| Hook | What It Does |
-|------|-------------|
+| Hook         | What It Does                                                                            |
+| ------------ | --------------------------------------------------------------------------------------- |
 | `pre-commit` | Runs lint-staged (ESLint fix on .ts/.tsx, Prettier on .json/.md/.css) + full test suite |
-| `commit-msg` | Enforces conventional commit format via commitlint |
-| `post-merge` | Auto-runs `npm install` after pulling changes with new dependencies |
+| `commit-msg` | Enforces conventional commit format via commitlint                                      |
+| `post-merge` | Auto-runs `npm install` after pulling changes with new dependencies                     |
 
 ### Cost
 
@@ -1028,12 +1058,12 @@ Issue tracking and project management. Already in use on the free tier for anoth
 
 ### Structure
 
-| Level | Purpose | Example |
-|-------|---------|---------|
-| Project | GWTH v2 | — |
-| Cycle | 2-week sprint | "Phase 2: Auth + Database" |
-| Epic | Major feature | "Subscription & Payment Flow" |
-| Issue | Individual task | "Implement Stripe webhook handler for invoice.payment_succeeded" |
+| Level   | Purpose         | Example                                                          |
+| ------- | --------------- | ---------------------------------------------------------------- |
+| Project | GWTH v2         | —                                                                |
+| Cycle   | 2-week sprint   | "Phase 2: Auth + Database"                                       |
+| Epic    | Major feature   | "Subscription & Payment Flow"                                    |
+| Issue   | Individual task | "Implement Stripe webhook handler for invoice.payment_succeeded" |
 
 ---
 
@@ -1043,17 +1073,17 @@ Issue tracking and project management. Already in use on the free tier for anoth
 
 As a UK/EU-serving platform collecting personal data:
 
-| Requirement | How We Handle It |
-|------------|-----------------|
-| **Lawful basis for processing** | Consent (signup) and contract performance (subscription) |
-| **Right to access** | "Export my data" in settings — generates JSON export of all user data |
-| **Right to deletion** | "Delete account" in settings — cascading delete of all user data from Supabase |
-| **Right to portability** | Data export includes progress, notes, bookmarks in standard JSON format |
-| **Data minimisation** | Only collect name, email, bio. No unnecessary tracking. |
-| **Cookie consent** | Not required — Plausible doesn't use cookies. Supabase Auth uses httpOnly session cookies (exempt as "strictly necessary"). |
-| **Privacy policy** | Required page at `/privacy` — describe what data is collected and why |
-| **DPA with processors** | Supabase (DPA available), Stripe (DPA available), Resend (DPA available) |
-| **Data breach notification** | Sentry alerts + Telegram for monitoring. 72-hour ICO notification if breach occurs. |
+| Requirement                     | How We Handle It                                                                                                            |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **Lawful basis for processing** | Consent (signup) and contract performance (subscription)                                                                    |
+| **Right to access**             | "Export my data" in settings — generates JSON export of all user data                                                       |
+| **Right to deletion**           | "Delete account" in settings — cascading delete of all user data from Supabase                                              |
+| **Right to portability**        | Data export includes progress, notes, bookmarks in standard JSON format                                                     |
+| **Data minimisation**           | Only collect name, email, bio. No unnecessary tracking.                                                                     |
+| **Cookie consent**              | Not required — Plausible doesn't use cookies. Supabase Auth uses httpOnly session cookies (exempt as "strictly necessary"). |
+| **Privacy policy**              | Required page at `/privacy` — describe what data is collected and why                                                       |
+| **DPA with processors**         | Supabase (DPA available), Stripe (DPA available), Resend (DPA available)                                                    |
+| **Data breach notification**    | Sentry alerts + Telegram for monitoring. 72-hour ICO notification if breach occurs.                                         |
 
 ### Technical Implementation
 
@@ -1061,16 +1091,16 @@ As a UK/EU-serving platform collecting personal data:
 // API route: /api/user/export
 // Returns all user data as downloadable JSON
 export async function GET(request: NextRequest) {
-  const user = await requireAuth()
-  const supabase = await createClient()
+  const user = await requireAuth();
+  const supabase = await createClient();
 
   const [profile, progress, notes, bookmarks, streaks] = await Promise.all([
-    supabase.from('profiles').select('*').eq('id', user.id).single(),
-    supabase.from('lesson_progress').select('*').eq('user_id', user.id),
-    supabase.from('notes').select('*').eq('user_id', user.id),
-    supabase.from('bookmarks').select('*').eq('user_id', user.id),
-    supabase.from('study_streaks').select('*').eq('user_id', user.id),
-  ])
+    supabase.from("profiles").select("*").eq("id", user.id).single(),
+    supabase.from("lesson_progress").select("*").eq("user_id", user.id),
+    supabase.from("notes").select("*").eq("user_id", user.id),
+    supabase.from("bookmarks").select("*").eq("user_id", user.id),
+    supabase.from("study_streaks").select("*").eq("user_id", user.id),
+  ]);
 
   return Response.json({
     exported_at: new Date().toISOString(),
@@ -1079,24 +1109,24 @@ export async function GET(request: NextRequest) {
     notes: notes.data,
     bookmarks: bookmarks.data,
     study_streaks: streaks.data,
-  })
+  });
 }
 
 // API route: /api/user/delete
 // Cascading delete of all user data
 export async function DELETE(request: NextRequest) {
-  const user = await requireAuth()
-  const supabase = await createServiceRoleClient() // Service role for cascading delete
+  const user = await requireAuth();
+  const supabase = await createServiceRoleClient(); // Service role for cascading delete
 
   // Cancel Stripe subscription first
   if (user.stripe_subscription_id) {
-    await stripe.subscriptions.cancel(user.stripe_subscription_id)
+    await stripe.subscriptions.cancel(user.stripe_subscription_id);
   }
 
   // Delete Supabase auth user (cascades to profiles and all related tables via FK)
-  await supabase.auth.admin.deleteUser(user.id)
+  await supabase.auth.admin.deleteUser(user.id);
 
-  return Response.json({ success: true })
+  return Response.json({ success: true });
 }
 ```
 
@@ -1155,19 +1185,19 @@ export async function DELETE(request: NextRequest) {
 
 **npm:** `isomorphic-dompurify`. Docs: [github.com/cure53/DOMPurify](https://github.com/cure53/DOMPurify)
 
-#### Security Headers — Middleware
+#### Security Headers - Proxy
 
-**What:** Comprehensive security headers applied to all responses via `src/middleware.ts`:
+**What:** Comprehensive security headers applied to all responses via `src/proxy.ts`:
 
-| Header | Value |
-|--------|-------|
-| X-DNS-Prefetch-Control | on |
-| X-Frame-Options | SAMEORIGIN |
-| X-Content-Type-Options | nosniff |
-| Referrer-Policy | strict-origin-when-cross-origin |
-| Permissions-Policy | camera=(), microphone=(), geolocation=() |
-| Strict-Transport-Security | max-age=63072000; includeSubDomains; preload |
-| Content-Security-Policy | default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-ancestors 'none' |
+| Header                    | Value                                                                                                                                                                                          |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| X-DNS-Prefetch-Control    | on                                                                                                                                                                                             |
+| X-Frame-Options           | SAMEORIGIN                                                                                                                                                                                     |
+| X-Content-Type-Options    | nosniff                                                                                                                                                                                        |
+| Referrer-Policy           | strict-origin-when-cross-origin                                                                                                                                                                |
+| Permissions-Policy        | camera=(), microphone=(), geolocation=()                                                                                                                                                       |
+| Strict-Transport-Security | max-age=63072000; includeSubDomains; preload                                                                                                                                                   |
+| Content-Security-Policy   | default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-ancestors 'none' |
 
 **Future:** Replace hand-rolled CSP with Nosecone (`@nosecone/next`) for type-safe security header management once backend integrations require CSP modifications.
 
@@ -1245,10 +1275,10 @@ export async function DELETE(request: NextRequest) {
 
 **What:** Automated quality gates that run at Claude Code lifecycle events.
 
-| Hook | File | Trigger | Action |
-|------|------|---------|--------|
-| Stop | `.claude/hooks/auto-commit.sh` | Claude finishes response | Run tests → auto-commit if passing, block if failing |
-| PostToolUse | `.claude/hooks/lint-on-edit.sh` | Write or Edit on .ts/.tsx | Run ESLint on changed file |
+| Hook        | File                            | Trigger                   | Action                                               |
+| ----------- | ------------------------------- | ------------------------- | ---------------------------------------------------- |
+| Stop        | `.claude/hooks/auto-commit.sh`  | Claude finishes response  | Run tests → auto-commit if passing, block if failing |
+| PostToolUse | `.claude/hooks/lint-on-edit.sh` | Write or Edit on .ts/.tsx | Run ESLint on changed file                           |
 
 **Context management:** `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=60` set in `~/.bash_profile` to auto-compact at 60% context usage.
 
@@ -1256,15 +1286,15 @@ export async function DELETE(request: NextRequest) {
 
 See [Quality Tools Research](../research-quality-tools-2025-2026.md) for full details on each tool.
 
-| Tool | Category | Priority | When |
-|------|----------|----------|------|
-| **Sentry** | Error tracking + session replay | HIGH | Phase 4 (launch) |
-| **PostHog** | Product analytics + feature flags + A/B testing | HIGH | Phase 4 (launch) |
-| **Arcjet** | Bot protection + rate limiting + WAF | HIGH | Phase 4 (security hardening) |
-| **Storybook** | Component development + visual documentation | HIGH | Phase 5 (growth) |
-| **k6** | Load testing (before launch) | HIGH | Phase 4 (beta) |
-| **Nosecone** | Type-safe security headers (replace hand-rolled CSP) | MEDIUM | Phase 4 (when CSP needs updating) |
-| **Stryker** | Mutation testing (test quality) | HIGH | Phase 5 (growth) |
-| **Chromatic** | Visual regression testing (with Storybook) | MEDIUM | Phase 5 (growth) |
-| **Partytown** | Third-party script offloading | HIGH | Phase 5 (if analytics scripts impact CWV) |
-| **Biome** | ESLint + Prettier replacement (10-25x faster) | MEDIUM | Long-term (when ESLint causes friction) |
+| Tool          | Category                                             | Priority | When                                      |
+| ------------- | ---------------------------------------------------- | -------- | ----------------------------------------- |
+| **Sentry**    | Error tracking + session replay                      | HIGH     | Phase 4 (launch)                          |
+| **PostHog**   | Product analytics + feature flags + A/B testing      | HIGH     | Phase 4 (launch)                          |
+| **Arcjet**    | Bot protection + rate limiting + WAF                 | HIGH     | Phase 4 (security hardening)              |
+| **Storybook** | Component development + visual documentation         | HIGH     | Phase 5 (growth)                          |
+| **k6**        | Load testing (before launch)                         | HIGH     | Phase 4 (beta)                            |
+| **Nosecone**  | Type-safe security headers (replace hand-rolled CSP) | MEDIUM   | Phase 4 (when CSP needs updating)         |
+| **Stryker**   | Mutation testing (test quality)                      | HIGH     | Phase 5 (growth)                          |
+| **Chromatic** | Visual regression testing (with Storybook)           | MEDIUM   | Phase 5 (growth)                          |
+| **Partytown** | Third-party script offloading                        | HIGH     | Phase 5 (if analytics scripts impact CWV) |
+| **Biome**     | ESLint + Prettier replacement (10-25x faster)        | MEDIUM   | Long-term (when ESLint causes friction)   |
