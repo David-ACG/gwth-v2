@@ -1,0 +1,333 @@
+/*
+ * Public credential verification page in the FDE journal register (see
+ * DESIGN_FDE.md §5.7). The page is the register's highlight-panel showcase:
+ * a paper panel with an ink border centred on the sage ground, mono
+ * credential metadata, a huge serif score, and the system's only shadow,
+ * the hard teal offset on hover.
+ *
+ * All colours are scoped custom properties on .shell with a .dark override
+ * block, so the site-wide theme toggle flips the whole page.
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+  --v-dash: rgba(26, 28, 24, 0.18);
+  --v-dash-active: #2c4a47;
+
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+  --v-dash: rgba(236, 232, 210, 0.18);
+  --v-dash-active: #6ea877;
+
+  color-scheme: dark;
+}
+
+.page {
+  margin: 0 auto;
+  width: min(1100px, calc(100% - 2.5rem));
+}
+
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* ---------------- Centred stage ---------------- */
+
+.stage {
+  min-height: calc(100vh - 8rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(3rem, 6vw, 5rem) 0;
+}
+
+.stageInner {
+  margin: 0 auto;
+  width: min(52rem, calc(100% - 2.5rem));
+}
+
+.kicker {
+  composes: mono;
+  text-align: center;
+}
+
+.stageTitle {
+  margin: 0.9rem auto 2.25rem;
+  max-width: 24ch;
+  text-align: center;
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.stageTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-ochre);
+}
+
+/* ---------------- Highlight panel (§5.7) ---------------- */
+
+.credentialPanel {
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);
+  padding: 2rem 1.75rem;
+  transition: box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.credentialPanel:hover {
+  box-shadow: 0.4rem 0.4rem 0 0 var(--v-teal);
+}
+
+.panelGrid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 48rem) {
+  .panelGrid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3rem;
+  }
+}
+
+.credentialId {
+  composes: mono;
+}
+
+.statusVerified {
+  white-space: nowrap;
+}
+
+.statusVerified i {
+  font-style: normal;
+  color: var(--v-dash-active);
+  margin-right: 0.35rem;
+}
+
+.learnerName {
+  margin-top: 1rem;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.credentialBody {
+  margin-top: 0.9rem;
+  max-width: 52ch;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.credentialRow {
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.scoreBlock .mono {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.credentialNumber {
+  font-size: 3.4rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--v-teal);
+}
+
+:global(.dark) .shell .credentialNumber {
+  color: var(--v-ochre);
+}
+
+.credentialFacts {
+  display: grid;
+  gap: 0.45rem;
+  text-align: right;
+  font-size: 0.88rem;
+}
+
+.credentialFacts span {
+  color: var(--v-muted);
+  margin-right: 0.6rem;
+}
+
+.credentialFacts strong {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.updatedLine {
+  composes: mono;
+  margin-top: 1.5rem;
+}
+
+/* ---------------- QR column ---------------- */
+
+.qrColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .qrColumn {
+    align-items: flex-end;
+  }
+}
+
+.qrFrame {
+  border: 1px solid var(--v-line);
+  background: var(--v-cream);
+  padding: 0.5rem;
+  border-radius: 0;
+}
+
+.qrFrame img {
+  display: block;
+  border-radius: 0;
+}
+
+/* ---------------- Buttons ---------------- */
+
+.buttonSolid,
+.buttonOutline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0;
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.buttonSolid {
+  background: var(--v-action);
+  color: var(--v-action-text);
+  border: 1px solid var(--v-action);
+}
+
+.buttonSolid:hover {
+  background: var(--v-teal-deep);
+  border-color: var(--v-teal-deep);
+}
+
+.buttonOutline {
+  background: transparent;
+  color: var(--v-ink);
+  border: 1px solid var(--v-ink);
+}
+
+.buttonOutline:hover {
+  background: var(--v-ink);
+  color: var(--v-bg);
+}
+
+.buttonSolid:focus-visible,
+.buttonOutline:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+/* ---------------- Disabled (beta) state ---------------- */
+
+.disabledPanel {
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);
+  padding: clamp(2.5rem, 6vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+  text-align: center;
+  transition: box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.disabledPanel:hover {
+  box-shadow: 0.4rem 0.4rem 0 0 var(--v-teal);
+}
+
+.disabledPanel h1 {
+  margin-top: 1rem;
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.disabledPanel h1 em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-ochre);
+}
+
+.disabledPanel p {
+  margin: 1rem auto 0;
+  max-width: 38rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.disabledActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.75rem;
+}
