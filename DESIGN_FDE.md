@@ -598,17 +598,17 @@ are). Copy is done (W2) — do not rewrite text while re-skinning.
 |---|---|---|---|
 | Homepage | `/` | **Done** — IS the exemplar | — |
 | Marketing inner pages | `/labs`, `/lessons`, `/pricing`, `/for-teams`, `/about`, `/news` | **Done** via `*-fde` modules | Masthead band, card rows, dispatch band |
-| Remaining public pages | `/newsletter`, `/contact`, `/why-gwth`, `/tech-radar`, `/verify/[id]`, `/privacy`, `/terms` | To re-skin (W10 step 2) | Masthead, section heads, body measure; `/verify` uses the §5.7 highlight panel |
-| Public nav + footer | all public pages | To re-skin (W10) | §5.9 recipe |
+| Remaining public pages | `/newsletter`, `/contact`, `/why-gwth`, `/tech-radar`, `/verify/[id]`, `/privacy`, `/terms` | **Done** (2026-06-12, W10) via `*-fde` modules | Masthead, section heads, body measure; `/verify` uses the §5.7 highlight panel |
+| Public nav + footer | all public pages | **Done** (2026-06-12, W10) | §5.9 recipe |
 | Auth | `/login`, `/signup`, `/forgot-password` | **New build to FDE** (W1, Codex; gated on this guide) | Centred paper panel on `--v-bg`, ink border, serif H1 + mono kicker, §5.3 buttons, square inputs |
-| Dashboard home | `/dashboard` | Re-skin (W10 step 3) | Paper cards, section heads, dash-progress, mono metadata |
-| Courses index | `/courses` | Re-skin (W10) | Card grid with flavour rotation, issue framing per module |
-| Course detail | `/course/[slug]` | Re-skin (W10) | Journal-issue framing, dash-progress, capstone blocks |
-| Lesson viewer | `/course/[slug]/lesson/[lessonSlug]` | Re-skin (W10) | Serif reading measure (62ch), mono lesson IDs ("M1 L04"), pull quotes for key claims, hairline section rules |
-| Labs (dashboard) | `/labs`, `/labs/[slug]` (dashboard group) | Re-skin (W10) | Card grid + flavour tops; lab steps as dash-progress |
-| Progress | `/progress` | Re-skin (W10) | Stat list (§5.6) + dash-progress; no rings |
-| Profile / Settings | `/profile`, `/settings` | Re-skin (W10) | Functional-as-is: forms keep structure; tokens, type, square inputs, hairline group dividers |
-| Bookmarks / Notifications | `/bookmarks`, `/notifications` | Re-skin (W10) | Hairline list rows (FAQ-row anatomy without the toggle) |
+| Dashboard home | `/dashboard` | **Done** (2026-06-12, W10; all three subscription variants) | Paper cards, section heads, dash-progress, mono metadata |
+| Courses index | `/courses` | n/a — redirects to the single course | — |
+| Course detail | `/course/[slug]` | **Done** (2026-06-12, W10) | Journal-issue framing, dash-progress, capstone blocks |
+| Lesson viewer | `/course/[slug]/lesson/[lessonSlug]` | **Done** (2026-06-12, W10) | Serif reading measure (62ch), mono lesson IDs ("M1 L04"), pull quotes for key claims, hairline section rules |
+| Labs (dashboard) | `/labs/[slug]` (dashboard group) | **Done** (2026-06-12, W10) | Section head + mono meta; lab steps as dash-progress |
+| Progress | `/progress` | **Done** (2026-06-12, W10) | Stat list (§5.6) + dash-progress; no rings |
+| Profile / Settings | `/profile`, `/settings` | **Done** (2026-06-12, W10) | Functional-as-is: forms keep structure; tokens, type, square inputs, hairline group dividers |
+| Bookmarks / Notifications | `/bookmarks`, `/notifications` | **Done** (2026-06-12, W10) | Hairline list rows (FAQ-row anatomy without the toggle) |
 | /guide (tester guide) | planned | **New build to FDE** (W5) | Journal-issue layout, FAQ rows, dispatch band for "how to give feedback" CTA |
 | Feedback form | planned (W5) | **New build to FDE** | Paper panel, square inputs, §5.3 buttons |
 | Admin (David-facing) | planned (W4) | **New build, same register** | Same tokens and type; denser tables allowed; functional priority — recipes apply where cheap |
@@ -699,13 +699,16 @@ them — partial palettes drift.
 
 1. ~~Homepage promoted to `/`~~ — **done** (2026-06-12; review routes
    `/home-fde` and `/home-claude` deleted).
-2. Remaining public/marketing: nav + footer, then `/newsletter`,
-   `/contact`, `/why-gwth`, `/tech-radar`, `/verify`, `/privacy`, `/terms`.
-   Copy is locked (W2); pricing copy and no-checkout rule locked (W8).
-3. Dashboard suite: `/dashboard`, `/courses`, `/course/[slug]`, lesson
-   viewer, `/labs/[slug]`, `/progress`, `/profile`, `/settings`,
-   `/bookmarks`, `/notifications`. Commit per surface; site stays
-   shippable throughout; `npm test` green after each group.
+2. ~~Remaining public/marketing: nav + footer, then `/newsletter`,
+   `/contact`, `/why-gwth`, `/tech-radar`, `/verify`, `/privacy`,
+   `/terms`~~ — **done** (2026-06-12, commit 0df913a). Copy locked (W2);
+   pricing copy and no-checkout rule locked (W8).
+3. ~~Dashboard suite: `/dashboard`, `/course/[slug]`, lesson viewer,
+   `/labs/[slug]`, `/progress`, `/profile`, `/settings`, `/bookmarks`,
+   `/notifications`~~ — **done** (2026-06-12, commit cc9a7f3). Dashboard
+   visual work can use `ENABLE_DEV_MOCK_USER=true` (dev-only,
+   NODE_ENV-guarded in `src/lib/supabase/middleware.ts`) to render the
+   mock learner without login.
 4. Auth and `/guide`: built FDE-native by W1/W5 — confirm conformance
    rather than re-skin.
 
