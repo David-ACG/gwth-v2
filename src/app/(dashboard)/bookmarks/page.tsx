@@ -2,11 +2,11 @@ import type { Metadata } from "next"
 import { getBookmarks } from "@/lib/data/bookmarks"
 import { getCourses } from "@/lib/data/courses"
 import { getLabs } from "@/lib/data/labs"
-import { Card, CardContent } from "@/components/ui/card"
 import { EmptyState } from "@/components/shared/empty-state"
-import { Badge } from "@/components/ui/badge"
-import { Bookmark, BookOpen, FlaskConical } from "lucide-react"
+import { Bookmark } from "lucide-react"
+import { formatRelativeDate } from "@/lib/utils"
 import Link from "next/link"
+import styles from "./bookmarks-fde.module.css"
 
 export const metadata: Metadata = {
   title: "Bookmarks",
@@ -57,13 +57,11 @@ export default async function BookmarksPage() {
   }).filter(Boolean)
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Bookmarks</h1>
-        <p className="mt-1 text-muted-foreground">
-          Your saved lessons and labs
-        </p>
-      </div>
+    <div className={styles.shell} data-section="bookmarks">
+      <header className={styles.head}>
+        <h1 className={styles.title}>Bookmarks</h1>
+        <p className={styles.mono}>Your saved lessons and labs</p>
+      </header>
 
       {items.length === 0 ? (
         <EmptyState
@@ -73,27 +71,20 @@ export default async function BookmarksPage() {
           action={{ label: "Start Learning", href: "/course/applied-ai-skills" }}
         />
       ) : (
-        <div className="space-y-2">
+        <div className={styles.list}>
           {items.map((item) => (
-            <Link key={item!.id} href={item!.href}>
-              <Card className="transition-colors hover:bg-muted/50">
-                <CardContent className="flex items-center gap-4 p-4">
-                  {item!.type === "lesson" ? (
-                    <BookOpen className="size-5 text-primary" />
-                  ) : (
-                    <FlaskConical className="size-5 text-accent" />
-                  )}
-                  <div className="flex-1">
-                    <p className="font-medium">{item!.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {item!.subtitle}
-                    </p>
-                  </div>
-                  <Badge variant="outline" className="capitalize">
-                    {item!.type}
-                  </Badge>
-                </CardContent>
-              </Card>
+            <Link key={item!.id} href={item!.href} className={styles.row}>
+              <span
+                className={`${styles.typeLabel} ${
+                  item!.type === "lesson" ? styles.typeLesson : styles.typeLab
+                }`}
+              >
+                {item!.type}
+              </span>
+              <p className={styles.rowTitle}>{item!.title}</p>
+              <p className={styles.rowMeta}>
+                {item!.subtitle} · saved {formatRelativeDate(item!.createdAt)}
+              </p>
             </Link>
           ))}
         </div>

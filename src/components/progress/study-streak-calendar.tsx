@@ -8,9 +8,29 @@ interface StudyStreakCalendarProps {
   className?: string
 }
 
+/** Cell colour for an activity count, using the FDE dash tokens. */
+function heatStyle(count: number): React.CSSProperties {
+  if (count === 0) return { background: "var(--v-dash)" }
+  if (count === 1) return { background: "var(--v-dash-active)", opacity: 0.4 }
+  if (count === 2) return { background: "var(--v-dash-active)", opacity: 0.65 }
+  return { background: "var(--v-dash-active)" }
+}
+
+const MONO_LABEL: React.CSSProperties = {
+  fontFamily: "var(--font-jetbrains), ui-monospace, monospace",
+  fontSize: "0.7rem",
+  fontWeight: 500,
+  letterSpacing: "0.16em",
+  textTransform: "uppercase",
+  color: "var(--v-muted)",
+}
+
 /**
- * GitHub-style activity heatmap showing daily study activity.
- * Displays the last 365 days of activity with color intensity.
+ * Activity heatmap showing daily study activity over the last 365 days.
+ * Styled to the FDE journal register (DESIGN_FDE.md): square cells coloured
+ * by the --v-dash / --v-dash-active tokens, mono metadata, hairline rule.
+ * Must be rendered inside an FDE token scope (a `.shell` palette block).
+ * Used only by the /progress page.
  */
 export function StudyStreakCalendar({
   streak,
@@ -32,26 +52,32 @@ export function StudyStreakCalendar({
   }
 
   return (
-    <div className={cn("space-y-3", className)}>
-      <div className="flex items-center justify-between">
-        <div className="space-y-0.5">
-          <h3 className="text-sm font-medium">Study Streak</h3>
-          <p className="text-xs text-muted-foreground">
+    <div className={cn("space-y-4", className)}>
+      <div
+        className="flex items-baseline justify-between gap-4 flex-wrap pb-3"
+        style={{ borderBottom: "1px solid var(--v-line-soft)" }}
+      >
+        <div>
+          <h3
+            style={{
+              fontSize: "1.05rem",
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Study Streak
+          </h3>
+          <p style={MONO_LABEL} className="mt-1">
             {streak.currentStreak} day streak · {streak.longestStreak} day best
           </p>
         </div>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1.5" style={MONO_LABEL}>
           <span>Less</span>
           {[0, 1, 2, 3].map((level) => (
-            <div
+            <span
               key={level}
-              className={cn(
-                "size-2.5 rounded-sm",
-                level === 0 && "bg-muted",
-                level === 1 && "bg-primary/25",
-                level === 2 && "bg-primary/50",
-                level === 3 && "bg-primary"
-              )}
+              className="inline-block size-2.5"
+              style={heatStyle(level)}
             />
           ))}
           <span>More</span>
@@ -64,13 +90,8 @@ export function StudyStreakCalendar({
             {week.map((day, dayIndex) => (
               <div
                 key={dayIndex}
-                className={cn(
-                  "size-2.5 rounded-sm",
-                  day.count === 0 && "bg-muted",
-                  day.count === 1 && "bg-primary/25",
-                  day.count === 2 && "bg-primary/50",
-                  day.count >= 3 && "bg-primary"
-                )}
+                className="size-2.5"
+                style={heatStyle(day.count)}
                 title={`${day.date.toLocaleDateString()}: ${day.count} items`}
               />
             ))}

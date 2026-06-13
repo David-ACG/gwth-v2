@@ -1,30 +1,20 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import {
   getAllCourseProgress,
   getAllLessonProgress,
   getStreak,
   getDynamicScore,
 } from "@/lib/data/progress"
+import { ENABLE_GWTH_SCORE } from "@/lib/config"
 import { getCourses } from "@/lib/data/courses"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { ProgressRing } from "@/components/progress/progress-ring"
 import { StudyStreakCalendar } from "@/components/progress/study-streak-calendar"
-import { EmptyState } from "@/components/shared/empty-state"
-import { Badge } from "@/components/ui/badge"
-import {
-  BarChart3,
-  Trophy,
-  TrendingUp,
-  Brain,
-  Target,
-  Zap,
-} from "lucide-react"
 import { formatDuration, formatProgress, getGradeFromScore } from "@/lib/utils"
+import styles from "./progress-fde.module.css"
 
 export const metadata: Metadata = {
   title: "Progress",
-  description: "Track your learning progress, dynamic score, and achievements.",
+  description: "Track your learning progress and achievements.",
 }
 
 export default async function ProgressPage() {
@@ -53,152 +43,146 @@ export default async function ProgressPage() {
       : null
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Progress</h1>
-        <p className="mt-1 text-muted-foreground">
-          Track your learning journey and dynamic score
-        </p>
+    <div className={styles.shell} data-section="progress">
+      <div className={styles.pageHead}>
+        <h1 className={styles.pageTitle}>Progress</h1>
+        <p className={styles.mono}>Your record</p>
       </div>
+      <p className={styles.pageLead}>
+        {ENABLE_GWTH_SCORE
+          ? "Track your learning journey and GWTH Score"
+          : "Track your learning journey and course progress"}
+      </p>
 
-      {/* Dynamic Score */}
-      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
-        <CardContent className="p-6">
-          <h2 className="text-lg font-semibold">Dynamic Score</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
+      {ENABLE_GWTH_SCORE && (
+        <div className={styles.scorePanel}>
+          <p className={styles.mono}>GWTH Score</p>
+          <p className={styles.pageLead} style={{ marginTop: "0.4rem" }}>
             Your score reflects current competence. It grows as you learn and
             decays if updated content is not reviewed.
           </p>
-          <div className="mt-4 flex flex-col gap-6 sm:flex-row sm:items-center">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary">
+          <div className="mt-5 flex flex-col gap-6 sm:flex-row sm:items-center">
+            <div>
+              <div className={styles.scoreValue}>
                 {dynamicScore.overallScore}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className={styles.mono}>
                 of {dynamicScore.maxPossibleScore} possible
               </p>
             </div>
-            <div className="flex-1 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <Target className="size-3.5 text-muted-foreground" />
-                  <span className="text-sm font-semibold">
-                    {dynamicScore.percentile}%
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">Percentile</p>
+            <div className={`flex-1 ${styles.scoreFacts}`}>
+              <div>
+                <p className={styles.mono}>Percentile</p>
+                <p className={styles.scoreFactValue}>
+                  {dynamicScore.percentile}%
+                </p>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <Brain className="size-3.5 text-muted-foreground" />
-                  <span className="text-sm font-semibold">
-                    {Math.round(dynamicScore.curiosityIndex * 100)}%
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">Curiosity</p>
+              <div>
+                <p className={styles.mono}>Curiosity</p>
+                <p className={styles.scoreFactValue}>
+                  {Math.round(dynamicScore.curiosityIndex * 100)}%
+                </p>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <Zap className="size-3.5 text-muted-foreground" />
-                  <span className="text-sm font-semibold">
-                    {dynamicScore.consistencyScore}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">Consistency</p>
+              <div>
+                <p className={styles.mono}>Consistency</p>
+                <p className={styles.scoreFactValue}>
+                  {dynamicScore.consistencyScore}
+                </p>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <TrendingUp className="size-3.5 text-muted-foreground" />
-                  <span className="text-sm font-semibold">
-                    +{dynamicScore.improvementRate}%
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">Improvement</p>
+              <div>
+                <p className={styles.mono}>Improvement</p>
+                <p className={styles.scoreFactValue}>
+                  +{dynamicScore.improvementRate}%
+                </p>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      )}
 
-      {/* Stats overview */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-muted-foreground">Lessons Completed</p>
-            <p className="mt-1 text-3xl font-bold">{completedLessons}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-muted-foreground">Time Spent</p>
-            <p className="mt-1 text-3xl font-bold">
-              {formatDuration(Math.round(totalTimeSpent / 60))}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-muted-foreground">Current Streak</p>
-            <p className="mt-1 text-3xl font-bold">
-              {streak.currentStreak} days
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-muted-foreground">Avg Quiz Score</p>
-            <p className="mt-1 text-3xl font-bold">
-              {avgQuizScore !== null ? `${avgQuizScore}%` : "—"}
-            </p>
-          </CardContent>
-        </Card>
+      {/* Stats overview (§5.6 stat list) */}
+      <div className={styles.statList}>
+        <div className={styles.statListRow}>
+          <span className={styles.statListValue}>{completedLessons}</span>
+          <span className={styles.statListLabel}>Lessons Completed</span>
+          <span className={styles.mono}>All time</span>
+        </div>
+        <div className={styles.statListRow}>
+          <span className={styles.statListValue}>
+            {formatDuration(Math.round(totalTimeSpent / 60))}
+          </span>
+          <span className={styles.statListLabel}>Time Spent</span>
+          <span className={styles.mono}>All time</span>
+        </div>
+        <div className={styles.statListRow}>
+          <span className={styles.statListValue}>
+            {streak.currentStreak} days
+          </span>
+          <span className={styles.statListLabel}>Current Streak</span>
+          <span className={styles.mono}>
+            Longest {streak.longestStreak} days
+          </span>
+        </div>
+        <div className={styles.statListRow}>
+          <span className={styles.statListValue}>
+            {avgQuizScore !== null ? `${avgQuizScore}%` : "·"}
+          </span>
+          <span className={styles.statListLabel}>Avg Quiz Score</span>
+          <span className={styles.mono}>
+            {avgQuizScore !== null ? "Best attempts" : "No quizzes yet"}
+          </span>
+        </div>
       </div>
 
       {/* Study streak */}
-      <Card>
-        <CardContent className="p-6">
-          <StudyStreakCalendar streak={streak} />
-        </CardContent>
-      </Card>
+      <div className={styles.streakPanel}>
+        <StudyStreakCalendar streak={streak} />
+      </div>
 
       {/* Course progress */}
-      <section>
-        <h2 className="mb-4 text-xl font-semibold">Course Progress</h2>
+      <section className={styles.section}>
+        <div className={styles.sectionHead}>
+          <h2 className={styles.sectionTitle}>Course Progress</h2>
+          <p className={styles.mono}>Issue by issue</p>
+        </div>
         {courseProgress.length === 0 ? (
-          <EmptyState
-            icon={BarChart3}
-            title="No progress yet"
-            description="Start the course to track your progress here."
-            action={{
-              label: "Start the Course",
-              href: "/course/applied-ai-skills",
-            }}
-          />
+          <div className={styles.empty}>
+            <p className={styles.emptyTitle}>No progress yet</p>
+            <p className={styles.emptyBody}>
+              Start the course to track your progress here.
+            </p>
+            <div className="mt-5">
+              <Link
+                href="/course/applied-ai-skills"
+                className={styles.buttonOutline}
+              >
+                Start the Course
+              </Link>
+            </div>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4">
+          <div>
             {courseProgress.map((cp) => {
               const course = courses.find((c) => c.id === cp.courseId)
               if (!course) return null
               return (
-                <Card key={cp.courseId}>
-                  <CardContent className="flex items-center gap-4 p-6">
-                    <ProgressRing value={cp.progress} size={64}>
-                      <span className="text-xs font-bold">
-                        {formatProgress(cp.progress)}
-                      </span>
-                    </ProgressRing>
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{course.title}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {cp.completedLessons}/{cp.totalLessons} lessons
-                      </p>
-                      <Progress
-                        value={cp.progress * 100}
-                        className="mt-2 h-1.5"
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
+                <div key={cp.courseId} className={styles.courseRow}>
+                  <div className="flex items-baseline justify-between gap-4 flex-wrap">
+                    <h3 className={styles.courseTitle}>{course.title}</h3>
+                    <span className={styles.coursePct}>
+                      {formatProgress(cp.progress)}
+                    </span>
+                  </div>
+                  <p className={`${styles.courseMeta} mt-1`}>
+                    {cp.completedLessons} of {cp.totalLessons} lessons
+                  </p>
+                  <div className="mt-4">
+                    <DashProgress
+                      value={cp.completedLessons}
+                      total={cp.totalLessons}
+                    />
+                  </div>
+                </div>
               )
             })}
           </div>
@@ -206,53 +190,77 @@ export default async function ProgressPage() {
       </section>
 
       {/* Certificates placeholder */}
-      <section>
-        <h2 className="mb-4 text-xl font-semibold">Certificates</h2>
-        <EmptyState
-          icon={Trophy}
-          title="No certificates yet"
-          description="Complete the course to earn your certificate."
-          action={{
-            label: "Continue Learning",
-            href: "/course/applied-ai-skills",
-          }}
-        />
+      <section className={styles.section}>
+        <div className={styles.sectionHead}>
+          <h2 className={styles.sectionTitle}>Certificates</h2>
+          <p className={styles.mono}>Credential</p>
+        </div>
+        <div className={styles.empty}>
+          <p className={styles.emptyTitle}>No certificates yet</p>
+          <p className={styles.emptyBody}>
+            Complete the course to earn your certificate.
+          </p>
+          <div className="mt-5">
+            <Link
+              href="/course/applied-ai-skills"
+              className={styles.buttonOutline}
+            >
+              Continue Learning
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* Quiz scores */}
       {lessonProgress.filter((lp) => lp.bestQuizScore !== null).length > 0 && (
-        <section>
-          <h2 className="mb-4 text-xl font-semibold">Quiz Scores</h2>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <section className={styles.section}>
+          <div className={styles.sectionHead}>
+            <h2 className={styles.sectionTitle}>Quiz Scores</h2>
+            <p className={styles.mono}>Best attempts</p>
+          </div>
+          <div className={styles.quizGrid}>
             {lessonProgress
               .filter((lp) => lp.bestQuizScore !== null)
               .map((lp) => {
                 const grade = getGradeFromScore(lp.bestQuizScore!)
                 return (
-                  <Card key={lp.lessonId}>
-                    <CardContent className="flex items-center justify-between p-4">
-                      <div>
-                        <p className="text-sm font-medium">
-                          Lesson {lp.lessonId}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {lp.quizAttempts} attempt
-                          {lp.quizAttempts !== 1 ? "s" : ""}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold">
-                          {lp.bestQuizScore}%
-                        </span>
-                        <Badge variant="outline">Grade {grade}</Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <div key={lp.lessonId} className={styles.quizRow}>
+                    <div>
+                      <p className={styles.quizTitle}>Lesson {lp.lessonId}</p>
+                      <p className={styles.quizMeta}>
+                        {lp.quizAttempts} attempt
+                        {lp.quizAttempts !== 1 ? "s" : ""}
+                      </p>
+                    </div>
+                    <div className="flex items-baseline gap-3">
+                      <span className={styles.quizScore}>
+                        {lp.bestQuizScore}%
+                      </span>
+                      <span className={styles.mono}>Grade {grade}</span>
+                    </div>
+                  </div>
                 )
               })}
           </div>
         </section>
       )}
+    </div>
+  )
+}
+
+/**
+ * §4.5 dash-progress strip. aria-hidden; always rendered next to text that
+ * states the same fact ("4 of 12 lessons").
+ */
+function DashProgress({ value, total }: { value: number; total: number }) {
+  const segs = Math.max(1, Math.min(total, 24))
+  const filled =
+    total === 0 ? 0 : Math.round((Math.max(0, Math.min(value, total)) / total) * segs)
+  return (
+    <div className={styles.dashes} aria-hidden="true">
+      {Array.from({ length: segs }, (_, dash) => (
+        <span key={dash} data-active={dash < filled ? "true" : undefined} />
+      ))}
     </div>
   )
 }

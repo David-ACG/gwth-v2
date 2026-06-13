@@ -1,0 +1,372 @@
+/*
+ * Progress page in the FDE journal register (see DESIGN_FDE.md). Stat-list
+ * rows (§5.6), dash-progress strips (§4.5) instead of rings and bars, a
+ * square-cell hairline streak calendar, paper cards with hairline rules.
+ *
+ * All colours are scoped custom properties on .shell with a .dark override
+ * block, so the site-wide theme toggle flips the whole page.
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+  --v-dash: rgba(26, 28, 24, 0.18);
+  --v-dash-active: #2c4a47;
+
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+  margin: -1rem;
+  padding: 1.5rem 2rem 2.5rem;
+}
+
+@media (min-width: 48rem) {
+  .shell {
+    margin: -1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .shell {
+    margin: -2rem;
+  }
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+  --v-dash: rgba(236, 232, 210, 0.18);
+  --v-dash-active: #6ea877;
+
+  color-scheme: dark;
+}
+
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* ---------------- Page head ---------------- */
+
+.pageHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  border-bottom: 1px solid var(--v-ink);
+  padding-bottom: 1rem;
+}
+
+.pageTitle {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.pageLead {
+  margin-top: 0.85rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+  max-width: 38rem;
+}
+
+/* ---------------- Section heads (§5.2) ---------------- */
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  border-bottom: 1px solid var(--v-ink);
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.sectionTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-ochre);
+}
+
+.section {
+  margin-top: 3rem;
+}
+
+/* ---------------- Stat list (§5.6) ---------------- */
+
+.statList {
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--v-line);
+}
+
+.statListRow {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1.25rem;
+  border-bottom: 1px solid var(--v-line);
+  padding: 0.9rem 0;
+}
+
+.statListValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--v-ochre);
+  font-variant-numeric: tabular-nums;
+}
+
+.statListLabel {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
+/* ---------------- GWTH Score panel (flag-gated) ---------------- */
+
+.scorePanel {
+  margin-top: 2rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);
+  padding: 1.5rem 1.6rem;
+}
+
+.scoreValue {
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--v-teal);
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.dark) .shell .scoreValue {
+  color: var(--v-ochre);
+}
+
+.scoreFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.5rem;
+}
+
+@media (min-width: 40rem) {
+  .scoreFacts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.scoreFactValue {
+  margin-top: 0.2rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+/* ---------------- Dash progress (§4.5) ---------------- */
+
+.dashes {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.dashes span {
+  height: 3px;
+  flex: 1;
+  background: var(--v-dash);
+}
+
+.dashes span[data-active="true"] {
+  background: var(--v-dash-active);
+}
+
+/* ---------------- Course progress rows ---------------- */
+
+.courseRow {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.25rem 1.4rem;
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.courseRow:hover {
+  border-color: var(--v-ink);
+}
+
+.courseRow + .courseRow {
+  margin-top: 1rem;
+}
+
+.courseTitle {
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.courseMeta {
+  font-size: 0.9rem;
+  color: var(--v-soft);
+}
+
+.coursePct {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--v-ochre);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------- Streak calendar panel ---------------- */
+
+.streakPanel {
+  margin-top: 1.75rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.25rem 1.4rem 1.4rem;
+}
+
+/* ---------------- Quiz rows ---------------- */
+
+.quizGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .quizGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .quizGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.quizRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 0.9rem 1.1rem;
+}
+
+.quizTitle {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.quizMeta {
+  margin-top: 0.1rem;
+  font-size: 0.82rem;
+  color: var(--v-muted);
+}
+
+.quizScore {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-ochre);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------- Empty state ---------------- */
+
+.empty {
+  border: 1px solid var(--v-line);
+  background: var(--v-surface);
+  padding: 2.25rem 1.5rem;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: 1.18rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.emptyBody {
+  margin-top: 0.4rem;
+  font-size: 0.93rem;
+  color: var(--v-soft);
+}
+
+.buttonOutline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.3rem;
+  border-radius: 0;
+  text-decoration: none;
+  background: transparent;
+  color: var(--v-ink);
+  border: 1px solid var(--v-ink);
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.buttonOutline:hover {
+  background: var(--v-ink);
+  color: var(--v-bg);
+}
+
+.buttonOutline:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}

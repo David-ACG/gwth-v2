@@ -3,19 +3,18 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getCourse } from "@/lib/data/courses"
 import { getCourseProgress } from "@/lib/data/progress"
-import { getMockUser, canAccessMonth } from "@/lib/auth"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { StatusBadge } from "@/components/progress/status-badge"
 import { formatDuration, formatProgress } from "@/lib/utils"
-import { BookOpen, Clock, Lock, Star } from "lucide-react"
+import { Lock } from "lucide-react"
 import { MONTH_CONFIGS } from "@/lib/config"
+import type { LessonStatus } from "@/lib/types"
+import styles from "./course-fde.module.css"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -39,21 +38,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const COURSE_DASH_COUNT = 24
+
+/** Status rendered as colour + glyph + text, never colour alone (§5.5). */
+const STATUS_DISPLAY: Record<
+  Exclude<LessonStatus, "locked">,
+  { glyph: string; label: string; className: string | undefined }
+> = {
+  completed: { glyph: "✓", label: "Done", className: styles.statusDone },
+  "in-progress": {
+    glyph: "▸",
+    label: "In progress",
+    className: styles.statusActive,
+  },
+  available: {
+    glyph: "○",
+    label: "Not started",
+    className: styles.statusPending,
+  },
+}
+
 /**
  * Course detail page showing sections accordion with lesson list,
  * month indicators, optional lesson badges, and access gating.
+ * FDE journal register: issue framing per month, hairline lesson rows,
+ * dash-progress for course completion (DESIGN_FDE.md §4.4, §4.5, §5.8).
  */
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = await params
   const [course, progress, user] = await Promise.all([
     getCourse(slug),
     getCourseProgress(slug),
-    getMockUser(),
+    getDashboardUser(),
   ])
 
   if (!course) notFound()
-
-  const state = user?.subscriptionState ?? "visitor"
 
   const totalLessons = course.sections.reduce(
     (sum, s) => sum + s.lessons.length,
@@ -65,8 +84,12 @@ export default async function CourseDetailPage({ params }: PageProps) {
     month: month as 1 | 2 | 3,
     config: MONTH_CONFIGS.find((m) => m.month === month)!,
     sections: course.sections.filter((s) => s.month === month),
-    canAccess: canAccessMonth(state, month as 1 | 2 | 3),
+    canAccess: user ? canUserAccessMonth(user, month as 1 | 2 | 3) : false,
   }))
+
+  const progressDashesFilled = progress
+    ? Math.round(progress.progress * COURSE_DASH_COUNT)
+    : 0
 
   return (
     <>
@@ -87,59 +110,55 @@ export default async function CourseDetailPage({ params }: PageProps) {
         }}
       />
 
-      <div className="space-y-6">
+      <div className={styles.shell} data-section="course-detail">
         {/* Course header */}
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {course.title}
-          </h1>
-          <p className="mt-2 text-lg text-muted-foreground">
-            {course.description}
-          </p>
-          <div className="mt-4 flex items-center gap-6 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <BookOpen className="size-4" />
-              {totalLessons} lessons
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="size-4" />
-              {formatDuration(course.estimatedDuration)}
-            </span>
-            <span className="flex items-center gap-1.5">
-              3 months
-            </span>
+        <header>
+          <div className={styles.head}>
+            <h1 className={styles.title}>{course.title}</h1>
+            <p className={styles.mono}>Course</p>
           </div>
+          <p className={styles.lead}>{course.description}</p>
+          <p className={styles.metaRow}>
+            {totalLessons} lessons · {formatDuration(course.estimatedDuration)}{" "}
+            · 3 months
+          </p>
           {progress && (
-            <div className="mt-4 max-w-sm space-y-1">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Progress</span>
-                <span className="font-medium">
-                  {formatProgress(progress.progress)} ·{" "}
-                  {progress.completedLessons}/{progress.totalLessons} lessons
-                </span>
+            <div className={styles.progressWrap}>
+              <div className={styles.dashes} aria-hidden="true">
+                {Array.from({ length: COURSE_DASH_COUNT }, (_, dash) => (
+                  <span
+                    key={dash}
+                    data-active={
+                      dash < progressDashesFilled ? "true" : undefined
+                    }
+                  />
+                ))}
               </div>
-              <Progress value={progress.progress * 100} className="h-2" />
+              <p className={styles.progressText}>
+                {formatProgress(progress.progress)} ·{" "}
+                {progress.completedLessons}/{progress.totalLessons} lessons
+              </p>
             </div>
           )}
-        </div>
+        </header>
 
-        {/* Month-grouped sections */}
+        {/* Month-grouped sections, framed as journal issues (§4.4) */}
         {sectionsByMonth.map(({ month, config, sections, canAccess }) => (
-          <div key={month} className="space-y-3">
-            {/* Month header */}
-            <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold">
-                Month {month}: {config.title}
-              </h2>
+          <section key={month} className={styles.issue}>
+            <div className={styles.issueHead}>
+              <p className={styles.issueKicker}>
+                Issue 0{month} · Month {month}
+              </p>
               {!canAccess && (
-                <Badge variant="secondary" className="gap-1">
-                  <Lock className="size-3" />
+                <p className={styles.lockedTag}>
+                  <Lock className="size-3" aria-hidden="true" />
                   Locked
-                </Badge>
+                </p>
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
-              {config.subtitle} — {config.mandatoryLessons} mandatory
+            <h2 className={styles.issueTitle}>{config.title}</h2>
+            <p className={styles.issueSub}>
+              {config.subtitle} · {config.mandatoryLessons} mandatory
               {config.optionalLessons > 0 &&
                 ` + ${config.optionalLessons} optional`}{" "}
               lessons
@@ -148,113 +167,114 @@ export default async function CourseDetailPage({ params }: PageProps) {
             {/* Sections accordion */}
             <Accordion
               type="multiple"
-              defaultValue={
-                canAccess ? sections.map((s) => s.id) : []
-              }
-              className="space-y-2"
+              defaultValue={canAccess ? sections.map((s) => s.id) : []}
+              className={styles.accordion}
             >
               {sections.map((section) => (
                 <AccordionItem
                   key={section.id}
                   value={section.id}
-                  className="rounded-lg border px-4"
+                  className={styles.accItem}
                 >
-                  <AccordionTrigger className="text-base font-semibold hover:no-underline">
-                    <div className="flex items-center gap-3">
-                      <span>{section.title}</span>
-                      <Badge
-                        variant="secondary"
-                        className="text-xs font-normal"
-                      >
-                        {section.lessons.length} lessons
-                      </Badge>
-                      {section.isOptional && (
-                        <Badge
-                          variant="outline"
-                          className="gap-1 text-xs font-normal"
-                        >
-                          <Star className="size-3" />
-                          Optional
-                        </Badge>
-                      )}
-                    </div>
+                  <AccordionTrigger className={styles.accTrigger}>
+                    <span>{section.title}</span>
+                    <span className={styles.accTriggerMeta}>
+                      {section.lessons.length} lessons
+                      {section.isOptional && " · Optional"}
+                    </span>
                   </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-1 pb-2">
-                      {section.lessons.map((lesson) => {
-                        const isLocked = !canAccess || lesson.status === "locked"
-                        return (
-                          <div key={lesson.id}>
-                            {isLocked ? (
-                              <div className="flex items-center justify-between rounded-md px-3 py-2 text-sm text-muted-foreground">
-                                <div className="flex items-center gap-3">
-                                  <span>{lesson.order}.</span>
-                                  <span>{lesson.title}</span>
-                                  {lesson.isOptional && (
-                                    <Badge
-                                      variant="outline"
-                                      className="text-xs"
-                                    >
-                                      {lesson.optionalTrack}
-                                    </Badge>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-xs">
-                                    {formatDuration(lesson.duration)}
-                                  </span>
-                                  <Lock className="size-3.5" />
-                                </div>
-                              </div>
-                            ) : (
-                              <Link
-                                href={`/course/${course.slug}/lesson/${lesson.slug}`}
-                                className="flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted"
-                              >
-                                <div className="flex items-center gap-3">
-                                  <span className="text-muted-foreground">
-                                    {lesson.order}.
-                                  </span>
-                                  <span>{lesson.title}</span>
-                                  {lesson.isOptional && (
-                                    <Badge
-                                      variant="outline"
-                                      className="text-xs"
-                                    >
-                                      {lesson.optionalTrack}
-                                    </Badge>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-xs text-muted-foreground">
-                                    {formatDuration(lesson.duration)}
-                                  </span>
-                                  <StatusBadge status={lesson.status} />
-                                </div>
-                              </Link>
+                  <AccordionContent className={styles.accContent}>
+                    {section.lessons.map((lesson) => {
+                      const isLocked =
+                        !canAccess || lesson.status === "locked"
+                      const lessonId = `M${month} L${String(
+                        lesson.order
+                      ).padStart(2, "0")}`
+                      const inner = (
+                        <>
+                          <span className={styles.lessonId}>{lessonId}</span>
+                          <span className={styles.lessonTitle}>
+                            {lesson.title}
+                            {lesson.isOptional && (
+                              <span className={styles.lessonTrackTag}>
+                                {lesson.optionalTrack}
+                              </span>
                             )}
-                          </div>
-                        )
-                      })}
-                    </div>
+                          </span>
+                          <span className={styles.lessonDuration}>
+                            {formatDuration(lesson.duration)}
+                          </span>
+                          {isLocked ? (
+                            <span
+                              className={`${styles.status} ${styles.statusLocked}`}
+                            >
+                              <Lock
+                                className="size-3"
+                                aria-hidden="true"
+                              />
+                              Locked
+                            </span>
+                          ) : (
+                            <span
+                              className={`${styles.status} ${
+                                STATUS_DISPLAY[
+                                  lesson.status as Exclude<
+                                    LessonStatus,
+                                    "locked"
+                                  >
+                                ]?.className ?? styles.statusPending
+                              }`}
+                            >
+                              <span className={styles.glyph} aria-hidden="true">
+                                {STATUS_DISPLAY[
+                                  lesson.status as Exclude<
+                                    LessonStatus,
+                                    "locked"
+                                  >
+                                ]?.glyph ?? "○"}
+                              </span>
+                              {STATUS_DISPLAY[
+                                lesson.status as Exclude<
+                                  LessonStatus,
+                                  "locked"
+                                >
+                              ]?.label ?? "Not started"}
+                            </span>
+                          )}
+                        </>
+                      )
+                      return isLocked ? (
+                        <div
+                          key={lesson.id}
+                          className={styles.lessonRow}
+                          data-locked="true"
+                        >
+                          {inner}
+                        </div>
+                      ) : (
+                        <Link
+                          key={lesson.id}
+                          href={`/course/${course.slug}/lesson/${lesson.slug}`}
+                          className={styles.lessonRow}
+                        >
+                          {inner}
+                        </Link>
+                      )
+                    })}
                   </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
 
-            {/* Capstone callout */}
-            <div className="rounded-lg bg-muted/50 p-4">
-              <p className="text-xs font-medium text-muted-foreground">
-                Capstone Project
-              </p>
-              <p className="mt-1 text-sm font-semibold">
-                {config.capstoneName}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+            {/* Capstone callout (§4.4: hairline + bold ink lead-in) */}
+            <div className={styles.capstone}>
+              <p className={styles.capstoneKicker}>Capstone Project</p>
+              <p className={styles.capstoneName}>{config.capstoneName}</p>
+              <p className={styles.capstoneBody}>
                 {config.capstoneDescription}
               </p>
             </div>
-          </div>
+          </section>
         ))}
       </div>
     </>

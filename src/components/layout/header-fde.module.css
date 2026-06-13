@@ -1,0 +1,228 @@
+/*
+ * FDE journal register skin for the dashboard header (DESIGN_FDE.md §5.9,
+ * W10 step 3). Palette block copied WHOLE from home-fde.module.css per §8
+ * (partial palettes drift), with color-scheme per the labs-fde convention.
+ *
+ * .shell is applied to the sticky <header> AND to the portaled user
+ * dropdown content (Radix portals mount at <body>, outside the header,
+ * so they need their own token declaration root).
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+  --v-dash: rgba(26, 28, 24, 0.18);
+  --v-dash-active: #2c4a47;
+
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+  --v-dash: rgba(236, 232, 210, 0.18);
+  --v-dash-active: #6ea877;
+
+  color-scheme: dark;
+}
+
+/* ---------------- Header bar ---------------- */
+
+/* Solid var(--v-bg) ground comes from .shell; no backdrop-blur in FDE. */
+.header {
+  border-bottom: 1px solid var(--v-line);
+}
+
+/* ---------------- Icon buttons (mobile menu, theme toggle, mobile search) ---------------- */
+/* Descendant of .shell so the compound selector outranks the shadcn ghost
+   hover utilities without !important (public-nav convention). */
+
+.shell .iconButton {
+  border-radius: 0;
+  border: 1px solid var(--v-line);
+  background: transparent;
+  color: var(--v-ink);
+}
+
+.shell .iconButton:hover {
+  background: var(--v-surface);
+  color: var(--v-ink);
+  border-color: var(--v-ink);
+}
+
+.shell .iconButton:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* ---------------- Search trigger (square hairline field) ---------------- */
+/* Desktop-only; the responsive display lives here (not Tailwind's
+   `hidden sm:inline-flex`) so the module recipe cannot be overridden by
+   the same-layer utility. */
+
+.searchTrigger {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2rem;
+  padding: 0 0.65rem;
+  border: 1px solid var(--v-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--v-muted);
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.searchTrigger:hover {
+  color: var(--v-ink);
+  border-color: var(--v-ink);
+}
+
+.searchTrigger:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+@media (min-width: 640px) {
+  .searchTrigger {
+    display: inline-flex;
+  }
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--v-line-soft);
+  border-radius: 0;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--v-muted);
+}
+
+/* ---------------- Avatar trigger ---------------- */
+
+.shell .avatarButton {
+  border-radius: 0;
+  border: 1px solid var(--v-line);
+  background: transparent;
+  padding: 0;
+}
+
+.shell .avatarButton:hover {
+  border-color: var(--v-ink);
+  background: transparent;
+}
+
+.shell .avatarButton:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.shell .avatar {
+  border-radius: 0;
+}
+
+.shell .avatarImage {
+  border-radius: 0;
+}
+
+.shell .avatarFallback {
+  border-radius: 0;
+  background: var(--v-teal);
+  color: var(--v-cream);
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+/* ---------------- User dropdown menu (portaled) ---------------- */
+
+.shell.menu {
+  background: var(--v-surface);
+  color: var(--v-ink);
+  border: 1px solid var(--v-line);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0.4rem;
+}
+
+.menuName {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.menuMeta {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  color: var(--v-muted);
+}
+
+.menu :global([data-slot="dropdown-menu-item"]) {
+  border-radius: 0;
+  font-size: 0.92rem;
+  color: var(--v-ink);
+}
+
+.menu :global([data-slot="dropdown-menu-item"][data-highlighted]) {
+  background: var(--v-bg);
+  color: var(--v-ink);
+}
+
+.menu :global([data-slot="dropdown-menu-separator"]) {
+  background: var(--v-line-soft);
+}
+
+.shell .menuDanger,
+.menu :global([data-slot="dropdown-menu-item"][data-highlighted]).menuDanger {
+  color: var(--v-rust);
+}

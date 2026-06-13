@@ -1,16 +1,14 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { getMockUser } from "@/lib/auth"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { getDashboardUser } from "@/lib/auth"
 import { SettingsForm } from "@/components/settings/settings-form"
 import {
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
   GRACE_PERIOD_DAYS,
+  ENABLE_BILLING,
 } from "@/lib/config"
-import { CreditCard, AlertTriangle, ExternalLink } from "lucide-react"
+import { BillingActions } from "@/components/billing/billing-actions"
+import styles from "./settings-fde.module.css"
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -22,116 +20,130 @@ function getSubscriptionLabel(state: string): string {
   const labels: Record<string, string> = {
     visitor: "No Account",
     registered: "Free Account",
-    month1: "Month 1 — Active",
-    month2: "Month 2 — Active",
-    month3: "Month 3 — Active",
-    ongoing: "Ongoing — Active",
-    lapsed: "Lapsed — Payment Required",
+    month1: "Month 1 · Active",
+    month2: "Month 2 · Active",
+    month3: "Month 3 · Active",
+    ongoing: "Ongoing · Active",
+    lapsed: "Lapsed · Payment Required",
   }
   return labels[state] ?? state
 }
 
-/** Returns the badge variant for a subscription state */
-function getSubscriptionVariant(
-  state: string
-): "default" | "secondary" | "destructive" | "outline" {
-  if (state === "lapsed") return "destructive"
-  if (["month1", "month2", "month3", "ongoing"].includes(state))
-    return "default"
-  return "secondary"
+/** Subscription state as colour + glyph + text (no rounded badge). */
+function SubscriptionStatus({ state }: { state: string }) {
+  const label = getSubscriptionLabel(state)
+  if (state === "lapsed") {
+    return <span className={styles.statusWarm}>▲ {label}</span>
+  }
+  if (["month1", "month2", "month3", "ongoing"].includes(state)) {
+    return <span className={styles.statusActive}>✓ {label}</span>
+  }
+  return <span className={styles.statusMuted}>○ {label}</span>
 }
 
 export default async function SettingsPage() {
-  const user = await getMockUser()
+  const user = await getDashboardUser()
   const state = user?.subscriptionState ?? "visitor"
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-        <p className="mt-1 text-muted-foreground">
-          Manage your account, subscription, and notification preferences
-        </p>
+    <div className={styles.shell} data-section="settings">
+      <div className={styles.pageHead}>
+        <h1 className={styles.pageTitle}>Settings</h1>
+        <p className={styles.mono}>Account</p>
       </div>
+      <p className={styles.pageLead}>
+        Manage your account, subscription, and notification preferences
+      </p>
 
       {/* Subscription Management */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CreditCard className="size-5" />
-            Subscription
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Current Plan</p>
-              <p className="text-xs text-muted-foreground">
-                {state === "registered"
-                  ? "Free labs access only"
-                  : state === "ongoing"
-                    ? `Full course access · £${ONGOING_MONTHLY_PRICE.toFixed(2)}/month`
-                    : ["month1", "month2", "month3"].includes(state)
-                      ? `Course access · £${COURSE_MONTHLY_PRICE.toFixed(2)}/month`
-                      : "No active subscription"}
-              </p>
-            </div>
-            <Badge variant={getSubscriptionVariant(state)}>
-              {getSubscriptionLabel(state)}
-            </Badge>
+      <section className={styles.group}>
+        <div className={styles.groupHead}>
+          <h2 className={styles.groupTitle}>Subscription</h2>
+          <p className={styles.mono}>Billing</p>
+        </div>
+
+        <div className={styles.fieldRow}>
+          <div>
+            <p className={styles.fieldLabel}>Current Plan</p>
+            <p className={styles.fieldHint}>
+              {state === "registered"
+                ? "Free labs access only"
+                : state === "ongoing"
+                  ? `Full course access · £${ONGOING_MONTHLY_PRICE.toFixed(2)}/month`
+                  : ["month1", "month2", "month3"].includes(state)
+                    ? `Course access · £${COURSE_MONTHLY_PRICE.toFixed(2)}/month`
+                    : "No active subscription"}
+            </p>
           </div>
+          <SubscriptionStatus state={state} />
+        </div>
 
-          {state === "lapsed" && (
-            <div className="flex items-start gap-3 rounded-lg border border-destructive/50 bg-destructive/5 p-4">
-              <AlertTriangle className="mt-0.5 size-5 shrink-0 text-destructive" />
-              <div>
-                <p className="text-sm font-medium text-destructive">
-                  Payment failed
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Your payment could not be processed. You have{" "}
-                  {GRACE_PERIOD_DAYS} days to update your payment method before
-                  losing access.
-                </p>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  className="mt-3 gap-2"
-                >
-                  Update Payment Method
-                  <ExternalLink className="size-3" />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {user?.lastPaymentDate && (
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Last payment</span>
-              <span>
-                {user.lastPaymentDate.toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </span>
-            </div>
-          )}
-
-          {state === "registered" && (
-            <div className="rounded-lg bg-muted/50 p-4">
-              <p className="text-sm font-medium">Ready to start the course?</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Subscribe for £{COURSE_MONTHLY_PRICE.toFixed(2)}/month to
-                unlock the full course, monthly content, and dynamic scoring.
+        {state === "lapsed" && (
+          <div className={styles.noticeRust}>
+            <p className={styles.statusWarm}>▲ Payment failed</p>
+            <p className={`${styles.bodyText} mt-2`}>
+              Your payment could not be processed. You have{" "}
+              {GRACE_PERIOD_DAYS} days to update your payment method before
+              losing access.
+            </p>
+            {ENABLE_BILLING ? (
+              <button type="button" className={`${styles.buttonDanger} mt-3`}>
+                Update Payment Method
+              </button>
+            ) : (
+              <p className={`${styles.bodyText} ${styles.rustText} mt-3`}>
+                Billing is disabled for beta; access is handled manually.
               </p>
-              <Button size="sm" className="mt-3" asChild>
-                <Link href="/pricing">View Pricing</Link>
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            )}
+          </div>
+        )}
+
+        {user?.lastPaymentDate && (
+          <div className={styles.fieldRow}>
+            <span className={styles.fieldLabel}>Last payment</span>
+            <span className={styles.metaValue}>
+              {user.lastPaymentDate.toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </span>
+          </div>
+        )}
+
+        {state === "registered" && (
+          <div className={styles.noticeMuted}>
+            <p className={styles.strongLine}>Ready to start the course?</p>
+            <p className={`${styles.bodyText} mt-1`}>
+              Subscribe for £{COURSE_MONTHLY_PRICE.toFixed(2)}/month to
+              unlock the course one month at a time once billing reopens
+              for approved beta learners.
+            </p>
+            {ENABLE_BILLING ? (
+              <BillingActions
+                state={state}
+                className="mt-3"
+                checkoutUrl="/api/stripe/checkout"
+                portalUrl="/api/stripe/portal"
+              />
+            ) : (
+              <p className={`${styles.bodyText} mt-3`}>
+                Billing is disabled for beta. Approved learners receive
+                manual access from GWTH.
+              </p>
+            )}
+          </div>
+        )}
+
+        {ENABLE_BILLING && ["month1", "month2", "month3", "ongoing"].includes(state) && (
+          <BillingActions
+            state={state}
+            className="mt-4"
+            checkoutUrl="/api/stripe/checkout"
+            portalUrl="/api/stripe/portal"
+          />
+        )}
+      </section>
 
       <SettingsForm />
     </div>

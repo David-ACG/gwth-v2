@@ -1,59 +1,88 @@
 import type { Metadata } from "next"
-import { getMockUser } from "@/lib/auth"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+import { getDashboardUser } from "@/lib/auth"
 import { formatDate } from "@/lib/utils"
+import styles from "./profile-fde.module.css"
 
 export const metadata: Metadata = {
   title: "Profile",
   description: "View and manage your profile.",
 }
 
+/** Subscription state rendered as colour + glyph + text (no rounded badge). */
+function SubscriptionStatus({ state }: { state: string }) {
+  const label = state === "registered" ? "Free" : state
+  if (["month1", "month2", "month3", "ongoing"].includes(state)) {
+    return (
+      <span className={styles.statusActive}>
+        ✓ {label}
+      </span>
+    )
+  }
+  if (state === "lapsed") {
+    return (
+      <span className={styles.statusWarm}>
+        ▲ {label}
+      </span>
+    )
+  }
+  return (
+    <span className={styles.statusMuted}>
+      ○ {label}
+    </span>
+  )
+}
+
 export default async function ProfilePage() {
-  const user = await getMockUser()
+  const user = await getDashboardUser()
+
+  if (!user) {
+    return null
+  }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-        <p className="mt-1 text-muted-foreground">
-          Your account information
-        </p>
+    <div className={styles.shell} data-section="profile">
+      <div className={styles.pageHead}>
+        <h1 className={styles.pageTitle}>Profile</h1>
+        <p className={styles.mono}>Account record</p>
       </div>
+      <p className={styles.pageLead}>Your account information</p>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-6">
-            <Avatar className="size-20">
-              <AvatarFallback className="text-2xl">
-                {user.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold">{user.name}</h2>
-              <p className="text-sm text-muted-foreground">{user.email}</p>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="capitalize">
-                  {user.subscriptionState === "registered" ? "Free" : user.subscriptionState}
-                </Badge>
-                <span className="text-xs text-muted-foreground">
-                  Member since {formatDate(user.createdAt)}
-                </span>
-              </div>
-            </div>
+      <div className={styles.identityPanel}>
+        <p className={styles.mono}>Personal Information</p>
+        <div className={`${styles.identityHead} mt-5`}>
+          <span className={styles.initial} aria-hidden="true">
+            {user.name.charAt(0).toUpperCase()}
+          </span>
+          <div>
+            <h2 className={styles.name}>{user.name}</h2>
+            <p className={`${styles.mono} mt-1`}>{user.email}</p>
           </div>
-          {user.bio && (
-            <div className="mt-6">
-              <h3 className="text-sm font-medium">Bio</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{user.bio}</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        </div>
+
+        <div className={styles.metaList}>
+          <div className={styles.metaRow}>
+            <span className={styles.mono}>Subscription</span>
+            <SubscriptionStatus state={user.subscriptionState} />
+          </div>
+          <div className={styles.metaRow}>
+            <span className={styles.mono}>Member since</span>
+            <span className={styles.metaValue}>
+              {formatDate(user.createdAt)}
+            </span>
+          </div>
+          <div className={styles.metaRow}>
+            <span className={styles.mono}>Email</span>
+            <span className={styles.metaValue}>{user.email}</span>
+          </div>
+        </div>
+
+        {user.bio && (
+          <div className="mt-6">
+            <h3 className={styles.bioHead}>Bio</h3>
+            <p className={styles.bioBody}>{user.bio}</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

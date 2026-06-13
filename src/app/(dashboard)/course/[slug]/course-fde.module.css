@@ -1,0 +1,349 @@
+/*
+ * Course detail page in the FDE journal register (DESIGN_FDE.md).
+ * Journal-issue framing per month, hairline lesson rows, dash-progress.
+ * Full scoped --v-* palette per §8; never raw hex outside this block.
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+  --v-dash: rgba(26, 28, 24, 0.18);
+  --v-dash-active: #2c4a47;
+
+  /* Scoped remap of the Stone & Sage semantic layer so embedded shadcn
+     primitives (accordion) inherit the register. */
+  --background: var(--v-bg);
+  --foreground: var(--v-ink);
+  --card: var(--v-surface);
+  --card-foreground: var(--v-ink);
+  --border: var(--v-line);
+  --input: var(--v-line);
+  --ring: var(--v-ochre);
+  --muted: var(--v-line-soft);
+  --muted-foreground: var(--v-muted);
+  --primary: var(--v-action);
+  --primary-foreground: var(--v-action-text);
+  --radius: 0px;
+
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+  --v-dash: rgba(236, 232, 210, 0.18);
+  --v-dash-active: #6ea877;
+
+  color-scheme: dark;
+}
+
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* ── Course head ─────────────────────────────────────────────────────── */
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  border-bottom: 1px solid var(--v-ink);
+  padding-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.lead {
+  margin: 1.25rem 0 0;
+  max-width: 44rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.metaRow {
+  composes: mono;
+  margin: 1rem 0 0;
+}
+
+.progressWrap {
+  margin-top: 1.5rem;
+  max-width: 26rem;
+}
+
+.dashes {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.dashes span {
+  height: 3px;
+  flex: 1;
+  background: var(--v-dash);
+}
+
+.dashes span[data-active="true"] {
+  background: var(--v-dash-active);
+}
+
+.progressText {
+  composes: mono;
+  margin: 0.6rem 0 0;
+}
+
+/* ── Month issue blocks ──────────────────────────────────────────────── */
+
+.issue {
+  margin-top: 3rem;
+}
+
+.issueHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.issueKicker {
+  composes: mono;
+  margin: 0;
+}
+
+.lockedTag {
+  composes: mono;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.issueTitle {
+  margin: 0.6rem 0 0;
+  font-size: clamp(1.4rem, 2.6vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.issueSub {
+  margin: 0.5rem 0 0;
+  max-width: 62ch;
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+/* ── Sections accordion (restyled shadcn accordion, §5.8 anatomy) ────── */
+
+.accordion {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--v-ink);
+}
+
+.accItem {
+  border-bottom: 1px solid var(--v-line);
+}
+
+.accTrigger {
+  border-radius: 0;
+  padding: 1.1rem 0;
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--v-ink);
+  align-items: baseline;
+}
+
+.accTrigger:hover {
+  text-decoration: none;
+  color: var(--v-ochre);
+}
+
+/* Hide the built-in chevron; replace with the mono +/− marker. */
+.accTrigger > :global(svg) {
+  display: none;
+}
+
+.accTrigger::after {
+  content: "+";
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--v-muted);
+}
+
+.accTrigger[data-state="open"]::after {
+  content: "\2212";
+}
+
+.accTriggerMeta {
+  composes: mono;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.accContent {
+  padding-bottom: 1rem;
+}
+
+/* ── Lesson rows ─────────────────────────────────────────────────────── */
+
+.lessonRow {
+  display: grid;
+  grid-template-columns: 3.6rem minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid var(--v-line-soft);
+  text-decoration: none;
+  color: inherit;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a.lessonRow:hover .lessonTitle {
+  color: var(--v-ochre);
+}
+
+.lessonRow[data-locked="true"] .lessonTitle {
+  color: var(--v-muted);
+}
+
+.lessonId {
+  composes: mono;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.lessonTitle {
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--v-ink);
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lessonTrackTag {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  margin-left: 0.6rem;
+}
+
+.lessonDuration {
+  composes: mono;
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+
+/* Status: colour + glyph + text, never colour alone (§5.5). */
+.status {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--v-soft);
+}
+
+.status .glyph {
+  font-weight: 700;
+}
+
+.statusDone,
+.statusDone .glyph {
+  color: var(--v-dash-active);
+}
+
+.statusActive .glyph {
+  color: var(--v-ochre);
+}
+
+.statusPending,
+.statusPending .glyph,
+.statusLocked,
+.statusLocked .glyph {
+  color: var(--v-muted);
+}
+
+/* ── Capstone block (§4.4: hairline + bold ink lead-in) ──────────────── */
+
+.capstone {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 1rem;
+}
+
+.capstoneKicker {
+  composes: mono;
+  margin: 0;
+}
+
+.capstoneName {
+  margin: 0.45rem 0 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--v-ink);
+}
+
+.capstoneBody {
+  margin: 0.3rem 0 0;
+  max-width: 62ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+}

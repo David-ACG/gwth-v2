@@ -2,12 +2,9 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getLab } from "@/lib/data/labs"
 import { getLabProgress } from "@/lib/data/progress"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
-import { Clock, CheckCircle2 } from "lucide-react"
 import { formatDuration } from "@/lib/utils"
+import styles from "./lab-fde.module.css"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -26,6 +23,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 /**
  * Lab viewer page with instructions, resources, and step tracker.
+ * FDE journal register: §5.2 section head with mono meta row, serif
+ * reading measure for instructions, §4.5 dash-progress + hairline
+ * step rows with status glyph and text.
  */
 export default async function LabDetailPage({ params }: PageProps) {
   const { slug } = await params
@@ -36,78 +36,116 @@ export default async function LabDetailPage({ params }: PageProps) {
 
   if (!lab) notFound()
 
-  return (
-    <div className="space-y-6">
-      {/* Lab header */}
-      <div>
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary">{lab.difficulty}</Badge>
-          {lab.isPremium && <Badge>Pro</Badge>}
-        </div>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight">{lab.title}</h1>
-        <p className="mt-2 text-lg text-muted-foreground">{lab.description}</p>
-        <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <Clock className="size-4" />
-            {formatDuration(lab.duration)}
-          </span>
-        </div>
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {lab.technologies.map((tech) => (
-            <Badge key={tech} variant="outline" className="font-normal">
-              {tech}
-            </Badge>
-          ))}
-        </div>
-      </div>
+  const totalSteps = lab.instructions.length
+  const currentStep = progress?.currentStep ?? 0
 
-      {/* Progress */}
+  /** Status per step: colour + glyph + text, never colour alone. */
+  const stepStatus = (step: number) => {
+    if (!progress) return null
+    if (step < currentStep)
+      return (
+        <span className={`${styles.status} ${styles.statusDone}`}>
+          <span className={styles.glyph} aria-hidden="true">
+            ✓
+          </span>
+          Done
+        </span>
+      )
+    if (step === currentStep)
+      return (
+        <span className={`${styles.status} ${styles.statusActive}`}>
+          <span className={styles.glyph} aria-hidden="true">
+            ▸
+          </span>
+          In progress
+        </span>
+      )
+    return (
+      <span className={`${styles.status} ${styles.statusPending}`}>
+        <span className={styles.glyph} aria-hidden="true">
+          ○
+        </span>
+        Not started
+      </span>
+    )
+  }
+
+  return (
+    <div className={styles.shell} data-section="lab-detail">
+      {/* Lab header (§5.2 section head + mono meta row, no pills) */}
+      <header>
+        <div className={styles.head}>
+          <h1 className={styles.title}>{lab.title}</h1>
+          <p className={styles.mono}>Lab · {lab.category}</p>
+        </div>
+        <p className={styles.lead}>{lab.description}</p>
+        <p className={styles.metaRow}>
+          {lab.difficulty} · {formatDuration(lab.duration)}
+          {lab.isPremium && " · Pro"}
+        </p>
+        {lab.technologies.length > 0 && (
+          <p className={styles.techRow}>{lab.technologies.join(" · ")}</p>
+        )}
+      </header>
+
+      {/* Step progress (§4.5 dash-progress, paired with text) */}
       {progress && (
-        <div className="max-w-sm space-y-1">
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Progress</span>
-            <span className="font-medium">
-              Step {progress.currentStep}/{lab.instructions.length}
-            </span>
+        <div className={styles.progressWrap}>
+          <div className={styles.dashes} aria-hidden="true">
+            {Array.from({ length: totalSteps }, (_, dash) => (
+              <span
+                key={dash}
+                data-active={dash < currentStep ? "true" : undefined}
+              />
+            ))}
           </div>
-          <Progress value={progress.progress * 100} className="h-2" />
+          <p className={styles.progressText}>
+            Step {currentStep}/{totalSteps}
+          </p>
         </div>
       )}
 
       {/* Learning outcomes */}
-      <Card>
-        <CardContent className="p-6">
-          <h2 className="text-lg font-semibold">What You&apos;ll Learn</h2>
-          <ul className="mt-3 space-y-2">
-            {lab.learningOutcomes.map((outcome) => (
-              <li key={outcome} className="flex items-start gap-2 text-sm">
-                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
-                {outcome}
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+      <section>
+        <div className={styles.sectionHead}>
+          <h2 className={styles.sectionTitle}>What You&apos;ll Learn</h2>
+          <p className={styles.mono}>Outcomes</p>
+        </div>
+        <ul className={styles.outcomeList}>
+          {lab.learningOutcomes.map((outcome) => (
+            <li key={outcome} className={styles.outcomeRow}>
+              <span className={styles.outcomeGlyph} aria-hidden="true">
+                ✓
+              </span>
+              {outcome}
+            </li>
+          ))}
+        </ul>
+      </section>
 
       {/* Instructions */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Instructions</h2>
+      <section>
+        <div className={styles.sectionHead}>
+          <h2 className={styles.sectionTitle}>Instructions</h2>
+          <p className={styles.mono}>
+            {totalSteps} steps · {formatDuration(lab.duration)}
+          </p>
+        </div>
         {lab.instructions.map((step) => (
-          <Card key={step.step}>
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                  {step.step}
-                </div>
-                <h3 className="text-base font-semibold">{step.title}</h3>
-              </div>
-              <div className="mt-3 pl-11">
-                <MarkdownRenderer content={step.content} />
-              </div>
-            </CardContent>
-          </Card>
+          <div key={step.step} className={styles.stepRow}>
+            <div className={styles.stepHead}>
+              <p className={styles.stepKicker}>
+                Step {String(step.step).padStart(2, "0")} of {totalSteps}
+              </p>
+              {stepStatus(step.step)}
+            </div>
+            <h3 className={styles.stepTitle}>{step.title}</h3>
+            <div className={styles.reading}>
+              <MarkdownRenderer content={step.content} />
+            </div>
+          </div>
         ))}
-      </div>
+      </section>
     </div>
   )
 }

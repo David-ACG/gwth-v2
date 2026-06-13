@@ -31,25 +31,25 @@ const variantConfig: Record<
   note: {
     icon: Info,
     label: "Note",
-    containerClass: "bg-primary/5 border-l-4 border-primary",
+    containerClass: "border border-primary/25 bg-primary/5",
     iconClass: "text-primary",
   },
   warning: {
     icon: AlertTriangle,
     label: "Warning",
-    containerClass: "bg-warning/5 border-l-4 border-warning",
+    containerClass: "border border-warning/35 bg-warning/5",
     iconClass: "text-warning",
   },
   tip: {
     icon: Lightbulb,
     label: "Tip",
-    containerClass: "bg-success/5 border-l-4 border-success",
+    containerClass: "border border-success/25 bg-success/5",
     iconClass: "text-success",
   },
   "deep-dive": {
     icon: BookOpen,
     label: "Deep Dive",
-    containerClass: "bg-accent/5 border-l-4 border-accent",
+    containerClass: "border border-accent/25 bg-accent/5",
     iconClass: "text-accent",
   },
 }
@@ -57,7 +57,6 @@ const variantConfig: Record<
 /**
  * Styled callout box with 4 variants: note, warning, tip, deep-dive.
  * The deep-dive variant is collapsible — click the title to toggle.
- * Uses left-border styling inspired by react.dev documentation.
  */
 export function CalloutBox({
   variant,
@@ -73,7 +72,7 @@ export function CalloutBox({
     return (
       <div
         className={cn(
-          "my-5 rounded-r-lg",
+          "my-5 rounded-lg",
           config.containerClass,
           className,
         )}
@@ -98,7 +97,7 @@ export function CalloutBox({
   return (
     <div
       className={cn(
-        "my-5 rounded-r-lg px-5 py-4",
+        "my-5 rounded-lg px-5 py-4",
         config.containerClass,
         className,
       )}

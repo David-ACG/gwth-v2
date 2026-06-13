@@ -13,6 +13,8 @@ import {
 import { useSearch } from "@/hooks/use-search"
 import { BookOpen, FlaskConical, Newspaper, BarChart3, Settings, User } from "lucide-react"
 import { mockCourses, mockLabs, mockNewsArticles } from "@/lib/data/mock-data"
+import { ENABLE_NEWS } from "@/lib/config"
+import styles from "./search-palette-fde.module.css"
 
 const quickLinks = [
   { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
@@ -35,7 +37,11 @@ export function SearchPalette() {
   }
 
   return (
-    <CommandDialog open={isOpen} onOpenChange={(open) => !open && close()}>
+    <CommandDialog
+      open={isOpen}
+      onOpenChange={(open) => !open && close()}
+      className={`${styles.shell} ${styles.palette}`}
+    >
       <CommandInput
         placeholder="Search lessons, labs, pages..."
         onValueChange={setQuery}
@@ -69,22 +75,24 @@ export function SearchPalette() {
           ))}
         </CommandGroup>
 
-        <CommandGroup heading="News">
-          {mockNewsArticles
-            .filter((a) => a.status === "published")
-            .map((article) => (
-              <CommandItem
-                key={article.id}
-                value={article.title}
-                onSelect={() => navigateTo(`/news/${article.slug}`)}
-              >
-                <Newspaper className="mr-2 size-4" />
-                {article.title}
-              </CommandItem>
-            ))}
-        </CommandGroup>
+        {ENABLE_NEWS && (
+          <CommandGroup heading="News">
+            {mockNewsArticles
+              .filter((a) => a.status === "published")
+              .map((article) => (
+                <CommandItem
+                  key={article.id}
+                  value={article.title}
+                  onSelect={() => navigateTo(`/news/${article.slug}`)}
+                >
+                  <Newspaper className="mr-2 size-4" />
+                  {article.title}
+                </CommandItem>
+              ))}
+          </CommandGroup>
+        )}
 
-        <CommandGroup heading="Quick Links">
+        <CommandGroup heading="Quick links">
           {quickLinks.map((link) => (
             <CommandItem
               key={link.href}

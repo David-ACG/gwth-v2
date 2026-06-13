@@ -17,9 +17,9 @@ import {
 import { cn } from "@/lib/utils"
 import { useSidebar } from "@/hooks/use-sidebar"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { SIDEBAR_WIDTH, SIDEBAR_COLLAPSED_WIDTH } from "@/lib/config"
+import styles from "./sidebar-fde.module.css"
 
 const mainNavItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -36,8 +36,11 @@ const secondaryNavItems = [
 ]
 
 /**
- * Dashboard sidebar with collapsible navigation.
- * Shows as a persistent sidebar on desktop, Sheet overlay on mobile.
+ * Dashboard sidebar with collapsible navigation, in the FDE journal
+ * register (DESIGN_FDE.md §5.9 adapted to a rail): paper surface, hairline
+ * right rule, mono nav links with a 2px active left rule, square hairline
+ * collapse toggle. Shows as a persistent sidebar on desktop, Sheet overlay
+ * on mobile.
  */
 export function Sidebar() {
   const { isOpen, isMobile, toggle, close } = useSidebar()
@@ -48,7 +51,7 @@ export function Sidebar() {
       {/* Logo + collapse toggle */}
       <div className="flex h-16 items-center justify-between px-4">
         {isOpen && (
-          <Link href="/dashboard" className="text-lg font-bold text-gradient">
+          <Link href="/dashboard" className={styles.wordmark}>
             GWTH.ai
           </Link>
         )}
@@ -57,7 +60,7 @@ export function Sidebar() {
           size="icon"
           onClick={toggle}
           aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
-          className="size-8"
+          className={cn("size-8", styles.iconButton)}
         >
           {isOpen ? (
             <PanelLeftClose className="size-4" />
@@ -67,7 +70,7 @@ export function Sidebar() {
         </Button>
       </div>
 
-      <Separator />
+      <div className={styles.rule} aria-hidden="true" />
 
       {/* Main navigation */}
       <nav className="flex-1 space-y-1 px-2 py-4" aria-label="Main navigation">
@@ -78,22 +81,17 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               onClick={isMobile ? close : undefined}
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
-              )}
+              className={cn(styles.navLink, isActive && styles.navLinkActive)}
               title={!isOpen ? item.label : undefined}
             >
-              <item.icon className="size-5 shrink-0" />
+              <item.icon className="size-4 shrink-0" />
               {isOpen && <span>{item.label}</span>}
             </Link>
           )
         })}
       </nav>
 
-      <Separator />
+      <div className={styles.rule} aria-hidden="true" />
 
       {/* Secondary navigation */}
       <nav className="space-y-1 px-2 py-4" aria-label="Secondary navigation">
@@ -104,15 +102,10 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               onClick={isMobile ? close : undefined}
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
-              )}
+              className={cn(styles.navLink, isActive && styles.navLinkActive)}
               title={!isOpen ? item.label : undefined}
             >
-              <item.icon className="size-5 shrink-0" />
+              <item.icon className="size-4 shrink-0" />
               {isOpen && <span>{item.label}</span>}
             </Link>
           )
@@ -125,7 +118,10 @@ export function Sidebar() {
   if (isMobile) {
     return (
       <Sheet open={isOpen} onOpenChange={(open) => !open && close()}>
-        <SheetContent side="left" className="w-[280px] p-0">
+        <SheetContent
+          side="left"
+          className={cn("w-[280px] p-0", styles.shell, styles.sheet)}
+        >
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           {sidebarContent}
         </SheetContent>
@@ -136,7 +132,11 @@ export function Sidebar() {
   // Desktop: persistent sidebar
   return (
     <aside
-      className="sticky top-0 h-screen shrink-0 border-r bg-sidebar transition-[width] duration-200"
+      className={cn(
+        "sticky top-0 h-screen shrink-0 transition-[width] duration-200",
+        styles.shell,
+        styles.rail
+      )}
       style={{ width: isOpen ? SIDEBAR_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
     >
       {sidebarContent}

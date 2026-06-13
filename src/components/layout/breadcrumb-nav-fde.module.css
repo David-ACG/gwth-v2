@@ -1,0 +1,42 @@
+/*
+ * FDE journal register skin for the dashboard breadcrumbs (DESIGN_FDE.md
+ * §3 mono metadata, W10 step 3). No palette root here: the breadcrumb only
+ * ever renders inside the dashboard header's .shell (header-fde.module.css),
+ * so the --v-* tokens are inherited and a second palette copy would just
+ * be drift surface.
+ */
+
+.crumbs {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  gap: 0.6rem;
+}
+
+.crumbLink {
+  color: var(--v-muted);
+  text-decoration: none;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.crumbLink:hover {
+  color: var(--v-ink);
+}
+
+.crumbLink:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.crumbCurrent {
+  color: var(--v-ink);
+  font-weight: 500;
+}
+
+.crumbSep {
+  color: var(--v-muted);
+}

@@ -10,6 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import React from "react"
+import styles from "./breadcrumb-nav-fde.module.css"
 
 /** Maps route segments to human-readable labels */
 const segmentLabels: Record<string, string> = {
@@ -40,7 +41,7 @@ export function BreadcrumbNav() {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList>
+      <BreadcrumbList className={styles.crumbs}>
         {segments.map((segment, index) => {
           const href = "/" + segments.slice(0, index + 1).join("/")
           const isLast = index === segments.length - 1
@@ -52,12 +53,20 @@ export function BreadcrumbNav() {
 
           return (
             <React.Fragment key={href}>
-              {index > 0 && <BreadcrumbSeparator />}
+              {index > 0 && (
+                <BreadcrumbSeparator className={styles.crumbSep}>
+                  /
+                </BreadcrumbSeparator>
+              )}
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{label}</BreadcrumbPage>
+                  <BreadcrumbPage className={styles.crumbCurrent}>
+                    {label}
+                  </BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={href}>{label}</BreadcrumbLink>
+                  <BreadcrumbLink href={href} className={styles.crumbLink}>
+                    {label}
+                  </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
             </React.Fragment>

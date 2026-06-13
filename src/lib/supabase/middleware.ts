@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+import { isUserGrantedBetaAccess } from "@/lib/billing/access"
 
 /** Dashboard routes that require authentication */
 const PROTECTED_PATHS = [
@@ -73,24 +74,38 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Check if visiting a protected route without auth
   const isProtected =
     PROTECTED_PATHS.some(
       (path) => pathname === path || pathname.startsWith(`${path}/`)
     ) && pathname !== "/labs"
 
-  if (isProtected && !user) {
-    const url = request.nextUrl.clone()
-    url.pathname = "/login"
-    return NextResponse.redirect(url)
-  }
-
-  // Check if visiting an auth route while already logged in
   const isAuthRoute = AUTH_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`)
   )
 
-  if (isAuthRoute && user) {
+  const hasBetaAccess =
+    user && (isProtected || isAuthRoute)
+      ? await isUserGrantedBetaAccess(supabase, user.id)
+      : false
+
+  if (isProtected && (!user || !hasBetaAccess)) {
+    // Dev-only escape hatch matching getDashboardUser(): with
+    // ENABLE_DEV_MOCK_USER=true the dashboard renders the mock learner
+    // for visual work, so the gate must let the request through.
+    if (
+      process.env.NODE_ENV !== "production" &&
+      process.env.ENABLE_DEV_MOCK_USER === "true"
+    ) {
+      return supabaseResponse
+    }
+    if (user) await supabase.auth.signOut()
+    const url = request.nextUrl.clone()
+    url.pathname = "/login"
+    if (user) url.searchParams.set("error", "beta_access_required")
+    return NextResponse.redirect(url)
+  }
+
+  if (isAuthRoute && user && hasBetaAccess) {
     const url = request.nextUrl.clone()
     url.pathname = "/dashboard"
     return NextResponse.redirect(url)
