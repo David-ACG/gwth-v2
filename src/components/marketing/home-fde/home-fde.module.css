@@ -1,0 +1,689 @@
+/*
+ * Variant B: homepage redesign based on the FDE.build journal mockup
+ * (http://192.168.178.50:3010/). Palette, type, and idioms are lifted from
+ * the mockup: cream/sage paper surfaces, ink text, a drenched dark-teal hero
+ * band with ochre accents, Source Serif 4 display + body, mono metadata,
+ * and colour-block card tops.
+ *
+ * All colours are scoped custom properties on .shell with a .dark override
+ * block, so the site-wide theme toggle flips the whole page.
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+  --v-dash: rgba(26, 28, 24, 0.18);
+  --v-dash-active: #2c4a47;
+
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+  --v-dash: rgba(236, 232, 210, 0.18);
+  --v-dash-active: #6ea877;
+}
+
+.page {
+  margin: 0 auto;
+  width: min(1100px, calc(100% - 2.5rem));
+}
+
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* ---------------- Hero (drenched teal band) ---------------- */
+
+.hero {
+  background: var(--v-teal);
+  color: var(--v-cream);
+  padding: clamp(4rem, 9vw, 7rem) 0 clamp(3.5rem, 8vw, 6rem);
+}
+
+.heroInner {
+  display: grid;
+  gap: 3rem;
+}
+
+@media (min-width: 64rem) {
+  .heroInner {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 5rem;
+    align-items: end;
+  }
+}
+
+.heroTitle {
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.heroTitle span {
+  display: block;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-ochre-bright);
+}
+
+.heroRight {
+  border-top: 1px solid var(--v-hero-line);
+  padding-top: 1.75rem;
+}
+
+.heroStandfirst {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--v-cream-muted);
+  max-width: 34rem;
+}
+
+.heroByline {
+  composes: mono;
+  color: var(--v-cream-muted);
+  margin-top: 1.75rem;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 2rem;
+}
+
+.heroFoot {
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--v-hero-line);
+  padding-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+}
+
+.heroFoot p {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-cream-muted);
+}
+
+/* ---------------- Buttons ---------------- */
+
+.buttonSolid,
+.buttonOutline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0;
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero .buttonSolid {
+  background: var(--v-cream);
+  color: var(--v-teal);
+  border: 1px solid var(--v-cream);
+}
+
+.hero .buttonSolid:hover {
+  background: var(--v-ochre-bright);
+  border-color: var(--v-ochre-bright);
+  color: var(--v-teal-deep);
+}
+
+.hero .buttonOutline {
+  background: transparent;
+  color: var(--v-cream);
+  border: 1px solid var(--v-hero-line);
+}
+
+.hero .buttonOutline:hover {
+  border-color: var(--v-cream);
+}
+
+.buttonSolid {
+  background: var(--v-action);
+  color: var(--v-action-text);
+  border: 1px solid var(--v-action);
+}
+
+.buttonSolid:hover {
+  background: var(--v-teal-deep);
+  border-color: var(--v-teal-deep);
+}
+
+.buttonOutline {
+  background: transparent;
+  color: var(--v-ink);
+  border: 1px solid var(--v-ink);
+}
+
+.buttonOutline:hover {
+  background: var(--v-ink);
+  color: var(--v-bg);
+}
+
+.buttonSolid:focus-visible,
+.buttonOutline:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+/* ---------------- Section scaffolding ---------------- */
+
+.section {
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  border-bottom: 1px solid var(--v-ink);
+  padding-bottom: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.sectionLead {
+  max-width: 44rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--v-soft);
+  margin-bottom: 2.5rem;
+}
+
+/* ---------------- Journey cards (journal card row) ---------------- */
+
+.cardsRow {
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 48rem) {
+  .cardsRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  border-color: var(--v-ink);
+}
+
+.cardTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1.25rem;
+  color: var(--v-cream);
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.flvTeal {
+  background: var(--v-teal);
+}
+
+.flvMoss {
+  background: var(--v-moss);
+}
+
+.flvRust {
+  background: var(--v-rust);
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.65rem;
+  padding: 1.25rem 1.25rem 1.4rem;
+}
+
+.cardBody h3 {
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .cardBody h3 {
+  color: var(--v-ochre);
+}
+
+.cardBody > p {
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+  flex: 1;
+}
+
+.cardStatLine {
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 0.85rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--v-muted);
+}
+
+.cardStatLine strong {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-ochre);
+  margin-right: 0.25rem;
+}
+
+/* ---------------- Pull quote ---------------- */
+
+.pullQuote {
+  border-block: 1px solid var(--v-ink);
+  padding: clamp(2.5rem, 6vw, 4rem) 0;
+  text-align: center;
+}
+
+.pullQuote blockquote {
+  margin: 0 auto;
+  max-width: 46rem;
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.pullQuote blockquote em {
+  color: var(--v-ochre);
+}
+
+.pullQuoteSource {
+  composes: mono;
+  margin-top: 1.5rem;
+}
+
+/* ---------------- Curriculum (issues) ---------------- */
+
+.issueList {
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 48rem) {
+  .issueList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.issue {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.5rem 1.4rem 1.6rem;
+}
+
+.issueDashes {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 1.1rem;
+}
+
+.issueDashes span {
+  height: 3px;
+  flex: 1;
+  background: var(--v-dash);
+}
+
+.issueDashes span[data-active="true"] {
+  background: var(--v-dash-active);
+}
+
+.issue h3 {
+  margin-top: 0.7rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.issue > p {
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.issueCapstone {
+  margin-top: 1.3rem;
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+.issueCapstone strong {
+  display: block;
+  color: var(--v-ink);
+  font-weight: 600;
+}
+
+/* ---------------- Credential (bone panel) ---------------- */
+
+.credentialSplit {
+  display: grid;
+  gap: 3rem;
+}
+
+@media (min-width: 64rem) {
+  .credentialSplit {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: 5rem;
+    align-items: center;
+  }
+}
+
+.credentialProse p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--v-soft);
+  margin-top: 1.25rem;
+  max-width: 62ch;
+}
+
+.statList {
+  margin-top: 2rem;
+  border-top: 1px solid var(--v-line);
+}
+
+.statListRow {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1.25rem;
+  border-bottom: 1px solid var(--v-line);
+  padding: 0.9rem 0;
+}
+
+.statListValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--v-ochre);
+}
+
+.statListRow p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
+.credentialPanel {
+  display: block;
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);
+  padding: 2rem 1.75rem;
+  transition: box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.credentialPanel:hover {
+  box-shadow: 0.4rem 0.4rem 0 0 var(--v-teal);
+}
+
+.credentialPanel h3 {
+  margin-top: 1rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.credentialPanel > p {
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.credentialRow {
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.25rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.credentialNumber {
+  font-size: 3.4rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--v-teal);
+}
+
+:global(.dark) .shell .credentialNumber {
+  color: var(--v-ochre);
+}
+
+.credentialFacts {
+  display: grid;
+  gap: 0.45rem;
+  text-align: right;
+  font-size: 0.88rem;
+}
+
+.credentialFacts span {
+  color: var(--v-muted);
+  margin-right: 0.6rem;
+}
+
+/* ---------------- Dispatch band (pricing) ---------------- */
+
+.dispatch {
+  background: var(--v-teal-deep);
+  color: var(--v-cream);
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+}
+
+.dispatch .mono,
+.dispatch .sectionLead {
+  color: var(--v-cream-muted);
+}
+
+.dispatchTitle {
+  font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  margin-top: 0.9rem;
+}
+
+.dispatchTitle em {
+  font-style: italic;
+  color: var(--v-ochre-bright);
+}
+
+.dispatchRow {
+  margin-top: 2.5rem;
+  display: grid;
+  gap: 1.5rem;
+  border-top: 1px solid var(--v-hero-line);
+  padding-top: 1.75rem;
+}
+
+@media (min-width: 56rem) {
+  .dispatchRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    align-items: center;
+  }
+}
+
+.dispatchPrice strong {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.dispatchPrice p {
+  margin-top: 0.3rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--v-cream-muted);
+}
+
+/* ---------------- FAQ ---------------- */
+
+.faqList {
+  border-top: 1px solid var(--v-ink);
+  max-width: 52rem;
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--v-line);
+}
+
+.faqItem summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.faqItem summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqItem summary::after {
+  content: "+";
+  font-family: var(--font-jetbrains), monospace;
+  color: var(--v-muted);
+  flex-shrink: 0;
+}
+
+.faqItem[open] summary::after {
+  content: "\2212";
+}
+
+.faqItem p {
+  padding-bottom: 1.4rem;
+  max-width: 62ch;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+/* ---------------- Closing band ---------------- */
+
+.closing {
+  border-top: 1px solid var(--v-ink);
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  text-align: center;
+}
+
+.closing h2 {
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.closing h2 em {
+  font-style: italic;
+  color: var(--v-ochre);
+}
+
+.closing p {
+  margin: 1.25rem auto 0;
+  max-width: 36rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.closingActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.875rem;
+  margin-top: 2.25rem;
+}

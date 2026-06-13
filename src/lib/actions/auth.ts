@@ -7,7 +7,13 @@
  */
 
 import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient, createClient } from "@/lib/supabase/server"
+import {
+  applyBetaAccessGrantToUser,
+  BETA_ACCESS_REQUIRED_MESSAGE,
+  isEmailGrantedBetaAccess,
+  isUserGrantedBetaAccess,
+} from "@/lib/billing/access"
 
 /**
  * Signs up a new user with email and password.
@@ -19,9 +25,16 @@ export async function signUp(formData: {
   email: string
   password: string
 }): Promise<{ error: string | null }> {
+  const admin = createAdminClient()
+  const hasBetaAccess = await isEmailGrantedBetaAccess(admin, formData.email)
+
+  if (!hasBetaAccess) {
+    return { error: BETA_ACCESS_REQUIRED_MESSAGE }
+  }
+
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: formData.email,
     password: formData.password,
     options: {
@@ -34,6 +47,10 @@ export async function signUp(formData: {
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (data.user?.id && data.user.email) {
+    await applyBetaAccessGrantToUser(admin, data.user.id, data.user.email)
   }
 
   return { error: null }
@@ -63,6 +80,19 @@ export async function signIn(formData: {
       return { error: "Please check your email and confirm your account first" }
     }
     return { error: error.message }
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const admin = createAdminClient()
+  const hasBetaAccess = user?.id
+    ? await isUserGrantedBetaAccess(admin, user.id)
+    : false
+
+  if (!hasBetaAccess) {
+    await supabase.auth.signOut()
+    return { error: BETA_ACCESS_REQUIRED_MESSAGE }
   }
 
   return { error: null }

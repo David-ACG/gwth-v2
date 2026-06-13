@@ -1,0 +1,483 @@
+/*
+ * Free Labs page in the FDE journal register (the chosen homepage
+ * direction, see home-fde/). Same palette and idioms: cream/sage paper
+ * surfaces, ink text, a drenched dark-teal masthead, ochre accents,
+ * Source Serif 4 display + body, mono metadata, colour-block card tops.
+ *
+ * All colours are scoped custom properties on .shell with a .dark override
+ * block, so the site-wide theme toggle flips the whole page.
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+
+  color-scheme: dark;
+}
+
+.page {
+  margin: 0 auto;
+  width: min(1100px, calc(100% - 2.5rem));
+}
+
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* ---------------- Masthead (drenched teal band) ---------------- */
+
+.masthead {
+  background: var(--v-teal);
+  color: var(--v-cream);
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
+}
+
+.mastheadKicker {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-cream-muted);
+}
+
+.mastheadTitle {
+  margin-top: 1rem;
+  font-size: clamp(2.6rem, 6.5vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 18ch;
+}
+
+.mastheadTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-ochre-bright);
+}
+
+.standfirst {
+  margin-top: 1.5rem;
+  max-width: 38rem;
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--v-cream-muted);
+}
+
+.mastheadActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 2rem;
+}
+
+.mastheadFoot {
+  margin-top: clamp(2.25rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--v-hero-line);
+  padding-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+}
+
+.mastheadFoot p {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-cream-muted);
+}
+
+/* ---------------- Buttons ---------------- */
+
+.buttonSolid,
+.buttonOutline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0;
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.masthead .buttonSolid {
+  background: var(--v-cream);
+  color: var(--v-teal);
+  border: 1px solid var(--v-cream);
+}
+
+.masthead .buttonSolid:hover {
+  background: var(--v-ochre-bright);
+  border-color: var(--v-ochre-bright);
+  color: var(--v-teal-deep);
+}
+
+.masthead .buttonOutline {
+  background: transparent;
+  color: var(--v-cream);
+  border: 1px solid var(--v-hero-line);
+}
+
+.masthead .buttonOutline:hover {
+  border-color: var(--v-cream);
+}
+
+.buttonSolid {
+  background: var(--v-action);
+  color: var(--v-action-text);
+  border: 1px solid var(--v-action);
+}
+
+.buttonSolid:hover {
+  background: var(--v-teal-deep);
+  border-color: var(--v-teal-deep);
+}
+
+.buttonOutline {
+  background: transparent;
+  color: var(--v-ink);
+  border: 1px solid var(--v-ink);
+}
+
+.buttonOutline:hover {
+  background: var(--v-ink);
+  color: var(--v-bg);
+}
+
+.buttonSolid:focus-visible,
+.buttonOutline:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+/* ---------------- Section scaffolding ---------------- */
+
+.section {
+  padding: clamp(3rem, 6vw, 4.5rem) 0;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  border-bottom: 1px solid var(--v-ink);
+  padding-bottom: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+/* ---------------- Filter row ---------------- */
+
+.filterRow {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+}
+
+@media (min-width: 48rem) {
+  .filterRow {
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  }
+}
+
+.input,
+.select {
+  width: 100%;
+  appearance: none;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: 0;
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  padding: 0.65rem 0.9rem;
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.input:hover,
+.select:hover {
+  border-color: var(--v-ink);
+}
+
+.input:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 1px;
+}
+
+.input::placeholder {
+  color: var(--v-muted);
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap::after {
+  content: "\25BE";
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 0.7rem;
+  color: var(--v-muted);
+}
+
+.select {
+  cursor: pointer;
+  padding-right: 2.2rem;
+}
+
+/* ---------------- Lab cards (journal card grid) ---------------- */
+
+.cardsRow {
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 40rem) {
+  .cardsRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .cardsRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  border-color: var(--v-ink);
+}
+
+.cardTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1.25rem;
+  color: var(--v-cream);
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.flvTeal {
+  background: var(--v-teal);
+}
+
+.flvMoss {
+  background: var(--v-moss);
+}
+
+.flvRust {
+  background: var(--v-rust);
+}
+
+.cardImage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid var(--v-line);
+}
+
+.cardImage img {
+  object-fit: cover;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.65rem;
+  padding: 1.25rem 1.25rem 1.4rem;
+}
+
+.cardBody h3 {
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .cardBody h3 {
+  color: var(--v-ochre);
+}
+
+.cardBody > p {
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardTech {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardStatLine {
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 0.85rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--v-muted);
+  text-transform: capitalize;
+}
+
+.cardStatLine strong {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-ochre);
+  margin-right: 0.25rem;
+}
+
+/* ---------------- Empty state ---------------- */
+
+.empty {
+  border: 1px solid var(--v-line);
+  background: var(--v-surface);
+  padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
+  text-align: center;
+}
+
+.empty h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.empty p {
+  margin: 0.75rem auto 0;
+  max-width: 32rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.empty a {
+  margin-top: 1.75rem;
+}
+
+/* ---------------- Closing band ---------------- */
+
+.closing {
+  border-top: 1px solid var(--v-ink);
+  padding: clamp(3rem, 6vw, 4.5rem) 0;
+  text-align: center;
+}
+
+.closing h2 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.closing h2 em {
+  font-style: italic;
+  color: var(--v-ochre);
+}
+
+.closing p {
+  margin: 1.25rem auto 0;
+  max-width: 36rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.closingActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.875rem;
+  margin-top: 2.25rem;
+}

@@ -35,12 +35,12 @@ export default function PrivacyPage() {
         </li>
         <li>
           <strong>Course activity:</strong> lesson progress, quiz answers
-          and scores, lab completions, notes, and bookmarks.
+          and results, lab completions, notes, and bookmarks.
         </li>
         <li>
           <strong>Payment information:</strong> billing details processed
-          securely through our third-party payment provider. We do not
-          store your full card details.
+          securely through our third-party payment provider if billing
+          reopens after beta. We do not store your full card details.
         </li>
       </ul>
 
@@ -64,9 +64,7 @@ export default function PrivacyPage() {
       <p>We use the information we collect to:</p>
       <ul>
         <li>Provide, maintain, and improve our services.</li>
-        <li>
-          Track your learning progress and generate skill scores.
-        </li>
+        <li>Track your learning progress and completion evidence.</li>
         <li>
           Send you service-related communications (account confirmation,
           password resets, course updates).
@@ -108,8 +106,8 @@ export default function PrivacyPage() {
         </li>
         <li>
           <strong>With your consent:</strong> when you explicitly agree to
-          share your information (e.g. making your skill scores publicly
-          verifiable).
+          share your information (e.g. making post-beta credentials or
+          course progress publicly verifiable).
         </li>
       </ul>
 

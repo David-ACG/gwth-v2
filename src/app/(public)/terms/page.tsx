@@ -53,15 +53,18 @@ export default function TermsPage() {
       </p>
       <ul>
         <li>Access to course materials, video content, and interactive labs.</li>
-        <li>Progress tracking, skill scoring, and certification.</li>
-        <li>GWTH Score, assessments, and course progress features.</li>
+        <li>Progress tracking, assessments, and course completion records.</li>
+        <li>
+          Invite-only beta access, manually granted by GWTH for approved
+          learners.
+        </li>
         <li>Team administration features for group subscriptions.</li>
       </ul>
 
       <h2 id="ip">2. Intellectual Property</h2>
       <p>
         All content on GWTH.ai — including course materials, videos, text,
-        graphics, logos, assessments, and score systems — is the
+        graphics, logos, assessments, and progress systems — is the
         intellectual property of GWTH.ai and is protected by copyright and
         other intellectual property laws.
       </p>
@@ -73,7 +76,7 @@ export default function TermsPage() {
       <ul>
         <li>Copy, reproduce, or distribute course content.</li>
         <li>Use content for commercial training without a team licence.</li>
-        <li>Reverse-engineer, decompile, or extract our scoring algorithms.</li>
+        <li>Reverse-engineer, decompile, or extract platform logic.</li>
         <li>Remove any copyright or proprietary notices.</li>
       </ul>
 
@@ -103,6 +106,10 @@ export default function TermsPage() {
         notify us immediately of any unauthorised use.
       </p>
       <p>
+        During the 23 June beta, public signup is closed. Course access is
+        invite-only and manually granted by GWTH to approved email addresses.
+      </p>
+      <p>
         We reserve the right to suspend or terminate accounts that violate
         these Terms or are inactive for an extended period, with reasonable
         notice.
@@ -110,10 +117,14 @@ export default function TermsPage() {
 
       <h2 id="purchases">5. Purchases and Payment</h2>
       <p>
-        Payments are processed securely through our third-party payment
-        provider. All prices are displayed in US Dollars (USD) unless
-        otherwise stated. You agree to provide current, complete, and
-        accurate payment information.
+        Billing is disabled for the 23 June beta. Approved beta learners
+        receive manual access rather than self-service checkout.
+      </p>
+      <p>
+        If billing reopens after beta, payments will be processed securely
+        through our third-party payment provider. All prices are displayed
+        in GBP unless otherwise stated. You agree to provide current,
+        complete, and accurate payment information.
       </p>
       <p>
         We reserve the right to refuse or cancel any order at our
@@ -123,9 +134,10 @@ export default function TermsPage() {
 
       <h2 id="subscriptions">6. Subscriptions</h2>
       <p>
-        Our course is offered as a monthly subscription. By subscribing,
-        you authorise us to charge your payment method on a recurring
-        monthly basis until you cancel.
+        Self-service subscriptions are not available during the 23 June
+        beta. If subscriptions reopen after beta, the course may be offered
+        monthly and you will authorise us to charge your payment method on
+        a recurring monthly basis until you cancel.
       </p>
       <ul>
         <li>

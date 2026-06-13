@@ -17,6 +17,7 @@ import {
   mockStudyStreak,
   mockDynamicScore,
 } from "./mock-data"
+import { createEmptyLessonProgress, hasPassedQuiz } from "@/lib/progress/completion"
 
 /**
  * Fetches the user's progress on a specific lesson.
@@ -49,15 +50,11 @@ export async function updateLessonProgress(
     return existing
   }
   const newProgress: LessonProgress = {
-    lessonId,
-    isCompleted: false,
-    progress: 0,
-    quizScore: null,
-    bestQuizScore: null,
-    quizAttempts: 0,
-    timeSpent: 0,
-    lastAccessedAt: new Date(),
+    ...createEmptyLessonProgress(lessonId),
     ...update,
+    quizPassed:
+      update.quizPassed ??
+      hasPassedQuiz(update.bestQuizScore ?? update.quizScore ?? null),
   }
   mockLessonProgress.push(newProgress)
   return newProgress
@@ -103,7 +100,7 @@ export async function getStreak(): Promise<StudyStreak> {
 }
 
 /**
- * Fetches the user's dynamic score data.
+ * Fetches the user's GWTH Score data.
  */
 export async function getDynamicScore(): Promise<DynamicScore> {
   return { ...mockDynamicScore }

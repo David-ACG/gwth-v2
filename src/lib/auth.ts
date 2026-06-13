@@ -6,6 +6,7 @@
 
 import type { User, SubscriptionState } from "@/lib/types"
 import { createClient } from "@/lib/supabase/server"
+import { getAccessForUser } from "@/lib/billing/access"
 
 /** Mock user for development — subscription state is controlled by the dev toolbar */
 const MOCK_USER: User = {
@@ -52,16 +53,21 @@ export async function getCurrentUser(): Promise<User | null> {
     (meta.picture as string) ??
     null
 
+  const access = await getAccessForUser(supabase, user.id)
+  if (access.source !== "manual_beta" || access.subscriptionMonth <= 0) {
+    return null
+  }
+
   return {
     id: user.id,
     name,
     email: user.email ?? "",
     avatarUrl,
     bio: null,
-    subscriptionState: "registered" as SubscriptionState,
-    subscriptionMonth: 0,
-    gracePeriodEnds: null,
-    lastPaymentDate: null,
+    subscriptionState: access.subscriptionState,
+    subscriptionMonth: access.subscriptionMonth,
+    gracePeriodEnds: access.gracePeriodEnds,
+    lastPaymentDate: access.lastPaymentDate,
     createdAt: new Date(user.created_at),
     updatedAt: new Date(user.updated_at ?? user.created_at),
   }
@@ -73,6 +79,22 @@ export async function getCurrentUser(): Promise<User | null> {
  */
 export async function getMockUser(): Promise<User> {
   return MOCK_USER
+}
+/**
+ * Returns the real authenticated user. In local development,
+ * ENABLE_DEV_MOCK_USER=true can opt into the mock learner for visual
+ * dashboard work. The mock is off by default for beta scope enforcement.
+ */
+export async function getDashboardUser(): Promise<User | null> {
+  const user = await getCurrentUser()
+  if (user) return user
+  if (
+    process.env.NODE_ENV !== "production" &&
+    process.env.ENABLE_DEV_MOCK_USER === "true"
+  ) {
+    return MOCK_USER
+  }
+  return null
 }
 
 /**
@@ -142,6 +164,20 @@ export function isInGracePeriod(user: User): boolean {
   if (user.subscriptionState !== "lapsed") return false
   if (!user.gracePeriodEnds) return false
   return new Date() < user.gracePeriodEnds
+}
+
+/**
+ * Checks course access with the user's grace period included.
+ */
+export function canUserAccessCourse(user: User): boolean {
+  return canAccessCourse(user.subscriptionState) || isInGracePeriod(user)
+}
+
+/**
+ * Checks month access with the user's grace period included.
+ */
+export function canUserAccessMonth(user: User, month: 1 | 2 | 3): boolean {
+  return canAccessMonth(user.subscriptionState, month) || isInGracePeriod(user)
 }
 
 /**

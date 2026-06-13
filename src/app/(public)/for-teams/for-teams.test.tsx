@@ -18,7 +18,7 @@ describe("ForTeamsPage", () => {
       screen.getByText(/The real cost is not the course/)
     ).toBeInTheDocument()
     expect(
-      screen.getByText(/£87\.00 per person/)
+      screen.getByText(/£29\.00\/month per person/)
     ).toBeInTheDocument()
   })
 
@@ -54,11 +54,11 @@ describe("ForTeamsPage", () => {
     render(<ForTeamsPage />)
     const expectedTitles = [
       "Zero wasted time",
-      "94 hands-on projects with video walkthroughs",
-      "No coding required",
+      "Practical projects with walkthroughs",
+      "Beginner-friendly, then builder-ready",
       "You choose the syllabus",
-      "Vendor-neutral (Tech Radar tracks 60+ tools)",
-      "Dynamic certification",
+      "Vendor-neutral applied AI",
+      "Plain progress reporting",
       "Built for the enterprise conversation",
     ]
     for (const title of expectedTitles) {

@@ -342,12 +342,18 @@ export interface LessonProgress {
   lessonId: string
   /** Whether the lesson is fully completed */
   isCompleted: boolean
+  /** When the lesson was completed, null if not yet complete */
+  completedAt?: Date | null
   /** Progress fraction (0 to 1) */
   progress: number
+  /** Intro video watched fraction (0 to 1) */
+  introVideoProgress?: number
   /** Latest quiz score (0 to 100), null if not attempted */
   quizScore: number | null
   /** Best quiz score achieved */
   bestQuizScore: number | null
+  /** Whether the learner has passed this lesson's Q&A gate */
+  quizPassed?: boolean
   /** Number of quiz attempts */
   quizAttempts: number
   /** Total time spent on this lesson in seconds */

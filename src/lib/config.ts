@@ -80,6 +80,9 @@ export const TEAMS_EMAIL = "teams@gwth.ai"
 /** Monthly price during the 3-month course (GBP) */
 export const COURSE_MONTHLY_PRICE = 29
 
+/** Public label for the launch price; price may rise after beta/starter period */
+export const COURSE_PRICE_LABEL = "Starter pricing"
+
 /** Monthly price for ongoing access after course completion (GBP) */
 export const ONGOING_MONTHLY_PRICE = 7.5
 
@@ -95,7 +98,7 @@ export const TOTAL_COURSE_MONTHS = 3
 /** Points earned per completed lesson */
 export const POINTS_PER_LESSON = 1.5
 
-/** Score decay period — days after content update before score starts decaying */
+/** Days after a significant lesson update before the old lesson points decay */
 export const SCORE_DECAY_DAYS = 14
 
 /** Estimated hours of new content added per month (ongoing subscribers) */
@@ -110,6 +113,18 @@ export const TOTAL_MANDATORY_LESSONS = 64
 /** Total course cost for 3 months (GBP) */
 export const TOTAL_COURSE_COST = COURSE_MONTHLY_PRICE * TOTAL_COURSE_MONTHS
 
+/** Whether marketing pages should prominently show the three-month total */
+export const SHOW_TOTAL_COURSE_COST = false
+
+/** Public GWTH Score percentile milestones for applied AI skill */
+export const SCORE_PERCENTILE_MILESTONES = [
+  { label: "Top 30%", description: "Complete Month 1" },
+  { label: "Top 10%", description: "Complete Month 2 mandatory lessons" },
+  { label: "Top 5%", description: "Complete Month 2 with most optional lessons" },
+  { label: "Top 2%", description: "Complete Month 3 mandatory lessons" },
+  { label: "Top 1%", description: "Complete Month 3 with most optional lessons" },
+] as const
+
 // ─── Course Structure ────────────────────────────────────────────────────────
 
 /** Configuration for each month of the course */
@@ -119,7 +134,7 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     title: "From Zero to Building",
     subtitle: "AI for Your Life",
     description:
-      "Go from your first AI conversation to building real, working tools — apps, websites, dashboards, research projects, content packages, AI assistants, and automations — by typing plain English descriptions of what you want.",
+      "Move beyond using ChatGPT like Google. Learn AI foundations, the six primitives, and AI-assisted coding/building as the main spine: apps, websites, dashboards, research projects, content packages, AI assistants, and automations.",
     mandatoryLessons: 24,
     optionalLessons: 0,
     capstoneName: "Family AI Bot",
@@ -130,9 +145,9 @@ export const MONTH_CONFIGS: MonthConfig[] = [
   {
     month: 2,
     title: "Building Real Apps",
-    subtitle: "AI for Your Industry",
+    subtitle: "AI for Small Business & Consulting",
     description:
-      "Build for the real world. Choose your industry — healthcare, legal, finance, travel, creative, marketing, or HR — and build applications that solve actual problems in that field.",
+      "Go deeper into building, coding, workflows, apps, small-business use cases, and the practical toolkit needed by individuals who want to become AI consultants.",
     mandatoryLessons: 20,
     optionalLessons: 15,
     capstoneName: "AI Customer-Support Chatbot",
@@ -155,6 +170,16 @@ export const MONTH_CONFIGS: MonthConfig[] = [
   },
 ]
 
+/** Additional official capstones beyond the primary month card capstone */
+export const ADDITIONAL_CAPSTONES = [
+  {
+    month: 2,
+    name: "FractionalBuddy",
+    description:
+      "A second Month 2 capstone based on the real FractionalBuddy project: a practical AI consulting/productivity tool for fractional leaders and small-business advisory work.",
+  },
+] as const
+
 // ─── Feature Flags ────────────────────────────────────────────────────────────
 
 /** Whether the search palette (Cmd+K) is enabled */
@@ -167,15 +192,32 @@ export const ENABLE_STREAKS = true
 export const ENABLE_NOTES = true
 
 /** Whether certificate generation is enabled */
-export const ENABLE_CERTIFICATES = false
+export const ENABLE_CERTIFICATES = true
+
+function envFlagEnabled(value: string | undefined): boolean {
+  return ["1", "true", "yes", "on"].includes(value?.toLowerCase() ?? "")
+}
+
+/** Explicit billing kill-switch. Defaults off for the 23 June beta. */
+export const ENABLE_BILLING = envFlagEnabled(process.env.BILLING_ENABLED)
+
+/** Explicit GWTH Score feature flag. Defaults off for the 23 June beta. */
+export const ENABLE_GWTH_SCORE = envFlagEnabled(process.env.GWTH_SCORE_ENABLED)
 
 /** Whether the dev state switcher toolbar is shown (development only) */
 export const ENABLE_DEV_TOOLBAR = process.env.NODE_ENV === "development"
 
 // ─── News ────────────────────────────────────────────────────────────────────
 
-/** Whether the news section is enabled */
-export const ENABLE_NEWS = true
+/**
+ * Whether the news section is enabled. Disabled 2026-06-12 (David's call:
+ * the page was taking too long). Gates the nav and footer links, the
+ * search-palette News group, and the route guards. The route directory is
+ * also renamed to `src/app/(public)/_news` (underscore = excluded from
+ * routing) so /news returns a real 404; to re-enable, rename it back to
+ * `news` and flip this to true.
+ */
+export const ENABLE_NEWS = false
 
 /** Number of news articles per page */
 export const NEWS_PAGE_SIZE = 12

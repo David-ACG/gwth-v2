@@ -36,7 +36,10 @@ export function SettingsForm() {
   // next-themes resolves the stored theme only on the client; render the
   // select valueless until mounted so SSR and first client render match.
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    const timer = window.setTimeout(() => setMounted(true), 0)
+    return () => window.clearTimeout(timer)
+  }, [])
 
   const form = useForm<SettingsFormData>({
     resolver: zodResolver(settingsSchema),

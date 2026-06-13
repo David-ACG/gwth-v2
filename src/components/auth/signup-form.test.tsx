@@ -1,45 +1,39 @@
 /**
- * Tests for the signup form component.
+ * Tests for the invite-only beta signup surface.
  */
-import { describe, it, expect } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { afterEach, describe, it, expect } from "vitest"
+import { cleanup, render, screen } from "@testing-library/react"
 import { SignupForm } from "./signup-form"
 
+afterEach(cleanup)
+
 describe("SignupForm", () => {
-  it("renders the signup heading", () => {
+  it("renders invite-only beta messaging", () => {
     render(<SignupForm />)
-    expect(screen.getAllByText("Create your account").length).toBeGreaterThan(0)
+
+    expect(screen.getByText(/invite-only beta/i)).toBeInTheDocument()
+    expect(screen.getByText(/closed to public signup/i)).toBeInTheDocument()
   })
 
-  it("renders name, email, password, and confirm password fields", () => {
+  it("points invited users to login and everyone else to the waitlist", () => {
     render(<SignupForm />)
-    expect(screen.getAllByLabelText("Name").length).toBeGreaterThan(0)
-    expect(screen.getAllByLabelText("Email").length).toBeGreaterThan(0)
-    expect(screen.getAllByLabelText("Password").length).toBeGreaterThan(0)
-    expect(screen.getAllByLabelText("Confirm Password").length).toBeGreaterThan(0)
-  })
 
-  it("renders the submit button with correct text", () => {
-    render(<SignupForm />)
-    expect(screen.getAllByRole("button", { name: "Create Account" }).length).toBeGreaterThan(0)
-  })
-
-  it("renders the login link", () => {
-    render(<SignupForm />)
-    expect(screen.getAllByText("Log in").length).toBeGreaterThan(0)
-  })
-
-  it("renders OAuth social login buttons", () => {
-    render(<SignupForm />)
-    expect(screen.getAllByText("Continue with Google").length).toBeGreaterThan(0)
-    expect(screen.getAllByText("Continue with GitHub").length).toBeGreaterThan(0)
-    expect(screen.getAllByText("Continue with LinkedIn").length).toBeGreaterThan(0)
-  })
-
-  it("shows email confirmation message in description", () => {
-    render(<SignupForm />)
+    expect(screen.getByRole("link", { name: /log in/i })).toHaveAttribute(
+      "href",
+      "/login"
+    )
     expect(
-      screen.getAllByText(/send you a confirmation email/).length
-    ).toBeGreaterThan(0)
+      screen.getByRole("link", { name: /join the waitlist/i })
+    ).toHaveAttribute("href", "/")
+  })
+
+  it("does not render public account creation fields", () => {
+    render(<SignupForm />)
+
+    expect(screen.queryByLabelText("Email")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Password")).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /create account/i })
+    ).not.toBeInTheDocument()
   })
 })

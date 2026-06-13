@@ -1,0 +1,56 @@
+import { MotionSection } from "@/components/marketing/motion-section"
+import { JOURNEYS } from "@/components/marketing/data"
+import { JourneyCard } from "./journey-card"
+
+/**
+ * 9-card journey grid. Desktop: 3+3+3 (3 cols across 3 rows). Mobile:
+ * single column.
+ *
+ * Section-level entrance animation comes from MotionSection (gated on
+ * prefers-reduced-motion). Per-card hover lift uses the global
+ * .hover-lift utility from globals.css.
+ */
+export function JourneyGrid() {
+  const rowOne = JOURNEYS.slice(0, 3)
+  const rowTwo = JOURNEYS.slice(3, 6)
+  const rowThree = JOURNEYS.slice(6, 9)
+  if (rowThree.length !== 3) {
+    throw new Error("JOURNEYS must contain at least 9 entries — see marketing/data.ts")
+  }
+
+  return (
+    <MotionSection data-section="journey" className="py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Different reasons. Same course.
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Nine journeys, one course, one progress trail. Pick the row that fits, they
+            all end up at the same proof.
+          </p>
+        </div>
+
+        <div className="mt-14 space-y-6">
+          <div data-row="1" className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {rowOne.map((journey) => (
+              <JourneyCard key={journey.n} journey={journey} />
+            ))}
+          </div>
+
+          <div data-row="2" className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {rowTwo.map((journey) => (
+              <JourneyCard key={journey.n} journey={journey} />
+            ))}
+          </div>
+
+          <div data-row="3" className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {rowThree.map((journey) => (
+              <JourneyCard key={journey.n} journey={journey} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </MotionSection>
+  )
+}

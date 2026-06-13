@@ -1,0 +1,234 @@
+import Link from "next/link"
+import { PRICING } from "@/components/marketing/data"
+import styles from "./pricing-fde.module.css"
+
+/** Extra capabilities included for teams of 5 or more. */
+const TEAM_FEATURES = [
+  "Admin dashboard for managers",
+  "Progress and completion reporting",
+  "Role-specific lesson recommendations",
+  "Bespoke workflow lessons for larger teams",
+]
+
+/** Feature comparison rows: [feature, Free, Member, Team]. */
+const COMPARISONS = [
+  ["Free labs", "Included", "Included", "Included"],
+  ["Full core course", "Preview only", "Included", "Included"],
+  [
+    "Plain progress tracking",
+    "Included",
+    "Included",
+    "Team visibility",
+  ],
+  ["Stay Current refreshes", "No", "Available after course", "Team policy"],
+  ["Admin dashboard", "No", "No", "Included for 5+"],
+]
+
+/**
+ * Pricing page in the FDE journal register, matching the chosen homepage
+ * direction (home-fde/): drenched teal masthead, three tier cards with
+ * colour-block tops (the Member tier featured with an ochre border), a
+ * ruled comparison table, the teams split, and a closing band. Prices come
+ * from the canonical PRICING data so copy cannot drift from config.
+ */
+export function PricingFde() {
+  const free = PRICING[0]!
+  const course = PRICING[1]!
+
+  const tiers = [
+    {
+      key: "free",
+      badge: free.badge,
+      tag: "Forever",
+      flavour: styles.flvTeal,
+      price: free.price,
+      per: free.per,
+      features: free.features,
+      cta: { label: free.cta.label, href: free.cta.href },
+      featured: false,
+    },
+    {
+      key: "course",
+      badge: "Member",
+      tag: course.flag ?? "The course",
+      flavour: styles.flvMoss,
+      price: course.price,
+      per: course.per,
+      features: course.features,
+      cta: { label: course.cta.label, href: course.cta.href },
+      featured: true,
+    },
+    {
+      key: "team",
+      badge: "Teams",
+      tag: "5+ people",
+      flavour: styles.flvRust,
+      price: "Same",
+      per: "per-person price",
+      features: TEAM_FEATURES,
+      cta: { label: "Talk to us", href: "/contact" },
+      featured: false,
+    },
+  ]
+
+  return (
+    <div className={styles.shell}>
+      <section className={styles.masthead} data-section="masthead">
+        <div className={styles.page}>
+          <p className={styles.mastheadKicker}>
+            Pricing in GBP · No yearly lock-in
+          </p>
+          <h1 className={styles.mastheadTitle}>
+            Three ways to learn. <em>Start free.</em>
+          </h1>
+          <p className={styles.standfirst}>
+            Less than the cost of one hour with an AI consultant. Try the
+            free labs, join the course when you are ready, and bring teams in
+            without hidden enterprise games.
+          </p>
+          <div className={styles.mastheadFoot}>
+            <p>Free labs forever</p>
+            <p>Unlock one month at a time</p>
+            <p>Cancel anytime</p>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section} data-section="tiers">
+        <div className={styles.page}>
+          <div className={styles.tiersRow}>
+            {tiers.map((tier) => (
+              <article
+                key={tier.key}
+                data-testid="pricing-tier"
+                data-tier={tier.key}
+                data-featured={tier.featured ? "true" : undefined}
+                className={`${styles.tierCard} ${
+                  tier.featured ? styles.tierFeatured : ""
+                }`}
+              >
+                <div className={`${styles.cardTop} ${tier.flavour}`}>
+                  <h3>{tier.badge}</h3>
+                  <span>{tier.tag}</span>
+                </div>
+                <div className={styles.tierBody}>
+                  <p className={styles.tierPrice}>
+                    <strong>{tier.price}</strong>
+                    <span>{tier.per}</span>
+                  </p>
+                  <ul className={styles.tierFeatures}>
+                    {tier.features.map((feature) => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                  <div className={styles.tierCta}>
+                    <Link
+                      href={tier.cta.href}
+                      className={
+                        tier.featured
+                          ? styles.buttonSolid
+                          : styles.buttonOutline
+                      }
+                    >
+                      {tier.cta.label}
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className={styles.fineprint}>
+            No yearly price · Cancel anytime · Stay Current remains available
+            after the course at {PRICING[2]!.price}/mo
+          </p>
+        </div>
+      </section>
+
+      <section
+        className={`${styles.section} ${styles.sectionAlt}`}
+        data-section="compare"
+      >
+        <div className={styles.page}>
+          <div className={styles.sectionHead}>
+            <h2 className={styles.sectionTitle}>
+              The useful differences, <em>without pricing theatre.</em>
+            </h2>
+            <p className={styles.mono}>Compare</p>
+          </div>
+          <p className={styles.sectionLead}>
+            The point is simple: free is enough to try, member is the real
+            course, team adds management visibility.
+          </p>
+          <div className={styles.tableWrap}>
+            <table className={styles.compareTable}>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Free</th>
+                  <th>Member</th>
+                  <th>Team</th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISONS.map((row) => (
+                  <tr key={row[0]}>
+                    {row.map((cell, index) => (
+                      <td key={`${row[0]}-${index}`}>{cell}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section} data-section="teams">
+        <div className={`${styles.page} ${styles.splitGrid}`}>
+          <div>
+            <p className={styles.mono}>For teams</p>
+            <h2>
+              Same learner experience. <em>More visibility for managers.</em>
+            </h2>
+          </div>
+          <div className={styles.splitNote}>
+            <p>
+              Teams of 5+ get an admin dashboard with progress tracking,
+              completion rates, and the ability to recommend optional lessons
+              by role. For teams of 100+, GWTH can create bespoke lessons
+              around your company&apos;s workflows and tools.
+            </p>
+            <div className={styles.buttonRow}>
+              <Link href="/for-teams" className={styles.buttonSolid}>
+                Learn about teams
+              </Link>
+              <Link href="/contact" className={styles.buttonOutline}>
+                Contact GWTH
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.closing} data-section="closing">
+        <div className={styles.page}>
+          <h2>
+            Try before <em>you join.</em>
+          </h2>
+          <p>
+            Free labs are there so the course has to earn your attention
+            first. No card, no timer, no pretend scarcity.
+          </p>
+          <div className={styles.closingActions}>
+            <Link href="/labs" className={styles.buttonSolid}>
+              Try a free lab
+            </Link>
+            <Link href="/signup" className={styles.buttonOutline}>
+              Join the waitlist
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

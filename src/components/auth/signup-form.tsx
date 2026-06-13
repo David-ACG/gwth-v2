@@ -18,15 +18,49 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { CheckCircle2, ArrowRight, Radar } from "lucide-react"
+import { CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react"
 import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
 
 /**
- * Signup form with real Supabase Auth registration.
- * Collects name, email, password + confirmation.
- * Shows a success screen after signup with email confirmation instructions.
+ * Invite-only beta signup surface. The full Supabase registration form remains
+ * below as PostBetaSignupForm for post-beta reactivation.
  */
 export function SignupForm() {
+  return (
+    <Card>
+      <CardHeader className="text-center">
+        <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+          <ShieldCheck className="size-6 text-primary" />
+        </div>
+        <CardTitle className="text-2xl">Invite-only beta</CardTitle>
+        <p className="text-sm text-muted-foreground">
+          The 23 June beta is closed to public signup. Access is granted
+          manually by the GWTH team.
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-4 text-center">
+        <p className="text-sm text-muted-foreground">
+          If you have been invited, use the email address GWTH approved and
+          log in once your account is ready. Otherwise, join the waitlist and
+          we will contact you when more beta places open.
+        </p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Button className="gap-2" asChild>
+            <Link href="/login">
+              Log in
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+          <Button variant="outline" className="gap-2" asChild>
+            <Link href="/">Join the waitlist</Link>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+export function PostBetaSignupForm() {
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [submittedName, setSubmittedName] = useState("")
   const [serverError, setServerError] = useState<string | null>(null)
@@ -74,9 +108,9 @@ export function SignupForm() {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button className="gap-2" asChild>
-              <Link href="/tech-radar">
-                <Radar className="size-4" />
-                Explore the Tech Radar
+              <Link href="/why-gwth">
+                <ShieldCheck className="size-4" />
+                Why GWTH
               </Link>
             </Button>
             <Button variant="outline" className="gap-2" asChild>
