@@ -13,3 +13,6 @@
  */
 export * from "../../drizzle/schema"
 export * from "../../drizzle/relations"
+// W11 — Better Auth core tables (user/session/account/verification). Canonical
+// user table is public."user" (text ids); see src/db/auth-schema.ts.
+export * from "./auth-schema"
