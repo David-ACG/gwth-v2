@@ -1,78 +1,59 @@
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-const {
-  mockGetUser,
-  mockMaybeSingle,
-  mockSignInWithPassword,
-  mockSignOut,
-  mockSignUp,
-} = vi.hoisted(() => ({
-  mockGetUser: vi.fn(),
-  mockMaybeSingle: vi.fn(),
-  mockSignInWithPassword: vi.fn(),
+/**
+ * W11 (Better Auth) — Phase 2 trims this suite to the only remaining server
+ * action, `signOut`. The sign-in / sign-up / password-reset flows now run on
+ * the CLIENT via `authClient` inside the form components, so their unit tests
+ * move to the client-flow suites in Phase 3 (full test rewrite). This file just
+ * keeps tsc/build green and covers the mock-mode sign-out redirect.
+ */
+
+const { mockSignOut, mockRedirect } = vi.hoisted(() => ({
   mockSignOut: vi.fn(),
-  mockSignUp: vi.fn(),
+  mockRedirect: vi.fn(),
 }))
 
-vi.mock("@/lib/supabase/server", () => ({
-  createAdminClient: () => ({
-    from: () => ({
-      select: () => ({
-        eq: () => ({
-          maybeSingle: mockMaybeSingle,
-        }),
-      }),
-    }),
-  }),
-  createClient: vi.fn().mockResolvedValue({
-    auth: {
-      getUser: mockGetUser,
-      signInWithPassword: mockSignInWithPassword,
-      signOut: mockSignOut,
-      signUp: mockSignUp,
-    },
-  }),
+vi.mock("next/navigation", () => ({
+  redirect: mockRedirect,
 }))
 
-describe("signUp beta gate", () => {
+vi.mock("next/headers", () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}))
+
+vi.mock("@/lib/better-auth", () => ({
+  getAuth: () => ({ api: { signOut: mockSignOut } }),
+}))
+
+describe("signOut server action", () => {
+  const originalDatabaseUrl = process.env.DATABASE_URL
+
   beforeEach(() => {
     vi.clearAllMocks()
-    mockMaybeSingle.mockResolvedValue({ data: null, error: null })
-    mockGetUser.mockResolvedValue({
-      data: { user: { id: "user_ungranted", email: "nogrant@example.com" } },
-    })
-    mockSignInWithPassword.mockResolvedValue({ error: null })
-    mockSignOut.mockResolvedValue({ error: null })
+    mockSignOut.mockResolvedValue({ success: true })
   })
 
-  it("rejects ungranted emails before creating a Supabase user", async () => {
-    const { signUp } = await import("./auth")
-    const { BETA_ACCESS_REQUIRED_MESSAGE } = await import("@/lib/billing/access")
-
-    const result = await signUp({
-      name: "No Grant",
-      email: "nogrant@example.com",
-      password: "password-123",
-    })
-
-    expect(result.error).toBe(BETA_ACCESS_REQUIRED_MESSAGE)
-    expect(mockSignUp).not.toHaveBeenCalled()
+  afterEach(() => {
+    process.env.DATABASE_URL = originalDatabaseUrl
   })
 
-  it("rejects ungranted email-password login and clears the session", async () => {
-    const { signIn } = await import("./auth")
-    const { BETA_ACCESS_REQUIRED_MESSAGE } = await import("@/lib/billing/access")
+  it("redirects home without touching Better Auth in mock mode", async () => {
+    delete process.env.DATABASE_URL
+    const { signOut } = await import("./auth")
 
-    const result = await signIn({
-      email: "nogrant@example.com",
-      password: "password-123",
-    })
+    await signOut()
 
-    expect(mockSignInWithPassword).toHaveBeenCalledWith({
-      email: "nogrant@example.com",
-      password: "password-123",
-    })
-    expect(result.error).toBe(BETA_ACCESS_REQUIRED_MESSAGE)
-    expect(mockSignOut).toHaveBeenCalled()
+    expect(mockSignOut).not.toHaveBeenCalled()
+    expect(mockRedirect).toHaveBeenCalledWith("/")
+  })
+
+  it("revokes the session then redirects home when a DB is configured", async () => {
+    process.env.DATABASE_URL = "postgresql://gwth:devpass@localhost:5443/gwth_v2"
+    const { signOut } = await import("./auth")
+
+    await signOut()
+
+    expect(mockSignOut).toHaveBeenCalledTimes(1)
+    expect(mockRedirect).toHaveBeenCalledWith("/")
   })
 })

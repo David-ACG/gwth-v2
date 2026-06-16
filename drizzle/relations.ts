@@ -1,5 +1,8 @@
 import { relations } from "drizzle-orm/relations";
-import { lessons, lessonResources, courses, sections, quizQuestions, newsArticles, newsVotes, usersInAuth, newsComments, benchmarkRuns, benchmarkResults, userAccess, lessonProgress, credentialVerifications, betaAccessGrants } from "./schema";
+import { lessons, lessonResources, courses, sections, quizQuestions, newsArticles, newsVotes, newsComments, benchmarkRuns, benchmarkResults, userAccess, lessonProgress, credentialVerifications, betaAccessGrants } from "./schema";
+// W11: the user-scoped relations now point at the Better Auth `user` table
+// (public."user", text ids) instead of the removed Supabase `auth.users`.
+import { user } from "../src/db/auth-schema";
 
 export const lessonResourcesRelations = relations(lessonResources, ({one}) => ({
 	lesson: one(lessons, {
@@ -48,9 +51,9 @@ export const newsVotesRelations = relations(newsVotes, ({one}) => ({
 		fields: [newsVotes.articleId],
 		references: [newsArticles.id]
 	}),
-	usersInAuth: one(usersInAuth, {
+	user: one(user, {
 		fields: [newsVotes.userId],
-		references: [usersInAuth.id]
+		references: [user.id]
 	}),
 }));
 
@@ -59,7 +62,7 @@ export const newsArticlesRelations = relations(newsArticles, ({many}) => ({
 	newsComments: many(newsComments),
 }));
 
-export const usersInAuthRelations = relations(usersInAuth, ({many}) => ({
+export const userRelations = relations(user, ({many}) => ({
 	newsVotes: many(newsVotes),
 	newsComments: many(newsComments),
 	userAccesses: many(userAccess),
@@ -81,9 +84,9 @@ export const newsCommentsRelations = relations(newsComments, ({one, many}) => ({
 	newsComments: many(newsComments, {
 		relationName: "newsComments_parentId_newsComments_id"
 	}),
-	usersInAuth: one(usersInAuth, {
+	user: one(user, {
 		fields: [newsComments.userId],
-		references: [usersInAuth.id]
+		references: [user.id]
 	}),
 }));
 
@@ -99,16 +102,16 @@ export const benchmarkRunsRelations = relations(benchmarkRuns, ({many}) => ({
 }));
 
 export const userAccessRelations = relations(userAccess, ({one}) => ({
-	usersInAuth: one(usersInAuth, {
+	user: one(user, {
 		fields: [userAccess.userId],
-		references: [usersInAuth.id]
+		references: [user.id]
 	}),
 }));
 
 export const lessonProgressRelations = relations(lessonProgress, ({one}) => ({
-	usersInAuth: one(usersInAuth, {
+	user: one(user, {
 		fields: [lessonProgress.userId],
-		references: [usersInAuth.id]
+		references: [user.id]
 	}),
 	lesson: one(lessons, {
 		fields: [lessonProgress.lessonId],
@@ -121,15 +124,15 @@ export const credentialVerificationsRelations = relations(credentialVerification
 		fields: [credentialVerifications.courseId],
 		references: [courses.id]
 	}),
-	usersInAuth: one(usersInAuth, {
+	user: one(user, {
 		fields: [credentialVerifications.userId],
-		references: [usersInAuth.id]
+		references: [user.id]
 	}),
 }));
 
 export const betaAccessGrantsRelations = relations(betaAccessGrants, ({one}) => ({
-	usersInAuth: one(usersInAuth, {
+	user: one(user, {
 		fields: [betaAccessGrants.userId],
-		references: [usersInAuth.id]
+		references: [user.id]
 	}),
 }));

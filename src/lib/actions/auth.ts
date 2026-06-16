@@ -1,128 +1,33 @@
 "use server"
 
 /**
- * Server Actions for authentication (signup, login, logout, password reset).
- * These are called from Client Components and run on the server.
- * Uses the cookie-based Supabase client so session cookies are set automatically.
+ * Server Actions for authentication (W11 — Better Auth).
+ *
+ * Sign-in / sign-up / social / password-reset are driven from the CLIENT via
+ * `authClient` inside the form components (D-W11-10 — Better Auth's intended
+ * pattern). The only flow that still needs the server is sign-out, which is
+ * invoked from server-rendered nav components' onClick handlers and must clear
+ * the session cookie + redirect.
  */
 
 import { redirect } from "next/navigation"
-import { createAdminClient, createClient } from "@/lib/supabase/server"
-import {
-  applyBetaAccessGrantToUser,
-  BETA_ACCESS_REQUIRED_MESSAGE,
-  isEmailGrantedBetaAccess,
-  isUserGrantedBetaAccess,
-} from "@/lib/billing/access"
-
-/**
- * Signs up a new user with email and password.
- * Sends a confirmation email — user must click the link to activate their account.
- * Returns an error message on failure, or null on success.
- */
-export async function signUp(formData: {
-  name: string
-  email: string
-  password: string
-}): Promise<{ error: string | null }> {
-  const admin = createAdminClient()
-  const hasBetaAccess = await isEmailGrantedBetaAccess(admin, formData.email)
-
-  if (!hasBetaAccess) {
-    return { error: BETA_ACCESS_REQUIRED_MESSAGE }
-  }
-
-  const supabase = await createClient()
-
-  const { data, error } = await supabase.auth.signUp({
-    email: formData.email,
-    password: formData.password,
-    options: {
-      data: {
-        name: formData.name,
-      },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/callback`,
-    },
-  })
-
-  if (error) {
-    return { error: error.message }
-  }
-
-  if (data.user?.id && data.user.email) {
-    await applyBetaAccessGrantToUser(admin, data.user.id, data.user.email)
-  }
-
-  return { error: null }
-}
-
-/**
- * Signs in a user with email and password.
- * Returns an error message on failure, or null on success.
- */
-export async function signIn(formData: {
-  email: string
-  password: string
-}): Promise<{ error: string | null }> {
-  const supabase = await createClient()
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email: formData.email,
-    password: formData.password,
-  })
-
-  if (error) {
-    // Provide user-friendly error messages
-    if (error.message.includes("Invalid login credentials")) {
-      return { error: "Invalid email or password" }
-    }
-    if (error.message.includes("Email not confirmed")) {
-      return { error: "Please check your email and confirm your account first" }
-    }
-    return { error: error.message }
-  }
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const admin = createAdminClient()
-  const hasBetaAccess = user?.id
-    ? await isUserGrantedBetaAccess(admin, user.id)
-    : false
-
-  if (!hasBetaAccess) {
-    await supabase.auth.signOut()
-    return { error: BETA_ACCESS_REQUIRED_MESSAGE }
-  }
-
-  return { error: null }
-}
+import { headers } from "next/headers"
 
 /**
  * Signs out the current user and redirects to the home page.
+ *
+ * No-op in mock mode (no DATABASE_URL): there is no Better Auth session to
+ * revoke, so we just redirect home.
  */
 export async function signOut(): Promise<void> {
-  const supabase = await createClient()
-  await supabase.auth.signOut()
-  redirect("/")
-}
-
-/**
- * Sends a password reset email.
- * Returns an error message on failure, or null on success.
- */
-export async function resetPassword(
-  email: string
-): Promise<{ error: string | null }> {
-  const supabase = await createClient()
-
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/callback?next=/settings`,
-  })
-
-  if (error) {
-    return { error: error.message }
+  if (process.env.DATABASE_URL) {
+    const { getAuth } = await import("@/lib/better-auth")
+    try {
+      await getAuth().api.signOut({ headers: await headers() })
+    } catch {
+      // Even if revocation fails, fall through to the redirect so the user is
+      // returned to a logged-out surface.
+    }
   }
-
-  return { error: null }
+  redirect("/")
 }

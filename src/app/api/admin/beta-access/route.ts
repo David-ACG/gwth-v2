@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { createAdminClient } from "@/lib/supabase/server"
+import { eq } from "drizzle-orm"
+import { getDb } from "@/db"
+import { betaAccessGrants, userAccess, user } from "@/db/schema"
 import {
   clampCourseMonth,
   normalizeBetaAccessEmail,
@@ -9,7 +11,7 @@ import {
 
 const betaAccessSchema = z.object({
   apiKey: z.string().min(1),
-  userId: z.string().uuid().optional(),
+  userId: z.string().min(1).optional(),
   email: z.string().email().optional(),
   months: z.number().int().min(1).max(3).default(3),
   validUntil: z.string().datetime().optional(),
@@ -23,30 +25,20 @@ function isAuthorized(apiKey: string): boolean {
   return Boolean(expectedKey && apiKey === expectedKey)
 }
 
-async function findUserIdByEmail(
-  supabase: ReturnType<typeof createAdminClient>,
-  email: string
-): Promise<string | null> {
+/**
+ * Resolves a Better Auth user id from an email by querying the canonical
+ * `public."user"` table directly (W11 — replaces the Supabase
+ * `auth.admin.listUsers` paged scan).
+ */
+async function findUserIdByEmail(email: string): Promise<string | null> {
   const normalizedEmail = normalizeBetaAccessEmail(email)
-  let page = 1
-
-  while (page <= 20) {
-    const { data, error } = await supabase.auth.admin.listUsers({
-      page,
-      perPage: 100,
-    })
-
-    if (error) throw new Error(error.message)
-
-    const match = data.users.find(
-      (user) => user.email && normalizeBetaAccessEmail(user.email) === normalizedEmail
-    )
-    if (match) return match.id
-    if (data.users.length < 100) return null
-    page += 1
-  }
-
-  return null
+  const db = getDb()
+  const rows = await db
+    .select({ id: user.id })
+    .from(user)
+    .where(eq(user.email, normalizedEmail))
+    .limit(1)
+  return rows[0]?.id ?? null
 }
 
 export async function POST(request: NextRequest) {
@@ -63,12 +55,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const supabase = createAdminClient()
+    const db = getDb()
     const email = parsed.data.email
       ? normalizeBetaAccessEmail(parsed.data.email)
       : null
     const userId =
-      parsed.data.userId ?? (email ? await findUserIdByEmail(supabase, email) : null)
+      parsed.data.userId ?? (email ? await findUserIdByEmail(email) : null)
 
     const month = clampCourseMonth(parsed.data.months)
     const state = stateForCourseMonth(month)
@@ -76,39 +68,49 @@ export async function POST(request: NextRequest) {
     const notes = parsed.data.notes ?? null
 
     if (email) {
-      const { error } = await supabase.from("beta_access_grants").upsert(
-        {
+      await db
+        .insert(betaAccessGrants)
+        .values({
           email,
-          user_id: userId,
-          subscription_month: month,
-          valid_until: validUntil,
+          userId,
+          subscriptionMonth: month,
+          validUntil,
           notes,
-        },
-        { onConflict: "email" }
-      )
-
-      if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
-      }
+        })
+        .onConflictDoUpdate({
+          target: betaAccessGrants.email,
+          set: {
+            userId,
+            subscriptionMonth: month,
+            validUntil,
+            notes,
+          },
+        })
     }
 
     if (userId) {
-      const { error } = await supabase.from("user_access").upsert(
-        {
-          user_id: userId,
-          access_source: "manual_beta",
-          subscription_state: state,
-          subscription_month: month,
-          valid_until: validUntil,
-          grace_period_ends: null,
+      await db
+        .insert(userAccess)
+        .values({
+          userId,
+          accessSource: "manual_beta",
+          subscriptionState: state,
+          subscriptionMonth: month,
+          validUntil,
+          gracePeriodEnds: null,
           notes,
-        },
-        { onConflict: "user_id" }
-      )
-
-      if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
-      }
+        })
+        .onConflictDoUpdate({
+          target: userAccess.userId,
+          set: {
+            accessSource: "manual_beta",
+            subscriptionState: state,
+            subscriptionMonth: month,
+            validUntil,
+            gracePeriodEnds: null,
+            notes,
+          },
+        })
     }
 
     return NextResponse.json({

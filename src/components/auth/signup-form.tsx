@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { signupSchema, type SignupFormData } from "@/lib/validations"
-import { signUp } from "@/lib/actions/auth"
+import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -72,17 +72,19 @@ export function PostBetaSignupForm() {
 
   async function onSubmit(data: SignupFormData) {
     setServerError(null)
-    const result = await signUp({
+    const { error } = await authClient.signUp.email({
       name: data.name,
       email: data.email,
       password: data.password,
+      callbackURL: "/dashboard",
     })
 
-    if (result.error) {
-      if (result.error.includes("already registered")) {
+    if (error) {
+      const message = error.message ?? "Unable to create account"
+      if (/already|exists|registered/i.test(message)) {
         setServerError("This email is already registered. Try logging in instead.")
       } else {
-        setServerError(result.error)
+        setServerError(message)
       }
       return
     }

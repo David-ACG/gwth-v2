@@ -23,8 +23,13 @@
  */
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { nextCookies } from "better-auth/next-js"
 import { getDb, schema } from "@/db"
 import { sendPlunkEmail } from "@/lib/email/plunk"
+import {
+  applyBetaAccessGrantToUser,
+  isEmailGrantedBetaAccess,
+} from "@/lib/billing/access"
 
 // Construct the instance. Kept as a standalone builder so its concrete return
 // type (carrying the exact options shape) drives `Auth` — using the generic
@@ -95,6 +100,33 @@ function buildAuth() {
         clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
       },
     },
+    databaseHooks: {
+      user: {
+        create: {
+          // Invite-only beta gate (replaces the Supabase signIn-checks-and-
+          // signs-out + OAuth-delete-ungranted logic). When a new account is
+          // created (email/password OR social), if its email has a manual beta
+          // grant we apply that grant to the new user id. Ungranted accounts
+          // are NOT deleted — the access gate in getCurrentUser() returns null
+          // for them and the route guard redirects to
+          // /login?error=beta_access_required, so they can never reach gated
+          // content. This deliberately drops the OAuth-deletion quirk.
+          after: async (user) => {
+            try {
+              if (await isEmailGrantedBetaAccess(user.email)) {
+                await applyBetaAccessGrantToUser(user.id, user.email)
+              }
+            } catch {
+              // A grant-application failure must never block account creation;
+              // the access gate still denies entry until a grant is applied.
+            }
+          },
+        },
+      },
+    },
+    // nextCookies() MUST be the LAST plugin: it flushes Set-Cookie headers from
+    // Server Actions so server-side auth ops set the session cookie correctly.
+    plugins: [nextCookies()],
   })
 }
 

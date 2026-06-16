@@ -1,11 +1,14 @@
 /**
- * Auth abstraction layer.
- * Maps Supabase Auth to our User type. All components should import
- * from this file, never from the auth provider directly.
+ * Auth abstraction layer (W11 — Better Auth).
+ *
+ * The SINGLE accessor seam (D-W11-2): all components import from this file,
+ * never from the auth provider directly. `getCurrentUser()` reads the Better
+ * Auth session and maps it onto the app's `User` type, keeping the invite-only
+ * beta access gate (returns null for users without a live manual_beta grant).
  */
 
+import { headers } from "next/headers"
 import type { User, SubscriptionState } from "@/lib/types"
-import { createClient } from "@/lib/supabase/server"
 import { getAccessForUser } from "@/lib/billing/access"
 
 /** Mock user for development — subscription state is controlled by the dev toolbar */
@@ -25,51 +28,59 @@ const MOCK_USER: User = {
 
 /**
  * Returns the currently authenticated user, or null if not logged in.
- * Maps Supabase auth.getUser() to our User type.
+ *
+ * Reads the Better Auth session (`getAuth().api.getSession`) and maps it onto
+ * the app's `User` type, then applies the invite-only beta gate: a session
+ * without a live `manual_beta` grant resolves to null (the route guard then
+ * redirects such users to /login?error=beta_access_required).
+ *
+ * In mock mode (no `DATABASE_URL`) `getAuth()`/`getAccessForUser()` cannot reach
+ * a backend, so this resolves to null and the dev mock path takes over via
+ * `getDashboardUser()`. `getAuth()` is imported lazily so this module never
+ * constructs the auth context (or touches the DB) at import time.
  */
 export async function getCurrentUser(): Promise<User | null> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // No DB configured → no real session is possible (mock mode handles users
+  // via getDashboardUser()). Avoid constructing getAuth() (which resolves the
+  // DB) in that case.
+  if (!process.env.DATABASE_URL) return null
 
-  if (!user) return null
+  const { getAuth } = await import("@/lib/better-auth")
 
-  // OAuth providers return different metadata shapes:
-  // Google: full_name, avatar_url
-  // GitHub: user_name or full_name, avatar_url
-  // LinkedIn OIDC: full_name, picture
-  // Email signup: name (set in signUp options.data)
-  const meta = user.user_metadata ?? {}
+  let session: Awaited<
+    ReturnType<ReturnType<typeof getAuth>["api"]["getSession"]>
+  >
+  try {
+    session = await getAuth().api.getSession({ headers: await headers() })
+  } catch {
+    return null
+  }
+
+  const sessionUser = session?.user
+  if (!sessionUser) return null
+
   const name =
-    (meta.full_name as string) ??
-    (meta.name as string) ??
-    (meta.user_name as string) ??
-    user.email?.split("@")[0] ??
+    sessionUser.name?.trim() ||
+    sessionUser.email?.split("@")[0] ||
     "User"
 
-  const avatarUrl =
-    (meta.avatar_url as string) ??
-    (meta.picture as string) ??
-    null
-
-  const access = await getAccessForUser(supabase, user.id)
+  const access = await getAccessForUser(sessionUser.id)
   if (access.source !== "manual_beta" || access.subscriptionMonth <= 0) {
     return null
   }
 
   return {
-    id: user.id,
+    id: sessionUser.id,
     name,
-    email: user.email ?? "",
-    avatarUrl,
+    email: sessionUser.email ?? "",
+    avatarUrl: sessionUser.image ?? null,
     bio: null,
     subscriptionState: access.subscriptionState,
     subscriptionMonth: access.subscriptionMonth,
     gracePeriodEnds: access.gracePeriodEnds,
     lastPaymentDate: access.lastPaymentDate,
-    createdAt: new Date(user.created_at),
-    updatedAt: new Date(user.updated_at ?? user.created_at),
+    createdAt: new Date(sessionUser.createdAt),
+    updatedAt: new Date(sessionUser.updatedAt ?? sessionUser.createdAt),
   }
 }
 

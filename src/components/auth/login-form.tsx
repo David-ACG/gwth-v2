@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { loginSchema, type LoginFormData } from "@/lib/validations"
-import { signIn } from "@/lib/actions/auth"
+import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -35,13 +35,26 @@ export function LoginForm() {
 
   async function onSubmit(data: LoginFormData) {
     setServerError(null)
-    const result = await signIn({ email: data.email, password: data.password })
+    const { error } = await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+    })
 
-    if (result.error) {
-      setServerError(result.error)
+    if (error) {
+      // Friendly messages for the common cases Better Auth surfaces.
+      const message = error.message ?? "Unable to log in"
+      if (error.status === 401 || /invalid/i.test(message)) {
+        setServerError("Invalid email or password")
+      } else if (/verif/i.test(message)) {
+        setServerError("Please check your email and confirm your account first")
+      } else {
+        setServerError(message)
+      }
       return
     }
 
+    // Beta access is enforced by the route guard + getCurrentUser() gate: an
+    // ungranted account is redirected back to /login?error=beta_access_required.
     toast.success("Welcome back!")
     router.push("/dashboard")
     router.refresh()

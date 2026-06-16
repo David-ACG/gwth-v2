@@ -1,4 +1,5 @@
 import type { SubscriptionState } from "@/lib/types"
+import { eq } from "drizzle-orm"
 
 export type AccessSource =
   | "registered"
@@ -41,69 +42,6 @@ export type UserAccess = {
   stripePriceId: string | null
   stripeSubscriptionStatus: string | null
 }
-
-type QueryableSupabase = {
-  from: (table: string) => {
-    select: (columns: string) => {
-      eq: (column: string, value: string) => {
-        maybeSingle: () => PromiseLike<{
-          data: UserAccessRow | null
-          error: { message?: string } | null
-        }>
-      }
-    }
-  }
-}
-
-type BetaGrantQueryableSupabase = {
-  from: (table: string) => {
-    select: (columns: string) => {
-      eq: (column: string, value: string) => {
-        maybeSingle: () => PromiseLike<{
-          data: BetaAccessGrantRow | null
-          error: { message?: string } | null
-        }>
-      }
-    }
-  }
-}
-
-type BetaAccessWritableSupabase = {
-  from: (table: string) => {
-    upsert: (
-      values: Record<string, unknown>,
-      options?: Record<string, string>
-    ) => PromiseLike<{ error: { message?: string } | null }>
-    update: (values: Record<string, unknown>) => {
-      eq: (column: string, value: string) => PromiseLike<{
-        error: { message?: string } | null
-      }>
-    }
-  }
-}
-
-const ACCESS_COLUMNS = [
-  "user_id",
-  "access_source",
-  "subscription_state",
-  "subscription_month",
-  "valid_until",
-  "grace_period_ends",
-  "last_payment_at",
-  "stripe_customer_id",
-  "stripe_subscription_id",
-  "stripe_price_id",
-  "stripe_subscription_status",
-  "notes",
-].join(",")
-
-const BETA_ACCESS_GRANT_COLUMNS = [
-  "email",
-  "user_id",
-  "subscription_month",
-  "valid_until",
-  "notes",
-].join(",")
 
 export const BETA_ACCESS_REQUIRED_MESSAGE =
   "The 23 June beta is invite-only. Join the waitlist or ask GWTH for access."
@@ -200,70 +138,99 @@ export function normaliseAccessRow(
   }
 }
 
-export async function getAccessForUser(
-  supabase: unknown,
-  userId: string
-): Promise<UserAccess> {
-  const client = supabase as QueryableSupabase
-
+/**
+ * Resolves a userId's access from the `user_access` table via Drizzle.
+ *
+ * The supabase parameter is gone (D-W11-4b): the DB is resolved internally via
+ * `getDb()`. When no DATABASE_URL is configured (mock mode) `getDb()` throws and
+ * we fall back to REGISTERED_ACCESS — preserving the pre-migration behaviour
+ * where a missing/erroring backend never admitted a user beyond "registered".
+ */
+export async function getAccessForUser(userId: string): Promise<UserAccess> {
   try {
-    const { data, error } = (await client
-      .from("user_access")
-      .select(ACCESS_COLUMNS)
-      .eq("user_id", userId)
-      .maybeSingle()) as {
-      data: UserAccessRow | null
-      error: { message?: string } | null
-    }
+    const { getDb } = await import("@/db")
+    const { userAccess } = await import("@/db/schema")
+    const db = getDb()
 
-    if (error) return REGISTERED_ACCESS
-    return normaliseAccessRow(data)
+    const rows = await db
+      .select()
+      .from(userAccess)
+      .where(eq(userAccess.userId, userId))
+      .limit(1)
+
+    const row = rows[0]
+    if (!row) return REGISTERED_ACCESS
+
+    return normaliseAccessRow({
+      user_id: row.userId,
+      access_source: row.accessSource as AccessSource,
+      subscription_state: row.subscriptionState as Exclude<
+        SubscriptionState,
+        "visitor"
+      >,
+      subscription_month: row.subscriptionMonth,
+      valid_until: row.validUntil,
+      grace_period_ends: row.gracePeriodEnds,
+      last_payment_at: row.lastPaymentAt,
+      stripe_customer_id: row.stripeCustomerId,
+      stripe_subscription_id: row.stripeSubscriptionId,
+      stripe_price_id: row.stripePriceId,
+      stripe_subscription_status: row.stripeSubscriptionStatus,
+      notes: row.notes,
+    })
   } catch {
     return REGISTERED_ACCESS
   }
 }
 
 export async function getBetaAccessGrantForEmail(
-  supabase: unknown,
   email: string,
   now = new Date()
 ): Promise<BetaAccessGrantRow | null> {
   const normalizedEmail = normalizeBetaAccessEmail(email)
   if (!normalizedEmail) return null
 
-  const client = supabase as BetaGrantQueryableSupabase
-
   try {
-    const { data, error } = (await client
-      .from("beta_access_grants")
-      .select(BETA_ACCESS_GRANT_COLUMNS)
-      .eq("email", normalizedEmail)
-      .maybeSingle()) as {
-      data: BetaAccessGrantRow | null
-      error: { message?: string } | null
+    const { getDb } = await import("@/db")
+    const { betaAccessGrants } = await import("@/db/schema")
+    const db = getDb()
+
+    const rows = await db
+      .select()
+      .from(betaAccessGrants)
+      .where(eq(betaAccessGrants.email, normalizedEmail))
+      .limit(1)
+
+    const row = rows[0]
+    if (!row) return null
+
+    const grant: BetaAccessGrantRow = {
+      email: row.email,
+      user_id: row.userId,
+      subscription_month: row.subscriptionMonth,
+      valid_until: row.validUntil,
+      notes: row.notes,
     }
 
-    if (error || !data || !isGrantActive(data, now)) return null
-    return data
+    if (!isGrantActive(grant, now)) return null
+    return grant
   } catch {
     return null
   }
 }
 
 export async function isEmailGrantedBetaAccess(
-  supabase: unknown,
   email: string,
   now = new Date()
 ): Promise<boolean> {
-  return (await getBetaAccessGrantForEmail(supabase, email, now)) !== null
+  return (await getBetaAccessGrantForEmail(email, now)) !== null
 }
 
 export async function isUserGrantedBetaAccess(
-  supabase: unknown,
   userId: string,
   now = new Date()
 ): Promise<boolean> {
-  const access = await getAccessForUser(supabase, userId)
+  const access = await getAccessForUser(userId)
   return (
     access.source === "manual_beta" &&
     access.subscriptionMonth > 0 &&
@@ -272,38 +239,54 @@ export async function isUserGrantedBetaAccess(
 }
 
 export async function applyBetaAccessGrantToUser(
-  supabase: unknown,
   userId: string,
   email: string,
   now = new Date()
 ): Promise<boolean> {
-  const grant = await getBetaAccessGrantForEmail(supabase, email, now)
+  const grant = await getBetaAccessGrantForEmail(email, now)
   if (!grant) return false
 
   const month = (clampCourseMonth(grant.subscription_month || 3) || 3) as
     | 1
     | 2
     | 3
-  const client = supabase as BetaAccessWritableSupabase
-  const { error } = await client.from("user_access").upsert(
-    {
-      user_id: userId,
-      access_source: "manual_beta",
-      subscription_state: stateForCourseMonth(month),
-      subscription_month: month,
-      valid_until: grant.valid_until,
-      grace_period_ends: null,
-      notes: grant.notes,
-    },
-    { onConflict: "user_id" }
-  )
 
-  if (error) return false
+  try {
+    const { getDb } = await import("@/db")
+    const { userAccess, betaAccessGrants } = await import("@/db/schema")
+    const db = getDb()
 
-  await client
-    .from("beta_access_grants")
-    .update({ user_id: userId })
-    .eq("email", normalizeBetaAccessEmail(email))
+    await db
+      .insert(userAccess)
+      .values({
+        userId,
+        accessSource: "manual_beta",
+        subscriptionState: stateForCourseMonth(month),
+        subscriptionMonth: month,
+        validUntil: grant.valid_until,
+        gracePeriodEnds: null,
+        notes: grant.notes,
+      })
+      .onConflictDoUpdate({
+        target: userAccess.userId,
+        set: {
+          accessSource: "manual_beta",
+          subscriptionState: stateForCourseMonth(month),
+          subscriptionMonth: month,
+          validUntil: grant.valid_until,
+          gracePeriodEnds: null,
+          notes: grant.notes,
+        },
+      })
 
-  return true
+    // Link the grant to the now-known user id (best effort).
+    await db
+      .update(betaAccessGrants)
+      .set({ userId })
+      .where(eq(betaAccessGrants.email, normalizeBetaAccessEmail(email)))
+
+    return true
+  } catch {
+    return false
+  }
 }

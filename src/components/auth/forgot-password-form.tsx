@@ -9,7 +9,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "@/lib/validations"
-import { resetPassword } from "@/lib/actions/auth"
+import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form"
 
 /**
- * Forgot password form — sends a password reset email via Supabase Auth.
+ * Forgot password form — sends a password reset email via Better Auth.
  */
 export function ForgotPasswordForm() {
   const [serverError, setServerError] = useState<string | null>(null)
@@ -34,10 +34,13 @@ export function ForgotPasswordForm() {
 
   async function onSubmit(data: ForgotPasswordFormData) {
     setServerError(null)
-    const result = await resetPassword(data.email)
+    const { error } = await authClient.requestPasswordReset({
+      email: data.email,
+      redirectTo: "/settings",
+    })
 
-    if (result.error) {
-      setServerError(result.error)
+    if (error) {
+      setServerError(error.message ?? "Unable to send reset link")
       return
     }
 

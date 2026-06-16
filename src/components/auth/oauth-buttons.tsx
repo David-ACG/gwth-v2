@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 
-type OAuthProvider = "google" | "github" | "linkedin_oidc"
+type OAuthProvider = "google" | "github" | "linkedin"
 
 /** Provider display config */
 const providers: { id: OAuthProvider; label: string; icon: React.ReactNode }[] = [
@@ -31,7 +31,7 @@ const providers: { id: OAuthProvider; label: string; icon: React.ReactNode }[] =
     ),
   },
   {
-    id: "linkedin_oidc",
+    id: "linkedin",
     label: "LinkedIn",
     icon: (
       <svg viewBox="0 0 24 24" className="size-5 fill-[#0A66C2]" aria-hidden="true">
@@ -43,22 +43,19 @@ const providers: { id: OAuthProvider; label: string; icon: React.ReactNode }[] =
 
 /**
  * Social OAuth login buttons for Google, GitHub, and LinkedIn.
- * Uses the browser Supabase client to trigger signInWithOAuth.
- * Works on both login and signup pages — Supabase handles account
- * creation automatically for new OAuth users.
+ * Uses the Better Auth client to trigger social sign-in. Works on both login
+ * and signup pages — Better Auth provisions the account for new OAuth users,
+ * and the user.create database hook applies any matching beta grant.
  */
 export function OAuthButtons() {
   const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
 
   async function handleOAuth(provider: OAuthProvider) {
     setLoadingProvider(provider)
-    const supabase = createClient()
 
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await authClient.signIn.social({
       provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      callbackURL: `${window.location.origin}/dashboard`,
     })
 
     if (error) {
