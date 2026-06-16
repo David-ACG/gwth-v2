@@ -1,7 +1,7 @@
 "use client"
 
 import { useOptimistic, useTransition } from "react"
-import { updateLessonProgress } from "@/lib/data/progress"
+import { updateLessonProgressAction } from "@/lib/actions/progress"
 import { createEmptyLessonProgress, hasPassedQuiz } from "@/lib/progress/completion"
 import type { LessonProgress } from "@/lib/types"
 
@@ -31,7 +31,7 @@ export function useProgress(initialProgress: LessonProgress | null) {
       progress: 1,
     })
     startTransition(async () => {
-      await updateLessonProgress(lessonId, {
+      await updateLessonProgressAction(lessonId, {
         isCompleted: true,
         completedAt: new Date(),
         progress: 1,
@@ -51,7 +51,7 @@ export function useProgress(initialProgress: LessonProgress | null) {
     })
     startTransition(async () => {
       const persistedBestScore = Math.max(score, initialProgress?.bestQuizScore ?? 0)
-      await updateLessonProgress(lessonId, {
+      await updateLessonProgressAction(lessonId, {
         quizScore: score,
         bestQuizScore: persistedBestScore,
         quizPassed: hasPassedQuiz(persistedBestScore),
@@ -65,7 +65,7 @@ export function useProgress(initialProgress: LessonProgress | null) {
     const boundedProgress = Math.max(0, Math.min(1, progress))
     setOptimisticProgress({ lessonId, introVideoProgress: boundedProgress })
     startTransition(async () => {
-      await updateLessonProgress(lessonId, {
+      await updateLessonProgressAction(lessonId, {
         introVideoProgress: boundedProgress,
       })
     })

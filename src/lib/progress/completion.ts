@@ -42,6 +42,30 @@ export function getLessonCompletionStatus(
   }
 }
 
+/**
+ * The single source of truth for "is this lesson complete?".
+ *
+ * A lesson is complete when the intro video is at least 80% watched AND the
+ * lesson's Q&A gate has been passed. Partial states are incomplete:
+ *   - video 80% but quiz failed → incomplete
+ *   - quiz passed but video 60% → incomplete
+ *
+ * This works on a stored progress row (the shape the data layer reads/writes):
+ * it trusts `quizPassed` if present, otherwise derives it from the best quiz
+ * score, and reads the watched fraction from `introVideoProgress`.
+ */
+export function isLessonComplete(
+  row: Pick<
+    LessonProgress,
+    "introVideoProgress" | "quizPassed" | "bestQuizScore"
+  >
+): boolean {
+  const videoComplete =
+    (row.introVideoProgress ?? 0) >= INTRO_VIDEO_COMPLETION_THRESHOLD
+  const quizPassed = row.quizPassed ?? hasPassedQuiz(row.bestQuizScore)
+  return videoComplete && quizPassed
+}
+
 export function createEmptyLessonProgress(lessonId: string): LessonProgress {
   return {
     lessonId,
