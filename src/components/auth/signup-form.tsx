@@ -40,9 +40,11 @@ export function SignupForm() {
       </CardHeader>
       <CardContent className="space-y-4 text-center">
         <p className="text-sm text-muted-foreground">
-          If you have been invited, use the email address GWTH approved and
-          log in once your account is ready. Otherwise, join the waitlist and
-          we will contact you when more beta places open.
+          If you have been invited, sign in with a social provider (Google,
+          GitHub or LinkedIn) using the email address GWTH approved — that
+          first sign-in creates your account and applies your beta access.
+          Otherwise, join the waitlist and we will contact you when more beta
+          places open.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Button className="gap-2" asChild>

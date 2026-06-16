@@ -53,8 +53,10 @@ export function LoginForm() {
       return
     }
 
-    // Beta access is enforced by the route guard + getCurrentUser() gate: an
-    // ungranted account is redirected back to /login?error=beta_access_required.
+    // Beta access is enforced by the getCurrentUser() gate: an ungranted account
+    // keeps its valid session but resolves to null there, so it lands on the
+    // invite-required FreeDashboard view (no ?error param is emitted; the proxy
+    // guard only bounces anonymous no-cookie traffic to the bare /login).
     toast.success("Welcome back!")
     router.push("/dashboard")
     router.refresh()

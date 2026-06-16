@@ -31,8 +31,9 @@ const MOCK_USER: User = {
  *
  * Reads the Better Auth session (`getAuth().api.getSession`) and maps it onto
  * the app's `User` type, then applies the invite-only beta gate: a session
- * without a live `manual_beta` grant resolves to null (the route guard then
- * redirects such users to /login?error=beta_access_required).
+ * without a live `manual_beta` grant resolves to null. Such users keep a valid
+ * session but land on the invite-required FreeDashboard view; only anonymous
+ * (no-cookie) traffic is bounced by the proxy guard to the bare /login.
  *
  * In mock mode (no `DATABASE_URL`) `getAuth()`/`getAccessForUser()` cannot reach
  * a backend, so this resolves to null and the dev mock path takes over via

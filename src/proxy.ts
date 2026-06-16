@@ -73,8 +73,19 @@ const PROTECTED_PATHS = [
   "/notifications",
 ]
 
-/** Auth routes that should redirect to dashboard if already logged in */
-const AUTH_PATHS = ["/login", "/signup", "/forgot-password"]
+/**
+ * Auth routes that should redirect to dashboard if already logged in.
+ * `/reset-password` is here (NOT in PROTECTED_PATHS) so the emailed reset link
+ * is reachable WITHOUT a session — otherwise the logged-out user is bounced to
+ * /login and the reset token is dropped (#7). `/error` is likewise public (it
+ * is in neither list, so guardRoute passes it straight through).
+ */
+const AUTH_PATHS = [
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+]
 
 /** Paths that never need an auth check */
 const PUBLIC_ONLY_PATHS = ["/demo", "/api/health"]

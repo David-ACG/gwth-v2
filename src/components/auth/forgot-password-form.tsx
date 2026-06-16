@@ -36,7 +36,11 @@ export function ForgotPasswordForm() {
     setServerError(null)
     const { error } = await authClient.requestPasswordReset({
       email: data.email,
-      redirectTo: "/settings",
+      // #7: the reset link must land on the public /reset-password page (which
+      // reads the token and renders the new-password form). The old "/settings"
+      // is a PROTECTED route that bounced the logged-out user to /login and
+      // dropped the token.
+      redirectTo: "/reset-password",
     })
 
     if (error) {

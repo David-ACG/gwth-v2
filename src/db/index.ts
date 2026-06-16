@@ -21,8 +21,13 @@ import postgres from "postgres"
 // should import named tables from "@/db/schema" (the app-facing barrel).
 import * as tables from "../../drizzle/schema"
 import * as relations from "../../drizzle/relations"
+// W11 — Better Auth core tables (user/session/account/verification) live in
+// src/db/auth-schema.ts, NOT in the generated drizzle/ files. They MUST be part
+// of the schema handed to the Drizzle adapter, or it throws `model "user" not
+// found` on every op → getSession returns null → all users denied.
+import * as authTables from "./auth-schema"
 
-const schema = { ...tables, ...relations }
+const schema = { ...tables, ...relations, ...authTables }
 
 type Db = PostgresJsDatabase<typeof schema>
 

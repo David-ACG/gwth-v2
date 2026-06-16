@@ -112,6 +112,21 @@ describe("proxy route guard (W11)", () => {
         expect(redirectPath(response)).toBeNull()
       }
     })
+
+    it("(#7) lets a logged-out user reach /reset-password with its token intact", async () => {
+      // /reset-password is an AUTH_PATH (not PROTECTED): the emailed reset link
+      // must reach the form without a session, else the token is dropped.
+      setSessionCookie(null)
+      const response = await proxy(request("/reset-password?token=abc123"))
+      expect(redirectPath(response)).toBeNull()
+    })
+
+    it("(#6) lets a logged-out user reach the /error OAuth-failure page", async () => {
+      // /error is in neither list → guardRoute passes it straight through.
+      setSessionCookie(null)
+      const response = await proxy(request("/error?error=access_denied"))
+      expect(redirectPath(response)).toBeNull()
+    })
   })
 
   describe("in development", () => {

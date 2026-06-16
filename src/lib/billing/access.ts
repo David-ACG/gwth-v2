@@ -178,7 +178,14 @@ export async function getAccessForUser(userId: string): Promise<UserAccess> {
       stripe_subscription_status: row.stripeSubscriptionStatus,
       notes: row.notes,
     })
-  } catch {
+  } catch (err) {
+    // Fail CLOSED: a transient DB error must never admit a user beyond
+    // "registered". But log it — silently demoting a GRANTED tester on a blip
+    // is invisible otherwise (#11).
+    console.error(
+      "[access] getAccessForUser failed; failing closed to REGISTERED_ACCESS",
+      err
+    )
     return REGISTERED_ACCESS
   }
 }
@@ -214,7 +221,12 @@ export async function getBetaAccessGrantForEmail(
 
     if (!isGrantActive(grant, now)) return null
     return grant
-  } catch {
+  } catch (err) {
+    // Fail closed (no grant found) but make the lookup failure observable (#11).
+    console.error(
+      "[access] getBetaAccessGrantForEmail failed; treating as no grant",
+      err
+    )
     return null
   }
 }
@@ -286,7 +298,13 @@ export async function applyBetaAccessGrantToUser(
       .where(eq(betaAccessGrants.email, normalizeBetaAccessEmail(email)))
 
     return true
-  } catch {
+  } catch (err) {
+    // The grant application failed — the access gate still denies entry until a
+    // grant is applied, but surface the failure so it is not silent (#11).
+    console.error(
+      "[access] applyBetaAccessGrantToUser failed; grant not applied",
+      err
+    )
     return false
   }
 }

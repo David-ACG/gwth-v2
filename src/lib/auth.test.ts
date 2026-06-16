@@ -3,7 +3,8 @@
  *
  * `getCurrentUser` reads the Better Auth session and applies the invite-only
  * beta gate: a session without a live `manual_beta` grant resolves to null
- * (the route guard then bounces such users to /login?error=beta_access_required).
+ * (such users keep a valid session but get the invite-required FreeDashboard
+ * view; only anonymous no-cookie traffic is bounced by the proxy to /login).
  *
  * Both backend reads are mocked so the gate logic is the only thing under test:
  *   - @/lib/better-auth → getAuth().api.getSession returns a controllable session

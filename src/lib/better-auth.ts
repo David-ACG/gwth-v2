@@ -36,8 +36,26 @@ import {
 // `ReturnType<typeof betterAuth>` (i.e. Auth<BetterAuthOptions>) would widen and
 // fail to assign here.
 function buildAuth() {
+  // HIGH #4: without an explicit public baseURL, Better Auth derives the origin
+  // from the internal http request (behind Cloudflare → Traefik), breaking OAuth
+  // callbacks, email links and secure cookies (the D4 crisis class). Fail fast in
+  // production so a missing env can never silently ship the wrong origin.
+  const baseURL = process.env.BETTER_AUTH_URL
+  if (process.env.NODE_ENV === "production" && !baseURL) {
+    throw new Error(
+      "BETTER_AUTH_URL must be set in production — without it Better Auth derives the origin from the internal http request behind Cloudflare→Traefik, breaking OAuth callbacks, email links and secure cookies (D4)."
+    )
+  }
+
+  // HIGH #5: derive Secure from the public origin scheme rather than hardcoding
+  // it. Hardcoded Secure cookies are dropped by browsers over the plain-http
+  // staging origin (http://192.168.178.50:3001), so the session never persists
+  // there and the mandated D4 smoke test can never pass. https prod → secure;
+  // http staging → not secure → cookie persists. Mirrors site-access.ts:32.
+  const isSecureOrigin = (process.env.BETTER_AUTH_URL ?? "").startsWith("https://")
+
   return betterAuth({
-    baseURL: process.env.BETTER_AUTH_URL,
+    baseURL,
     secret: process.env.BETTER_AUTH_SECRET,
     database: drizzleAdapter(getDb(), {
       provider: "pg",
@@ -49,12 +67,23 @@ function buildAuth() {
       "http://localhost:3000",
     ],
     advanced: {
-      useSecureCookies: true,
+      useSecureCookies: isSecureOrigin,
       defaultCookieAttributes: {
         sameSite: "lax",
-        secure: true,
+        secure: isSecureOrigin,
         httpOnly: true,
         path: "/",
+      },
+    },
+    // HIGH #3: enable OAuth account linking across our first-party providers. A
+    // granted tester who first signs in with LinkedIn/GitHub (email reported
+    // unverified by the provider) would otherwise be permanently locked out when
+    // they later use a different provider — or even the same email/password —
+    // because Better Auth refuses to link to an existing unverified-email user.
+    account: {
+      accountLinking: {
+        enabled: true,
+        trustedProviders: ["google", "github", "linkedin"],
       },
     },
     emailAndPassword: {
@@ -74,6 +103,11 @@ function buildAuth() {
     },
     emailVerification: {
       sendOnSignUp: true,
+      // MEDIUM #8: re-issue + re-send the verification link when an unverified
+      // user attempts to sign in. With requireEmailVerification: true, an
+      // unverified user is rejected on every sign-in; without this they are
+      // locked out if the single signup email never arrives.
+      sendOnSignIn: true,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
         await sendPlunkEmail({
@@ -107,10 +141,12 @@ function buildAuth() {
           // signs-out + OAuth-delete-ungranted logic). When a new account is
           // created (email/password OR social), if its email has a manual beta
           // grant we apply that grant to the new user id. Ungranted accounts
-          // are NOT deleted — the access gate in getCurrentUser() returns null
-          // for them and the route guard redirects to
-          // /login?error=beta_access_required, so they can never reach gated
-          // content. This deliberately drops the OAuth-deletion quirk.
+          // are NOT deleted — they get a valid session, but the access gate in
+          // getCurrentUser() returns null for them, so they land on the
+          // invite-required FreeDashboard view and can never reach gated
+          // content. (The proxy guard only bounces anonymous, no-cookie traffic
+          // to the bare /login — no ?error param is ever emitted.) This
+          // deliberately drops the OAuth-deletion quirk.
           after: async (user) => {
             try {
               if (await isEmailGrantedBetaAccess(user.email)) {
