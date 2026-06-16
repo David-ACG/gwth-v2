@@ -54,13 +54,18 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     data = await import("./progress")
 
     // Clean any leftovers from a previous run, then seed the FK chain.
+    // W11: lesson_progress.user_id now FKs to public."user"(id) (text), not the
+    // retired auth.users table — seed real user rows so the FK is satisfied
+    // (deleting the user rows in afterAll cascades the progress rows away).
     await sql`delete from lesson_progress where lesson_id in (${LESSON_ID}, ${LESSON_ID_2})`
     await sql`delete from lessons where id in (${LESSON_ID}, ${LESSON_ID_2})`
     await sql`delete from sections where id = ${SECTION_ID}`
     await sql`delete from courses where id = ${COURSE_ID}`
-    await sql`delete from auth.users where id in (${USER_A}, ${USER_B})`
+    await sql`delete from "user" where id in (${USER_A}, ${USER_B})`
 
-    await sql`insert into auth.users (id) values (${USER_A}), (${USER_B})`
+    await sql`insert into "user" (id, name, email) values
+      (${USER_A}, 'W7 Test A', 'w7-test-a@example.com'),
+      (${USER_B}, 'W7 Test B', 'w7-test-b@example.com')`
     await sql`insert into courses (id, slug, title) values (${COURSE_ID}, ${COURSE_ID}, 'W7 Test Course')`
     await sql`insert into sections (id, course_id, title, month) values (${SECTION_ID}, ${COURSE_ID}, 'W7 Test Section', 1)`
     await sql`insert into lessons (id, slug, title, section_id, course_id, month)
@@ -73,7 +78,7 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     await sql`delete from lessons where id in (${LESSON_ID}, ${LESSON_ID_2})`
     await sql`delete from sections where id = ${SECTION_ID}`
     await sql`delete from courses where id = ${COURSE_ID}`
-    await sql`delete from auth.users where id in (${USER_A}, ${USER_B})`
+    await sql`delete from "user" where id in (${USER_A}, ${USER_B})`
     await sql.end({ timeout: 5 })
   })
 
