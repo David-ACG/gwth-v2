@@ -2,7 +2,7 @@
 
 > Living document. Updated as infrastructure is built.
 >
-> Last updated: 2026-02-22
+> Last updated: 2026-06-19 (I1: P520 staging DB + light hardening + SOPS)
 
 ---
 
@@ -132,7 +132,62 @@ Default: deny incoming, allow outgoing.
 | Base Dir     | `/`                                 |
 | Health Check | `GET /api/health`                   |
 | Port         | 3001 → 3000                         |
-| Status       | Running, healthy                    |
+| Status       | Coolify app record `exited`; :3001 is served by a hand-run image (below) |
+
+> **Topology note (I1, 2026-06-19):** the live `:3001` is **not** the Coolify
+> app record — it is a hand-run container `gwth-v2-w8-beta` (image
+> `gwth-v2:w8-beta-scope`, built 2026-06-13) redeployed via
+> `GWTH_V2/deploy/run-staging.sh`. It is wired to the staging DB below and its
+> dead Supabase env has been dropped. A current `next build` from HEAD (full
+> Drizzle data layer, no Supabase) is the W-track follow-up to make the
+> dashboard fully DB-backed; the June-13 build still routes some reads through
+> the (cancelled) Supabase and logs errors on those paths.
+
+### P520 GWTH v2 Staging Database (I1 / D1 / D2)
+
+Dedicated, **internal-only** Postgres for the `:3001` test instance — Coolify-managed,
+**never** another project's DB, **no public port**.
+
+| Setting          | Value                                                          |
+| ---------------- | -------------------------------------------------------------- |
+| Coolify resource | `gwth-v2-staging-db` (uuid `l08k8gwcscgssgwscoscwo8g`)         |
+| Image (pinned)   | `postgres:17.10-alpine` (digest `sha256:dc17045c…`) — matches prod PG 17.10, **not** a floating tag |
+| Network          | `coolify` (internal) — **no published host port**             |
+| User / DB        | `gwth` / `gwth_v2`                                             |
+| Schema applied   | Drizzle via `drizzle-kit push` (D1 — no `_prisma_migrations`); 22 tables + `news_articles_ranked` view, identical column set to dev |
+| Scoping          | per-user filter centralised in `src/lib/data/*.ts` (`currentUserId()`); **no DB RLS** (D2) — tested in `src/lib/data/progress.db.test.ts` |
+| Legacy roles     | inert `anon`/`authenticated`/`service_role` (NOLOGIN) created only to satisfy introspected Supabase GRANTs — drop when schema is re-introspected post-Supabase |
+
+**DATABASE_URL contract.** The app reads `DATABASE_URL` and **mock-falls-back when it is unset**
+(`src/db/index.ts` throws if a DB op runs without it; `src/lib/data/*.ts` gate on
+`isDbConfigured()`). The staging URL is **internal-network only**:
+
+```
+postgres://gwth:<password>@l08k8gwcscgssgwscoscwo8g:5432/gwth_v2
+```
+
+The password lives **only** in SOPS (`GWTH_V2/deploy/secrets.staging.env`, age-encrypted) and the
+running container env — never in plaintext in the repo. Deploy/redeploy with
+`./deploy/run-staging.sh` (decrypts secrets to a 0600 tmpfile, shredded on exit).
+
+**Backups (I1 step 3).** Coolify scheduled `pg_dump` (gzip logical), daily `0 3 * * *`,
+**local-only**, retain 7. Restore-drill-verified (both the manual gzip dump and the Coolify
+`.dmp` restore into a scratch DB with 0 errors). **Deferred to I3:** the Cloudflare R2 offsite
+copy and the D10 backup dead-man monitor (both gated on the R2 bucket, not yet provisioned).
+
+### P520 Applied Hardening Baseline (I1 / D8 — LIGHT, LAN+Tailscale)
+
+hlab is a **local dev box** — the public-grade lockdown (key-only SSH, egress controls,
+immutable audit) is reserved for the **Hetzner** box, a separate task. Applied here:
+
+| Item        | State                                                                   |
+| ----------- | ----------------------------------------------------------------------- |
+| Patching    | `apt full-upgrade` applied (Docker engine pkgs **held** — bounce all containers; deferred to a David-scheduled window with the kernel reboot 6.8.0-117 → -124). Unattended-upgrades on, auto-reboot off. |
+| auditd      | installed + enabled; light forensic ruleset `/etc/audit/rules.d/i1-hardening.rules` (identity, sudoers, sshd, docker, priv-esc) |
+| SSH (:22)   | `/etc/ssh/sshd_config.d/99-hardening.conf` — modern Kex/Ciphers/MACs, `MaxAuthTries 4`, `X11Forwarding no`, `PermitRootLogin prohibit-password`. **Password auth intentionally LEFT ENABLED** (dev box). Pubkey login re-verified through the new config. |
+| Docker      | `daemon.json` + `no-new-privileges: true`, `live-restore: true` (applied via reload — zero container bounce; keeps containers up across future daemon restarts) |
+| CIS audit   | Lynis hardening index **61 → 63** (`lynis audit system`)                 |
+| Secrets     | SOPS + age adopted (`~/.config/sops/age/keys.txt`, 0600 — **back up to Vaultwarden**); staging DB credential generated fresh; app secrets sourced from the encrypted store. Legacy plaintext credential files flagged for source-rotation (see I1 completion packet). |
 
 ---
 

@@ -1,0 +1,5 @@
+# SOPS config — I1 / D9 (SOPS + age for this box's app secrets).
+# Private key: ~/.config/sops/age/keys.txt on hlab (0600) — BACK UP to Vaultwarden.
+creation_rules:
+  - path_regex: deploy/secrets\..*\.env$
+    age: age1lruurmrw95uk2ahsnx043d7um8y05wkza4ty6f97kex4q8tugeesch30n4
