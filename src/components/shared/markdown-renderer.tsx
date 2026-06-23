@@ -10,7 +10,7 @@ import { CalloutBox } from "@/components/lesson/callout-box"
 import type { CalloutVariant } from "@/components/lesson/callout-box"
 import { KeyTermTooltip } from "@/components/lesson/key-term-tooltip"
 import type { Components } from "react-markdown"
-import type { ReactNode, HTMLAttributes } from "react"
+import { useState, type ReactNode, type HTMLAttributes, type ImgHTMLAttributes } from "react"
 
 const CodeBlock = dynamic(
   () =>
@@ -136,6 +136,41 @@ function headingId(text: string): string {
     .replace(/^-|-$/g, "")
 }
 
+/**
+ * Renders a markdown image that hides itself if the source fails to load.
+ * Lesson/lab bodies imported from the pipeline can reference figures whose
+ * assets are not (yet) hosted on the site; rather than show a broken-image
+ * icon, the element removes itself so the surrounding prose stays clean
+ * (graceful fallback for missing media — W3). Uses a raw <img> because the
+ * markdown source has no intrinsic dimensions for next/image.
+ */
+function GracefulImage({
+  src,
+  alt,
+  ...props
+}: ImgHTMLAttributes<HTMLImageElement>) {
+  const [failed, setFailed] = useState(false)
+  // Only request images from a real, hosted origin. Pipeline lesson bodies
+  // reference figures by relative path (e.g. `assets/generated/…`) whose assets
+  // are not hosted on the site yet — emitting those would 404 (and clutter the
+  // console). Skip anything that isn't an absolute http(s)/data/blob URL; once
+  // image hosting is wired, absolute URLs render normally. `onError` still
+  // hides a hosted image that fails at runtime.
+  const isHosted =
+    typeof src === "string" && /^(https?:|data:|blob:)/i.test(src)
+  if (!src || failed || !isHosted) return null
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt ?? ""}
+      loading="lazy"
+      onError={() => setFailed(true)}
+      {...props}
+    />
+  )
+}
+
 /** Type for div props that may include our custom data attributes */
 type DivProps = HTMLAttributes<HTMLDivElement> & {
   "data-callout"?: string
@@ -229,6 +264,12 @@ const markdownComponents: Components = {
     }
     return <div {...props}>{children}</div>
   }) as Components["div"],
+
+  // Images self-hide on load failure (graceful fallback for missing media).
+  img: (({ node, ...props }) => {
+    void node
+    return <GracefulImage {...(props as ImgHTMLAttributes<HTMLImageElement>)} />
+  }) as Components["img"],
 
   // Override span to detect key-term data attributes
   span: (({ children, node, ...props }: SpanProps) => {

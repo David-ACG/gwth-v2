@@ -162,8 +162,15 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Route protection — production only (dev no-op, see above).
-  if (process.env.NODE_ENV === "production") {
+  // Route protection — production only (dev no-op, see above). The W8-beta
+  // staging review env opts in via ENABLE_DEV_MOCK_USER, which makes the data
+  // layer serve a mock learner (getDashboardUser); skip the optimistic cookie
+  // guard there too so reviewers reach dashboard routes without a real session.
+  // This flag is never set on the public/production deploy.
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.ENABLE_DEV_MOCK_USER !== "true"
+  ) {
     const guardRedirect = guardRoute(request)
     if (guardRedirect) return guardRedirect
   }

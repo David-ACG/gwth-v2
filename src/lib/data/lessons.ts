@@ -1,69 +1,68 @@
 /**
  * Data access functions for lessons.
- * Queries Supabase when available, falls back to mock data.
- * The data layer abstraction ensures the UI code doesn't need to know
- * which backend is in use.
+ *
+ * Reads self-hosted PostgreSQL via Drizzle ORM (D1 — ratified 2026-06-15) when
+ * `DATABASE_URL` is configured, and falls back to the in-memory mock data when
+ * it is absent (so the app still runs in mock mode — same pattern as
+ * `progress.ts`). Supabase has been CANCELLED as a data backend; never
+ * re-introduce a Supabase client here.
+ *
+ * The data layer abstraction ensures the UI code doesn't need to know which
+ * backend is in use.
  */
 
 import type { Lesson, LessonSummary, QuizQuestion, Resource } from "@/lib/types"
 import { mockLessons, mockCourses } from "./mock-data"
+import { getDb } from "@/db"
+import { lessons, quizQuestions, lessonResources } from "@/db/schema"
+import { and, asc, eq } from "drizzle-orm"
 
 /**
- * Attempts to create a Supabase client. Returns null if Supabase
- * is not configured (missing env vars). This allows graceful
- * fallback to mock data during development.
+ * True when a real database is configured. When false the layer falls back to
+ * the in-memory mock arrays so the app still runs without a DB.
  */
-async function getSupabaseClient() {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    return null
-  }
-
-  try {
-    const { createClient } = await import("@/lib/supabase/server")
-    return await createClient()
-  } catch {
-    return null
-  }
+function isDbConfigured(): boolean {
+  return Boolean(process.env.DATABASE_URL)
 }
 
+/** The shape of a `lessons` row as returned by Drizzle. */
+type LessonRow = typeof lessons.$inferSelect
+
 /**
- * Converts a Supabase lesson row (snake_case) to a Lesson object (camelCase).
- * Attaches quiz questions and resources from their respective tables.
+ * Converts a persisted `lessons` row (camelCase via Drizzle) to a Lesson
+ * object. Attaches quiz questions and resources from their respective tables.
  */
 function rowToLesson(
-  row: Record<string, unknown>,
+  row: LessonRow,
   questions: QuizQuestion[] = [],
   resources: Resource[] = []
 ): Lesson {
   return {
-    id: row.id as string,
-    slug: row.slug as string,
-    title: row.title as string,
-    description: (row.description as string) || "",
-    order: row.order as number,
-    duration: row.duration as number,
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    description: row.description || "",
+    order: row.order,
+    duration: row.duration,
     difficulty: row.difficulty as "beginner" | "intermediate" | "advanced",
-    category: (row.category as string) || "",
-    sectionId: row.section_id as string,
-    courseId: row.course_id as string,
-    courseSlug: row.course_slug as string,
+    category: row.category || "",
+    sectionId: row.sectionId,
+    courseId: row.courseId,
+    courseSlug: row.courseSlug,
     month: row.month as 1 | 2 | 3,
-    isOptional: (row.is_optional as boolean) || false,
-    optionalTrack: (row.optional_track as string) || undefined,
-    introVideoUrl: (row.intro_video_url as string) || null,
-    learnContent: (row.learn_content as string) || "",
-    audioFileUrl: (row.audio_file_url as string) || null,
-    audioDuration: (row.audio_duration as number) || null,
-    buildVideoUrl: (row.build_video_url as string) || null,
-    buildInstructions: (row.build_instructions as string) || null,
+    isOptional: row.isOptional || false,
+    optionalTrack: row.optionalTrack || undefined,
+    introVideoUrl: row.introVideoUrl ?? null,
+    learnContent: row.learnContent || "",
+    audioFileUrl: row.audioFileUrl ?? null,
+    audioDuration: row.audioDuration ?? null,
+    buildVideoUrl: row.buildVideoUrl ?? null,
+    buildInstructions: row.buildInstructions ?? null,
     questions,
     resources,
     status: (row.status as Lesson["status"]) || "available",
-    createdAt: new Date(row.created_at as string),
-    updatedAt: new Date(row.updated_at as string),
+    createdAt: row.createdAt ? new Date(row.createdAt) : new Date(),
+    updatedAt: row.updatedAt ? new Date(row.updatedAt) : new Date(),
   }
 }
 
@@ -71,86 +70,89 @@ function rowToLesson(
  * Fetches a full lesson by slug, including all content tabs.
  * Returns null if the lesson doesn't exist.
  *
- * Tries Supabase first; falls back to mock data if unavailable or empty.
+ * Reads Postgres when configured; falls back to mock data otherwise.
  */
 export async function getLesson(slug: string): Promise<Lesson | null> {
-  const supabase = await getSupabaseClient()
+  if (isDbConfigured()) {
+    const db = getDb()
+    const lessonRows = await db
+      .select()
+      .from(lessons)
+      .where(eq(lessons.slug, slug))
+      .limit(1)
 
-  if (supabase) {
-    const { data: lessonRow, error } = await supabase
-      .from("lessons")
-      .select("*")
-      .eq("slug", slug)
-      .single()
-
-    if (!error && lessonRow) {
-      // Fetch questions and resources in parallel
-      const [questionsResult, resourcesResult] = await Promise.all([
-        supabase
-          .from("quiz_questions")
-          .select("*")
-          .eq("lesson_id", lessonRow.id)
-          .order("order"),
-        supabase
-          .from("lesson_resources")
-          .select("*")
-          .eq("lesson_id", lessonRow.id)
-          .order("order"),
+    const lessonRow = lessonRows[0]
+    if (lessonRow) {
+      const [questionRows, resourceRows] = await Promise.all([
+        db
+          .select()
+          .from(quizQuestions)
+          .where(eq(quizQuestions.lessonId, lessonRow.id))
+          .orderBy(asc(quizQuestions.order)),
+        db
+          .select()
+          .from(lessonResources)
+          .where(eq(lessonResources.lessonId, lessonRow.id))
+          .orderBy(asc(lessonResources.order)),
       ])
 
-      const questions: QuizQuestion[] = (questionsResult.data || []).map(
-        (q: Record<string, unknown>) => ({
-          id: q.id as string,
-          question: q.question as string,
-          options: q.options as string[],
-          correctOptionIndex: q.correct_option_index as number,
-          explanation: q.explanation as string,
-        })
-      )
+      const questions: QuizQuestion[] = questionRows.map((q) => ({
+        id: q.id,
+        question: q.question,
+        options: q.options,
+        correctOptionIndex: q.correctOptionIndex,
+        explanation: q.explanation,
+      }))
 
-      const resources: Resource[] = (resourcesResult.data || []).map(
-        (r: Record<string, unknown>) => ({
-          title: r.title as string,
-          url: r.url as string,
-          type: r.type as Resource["type"],
-        })
-      )
+      const resources: Resource[] = resourceRows.map((r) => ({
+        title: r.title,
+        url: r.url,
+        type: r.type as Resource["type"],
+      }))
 
       return rowToLesson(lessonRow, questions, resources)
     }
+    // Not found in the DB — fall through to the mock set so dev still resolves
+    // lessons that haven't been imported yet.
   }
 
-  // Fallback to mock data
   return mockLessons.find((l) => l.slug === slug) ?? null
 }
 
 /**
  * Fetches all lessons for a course (summaries only, not full content).
- * Returns them in section/order sequence.
+ * Returns them in month/order sequence.
  *
- * Tries Supabase first; falls back to mock data.
+ * Reads Postgres when configured; falls back to mock data otherwise.
  */
 export async function getLessons(courseSlug: string): Promise<LessonSummary[]> {
-  const supabase = await getSupabaseClient()
+  if (isDbConfigured()) {
+    const db = getDb()
+    const rows = await db
+      .select({
+        id: lessons.id,
+        slug: lessons.slug,
+        title: lessons.title,
+        order: lessons.order,
+        duration: lessons.duration,
+        status: lessons.status,
+        isOptional: lessons.isOptional,
+        optionalTrack: lessons.optionalTrack,
+      })
+      .from(lessons)
+      .where(eq(lessons.courseSlug, courseSlug))
+      .orderBy(asc(lessons.month), asc(lessons.order))
 
-  if (supabase) {
-    const { data: rows, error } = await supabase
-      .from("lessons")
-      .select("id, slug, title, \"order\", duration, status, is_optional, optional_track, section_id, month")
-      .eq("course_slug", courseSlug)
-      .order("month")
-      .order("order")
-
-    if (!error && rows && rows.length > 0) {
-      return rows.map((row: Record<string, unknown>) => ({
-        id: row.id as string,
-        slug: row.slug as string,
-        title: row.title as string,
-        order: row.order as number,
-        duration: row.duration as number,
+    if (rows.length > 0) {
+      return rows.map((row) => ({
+        id: row.id,
+        slug: row.slug,
+        title: row.title,
+        order: row.order,
+        duration: row.duration,
         status: (row.status as LessonSummary["status"]) || "available",
-        isOptional: (row.is_optional as boolean) || false,
-        optionalTrack: (row.optional_track as string) || undefined,
+        isOptional: row.isOptional || false,
+        optionalTrack: row.optionalTrack || undefined,
       }))
     }
   }
@@ -183,24 +185,23 @@ export async function getAdjacentLessons(
 
   return {
     prev: currentIndex > 0 ? (allLessons[currentIndex - 1] ?? null) : null,
-    next: currentIndex < allLessons.length - 1 ? (allLessons[currentIndex + 1] ?? null) : null,
+    next:
+      currentIndex < allLessons.length - 1
+        ? (allLessons[currentIndex + 1] ?? null)
+        : null,
   }
 }
 
 /**
  * Fetches the total count of lessons in the database.
- * Returns 0 if Supabase is unavailable (falls back to mock count).
+ * Returns the mock count when Postgres is unavailable or empty.
  */
 export async function getLessonCount(): Promise<number> {
-  const supabase = await getSupabaseClient()
-
-  if (supabase) {
-    const { count, error } = await supabase
-      .from("lessons")
-      .select("*", { count: "exact", head: true })
-
-    if (!error && count !== null && count > 0) {
-      return count
+  if (isDbConfigured()) {
+    const db = getDb()
+    const rows = await db.select({ id: lessons.id }).from(lessons)
+    if (rows.length > 0) {
+      return rows.length
     }
   }
 

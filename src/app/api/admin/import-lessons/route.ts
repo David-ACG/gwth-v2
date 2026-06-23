@@ -1,19 +1,29 @@
 /**
  * Admin API for importing lessons from the GWTH Pipeline.
  * Accepts structured lesson JSON matching the shared schema and upserts
- * into Supabase. Authenticated via API key (service-to-service).
+ * into self-hosted PostgreSQL via Drizzle ORM (D1 — ratified 2026-06-15).
+ * Authenticated via API key (service-to-service).
+ *
+ * Supabase has been CANCELLED as a data backend; this endpoint writes
+ * exclusively through `getDb()` (postgres.js + drizzle-orm). Never
+ * re-introduce a Supabase client here.
  *
  * POST /api/admin/import-lessons
  * Body: { lessons: PipelineLessonPayload[], apiKey: string }
  */
 
 import { NextRequest, NextResponse } from "next/server"
-import { createAdminClient } from "@/lib/supabase/server"
+import { getDb } from "@/db"
+import { courses, sections, lessons, quizQuestions, lessonResources } from "@/db/schema"
+import { eq } from "drizzle-orm"
 import type {
   PipelineLessonPayload,
   PipelineImportResponse,
   PipelineImportResult,
 } from "@/lib/types/pipeline"
+
+/** The set of resource types accepted by the `lesson_resources_type_check`. */
+const VALID_RESOURCE_TYPES = new Set(["link", "download", "video", "article"])
 
 /**
  * Validates a single lesson payload has the minimum required fields.
@@ -35,179 +45,137 @@ function validateLesson(lesson: PipelineLessonPayload): string | null {
 }
 
 /**
- * Imports a single lesson into Supabase using the upsert function.
- * Falls back to individual table operations if the RPC function isn't available.
+ * Imports a single lesson into Postgres via Drizzle. The whole lesson
+ * (course → section → lesson → quiz → resources) is written inside one
+ * transaction so a partial failure rolls back cleanly and never leaves the
+ * content tables half-populated. Mirrors the previous Supabase behaviour:
+ * the parent course and section are upserted first to satisfy the FKs, the
+ * lesson is upserted on its primary key, and quiz/resources are fully
+ * replaced (delete-then-insert) so re-imports stay idempotent.
  */
 async function importLesson(
-  supabase: ReturnType<typeof createAdminClient>,
+  db: ReturnType<typeof getDb>,
   lesson: PipelineLessonPayload
 ): Promise<PipelineImportResult> {
   try {
-    // Try the RPC function first (created in migration 003)
-    const { data, error } = await supabase.rpc("upsert_lesson_from_pipeline", {
-      p_lesson: lesson as unknown as Record<string, unknown>,
-      p_questions: lesson.questions as unknown as Record<string, unknown>[],
-      p_resources: lesson.resources as unknown as Record<string, unknown>[],
-    })
+    await db.transaction(async (tx) => {
+      // 1. Ensure the parent course exists (FK target for sections/lessons).
+      // We never clobber an existing course row — only fill it in if missing.
+      await tx
+        .insert(courses)
+        .values({
+          id: lesson.courseId || "course_gwth",
+          slug: lesson.courseSlug || "applied-ai-skills",
+          title: "Applied AI Skills",
+        })
+        .onConflictDoNothing()
 
-    if (error) {
-      // Fall back to manual upsert if RPC not available
-      return await importLessonManual(supabase, lesson)
-    }
+      // 2. Upsert the section (FK target for the lesson).
+      await tx
+        .insert(sections)
+        .values({
+          id: lesson.sectionId,
+          courseId: lesson.courseId || "course_gwth",
+          title: lesson.sectionTitle || `Week ${lesson.month}`,
+          order: lesson.sectionOrder ?? 0,
+          month: lesson.month,
+          isOptional: lesson.isOptional ?? false,
+          optionalTrack: lesson.optionalTrack ?? null,
+        })
+        .onConflictDoUpdate({
+          target: sections.id,
+          set: {
+            courseId: lesson.courseId || "course_gwth",
+            title: lesson.sectionTitle || `Week ${lesson.month}`,
+            order: lesson.sectionOrder ?? 0,
+            month: lesson.month,
+            isOptional: lesson.isOptional ?? false,
+            optionalTrack: lesson.optionalTrack ?? null,
+            updatedAt: new Date().toISOString(),
+          },
+        })
 
-    return {
-      lessonId: lesson.id,
-      success: true,
-      questionsCount: lesson.questions.length,
-      resourcesCount: lesson.resources.length,
-    }
-  } catch {
-    return await importLessonManual(supabase, lesson)
-  }
-}
-
-/**
- * Manual fallback: upserts lesson data using individual table operations.
- * Used when the RPC function isn't available (e.g. migration not yet run).
- */
-async function importLessonManual(
-  supabase: ReturnType<typeof createAdminClient>,
-  lesson: PipelineLessonPayload
-): Promise<PipelineImportResult> {
-  try {
-    // 1. Upsert section
-    const { error: sectionError } = await supabase
-      .from("sections")
-      .upsert({
-        id: lesson.sectionId,
-        course_id: lesson.courseId || "course_gwth",
-        title: lesson.sectionTitle || `Week ${lesson.month}`,
-        order: lesson.sectionOrder || 0,
-        month: lesson.month,
-        is_optional: lesson.isOptional || false,
-        optional_track: lesson.optionalTrack || null,
-      }, { onConflict: "id" })
-
-    if (sectionError) {
-      return {
-        lessonId: lesson.id,
-        success: false,
-        error: `Section upsert failed: ${sectionError.message}`,
-        questionsCount: 0,
-        resourcesCount: 0,
-      }
-    }
-
-    // 2. Upsert lesson
-    const { error: lessonError } = await supabase
-      .from("lessons")
-      .upsert({
+      // 3. Upsert the lesson on its primary key.
+      const lessonValues = {
         id: lesson.id,
         slug: lesson.slug,
         title: lesson.title,
         description: lesson.description || "",
-        order: lesson.order,
-        duration: lesson.duration,
+        order: lesson.order ?? 0,
+        duration: lesson.duration ?? 45,
         difficulty: lesson.difficulty,
         category: lesson.category || "",
-        section_id: lesson.sectionId,
-        course_id: lesson.courseId || "course_gwth",
-        course_slug: lesson.courseSlug || "applied-ai-skills",
+        sectionId: lesson.sectionId,
+        courseId: lesson.courseId || "course_gwth",
+        courseSlug: lesson.courseSlug || "applied-ai-skills",
         month: lesson.month,
-        is_optional: lesson.isOptional || false,
-        optional_track: lesson.optionalTrack || null,
-        intro_video_url: lesson.introVideoUrl,
-        learn_content: lesson.learnContent,
-        audio_file_url: lesson.audioFileUrl,
-        audio_duration: lesson.audioDuration,
-        build_video_url: lesson.buildVideoUrl,
-        build_instructions: lesson.buildInstructions,
+        isOptional: lesson.isOptional ?? false,
+        optionalTrack: lesson.optionalTrack ?? null,
+        introVideoUrl: lesson.introVideoUrl ?? null,
+        learnContent: lesson.learnContent,
+        audioFileUrl: lesson.audioFileUrl ?? null,
+        audioDuration: lesson.audioDuration ?? null,
+        buildVideoUrl: lesson.buildVideoUrl ?? null,
+        buildInstructions: lesson.buildInstructions ?? null,
         status: lesson.status || "available",
-        objectives: lesson.objectives || [],
-        tags: lesson.tags || [],
-        prerequisites: lesson.prerequisites || [],
-        pipeline_id: lesson.pipelineId || null,
-        pipeline_status: lesson.pipelineStatus || null,
-        exported_at: lesson.exportedAt || null,
-      }, { onConflict: "id" })
-
-    if (lessonError) {
-      return {
-        lessonId: lesson.id,
-        success: false,
-        error: `Lesson upsert failed: ${lessonError.message}`,
-        questionsCount: 0,
-        resourcesCount: 0,
+        objectives: lesson.objectives ?? [],
+        tags: lesson.tags ?? [],
+        prerequisites: lesson.prerequisites ?? [],
+        pipelineId: lesson.pipelineId ?? null,
+        pipelineStatus: lesson.pipelineStatus ?? null,
+        exportedAt: lesson.exportedAt ?? null,
+        updatedAt: new Date().toISOString(),
       }
-    }
 
-    // 3. Replace quiz questions
-    await supabase
-      .from("quiz_questions")
-      .delete()
-      .eq("lesson_id", lesson.id)
+      await tx
+        .insert(lessons)
+        .values(lessonValues)
+        .onConflictDoUpdate({ target: lessons.id, set: lessonValues })
 
-    if (lesson.questions.length > 0) {
-      const { error: qError } = await supabase
-        .from("quiz_questions")
-        .insert(
+      // 4. Replace quiz questions (delete-then-insert keeps re-imports clean).
+      await tx.delete(quizQuestions).where(eq(quizQuestions.lessonId, lesson.id))
+      if (lesson.questions.length > 0) {
+        await tx.insert(quizQuestions).values(
           lesson.questions.map((q, i) => ({
-            id: q.id,
-            lesson_id: lesson.id,
+            id: q.id || `${lesson.id}_q${i + 1}`,
+            lessonId: lesson.id,
             question: q.question,
             options: q.options,
-            correct_option_index: q.correctOptionIndex,
-            explanation: q.explanation,
+            correctOptionIndex: q.correctOptionIndex,
+            explanation: q.explanation || "",
             order: i,
           }))
         )
-
-      if (qError) {
-        return {
-          lessonId: lesson.id,
-          success: false,
-          error: `Quiz insert failed: ${qError.message}`,
-          questionsCount: 0,
-          resourcesCount: lesson.resources.length,
-        }
       }
-    }
 
-    // 4. Replace resources
-    await supabase
-      .from("lesson_resources")
-      .delete()
-      .eq("lesson_id", lesson.id)
-
-    if (lesson.resources.length > 0) {
-      const { error: rError } = await supabase
-        .from("lesson_resources")
-        .insert(
-          lesson.resources.map((r, i) => ({
-            lesson_id: lesson.id,
+      // 5. Replace resources (skip any with an unsupported type to respect the
+      // `lesson_resources_type_check` constraint).
+      await tx
+        .delete(lessonResources)
+        .where(eq(lessonResources.lessonId, lesson.id))
+      const validResources = lesson.resources.filter((r) =>
+        VALID_RESOURCE_TYPES.has(r.type)
+      )
+      if (validResources.length > 0) {
+        await tx.insert(lessonResources).values(
+          validResources.map((r, i) => ({
+            lessonId: lesson.id,
             title: r.title,
             url: r.url,
             type: r.type,
             order: i,
           }))
         )
-
-      if (rError) {
-        return {
-          lessonId: lesson.id,
-          success: false,
-          error: `Resources insert failed: ${rError.message}`,
-          questionsCount: lesson.questions.length,
-          resourcesCount: 0,
-        }
       }
-    }
+    })
 
     return {
       lessonId: lesson.id,
       success: true,
       questionsCount: lesson.questions.length,
-      resourcesCount: lesson.resources.length,
+      resourcesCount: lesson.resources.filter((r) =>
+        VALID_RESOURCE_TYPES.has(r.type)
+      ).length,
     }
   } catch (err) {
     return {
@@ -223,15 +191,16 @@ async function importLessonManual(
 /**
  * POST /api/admin/import-lessons
  *
- * Imports one or more lessons from the pipeline into Supabase.
- * Requires the PIPELINE_API_KEY environment variable for authentication.
+ * Imports one or more lessons from the pipeline into Postgres (Drizzle).
+ * Requires the PIPELINE_API_KEY environment variable for authentication and
+ * DATABASE_URL to be configured.
  */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { lessons, apiKey } = body
+    const { lessons: lessonPayloads, apiKey } = body
 
-    // Validate API key
+    // Validate API key (service-to-service auth — unchanged contract).
     const expectedKey = process.env.PIPELINE_API_KEY
     if (!expectedKey) {
       return NextResponse.json(
@@ -240,27 +209,30 @@ export async function POST(request: NextRequest) {
       )
     }
     if (apiKey !== expectedKey) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 })
+    }
+
+    if (!process.env.DATABASE_URL) {
       return NextResponse.json(
-        { error: "Invalid API key" },
-        { status: 401 }
+        { error: "DATABASE_URL not configured on server" },
+        { status: 500 }
       )
     }
 
     // Validate payload
-    if (!Array.isArray(lessons) || lessons.length === 0) {
+    if (!Array.isArray(lessonPayloads) || lessonPayloads.length === 0) {
       return NextResponse.json(
         { error: "Request body must include a non-empty 'lessons' array" },
         { status: 400 }
       )
     }
 
-    const supabase = createAdminClient()
+    const db = getDb()
     const results: PipelineImportResult[] = []
     let successful = 0
     let failed = 0
 
-    for (const lesson of lessons as PipelineLessonPayload[]) {
-      // Validate each lesson
+    for (const lesson of lessonPayloads as PipelineLessonPayload[]) {
       const validationError = validateLesson(lesson)
       if (validationError) {
         results.push({
@@ -274,7 +246,7 @@ export async function POST(request: NextRequest) {
         continue
       }
 
-      const result = await importLesson(supabase, lesson)
+      const result = await importLesson(db, lesson)
       results.push(result)
       if (result.success) {
         successful++
@@ -284,7 +256,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response: PipelineImportResponse = {
-      total: lessons.length,
+      total: lessonPayloads.length,
       successful,
       failed,
       results,
@@ -304,7 +276,7 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/admin/import-lessons
  *
- * Returns the count of lessons currently in Supabase.
+ * Returns the count of lessons currently in Postgres.
  * Useful for health checks and verifying imports.
  */
 export async function GET(request: NextRequest) {
@@ -314,17 +286,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
+  if (!process.env.DATABASE_URL) {
+    return NextResponse.json(
+      { error: "DATABASE_URL not configured on server" },
+      { status: 500 }
+    )
+  }
+
   try {
-    const supabase = createAdminClient()
-    const { count, error } = await supabase
-      .from("lessons")
-      .select("*", { count: "exact", head: true })
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
-    }
-
-    return NextResponse.json({ lessonCount: count })
+    const db = getDb()
+    const rows = await db.select({ id: lessons.id }).from(lessons)
+    return NextResponse.json({ lessonCount: rows.length })
   } catch (err) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Internal server error" },

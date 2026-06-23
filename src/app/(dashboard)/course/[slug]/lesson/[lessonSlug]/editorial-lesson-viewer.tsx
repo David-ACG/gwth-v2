@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
+import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
 import styles from "./lesson-fde.module.css"
 
 /**
@@ -38,6 +39,18 @@ export interface EditorialLessonPage {
   kind: EditorialLessonPageKind
 }
 
+/** A real Q&A question wired into the end-of-lesson surface. */
+export interface EditorialLessonQuestion {
+  /** The question prompt. */
+  question: string
+  /** Answer options (rendered A, B, C…). */
+  options: string[]
+  /** Index of the correct option. */
+  correctOptionIndex: number
+  /** Optional explanation shown as feedback. */
+  explanation?: string
+}
+
 /** Static lesson metadata required by the viewer chrome. */
 export interface EditorialLessonMeta {
   /** Course month label, e.g. `"MONTH 1 · LESSON 13"`. */
@@ -52,6 +65,16 @@ export interface EditorialLessonMeta {
   monthTotal: number
   /** Ordered list of pages in this lesson. */
   pages: EditorialLessonPage[]
+  /**
+   * Real lesson body (markdown), imported from Postgres. When present the
+   * prose surface renders this instead of the bundled design placeholder.
+   */
+  learnContent?: string
+  /**
+   * Real end-of-lesson Q&A, imported from Postgres. When present the Q&A
+   * surface renders these instead of the bundled design placeholder.
+   */
+  questions?: EditorialLessonQuestion[]
 }
 
 interface EditorialLessonViewerProps {
@@ -176,10 +199,18 @@ export function EditorialLessonViewer({
               {isVideo ? (
                 <VideoPageBody pageTotal={lesson.pages.length} />
               ) : isQa ? (
-                <QAPageBody />
+                lesson.questions && lesson.questions.length > 0 ? (
+                  <RealQAPageBody questions={lesson.questions} />
+                ) : (
+                  <QAPageBody />
+                )
               ) : (
                 <ProseBody>
-                  <DefaultProseContent />
+                  {lesson.learnContent ? (
+                    <MarkdownRenderer content={lesson.learnContent} />
+                  ) : (
+                    <DefaultProseContent />
+                  )}
                 </ProseBody>
               )}
             </div>
@@ -1156,6 +1187,54 @@ function QAPageBody() {
       <div className="mt-8 flex items-center justify-between border-t border-border pt-[22px]">
         <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
           1 PASSED · 1 SELECTED · 2 PENDING
+        </div>
+        <SharpButton variant="primary" className="min-w-[240px]">
+          SUBMIT Q&amp;A <span aria-hidden="true">→</span>
+        </SharpButton>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Renders the real, imported end-of-lesson Q&A (from Postgres) using the same
+ * editorial QAItem chrome as the design placeholder. Options are shown in the
+ * neutral `idle` state — the static viewer does not reveal answers or grade
+ * inline; the answer key stays server-side. Falls back to the bundled
+ * `QAPageBody` when no questions are imported.
+ */
+function RealQAPageBody({
+  questions,
+}: {
+  questions: EditorialLessonQuestion[]
+}) {
+  return (
+    <div className="w-full max-w-[720px]">
+      <p className="m-0 mb-7 text-[17px] italic leading-[1.55] text-muted-foreground">
+        {questions.length} short question{questions.length === 1 ? "" : "s"}{" "}
+        before this counts toward Month 1.{" "}
+        <span className={styles.accent}>
+          No clock, no streak, no penalty for retrying.
+        </span>
+      </p>
+
+      {questions.map((q, i) => (
+        <QAItem
+          key={i}
+          num={i + 1}
+          total={questions.length}
+          state="open"
+          prompt={q.question}
+          options={q.options.map((label) => ({
+            label,
+            state: "idle" as const,
+          }))}
+        />
+      ))}
+
+      <div className="mt-8 flex items-center justify-between border-t border-border pt-[22px]">
+        <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
+          {questions.length} QUESTION{questions.length === 1 ? "" : "S"}
         </div>
         <SharpButton variant="primary" className="min-w-[240px]">
           SUBMIT Q&amp;A <span aria-hidden="true">→</span>

@@ -100,10 +100,12 @@ export async function getMockUser(): Promise<User> {
 export async function getDashboardUser(): Promise<User | null> {
   const user = await getCurrentUser()
   if (user) return user
-  if (
-    process.env.NODE_ENV !== "production" &&
-    process.env.ENABLE_DEV_MOCK_USER === "true"
-  ) {
+  // ENABLE_DEV_MOCK_USER opts into the mock learner for visual/review work.
+  // Honoured in local dev AND on the W8-beta staging review env (which runs
+  // NODE_ENV=production but sets the flag so reviewers see imported content
+  // unlocked); it is never set on the public/production deploy. The proxy
+  // route guard is relaxed under the same flag (src/proxy.ts).
+  if (process.env.ENABLE_DEV_MOCK_USER === "true") {
     return MOCK_USER
   }
   return null

@@ -40,6 +40,10 @@ docker run -d --name "$NAME" \
   -e PORT="$CONTAINER_PORT" \
   -e NEXT_PUBLIC_SITE_URL="http://192.168.178.50:${HOST_PORT}" \
   -e BETTER_AUTH_URL="http://192.168.178.50:${HOST_PORT}" \
+  -e ENABLE_DEV_MOCK_USER=true \
   "$IMAGE" >/dev/null
+# ENABLE_DEV_MOCK_USER (W3): the W8-beta staging review env surfaces the mock
+# learner so reviewers see imported Month-1 content unlocked. Remove this -e
+# line before any public/production deploy.
 
 echo "deployed $NAME on :${HOST_PORT} (network=$NET, secrets via SOPS, Supabase env dropped)"

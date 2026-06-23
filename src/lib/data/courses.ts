@@ -1,86 +1,108 @@
 /**
  * Data access functions for courses.
- * Queries Supabase when available, falls back to mock data.
+ *
+ * Reads self-hosted PostgreSQL via Drizzle ORM (D1 — ratified 2026-06-15) when
+ * `DATABASE_URL` is configured, joining course → sections → lessons into the
+ * nested Course structure, and falls back to the in-memory mock courses when it
+ * is absent. Supabase has been CANCELLED as a data backend; never re-introduce
+ * a Supabase client here.
  */
 
 import type { Course, CourseSection, LessonSummary } from "@/lib/types"
 import { mockCourses } from "./mock-data"
+import { getDb } from "@/db"
+import { courses, sections, lessons } from "@/db/schema"
+import { asc, eq, inArray } from "drizzle-orm"
 
 /**
- * Attempts to create a Supabase client. Returns null if Supabase
- * is not configured (missing env vars).
+ * True when a real database is configured. When false the layer falls back to
+ * the in-memory mock arrays so the app still runs without a DB.
  */
-async function getSupabaseClient() {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    return null
-  }
+function isDbConfigured(): boolean {
+  return Boolean(process.env.DATABASE_URL)
+}
 
-  try {
-    const { createClient } = await import("@/lib/supabase/server")
-    return await createClient()
-  } catch {
-    return null
-  }
+type CourseRow = typeof courses.$inferSelect
+type SectionRow = typeof sections.$inferSelect
+type LessonSummaryRow = {
+  id: string
+  slug: string
+  title: string
+  order: number
+  duration: number
+  status: string
+  isOptional: boolean
+  optionalTrack: string | null
+  sectionId: string
+  courseId: string
+}
+
+/** The columns selected for lesson summaries (avoids pulling full content). */
+const lessonSummaryColumns = {
+  id: lessons.id,
+  slug: lessons.slug,
+  title: lessons.title,
+  order: lessons.order,
+  duration: lessons.duration,
+  status: lessons.status,
+  isOptional: lessons.isOptional,
+  optionalTrack: lessons.optionalTrack,
+  sectionId: lessons.sectionId,
+  courseId: lessons.courseId,
 }
 
 /**
- * Assembles a Course object from Supabase rows.
+ * Assembles a Course object from Drizzle rows.
  * Joins course → sections → lessons into the nested Course structure.
  */
 function assembleCourse(
-  courseRow: Record<string, unknown>,
-  sectionRows: Record<string, unknown>[],
-  lessonRows: Record<string, unknown>[]
+  courseRow: CourseRow,
+  sectionRows: SectionRow[],
+  lessonRows: LessonSummaryRow[]
 ): Course {
-  // Group lessons by section_id
   const lessonsBySection = new Map<string, LessonSummary[]>()
   for (const row of lessonRows) {
-    const sectionId = row.section_id as string
-    if (!lessonsBySection.has(sectionId)) {
-      lessonsBySection.set(sectionId, [])
+    if (!lessonsBySection.has(row.sectionId)) {
+      lessonsBySection.set(row.sectionId, [])
     }
-    lessonsBySection.get(sectionId)!.push({
-      id: row.id as string,
-      slug: row.slug as string,
-      title: row.title as string,
-      order: row.order as number,
-      duration: row.duration as number,
+    lessonsBySection.get(row.sectionId)!.push({
+      id: row.id,
+      slug: row.slug,
+      title: row.title,
+      order: row.order,
+      duration: row.duration,
       status: (row.status as LessonSummary["status"]) || "available",
-      isOptional: (row.is_optional as boolean) || false,
-      optionalTrack: (row.optional_track as string) || undefined,
+      isOptional: row.isOptional || false,
+      optionalTrack: row.optionalTrack || undefined,
     })
   }
 
-  // Build sections with their lessons
-  const sections: CourseSection[] = sectionRows.map((s) => ({
-    id: s.id as string,
-    title: s.title as string,
-    order: s.order as number,
+  const courseSections: CourseSection[] = sectionRows.map((s) => ({
+    id: s.id,
+    title: s.title,
+    order: s.order,
     month: s.month as 1 | 2 | 3,
-    isOptional: (s.is_optional as boolean) || false,
-    optionalTrack: (s.optional_track as string) || undefined,
-    lessons: (lessonsBySection.get(s.id as string) || []).sort(
+    isOptional: s.isOptional || false,
+    optionalTrack: s.optionalTrack || undefined,
+    lessons: (lessonsBySection.get(s.id) || []).sort(
       (a, b) => a.order - b.order
     ),
   }))
 
   return {
-    id: courseRow.id as string,
-    slug: courseRow.slug as string,
-    title: courseRow.title as string,
-    description: (courseRow.description as string) || "",
-    thumbnail: (courseRow.thumbnail as string) || "/images/courses/applied-ai-skills.jpg",
-    blurDataUrl: (courseRow.blur_data_url as string) || null,
-    price: (courseRow.price as number) || 0,
-    category: (courseRow.category as string) || "Applied AI",
+    id: courseRow.id,
+    slug: courseRow.slug,
+    title: courseRow.title,
+    description: courseRow.description || "",
+    thumbnail: courseRow.thumbnail || "/images/courses/applied-ai-skills.jpg",
+    blurDataUrl: courseRow.blurDataUrl || null,
+    price: courseRow.price || 0,
+    category: courseRow.category || "Applied AI",
     difficulty: (courseRow.difficulty as Course["difficulty"]) || "beginner",
-    estimatedDuration: (courseRow.estimated_duration as number) || 0,
-    sections: sections.sort((a, b) => a.order - b.order),
-    createdAt: new Date(courseRow.created_at as string),
-    updatedAt: new Date(courseRow.updated_at as string),
+    estimatedDuration: courseRow.estimatedDuration || 0,
+    sections: courseSections.sort((a, b) => a.order - b.order),
+    createdAt: courseRow.createdAt ? new Date(courseRow.createdAt) : new Date(),
+    updatedAt: courseRow.updatedAt ? new Date(courseRow.updatedAt) : new Date(),
   }
 }
 
@@ -89,35 +111,37 @@ function assembleCourse(
  * Returns them sorted by creation date (newest first).
  */
 export async function getCourses(): Promise<Course[]> {
-  const supabase = await getSupabaseClient()
+  if (isDbConfigured()) {
+    const db = getDb()
+    const courseRows = await db.select().from(courses)
 
-  if (supabase) {
-    const { data: courseRows, error } = await supabase
-      .from("courses")
-      .select("*")
-      .order("created_at", { ascending: false })
-
-    if (!error && courseRows && courseRows.length > 0) {
-      // Fetch all sections and lessons for all courses
-      const courseIds = courseRows.map((c: Record<string, unknown>) => c.id as string)
-      const [sectionsResult, lessonsResult] = await Promise.all([
-        supabase.from("sections").select("*").in("course_id", courseIds).order("order"),
-        supabase.from("lessons").select("id, slug, title, \"order\", duration, status, is_optional, optional_track, section_id, course_id, month").in("course_id", courseIds).order("order"),
+    if (courseRows.length > 0) {
+      const courseIds = courseRows.map((c) => c.id)
+      const [sectionRows, lessonRows] = await Promise.all([
+        db
+          .select()
+          .from(sections)
+          .where(inArray(sections.courseId, courseIds))
+          .orderBy(asc(sections.order)),
+        db
+          .select(lessonSummaryColumns)
+          .from(lessons)
+          .where(inArray(lessons.courseId, courseIds))
+          .orderBy(asc(lessons.order)),
       ])
 
-      return courseRows.map((courseRow: Record<string, unknown>) => {
-        const sections = (sectionsResult.data || []).filter(
-          (s: Record<string, unknown>) => s.course_id === courseRow.id
+      return courseRows
+        .map((courseRow) =>
+          assembleCourse(
+            courseRow,
+            sectionRows.filter((s) => s.courseId === courseRow.id),
+            lessonRows.filter((l) => l.courseId === courseRow.id)
+          )
         )
-        const lessons = (lessonsResult.data || []).filter(
-          (l: Record<string, unknown>) => l.course_id === courseRow.id
-        )
-        return assembleCourse(courseRow, sections, lessons)
-      })
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     }
   }
 
-  // Fallback to mock data
   return [...mockCourses].sort(
     (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
   )
@@ -125,33 +149,37 @@ export async function getCourses(): Promise<Course[]> {
 
 /**
  * Fetches a single course by slug, including its sections and lesson metadata.
- * Returns null if the course doesn't exist or isn't published.
+ * Returns null if the course doesn't exist.
  */
 export async function getCourse(slug: string): Promise<Course | null> {
-  const supabase = await getSupabaseClient()
+  if (isDbConfigured()) {
+    const db = getDb()
+    const courseRows = await db
+      .select()
+      .from(courses)
+      .where(eq(courses.slug, slug))
+      .limit(1)
 
-  if (supabase) {
-    const { data: courseRow, error } = await supabase
-      .from("courses")
-      .select("*")
-      .eq("slug", slug)
-      .single()
-
-    if (!error && courseRow) {
-      const [sectionsResult, lessonsResult] = await Promise.all([
-        supabase.from("sections").select("*").eq("course_id", courseRow.id).order("order"),
-        supabase.from("lessons").select("id, slug, title, \"order\", duration, status, is_optional, optional_track, section_id, course_id, month").eq("course_id", courseRow.id).order("month").order("order"),
+    const courseRow = courseRows[0]
+    if (courseRow) {
+      const [sectionRows, lessonRows] = await Promise.all([
+        db
+          .select()
+          .from(sections)
+          .where(eq(sections.courseId, courseRow.id))
+          .orderBy(asc(sections.order)),
+        db
+          .select(lessonSummaryColumns)
+          .from(lessons)
+          .where(eq(lessons.courseId, courseRow.id))
+          .orderBy(asc(lessons.month), asc(lessons.order)),
       ])
 
-      return assembleCourse(
-        courseRow,
-        sectionsResult.data || [],
-        lessonsResult.data || []
-      )
+      return assembleCourse(courseRow, sectionRows, lessonRows)
     }
+    // Not found in the DB — fall through to the mock set.
   }
 
-  // Fallback to mock data
   return mockCourses.find((c) => c.slug === slug) ?? null
 }
 
@@ -164,8 +192,6 @@ export async function searchCourses(params: {
   category?: string
   difficulty?: "beginner" | "intermediate" | "advanced"
 }): Promise<Course[]> {
-  // For search, use the getCourses function and filter client-side.
-  // Supabase full-text search can be added later for performance.
   let results = await getCourses()
 
   if (params.query) {
@@ -192,7 +218,7 @@ export async function searchCourses(params: {
  * Returns the unique categories across all courses.
  */
 export async function getCourseCategories(): Promise<string[]> {
-  const courses = await getCourses()
-  const categories = new Set(courses.map((c) => c.category))
+  const allCourses = await getCourses()
+  const categories = new Set(allCourses.map((c) => c.category))
   return [...categories].sort()
 }

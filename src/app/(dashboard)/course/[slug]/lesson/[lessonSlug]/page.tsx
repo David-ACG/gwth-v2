@@ -149,6 +149,19 @@ export default async function LessonPage({
     monthCompleted: courseProgress?.completedLessons ?? 0,
     monthTotal: monthLessonCount > 0 ? monthLessonCount : 24,
     pages: buildLessonPages(lesson),
+    // Real imported content (Postgres/Drizzle). The viewer renders these in
+    // the prose + Q&A surfaces, falling back to the design placeholders only
+    // when a lesson has no body / no questions.
+    learnContent: lesson.learnContent || undefined,
+    questions:
+      lesson.questions.length > 0
+        ? lesson.questions.map((q) => ({
+            question: q.question,
+            options: q.options,
+            correctOptionIndex: q.correctOptionIndex,
+            explanation: q.explanation,
+          }))
+        : undefined,
   }
 
   const surfaceParam = sp.surface ?? "prose"

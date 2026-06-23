@@ -1,23 +1,42 @@
 /**
  * Tests for the /api/admin/import-lessons route.
- * Validates API key auth, request validation, and lesson import flow.
+ * Validates API key auth, request validation, and the Drizzle import flow
+ * (D1 — self-hosted Postgres; Supabase removed).
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 import { NextRequest } from "next/server"
 
-// Mock createAdminClient before importing route
-const mockRpc = vi.fn()
-const mockFrom = vi.fn()
-const mockUpsert = vi.fn()
-const mockDelete = vi.fn()
-const mockInsert = vi.fn()
-const mockSelect = vi.fn()
+// ─── Drizzle mock ─────────────────────────────────────────────────────────
+// A thenable insert builder: `await db.insert(t).values(v)` resolves, and the
+// optional `.onConflictDoNothing()` / `.onConflictDoUpdate()` terminators also
+// resolve — matching how the route writes each table.
+function makeInsertBuilder() {
+  return {
+    values: vi.fn(() => {
+      const result: Record<string, unknown> = {
+        onConflictDoNothing: vi.fn(() => Promise.resolve([])),
+        onConflictDoUpdate: vi.fn(() => Promise.resolve([])),
+        then: (resolve: (v: unknown) => unknown) =>
+          Promise.resolve([]).then(resolve),
+      }
+      return result
+    }),
+  }
+}
 
-vi.mock("@/lib/supabase/server", () => ({
-  createAdminClient: () => ({
-    rpc: mockRpc,
-    from: mockFrom,
-  }),
+const txInsert = vi.fn(() => makeInsertBuilder())
+const txDelete = vi.fn(() => ({ where: vi.fn(() => Promise.resolve([])) }))
+const transaction = vi.fn(
+  async (cb: (tx: unknown) => Promise<unknown>) =>
+    cb({ insert: txInsert, delete: txDelete })
+)
+
+// GET path: db.select({...}).from(lessons) resolves to an array of rows.
+const selectFrom = vi.fn(() => Promise.resolve([{ id: "m1_l01" }]))
+const select = vi.fn(() => ({ from: selectFrom }))
+
+vi.mock("@/db", () => ({
+  getDb: () => ({ transaction, select }),
 }))
 
 import { POST, GET } from "./route"
@@ -80,24 +99,11 @@ describe("/api/admin/import-lessons", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    process.env = { ...originalEnv, PIPELINE_API_KEY: "test-key-123" }
-
-    // Default mock: RPC succeeds
-    mockRpc.mockResolvedValue({ data: { status: "upserted" }, error: null })
-
-    // Default mock chain for manual fallback
-    mockFrom.mockReturnValue({
-      upsert: mockUpsert.mockReturnValue({ error: null }),
-      delete: mockDelete.mockReturnValue({
-        eq: vi.fn().mockReturnValue({ error: null }),
-      }),
-      insert: mockInsert.mockReturnValue({ error: null }),
-      select: mockSelect.mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ count: 1, error: null }),
-        }),
-      }),
-    })
+    process.env = {
+      ...originalEnv,
+      PIPELINE_API_KEY: "test-key-123",
+      DATABASE_URL: "postgres://test:test@localhost:5432/test",
+    }
   })
 
   afterEach(() => {
@@ -125,6 +131,16 @@ describe("/api/admin/import-lessons", () => {
   it("returns 401 when API key is missing", async () => {
     const res = await POST(createPostRequest({ lessons: [makeLesson()] }))
     expect(res.status).toBe(401)
+  })
+
+  it("returns 500 when DATABASE_URL is not configured", async () => {
+    delete process.env.DATABASE_URL
+    const res = await POST(
+      createPostRequest({ lessons: [makeLesson()], apiKey: "test-key-123" })
+    )
+    expect(res.status).toBe(500)
+    const data = await res.json()
+    expect(data.error).toContain("DATABASE_URL not configured")
   })
 
   // ─── Request Validation ───────────────────────────────────────────────────
@@ -193,7 +209,7 @@ describe("/api/admin/import-lessons", () => {
 
   // ─── Successful Import ────────────────────────────────────────────────────
 
-  it("imports a valid lesson successfully via RPC", async () => {
+  it("imports a valid lesson successfully via Drizzle", async () => {
     const res = await POST(
       createPostRequest({
         lessons: [makeLesson()],
@@ -212,20 +228,37 @@ describe("/api/admin/import-lessons", () => {
     expect(data.results[0].resourcesCount).toBe(1)
   })
 
-  it("calls RPC with correct parameters", async () => {
-    const lesson = makeLesson()
+  it("runs the import inside a transaction and writes the content tables", async () => {
     await POST(
       createPostRequest({
-        lessons: [lesson],
+        lessons: [makeLesson()],
         apiKey: "test-key-123",
       })
     )
 
-    expect(mockRpc).toHaveBeenCalledWith("upsert_lesson_from_pipeline", {
-      p_lesson: expect.objectContaining({ id: "m1_l01", slug: "welcome-to-gwth" }),
-      p_questions: lesson.questions,
-      p_resources: lesson.resources,
-    })
+    expect(transaction).toHaveBeenCalledTimes(1)
+    // course + section + lesson + quiz questions = 4 inserts
+    expect(txInsert).toHaveBeenCalled()
+    // quiz + resources are replaced via delete-then-insert
+    expect(txDelete).toHaveBeenCalled()
+  })
+
+  it("drops resources with an unsupported type", async () => {
+    const res = await POST(
+      createPostRequest({
+        lessons: [
+          makeLesson({
+            resources: [
+              { title: "ok", url: "https://x", type: "link" },
+              { title: "bad", url: "https://y", type: "bogus" },
+            ],
+          }),
+        ],
+        apiKey: "test-key-123",
+      })
+    )
+    const data = await res.json()
+    expect(data.results[0].resourcesCount).toBe(1)
   })
 
   it("handles multiple lessons with mixed results", async () => {
@@ -259,30 +292,18 @@ describe("/api/admin/import-lessons", () => {
     expect(res.status).toBe(422)
   })
 
-  // ─── RPC Fallback ─────────────────────────────────────────────────────────
-
-  it("falls back to manual upsert when RPC fails", async () => {
-    mockRpc.mockResolvedValue({ data: null, error: { message: "function not found" } })
-
-    // Mock the manual upsert chain
-    mockFrom.mockReturnValue({
-      upsert: vi.fn().mockReturnValue({ error: null }),
-      delete: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({ error: null }),
-      }),
-      insert: vi.fn().mockReturnValue({ error: null }),
-    })
-
+  it("reports a failed lesson when the transaction throws", async () => {
+    transaction.mockRejectedValueOnce(new Error("db down"))
     const res = await POST(
       createPostRequest({
         lessons: [makeLesson()],
         apiKey: "test-key-123",
       })
     )
-
     const data = await res.json()
-    expect(data.successful).toBe(1)
-    expect(mockFrom).toHaveBeenCalled()
+    expect(data.failed).toBe(1)
+    expect(data.results[0].success).toBe(false)
+    expect(data.results[0].error).toContain("db down")
   })
 
   // ─── GET Endpoint ─────────────────────────────────────────────────────────
@@ -298,16 +319,9 @@ describe("/api/admin/import-lessons", () => {
   })
 
   it("GET returns lesson count with valid API key", async () => {
-    mockFrom.mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        error: null,
-        count: 5,
-      }),
-    })
-
-    // The GET handler reads count differently - need to match its pattern
     const res = await GET(createGetRequest({ apiKey: "test-key-123" }))
-    // Status will depend on mock, just verify it doesn't crash
-    expect([200, 500]).toContain(res.status)
+    expect(res.status).toBe(200)
+    const data = await res.json()
+    expect(data.lessonCount).toBe(1)
   })
 })
