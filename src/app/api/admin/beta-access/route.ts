@@ -8,6 +8,7 @@ import {
   normalizeBetaAccessEmail,
   stateForCourseMonth,
 } from "@/lib/billing/access"
+import { sendPlunkEmail } from "@/lib/email/plunk"
 
 const betaAccessSchema = z.object({
   apiKey: z.string().min(1),
@@ -16,9 +17,37 @@ const betaAccessSchema = z.object({
   months: z.number().int().min(1).max(3).default(3),
   validUntil: z.string().datetime().optional(),
   notes: z.string().max(500).optional(),
+  // W5: opt-in beta invite email. Default false preserves the existing
+  // grant-only behaviour for programmatic callers (e.g. the pipeline).
+  sendInvite: z.boolean().default(false),
 }).refine((body) => body.userId || body.email, {
   message: "Either userId or email is required",
 })
+
+/**
+ * Sends the hand-picked beta invite email (W5). Best-effort: any failure is
+ * swallowed so a grant always succeeds even when Plunk is down. Returns whether
+ * Plunk accepted the send.
+ */
+async function sendBetaInviteEmail(email: string): Promise<boolean> {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://gwth.ai"
+  try {
+    return await sendPlunkEmail({
+      to: email,
+      subject: "You're in: your GWTH.ai beta access",
+      body: `<p>Hi,</p>
+<p>You have been given early access to the GWTH.ai beta. There is nothing to pay, your access is on us during the beta.</p>
+<p>To get started:</p>
+<ol>
+<li>Sign up with this email address at <a href="${siteUrl}/signup">${siteUrl}/signup</a>, then confirm your email.</li>
+<li>Read the short beta guide at <a href="${siteUrl}/guide">${siteUrl}/guide</a>: what is ready, what is switched off on purpose, and how to report problems.</li>
+</ol>
+<p>If anything looks wrong, please use the report a problem panel inside the app. Thank you for testing early.</p>`,
+    })
+  } catch {
+    return false
+  }
+}
 
 function isAuthorized(apiKey: string): boolean {
   const expectedKey = process.env.BETA_ACCESS_API_KEY ?? process.env.PIPELINE_API_KEY
@@ -113,12 +142,16 @@ export async function POST(request: NextRequest) {
         })
     }
 
+    const inviteSent =
+      parsed.data.sendInvite && email ? await sendBetaInviteEmail(email) : false
+
     return NextResponse.json({
       success: true,
       email,
       userId,
       subscriptionState: state,
       subscriptionMonth: month,
+      inviteSent,
     })
   } catch (err) {
     return NextResponse.json(

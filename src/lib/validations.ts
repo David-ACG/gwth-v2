@@ -140,6 +140,27 @@ export const waitlistSchema = z.object({
     .or(z.literal("")),
 })
 
+// ─── Tester Feedback (beta "report a problem") ────────────────────────────────
+
+/** Allowed feedback categories — kept in lock-step with the 011_feedback CHECK. */
+export const FEEDBACK_CATEGORIES = ["bug", "content", "idea", "general"] as const
+
+/**
+ * Tester feedback submission schema. `sourcePath` is the in-app path the panel
+ * was opened from (captured client-side); `category` defaults to "general".
+ */
+export const feedbackSchema = z.object({
+  category: z.enum(FEEDBACK_CATEGORIES),
+  message: z
+    .string()
+    .min(10, "Please add a little more detail (at least 10 characters)")
+    .max(4000, "Feedback must be less than 4000 characters"),
+  sourcePath: z
+    .string()
+    .min(1, "Source path is required")
+    .max(512, "Source path must be less than 512 characters"),
+})
+
 // ─── News Comments ───────────────────────────────────────────────────────────
 
 /** News comment creation schema */
@@ -162,5 +183,7 @@ export type QuizAnswerData = z.infer<typeof quizAnswerSchema>
 export type QuizSubmissionData = z.infer<typeof quizSubmissionSchema>
 export type NoteFormData = z.infer<typeof noteSchema>
 export type ContactFormData = z.infer<typeof contactSchema>
+export type FeedbackFormData = z.infer<typeof feedbackSchema>
+export type FeedbackCategory = (typeof FEEDBACK_CATEGORIES)[number]
 export type WaitlistFormData = z.infer<typeof waitlistSchema>
 export type NewsCommentFormData = z.infer<typeof newsCommentSchema>

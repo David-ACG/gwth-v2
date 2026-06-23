@@ -156,6 +156,36 @@ export const courses = pgTable("courses", {
 	check("courses_difficulty_check", sql`difficulty = ANY (ARRAY['beginner'::text, 'intermediate'::text, 'advanced'::text])`),
 ]);
 
+// W3 — labs content table. Mirrors the `Lab` shape consumed by
+// src/lib/data/labs.ts (instructions = LabStep[] stored as jsonb). Hand-written
+// (not pulled), so RE-DECLARE after any future `drizzle-kit pull`.
+export const labs = pgTable("labs", {
+	id: text().primaryKey().notNull(),
+	slug: text().notNull(),
+	title: text().notNull(),
+	description: text().default("").notNull(),
+	difficulty: text().default('beginner').notNull(),
+	duration: integer().default(60).notNull(),
+	technologies: text().array().default([]).notNull(),
+	learningOutcomes: text("learning_outcomes").array().default([]).notNull(),
+	prerequisites: text(),
+	content: text().default("").notNull(),
+	instructions: jsonb().default([]).notNull(),
+	category: text().default("").notNull(),
+	projectType: text("project_type").default("").notNull(),
+	color: text().default("").notNull(),
+	icon: text().default("").notNull(),
+	image: text(),
+	isPremium: boolean("is_premium").default(false).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+	index("idx_labs_slug").using("btree", table.slug.asc().nullsLast().op("text_ops")),
+	index("idx_labs_category").using("btree", table.category.asc().nullsLast().op("text_ops")),
+	unique("labs_slug_key").on(table.slug),
+	check("labs_difficulty_check", sql`difficulty = ANY (ARRAY['beginner'::text, 'intermediate'::text, 'advanced'::text])`),
+]);
+
 export const newsArticles = pgTable("news_articles", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	slug: text().notNull(),
@@ -462,6 +492,27 @@ export const betaAccessGrants = pgTable("beta_access_grants", {
 	check("beta_access_grants_subscription_month_check", sql`(subscription_month >= 1) AND (subscription_month <= 3)`),
 	check("beta_access_grants_email_check", sql`email = lower(TRIM(BOTH FROM email))`),
 ]);
+
+export const feedback = pgTable("feedback", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	sourcePath: text("source_path").notNull(),
+	category: text().default('general').notNull(),
+	message: text().notNull(),
+	userAgent: text("user_agent"),
+	emailSent: boolean("email_sent").default(false).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_feedback_created_at").using("btree", table.createdAt.desc().nullsFirst().op("timestamptz_ops")),
+	index("idx_feedback_user_id").using("btree", table.userId.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "feedback_user_id_fkey"
+		}).onDelete("cascade"),
+	check("feedback_category_check", sql`category = ANY (ARRAY['bug'::text, 'content'::text, 'idea'::text, 'general'::text])`),
+]);
+
 export const newsArticlesRanked = pgView("news_articles_ranked", {	id: uuid(),
 	slug: text(),
 	title: text(),

@@ -1,6 +1,7 @@
 import { Sidebar } from "@/components/layout/sidebar"
 import { DashboardHeader } from "@/components/layout/header"
 import { SearchPalette } from "@/components/search/search-palette"
+import { ReportProblemLauncher } from "@/components/feedback/report-problem-launcher"
 import { getCurrentUser } from "@/lib/auth"
 import styles from "./dashboard-fde.module.css"
 
@@ -32,6 +33,7 @@ export default async function DashboardLayout({
         </main>
       </div>
       <SearchPalette />
+      <ReportProblemLauncher />
     </div>
   )
 }

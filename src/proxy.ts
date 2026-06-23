@@ -71,6 +71,7 @@ const PROTECTED_PATHS = [
   "/profile",
   "/bookmarks",
   "/notifications",
+  "/guide",
 ]
 
 /**
