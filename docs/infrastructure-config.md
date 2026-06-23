@@ -134,14 +134,15 @@ Default: deny incoming, allow outgoing.
 | Port         | 3001 → 3000                         |
 | Status       | Coolify app record `exited`; :3001 is served by a hand-run image (below) |
 
-> **Topology note (I1, 2026-06-19):** the live `:3001` is **not** the Coolify
-> app record — it is a hand-run container `gwth-v2-w8-beta` (image
-> `gwth-v2:w8-beta-scope`, built 2026-06-13) redeployed via
-> `GWTH_V2/deploy/run-staging.sh`. It is wired to the staging DB below and its
-> dead Supabase env has been dropped. A current `next build` from HEAD (full
-> Drizzle data layer, no Supabase) is the W-track follow-up to make the
-> dashboard fully DB-backed; the June-13 build still routes some reads through
-> the (cancelled) Supabase and logs errors on those paths.
+> **Topology note (I1, updated 2026-06-23):** the live `:3001` is **not** the
+> Coolify app record — it is a hand-run container `gwth-v2-w8-beta` redeployed via
+> `GWTH_V2/deploy/run-staging.sh`. It now runs the **current HEAD build**
+> (`gwth-v2:staging`, rebuilt 2026-06-23) — wired to the staging DB, dead Supabase
+> env dropped. It serves cleanly: `/` `200`, `/dashboard` `307`-redirects via Better
+> Auth (no Supabase crash), **no Supabase error noise in logs**. DB-backed dashboard
+> reads activate once a Better Auth user logs in. Some data modules
+> (news/credentials) still *import* Supabase in code — full de-Supabase is a code
+> refactor (W-track), not a rebuild.
 
 ### P520 GWTH v2 Staging Database (I1 / D1 / D2)
 

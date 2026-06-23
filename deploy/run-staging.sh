@@ -12,7 +12,7 @@
 #
 set -euo pipefail
 
-IMAGE="${IMAGE:-gwth-v2:w8-beta-scope}"   # the built W8-beta image (override to redeploy a new build)
+IMAGE="${IMAGE:-gwth-v2:staging}"         # current HEAD build (retag a fresh build to this; override to pin)
 NAME="gwth-v2-w8-beta"
 NET="coolify"                              # share the network with the Coolify-managed DB
 HOST_PORT="3001"
