@@ -1,0 +1,9 @@
+node_modules/
+.remotion/
+# scratch verification stills (deliverable mp4s + poster are kept)
+out/check-*.png
+out/_test-*.png
+out/explainer-draft-silent.mp4
+# padded audio intermediates (per-beat source WAVs are kept)
+assets/audio/pb*.wav
+assets/audio/vo-david-draft.wav
