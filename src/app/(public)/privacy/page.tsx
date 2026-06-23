@@ -5,7 +5,7 @@ import { LegalFde } from "@/components/marketing/legal-fde/legal-fde"
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "GWTH.ai Privacy Policy — how we collect, use, and protect your personal data.",
+    "GWTH.ai Privacy Policy: how we collect, use, and protect your personal data.",
 }
 
 /**

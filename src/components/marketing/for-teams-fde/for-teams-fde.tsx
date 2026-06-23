@@ -176,7 +176,7 @@ export function ForTeamsFde() {
               Get in touch
             </Link>
             <Link href="/labs" className={styles.buttonOutline}>
-              Try free labs
+              Try a free lab
             </Link>
           </div>
           <div className={styles.mastheadFoot}>
@@ -423,10 +423,10 @@ export function ForTeamsFde() {
           </p>
           <div className={styles.closingActions}>
             <Link href="/contact" className={styles.buttonSolid}>
-              Get in Touch
+              Get in touch
             </Link>
             <Link href="/labs" className={styles.buttonOutline}>
-              Try Free Labs
+              Try a free lab
             </Link>
           </div>
         </div>

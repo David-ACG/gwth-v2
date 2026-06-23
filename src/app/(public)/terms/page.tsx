@@ -5,7 +5,7 @@ import { LegalFde } from "@/components/marketing/legal-fde/legal-fde"
 export const metadata: Metadata = {
   title: "Terms and Conditions",
   description:
-    "GWTH.ai Terms and Conditions — the rules and guidelines for using our platform and services.",
+    "GWTH.ai Terms and Conditions: the rules and guidelines for using our platform and services.",
 }
 
 /**
@@ -63,8 +63,8 @@ export default function TermsPage() {
 
       <h2 id="ip">2. Intellectual Property</h2>
       <p>
-        All content on GWTH.ai — including course materials, videos, text,
-        graphics, logos, assessments, and progress systems — is the
+        All content on GWTH.ai (including course materials, videos, text,
+        graphics, logos, assessments, and progress systems) is the
         intellectual property of GWTH.ai and is protected by copyright and
         other intellectual property laws.
       </p>
@@ -143,7 +143,7 @@ export default function TermsPage() {
         <li>
           <strong>Cancellation:</strong> You may cancel your subscription
           at any time. Cancellation takes effect at the end of the current
-          billing period — you retain access until then.
+          billing period. You retain access until then.
         </li>
         <li>
           <strong>No lock-in:</strong> There is no minimum commitment

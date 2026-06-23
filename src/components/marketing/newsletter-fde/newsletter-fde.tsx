@@ -102,7 +102,7 @@ export function NewsletterFde() {
 
             <div className={styles.ctaRow}>
               <Link href="/labs" className={styles.buttonOutline}>
-                Try a Free Lab
+                Try a free lab
               </Link>
               <Link href="/pricing" className={styles.buttonOutline}>
                 See pricing

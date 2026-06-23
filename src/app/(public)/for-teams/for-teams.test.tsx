@@ -94,8 +94,8 @@ describe("ForTeamsPage", () => {
 
   it("has contact CTA", () => {
     render(<ForTeamsPage />)
-    expect(
-      screen.getByRole("link", { name: /Get in Touch/ })
-    ).toBeInTheDocument()
+    const links = screen.getAllByRole("link", { name: /Get in touch/ })
+    expect(links.length).toBeGreaterThan(0)
+    expect(links[0]).toHaveAttribute("href", "/contact")
   })
 })
