@@ -39,6 +39,7 @@ docker run -d --name "$NAME" \
   -e HOSTNAME=0.0.0.0 \
   -e PORT="$CONTAINER_PORT" \
   -e NEXT_PUBLIC_SITE_URL="http://192.168.178.50:${HOST_PORT}" \
+  -e BETTER_AUTH_URL="http://192.168.178.50:${HOST_PORT}" \
   "$IMAGE" >/dev/null
 
 echo "deployed $NAME on :${HOST_PORT} (network=$NET, secrets via SOPS, Supabase env dropped)"
