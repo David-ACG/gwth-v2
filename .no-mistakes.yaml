@@ -1,0 +1,23 @@
+# .no-mistakes.yaml — per-repo gate config for the GWTH Next.js site (gwth-v2 / gwth-prod).
+# Read from the DEFAULT branch for security; inert for anyone not using the gate.
+# Added 2026-06-24 for the no-mistakes trial (task A6).
+agent: claude
+
+commands:
+  test: "npm test"          # vitest run — deterministic gate baseline
+  lint: "eslint"            # repo's lint script
+  # no "format" script exists in package.json → omitted
+
+ignore_patterns:
+  - ".next/**"
+  - "node_modules/**"
+  - "*.generated.ts"
+
+# Single-developer, trusted branches → honor this file from feature branches too.
+allow_repo_commands: true
+
+# Commit Playwright screenshots into the PR so UI evidence renders inline.
+test:
+  evidence:
+    store_in_repo: true
+    dir: .no-mistakes/evidence
