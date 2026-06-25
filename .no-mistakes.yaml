@@ -5,7 +5,7 @@ agent: claude
 
 commands:
   test: "npm test"          # vitest run — deterministic gate baseline
-  lint: "eslint"            # repo's lint script
+  lint: "npm run lint"      # via npm so node_modules/.bin/eslint resolves in the gate worktree
   # no "format" script exists in package.json → omitted
 
 ignore_patterns:
