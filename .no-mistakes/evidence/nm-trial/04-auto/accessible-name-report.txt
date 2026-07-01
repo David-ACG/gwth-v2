@@ -1,0 +1,12 @@
+Chromium accessibility tree — computed accessible name for the public-nav avatar trigger
+(this is the announcement a screen reader / assistive tech consumes)
+
+BEFORE (pre-fix, no aria-label) — aria snapshot of the button:
+  - button "AL"
+  --> accessible name falls back to the raw avatar initials ("AL"),
+      which a screen reader announces as a meaningless "AL button".
+
+AFTER (fix applied, aria-label="Open user menu") — aria snapshot of the button:
+  - button "Open user menu": AL
+
+Navigating by role + accessible name "Open user menu" now finds 1 control.
