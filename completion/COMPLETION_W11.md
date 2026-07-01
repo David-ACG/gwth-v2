@@ -10,6 +10,19 @@ app registration + consent click-through — not automatable headlessly).
 **Primary test URL:** http://192.168.178.50:3001/login
 **Decision register:** D4 — gate resolution note recorded 2026-06-23.
 
+> **Re-verified at completion 2026-07-01.** Independently re-ran the live smoke
+> and the test suite before the final RECORD — both still green, 8 days after the
+> gate resolved:
+> - `bash deploy/smoke-w11-auth.sh` → **15 passed, 0 failed** against live :3001
+>   (same PG 17.10 schema, same real proxy chain). Session survives reload, two-user
+>   isolation holds, sign-out destroys the session, `getAccessForUser` returns the
+>   right `manual_beta` id.
+> - `npm test` → **298 passed, 11 skipped** (skips = live-DB tests; no auth code
+>   touched). `grep @supabase src/` still only the W7 data layer — no auth client.
+> - OAuth init still 500 on staging (creds never provisioned) — the one David-only
+>   residual below; provider-agnostic, so *not* a Better Auth defect and not a gate
+>   failure. Better Auth **still HOLDS**; Clerk fallback remains NOT invoked.
+
 ---
 
 ## What changed (this task only — no auth *code* changed)

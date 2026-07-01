@@ -56,7 +56,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' })
 <div class="wrap">
 <header class="vh">
   <h1>W11 · Auth migration off Supabase — to the ratified provider</h1>
-  <p class="meta">Review packet · generated 2026-06-23 22:11 · <span class="mono">completion/COMPLETION_W11.md</span></p>
+  <p class="meta">Review packet · generated 2026-07-01 17:36 · <span class="mono">completion/COMPLETION_W11.md</span></p>
   <div class="toolbar"><a href="http://192.168.178.50:8090/verify/W11" target="_blank" rel="noopener">Interactive verify page →</a></div>
 </header>
 
@@ -70,6 +70,20 @@ Clerk fallback <strong>NOT</strong> invoked. One David-only follow-up remains (s
 app registration + consent click-through — not automatable headlessly).</p>
 <p><strong>Primary test URL:</strong> http://192.168.178.50:3001/login<br />
 <strong>Decision register:</strong> D4 — gate resolution note recorded 2026-06-23.</p>
+<blockquote>
+<p><strong>Re-verified at completion 2026-07-01.</strong> Independently re-ran the live smoke<br />
+and the test suite before the final RECORD — both still green, 8 days after the<br />
+gate resolved:<br />
+- <code>bash deploy/smoke-w11-auth.sh</code> → <strong>15 passed, 0 failed</strong> against live :3001<br />
+  (same PG 17.10 schema, same real proxy chain). Session survives reload, two-user<br />
+  isolation holds, sign-out destroys the session, <code>getAccessForUser</code> returns the<br />
+  right <code>manual_beta</code> id.<br />
+- <code>npm test</code> → <strong>298 passed, 11 skipped</strong> (skips = live-DB tests; no auth code<br />
+  touched). <code>grep @supabase src/</code> still only the W7 data layer — no auth client.<br />
+- OAuth init still 500 on staging (creds never provisioned) — the one David-only<br />
+  residual below; provider-agnostic, so <em>not</em> a Better Auth defect and not a gate<br />
+  failure. Better Auth <strong>still HOLDS</strong>; Clerk fallback remains NOT invoked.</p>
+</blockquote>
 <hr />
 <h2>What changed (this task only — no auth <em>code</em> changed)</h2>
 <p>The Better Auth seam (<code>src/lib/auth.ts</code>, <code>src/lib/better-auth.ts</code>, <code>src/proxy.ts</code>,<br />
