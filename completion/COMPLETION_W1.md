@@ -61,9 +61,20 @@ Every surface, light + dark, at the guide's QA widths (1440 / 768 / 412).
 
 </details>
 
-**Test it live** (after the staging deploy of this commit):
+**Test it live** — deployed and verified on P520 staging:
 `http://192.168.178.50:3001/login`, `/signup`, `/forgot-password`,
-`/reset-password`, `/error`.
+`/reset-password`, `/error`. All five render the FDE register in light +
+dark with a clean console, and the auth round-trip is live-verified (a bad
+email/password returns the exact `401 Invalid email or password` the login
+form maps to the rust banner).
+
+> Deploying this required an unrelated pre-existing build fix (committed
+> separately as `fix(build): exclude the standalone remotion/ sub-project`):
+> the W12 Remotion renderer (`remotion/`, its own tsconfig + node_modules)
+> was being swept into `next build`, which then failed to resolve
+> `@remotion/cli/config` under `npm ci` — so every Docker build of master
+> had been broken since the W12 explainer landed, stranding `:3001` on a
+> 7-day-old image. Excluding the sub-project restores reproducible builds.
 
 ## Structure (how the re-skin is scoped — no backend/schema/infra change)
 
@@ -117,4 +128,11 @@ Playwright console check                 → ALL CLEAN (6 routes × light+dark)
 Adversarial review (3 lenses + verify)   → 1 minor confirmed (reduced-motion
                                             on OAuth spinner) → fixed
 Logic diff (auth onSubmit/authClient)    → unchanged (re-skin proven)
+
+Docker build (clean master, Dockerfile)  → succeeds after the remotion fix
+Deployed to :3001 (deploy/run-staging.sh)→ gwth-v2-w8-beta up, /login 200
+:3001 Playwright console (5 routes × L/D) → ALL CLEAN
+:3001 auth round-trip (POST sign-in/email)→ HTTP 401 "Invalid email or
+                                            password" (server + DB wired;
+                                            valid creds are David-only)
 ```

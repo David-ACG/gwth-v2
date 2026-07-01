@@ -56,7 +56,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' })
 <div class="wrap">
 <header class="vh">
   <h1>W1 · Finish public site design — auth surfaces to the FDE guide</h1>
-  <p class="meta">Review packet · generated 2026-07-01 17:30 · <span class="mono">completion/COMPLETION_W1.md</span></p>
+  <p class="meta">Review packet · generated 2026-07-01 18:04 · <span class="mono">completion/COMPLETION_W1.md</span></p>
   <div class="toolbar"><a href="http://192.168.178.50:3001/login" target="_blank" rel="noopener">Test it → http://192.168.178.50:3001/login</a> <a href="http://192.168.178.50:8090/verify/W1" target="_blank" rel="noopener">Interactive verify page →</a></div>
 </header>
 <section class="checklist"><h2>What David should verify</h2><ul><li>Open [/login](http://192.168.178.50:3001/login), toggle dark mode</li><li>Sign in with a test account end-to-end (Google / GitHub / LinkedIn, or</li><li>Spot-check [/error?error=access_denied](http://192.168.178.50:3001/error?error=access_denied)</li></ul></section>
@@ -116,9 +116,21 @@ the register the rest of the site already ships.</p>
 
 </details>
 
-<p><strong>Test it live</strong> (after the staging deploy of this commit):<br />
+<p><strong>Test it live</strong> — deployed and verified on P520 staging:<br />
 <code>http://192.168.178.50:3001/login</code>, <code>/signup</code>, <code>/forgot-password</code>,<br />
-<code>/reset-password</code>, <code>/error</code>.</p>
+<code>/reset-password</code>, <code>/error</code>. All five render the FDE register in light +<br />
+dark with a clean console, and the auth round-trip is live-verified (a bad<br />
+email/password returns the exact <code>401 Invalid email or password</code> the login<br />
+form maps to the rust banner).</p>
+<blockquote>
+<p>Deploying this required an unrelated pre-existing build fix (committed<br />
+separately as <code>fix(build): exclude the standalone remotion/ sub-project</code>):<br />
+the W12 Remotion renderer (<code>remotion/</code>, its own tsconfig + node_modules)<br />
+was being swept into <code>next build</code>, which then failed to resolve<br />
+<code>@remotion/cli/config</code> under <code>npm ci</code> — so every Docker build of master<br />
+had been broken since the W12 explainer landed, stranding <code>:3001</code> on a<br />
+7-day-old image. Excluding the sub-project restores reproducible builds.</p>
+</blockquote>
 <h2>Structure (how the re-skin is scoped — no backend/schema/infra change)</h2>
 <p>Pure front-end re-skin. No DB, API, auth-provider or route change. The register<br />
 is delivered by a scoped CSS-module shell, exactly like the other flipped<br />
@@ -163,6 +175,13 @@ Playwright console check                 → ALL CLEAN (6 routes × light+dark)
 Adversarial review (3 lenses + verify)   → 1 minor confirmed (reduced-motion
                                             on OAuth spinner) → fixed
 Logic diff (auth onSubmit/authClient)    → unchanged (re-skin proven)
+
+Docker build (clean master, Dockerfile)  → succeeds after the remotion fix
+Deployed to :3001 (deploy/run-staging.sh)→ gwth-v2-w8-beta up, /login 200
+:3001 Playwright console (5 routes × L/D) → ALL CLEAN
+:3001 auth round-trip (POST sign-in/email)→ HTTP 401 &quot;Invalid email or
+                                            password&quot; (server + DB wired;
+                                            valid creds are David-only)
 </code></pre>
 </article>
 <footer class="vf">
