@@ -1,0 +1,10 @@
+
+ RUN  v4.0.18 /home/david/.no-mistakes/worktrees/60d30416accd/01KWFFMT3TS7JAB7E58PPSTPXV
+
+ ✓ src/lib/score-trend.kanbanc.test.ts > formatDeltaAbs (A11 kanban demo C) > prefixes a positive delta with an explicit + 1ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  18:41:26
+   Duration  816ms (transform 65ms, setup 117ms, import 33ms, tests 3ms, environment 524ms)
+
