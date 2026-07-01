@@ -1,0 +1,23 @@
+=== External-source card — ARIA tree (Chromium) ===
+- button "Upvote this article": "42"
+- text: AI Launch
+- link "Anthropic ships a new Claude model(has external source)":
+  - /url: /news/anthropic-ships-claude
+  - heading "Anthropic ships a new Claude model(has external source)" [level=3]:
+    - text: Anthropic ships a new Claude model
+    - img "(has external source)"
+- paragraph: A short summary of the article shown on the card.
+- text: claude anthropic GWTH Team ·
+- time: Jun 1, 2026
+- text: · 7
+
+=== GWTH original card (url=null) — ARIA tree (Chromium) ===
+- button "Remove your upvote" [pressed]: "42"
+- text: Tutorial
+- 'link "GWTH original: building an AI study workflow"':
+  - /url: /news/gwth-original
+  - 'heading "GWTH original: building an AI study workflow" [level=3]'
+- paragraph: A short summary of the article shown on the card.
+- text: workflow study GWTH Team ·
+- time: Jun 1, 2026
+- text: · 7
