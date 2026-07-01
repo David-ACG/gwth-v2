@@ -67,7 +67,7 @@ export function NewsCard({ article, hasVoted, isAuthenticated }: NewsCardProps) 
                 <ExternalLink
                   className="ml-1.5 inline size-3.5 text-muted-foreground"
                   role="img"
-                  aria-label="(opens external source)"
+                  aria-label="(has external source)"
                 />
               )}
             </h3>
