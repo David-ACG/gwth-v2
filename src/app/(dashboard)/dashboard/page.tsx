@@ -490,10 +490,10 @@ export function ActiveDashboard({
             <div className={styles.tealDivider}>
               <p className={styles.tealMono}>PROJECTS SHIPPED</p>
               <div className={styles.hugeNumCream} style={{ fontSize: "2.6rem" }}>
-                12
+                10
               </div>
               <p className={styles.activityNoteCream}>
-                Across nine lessons, two labs, one capstone.
+                Across nine lesson projects and one capstone.
               </p>
             </div>
           </div>

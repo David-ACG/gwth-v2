@@ -282,7 +282,12 @@ export interface Resource {
 
 // ─── Lab ──────────────────────────────────────────────────────────────────────
 
-/** A hands-on lab exercise */
+/**
+ * A standalone marketing lead-magnet lab, tiered by difficulty
+ * (beginner/intermediate/advanced). It is not tied to any specific lesson;
+ * tier is its only course link. Distinct from a lesson's PROJECT (its practical
+ * part), which has no dedicated website model yet. See pipeline board L14.
+ */
 export interface Lab {
   /** Unique identifier */
   id: string
