@@ -1,0 +1,13 @@
+
+ RUN  v4.0.18 /home/david/.no-mistakes/worktrees/407335fa73dd/01KWFDD2NMQGEXBWENDVQH4VHN
+
+ ✓ src/lib/score-trend.gatecheck.test.ts > formatDeltaAbs (A11 gatecheck) > prefixes positive deltas with an explicit + 2ms
+ ✓ src/lib/score-trend.gatecheck.test.ts > formatDeltaAbs (A11 gatecheck) > keeps the native sign for negative and zero 0ms
+ ✓ src/lib/score-trend.gatecheck.test.ts > formatDeltaPct (A11 gatecheck) > prefixes positive percentages with + and one decimal 0ms
+ ✓ src/lib/score-trend.gatecheck.test.ts > formatDeltaPct (A11 gatecheck) > keeps the native sign for negative and zero 0ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  18:02:28
+   Duration  773ms (transform 68ms, setup 100ms, import 36ms, tests 6ms, environment 477ms)
+
