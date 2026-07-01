@@ -53,7 +53,7 @@ const BULLETS: readonly Bullet[] = [
     body: (
       <>
         Reaching <Num>100</Num> means completing <Num>{TOTAL_HANDS_ON}</Num>+ hands-on
-        projects across {TOTAL_COURSE_MONTHS} modules — no passive watching.
+        projects across {TOTAL_COURSE_MONTHS} months — no passive watching.
       </>
     ),
   },
