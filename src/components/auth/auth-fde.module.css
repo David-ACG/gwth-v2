@@ -1,0 +1,445 @@
+/*
+ * Auth surfaces in the FDE journal register (DESIGN_FDE.md, Direction C —
+ * "journal masthead + panel", chosen by David 2026-06-17). A full-width
+ * dark-teal masthead band carries the GWTH.ai wordmark only; the form sits
+ * below in a bordered paper-cream panel wearing the register's one sanctioned
+ * hard-offset shadow (5px 5px 0 var(--v-ink), no blur) on the sage ground.
+ *
+ * Shared by the (auth) layout shell and every auth surface: login, signup
+ * (invite-only), forgot-password, reset-password, error. Same palette and
+ * idioms as home-fde/ and contact-fde/: cream/sage paper, ink text, Source
+ * Serif 4 display + body, JetBrains Mono metadata, square corners, hairlines.
+ *
+ * All colours are scoped custom properties on .shell with a :global(.dark)
+ * override block, so the site-wide theme toggle flips the whole surface.
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+
+  color-scheme: dark;
+}
+
+/* ---------------- Shell layout (masthead + centred panel) ---------------- */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.page {
+  margin: 0 auto;
+  width: min(1100px, calc(100% - 2.5rem));
+}
+
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* Journal masthead: full-bleed teal rule holding the wordmark only. */
+.masthead {
+  background: var(--v-teal);
+  border-bottom: 1px solid var(--v-teal-deep);
+  padding: 1.4rem 0;
+}
+
+.mastheadInner {
+  display: flex;
+  align-items: center;
+}
+
+.wordmarkLink {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0;
+}
+
+.wordmarkLink svg {
+  height: 1.85rem;
+  width: auto;
+}
+
+.wordmarkLink:focus-visible {
+  outline: 2px solid var(--v-ochre-bright);
+  outline-offset: 4px;
+}
+
+/* Centred column that holds the panel, with room for the offset shadow. */
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2.5rem, 7vw, 5rem) 1.5rem clamp(3rem, 8vw, 5.5rem);
+}
+
+.panelColumn {
+  width: 100%;
+  max-width: 29rem;
+}
+
+/* ---------------- Paper panel (the credential-panel anatomy) ---------------- */
+
+.panel {
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);
+  box-shadow: 5px 5px 0 0 var(--v-ink);
+  padding: clamp(1.75rem, 4vw, 2.25rem) clamp(1.5rem, 4vw, 2rem);
+}
+
+.panelHead {
+  margin-bottom: 1.75rem;
+}
+
+.title {
+  font-size: clamp(1.55rem, 4vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--v-ink);
+}
+
+.title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-ochre);
+}
+
+.subtitle {
+  margin-top: 0.65rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+  max-width: 40ch;
+}
+
+/* ---------------- Form fields ---------------- */
+
+.form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.label {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--v-line);
+  border-radius: 0;
+  background: var(--v-bg);
+  padding: 0.7rem 0.85rem;
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--v-ink);
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.input::placeholder {
+  color: var(--v-muted);
+  opacity: 1;
+}
+
+.input:hover {
+  border-color: var(--v-ink);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--v-rust);
+}
+
+/* Field validation message (colour + weight; paired with the invalid border). */
+.error {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--v-ink);
+}
+
+/* ---------------- Server / status banner (colour + icon + text) ---------------- */
+
+.serverError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border: 1px solid var(--v-rust);
+  background: transparent;
+  padding: 0.75rem 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.serverError svg {
+  flex-shrink: 0;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.05rem;
+  color: var(--v-rust);
+}
+
+/* ---------------- Buttons (DESIGN_FDE.md §5.3) ---------------- */
+
+.buttonSolid,
+.buttonOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.5rem;
+  border-radius: 0;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.buttonSolid {
+  background: var(--v-action);
+  color: var(--v-action-text);
+  border: 1px solid var(--v-action);
+}
+
+.buttonSolid:hover {
+  background: var(--v-teal-deep);
+  border-color: var(--v-teal-deep);
+}
+
+.buttonSolid:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.buttonOutline {
+  background: transparent;
+  color: var(--v-ink);
+  border: 1px solid var(--v-ink);
+}
+
+.buttonOutline:hover {
+  background: var(--v-ink);
+  color: var(--v-bg);
+}
+
+.buttonOutline:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.buttonSolid:focus-visible,
+.buttonOutline:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+.buttonFull {
+  width: 100%;
+}
+
+/* ---------------- OAuth buttons + divider ---------------- */
+
+.oauthGroup {
+  display: grid;
+  gap: 0.7rem;
+}
+
+/* Provider buttons reuse the outline recipe but left-align label + glyph. */
+.oauthButton {
+  justify-content: center;
+  gap: 0.65rem;
+}
+
+.oauthButton svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.4rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--v-line);
+}
+
+.dividerLabel {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* ---------------- Alt prompt (cross-links between surfaces) ---------------- */
+
+.altPrompt {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--v-line);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+  text-align: center;
+}
+
+.link {
+  color: var(--v-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--v-line);
+  text-underline-offset: 2px;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    text-decoration-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link:hover {
+  color: var(--v-ochre);
+  text-decoration-color: var(--v-ochre);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+/* The forgot-password link sits inline with the field label — mono, small. */
+.inlineLink {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  text-decoration: none;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.inlineLink:hover {
+  color: var(--v-ochre);
+}
+
+.inlineLink:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+/* ---------------- Notice + action rows (invite-only, error, reset-invalid) --- */
+
+.notice {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.actions .buttonSolid,
+.actions .buttonOutline {
+  flex: 1;
+  min-width: 9rem;
+}
+
+/* ---------------- Success state (post-beta signup confirmation) ---------- */
+
+.success {
+  display: grid;
+  gap: 1rem;
+}
+
+.successBody {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--v-soft);
+  max-width: 42ch;
+}

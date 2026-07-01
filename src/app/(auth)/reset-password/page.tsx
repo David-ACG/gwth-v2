@@ -7,10 +7,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { z } from "zod"
+import { AlertTriangle } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -19,9 +17,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import styles from "@/components/auth/auth-fde.module.css"
 
 /**
- * Password reset landing page (MEDIUM #7).
+ * Password reset landing page (MEDIUM #7), in the FDE journal register.
  *
  * The reset email links here with `?token=…`. This page is PUBLIC and reachable
  * logged-out (see /reset-password in proxy.ts AUTH_PATHS) — the previous
@@ -85,91 +84,94 @@ function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Reset link invalid</CardTitle>
-          <p className="text-sm text-muted-foreground">
+      <div className={styles.panel}>
+        <div className={styles.panelHead}>
+          <h1 className={styles.title}>Reset link invalid</h1>
+          <p className={styles.subtitle}>
             This reset link is missing its token or has expired.
           </p>
-        </CardHeader>
-        <CardContent className="text-center">
-          <Button asChild className="w-full">
-            <Link href="/forgot-password">Request a new link</Link>
-          </Button>
-        </CardContent>
-      </Card>
+        </div>
+        <div className={styles.actions}>
+          <Link href="/forgot-password" className={styles.buttonSolid}>
+            Request a new link
+          </Link>
+        </div>
+      </div>
     )
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Choose a new password</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Enter a new password for your GWTH.ai account
+    <div className={styles.panel}>
+      <div className={styles.panelHead}>
+        <h1 className={styles.title}>Choose a new password</h1>
+        <p className={styles.subtitle}>
+          Enter a new password for your GWTH.ai account.
         </p>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {serverError && (
-              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-                {serverError}
-              </div>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          {serverError && (
+            <p className={styles.serverError} role="alert">
+              <AlertTriangle aria-hidden="true" />
+              {serverError}
+            </p>
+          )}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>New password</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
             )}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>New password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="••••••••"
-                      autoComplete="new-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="••••••••"
-                      autoComplete="new-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting ? "Updating..." : "Update Password"}
-            </Button>
-          </form>
-        </Form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Remember your password?{" "}
-          <Link href="/login" className="text-primary hover:underline">
-            Log in
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>Confirm password</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
+            )}
+          />
+          <button
+            type="submit"
+            className={`${styles.buttonSolid} ${styles.buttonFull}`}
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Updating..." : "Update password"}
+          </button>
+        </form>
+      </Form>
+
+      <p className={styles.altPrompt}>
+        Remember your password?{" "}
+        <Link href="/login" className={styles.link}>
+          Log in
+        </Link>
+      </p>
+    </div>
   )
 }
 

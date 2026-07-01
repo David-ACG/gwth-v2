@@ -5,14 +5,12 @@ import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
+import { AlertTriangle } from "lucide-react"
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "@/lib/validations"
 import { authClient } from "@/lib/auth-client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -21,9 +19,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import styles from "@/components/auth/auth-fde.module.css"
 
 /**
- * Forgot password form — sends a password reset email via Better Auth.
+ * Forgot password form in the FDE register — sends a password reset email via
+ * Better Auth (paper panel, square hairline input, mono label).
  */
 export function ForgotPasswordForm() {
   const [serverError, setServerError] = useState<string | null>(null)
@@ -53,57 +53,57 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Reset your password</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Enter your email and we&apos;ll send you a reset link
+    <div className={styles.panel}>
+      <div className={styles.panelHead}>
+        <h1 className={styles.title}>Reset your password</h1>
+        <p className={styles.subtitle}>
+          Enter your email and we&apos;ll send you a reset link.
         </p>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {serverError && (
-              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-                {serverError}
-              </div>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          {serverError && (
+            <p className={styles.serverError} role="alert">
+              <AlertTriangle aria-hidden="true" />
+              {serverError}
+            </p>
+          )}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>Email</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="email"
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
             )}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="you@example.com"
-                      autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting
-                ? "Sending..."
-                : "Send Reset Link"}
-            </Button>
-          </form>
-        </Form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Remember your password?{" "}
-          <Link href="/login" className="text-primary hover:underline">
-            Log in
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+          />
+          <button
+            type="submit"
+            className={`${styles.buttonSolid} ${styles.buttonFull}`}
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Sending..." : "Send reset link"}
+          </button>
+        </form>
+      </Form>
+
+      <p className={styles.altPrompt}>
+        Remember your password?{" "}
+        <Link href="/login" className={styles.link}>
+          Log in
+        </Link>
+      </p>
+    </div>
   )
 }

@@ -5,11 +5,9 @@ import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
+import { AlertTriangle } from "lucide-react"
 import { signupSchema, type SignupFormData } from "@/lib/validations"
 import { authClient } from "@/lib/auth-client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -18,50 +16,47 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react"
 import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
+import styles from "@/components/auth/auth-fde.module.css"
 
 /**
- * Invite-only beta signup surface. The full Supabase registration form remains
- * below as PostBetaSignupForm for post-beta reactivation.
+ * Invite-only beta signup surface in the FDE journal register. The full
+ * email/password registration form remains below as PostBetaSignupForm for
+ * post-beta reactivation.
  */
 export function SignupForm() {
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-          <ShieldCheck className="size-6 text-primary" />
-        </div>
-        <CardTitle className="text-2xl">Invite-only beta</CardTitle>
-        <p className="text-sm text-muted-foreground">
+    <div className={styles.panel}>
+      <div className={styles.panelHead}>
+        <h1 className={styles.title}>Invite-only beta</h1>
+        <p className={styles.subtitle}>
           The 23 June beta is closed to public signup. Access is granted
           manually by the GWTH team.
         </p>
-      </CardHeader>
-      <CardContent className="space-y-4 text-center">
-        <p className="text-sm text-muted-foreground">
-          If you have been invited, sign in with a social provider (Google,
-          GitHub or LinkedIn) using the email address GWTH approved — that
-          first sign-in creates your account and applies your beta access.
-          Otherwise, join the waitlist and we will contact you when more beta
-          places open.
-        </p>
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button className="gap-2" asChild>
-            <Link href="/login">
-              Log in
-              <ArrowRight className="size-4" />
-            </Link>
-          </Button>
-          <Button variant="outline" className="gap-2" asChild>
-            <Link href="/">Join the waitlist</Link>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+      <p className={styles.notice}>
+        If you have been invited, sign in with a social provider (Google,
+        GitHub or LinkedIn) using the email address GWTH approved. That first
+        sign-in creates your account and applies your beta access. Otherwise,
+        join the waitlist and we will contact you when more beta places open.
+      </p>
+      <div className={styles.actions}>
+        <Link href="/login" className={styles.buttonSolid}>
+          Log in
+        </Link>
+        <Link href="/" className={styles.buttonOutline}>
+          Join the waitlist
+        </Link>
+      </div>
+    </div>
   )
 }
 
+/**
+ * Post-beta public registration form (name, email, password) in the FDE
+ * register. Dormant during the invite-only beta; kept wired to the authClient
+ * sign-up so it can be re-enabled without a rebuild.
+ */
 export function PostBetaSignupForm() {
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [submittedName, setSubmittedName] = useState("")
@@ -98,142 +93,139 @@ export function PostBetaSignupForm() {
 
   if (isConfirmed) {
     return (
-      <Card>
-        <CardContent className="p-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-            <CheckCircle2 className="h-8 w-8 text-primary" />
+      <div className={styles.panel}>
+        <div className={styles.success} role="status">
+          <div className={styles.panelHead}>
+            <h1 className={styles.title}>Check your email, {submittedName}.</h1>
+            <p className={styles.subtitle}>
+              We&apos;ve sent you a confirmation link. Click it to activate your
+              account and start learning.
+            </p>
           </div>
-          <h2 className="text-2xl font-bold">
-            Check your email, {submittedName}.
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            We&apos;ve sent you a confirmation link. Click it to activate your
-            account and start learning.
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Button className="gap-2" asChild>
-              <Link href="/why-gwth">
-                <ShieldCheck className="size-4" />
-                Why GWTH
-              </Link>
-            </Button>
-            <Button variant="outline" className="gap-2" asChild>
-              <Link href="/">
-                Back to Home
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
+          <div className={styles.actions}>
+            <Link href="/why-gwth" className={styles.buttonSolid}>
+              Why GWTH
+            </Link>
+            <Link href="/" className={styles.buttonOutline}>
+              Back to home
+            </Link>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     )
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Create your account</CardTitle>
-        <p className="text-sm text-muted-foreground">
+    <div className={styles.panel}>
+      <div className={styles.panelHead}>
+        <h1 className={styles.title}>Create your account</h1>
+        <p className={styles.subtitle}>
           Sign up to start learning. We&apos;ll send you a confirmation email.
         </p>
-      </CardHeader>
-      <CardContent>
-        <OAuthButtons />
-        <OAuthDivider />
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {serverError && (
-              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-                {serverError}
-              </div>
+      </div>
+
+      <OAuthButtons />
+      <OAuthDivider />
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          {serverError && (
+            <p className={styles.serverError} role="alert">
+              <AlertTriangle aria-hidden="true" />
+              {serverError}
+            </p>
+          )}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>Name</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    placeholder="Your name"
+                    autoComplete="name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
             )}
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Your name"
-                      autoComplete="name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="you@example.com"
-                      autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="••••••••"
-                      autoComplete="new-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="••••••••"
-                      autoComplete="new-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting ? "Creating account..." : "Create Account"}
-            </Button>
-          </form>
-        </Form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link href="/login" className="text-primary hover:underline">
-            Log in
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>Email</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="email"
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>Password</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>Confirm password</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
+            )}
+          />
+          <button
+            type="submit"
+            className={`${styles.buttonSolid} ${styles.buttonFull}`}
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Creating account..." : "Create account"}
+          </button>
+        </form>
+      </Form>
+
+      <p className={styles.altPrompt}>
+        Already have an account?{" "}
+        <Link href="/login" className={styles.link}>
+          Log in
+        </Link>
+      </p>
+    </div>
   )
 }

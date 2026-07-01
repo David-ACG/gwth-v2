@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight } from "lucide-react"
+import { AlertTriangle } from "lucide-react"
+import styles from "@/components/auth/auth-fde.module.css"
 
 export const metadata: Metadata = {
   title: "Sign-in Error",
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 /**
- * OAuth / auth error landing page (MEDIUM #6).
+ * OAuth / auth error landing page (MEDIUM #6), in the FDE journal register.
  *
  * Better Auth routes ALL OAuth callback failures to `${baseURL}/error?error=…`.
  * Without a routable page here those failures 404 (the (auth) error.tsx files
@@ -30,29 +29,27 @@ export default async function AuthErrorPage({
     "We couldn't complete your sign-in. This can happen if the request expired or was cancelled. Please try again."
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Sign-in didn&apos;t work</CardTitle>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardHeader>
-      <CardContent className="space-y-4 text-center">
-        {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            Error: {error}
-          </div>
-        )}
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button className="gap-2" asChild>
-            <Link href="/login">
-              Back to log in
-              <ArrowRight className="size-4" />
-            </Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/">Go home</Link>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+    <div className={styles.panel}>
+      <div className={styles.panelHead}>
+        <h1 className={styles.title}>Sign-in didn&apos;t work</h1>
+        <p className={styles.subtitle}>{description}</p>
+      </div>
+
+      {error && (
+        <p className={styles.serverError} role="alert">
+          <AlertTriangle aria-hidden="true" />
+          Error: {error}
+        </p>
+      )}
+
+      <div className={styles.actions}>
+        <Link href="/login" className={styles.buttonSolid}>
+          Back to log in
+        </Link>
+        <Link href="/" className={styles.buttonOutline}>
+          Go home
+        </Link>
+      </div>
+    </div>
   )
 }

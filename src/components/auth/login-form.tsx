@@ -6,11 +6,9 @@ import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
+import { AlertTriangle } from "lucide-react"
 import { loginSchema, type LoginFormData } from "@/lib/validations"
 import { authClient } from "@/lib/auth-client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -20,10 +18,12 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
+import styles from "@/components/auth/auth-fde.module.css"
 
 /**
- * Login form with OAuth social buttons and email/password validation.
- * Calls the signIn server action and redirects to dashboard on success.
+ * Login form with OAuth social buttons and email/password validation, in the
+ * FDE journal register (paper panel, square hairline inputs, mono labels).
+ * Calls the authClient sign-in and redirects to dashboard on success.
  */
 export function LoginForm() {
   const router = useRouter()
@@ -63,83 +63,84 @@ export function LoginForm() {
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Welcome back</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Log in to your account to continue learning
+    <div className={styles.panel}>
+      <div className={styles.panelHead}>
+        <h1 className={styles.title}>Welcome back</h1>
+        <p className={styles.subtitle}>
+          Log in to your account to continue learning.
         </p>
-      </CardHeader>
-      <CardContent>
-        <OAuthButtons />
-        <OAuthDivider />
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {serverError && (
-              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-                {serverError}
-              </div>
+      </div>
+
+      <OAuthButtons />
+      <OAuthDivider />
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          {serverError && (
+            <p className={styles.serverError} role="alert">
+              <AlertTriangle aria-hidden="true" />
+              {serverError}
+            </p>
+          )}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <FormLabel className={styles.label}>Email</FormLabel>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="email"
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
             )}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="you@example.com"
-                      autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center justify-between">
-                    <FormLabel>Password</FormLabel>
-                    <Link
-                      href="/forgot-password"
-                      className="text-xs text-primary hover:underline"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="••••••••"
-                      autoComplete="current-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting ? "Logging in..." : "Log In"}
-            </Button>
-          </form>
-        </Form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-primary hover:underline">
-            Sign up
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className={styles.field}>
+                <div className={styles.labelRow}>
+                  <FormLabel className={styles.label}>Password</FormLabel>
+                  <Link href="/forgot-password" className={styles.inlineLink}>
+                    Forgot password?
+                  </Link>
+                </div>
+                <FormControl>
+                  <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className={styles.error} />
+              </FormItem>
+            )}
+          />
+          <button
+            type="submit"
+            className={`${styles.buttonSolid} ${styles.buttonFull}`}
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Logging in..." : "Log in"}
+          </button>
+        </form>
+      </Form>
+
+      <p className={styles.altPrompt}>
+        Don&apos;t have an account?{" "}
+        <Link href="/signup" className={styles.link}>
+          Sign up
+        </Link>
+      </p>
+    </div>
   )
 }
