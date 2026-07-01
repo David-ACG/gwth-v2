@@ -17,6 +17,17 @@ export const metadata: Metadata = {
   description: "Track your learning progress and achievements.",
 }
 
+/**
+ * Render per request, never statically. This page reads the signed-in user's
+ * real lesson progress via `getAllLessonProgress()` (W7, DB-backed, scoped by
+ * `getCurrentUser()`), so it must not be prerendered/cached as a shared static
+ * page — otherwise every user is served one build-time snapshot (mock data) and
+ * per-user progress never appears. `getCurrentUser()` short-circuits before
+ * touching cookies when `DATABASE_URL` is unset (build time), which would
+ * otherwise let Next statically optimise this per-user route.
+ */
+export const dynamic = "force-dynamic"
+
 export default async function ProgressPage() {
   const [courseProgress, lessonProgress, streak, courses, dynamicScore] =
     await Promise.all([

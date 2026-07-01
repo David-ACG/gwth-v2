@@ -15,6 +15,14 @@ import { cn } from "@/lib/utils"
 import type { User, Course, CourseProgress } from "@/lib/types"
 import styles from "./dashboard-fde.module.css"
 
+/**
+ * Render per request, never statically. The dashboard is a per-user authed
+ * page (real user via `getDashboardUser()` → `getCurrentUser()`); serving it as
+ * a shared build-time static snapshot would show one user's view to all and
+ * hide real state (W7). See the matching note on the progress page.
+ */
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Dashboard",
   description:
