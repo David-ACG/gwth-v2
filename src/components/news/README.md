@@ -5,7 +5,7 @@ Components for the public news feed (`/news`) and article detail pages (`/news/[
 ## Components
 
 ### `NewsCard` (`news-card.tsx`)
-Card for the news feed grid. Shows upvote button, category badge, title, excerpt, tags, optional "Now a Lab!" badge, author, timestamp, and comment count. Used on the news feed page.
+Card for the news feed grid. Shows upvote button, category badge, title, excerpt, tags, optional "Now a Lab!" badge, author, timestamp, and comment count. When the article has an external source URL, an external-link icon follows the title (labelled "(has external source)" for screen readers); the card itself always links to the internal article page. Used on the news feed page.
 
 ### `UpvoteButton` (`upvote-button.tsx`)
 Toggle vote button with optimistic UI via the `useVote` hook. Shows a login prompt toast for unauthenticated users. Client component.

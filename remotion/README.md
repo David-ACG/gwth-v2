@@ -6,8 +6,9 @@ templates. Co-located with the platform it embeds into (W12).
 
 > This is its own React 18 / Remotion 4 project root with its own
 > `node_modules`. It deliberately does **not** share the Next.js app's React 19
-> tree. The slide templates here are the keepable deliverable; the explainer is
-> one composition assembled from them.
+> tree, so the platform's root `tsconfig.json` excludes `remotion` from the main
+> `tsc` typecheck. The slide templates here are the keepable deliverable; the
+> explainer is one composition assembled from them.
 
 ## Quick start
 
