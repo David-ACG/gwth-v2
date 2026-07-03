@@ -2,7 +2,7 @@
 
 > Living document. Updated as infrastructure is built.
 >
-> Last updated: 2026-06-19 (I1: P520 staging DB + light hardening + SOPS)
+> Last updated: 2026-07-03 (I2: Hetzner prod DB + full hardening delta + backups + rollback)
 
 ---
 
@@ -104,6 +104,133 @@ Default: deny incoming, allow outgoing.
 | coolify-db       | healthy | 5432 (internal) |
 | coolify-redis    | healthy | 6379 (internal) |
 | coolify-realtime | healthy | 6001-6002       |
+
+### Hetzner Production Database (I2 / D2 — 2026-07-03)
+
+Greenfield prod `gwth_v2` — the W7-era note about a `p48owok…` PG resource was
+stale (that container never survived; W7's live verify actually ran against the
+**P520 staging** DB `l08k8gwcscgssgwscoscwo8g`). Provisioned fresh, schema
+applied **once** from a schema-only dump of the verified staging DB (W7
+`lesson_progress` + W11 Better Auth `user` tables included — never re-authored).
+
+| Setting          | Value                                                       |
+| ---------------- | ----------------------------------------------------------- |
+| Coolify resource | `gwth-v2-db-prod` (uuid `zo0gkcwoo0o4gow0go4cwk0o`)          |
+| Image (pinned)   | `postgres:17.10-alpine` — matches P520 staging exactly       |
+| Network          | `coolify` (internal) — **no published host port** (verified `ss -tlnp`) |
+| User / DB        | `gwth` / `gwth_v2`                                           |
+| Limits           | 2g memory / 2 CPUs, own volume `postgres-data-zo0gk…`        |
+| Schema           | 24 public tables; `lesson_progress` FKs → `lessons` + `"user"` verified |
+| Canary row       | `waitlist.email = backup-canary@gwth.internal` (known-row check for every restore drill — do not delete) |
+
+**DATABASE_URL contract (prod).** Same as staging: the app reads `DATABASE_URL`
+(runtime env, injected via Coolify env store on app `tw0cc8oc0w4scwoccs0cw0go`;
+preview row auto-created by Coolify):
+
+```
+postgres://gwth:<password>@zo0gkcwoo0o4gow0go4cwk0o:5432/gwth_v2
+```
+
+The password lives **only** in SOPS (`deploy/secrets.production.env`,
+age-encrypted) and the Coolify env store. `SUPABASE_*` keys are **retired**
+(deleted from the env store 2026-07-03; zero remain anywhere in Coolify).
+A fresh prod `BETTER_AUTH_SECRET` is minted and injected (unused by the current
+build; live at the W6 cutover deploy).
+
+### Backups & Tested Restore (I2 / D3)
+
+| Leg | Mechanism | Schedule | State |
+| --- | --------- | -------- | ----- |
+| Primary dump | Coolify scheduled `pg_dump` (custom format) → `/data/coolify/backups/databases/root-team-0/gwth-v2-db-prod-zo0gk…/` | 03:00 daily, retain 7 | LIVE (backup id 1, first run success) |
+| Offsite (R2) | Coolify S3 destination → Cloudflare R2 bucket `gwth-db-backups` | with primary | **BLOCKED on David**: create the R2 bucket + scoped token (Cloudflare dashboard → R2), then Coolify UI → Storages → add S3 (endpoint `https://<account-id>.r2.cloudflarestorage.com`), then on the DB backup set `save_s3 = true` |
+| Backstop | P520 pull: `/home/david/backups/gwth-v2-db/pull.sh` — sudo-rsync dumps off-box, freshness gate (<26 h), restic snapshot `/home/david/backups/gwth-v2-db/restic-repo` (keep 14d/8w), key `/home/david/backups/restic-keys/gwth-v2-db.key` | 03:30 daily (P520 cron) | LIVE (snapshot `ce7365db` verified) |
+| Dead-man | Kuma push monitor 4 → Telegram; pull.sh heartbeats **only after** a fresh dump is snapshotted, so a never-fired Coolify cron, a stale dump, or a failed pull all stop the heartbeat (alert ≤26 h) | 26 h window | LIVE |
+
+**Restore drill (2026-07-03, gate PASSED):** Coolify `.dmp` → fresh throwaway
+`postgres:17.10-alpine` container via `pg_restore`. Gate: (a) schema fingerprint
+match with source (`pg_dump --schema-only`, ignoring pg17's random `\restrict`
+token lines); (b) known-row: canary present; (c) **RTO ≈ 2 s restore / ~40 s
+including container spin-up** at current (empty-data) size. Re-drill after real
+content lands.
+
+### Hetzner Applied Hardening Baseline (I2 / D8 — FULL public-grade delta, 2026-07-03)
+
+The Feb-2026 breach-enabling gaps are now closed. Lockout-risky items D8 marks
+post-launch (default-deny egress, `userland-proxy:false`, `icc:false`) remain deferred.
+
+| Item | State |
+| ---- | ----- |
+| auditd | **ACTIVE**, `-e 1`, ruleset `/etc/audit/rules.d/gwth-prelaunch.rules` (identity, sudoers, sshd, pam, docker/ufw config, cron persistence, kernel modules, root-exec trail) — closes the #1 forensic gap |
+| Egress logging | UFW `logging medium` (outbound/new-connection visibility — miner C2 would light up) |
+| SSH | `PermitRootLogin no`; `AllowUsers david` (root **dropped**); modern algorithm set `/etc/ssh/sshd_config.d/99-gwth-algos.conf` (sntrup761x25519/curve25519 kex, AEAD ciphers, etm MACs); `LoginGraceTime 30`. ssh-audit: **6 fail / 9 warn → 0 / 0**. Applied watched, one change per reconnect, fresh-login verified each step, 10-min auto-revert net armed/disarmed per change |
+| Docker daemon | `live-restore: true` (applied via SIGHUP first) + `no-new-privileges: true` (daemon restart; **all 19 containers survived**, gwth.ai stayed up apart from Traefik's ~seconds docker-provider reconnect) |
+| Published-port reconcile | Traefik `:8080` (dead dashboard mapping, nothing listens) — DOCKER-USER DROP guard, persisted via `docker-user-rules.service`; Coolify realtime `:6001-2` kept (required by Coolify UI terminal/logs) and made intentional via commented UFW allow rules |
+| CIS-reference score | Lynis hardening index **62 → 63** (before/after reports `/var/log/lynis-report.{BEFORE,AFTER}-i2.dat`); big wins (auditd, SSH) show in ssh-audit + closed gaps rather than Lynis' weighting of deferred post-launch items |
+
+### Rollback Procedure (I2 — feeds W6 runbook)
+
+Coolify retains previous app images on-box (verified: 2 images for
+`tw0cc8oc0w4scwoccs0cw0go`, e.g. `…:376d434…` currently live).
+
+1. **UI path (preferred):** Coolify → My first project → production →
+   GWTH v2 → **Deployments** → pick the last good deployment → **Rollback**
+   (instant — restarts from the retained image, no rebuild).
+2. **Headless path** (Coolify web terminal → `coolify` container, or
+   `ssh hetzner 'docker exec coolify php artisan tinker …'`):
+
+   ```php
+   use App\Models\Application;
+   use App\Models\ApplicationDeploymentQueue;
+   $app = Application::where('uuid','tw0cc8oc0w4scwoccs0cw0go')->first();
+   $q = ApplicationDeploymentQueue::create([
+     'application_id' => $app->id,
+     'deployment_uuid' => Illuminate\Support\Str::uuid()->toString(),
+     'commit' => '<last-good-sha>',   // e.g. 376d434287a78ecb3dd28f37a064d182eba785ba
+     'rollback' => true,              // true = instant image restart, false = rebuild at that commit
+     'force_rebuild' => false,
+     'status' => 'queued',
+     'is_webhook' => false,
+     'server_id' => $app->destination->server->id,
+   ]);
+   dispatch(new App\Jobs\ApplicationDeploymentJob($q->id));
+   ```
+3. **DB rollback** (only if a migration must be reversed): restore the newest
+   dump per the drill above into a scratch DB, verify, then swap — never
+   restore over the live DB blind.
+4. Verify: `curl -s https://gwth.ai/api/health` → 200, then Kuma monitors green.
+
+Dry-checked 2026-07-03: retained images present, `rollback`/`commit` queue
+columns confirmed on beta.463. (**Do not** run an actual rollback casually —
+both retained images are 3-month-old pre-W7 builds.)
+
+### Secrets (I2 / D9)
+
+- Canonical store: **SOPS + age** in git — `deploy/secrets.production.env`
+  (app runtime: `DATABASE_URL`, `BETTER_AUTH_SECRET`, …) and
+  `deploy/secrets.hetzner-ops.env` (Coolify/Kuma/Plausible ops creds + the
+  **new** Coolify API token `claude-i2-2026-07-03`; the old `claude-deploy`
+  token was already invalidated by the beta.463 upgrade). Age key:
+  `~/.config/sops/age/keys.txt` on hlab — **back up to Vaultwarden**.
+- Plaintext `docs/connection-secrets.md` **DELETED** (2026-07-03; never in git
+  history — verified). Hetzner-side plaintext DB password file deleted.
+- **Rotation still owed (David, external dashboards):** Google OAuth secret,
+  GitHub OAuth secret, Stripe live keys + webhook, MailerSend, MailerLite —
+  the Feb-compromise set (see `docs/old-site/env-reference.md`). Everything
+  born since (DB password, Coolify token, BETTER_AUTH_SECRET) is fresh today.
+
+### Monitoring (I2 / D10)
+
+- Kuma monitors 1–3 (gwth.ai `/api/health`, status page, Plausible) confirmed,
+  cert-expiry alerts on, Telegram notification attached.
+- **Monitor 4 (new):** `GWTH v2 DB backup dead-man (P520 pull)` — push type,
+  26 h window, heartbeat from `pull.sh`.
+- **External watcher (new, launch-blocking):** P520 cron
+  `/home/david/gwth-hetzner-watch.sh` every 5 min →
+  `https://gwth.ai/api/health` + `https://status.gwth.ai`, Telegram alerts on
+  state change (token sourced from `~/.gwth-telegram.env`, not hardcoded).
+  Survives a full Hetzner outage.
+- Gap (website task): `/api/health` is currently shallow (no DB/disk check) —
+  D10 rider 1 wants it deep once the Better-Auth build deploys.
 
 ---
 
@@ -320,3 +447,12 @@ ssh hetzner 'docker logs plausible-plausible-1 --tail 50'
 | 2026-02-22 | Plausible setup: admin account, gwth.ai site, outbound links + 404       | OK     |
 | 2026-02-22 | Plausible tracking script added to GWTH v2 root layout, deployed         | OK     |
 | 2026-02-22 | First pageview verified in Plausible dashboard                           | OK     |
+| 2026-07-03 | I2: prod DB `gwth-v2-db-prod` (PG 17.10, internal-only) + schema from verified staging dump | OK |
+| 2026-07-03 | I2: DATABASE_URL injected into gwth.ai app; SUPABASE_\* retired from Coolify env store | OK |
+| 2026-07-03 | I2: nightly Coolify pg_dump (03:00) + P520 restic backstop (03:30) + Kuma dead-man; restore drill gate PASSED (RTO ~2 s) | OK |
+| 2026-07-03 | I2: auditd active (-e 1, forensic ruleset); UFW logging medium (egress visibility) | OK |
+| 2026-07-03 | I2: SSH root login disabled + AllowUsers david only + modern algos (ssh-audit 6 fail → 0); watched, revert-net protocol | OK |
+| 2026-07-03 | I2: Docker live-restore + no-new-privileges (19/19 containers survived restart); :8080 DOCKER-USER guard; :6001-2 documented | OK |
+| 2026-07-03 | I2: SOPS prod + ops stores committed; plaintext connection-secrets.md deleted; new Coolify API token | OK |
+| 2026-07-03 | I2: external P520→Hetzner watcher (5-min cron → Telegram); rollback procedure documented + dry-checked | OK |
+| 2026-07-03 | PENDING (David): R2 bucket `gwth-db-backups` + scoped token → flip backup `save_s3`; external-SaaS key rotations | TODO |
