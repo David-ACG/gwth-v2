@@ -23,7 +23,9 @@ export default function AuthLayout({
       <header className={styles.masthead} data-section="masthead">
         <div className={`${styles.page} ${styles.mastheadInner}`}>
           <Link href="/" aria-label="GWTH.ai home" className={styles.wordmarkLink}>
-            {/* Cream wordmark + ochre accent read on the teal band in both modes. */}
+            {/* Cream wordmark + mustard (ochre-bright) accent on the teal band.
+                David compared mustard vs the terracotta brand accent on the
+                green ground and picked mustard (2026-07-03, second review). */}
             <LogoGwth
               width={150}
               wordmarkColor="var(--v-cream)"

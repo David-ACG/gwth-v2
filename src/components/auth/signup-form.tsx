@@ -30,8 +30,8 @@ export function SignupForm() {
       <div className={styles.panelHead}>
         <h1 className={styles.title}>Invite-only beta</h1>
         <p className={styles.subtitle}>
-          The 23 June beta is closed to public signup. Access is granted
-          manually by the GWTH team.
+          The beta is closed to public signup. Access is granted manually by
+          the GWTH team.
         </p>
       </div>
       <p className={styles.notice}>
