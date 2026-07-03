@@ -1,25 +1,25 @@
 ---
 paths:
-  - "src/middleware.ts"
+  - "src/proxy.ts"
   - "src/app/layout.tsx"
 ---
 
 <!-- SENTINEL: rule=middleware-and-layout, salt=ml-2H6r -->
 
-# Middleware & Root Layout
+# Proxy & Root Layout
 
-Loaded automatically when editing `src/middleware.ts` or `src/app/layout.tsx`.
+Loaded automatically when editing `src/proxy.ts` or `src/app/layout.tsx`.
 
-## Middleware
+## Proxy
 
 Protect dashboard routes from unauthenticated access:
 
 ```ts
-// middleware.ts
+// proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Auth check will be implemented when backend is connected
   // For now, allow all requests through
   return NextResponse.next();
