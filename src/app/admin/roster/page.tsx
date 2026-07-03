@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { requireAdminOrRedirect } from "@/lib/admin"
 import { getRoster, type RosterEntry } from "@/lib/data/admin"
 import { GrantForm } from "@/components/admin/grant-form"
 import {
@@ -55,6 +56,9 @@ export default async function AdminRosterPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
+  // Pages render in parallel with the layout: gate BEFORE any data read.
+  await requireAdminOrRedirect()
+
   const params = await searchParams
   const sortParam = typeof params.sort === "string" ? params.sort : "signup"
   const sort: SortKey = (SORT_KEYS as readonly string[]).includes(sortParam)

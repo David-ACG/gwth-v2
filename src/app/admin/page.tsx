@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { requireAdminOrRedirect } from "@/lib/admin"
 import {
   getCohortMetrics,
   getFunnel,
@@ -16,6 +17,9 @@ import styles from "./admin-fde.module.css"
  * deeper; the grant form is the header action.
  */
 export default async function AdminOverviewPage() {
+  // Pages render in parallel with the layout: gate BEFORE any data read.
+  await requireAdminOrRedirect()
+
   const [metrics, funnel] = await Promise.all([
     safe(() => getCohortMetrics()),
     safe(() => getFunnel()),

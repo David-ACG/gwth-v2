@@ -11,13 +11,18 @@
   full roster, M1 funnel and feedback inbox live one click deeper; the grant
   form is the header action. FDE journal register throughout (DESIGN_FDE.md;
   denser tables per §6 "functional priority"), light + dark, 412px-safe.
-- **Access gate** — server-side in [src/app/admin/layout.tsx](../src/app/admin/layout.tsx):
-  reuses the W11 auth seam (`getCurrentUser()` from [src/lib/auth.ts](../src/lib/auth.ts))
-  then checks the email against the **`ADMIN_EMAILS` env allowlist**
-  ([src/lib/admin.ts](../src/lib/admin.ts) — unset = nobody is admin, fail
-  closed; nothing hardcoded). Anonymous → `/login`; signed-in non-admin →
-  `/dashboard` (never a 500). **No middleware.ts** — `/admin` was only added to
-  the proxy's optimistic no-cookie bounce ([src/proxy.ts](../src/proxy.ts)).
+- **Access gate** — server-side, reusing the W11 auth seam (`getCurrentUser()`
+  from [src/lib/auth.ts](../src/lib/auth.ts)) + the **`ADMIN_EMAILS` env
+  allowlist** ([src/lib/admin.ts](../src/lib/admin.ts) — unset = nobody is
+  admin, fail closed; nothing hardcoded). The gate runs in the
+  [layout](../src/app/admin/layout.tsx) **and at the top of every /admin
+  page** (`requireAdminOrRedirect()`): App Router renders pages IN PARALLEL
+  with their layout, so a layout-only redirect still streams the page's data
+  to a raw curl — caught during verification, fixed, and re-proven (anonymous
+  body now contains zero cohort strings). Anonymous → `/login`; signed-in
+  non-admin → `/dashboard` (never a 500). **No middleware.ts** — `/admin` was
+  only added to the proxy's optimistic no-cookie bounce
+  ([src/proxy.ts](../src/proxy.ts)).
   The W5 feedback-inbox admin check (`isFeedbackAdmin`) now delegates to the
   same env allowlist — its hardcoded email set is gone.
 - **Panels against real Postgres (D2)** — Panel 1 roster (users + waitlist +
@@ -102,8 +107,8 @@ unchanged — new rows are simply unread). Rollback = drop column + index.
 
 ```mermaid
 flowchart LR
-  subgraph Gate [Admin gate — reused W11 seam]
-    L["/admin layout (server)"] --> CU["getCurrentUser()\nsrc/lib/auth.ts"]
+  subgraph Gate [Admin gate — reused W11 seam, layout AND every page]
+    L["/admin layout + each page\n(requireAdminOrRedirect)"] --> CU["getCurrentUser()\nsrc/lib/auth.ts"]
     CU --> AL{"email in ADMIN_EMAILS?\n(env, fail closed)"}
     AL -->|no session| LOGIN["redirect /login"]
     AL -->|not listed| DASH["redirect /dashboard"]
@@ -135,6 +140,12 @@ flowchart LR
   (toast + roster update, no manual refresh); non-admin → `/dashboard`;
   anonymous → `/login`; API parity (anon PATCH 401, non-admin PATCH 401, anon
   grant 401, admin PATCH 200).
+- Raw-stream leak check (curl, no JS): before the per-page gate an anonymous
+  `GET /admin` 200-streamed cohort markup alongside the layout's
+  `NEXT_REDIRECT`; after the fix the anonymous and non-admin bodies contain
+  **zero** cohort strings ("Cohort health", metric markup, tester emails all
+  0 matches) while the admin body still renders — re-run:
+  `curl -s http://192.168.178.50:3001/admin | grep -c "Cohort health"` → 0.
 
 ## What David should verify
 

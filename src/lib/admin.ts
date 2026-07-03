@@ -14,6 +14,7 @@
  */
 
 import { NextResponse } from "next/server"
+import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 import type { User } from "@/lib/types"
 
@@ -53,6 +54,22 @@ export function isAdminEmail(email: string | null | undefined): boolean {
 export async function getAdminUser(): Promise<User | null> {
   const user = await getCurrentUser()
   if (!user || !isAdminEmail(user.email)) return null
+  return user
+}
+
+/**
+ * Page-level admin gate for /admin/* server components.
+ *
+ * The layout carries the same gate for the chrome, but App Router renders a
+ * page IN PARALLEL with its layout — a layout redirect alone does not stop
+ * the page's RSC payload (cohort data) from streaming to an anonymous curl.
+ * Every /admin page therefore calls this FIRST, before any data read.
+ * Anonymous → /login; authenticated non-admin → /dashboard.
+ */
+export async function requireAdminOrRedirect(): Promise<User> {
+  const user = await getCurrentUser()
+  if (!user) redirect("/login")
+  if (!isAdminEmail(user.email)) redirect("/dashboard")
   return user
 }
 

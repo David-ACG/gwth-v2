@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { requireAdminOrRedirect } from "@/lib/admin"
 import { getFeedbackInbox, type FeedbackInboxRow } from "@/lib/data/feedback"
 import { FeedbackReadToggle } from "@/components/admin/feedback-read-toggle"
 import { AdminEmptyState, safe } from "../admin-shared"
@@ -15,6 +16,9 @@ export default async function AdminFeedbackPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
+  // Pages render in parallel with the layout: gate BEFORE any data read.
+  await requireAdminOrRedirect()
+
   const params = await searchParams
   const unreadOnly = params.filter === "unread"
 

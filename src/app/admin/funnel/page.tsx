@@ -1,3 +1,4 @@
+import { requireAdminOrRedirect } from "@/lib/admin"
 import { getFunnel, STALL_THRESHOLD_DAYS } from "@/lib/data/admin"
 import {
   AdminEmptyState,
@@ -15,6 +16,9 @@ import styles from "../admin-fde.module.css"
  * testers who most need a nudge sit at the top.
  */
 export default async function AdminFunnelPage() {
+  // Pages render in parallel with the layout: gate BEFORE any data read.
+  await requireAdminOrRedirect()
+
   const funnel = await safe(() => getFunnel())
 
   const entries = (funnel ?? []).sort((a, b) => {
