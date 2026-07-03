@@ -47,7 +47,7 @@ export default async function AuthErrorPage({
           Back to log in
         </Link>
         <Link href="/" className={styles.buttonOutline}>
-          Go home
+          Home
         </Link>
       </div>
     </div>
