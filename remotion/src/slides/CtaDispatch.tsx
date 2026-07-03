@@ -1,7 +1,7 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
 import { SURFACES, SurfaceName, TYPE } from "../theme/fde-theme";
-import { Frame, Mono, EmText } from "../components/primitives";
+import { FitToFrame, Frame, Mono, EmText } from "../components/primitives";
 import { fadeUp, fadeIn, hairlineDraw, TIMING } from "../motion/presets";
 
 /** Motion treatments offered for the CTA/dispatch archetype (David picks — 2a). */
@@ -53,7 +53,7 @@ export const CtaDispatch: React.FC<CtaDispatchProps> = ({
 
   return (
     <Frame surface={surface} align="center">
-      <div style={{ maxWidth: 1400, width: "100%" }}>
+      <FitToFrame style={{ maxWidth: 1400, width: "100%" }}>
         {kicker && (
           <div style={{ marginBottom: 34, ...fadeUp(frame, 0, TIMING.normal, 14) }}>
             <Mono color={s.mono}>{kicker}</Mono>
@@ -152,7 +152,7 @@ export const CtaDispatch: React.FC<CtaDispatchProps> = ({
             </div>
           )}
         </div>
-      </div>
+      </FitToFrame>
     </Frame>
   );
 };

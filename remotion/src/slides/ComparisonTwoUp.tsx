@@ -1,7 +1,7 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
 import { SURFACES, SurfaceName, TYPE } from "../theme/fde-theme";
-import { Frame, Mono, EmText } from "../components/primitives";
+import { FitToFrame, Frame, Mono, EmText } from "../components/primitives";
 import { fadeUp, fadeIn, ruleDrawDown, TIMING } from "../motion/presets";
 
 /** Motion treatments offered for the comparison archetype (David picks — 2a). */
@@ -117,7 +117,7 @@ export const ComparisonTwoUp: React.FC<ComparisonTwoUpProps> = ({
 
   return (
     <Frame surface={surface} align="center">
-      <div style={{ maxWidth: 1520, width: "100%" }}>
+      <FitToFrame style={{ maxWidth: 1520, width: "100%" }}>
         {(kicker || title) && (
           <div style={{ marginBottom: 44, ...fadeUp(frame, 0, TIMING.slow, 16) }}>
             {kicker && (
@@ -157,7 +157,7 @@ export const ComparisonTwoUp: React.FC<ComparisonTwoUpProps> = ({
           />
           {column("right", rightTitle, rightItems, rightDelay)}
         </div>
-      </div>
+      </FitToFrame>
     </Frame>
   );
 };

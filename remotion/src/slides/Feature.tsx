@@ -1,7 +1,7 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
 import { SURFACES, SurfaceName, TYPE } from "../theme/fde-theme";
-import { Frame, Mono, EmText } from "../components/primitives";
+import { FitToFrame, Frame, Mono, EmText } from "../components/primitives";
 import { fadeUp, fadeIn, hairlineDraw, TIMING } from "../motion/presets";
 
 /** Motion treatments offered for the feature archetype (David picks — 2a). */
@@ -33,7 +33,8 @@ export interface FeatureProps {
  * FEATURE slide — a section head (title + mono kicker, closed by an ink rule)
  * over a list of hairline-separated feature rows (DESIGN_FDE §5.2, §4.8). The
  * register's substitute for an icon grid: serif headings + hairlines, no icons,
- * no cards-with-shadows. Handles 2–5 points; rows wrap gracefully.
+ * no cards-with-shadows. Handles 2–5 points; rows wrap gracefully, and content
+ * too tall for the canvas scales down via FitToFrame instead of clipping.
  */
 export const Feature: React.FC<FeatureProps> = ({
   kicker,
@@ -50,7 +51,7 @@ export const Feature: React.FC<FeatureProps> = ({
 
   return (
     <Frame surface={surface} align="center">
-      <div style={{ maxWidth: 1500, width: "100%" }}>
+      <FitToFrame style={{ maxWidth: 1500, width: "100%" }}>
         {/* Section head */}
         <div
           style={{
@@ -148,7 +149,7 @@ export const Feature: React.FC<FeatureProps> = ({
             );
           })}
         </div>
-      </div>
+      </FitToFrame>
     </Frame>
   );
 };

@@ -1,5 +1,5 @@
-import React from "react";
-import { AbsoluteFill } from "remotion";
+import React, { useEffect, useRef, useState } from "react";
+import { AbsoluteFill, continueRender, delayRender } from "remotion";
 import { FDE, SURFACES, SurfaceName, TYPE, PAGE_PADDING } from "../theme/fde-theme";
 import { FONT_FAMILY } from "../theme/fonts";
 
@@ -28,6 +28,51 @@ export const Frame: React.FC<{
     >
       {children}
     </AbsoluteFill>
+  );
+};
+
+/**
+ * Vertical-fit guard for slides whose props accept unbounded content (feature
+ * points, comparison items, dispatch entries). Measures the laid-out content
+ * once and, only if it would overflow the 1080px canvas, scales it down to fit
+ * (transform does not affect layout metrics, so the measure stays stable).
+ * With content that fits — every beat in the explainer — this renders
+ * pixel-identically to a plain wrapper. Prevents the centre-clip failure where
+ * `Frame`'s centring pushes overflow off both the top and bottom edges.
+ */
+export const FitToFrame: React.FC<{
+  children: React.ReactNode;
+  /** Available content height inside the 1080 canvas (default leaves margins). */
+  maxHeight?: number;
+  /** Extra styles for the measured wrapper (e.g. the page measure width). */
+  style?: React.CSSProperties;
+}> = ({ children, maxHeight = 960, style }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+  const [handle] = useState(() => delayRender("fit-to-frame measure"));
+
+  useEffect(() => {
+    const el = ref.current;
+    if (el) {
+      // offsetHeight is a layout metric: transforms (ours or the entrance
+      // animations') never feed back into it, so this settles in one pass.
+      const height = el.offsetHeight;
+      setScale(height > maxHeight ? maxHeight / height : 1);
+    }
+    continueRender(handle);
+  }, [handle, maxHeight]);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        transform: scale < 1 ? `scale(${scale})` : undefined,
+        transformOrigin: "center center",
+        ...style,
+      }}
+    >
+      {children}
+    </div>
   );
 };
 

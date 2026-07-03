@@ -156,10 +156,71 @@ const SAMPLE = {
 };
 
 /**
+ * Deliberately oversized content for the QA-FitStress composition: each list is
+ * far taller than the 1080 canvas, proving the FitToFrame guard scales content
+ * down instead of the old centre-clip failure. Not part of any deliverable.
+ */
+const STRESS = {
+  feature: {
+    kicker: "QA · fit stress",
+    title: "Six points with long wrapping bodies, *deliberately oversized*.",
+    lead: "Without the FitToFrame guard this slide clips off the top and bottom edges; with it, everything scales to fit the canvas.",
+    points: [
+      { heading: "Build small applications end to end", body: "A long body line that wraps across the measure and pushes the row height up considerably, simulating a verbose author writing far more than the design anticipated for one row." },
+      { heading: "Automate the workflows that eat your week", body: "Another long wrapping body with plenty of text so the row takes several lines at body size, adding to the accumulated vertical overflow across the slide." },
+      { heading: "Research in minutes, not hours", body: "Yet another long body designed to wrap over multiple lines and contribute to the total height so content dramatically exceeds the canvas." },
+      { heading: "Make sense of your own data", body: "Still more wrapping body text to guarantee we blow past the available pixel budget by a wide margin on this stress slide." },
+      { heading: "Ship a portfolio of real artefacts", body: "More long text to be sure the overflow is comfortably in the failing range that the template audit identified." },
+      { heading: "Stay current after the course ends", body: "Final row with a long body, completing the six-row stress case that previously would have clipped on both edges." },
+    ],
+  },
+  comparison: {
+    kicker: "QA · fit stress",
+    title: "Seven items a side, *all wrapping*.",
+    leftTitle: "Most courses",
+    leftItems: [
+      "Hours of pre-recorded slide decks that you watch passively without ever producing anything you could show to another person",
+      "A one-shot certificate PDF that ages from the day it is issued and proves nothing about current ability",
+      "Quizzes about terminology rather than practical work with the tools professionals actually use",
+      "No feedback loop of any kind once the cohort ends and the community channel goes quiet",
+      "Content frozen at recording time while the tools change underneath it every quarter",
+      "A curriculum built around what is easy to film rather than what learners need to do",
+      "Marketing promises about outcomes with no artefact anywhere to back them up",
+    ],
+    rightTitle: "GWTH",
+    rightItems: [
+      "Real projects built week by week that accumulate into a portfolio someone else can actually inspect",
+      "A verifiable credential that stays current because it decays when you stop refreshing updated lessons",
+      "Practical work with the same tools professionals use, assessed by what you produce",
+      "A visible progress trail that updates as your skill changes rather than a static certificate",
+      "Lessons refreshed against the live tool landscape with refresh work tracked openly",
+      "A curriculum built backwards from real applied capability at every level",
+      "Every claim on the site sits next to the artefact that proves it",
+    ],
+    highlightSide: "right" as const,
+  },
+  dispatch: {
+    kicker: "QA · fit stress",
+    title: "Five pricing entries with long labels, *deliberately oversized*.",
+    entries: [
+      { value: "£0", label: "Free labs and sample lessons with no card required and no time limit on how long you take" },
+      { value: "£29/mo", label: "Course access billed one course month at a time with the freedom to stop after any month" },
+      { value: "£7.50/mo", label: "Optional Stay Current access after the course ends so the credential keeps its freshness" },
+      { value: "£39", label: "A hypothetical future price point used purely to stress the grid with a fourth column" },
+      { value: "£49", label: "A second hypothetical future price point used purely to stress the grid with a fifth column" },
+    ],
+    buttonLabel: "Try a free lab",
+    url: "gwth.ai",
+  },
+};
+
+/**
  * Remotion root. Registers:
  *  - `Explainer` — the composed homepage explainer (the deliverable).
  *  - `MotionOptions-*` — one reel per archetype for David's step-2a pick.
  *  - `Slide-*` — each template alone, default motion (a library contact sheet).
+ *  - `QA-FitStress` — the three unbounded-content templates fed oversized
+ *    content, proving the FitToFrame long-text guard (render stills to check).
  */
 export const RemotionRoot: React.FC = () => {
   return (
@@ -283,6 +344,28 @@ export const RemotionRoot: React.FC = () => {
         id="Slide-CtaDispatch"
         component={() => <CtaDispatch {...SAMPLE.dispatch} surface="tealDeep" motionVariant="stagger" />}
         durationInFrames={OPTION_FRAMES}
+        fps={fps}
+        width={width}
+        height={height}
+      />
+
+      {/* ---- QA: long-text guard proof (not a deliverable) ---- */}
+      <Composition
+        id="QA-FitStress"
+        component={() => (
+          <Series>
+            <Series.Sequence durationInFrames={OPTION_FRAMES}>
+              <Feature {...STRESS.feature} surface="paper" motionVariant="stagger" />
+            </Series.Sequence>
+            <Series.Sequence durationInFrames={OPTION_FRAMES}>
+              <ComparisonTwoUp {...STRESS.comparison} surface="paper" motionVariant="divider-first" />
+            </Series.Sequence>
+            <Series.Sequence durationInFrames={OPTION_FRAMES}>
+              <CtaDispatch {...STRESS.dispatch} surface="tealDeep" motionVariant="stagger" />
+            </Series.Sequence>
+          </Series>
+        )}
+        durationInFrames={OPTION_FRAMES * 3}
         fps={fps}
         width={width}
         height={height}
