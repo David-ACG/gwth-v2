@@ -82,6 +82,15 @@ describe("proxy route guard (W11)", () => {
       expect(redirectPath(response)).toBe("/login")
     })
 
+    it("(W4) bounces anonymous traffic off /admin and /admin/* to /login", async () => {
+      setSessionCookie(null)
+      for (const path of ["/admin", "/admin/roster", "/admin/feedback"]) {
+        const response = await proxy(request(path))
+        expect(response.status).toBe(307)
+        expect(redirectPath(response)).toBe("/login")
+      }
+    })
+
     it("(b) redirects a logged-in user off an auth route to /dashboard", async () => {
       setSessionCookie("session-token")
       const response = await proxy(request("/login"))

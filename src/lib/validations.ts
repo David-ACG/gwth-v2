@@ -181,9 +181,10 @@ export const newsCommentSchema = z.object({
  */
 export const adminGrantSchema = z.object({
   email: z.string().email("Enter a valid email address"),
-  months: z.coerce.number().int().min(1).max(3).default(3),
+  // Registered with valueAsNumber (the <select> would otherwise yield a string).
+  months: z.number().int().min(1).max(3),
   notes: z.string().max(500, "Notes must be less than 500 characters").optional(),
-  sendInvite: z.boolean().default(true),
+  sendInvite: z.boolean(),
 })
 
 // ─── Inferred Types ───────────────────────────────────────────────────────────

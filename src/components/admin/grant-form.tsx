@@ -92,7 +92,7 @@ export function GrantForm() {
           <select
             id="grant-months"
             className={styles.select}
-            {...form.register("months")}
+            {...form.register("months", { valueAsNumber: true })}
           >
             <option value={1}>Month 1</option>
             <option value={2}>Months 1–2</option>
