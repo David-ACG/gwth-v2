@@ -60,8 +60,14 @@ function isPasswordExempt(pathname: string): boolean {
   )
 }
 
-/** Dashboard routes that require authentication (W11 route guard) */
+/**
+ * Dashboard routes that require authentication (W11 route guard).
+ * `/admin` is here for the optimistic no-cookie bounce only — the REAL admin
+ * gate (session + ADMIN_EMAILS allowlist) lives in src/app/admin/layout.tsx
+ * and in requireAdminForApi for /api/admin/*; per W11 there is no middleware.
+ */
 const PROTECTED_PATHS = [
+  "/admin",
   "/dashboard",
   "/courses",
   "/course",

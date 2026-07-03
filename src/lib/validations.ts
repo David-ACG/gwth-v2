@@ -172,6 +172,20 @@ export const newsCommentSchema = z.object({
   parentId: z.string().optional(),
 })
 
+// ─── Admin (W4) ───────────────────────────────────────────────────────────────
+
+/**
+ * Manual beta grant form on /admin/roster (Panel 4). Mirrors the fields the
+ * beta-access endpoint accepts from the admin UI; the server-side API key is
+ * injected by /api/admin/grant, never collected from the form.
+ */
+export const adminGrantSchema = z.object({
+  email: z.string().email("Enter a valid email address"),
+  months: z.coerce.number().int().min(1).max(3).default(3),
+  notes: z.string().max(500, "Notes must be less than 500 characters").optional(),
+  sendInvite: z.boolean().default(true),
+})
+
 // ─── Inferred Types ───────────────────────────────────────────────────────────
 
 export type LoginFormData = z.infer<typeof loginSchema>
@@ -187,3 +201,4 @@ export type FeedbackFormData = z.infer<typeof feedbackSchema>
 export type FeedbackCategory = (typeof FEEDBACK_CATEGORIES)[number]
 export type WaitlistFormData = z.infer<typeof waitlistSchema>
 export type NewsCommentFormData = z.infer<typeof newsCommentSchema>
+export type AdminGrantFormData = z.infer<typeof adminGrantSchema>

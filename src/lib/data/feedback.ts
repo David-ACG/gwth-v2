@@ -14,11 +14,9 @@
 
 import { desc, eq } from "drizzle-orm"
 import { getDb } from "@/db"
-import { feedback } from "@/db/schema"
+import { feedback, user } from "@/db/schema"
+import { isAdminEmail } from "@/lib/admin"
 import type { FeedbackCategory } from "@/lib/validations"
-
-/** Emails allowed to read the full feedback inbox (admin scope, app-level). */
-const ADMIN_EMAILS = new Set(["david@gwth.ai", "david@agilecommercegroup.com"])
 
 /** A single persisted feedback row, as returned by the data layer. */
 export interface FeedbackRow {
@@ -38,6 +36,16 @@ export interface FeedbackRow {
   emailSent: boolean
   /** Creation timestamp (ISO string — the generated column uses mode: "string"). */
   createdAt: string
+  /** When the admin marked this read (ISO string) — null means unread (W4). */
+  readAt: string | null
+}
+
+/** A feedback row joined with the submitting tester, for the admin inbox (W4). */
+export interface FeedbackInboxRow extends FeedbackRow {
+  /** Tester's display name from the Better Auth user table. */
+  userName: string
+  /** Tester's email from the Better Auth user table. */
+  userEmail: string
 }
 
 /** Input for creating a feedback row. */
@@ -109,7 +117,49 @@ export async function getAllFeedback(): Promise<FeedbackRow[]> {
   return rows as FeedbackRow[]
 }
 
-/** Whether an email address may read the full feedback inbox. */
+/**
+ * Returns every feedback row joined with the tester's name/email, newest
+ * first — the W4 admin inbox read. Admin-only; callers gate via the /admin
+ * layout or {@link isFeedbackAdmin}.
+ */
+export async function getFeedbackInbox(): Promise<FeedbackInboxRow[]> {
+  const db = getDb()
+  const rows = await db
+    .select({
+      id: feedback.id,
+      userId: feedback.userId,
+      sourcePath: feedback.sourcePath,
+      category: feedback.category,
+      message: feedback.message,
+      userAgent: feedback.userAgent,
+      emailSent: feedback.emailSent,
+      createdAt: feedback.createdAt,
+      readAt: feedback.readAt,
+      userName: user.name,
+      userEmail: user.email,
+    })
+    .from(feedback)
+    .innerJoin(user, eq(feedback.userId, user.id))
+    .orderBy(desc(feedback.createdAt))
+  return rows as FeedbackInboxRow[]
+}
+
+/**
+ * Sets or clears the admin-inbox read marker on one feedback row (W4).
+ * `read: true` stamps read_at now; `read: false` clears it back to unread.
+ */
+export async function setFeedbackRead(id: string, read: boolean): Promise<void> {
+  const db = getDb()
+  await db
+    .update(feedback)
+    .set({ readAt: read ? new Date().toISOString() : null })
+    .where(eq(feedback.id, id))
+}
+
+/**
+ * Whether an email address may read the full feedback inbox.
+ * Delegates to the W4 env-var allowlist (ADMIN_EMAILS) — no hardcoded emails.
+ */
 export function isFeedbackAdmin(email: string | null | undefined): boolean {
-  return Boolean(email && ADMIN_EMAILS.has(email.toLowerCase()))
+  return isAdminEmail(email)
 }

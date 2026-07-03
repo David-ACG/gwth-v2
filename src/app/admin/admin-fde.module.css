@@ -1,0 +1,622 @@
+/*
+ * FDE journal register — /admin (W4, David-facing).
+ *
+ * Same tokens and type as every FDE surface (DESIGN_FDE.md §2/§3); denser
+ * tables are sanctioned for admin (§6 "functional priority"). Palette block
+ * copied WHOLE from home-fde.module.css per §8 (partial palettes drift).
+ * No raw hex outside the .shell/.dark blocks; square corners; hairlines,
+ * not shadows.
+ */
+
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
+  --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
+  --v-action: #2c4a47;
+  --v-action-text: #ffffff;
+  --v-dash: rgba(26, 28, 24, 0.18);
+  --v-dash-active: #2c4a47;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
+  --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
+  --v-action: #4d7a55;
+  --v-action-text: #ece8d2;
+  --v-dash: rgba(236, 232, 210, 0.18);
+  --v-dash-active: #6ea877;
+
+  color-scheme: dark;
+}
+
+/* ── Page measure ─────────────────────────────────────────────────────── */
+
+.page {
+  margin: 0 auto;
+  width: min(1200px, calc(100% - 2rem));
+}
+
+.main {
+  flex: 1;
+  padding: clamp(1.75rem, 4vw, 3rem) 0 clamp(3rem, 6vw, 4.5rem);
+}
+
+/* ── Mono metadata voice ──────────────────────────────────────────────── */
+
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+
+.header {
+  background: var(--v-bg);
+  border-bottom: 1px solid var(--v-ink);
+}
+
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 0.85rem 0;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brandTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+  margin-right: auto;
+}
+
+.navLink {
+  composes: mono;
+  padding: 0.35rem 0;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navLink:hover {
+  color: var(--v-ink);
+}
+
+.navLink[data-active="true"] {
+  color: var(--v-ink);
+  border-bottom-color: var(--v-ink);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ── Buttons (§5.3, reduced padding for the dense surface) ────────────── */
+
+.buttonSolid,
+.buttonOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.1rem;
+  border-radius: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.buttonSolid {
+  background: var(--v-action);
+  color: var(--v-action-text);
+  border: 1px solid var(--v-action);
+}
+
+.buttonSolid:hover {
+  background: var(--v-teal-deep);
+  border-color: var(--v-teal-deep);
+}
+
+.buttonSolid:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.buttonOutline {
+  background: transparent;
+  color: var(--v-ink);
+  border: 1px solid var(--v-ink);
+}
+
+.buttonOutline:hover {
+  background: var(--v-ink);
+  color: var(--v-bg);
+}
+
+.buttonSolid:focus-visible,
+.buttonOutline:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 2px;
+}
+
+/* ── Section head (§5.2) ──────────────────────────────────────────────── */
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  border-bottom: 1px solid var(--v-ink);
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.sectionLead {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+  max-width: 44rem;
+  margin: -0.75rem 0 1.75rem;
+}
+
+.section {
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+/* ── Metric cards (overview row) ──────────────────────────────────────── */
+
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .metricsRow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.1rem 1.2rem 1.25rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metricCard:hover {
+  border-color: var(--v-ink);
+}
+
+.metricValue {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.metricCard:hover .metricValue {
+  color: var(--v-ochre);
+}
+
+.metricCaption {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
+/* Attention variant: the stalled card carries an ochre top strip when hot. */
+.metricAlert {
+  border-top: 3px solid var(--v-ochre);
+}
+
+/* ── Tables (dense, sanctioned for admin) ─────────────────────────────── */
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--v-line);
+  background: var(--v-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  text-align: left;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--v-ink);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  vertical-align: baseline;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background: color-mix(in srgb, var(--v-line-soft) 35%, transparent);
+}
+
+.sortLink {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.sortLink:hover {
+  color: var(--v-ink);
+}
+
+.sortLink[data-active="true"] {
+  color: var(--v-ink);
+  border-bottom-color: var(--v-ink);
+}
+
+.cellName {
+  font-weight: 600;
+  color: var(--v-ink);
+  white-space: nowrap;
+}
+
+.cellEmail {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--v-muted);
+  display: block;
+  margin-top: 0.15rem;
+  text-transform: none;
+}
+
+.cellMuted {
+  color: var(--v-muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.cellTitle {
+  color: var(--v-soft);
+}
+
+/* ── Status labels — colour + glyph + text (§5.5, never colour alone) ─── */
+
+.status {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.stGranted {
+  color: var(--v-dash-active);
+}
+
+.stWaitlist {
+  color: var(--v-ochre);
+}
+
+.stRevoked {
+  color: var(--v-rust);
+}
+
+.stRegistered {
+  color: var(--v-muted);
+}
+
+.stStalled {
+  color: var(--v-ochre);
+}
+
+.stActive {
+  color: var(--v-dash-active);
+}
+
+.stUnread {
+  color: var(--v-ochre);
+}
+
+.stRead {
+  color: var(--v-muted);
+}
+
+/* ── Dash-progress (§4.5) ─────────────────────────────────────────────── */
+
+.dashes {
+  display: flex;
+  gap: 0.25rem;
+  min-width: 7rem;
+  max-width: 12rem;
+}
+
+.dashes span {
+  height: 3px;
+  flex: 1;
+  background: var(--v-dash);
+}
+
+.dashes span[data-active="true"] {
+  background: var(--v-dash-active);
+}
+
+.dashesLabel {
+  font-size: 0.85rem;
+  color: var(--v-soft);
+  white-space: nowrap;
+}
+
+/* ── Grant form panel (§5.7 highlight panel) ──────────────────────────── */
+
+.panel {
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);
+  padding: 1.5rem 1.5rem 1.6rem;
+  margin-bottom: 2rem;
+}
+
+.panelHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.panelTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.panelLead {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+  max-width: 52rem;
+  margin-bottom: 1.1rem;
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.fieldGrow {
+  flex: 1 1 16rem;
+}
+
+.label {
+  composes: mono;
+}
+
+.input,
+.select {
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 0.95rem;
+  color: var(--v-ink);
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: 0;
+  padding: 0.55rem 0.7rem;
+  width: 100%;
+}
+
+.input:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 1px;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.55rem;
+}
+
+.checkboxRow input {
+  accent-color: var(--v-action);
+  width: 1rem;
+  height: 1rem;
+}
+
+.checkboxLabel {
+  font-size: 0.85rem;
+  color: var(--v-soft);
+}
+
+.formError {
+  width: 100%;
+  font-size: 0.85rem;
+  color: var(--v-rust);
+  font-weight: 600;
+}
+
+/* ── Feedback inbox rows ──────────────────────────────────────────────── */
+
+.inboxList {
+  border-top: 1px solid var(--v-ink);
+}
+
+.inboxItem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--v-line);
+  padding: 1.1rem 0;
+}
+
+.inboxBody {
+  flex: 1 1 24rem;
+  min-width: 0;
+}
+
+.inboxMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.inboxMessage {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+  max-width: 62ch;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.inboxAside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+@media (min-width: 48rem) {
+  .inboxAside {
+    align-items: flex-end;
+  }
+}
+
+.filterRow {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Empty / fallback states ──────────────────────────────────────────── */
+
+.empty {
+  border: 1px solid var(--v-line);
+  background: var(--v-surface);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.emptyTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.emptyBody {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+  max-width: 52rem;
+}
+
+/* ── Access-denied / error card ───────────────────────────────────────── */
+
+.center {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}

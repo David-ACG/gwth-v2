@@ -502,6 +502,9 @@ export const feedback = pgTable("feedback", {
 	userAgent: text("user_agent"),
 	emailSent: boolean("email_sent").default(false).notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	// Hand-patched (W4, canonical DDL: 012_feedback_read.sql): admin-inbox
+	// read marker — NULL = unread. Re-apply after any drizzle-kit re-pull.
+	readAt: timestamp("read_at", { withTimezone: true, mode: 'string' }),
 }, (table) => [
 	index("idx_feedback_created_at").using("btree", table.createdAt.desc().nullsFirst().op("timestamptz_ops")),
 	index("idx_feedback_user_id").using("btree", table.userId.asc().nullsLast().op("text_ops")),
