@@ -1,0 +1,186 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "GWTH.ai" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+          - button "Collapse sidebar" [ref=e7]:
+            - img
+        - navigation "Main navigation" [ref=e8]:
+          - link "Dashboard" [ref=e9] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e10]
+            - generic [ref=e15]: Dashboard
+          - link "The Course" [ref=e16] [cursor=pointer]:
+            - /url: /course/applied-ai-skills
+            - img [ref=e17]
+            - generic [ref=e19]: The Course
+          - link "Labs" [ref=e20] [cursor=pointer]:
+            - /url: /labs
+            - img [ref=e21]
+            - generic [ref=e23]: Labs
+          - link "Progress" [ref=e24] [cursor=pointer]:
+            - /url: /progress
+            - img [ref=e25]
+            - generic [ref=e27]: Progress
+        - navigation "Secondary navigation" [ref=e28]:
+          - link "Bookmarks" [ref=e29] [cursor=pointer]:
+            - /url: /bookmarks
+            - img [ref=e30]
+            - generic [ref=e32]: Bookmarks
+          - link "Notifications" [ref=e33] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e34]
+            - generic [ref=e37]: Notifications
+          - link "Profile" [ref=e38] [cursor=pointer]:
+            - /url: /profile
+            - img [ref=e39]
+            - generic [ref=e42]: Profile
+          - link "Settings" [ref=e43] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e44]
+            - generic [ref=e47]: Settings
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "breadcrumb" [ref=e50]:
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "Demo" [ref=e53] [cursor=pointer]:
+                - /url: /demo
+            - listitem [ref=e54]:
+              - img [ref=e55]
+            - listitem [ref=e57]:
+              - link "Lesson" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - button "Search... ⌘ K" [ref=e60]:
+            - img
+            - generic [ref=e61]: Search...
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button "Toggle theme" [ref=e62]:
+            - img
+          - button "U" [ref=e63]:
+            - generic [ref=e65]: U
+      - main [ref=e66]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - complementary [ref=e71]:
+              - generic [ref=e72]: LESSON 13 · OUTLINE
+              - generic [ref=e73]:
+                - generic [ref=e74]:
+                  - img [ref=e76]
+                  - generic [ref=e78]:
+                    - generic [ref=e79]: Why this lesson exists
+                    - generic [ref=e80]: VIDEO · 4 MIN
+                  - generic [ref=e81]: P01
+                - generic [ref=e82]:
+                  - img [ref=e84]
+                  - generic [ref=e86]:
+                    - generic [ref=e87]: Picking the right problem
+                    - generic [ref=e88]: PROSE · 3 MIN
+                  - generic [ref=e89]: P02
+                - generic [ref=e90]:
+                  - img [ref=e92]
+                  - generic [ref=e94]:
+                    - generic [ref=e95]: The brief, in plain English
+                    - generic [ref=e96]: PROSE · 4 MIN
+                  - generic [ref=e97]: P03
+                - generic [ref=e98]:
+                  - generic [ref=e100]:
+                    - generic [ref=e101]: Calling Claude from a script
+                    - generic [ref=e102]: CODE · 4 MIN
+                  - generic [ref=e103]: P04
+                - generic [ref=e104]:
+                  - generic [ref=e106]:
+                    - generic [ref=e107]: When the model misreads you
+                    - generic [ref=e108]: PROSE · 3 MIN
+                  - generic [ref=e109]: P05
+                - generic [ref=e110]:
+                  - generic [ref=e112]:
+                    - generic [ref=e113]: Shipping past your own desk
+                    - generic [ref=e114]: PROSE · 3 MIN
+                  - generic [ref=e115]: P06
+                - generic [ref=e116]:
+                  - generic [ref=e118]:
+                    - generic [ref=e119]: Recap
+                    - generic [ref=e120]: PROSE · 1 MIN
+                  - generic [ref=e121]: P07
+                - generic [ref=e122]:
+                  - generic [ref=e124]:
+                    - generic [ref=e125]: End-of-lesson Q&A
+                    - generic [ref=e126]: Q&A · 4 MIN
+                  - generic [ref=e127]: P08
+            - main [ref=e128]:
+              - generic [ref=e129]:
+                - generic [ref=e130]: COURSE · LESSON 13
+                - generic [ref=e131]: FRI 8 MAY 2026 · 14:24 BST
+                - generic [ref=e132]: Active · Month 1 of 3
+              - generic [ref=e134]:
+                - generic [ref=e135]:
+                  - generic [ref=e136]:
+                    - generic [ref=e137]: MONTH 1 · LESSON 13
+                    - generic [ref=e138]: PAGE 3 OF 8
+                  - 'heading "Building with Claude: your first useful tool." [level=1] [ref=e139]'
+                  - generic [ref=e140]:
+                    - generic [ref=e142]:
+                      - generic [ref=e143]: LESSON 13 PROGRESS
+                      - generic [ref=e144]: 25%
+                    - generic [ref=e155]:
+                      - generic [ref=e156]: MONTH 1 PROGRESS
+                      - generic [ref=e157]: 12 / 24
+                - article [ref=e161]:
+                  - paragraph [ref=e162]: "Yesterday you wrote one paragraph on a sticky note: the smallest useful tool you wished existed at work last week. Today you turn that paragraph into something you can actually run."
+                  - paragraph [ref=e163]:
+                    - text: Most people, when they first sit down to build with a model, get stuck deciding what to build. They reach for the demo problems, the toy chatbot, the joke summariser. The teaching here is the opposite. Your first useful tool should be small, embarrassing, and
+                    - emphasis [ref=e164]: specific to your own week
+                    - text: . Not a portfolio piece. A pocket knife.
+                  - blockquote [ref=e165]: The brief should fit on a sticky note. If it doesn’t, the tool will not ship.
+                  - paragraph [ref=e166]: Look at what you actually did between Monday and Friday. The repeated work, not the interesting work. Stand-up notes that became Jira tickets. Inbound emails that became three-line replies. The fortnightly slide where you copy six rows out of a spreadsheet. The point is not that any of these things are hard, it is that they are boring, and the model does not get bored.
+                  - figure "Input from somewhere you already are, one model call, output back to where you already are. No new app to open." [ref=e167]:
+                    - generic [ref=e169]: FIG. 03 · A USEFUL TOOL, ANATOMY
+                    - generic [ref=e170]: Input from somewhere you already are, one model call, output back to where you already are. No new app to open.
+                  - paragraph [ref=e171]: "Three rules for picking the brief. First: the input has to come from a place you already go, an email, a doc, a spreadsheet. Second: the output has to land in a place you already look, a Slack message, a Notion page, a Calendar event. Third: there is no new tab. If your tool needs a new tab, it is a product, not a tool, and you will not use it on Wednesday afternoon when you are tired."
+                  - complementary [ref=e172]:
+                    - generic [ref=e173]: WORKED EXAMPLE
+                    - generic [ref=e174]: Last cohort, the most-shipped lesson-13 build was a five-line script that read the latest message in a Gmail label called triage, asked Claude for a one-sentence summary, and wrote it back as a draft reply. Forty minutes. Saved its author about an hour a week.
+                  - paragraph [ref=e175]: By the end of the next page you will have written your one-paragraph brief. By the end of the lesson you will have run the tool against a real input from your own week, and decided whether to keep it or throw it away. Both outcomes count.
+                - generic [ref=e178]:
+                  - button "PREVIOUS PAGE" [ref=e179]:
+                    - generic [ref=e180]: ←
+                    - text: PREVIOUS PAGE
+                  - generic [ref=e181]: PAGE 3 OF 8
+                  - generic [ref=e182]:
+                    - generic [ref=e183]:
+                      - generic [ref=e185]: ADVANCING IN 2S
+                      - generic [ref=e186]: ·
+                      - generic [ref=e187]: tap to stay
+                    - button "CONTINUE" [ref=e188]:
+                      - text: CONTINUE
+                      - generic [ref=e189]: →
+              - generic [ref=e191]:
+                - button "Pause" [ref=e192]:
+                  - img [ref=e193]
+                - generic [ref=e197]:
+                  - generic [ref=e198]:
+                    - generic [ref=e199]: NOW READING
+                    - generic [ref=e200]: Page 3 · The brief, in plain English
+                  - generic [ref=e201]: 02:14 / 03:42
+                - generic [ref=e259]:
+                  - button "1x" [ref=e260] [cursor=pointer]
+                  - button "1.25x" [ref=e261] [cursor=pointer]
+                  - button "1.5x" [ref=e262] [cursor=pointer]
+                - generic [ref=e264]:
+                  - generic [ref=e265]: AUTO-ADVANCE
+                  - switch [checked] [ref=e266] [cursor=pointer]
+                  - generic [ref=e268]: "ON"
+          - generic [ref=e269]: advancing-3
+    - generic [ref=e270]:
+      - heading "Command Palette" [level=2] [ref=e271]
+      - paragraph [ref=e272]: Search for a command to run...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e274]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e281] [cursor=pointer]:
+    - img [ref=e282]
+  - alert [ref=e285]

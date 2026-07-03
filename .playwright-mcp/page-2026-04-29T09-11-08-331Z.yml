@@ -1,0 +1,11 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - status "Loading" [ref=e3]:
+      - img [ref=e4]
+      - img [ref=e7]
+    - paragraph [ref=e9]: Loading...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e11]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e18] [cursor=pointer]:
+    - img [ref=e19]
+  - alert [ref=e22]

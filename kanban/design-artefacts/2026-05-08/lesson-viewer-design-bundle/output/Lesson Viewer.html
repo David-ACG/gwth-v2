@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH.ai — Lesson Viewer (23 May beta)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Vollkorn:ital,wght@1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: "Public Sans", sans-serif; }
+  .gwth-root::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="lesson-shell.jsx"></script>
+<script type="text/babel" src="surface-prose.jsx"></script>
+<script type="text/babel" src="surface-video-qa.jsx"></script>
+<script type="text/babel" src="surface-mobile-handoff.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="primary"
+        title="GWTH.ai · Lesson Viewer"
+        subtitle="23 May 2026 UK beta · Multi-page reading + audiobook auto-advance · Stone & Sage register">
+        <DCArtboard id="s1-prose-paused" label="Surface 1 · Desktop · Prose page (audio paused)"
+          width={1440} height={1080}>
+          <ProseSurface playing={false} />
+        </DCArtboard>
+        <DCArtboard id="s2-prose-playing" label="Surface 2 · Desktop · Audio playing · Auto-advance ON · 2s overlay"
+          width={1440} height={1080}>
+          <ProseSurface playing={true} advancing={true} />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="other-page-types"
+        title="Other page types in the lesson"
+        subtitle="Intro video (gate 1) · End-of-lesson Q&A (gate 2)">
+        <DCArtboard id="s3-video" label="Surface 3 · Desktop · Intro video (80% gate cleared)"
+          width={1440} height={1080}>
+          <VideoSurface />
+        </DCArtboard>
+        <DCArtboard id="s4-qa" label="Surface 4 · Desktop · End-of-lesson Q&A"
+          width={1440} height={1180}>
+          <QASurface />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mobile"
+        title="Mobile + completion"
+        subtitle="412px viewport · plus the calm completion state">
+        <DCArtboard id="s5-mobile" label="Surface 5 · Mobile 412 · Prose + audio bar (playing)"
+          width={412} height={892}>
+          <MobileSurface />
+        </DCArtboard>
+        <DCArtboard id="s6-complete" label="Optional · Lesson complete · editorial calm"
+          width={1440} height={1080}>
+          <LessonCompleteSurface />
+        </DCArtboard>
+        <DCArtboard id="s7-dark" label="Optional · Surface 1 · Dark mode parity"
+          width={1440} height={1080}>
+          <ProseSurface dark />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="handoff"
+        title="Implementation handoff"
+        subtitle="Components, state-machine, locked button copy, what the codebase needs">
+        <DCArtboard id="notes" label="Notes for the build" width={920} height={1180}>
+          <HandoffNotes />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

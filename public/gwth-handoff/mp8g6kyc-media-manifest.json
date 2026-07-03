@@ -1,0 +1,44 @@
+{
+  "lessonId": "m1_l01",
+  "lessonJson": "../lesson-m1_l01.json",
+  "audio": {
+    "kind": "kokoro_main",
+    "src": "audio/kokoro_main.wav",
+    "mimeType": "audio/wav",
+    "durationSeconds": 83.77325,
+    "alignment": null,
+    "alignmentStatus": "missing_in_current_export",
+    "futureAlignmentShape": {
+      "segments": [
+        {
+          "start": 0.0,
+          "end": 5.2,
+          "pageId": "p2",
+          "blockIndex": 0,
+          "textStart": 0,
+          "textEnd": 180,
+          "text": "The exact text span being read."
+        }
+      ],
+      "granularity": "paragraph|sentence|word"
+    }
+  },
+  "videos": {
+    "intro": {
+      "kind": "intro_placeholder",
+      "src": "video/intro-placeholder.mp4",
+      "mimeType": "video/mp4",
+      "durationSeconds": 6.0,
+      "aspect": "16:9",
+      "note": "Dummy intro video for layout and player design."
+    },
+    "build": {
+      "kind": "build_placeholder",
+      "src": "video/build-placeholder.mp4",
+      "mimeType": "video/mp4",
+      "durationSeconds": 6.0,
+      "aspect": "16:9",
+      "note": "Dummy build walkthrough video for layout and player design."
+    }
+  }
+}

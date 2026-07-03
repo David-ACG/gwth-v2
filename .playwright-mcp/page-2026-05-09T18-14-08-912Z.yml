@@ -1,0 +1,42 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "GWTH.ai" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]: Welcome back
+        - paragraph [ref=e8]: Log in to your account to continue learning
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - button "Continue with Google" [ref=e11]:
+            - img
+            - text: Continue with Google
+          - button "Continue with GitHub" [ref=e12]:
+            - img
+            - text: Continue with GitHub
+          - button "Continue with LinkedIn" [ref=e13]:
+            - img
+            - text: Continue with LinkedIn
+        - generic [ref=e18]: or continue with email
+        - generic [ref=e19]:
+          - generic [ref=e20]:
+            - generic [ref=e21]: Email
+            - textbox "Email" [ref=e22]:
+              - /placeholder: you@example.com
+          - generic [ref=e23]:
+            - generic [ref=e24]:
+              - generic [ref=e25]: Password
+              - link "Forgot password?" [ref=e26] [cursor=pointer]:
+                - /url: /forgot-password
+            - textbox "Password" [ref=e27]:
+              - /placeholder: ••••••••
+          - button "Log In" [ref=e28]
+        - paragraph [ref=e29]:
+          - text: Don't have an account?
+          - link "Sign up" [ref=e30] [cursor=pointer]:
+            - /url: /signup
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e32]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e39] [cursor=pointer]:
+    - img [ref=e40]
+  - alert [ref=e43]

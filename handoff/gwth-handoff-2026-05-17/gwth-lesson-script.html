@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GWTH Script — Lesson M1 · L01 — Welcome to GWTH: Six Ways AI Can Give You Superpowers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500;1,8..60,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4;
+  --bg-2: #F5F0E6;
+  --bg-3: #F3E8D2;
+  --surface: #FFFFFF;
+  --sand: #EFE3CB;
+  --sand-warm: #E8D6B0;
+  --ink: #22301F;
+  --ink-2: #3F4A3B;
+  --ink-3: #6F7569;
+  --muted: #6F7569;
+  --stone: #948A76;
+  --amber: #B8893F;
+  --ochre: #A87033;
+  --clay: #B45B3E;
+  --border: #E5DFD2;
+  --border-strong: #D4CCBA;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 17px; -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; min-height: 100vh; display: flex; flex-direction: column; }
+::selection { background: var(--sand-warm); color: var(--ink); }
+
+/* ── TOP BAR ─────────────────────────────────── */
+.topbar { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 14px 24px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; position: sticky; top: 0; z-index: 50; }
+.topbar-tag { display: flex; align-items: center; gap: 12px; }
+.topbar-logo svg { width: 92px; height: auto; display: block; }
+.topbar-mark { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); padding-left: 14px; border-left: 1px solid var(--border-strong); }
+.topbar-lesson { font-family: var(--font-display); font-size: 17px; font-weight: 500; line-height: 1.25; color: var(--ink); }
+.topbar-lesson .id { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ochre); margin-right: 10px; }
+.topbar-controls { display: flex; gap: 8px; align-items: center; }
+.btn-ctrl { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); background: var(--surface); border: 1px solid var(--border-strong); padding: 7px 12px; border-radius: 3px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: border-color 0.15s, color 0.15s; }
+.btn-ctrl:hover { border-color: var(--ochre); color: var(--ochre); }
+.btn-ctrl.is-active { background: var(--sand); border-color: var(--ochre); color: var(--ochre); }
+.btn-ctrl .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--stone); }
+.btn-ctrl.is-active .dot { background: var(--ochre); }
+.font-sizer { display: inline-flex; align-items: center; gap: 2px; border: 1px solid var(--border-strong); border-radius: 3px; background: var(--surface); padding: 1px; }
+.font-sizer button { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 10px; border: 0; background: transparent; cursor: pointer; color: var(--muted); border-radius: 2px; }
+.font-sizer button.is-active { background: var(--sand); color: var(--ochre); font-weight: 500; }
+
+/* ── MAIN GRID ─────────────────────────────────── */
+.main { flex: 1; display: grid; grid-template-columns: 1fr; min-height: 0; }
+.main.with-preview { grid-template-columns: 1.4fr 1fr; }
+.script-pane { overflow-y: auto; padding: 0; background: var(--bg); border-right: 1px solid var(--border); }
+.preview-pane { overflow-y: auto; background: var(--bg-2); border-left: 1px solid var(--border); display: none; }
+.main.with-preview .preview-pane { display: block; }
+
+/* ── SCRIPT META ─────────────────────────────────── */
+.script-meta { padding: 32px 48px 20px; border-bottom: 1px solid var(--border); }
+.script-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 16px; }
+.meta-cell { display: flex; flex-direction: column; gap: 4px; }
+.meta-cell .label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.meta-cell .value { font-family: var(--font-display); font-size: 16px; color: var(--ink); font-style: italic; line-height: 1.3; }
+.meta-cell .value.upright { font-style: normal; font-family: var(--font-body); font-weight: 500; font-size: 14px; }
+.script-meta-h { font-family: var(--font-display); font-size: 28px; font-weight: 500; line-height: 1.15; color: var(--ink); margin-bottom: 8px; text-wrap: balance; }
+.script-meta-lead { font-family: var(--font-display); font-style: italic; font-size: 17px; color: var(--ink-2); line-height: 1.45; max-width: 64ch; }
+
+.script-pronunciation { padding: 18px 48px; background: var(--sand); border-bottom: 1px solid var(--border-strong); display: flex; gap: 20px; align-items: baseline; }
+.script-pronunciation .label { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ochre); font-weight: 500; }
+.script-pronunciation .items { font-family: var(--font-body); font-size: 13.5px; color: var(--ink); line-height: 1.55; }
+.script-pronunciation .items b { font-weight: 600; }
+
+/* ── SECTIONS (script content) ─────────────────────────────────── */
+.script-section { padding: 36px 48px; border-bottom: 1px solid var(--border); }
+.script-section-head { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: baseline; margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--border-strong); }
+.script-section-num { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ochre); margin-bottom: 8px; }
+.script-section-title { font-family: var(--font-display); font-size: 24px; font-weight: 500; line-height: 1.18; color: var(--ink); }
+.script-section-stats { display: flex; gap: 18px; align-items: center; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.script-section-stats .pill { background: var(--bg-2); padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); color: var(--ochre); }
+
+/* 2-column layout for narration + direction */
+.script-row { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 18px; align-items: start; }
+.script-narration { font-family: var(--font-display); font-size: 19px; line-height: 1.7; color: var(--ink); }
+.script-narration p { margin-bottom: 14px; max-width: 60ch; }
+.script-narration p:last-child { margin-bottom: 0; }
+.script-narration .pause { color: var(--ochre); font-style: italic; font-family: var(--font-mono); font-size: 14px; padding: 0 4px; }
+.script-narration .emph { font-weight: 600; }
+.script-narration .caps { letter-spacing: 0.02em; }
+
+.script-direction { display: flex; flex-direction: column; gap: 12px; padding-top: 4px; }
+.dir-block { padding: 14px 16px; border-radius: 4px; font-family: var(--font-body); font-size: 13.5px; line-height: 1.5; color: var(--ink-2); border-left: 3px solid; background: var(--bg-2); }
+.dir-block.stage { border-left-color: var(--ochre); }
+.dir-block.cue { border-left-color: var(--amber); }
+.dir-block.audio { border-left-color: var(--stone); }
+.dir-block.tone { border-left-color: var(--clay); }
+.dir-block.beat { border-left-color: var(--ink-3); background: var(--bg-3); }
+.dir-block .kicker { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ochre); font-weight: 500; margin-bottom: 6px; display: block; }
+.dir-block.cue .kicker { color: var(--amber); }
+.dir-block.audio .kicker { color: var(--stone); }
+.dir-block.tone .kicker { color: var(--clay); }
+.dir-block.beat .kicker { color: var(--ink-3); }
+.dir-block p { margin-bottom: 4px; }
+.dir-block p:last-child { margin-bottom: 0; }
+.dir-block em { font-style: italic; color: var(--ink-2); }
+
+.script-tag-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.script-tag { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 4px 9px; background: var(--bg-2); border-radius: 3px; border: 1px solid var(--border); }
+.script-tag.is-hook { color: var(--clay); border-color: var(--clay); }
+.script-tag.is-teach { color: var(--ochre); border-color: var(--ochre); }
+.script-tag.is-example { color: var(--amber); border-color: var(--amber); }
+.script-tag.is-practice { color: var(--stone); border-color: var(--stone); }
+.script-tag.is-recap { color: var(--ink-3); border-color: var(--ink-3); }
+
+/* end-of-section marker */
+.section-end { margin: 24px 0 0; padding-top: 16px; border-top: 1px dashed var(--border-strong); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.section-end .end-marker { color: var(--ochre); font-weight: 500; }
+
+/* font sizes */
+body[data-size="small"] .script-narration { font-size: 16px; line-height: 1.65; }
+body[data-size="large"] .script-narration { font-size: 22px; line-height: 1.75; }
+body[data-size="xlarge"] .script-narration { font-size: 25px; line-height: 1.8; }
+
+/* ── LESSON PREVIEW PANE ─────────────────────────────────── */
+.preview-head { padding: 18px 24px; background: var(--bg-2); border-bottom: 1px solid var(--border); display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 5; }
+.preview-tag { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ochre); }
+.preview-pageinfo { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+.preview-pageinfo .pageno { color: var(--ink); font-weight: 500; font-family: var(--font-mono); }
+.preview-pageinfo .of { color: var(--muted); }
+.preview-nav { display: flex; gap: 4px; }
+.preview-nav button { font-family: var(--font-mono); font-size: 11px; padding: 6px 10px; border: 1px solid var(--border-strong); background: var(--surface); border-radius: 3px; cursor: pointer; color: var(--ink-2); transition: all 0.15s; }
+.preview-nav button:hover:not(:disabled) { border-color: var(--ochre); color: var(--ochre); }
+.preview-nav button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.preview-content { padding: 32px 36px 80px; max-width: 720px; margin: 0 auto; }
+.preview-page-cover { padding: 56px 0; text-align: left; }
+.preview-cover-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ochre); margin-bottom: 16px; }
+.preview-cover-title { font-family: var(--font-display); font-size: 36px; font-weight: 500; line-height: 1.12; color: var(--ink); margin-bottom: 18px; text-wrap: balance; }
+.preview-cover-lead { font-family: var(--font-display); font-style: italic; font-size: 18px; color: var(--ink-2); line-height: 1.5; margin-bottom: 24px; max-width: 48ch; }
+.preview-cover-meta { display: flex; gap: 16px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding-top: 18px; border-top: 1px solid var(--border); }
+.preview-cover-meta .label { color: var(--ink); font-weight: 500; }
+
+.preview-page { padding-bottom: 32px; }
+.preview-page-head { margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.preview-page-num { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ochre); margin-bottom: 8px; }
+.preview-page-h { font-family: var(--font-display); font-size: 26px; font-weight: 500; line-height: 1.18; color: var(--ink); }
+.preview-page-body p { font-family: var(--font-display); font-size: 16.5px; line-height: 1.7; color: var(--ink); margin-bottom: 14px; max-width: 60ch; }
+.preview-page-body p strong { font-weight: 600; }
+.preview-page-body p em { font-style: italic; }
+.preview-page-body h3 { font-family: var(--font-display); font-size: 18px; font-weight: 500; margin: 24px 0 10px; color: var(--ink); }
+.preview-page-body figure { margin: 24px 0; padding: 18px; background: var(--bg-3); border-radius: 4px; border: 1px solid var(--border); }
+.preview-page-body figure img { width: 100%; height: auto; display: block; border-radius: 2px; }
+.preview-page-body figure figcaption { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+.preview-page-body .callout { padding: 16px 18px; background: var(--sand); border-radius: 4px; margin: 18px 0; border-left: 3px solid var(--ochre); }
+.preview-page-body .callout .ck { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ochre); margin-bottom: 6px; font-weight: 500; }
+.preview-page-body .callout .ct { font-family: var(--font-display); font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+.preview-page-body .callout p { font-size: 14.5px; margin-bottom: 0; }
+
+/* mobile fallback */
+@media (max-width: 1100px) {
+  .topbar { grid-template-columns: 1fr auto; }
+  .topbar-tag { grid-column: 1 / -1; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .topbar-controls { grid-column: 1 / -1; flex-wrap: wrap; }
+  .main.with-preview { grid-template-columns: 1fr; }
+  .preview-pane { display: none !important; }
+  .script-row { grid-template-columns: 1fr; gap: 14px; }
+  .script-direction { padding-top: 0; }
+  .script-meta { padding: 24px 24px 18px; }
+  .script-section { padding: 28px 24px; }
+  .script-pronunciation { padding: 16px 24px; flex-direction: column; gap: 6px; }
+  .script-meta-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .topbar-controls { gap: 4px; }
+  .btn-ctrl { font-size: 10px; padding: 6px 8px; }
+  .script-meta-h { font-size: 22px; }
+  .script-narration { font-size: 17px !important; }
+  body[data-size="large"] .script-narration { font-size: 20px !important; }
+}
+
+/* print */
+@media print {
+  @page { margin: 14mm 14mm 12mm; size: A4; }
+  body { background: #fff; }
+  .topbar, .preview-pane { display: none !important; }
+  .main { display: block; }
+  .script-pane { border-right: 0; }
+  .script-section { page-break-inside: avoid; padding: 18px 0; border-bottom: 1px solid #ccc; }
+  .script-section-head { border-bottom-color: #888; }
+  .dir-block { border-left-width: 2px; padding: 10px 12px; background: #f4f4f4; }
+  .script-row { gap: 18px; }
+  .script-narration { font-size: 13pt; line-height: 1.55; }
+  .dir-block { font-size: 10.5pt; }
+  .script-meta { border-bottom: 1px solid #999; padding: 0 0 12pt; margin-bottom: 12pt; }
+  .script-meta-h { font-size: 18pt; }
+  .script-pronunciation { background: #f0e8d8; padding: 8pt 12pt; margin-bottom: 10pt; }
+}
+</style>
+</head>
+<body data-size="medium" data-preview="off">
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-tag">
+    <span class="topbar-logo">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><style>.gl1{fill:#22301F;}.gl2{fill:#A94C2E;}</style></defs>
+        <path class="gl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="gl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="gl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="gl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="gl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="gl1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="gl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="gl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="gl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+    </span>
+    <span class="topbar-mark">Narrator script</span>
+  </div>
+  <div class="topbar-lesson">
+    <span class="id">M1 · L01</span>Welcome to GWTH — Six Ways AI Can Give You Superpowers
+  </div>
+  <div class="topbar-controls">
+    <div class="font-sizer">
+      <button data-size="small">Sm</button>
+      <button data-size="medium" class="is-active">Md</button>
+      <button data-size="large">Lg</button>
+      <button data-size="xlarge">XL</button>
+    </div>
+    <button class="btn-ctrl" id="togglePreview"><span class="dot"></span>Show lesson</button>
+    <button class="btn-ctrl" id="printScript">Print</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main" id="mainGrid">
+
+  <!-- SCRIPT PANE -->
+  <div class="script-pane">
+
+    <!-- SCRIPT META HEADER -->
+    <section class="script-meta">
+      <h1 class="script-meta-h">Welcome to GWTH — Six Ways AI Can Give You Superpowers</h1>
+      <p class="script-meta-lead">For most of the last twenty years, getting better at the practical bits of life usually meant one of three things. In the last two years, that has started to change.</p>
+      <div class="script-meta-grid">
+        <div class="meta-cell">
+          <span class="label">Lesson</span>
+          <span class="value">M1 · L01</span>
+        </div>
+        <div class="meta-cell">
+          <span class="label">Total runtime</span>
+          <span class="value upright">~22 min</span>
+        </div>
+        <div class="meta-cell">
+          <span class="label">Narrator tone</span>
+          <span class="value">Warm, patient, considered</span>
+        </div>
+        <div class="meta-cell">
+          <span class="label">Last revised</span>
+          <span class="value upright">10 May 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRONUNCIATION GUIDE -->
+    <aside class="script-pronunciation">
+      <span class="label">Pronunciation</span>
+      <span class="items">
+        <b>GWTH</b> = "growth" (silent W) ·
+        <b>AI</b> spelled out: "A · I" ·
+        <b>jagged frontier</b> = JAG-id frun-TEER, slight emphasis on "frontier"
+      </span>
+    </aside>
+
+    <!-- SECTION 01 -->
+    <section class="script-section" data-section="1" data-page="2">
+      <header class="script-section-head">
+        <div>
+          <div class="script-section-num">Section 01</div>
+          <h2 class="script-section-title">Opening — the three old options</h2>
+          <div class="script-tag-row">
+            <span class="script-tag is-hook">Hook</span>
+            <span class="script-tag">Lesson page 02</span>
+          </div>
+        </div>
+        <div class="script-section-stats">
+          <span><span class="pill">~3 min</span></span>
+          <span>~480 wds</span>
+        </div>
+      </header>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>For most of the last twenty years, getting better at the practical bits of life usually meant <span class="emph">one of three things</span>: you learnt to do it <span class="emph">yourself</span>… you <span class="emph">paid</span> someone else to do it… or you quietly went <span class="emph">without</span>.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block tone">
+            <span class="kicker">Tone</span>
+            <p>Open warm. Take your time on the three options — beat between each one.</p>
+          </div>
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>Hold for a half-beat after "without" before continuing. Let the audience feel the weight of the third option.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>That could mean drafting a difficult letter… making sense of a confusing bill… planning a project, getting your CV moving again, helping a family member understand an official form… or building a useful tool, workflow, or app you always assumed was beyond you.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block beat">
+            <span class="kicker">Beat</span>
+            <p>Six examples — pace evenly. Don't rush. Each one is someone's actual life.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>In the last <span class="emph">two years</span>, that has started to change. Ordinary people in the UK — not just engineers, founders, or people working in big technology companies — now have a new option. They can <span class="emph">ask for help</span> from AI, <span class="emph">shape</span> the answer, <span class="emph">try again</span>, and make something useful from a blank page.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block tone">
+            <span class="kicker">Tone</span>
+            <p>Light lift on "two years" — the pivot of the lesson. From here, slightly more confident, slightly more curious.</p>
+          </div>
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>The four verbs — "ask, shape, try again, make" — land each one cleanly. This is the lesson's quiet thesis.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>This course is about that shift. And it has a much more ambitious end goal than simply helping you "try AI".</p>
+          <p>If you complete the course and do the projects, the aim is to put you in the <span class="caps emph">TOP ONE PERCENT</span> of people in the UK for practical, applied AI ability. Not theory. Not buzzwords. The real skill of using AI to research, write, analyse, build, automate, test, and create useful things that other people can see.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block tone">
+            <span class="kicker">Tone</span>
+            <p>"Top one percent" should feel earnest, not boastful. The aim is grounded — practical ability.</p>
+          </div>
+          <div class="dir-block cue">
+            <span class="kicker">Visual cue</span>
+            <p>SHOW FIG-01 at "top one percent" — the calibration curve visual sets up the rest of the course.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-end">
+        <span>End of Section 01</span>
+        <span class="end-marker">→ Auto-pause 2s. Cue Page 03.</span>
+      </div>
+    </section>
+
+    <!-- SECTION 02 -->
+    <section class="script-section" data-section="2" data-page="3">
+      <header class="script-section-head">
+        <div>
+          <div class="script-section-num">Section 02</div>
+          <h2 class="script-section-title">What this lesson is, and what it is not</h2>
+          <div class="script-tag-row">
+            <span class="script-tag is-teach">Teach</span>
+            <span class="script-tag">Lesson page 03</span>
+          </div>
+        </div>
+        <div class="script-section-stats">
+          <span><span class="pill">~2 min</span></span>
+          <span>~320 wds</span>
+        </div>
+      </header>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>Before we start, a quick word about what this lesson <span class="emph">is</span>, and what it <span class="emph">is not</span>.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>Slight tonal shift here — more direct, slightly slower. You're setting expectations.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>This is <span class="emph">not</span> a lesson about how AI works under the hood. It's not a history of machine learning. It's not a debate about whether AI is good or bad for society.</p>
+          <p>This <span class="emph">is</span> a lesson about how to use AI well — the way a craftsperson uses a good tool — to do things that mattered to you before AI existed, and now matter even more.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block tone">
+            <span class="kicker">Tone</span>
+            <p>"Not… not… not…" — three short rejections. Quick, but not impatient. You're clearing the room.</p>
+          </div>
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>"is a lesson about" — slow down here. This is the turn.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>If you're new to AI, this lesson will give you the right map. If you've already used AI a lot, this lesson will give you better questions to ask.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>Two short reassurances. Friendly, warm. The lesson is for both audiences.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-end">
+        <span>End of Section 02</span>
+        <span class="end-marker">→ Cue Page 04.</span>
+      </div>
+    </section>
+
+    <!-- SECTION 03 -->
+    <section class="script-section" data-section="3" data-page="4">
+      <header class="script-section-head">
+        <div>
+          <div class="script-section-num">Section 03</div>
+          <h2 class="script-section-title">What GWTH stands for</h2>
+          <div class="script-tag-row">
+            <span class="script-tag is-teach">Teach</span>
+            <span class="script-tag">Lesson page 04</span>
+          </div>
+        </div>
+        <div class="script-section-stats">
+          <span><span class="pill">~2 min</span></span>
+          <span>~340 wds</span>
+        </div>
+      </header>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p><span class="caps emph">GWTH</span> stands for <span class="emph">growth</span> — the practical, slow-and-steady kind. Not the kind you see on a startup pitch deck. The kind you can hold in your hands at the end of a week and say: I made that.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>"GWTH" — pronounced "growth", but cleanly spelled out by emphasis. The dropped W is the joke.</p>
+          </div>
+          <div class="dir-block tone">
+            <span class="kicker">Tone</span>
+            <p>The hands moment — make this physical. "Hold in your hands at the end of a week" should feel solid, not abstract.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>It also stands for what we believe about AI literacy. <span class="emph">G</span>round it in real things you do. <span class="emph">W</span>ork with the tool, not against it. <span class="emph">T</span>est it, instead of trusting it. <span class="emph">H</span>old onto your own judgement, always.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block cue">
+            <span class="kicker">Visual cue</span>
+            <p>SHOW FIG-02 — the four-word acronym poster — synced one word at a time as you read each letter.</p>
+          </div>
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>Read each letter clearly. Slight emphasis at the start of each, like punctuation. Then the rest of the sentence at normal pace.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-narration">
+          <p>If you remember nothing else from this lesson — remember those four. They'll be quietly underneath every other thing we do.</p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block tone">
+            <span class="kicker">Tone</span>
+            <p>Anchor moment. Slow down, look up if on camera. The line "they'll be quietly underneath" is the lesson's promise.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-end">
+        <span>End of Section 03</span>
+        <span class="end-marker">→ Cue Page 05.</span>
+      </div>
+    </section>
+
+    <!-- placeholder for remaining sections -->
+    <section class="script-section" data-section="4" data-page="5">
+      <header class="script-section-head">
+        <div>
+          <div class="script-section-num">Section 04</div>
+          <h2 class="script-section-title">Why this matters now, in the UK</h2>
+          <div class="script-tag-row">
+            <span class="script-tag is-teach">Teach</span>
+            <span class="script-tag">Lesson page 05</span>
+          </div>
+        </div>
+        <div class="script-section-stats">
+          <span><span class="pill">~3 min</span></span>
+          <span>~520 wds</span>
+        </div>
+      </header>
+      <div class="script-row">
+        <div class="script-narration">
+          <p><em style="color: var(--muted); font-style: italic;">Script content for this section pending. Lesson page 05 covers the UK context, regulatory landscape, and the case for ordinary people learning AI now.</em></p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block stage">
+            <span class="kicker">Stage</span>
+            <p>Sections 04 through 11 to be drafted. Use the lesson content as the source, then apply tone notes per Section 01's pattern.</p>
+          </div>
+        </div>
+      </div>
+      <div class="section-end">
+        <span>End of Section 04</span>
+        <span class="end-marker">→ Cue Page 06.</span>
+      </div>
+    </section>
+
+    <section class="script-section" data-section="5" data-page="6">
+      <header class="script-section-head">
+        <div>
+          <div class="script-section-num">Section 05</div>
+          <h2 class="script-section-title">The six AI superpowers</h2>
+          <div class="script-tag-row">
+            <span class="script-tag is-example">Example</span>
+            <span class="script-tag">Lesson page 06</span>
+          </div>
+        </div>
+        <div class="script-section-stats">
+          <span><span class="pill">~5 min</span></span>
+          <span>~860 wds</span>
+        </div>
+      </header>
+      <div class="script-row">
+        <div class="script-narration">
+          <p><em style="color: var(--muted); font-style: italic;">Six superpowers, each with a small example. Longest section — pace yourself.</em></p>
+        </div>
+        <div class="script-direction">
+          <div class="dir-block cue">
+            <span class="kicker">Visual cue</span>
+            <p>FIG-03 through FIG-08 — show one per superpower. Pause briefly after each visual lands.</p>
+          </div>
+        </div>
+      </div>
+      <div class="section-end">
+        <span>End of Section 05</span>
+        <span class="end-marker">→ Cue Page 07.</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- LESSON PREVIEW PANE -->
+  <aside class="preview-pane" id="previewPane">
+    <header class="preview-head">
+      <span class="preview-tag">Lesson preview</span>
+      <div class="preview-pageinfo">
+        <span class="pageno" id="pageCurrent">2</span>
+        <span class="of">/ 12</span>
+        <span id="pageTitle">— Opening</span>
+      </div>
+      <div class="preview-nav">
+        <button id="prevPage">← Prev</button>
+        <button id="nextPage">Next →</button>
+      </div>
+    </header>
+    <div class="preview-content" id="previewContent">
+      <!-- populated by JS -->
+    </div>
+  </aside>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ─── LESSON CONTENT (12 pages) ─────────
+  const pages = [
+    { kind: 'cover', title: 'Welcome to GWTH — Six Ways AI Can Give You Superpowers',
+      lead: 'For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without.',
+      meta: { module: 'Month 1', lesson: 'L01', updated: '10 May 2026', level: 'Beginner' } },
+    { kind: 'section', heading: 'Opening — the three old options',
+      blocks: [
+        { type: 'p', text: 'For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without.' },
+        { type: 'p', text: 'That could mean drafting a difficult letter, making sense of a confusing bill, planning a project, getting your CV moving again, helping a family member understand an official form, or building a useful tool, workflow, or app you always assumed was beyond you.' },
+        { type: 'p', text: 'In the last two years, that has started to change. Ordinary people in the UK, not just engineers, founders, or people working in big technology companies, now have a new option. They can ask for help from AI, shape the answer, try again, and make something useful from a blank page.' },
+        { type: 'p', text: 'This course is about that shift, and it has a much more ambitious end goal than simply helping you "try AI". If you complete the course and do the projects, the aim is to put you in the top 1% of people in the UK for practical, applied AI ability.' },
+        { type: 'figure', src: 'mp8g72tg-fig-01.png', caption: 'FIG-01 · The calibration curve — where most adults sit on AI capability today, and where GWTH aims to take them.' }
+      ] },
+    { kind: 'section', heading: 'What this lesson is, and what it is not',
+      blocks: [
+        { type: 'p', text: 'This is not a lesson about how AI works under the hood. It is not a history of machine learning. It is not a debate about whether AI is good or bad for society.' },
+        { type: 'p', text: 'This is a lesson about how to use AI well — the way a craftsperson uses a good tool — to do things that mattered to you before AI existed, and now matter even more.' },
+        { type: 'p', text: 'If you are new to AI, this lesson will give you the right map. If you have already used AI a lot, this lesson will give you better questions to ask.' }
+      ] },
+    { kind: 'section', heading: 'What GWTH stands for',
+      blocks: [
+        { type: 'p', text: 'GWTH stands for growth — the practical, slow-and-steady kind. Not the kind you see on a startup pitch deck. The kind you can hold in your hands at the end of a week and say: I made that.' },
+        { type: 'p', text: 'It also stands for what we believe about AI literacy. <strong>G</strong>round it in real things you do. <strong>W</strong>ork with the tool, not against it. <strong>T</strong>est it, instead of trusting it. <strong>H</strong>old onto your own judgement, always.' },
+        { type: 'figure', src: 'mp8g72wv-fig-02.png', caption: 'FIG-02 · The four-word acronym poster, used throughout the course as a quiet anchor.' },
+        { type: 'p', text: 'If you remember nothing else from this lesson, remember those four. They will be quietly underneath every other thing we do.' }
+      ] },
+    { kind: 'section', heading: 'Why this matters now, in the UK',
+      blocks: [
+        { type: 'p', text: 'In the UK in 2026, the question is no longer whether AI can do useful things — it can — but whether ordinary adults will pick up the practice of using it well before someone less considered teaches them badly.' },
+        { type: 'callout', kind: 'insight', title: 'The 2026 context', text: 'AI assistants are now embedded in search, email, office software, and government services. Most adults will use one this year, whether they realise it or not.' },
+        { type: 'p', text: 'This lesson assumes you live somewhere in the UK, that you have a job or want one, that you have a family or care about people, and that you would rather understand what is happening than be told.' }
+      ] },
+    { kind: 'section', heading: 'The six AI superpowers',
+      blocks: [
+        { type: 'p', text: 'Through the rest of this course, you will practise six things AI is genuinely good at — six superpowers. Each one starts small, then grows into a project you can show someone.' },
+        { type: 'p', text: 'They are: <strong>research</strong>, <strong>writing</strong>, <strong>analysis</strong>, <strong>building</strong>, <strong>automation</strong>, and <strong>creation</strong>.' },
+        { type: 'figure', src: 'mp8g72wy-fig-03.png', caption: 'FIG-03 · The six superpowers — overview.' },
+        { type: 'figure', src: 'mp8g72wz-fig-04.png', caption: 'FIG-04 · Superpower 1: Research — turning a blank page into a structured brief.' },
+        { type: 'figure', src: 'mp8g72wz-fig-05.png', caption: 'FIG-05 · Superpower 2: Writing — making a draft you can edit, not from scratch.' },
+        { type: 'figure', src: 'mp8g72x3-fig-06.png', caption: 'FIG-06 · Superpower 3: Analysis — reading a long PDF in five minutes.' }
+      ] },
+    { kind: 'section', heading: 'The honest limits: the jagged frontier',
+      blocks: [
+        { type: 'p', text: 'Not every task is the same. AI is shockingly good at some things, and shockingly poor at others — and the line between those two is not obvious.' },
+        { type: 'p', text: 'Researchers call this the "jagged frontier". You will encounter it constantly in this course.' },
+        { type: 'figure', src: 'mp8g72x5-fig-07.png', caption: 'FIG-07 · The jagged frontier — a visualisation of AI capability.' },
+        { type: 'callout', kind: 'warning', title: 'A note on confidence', text: 'AI can sound certain about answers that are quietly wrong. Throughout the course, we will practise asking it to slow down, show its working, and admit when it is uncertain.' }
+      ] },
+    { kind: 'section', heading: 'Demonstration: a council letter',
+      blocks: [
+        { type: 'p', text: 'Let us look at a small, realistic example. A letter from your local council, written in dense officialese, asking you to do something by Friday.' },
+        { type: 'p', text: 'You have two AI tools open. You paste the letter into one, and ask: "What is this asking me to do, and what happens if I do not do it?"' },
+        { type: 'figure', src: 'mp8g72x7-fig-08.png', caption: 'FIG-08 · The council letter, before and after.' },
+        { type: 'p', text: 'The answer comes back in plain English. You have your evening back.' }
+      ] },
+    { kind: 'section', heading: 'The shape of the course',
+      blocks: [
+        { type: 'p', text: 'The course has six months. Each month focuses on one superpower. Each week has four lessons, each lesson about twenty minutes long.' },
+        { type: 'p', text: 'At the end of each month, you build something real and small. By the end of the course, you have built six things, each one in your own voice.' },
+        { type: 'figure', src: 'mp8g72yh-fig-09.png', caption: 'FIG-09 · The six-month curriculum at a glance.' }
+      ] },
+    { kind: 'practice', heading: 'Your first project: the Superpowers Wishlist',
+      blocks: [
+        { type: 'p', text: 'Before the next lesson, take ten minutes and write down: of the six superpowers, which two excite you most, and which one feels furthest from where you are today?' },
+        { type: 'callout', kind: 'practice', title: 'Practice', text: 'You will use this wishlist in week 2 to decide which exercise to start with. There are no wrong answers.' }
+      ] },
+    { kind: 'section', heading: 'Recap',
+      blocks: [
+        { type: 'p', text: 'GWTH stands for growth — practical, slow, and yours. The four letters: Ground, Work, Test, Hold.' },
+        { type: 'p', text: 'Six superpowers ahead. One jagged frontier to navigate. One wishlist to write before next time.' }
+      ] },
+    { kind: 'section', heading: 'Bridge to L02',
+      blocks: [
+        { type: 'p', text: 'In the next lesson, we meet your AI colleague — and learn how to get brilliant help without giving up your judgement.' },
+        { type: 'p', text: 'Take ten minutes for the Wishlist before then. See you in L02.' }
+      ] }
+  ];
+
+  let currentPage = 1; // 0-indexed, but start at p2 (skip cover)
+  const sections = document.querySelectorAll('.script-section');
+  const main = document.getElementById('mainGrid');
+  const previewPane = document.getElementById('previewPane');
+  const togglePreview = document.getElementById('togglePreview');
+  const printScript = document.getElementById('printScript');
+  const prevPage = document.getElementById('prevPage');
+  const nextPage = document.getElementById('nextPage');
+  const previewContent = document.getElementById('previewContent');
+  const pageCurrent = document.getElementById('pageCurrent');
+  const pageTitle = document.getElementById('pageTitle');
+
+  // RENDER LESSON PAGE
+  function renderPage(idx) {
+    const page = pages[idx];
+    if (!page) return;
+    pageCurrent.textContent = (idx + 1);
+    pageTitle.textContent = page.kind === 'cover' ? '— Cover' : (page.heading ? '— ' + page.heading.slice(0, 40) : '— Section');
+
+    if (page.kind === 'cover') {
+      previewContent.innerHTML = `
+        <div class="preview-page-cover">
+          <div class="preview-cover-kicker">M1 · L01 · Beginner</div>
+          <h1 class="preview-cover-title">${page.title}</h1>
+          <p class="preview-cover-lead">${page.lead}</p>
+          <div class="preview-cover-meta">
+            <span><span class="label">Module:</span> ${page.meta.module}</span>
+            <span><span class="label">Lesson:</span> ${page.meta.lesson}</span>
+            <span><span class="label">Updated:</span> ${page.meta.updated}</span>
+            <span><span class="label">Level:</span> ${page.meta.level}</span>
+          </div>
+        </div>
+      `;
+    } else {
+      let html = `<div class="preview-page">
+        <header class="preview-page-head">
+          <div class="preview-page-num">Page ${idx + 1} of ${pages.length}${page.kind === 'practice' ? ' · Practice' : ''}</div>
+          <h2 class="preview-page-h">${page.heading || 'Section'}</h2>
+        </header>
+        <div class="preview-page-body">`;
+      (page.blocks || []).forEach(b => {
+        if (b.type === 'p') html += `<p>${b.text}</p>`;
+        else if (b.type === 'h') html += `<h3>${b.text}</h3>`;
+        else if (b.type === 'callout') {
+          html += `<div class="callout"><div class="ck">${b.kind}</div>${b.title ? `<div class="ct">${b.title}</div>` : ''}<p>${b.text}</p></div>`;
+        }
+        else if (b.type === 'figure') {
+          html += `<figure><img src="${b.src}" alt="${b.caption || ''}" loading="lazy"/><figcaption>${b.caption || ''}</figcaption></figure>`;
+        }
+      });
+      html += `</div></div>`;
+      previewContent.innerHTML = html;
+    }
+    previewContent.scrollTop = 0;
+    prevPage.disabled = idx <= 0;
+    nextPage.disabled = idx >= pages.length - 1;
+  }
+
+  function setPreviewOpen(open) {
+    main.classList.toggle('with-preview', open);
+    togglePreview.classList.toggle('is-active', open);
+    togglePreview.querySelector('.dot').style.background = open ? 'var(--ochre)' : 'var(--stone)';
+    togglePreview.lastChild.textContent = open ? 'Hide lesson' : 'Show lesson';
+    document.body.dataset.preview = open ? 'on' : 'off';
+    if (open) renderPage(currentPage);
+  }
+
+  togglePreview.addEventListener('click', () => {
+    setPreviewOpen(!main.classList.contains('with-preview'));
+  });
+
+  prevPage.addEventListener('click', () => {
+    if (currentPage > 0) { currentPage--; renderPage(currentPage); }
+  });
+  nextPage.addEventListener('click', () => {
+    if (currentPage < pages.length - 1) { currentPage++; renderPage(currentPage); }
+  });
+
+  printScript.addEventListener('click', () => window.print());
+
+  // Font size buttons
+  document.querySelectorAll('.font-sizer button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.body.dataset.size = btn.dataset.size;
+      document.querySelectorAll('.font-sizer button').forEach(b => b.classList.toggle('is-active', b === btn));
+    });
+  });
+
+  // Auto-sync script section to lesson page on scroll
+  const observer = new IntersectionObserver((entries) => {
+    if (!main.classList.contains('with-preview')) return;
+    entries.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio > 0.3) {
+        const pageIdx = parseInt(e.target.dataset.page) - 1;
+        if (pageIdx >= 0 && pageIdx !== currentPage) {
+          currentPage = pageIdx;
+          renderPage(pageIdx);
+        }
+      }
+    });
+  }, { threshold: [0.3, 0.7] });
+  sections.forEach(s => observer.observe(s));
+
+  // Init
+  renderPage(currentPage);
+  setPreviewOpen(false);
+})();
+</script>
+</body>
+</html>

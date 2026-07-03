@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GWTH.ai — Design Tokens · v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     GWTH.ai — design tokens (canonical)
+     mirrors index.html :root verbatim — single source of truth.
+     ============================================================ */
+  :root {
+    /* light theme */
+    --bg:            #FBF9F4;
+    --bg-2:          #F5F0E6;
+    --surface:       #FFFFFF;
+    --sunken:        #F0EBE0;
+    --border:        #E5DFD2;
+    --border-strong: #C5BDA9;
+    --ink:           #22301F;
+    --ink-2:         #3F4938;
+    --ink-3:         #6B6F5E;
+    --ink-4:         #9A9B86;
+    --teal:          #2A5D69;
+    --teal-2:        #1E454F;
+    --teal-soft:     #D7E0E3;
+    --rust:          #A94C2E;
+    --rust-soft:     #EFDCD3;
+    --stone:         #948A76;
+    --sage:          #9A9B86;
+    --forest:        #5C7F4A;
+    --forest-soft:   #DCE5D3;
+    --amber:         #B8893F;
+    --amber-block:   #D4A55B;
+    --amber-soft:    #F0E2C7;
+    --indigo:        #3A4773;
+    --indigo-soft:   #DCDFE9;
+
+    /* dark theme */
+    --d-bg:            #1B231A;
+    --d-bg-2:          #232C20;
+    --d-surface:       #2B3328;
+    --d-sunken:        #151C14;
+    --d-border:        #3A4434;
+    --d-border-strong: #4F5947;
+    --d-ink:           #EDEAE6;
+    --d-ink-2:         #C8C3B8;
+    --d-ink-3:         #8E907F;
+    --d-ink-4:         #6B6F5E;
+    --d-teal:          #76A8B5;
+    --d-teal-soft:     #28383D;
+    --d-rust:          #C76C4A;
+    --d-rust-soft:     #3C2820;
+    --d-stone:         #B5AA92;
+    --d-sage:          #A4A691;
+    --d-forest:        #87A875;
+    --d-forest-soft:   #2C3525;
+    --d-amber:         #D6A95C;
+    --d-amber-soft:    #3D311E;
+    --d-indigo:        #7E8AB5;
+    --d-indigo-soft:   #232838;
+
+    /* type stacks */
+    --font-display: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
+    --font-body:    'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono:    'JetBrains Mono', ui-monospace, 'IBM Plex Mono', Menlo, monospace;
+
+    /* spacing scale */
+    --s-1:  4px;
+    --s-2:  8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 24px;
+    --s-6: 32px;
+    --s-7: 48px;
+    --s-8: 64px;
+    --s-9: 96px;
+
+    /* radius + rhythm */
+    --rad:    6px;
+    --rad-lg: 10px;
+    --shadow: none;
+  }
+
+  /* ============================================================
+     base
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    font-feature-settings: "ss01" on, "cv11" on;
+  }
+  ::selection { background: var(--teal); color: #fff; }
+
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; color: var(--ink); margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(48px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.025em; }
+  h2 { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.1; }
+  h3 { font-size: 22px; line-height: 1.25; }
+  h4 { font-size: 16px; line-height: 1.3; font-family: var(--font-body); font-weight: 600; letter-spacing: 0; }
+  p { margin: 0 0 1em; text-wrap: pretty; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .caption { font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* ============================================================
+     page chrome
+     ============================================================ */
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  section { padding: 96px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: 0; }
+  .section-head { display: flex; align-items: baseline; gap: 24px; margin-bottom: 48px; flex-wrap: wrap; }
+  .section-head .num { font-family: var(--font-mono); font-size: 13px; color: var(--ink-3); min-width: 30px; }
+  .section-head .lead { color: var(--ink-3); max-width: 480px; margin-left: auto; font-size: 14px; line-height: 1.55; }
+
+  /* split light/dark pair */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .pane { padding: 28px 32px; }
+  .pane.light { background: var(--bg); color: var(--ink); }
+  .pane.dark  { background: var(--d-bg);  color: var(--d-ink); }
+  .pane.dark h1, .pane.dark h2, .pane.dark h3, .pane.dark h4 { color: var(--d-ink); }
+  .pane .pane-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .pane.light .pane-label { color: var(--ink-3); }
+  .pane.dark  .pane-label { color: var(--d-ink-3); }
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+  }
+
+  /* ============================================================
+     1 — COVER
+     ============================================================ */
+  .cover { padding: 88px 0 64px; border-bottom: 1px solid var(--border); }
+  .cover-mark { display: flex; align-items: center; gap: 16px; margin-bottom: 56px; }
+  .cover-mark svg { height: 28px; width: auto; }
+  .cover-mark .meta { display: flex; flex-direction: column; gap: 2px; }
+  .cover-mark .meta .a { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+  .cover-mark .meta .b { font-size: 12px; color: var(--ink-3); font-family: var(--font-mono); }
+  .cover h1 {
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    max-width: 14ch;
+  }
+  .cover h1 em { font-style: normal; color: var(--teal); }
+  .cover-lead {
+    max-width: 680px;
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+  .cover-meta { display: flex; gap: 48px; margin-top: 48px; flex-wrap: wrap; }
+  .cover-meta dl { margin: 0; }
+  .cover-meta dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; }
+  .cover-meta dd { margin: 0; font-size: 14px; color: var(--ink); }
+  .cover-meta a { color: var(--teal); text-decoration: none; border-bottom: 1px solid var(--teal-soft); padding-bottom: 1px; transition: border-color 120ms; }
+  .cover-meta a:hover { border-bottom-color: var(--teal); }
+
+  /* ============================================================
+     2 — READING THIS DOCUMENT
+     ============================================================ */
+  .frame-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .frame { background: var(--surface); padding: 28px 28px 30px; min-height: 168px; display: flex; flex-direction: column; }
+  .frame .num { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-bottom: 14px; letter-spacing: 0.14em; }
+  .frame h3 { font-size: 19px; margin-bottom: 8px; }
+  .frame p { color: var(--ink-2); font-size: 14px; line-height: 1.6; margin: 0; }
+  @media (max-width: 800px) { .frame-grid { grid-template-columns: 1fr; } }
+
+  /* ============================================================
+     3 — TOKEN TABLE
+     ============================================================ */
+  .ttable { border: 1px solid var(--border); border-radius: var(--rad-lg); background: var(--surface); overflow: hidden; }
+  .ttable-head, .ttable-row { display: grid; grid-template-columns: 56px 2.2fr 1.4fr 3.4fr; align-items: center; padding: 14px 20px; }
+  .ttable-head { background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .ttable-head .k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+  .ttable-row { border-top: 1px solid var(--border); font-size: 14px; }
+  .ttable-row:first-of-type { border-top: 0; }
+  .ttable-row .sw { width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--border); }
+  .ttable-row .name { font-family: var(--font-mono); font-size: 13px; color: var(--ink); font-weight: 500; }
+  .ttable-row .val { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+  .ttable-row .role { color: var(--ink-2); font-size: 14px; line-height: 1.4; }
+  .ttable-row .sw.bordered { border-color: var(--border-strong); }
+
+  .ttable.dark { background: var(--d-bg-2); border-color: var(--d-border); }
+  .ttable.dark .ttable-head { background: var(--d-bg); border-bottom-color: var(--d-border); }
+  .ttable.dark .ttable-head .k { color: var(--d-ink-3); }
+  .ttable.dark .ttable-row { border-top-color: var(--d-border); color: var(--d-ink); }
+  .ttable.dark .ttable-row .sw { border-color: var(--d-border); }
+  .ttable.dark .ttable-row .name { color: var(--d-ink); }
+  .ttable.dark .ttable-row .val { color: var(--d-ink-3); }
+  .ttable.dark .ttable-row .role { color: var(--d-ink-2); }
+
+  .ttable-stack { display: grid; gap: 1px; background: var(--border); }
+  .ttable-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 900px) { .ttable-pair { grid-template-columns: 1fr; } .ttable-head, .ttable-row { grid-template-columns: 40px 1.6fr 1fr 2.2fr; padding: 12px 16px; } }
+
+  .ttable-cap { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; padding-left: 4px; }
+  .ttable-cap h3 { font-size: 16px; font-family: var(--font-body); font-weight: 600; letter-spacing: 0; }
+  .ttable-cap .meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+
+  .group-block { margin-bottom: 56px; }
+  .group-block:last-child { margin-bottom: 0; }
+  .group-block > .group-title { display: flex; align-items: baseline; gap: 18px; margin-bottom: 22px; }
+  .group-block > .group-title h3 { font-family: var(--font-display); font-size: 22px; font-weight: 500; font-style: italic; letter-spacing: -0.01em; color: var(--ink-2); }
+  .group-block > .group-title .ruler { flex: 1; border-bottom: 1px solid var(--border); transform: translateY(-6px); }
+  .group-block > .group-title .meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.05em; }
+
+  /* block-surface rows (the six pigment cards demo) */
+  .blockrow { display: grid; grid-template-columns: 56px 2.2fr 1.4fr 3.4fr 1.4fr; align-items: center; padding: 14px 20px; border-top: 1px solid var(--border); font-size: 14px; }
+  .blockrow:first-of-type { border-top: 0; }
+  .blockrow .swatch-pair { display: flex; gap: 6px; }
+  .blockrow .swatch-pair .sw-cell { width: 26px; height: 32px; border-radius: 4px; border: 1px solid var(--border); }
+  .blockrow .name { font-family: var(--font-mono); font-size: 13px; font-weight: 500; }
+  .blockrow .val { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+  .blockrow .role { color: var(--ink-2); font-size: 14px; line-height: 1.4; }
+  .blockrow .applies { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; text-transform: uppercase; }
+  @media (max-width: 900px) { .blockrow { grid-template-columns: 50px 1.4fr 1fr 1.8fr; } .blockrow .applies { display: none; } }
+
+  /* ============================================================
+     4 — TYPOGRAPHY
+     ============================================================ */
+  .type-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .type-row { display: grid; grid-template-columns: 1.8fr 2.2fr; padding: 28px 36px; border-top: 1px solid var(--border); align-items: center; gap: 28px; }
+  .type-row:first-of-type { border-top: 0; }
+  .type-row .sample { color: var(--ink); }
+  .type-row .meta { font-family: var(--font-mono); font-size: 11px; line-height: 1.7; color: var(--ink-3); }
+  .type-row .meta .token { color: var(--ink); font-size: 12px; letter-spacing: 0.01em; }
+  .type-row .meta .role { color: var(--ink-2); font-family: var(--font-body); font-size: 13px; margin-top: 8px; line-height: 1.5; max-width: 38ch; }
+  @media (max-width: 800px) { .type-row { grid-template-columns: 1fr; padding: 22px 24px; gap: 16px; } }
+
+  .t-display-xl { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 64px; line-height: 1.02; letter-spacing: -0.025em; }
+  .t-display    { font-family: var(--font-display); font-weight: 500; font-size: 40px; line-height: 1.08; letter-spacing: -0.015em; }
+  .t-h2         { font-family: var(--font-display); font-weight: 500; font-size: 28px; line-height: 1.15; letter-spacing: -0.01em; }
+  .t-h3         { font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.25; letter-spacing: -0.01em; }
+  .t-h4         { font-family: var(--font-body); font-weight: 600; font-size: 16px; line-height: 1.3; }
+  .t-body       { font-family: var(--font-body); font-weight: 400; font-size: 16px; line-height: 1.65; color: var(--ink-2); max-width: 38ch; }
+  .t-ui         { font-family: var(--font-body); font-weight: 500; font-size: 14px; line-height: 1.45; }
+  .t-caption    { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.5; color: var(--ink-3); }
+  .t-eyebrow    { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  .t-mono       { font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); font-weight: 400; }
+
+  /* ============================================================
+     5 — SPACING
+     ============================================================ */
+  .space-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rad-lg); padding: 8px 0; overflow: hidden; }
+  .space-row { display: grid; grid-template-columns: 100px 64px 1fr 220px; align-items: center; padding: 14px 28px; gap: 24px; border-top: 1px solid var(--border); }
+  .space-row:first-of-type { border-top: 0; }
+  .space-row .token { font-family: var(--font-mono); font-size: 13px; color: var(--ink); font-weight: 500; }
+  .space-row .val { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+  .space-row .bar { height: 14px; background: var(--ink); border-radius: 2px; }
+  .space-row .role { color: var(--ink-2); font-size: 13px; line-height: 1.4; }
+  @media (max-width: 800px) { .space-row { grid-template-columns: 76px 56px 1fr; } .space-row .role { display: none; } }
+
+  /* ============================================================
+     6 — RADIUS + BORDERS
+     ============================================================ */
+  .rad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .rad-cell { background: var(--surface); padding: 28px 24px 24px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+  .rad-cell .shape { width: 76px; height: 76px; background: var(--ink); }
+  .rad-cell .shape.r0 { border-radius: 0; }
+  .rad-cell .shape.r3 { border-radius: 3px; }
+  .rad-cell .shape.r6 { border-radius: 6px; }
+  .rad-cell .shape.r10 { border-radius: 10px; }
+  .rad-cell .token { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--ink); }
+  .rad-cell .val { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+  .rad-cell .role { font-size: 12px; color: var(--ink-2); line-height: 1.45; max-width: 22ch; }
+  @media (max-width: 700px) { .rad-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .border-stack { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; margin-top: 24px; }
+  .border-cell { background: var(--surface); padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .border-cell .demo { padding: 18px 20px; min-height: 70px; }
+  .border-cell .demo.hair { border: 1px solid var(--border); }
+  .border-cell .demo.strong { border: 1px solid var(--border-strong); }
+  .border-cell .demo.bare { border: 0; background: var(--bg-2); }
+  .border-cell .demo .t { font-family: var(--font-display); font-size: 18px; line-height: 1.2; }
+  .border-cell .meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+  .border-cell .meta .name { color: var(--ink); }
+  .border-cell .role { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+  @media (max-width: 800px) { .border-stack { grid-template-columns: 1fr; } }
+
+  /* ============================================================
+     7 — COMPONENT RULES
+     ============================================================ */
+  .rule { padding: 36px 0 4px; border-top: 1px solid var(--border); }
+  .rule:first-of-type { border-top: 0; padding-top: 0; }
+  .rule:last-of-type { padding-bottom: 0; }
+  .rule-head { display: grid; grid-template-columns: 80px 1fr; gap: 24px; align-items: baseline; margin-bottom: 14px; }
+  .rule-head .num { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; padding-top: 6px; }
+  .rule-head h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 30px; line-height: 1.15; letter-spacing: -0.01em; color: var(--ink); }
+  .rule-head h3 em { font-style: normal; color: var(--teal); }
+  .rule-body { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 24px; align-items: start; padding-bottom: 36px; }
+  .rule-body .reason { color: var(--ink-2); font-size: 14px; line-height: 1.6; max-width: 46ch; padding-top: 4px; }
+  .rule-demo { border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .rule-demo .demo-label { display: flex; justify-content: space-between; padding: 10px 16px; background: var(--bg-2); border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+  .rule-demo .demo-body { padding: 20px 20px 24px; min-height: 152px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  @media (max-width: 900px) { .rule-head { grid-template-columns: 1fr; gap: 4px; } .rule-body { grid-template-columns: 1fr; } .rule-head .num { padding-top: 0; } }
+
+  /* mini-card variants for rule demos */
+  .mini-card { padding: 16px 18px; border-radius: var(--rad); border: 1px solid var(--border); background: var(--surface); }
+  .mini-card .kc { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .mini-card .ti { font-family: var(--font-display); font-size: 18px; line-height: 1.2; color: var(--ink); margin-bottom: 4px; }
+  .mini-card .ti em { font-style: italic; color: var(--ink-2); }
+  .mini-card .bd { font-size: 12px; color: var(--ink-2); line-height: 1.45; }
+  .mini-card.block-teal   { background: var(--teal);   color: #EDEAE6; border-color: transparent; }
+  .mini-card.block-forest { background: var(--forest); color: #EDEAE6; border-color: transparent; }
+  .mini-card.block-sage   { background: var(--sage);   color: var(--ink); border-color: transparent; }
+  .mini-card.block-amber  { background: var(--amber-block); color: var(--ink); border-color: transparent; }
+  .mini-card.block-rust   { background: var(--rust);   color: #EDEAE6; border-color: transparent; }
+  .mini-card.block-indigo { background: var(--indigo); color: #EDEAE6; border-color: transparent; }
+  .mini-card.block-teal   .kc, .mini-card.block-forest .kc, .mini-card.block-rust .kc, .mini-card.block-indigo .kc { color: rgba(237,234,230,0.7); }
+  .mini-card.block-sage   .kc, .mini-card.block-amber  .kc { color: var(--ink-2); }
+  .mini-card.block-teal   .ti, .mini-card.block-forest .ti, .mini-card.block-rust .ti, .mini-card.block-indigo .ti { color: #EDEAE6; }
+  .mini-card.block-teal   .bd, .mini-card.block-forest .bd, .mini-card.block-rust .bd, .mini-card.block-indigo .bd { color: rgba(237,234,230,0.85); }
+
+  /* buttons used in rule 05 demo */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 999px; font-size: 13px; font-weight: 500; font-family: var(--font-body); letter-spacing: 0.01em; border: 1px solid transparent; cursor: pointer; transition: background 120ms, color 120ms; text-decoration: none; line-height: 1; }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+  .btn-ghost { background: transparent; color: var(--ink-2); padding-left: 4px; padding-right: 4px; }
+  .btn-rust { background: var(--rust); color: #EDEAE6; }
+  .btn-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+  /* pill rules */
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.04em; line-height: 1.4; border: 1px solid transparent; }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .pill.t-forest { color: #2F4A22; background: var(--forest-soft); }
+  .pill.t-forest .dot { background: var(--forest); }
+  .pill.t-amber { color: #6B4F1C; background: var(--amber-soft); }
+  .pill.t-amber .dot { background: var(--amber); }
+  .pill.t-rust { color: #5E2914; background: var(--rust-soft); }
+  .pill.t-rust .dot { background: var(--rust); }
+  .pill.t-teal { color: #14333A; background: var(--teal-soft); }
+  .pill.t-teal .dot { background: var(--teal); }
+
+  /* ============================================================
+     8 — ANTI-SLOP DO / DON'T
+     ============================================================ */
+  .ds-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .ds-cell { background: var(--surface); padding: 28px 28px 32px; display: flex; flex-direction: column; gap: 20px; min-height: 280px; }
+  .ds-cell .stamp { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .ds-cell.is-dont .stamp { color: var(--rust); }
+  .ds-cell.is-do   .stamp { color: var(--forest); }
+  .ds-cell .stamp .mk { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; font-size: 12px; line-height: 1; }
+  .ds-cell.is-dont .stamp .mk { background: var(--rust-soft); color: var(--rust); }
+  .ds-cell.is-do   .stamp .mk { background: var(--forest-soft); color: var(--forest); }
+  .ds-cell .demo { flex: 1; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
+  .ds-cell .note { font-size: 13px; color: var(--ink-2); line-height: 1.55; max-width: 42ch; }
+  .ds-cell .note .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink-3); display: block; margin-bottom: 4px; text-transform: uppercase; }
+  @media (max-width: 800px) { .ds-grid { grid-template-columns: 1fr; } }
+
+  /* slop demo bits */
+  .slop-gradient { width: 100%; max-width: 320px; height: 110px; border-radius: 12px; background: linear-gradient(135deg, #8B5CF6, #6366F1 50%, #06B6D4); display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-body); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .flat-paper { width: 100%; max-width: 320px; height: 110px; border-radius: var(--rad); background: var(--bg-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-style: italic; font-size: 21px; color: var(--ink); }
+  .slop-borderaccent { width: 100%; max-width: 320px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid #6366F1; padding: 18px 20px; }
+  .slop-borderaccent .ti { font-family: var(--font-body); font-weight: 600; font-size: 15px; color: var(--ink); margin-bottom: 4px; }
+  .slop-borderaccent .bd { font-size: 12px; color: var(--ink-3); }
+  .clean-block { width: 100%; max-width: 320px; background: var(--teal); color: #EDEAE6; padding: 18px 20px; border-radius: 0; }
+  .clean-block .ti { font-family: var(--font-display); font-style: italic; font-size: 18px; line-height: 1.2; margin-bottom: 4px; color: #EDEAE6; }
+  .clean-block .bd { font-size: 12px; color: rgba(237,234,230,0.85); }
+  .slop-emoji { width: 100%; max-width: 320px; padding: 18px 20px; }
+  .slop-emoji .row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .slop-emoji .row:last-child { margin-bottom: 0; }
+  .slop-emoji .e { font-size: 22px; }
+  .slop-emoji .h { font-family: var(--font-body); font-weight: 600; font-size: 15px; color: var(--ink); }
+  .clean-type { width: 100%; max-width: 320px; padding: 18px 20px; }
+  .clean-type .h { font-family: var(--font-display); font-size: 19px; line-height: 1.25; color: var(--ink); margin-bottom: 4px; }
+  .clean-type .b { font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+  .clean-type .h + .h { margin-top: 16px; }
+  .slop-purple { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 8px; background: linear-gradient(135deg, #A855F7, #7C3AED); color: white; font-weight: 600; font-size: 14px; }
+  .clean-cta { display: inline-flex; align-items: center; gap: 8px; padding: 9px 22px; border-radius: 999px; background: var(--rust); color: #EDEAE6; font-weight: 500; font-size: 14px; }
+  .slop-stat { font-family: var(--font-display); font-style: italic; font-size: 44px; color: var(--rust); letter-spacing: -0.02em; line-height: 1; }
+  .slop-stat + .lbl { font-size: 12px; color: var(--ink-3); margin-top: 6px; font-family: var(--font-mono); letter-spacing: 0.04em; }
+  .clean-stat { font-family: var(--font-display); font-style: italic; font-size: 44px; color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
+  .clean-stat + .lbl { font-size: 12px; color: var(--ink-3); margin-top: 6px; font-family: var(--font-mono); letter-spacing: 0.04em; }
+  .stat-stack { display: flex; flex-direction: column; align-items: flex-start; }
+  .slop-display-inter { font-family: 'Source Sans 3', sans-serif; font-weight: 700; font-size: 36px; line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); max-width: 16ch; }
+  .clean-display-serif { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 36px; line-height: 1.05; letter-spacing: -0.025em; color: var(--ink); max-width: 16ch; }
+
+  /* ============================================================
+     footer
+     ============================================================ */
+  footer { padding: 56px 0 64px; background: var(--bg-2); border-top: 1px solid var(--border); }
+  footer .wrap { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  footer .lockup { display: flex; align-items: center; gap: 16px; }
+  footer .lockup svg { height: 22px; width: auto; }
+  footer .stamp { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.1em; }
+  footer .stamp .d { color: var(--ink-2); }
+  footer .meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; line-height: 1.7; text-align: right; }
+  footer .meta a { color: var(--teal); text-decoration: none; }
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     1 — COVER
+     ============================================================ -->
+<header class="cover">
+  <div class="wrap">
+    <div class="cover-mark">
+      <svg viewBox="0 0 578.07 101.64" role="img" aria-label="GWTH.ai logo"><defs><style>.lc1{fill:#22301f;}.lc2{fill:#a94c2e;}</style></defs><path class="lc1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="lc1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="lc1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="lc1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="lc1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="lc1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="lc2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="lc2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="lc2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+      <div class="meta">
+        <span class="a">Design Tokens · v1</span>
+        <span class="b">May 2026 · System spec</span>
+      </div>
+    </div>
+
+    <h1>The system, <em>in writing</em>.</h1>
+
+    <p class="cover-lead">
+      The mood board <em>showed</em> the direction. This document <em>tells</em> it — the colour, type, spacing, radius, and component rules that make up GWTH.ai, written down once so any new surface can be built without forking the system.
+    </p>
+
+    <div class="cover-meta">
+      <dl>
+        <dt>Version</dt>
+        <dd>v1 · 2026-05-15</dd>
+      </dl>
+      <dl>
+        <dt>Status</dt>
+        <dd>Locked direction</dd>
+      </dl>
+      <dl>
+        <dt>Companion</dt>
+        <dd><a href="index.html">Mood board v1 →</a></dd>
+      </dl>
+      <dl>
+        <dt>Successor</dt>
+        <dd>Surface library (Phase 3)</dd>
+      </dl>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     2 — READING THIS DOCUMENT
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">01</div>
+      <div>
+        <div class="eyebrow">Reading this</div>
+        <h2>Three layers, top to bottom.</h2>
+      </div>
+      <p class="lead">A system is only useful if every screen built from it draws from the same well. Tokens are the well — names that don't change. Rules are how they're used. Examples are what good looks like.</p>
+    </div>
+
+    <div class="frame-grid">
+      <div class="frame">
+        <div class="num">01 · TOKENS</div>
+        <h3>The vocabulary.</h3>
+        <p>Named values for colour, type, spacing, radius, borders. Anyone building a new screen reaches for these, never raw hex or ad-hoc px. Change the value in one place; the whole system updates.</p>
+      </div>
+      <div class="frame">
+        <div class="num">02 · RULES</div>
+        <h3>The grammar.</h3>
+        <p>How tokens combine. When the card surface is white and when it's a colour block. How much rust is allowed on a single page. Which heading is upright and which is italic. The felt rules made explicit.</p>
+      </div>
+      <div class="frame">
+        <div class="num">03 · EXAMPLES</div>
+        <h3>The accent.</h3>
+        <p>Right-and-wrong cells showing the rule in motion. Most failures come from forgetting one rule; an example beside the rule makes that failure visible before it ships.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     3 — COLOUR TOKENS
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">02</div>
+      <div>
+        <div class="eyebrow">Colour · tokens</div>
+        <h2>Surface, ink, block, state, chart.</h2>
+      </div>
+      <p class="lead">Five families, each with a light and dark variant. Block colours behave as <em>surfaces</em> on the public site and as quiet pill / chart accents inside the product. State tokens map to existing block colours so the palette stays one palette.</p>
+    </div>
+
+    <!-- 02a · Surface + ink -->
+    <div class="group-block">
+      <div class="group-title">
+        <h3>Surface &amp; ink</h3>
+        <span class="ruler"></span>
+        <span class="meta">10 light · 10 dark</span>
+      </div>
+
+      <div class="ttable-pair">
+        <div>
+          <div class="ttable-cap"><h3>Light theme</h3><span class="meta">light surfaces — primary</span></div>
+          <div class="ttable">
+            <div class="ttable-head"><span></span><span class="k">Token</span><span class="k">Value</span><span class="k">Role</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#FBF9F4"></span><span class="name">--bg</span><span class="val">#FBF9F4</span><span class="role">Page paper. The cream backdrop everything else sits on.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#F5F0E6"></span><span class="name">--bg-2</span><span class="val">#F5F0E6</span><span class="role">Lifted cream. Frames, logo tiles, public-site banners.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#FFFFFF; border-color:var(--border-strong)"></span><span class="name">--surface</span><span class="val">#FFFFFF</span><span class="role">Card body. White against cream gives the edge without borders.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#F0EBE0"></span><span class="name">--sunken</span><span class="val">#F0EBE0</span><span class="role">Pressed / disabled / footer well.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#E5DFD2"></span><span class="name">--border</span><span class="val">#E5DFD2</span><span class="role">Default 1px hairline. Used on every card and divider.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#C5BDA9"></span><span class="name">--border-strong</span><span class="val">#C5BDA9</span><span class="role">Emphasis hairline. Used on bordered buttons + chart axes.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#22301F"></span><span class="name">--ink</span><span class="val">#22301F</span><span class="role">Primary ink. Headings, primary buttons, locked logo wordmark.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#3F4938"></span><span class="name">--ink-2</span><span class="val">#3F4938</span><span class="role">Body. Long-form reading copy.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#6B6F5E"></span><span class="name">--ink-3</span><span class="val">#6B6F5E</span><span class="role">Muted. Captions, eyebrows, metadata.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#9A9B86"></span><span class="name">--ink-4</span><span class="val">#9A9B86</span><span class="role">Quiet. Placeholders, hairline labels, scaffolding.</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="ttable-cap"><h3>Dark theme</h3><span class="meta">forest surfaces — secondary</span></div>
+          <div class="ttable dark">
+            <div class="ttable-head"><span></span><span class="k">Token</span><span class="k">Value</span><span class="k">Role</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#1B231A"></span><span class="name">--d-bg</span><span class="val">#1B231A</span><span class="role">Page. Deep forest at rest — almost black, never neutral.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#232C20"></span><span class="name">--d-bg-2</span><span class="val">#232C20</span><span class="role">Lifted forest. Section bands and footer well.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#2B3328"></span><span class="name">--d-surface</span><span class="val">#2B3328</span><span class="role">Card body on dark.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#151C14"></span><span class="name">--d-sunken</span><span class="val">#151C14</span><span class="role">Pressed / disabled state.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#3A4434"></span><span class="name">--d-border</span><span class="val">#3A4434</span><span class="role">Default hairline on dark.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#4F5947"></span><span class="name">--d-border-strong</span><span class="val">#4F5947</span><span class="role">Emphasis hairline on dark.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#EDEAE6"></span><span class="name">--d-ink</span><span class="val">#EDEAE6</span><span class="role">Primary text. Warm parchment, never pure white.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#C8C3B8"></span><span class="name">--d-ink-2</span><span class="val">#C8C3B8</span><span class="role">Body on dark.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#8E907F"></span><span class="name">--d-ink-3</span><span class="val">#8E907F</span><span class="role">Muted on dark. Captions, eyebrows.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:#6B6F5E"></span><span class="name">--d-ink-4</span><span class="val">#6B6F5E</span><span class="role">Quiet on dark. Hairline labels.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02b · Block colours -->
+    <div class="group-block">
+      <div class="group-title">
+        <h3>Block colours</h3>
+        <span class="ruler"></span>
+        <span class="meta">6 pigments · light + dark surface</span>
+      </div>
+
+      <div class="ttable">
+        <div class="ttable-head" style="grid-template-columns: 56px 2.2fr 1.4fr 3.4fr 1.4fr">
+          <span></span><span class="k">Token</span><span class="k">Value</span><span class="k">Role</span><span class="k">Applies to</span>
+        </div>
+        <div class="blockrow">
+          <div class="swatch-pair"><span class="sw-cell" style="background:#2A5D69"></span><span class="sw-cell" style="background:#1E454F"></span></div>
+          <span class="name">--teal · --d-teal-block</span>
+          <span class="val">#2A5D69 · #1E454F</span>
+          <span class="role">Lesson surfaces. Primary action surface. Focus rings + selection.</span>
+          <span class="applies">Lessons · CTAs</span>
+        </div>
+        <div class="blockrow">
+          <div class="swatch-pair"><span class="sw-cell" style="background:#3A4773"></span><span class="sw-cell" style="background:#23284A"></span></div>
+          <span class="name">--indigo · --d-indigo-block</span>
+          <span class="val">#3A4773 · #23284A</span>
+          <span class="role">Practice / reflection surfaces. Quiet midnight blue, no purple tilt.</span>
+          <span class="applies">Practice</span>
+        </div>
+        <div class="blockrow">
+          <div class="swatch-pair"><span class="sw-cell" style="background:#5C7F4A"></span><span class="sw-cell" style="background:#3D5430"></span></div>
+          <span class="name">--forest · --d-forest-block</span>
+          <span class="val">#5C7F4A · #3D5430</span>
+          <span class="role">Credentials. Completion milestones. Active streak day.</span>
+          <span class="applies">Credentials</span>
+        </div>
+        <div class="blockrow">
+          <div class="swatch-pair"><span class="sw-cell" style="background:#9A9B86"></span><span class="sw-cell" style="background:#5F6256"></span></div>
+          <span class="name">--sage · --d-sage-block</span>
+          <span class="val">#9A9B86 · #5F6256</span>
+          <span class="role">Passive states. Streak count. Background data rows.</span>
+          <span class="applies">Streaks · meta</span>
+        </div>
+        <div class="blockrow">
+          <div class="swatch-pair"><span class="sw-cell" style="background:#D4A55B"></span><span class="sw-cell" style="background:#A87836"></span></div>
+          <span class="name">--amber-block · --d-amber-block</span>
+          <span class="val">#D4A55B · #A87836</span>
+          <span class="role">Editorial moments — pull quotes, takeaways, content highlights.</span>
+          <span class="applies">Content blocks</span>
+        </div>
+        <div class="blockrow">
+          <div class="swatch-pair"><span class="sw-cell" style="background:#A94C2E"></span><span class="sw-cell" style="background:#7A341F"></span></div>
+          <span class="name">--rust · --d-rust-block</span>
+          <span class="val">#A94C2E · #7A341F</span>
+          <span class="role">Brand + the single peak CTA per page. Locked logo accent.</span>
+          <span class="applies">Brand · CTA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02c · State tokens -->
+    <div class="group-block">
+      <div class="group-title">
+        <h3>State tokens</h3>
+        <span class="ruler"></span>
+        <span class="meta">4 states · light + dark</span>
+      </div>
+
+      <div class="ttable-pair">
+        <div>
+          <div class="ttable-cap"><h3>Light</h3><span class="meta">pills, badges, status</span></div>
+          <div class="ttable">
+            <div class="ttable-head"><span></span><span class="k">Token</span><span class="k">Maps to</span><span class="k">Role</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--forest-soft); border-color:var(--forest)"></span><span class="name">--success</span><span class="val">forest</span><span class="role">Verified credential. Completed module. Saved state.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--amber-soft); border-color:var(--amber)"></span><span class="name">--warning</span><span class="val">amber</span><span class="role">Out of date, needs review, attention without alarm.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--rust-soft); border-color:var(--rust)"></span><span class="name">--error</span><span class="val">rust</span><span class="role">Submission blocked. Verification failed.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--teal-soft); border-color:var(--teal)"></span><span class="name">--info</span><span class="val">teal</span><span class="role">In progress. Pending review. New lesson available.</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="ttable-cap"><h3>Dark</h3><span class="meta">pills, badges, status</span></div>
+          <div class="ttable dark">
+            <div class="ttable-head"><span></span><span class="k">Token</span><span class="k">Maps to</span><span class="k">Role</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--d-forest-soft); border-color:var(--d-forest)"></span><span class="name">--d-success</span><span class="val">d-forest</span><span class="role">Verified. Completed. Saved.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--d-amber-soft); border-color:var(--d-amber)"></span><span class="name">--d-warning</span><span class="val">d-amber</span><span class="role">Out of date. Needs review.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--d-rust-soft); border-color:var(--d-rust)"></span><span class="name">--d-error</span><span class="val">d-rust</span><span class="role">Blocked. Failed.</span></div>
+            <div class="ttable-row"><span class="sw" style="background:var(--d-teal-soft); border-color:var(--d-teal)"></span><span class="name">--d-info</span><span class="val">d-teal</span><span class="role">In progress. Pending. New.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02d · Chart palette -->
+    <div class="group-block">
+      <div class="group-title">
+        <h3>Chart palette</h3>
+        <span class="ruler"></span>
+        <span class="meta">6 series · ordered for accessibility</span>
+      </div>
+
+      <div class="ttable">
+        <div class="ttable-head"><span></span><span class="k">Token</span><span class="k">Value</span><span class="k">Role</span></div>
+        <div class="ttable-row"><span class="sw" style="background:#2A5D69"></span><span class="name">--chart-1</span><span class="val">#2A5D69 · teal</span><span class="role">Primary series. The line that matters most.</span></div>
+        <div class="ttable-row"><span class="sw" style="background:#A94C2E"></span><span class="name">--chart-2</span><span class="val">#A94C2E · rust</span><span class="role">Emphasised single bar / point. Use sparingly.</span></div>
+        <div class="ttable-row"><span class="sw" style="background:#5C7F4A"></span><span class="name">--chart-3</span><span class="val">#5C7F4A · forest</span><span class="role">Achievement / cumulative growth series.</span></div>
+        <div class="ttable-row"><span class="sw" style="background:#B8893F"></span><span class="name">--chart-4</span><span class="val">#B8893F · amber</span><span class="role">Comparative / contextual series.</span></div>
+        <div class="ttable-row"><span class="sw" style="background:#3A4773"></span><span class="name">--chart-5</span><span class="val">#3A4773 · indigo</span><span class="role">Secondary comparison series.</span></div>
+        <div class="ttable-row"><span class="sw" style="background:#9A9B86"></span><span class="name">--chart-6</span><span class="val">#9A9B86 · sage</span><span class="role">Baseline / passive series. Default for muted rows.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     4 — TYPOGRAPHY TOKENS
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">03</div>
+      <div>
+        <div class="eyebrow">Typography · tokens</div>
+        <h2>Source Serif 4, Source Sans 3, JetBrains Mono.</h2>
+      </div>
+      <p class="lead">A nine-step type scale with three families. Display is always serif and reserves italic for editorial moments — pull quotes, hero lines, section openers. Body and UI are sans. Mono is reserved for metadata.</p>
+    </div>
+
+    <div class="group-block">
+      <div class="group-title">
+        <h3>Type families</h3>
+        <span class="ruler"></span>
+        <span class="meta">3 stacks</span>
+      </div>
+
+      <div class="ttable">
+        <div class="ttable-head"><span></span><span class="k">Token</span><span class="k">Stack</span><span class="k">Role</span></div>
+        <div class="ttable-row"><span class="sw" style="background:var(--bg-2); border-color:var(--border)"></span><span class="name">--font-display</span><span class="val">Source Serif 4</span><span class="role">All headings + italic editorial moments.</span></div>
+        <div class="ttable-row"><span class="sw" style="background:var(--bg-2); border-color:var(--border)"></span><span class="name">--font-body</span><span class="val">Source Sans 3</span><span class="role">Body, UI, buttons, form fields.</span></div>
+        <div class="ttable-row"><span class="sw" style="background:var(--bg-2); border-color:var(--border)"></span><span class="name">--font-mono</span><span class="val">JetBrains Mono</span><span class="role">Eyebrows, metadata, code, numerics in dense tables.</span></div>
+      </div>
+    </div>
+
+    <div class="group-block" style="margin-bottom:0">
+      <div class="group-title">
+        <h3>Scale</h3>
+        <span class="ruler"></span>
+        <span class="meta">9 steps · 13 → 64 px</span>
+      </div>
+
+      <div class="type-table">
+        <div class="type-row">
+          <div class="sample"><div class="t-display-xl">Display XL · italic.</div></div>
+          <div class="meta">
+            <div><span class="token">--text-display-xl</span></div>
+            <div>Source Serif 4 · italic 400 · 64/1.02 · -2.5%</div>
+            <div class="role">Hero h1. Page opener only — one per surface. Always italic.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-display">Display · upright.</div></div>
+          <div class="meta">
+            <div><span class="token">--text-display</span></div>
+            <div>Source Serif 4 · 500 · 40/1.08 · -1.5%</div>
+            <div class="role">Section h2. Editorial opener for major sections.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-h2">Heading 2 · standard.</div></div>
+          <div class="meta">
+            <div><span class="token">--text-h2</span></div>
+            <div>Source Serif 4 · 500 · 28/1.15 · -1%</div>
+            <div class="role">Sub-section heading inside long documents.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-h3">Heading 3 · card title.</div></div>
+          <div class="meta">
+            <div><span class="token">--text-h3</span></div>
+            <div>Source Serif 4 · 500 · 22/1.25 · -1%</div>
+            <div class="role">Card title. Lesson title. Credential subject.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-h4">Heading 4 · widget label</div></div>
+          <div class="meta">
+            <div><span class="token">--text-h4</span></div>
+            <div>Source Sans 3 · 600 · 16/1.3</div>
+            <div class="role">Dense-screen widget label. Switches to sans for tightness.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-body">Body · reading copy. Long-form lessons, descriptive paragraphs, the centre of gravity of every reading surface.</div></div>
+          <div class="meta">
+            <div><span class="token">--text-body</span></div>
+            <div>Source Sans 3 · 400 · 16/1.65</div>
+            <div class="role">All paragraph copy. Generous leading for an hour of reading.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-ui">UI · buttons, tabs, form fields.</div></div>
+          <div class="meta">
+            <div><span class="token">--text-ui</span></div>
+            <div>Source Sans 3 · 500 · 14/1.45</div>
+            <div class="role">Functional UI. One step tighter than body.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-caption">Caption · metadata, image notes, helper text.</div></div>
+          <div class="meta">
+            <div><span class="token">--text-caption</span></div>
+            <div>Source Sans 3 · 400 · 13/1.5 · ink-3</div>
+            <div class="role">Below the reading register. Captions, helper rows.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-eyebrow">Eyebrow · section kicker</div></div>
+          <div class="meta">
+            <div><span class="token">--text-eyebrow</span></div>
+            <div>JetBrains Mono · 500 · 11 · +18% tracking · upper</div>
+            <div class="role">Above every section heading. Lowercase forbidden.</div>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="sample"><div class="t-mono">Mono · data · 812 / 1000 · 2026-05-15</div></div>
+          <div class="meta">
+            <div><span class="token">--text-mono</span></div>
+            <div>JetBrains Mono · 400 · 13 · ink-2</div>
+            <div class="role">Numerics, IDs, timestamps in dense rows.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     5 — SPACING
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">04</div>
+      <div>
+        <div class="eyebrow">Spacing · tokens</div>
+        <h2>A nine-step scale.</h2>
+      </div>
+      <p class="lead">All gaps, paddings, and margins come from these steps. New screens that introduce 5, 9, 14 px will read as off-rhythm — pick the nearest step instead.</p>
+    </div>
+
+    <div class="space-table">
+      <div class="space-row"><span class="token">--s-1</span><span class="val">4px</span><div class="bar" style="width:4px"></div><span class="role">Inline gap between a pill dot and its label.</span></div>
+      <div class="space-row"><span class="token">--s-2</span><span class="val">8px</span><div class="bar" style="width:8px"></div><span class="role">Tight gap inside a stat / number pair.</span></div>
+      <div class="space-row"><span class="token">--s-3</span><span class="val">12px</span><div class="bar" style="width:12px"></div><span class="role">Row gap inside a card.</span></div>
+      <div class="space-row"><span class="token">--s-4</span><span class="val">16px</span><div class="bar" style="width:16px"></div><span class="role">Card padding x. Default vertical paragraph rhythm.</span></div>
+      <div class="space-row"><span class="token">--s-5</span><span class="val">24px</span><div class="bar" style="width:24px"></div><span class="role">Component gap. Space between cards in a grid.</span></div>
+      <div class="space-row"><span class="token">--s-6</span><span class="val">32px</span><div class="bar" style="width:32px"></div><span class="role">Card padding y. Page side-padding on desktop.</span></div>
+      <div class="space-row"><span class="token">--s-7</span><span class="val">48px</span><div class="bar" style="width:48px"></div><span class="role">Section-head bottom margin. Between heading + first child.</span></div>
+      <div class="space-row"><span class="token">--s-8</span><span class="val">64px</span><div class="bar" style="width:64px"></div><span class="role">Between groups inside a section.</span></div>
+      <div class="space-row"><span class="token">--s-9</span><span class="val">96px</span><div class="bar" style="width:96px"></div><span class="role">Section padding y. Major page rhythm.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     6 — RADIUS + BORDERS
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">05</div>
+      <div>
+        <div class="eyebrow">Radius &amp; borders</div>
+        <h2>Hairlines do the work.</h2>
+      </div>
+      <p class="lead">No shadows anywhere in the system. The cream-on-white edge plus a 1px hairline is enough lift. Radius is small — 6 px for cards, 10 px for the outer frame, full-pill only for buttons.</p>
+    </div>
+
+    <div class="group-block">
+      <div class="group-title">
+        <h3>Radius scale</h3>
+        <span class="ruler"></span>
+        <span class="meta">4 steps</span>
+      </div>
+
+      <div class="rad-grid">
+        <div class="rad-cell">
+          <div class="shape r0"></div>
+          <div class="token">--rad-0</div>
+          <div class="val">0px</div>
+          <div class="role">Block-colour surfaces. Brutalist edge for marketing blocks.</div>
+        </div>
+        <div class="rad-cell">
+          <div class="shape r3"></div>
+          <div class="token">--rad-sm</div>
+          <div class="val">3px</div>
+          <div class="role">Inline swatches. Mono numerics frames.</div>
+        </div>
+        <div class="rad-cell">
+          <div class="shape r6"></div>
+          <div class="token">--rad</div>
+          <div class="val">6px</div>
+          <div class="role">Default card radius across the product.</div>
+        </div>
+        <div class="rad-cell">
+          <div class="shape r10"></div>
+          <div class="token">--rad-lg</div>
+          <div class="val">10px</div>
+          <div class="role">Outer panel frame. Public-site hero containers.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-block" style="margin-bottom:0">
+      <div class="group-title">
+        <h3>Border weights</h3>
+        <span class="ruler"></span>
+        <span class="meta">2 weights · 1 absent</span>
+      </div>
+
+      <div class="border-stack">
+        <div class="border-cell">
+          <div class="demo hair"><div class="t">Hairline · default</div></div>
+          <div class="meta">1px solid <span class="name">--border</span> · <span class="val">#E5DFD2</span></div>
+          <div class="role">Every card, every divider, every table row in the product. Use this 95% of the time.</div>
+        </div>
+        <div class="border-cell">
+          <div class="demo strong"><div class="t">Strong · emphasis</div></div>
+          <div class="meta">1px solid <span class="name">--border-strong</span> · <span class="val">#C5BDA9</span></div>
+          <div class="role">Bordered secondary buttons. Chart axes. Cells that need to read as actionable.</div>
+        </div>
+        <div class="border-cell">
+          <div class="demo bare"><div class="t">None · block surface</div></div>
+          <div class="meta">0 · use <span class="name">--bg-2</span> or block colour as edge</div>
+          <div class="role">When a card is a full block of colour, the colour itself is the edge — never add a border.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     7 — COMPONENT RULES
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">06</div>
+      <div>
+        <div class="eyebrow">Component · rules</div>
+        <h2>How the tokens combine.</h2>
+      </div>
+      <p class="lead">Five rules cover most of the felt knowledge in this system. Each is paired with a right-and-wrong demo so the rule reads as a picture, not a sentence.</p>
+    </div>
+
+    <!-- rule 01 · card surface -->
+    <div class="rule">
+      <div class="rule-head">
+        <div class="num">Rule 01</div>
+        <h3>Card surface follows <em>density</em>: white inside the product, colour blocks on the public site.</h3>
+      </div>
+      <div class="rule-body">
+        <div></div>
+        <div class="reason">
+          Dense screens — dashboards, lessons, settings — hold many cards in one view. Six colour blocks at once becomes a fruit salad. Use the white-on-cream system there. The public site shows one or two cards per scroll moment; that's where colour blocks land best.
+        </div>
+        <div>
+          <div class="rule-demo">
+            <div class="demo-label"><span>Right · product surface</span><span>Density: high</span></div>
+            <div class="demo-body" style="background:var(--bg)">
+              <div class="mini-card"><div class="kc">Module 04 · 02</div><div class="ti">How models think about uncertainty</div><div class="bd">15 min read · 9 of 12 lessons complete.</div></div>
+              <div class="mini-card"><div class="kc">Credential · 01</div><div class="ti">AI Literacy 01 · Verified</div><div class="bd">Score 812/1000 · issued May 2026.</div></div>
+            </div>
+          </div>
+          <div class="rule-demo" style="margin-top:14px">
+            <div class="demo-label"><span>Right · public surface</span><span>Density: low</span></div>
+            <div class="demo-body" style="background:var(--bg); gap:0">
+              <div class="mini-card block-teal" style="border-radius:0"><div class="kc">Step 01 · Read</div><div class="ti">Short, careful lessons</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rule 02 · rust budget -->
+    <div class="rule">
+      <div class="rule-head">
+        <div class="num">Rule 02</div>
+        <h3>Rust is <em>permanent and rare</em>. One peak per page; everywhere else, calmer pigments.</h3>
+      </div>
+      <div class="rule-body">
+        <div></div>
+        <div class="reason">
+          Rust belongs to the brand: the locked logo accent, the single highest-value CTA per page, the one chart bar that demands attention, the error / blocked state. If rust shows up three times in one scroll, it stops meaning anything. Choose the moment.
+        </div>
+        <div>
+          <div class="rule-demo">
+            <div class="demo-label"><span>Permitted uses</span><span>Per page · max 1 of each</span></div>
+            <div class="demo-body">
+              <div class="btn-row"><span class="pill t-rust"><span class="dot"></span>Brand mark</span><span class="pill t-rust"><span class="dot"></span>Peak CTA</span><span class="pill t-rust"><span class="dot"></span>Chart-2 bar</span><span class="pill t-rust"><span class="dot"></span>Error / blocked</span></div>
+              <div class="caption" style="margin-top:8px">Never more than four rust touches in any single scroll. Never rust for an info pill, a button border, or decorative emphasis.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rule 03 · sage vs forest -->
+    <div class="rule">
+      <div class="rule-head">
+        <div class="num">Rule 03</div>
+        <h3>Sage is for <em>passive</em>; forest is for <em>active</em>.</h3>
+      </div>
+      <div class="rule-body">
+        <div></div>
+        <div class="reason">
+          Both are green. Sage (warm olive-grey) is the colour of *what is, at rest* — a streak count, a baseline data row, a passive metadata pill. Forest (vegetal green) is the colour of *what was completed* — a verified credential, a finished module, today's active step.
+        </div>
+        <div>
+          <div class="rule-demo">
+            <div class="demo-label"><span>Sage · passive</span><span>State at rest</span></div>
+            <div class="demo-body" style="background:var(--bg)">
+              <div class="mini-card block-sage"><div class="kc">Current streak</div><div class="ti">9 days</div><div class="bd">Median across enrolled learners.</div></div>
+            </div>
+          </div>
+          <div class="rule-demo" style="margin-top:14px">
+            <div class="demo-label"><span>Forest · active</span><span>Achievement</span></div>
+            <div class="demo-body" style="background:var(--bg)">
+              <div class="mini-card block-forest"><div class="kc">Credential</div><div class="ti">AI Literacy 01 · Verified</div><div class="bd">Issued May 2026 · score 812 / 1000.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rule 04 · italic display -->
+    <div class="rule">
+      <div class="rule-head">
+        <div class="num">Rule 04</div>
+        <h3>Italic display is reserved for <em>editorial moments</em>.</h3>
+      </div>
+      <div class="rule-body">
+        <div></div>
+        <div class="reason">
+          Italic Source Serif 4 is the system's voice. Page openers, pull quotes, takeaways, marketing headlines. Card titles, widget labels, settings rows — those stay upright. If everything is italic, nothing reads as the special moment.
+        </div>
+        <div>
+          <div class="rule-demo">
+            <div class="demo-label"><span>Italic · editorial</span><span>1 per surface</span></div>
+            <div class="demo-body" style="background:var(--bg)">
+              <div style="font-family:var(--font-display); font-style:italic; font-size:32px; line-height:1.1; color:var(--ink); max-width:18ch">A place to learn carefully, <em style="color:var(--teal); font-style:normal">in your own time</em>.</div>
+            </div>
+          </div>
+          <div class="rule-demo" style="margin-top:14px">
+            <div class="demo-label"><span>Upright · functional</span><span>Everywhere else</span></div>
+            <div class="demo-body" style="background:var(--bg)">
+              <div style="font-family:var(--font-display); font-size:22px; line-height:1.25; color:var(--ink)">How models think about uncertainty</div>
+              <div class="caption" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-3); letter-spacing:0.1em; text-transform:uppercase">Module 04 · 02</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rule 05 · button hierarchy -->
+    <div class="rule">
+      <div class="rule-head">
+        <div class="num">Rule 05</div>
+        <h3>Four buttons, in <em>strict order</em>.</h3>
+      </div>
+      <div class="rule-body">
+        <div></div>
+        <div class="reason">
+          One primary per surface. Secondaries can multiply. Ghost links are for tertiary moves. Rust-filled is reserved for the single peak CTA — almost always on the public site. Inside the product, primary is always ink, never rust.
+        </div>
+        <div>
+          <div class="rule-demo">
+            <div class="demo-label"><span>Hierarchy · in order</span><span>Per surface</span></div>
+            <div class="demo-body">
+              <div class="btn-row">
+                <button class="btn btn-primary">Start lesson</button>
+                <button class="btn btn-secondary">Continue later</button>
+                <button class="btn btn-ghost">Skip →</button>
+                <button class="btn btn-rust">Begin a credential</button>
+              </div>
+              <div class="caption" style="margin-top:8px"><span class="t-mono" style="color:var(--ink-3)">primary · secondary · ghost · rust-peak</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rule 06 · score decay model -->
+    <div class="rule">
+      <div class="rule-head">
+        <div class="num">Rule 06</div>
+        <h3>Credentials don't <em>expire</em>. Scores <em>decay</em>.</h3>
+      </div>
+      <div class="rule-body">
+        <div></div>
+        <div class="reason">
+          A GWTH credential is never revoked or invalidated by time. Instead, the score drops as the curriculum updates and the learner falls behind — gently, predictably, recoverably. Three implications for design: never use the word <em>expired</em>; always show the current score next to the peak; and the visual treatment shifts from forest (active) to amber (needs refresh), never to rust (rust means broken).
+        </div>
+        <div>
+          <div class="rule-demo">
+            <div class="demo-label"><span>Current · forest</span><span>Score at rest</span></div>
+            <div class="demo-body" style="background:var(--bg)">
+              <div class="mini-card block-forest" style="border-radius:4px"><div class="kc">AI Literacy · Foundations</div><div class="ti">812 / 1000</div><div class="bd">Verified May 2026 · current with the latest curriculum.</div></div>
+            </div>
+          </div>
+          <div class="rule-demo" style="margin-top:14px">
+            <div class="demo-label"><span>Decayed · amber</span><span>Needs refresh</span></div>
+            <div class="demo-body" style="background:var(--bg)">
+              <div class="mini-card block-amber" style="border-radius:4px"><div class="kc">AI Literacy · Foundations</div><div class="ti">624 / 1000 · was 812</div><div class="bd">Last refresh Feb 2026 · take 3 updated lessons to restore.</div></div>
+            </div>
+          </div>
+          <div class="caption" style="margin-top:8px">Never show a credential as <em>expired</em>, <em>revoked</em>, or <em>invalid</em>. The score itself is the signal — and it's always recoverable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     8 — DO / DON'T
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">07</div>
+      <div>
+        <div class="eyebrow">Anti-slop · examples</div>
+        <h2>What this system <em>isn't</em>.</h2>
+      </div>
+      <p class="lead">Six common failure modes paired with the system's answer. When a screen starts to feel generic, it's almost always one of these creeping back in.</p>
+    </div>
+
+    <div class="ds-grid">
+      <div class="ds-cell is-dont">
+        <div class="stamp"><span class="mk">✕</span>Don't · gradient backdrop</div>
+        <div class="demo"><div class="slop-gradient">Generic AI hero</div></div>
+        <div class="note"><span class="k">Why it fails</span>Purple-blue gradients are the visual signature of LLM-generated landing pages. They flatten brand into "another AI tool."</div>
+      </div>
+      <div class="ds-cell is-do">
+        <div class="stamp"><span class="mk">✓</span>Do · flat paper</div>
+        <div class="demo"><div class="flat-paper">A place to <em>learn</em>.</div></div>
+        <div class="note"><span class="k">Why it works</span>Cream paper + italic serif reads as editorial first, software second. Calmer, warmer, more specific.</div>
+      </div>
+
+      <div class="ds-cell is-dont">
+        <div class="stamp"><span class="mk">✕</span>Don't · left-border-accent card</div>
+        <div class="demo"><div class="slop-borderaccent"><div class="ti">Practice this lesson</div><div class="bd">Tip · this is a common feature-flag SaaS pattern.</div></div></div>
+        <div class="note"><span class="k">Why it fails</span>Rounded card + 4 px left accent + greyscale body is the universal indie-SaaS dashboard tell. Skim-readable but identity-less.</div>
+      </div>
+      <div class="ds-cell is-do">
+        <div class="stamp"><span class="mk">✓</span>Do · full block surface</div>
+        <div class="demo"><div class="clean-block"><div class="ti">Practice this lesson</div><div class="bd">A teal block means a lesson. The colour is the structure.</div></div></div>
+        <div class="note"><span class="k">Why it works</span>A whole pigmented surface is more confident than a hint of colour at the edge. Reads as one decision, not a flourish.</div>
+      </div>
+
+      <div class="ds-cell is-dont">
+        <div class="stamp"><span class="mk">✕</span>Don't · emoji feature icons</div>
+        <div class="demo"><div class="slop-emoji"><div class="row"><span class="e">✨</span><span class="h">AI-powered learning</span></div><div class="row"><span class="e">🚀</span><span class="h">Career growth</span></div><div class="row"><span class="e">🎯</span><span class="h">Verified credentials</span></div></div></div>
+        <div class="note"><span class="k">Why it fails</span>Emoji-next-to-heading is the strongest AI-slop signal. The icon does nothing for understanding and lowers the register of the page.</div>
+      </div>
+      <div class="ds-cell is-do">
+        <div class="stamp"><span class="mk">✓</span>Do · just type</div>
+        <div class="demo"><div class="clean-type"><div class="h">AI literacy, lesson by lesson.</div><div class="b">Short modules · careful prose · real exercises.</div><div class="h">A credential someone can verify.</div><div class="b">Public score page · employer-readable.</div></div></div>
+        <div class="note"><span class="k">Why it works</span>Typography carries hierarchy on its own. Italic serif headline + sans body says everything the icons were trying to.</div>
+      </div>
+
+      <div class="ds-cell is-dont">
+        <div class="stamp"><span class="mk">✕</span>Don't · purple / violet accent</div>
+        <div class="demo"><div class="slop-purple">Get started free →</div></div>
+        <div class="note"><span class="k">Why it fails</span>Trendy violet doesn't belong to GWTH. Locked palette is forest / teal / rust / amber / sage / indigo — never purple.</div>
+      </div>
+      <div class="ds-cell is-do">
+        <div class="stamp"><span class="mk">✓</span>Do · rust peak CTA</div>
+        <div class="demo"><div class="clean-cta">Start a lesson →</div></div>
+        <div class="note"><span class="k">Why it works</span>Rust pill button — the system's one rust moment per page. Brand-coloured, calm, and identical to the locked logo accent.</div>
+      </div>
+
+      <div class="ds-cell is-dont">
+        <div class="stamp"><span class="mk">✕</span>Don't · Inter (or Source Sans) as display</div>
+        <div class="demo"><div class="slop-display-inter">A modern, fast way to learn AI.</div></div>
+        <div class="note"><span class="k">Why it fails</span>Bold sans-serif at display sizes reads as software-tool, not as editorial. The page loses its "learning publication" register.</div>
+      </div>
+      <div class="ds-cell is-do">
+        <div class="stamp"><span class="mk">✓</span>Do · italic serif display</div>
+        <div class="demo"><div class="clean-display-serif">A modern, fast <em style="color:var(--teal); font-style:normal">way</em> to learn AI.</div></div>
+        <div class="note"><span class="k">Why it works</span>Italic Source Serif 4 + a single accent word in upright teal carries personality. Serif = editorial = trustworthy for long-form.</div>
+      </div>
+
+      <div class="ds-cell is-dont">
+        <div class="stamp"><span class="mk">✕</span>Don't · invented metrics</div>
+        <div class="demo"><div class="stat-stack"><div class="slop-stat">10×</div><div class="lbl">FASTER LEARNING</div></div></div>
+        <div class="note"><span class="k">Why it fails</span>"10×" and "99.9% uptime" are the universal markers of a deck written by a stranger. If the number isn't real and sourced, it shouldn't be on the page.</div>
+      </div>
+      <div class="ds-cell is-do">
+        <div class="stamp"><span class="mk">✓</span>Do · real or omit</div>
+        <div class="demo"><div class="stat-stack"><div class="clean-stat">812 / 1000</div><div class="lbl">MEDIAN CREDENTIAL · MAY 2026</div></div></div>
+        <div class="note"><span class="k">Why it works</span>A specific, attributable number reads as honest. When the number doesn't exist yet, leave a labelled placeholder, not a fake stat.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     footer
+     ============================================================ -->
+<footer>
+  <div class="wrap">
+    <div class="lockup">
+      <svg viewBox="0 0 578.07 101.64" role="img" aria-label="GWTH.ai logo"><defs><style>.fc1{fill:#22301f;}.fc2{fill:#a94c2e;}</style></defs><path class="fc1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="fc1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="fc1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="fc1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="fc1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="fc1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="fc2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="fc2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="fc2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+      <span class="stamp"><span class="d">Design tokens · v1</span> · May 2026 · Phase 2 spec</span>
+    </div>
+    <div class="meta">
+      Companion to <a href="index.html">mood board v1 →</a><br>
+      Source Serif 4 · Source Sans 3 · JetBrains Mono<br>
+      Paper #FBF9F4 · Ink #22301F · Rust #A94C2E
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

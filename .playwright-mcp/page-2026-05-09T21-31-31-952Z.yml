@@ -1,0 +1,182 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "GWTH.ai" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+          - button "Collapse sidebar" [ref=e7]:
+            - img
+        - navigation "Main navigation" [ref=e8]:
+          - link "Dashboard" [ref=e9] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e10]
+            - generic [ref=e15]: Dashboard
+          - link "The Course" [ref=e16] [cursor=pointer]:
+            - /url: /course/applied-ai-skills
+            - img [ref=e17]
+            - generic [ref=e19]: The Course
+          - link "Labs" [ref=e20] [cursor=pointer]:
+            - /url: /labs
+            - img [ref=e21]
+            - generic [ref=e23]: Labs
+          - link "Progress" [ref=e24] [cursor=pointer]:
+            - /url: /progress
+            - img [ref=e25]
+            - generic [ref=e27]: Progress
+        - navigation "Secondary navigation" [ref=e28]:
+          - link "Bookmarks" [ref=e29] [cursor=pointer]:
+            - /url: /bookmarks
+            - img [ref=e30]
+            - generic [ref=e32]: Bookmarks
+          - link "Notifications" [ref=e33] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e34]
+            - generic [ref=e37]: Notifications
+          - link "Profile" [ref=e38] [cursor=pointer]:
+            - /url: /profile
+            - img [ref=e39]
+            - generic [ref=e42]: Profile
+          - link "Settings" [ref=e43] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e44]
+            - generic [ref=e47]: Settings
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "breadcrumb" [ref=e50]:
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "Demo" [ref=e53] [cursor=pointer]:
+                - /url: /demo
+            - listitem [ref=e54]:
+              - img [ref=e55]
+            - listitem [ref=e57]:
+              - link "Lesson" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - button "Search... ⌘ K" [ref=e60]:
+            - img
+            - generic [ref=e61]: Search...
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button "Toggle theme" [ref=e62]:
+            - img
+          - button "U" [ref=e63]:
+            - generic [ref=e65]: U
+      - main [ref=e66]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - complementary [ref=e71]:
+              - generic [ref=e72]: LESSON 13 · OUTLINE
+              - generic [ref=e73]:
+                - generic [ref=e74]:
+                  - img [ref=e76]
+                  - generic [ref=e78]:
+                    - generic [ref=e79]: Why this lesson exists
+                    - generic [ref=e80]: VIDEO · 4 MIN
+                  - generic [ref=e81]: P01
+                - generic [ref=e82]:
+                  - generic [ref=e84]:
+                    - generic [ref=e85]: Picking the right problem
+                    - generic [ref=e86]: PROSE · 3 MIN
+                  - generic [ref=e87]: P02
+                - generic [ref=e88]:
+                  - generic [ref=e90]:
+                    - generic [ref=e91]: The brief, in plain English
+                    - generic [ref=e92]: PROSE · 4 MIN
+                  - generic [ref=e93]: P03
+                - generic [ref=e94]:
+                  - generic [ref=e96]:
+                    - generic [ref=e97]: Calling Claude from a script
+                    - generic [ref=e98]: CODE · 4 MIN
+                  - generic [ref=e99]: P04
+                - generic [ref=e100]:
+                  - generic [ref=e102]:
+                    - generic [ref=e103]: When the model misreads you
+                    - generic [ref=e104]: PROSE · 3 MIN
+                  - generic [ref=e105]: P05
+                - generic [ref=e106]:
+                  - generic [ref=e108]:
+                    - generic [ref=e109]: Shipping past your own desk
+                    - generic [ref=e110]: PROSE · 3 MIN
+                  - generic [ref=e111]: P06
+                - generic [ref=e112]:
+                  - generic [ref=e114]:
+                    - generic [ref=e115]: Recap
+                    - generic [ref=e116]: PROSE · 1 MIN
+                  - generic [ref=e117]: P07
+                - generic [ref=e118]:
+                  - generic [ref=e120]:
+                    - generic [ref=e121]: End-of-lesson Q&A
+                    - generic [ref=e122]: Q&A · 4 MIN
+                  - generic [ref=e123]: P08
+            - main [ref=e124]:
+              - generic [ref=e125]:
+                - generic [ref=e126]: COURSE · LESSON 13
+                - generic [ref=e127]: FRI 8 MAY 2026 · 14:24 BST
+                - generic [ref=e128]: Active · Month 1 of 3
+              - generic [ref=e130]:
+                - generic [ref=e131]:
+                  - generic [ref=e132]:
+                    - generic [ref=e133]: MONTH 1 · LESSON 13
+                    - generic [ref=e134]: PAGE 1 OF 8
+                  - 'heading "Building with Claude: your first useful tool." [level=1] [ref=e135]'
+                  - generic [ref=e136]:
+                    - generic [ref=e138]:
+                      - generic [ref=e139]: LESSON 13 PROGRESS
+                      - generic [ref=e140]: 0%
+                    - generic [ref=e151]:
+                      - generic [ref=e152]: MONTH 1 PROGRESS
+                      - generic [ref=e153]: 12 / 24
+                - generic [ref=e157]:
+                  - generic [ref=e158]: PAGE 1 OF 8 · INTRO VIDEO · 4:12
+                  - heading "Why this lesson, in four minutes." [level=2] [ref=e159]
+                  - generic [ref=e160]:
+                    - button "Play video" [ref=e163]:
+                      - img [ref=e164]
+                    - generic [ref=e166]: L13 · INTRO · NARR. PALMER
+                    - generic [ref=e167]: 03:22 / 04:12
+                    - generic [ref=e172]: 80% MARK
+                  - generic [ref=e173]:
+                    - img [ref=e175]
+                    - generic [ref=e177]:
+                      - generic [ref=e178]: Counts toward completion. You passed the 80% mark a moment ago.
+                      - generic [ref=e179]: Lesson completion needs the intro watched to 80% and the Q&A passed. One down.
+                    - generic [ref=e180]: GATE 1 / 2 · CLEARED
+                  - generic [ref=e181]:
+                    - generic [ref=e182]:
+                      - generic [ref=e183]: DURATION
+                      - generic [ref=e184]: 4:12
+                      - generic [ref=e185]: watched 3:22
+                    - generic [ref=e186]:
+                      - generic [ref=e187]: THRESHOLD
+                      - generic [ref=e188]: 80%
+                      - generic [ref=e189]: cleared at 3:22
+                    - generic [ref=e190]:
+                      - generic [ref=e191]: UP NEXT
+                      - generic [ref=e192]: Page 2
+                      - generic [ref=e193]: Picking the right problem
+                - generic [ref=e195]:
+                  - button "PREVIOUS PAGE" [ref=e196]:
+                    - generic [ref=e197]: ←
+                    - text: PREVIOUS PAGE
+                  - generic [ref=e198]: PAGE 1 OF 8
+                  - button "CONTINUE" [ref=e200]:
+                    - text: CONTINUE
+                    - generic [ref=e201]: →
+              - generic [ref=e203]:
+                - generic [ref=e204]:
+                  - img [ref=e206]
+                  - generic [ref=e208]:
+                    - generic [ref=e209]: NARRATION MUTED FOR VIDEO
+                    - generic [ref=e210]: Audio resumes on the next prose page.
+                - generic [ref=e211]: AUTO-ADVANCE ON
+          - generic [ref=e212]: video-3
+    - generic [ref=e213]:
+      - heading "Command Palette" [level=2] [ref=e214]
+      - paragraph [ref=e215]: Search for a command to run...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e217]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e224] [cursor=pointer]:
+    - img [ref=e225]
+  - alert [ref=e228]

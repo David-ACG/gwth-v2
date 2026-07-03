@@ -1,0 +1,2720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GWTH.ai — Welcome (Lesson m1_l01)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4;
+  --bg-2: #F5F0E6;
+  --surface: #FFFFFF;
+  --sunken: #F0EBE0;
+  --border: #E5DFD2;
+  --border-strong: #D4CCBA;
+  --ink: #22301F;
+  --ink-2: #3F4A3B;
+  --muted: #6F7569;
+  --stone: #948A76;
+
+  --teal: #2A5D69;
+  --teal-deep: #1E454F;
+  --teal-soft: #C2D5D9;
+  --teal-tint: #EBF1F2;
+
+  --rust: #A94C2E;
+  --rust-soft: #EAD0C7;
+  --rust-tint: #F7EDE9;
+
+  --forest: #5C7F4A;
+  --forest-soft: #D4DCC9;
+  --forest-tint: #ECEFE3;
+
+  --amber: #B8893F;
+  --amber-soft: #E8D9B8;
+  --amber-tint: #F5ECD8;
+  --amber-light: #D4A55B;
+
+  --indigo: #3A4773;
+  --indigo-soft: #C6CADD;
+  --indigo-tint: #E8EAF1;
+
+  --sage: #9A9B86;
+
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, 'Courier New', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --topbar-h: 56px;
+  --player-h: 76px;
+  --outline-w: 248px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+html { font-size: 17px; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  overflow-x: hidden;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+button { font-family: inherit; cursor: pointer; }
+::selection { background: var(--teal-soft); color: var(--ink); }
+
+/* ===== Progress bar ===== */
+.progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--border); z-index: 60;
+}
+.progress-fill {
+  height: 100%; background: var(--teal);
+  transition: width 0.35s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  position: fixed; top: 2px; left: 0; right: 0;
+  height: var(--topbar-h);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  background: rgba(251, 249, 244, 0.92);
+  backdrop-filter: saturate(160%) blur(10px);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
+  border-bottom: 1px solid var(--border);
+  z-index: 50;
+  padding: 0 20px;
+  gap: 24px;
+}
+.topbar-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.brand-logo { display: flex; align-items: center; }
+.brand-logo svg { width: 88px; height: auto; display: block; }
+.outline-toggle {
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.outline-toggle:hover { background: var(--bg-2); }
+.outline-toggle svg { width: 16px; height: 16px; display: block; }
+.topbar-nav {
+  display: flex;
+  gap: 28px;
+  justify-self: center;
+  align-items: center;
+}
+.topbar-nav a {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--ink-2);
+  font-weight: 500;
+  letter-spacing: -0.003em;
+  padding: 4px 0;
+  text-decoration: none;
+  position: relative;
+}
+.topbar-nav a:hover { color: var(--ink); }
+.topbar-nav a.is-active { color: var(--ink); }
+.topbar-nav a.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 1.5px;
+  background: var(--ink);
+}
+.topbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+}
+.user-chip:hover { border-color: var(--border-strong); }
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: #EDEAE6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+}
+.user-chip .caret {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: 2px;
+}
+.topbar-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ink);
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.topbar-btn:hover { background: var(--bg-2); }
+.topbar-btn svg { width: 13px; height: 13px; display: block; }
+.topbar-btn .count {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--rust);
+  background: var(--rust-tint);
+  padding: 1px 6px;
+  border-radius: 8px;
+  letter-spacing: 0.02em;
+}
+.topbar-btn .count.is-zero { display: none; }
+
+/* ===== Shell ===== */
+.shell {
+  display: grid;
+  grid-template-columns: var(--outline-w) 1fr;
+  padding-top: calc(var(--topbar-h) + 2px);
+  padding-bottom: var(--player-h);
+  min-height: 100vh;
+}
+
+/* ===== Outline ===== */
+.outline {
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: calc(var(--topbar-h) + 2px);
+  align-self: start;
+  height: calc(100vh - var(--topbar-h) - 2px - var(--player-h));
+  overflow-y: auto;
+  padding: 24px 0 28px;
+  background: var(--bg);
+}
+.outline-head {
+  padding: 0 22px 14px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.outline-head .total { color: var(--ink); font-weight: 500; }
+.outline-list { list-style: none; padding: 0; margin: 0; }
+.outline-item {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 8px;
+  align-items: baseline;
+  padding: 9px 22px 9px 14px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.outline-item:hover { background: var(--bg-2); }
+.outline-item.is-active {
+  background: var(--teal-tint);
+  border-left-color: var(--teal);
+}
+.outline-item.is-active .ol-num { color: var(--teal); font-weight: 500; }
+.outline-item.is-active .ol-label { color: var(--ink); font-weight: 500; }
+.ol-num {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--stone);
+  letter-spacing: 0.04em;
+  padding-top: 1px;
+}
+.ol-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.4;
+}
+.ol-label .ol-kind-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: 1px;
+  background: transparent;
+}
+.outline-item[data-kind="cover"] .ol-kind-dot { background: var(--teal); }
+.outline-item[data-kind="practice"] .ol-kind-dot { background: var(--forest); }
+.outline-item[data-kind="takeaways"] .ol-kind-dot { background: var(--amber); }
+.outline-item[data-kind="recap"] .ol-kind-dot { background: var(--amber); }
+.outline-item[data-kind="bridge"] .ol-kind-dot { background: var(--indigo); }
+
+.ol-feedback {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rust);
+  align-self: center;
+  opacity: 0;
+}
+.outline-item[data-has-feedback="true"] .ol-feedback { opacity: 1; }
+
+/* ===== Reader ===== */
+.reader {
+  min-width: 0;
+  padding: 56px 56px 80px;
+  max-width: 880px;
+  margin: 0 auto;
+  width: 100%;
+}
+.page { display: none; }
+.page.is-current { display: block; }
+
+/* Page header */
+.page-head {
+  margin-bottom: 36px;
+}
+.page-kicker {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.page-kicker .kicker-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--stone);
+}
+.page[data-kind="cover"] .kicker-dot { background: var(--teal); }
+.page[data-kind="practice"] .kicker-dot { background: var(--forest); }
+.page[data-kind="takeaways"] .kicker-dot,
+.page[data-kind="recap"] .kicker-dot { background: var(--amber); }
+.page[data-kind="bridge"] .kicker-dot { background: var(--indigo); }
+
+.page-kicker .kicker-strong { color: var(--ink); font-weight: 500; }
+.page-kicker .sep {
+  width: 14px; height: 1px;
+  background: var(--border-strong);
+  opacity: 0.7;
+}
+
+.page-heading {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(34px, 4.6vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin-bottom: 22px;
+  text-wrap: balance;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1;
+}
+
+/* Cover page */
+.cover .cover-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(40px, 6.4vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  margin-bottom: 28px;
+  text-wrap: balance;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1;
+}
+.cover .cover-lead {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin-bottom: 36px;
+  max-width: 56ch;
+  text-wrap: pretty;
+}
+.cover-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.cover-meta-item { display: flex; align-items: center; gap: 8px; }
+.cover-meta-item strong { color: var(--ink); font-weight: 500; }
+
+/* Intro video */
+.intro-frame {
+  position: relative;
+  background: var(--ink);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 18px;
+}
+.intro-frame video {
+  width: 100%; height: 100%; display: block;
+  object-fit: cover;
+}
+.intro-poster {
+  position: absolute; inset: 0;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  transition: opacity 0.25s ease;
+}
+.intro-poster.is-hidden { opacity: 0; pointer-events: none; }
+.intro-play {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: rgba(251, 249, 244, 0.95);
+  color: var(--ink);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s ease, background 0.18s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.intro-play:hover { transform: scale(1.05); background: #FFFFFF; }
+.intro-play svg { width: 24px; height: 24px; margin-left: 4px; }
+.intro-poster .intro-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(251, 249, 244, 0.9);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+}
+
+.intro-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 48px;
+  padding: 6px 0;
+}
+.intro-meta .lab { color: var(--ink); font-weight: 500; }
+.intro-meta-dot { width: 3px; height: 3px; background: var(--stone); border-radius: 50%; opacity: 0.7; }
+
+.cover-start {
+  background: var(--teal);
+  color: var(--bg);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 28px;
+}
+.cover-start-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--bg);
+}
+.cover-start-text strong {
+  font-style: normal;
+  font-family: var(--font-body);
+  font-weight: 500;
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(251, 249, 244, 0.65);
+  margin-bottom: 8px;
+}
+.cover-start-btn {
+  background: var(--bg);
+  color: var(--teal);
+  border: none;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.cover-start-btn:hover { background: #FFFFFF; }
+.cover-start-btn svg { width: 14px; height: 14px; }
+
+/* ===== Block rendering ===== */
+.block {
+  position: relative;
+  padding: 6px 0;
+  margin-bottom: 0;
+  border-radius: 4px;
+  transition: background 0.15s ease, outline-color 0.15s ease;
+  outline: 1px solid transparent;
+}
+
+/* Highlight when audio is reading this block */
+.block.is-reading {
+  background: var(--teal-tint);
+  outline-color: var(--teal-soft);
+  outline-offset: 6px;
+}
+
+/* Feedback mode hover */
+body.is-feedback-mode .block { cursor: pointer; }
+body.is-feedback-mode .block:hover {
+  outline-color: var(--rust);
+  outline-style: dashed;
+  outline-offset: 6px;
+  background: var(--rust-tint);
+}
+.block[data-has-feedback="true"]::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 16px;
+  width: 6px;
+  height: 6px;
+  background: var(--rust);
+  border-radius: 50%;
+}
+
+.b-para p {
+  font-family: var(--font-body);
+  font-size: 17.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  margin: 0 0 22px;
+  text-wrap: pretty;
+  max-width: 68ch;
+}
+.b-para p em { font-style: italic; }
+.b-para p strong { font-weight: 600; color: var(--ink); }
+.b-para p code.inline {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-2);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--ink);
+}
+
+.b-heading {
+  margin: 44px 0 16px;
+}
+.b-heading h3 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.003em;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.b-heading .h-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--rust);
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.b-pullquote {
+  margin: 36px 0;
+  padding: 28px 36px;
+  background: var(--amber-tint);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+.b-pullquote blockquote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(24px, 3vw, 28px);
+  line-height: 1.25;
+  color: var(--ink);
+  text-wrap: balance;
+  letter-spacing: -0.008em;
+  max-width: 28ch;
+  margin: 0 auto;
+}
+.b-pullquote blockquote strong {
+  font-style: normal;
+  font-weight: 500;
+}
+
+.b-code {
+  margin: 28px 0;
+  background: var(--bg-2);
+  border-radius: var(--radius-md);
+  padding: 22px 26px;
+  position: relative;
+}
+.b-code::before {
+  content: 'Prompt';
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  background: var(--indigo);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.b-code pre {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.b-figure {
+  margin: 36px 0;
+}
+.figure-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: zoom-in;
+  display: block;
+}
+.figure-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.figure-cap {
+  margin-top: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.figure-cap .num {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rust);
+  font-weight: 500;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.figure-cap .lab {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* End-of-page next/prev */
+.page-foot {
+  margin-top: 64px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border);
+}
+.next-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 28px;
+  align-items: center;
+  padding: 28px 32px;
+  border-radius: var(--radius-lg);
+  background: var(--teal);
+  color: var(--bg);
+  text-decoration: none;
+  transition: filter 0.15s ease;
+}
+.next-card:hover { filter: brightness(1.06); text-decoration: none; }
+.next-card .nc-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(251, 249, 244, 0.72);
+  margin-bottom: 8px;
+}
+.next-card .nc-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.22;
+  color: var(--bg);
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.next-card .nc-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(251, 249, 244, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg);
+  flex-shrink: 0;
+}
+.next-card .nc-arrow svg { width: 16px; height: 16px; }
+
+/* Next-card variants per next-page kind */
+.next-card[data-next-kind="practice"] { background: var(--forest); }
+.next-card[data-next-kind="recap"] { background: var(--amber-light); color: var(--ink); }
+.next-card[data-next-kind="recap"] .nc-meta { color: rgba(34, 48, 31, 0.55); }
+.next-card[data-next-kind="recap"] .nc-title { color: var(--ink); }
+.next-card[data-next-kind="recap"] .nc-arrow { background: rgba(34, 48, 31, 0.12); color: var(--ink); }
+.next-card[data-next-kind="bridge"] { background: var(--indigo); }
+
+.page-pagi {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 28px;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.page-pagi .prev { text-align: left; }
+.page-pagi .next { text-align: right; }
+.page-pagi a { color: var(--muted); }
+.page-pagi a:hover { color: var(--teal); text-decoration: none; }
+.page-pagi .mid { color: var(--ink); font-weight: 500; }
+
+/* Practice / Build section */
+.build-block {
+  margin: 48px 0 0;
+  padding: 28px 32px 32px;
+  background: var(--forest-tint);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--forest-soft);
+}
+.build-block .bb-kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--forest);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+.build-block .bb-kicker .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--forest);
+}
+.build-block .bb-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 12px;
+  letter-spacing: -0.008em;
+}
+.build-block .bb-lead {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--ink-2);
+  margin-bottom: 22px;
+  max-width: 60ch;
+}
+.build-video {
+  background: var(--ink);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  margin-bottom: 20px;
+}
+.build-video video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.build-poster {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(34, 48, 31, 0.1), rgba(34, 48, 31, 0.55));
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.25s ease;
+}
+.build-poster.is-hidden { opacity: 0; pointer-events: none; }
+.build-poster .play-circle {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(251, 249, 244, 0.92);
+  color: var(--forest);
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.build-poster .play-circle svg { width: 18px; height: 18px; margin-left: 3px; }
+.bb-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: grid;
+  gap: 14px;
+}
+.bb-steps li {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.bb-steps .step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--forest);
+  font-weight: 500;
+  padding-top: 2px;
+}
+.bb-foot {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding-top: 18px;
+  border-top: 1px solid var(--forest-soft);
+}
+.bb-foot .status-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--stone);
+}
+.bb-foot .open-build {
+  background: var(--forest);
+  color: var(--bg);
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-left: auto;
+}
+.bb-foot .open-build:hover { background: var(--ink); }
+
+/* ===== Audio player ===== */
+.player {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--player-h);
+  background: var(--ink);
+  color: var(--bg);
+  z-index: 50;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto minmax(260px, 1fr);
+  align-items: center;
+  padding: 0 24px;
+  gap: 24px;
+  border-top: 1px solid rgba(251, 249, 244, 0.08);
+}
+.player-now {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.player-source {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(251, 249, 244, 0.6);
+  background: rgba(251, 249, 244, 0.08);
+  padding: 4px 10px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.player-source .dot { width: 5px; height: 5px; background: var(--teal-soft); border-radius: 50%; }
+.player-now-text {
+  min-width: 0;
+}
+.player-now-page {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--bg);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.player-now-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: rgba(251, 249, 244, 0.55);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.player-btn {
+  background: transparent;
+  border: none;
+  color: var(--bg);
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.player-btn:hover { background: rgba(251, 249, 244, 0.1); }
+.player-btn:disabled { opacity: 0.4; cursor: default; }
+.player-btn:disabled:hover { background: transparent; }
+.player-btn svg { width: 14px; height: 14px; display: block; }
+.player-btn.is-play {
+  width: 40px;
+  height: 40px;
+  background: var(--teal-soft);
+  color: var(--teal-deep);
+}
+.player-btn.is-play:hover { background: var(--bg); }
+.player-btn.is-play svg { width: 14px; height: 14px; }
+
+.player-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-self: end;
+}
+.player-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(251, 249, 244, 0.65);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.player-scrub {
+  flex: 1;
+  height: 4px;
+  background: rgba(251, 249, 244, 0.15);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+  margin: 0 4px;
+}
+.player-scrub-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  background: var(--teal-soft);
+  border-radius: 2px;
+  width: 0%;
+}
+.player-scrub-grip {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--bg);
+  transform: translate(-50%, -50%);
+}
+
+.player-scrub-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px 0;
+  margin-top: -6px;
+}
+
+.player-speed,
+.player-continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(251, 249, 244, 0.85);
+  background: transparent;
+  border: 1px solid rgba(251, 249, 244, 0.18);
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.player-speed:hover,
+.player-continue:hover { background: rgba(251, 249, 244, 0.08); border-color: rgba(251, 249, 244, 0.3); }
+.player-continue.is-on {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--bg);
+}
+.player-continue svg { width: 12px; height: 12px; }
+.player-speed .value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  min-width: 28px;
+  text-align: center;
+}
+
+/* Two-row player on smaller screens */
+.player-wrap {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 50;
+}
+.player-scrub-bar {
+  background: var(--ink);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 28px;
+  border-top: 1px solid rgba(251, 249, 244, 0.05);
+}
+
+/* ===== Feedback button (floating) ===== */
+.fab-feedback {
+  position: fixed;
+  bottom: calc(var(--player-h) + 24px);
+  right: 24px;
+  z-index: 55;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border-strong);
+  padding: 12px 18px;
+  border-radius: 40px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(34, 48, 31, 0.08);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.fab-feedback:hover { transform: translateY(-1px); background: var(--bg-2); }
+.fab-feedback svg { width: 14px; height: 14px; color: var(--rust); }
+.fab-feedback.is-active {
+  background: var(--rust);
+  color: var(--bg);
+  border-color: var(--rust);
+}
+.fab-feedback.is-active svg { color: var(--bg); }
+
+.feedback-hint {
+  position: fixed;
+  bottom: calc(var(--player-h) + 80px);
+  right: 24px;
+  z-index: 54;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  max-width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: none;
+  font-style: italic;
+  font-family: var(--font-display);
+}
+.feedback-hint.is-shown { display: block; }
+
+/* Feedback composer */
+.composer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(34, 48, 31, 0.35);
+  z-index: 80;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.composer-backdrop.is-shown { display: flex; }
+.composer {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 28px 30px;
+  width: 100%;
+  max-width: 540px;
+  box-shadow: 0 20px 60px rgba(34, 48, 31, 0.25);
+}
+.composer h3 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.composer-anchor {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rust);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.composer-anchor .dot { width: 6px; height: 6px; background: var(--rust); border-radius: 50%; }
+.composer-quote {
+  background: var(--bg-2);
+  border-left: 3px solid var(--rust);
+  padding: 12px 16px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-2);
+  margin-bottom: 18px;
+  border-radius: 0 4px 4px 0;
+  max-height: 120px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+.composer textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+.composer textarea:focus { outline: none; border-color: var(--teal); }
+.composer-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+.composer-mic {
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+  color: var(--ink);
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.composer-mic:hover { background: var(--bg); border-color: var(--rust); }
+.composer-mic svg { width: 13px; height: 13px; }
+.composer-mic.is-recording {
+  background: var(--rust);
+  color: var(--bg);
+  border-color: var(--rust);
+}
+.composer-mic.is-recording svg { color: var(--bg); }
+.composer-mic.is-recording .label { letter-spacing: 0.04em; }
+.composer-mic.is-unavailable { opacity: 0.4; cursor: not-allowed; }
+
+.composer-status {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  flex: 1;
+}
+
+.composer-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+.composer-actions .btn {
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+}
+.composer-actions .btn-cancel {
+  background: transparent;
+  color: var(--muted);
+}
+.composer-actions .btn-cancel:hover { background: var(--bg-2); color: var(--ink); }
+.composer-actions .btn-send {
+  background: var(--rust);
+  color: var(--bg);
+}
+.composer-actions .btn-send:hover { background: #963F25; }
+.composer-actions .btn-send:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Notes panel */
+.notes-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(34, 48, 31, 0.35);
+  z-index: 80;
+  display: none;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+.notes-panel-backdrop.is-shown { display: flex; }
+.notes-panel {
+  background: var(--bg);
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 32px;
+  border-left: 1px solid var(--border);
+}
+.notes-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.notes-panel-head h2 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--ink);
+}
+.notes-panel-close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 6px;
+  font-size: 18px;
+  line-height: 1;
+}
+.notes-panel-close:hover { color: var(--ink); }
+.note-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+.note-card-anchor {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rust);
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.note-card-anchor:hover { text-decoration: underline; }
+.note-card-body {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.note-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.note-card-meta .delete {
+  margin-left: auto;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  padding: 2px 6px;
+}
+.note-card-meta .delete:hover { color: var(--rust); }
+.notes-empty {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+  text-align: center;
+  padding: 60px 20px;
+  line-height: 1.5;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(34, 48, 31, 0.92);
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+.lightbox.is-shown { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+}
+.lightbox-close {
+  position: absolute;
+  top: 24px; right: 24px;
+  background: rgba(251, 249, 244, 0.1);
+  color: var(--bg);
+  border: 1px solid rgba(251, 249, 244, 0.2);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+}
+.lightbox-close:hover { background: rgba(251, 249, 244, 0.2); }
+
+/* Diagnostic banner — shows if init crashes */
+.viewer-diag {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: var(--rust);
+  color: var(--bg);
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  z-index: 100;
+  display: none;
+}
+.viewer-diag.is-shown { display: block; }
+
+/* Mobile */
+.outline.is-mobile-overlay {
+  position: fixed;
+  top: calc(var(--topbar-h) + 2px);
+  left: 0; bottom: 0;
+  width: 280px;
+  background: var(--bg);
+  z-index: 55;
+  box-shadow: 8px 0 24px rgba(0,0,0,0.1);
+  display: none;
+}
+.outline.is-mobile-overlay.is-open { display: block; }
+
+.outline-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(34, 48, 31, 0.3);
+  z-index: 54;
+  display: none;
+}
+.outline-scrim.is-shown { display: block; }
+
+@media (max-width: 1024px) {
+  :root { --outline-w: 220px; }
+  .reader { padding: 48px 40px 64px; }
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .outline {
+    position: fixed;
+    top: calc(var(--topbar-h) + 2px);
+    left: 0; bottom: 0;
+    width: 280px;
+    z-index: 55;
+    box-shadow: 8px 0 24px rgba(0,0,0,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+    height: calc(100vh - var(--topbar-h) - 2px);
+  }
+  .outline.is-open { transform: translateX(0); }
+  .reader { padding: 36px 24px 48px; }
+  .topbar-nav { display: none; }
+  .user-chip span:not(.user-avatar):not(.caret) { display: none; }
+  .player {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 0 16px;
+    height: 64px;
+  }
+  --player-h: 64px;
+  .player-right { display: none; }
+  .cover-start { grid-template-columns: 1fr; padding: 24px; gap: 18px; }
+  .cover-start-btn { justify-self: start; }
+  .next-card { padding: 22px 24px; }
+  .next-card .nc-title { font-size: 19px; }
+  .b-pullquote { padding: 22px 24px; }
+  .fab-feedback {
+    bottom: calc(64px + 16px);
+    right: 16px;
+    padding: 10px 14px;
+  }
+  .fab-feedback .label { display: none; }
+  .fab-feedback svg { width: 16px; height: 16px; }
+}
+
+@media (max-width: 520px) {
+  .reader { padding: 28px 18px 48px; }
+  .cover .cover-title { font-size: 36px; }
+  .page-heading { font-size: 28px; }
+  .b-para p { font-size: 16.5px; line-height: 1.65; }
+  .b-pullquote blockquote { font-size: 20px; }
+  .composer { padding: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Diagnostic banner -->
+<div class="viewer-diag" id="viewerDiag">
+  The lesson viewer is loading. If this banner stays for more than a few seconds, the page failed to initialise — please reload.
+</div>
+
+<!-- Progress bar -->
+<div class="progress" role="progressbar" aria-label="Lesson progress">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <button class="outline-toggle" id="outlineToggle" aria-label="Toggle lesson outline" type="button">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/></svg>
+    </button>
+    <a class="brand-logo" href="#" aria-label="GWTH.ai home" id="brandLink">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GWTH.ai logo">
+        <defs><style>.cls-1{fill:#22301f;}.cls-2{fill:#a94c2e;}</style></defs>
+        <path class="cls-1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="cls-1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="cls-1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="cls-1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="cls-1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="cls-1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="cls-2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="cls-2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="cls-2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+    </a>
+  </div>
+
+  <nav class="topbar-nav" aria-label="Primary">
+    <a href="gwth-dashboard.html">Dashboard</a>
+    <a href="#" class="is-active">Lessons</a>
+    <a href="#">Notes</a>
+    <a href="gwth-credential-verification.html">Credential</a>
+  </nav>
+
+  <div class="topbar-tools">
+    <button class="topbar-btn" id="notesBtn" type="button">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M2 3h10v6H7l-3 2.5V9H2z"/>
+      </svg>
+      <span>My notes</span>
+      <span class="count is-zero" id="notesCount">0</span>
+    </button>
+    <button type="button" class="user-chip" aria-label="Account menu">
+      <span class="user-avatar" aria-hidden="true">S</span>
+      <span>Sarah</span>
+      <span class="caret">▾</span>
+    </button>
+  </div>
+</header>
+
+<!-- Outline scrim (mobile) -->
+<div class="outline-scrim" id="outlineScrim"></div>
+
+<!-- Main shell -->
+<div class="shell">
+  <aside class="outline" id="outline">
+    <div class="outline-head">
+      <span>Lesson</span>
+      <span class="total" id="outlineTotal">12 pages</span>
+    </div>
+    <ul class="outline-list" id="outlineList" role="list"></ul>
+  </aside>
+
+  <main class="reader" id="reader" role="main"></main>
+</div>
+
+<!-- Feedback button -->
+<button class="fab-feedback" id="fabFeedback" type="button">
+  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M1 2h12v8H5l-4 3z"/>
+  </svg>
+  <span class="label">Feedback</span>
+</button>
+<div class="feedback-hint" id="feedbackHint">Click any paragraph, quote, or figure to leave feedback on it.</div>
+
+<!-- Feedback composer -->
+<div class="composer-backdrop" id="composerBackdrop">
+  <div class="composer" role="dialog" aria-modal="true" aria-labelledby="composerTitle">
+    <h3 id="composerTitle">Feedback on this passage</h3>
+    <div class="composer-anchor"><span class="dot"></span><span id="composerLocation">Page 2 · paragraph 3</span></div>
+    <div class="composer-quote" id="composerQuote"></div>
+    <textarea id="composerText" placeholder="What's confusing, surprising, useful, or worth changing? Write here, or tap the mic to dictate."></textarea>
+    <div class="composer-tools">
+      <button class="composer-mic" id="composerMic" type="button">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="5" y="1.5" width="4" height="7" rx="2"/>
+          <path d="M2.5 7a4.5 4.5 0 0 0 9 0M7 11.5v1.5M5 13h4"/>
+        </svg>
+        <span class="label">Record voice</span>
+      </button>
+      <div class="composer-status" id="composerStatus"></div>
+    </div>
+    <div class="composer-actions">
+      <button class="btn btn-cancel" id="composerCancel" type="button">Cancel</button>
+      <button class="btn btn-send" id="composerSend" type="button" disabled>Send feedback</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notes panel -->
+<div class="notes-panel-backdrop" id="notesPanelBackdrop">
+  <aside class="notes-panel" role="dialog" aria-modal="true" aria-labelledby="notesPanelTitle">
+    <div class="notes-panel-head">
+      <h2 id="notesPanelTitle">Your notes</h2>
+      <button class="notes-panel-close" id="notesPanelClose" type="button" aria-label="Close notes">×</button>
+    </div>
+    <div id="notesPanelBody"></div>
+  </aside>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Figure">
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">×</button>
+  <img id="lightboxImg" alt="">
+</div>
+
+<!-- Audio player -->
+<div class="player-wrap">
+  <div class="player">
+    <div class="player-now">
+      <span class="player-source"><span class="dot"></span>Narration</span>
+      <div class="player-now-text">
+        <div class="player-now-page" id="playerNowPage">Welcome to GWTH</div>
+        <div class="player-now-meta" id="playerNowMeta">Press play to begin · 1:23 total</div>
+      </div>
+    </div>
+    <div class="player-controls">
+      <button class="player-btn" id="playerPrev" type="button" aria-label="Previous page">
+        <svg viewBox="0 0 14 14" fill="currentColor"><polygon points="10,2 4,7 10,12"/></svg>
+      </button>
+      <button class="player-btn is-play" id="playerPlay" type="button" aria-label="Play">
+        <svg id="playIcon" viewBox="0 0 14 14" fill="currentColor"><polygon points="4,2 12,7 4,12"/></svg>
+        <svg id="pauseIcon" viewBox="0 0 14 14" fill="currentColor" style="display:none;"><rect x="3" y="2" width="3" height="10"/><rect x="8" y="2" width="3" height="10"/></svg>
+      </button>
+      <button class="player-btn" id="playerNext" type="button" aria-label="Next page">
+        <svg viewBox="0 0 14 14" fill="currentColor"><polygon points="4,2 10,7 4,12"/></svg>
+      </button>
+    </div>
+    <div class="player-right">
+      <button class="player-speed" id="playerSpeed" type="button" aria-label="Playback speed">
+        Speed <span class="value" id="speedValue">1×</span>
+      </button>
+      <button class="player-continue is-on" id="playerContinue" type="button" aria-label="Auto-continue to next page">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3,7 6,10 11,4"/></svg>
+        Continue
+      </button>
+    </div>
+  </div>
+  <div class="player-scrub-bar">
+    <span class="player-time" id="playerCurrent">0:00</span>
+    <div class="player-scrub" id="playerScrub">
+      <div class="player-scrub-fill" id="playerScrubFill"></div>
+      <div class="player-scrub-grip" id="playerScrubGrip"></div>
+    </div>
+    <span class="player-time" id="playerTotal">1:24</span>
+  </div>
+</div>
+
+<audio id="lessonAudio" preload="metadata">
+  <source src="audio/kokoro_main.wav" type="audio/wav">
+</audio>
+
+<!-- Embedded lesson data -->
+<script id="lessonData" type="application/json">
+{
+  "id": "m1_l01",
+  "slug": "m1_l01_welcome_to_gwth_six_ways_ai_can_give_you_superpowers",
+  "module": { "id": "m1", "title": "Month 1" },
+  "title": "Welcome to GWTH - Six Ways AI Can Give You Superpowers",
+  "lead": "For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without.",
+  "kicker": null,
+  "level": "beginner",
+  "updatedAt": "2026-05-10",
+  "position": { "index": 1, "total": 26 },
+  "prev": null,
+  "next": { "id": "m1_l02", "title": "Your AI Colleague - How to Get Brilliant Help Without Giving Up Your Judgement" },
+  "pages": [
+    { "id": "p1", "kind": "cover", "sectionNumber": null, "heading": null, "blocks": [] },
+    {
+      "id": "p2", "kind": "section", "sectionNumber": null, "heading": null,
+      "blocks": [
+        { "type": "paragraph", "text": "For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without." },
+        { "type": "paragraph", "text": "That could mean drafting a difficult letter, making sense of a confusing bill, planning a project, getting your CV moving again, helping a family member understand an official form, or building a useful tool, workflow, or app you always assumed was beyond you." },
+        { "type": "paragraph", "text": "In the last two years, that has started to change. Ordinary people in the UK, not just engineers, founders, or people working in big technology companies, now have a new option. They can ask for help from AI, shape the answer, try again, and make something useful from a blank page." },
+        { "type": "paragraph", "text": "This course is about that shift, and it has a much more ambitious end goal than simply helping you \"try AI\". If you complete the course and do the projects, the aim is to put you in the top 1% of people in the UK for practical, applied AI ability. Not theory. Not buzzwords. The real skill of using AI to research, write, analyse, build, automate, test, and create useful things that other people can see." },
+        { "type": "figure", "image": { "src": "images/fig-01.png", "width": 1672, "height": 941, "aspect": "16:9" }, "alt": "Paper-craft overview of GWTH projects and AI confidence", "caption": null, "figureNumber": "01", "treatment": "inline" },
+        { "type": "paragraph", "text": "The course is written first for non-technical adults. You do not need to be a programmer, data analyst, or IT person to start. But it is also useful if you are already technical and want to broaden what you can do. A developer may use it to become better at research, product thinking, business workflows, communication, and AI-assisted delivery. A marketer, accountant, operations manager, teacher, charity worker, or small business owner may use it to build tools they would never have attempted before." },
+        { "type": "paragraph", "text": "This is where work is heading. In the next year or two, many more people will become practical generalists. Not because everyone suddenly becomes an expert in everything, but because AI lets people step outside their old job boundaries with guidance. We can already see the shape of this in companies using AI and low-code tools. Anthropic has described non-technical teams such as marketing and data using AI coding tools to build tools and work through complex multi-step tasks. In the UK, companies such as Shell and Lloyds Banking Group have shown a similar direction with business employees building apps, automations, and AI-supported tools that help colleagues across the organisation." },
+        { "type": "paragraph", "text": "That is the kind of confidence GWTH is trying to build. You may arrive as a beginner, but the point is not to stay in a beginner box. The point is to become someone who can cross boundaries: from idea to tool, from messy problem to clear plan, from useful prompt to working project." },
+        { "type": "paragraph", "text": "Month 1 gives you the foundations and your first serious proof. You will learn how AI works well enough to use it properly, how to work with it as a colleague, how to choose tools, and how to use the six superpowers in real tasks. You will create practical artefacts such as research briefs, personal content, a first useful tool, a dashboard, career assets, and a FamilyBot-style project that can listen, organise, and share useful household or team information." },
+        { "type": "paragraph", "text": "Month 2 moves from personal prototypes to business-ready AI tools. You will learn how to organise projects professionally, keep versions of your work, store real data safely, publish working apps, test that they behave properly, and build AI systems that answer from trusted company information rather than guessing. You will also learn how businesses can make themselves easier for AI search and shopping assistants to understand. The two big capstone routes are a company knowledge and support assistant, called AskMyCo, and an AI business-consultant assistant, called FractionalBuddy. Those names will make sense later. For now, the important point is simple: you will build things that could be useful to an employer, a client, a small business, or a future collaborator." },
+        { "type": "paragraph", "text": "Month 3 is where the work becomes transformation-level. You will build towards an AI Readiness Assessment Tool: a system that can interview people in an organisation, capture spoken or written answers, organise the evidence, find patterns across teams, score how ready the organisation is for AI, and generate a practical roadmap and executive report. That is not a toy project. It is the kind of thing an AI transformation consultant would want in their toolkit." },
+        { "type": "figure", "image": { "src": "images/fig-02.png", "width": 1423, "height": 763, "aspect": "16:9" }, "alt": "Three-month GWTH roadmap from foundations to transformation-level project work", "caption": null, "figureNumber": "02", "treatment": "inline" },
+        { "type": "paragraph", "text": "If some of those words feel unfamiliar, that is completely fine. You have not started the course yet. You are not expected to know how a company knowledge assistant works, how an app gets published, or how an AI readiness tool is built today. The point of this first lesson is to show you where the path leads, not to ask you to understand every signpost before you have taken the first step." },
+        { "type": "paragraph", "text": "Across the course, your GWTH Score will help you see progress. It is not a school mark. Think of it as a practical signal of your applied AI ability: how confident you are, how good your judgement is, how up to date your skills are, and how much useful work you have actually created. Over time, that can become valuable career evidence. It gives you a clearer way to say, \"I do not just follow AI news; I can use AI well, across real tasks.\" If you want to show it to an employer, client, manager, collaborator, or your own network, you can. If you prefer to keep it private and use it only to guide your own progress, that is completely fine too." },
+        { "type": "paragraph", "text": "By the end, the aim is not that you have watched a set of videos. The aim is that you have a portfolio of useful work, a way to explain what you can now do, and enough practical confidence to be one of the people in your workplace, family, business, or local community who genuinely understands how to put AI to work." },
+        { "type": "paragraph", "text": "The course is not about chasing every new tool or pretending AI is magic. It is about learning how to use AI in ordinary life, with your judgement still firmly in charge." },
+        { "type": "paragraph", "text": "Welcome to GWTH." }
+      ]
+    },
+    {
+      "id": "p3", "kind": "section", "sectionNumber": "§ 1", "heading": "What this lesson is, and what it is not",
+      "blocks": [
+        { "type": "paragraph", "text": "We start with the map, because the tools make more sense once you know what they are for." },
+        { "type": "paragraph", "text": "This first lesson is not a chatbot comparison. We will not be ranking tools, choosing subscriptions, or showing you every button on a screen. Those things matter later, but they are not the best place to begin." },
+        { "type": "paragraph", "text": "By the end, you should have a clear first map of the course: what GWTH is for, the six main ways AI can be useful in your work and home life, and the simple habit that keeps you in charge from day one." },
+        { "type": "paragraph", "text": "You will also leave with your first practical task: a short personal document called *My AI Superpowers Wishlist*. It is the first thing in your GWTH portfolio, and it will help shape the rest of Month 1." },
+        { "type": "paragraph", "text": "Nothing here assumes you are technical. It does assume you are capable, curious, and busy. That is the level this course is written for." },
+        { "type": "figure", "image": { "src": "images/fig-03.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Lesson 1 focus: course map, six superpowers, and first portfolio wishlist", "caption": null, "figureNumber": "03", "treatment": "inline" }
+      ]
+    },
+    {
+      "id": "p4", "kind": "section", "sectionNumber": "§ 2", "heading": "What GWTH stands for",
+      "blocks": [
+        { "type": "paragraph", "text": "GWTH is short for *Growth With Tech and Humans*. The order of those words matters." },
+        { "type": "paragraph", "text": "**Growth** comes first because growth is the point. The aim is not novelty, gadgets, or keeping up with whatever is trending this week. We are here because there are things you want to do at work, at home, for yourself, or for your family, and AI can now help you do some of them better, sooner, or with more confidence than before." },
+        { "type": "paragraph", "text": "**Tech** comes second because technology is the lever, not the hero. You will hear a lot about model versions, benchmarks, agents, and feature launches. Most of that does not matter at the start. What matters is that a small set of AI abilities has become good enough, affordable enough, and easy enough to be useful in real life." },
+        { "type": "paragraph", "text": "**Humans** comes last because humans decide what matters. AI can draft, summarise, compare, suggest, organise, and sometimes build. It cannot decide what a good life looks like for you. It cannot know which family trade-off you will regret, what tone feels respectful in your workplace, or whether a plan fits the week you are actually living through." },
+        { "type": "paragraph", "text": "That is why one line sits underneath this whole course:" },
+        { "type": "pullQuote", "text": "**AI suggests. Humans decide.**" },
+        { "type": "figure", "image": { "src": "images/fig-04.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Growth With Tech and Humans pillars with the rule AI suggests, humans decide", "caption": null, "figureNumber": "04", "treatment": "inline" },
+        { "type": "paragraph", "text": "AI can be fast, fluent, and surprisingly useful. But you remain the adult in the room." }
+      ]
+    },
+    {
+      "id": "p5", "kind": "section", "sectionNumber": "§ 3", "heading": "Why this matters now, in the UK",
+      "blocks": [
+        { "type": "paragraph", "text": "Three things are true at the same time in 2026." },
+        { "type": "paragraph", "text": "The first is that AI is already here, but most people have not yet built the habit of using it in everyday work and life. According to Ofcom's *Online Nation 2025* report, roughly three in ten UK adults aged 16 and over had actively used a generative AI service. That means around seven in ten had not. So if you are starting today, you are not behind: most people are still learning how to use AI in everyday work and life." },
+        { "type": "paragraph", "text": "At the same time, many people are meeting AI without choosing to. Ofcom also found that AI-written summaries were appearing at the top of many UK Google searches, and more than half of UK adults said they saw those summaries often. So even if you have never opened a chatbot, AI may already be shaping the first answer you see when you search for something." },
+        { "type": "paragraph", "text": "The second thing is that the UK has decided to take AI skills seriously. The government's *AI Opportunities Action Plan* talks about the UK becoming an AI maker, not just an AI taker. Follow-up government reporting describes more than a million free AI courses delivered, with a target of upskilling ten million UK workers by 2030." },
+        { "type": "paragraph", "text": "That does not mean everyone needs to become an AI engineer. The same government analysis describes three broad groups. There are AI experts, who build the systems. There are AI specialists, who help organisations put the systems to work. And then there is a much larger group: AI implementers." },
+        { "type": "paragraph", "text": "AI implementers are people who use AI to do their existing work better. That might be a teaching assistant, a small business owner, a project manager, a charity administrator, a carer, a receptionist, a designer, a sales manager, or someone trying to get back into work after time away." },
+        { "type": "paragraph", "text": "That group is where most of us live." },
+        { "type": "paragraph", "text": "The evidence so far is not a simple story of robots replacing people. It is more often a story of tasks changing inside jobs. In the ONS Business Insights and Conditions Survey published on 2 April 2026, 26% of businesses reported using at least one type of AI technology, up eight percentage points from late March 2025. In the same wave, 5% of businesses using AI said their workforce headcount had reduced because of AI technologies." },
+        { "type": "paragraph", "text": "The third thing is that the boundary between \"technical\" and \"non-technical\" work is already moving. People in marketing, finance, operations, customer service, education, and management are beginning to build, automate, analyse, and test things that used to sit somewhere else in the organisation. They still need judgement, domain knowledge, taste, care, and responsibility. AI does not remove those things. It helps people turn them into working outputs." },
+        { "type": "paragraph", "text": "So the practical question is not \"will AI replace everyone?\" The better question is: \"Which parts of my life and work could become easier, clearer, faster, or more ambitious if I learnt to use this well?\"" },
+        { "type": "paragraph", "text": "That is the gap GWTH exists to close." },
+        { "type": "figure", "image": { "src": "images/fig-05.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "UK 2026 AI skills context: most adults are still learning, AI is shaping everyday work and life, non-technical people can build useful outputs", "caption": null, "figureNumber": "05", "treatment": "inline" }
+      ]
+    },
+    {
+      "id": "p6", "kind": "section", "sectionNumber": "§ 4", "heading": "The six AI superpowers",
+      "blocks": [
+        { "type": "paragraph", "text": "So what can AI actually do for an ordinary person in 2026?" },
+        { "type": "paragraph", "text": "We will use six categories. They are not scientific laws. They are a practical map. Six is enough to cover the important ground, and few enough to remember." },
+        { "type": "figure", "image": { "src": "images/fig-06.png", "width": 1313, "height": 830, "aspect": "3:2" }, "alt": "The six AI superpowers: research, content, thinking, building, data and automation", "caption": null, "figureNumber": "06", "treatment": "inline" },
+        { "type": "paragraph", "text": "For each one, I will explain what it is, where it shows up in real UK life, and the simple checking habit that keeps you safe." },
+        { "type": "heading", "level": 3, "text": "4.1 Research" },
+        { "type": "paragraph", "text": "Research means finding things out, summarising long things into short things, comparing options, and helping you understand a topic that is new or messy." },
+        { "type": "paragraph", "text": "This could be a confusing energy-tariff change. It could be a school's attendance policy. It could be comparing broadband providers in your area without giving up a whole Saturday. It could be catching up on a topic like dementia care, solar batteries, tax-free childcare, or the rules around a particular benefit, so that you can have a more informed conversation with someone else." },
+        { "type": "paragraph", "text": "The important point is that AI can reduce the fog. It can read quickly, pull out themes, explain things in plainer English, and say, \"Here are the three things that seem to matter most.\"" },
+        { "type": "paragraph", "text": "But research is also where the first verification habit matters most." },
+        { "type": "paragraph", "text": "For anything involving money, health, law, public services, or someone else's wellbeing, check the original source before acting. AI can help you understand a document, but it is not the document. It can summarise a council page, but it is not the council page. It can explain an NHS letter, but it is not the clinician." },
+        { "type": "paragraph", "text": "Use it to get your bearings. Then check the source that actually has authority." },
+        { "type": "figure", "image": { "src": "images/fig-07.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Research superpower: reduce the fog, then check the original source", "caption": null, "figureNumber": "07", "treatment": "inline" },
+        { "type": "heading", "level": 3, "text": "4.2 Content" },
+        { "type": "paragraph", "text": "Content means writing and rewriting. Drafting, improving, translating, shortening, softening, strengthening, and making a piece of writing fit the person who will read it." },
+        { "type": "paragraph", "text": "This is where many people first feel AI becoming useful." },
+        { "type": "paragraph", "text": "You might ask it to draft a polite but firm complaint to your council. You might turn a panicky late-night email into a calm version you can send on Monday morning. You might ask it to rewrite your CV after a long break from paid work. You might use it to explain an insurance claim clearly, translate a letter for a neighbour, or find the right first sentence for something emotional, like a eulogy, a wedding speech, or a message of condolence." },
+        { "type": "paragraph", "text": "The danger with AI writing is that it can sound smooth while not sounding like you. It may be too formal, too cheerful, too American, too corporate, or simply too vague." },
+        { "type": "paragraph", "text": "So the content habit is simple: read it out loud before you send it. If the words sound like someone pretending to be you, change them. If a sentence makes a claim you would not defend, remove it. If the tone is wrong for the person receiving it, reshape it. One useful meta-prompt is to ask the AI to interview you first: \"Ask me three questions about the audience, tone, and point before you draft.\"" },
+        { "type": "paragraph", "text": "AI can get you past the blank page. You still own the voice." },
+        { "type": "figure", "image": { "src": "images/fig-08.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Content superpower: AI helps draft, the human keeps the voice", "caption": null, "figureNumber": "08", "treatment": "inline" },
+        { "type": "heading", "level": 3, "text": "4.3 Thinking" },
+        { "type": "paragraph", "text": "Thinking means using AI as a patient sounding board. Not because it knows your life better than you do, but because it can help you slow a problem down." },
+        { "type": "paragraph", "text": "You might say, \"I am thinking of going part-time. Help me list the trade-offs honestly.\" Or, \"We are trying to decide whether Mum needs more care. What questions are we forgetting to ask?\" Or, \"I have eighteen things on my to-do list and three hours. Help me sort what matters most.\"" },
+        { "type": "paragraph", "text": "This is one of the most valuable uses of AI, and one of the least obvious. Many beginners think AI is mainly there to give answers, but often it is better at helping you ask better questions." },
+        { "type": "paragraph", "text": "It can help you compare options. It can challenge an assumption. It can show you what a reasonable person on the other side might say. It can turn a worry into a list, and a list into a plan. Here too, meta-prompting helps: before asking for advice, ask the AI what it needs to know to give you a better answer." },
+        { "type": "paragraph", "text": "The thinking habit is to ask one follow-up question before you accept the answer:" },
+        { "type": "pullQuote", "text": "\"What would change your answer?\"" },
+        { "type": "paragraph", "text": "or:" },
+        { "type": "pullQuote", "text": "\"What would someone who disagreed with you say?\"" },
+        { "type": "paragraph", "text": "Those questions are powerful because AI often sounds certain. Asking it to explain what might weaken its answer makes the advice less shiny and more useful." },
+        { "type": "figure", "image": { "src": "images/fig-09.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Thinking superpower: use AI as a sounding board and ask what would change the answer", "caption": null, "figureNumber": "09", "treatment": "inline" },
+        { "type": "heading", "level": 3, "text": "4.4 Building" },
+        { "type": "paragraph", "text": "Building means turning an idea into something useful: start small, test it, then grow it into a stronger tool, workflow, app, or AI system when the need is real." },
+        { "type": "paragraph", "text": "That might be a checklist, a tracker, a spreadsheet, a reusable prompt, a simple web page, or a tiny tool that does one job for you. You do not need to start by writing code yourself. In many cases, AI can write the first version and explain what it has done." },
+        { "type": "paragraph", "text": "This is the superpower many beginners assume is \"not for people like me\". It is. Not because everyone needs to become a software developer, but because the first version of a tool, workflow, or app is now much easier to make, and those first versions can grow." },
+        { "type": "paragraph", "text": "Imagine a packing checklist that asks where you are going, who is coming, and what the weather is likely to be. Imagine a reading-log tracker for a child that spots when the routine has slipped. Imagine a button that rewrites an email kinder, firmer, or shorter. Imagine a simple website for an allotment committee, a charity event, a local club, or a family history project." },
+        { "type": "paragraph", "text": "None of those needs to be a business, and none of them needs to be impressive on LinkedIn. They are useful because they remove friction from real life." },
+        { "type": "paragraph", "text": "The building habit is: test it with real examples before you trust it. AI can produce a tool that looks right but behaves wrongly in a corner you did not notice. Try the boring cases. Try the awkward cases. Try the thing you will actually use next Tuesday. Start small, test it with real examples, and then grow the useful parts iteratively." },
+        { "type": "figure", "image": { "src": "images/fig-10.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Building superpower: start small, test, improve, and grow useful tools iteratively", "caption": null, "figureNumber": "10", "treatment": "inline" },
+        { "type": "heading", "level": 3, "text": "4.5 Data" },
+        { "type": "paragraph", "text": "Data means asking plain-English questions of spreadsheets, tables, lists, forms, survey answers, or messy notes." },
+        { "type": "paragraph", "text": "You might upload a simple spreadsheet and ask, \"Where does most of this spending go?\" You might paste 200 customer reviews and ask, \"What are the three things people keep complaining about?\" You might take a parent survey and ask, \"What are the most common themes, and what are two comments that show each theme?\" You might look at a sleep tracker, exercise log, or timesheet and ask what changed in November." },
+        { "type": "paragraph", "text": "This does not mean blindly trusting a chart. It means using AI to help you see patterns that would take longer by hand." },
+        { "type": "paragraph", "text": "The data habit is to check a few rows yourself and make sure the totals still make sense. If a column has been misread, the answer can look polished and still be wrong. Open a few original rows, compare the totals, and ask which rows or assumptions created any surprising chart." },
+        { "type": "paragraph", "text": "AI can help you see the pattern. You still check whether the pattern is real." },
+        { "type": "figure", "image": { "src": "images/fig-11.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Data superpower: find patterns, open original rows, and check totals", "caption": null, "figureNumber": "11", "treatment": "inline" },
+        { "type": "heading", "level": 3, "text": "4.6 Automation and agents" },
+        { "type": "paragraph", "text": "Automation means AI doing a chain of small steps for you. You may also hear the word \"agent\". In plain English, an agent is an AI system that can carry out more than one step towards a goal, often using tools along the way." },
+        { "type": "paragraph", "text": "For example, one click might turn a meeting recording into notes, action points, and a draft follow-up email. A weekly briefing might collect the important messages from your inbox and group them by topic. A small business owner might ask an AI assistant to draft replies to routine enquiries, leaving only the unusual ones for a human. A research assistant might read a set of articles and return a summary while you do something else." },
+        { "type": "paragraph", "text": "This is the newest of the six superpowers, and it is moving quickly. It is also the one where beginners need the clearest boundary." },
+        { "type": "paragraph", "text": "The beginner automation habit is this: do not let AI take the final action on anything that matters." },
+        { "type": "paragraph", "text": "If something sends, pays, posts, files, signs, deletes, books, or commits you to a decision, you click the final button. AI can prepare the action. You approve it. Later, some automations can approve low-risk cases against clear criteria; while learning, keep human approval for anything consequential." },
+        { "type": "figure", "image": { "src": "images/fig-12.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Automation superpower: AI prepares, criteria handle low risk, humans approve consequences", "caption": null, "figureNumber": "12", "treatment": "inline" },
+        { "type": "paragraph", "text": "That single rule prevents a lot of trouble." },
+        { "type": "heading", "level": 3, "text": "Pause for a moment" },
+        { "type": "paragraph", "text": "If I gave you a Saturday afternoon and said, \"Use AI for one useful thing\", which of the six would you reach for first?" },
+        { "type": "paragraph", "text": "Research. Content. Thinking. Building. Data. Automation." },
+        { "type": "paragraph", "text": "Keep your answer in mind. You will use it in your first project." }
+      ]
+    },
+    {
+      "id": "p7", "kind": "section", "sectionNumber": "§ 5", "heading": "The honest limits: the jagged frontier",
+      "blocks": [
+        { "type": "paragraph", "text": "Before we go further, there is one limit worth naming clearly." },
+        { "type": "paragraph", "text": "AI is powerful, but it is uneven. It is brilliant at some tasks that look hard, and surprisingly poor at some tasks that look easy." },
+        { "type": "paragraph", "text": "Researchers often call this the *jagged frontier*. Imagine a border on a map, but instead of a neat line, it has spikes, dents, and odd corners. On one side are tasks AI can handle well. On the other side are tasks where it becomes unreliable. The awkward part is that the border is not always obvious until you cross it." },
+        { "type": "paragraph", "text": "One well-known Harvard Business School study showed this clearly. Researchers gave experienced consultants access to AI for a set of real consulting tasks. On many tasks, the AI-assisted consultants did better: more tasks completed, faster, and at higher quality. But on a task designed to sit just outside what AI could reliably handle, the AI-assisted group did worse than the group without AI." },
+        { "type": "paragraph", "text": "That is the lesson. AI help can make you better. It can also make a wrong answer feel more convincing." },
+        { "type": "paragraph", "text": "Three honest things follow from that." },
+        { "type": "paragraph", "text": "First, AI can invent details. People often call this \"hallucination\". It means the system produces an answer that sounds fluent but is not true, or is not supported by the information it was given." },
+        { "type": "paragraph", "text": "Second, AI can sound certain when it should be cautious. It often tries to be helpful, agreeable, and confident. That can be useful when you need momentum, but risky when you need accuracy." },
+        { "type": "paragraph", "text": "Third, the frontier is moving. Things that were not possible eighteen months ago are now ordinary. Things that are unreliable today may improve in six months. So the question is not simply, \"Can AI do this?\" The better question is, \"Can AI do this well enough today, for this situation, with the checks I can apply?\"" },
+        { "type": "paragraph", "text": "That is why the GWTH rule matters:" },
+        { "type": "pullQuote", "text": "**AI suggests. Humans decide.**" },
+        { "type": "paragraph", "text": "If you leave this lesson thinking AI is magic, you will be disappointed. If you leave thinking it is pointless, you will miss useful opportunities. The grown-up position is more practical: AI is a powerful, uneven tool. The people who learn to use it well will often have an advantage. But nobody is being asked to hand over their judgement." },
+        { "type": "figure", "image": { "src": "images/fig-13.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Jagged frontier: ask whether AI can do this well enough today with checks", "caption": null, "figureNumber": "13", "treatment": "inline" }
+      ]
+    },
+    {
+      "id": "p8", "kind": "section", "sectionNumber": "§ 6", "heading": "Demonstration: a council letter",
+      "blocks": [
+        { "type": "paragraph", "text": "Let us make this concrete." },
+        { "type": "paragraph", "text": "This is the kind of letter that can sit on the kitchen table for a fortnight. Not because it is impossible to understand, but because it takes concentration, and life is already full." },
+        { "type": "paragraph", "text": "Here is the sort of prompt I might type into a chatbot. The wording matters because it gives the AI a clear job and clear boundaries." },
+        { "type": "code", "language": "text", "code": "I'm a UK adult and I've received this council parking-permit letter.\nPlease do four things, in this order:\n\n1. Summarise the letter in plain English in five lines or fewer.\n2. List the actions I need to take, with dates.\n3. Tell me anything that is unclear or that I should check on the council's website before acting.\n4. If I want to challenge the fee increase, draft a polite, clear paragraph in British English that I can use as a starting point.\n\nDo not invent details. If the letter doesn't say something, say \"not stated\"." },
+        { "type": "paragraph", "text": "There are five useful choices in that prompt." },
+        { "type": "paragraph", "text": "I said I am in the UK. I asked for a short plain-English summary. I gave the outputs in a numbered order. I asked for British English. And I added the most important line: \"Do not invent details. If the letter doesn't say something, say 'not stated'.\"" },
+        { "type": "paragraph", "text": "That last line is not magic, but it helps. It tells the AI that gaps matter." },
+        { "type": "paragraph", "text": "The AI might then give me a summary, an action list, a list of things to check, and a draft challenge paragraph. None of that is the final answer. My job is to compare the summary against the original letter, check the dates, go to the council website if needed, and decide whether the draft paragraph says what I mean." },
+        { "type": "paragraph", "text": "That is the whole course in miniature: AI makes the fog thinner, and you decide what to do." },
+        { "type": "figure", "image": { "src": "images/fig-14.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Council letter demonstration as Excalidraw prompt structure: summarise, list actions, flag checks, draft paragraph", "caption": null, "figureNumber": "14", "treatment": "inline" }
+      ]
+    },
+    {
+      "id": "p9", "kind": "section", "sectionNumber": "§ 7", "heading": "The shape of the course",
+      "blocks": [
+        { "type": "paragraph", "text": "This first lesson matters because it is the doorway into the whole course, so the wider promise needs to be clear." },
+        { "type": "paragraph", "text": "GWTH is not a three-day introduction stretched across three months. It is a practical progression from beginner confidence to serious applied AI capability. The course starts gently because that is the right way to teach, but the destination is ambitious: by the end, if you have done the work, the aim is that you are in the top 1% of UK adults for applied AI." },
+        { "type": "paragraph", "text": "That does not mean you know more AI trivia than everyone else. It means you can do things most people still cannot do. You can brief AI properly, check it, use different tools for different jobs, build useful tools and apps from small tested starts, work with data, create useful content, design AI helpers and repeatable workflows, test what you make, and explain your work clearly enough that someone else can trust it." },
+        { "type": "paragraph", "text": "**Month 1 is foundation, confidence, and visible proof.** You start with the six superpowers, the AI colleague model, and the useful parts of how AI works: context windows, models, memory, privacy, subscriptions, APIs, and multimodal inputs. Then you use those ideas in practical lessons on research, content, thinking, building, data, automation, and agents." },
+        { "type": "paragraph", "text": "Month 1 also includes work that matters for jobs and confidence. You will improve career assets such as a CV or LinkedIn profile, practise job-search and interview support, make ideas visible through presentations or simple web pages, build a dashboard, learn about AI power tools such as connectors and command-line tools, and choose a sensible coding or building stack. The capstone is a FamilyBot or Team Meeting Bot style project: a helpful AI system that can take voice notes or meetings, turn them into text, extract tasks, meals, events, shopping or actions, and share useful outputs in a way real people can use." },
+        { "type": "paragraph", "text": "By the end of Month 1, you should already have proof. Not just notes, but a portfolio: prompts, checked research, improved writing, a first tool, career assets, a dashboard or page, and a personal AI helper project. You should feel that AI is no longer something happening \"out there\". It is something you can direct." },
+        { "type": "figure", "image": { "src": "images/fig-15.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Month 1 portfolio proof stack: prompts, research, writing, tool, dashboard, AI helper project", "caption": null, "figureNumber": "15", "treatment": "inline" },
+        { "type": "paragraph", "text": "**Month 2 is where you become a practical AI builder.** The work moves from personal prototypes to business-ready tools. You learn how to write a clear brief for an app, keep the project organised, use AI coding assistants, save your work properly, store customer or business information in a database, publish an app so other people can try it, test it in a browser, protect private information, manage cost, and work at a pace that does not overwhelm you." },
+        { "type": "paragraph", "text": "Month 2 also teaches the business-grade versions of the superpowers. Research becomes a company knowledge system: instead of asking AI to guess from memory, you build a tool that searches trusted documents and answers with evidence. Building becomes working app development. Data becomes dashboards, reports, and quality checks. Automation becomes workflows where AI can carry out steps, but a human still approves anything important. Content becomes brand assets, proposals, slide decks, and websites. You will also learn how UK businesses can make their products and services easier for AI assistants to understand, compare, and recommend." },
+        { "type": "paragraph", "text": "The two main Month 2 capstone routes make that concrete. One is a company knowledge and support assistant, which we call AskMyCo. Imagine a small business, charity, or team being able to ask questions about its own policies, services, FAQs, documents, and processes, and get answers with links back to the evidence. The other is an AI business-consultant assistant, which we call FractionalBuddy. Imagine a tool that helps a team understand a problem, plan next steps, research options, write useful documents, and keep human approval in the loop. These are not pretend exercises. They are portfolio projects that can support a job move, an internal promotion conversation, a freelance offer, or a small-business consultancy pitch." },
+        { "type": "paragraph", "text": "**Month 3 is transformation-level work.** This is where the course moves from \"I can build useful AI tools\" to \"I can help an organisation understand what to do with AI.\" The main capstone is an AI Readiness Assessment Tool. It is designed to interview people in a business, gather evidence, understand workflows and blockers, organise what it learns into a searchable knowledge base, find themes across teams, score how ready the organisation is for AI, and generate a practical transformation roadmap." },
+        { "type": "paragraph", "text": "That Month 3 project brings together spoken interviews, consent and UK governance, company knowledge systems, pattern-finding, readiness scoring, cost and impact thinking, workflow redesign, AI helpers that can carry out steps safely, model choices, adoption planning, dashboards, executive reports, and a 90-day AI champion playbook. It is advanced, but it is built step by step from skills you have already practised." },
+        { "type": "paragraph", "text": "Again, do not worry if some of that sounds like a lot. It is a lot. That is why the course takes you there gradually. At this stage, you only need to understand the promise: we start with ordinary tasks, then build towards serious projects that would put you far ahead of most people who have only used AI as a search box or a writing shortcut." },
+        { "type": "paragraph", "text": "This is where the career value becomes much more visible. GWTH cannot promise anyone a job or a promotion; no honest course can. What it can do is help you build evidence that you are not just interested in AI, you can use it. More than that, you can use it across research, content, data, building, automation, agents, governance, and transformation. That matters in interviews, appraisals, small-business conversations, career changes, freelance work, and consultancy." },
+        { "type": "paragraph", "text": "Across all three months, your GWTH Score gives you a way to see that growth. It is not a school mark and not a leaderboard. It is a practical scorecard for confidence, judgement, tool use, project work, safety habits, portfolio evidence, and how current your AI skills are becoming. For your career, that matters because AI ability is hard to prove with vague phrases like \"I am good with AI\". A visible score, backed by real projects, gives you something stronger: evidence that you are building, testing, improving, and staying up to date. You may choose to show it off when it helps you, or keep it private when it does not. The score belongs to you." },
+        { "type": "figure", "image": { "src": "images/fig-16.png", "width": 1672, "height": 941, "aspect": "16:9" }, "alt": "Paper-craft GWTH Score and portfolio evidence card", "caption": null, "figureNumber": "16", "treatment": "inline" },
+        { "type": "paragraph", "text": "That is the journey: from beginner to someone with serious applied AI proof. Not scary, not theoretical, and not easy in the shallow sense. Useful, ambitious, and built one project at a time." }
+      ]
+    },
+    {
+      "id": "p10", "kind": "practice", "sectionNumber": "§ 8", "heading": "Your first project: the Superpowers Wishlist",
+      "blocks": [
+        { "type": "paragraph", "text": "The Build section below is where you actually make the first portfolio artefact: *My AI Superpowers Wishlist*." },
+        { "type": "paragraph", "text": "For now, the important idea is simple. Before you choose tools, name the useful things you want AI to help with across work, career, home, family, hobbies, confidence, and admin. The six superpowers are the map. Your wishlist is the route." },
+        { "type": "paragraph", "text": "By the end of the course, the goal is not that you have watched a lot of videos. The goal is that many of the useful things on your list have started moving, because you learnt how to work with AI without handing it the steering wheel." }
+      ]
+    },
+    {
+      "id": "p11", "kind": "recap", "sectionNumber": "§ 9", "heading": "Recap",
+      "blocks": [
+        { "type": "paragraph", "text": "Three things to take with you. GWTH is human-first: AI is the lever, and you decide what to lift. The six superpowers give you a practical map: research, content, thinking, building, data, and automation. And the frontier is jagged, which means AI is excellent at some things and unreliable at others. That is why the rule matters: AI suggests, humans decide." },
+        { "type": "figure", "image": { "src": "images/fig-17.png", "width": 1600, "height": 900, "aspect": "16:9" }, "alt": "Lesson 1 recap: human-first, six superpowers, jagged frontier, humans decide", "caption": null, "figureNumber": "17", "treatment": "inline" },
+        { "type": "paragraph", "text": "Most UK adults are still learning how to use generative AI in everyday work and life. You are not behind." }
+      ]
+    },
+    {
+      "id": "p12", "kind": "bridge", "sectionNumber": "§ 10", "heading": "Bridge to L02",
+      "blocks": [
+        { "type": "paragraph", "text": "Next lesson is *Your AI Colleague: How to Get Brilliant Help Without Giving Up Your Judgement*." },
+        { "type": "paragraph", "text": "We will treat AI not as a magic answer machine, but as a very fast colleague: useful, tireless, sometimes surprising, and occasionally wrong about something obvious." },
+        { "type": "paragraph", "text": "Bring your wishlist. We will use it in the first activity." },
+        { "type": "paragraph", "text": "See you there." }
+      ]
+    }
+  ],
+  "footnotes": [],
+  "notes": []
+}
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  // ============ safeStorage shim ============
+  const _mem = {};
+  const safeStorage = {
+    getItem(k) { try { return localStorage.getItem(k); } catch (e) { return k in _mem ? _mem[k] : null; } },
+    setItem(k, v) { try { localStorage.setItem(k, v); } catch (e) { _mem[k] = String(v); } },
+    removeItem(k) { try { localStorage.removeItem(k); } catch (e) { delete _mem[k]; } }
+  };
+  const STATE_KEY = 'gwth_l01_v3';
+  const FEEDBACK_KEY = 'gwth_l01_feedback_v3';
+  const PREFS_KEY = 'gwth_l01_prefs_v3';
+
+  // ============ DATA ============
+  let LESSON;
+  try {
+    LESSON = JSON.parse(document.getElementById('lessonData').textContent);
+  } catch (e) {
+    console.error('[viewer] Failed to parse lesson JSON', e);
+    LESSON = { id: 'unknown', title: 'Lesson failed to load', lead: '', module: {}, pages: [], position: {} };
+  }
+
+  // Mock audio segments — covers ~84s for paragraphs on page 2
+  const TIMINGS = {
+    segments: [
+      { start: 0,     end: 9.5,   pageId: 'p2', blockIndex: 0 },
+      { start: 9.5,   end: 22,    pageId: 'p2', blockIndex: 1 },
+      { start: 22,    end: 36,    pageId: 'p2', blockIndex: 2 },
+      { start: 36,    end: 55,    pageId: 'p2', blockIndex: 3 },
+      { start: 55,    end: 64,    pageId: 'p2', blockIndex: 4 },
+      { start: 64,    end: 83.77, pageId: 'p2', blockIndex: 5 }
+    ]
+  };
+
+  // ============ STATE ============
+  let prefs;
+  try {
+    prefs = JSON.parse(safeStorage.getItem(PREFS_KEY) || '{}');
+  } catch (e) { prefs = {}; }
+
+  const state = {
+    currentPage: 0,
+    audioPlaying: false,
+    speed: prefs.speed || 1,
+    autoContinue: prefs.autoContinue !== false,
+    feedbackMode: false,
+    composeFor: null,
+    mobileBreak: false
+  };
+
+  let FEEDBACK = [];
+  try {
+    FEEDBACK = JSON.parse(safeStorage.getItem(FEEDBACK_KEY) || '[]');
+  } catch (e) { FEEDBACK = []; }
+
+  // Restore last-viewed page
+  try {
+    const saved = JSON.parse(safeStorage.getItem(STATE_KEY) || '{}');
+    if (typeof saved.currentPage === 'number') {
+      state.currentPage = Math.max(0, Math.min(LESSON.pages.length - 1, saved.currentPage));
+    }
+  } catch (e) {}
+
+  // ============ UTILS ============
+  const md = s => String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code class="inline">$1</code>');
+
+  const fmtTime = s => {
+    if (!isFinite(s) || s < 0) s = 0;
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  const pages = () => LESSON.pages;
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+  function pageNumLabel(idx) {
+    return String(idx + 1).padStart(2, '0');
+  }
+
+  function pageDisplayHeading(p, idx) {
+    if (p.heading) return p.heading;
+    if (p.kind === 'cover') return 'Cover';
+    if (idx === 1) return 'Where this begins';
+    return 'Reading';
+  }
+
+  function pageFeedbackCount(pageId) {
+    return FEEDBACK.filter(f => f.pageId === pageId).length;
+  }
+
+  // ============ OUTLINE ============
+  function renderOutline() {
+    const list = $('#outlineList');
+    if (!list) return;
+    const total = pages().length;
+    $('#outlineTotal').textContent = `${total} pages`;
+    list.innerHTML = pages().map((p, i) => {
+      const heading = pageDisplayHeading(p, i);
+      const fbCount = pageFeedbackCount(p.id);
+      return `<li class="outline-item ${i === state.currentPage ? 'is-active' : ''}"
+                  data-page-idx="${i}"
+                  data-kind="${p.kind}"
+                  data-has-feedback="${fbCount > 0}"
+                  role="button" tabindex="0">
+        <span class="ol-num">${pageNumLabel(i)}</span>
+        <span class="ol-label"><span class="ol-kind-dot"></span>${heading}</span>
+        <span class="ol-feedback" title="${fbCount} feedback note${fbCount === 1 ? '' : 's'}"></span>
+      </li>`;
+    }).join('');
+    list.querySelectorAll('.outline-item').forEach(el => {
+      el.addEventListener('click', () => {
+        goToPage(parseInt(el.dataset.pageIdx, 10));
+        if (state.mobileBreak) closeMobileOutline();
+      });
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          goToPage(parseInt(el.dataset.pageIdx, 10));
+          if (state.mobileBreak) closeMobileOutline();
+        }
+      });
+    });
+  }
+
+  // ============ BLOCK RENDERING ============
+  function renderBlock(block, pageId, i) {
+    const fb = FEEDBACK.find(f => f.pageId === pageId && f.blockIndex === i);
+    const fbAttr = fb ? 'data-has-feedback="true"' : '';
+    switch (block.type) {
+      case 'paragraph':
+        return `<div class="block b-para" ${fbAttr} data-block-idx="${i}" data-page-id="${pageId}"><p>${md(block.text)}</p></div>`;
+      case 'heading': {
+        const lvl = Math.min(Math.max(block.level || 3, 3), 4);
+        const m = String(block.text).match(/^(\d+\.\d+)\s+(.+)$/);
+        const h = m
+          ? `<span class="h-num">${m[1]}</span><span>${m[2]}</span>`
+          : `<span>${block.text}</span>`;
+        return `<div class="block b-heading" ${fbAttr} data-block-idx="${i}" data-page-id="${pageId}"><h${lvl}>${h}</h${lvl}></div>`;
+      }
+      case 'pullQuote':
+        return `<div class="block b-pullquote" ${fbAttr} data-block-idx="${i}" data-page-id="${pageId}"><blockquote>${md(block.text)}</blockquote></div>`;
+      case 'code': {
+        const safe = String(block.code || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return `<div class="block b-code" ${fbAttr} data-block-idx="${i}" data-page-id="${pageId}"><pre>${safe}</pre></div>`;
+      }
+      case 'figure': {
+        const src = block.image ? block.image.src : '';
+        const alt = block.alt || '';
+        const num = block.figureNumber || '';
+        const cap = block.caption || alt;
+        return `<div class="block b-figure" ${fbAttr} data-block-idx="${i}" data-page-id="${pageId}">
+          <div class="figure-frame" data-img="${src}" data-alt="${alt}">
+            <img src="${src}" alt="${alt}" loading="lazy" decoding="async">
+          </div>
+          <div class="figure-cap"><span class="num">Fig. ${num}</span><span class="lab">${cap}</span></div>
+        </div>`;
+      }
+      default:
+        return '';
+    }
+  }
+
+  // ============ PAGE RENDERING ============
+  function renderCover() {
+    const moduleTitle = LESSON.module ? LESSON.module.title : '';
+    const updated = LESSON.updatedAt || '';
+    const total = LESSON.position ? LESSON.position.total : '';
+    return `<div class="page is-current cover" data-page-id="${LESSON.pages[0].id}" data-page-idx="0" data-kind="cover">
+      <div class="page-kicker">
+        <span class="kicker-dot"></span>
+        <span class="kicker-strong">${moduleTitle} · Lesson 01</span>
+        <span class="sep"></span>
+        <span>Beginner · 12 minutes</span>
+      </div>
+      <h1 class="cover-title">${LESSON.title}</h1>
+      <p class="cover-lead">${md(LESSON.lead)}</p>
+
+      <div class="cover-meta">
+        <div class="cover-meta-item"><span>Read</span><strong>~12 min</strong></div>
+        <div class="cover-meta-item"><span>Level</span><strong>Beginner</strong></div>
+        <div class="cover-meta-item"><span>Updated</span><strong>${updated}</strong></div>
+        <div class="cover-meta-item"><span>Position</span><strong>1 of ${total}</strong></div>
+      </div>
+
+      <div class="intro-frame" id="introFrame">
+        <video id="introVideo" preload="metadata" playsinline poster="">
+          <source src="video/intro-placeholder.mp4" type="video/mp4">
+        </video>
+        <div class="intro-poster" id="introPoster">
+          <button class="intro-play" id="introPlayBtn" type="button" aria-label="Play intro">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 21,12 6,21"/></svg>
+          </button>
+          <span class="intro-label">Lesson intro · 6 s preview</span>
+        </div>
+      </div>
+      <div class="intro-meta">
+        <span class="lab">Intro</span>
+        <span>Placeholder video</span>
+        <span class="intro-meta-dot"></span>
+        <span>Audio narration available below</span>
+      </div>
+
+      <a class="cover-start" href="#" id="coverStart">
+        <div class="cover-start-text">
+          <strong>Ready when you are</strong>
+          Start reading. The audio narration will play below as you go.
+        </div>
+        <button class="cover-start-btn" type="button">
+          <span>Start the lesson</span>
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,3 9,7 3,11"/></svg>
+        </button>
+      </a>
+
+      ${pageFoot(0)}
+    </div>`;
+  }
+
+  function renderPractice(p, idx) {
+    const blocksHtml = p.blocks.map((b, i) => renderBlock(b, p.id, i)).join('');
+    return `<div class="page is-current" data-page-id="${p.id}" data-page-idx="${idx}" data-kind="practice">
+      ${pageHead(p, idx)}
+      ${blocksHtml}
+      <div class="build-block">
+        <div class="bb-kicker"><span class="dot"></span>Your first build</div>
+        <div class="bb-title">Make your AI Superpowers Wishlist</div>
+        <p class="bb-lead">A short personal document. The first item in your GWTH portfolio.</p>
+
+        <div class="build-video" id="buildVideo">
+          <video preload="metadata" playsinline>
+            <source src="video/build-placeholder.mp4" type="video/mp4">
+          </video>
+          <div class="build-poster" id="buildPoster">
+            <button class="play-circle" id="buildPlayBtn" type="button" aria-label="Play build walkthrough">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 21,12 6,21"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <ol class="bb-steps">
+          <li><span class="step-num">01</span><span>Open a fresh document. Title it <em>My AI Superpowers Wishlist</em>.</span></li>
+          <li><span class="step-num">02</span><span>For each of the six superpowers (research, content, thinking, building, data, automation), write one thing you would use it for next week.</span></li>
+          <li><span class="step-num">03</span><span>Star the one that would make the biggest difference. That is where your first real project lives.</span></li>
+          <li><span class="step-num">04</span><span>Save it. You will use this in Lesson 02.</span></li>
+        </ol>
+
+        <div class="bb-foot">
+          <span class="status-dot"></span>
+          <span>Build · 4 steps · 15 min</span>
+          <button class="open-build" type="button">Open build workspace</button>
+        </div>
+      </div>
+      ${pageFoot(idx)}
+    </div>`;
+  }
+
+  function renderSection(p, idx) {
+    const blocksHtml = p.blocks.map((b, i) => renderBlock(b, p.id, i)).join('');
+    return `<div class="page is-current" data-page-id="${p.id}" data-page-idx="${idx}" data-kind="${p.kind}">
+      ${pageHead(p, idx)}
+      ${blocksHtml}
+      ${pageFoot(idx)}
+    </div>`;
+  }
+
+  function pageHead(p, idx) {
+    if (idx === 1 && !p.heading && !p.sectionNumber) return '';
+    if (!p.heading && !p.sectionNumber) return '';
+    const kickerLeft = p.sectionNumber || (p.kind === 'recap' ? 'Recap' : p.kind === 'bridge' ? 'Bridge' : '');
+    const kickerRight = `Page ${pageNumLabel(idx)} of ${pageNumLabel(pages().length - 1)}`;
+    return `<header class="page-head">
+      <div class="page-kicker">
+        <span class="kicker-dot"></span>
+        ${kickerLeft ? `<span class="kicker-strong">${kickerLeft}</span><span class="sep"></span>` : ''}
+        <span>${kickerRight}</span>
+      </div>
+      ${p.heading ? `<h2 class="page-heading">${p.heading}</h2>` : ''}
+    </header>`;
+  }
+
+  function pageFoot(idx) {
+    const total = pages().length;
+    const hasNext = idx < total - 1;
+    const hasPrev = idx > 0;
+    let nextCard = '';
+    if (hasNext) {
+      const nextPage = pages()[idx + 1];
+      const nextHeading = pageDisplayHeading(nextPage, idx + 1);
+      nextCard = `<a class="next-card" href="#" data-next-page="${idx + 1}" data-next-kind="${nextPage.kind}">
+        <div>
+          <div class="nc-meta">Next · Page ${pageNumLabel(idx + 1)}</div>
+          <div class="nc-title">${nextHeading}</div>
+        </div>
+        <span class="nc-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg></span>
+      </a>`;
+    } else {
+      const nextLesson = LESSON.next ? LESSON.next.title : null;
+      if (nextLesson) {
+        nextCard = `<a class="next-card" href="#" data-next-kind="bridge">
+          <div>
+            <div class="nc-meta">Next lesson</div>
+            <div class="nc-title">${nextLesson}</div>
+          </div>
+          <span class="nc-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg></span>
+        </a>`;
+      }
+    }
+    const prevHeading = hasPrev ? pageDisplayHeading(pages()[idx - 1], idx - 1) : '';
+    const nextHeading = hasNext ? pageDisplayHeading(pages()[idx + 1], idx + 1) : '';
+    return `<div class="page-foot">
+      ${nextCard}
+      <nav class="page-pagi" aria-label="Page navigation">
+        <div class="prev">${hasPrev ? `<a href="#" data-prev-page="${idx - 1}">← Page ${pageNumLabel(idx - 1)} · ${prevHeading}</a>` : ''}</div>
+        <span class="mid">${pageNumLabel(idx)} / ${String(total).padStart(2, '0')}</span>
+        <div class="next">${hasNext ? `<a href="#" data-next-page="${idx + 1}">Page ${pageNumLabel(idx + 1)} · ${nextHeading} →</a>` : ''}</div>
+      </nav>
+    </div>`;
+  }
+
+  function renderCurrentPage() {
+    const reader = $('#reader');
+    const p = pages()[state.currentPage];
+    if (!p) {
+      reader.innerHTML = '<div style="padding:60px;text-align:center;color:var(--muted);">Page not found.</div>';
+      return;
+    }
+    let html;
+    if (p.kind === 'cover') html = renderCover();
+    else if (p.kind === 'practice') html = renderPractice(p, state.currentPage);
+    else html = renderSection(p, state.currentPage);
+    reader.innerHTML = html;
+
+    // Hook up cover start button
+    const startBtn = document.getElementById('coverStart');
+    if (startBtn) {
+      startBtn.addEventListener('click', e => { e.preventDefault(); goToPage(1); });
+    }
+    // Intro video
+    const introBtn = document.getElementById('introPlayBtn');
+    const introPoster = document.getElementById('introPoster');
+    const introVideo = document.getElementById('introVideo');
+    if (introBtn && introVideo) {
+      introBtn.addEventListener('click', () => {
+        introVideo.play();
+        introPoster.classList.add('is-hidden');
+        introVideo.controls = true;
+      });
+    }
+    // Build video
+    const buildBtn = document.getElementById('buildPlayBtn');
+    const buildPoster = document.getElementById('buildPoster');
+    const buildVideo = document.querySelector('#buildVideo video');
+    if (buildBtn && buildVideo) {
+      buildBtn.addEventListener('click', () => {
+        buildVideo.play();
+        buildPoster.classList.add('is-hidden');
+        buildVideo.controls = true;
+      });
+    }
+
+    // Hook up next/prev buttons
+    reader.querySelectorAll('[data-next-page]').forEach(el => {
+      el.addEventListener('click', e => { e.preventDefault(); goToPage(parseInt(el.dataset.nextPage, 10)); });
+    });
+    reader.querySelectorAll('[data-prev-page]').forEach(el => {
+      el.addEventListener('click', e => { e.preventDefault(); goToPage(parseInt(el.dataset.prevPage, 10)); });
+    });
+    // Lightbox on figure
+    reader.querySelectorAll('.figure-frame').forEach(el => {
+      el.addEventListener('click', () => {
+        if (state.feedbackMode) return;
+        openLightbox(el.dataset.img, el.dataset.alt);
+      });
+    });
+
+    // Feedback mode block clicks
+    if (state.feedbackMode) wireFeedbackBlockClicks(reader);
+
+    // Reset scroll
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // ============ NAVIGATION ============
+  function goToPage(idx) {
+    const total = pages().length;
+    if (idx < 0 || idx >= total) return;
+    state.currentPage = idx;
+    safeStorage.setItem(STATE_KEY, JSON.stringify({ currentPage: idx }));
+    renderOutline();
+    renderCurrentPage();
+    updateProgress();
+    updatePlayerNow();
+    updateTopbar();
+  }
+
+  function updateProgress() {
+    const total = pages().length;
+    const pct = ((state.currentPage + 1) / total) * 100;
+    const fill = document.getElementById('progressFill');
+    if (fill) fill.style.width = pct + '%';
+  }
+
+  function updateTopbar() {
+    const p = pages()[state.currentPage];
+    const heading = pageDisplayHeading(p, state.currentPage);
+    const num = document.getElementById('topbarNum');
+    const h = document.getElementById('topbarHeading');
+    if (num) num.textContent = `M1 · L01 · ${pageNumLabel(state.currentPage)}`;
+    if (h) h.textContent = heading;
+  }
+
+  function updateNotesCount() {
+    const btn = document.getElementById('notesCount');
+    if (!btn) return;
+    btn.textContent = String(FEEDBACK.length);
+    btn.classList.toggle('is-zero', FEEDBACK.length === 0);
+  }
+
+  // ============ AUDIO ============
+  const audio = document.getElementById('lessonAudio');
+  let lastReadingBlock = null;
+
+  function updatePlayerNow() {
+    const p = pages()[state.currentPage];
+    const page = document.getElementById('playerNowPage');
+    if (page) page.textContent = pageDisplayHeading(p, state.currentPage);
+    const meta = document.getElementById('playerNowMeta');
+    const dur = isFinite(audio.duration) ? fmtTime(audio.duration) : '1:23';
+    if (meta) {
+      const hasSegments = TIMINGS.segments.some(s => s.pageId === p.id);
+      meta.textContent = hasSegments ? `Narrated · ${dur} total` : '';
+    }
+  }
+
+  function setPlayState(playing) {
+    state.audioPlaying = playing;
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    if (playing) { playIcon.style.display = 'none'; pauseIcon.style.display = 'block'; }
+    else { playIcon.style.display = 'block'; pauseIcon.style.display = 'none'; }
+  }
+
+  function highlightActiveBlock() {
+    if (!state.audioPlaying) return;
+    const t = audio.currentTime;
+    const seg = TIMINGS.segments.find(s => t >= s.start && t < s.end);
+    if (!seg) {
+      clearReadingHighlight();
+      return;
+    }
+    if (seg.pageId !== pages()[state.currentPage].id) return;
+    const blocks = $$('#reader .block');
+    const targetEl = blocks.find(b => parseInt(b.dataset.blockIdx, 10) === seg.blockIndex && b.dataset.pageId === seg.pageId);
+    if (targetEl && targetEl !== lastReadingBlock) {
+      if (lastReadingBlock) lastReadingBlock.classList.remove('is-reading');
+      targetEl.classList.add('is-reading');
+      lastReadingBlock = targetEl;
+      // Gentle scroll
+      const rect = targetEl.getBoundingClientRect();
+      const headerH = 60;
+      if (rect.top < headerH + 40 || rect.bottom > window.innerHeight - 100) {
+        window.scrollBy({ top: rect.top - 180, behavior: 'smooth' });
+      }
+    }
+  }
+
+  function clearReadingHighlight() {
+    if (lastReadingBlock) {
+      lastReadingBlock.classList.remove('is-reading');
+      lastReadingBlock = null;
+    }
+  }
+
+  function updateScrubber() {
+    const fill = document.getElementById('playerScrubFill');
+    const grip = document.getElementById('playerScrubGrip');
+    const cur = document.getElementById('playerCurrent');
+    const total = document.getElementById('playerTotal');
+    const pct = isFinite(audio.duration) && audio.duration > 0 ? (audio.currentTime / audio.duration) * 100 : 0;
+    if (fill) fill.style.width = pct + '%';
+    if (grip) grip.style.left = pct + '%';
+    if (cur) cur.textContent = fmtTime(audio.currentTime);
+    if (total) total.textContent = fmtTime(audio.duration);
+  }
+
+  function setupAudio() {
+    audio.playbackRate = state.speed;
+    audio.addEventListener('play', () => setPlayState(true));
+    audio.addEventListener('pause', () => setPlayState(false));
+    audio.addEventListener('ended', () => {
+      setPlayState(false);
+      clearReadingHighlight();
+      if (state.autoContinue && state.currentPage < pages().length - 1) {
+        goToPage(state.currentPage + 1);
+        // Brief pause, then play again
+        setTimeout(() => {
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
+        }, 350);
+      }
+    });
+    audio.addEventListener('timeupdate', () => {
+      updateScrubber();
+      highlightActiveBlock();
+    });
+    audio.addEventListener('loadedmetadata', () => {
+      updateScrubber();
+      updatePlayerNow();
+    });
+
+    document.getElementById('playerPlay').addEventListener('click', () => {
+      if (audio.paused) audio.play().catch(() => {});
+      else audio.pause();
+    });
+    document.getElementById('playerPrev').addEventListener('click', () => {
+      if (state.currentPage > 0) goToPage(state.currentPage - 1);
+    });
+    document.getElementById('playerNext').addEventListener('click', () => {
+      if (state.currentPage < pages().length - 1) goToPage(state.currentPage + 1);
+    });
+
+    // Speed
+    document.getElementById('playerSpeed').addEventListener('click', () => {
+      const speeds = [1, 1.25, 1.5, 0.85];
+      const next = speeds[(speeds.indexOf(state.speed) + 1) % speeds.length];
+      state.speed = next;
+      audio.playbackRate = next;
+      document.getElementById('speedValue').textContent = next + '×';
+      savePrefs();
+    });
+
+    // Auto-continue
+    const contBtn = document.getElementById('playerContinue');
+    if (state.autoContinue) contBtn.classList.add('is-on'); else contBtn.classList.remove('is-on');
+    contBtn.addEventListener('click', () => {
+      state.autoContinue = !state.autoContinue;
+      contBtn.classList.toggle('is-on', state.autoContinue);
+      savePrefs();
+    });
+
+    // Scrubber
+    const scrub = document.getElementById('playerScrub');
+    scrub.addEventListener('click', e => {
+      const rect = scrub.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      if (isFinite(audio.duration)) {
+        audio.currentTime = Math.max(0, Math.min(audio.duration, audio.duration * pct));
+      }
+    });
+
+    document.getElementById('speedValue').textContent = state.speed + '×';
+  }
+
+  function savePrefs() {
+    safeStorage.setItem(PREFS_KEY, JSON.stringify({ speed: state.speed, autoContinue: state.autoContinue }));
+  }
+
+  // ============ LIGHTBOX ============
+  function openLightbox(src, alt) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightboxImg');
+    img.src = src; img.alt = alt || '';
+    lb.classList.add('is-shown');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('is-shown');
+  }
+
+  // ============ FEEDBACK MODE ============
+  function toggleFeedbackMode(on) {
+    state.feedbackMode = (on === undefined) ? !state.feedbackMode : on;
+    document.body.classList.toggle('is-feedback-mode', state.feedbackMode);
+    const btn = document.getElementById('fabFeedback');
+    const hint = document.getElementById('feedbackHint');
+    btn.classList.toggle('is-active', state.feedbackMode);
+    btn.querySelector('.label').textContent = state.feedbackMode ? 'Cancel feedback' : 'Feedback';
+    if (state.feedbackMode) {
+      hint.classList.add('is-shown');
+      setTimeout(() => hint.classList.remove('is-shown'), 4500);
+      wireFeedbackBlockClicks(document.getElementById('reader'));
+    } else {
+      hint.classList.remove('is-shown');
+    }
+  }
+
+  function wireFeedbackBlockClicks(scope) {
+    scope.querySelectorAll('.block').forEach(el => {
+      el.addEventListener('click', onFeedbackBlockClick, { once: true });
+    });
+  }
+
+  function onFeedbackBlockClick(e) {
+    if (!state.feedbackMode) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const el = e.currentTarget;
+    const pageId = el.dataset.pageId;
+    const blockIdx = parseInt(el.dataset.blockIdx, 10);
+    openComposer(pageId, blockIdx, el);
+  }
+
+  function openComposer(pageId, blockIdx, blockEl) {
+    state.composeFor = { pageId, blockIdx };
+    const backdrop = document.getElementById('composerBackdrop');
+    const loc = document.getElementById('composerLocation');
+    const quote = document.getElementById('composerQuote');
+    const text = document.getElementById('composerText');
+    const send = document.getElementById('composerSend');
+    const status = document.getElementById('composerStatus');
+
+    const pageIdx = pages().findIndex(p => p.id === pageId);
+    const heading = pageDisplayHeading(pages()[pageIdx], pageIdx);
+    loc.textContent = `Page ${pageNumLabel(pageIdx)} · ${heading}`;
+    quote.innerHTML = blockEl ? (blockEl.textContent || '').trim().slice(0, 220) + ((blockEl.textContent || '').length > 220 ? '…' : '') : '';
+    text.value = '';
+    status.textContent = '';
+    send.disabled = true;
+    backdrop.classList.add('is-shown');
+    setTimeout(() => text.focus(), 50);
+
+    text.oninput = () => { send.disabled = !text.value.trim(); };
+  }
+
+  function closeComposer() {
+    document.getElementById('composerBackdrop').classList.remove('is-shown');
+    state.composeFor = null;
+    stopRecognition();
+  }
+
+  function sendFeedback() {
+    if (!state.composeFor) return;
+    const text = document.getElementById('composerText').value.trim();
+    if (!text) return;
+    FEEDBACK.push({
+      id: 'f' + Date.now(),
+      pageId: state.composeFor.pageId,
+      blockIndex: state.composeFor.blockIdx,
+      text: text,
+      createdAt: new Date().toISOString()
+    });
+    safeStorage.setItem(FEEDBACK_KEY, JSON.stringify(FEEDBACK));
+    closeComposer();
+    toggleFeedbackMode(false);
+    renderOutline();
+    renderCurrentPage();
+    updateNotesCount();
+  }
+
+  // ============ SPEECH RECOGNITION ============
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let recognitionFinal = '';
+
+  function setupRecognition() {
+    const micBtn = document.getElementById('composerMic');
+    if (!SR) {
+      micBtn.classList.add('is-unavailable');
+      micBtn.title = 'Voice input not available in this browser';
+      micBtn.addEventListener('click', e => {
+        e.preventDefault();
+        const status = document.getElementById('composerStatus');
+        status.textContent = 'Voice input not supported here — try Chrome, Edge, or Safari';
+      });
+      return;
+    }
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-GB';
+
+    recognition.onresult = e => {
+      const text = document.getElementById('composerText');
+      let interim = '';
+      let final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) final += r[0].transcript;
+        else interim += r[0].transcript;
+      }
+      if (final) recognitionFinal += (recognitionFinal && !recognitionFinal.endsWith(' ') ? ' ' : '') + final.trim();
+      text.value = (recognitionFinal + (interim ? ' ' + interim : '')).trim();
+      document.getElementById('composerSend').disabled = !text.value.trim();
+    };
+    recognition.onstart = () => {
+      micBtn.classList.add('is-recording');
+      micBtn.querySelector('.label').textContent = 'Stop';
+      document.getElementById('composerStatus').textContent = 'Listening… speak naturally';
+      recognitionFinal = document.getElementById('composerText').value.trim();
+    };
+    recognition.onend = () => {
+      micBtn.classList.remove('is-recording');
+      micBtn.querySelector('.label').textContent = 'Record voice';
+      document.getElementById('composerStatus').textContent = '';
+    };
+    recognition.onerror = e => {
+      micBtn.classList.remove('is-recording');
+      micBtn.querySelector('.label').textContent = 'Record voice';
+      const status = document.getElementById('composerStatus');
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        status.textContent = 'Microphone permission was denied';
+      } else if (e.error === 'no-speech') {
+        status.textContent = 'No speech detected — try again';
+      } else {
+        status.textContent = 'Voice input stopped';
+      }
+    };
+
+    micBtn.addEventListener('click', () => {
+      if (micBtn.classList.contains('is-recording')) stopRecognition();
+      else { try { recognition.start(); } catch (e) {} }
+    });
+  }
+
+  function stopRecognition() {
+    if (recognition) try { recognition.stop(); } catch (e) {}
+  }
+
+  // ============ NOTES PANEL ============
+  function openNotesPanel() {
+    const backdrop = document.getElementById('notesPanelBackdrop');
+    const body = document.getElementById('notesPanelBody');
+    if (FEEDBACK.length === 0) {
+      body.innerHTML = '<div class="notes-empty">You haven\'t left any feedback yet. Tap <em>Feedback</em> at the bottom right, then click a passage you\'d like to comment on.</div>';
+    } else {
+      body.innerHTML = FEEDBACK.slice().reverse().map(f => {
+        const pageIdx = pages().findIndex(p => p.id === f.pageId);
+        const heading = pageDisplayHeading(pages()[pageIdx], pageIdx);
+        const dateStr = new Date(f.createdAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+        return `<div class="note-card">
+          <div class="note-card-anchor" data-go-page="${pageIdx}">Page ${pageNumLabel(pageIdx)} · ${heading}</div>
+          <div class="note-card-body">${md(f.text)}</div>
+          <div class="note-card-meta">
+            <span>${dateStr}</span>
+            <button class="delete" data-del-id="${f.id}" type="button">Delete</button>
+          </div>
+        </div>`;
+      }).join('');
+      body.querySelectorAll('[data-go-page]').forEach(el => {
+        el.addEventListener('click', () => {
+          closeNotesPanel();
+          goToPage(parseInt(el.dataset.goPage, 10));
+        });
+      });
+      body.querySelectorAll('[data-del-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.delId;
+          FEEDBACK = FEEDBACK.filter(f => f.id !== id);
+          safeStorage.setItem(FEEDBACK_KEY, JSON.stringify(FEEDBACK));
+          openNotesPanel();
+          updateNotesCount();
+          renderOutline();
+          renderCurrentPage();
+        });
+      });
+    }
+    backdrop.classList.add('is-shown');
+  }
+
+  function closeNotesPanel() {
+    document.getElementById('notesPanelBackdrop').classList.remove('is-shown');
+  }
+
+  // ============ MOBILE ============
+  function applyMobileLayout() {
+    const isMobile = window.matchMedia('(max-width: 860px)').matches;
+    state.mobileBreak = isMobile;
+    const outline = document.getElementById('outline');
+    if (!isMobile) {
+      outline.classList.remove('is-open');
+      document.getElementById('outlineScrim').classList.remove('is-shown');
+    }
+  }
+
+  function openMobileOutline() {
+    document.getElementById('outline').classList.add('is-open');
+    document.getElementById('outlineScrim').classList.add('is-shown');
+  }
+  function closeMobileOutline() {
+    document.getElementById('outline').classList.remove('is-open');
+    document.getElementById('outlineScrim').classList.remove('is-shown');
+  }
+
+  // ============ EVENT WIRING ============
+  function wireGlobalEvents() {
+    document.getElementById('outlineToggle').addEventListener('click', () => {
+      if (state.mobileBreak) openMobileOutline();
+    });
+    document.getElementById('outlineScrim').addEventListener('click', closeMobileOutline);
+
+    document.getElementById('fabFeedback').addEventListener('click', () => toggleFeedbackMode());
+
+    document.getElementById('composerCancel').addEventListener('click', closeComposer);
+    document.getElementById('composerSend').addEventListener('click', sendFeedback);
+    document.getElementById('composerBackdrop').addEventListener('click', e => {
+      if (e.target.id === 'composerBackdrop') closeComposer();
+    });
+
+    document.getElementById('notesBtn').addEventListener('click', openNotesPanel);
+    document.getElementById('notesPanelClose').addEventListener('click', closeNotesPanel);
+    document.getElementById('notesPanelBackdrop').addEventListener('click', e => {
+      if (e.target.id === 'notesPanelBackdrop') closeNotesPanel();
+    });
+
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox').addEventListener('click', e => {
+      if (e.target.id === 'lightbox') closeLightbox();
+    });
+
+    document.getElementById('brandLink').addEventListener('click', e => { e.preventDefault(); goToPage(0); });
+
+    document.addEventListener('keydown', e => {
+      if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return;
+      if (e.key === 'ArrowRight' && state.currentPage < pages().length - 1) {
+        e.preventDefault(); goToPage(state.currentPage + 1);
+      } else if (e.key === 'ArrowLeft' && state.currentPage > 0) {
+        e.preventDefault(); goToPage(state.currentPage - 1);
+      } else if (e.key === ' ' && !e.target.matches('button, a')) {
+        e.preventDefault();
+        if (audio.paused) audio.play().catch(() => {}); else audio.pause();
+      } else if (e.key === 'Escape') {
+        if (document.getElementById('lightbox').classList.contains('is-shown')) closeLightbox();
+        else if (document.getElementById('composerBackdrop').classList.contains('is-shown')) closeComposer();
+        else if (document.getElementById('notesPanelBackdrop').classList.contains('is-shown')) closeNotesPanel();
+        else if (state.feedbackMode) toggleFeedbackMode(false);
+      }
+    });
+
+    window.addEventListener('resize', applyMobileLayout);
+  }
+
+  // ============ INIT ============
+  function init() {
+    applyMobileLayout();
+    renderOutline();
+    renderCurrentPage();
+    updateProgress();
+    updateTopbar();
+    updateNotesCount();
+    setupAudio();
+    setupRecognition();
+    wireGlobalEvents();
+    const diag = document.getElementById('viewerDiag');
+    if (diag) diag.classList.remove('is-shown');
+  }
+
+  // Show diagnostic if init takes too long
+  setTimeout(() => {
+    if (!document.querySelector('.page.is-current')) {
+      const diag = document.getElementById('viewerDiag');
+      if (diag) diag.classList.add('is-shown');
+    }
+  }, 2000);
+
+  try { init(); } catch (e) {
+    console.error('[viewer] init failed', e);
+    const diag = document.getElementById('viewerDiag');
+    if (diag) {
+      diag.classList.add('is-shown');
+      diag.textContent = 'The lesson viewer hit an error during start-up. Open the browser console for details.';
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

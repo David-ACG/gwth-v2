@@ -1,0 +1,455 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "GWTH.ai" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+          - button "Collapse sidebar" [ref=e7]:
+            - img
+        - navigation "Main navigation" [ref=e8]:
+          - link "Dashboard" [ref=e9] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e10]
+            - generic [ref=e15]: Dashboard
+          - link "The Course" [ref=e16] [cursor=pointer]:
+            - /url: /course/applied-ai-skills
+            - img [ref=e17]
+            - generic [ref=e19]: The Course
+          - link "Labs" [ref=e20] [cursor=pointer]:
+            - /url: /labs
+            - img [ref=e21]
+            - generic [ref=e23]: Labs
+          - link "Progress" [ref=e24] [cursor=pointer]:
+            - /url: /progress
+            - img [ref=e25]
+            - generic [ref=e27]: Progress
+        - navigation "Secondary navigation" [ref=e28]:
+          - link "Bookmarks" [ref=e29] [cursor=pointer]:
+            - /url: /bookmarks
+            - img [ref=e30]
+            - generic [ref=e32]: Bookmarks
+          - link "Notifications" [ref=e33] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e34]
+            - generic [ref=e37]: Notifications
+          - link "Profile" [ref=e38] [cursor=pointer]:
+            - /url: /profile
+            - img [ref=e39]
+            - generic [ref=e42]: Profile
+          - link "Settings" [ref=e43] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e44]
+            - generic [ref=e47]: Settings
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "breadcrumb" [ref=e50]:
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "Demo" [ref=e53] [cursor=pointer]:
+                - /url: /demo
+            - listitem [ref=e54]:
+              - img [ref=e55]
+            - listitem [ref=e57]:
+              - link "Dashboard" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - button "Search... ⌘ K" [ref=e60]:
+            - img
+            - generic [ref=e61]: Search...
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button "Toggle theme" [ref=e62]:
+            - img
+          - button "U" [ref=e63]:
+            - generic [ref=e65]: U
+      - main [ref=e66]:
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: DASHBOARD · TODAY
+            - generic [ref=e71]: SAT 9 MAY 2026 · 19:26 BST
+            - generic [ref=e72]: BETA · v0.4.1
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e75]: TODAY · 19:26 BST
+              - heading "Welcome back, Alex. Five hours this week." [level=1] [ref=e76]:
+                - text: Welcome back, Alex.
+                - text: Five hours this week.
+              - paragraph [ref=e77]: Month 1, lesson 13. Capstone 01 approved 6 May. Score 104, verified two days ago.
+            - generic [ref=e78]:
+              - generic [ref=e79]: NEXT, IF YOU HAVE 24 MINUTES
+              - generic [ref=e80]: LESSON 13 · MONTH 1
+              - generic [ref=e81]: "Building with Claude: your first useful tool."
+              - generic [ref=e82]: You wrote the brief yesterday. Today you ship it.
+              - generic [ref=e83]:
+                - link "Continue Lesson 13" [ref=e84] [cursor=pointer]:
+                  - /url: /course/applied-ai-skills
+                  - text: Continue Lesson 13
+                  - img
+                - link "Skip to Q&A" [ref=e85] [cursor=pointer]:
+                  - /url: /course/applied-ai-skills
+          - generic [ref=e87]:
+            - generic [ref=e88]: SECTION 01 — YOUR COURSE
+            - generic [ref=e89]:
+              - heading "Month 1 of 3. Plain English." [level=2] [ref=e90]
+              - generic [ref=e91]: 12 / 24 mandatory
+            - generic [ref=e95]:
+              - generic [ref=e96]: UNLOCKED 8 APR
+              - generic [ref=e97]: TARGET TOP 30% · 7 JUN
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - generic [ref=e101]: NO.
+                - generic [ref=e102]: LESSON
+                - generic [ref=e103]: LENGTH
+              - generic [ref=e104]:
+                - img [ref=e107]
+                - generic [ref=e109]: L01–L12
+                - generic [ref=e110]: 12 foundations, complete.ChatGPT past Google, prompt patterns, three small builds.
+                - link "REVIEW →" [ref=e111] [cursor=pointer]:
+                  - /url: /course/applied-ai-skills
+              - generic [ref=e112] [cursor=pointer]:
+                - img [ref=e115]
+                - generic [ref=e117]: L13
+                - generic [ref=e118]:
+                  - generic [ref=e119]: "Building with Claude: your first useful tool"
+                  - generic [ref=e120]: IN PROGRESS
+                - generic [ref=e121]: 24 MIN
+              - generic [ref=e122] [cursor=pointer]:
+                - generic [ref=e125]: L14
+                - generic [ref=e127]: "Q&A: when to reach for which model"
+                - generic [ref=e128]: 9 MIN
+              - generic [ref=e129] [cursor=pointer]:
+                - generic [ref=e132]: L15
+                - generic [ref=e134]: Reading docs without reading docs
+                - generic [ref=e135]: 18 MIN
+              - generic [ref=e136] [cursor=pointer]:
+                - generic [ref=e139]: L16
+                - generic [ref=e141]: Codex for non-engineers, part one
+                - generic [ref=e142]: 22 MIN
+              - generic [ref=e143] [cursor=pointer]:
+                - generic [ref=e146]: L17
+                - generic [ref=e148]: Plain-English automationsOPTIONAL
+                - generic [ref=e149]: 26 MIN
+              - generic [ref=e150] [cursor=pointer]:
+                - generic [ref=e153]: L18
+                - generic [ref=e155]: Two-week capstone brief
+                - generic [ref=e156]: 14 MIN
+              - generic [ref=e157]:
+                - generic [ref=e158]: + 6 MORE LESSONS THIS MONTH
+                - link "VIEW ALL 24 →" [ref=e159] [cursor=pointer]:
+                  - /url: /course/applied-ai-skills
+            - generic [ref=e160]:
+              - generic [ref=e161]:
+                - generic [ref=e162]: MONTH 02 · LOCKED
+                - generic [ref=e163]: Apps, agents, and the consultant’s skill.
+                - generic [ref=e164]: 20 mandatory plus 15 optional. Target top 5%.
+                - generic [ref=e165]:
+                  - generic [ref=e166]: UNLOCKS 8 JUN
+                  - generic [ref=e167]: £29
+              - generic [ref=e168]:
+                - generic [ref=e169]: MONTH 03 · LOCKED
+                - generic [ref=e170]: Enterprise transformation, in your job.
+                - generic [ref=e171]: 20 mandatory plus 15 optional. Target top 1%.
+                - generic [ref=e172]:
+                  - generic [ref=e173]: UNLOCKS 8 JUL
+                  - generic [ref=e174]: £29
+          - generic [ref=e175]:
+            - generic [ref=e176]:
+              - generic [ref=e177]: SECTION 02 — YOUR GWTH SCORE
+              - heading "Improving. Verified two days ago." [level=2] [ref=e178]
+              - figure "Illustrative — your actual GWTH Score reflects verified work." [ref=e180]:
+                - generic [ref=e181]:
+                  - generic [ref=e186]: gwth.ai/score/c67sg#dde5
+                  - generic [ref=e187]:
+                    - generic [ref=e188]:
+                      - generic [ref=e189]:
+                        - generic [ref=e190]: AE
+                        - generic [ref=e191]:
+                          - generic [ref=e192]: Alex Example
+                          - generic [ref=e193]: Operations Lead · UK
+                      - img "Scan to open gwth.ai/score/c67sg#dde5" [ref=e195]
+                    - generic [ref=e624]:
+                      - generic [ref=e625]: Example
+                      - generic [ref=e626]:
+                        - img "GWTH" [ref=e627]
+                        - generic [ref=e630]: GWTH Score
+                      - generic [ref=e631]:
+                        - generic [ref=e632]:
+                          - generic [ref=e633]: "104"
+                          - generic [ref=e634]: Top 1%
+                        - generic [ref=e635]:
+                          - img [ref=e636]
+                          - generic [ref=e639]: trending up
+                          - text: "+49"
+                        - generic [ref=e640]: vs 3 months ago
+                      - button "What this score tells an employer 5 reasons it's credible" [ref=e643]:
+                        - generic [ref=e644]:
+                          - img [ref=e646]
+                          - generic [ref=e648]:
+                            - generic [ref=e649]: What this score tells an employer
+                            - generic [ref=e650]: 5 reasons it's credible
+                        - img [ref=e651]
+                - generic [ref=e653]: Illustrative — your actual GWTH Score reflects verified work.
+              - generic [ref=e654]:
+                - link "Copy public URL" [ref=e655] [cursor=pointer]:
+                  - /url: "#"
+                - link "Add to LinkedIn" [ref=e656] [cursor=pointer]:
+                  - /url: "#"
+                - link "Download QR" [ref=e657] [cursor=pointer]:
+                  - /url: "#"
+            - generic [ref=e658]:
+              - generic [ref=e659]: SECTION 03 — CREDENTIAL CURRENTNESS
+              - heading "Score is current. Stays that way if you keep going." [level=2] [ref=e660]
+              - generic [ref=e661]:
+                - generic [ref=e662]:
+                  - generic [ref=e663]:
+                    - generic [ref=e664]: "Last verified work: Capstone 01."
+                    - generic [ref=e665]: Approved 6 May by reviewer M. Patel.
+                  - generic [ref=e666]: Stable
+                - generic [ref=e670]:
+                  - generic [ref=e671]: FRESHNESS 92%
+                  - generic [ref=e672]: NEXT DECAY CHECK 11 MAY
+              - generic [ref=e673]:
+                - generic [ref=e674]:
+                  - generic [ref=e675]: UPDATED SINCE YOU LAST WATCHED · 4
+                  - link "MARK ALL REVIEWED" [ref=e676] [cursor=pointer]:
+                    - /url: "#"
+                - generic [ref=e677]: The course updates as the tools do. A short re-watch keeps your score current and your work in step with what employers are using right now.
+                - generic [ref=e678]:
+                  - generic [ref=e679]:
+                    - generic [ref=e680]: L09
+                    - generic [ref=e681]:
+                      - generic [ref=e682]:
+                        - generic [ref=e683]: Reading docs without reading docs
+                        - link "RE-WATCH →" [ref=e684] [cursor=pointer]:
+                          - /url: "#"
+                      - generic [ref=e685]: New section on Claude Sonnet 4.5 doc-tool, 4 min added at 12:18.
+                    - generic [ref=e686]: 2 DAYS AGO
+                  - generic [ref=e687]:
+                    - generic [ref=e688]: L11
+                    - generic [ref=e689]:
+                      - generic [ref=e690]:
+                        - generic [ref=e691]: Spreadsheets, plain English
+                        - link "RE-WATCH →" [ref=e692] [cursor=pointer]:
+                          - /url: "#"
+                      - generic [ref=e693]: Replaced the GPT-4 demo with Claude Code, same brief, faster path.
+                    - generic [ref=e694]: 5 DAYS AGO
+                  - generic [ref=e695]:
+                    - generic [ref=e696]: L07
+                    - generic [ref=e697]:
+                      - generic [ref=e698]:
+                        - generic [ref=e699]: When to reach for which model
+                        - link "RE-WATCH →" [ref=e700] [cursor=pointer]:
+                          - /url: "#"
+                      - generic [ref=e701]: Updated pricing table and Apr-2026 model line-up. Two new examples.
+                    - generic [ref=e702]: 1 WEEK AGO
+                  - generic [ref=e703]:
+                    - generic [ref=e704]: L04
+                    - generic [ref=e705]:
+                      - generic [ref=e706]:
+                        - generic [ref=e707]: Prompt patterns that survive a model swap
+                        - link "RE-WATCH →" [ref=e708] [cursor=pointer]:
+                          - /url: "#"
+                      - generic [ref=e709]: Re-recorded with new Claude voice. Same six patterns.
+                    - generic [ref=e710]: 2 WEEKS AGO
+                - generic [ref=e711]:
+                  - generic [ref=e712]: REVIEWING UPDATED LESSONS HOLDS YOUR FRESHNESS ABOVE 90%
+                  - link "UPDATE LOG →" [ref=e713] [cursor=pointer]:
+                    - /url: "#"
+          - generic [ref=e714]:
+            - generic [ref=e715]:
+              - generic [ref=e716]: SECTION 04 — ACTIVITY
+              - heading "Five-hour rhythm. Held for 5 days." [level=2] [ref=e717]:
+                - text: Five-hour rhythm.
+                - generic [ref=e718]: Held for 5 days.
+            - generic [ref=e719]:
+              - generic [ref=e720]:
+                - generic [ref=e721]: HOURS THIS WEEK
+                - generic [ref=e722]: "5.2"
+                - generic [ref=e723]: On target. The course is built around five hours a week, you are exactly there.
+                - generic [ref=e724]:
+                  - generic [ref=e725]:
+                    - generic [ref=e726]: VS LAST WEEK
+                    - generic [ref=e727]: +0.8 HRS
+                  - generic [ref=e728]:
+                    - generic [ref=e729]: 4-WEEK AVG
+                    - generic [ref=e730]: 4.9 HRS
+              - generic [ref=e731]:
+                - generic [ref=e732]:
+                  - generic [ref=e733]: LAST 12 WEEKS
+                  - generic [ref=e734]: EVERY GREEN CELL · A SESSION YOU SHIPPED
+                - generic [ref=e736]:
+                  - generic [ref=e737]: M
+                  - generic [ref=e738]: T
+                  - generic [ref=e739]: W
+                  - generic [ref=e740]: T
+                  - generic [ref=e741]: F
+                  - generic [ref=e742]: S
+                  - generic [ref=e743]: S
+                  - generic [ref=e744]: W1
+                  - generic [ref=e752]: W2
+                  - generic [ref=e760]: W3
+                  - generic [ref=e768]: W4
+                  - generic [ref=e776]: W5
+                  - generic [ref=e784]: W6
+                  - generic [ref=e792]: W7
+                  - generic [ref=e800]: W8
+                  - generic [ref=e808]: W9
+                  - generic [ref=e816]: W10
+                  - generic [ref=e824]: W11
+                  - generic [ref=e832]: W12
+              - generic [ref=e840]:
+                - generic [ref=e841]: CURRENT STREAK
+                - generic [ref=e842]: 5DAYS
+                - generic [ref=e843]: "Longest yet: 14 days."
+                - generic [ref=e844]:
+                  - generic [ref=e845]: PROJECTS SHIPPED
+                  - generic [ref=e846]: "12"
+                  - generic [ref=e847]: Across nine lessons, two labs, one capstone.
+          - generic [ref=e849]:
+            - generic [ref=e850]:
+              - generic [ref=e851]: SECTION 05 — PORTFOLIO
+              - heading "Every lesson ships a project. They all live here." [level=2] [ref=e852]
+            - generic [ref=e853]:
+              - generic [ref=e854]: CAPSTONES · 1 OF 3
+              - generic [ref=e855]:
+                - generic [ref=e856]: C01
+                - generic [ref=e857]: C02
+                - generic [ref=e858]: C03
+              - generic [ref=e859]: Three pieces of verifiable work, one per month. These projects count for credential.
+              - link "EVIDENCE LOCKER →" [ref=e860] [cursor=pointer]:
+                - /url: "#"
+            - generic [ref=e861]:
+              - generic [ref=e862]:
+                - generic [ref=e863]:
+                  - generic [ref=e864]: SHIPPED · 12 PROJECTS
+                  - generic [ref=e865]:
+                    - link "ALL" [ref=e866] [cursor=pointer]:
+                      - /url: "#"
+                    - link "CAPSTONES" [ref=e867] [cursor=pointer]:
+                      - /url: "#"
+                    - link "LESSONS" [ref=e868] [cursor=pointer]:
+                      - /url: "#"
+                    - link "LABS" [ref=e869] [cursor=pointer]:
+                      - /url: "#"
+                - generic [ref=e870]:
+                  - generic [ref=e871]:
+                    - generic [ref=e872]: CAPSTONE 01
+                    - generic [ref=e873]:
+                      - generic [ref=e874]: Internal ops assistant
+                      - generic [ref=e875]: Built in M1 · Claude + Notion API · approved by M. Patel
+                    - generic [ref=e877]: APPROVED
+                    - generic [ref=e878]: 6 MAY
+                  - generic [ref=e879]:
+                    - generic [ref=e880]: L09
+                    - generic [ref=e881]:
+                      - generic [ref=e882]: Doc triage scanner for inbound briefs
+                      - generic [ref=e883]: Lesson project · ChatGPT · 240 lines TS
+                    - generic [ref=e884]: PUBLIC
+                    - generic [ref=e885]: 4 MAY
+                  - generic [ref=e886]:
+                    - generic [ref=e887]: L08
+                    - generic [ref=e888]:
+                      - generic [ref=e889]: Three-rule email triage
+                      - generic [ref=e890]: Lesson project · Claude + Gmail filter export
+                    - generic [ref=e891]: PUBLIC
+                    - generic [ref=e892]: 1 MAY
+                  - generic [ref=e893]:
+                    - generic [ref=e894]: LAB
+                    - generic [ref=e895]:
+                      - generic [ref=e896]: Spreadsheet QA in plain English
+                      - generic [ref=e897]: Lab · unscored · Claude + Sheets
+                    - generic [ref=e898]: PUBLIC
+                    - generic [ref=e899]: 28 APR
+                  - generic [ref=e900]:
+                    - generic [ref=e901]: L07
+                    - generic [ref=e902]:
+                      - generic [ref=e903]: Meeting recap to Jira tickets
+                      - generic [ref=e904]: Lesson project · Claude Code · 1 webhook
+                    - generic [ref=e905]: PUBLIC
+                    - generic [ref=e906]: 24 APR
+                  - generic [ref=e907]:
+                    - generic [ref=e908]: L06
+                    - generic [ref=e909]:
+                      - generic [ref=e910]: Personal CRM in Notion + Claude
+                      - generic [ref=e911]: Lesson project · private build
+                    - generic [ref=e912]: PRIVATE
+                    - generic [ref=e913]: 20 APR
+                  - generic [ref=e914]:
+                    - generic [ref=e915]: LAB
+                    - generic [ref=e916]:
+                      - generic [ref=e917]: Resume rewriter for non-tech roles
+                      - generic [ref=e918]: Lab · unscored · public template
+                    - generic [ref=e919]: PUBLIC
+                    - generic [ref=e920]: 17 APR
+                - generic [ref=e921]:
+                  - link "VIEW ALL 12 →" [ref=e922] [cursor=pointer]:
+                    - /url: "#"
+                  - generic [ref=e923]: LESSON PROJECTS DO NOT AFFECT SCORE · LABS DO NOT AFFECT SCORE
+              - generic [ref=e924]:
+                - generic [ref=e925]: SAVED · 12 ITEMS
+                - generic [ref=e926]: Bookmarks, drafts, notes.
+                - generic [ref=e927]:
+                  - generic [ref=e928]:
+                    - generic [ref=e929]: DRAFT
+                    - generic [ref=e930]: Capstone 02 brief
+                    - generic [ref=e931]: YESTERDAY
+                  - generic [ref=e932]:
+                    - generic [ref=e933]: NOTE
+                    - generic [ref=e934]: Six prompt patterns I keep reusing
+                    - generic [ref=e935]: 2 MAY
+                  - generic [ref=e936]:
+                    - generic [ref=e937]: LESSON
+                    - generic [ref=e938]: L09 · Reading docs without reading docs
+                    - generic [ref=e939]: 29 APR
+                  - generic [ref=e940]:
+                    - generic [ref=e941]: LAB
+                    - generic [ref=e942]: Email triage with three rules
+                    - generic [ref=e943]: 24 APR
+                  - generic [ref=e944]:
+                    - generic [ref=e945]: DRAFT
+                    - generic [ref=e946]: Lab idea, invoice chaser
+                    - generic [ref=e947]: 22 APR
+                - link "OPEN ALL SAVED →" [ref=e948] [cursor=pointer]:
+                  - /url: /bookmarks
+          - generic [ref=e951]:
+            - generic [ref=e952]:
+              - generic [ref=e953]: SECTION 06 — NOTIFICATIONS
+              - link "MARK ALL READ" [ref=e954] [cursor=pointer]:
+                - /url: /notifications
+            - generic [ref=e955]:
+              - generic [ref=e956]:
+                - generic [ref=e957]: 19 FEB
+                - generic [ref=e958]: ACHIEVEMENT
+                - generic [ref=e959]: 5-Day Study Streak!
+              - generic [ref=e960]:
+                - generic [ref=e961]: 19 FEB
+                - generic [ref=e962]: REMINDER
+                - generic [ref=e963]: Continue Data Analysis
+              - generic [ref=e964]:
+                - generic [ref=e965]: 15 FEB
+                - generic [ref=e966]: ANNOUNCEMENT
+                - generic [ref=e967]: "New Lab Published: Build a Personal Dashboard"
+              - generic [ref=e968]:
+                - generic [ref=e969]: 11 FEB
+                - generic [ref=e970]: ACHIEVEMENT
+                - generic [ref=e971]: "Month 1: 50% Complete"
+          - generic [ref=e972]:
+            - generic [ref=e973]: SECTION 07 — POSTSCRIPT
+            - generic [ref=e974]:
+              - heading "Five hours a week. Decide later, but keep going." [level=3] [ref=e975]:
+                - text: Five hours a week.
+                - text: Decide later, but keep going.
+              - paragraph [ref=e976]: Your score reflects the last 90 days. Skip a week and the freshness check will tell you. Stay Current opens after Month 3 to keep things current without resitting the whole course.
+          - generic [ref=e977]:
+            - generic [ref=e978]: © 2026 GWTH.ai · UK
+            - generic [ref=e979]: Built for the 23 May beta · v0.4.1
+            - generic [ref=e980]: Privacy · Terms · Accessibility
+    - generic [ref=e981]:
+      - heading "Command Palette" [level=2] [ref=e982]
+      - paragraph [ref=e983]: Search for a command to run...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e985]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e992] [cursor=pointer]:
+    - img [ref=e993]
+  - alert [ref=e996]

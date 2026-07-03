@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH Score — Employer panel placement (1 vs 2)</title>
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    background: #0f0f10; color: #ddd;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    height: 100%; overflow: hidden;
+  }
+  header {
+    padding: 14px 24px;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; flex-wrap: wrap;
+    background: #161617;
+  }
+  header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+  header .summary {
+    font-size: 12px; color: #999;
+    max-width: 720px;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  header .links { font-size: 12px; }
+  header .links a {
+    color: #5cc8a8;
+    margin-left: 14px;
+    text-decoration: none;
+  }
+  header .links a:hover { text-decoration: underline; }
+
+  .grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    height: calc(100vh - 84px);
+  }
+  .pane {
+    border-right: 1px solid #2a2a2a;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .pane:last-child { border-right: none; }
+  .pane-head {
+    padding: 10px 16px;
+    background: #1a1a1c;
+    border-bottom: 1px solid #2a2a2a;
+    font-size: 12px; font-weight: 600;
+  }
+  .pane-head .pill {
+    font-size: 10px; padding: 2px 8px;
+    border-radius: 999px; margin-left: 8px;
+    font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pill-1 { background: rgba(91,168,230,0.20); color: #5ba8e6; }
+  .pill-2 { background: rgba(92,200,168,0.22); color: #5cc8a8; }
+  .pane-tradeoffs {
+    color: #888; font-weight: 400; font-size: 11px;
+    margin-top: 4px; line-height: 1.45;
+  }
+  iframe { flex: 1; width: 100%; border: 0; background: #f5f5f5; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Employer panel placement — pick 1 or 2</h1>
+    <div class="summary">
+      Both mocks use the new design language (rounded-2xl device frame, primary-to-accent gradient on the score number, refined typography, gradient avatar, lucide-style icons). Use the scenario chips inside each pane to flip the score state. Toggle theme on either side independently.
+    </div>
+  </div>
+  <div class="links">
+    <a href="option-1-inline.html" target="_blank">Open 1 ↗</a>
+    <a href="option-2-collapsible.html" target="_blank">Open 2 ↗</a>
+  </div>
+</header>
+<div class="grid">
+  <div class="pane">
+    <div class="pane-head">
+      Option 1 — Permanent inline<span class="pill pill-1">5 messages always visible</span>
+      <div class="pane-tradeoffs">
+        Pros: every visitor sees the credibility argument; no extra click; great for landing-page hero where the goal is persuasion. Cons: card is tall (~840px); pulls attention down past the score itself.
+      </div>
+    </div>
+    <iframe src="option-1-inline.html"></iframe>
+  </div>
+  <div class="pane">
+    <div class="pane-head">
+      Option 2 — Collapsible toggle<span class="pill pill-2">Compact by default</span>
+      <div class="pane-tradeoffs">
+        Pros: card stays compact (~560px); the score itself owns the frame; expand-on-demand respects the curious. Cons: messages are one click away; some visitors will never click.
+      </div>
+    </div>
+    <iframe src="option-2-collapsible.html"></iframe>
+  </div>
+</div>
+</body>
+</html>

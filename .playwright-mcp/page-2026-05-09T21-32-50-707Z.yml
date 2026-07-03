@@ -1,0 +1,110 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "GWTH.ai" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+          - button "Collapse sidebar" [ref=e7]:
+            - img
+        - navigation "Main navigation" [ref=e8]:
+          - link "Dashboard" [ref=e9] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e10]
+            - generic [ref=e15]: Dashboard
+          - link "The Course" [ref=e16] [cursor=pointer]:
+            - /url: /course/applied-ai-skills
+            - img [ref=e17]
+            - generic [ref=e19]: The Course
+          - link "Labs" [ref=e20] [cursor=pointer]:
+            - /url: /labs
+            - img [ref=e21]
+            - generic [ref=e23]: Labs
+          - link "Progress" [ref=e24] [cursor=pointer]:
+            - /url: /progress
+            - img [ref=e25]
+            - generic [ref=e27]: Progress
+        - navigation "Secondary navigation" [ref=e28]:
+          - link "Bookmarks" [ref=e29] [cursor=pointer]:
+            - /url: /bookmarks
+            - img [ref=e30]
+            - generic [ref=e32]: Bookmarks
+          - link "Notifications" [ref=e33] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e34]
+            - generic [ref=e37]: Notifications
+          - link "Profile" [ref=e38] [cursor=pointer]:
+            - /url: /profile
+            - img [ref=e39]
+            - generic [ref=e42]: Profile
+          - link "Settings" [ref=e43] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e44]
+            - generic [ref=e47]: Settings
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "breadcrumb" [ref=e50]:
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "Demo" [ref=e53] [cursor=pointer]:
+                - /url: /demo
+            - listitem [ref=e54]:
+              - img [ref=e55]
+            - listitem [ref=e57]:
+              - link "Lesson" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - button "Search" [ref=e60]:
+            - img
+          - button "Toggle theme" [ref=e61]:
+            - img
+          - button "U" [ref=e62]:
+            - generic [ref=e64]: U
+      - main [ref=e65]:
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - button "Previous page" [ref=e70]:
+              - img [ref=e71]
+            - generic [ref=e73]: GWTH.ai
+            - button "Lesson outline" [ref=e74]:
+              - img [ref=e75]
+              - generic [ref=e77]: 3/8
+          - generic [ref=e78]:
+            - generic [ref=e79]:
+              - generic [ref=e80]: MONTH 1 · LESSON 13
+              - generic [ref=e81]: P3 / 8
+            - 'heading "Building with Claude: your first useful tool." [level=1] [ref=e82]'
+          - generic [ref=e92]:
+            - paragraph [ref=e93]: "Yesterday you wrote one paragraph on a sticky note: the smallest useful tool you wished existed at work last week. Today you turn that paragraph into something you can actually run."
+            - paragraph [ref=e94]:
+              - text: Most people, when they first sit down to build with a model, get stuck deciding what to build. The teaching here is the opposite. Your first useful tool should be small, embarrassing, and
+              - emphasis [ref=e95]: specific to your own week
+              - text: .
+            - blockquote [ref=e96]: The brief should fit on a sticky note. If it doesn’t, the tool will not ship.
+            - paragraph [ref=e97]: Look at what you actually did between Monday and Friday. The repeated work, not the interesting work. The point is not that any of these things are hard, it is that they are boring, and the model does not get bored.
+            - button "CONTINUE" [ref=e99]:
+              - text: CONTINUE
+              - generic [ref=e100]: →
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - button "Pause" [ref=e103]:
+                - img [ref=e104]
+              - generic [ref=e108]:
+                - generic [ref=e109]: P3 · The brief, in plain English
+                - generic [ref=e110]: 02:14 / 03:42
+            - generic [ref=e168]:
+              - generic [ref=e169]:
+                - button "1x" [ref=e170] [cursor=pointer]
+                - button "1.25x" [ref=e171] [cursor=pointer]
+                - button "1.5x" [ref=e172] [cursor=pointer]
+              - generic [ref=e173]:
+                - generic [ref=e174]: AUTO-ADVANCE
+                - switch [checked] [ref=e175] [cursor=pointer]
+                - generic [ref=e177]: "ON"
+    - generic [ref=e178]:
+      - heading "Command Palette" [level=2] [ref=e179]
+      - paragraph [ref=e180]: Search for a command to run...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e182]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e189] [cursor=pointer]:
+    - img [ref=e190]
+  - alert [ref=e193]

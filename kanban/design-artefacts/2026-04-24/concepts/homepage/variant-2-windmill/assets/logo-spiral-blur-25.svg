@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="25"/>
+    </filter>
+    <path id="blade" d="M-10,0 C-48,-58 -108,-138 -72,-196 C-38,-186 -18,-108 10,-38 C18,-14 10,0 -10,0"/>
+  </defs>
+  <g transform="translate(256,256)" filter="url(#blur)">
+    <use href="#blade" fill="#0D4F4F" transform="rotate(0)"/>
+    <use href="#blade" fill="#0E7C7B" transform="rotate(51.43)"/>
+    <use href="#blade" fill="#1CBA93" transform="rotate(102.86)"/>
+    <use href="#blade" fill="#22D3A7" transform="rotate(154.29)"/>
+    <use href="#blade" fill="#33BBFF" transform="rotate(205.71)"/>
+    <use href="#blade" fill="#5B9BF5" transform="rotate(257.14)"/>
+    <use href="#blade" fill="#4A6CF7" transform="rotate(308.57)"/>
+  </g>
+</svg>

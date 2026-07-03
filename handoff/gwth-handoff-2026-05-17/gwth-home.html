@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GWTH.ai — AI literacy, learned slowly.</title>
+<meta name="description" content="GWTH.ai teaches practical AI to non-technical adults. Short lessons, real practice, a verifiable credential that stays current.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500;1,8..60,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4; --bg-2: #F5F0E6; --surface: #FFFFFF; --sunken: #F0EBE0;
+  --border: #E5DFD2; --border-strong: #D4CCBA;
+  --ink: #22301F; --ink-2: #3F4A3B; --ink-3: #6F7569; --muted: #6F7569; --stone: #948A76;
+  --teal: #2A5D69; --teal-deep: #1E454F; --teal-soft: #C2D5D9;
+  --rust: #A94C2E;
+  --forest: #5C7F4A; --forest-deep: #41603A; --forest-soft: #D4DCC9;
+  --sage: #7B8267;
+  --amber: #B8893F; --amber-deep: #8A6730; --amber-soft: #EEDDB8;
+  --indigo: #3A4773; --indigo-soft: #D6DBE4;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 17px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-feature-settings: 'kern' 1, 'liga' 1;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+::selection { background: var(--teal-soft); color: var(--ink); }
+
+/* ── Topbar (marketing, no user chip) ───────────── */
+.topbar { position: sticky; top: 0; z-index: 20; background: rgba(251,249,244,0.92); backdrop-filter: saturate(160%) blur(10px); -webkit-backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--border); }
+.topbar-inner { max-width: 1080px; margin: 0 auto; padding: 18px 32px; display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; }
+.brand-link { display: flex; align-items: center; }
+.brand-link svg { width: 100px; height: auto; display: block; }
+.topbar-nav { display: flex; gap: 28px; justify-self: end; }
+.topbar-nav a { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); font-weight: 500; letter-spacing: -0.003em; padding: 4px 0; }
+.topbar-nav a:hover { color: var(--ink); text-decoration: none; }
+.topbar-nav a.is-active { color: var(--ink); position: relative; }
+.topbar-nav a.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -19px; height: 1.5px; background: var(--ink); }
+.topbar-cta { display: flex; align-items: center; gap: 18px; }
+.topbar-cta .signin { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); font-weight: 500; }
+.topbar-cta .signin:hover { color: var(--ink); text-decoration: none; }
+.btn { font-family: var(--font-body); font-size: 14px; font-weight: 500; padding: 9px 18px; border-radius: 3px; border: 1px solid transparent; cursor: pointer; letter-spacing: -0.003em; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; line-height: 1; text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.btn-primary { background: var(--ink); color: var(--bg); }
+.btn-primary:hover { background: var(--teal); text-decoration: none; }
+.btn-secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+.btn-secondary:hover { border-color: var(--ink); text-decoration: none; }
+.btn-ghost { color: var(--ink-2); }
+.btn-ghost:hover { color: var(--ink); text-decoration: none; }
+.btn-small { padding: 7px 13px; font-size: 13px; }
+.btn-large { padding: 13px 22px; font-size: 15px; }
+
+/* ── Page wrapper ────────────────────────────── */
+.page { max-width: 1080px; width: 100%; margin: 0 auto; padding: 0 32px; }
+.section { padding: 96px 0; }
+.section-narrow { max-width: 720px; margin: 0 auto; }
+.section-h-eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 24px; }
+.section-h { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(36px, 4.8vw, 52px); line-height: 1.06; letter-spacing: -0.014em; color: var(--ink); margin-bottom: 22px; text-wrap: balance; max-width: 22ch; }
+.section-lead { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 20px; line-height: 1.5; color: var(--ink-2); margin-bottom: 36px; max-width: 56ch; text-wrap: pretty; }
+
+/* ── Hero ─────────────────────────────────────── */
+.hero { padding: 120px 0 96px; }
+.hero-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 32px; display: flex; align-items: center; gap: 10px; }
+.hero-kicker .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--forest); }
+.hero h1 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(48px, 7.5vw, 84px); line-height: 1.02; letter-spacing: -0.022em; color: var(--ink); margin-bottom: 28px; text-wrap: balance; max-width: 15ch; font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1; }
+.hero h1 em { font-style: normal; }
+.hero-lead { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: clamp(20px, 2.2vw, 24px); line-height: 1.45; color: var(--ink-2); margin-bottom: 44px; max-width: 52ch; text-wrap: pretty; }
+.hero-ctas { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 22px; }
+.hero-fineprint { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+/* ── Three principles ─────────────────────────── */
+.principles { padding: 80px 0 96px; border-top: 1px solid var(--border); }
+.principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; }
+.principle h3 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 22px; line-height: 1.24; color: var(--ink); margin-bottom: 12px; letter-spacing: -0.005em; }
+.principle p { font-family: var(--font-body); font-size: 15px; line-height: 1.6; color: var(--ink-2); max-width: 32ch; }
+.principle-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; }
+
+/* ── Sample lesson preview ────────────────────── */
+.sample { padding: 96px 0; border-top: 1px solid var(--border); }
+.sample-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
+.sample-meta .section-h-eyebrow { margin-bottom: 24px; }
+.sample-meta h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(32px, 4.2vw, 44px); line-height: 1.06; letter-spacing: -0.014em; color: var(--ink); margin-bottom: 22px; text-wrap: balance; }
+.sample-meta p { font-family: var(--font-body); font-size: 16px; line-height: 1.6; color: var(--ink-2); margin-bottom: 16px; max-width: 38ch; }
+.sample-meta .link { font-family: var(--font-body); font-size: 14px; color: var(--teal); font-weight: 500; margin-top: 16px; display: inline-block; }
+.lesson-frame { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 36px 40px 32px; position: relative; overflow: hidden; }
+.lesson-frame-meta { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.lesson-frame-meta .dot { width: 4px; height: 4px; background: var(--stone); border-radius: 50%; opacity: 0.6; }
+.lesson-frame h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 28px; line-height: 1.08; letter-spacing: -0.014em; color: var(--ink); margin-bottom: 16px; }
+.lesson-frame p { font-family: var(--font-body); font-size: 15px; line-height: 1.65; color: var(--ink); margin-bottom: 18px; }
+.lesson-frame .pq { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 19px; line-height: 1.3; color: var(--ink); text-align: center; max-width: 22ch; margin: 24px auto; padding: 18px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.lesson-frame .frame-foot { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--border); margin-top: 12px; }
+.lesson-frame .frame-foot .seg { display: flex; gap: 3px; }
+.lesson-frame .frame-foot .seg span { width: 14px; height: 3px; background: var(--border); border-radius: 1px; }
+.lesson-frame .frame-foot .seg span.on { background: var(--teal); }
+
+/* ── Score section ────────────────────────────── */
+.score-sec { padding: 96px 0; border-top: 1px solid var(--border); background: var(--bg-2); }
+.score-sec-inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+.score-grid { display: grid; grid-template-columns: 1.1fr 1.2fr; gap: 80px; align-items: center; }
+.score-meta-cell h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(34px, 4.4vw, 48px); line-height: 1.04; letter-spacing: -0.016em; color: var(--ink); margin-bottom: 24px; text-wrap: balance; max-width: 16ch; }
+.score-meta-cell p { font-family: var(--font-body); font-size: 16px; line-height: 1.65; color: var(--ink-2); margin-bottom: 16px; max-width: 44ch; }
+.score-meta-cell p strong { color: var(--ink); font-weight: 500; }
+.score-meta-cell .score-link { font-family: var(--font-body); font-size: 14px; color: var(--teal); font-weight: 500; margin-top: 18px; display: inline-block; }
+.score-vis { background: var(--surface); border-radius: 4px; padding: 36px 36px 30px; position: relative; }
+.score-vis-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+.score-vis-head .num { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 88px; line-height: 0.86; letter-spacing: -0.035em; color: var(--forest); }
+.score-vis-head .label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); text-align: right; }
+.score-vis-head .label .of { display: block; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+.score-decay-chart { width: 100%; height: 140px; display: block; margin-top: 8px; }
+.score-vis-legend { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+.legend-row { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
+.legend-row .swatch { width: 14px; height: 2px; }
+.legend-row .swatch.l-refresh { background: var(--forest); }
+.legend-row .swatch.l-decay { background: var(--amber); }
+
+/* ── Credential preview ───────────────────────── */
+.credential-sec { padding: 96px 0; border-top: 1px solid var(--border); }
+.credential-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; align-items: center; }
+.credential-meta h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(34px, 4.4vw, 48px); line-height: 1.04; letter-spacing: -0.016em; color: var(--ink); margin-bottom: 24px; text-wrap: balance; max-width: 18ch; }
+.credential-meta p { font-family: var(--font-body); font-size: 16px; line-height: 1.65; color: var(--ink-2); margin-bottom: 18px; max-width: 44ch; }
+.credential-card { background: var(--forest); color: #EDEAE6; border-radius: 4px; padding: 32px 36px 30px; }
+.cred-eyebrow { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(237,234,230,0.65); margin-bottom: 14px; }
+.cred-name { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 32px; line-height: 1.06; letter-spacing: -0.012em; color: #EDEAE6; margin-bottom: 8px; }
+.cred-title { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 15px; line-height: 1.45; color: rgba(237,234,230,0.85); margin-bottom: 28px; max-width: 30ch; }
+.cred-row { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; padding-top: 24px; border-top: 1px solid rgba(237,234,230,0.18); }
+.cred-num { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 96px; line-height: 0.85; letter-spacing: -0.04em; color: #EDEAE6; }
+.cred-num-of { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(237,234,230,0.55); margin-top: 6px; }
+.cred-detail { display: flex; flex-direction: column; gap: 10px; padding-bottom: 6px; }
+.cred-detail-row { display: flex; flex-direction: column; gap: 2px; }
+.cred-detail-row .lbl { font-family: var(--font-mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(237,234,230,0.55); }
+.cred-detail-row .val { font-family: var(--font-mono); font-size: 12px; color: #EDEAE6; letter-spacing: 0.06em; }
+
+/* ── Curriculum ───────────────────────────────── */
+.curriculum { padding: 96px 0; border-top: 1px solid var(--border); background: var(--bg-2); }
+.curriculum-head { max-width: 720px; margin: 0 auto 64px; text-align: center; }
+.curriculum-head .section-h-eyebrow { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.curriculum-head h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(36px, 4.8vw, 52px); line-height: 1.04; letter-spacing: -0.016em; color: var(--ink); margin: 0 auto 18px; text-wrap: balance; max-width: 18ch; }
+.curriculum-head p { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 19px; line-height: 1.5; color: var(--ink-2); max-width: 44ch; margin: 0 auto; text-wrap: pretty; }
+.curriculum-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.curriculum-cell { background: var(--surface); border-radius: 4px; padding: 28px 28px 26px; }
+.curriculum-cell .ord { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--teal); margin-bottom: 16px; }
+.curriculum-cell h3 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 22px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; letter-spacing: -0.008em; }
+.curriculum-cell p { font-family: var(--font-body); font-size: 14.5px; line-height: 1.6; color: var(--ink-2); max-width: 28ch; margin-bottom: 22px; }
+.curriculum-cell .arcmeta { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding-top: 16px; border-top: 1px solid var(--border); }
+
+/* ── Who it's for ─────────────────────────────── */
+.personas { padding: 96px 0; border-top: 1px solid var(--border); }
+.personas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 56px; }
+.persona { display: flex; flex-direction: column; gap: 16px; }
+.persona-tag { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink); padding-bottom: 10px; border-bottom: 1px solid var(--ink); }
+.persona h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 22px; line-height: 1.24; color: var(--ink); letter-spacing: -0.005em; max-width: 22ch; text-wrap: balance; }
+.persona p { font-family: var(--font-body); font-size: 15px; line-height: 1.6; color: var(--ink-2); max-width: 34ch; }
+.persona .link { font-family: var(--font-body); font-size: 13.5px; color: var(--teal); font-weight: 500; margin-top: 4px; }
+
+/* ── FAQ ──────────────────────────────────────── */
+.faq { padding: 96px 0; border-top: 1px solid var(--border); background: var(--bg-2); }
+.faq-inner { max-width: 760px; margin: 0 auto; }
+.faq-h { text-align: left; margin-bottom: 48px; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { padding: 26px 0; border-bottom: 1px solid var(--border-strong); }
+.faq-item:first-child { border-top: 1px solid var(--ink); }
+.faq-item summary { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 22px; line-height: 1.28; color: var(--ink); cursor: pointer; list-style: none; display: grid; grid-template-columns: 1fr 24px; gap: 24px; align-items: baseline; letter-spacing: -0.005em; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; font-family: var(--font-mono); font-size: 18px; color: var(--ink-2); font-style: normal; font-weight: 400; justify-self: end; transition: transform 0.15s ease; line-height: 1; }
+.faq-item[open] summary::after { content: '−'; }
+.faq-item summary:hover { color: var(--teal); }
+.faq-item p { font-family: var(--font-body); font-size: 16px; line-height: 1.65; color: var(--ink-2); margin-top: 14px; max-width: 56ch; }
+.faq-item p a { font-weight: 500; }
+
+/* ── Closing CTA ──────────────────────────────── */
+.close-cta { padding: 120px 0 96px; border-top: 1px solid var(--border); text-align: center; }
+.close-cta h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(40px, 5.5vw, 60px); line-height: 1.04; letter-spacing: -0.018em; color: var(--ink); margin-bottom: 28px; text-wrap: balance; max-width: 16ch; margin-left: auto; margin-right: auto; }
+.close-cta p { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 20px; line-height: 1.5; color: var(--ink-2); margin-bottom: 36px; max-width: 44ch; margin-left: auto; margin-right: auto; }
+.close-cta .hero-fineprint { display: block; margin-top: 22px; }
+
+/* ── Footer ───────────────────────────────────── */
+.footer { padding: 56px 0 48px; border-top: 1px solid var(--border); background: var(--bg); }
+.footer-inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 56px; align-items: start; }
+.footer-brand { display: flex; flex-direction: column; gap: 12px; }
+.footer-brand svg { width: 92px; height: auto; display: block; }
+.footer-brand p { font-family: var(--font-body); font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 28ch; }
+.footer-col h4 { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 14px; font-weight: 500; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-col a { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); }
+.footer-col a:hover { color: var(--ink); text-decoration: none; }
+.footer-bottom { max-width: 1080px; margin: 36px auto 0; padding: 22px 32px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.footer-bottom a { color: var(--muted); }
+.footer-bottom a:hover { color: var(--ink); text-decoration: none; }
+
+@media (max-width: 960px) {
+  .topbar-inner { gap: 20px; }
+  .topbar-nav { gap: 18px; }
+  .principles-grid { grid-template-columns: 1fr; gap: 32px; }
+  .sample-grid { grid-template-columns: 1fr; gap: 48px; }
+  .score-grid { grid-template-columns: 1fr; gap: 56px; }
+  .credential-grid { grid-template-columns: 1fr; gap: 48px; }
+  .curriculum-grid { grid-template-columns: repeat(2, 1fr); }
+  .personas-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width: 640px) {
+  .topbar-inner { grid-template-columns: 1fr auto; gap: 18px; }
+  .topbar-nav { grid-column: 1 / -1; justify-self: start; gap: 18px; padding-top: 10px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .topbar-cta { grid-column: 2; gap: 12px; }
+  .topbar-cta .signin { display: none; }
+  .hero { padding: 72px 0 64px; }
+  .hero-ctas { gap: 10px; }
+  .section { padding: 72px 0; }
+  .principles { padding: 60px 0 72px; }
+  .sample, .score-sec, .credential-sec, .curriculum, .personas, .faq, .close-cta { padding: 72px 0; }
+  .lesson-frame { padding: 28px 24px 24px; }
+  .score-vis { padding: 28px 24px 22px; }
+  .credential-card { padding: 26px 24px 24px; }
+  .cred-num { font-size: 72px; }
+  .curriculum-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; gap: 14px; align-items: flex-start; padding-top: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand-link" href="gwth-home.html" aria-label="GWTH.ai home">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><style>.hl1{fill:#22301F;}.hl2{fill:#A94C2E;}</style></defs>
+        <path class="hl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="hl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="hl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="hl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="hl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="hl1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="hl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="hl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="hl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+    </a>
+    <nav class="topbar-nav" aria-label="Primary">
+      <a href="gwth-home.html" class="is-active">Home</a>
+      <a href="gwth-pricing.html">Pricing</a>
+      <a href="gwth-about.html">About</a>
+    </nav>
+    <div class="topbar-cta">
+      <a href="gwth-dashboard.html" class="signin">Sign in</a>
+      <a href="#start" class="btn btn-primary btn-small">Start free</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Hero ─────────────────────────────────── -->
+  <section class="hero">
+    <div class="page">
+      <p class="hero-kicker"><span class="dot"></span>AI literacy · for non-technical adults</p>
+      <h1>AI, learned slowly.</h1>
+      <p class="hero-lead">GWTH teaches practical AI to people who don't write code. Short, careful lessons. A score that means something. A credential an employer can verify.</p>
+      <div class="hero-ctas">
+        <a href="gwth-lesson-viewer.html" class="btn btn-primary btn-large">Try a lesson →</a>
+        <a href="#how" class="btn btn-secondary btn-large">How it works</a>
+      </div>
+      <p class="hero-fineprint">No card needed · 12 free lessons</p>
+    </div>
+  </section>
+
+  <!-- ── Three principles ─────────────────────── -->
+  <section id="how" class="principles">
+    <div class="page">
+      <div class="principles-grid">
+        <div class="principle">
+          <div class="principle-num">01 · Calm pace</div>
+          <h3>Ten-minute lessons you can take on a commute.</h3>
+          <p>Every lesson is short, narrated, and meant to be read at the speed you actually read — not the speed you skim.</p>
+        </div>
+        <div class="principle">
+          <div class="principle-num">02 · Real practice</div>
+          <h3>Every module ends with a build, not a quiz.</h3>
+          <p>You finish with something usable in your own work — a prompt template, a workflow, a small tool. Practice that earns the credential.</p>
+        </div>
+        <div class="principle">
+          <div class="principle-num">03 · A score that stays current</div>
+          <h3>Your credential doesn't expire — but it does notice when the field moves.</h3>
+          <p>The GWTH Score gently decays as the curriculum updates. Refresh the lessons that changed and your score recovers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Sample lesson ────────────────────────── -->
+  <section class="sample">
+    <div class="page">
+      <div class="sample-grid">
+        <div class="sample-meta">
+          <p class="section-h-eyebrow">A sample lesson</p>
+          <h2>Read it the way you'd read a careful magazine.</h2>
+          <p>No video walls. No emoji icons. No "feature one / feature two". Lessons are typeset like editorial — pull quotes, callouts, real diagrams, the right kind of pause between paragraphs.</p>
+          <p>Each lesson includes optional narration so you can listen on the train and have the text follow along.</p>
+          <a href="gwth-lesson-viewer.html" class="link">Open the full lesson →</a>
+        </div>
+        <article class="lesson-frame" aria-label="Lesson preview">
+          <div class="lesson-frame-meta">
+            <span>Lesson 04.12</span>
+            <span class="dot"></span>
+            <span>Module 04 · How models think</span>
+          </div>
+          <h3>How models think about uncertainty</h3>
+          <p>Large language models speak with confidence. Underneath, every word is a wager. Learning to read the wager — and to ask it back out loud — is the difference between using a model and being used by one.</p>
+          <blockquote class="pq">A model isn't lying when it's wrong. It's predicting.</blockquote>
+          <p>Most chat models are slightly over-confident: they say 90% when they should be saying 75%. You can correct for this at the prompt level by asking the model to estimate its confidence as a number…</p>
+          <div class="frame-foot">
+            <span>5 of 12 pages</span>
+            <span class="seg" aria-hidden="true">
+              <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Score ───────────────────────────────── -->
+  <section class="score-sec">
+    <div class="score-sec-inner">
+      <div class="score-grid">
+        <div class="score-meta-cell">
+          <p class="section-h-eyebrow">The GWTH Score</p>
+          <h2>A score that stays current.</h2>
+          <p>The GWTH Score is a measure of your <strong>current</strong> proficiency — not what you knew six months ago. As the curriculum updates, your score gently decays. Coming back and refreshing the lessons that changed brings it back to full.</p>
+          <p>Employers see today's number. Admissions officers see today's number. You always know exactly where you stand.</p>
+          <a href="#" class="score-link">Read the full score guide →</a>
+        </div>
+        <div class="score-vis" aria-label="Score decay illustration">
+          <div class="score-vis-head">
+            <span class="num">812</span>
+            <span class="label"><span class="of">/ 1,000</span>Sarah's current score</span>
+          </div>
+          <svg class="score-decay-chart" viewBox="0 0 400 140" preserveAspectRatio="none" role="img" aria-label="Score over time: refresh holds 812, decay drifts down to 624.">
+            <g stroke="#E5DFD2" stroke-width="1">
+              <line x1="0" y1="35" x2="400" y2="35"/>
+              <line x1="0" y1="70" x2="400" y2="70"/>
+              <line x1="0" y1="105" x2="400" y2="105"/>
+            </g>
+            <path d="M 8 86 L 60 60 L 120 38 L 180 30 L 240 28 L 300 28 L 360 28 L 392 30" fill="none" stroke="#5C7F4A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M 180 30 L 240 50 L 300 76 L 360 96 L 392 104" fill="none" stroke="#B8893F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0"/>
+            <circle cx="180" cy="30" r="3.5" fill="#5C7F4A"/>
+            <circle cx="392" cy="30" r="3.5" fill="#5C7F4A"/>
+            <circle cx="392" cy="104" r="3.5" fill="#B8893F"/>
+            <g font-family="'JetBrains Mono', monospace" font-size="9" fill="#6F7569" letter-spacing="0.06em">
+              <text x="8" y="130">FEB</text>
+              <text x="200" y="130" text-anchor="middle">MAY</text>
+              <text x="392" y="130" text-anchor="end">AUG</text>
+            </g>
+            <g font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="0.04em" text-anchor="end">
+              <text x="388" y="22" fill="#5C7F4A">812</text>
+              <text x="388" y="96" fill="#B8893F">624</text>
+            </g>
+          </svg>
+          <div class="score-vis-legend">
+            <div class="legend-row"><span class="swatch l-refresh"></span><span>Refreshed monthly</span></div>
+            <div class="legend-row"><span class="swatch l-decay"></span><span>Left untouched</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Credential preview ───────────────────── -->
+  <section class="credential-sec">
+    <div class="page">
+      <div class="credential-grid">
+        <div class="credential-meta">
+          <p class="section-h-eyebrow">What employers see</p>
+          <h2>A credential someone can actually verify.</h2>
+          <p>Every GWTH credential has a unique ID, a public verification URL, a QR code, and a verifier audit log. It's a real artefact — not a screenshot, not a badge image, not a PDF that anyone could fake.</p>
+          <p>An employer can scan it, click it, or type the ID. They see the score, the modules covered, and when it was last refreshed.</p>
+          <a href="gwth-credential-verification.html" class="link" style="font-family: var(--font-body); font-size: 14px; color: var(--teal); font-weight: 500; display: inline-block; margin-top: 8px;">See a live credential →</a>
+        </div>
+        <a href="gwth-credential-verification.html" class="credential-card" style="display: block; color: #EDEAE6; text-decoration: none;">
+          <div class="cred-eyebrow">GWTH-2026-A4F8B1 · Verified</div>
+          <h3 class="cred-name">Sarah Mensah</h3>
+          <p class="cred-title">Has completed AI Literacy · Foundations — a certification on practical AI for non-technical adults.</p>
+          <div class="cred-row">
+            <div>
+              <span class="cred-num">812</span>
+              <div class="cred-num-of">Out of 1,000</div>
+            </div>
+            <div class="cred-detail">
+              <div class="cred-detail-row">
+                <span class="lbl">Issued</span>
+                <span class="val">11 May 2026</span>
+              </div>
+              <div class="cred-detail-row">
+                <span class="lbl">Cohort percentile</span>
+                <span class="val">Top 8%</span>
+              </div>
+              <div class="cred-detail-row">
+                <span class="lbl">Status</span>
+                <span class="val">Current</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Curriculum ───────────────────────────── -->
+  <section class="curriculum">
+    <div class="page">
+      <div class="curriculum-head">
+        <p class="section-h-eyebrow">The curriculum</p>
+        <h2>Four arcs, eighteen months.</h2>
+        <p>A complete path from "I'm not sure what AI is" to "I can use AI well in my own work, and explain it to someone else."</p>
+      </div>
+      <div class="curriculum-grid">
+        <div class="curriculum-cell">
+          <div class="ord">Arc 01</div>
+          <h3>Foundations</h3>
+          <p>How AI actually works — in plain language. What it can and can't do. Where the field came from. How models think.</p>
+          <div class="arcmeta">4 months · Foundational</div>
+        </div>
+        <div class="curriculum-cell">
+          <div class="ord">Arc 02</div>
+          <h3>Application</h3>
+          <p>Using AI well in your own work. Prompts that hold up. Workflows that survive scrutiny. Reading model output as a colleague, not a script.</p>
+          <div class="arcmeta">5 months · Practical</div>
+        </div>
+        <div class="curriculum-cell">
+          <div class="ord">Arc 03</div>
+          <h3>Practice</h3>
+          <p>Real builds. Real critique. You finish each module with a small piece of work someone could actually use.</p>
+          <div class="arcmeta">5 months · Hands-on</div>
+        </div>
+        <div class="curriculum-cell">
+          <div class="ord">Arc 04</div>
+          <h3>Mastery</h3>
+          <p>Reading the field as it changes. The literacy that lets you stay current when the headlines say something new every week.</p>
+          <div class="arcmeta">4 months · Advanced</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Who it's for ─────────────────────────── -->
+  <section class="personas">
+    <div class="page">
+      <p class="section-h-eyebrow">Who it's for</p>
+      <h2 class="section-h">Three kinds of reader.</h2>
+      <p class="section-lead">GWTH is built for the curious adult first — but it works for the L&D buyer and the technical learner too, because the same care goes into every lesson.</p>
+      <div class="personas-grid">
+        <div class="persona">
+          <div class="persona-tag">01 · For the curious adult</div>
+          <h3>You've never written code, but the AI conversation is moving and you want to be in it.</h3>
+          <p>You'll learn what models are doing under the hood, how to read their output, and how to make them useful in your own work — without ever being told "just trust the magic."</p>
+          <a href="#start" class="link">Try a lesson →</a>
+        </div>
+        <div class="persona">
+          <div class="persona-tag">02 · For the L&D buyer</div>
+          <h3>You're rolling out AI literacy across a team without sending everyone on a bootcamp.</h3>
+          <p>Cohort licenses, dashboards for managers, verifiable credentials your HR system can trust. Built for adults, not for compliance theatre.</p>
+          <a href="gwth-pricing.html" class="link">Team pricing →</a>
+        </div>
+        <div class="persona">
+          <div class="persona-tag">03 · For the technical learner</div>
+          <h3>You write code and want depth without the noise.</h3>
+          <p>The same lessons, plus the technical asides — calibration, sampling, retrieval, evals — that you'd otherwise have to read three papers to pull together.</p>
+          <a href="#start" class="link">Try a lesson →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ──────────────────────────────────── -->
+  <section class="faq">
+    <div class="faq-inner page">
+      <div class="faq-h">
+        <p class="section-h-eyebrow">Common questions</p>
+        <h2 class="section-h">Things worth asking before you start.</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary>Do I need to know how to code?</summary>
+          <p>No. GWTH is built for non-technical adults first. If you write code already, you'll find the lessons useful too — but nothing assumes a technical background.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How long is a lesson?</summary>
+          <p>Eight to twelve minutes of reading, plus an optional narration if you'd rather listen on the move. Most modules have twelve to sixteen lessons.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What does the score actually mean?</summary>
+          <p>The GWTH Score is your current proficiency, measured against the live curriculum. It's not a percentage of right answers — it's a weighted view of which lessons you've completed, when, and how thoroughly. <a href="#">Read the full score guide →</a></p>
+        </details>
+        <details class="faq-item">
+          <summary>What happens to my credential over time?</summary>
+          <p>It doesn't expire. It gently decays if the curriculum has been updated and you haven't refreshed the changed lessons. Coming back and reading the updated material restores your score.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can my employer verify my credential?</summary>
+          <p>Yes. Every credential has a unique public URL and a QR code. Anyone can verify it without an account — they see your score, the modules you've covered, and when it was last refreshed.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Will it work on my phone?</summary>
+          <p>Yes. The lesson viewer is built for phone, tablet, and laptop equally. Audio narration carries you on the commute; the reader takes over when you're sitting down.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a free trial?</summary>
+          <p>Yes — twelve lessons free, no card required. Long enough to know whether the format suits you.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What's not included?</summary>
+          <p>One-on-one tutoring isn't part of the standard plan. Certification exams for outside accrediting bodies aren't either. The GWTH credential stands on its own.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Closing CTA ──────────────────────────── -->
+  <section id="start" class="close-cta">
+    <div class="page">
+      <h2>Try a lesson. No card needed.</h2>
+      <p>Twelve free lessons. About two hours of reading, total. Enough to decide whether GWTH is for you.</p>
+      <a href="gwth-lesson-viewer.html" class="btn btn-primary btn-large">Open Lesson 01 →</a>
+      <span class="hero-fineprint">Free forever · Upgrade only when you want the credential</span>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><style>.fl1{fill:#22301F;}.fl2{fill:#A94C2E;}</style></defs>
+        <path class="fl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="fl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="fl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="fl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="fl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="fl1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="fl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="fl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="fl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+      <p>AI literacy for non-technical adults. Calm lessons, real practice, credentials that stay current.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="gwth-home.html">Home</a></li>
+        <li><a href="gwth-pricing.html">Pricing</a></li>
+        <li><a href="gwth-lesson-viewer.html">Sample lesson</a></li>
+        <li><a href="gwth-credential-verification.html">Verify a credential</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="gwth-about.html">About</a></li>
+        <li><a href="#">Curriculum</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="mailto:hello@gwth.ai">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Credential policy</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 GWTH.ai</span>
+    <span>Made with care · Designed slowly</span>
+  </div>
+</footer>
+
+</body>
+</html>

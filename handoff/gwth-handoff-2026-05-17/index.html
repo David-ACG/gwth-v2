@@ -1,0 +1,1599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GWTH.ai — Design Direction v1 · Mood Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     GWTH.ai — design tokens
+     ============================================================ */
+  :root {
+    /* light theme */
+    --bg:            #FBF9F4;
+    --bg-2:          #F5F0E6;
+    --surface:       #FFFFFF;
+    --sunken:        #F0EBE0;
+    --border:        #E5DFD2;
+    --border-strong: #C5BDA9;
+    --ink:           #22301F;
+    --ink-2:         #3F4938;
+    --ink-3:         #6B6F5E;
+    --ink-4:         #9A9B86;
+    --teal:          #2A5D69;
+    --teal-2:        #1E454F;
+    --teal-soft:     #D7E0E3;
+    --rust:          #A94C2E;
+    --rust-soft:     #EFDCD3;
+    --stone:         #948A76;
+    --sage:          #9A9B86;
+    --forest:        #5C7F4A;
+    --forest-soft:   #DCE5D3;
+    --amber:         #B8893F;
+    --amber-soft:    #F0E2C7;
+
+    /* dark theme */
+    --d-bg:            #1B231A;
+    --d-bg-2:          #232C20;
+    --d-surface:       #2B3328;
+    --d-sunken:        #151C14;
+    --d-border:        #3A4434;
+    --d-border-strong: #4F5947;
+    --d-ink:           #EDEAE6;
+    --d-ink-2:         #C8C3B8;
+    --d-ink-3:         #8E907F;
+    --d-ink-4:         #6B6F5E;
+    --d-teal:          #76A8B5;
+    --d-teal-soft:     #28383D;
+    --d-rust:          #C76C4A;
+    --d-rust-soft:     #3C2820;
+    --d-stone:         #B5AA92;
+    --d-sage:          #A4A691;
+    --d-forest:        #87A875;
+    --d-forest-soft:   #2C3525;
+    --d-amber:         #D6A95C;
+    --d-amber-soft:    #3D311E;
+
+    /* type stacks */
+    --font-display: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
+    --font-body:    'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono:    'JetBrains Mono', ui-monospace, 'IBM Plex Mono', Menlo, monospace;
+
+    /* rhythm */
+    --rad: 6px;
+    --rad-lg: 10px;
+    --shadow: none;
+  }
+
+  /* ============================================================
+     base
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    font-feature-settings: "ss01" on, "cv11" on;
+  }
+  ::selection { background: var(--teal); color: #fff; }
+
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; color: var(--ink); margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(48px, 7vw, 96px); line-height: 1; letter-spacing: -0.025em; }
+  h2 { font-size: clamp(28px, 3.4vw, 44px); line-height: 1.1; }
+  h3 { font-size: 22px; line-height: 1.25; }
+  h4 { font-size: 16px; line-height: 1.3; font-family: var(--font-body); font-weight: 600; letter-spacing: 0; }
+  p { margin: 0 0 1em; text-wrap: pretty; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .caption { font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* ============================================================
+     page chrome
+     ============================================================ */
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+  section { padding: 96px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: 0; }
+  .section-head { display: flex; align-items: baseline; gap: 24px; margin-bottom: 48px; flex-wrap: wrap; }
+  .section-head .num { font-family: var(--font-mono); font-size: 13px; color: var(--ink-3); min-width: 30px; }
+  .section-head .lead { color: var(--ink-3); max-width: 480px; margin-left: auto; font-size: 14px; line-height: 1.55; }
+
+  /* split pattern — light / dark side by side */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .pane { padding: 32px; }
+  .pane.light { background: var(--bg); color: var(--ink); }
+  .pane.dark  { background: var(--d-bg);  color: var(--d-ink); }
+  .pane.dark h1, .pane.dark h2, .pane.dark h3, .pane.dark h4 { color: var(--d-ink); }
+  .pane .pane-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .pane.light .pane-label { color: var(--ink-3); }
+  .pane.dark  .pane-label { color: var(--d-ink-3); }
+
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+  }
+
+  /* ============================================================
+     1 — COVER
+     ============================================================ */
+  .cover { padding: 88px 0 72px; border-bottom: 1px solid var(--border); }
+  .cover-mark { display: flex; align-items: center; gap: 16px; margin-bottom: 64px; }
+  .cover-mark svg { height: 28px; width: auto; }
+  .cover-mark .meta { display: flex; flex-direction: column; gap: 2px; }
+  .cover-mark .meta .a { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+  .cover-mark .meta .b { font-size: 12px; color: var(--ink-3); font-family: var(--font-mono); }
+  .cover h1 {
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+  .cover h1 em { font-style: normal; color: var(--teal); }
+  .cover-lead {
+    max-width: 720px;
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+  .cover-meta { display: flex; gap: 48px; margin-top: 56px; flex-wrap: wrap; }
+  .cover-meta dl { margin: 0; }
+  .cover-meta dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; }
+  .cover-meta dd { margin: 0; font-size: 14px; color: var(--ink); }
+
+  /* ============================================================
+     2 — PRINCIPLES
+     ============================================================ */
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .principle { background: var(--surface); padding: 32px; min-height: 180px; }
+  .principle .num { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-bottom: 16px; letter-spacing: 0.16em; }
+  .principle h3 { font-size: 19px; font-weight: 500; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .principle p { color: var(--ink-2); font-size: 14px; line-height: 1.6; margin: 0; }
+  @media (max-width: 800px) { .principles { grid-template-columns: 1fr; } }
+
+  /* ============================================================
+     3 — COLOR
+     ============================================================ */
+  .swatch-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--rad); overflow: hidden; margin-bottom: 32px; }
+  .swatch { padding: 16px; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; }
+  .swatch .name { font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.06em; opacity: 0.7; }
+  .swatch .val { font-size: 12px; font-family: var(--font-mono); opacity: 0.65; margin-top: 2px; }
+  .swatch .label { font-size: 13px; font-weight: 500; letter-spacing: -0.005em; margin-top: 24px; }
+  @media (max-width: 900px) { .swatch-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 500px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .color-group { margin-bottom: 48px; }
+  .color-group .group-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+  .color-group .group-head h3 { font-size: 17px; font-family: var(--font-body); font-weight: 600; }
+  .color-group .group-head .note { font-size: 12px; color: var(--ink-3); font-family: var(--font-mono); }
+
+  /* logo · locked across themes */
+  .logo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .logo-tile { border-radius: var(--rad-lg); overflow: hidden; padding: 28px 32px 22px; border: 1px solid transparent; display: flex; flex-direction: column; gap: 22px; }
+  .logo-tile.is-light { background: var(--bg-2); border-color: var(--border); color: var(--ink); }
+  .logo-tile.is-dark  { background: var(--d-bg); border-color: var(--d-border); color: var(--d-ink); }
+  .logo-tile .eyebrow { font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; }
+  .logo-tile.is-light .eyebrow { color: var(--ink-3); }
+  .logo-tile.is-dark  .eyebrow { color: var(--d-ink-3); }
+  .logo-stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 18px 8px 14px; }
+  .logo-stage svg { width: 100%; max-width: 320px; height: auto; }
+  .logo-spec { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px 16px; font-size: 11px; font-family: var(--font-mono); padding-top: 16px; border-top: 1px solid; }
+  .logo-tile.is-light .logo-spec { border-top-color: var(--border); }
+  .logo-tile.is-dark  .logo-spec { border-top-color: var(--d-border); }
+  .logo-spec > div { display: flex; flex-direction: column; gap: 4px; }
+  .logo-spec .k { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .logo-tile.is-light .logo-spec .k { color: var(--ink-3); }
+  .logo-tile.is-dark  .logo-spec .k { color: var(--d-ink-3); }
+  .logo-spec .v { display: flex; align-items: center; gap: 7px; font-size: 11px; line-height: 1; }
+  .logo-spec .v .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
+  .logo-note { font-size: 13px; color: var(--ink-3); font-style: italic; font-family: var(--font-display); margin: 18px 0 0; max-width: 70ch; }
+  @media (max-width: 720px) { .logo-pair { grid-template-columns: 1fr; } .logo-spec { grid-template-columns: 1fr 1fr; } }
+
+  /* ============================================================
+     4 — TYPE
+     ============================================================ */
+  .type-spec { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rad-lg); overflow: hidden; }
+  .type-spec-head { display: flex; justify-content: space-between; align-items: baseline; padding: 18px 36px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
+  .type-spec-head .name { font-size: 13px; font-family: var(--font-mono); color: var(--ink); letter-spacing: -0.01em; }
+  .type-spec-head .stack { font-size: 11px; font-family: var(--font-mono); color: var(--ink-3); letter-spacing: 0.04em; }
+  .type-spec-body { padding: 56px 56px 48px; }
+  .type-spec-body .display { font-family: 'Source Serif 4', serif; font-size: 64px; line-height: 1.02; letter-spacing: -0.02em; color: var(--ink); font-weight: 500; margin-bottom: 14px; }
+  .type-spec-body .display.italic { font-style: italic; font-weight: 400; color: var(--ink-2); margin-bottom: 36px; }
+  .type-spec-body .h3-sample { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; margin-bottom: 12px; letter-spacing: -0.01em; }
+  .type-spec-body .body-sample { font-family: 'Source Sans 3', sans-serif; font-size: 16px; line-height: 1.65; color: var(--ink-2); max-width: 62ch; margin-bottom: 40px; }
+  .type-scale-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border-top: 1px solid var(--border); margin: 0 -56px -48px; }
+  .type-scale-row .scale-item { background: var(--surface); padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 4px; }
+  .type-scale-row .role { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+  .type-scale-row .size { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 19px; color: var(--ink); letter-spacing: -0.01em; }
+  .type-scale-row .use { font-family: 'Source Sans 3', sans-serif; font-size: 12px; color: var(--ink-3); line-height: 1.4; }
+  @media (max-width: 900px) {
+    .type-spec-body { padding: 36px 28px 32px; }
+    .type-spec-body .display { font-size: 44px; }
+    .type-scale-row { grid-template-columns: repeat(2, 1fr); margin: 0 -28px -32px; }
+  }
+
+  /* ============================================================
+     5 — UI texture
+     ============================================================ */
+  /* every "ui-..." class set is mirrored for the .dark variant via the .pane.dark scope */
+
+  /* buttons */
+  .btn { font-family: inherit; font-size: 14px; font-weight: 500; padding: 10px 18px; border-radius: var(--rad); border: 1px solid transparent; cursor: pointer; line-height: 1; letter-spacing: -0.005em; transition: background .15s, border-color .15s; }
+  .btn + .btn { margin-left: 8px; }
+  .pane.light .btn-primary { background: var(--teal); color: #FBF9F4; }
+  .pane.light .btn-primary:hover { background: var(--teal-2); }
+  .pane.light .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--border-strong); }
+  .pane.light .btn-ghost { background: transparent; color: var(--ink); }
+  .pane.light .btn-ghost:hover { background: var(--sunken); }
+  .pane.light .btn-rust { background: var(--rust); color: #FBF9F4; }
+
+  .pane.dark .btn-primary { background: var(--d-teal); color: var(--d-bg); }
+  .pane.dark .btn-secondary { background: var(--d-surface); color: var(--d-ink); border-color: var(--d-border-strong); }
+  .pane.dark .btn-ghost { background: transparent; color: var(--d-ink); }
+  .pane.dark .btn-ghost:hover { background: var(--d-bg-2); }
+  .pane.dark .btn-rust { background: var(--d-rust); color: var(--d-bg); }
+
+  /* pills */
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 999px; line-height: 1.4; letter-spacing: -0.005em; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .pill.no-dot::before { display: none; }
+  .pane.light .pill-teal    { background: var(--teal-soft);   color: var(--teal); }
+  .pane.light .pill-forest  { background: var(--forest-soft); color: var(--forest); }
+  .pane.light .pill-amber   { background: var(--amber-soft);  color: var(--amber); }
+  .pane.light .pill-rust    { background: var(--rust-soft);   color: var(--rust); }
+  .pane.light .pill-muted   { background: var(--sunken);      color: var(--ink-3); }
+  .pane.dark .pill-teal     { background: var(--d-teal-soft);   color: var(--d-teal); }
+  .pane.dark .pill-forest   { background: var(--d-forest-soft); color: var(--d-forest); }
+  .pane.dark .pill-amber    { background: var(--d-amber-soft);  color: var(--d-amber); }
+  .pane.dark .pill-rust     { background: var(--d-rust-soft);   color: var(--d-rust); }
+  .pane.dark .pill-muted    { background: var(--d-sunken);      color: var(--d-ink-3); }
+
+  /* inputs */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 500; letter-spacing: 0.01em; }
+  .field input, .field textarea, .field select {
+    font-family: inherit; font-size: 14px; padding: 9px 12px;
+    border-radius: var(--rad); border: 1px solid var(--border-strong);
+    background: var(--surface); color: var(--ink); outline: none;
+    transition: border-color .15s, background .15s;
+  }
+  .pane.light .field input:focus, .pane.light .field textarea:focus { border-color: var(--teal); background: #fff; }
+  .pane.dark .field input, .pane.dark .field textarea, .pane.dark .field select {
+    background: var(--d-surface); color: var(--d-ink); border-color: var(--d-border-strong);
+  }
+  .pane.dark .field input:focus, .pane.dark .field textarea:focus { border-color: var(--d-teal); }
+  .pane.light .field label { color: var(--ink-2); }
+  .pane.dark .field label { color: var(--d-ink-2); }
+  .field .hint { font-size: 12px; }
+  .pane.light .field .hint { color: var(--ink-3); }
+  .pane.dark .field .hint { color: var(--d-ink-3); }
+
+  /* tabs */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+  .pane.dark .tabs { border-bottom-color: var(--d-border); }
+  .tab { font-size: 14px; padding: 10px 14px; cursor: pointer; color: var(--ink-3); position: relative; font-weight: 500; }
+  .tab.active { color: var(--ink); }
+  .tab.active::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; background: var(--teal); border-radius: 2px; }
+  .pane.dark .tab { color: var(--d-ink-3); }
+  .pane.dark .tab.active { color: var(--d-ink); }
+  .pane.dark .tab.active::after { background: var(--d-teal); }
+
+  /* callout */
+  .callout { padding: 16px 18px; border-radius: var(--rad-lg); display: flex; gap: 14px; align-items: flex-start; font-size: 14px; line-height: 1.55; }
+  .callout svg { flex-shrink: 0; margin-top: 1px; }
+  .callout .callout-title { font-weight: 600; margin-bottom: 2px; display: block; }
+  .pane.light .callout-info    { background: var(--teal-soft);   color: var(--teal-2); }
+  .pane.light .callout-success { background: var(--forest-soft); color: #2C4022; }
+  .pane.dark  .callout-info    { background: var(--d-teal-soft);   color: var(--d-ink); border: 1px solid color-mix(in oklab, var(--d-teal) 30%, transparent); }
+  .pane.dark  .callout-success { background: var(--d-forest-soft); color: var(--d-ink); border: 1px solid color-mix(in oklab, var(--d-forest) 30%, transparent); }
+
+  .ui-row { display: grid; gap: 20px; }
+  .ui-section { display: flex; flex-direction: column; gap: 12px; }
+  .ui-section h4 { font-size: 11px; font-family: var(--font-mono); color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; }
+  .pane.dark .ui-section h4 { color: var(--d-ink-3); }
+  .ui-line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+  /* ============================================================
+     6 — DASHBOARD sample
+     ============================================================ */
+  .dash-card { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .dash-stat { padding: 18px 20px; border-radius: var(--rad-lg); }
+  .pane.light .dash-stat { background: var(--surface); border: 1px solid var(--border); }
+  .pane.dark .dash-stat { background: var(--d-surface); border: 1px solid var(--d-border); }
+  .dash-stat .label { font-size: 12px; letter-spacing: 0.02em; margin-bottom: 12px; }
+  .dash-stat .num { font-family: var(--font-display); font-size: 32px; line-height: 1; letter-spacing: -0.02em; font-feature-settings: "tnum" on; font-weight: 500; }
+  .dash-stat .delta { font-size: 12px; font-family: var(--font-mono); margin-top: 8px; }
+  .pane.light .dash-stat .label { color: var(--ink-3); }
+  .pane.dark .dash-stat .label { color: var(--d-ink-3); }
+  .pane.light .dash-stat .delta { color: var(--forest); }
+  .pane.dark .dash-stat .delta { color: var(--d-forest); }
+  .pane.light .dash-stat .delta.neg { color: var(--rust); }
+  .pane.dark .dash-stat .delta.neg { color: var(--d-rust); }
+
+  .dash-chart { padding: 22px; border-radius: var(--rad-lg); margin-bottom: 16px; }
+  .pane.light .dash-chart { background: var(--surface); border: 1px solid var(--border); }
+  .pane.dark .dash-chart { background: var(--d-surface); border: 1px solid var(--d-border); }
+  .dash-chart .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+  .dash-chart .head h4 { font-family: var(--font-display); font-size: 18px; font-weight: 500; letter-spacing: -0.01em; }
+  .dash-chart .head .range { font-size: 11px; font-family: var(--font-mono); color: var(--ink-3); }
+  .pane.dark .dash-chart .head .range { color: var(--d-ink-3); }
+
+  /* dashboard activity rows */
+  .dash-list { padding: 0; border-radius: var(--rad-lg); }
+  .pane.light .dash-list { background: var(--surface); border: 1px solid var(--border); }
+  .pane.dark .dash-list { background: var(--d-surface); border: 1px solid var(--d-border); }
+  .dash-row { display: grid; grid-template-columns: 24px 1fr auto; gap: 14px; padding: 14px 18px; align-items: center; }
+  .pane.light .dash-row + .dash-row { border-top: 1px solid var(--border); }
+  .pane.dark .dash-row + .dash-row { border-top: 1px solid var(--d-border); }
+  .dash-row .icon { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; font-family: var(--font-mono); }
+  .pane.light .dash-row .icon { background: var(--teal-soft); color: var(--teal); }
+  .pane.dark .dash-row .icon { background: var(--d-teal-soft); color: var(--d-teal); }
+  .dash-row .title { font-size: 14px; font-weight: 500; }
+  .dash-row .sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .pane.dark .dash-row .sub { color: var(--d-ink-3); }
+  .dash-row .meta { font-size: 12px; font-family: var(--font-mono); color: var(--ink-3); }
+  .pane.dark .dash-row .meta { color: var(--d-ink-3); }
+
+  /* ============================================================
+     7 — LESSON sample
+     ============================================================ */
+  .lesson-frame { padding: 28px 30px 30px; border-radius: var(--rad-lg); display: grid; grid-template-columns: 1fr 200px; gap: 28px; }
+  .pane.light .lesson-frame { background: var(--surface); border: 1px solid var(--border); }
+  .pane.dark .lesson-frame { background: var(--d-surface); border: 1px solid var(--d-border); }
+  .lesson-frame .prose .eyebrow { margin-bottom: 8px; }
+  .lesson-frame .prose h3 { font-family: var(--font-display); font-size: 26px; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 14px; }
+  .lesson-frame .prose p { font-family: var(--font-display); font-size: 16px; line-height: 1.65; color: var(--ink-2); }
+  .pane.dark .lesson-frame .prose p { color: var(--d-ink-2); }
+  .lesson-frame .prose mark { background: var(--amber-soft); color: var(--ink); padding: 0 3px; border-radius: 2px; box-decoration-break: clone; }
+  .pane.dark .lesson-frame .prose mark { background: var(--d-amber-soft); color: var(--d-ink); }
+  .lesson-frame .prose blockquote { font-family: var(--font-display); border-left: 2px solid var(--teal); padding: 4px 0 4px 18px; margin: 18px 0; font-size: 16px; font-style: italic; color: var(--ink-2); }
+  .pane.dark .lesson-frame .prose blockquote { border-left-color: var(--d-teal); color: var(--d-ink-2); }
+
+  .lesson-side { display: flex; flex-direction: column; gap: 16px; padding-top: 22px; border-left: 1px solid var(--border); padding-left: 20px; }
+  .pane.dark .lesson-side { border-left-color: var(--d-border); }
+  .lesson-note { padding: 10px 12px; border-radius: var(--rad); font-size: 12px; line-height: 1.5; }
+  .pane.light .lesson-note { background: var(--bg-2); border: 1px solid var(--border); }
+  .pane.dark .lesson-note { background: var(--d-bg-2); border: 1px solid var(--d-border); }
+  .lesson-note .who { font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); margin-bottom: 4px; letter-spacing: 0.08em; }
+  .pane.dark .lesson-note .who { color: var(--d-ink-3); }
+  .lesson-actions { display: flex; gap: 4px; margin-top: 4px; align-items: center; }
+  .lesson-actions .a { padding: 4px 8px; border-radius: var(--rad); font-size: 12px; cursor: pointer; color: var(--ink-3); }
+  .pane.dark .lesson-actions .a { color: var(--d-ink-3); }
+  .pane.light .lesson-actions .a:hover { background: var(--sunken); color: var(--ink); }
+  .pane.dark .lesson-actions .a:hover { background: var(--d-bg-2); color: var(--d-ink); }
+
+  @media (max-width: 720px) { .lesson-frame { grid-template-columns: 1fr; } .lesson-side { border-left: 0; border-top: 1px solid var(--border); padding-left: 0; padding-top: 20px; } .pane.dark .lesson-side { border-top-color: var(--d-border); } }
+
+  /* ============================================================
+     8 — CREDENTIAL sample
+     ============================================================ */
+  .cred-card { padding: 28px; border-radius: var(--rad-lg); display: flex; flex-direction: column; gap: 20px; }
+  .pane.light .cred-card { background: var(--surface); border: 1px solid var(--border); }
+  .pane.dark .cred-card { background: var(--d-surface); border: 1px solid var(--d-border); }
+  .cred-head { display: flex; align-items: center; justify-content: space-between; }
+  .cred-head .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .pane.light .cred-head .meta { color: var(--ink-3); }
+  .pane.dark .cred-head .meta { color: var(--d-ink-3); }
+  .cred-body { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: end; }
+  .cred-name { font-family: var(--font-display); font-size: 28px; line-height: 1.1; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 4px; }
+  .cred-course { font-size: 13px; color: var(--ink-3); }
+  .pane.dark .cred-course { color: var(--d-ink-3); }
+  .cred-score {
+    font-family: var(--font-display); font-size: 64px; line-height: 1; font-weight: 500; letter-spacing: -0.03em; font-feature-settings: "tnum" on;
+    color: var(--teal);
+  }
+  .pane.dark .cred-score { color: var(--d-teal); }
+  .cred-score sub { font-size: 14px; vertical-align: baseline; color: var(--ink-3); font-family: var(--font-mono); font-weight: 400; }
+  .pane.dark .cred-score sub { color: var(--d-ink-3); }
+  .cred-meta-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .pane.dark .cred-meta-row { border-top-color: var(--d-border); }
+  .cred-meta-row dt { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .pane.light .cred-meta-row dt { color: var(--ink-3); }
+  .pane.dark .cred-meta-row dt { color: var(--d-ink-3); }
+  .cred-meta-row dd { margin: 4px 0 0; font-size: 13px; font-family: var(--font-mono); }
+  .cred-verify-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .pane.light .cred-verify-row { color: var(--forest); }
+  .pane.dark .cred-verify-row { color: var(--d-forest); }
+  .cred-verify-row .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* ============================================================
+     9 — PUBLIC SITE sample
+     ============================================================ */
+  .public-frame { padding: 40px 40px 44px; border-radius: var(--rad-lg); }
+  .pane.light .public-frame { background: var(--bg); border: 1px solid var(--border); }
+  .pane.dark .public-frame { background: var(--d-bg); border: 1px solid var(--d-border); }
+  .public-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px; }
+  .public-nav svg { height: 22px; width: auto; }
+  .public-nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: 13px; }
+  .pane.light .public-nav a { color: var(--ink-2); text-decoration: none; }
+  .pane.dark .public-nav a { color: var(--d-ink-2); text-decoration: none; }
+  .public-frame h2.public-headline { font-size: clamp(32px, 4vw, 48px); font-weight: 400; font-style: italic; letter-spacing: -0.025em; max-width: 14ch; margin-bottom: 18px; }
+  .public-frame h2.public-headline em { color: var(--teal); font-style: normal; }
+  .pane.dark .public-frame h2.public-headline em { color: var(--d-teal); }
+  .public-lead { max-width: 46ch; font-size: 16px; line-height: 1.65; color: var(--ink-2); margin-bottom: 28px; font-family: var(--font-display); font-weight: 400; }
+  .pane.dark .public-lead { color: var(--d-ink-2); }
+  .public-actions { display: flex; gap: 10px; align-items: center; }
+  .public-meta { display: flex; gap: 32px; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pane.dark .public-meta { border-top-color: var(--d-border); }
+  .public-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .public-meta-item .num { font-family: var(--font-display); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; font-feature-settings: "tnum" on; }
+  .public-meta-item .label { font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+  .pane.dark .public-meta-item .label { color: var(--d-ink-3); }
+
+  /* Public site — coloured Direction-B sections */
+  .public-section { margin-top: 44px; }
+  .public-section .kicker-line {
+    display: inline-block;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-bottom: 14px;
+  }
+  .pane.light .public-section .kicker-line { color: var(--ink-3); }
+  .pane.dark  .public-section .kicker-line { color: var(--d-ink-3); }
+
+  .public-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .public-tile {
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 22px 22px 24px; border-radius: var(--rad-lg);
+    min-height: 168px;
+  }
+  .public-tile .kicker {
+    font-size: 10px; font-family: var(--font-mono);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    opacity: 0.68;
+  }
+  .public-tile h4 {
+    font-size: 17px; line-height: 1.22;
+    font-family: var(--font-display); font-weight: 500;
+    letter-spacing: -0.01em; color: inherit; margin: 0;
+  }
+  .public-tile p {
+    font-size: 13px; line-height: 1.55;
+    margin: 0; opacity: 0.82;
+  }
+  .public-tile .arrow {
+    margin-top: auto; font-size: 11px; font-family: var(--font-mono);
+    letter-spacing: 0.08em; opacity: 0.78; padding-top: 8px;
+  }
+  .pane.light .public-tile.is-teal   { background: #2A5D69; color: #FBF9F4; }
+  .pane.light .public-tile.is-sage   { background: #7B8267; color: #FBF9F4; }
+  .pane.light .public-tile.is-forest { background: #5C7F4A; color: #FBF9F4; }
+  .pane.dark  .public-tile.is-teal   { background: #1E454F; color: #EDEAE6; }
+  .pane.dark  .public-tile.is-sage   { background: #5C6453; color: #EDEAE6; }
+  .pane.dark  .public-tile.is-forest { background: #41603A; color: #EDEAE6; }
+
+  .public-quote {
+    margin-top: 14px; padding: 32px 36px; border-radius: var(--rad-lg);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .pane.light .public-quote.is-amber { background: #D4A55B; color: #22301F; }
+  .pane.dark  .public-quote.is-amber { background: #8F6A2D; color: #FBF9F4; }
+  .public-quote .kicker {
+    font-size: 10px; font-family: var(--font-mono);
+    letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.78;
+  }
+  .public-quote blockquote {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 22px; line-height: 1.32; font-weight: 400;
+    margin: 0; max-width: 36ch; letter-spacing: -0.005em;
+  }
+  .public-quote cite {
+    font-size: 12px; font-style: normal;
+    font-family: var(--font-body); opacity: 0.78;
+  }
+
+  .public-cta {
+    margin-top: 14px; padding: 28px 32px; border-radius: var(--rad-lg);
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .pane.light .public-cta.is-rust { background: #A94C2E; color: #FBF9F4; }
+  .pane.dark  .public-cta.is-rust { background: #843A21; color: #EDEAE6; }
+  .public-cta h3 {
+    font-size: 22px; font-family: var(--font-display); font-style: italic;
+    font-weight: 400; letter-spacing: -0.01em; color: inherit;
+    margin: 0 0 4px;
+  }
+  .public-cta p {
+    font-size: 13px; line-height: 1.5; opacity: 0.84;
+    margin: 0; max-width: 32ch;
+  }
+  .btn-on-rust {
+    background: #FBF9F4; color: #A94C2E; border: 0;
+    padding: 11px 18px; border-radius: 6px;
+    font-family: var(--font-body); font-weight: 500; font-size: 13px;
+    letter-spacing: -0.005em; cursor: pointer; white-space: nowrap;
+  }
+  .pane.dark .btn-on-rust { background: #EDEAE6; color: #843A21; }
+
+  @media (max-width: 900px) {
+    .public-three { grid-template-columns: 1fr; }
+    .public-cta { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ============================================================
+     9 — DIRECTION COMPARE (restrained vs blocks of colour)
+     ============================================================ */
+  .dir-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+  @media (max-width: 1100px) { .dir-row { grid-template-columns: 1fr; } }
+  .dir-row + .dir-row { margin-top: 36px; }
+
+  .dir-pane-frame { padding: 24px; border-radius: var(--rad-xl); display: flex; flex-direction: column; gap: 16px; }
+  .dir-pane-frame.pane.light { background: var(--bg); border: 1px solid var(--border); }
+  .dir-pane-frame.pane.dark  { background: var(--d-bg); border: 1px solid var(--d-border); }
+
+  .dir-pane-head { display: flex; flex-direction: column; gap: 4px; padding-bottom: 12px; }
+  .pane.light .dir-pane-head { border-bottom: 1px solid var(--border); }
+  .pane.dark  .dir-pane-head { border-bottom: 1px solid var(--d-border); }
+  .pane.light .dir-pane-head .caption { color: var(--ink-3); }
+  .pane.dark  .dir-pane-head .caption { color: var(--d-ink-3); }
+
+  .dir-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 760px) { .dir-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px) { .dir-grid { grid-template-columns: 1fr; } }
+
+  .dir-card { padding: 16px 16px; border-radius: var(--rad-md); display: flex; flex-direction: column; gap: 8px; min-height: 152px; }
+  .dir-card .kicker { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .dir-card .h { font-family: var(--font-display); font-size: 15px; line-height: 1.22; letter-spacing: -0.01em; font-weight: 500; margin: 0; }
+  .dir-card .foot { margin-top: auto; font-size: 10.5px; font-family: var(--font-mono); display: flex; align-items: center; gap: 7px; letter-spacing: 0.02em; }
+  .dir-card .num-big { font-family: var(--font-display); font-size: 32px; line-height: 1; letter-spacing: -0.02em; font-feature-settings: "tnum" on; font-weight: 500; margin-top: 2px; }
+  .dir-card .num-big sub { font-size: 11px; font-family: var(--font-mono); font-weight: 400; vertical-align: baseline; opacity: 0.7; margin-left: 3px; }
+
+  /* Full colour blocks (pane-aware, six colours) */
+  .pane.light .dir-card.block.is-teal    { background: #2A5D69; color: #FBF9F4; }
+  .pane.light .dir-card.block.is-indigo  { background: #3A4773; color: #FBF9F4; }
+  .pane.light .dir-card.block.is-forest  { background: #5C7F4A; color: #FBF9F4; }
+  .pane.light .dir-card.block.is-sage    { background: #7B8267; color: #FBF9F4; }
+  .pane.light .dir-card.block.is-amber   { background: #D4A55B; color: #22301F; }
+  .pane.light .dir-card.block.is-rust    { background: #A94C2E; color: #FBF9F4; }
+
+  .pane.dark .dir-card.block.is-teal    { background: #1E454F; color: #EDEAE6; }
+  .pane.dark .dir-card.block.is-indigo  { background: #2A3556; color: #EDEAE6; }
+  .pane.dark .dir-card.block.is-forest  { background: #41603A; color: #EDEAE6; }
+  .pane.dark .dir-card.block.is-sage    { background: #5C6453; color: #EDEAE6; }
+  .pane.dark .dir-card.block.is-amber   { background: #8F6A2D; color: #FBF9F4; }
+  .pane.dark .dir-card.block.is-rust    { background: #843A21; color: #EDEAE6; }
+
+  .dir-card.block { border: 1px solid transparent; }
+  .dir-card.block .kicker     { opacity: 0.62; }
+  .dir-card.block .foot       { opacity: 0.72; }
+  .dir-card.block.is-amber .kicker,
+  .dir-card.block.is-amber .foot { opacity: 0.78; }
+
+  /* Heading colour override — global h3 rule sets var(--ink),
+     which would dark-on-dark inside coloured blocks. Force inherit. */
+  .dir-card.block h3.h { color: inherit; }
+
+  .dir-cta-mini {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 11px; border-radius: 999px;
+    font-size: 11px; font-weight: 500; line-height: 1;
+    font-family: var(--font-body);
+    text-decoration: none;
+  }
+  .dir-card.block .dir-cta-mini { background: rgba(255,255,255,0.16); color: #FBF9F4; border: 1px solid rgba(255,255,255,0.28); }
+  .dir-card.block.is-amber .dir-cta-mini { background: #22301F; color: #FBF9F4; border: 1px solid transparent; }
+
+  .dir-takeaway {
+    font-family: var(--font-display);
+    font-size: 15px; line-height: 1.6;
+    color: var(--ink-2); font-style: italic;
+    margin-top: 36px; max-width: 56ch;
+  }
+  .dir-takeaway strong { font-style: normal; font-weight: 500; color: var(--ink); }
+
+  .dir-palette-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 28px; padding: 16px 20px; background: var(--bg-2); border-radius: var(--rad-md); }
+  .dir-palette-legend .item { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--ink-2); }
+  .dir-palette-legend .sw { width: 14px; height: 14px; border-radius: 3px; }
+
+  /* ============================================================
+     closing
+     ============================================================ */
+  footer { padding: 64px 0 80px; }
+  footer .colophon { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px; }
+  footer .colophon svg { height: 24px; width: auto; }
+  footer .colophon .right { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; }
+
+  /* tiny svg icons */
+  .icon-small { width: 14px; height: 14px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     1. COVER
+============================================================ -->
+<section class="cover">
+  <div class="wrap">
+    <div class="cover-mark">
+      <svg viewBox="0 0 578.07 101.64" role="img" aria-label="GWTH.ai logo"><defs><style>.lc1{fill:#22301f;}.lc2{fill:#a94c2e;}</style></defs><path class="lc1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="lc1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="lc1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="lc1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="lc1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="lc1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="lc2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="lc2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="lc2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+      <div class="meta">
+        <span class="a">Design Direction · v1</span>
+        <span class="b">May 2026 · Mood board</span>
+      </div>
+    </div>
+
+    <h1>A place to think<br>about <em>thinking</em>.</h1>
+
+    <p class="cover-lead">A first-pass direction for GWTH.ai — calm, warm, editorial. Built from natural pigments, humanist type, and quiet structure. Designed for an hour of learning without visual fatigue.</p>
+
+    <div class="cover-meta">
+      <dl><dt>Status</dt><dd>Foundations — colour, type, texture</dd></dl>
+      <dl><dt>Surfaces</dt><dd>Public · Dashboard · Lesson · Credential</dd></dl>
+      <dl><dt>Themes</dt><dd>Light + dark, paired</dd></dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     2. PRINCIPLES
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2>Principles</h2>
+      <p class="lead">Six rules the whole system tries to honour. Each component below either obeys them or earns its variance.</p>
+    </div>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="num">P · 01</div>
+        <h3>Warm before contrast.</h3>
+        <p>Off-white paper, not stark white. Deep forest text, not pure black. The page should feel like daylight in a wood-panelled room — never an interrogation.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P · 02</div>
+        <h3>One accent, used twice.</h3>
+        <p>Teal carries action and focus. Rust carries the brand mark and rare emphasis. Everything else recedes so what matters lands.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P · 03</div>
+        <h3>Editorial, not magazine.</h3>
+        <p>Serif headlines for warmth and authority; humanist sans for body and chrome. Read like a thoughtful weekly, not a glossy.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P · 04</div>
+        <h3>Hairlines do the work.</h3>
+        <p>Single-pixel borders, generous whitespace, no shadows. Hierarchy comes from rhythm and weight, not from boxes inside boxes.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P · 05</div>
+        <h3>Numbers are typography.</h3>
+        <p>Scores, deltas, dates — set in tabular serifs or mono. A number on this site is something you can read at a glance and trust.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P · 06</div>
+        <h3>Stillness over motion.</h3>
+        <p>No drifting orbs, no animated gradients, no parallax. Movement is reserved for moments the user caused — a hover, a toggle, a success.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     3. COLOUR
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2>Colour</h2>
+      <p class="lead">Natural pigments — paper, ink, sage, taupe, deep teal, rust. The palette has tonal range without ever turning brown or muddy.</p>
+    </div>
+
+    <!-- LIGHT palette -->
+    <div class="color-group">
+      <div class="group-head"><h3>Light · paper</h3><span class="note">Default theme</span></div>
+      <div class="swatch-row">
+        <div class="swatch" style="background:#FBF9F4; color:#22301F"><div><div class="name">--bg</div><div class="val">#FBF9F4</div></div><div class="label">Page</div></div>
+        <div class="swatch" style="background:#F5F0E6; color:#22301F"><div><div class="name">--bg-2</div><div class="val">#F5F0E6</div></div><div class="label">Lifted</div></div>
+        <div class="swatch" style="background:#FFFFFF; color:#22301F; border-right:1px solid #E5DFD2"><div><div class="name">--surface</div><div class="val">#FFFFFF</div></div><div class="label">Card</div></div>
+        <div class="swatch" style="background:#F0EBE0; color:#22301F"><div><div class="name">--sunken</div><div class="val">#F0EBE0</div></div><div class="label">Sunken</div></div>
+        <div class="swatch" style="background:#E5DFD2; color:#22301F"><div><div class="name">--border</div><div class="val">#E5DFD2</div></div><div class="label">Border</div></div>
+        <div class="swatch" style="background:#C5BDA9; color:#22301F"><div><div class="name">--border-strong</div><div class="val">#C5BDA9</div></div><div class="label">Border · strong</div></div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background:#22301F; color:#EDEAE6"><div><div class="name">--ink</div><div class="val">#22301F</div></div><div class="label">Text · primary</div></div>
+        <div class="swatch" style="background:#3F4938; color:#EDEAE6"><div><div class="name">--ink-2</div><div class="val">#3F4938</div></div><div class="label">Text · body</div></div>
+        <div class="swatch" style="background:#6B6F5E; color:#EDEAE6"><div><div class="name">--ink-3</div><div class="val">#6B6F5E</div></div><div class="label">Text · muted</div></div>
+        <div class="swatch" style="background:#9A9B86; color:#22301F"><div><div class="name">--ink-4 · sage</div><div class="val">#9A9B86</div></div><div class="label">Hint · neutral</div></div>
+        <div class="swatch" style="background:#948A76; color:#FBF9F4"><div><div class="name">--stone</div><div class="val">#948A76</div></div><div class="label">Stone</div></div>
+        <div class="swatch" style="background:#FBF9F4; color:#22301F; border-right:1px solid #DFDBD2"><div><div class="name">on-ink</div><div class="val">#FBF9F4</div></div><div class="label">On dark</div></div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background:#2A5D69; color:#F0EEE9"><div><div class="name">--teal</div><div class="val">#2A5D69</div></div><div class="label">Primary action</div></div>
+        <div class="swatch" style="background:#D7E0E3; color:#1E454F"><div><div class="name">--teal-soft</div><div class="val">#D7E0E3</div></div><div class="label">Teal · tint</div></div>
+        <div class="swatch" style="background:#A94C2E; color:#F0EEE9"><div><div class="name">--rust</div><div class="val">#A94C2E</div></div><div class="label">Brand accent</div></div>
+        <div class="swatch" style="background:#5C7F4A; color:#F0EEE9"><div><div class="name">--forest</div><div class="val">#5C7F4A</div></div><div class="label">Success</div></div>
+        <div class="swatch" style="background:#B8893F; color:#22301F"><div><div class="name">--amber</div><div class="val">#B8893F</div></div><div class="label">Warning</div></div>
+        <div class="swatch" style="background:#A94C2E; color:#F0EEE9"><div><div class="name">error</div><div class="val">#A94C2E</div></div><div class="label">Error · = rust</div></div>
+      </div>
+    </div>
+
+    <!-- DARK palette -->
+    <div class="color-group">
+      <div class="group-head"><h3>Dark · forest</h3><span class="note">Inverted theme</span></div>
+      <div class="swatch-row">
+        <div class="swatch" style="background:#1B231A; color:#EDEAE6"><div><div class="name">--d-bg</div><div class="val">#1B231A</div></div><div class="label">Page</div></div>
+        <div class="swatch" style="background:#232C20; color:#EDEAE6"><div><div class="name">--d-bg-2</div><div class="val">#232C20</div></div><div class="label">Lifted</div></div>
+        <div class="swatch" style="background:#2B3328; color:#EDEAE6"><div><div class="name">--d-surface</div><div class="val">#2B3328</div></div><div class="label">Card</div></div>
+        <div class="swatch" style="background:#151C14; color:#EDEAE6"><div><div class="name">--d-sunken</div><div class="val">#151C14</div></div><div class="label">Sunken</div></div>
+        <div class="swatch" style="background:#3A4434; color:#EDEAE6"><div><div class="name">--d-border</div><div class="val">#3A4434</div></div><div class="label">Border</div></div>
+        <div class="swatch" style="background:#4F5947; color:#EDEAE6"><div><div class="name">--d-border-strong</div><div class="val">#4F5947</div></div><div class="label">Border · strong</div></div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background:#EDEAE6; color:#22301F"><div><div class="name">--d-ink</div><div class="val">#EDEAE6</div></div><div class="label">Text · primary</div></div>
+        <div class="swatch" style="background:#C8C3B8; color:#22301F"><div><div class="name">--d-ink-2</div><div class="val">#C8C3B8</div></div><div class="label">Text · body</div></div>
+        <div class="swatch" style="background:#8E907F; color:#1B231A"><div><div class="name">--d-ink-3</div><div class="val">#8E907F</div></div><div class="label">Text · muted</div></div>
+        <div class="swatch" style="background:#6B6F5E; color:#EDEAE6"><div><div class="name">--d-ink-4</div><div class="val">#6B6F5E</div></div><div class="label">Hint</div></div>
+        <div class="swatch" style="background:#B5AA92; color:#1B231A"><div><div class="name">--d-stone</div><div class="val">#B5AA92</div></div><div class="label">Stone</div></div>
+        <div class="swatch" style="background:#A4A691; color:#1B231A"><div><div class="name">--d-sage</div><div class="val">#A4A691</div></div><div class="label">Sage</div></div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background:#76A8B5; color:#1B231A"><div><div class="name">--d-teal</div><div class="val">#76A8B5</div></div><div class="label">Primary action</div></div>
+        <div class="swatch" style="background:#28383D; color:#EDEAE6"><div><div class="name">--d-teal-soft</div><div class="val">#28383D</div></div><div class="label">Teal · tint</div></div>
+        <div class="swatch" style="background:#C76C4A; color:#1B231A"><div><div class="name">--d-rust</div><div class="val">#C76C4A</div></div><div class="label">Brand accent</div></div>
+        <div class="swatch" style="background:#87A875; color:#1B231A"><div><div class="name">--d-forest</div><div class="val">#87A875</div></div><div class="label">Success</div></div>
+        <div class="swatch" style="background:#D6A95C; color:#1B231A"><div><div class="name">--d-amber</div><div class="val">#D6A95C</div></div><div class="label">Warning</div></div>
+        <div class="swatch" style="background:#C76C4A; color:#1B231A"><div><div class="name">error</div><div class="val">#C76C4A</div></div><div class="label">Error · = rust</div></div>
+      </div>
+    </div>
+
+    <!-- Chart palette -->
+    <div class="color-group">
+      <div class="group-head"><h3>Chart palette</h3><span class="note">Six categorical · works in either theme</span></div>
+      <div class="swatch-row" style="grid-template-columns:repeat(6,1fr)">
+        <div class="swatch" style="background:#2A5D69; color:#F0EEE9; min-height:90px"><div><div class="name">chart-1</div><div class="val">teal</div></div></div>
+        <div class="swatch" style="background:#A94C2E; color:#F0EEE9; min-height:90px"><div><div class="name">chart-2</div><div class="val">rust</div></div></div>
+        <div class="swatch" style="background:#5C7F4A; color:#F0EEE9; min-height:90px"><div><div class="name">chart-3</div><div class="val">forest</div></div></div>
+        <div class="swatch" style="background:#B8893F; color:#22301F; min-height:90px"><div><div class="name">chart-4</div><div class="val">amber</div></div></div>
+        <div class="swatch" style="background:#9A9B86; color:#22301F; min-height:90px"><div><div class="name">chart-5</div><div class="val">sage</div></div></div>
+        <div class="swatch" style="background:#948A76; color:#FBF9F4; min-height:90px"><div><div class="name">chart-6</div><div class="val">stone</div></div></div>
+      </div>
+    </div>
+
+    <!-- Logo · locked across themes -->
+    <div class="color-group">
+      <div class="group-head">
+        <h3>Logo · locked across themes</h3>
+        <span class="note">Geometry fixed · only the wordmark colour changes between themes — accent stays rust</span>
+      </div>
+      <div class="logo-pair">
+        <div class="logo-tile is-light">
+          <span class="eyebrow">Light · paper</span>
+          <div class="logo-stage">
+            <svg viewBox="0 0 578.07 101.64" role="img" aria-label="GWTH.ai logo · light"><defs><style>.ll1{fill:#22301f;}.ll2{fill:#a94c2e;}</style></defs><path class="ll1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="ll1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="ll1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="ll1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="ll1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="ll1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="ll2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="ll2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="ll2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+          </div>
+          <div class="logo-spec">
+            <div><span class="k">Wordmark</span><span class="v"><i class="dot" style="background:#22301F"></i>#22301F · forest ink</span></div>
+            <div><span class="k">Accent</span><span class="v"><i class="dot" style="background:#A94C2E"></i>#A94C2E · rust</span></div>
+            <div><span class="k">Surface</span><span class="v"><i class="dot" style="background:#FBF9F4; border:1px solid #E5DFD2"></i>#FBF9F4 · paper</span></div>
+          </div>
+        </div>
+        <div class="logo-tile is-dark">
+          <span class="eyebrow">Dark · forest</span>
+          <div class="logo-stage">
+            <svg viewBox="0 0 578.07 101.64" role="img" aria-label="GWTH.ai logo · dark"><defs><style>.dl1{fill:#edeae6;}.dl2{fill:#a94c2e;}</style></defs><path class="dl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="dl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="dl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="dl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="dl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="dl1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="dl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="dl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="dl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+          </div>
+          <div class="logo-spec">
+            <div><span class="k">Wordmark</span><span class="v"><i class="dot" style="background:#EDEAE6"></i>#EDEAE6 · paper cream</span></div>
+            <div><span class="k">Accent</span><span class="v"><i class="dot" style="background:#A94C2E"></i>#A94C2E · rust</span></div>
+            <div><span class="k">Surface</span><span class="v"><i class="dot" style="background:#1B231A; border:1px solid #3A4434"></i>#1B231A · forest</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="logo-note">Same geometry, two themes. Wordmark colour matches the theme ink; the rust accent is permanent — it is the brand mark and never swaps. Clear-space (the height of the &ldquo;G&rdquo;) is the minimum surrounding margin on both surfaces.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     4. TYPE
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">03</span>
+      <h2>Typography · the system</h2>
+      <p class="lead">Source Serif 4 carries display and editorial moments. Source Sans 3 carries body, UI, and chrome. Drawn by the same hand, with matched proportions — quiet enough to disappear behind dense content.</p>
+    </div>
+
+    <div class="type-spec">
+      <div class="type-spec-head">
+        <span class="name">Source Serif 4 · Source Sans 3</span>
+        <span class="stack">Display serif · humanist sans · monospace numerics</span>
+      </div>
+
+      <div class="type-spec-body">
+        <div class="display">A calm place to learn how to think.</div>
+        <div class="display italic">Learning is a slow craft.</div>
+
+        <div class="h3-sample">Designed for an hour at the desk.</div>
+        <p class="body-sample">The serif sets headlines and editorial moments — credentials, pull-quotes, the cover of a lesson. The sans does everything else: paragraphs, tables, form fields, navigation, button labels, captions. Numerics use tabular figures so dashboards line up cleanly without nudging.</p>
+
+        <div class="type-scale-row">
+          <div class="scale-item"><div class="role">Display</div><div class="size">32 – 96 px</div><div class="use">Section heads · cover</div></div>
+          <div class="scale-item"><div class="role">Heading</div><div class="size">19 – 24 px</div><div class="use">Card titles · sub-heads</div></div>
+          <div class="scale-item"><div class="role">Body</div><div class="size">15 – 17 px</div><div class="use">Long-form · paragraphs</div></div>
+          <div class="scale-item"><div class="role">UI</div><div class="size">13 – 14 px</div><div class="use">Buttons · labels · chrome</div></div>
+          <div class="scale-item"><div class="role">Caption</div><div class="size">11 – 12 px</div><div class="use">Mono · metadata · kickers</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     5. UI TEXTURE
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">04</span>
+      <h2>UI texture</h2>
+      <p class="lead">The vocabulary of small parts: buttons, pills, fields, tabs, callouts. Built from the palette, with hairline borders and quiet interaction states.</p>
+    </div>
+
+    <div class="split">
+      <!-- LIGHT -->
+      <div class="pane light">
+        <div class="pane-label"><span class="eyebrow">Light · paper</span><span class="caption">Default</span></div>
+
+        <div class="ui-row">
+          <div class="ui-section">
+            <h4>Buttons</h4>
+            <div class="ui-line">
+              <button class="btn btn-primary">Continue lesson</button>
+              <button class="btn btn-secondary">Save for later</button>
+              <button class="btn btn-ghost">Skip</button>
+            </div>
+            <div class="ui-line">
+              <button class="btn btn-rust">Submit credential</button>
+              <span class="caption">Rust reserved for brand &amp; rare emphasis.</span>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Pills</h4>
+            <div class="ui-line">
+              <span class="pill pill-teal">In progress</span>
+              <span class="pill pill-forest">Verified</span>
+              <span class="pill pill-amber">Needs review</span>
+              <span class="pill pill-rust">Locked</span>
+              <span class="pill pill-muted">Draft</span>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Form fields</h4>
+            <div class="ui-line" style="gap:14px; flex-wrap:nowrap">
+              <div class="field" style="flex:1">
+                <label for="i1">Display name</label>
+                <input id="i1" type="text" value="Alex Roussel">
+                <span class="hint">How learners will see you.</span>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="i2">Verification code</label>
+                <input id="i2" type="text" placeholder="GWTH-····-····" value="GWTH-7K2A-9MEX">
+                <span class="hint">Provided by your assessor.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Tabs</h4>
+            <div class="tabs">
+              <div class="tab active">Overview</div>
+              <div class="tab">Lessons</div>
+              <div class="tab">Notes</div>
+              <div class="tab">Credentials</div>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Callouts</h4>
+            <div class="callout callout-info">
+              <svg class="icon-small" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5v.01M7 7h1v4.5h1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+              <div><span class="callout-title">A note before you start.</span>This lesson assumes you've completed Module 02. You can revisit it anytime from the sidebar.</div>
+            </div>
+            <div class="callout callout-success">
+              <svg class="icon-small" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="7"/><path d="M5 8.5l2 2 4-4"/></svg>
+              <div><span class="callout-title">Credential issued.</span>Your score has been verified and is now publicly attestable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DARK -->
+      <div class="pane dark">
+        <div class="pane-label"><span class="eyebrow" style="color:var(--d-ink-3)">Dark · forest</span><span class="caption" style="color:var(--d-ink-3)">Inverted</span></div>
+
+        <div class="ui-row">
+          <div class="ui-section">
+            <h4>Buttons</h4>
+            <div class="ui-line">
+              <button class="btn btn-primary">Continue lesson</button>
+              <button class="btn btn-secondary">Save for later</button>
+              <button class="btn btn-ghost">Skip</button>
+            </div>
+            <div class="ui-line">
+              <button class="btn btn-rust">Submit credential</button>
+              <span class="caption" style="color:var(--d-ink-3)">Rust reserved for brand &amp; rare emphasis.</span>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Pills</h4>
+            <div class="ui-line">
+              <span class="pill pill-teal">In progress</span>
+              <span class="pill pill-forest">Verified</span>
+              <span class="pill pill-amber">Needs review</span>
+              <span class="pill pill-rust">Locked</span>
+              <span class="pill pill-muted">Draft</span>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Form fields</h4>
+            <div class="ui-line" style="gap:14px; flex-wrap:nowrap">
+              <div class="field" style="flex:1">
+                <label for="i3">Display name</label>
+                <input id="i3" type="text" value="Alex Roussel">
+                <span class="hint">How learners will see you.</span>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="i4">Verification code</label>
+                <input id="i4" type="text" value="GWTH-7K2A-9MEX">
+                <span class="hint">Provided by your assessor.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Tabs</h4>
+            <div class="tabs">
+              <div class="tab active">Overview</div>
+              <div class="tab">Lessons</div>
+              <div class="tab">Notes</div>
+              <div class="tab">Credentials</div>
+            </div>
+          </div>
+
+          <div class="ui-section">
+            <h4>Callouts</h4>
+            <div class="callout callout-info">
+              <svg class="icon-small" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5v.01M7 7h1v4.5h1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+              <div><span class="callout-title">A note before you start.</span>This lesson assumes you've completed Module 02. You can revisit it anytime from the sidebar.</div>
+            </div>
+            <div class="callout callout-success">
+              <svg class="icon-small" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="7"/><path d="M5 8.5l2 2 4-4"/></svg>
+              <div><span class="callout-title">Credential issued.</span>Your score has been verified and is now publicly attestable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     6. DASHBOARD sample
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">05</span>
+      <h2>Sample · Learner dashboard</h2>
+      <p class="lead">A small panel of a dashboard. Numbers set in tabular serif, charts as muted bars, activity rows held by hairlines only.</p>
+    </div>
+
+    <div class="split">
+      <!-- LIGHT -->
+      <div class="pane light">
+        <div class="pane-label"><span class="eyebrow">Light · paper</span><span class="caption">Default</span></div>
+
+        <div class="dash-card">
+          <div class="dash-stat">
+            <div class="label">Lessons completed</div>
+            <div class="num">47<span style="color:var(--ink-3); font-size:18px"> / 64</span></div>
+            <div class="delta">↗ +6 this week</div>
+          </div>
+          <div class="dash-stat">
+            <div class="label">Skill score</div>
+            <div class="num">812</div>
+            <div class="delta">↗ +24 this month</div>
+          </div>
+        </div>
+
+        <div class="dash-chart">
+          <div class="head"><h4>Weekly learning time</h4><span class="range">Apr 14 — May 11</span></div>
+          <!-- inline bar chart -->
+          <svg viewBox="0 0 420 90" width="100%" height="90" aria-hidden="true">
+            <line x1="0" y1="80" x2="420" y2="80" stroke="#DFDBD2" stroke-width="1"/>
+            <line x1="0" y1="55" x2="420" y2="55" stroke="#DFDBD2" stroke-dasharray="2 4" stroke-width="1"/>
+            <line x1="0" y1="30" x2="420" y2="30" stroke="#DFDBD2" stroke-dasharray="2 4" stroke-width="1"/>
+            <g fill="#2A5D69">
+              <rect x="10"  y="42" width="22" height="38" rx="2"/>
+              <rect x="42"  y="28" width="22" height="52" rx="2"/>
+              <rect x="74"  y="50" width="22" height="30" rx="2"/>
+              <rect x="106" y="18" width="22" height="62" rx="2"/>
+              <rect x="138" y="38" width="22" height="42" rx="2"/>
+              <rect x="170" y="48" width="22" height="32" rx="2"/>
+              <rect x="202" y="60" width="22" height="20" rx="2"/>
+              <rect x="234" y="34" width="22" height="46" rx="2"/>
+              <rect x="266" y="24" width="22" height="56" rx="2"/>
+              <rect x="298" y="44" width="22" height="36" rx="2"/>
+              <rect x="330" y="20" width="22" height="60" rx="2"/>
+              <rect x="362" y="36" width="22" height="44" rx="2"/>
+            </g>
+            <g fill="#A94C2E" opacity="0.85">
+              <rect x="362" y="20" width="22" height="16" rx="2"/>
+            </g>
+          </svg>
+          <div style="display:flex; justify-content:space-between; margin-top:8px; font-family:var(--font-mono); font-size:10px; color:var(--ink-3); letter-spacing:0.06em">
+            <span>W14</span><span>W15</span><span>W16</span><span>W17</span><span>W18</span><span>W19</span><span style="color:var(--rust)">This week</span>
+          </div>
+        </div>
+
+        <div class="dash-list">
+          <div class="dash-row">
+            <div class="icon">L</div>
+            <div><div class="title">Module 04 — Mental models for prompting</div><div class="sub">Completed · 38 min</div></div>
+            <div class="meta">Today, 09:14</div>
+          </div>
+          <div class="dash-row">
+            <div class="icon" style="background:var(--forest-soft); color:var(--forest)">✓</div>
+            <div><div class="title">Credential issued · Foundations of AI literacy</div><div class="sub">Verifiable · score 812 / 1000</div></div>
+            <div class="meta">Yesterday</div>
+          </div>
+          <div class="dash-row">
+            <div class="icon" style="background:var(--amber-soft); color:var(--amber)">!</div>
+            <div><div class="title">Feedback received on Lesson 12 notes</div><div class="sub">From your peer reviewer, M. Tan</div></div>
+            <div class="meta">2d ago</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DARK -->
+      <div class="pane dark">
+        <div class="pane-label"><span class="eyebrow" style="color:var(--d-ink-3)">Dark · forest</span><span class="caption" style="color:var(--d-ink-3)">Inverted</span></div>
+
+        <div class="dash-card">
+          <div class="dash-stat">
+            <div class="label">Lessons completed</div>
+            <div class="num">47<span style="color:var(--d-ink-3); font-size:18px"> / 64</span></div>
+            <div class="delta">↗ +6 this week</div>
+          </div>
+          <div class="dash-stat">
+            <div class="label">Skill score</div>
+            <div class="num">812</div>
+            <div class="delta">↗ +24 this month</div>
+          </div>
+        </div>
+
+        <div class="dash-chart">
+          <div class="head"><h4>Weekly learning time</h4><span class="range">Apr 14 — May 11</span></div>
+          <svg viewBox="0 0 420 90" width="100%" height="90" aria-hidden="true">
+            <line x1="0" y1="80" x2="420" y2="80" stroke="#3A4434" stroke-width="1"/>
+            <line x1="0" y1="55" x2="420" y2="55" stroke="#3A4434" stroke-dasharray="2 4" stroke-width="1"/>
+            <line x1="0" y1="30" x2="420" y2="30" stroke="#3A4434" stroke-dasharray="2 4" stroke-width="1"/>
+            <g fill="#76A8B5">
+              <rect x="10"  y="42" width="22" height="38" rx="2"/>
+              <rect x="42"  y="28" width="22" height="52" rx="2"/>
+              <rect x="74"  y="50" width="22" height="30" rx="2"/>
+              <rect x="106" y="18" width="22" height="62" rx="2"/>
+              <rect x="138" y="38" width="22" height="42" rx="2"/>
+              <rect x="170" y="48" width="22" height="32" rx="2"/>
+              <rect x="202" y="60" width="22" height="20" rx="2"/>
+              <rect x="234" y="34" width="22" height="46" rx="2"/>
+              <rect x="266" y="24" width="22" height="56" rx="2"/>
+              <rect x="298" y="44" width="22" height="36" rx="2"/>
+              <rect x="330" y="20" width="22" height="60" rx="2"/>
+              <rect x="362" y="36" width="22" height="44" rx="2"/>
+            </g>
+            <g fill="#C76C4A" opacity="0.95">
+              <rect x="362" y="20" width="22" height="16" rx="2"/>
+            </g>
+          </svg>
+          <div style="display:flex; justify-content:space-between; margin-top:8px; font-family:var(--font-mono); font-size:10px; color:var(--d-ink-3); letter-spacing:0.06em">
+            <span>W14</span><span>W15</span><span>W16</span><span>W17</span><span>W18</span><span>W19</span><span style="color:var(--d-rust)">This week</span>
+          </div>
+        </div>
+
+        <div class="dash-list">
+          <div class="dash-row">
+            <div class="icon">L</div>
+            <div><div class="title">Module 04 — Mental models for prompting</div><div class="sub">Completed · 38 min</div></div>
+            <div class="meta">Today, 09:14</div>
+          </div>
+          <div class="dash-row">
+            <div class="icon" style="background:var(--d-forest-soft); color:var(--d-forest)">✓</div>
+            <div><div class="title">Credential issued · Foundations of AI literacy</div><div class="sub">Verifiable · score 812 / 1000</div></div>
+            <div class="meta">Yesterday</div>
+          </div>
+          <div class="dash-row">
+            <div class="icon" style="background:var(--d-amber-soft); color:var(--d-amber)">!</div>
+            <div><div class="title">Feedback received on Lesson 12 notes</div><div class="sub">From your peer reviewer, M. Tan</div></div>
+            <div class="meta">2d ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     7. LESSON sample
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">06</span>
+      <h2>Sample · Lesson reading surface</h2>
+      <p class="lead">Reading is the hero — long-measure serif body, marginal notes alongside, a single highlight colour. The chrome disappears so the text breathes.</p>
+    </div>
+
+    <div class="split">
+
+      <!-- LIGHT -->
+      <div class="pane light">
+        <div class="pane-label"><span class="eyebrow">Light · paper</span><span class="caption">Default reading mode</span></div>
+
+        <div class="lesson-frame">
+          <div class="prose">
+            <div class="eyebrow">Module 04 · Lesson 12</div>
+            <h3>How models think about uncertainty.</h3>
+            <p>Most people assume a language model has a single opinion. It doesn't. At each step it holds a probability distribution over thousands of possible next moves, and what you see in the answer is one path sampled from that distribution.</p>
+            <p>The practical implication is that <mark>asking the same question twice rarely gives you the same answer twice</mark>, and that the model's "confidence" is something you can sometimes ask it to expose — but rarely something it volunteers.</p>
+            <blockquote>Treat the model as a probabilistic colleague, not as an oracle. The right question isn't "is this true?" — it's "how would I check?"</blockquote>
+            <p>In the next exercise you'll prompt the same question three ways and compare the answers side by side.</p>
+          </div>
+
+          <aside class="lesson-side">
+            <div class="lesson-note">
+              <div class="who">YOUR NOTE · 09:14</div>
+              This connects to the "epistemic humility" idea from L09.
+            </div>
+            <div class="lesson-note">
+              <div class="who">M. TAN · PEER</div>
+              Worth comparing to how a search engine ranks results — same intuition.
+            </div>
+            <div class="lesson-actions">
+              <span class="a">+ Add note</span>
+              <span class="a">↗ Cite</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- DARK -->
+      <div class="pane dark">
+        <div class="pane-label"><span class="eyebrow" style="color:var(--d-ink-3)">Dark · forest</span><span class="caption" style="color:var(--d-ink-3)">Evening mode</span></div>
+
+        <div class="lesson-frame">
+          <div class="prose">
+            <div class="eyebrow" style="color:var(--d-ink-3)">Module 04 · Lesson 12</div>
+            <h3>How models think about uncertainty.</h3>
+            <p>Most people assume a language model has a single opinion. It doesn't. At each step it holds a probability distribution over thousands of possible next moves, and what you see in the answer is one path sampled from that distribution.</p>
+            <p>The practical implication is that <mark>asking the same question twice rarely gives you the same answer twice</mark>, and that the model's "confidence" is something you can sometimes ask it to expose — but rarely something it volunteers.</p>
+            <blockquote>Treat the model as a probabilistic colleague, not as an oracle. The right question isn't "is this true?" — it's "how would I check?"</blockquote>
+            <p>In the next exercise you'll prompt the same question three ways and compare the answers side by side.</p>
+          </div>
+
+          <aside class="lesson-side">
+            <div class="lesson-note">
+              <div class="who">YOUR NOTE · 09:14</div>
+              This connects to the "epistemic humility" idea from L09.
+            </div>
+            <div class="lesson-note">
+              <div class="who">M. TAN · PEER</div>
+              Worth comparing to how a search engine ranks results — same intuition.
+            </div>
+            <div class="lesson-actions">
+              <span class="a">+ Add note</span>
+              <span class="a">↗ Cite</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     8. CREDENTIAL sample
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">07</span>
+      <h2>Sample · Credential verification</h2>
+      <p class="lead">A public credential page. Calm, document-like, with the score as the typographic anchor and verification as a quiet badge.</p>
+    </div>
+
+    <div class="split">
+
+      <!-- LIGHT -->
+      <div class="pane light">
+        <div class="pane-label"><span class="eyebrow">Light · paper</span><span class="caption">Public URL</span></div>
+
+        <div class="cred-card">
+          <div class="cred-head">
+            <span class="meta">Credential · GWTH-7K2A-9MEX</span>
+            <span class="cred-verify-row"><span class="dot"></span> Verified · gwth.ai/v/7k2a9mex</span>
+          </div>
+
+          <div class="cred-body">
+            <div>
+              <div class="eyebrow">Awarded to</div>
+              <div class="cred-name">Alex Roussel</div>
+              <div class="cred-course">Foundations of AI literacy · Cohort 14</div>
+            </div>
+            <div class="cred-score">812<sub>/1000</sub></div>
+          </div>
+
+          <dl class="cred-meta-row">
+            <div><dt>Issued</dt><dd>10 May 2026</dd></div>
+            <div><dt>Assessor</dt><dd>R. Khan</dd></div>
+            <div><dt>Score tier</dt><dd>Distinction · top 18%</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- DARK -->
+      <div class="pane dark">
+        <div class="pane-label"><span class="eyebrow" style="color:var(--d-ink-3)">Dark · forest</span><span class="caption" style="color:var(--d-ink-3)">Embeddable</span></div>
+
+        <div class="cred-card">
+          <div class="cred-head">
+            <span class="meta">Credential · GWTH-7K2A-9MEX</span>
+            <span class="cred-verify-row"><span class="dot"></span> Verified · gwth.ai/v/7k2a9mex</span>
+          </div>
+
+          <div class="cred-body">
+            <div>
+              <div class="eyebrow" style="color:var(--d-ink-3)">Awarded to</div>
+              <div class="cred-name">Alex Roussel</div>
+              <div class="cred-course">Foundations of AI literacy · Cohort 14</div>
+            </div>
+            <div class="cred-score">812<sub>/1000</sub></div>
+          </div>
+
+          <dl class="cred-meta-row">
+            <div><dt>Issued</dt><dd>10 May 2026</dd></div>
+            <div><dt>Assessor</dt><dd>R. Khan</dd></div>
+            <div><dt>Score tier</dt><dd>Distinction · top 18%</dd></div>
+          </dl>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     9. PUBLIC SITE sample
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">08</span>
+      <h2>Sample · Public site section</h2>
+      <p class="lead">A homepage in five moments — quiet hero, three coloured pillars, a takeaway from the curriculum, and a single rust CTA. Direction B applied: each block carries one role · teal for lessons, sage for practice, forest for credentials, amber for content moments, rust for the one peak call to action.</p>
+    </div>
+
+    <div class="split">
+
+      <!-- LIGHT -->
+      <div class="pane light">
+        <div class="pane-label"><span class="eyebrow">Light · paper</span><span class="caption">gwth.ai · home</span></div>
+
+        <div class="public-frame">
+          <div class="public-nav">
+            <svg viewBox="0 0 578.07 101.64"><defs><style>.lc1{fill:#22301f;}.lc2{fill:#a94c2e;}</style></defs><path class="lc1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="lc1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="lc1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="lc1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="lc1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="lc1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="lc2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="lc2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="lc2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+            <ul>
+              <li><a href="#">Curriculum</a></li>
+              <li><a href="#">Credentials</a></li>
+              <li><a href="#">For teams</a></li>
+              <li><a href="#">Sign in</a></li>
+            </ul>
+          </div>
+
+          <h2 class="public-headline">A calm way to learn <em>how to think</em> with AI.</h2>
+          <p class="public-lead">Short, careful lessons. Real practice with real feedback. A credential at the end that someone you respect can actually trust.</p>
+
+          <div class="public-actions">
+            <button class="btn btn-primary">Start a free lesson</button>
+            <button class="btn btn-ghost">Browse the curriculum →</button>
+          </div>
+
+          <div class="public-meta">
+            <div class="public-meta-item"><span class="num">12,400</span><span class="label">Learners</span></div>
+            <div class="public-meta-item"><span class="num">64</span><span class="label">Lessons</span></div>
+            <div class="public-meta-item"><span class="num">38<span style="font-size:13px; color:var(--ink-3)"> min</span></span><span class="label">Avg session</span></div>
+          </div>
+
+          <!-- How it works · 3 coloured tiles -->
+          <div class="public-section">
+            <span class="kicker-line">How GWTH works</span>
+            <div class="public-three">
+              <div class="public-tile is-teal">
+                <span class="kicker">Step · 01 · Read</span>
+                <h4>Short, careful lessons</h4>
+                <p>One idea per lesson — sourced, footnoted, 15-minute reads built by people who care where the ideas came from.</p>
+                <span class="arrow">Curriculum →</span>
+              </div>
+              <div class="public-tile is-sage">
+                <span class="kicker">Step · 02 · Practice</span>
+                <h4>Real exercises with feedback</h4>
+                <p>Apply each lesson in your own work — alongside a peer or a model. Feedback within a day.</p>
+                <span class="arrow">How practice works →</span>
+              </div>
+              <div class="public-tile is-forest">
+                <span class="kicker">Step · 03 · Credential</span>
+                <h4>A score someone can verify</h4>
+                <p>End each track with a public credential — provenance, attempt history, cohort percentile, all in 30 seconds.</p>
+                <span class="arrow">View a credential →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Takeaway from the curriculum (amber) -->
+          <div class="public-section">
+            <span class="kicker-line">From the curriculum</span>
+            <div class="public-quote is-amber">
+              <span class="kicker">Lesson 04 · How models think about uncertainty</span>
+              <blockquote>&ldquo;Treat the model as a probabilistic colleague, not as an oracle. It is right often enough to be useful, and wrong often enough to be checked.&rdquo;</blockquote>
+              <cite>— Excerpted from the curriculum opening</cite>
+            </div>
+          </div>
+
+          <!-- CTA (rust) -->
+          <div class="public-section">
+            <div class="public-cta is-rust">
+              <div>
+                <h3>Begin with one lesson.</h3>
+                <p>First lesson is free. No card. Twenty quiet minutes — see how it feels before you commit.</p>
+              </div>
+              <button class="btn-on-rust">Start a lesson →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DARK -->
+      <div class="pane dark">
+        <div class="pane-label"><span class="eyebrow" style="color:var(--d-ink-3)">Dark · forest</span><span class="caption" style="color:var(--d-ink-3)">gwth.ai · home</span></div>
+
+        <div class="public-frame">
+          <div class="public-nav">
+            <svg viewBox="0 0 578.07 101.64"><defs><style>.dc1{fill:#edeae6;}.dc2{fill:#a94c2e;}</style></defs><path class="dc1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="dc1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="dc1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="dc1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="dc1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="dc1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="dc2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="dc2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="dc2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+            <ul>
+              <li><a href="#">Curriculum</a></li>
+              <li><a href="#">Credentials</a></li>
+              <li><a href="#">For teams</a></li>
+              <li><a href="#">Sign in</a></li>
+            </ul>
+          </div>
+
+          <h2 class="public-headline">A calm way to learn <em>how to think</em> with AI.</h2>
+          <p class="public-lead">Short, careful lessons. Real practice with real feedback. A credential at the end that someone you respect can actually trust.</p>
+
+          <div class="public-actions">
+            <button class="btn btn-primary">Start a free lesson</button>
+            <button class="btn btn-ghost">Browse the curriculum →</button>
+          </div>
+
+          <div class="public-meta">
+            <div class="public-meta-item"><span class="num">12,400</span><span class="label">Learners</span></div>
+            <div class="public-meta-item"><span class="num">64</span><span class="label">Lessons</span></div>
+            <div class="public-meta-item"><span class="num">38<span style="font-size:13px; color:var(--d-ink-3)"> min</span></span><span class="label">Avg session</span></div>
+          </div>
+
+          <!-- How it works · 3 coloured tiles -->
+          <div class="public-section">
+            <span class="kicker-line">How GWTH works</span>
+            <div class="public-three">
+              <div class="public-tile is-teal">
+                <span class="kicker">Step · 01 · Read</span>
+                <h4>Short, careful lessons</h4>
+                <p>One idea per lesson — sourced, footnoted, 15-minute reads built by people who care where the ideas came from.</p>
+                <span class="arrow">Curriculum →</span>
+              </div>
+              <div class="public-tile is-sage">
+                <span class="kicker">Step · 02 · Practice</span>
+                <h4>Real exercises with feedback</h4>
+                <p>Apply each lesson in your own work — alongside a peer or a model. Feedback within a day.</p>
+                <span class="arrow">How practice works →</span>
+              </div>
+              <div class="public-tile is-forest">
+                <span class="kicker">Step · 03 · Credential</span>
+                <h4>A score someone can verify</h4>
+                <p>End each track with a public credential — provenance, attempt history, cohort percentile, all in 30 seconds.</p>
+                <span class="arrow">View a credential →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Takeaway from the curriculum (amber) -->
+          <div class="public-section">
+            <span class="kicker-line">From the curriculum</span>
+            <div class="public-quote is-amber">
+              <span class="kicker">Lesson 04 · How models think about uncertainty</span>
+              <blockquote>&ldquo;Treat the model as a probabilistic colleague, not as an oracle. It is right often enough to be useful, and wrong often enough to be checked.&rdquo;</blockquote>
+              <cite>— Excerpted from the curriculum opening</cite>
+            </div>
+          </div>
+
+          <!-- CTA (rust) -->
+          <div class="public-section">
+            <div class="public-cta is-rust">
+              <div>
+                <h3>Begin with one lesson.</h3>
+                <p>First lesson is free. No card. Twenty quiet minutes — see how it feels before you commit.</p>
+              </div>
+              <button class="btn-on-rust">Start a lesson →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     9. COLOUR IN USE — full colour blocks · light + dark
+============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">09</span>
+      <h2>Colour · in product surfaces</h2>
+      <p class="lead">Six calm pigments — teal, indigo, forest, sage, amber, rust — applied as whole-card colour blocks. Each card type carries one hue, so colour reads as <em>grouping</em> rather than decoration. On dark panes the same six are deepened so they sit at rest, not glowing.</p>
+    </div>
+
+    <div class="dir-palette-legend">
+      <span class="item"><span class="sw" style="background:#2A5D69"></span>TEAL · 2A5D69</span>
+      <span class="item"><span class="sw" style="background:#3A4773"></span>INDIGO · 3A4773</span>
+      <span class="item"><span class="sw" style="background:#5C7F4A"></span>FOREST · 5C7F4A</span>
+      <span class="item"><span class="sw" style="background:#7B8267"></span>SAGE · 7B8267</span>
+      <span class="item"><span class="sw" style="background:#B8893F"></span>AMBER · B8893F</span>
+      <span class="item"><span class="sw" style="background:#A94C2E"></span>RUST · A94C2E</span>
+    </div>
+
+    <div class="dir-row">
+      <!-- light -->
+      <div class="dir-pane-frame pane light">
+        <div class="dir-pane-head">
+          <span class="eyebrow">Light · paper</span>
+          <span class="caption">Cream page. Each card a full panel of colour.</span>
+        </div>
+        <div class="dir-grid">
+
+          <div class="dir-card block is-teal">
+            <div class="kicker">Lesson · 04.12</div>
+            <h3 class="h">How models think about uncertainty.</h3>
+            <div class="foot"><a href="#" class="dir-cta-mini">Continue reading →</a></div>
+          </div>
+
+          <div class="dir-card block is-indigo">
+            <div class="kicker">Practice · today</div>
+            <h3 class="h">Three reflections on yesterday's reading.</h3>
+            <div class="foot">3 of 5 prompts complete</div>
+          </div>
+
+          <div class="dir-card block is-forest">
+            <div class="kicker">Credential</div>
+            <div class="num-big">812<sub>/1000</sub></div>
+            <div class="foot">Distinction · top 18%</div>
+          </div>
+
+          <div class="dir-card block is-sage">
+            <div class="kicker">Streak</div>
+            <div class="num-big">9<sub> days</sub></div>
+            <div class="foot">Longest: 21 days</div>
+          </div>
+
+          <div class="dir-card block is-amber">
+            <div class="kicker">Takeaway</div>
+            <p class="h" style="font-style:italic; font-weight:400; margin:0">"Treat the model as a probabilistic colleague, not as an oracle."</p>
+            <div class="foot">Lesson 04.12</div>
+          </div>
+
+          <div class="dir-card block is-rust">
+            <div class="kicker">Start here</div>
+            <h3 class="h">A calm way to learn how to think with AI.</h3>
+            <div class="foot"><a href="#" class="dir-cta-mini">Start a free lesson</a></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- dark -->
+      <div class="dir-pane-frame pane dark">
+        <div class="dir-pane-head">
+          <span class="eyebrow" style="color:var(--d-ink-3)">Dark · forest</span>
+          <span class="caption" style="color:var(--d-ink-3)">Same six colours, deepened to sit at rest.</span>
+        </div>
+        <div class="dir-grid">
+
+          <div class="dir-card block is-teal">
+            <div class="kicker">Lesson · 04.12</div>
+            <h3 class="h">How models think about uncertainty.</h3>
+            <div class="foot"><a href="#" class="dir-cta-mini">Continue reading →</a></div>
+          </div>
+
+          <div class="dir-card block is-indigo">
+            <div class="kicker">Practice · today</div>
+            <h3 class="h">Three reflections on yesterday's reading.</h3>
+            <div class="foot">3 of 5 prompts complete</div>
+          </div>
+
+          <div class="dir-card block is-forest">
+            <div class="kicker">Credential</div>
+            <div class="num-big">812<sub>/1000</sub></div>
+            <div class="foot">Distinction · top 18%</div>
+          </div>
+
+          <div class="dir-card block is-sage">
+            <div class="kicker">Streak</div>
+            <div class="num-big">9<sub> days</sub></div>
+            <div class="foot">Longest: 21 days</div>
+          </div>
+
+          <div class="dir-card block is-amber">
+            <div class="kicker">Takeaway</div>
+            <p class="h" style="font-style:italic; font-weight:400; margin:0">"Treat the model as a probabilistic colleague, not as an oracle."</p>
+            <div class="foot">Lesson 04.12</div>
+          </div>
+
+          <div class="dir-card block is-rust">
+            <div class="kicker">Start here</div>
+            <h3 class="h">A calm way to learn how to think with AI.</h3>
+            <div class="foot"><a href="#" class="dir-cta-mini">Start a free lesson</a></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <p class="dir-takeaway"><strong>One card · one colour.</strong> Each surface type gets a single pigment that stays consistent across the system — a credential is always forest, a streak is always sage, a takeaway is always amber. Reserve denser product screens (settings, long tables, dashboards) for white surfaces with quieter accents; let the colour-block treatment carry public moments, lesson tiles, and credential cards.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="wrap">
+    <div class="colophon">
+      <svg viewBox="0 0 578.07 101.64" style="height:24px"><defs><style>.fc1{fill:#22301f;}.fc2{fill:#a94c2e;}</style></defs><path class="fc1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/><polygon class="fc1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/><polygon class="fc1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/><polygon class="fc1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/><path class="fc1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/><rect class="fc1" x="552.68" y="29.93" width="16.62" height="66.13"/><path class="fc2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/><ellipse class="fc2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/><ellipse class="fc2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/></svg>
+      <span class="right">DESIGN DIRECTION · V1 · MAY 2026 · SOURCE SERIF 4 + SOURCE SANS 3 · NOT FOR PROD</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH Score — Variant A: Pass-Line Gauge</title>
+<style>
+  :root {
+    --bg: oklch(0.98 0 0);
+    --fg: oklch(0.18 0.04 175);
+    --card: oklch(1 0 0);
+    --muted: oklch(0.95 0.01 220);
+    --muted-fg: oklch(0.5 0.02 220);
+    --primary: oklch(0.7 0.18 220);     /* aqua */
+    --accent: oklch(0.65 0.16 165);     /* mint */
+    --warning: oklch(0.75 0.15 75);     /* amber */
+    --danger: oklch(0.65 0.21 27);
+    --success: oklch(0.6 0.18 145);
+    --border: oklch(0.9 0.02 220);
+  }
+  body.dark {
+    --bg: oklch(0.17 0.005 60);
+    --fg: oklch(0.93 0.008 60);
+    --card: oklch(0.21 0.005 60);
+    --muted: oklch(0.24 0.006 60);
+    --muted-fg: oklch(0.65 0.015 60);
+    --primary: oklch(0.75 0.16 220);
+    --accent: oklch(0.75 0.14 165);
+    --border: oklch(1 0 0 / 12%);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; height: 100%; }
+  body { display: grid; place-items: center; padding: 24px; }
+  .stage { width: 100%; max-width: 720px; }
+  .device {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 24px 48px oklch(0 0 0 / 0.08);
+    overflow: hidden;
+  }
+  .device-chrome {
+    background: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #ffbd2e; }
+  .dot.g { background: #28ca42; }
+  .device-url {
+    margin-left: 12px;
+    font-size: 12px;
+    color: var(--muted-fg);
+    background: var(--bg);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  .body-pad { padding: 28px 32px 36px; }
+  .profile-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: grid; place-items: center; color: white; font-weight: 600; font-size: 18px; }
+  .profile-name { font-weight: 600; font-size: 16px; }
+  .profile-role { color: var(--muted-fg); font-size: 13px; margin-top: 2px; }
+
+  /* === GAUGE === */
+  .gauge-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 24px 28px; position: relative; }
+  .gauge-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+  .gauge-title { font-size: 13px; font-weight: 600; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.05em; }
+  .example-pill { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: var(--muted); color: var(--muted-fg); font-weight: 600; letter-spacing: 0.05em; }
+  .score-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .score-num { font-size: 56px; font-weight: 700; line-height: 1; font-feature-settings: 'tnum'; letter-spacing: -0.02em; }
+  .score-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: oklch(0.65 0.21 27 / 0.12);
+    color: var(--danger);
+  }
+  .score-status { color: var(--muted-fg); font-size: 13px; margin-bottom: 18px; }
+  .score-status .pill-pass { color: var(--success); font-weight: 600; }
+
+  .bar { position: relative; height: 14px; background: var(--muted); border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+  .bar-band-fail { position: absolute; left: 0; top: 0; bottom: 0; width: calc(100/130 * 100%); background: linear-gradient(90deg, oklch(0.92 0.005 220) 0%, oklch(0.85 0.04 75 / 0.4) 60%, oklch(0.78 0.12 75 / 0.5) 100%); }
+  .bar-band-pass { position: absolute; left: calc(100/130 * 100%); top: 0; bottom: 0; right: 0; background: linear-gradient(90deg, oklch(0.6 0.18 145 / 0.35), oklch(0.6 0.18 145 / 0.55)); }
+  .bar-trail { position: absolute; left: 0; top: 0; bottom: 0; width: calc(110/130 * 100%); background: linear-gradient(90deg, var(--primary), var(--accent)); opacity: 0.25; border-radius: 999px; }
+  .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; width: calc(104/130 * 100%); background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 999px; box-shadow: 0 0 16px var(--accent); }
+  .bar-tick { position: absolute; top: -4px; bottom: -4px; left: calc(100/130 * 100%); width: 2px; background: var(--fg); }
+  .bar-tick-label { position: absolute; top: -22px; left: calc(100/130 * 100%); transform: translateX(-50%); font-size: 11px; font-weight: 700; color: var(--fg); letter-spacing: 0.06em; }
+  .bar-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted-fg); margin-top: 4px; font-feature-settings: 'tnum'; }
+
+  .legend { display: flex; gap: 12px; margin-top: 18px; font-size: 11px; color: var(--muted-fg); }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+  .caveat { margin-top: 16px; font-size: 11px; color: var(--muted-fg); font-style: italic; line-height: 1.4; }
+
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .toggle { font-size: 12px; padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; color: var(--fg); }
+
+  /* Scenario selector — lets David see all states */
+  .scenarios { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .scenario { font-size: 11px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; background: transparent; color: var(--fg); }
+  .scenario.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="toolbar"><button class="toggle" onclick="document.body.classList.toggle('dark')">Toggle theme</button></div>
+
+  <div class="scenarios">
+    <button class="scenario" data-score="92"  data-delta="-2"  data-trail="105">Decaying (105 → 92)</button>
+    <button class="scenario active" data-score="104" data-delta="-2"  data-trail="120">Passing, slipping (120 → 104)</button>
+    <button class="scenario" data-score="120" data-delta="+5"  data-trail="98">Climbing into bonus</button>
+    <button class="scenario" data-score="78"  data-delta="-12" data-trail="115">Lapsed (was 115)</button>
+  </div>
+
+  <div class="device">
+    <div class="device-chrome">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <div class="device-url">gwth.ai/dashboard</div>
+    </div>
+    <div class="body-pad">
+      <div class="profile-row">
+        <div class="avatar">AE</div>
+        <div>
+          <div class="profile-name">Alex Example</div>
+          <div class="profile-role">Engineering Manager · Manchester</div>
+        </div>
+      </div>
+
+      <div class="gauge-card">
+        <div class="gauge-header">
+          <div class="gauge-title">GWTH Score</div>
+          <div class="example-pill">EXAMPLE</div>
+        </div>
+        <div class="score-row">
+          <div class="score-num" id="score-num">104</div>
+          <div class="score-delta" id="score-delta">▼ −2 this week</div>
+        </div>
+        <div class="score-status">Status: <span id="score-pill" class="pill-pass">Passing</span> · pass line at 100</div>
+
+        <div class="bar">
+          <div class="bar-band-fail"></div>
+          <div class="bar-band-pass"></div>
+          <div class="bar-trail" id="bar-trail"></div>
+          <div class="bar-fill" id="bar-fill"></div>
+          <div class="bar-tick"></div>
+          <div class="bar-tick-label">100 PASS</div>
+        </div>
+        <div class="bar-axis">
+          <span>0</span><span>50</span><span>100</span><span>130</span>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><div class="legend-swatch" style="background:linear-gradient(90deg,var(--primary),var(--accent));"></div>Current</div>
+          <div class="legend-item"><div class="legend-swatch" style="background:linear-gradient(90deg,var(--primary),var(--accent));opacity:0.25;"></div>30 days ago</div>
+          <div class="legend-item"><div class="legend-swatch" style="background:oklch(0.6 0.18 145 / 0.45);"></div>Passing band</div>
+        </div>
+
+        <div class="caveat">Illustrative — your actual GWTH Score reflects verified work.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const scenarios = document.querySelectorAll('.scenario');
+  const num = document.getElementById('score-num');
+  const delta = document.getElementById('score-delta');
+  const pill = document.getElementById('score-pill');
+  const fill = document.getElementById('bar-fill');
+  const trail = document.getElementById('bar-trail');
+
+  function apply(s, d, t) {
+    num.textContent = s;
+    delta.textContent = (d.startsWith('-') || d.startsWith('−') ? '▼' : '▲') + ' ' + d + ' this week';
+    delta.style.background = d.startsWith('+') ? 'oklch(0.6 0.18 145 / 0.15)' : 'oklch(0.65 0.21 27 / 0.12)';
+    delta.style.color = d.startsWith('+') ? 'var(--success)' : 'var(--danger)';
+    pill.textContent = s >= 100 ? 'Passing' : (t >= 100 ? 'Decaying — was passing' : 'Building');
+    pill.style.color = s >= 100 ? 'var(--success)' : 'var(--warning)';
+    fill.style.width = `calc(${Math.min(s,130)}/130 * 100%)`;
+    trail.style.width = `calc(${Math.min(t,130)}/130 * 100%)`;
+  }
+
+  scenarios.forEach(btn => btn.addEventListener('click', () => {
+    scenarios.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    apply(btn.dataset.score, btn.dataset.delta, +btn.dataset.trail);
+  }));
+</script>
+</body>
+</html>

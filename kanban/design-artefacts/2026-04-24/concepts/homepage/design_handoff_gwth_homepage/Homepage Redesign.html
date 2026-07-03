@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GWTH.ai — Homepage redesign · 2 directions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles-dirA.css?v=4" />
+  <link rel="stylesheet" href="styles-dirB.css?v=4" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: #f0eee9; }
+    /* Each artboard hosts a full homepage. We render at native pixel width
+       (1440 or 375) so text and layout match real-world; the design_canvas
+       handles zoom-to-fit. We cap height per artboard so the artboard frame
+       shows the whole page. */
+    .gwth-host {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .gwth-host > .gwth { display: block; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="components/data.js"></script>
+  <script type="text/babel" src="components/logo.jsx"></script>
+  <script type="text/babel" src="components/dirA.jsx"></script>
+  <script type="text/babel" src="components/dirB.jsx"></script>
+
+  <script type="text/babel" data-presets="env,react">
+    /* The full homepage scrolls inside each artboard. We size each artboard
+       to fit a tall content (~5500px desktop, ~7000px mobile) so the canvas
+       focus mode shows the whole page comfortably. */
+
+    const DESKTOP_W = 1440;
+    const MOBILE_W  = 375;
+    const DESKTOP_A_H = 6600;
+    const DESKTOP_B_H = 6200;
+    const MOBILE_A_H  = 9000;
+    const MOBILE_B_H  = 10000;
+
+    const Host = ({ children }) => (
+      <div className="gwth-host">{children}</div>
+    );
+
+    const App = () => (
+      <DesignCanvas
+        title="GWTH.ai — Homepage redesign"
+        subtitle="Two directions to pick from. Each at desktop 1440 + mobile 375, in light + dark. The page scrolls inside each artboard; click the expand icon to focus."
+      >
+        <DCSection
+          id="dir-a"
+          title="Direction A — Editorial precision"
+          subtitle="Linear/Vercel-flavoured. Editorial numbered list for the 7 journeys, single-accent gradients, mono labels, dense type hierarchy. Trust comes from precision and restraint, not ornamentation."
+        >
+          <DCArtboard id="a-d-light" label="Desktop · Light · 1440" width={DESKTOP_W} height={DESKTOP_A_H}>
+            <Host><DirA theme="light" viewport="desktop" /></Host>
+          </DCArtboard>
+          <DCArtboard id="a-d-dark" label="Desktop · Dark · 1440" width={DESKTOP_W} height={DESKTOP_A_H}>
+            <Host><DirA theme="dark" viewport="desktop" /></Host>
+          </DCArtboard>
+          <DCArtboard id="a-m-light" label="Mobile · Light · 375" width={MOBILE_W} height={MOBILE_A_H}>
+            <Host><DirA theme="light" viewport="mobile" /></Host>
+          </DCArtboard>
+          <DCArtboard id="a-m-dark" label="Mobile · Dark · 375" width={MOBILE_W} height={MOBILE_A_H}>
+            <Host><DirA theme="dark" viewport="mobile" /></Host>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection
+          id="dir-b"
+          title="Direction B — Confident product"
+          subtitle="Stripe/Supabase-flavoured. The Dynamic Score becomes a visible product surface in the hero, journeys are a 7-card grid (3+3+1) with stat-foot, the closing CTA is a dark, gradient-lit moment. More depth, more visible product proof."
+        >
+          <DCArtboard id="b-d-light" label="Desktop · Light · 1440" width={DESKTOP_W} height={DESKTOP_B_H}>
+            <Host><DirB theme="light" viewport="desktop" /></Host>
+          </DCArtboard>
+          <DCArtboard id="b-d-dark" label="Desktop · Dark · 1440" width={DESKTOP_W} height={DESKTOP_B_H}>
+            <Host><DirB theme="dark" viewport="desktop" /></Host>
+          </DCArtboard>
+          <DCArtboard id="b-m-light" label="Mobile · Light · 375" width={MOBILE_W} height={MOBILE_B_H}>
+            <Host><DirB theme="light" viewport="mobile" /></Host>
+          </DCArtboard>
+          <DCArtboard id="b-m-dark" label="Mobile · Dark · 375" width={MOBILE_W} height={MOBILE_B_H}>
+            <Host><DirB theme="dark" viewport="mobile" /></Host>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+    );
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

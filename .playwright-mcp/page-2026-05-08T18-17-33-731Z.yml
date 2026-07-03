@@ -1,0 +1,194 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation [ref=e4]:
+        - link "GWTH.ai home" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "GWTH.ai" [ref=e6]
+        - generic [ref=e16]:
+          - link "Free Labs" [ref=e17] [cursor=pointer]:
+            - /url: /labs
+          - link "Lessons" [ref=e18] [cursor=pointer]:
+            - /url: /lessons
+          - link "Pricing" [ref=e19] [cursor=pointer]:
+            - /url: /pricing
+          - link "For Teams" [ref=e20] [cursor=pointer]:
+            - /url: /for-teams
+          - link "About" [ref=e21] [cursor=pointer]:
+            - /url: /about
+          - link "News" [ref=e22] [cursor=pointer]:
+            - /url: /news
+        - generic [ref=e23]:
+          - button "Toggle theme" [ref=e24]:
+            - img
+          - link "Log in" [ref=e25] [cursor=pointer]:
+            - /url: /login
+          - link "Sign Up" [ref=e26] [cursor=pointer]:
+            - /url: /signup
+    - main [ref=e27]:
+      - generic [ref=e30]:
+        - img "AI labs — scientist with test tubes surrounded by lab projects like Family AI Bot, AI Customer Chatbot, AI Readiness Assessment Tool, and Local Whisper Bot" [ref=e32]
+        - heading "Build Real AI Projects" [level=1] [ref=e33]
+        - paragraph [ref=e34]: Hands-on labs with step-by-step guidance. Pick a project, follow the instructions, and build something real.
+        - link "Sign Up to Track Progress" [ref=e36] [cursor=pointer]:
+          - /url: /signup
+          - text: Sign Up to Track Progress
+          - img
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - img [ref=e41]
+            - textbox "Search labs..." [ref=e44]
+          - combobox [ref=e45]:
+            - generic: All Categories
+            - img
+          - combobox [ref=e46]:
+            - generic: All Levels
+            - img
+          - combobox [ref=e47]:
+            - generic: All Technologies
+            - img
+        - generic [ref=e48]:
+          - link "Build Your First AI App beginner Build Your First AI App Use Lovable or Bolt to turn a plain English description into a working, deployed application. No code required — just describe what you want and watch it come to life. Lovable Bolt Plain English AI App Builders 1h" [ref=e49] [cursor=pointer]:
+            - /url: /labs/build-your-first-ai-app
+            - generic [ref=e50]:
+              - img "Build Your First AI App" [ref=e52]
+              - generic [ref=e53]:
+                - generic [ref=e55]: beginner
+                - heading "Build Your First AI App" [level=3] [ref=e56]
+                - paragraph [ref=e57]: Use Lovable or Bolt to turn a plain English description into a working, deployed application. No code required — just describe what you want and watch it come to life.
+                - generic [ref=e58]:
+                  - generic [ref=e59]: Lovable
+                  - generic [ref=e60]: Bolt
+                  - generic [ref=e61]: Plain English
+                  - generic [ref=e62]: AI App Builders
+                - generic [ref=e63]:
+                  - img [ref=e64]
+                  - text: 1h
+          - link "Research with AI beginner Research with AI Use Perplexity and Claude to conduct deep, sourced research on any topic in minutes instead of hours. Learn to verify AI research and create professional research summaries. Perplexity Claude AI Research Fact-Checking 45m" [ref=e67] [cursor=pointer]:
+            - /url: /labs/research-with-ai
+            - generic [ref=e68]:
+              - img "Research with AI" [ref=e70]
+              - generic [ref=e71]:
+                - generic [ref=e73]: beginner
+                - heading "Research with AI" [level=3] [ref=e74]
+                - paragraph [ref=e75]: Use Perplexity and Claude to conduct deep, sourced research on any topic in minutes instead of hours. Learn to verify AI research and create professional research summaries.
+                - generic [ref=e76]:
+                  - generic [ref=e77]: Perplexity
+                  - generic [ref=e78]: Claude
+                  - generic [ref=e79]: AI Research
+                  - generic [ref=e80]: Fact-Checking
+                - generic [ref=e81]:
+                  - img [ref=e82]
+                  - text: 45m
+          - link "Automate Your Inbox intermediate Automate Your Inbox Build an email automation workflow using Make.com or Zapier that categorises, summarises, and routes your emails automatically. Reclaim hours every week. Make.com Zapier Gmail AI Automation 1h 30m" [ref=e85] [cursor=pointer]:
+            - /url: /labs/automate-your-inbox
+            - generic [ref=e86]:
+              - img "Automate Your Inbox" [ref=e88]
+              - generic [ref=e89]:
+                - generic [ref=e91]: intermediate
+                - heading "Automate Your Inbox" [level=3] [ref=e92]
+                - paragraph [ref=e93]: Build an email automation workflow using Make.com or Zapier that categorises, summarises, and routes your emails automatically. Reclaim hours every week.
+                - generic [ref=e94]:
+                  - generic [ref=e95]: Make.com
+                  - generic [ref=e96]: Zapier
+                  - generic [ref=e97]: Gmail
+                  - generic [ref=e98]: AI Automation
+                - generic [ref=e99]:
+                  - img [ref=e100]
+                  - text: 1h 30m
+          - link "Build a Personal Dashboard intermediate Pro Build a Personal Dashboard Create a data dashboard that visualises your personal or business metrics using AI tools. Track goals, habits, finances, or any data that matters to you. Lovable Claude Data Visualisation AI Analysis 1h 15m" [ref=e103] [cursor=pointer]:
+            - /url: /labs/build-a-personal-dashboard
+            - generic [ref=e104]:
+              - img "Build a Personal Dashboard" [ref=e106]
+              - generic [ref=e107]:
+                - generic [ref=e108]:
+                  - generic [ref=e109]: intermediate
+                  - generic [ref=e110]: Pro
+                - heading "Build a Personal Dashboard" [level=3] [ref=e111]
+                - paragraph [ref=e112]: Create a data dashboard that visualises your personal or business metrics using AI tools. Track goals, habits, finances, or any data that matters to you.
+                - generic [ref=e113]:
+                  - generic [ref=e114]: Lovable
+                  - generic [ref=e115]: Claude
+                  - generic [ref=e116]: Data Visualisation
+                  - generic [ref=e117]: AI Analysis
+                - generic [ref=e118]:
+                  - img [ref=e119]
+                  - text: 1h 15m
+          - link "Create an AI Customer-Support Bot advanced Pro Create an AI Customer-Support Bot Build a RAG-powered chatbot that answers customer questions using your own documentation. Deploy it as an embeddable widget for any website. RAG Claude Botpress Knowledge Base Embeddings 2h" [ref=e122] [cursor=pointer]:
+            - /url: /labs/ai-customer-support-bot
+            - generic [ref=e123]:
+              - img "Create an AI Customer-Support Bot" [ref=e125]
+              - generic [ref=e126]:
+                - generic [ref=e127]:
+                  - generic [ref=e128]: advanced
+                  - generic [ref=e129]: Pro
+                - heading "Create an AI Customer-Support Bot" [level=3] [ref=e130]
+                - paragraph [ref=e131]: Build a RAG-powered chatbot that answers customer questions using your own documentation. Deploy it as an embeddable widget for any website.
+                - generic [ref=e132]:
+                  - generic [ref=e133]: RAG
+                  - generic [ref=e134]: Claude
+                  - generic [ref=e135]: Botpress
+                  - generic [ref=e136]: Knowledge Base
+                  - generic [ref=e137]: Embeddings
+                - generic [ref=e138]:
+                  - img [ref=e139]
+                  - text: 2h
+    - contentinfo [ref=e142]:
+      - generic [ref=e143]:
+        - generic [ref=e144]:
+          - generic [ref=e145]:
+            - link "GWTH.ai" [ref=e146] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e147]: UK-focused applied AI training. Learn to research, automate, analyse, and build practical tools with AI-assisted coding.
+          - generic [ref=e148]:
+            - heading "Product" [level=3] [ref=e149]
+            - list [ref=e150]:
+              - listitem [ref=e151]:
+                - link "Pricing" [ref=e152] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e153]:
+                - link "Why GWTH" [ref=e154] [cursor=pointer]:
+                  - /url: /why-gwth
+              - listitem [ref=e155]:
+                - link "For Teams" [ref=e156] [cursor=pointer]:
+                  - /url: /for-teams
+              - listitem [ref=e157]:
+                - link "Contact" [ref=e158] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e159]:
+            - heading "Learn" [level=3] [ref=e160]
+            - list [ref=e161]:
+              - listitem [ref=e162]:
+                - link "Free Labs" [ref=e163] [cursor=pointer]:
+                  - /url: /labs
+              - listitem [ref=e164]:
+                - link "Lessons" [ref=e165] [cursor=pointer]:
+                  - /url: /lessons
+              - listitem [ref=e166]:
+                - link "News" [ref=e167] [cursor=pointer]:
+                  - /url: /news
+              - listitem [ref=e168]:
+                - link "Newsletter" [ref=e169] [cursor=pointer]:
+                  - /url: /newsletter
+              - listitem [ref=e170]:
+                - link "About GWTH" [ref=e171] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e172]:
+            - heading "Legal" [level=3] [ref=e173]
+            - list [ref=e174]:
+              - listitem [ref=e175]:
+                - link "Privacy" [ref=e176] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e177]:
+                - link "Terms" [ref=e178] [cursor=pointer]:
+                  - /url: /terms
+        - generic [ref=e180]:
+          - paragraph [ref=e181]: © 2026 GWTH.ai. All rights reserved.
+          - paragraph [ref=e182]: Independent. UK-based. No sponsors. No ads. No vendor partnerships.
+          - paragraph [ref=e183]: Based in the United Kingdom 🇬🇧
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e185]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e192] [cursor=pointer]:
+    - img [ref=e193]
+  - alert [ref=e196]

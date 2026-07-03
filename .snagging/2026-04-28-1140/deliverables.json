@@ -1,0 +1,23 @@
+{
+  "source": "kanban/2_testing/PROMPT_2026-04-27_phase-1b-C-polish-deploy.md (Gate 4 checklist)",
+  "verification_url": "http://192.168.178.50:3001/",
+  "plan_start_commit": "afb7d82",
+  "current_head": "b453c10",
+  "deliverables": [
+    { "id": 1, "title": "Page loads, no console errors", "hypothesis": "done-correctly", "evidence": "HTTP 200; need browser to confirm console" },
+    { "id": 2, "title": "Hero H1 + ScoreVis device + 'Illustrative...' caveat", "hypothesis": "done-correctly", "evidence": "all three strings present in HTML; need visual to confirm composition" },
+    { "id": 3, "title": "ResearchStrip says 'Built around UK research' (no banned phrases)", "hypothesis": "done-correctly", "evidence": "phrase present 2x; no 'partnered with' or 'featured in'" },
+    { "id": 4, "title": "7 journey cards in 3+3+1 grid; CTAs to real routes", "hypothesis": "done-correctly", "evidence": "7 data-testid='journey-card' elements rendered" },
+    { "id": 5, "title": "Curriculum vis: 3 modules + capstone callouts + 'Locked' caption", "hypothesis": "done-correctly", "evidence": "3 modules + 'Locked · sign up' caption present (per-module pills already removed in 99cb091)" },
+    { "id": 6, "title": "ResearchStats: 21% / 1 in 6 / 45% with DSIT citation", "hypothesis": "done-correctly", "evidence": "all stats + DSIT present" },
+    { "id": 7, "title": "Pricing: Free Labs £0 / The Course £29/mo (£87 total) / Stay Current £7.50/mo", "hypothesis": "done-correctly", "evidence": "all 4 prices + 3 tier names present" },
+    { "id": 8, "title": "FinalCTA mounts WaitlistForm (lazy-loaded)", "hypothesis": "done-correctly", "evidence": "waitlist-form chunk references present" },
+    { "id": 9, "title": "MarketingFooter has 3 columns", "hypothesis": "unclear", "evidence": "data-section='footer' present; column count needs visual" },
+    { "id": 10, "title": "Light + dark mode parity", "hypothesis": "done-correctly", "evidence": "screenshots show both themes render cleanly" },
+    { "id": 11, "title": "Mobile renders without horizontal scroll", "hypothesis": "done-correctly", "evidence": "412px capture has no overflow visible" },
+    { "id": 12, "title": "No banned strings (1,240 learners / 94% finish / fake testimonials)", "hypothesis": "done-correctly", "evidence": "0 matches" },
+    { "id": 13, "title": "JSON-LD Course schema in <head>", "hypothesis": "done-correctly", "evidence": "@type:Course present" },
+    { "id": 14, "title": "Journey copy drafts 5/6/7 — confirm OK to ship", "hypothesis": "unclear", "evidence": "copy is in data.ts; needs user judgement (flagged in Gate 4 as draft requiring review)" },
+    { "id": 15, "title": "Navbar wordmark treatment", "hypothesis": "done-but-wrong", "evidence": "currently plain-text 'GWTH.ai' gradient (just reverted from broken canonical-PNG attempt). User said 'logo is not the new logo'. Decision needed: keep gradient text? add G-arrow icon? something else?" }
+  ]
+}

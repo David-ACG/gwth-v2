@@ -1,0 +1,130 @@
+{
+  "savedAt": "2026-04-28T12:17:03.017Z",
+  "annotations": {
+    "after/desktop-light.png": {
+      "notes": "/dashboard should say /score\nI don't like the font used for BUILT AROUND UK RESEARCH\nReword \"Whichever line...\" so it is punchier\nI don't like the pills e.g. \"worried\" - we should replace these with images I will provide\nThe 94 projects section looks unpolished\nWe have a link to view curriculum after saying it is locked. Change this to Lessons\nWe don't have any zapier lessons",
+      "shapes": [
+        {
+          "type": "rect",
+          "x": 1097,
+          "y": 185.66666412353516,
+          "w": -81,
+          "h": 28,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 619,
+          "y": 941.6666870117188,
+          "w": 201,
+          "h": 28,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 342,
+          "y": 1137.6666870117188,
+          "w": 800,
+          "h": 188,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 400,
+          "y": 1383.6666870117188,
+          "w": 93,
+          "h": 43,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 802,
+          "y": 1387.6666870117188,
+          "w": 96,
+          "h": 37,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 1162,
+          "y": 1383.6666870117188,
+          "w": 138,
+          "h": 40,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 407,
+          "y": 1737.6666870117188,
+          "w": 66,
+          "h": 30,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 795,
+          "y": 1732.6666870117188,
+          "w": 99,
+          "h": 35,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 1235,
+          "y": 1735.6666870117188,
+          "w": 64,
+          "h": 30,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 1217,
+          "y": 2099.666748046875,
+          "w": 86,
+          "h": 33,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 96,
+          "y": 2649.666748046875,
+          "w": 220,
+          "h": 30,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 760,
+          "y": 2621.666748046875,
+          "w": 556,
+          "h": 35,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 773,
+          "y": 2671.666748046875,
+          "w": 545,
+          "h": 375,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 97,
+          "y": 2984.666748046875,
+          "w": 183,
+          "h": 29,
+          "color": "#dc2626"
+        },
+        {
+          "type": "rect",
+          "x": 547,
+          "y": 3737.666748046875,
+          "w": 70,
+          "h": 25,
+          "color": "#dc2626"
+        }
+      ]
+    }
+  }
+}

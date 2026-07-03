@@ -1,0 +1,2550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson m1_l01 — Welcome to GWTH · GWTH.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4; --bg-2: #F5F0E6; --surface: #FFFFFF; --sunken: #F0EBE0;
+  --border: #E5DFD2; --border-strong: #D4CCBA;
+  --ink: #22301F; --ink-2: #3F4A3B; --muted: #6F7569; --stone: #948A76;
+  --teal: #2A5D69; --teal-deep: #1E454F; --teal-soft: #C2D5D9; --teal-wash: rgba(42,93,105,0.08);
+  --rust: #A94C2E; --rust-soft: #E8C9BD;
+  --forest: #5C7F4A; --forest-soft: #D4DCC9;
+  --sage: #7B8267; --amber: #B8893F; --amber-soft: #EBD7B3; --indigo: #3A4773; --indigo-soft: #C8CCD9;
+  --font-display: 'Source Serif 4', Georgia, serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --radius-sm: 3px; --radius-md: 6px; --radius-lg: 10px;
+  --topbar-h: 56px; --mediabar-h: 64px; --rail-l: 244px; --rail-r: 340px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-feature-settings: 'kern' 1, 'liga' 1; overflow: hidden; }
+button { font: inherit; background: none; border: none; color: inherit; cursor: pointer; }
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+input, textarea, select { font: inherit; color: inherit; }
+::selection { background: var(--teal-soft); color: var(--ink); }
+
+/* === Top bar === */
+.topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); background: rgba(251,249,244,0.94); backdrop-filter: saturate(160%) blur(10px); -webkit-backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--border); z-index: 60; display: grid; grid-template-columns: var(--rail-l) 1fr auto; align-items: center; gap: 0; }
+.topbar-brand { display: flex; align-items: center; gap: 14px; padding: 0 20px; border-right: 1px solid var(--border); height: 100%; }
+.topbar-brand > a svg { width: 84px; height: auto; display: block; }
+.topbar-brand #outlineToggle svg { width: 14px; height: 14px; display: block; }
+.topbar-center { display: flex; align-items: center; gap: 16px; padding: 0 24px; min-width: 0; }
+.lesson-id { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
+.lesson-id strong { color: var(--ink); font-weight: 500; }
+.lesson-id .sep { display: inline-block; width: 12px; height: 1px; background: var(--stone); opacity: 0.5; margin: 0 6px; vertical-align: middle; }
+.lesson-title-tag { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 14.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-tools { display: flex; align-items: center; gap: 4px; padding: 0 14px 0 0; height: 100%; }
+.status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink); border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+.status-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--forest); }
+.status-pill.is-amber .dot { background: var(--amber); }
+.status-pill.is-rust .dot { background: var(--rust); }
+.status-pill.is-stone .dot { background: var(--stone); }
+.mode-switch { display: inline-flex; padding: 3px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-right: 4px; }
+.mode-switch button { padding: 5px 12px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-radius: 2px; transition: all 0.15s ease; }
+.mode-switch button.is-active { background: var(--ink); color: var(--bg); }
+.tool-btn { padding: 6px 11px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink); border: 1px solid transparent; border-radius: var(--radius-sm); transition: border-color 0.15s ease, background 0.15s ease; display: inline-flex; align-items: center; gap: 6px; }
+.tool-btn:hover { border-color: var(--border-strong); }
+.tool-btn.is-active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tool-btn .num { color: var(--teal); font-weight: 500; }
+.tool-btn.is-active .num { color: var(--bg); }
+
+/* === Progress strip === */
+.progress-strip { position: fixed; top: var(--topbar-h); left: 0; right: 0; height: 3px; background: var(--border); z-index: 55; display: flex; gap: 1px; padding: 0 var(--rail-r) 0 var(--rail-l); }
+.progress-strip.no-right { padding-right: 0; }
+.progress-strip .seg { flex: 1; background: var(--border); transition: background 0.2s ease; cursor: pointer; }
+.progress-strip .seg.is-done { background: var(--stone); }
+.progress-strip .seg.is-active { background: var(--teal); }
+
+/* === Shell === */
+.shell { position: fixed; top: calc(var(--topbar-h) + 3px); left: 0; right: 0; bottom: var(--mediabar-h); display: grid; grid-template-columns: var(--rail-l) 1fr var(--rail-r); overflow: hidden; }
+.shell.review-collapsed { grid-template-columns: var(--rail-l) 1fr 0; }
+.shell.outline-collapsed { grid-template-columns: 0 1fr var(--rail-r); }
+.shell.both-collapsed { grid-template-columns: 0 1fr 0; }
+
+/* === Left rail (outline) === */
+.rail-l { border-right: 1px solid var(--border); background: var(--bg); overflow-y: auto; overflow-x: hidden; padding: 24px 0 32px; transition: opacity 0.2s ease; }
+.shell.outline-collapsed .rail-l { opacity: 0; pointer-events: none; }
+.outline-head { padding: 0 20px 14px; display: flex; justify-content: space-between; align-items: baseline; }
+.outline-head .label { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.outline-head .count { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink); }
+.outline-section { padding: 8px 12px 8px 20px; margin-bottom: 0; }
+.outline-item { display: grid; grid-template-columns: 24px 1fr auto; align-items: baseline; gap: 8px; padding: 7px 8px; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.12s ease; margin-left: -8px; }
+.outline-item:hover { background: var(--bg-2); }
+.outline-item.is-active { background: var(--surface); }
+.outline-item.is-active .o-label { color: var(--ink); font-weight: 500; }
+.outline-item .o-num { font-family: var(--font-mono); font-size: 10.5px; color: var(--stone); padding-top: 2px; }
+.outline-item.is-active .o-num { color: var(--teal); }
+.outline-item .o-label { font-size: 13.5px; line-height: 1.4; color: var(--ink-2); }
+.outline-item .o-meta { font-family: var(--font-mono); font-size: 10px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.outline-item .o-meta .m-fig { color: var(--stone); }
+.outline-item .o-meta .m-audio { color: var(--teal); }
+.outline-item .o-meta .m-com { color: var(--rust); font-weight: 500; }
+.outline-item.is-build { border-top: 1px solid var(--border); margin-top: 12px; padding-top: 14px; }
+.outline-item.is-build .o-label { font-family: var(--font-display); font-style: italic; color: var(--ink); }
+
+/* === Reader === */
+.reader { overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
+.reader-inner { max-width: 760px; margin: 0 auto; padding: 56px 32px 96px; }
+.page { display: none; animation: page-in 0.32s ease; }
+.page.is-current { display: block; }
+@keyframes page-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Cover */
+.cover-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--rust); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+.cover-kicker .sep { width: 18px; height: 1px; background: var(--stone); opacity: 0.5; }
+.cover-kicker .module { color: var(--muted); }
+.cover-title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(36px, 5.6vw, 56px); line-height: 1.04; letter-spacing: -0.018em; color: var(--ink); margin-bottom: 28px; text-wrap: balance; }
+.cover-lead { font-family: var(--font-display); font-size: 21px; line-height: 1.5; color: var(--ink-2); margin-bottom: 36px; max-width: 56ch; text-wrap: pretty; }
+.cover-meta { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+.cover-meta strong { color: var(--ink); font-weight: 500; }
+.cover-meta-dot { width: 3px; height: 3px; background: var(--stone); border-radius: 50%; opacity: 0.6; }
+
+/* Intro video frame */
+.intro-frame { margin: 40px 0 48px; border-radius: var(--radius-lg); overflow: hidden; background: var(--ink); position: relative; aspect-ratio: 16/9; }
+.intro-frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.intro-frame .video-poster { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px; pointer-events: none; transition: opacity 0.2s ease; background: linear-gradient(135deg, rgba(30,69,79,0.85), rgba(34,48,31,0.92)); }
+.intro-frame.is-playing .video-poster { opacity: 0; }
+.intro-frame .play-big { width: 72px; height: 72px; border-radius: 50%; background: rgba(251,249,244,0.95); display: flex; align-items: center; justify-content: center; pointer-events: auto; cursor: pointer; transition: transform 0.15s ease; }
+.intro-frame .play-big:hover { transform: scale(1.04); }
+.intro-frame .play-big svg { width: 24px; height: 24px; margin-left: 4px; fill: var(--teal); }
+.intro-frame .poster-label { color: rgba(251,249,244,0.85); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; pointer-events: auto; }
+.intro-frame .video-badge { position: absolute; top: 14px; left: 14px; display: inline-flex; gap: 6px; align-items: center; padding: 5px 10px; background: rgba(251,249,244,0.92); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); }
+.intro-frame .video-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--amber); }
+.intro-frame .video-badge.is-ready .dot { background: var(--forest); }
+.intro-frame .video-badge.is-missing .dot { background: var(--rust); }
+.intro-frame.vv7b-missing { background: var(--bg-2); aspect-ratio: 16/9; }
+.intro-frame.vv7b-missing .video-poster { background: none; }
+.intro-frame.vv7b-missing video { display: none; }
+.intro-frame.vv7b-missing .vv7b-missing-panel { text-align: center; max-width: 380px; padding: 32px; pointer-events: auto; }
+.intro-frame.vv7b-missing .vv7b-missing-panel h4 { font-family: var(--font-display); font-style: italic; font-size: 22px; color: var(--ink); margin-bottom: 8px; }
+.intro-frame.vv7b-missing .vv7b-missing-panel p { font-size: 14px; color: var(--ink-2); line-height: 1.55; margin-bottom: 18px; }
+.intro-frame.vv7b-missing .vv7b-missing-panel .gen-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--indigo); color: var(--bg); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 13.5px; font-weight: 500; }
+.intro-frame.vv7b-missing .vv7b-missing-panel .gen-btn:hover { background: #2A3559; }
+
+.intro-aside { display: flex; align-items: baseline; gap: 14px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: -32px 0 56px; flex-wrap: wrap; }
+.intro-aside .lab { color: var(--ink); }
+.intro-aside .link { color: var(--teal); cursor: pointer; }
+.intro-aside .link:hover { text-decoration: underline; }
+.intro-aside .sep-dot { width: 3px; height: 3px; background: var(--stone); border-radius: 50%; opacity: 0.6; }
+
+.cover-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 36px; }
+.prev-next-card { padding: 20px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); display: block; cursor: pointer; transition: border-color 0.15s ease, transform 0.15s ease; }
+.prev-next-card:hover { border-color: var(--ink); text-decoration: none; }
+.prev-next-card .pn-label { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+.prev-next-card .pn-title { font-family: var(--font-display); font-style: italic; font-size: 17px; line-height: 1.3; color: var(--ink); text-wrap: balance; }
+.prev-next-card.is-disabled { opacity: 0.4; pointer-events: none; }
+.prev-next-card.is-firstmark { cursor: default; background: var(--bg); border-style: dashed; border-color: var(--border-strong); }
+.prev-next-card.is-firstmark:hover { border-color: var(--border-strong); }
+.prev-next-card.is-firstmark .pn-label { color: var(--teal); }
+.prev-next-card.is-firstmark .pn-title { color: var(--muted); font-style: normal; font-family: var(--font-body); font-size: 14px; }
+.cover-pair.is-single { grid-template-columns: 1fr; }
+
+/* Section pages */
+.section-head { margin-bottom: 32px; }
+.section-kicker { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--stone); margin-bottom: 14px; }
+.section-heading { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: clamp(28px, 3.6vw, 38px); line-height: 1.12; color: var(--ink); letter-spacing: -0.012em; text-wrap: balance; }
+
+/* Blocks */
+.lesson-body { font-size: 16.5px; line-height: 1.7; color: var(--ink); }
+.block { position: relative; padding: 6px 14px; margin: 0 -14px 16px; border-radius: var(--radius-sm); transition: background 0.3s ease, padding 0.3s ease; }
+.block.is-active { background: var(--teal-wash); }
+.block p { margin: 0; text-wrap: pretty; max-width: 64ch; }
+.block p em { font-style: italic; }
+.block p strong { font-weight: 600; color: var(--ink); }
+.block p code, .block code.inline { font-family: var(--font-mono); font-size: 0.85em; background: var(--bg-2); padding: 2px 6px; border-radius: var(--radius-sm); }
+.block.b-heading { margin-top: 36px; }
+.block.b-heading h3 { font-family: var(--font-body); font-weight: 600; font-size: 16.5px; letter-spacing: -0.003em; color: var(--ink); }
+.block.b-heading h3 .h-num { font-family: var(--font-mono); font-size: 11px; color: var(--teal); font-weight: 500; margin-right: 10px; letter-spacing: 0.04em; }
+.block.b-pullquote { padding: 36px 14px; margin: 36px -14px; }
+.block.b-pullquote blockquote { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(22px, 3vw, 28px); line-height: 1.24; color: var(--ink); text-align: center; text-wrap: balance; max-width: 26ch; margin: 0 auto; letter-spacing: -0.008em; }
+.block.b-pullquote blockquote::before, .block.b-pullquote blockquote::after { content: ''; display: block; width: 36px; height: 1px; background: var(--ink); margin: 0 auto; opacity: 0.5; }
+.block.b-pullquote blockquote::before { margin-bottom: 24px; }
+.block.b-pullquote blockquote::after { margin-top: 24px; }
+.block.b-code { padding: 0; margin: 28px 0; }
+.block.b-code pre { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px 26px; font-family: var(--font-mono); font-size: 13px; line-height: 1.65; overflow-x: auto; color: var(--ink); white-space: pre; }
+.block.b-figure { padding: 0; margin: 32px -14px; position: relative; }
+.figure-frame { position: relative; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-2); border: 1px solid var(--border); transition: box-shadow 0.3s ease, transform 0.3s ease; cursor: zoom-in; }
+.block.b-figure.is-active .figure-frame { box-shadow: 0 0 0 2px var(--teal); }
+.figure-frame img { display: block; width: 100%; height: auto; }
+.figure-cap { margin-top: 10px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: flex; gap: 10px; align-items: baseline; padding: 0 2px; }
+.figure-cap .num { color: var(--teal); font-weight: 500; }
+.figure-cap .lab { font-family: var(--font-body); font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--ink-2); line-height: 1.5; }
+
+/* Review affordances */
+.block-actions { position: absolute; top: 4px; right: -44px; opacity: 0; transition: opacity 0.15s ease; display: flex; flex-direction: column; gap: 4px; }
+body.mode-review .block:hover .block-actions, body.mode-review .block.has-comment .block-actions, body.mode-review .block.is-commenting .block-actions { opacity: 1; }
+.block-action-btn { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: var(--muted); transition: border-color 0.15s ease, color 0.15s ease; }
+.block-action-btn:hover { border-color: var(--teal); color: var(--teal); }
+.block-action-btn svg { width: 13px; height: 13px; }
+.block.has-comment::before { content: ''; position: absolute; left: -6px; top: 12px; bottom: 12px; width: 2px; background: var(--rust); border-radius: 1px; }
+.block.has-comment.is-fixed::before { background: var(--forest); }
+.block.has-comment.is-archived::before { background: var(--stone); opacity: 0.5; }
+
+/* Comment composer */
+.comment-composer { margin: 14px 0 6px; padding: 16px; background: var(--surface); border: 1px solid var(--rust-soft); border-radius: var(--radius-md); }
+.comment-composer .cc-head { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--rust); margin-bottom: 10px; }
+.comment-composer .cc-head .dot { width: 5px; height: 5px; background: var(--rust); border-radius: 50%; }
+.comment-composer .cc-tools { margin-left: auto; display: flex; gap: 6px; }
+.comment-composer .cc-tools button { padding: 4px 8px; font-size: 10px; color: var(--muted); border-radius: 2px; border: 1px solid transparent; }
+.comment-composer .cc-tools button:hover { border-color: var(--border); color: var(--ink); }
+.comment-composer textarea { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; background: var(--bg); font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: var(--ink); resize: vertical; min-height: 72px; outline: none; transition: border-color 0.15s ease; }
+.comment-composer textarea:focus { border-color: var(--teal); }
+.comment-composer .cc-foot { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+.comment-composer .cc-foot button { padding: 6px 14px; font-size: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+.comment-composer .cc-foot button.is-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.comment-composer .cc-foot button.is-primary:hover { background: var(--teal); border-color: var(--teal); }
+
+/* Pagination footer */
+.page-foot { margin-top: 56px; padding-top: 26px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 28px; }
+.page-foot a { display: flex; flex-direction: column; gap: 4px; color: var(--ink); transition: color 0.15s ease; }
+.page-foot a:hover { color: var(--teal); text-decoration: none; }
+.page-foot a.next { text-align: right; align-items: flex-end; }
+.page-foot .pf-meta { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.page-foot .pf-title { font-family: var(--font-body); font-size: 14px; font-weight: 500; max-width: 240px; }
+.page-foot a.next .pf-title { text-align: right; }
+.page-foot .pf-mid { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.page-foot a.disabled { opacity: 0.3; pointer-events: none; }
+
+/* Audio missing-timings banner */
+.timing-banner { margin: 22px 0 32px; padding: 12px 16px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink-2); }
+.timing-banner .lab { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); font-weight: 500; }
+
+/* Build section */
+.build-shell { margin-top: 40px; }
+.build-status-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+.build-status-row .stat { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; }
+.build-status-row .stat .lab { color: var(--muted); }
+.build-status-row .stat .val { color: var(--ink); font-weight: 500; }
+.build-progress { display: inline-flex; padding: 3px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.build-progress button { padding: 5px 12px; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-radius: 2px; }
+.build-progress button.is-active { background: var(--forest); color: var(--bg); }
+.build-progress button.is-active.todo { background: var(--stone); }
+.build-progress button.is-active.doing { background: var(--amber); }
+.build-video { margin: 24px 0 36px; border-radius: var(--radius-lg); overflow: hidden; background: var(--ink); aspect-ratio: 16/9; position: relative; }
+.build-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.build-video .video-poster { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px; background: linear-gradient(135deg, rgba(92,127,74,0.88), rgba(34,48,31,0.92)); transition: opacity 0.2s ease; }
+.build-video.is-playing .video-poster { opacity: 0; pointer-events: none; }
+.build-video .play-big { width: 64px; height: 64px; border-radius: 50%; background: rgba(251,249,244,0.95); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.build-video .play-big svg { width: 22px; height: 22px; margin-left: 3px; fill: var(--forest); }
+.build-video .poster-label { color: rgba(251,249,244,0.85); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+.build-overview { padding: 22px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 28px; }
+.build-overview h4 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 18px; color: var(--ink); margin-bottom: 10px; }
+.build-overview p { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 10px; }
+.build-overview p:last-child { margin-bottom: 0; }
+.build-section-h { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 22px; color: var(--ink); margin: 32px 0 16px; }
+.build-step { display: grid; grid-template-columns: 44px 1fr; gap: 14px; margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+.build-step:last-child { border-bottom: none; }
+.build-step .s-num { font-family: var(--font-display); font-style: italic; font-size: 32px; color: var(--teal); line-height: 1; padding-top: 2px; }
+.build-step h5 { font-family: var(--font-body); font-weight: 600; font-size: 15.5px; margin-bottom: 6px; color: var(--ink); }
+.build-step p { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); margin-bottom: 8px; }
+.starter-prompt { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.65; color: var(--ink); white-space: pre-wrap; margin: 8px 0 8px; }
+.checklist { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.checklist-item { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s ease; }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item:hover { background: var(--bg-2); }
+.checklist-item .ck { width: 18px; height: 18px; border-radius: 4px; border: 1.5px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s ease; }
+.checklist-item.is-done .ck { background: var(--forest); border-color: var(--forest); }
+.checklist-item.is-done .ck svg { width: 11px; height: 11px; stroke: var(--bg); stroke-width: 3; fill: none; }
+.checklist-item .ck svg { opacity: 0; }
+.checklist-item.is-done .ck svg { opacity: 1; }
+.checklist-item .ck-label { font-size: 14.5px; line-height: 1.45; color: var(--ink); }
+.checklist-item.is-done .ck-label { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--stone); }
+.checklist-item .ck-tag { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 3px 8px; background: var(--bg-2); border-radius: var(--radius-sm); }
+.resources { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.resource { padding: 16px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: border-color 0.15s ease; }
+.resource:hover { border-color: var(--ink); }
+.resource .r-kind { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal); margin-bottom: 6px; }
+.resource h6 { font-family: var(--font-body); font-weight: 600; font-size: 14.5px; color: var(--ink); margin-bottom: 4px; }
+.resource p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+
+/* === Right rail (review panel) === */
+.rail-r { border-left: 1px solid var(--border); background: var(--bg); overflow-y: auto; overflow-x: hidden; padding: 24px 22px 32px; transition: opacity 0.2s ease; }
+.shell.review-collapsed .rail-r { opacity: 0; pointer-events: none; }
+body:not(.mode-review) .rail-r { background: var(--bg-2); }
+.rail-r-tabs { display: flex; gap: 2px; padding: 3px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 24px; }
+.rail-r-tabs button { flex: 1; padding: 6px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-radius: 2px; }
+.rail-r-tabs button.is-active { background: var(--ink); color: var(--bg); }
+.tab-panel { display: none; }
+.tab-panel.is-current { display: block; }
+
+/* Comments panel */
+.comments-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+.comments-head h3 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 17px; color: var(--ink); }
+.comments-head .count { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); }
+.comments-head .count strong { color: var(--ink); font-weight: 500; }
+.comments-filter { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+.comments-filter button { padding: 4px 9px; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.comments-filter button.is-active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.comment { padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s ease; }
+.comment:hover { border-color: var(--border-strong); }
+.comment .c-anchor { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--stone); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.comment .c-anchor.is-image { color: var(--teal); }
+.comment .c-anchor .icon { width: 10px; height: 10px; }
+.comment .c-body { font-family: var(--font-display); font-style: italic; font-size: 14px; line-height: 1.5; color: var(--ink); margin-bottom: 10px; }
+.comment .c-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.comment .c-meta .author { color: var(--ink); font-weight: 500; }
+.comment .c-status { padding: 2px 7px; border-radius: var(--radius-sm); font-size: 9.5px; }
+.comment .c-status.open { background: var(--rust-soft); color: var(--rust); }
+.comment .c-status.fixed { background: var(--forest-soft); color: var(--forest); }
+.comment .c-status.confirmed { background: var(--teal-soft); color: var(--teal-deep); }
+.comment .c-actions { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.comment .c-actions button { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 3px 7px; border-radius: 2px; border: 1px solid transparent; }
+.comment .c-actions button:hover { border-color: var(--border); color: var(--ink); }
+.comment .c-actions button.is-fix { color: var(--forest); }
+.comment .c-actions button.is-archive { color: var(--stone); }
+.comment .c-actions button.is-reopen { color: var(--rust); }
+
+.archived-toggle { margin-top: 18px; padding: 10px 14px; background: var(--surface); border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.archived-toggle:hover { color: var(--ink); }
+.archived-toggle .chev { transition: transform 0.2s ease; }
+.archived-toggle.is-open .chev { transform: rotate(90deg); }
+.archived-list { margin-top: 8px; display: none; }
+.archived-list.is-open { display: block; }
+.comment.is-archived { opacity: 0.6; padding: 10px 14px; margin-bottom: 6px; }
+.comment.is-archived .c-body { font-size: 12.5px; }
+.comment.is-archived:hover { opacity: 1; }
+
+/* Checks tab */
+.checks-h3 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 17px; color: var(--ink); margin-bottom: 16px; }
+.check-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+.check-row .c-lab { font-size: 13.5px; color: var(--ink); }
+.check-row .c-sub { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.check-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border); }
+.check-pill.ok { color: var(--forest); }
+.check-pill.ok .d { background: var(--forest); }
+.check-pill.warn { color: var(--amber); }
+.check-pill.warn .d { background: var(--amber); }
+.check-pill.miss { color: var(--rust); }
+.check-pill.miss .d { background: var(--rust); }
+.check-pill .d { width: 5px; height: 5px; border-radius: 50%; }
+
+/* Approval */
+.approval-area { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--border); }
+.approve-btn { width: 100%; padding: 14px; background: var(--ink); color: var(--bg); border-radius: var(--radius-md); font-family: var(--font-body); font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s ease; }
+.approve-btn:hover { background: var(--teal); }
+.approved-card { padding: 18px 20px; background: var(--forest); color: var(--bg); border-radius: var(--radius-md); }
+.approved-card .a-lab { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(251,249,244,0.7); margin-bottom: 6px; }
+.approved-card .a-title { font-family: var(--font-display); font-style: italic; font-size: 20px; color: var(--bg); margin-bottom: 8px; }
+.approved-card .a-meta { font-family: var(--font-mono); font-size: 11px; color: rgba(251,249,244,0.85); display: flex; gap: 12px; align-items: center; }
+.approved-card .a-meta strong { color: var(--bg); font-weight: 500; }
+.approved-card .a-meta .dot { width: 3px; height: 3px; background: rgba(251,249,244,0.6); border-radius: 50%; }
+.approved-card .a-revoke { margin-top: 14px; padding: 6px 12px; background: rgba(251,249,244,0.12); color: var(--bg); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* === Media bar === */
+.mediabar { position: fixed; left: 0; right: 0; bottom: 0; height: var(--mediabar-h); background: var(--surface); border-top: 1px solid var(--border); z-index: 50; display: grid; grid-template-columns: 60px 1fr auto; align-items: center; gap: 0; padding: 0 22px; }
+.mb-play { width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--bg); display: flex; align-items: center; justify-content: center; transition: background 0.15s ease; }
+.mb-play:hover { background: var(--teal); }
+.mb-play svg { width: 14px; height: 14px; fill: currentColor; }
+.mb-play svg.pause-i { display: none; }
+.mb-play.is-playing svg.play-i { display: none; }
+.mb-play.is-playing svg.pause-i { display: block; }
+.mb-track { display: grid; grid-template-columns: 56px 1fr 56px; align-items: center; gap: 14px; padding: 0 24px; }
+.mb-time { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+.mb-time.dur { text-align: right; color: var(--muted); }
+.mb-scrub { position: relative; height: 4px; background: var(--border); border-radius: 2px; cursor: pointer; }
+.mb-scrub .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: var(--teal); border-radius: 2px; transition: width 0.05s linear; }
+.mb-scrub .knob { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; background: var(--teal); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--teal); opacity: 0; transition: opacity 0.15s ease; }
+.mb-scrub:hover .knob { opacity: 1; }
+.mb-tools { display: flex; align-items: center; gap: 8px; }
+.mb-source-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink); cursor: pointer; transition: border-color 0.15s ease; }
+.mb-source-pill:hover { border-color: var(--ink); }
+.mb-source-pill .d { width: 5px; height: 5px; background: var(--forest); border-radius: 50%; }
+.mb-toggle { padding: 5px 10px; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.mb-toggle:hover { color: var(--ink); border-color: var(--border-strong); }
+.mb-toggle.is-on { background: var(--teal); color: var(--bg); border-color: var(--teal); }
+.mb-speed { padding: 5px 9px; font-family: var(--font-mono); font-size: 10.5px; color: var(--ink); border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); cursor: pointer; }
+
+/* === Modals === */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(34,48,31,0.78); z-index: 100; display: none; align-items: center; justify-content: center; padding: 40px; }
+.modal-backdrop.is-open { display: flex; }
+.modal-image img { max-width: 92vw; max-height: 86vh; box-shadow: 0 24px 56px rgba(0,0,0,0.4); border-radius: var(--radius-md); }
+.modal-image .m-close { position: absolute; top: 24px; right: 28px; padding: 8px 14px; background: rgba(251,249,244,0.94); color: var(--ink); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+.modal-image .m-cap { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); padding: 8px 16px; background: rgba(251,249,244,0.94); color: var(--ink); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; max-width: 80vw; text-align: center; }
+
+.overview-modal { background: var(--bg); width: 100%; max-width: 1100px; max-height: 86vh; border-radius: var(--radius-lg); overflow: auto; padding: 28px; box-shadow: 0 24px 56px rgba(0,0,0,0.4); }
+.overview-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+.overview-head h3 { font-family: var(--font-display); font-style: italic; font-size: 22px; color: var(--ink); }
+.overview-head .close { padding: 6px 12px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.overview-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; aspect-ratio: 4/5; cursor: pointer; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.15s ease, transform 0.15s ease; overflow: hidden; }
+.overview-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+.overview-card.is-current { border-color: var(--teal); background: var(--teal-wash); }
+.overview-card .oc-num { font-family: var(--font-mono); font-size: 10.5px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; }
+.overview-card .oc-section { font-family: var(--font-mono); font-size: 10px; color: var(--stone); }
+.overview-card .oc-title { font-family: var(--font-display); font-style: italic; font-size: 15px; line-height: 1.2; color: var(--ink); text-wrap: balance; flex: 1; }
+.overview-card .oc-stats { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted); display: flex; gap: 8px; }
+@media (max-width: 720px) { .overview-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Demo states menu */
+.state-menu { position: fixed; top: calc(var(--topbar-h) + 12px); right: 16px; z-index: 90; background: var(--ink); color: var(--bg); border-radius: var(--radius-md); padding: 16px 18px; min-width: 220px; box-shadow: 0 12px 32px rgba(34,48,31,0.3); display: none; }
+.state-menu.is-open { display: block; }
+.state-menu h4 { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(251,249,244,0.6); margin-bottom: 12px; }
+.state-toggle { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13px; cursor: pointer; }
+.state-toggle:hover { color: rgba(251,249,244,0.85); }
+.state-toggle .sw { width: 28px; height: 16px; background: rgba(251,249,244,0.18); border-radius: 8px; position: relative; transition: background 0.15s ease; }
+.state-toggle .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: var(--bg); border-radius: 50%; transition: transform 0.15s ease; }
+.state-toggle.is-on .sw { background: var(--teal); }
+.state-toggle.is-on .sw::after { transform: translateX(12px); }
+
+/* Toast */
+.toast { position: fixed; bottom: calc(var(--mediabar-h) + 16px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px 10px 14px; border-radius: var(--radius-md); font-size: 13px; display: none; align-items: center; gap: 12px; box-shadow: 0 12px 32px rgba(34,48,31,0.3); z-index: 80; }
+.toast.is-open { display: flex; }
+.toast button { padding: 4px 10px; background: var(--teal); color: var(--bg); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Mobile responsive */
+@media (max-width: 1100px) {
+  :root { --rail-l: 200px; --rail-r: 300px; }
+}
+@media (max-width: 960px) {
+  /* Mobile: rails become overlays; shell is single-column regardless of collapse classes */
+  .shell, .shell.review-collapsed, .shell.outline-collapsed, .shell.both-collapsed { grid-template-columns: 1fr; }
+  .rail-l, .rail-r { position: fixed; top: calc(var(--topbar-h) + 3px); bottom: var(--mediabar-h); width: 280px; z-index: 70; background: var(--bg); transition: transform 0.25s ease; opacity: 1; pointer-events: auto; }
+  .rail-l { left: 0; transform: translateX(-100%); border-right: 1px solid var(--border); }
+  .rail-r { right: 0; transform: translateX(100%); border-left: 1px solid var(--border); }
+  .shell.outline-collapsed .rail-l { transform: translateX(-100%); }
+  .shell:not(.outline-collapsed) .rail-l { transform: translateX(0); box-shadow: 12px 0 32px rgba(0,0,0,0.15); }
+  .shell.review-collapsed .rail-r { transform: translateX(100%); opacity: 1; pointer-events: none; }
+  .shell:not(.review-collapsed) .rail-r { transform: translateX(0); box-shadow: -12px 0 32px rgba(0,0,0,0.15); opacity: 1; pointer-events: auto; }
+  /* Scrim is a real DOM element so taps can close the overlay */
+  #railScrim { display: block; }
+  .progress-strip { padding: 0; }
+  .topbar { grid-template-columns: auto 1fr auto; }
+  .topbar-brand { padding: 0 16px; border-right: none; }
+  .topbar-brand > a svg { width: 72px; }
+  .lesson-id { font-size: 9.5px; }
+  .lesson-title-tag { display: none; }
+  .progress-strip { padding: 0; }
+  .reader-inner { padding: 32px 20px 72px; }
+  .cover-pair { grid-template-columns: 1fr; }
+  .resources { grid-template-columns: 1fr; }
+  .mediabar { grid-template-columns: 44px 1fr; padding: 0 14px; }
+  .mb-tools { display: none; }
+  .status-pill { display: none; }
+}
+@media (max-width: 600px) {
+  .cover-title { font-size: 30px; }
+  .cover-lead { font-size: 17px; }
+  .cover-meta { gap: 12px; font-size: 9.5px; }
+  .section-heading { font-size: 24px; }
+  .build-step { grid-template-columns: 1fr; }
+  .build-step .s-num { font-size: 24px; }
+  .mb-track { padding: 0 14px; }
+  .modal-backdrop { padding: 20px 12px; }
+}
+
+/* Mobile rail scrim — real DOM element so taps close the overlay */
+#railScrim { display: none; position: fixed; inset: calc(var(--topbar-h) + 3px) 0 var(--mediabar-h) 0; background: rgba(34,48,31,0.45); z-index: 65; cursor: pointer; }
+#railScrim.is-on { display: block; }
+</style>
+</head>
+<body class="mode-learner">
+
+<div id="viewerDiag" role="status" style="display:none;position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:1000;background:#22301F;color:#FBF9F4;padding:14px 18px;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;line-height:1.5;box-shadow:0 12px 32px rgba(0,0,0,0.25);align-items:center;gap:14px;max-width:560px;"></div>
+<script>
+// Diagnostic: if init() never marks itself ok within 2s, show the banner.
+setTimeout(function(){
+  if (document.body.getAttribute('data-viewer-init') !== 'ok') {
+    var b = document.getElementById('viewerDiag');
+    if (b && b.style.display === 'none') {
+      b.style.display = 'flex';
+      b.innerHTML = '<div><strong>Lesson viewer didn’t finish loading.</strong><br>' +
+        '<span style="font-size:12px;opacity:.85">Likely cause: the preview sandbox blocked JavaScript or localStorage. Try opening the file in a regular browser tab.</span></div>' +
+        '<button onclick="location.reload()" style="background:#FBF9F4;color:#22301F;border:none;padding:8px 14px;border-radius:4px;font:inherit;font-weight:500;cursor:pointer;">Reload</button>';
+    }
+  }
+}, 2000);
+</script>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <button class="tool-btn" id="outlineToggle" aria-label="Toggle outline" style="padding: 6px 8px; margin-right: 4px;">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 3h12M1 7h12M1 11h12"/></svg>
+    </button>
+    <a href="#" aria-label="GWTH.ai home">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GWTH.ai logo">
+        <path fill="#22301F" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon fill="#22301F" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon fill="#22301F" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon fill="#22301F" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path fill="#22301F" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect fill="#22301F" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path fill="#A94C2E" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse fill="#A94C2E" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse fill="#A94C2E" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+    </a>
+  </div>
+  <div class="topbar-center">
+    <span class="lesson-id"><strong>Lesson m1_l01</strong><span class="sep"></span>Month 1<span class="sep"></span>Page <strong id="topbarPage">1</strong> / 12</span>
+    <span class="lesson-title-tag" id="topbarTitle">Welcome to GWTH — Six Ways AI Can Give You Superpowers</span>
+  </div>
+  <div class="topbar-tools">
+    <span class="status-pill" id="approvalPill"><span class="dot"></span>Draft · Review</span>
+    <div class="mode-switch">
+      <button data-mode="learner" class="is-active">Learner</button>
+      <button data-mode="review">Review</button>
+    </div>
+    <button class="tool-btn" id="overviewBtn" title="All pages (Esc)">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/><rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/></svg>
+      Overview
+    </button>
+    <button class="tool-btn" id="reviewToggle" title="Toggle review panel">
+      <span id="reviewToggleLabel">Review</span>
+      <span class="num" id="commentCount">3</span>
+    </button>
+    <button class="tool-btn" id="stateMenuBtn">Demo states</button>
+  </div>
+</header>
+
+<div class="progress-strip" id="progressStrip"></div>
+
+<div class="state-menu" id="stateMenu">
+  <h4>Demo states</h4>
+  <div class="state-toggle" data-state="audioPlaying"><span>Audio playing (p2)</span><span class="sw"></span></div>
+  <div class="state-toggle" data-state="timingsMissing"><span>Timings missing</span><span class="sw"></span></div>
+  <div class="state-toggle" data-state="vv7bMissing"><span>VV7B intro missing</span><span class="sw"></span></div>
+  <div class="state-toggle" data-state="approved"><span>Lesson approved</span><span class="sw"></span></div>
+  <div class="state-toggle" data-state="archivedOpen"><span>Show archived comments</span><span class="sw"></span></div>
+</div>
+
+<main class="shell" id="shell">
+  <div id="railScrim" aria-hidden="true"></div>
+  <aside class="rail-l" id="railL">
+    <div class="outline-head">
+      <span class="label">Lesson outline</span>
+      <span class="count" id="outlineCount">12</span>
+    </div>
+    <div class="outline-section" id="outlineList"></div>
+  </aside>
+
+  <section class="reader" id="reader">
+    <div class="reader-inner" id="readerInner">
+      <!-- Pages rendered by JS -->
+    </div>
+  </section>
+
+  <aside class="rail-r" id="railR">
+    <div class="rail-r-tabs">
+      <button data-tab="comments" class="is-active">Comments</button>
+      <button data-tab="checks">Checks</button>
+    </div>
+
+    <div class="tab-panel is-current" data-tab="comments">
+      <div class="comments-head">
+        <h3>Open comments</h3>
+        <span class="count"><strong id="openCount">2</strong> / 3</span>
+      </div>
+      <div class="comments-filter">
+        <button class="is-active" data-filter="all">All</button>
+        <button data-filter="open">Open</button>
+        <button data-filter="fixed">Fixed</button>
+        <button data-filter="page">This page</button>
+      </div>
+      <div id="commentsList"></div>
+      <div class="archived-toggle" id="archivedToggle">
+        <span>Archived (<span id="archivedCount">1</span>)</span>
+        <span class="chev">›</span>
+      </div>
+      <div class="archived-list" id="archivedList"></div>
+
+      <div class="approval-area" id="approvalArea">
+        <button class="approve-btn" id="approveBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,7 6,11 12,3"/></svg>
+          Mark lesson approved
+        </button>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-tab="checks">
+      <h3 class="checks-h3">Lesson readiness</h3>
+      <div class="check-row">
+        <div><div class="c-lab">Kokoro narration</div><div class="c-sub">audio · 83.8 s</div></div>
+        <span class="check-pill ok"><span class="d"></span>Ready</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">VV7B narration</div><div class="c-sub">premium voice</div></div>
+        <span class="check-pill miss" id="vv7bAudioCheck"><span class="d"></span>Missing</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">Word timings</div><div class="c-sub">for highlight sync</div></div>
+        <span class="check-pill warn" id="timingsCheck"><span class="d"></span>Mocked</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">Intro video</div><div class="c-sub">placeholder · 6 s</div></div>
+        <span class="check-pill warn" id="introCheck"><span class="d"></span>Placeholder</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">Build video</div><div class="c-sub">placeholder · 6 s</div></div>
+        <span class="check-pill warn"><span class="d"></span>Placeholder</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">Figures</div><div class="c-sub">17 / 17 referenced</div></div>
+        <span class="check-pill ok"><span class="d"></span>Ready</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">Open comments</div><div class="c-sub">2 open · 1 archived</div></div>
+        <span class="check-pill warn"><span class="d"></span>Pending</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">Perishability</div><div class="c-sub">Ofcom 2025 stats</div></div>
+        <span class="check-pill warn"><span class="d"></span>Re-check Q4</span>
+      </div>
+      <div class="check-row">
+        <div><div class="c-lab">Research date</div><div class="c-sub">last verified</div></div>
+        <span class="check-pill ok"><span class="d"></span>10 May 2026</span>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="mediabar">
+  <button class="mb-play" id="playBtn" aria-label="Play / pause">
+    <svg class="play-i" viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg>
+    <svg class="pause-i" viewBox="0 0 14 14"><rect x="3" y="2" width="3" height="10"/><rect x="8" y="2" width="3" height="10"/></svg>
+  </button>
+  <div class="mb-track">
+    <span class="mb-time" id="curTime">0:00</span>
+    <div class="mb-scrub" id="scrub"><div class="fill" id="scrubFill"></div><div class="knob" id="scrubKnob"></div></div>
+    <span class="mb-time dur" id="durTime">1:23</span>
+  </div>
+  <div class="mb-tools">
+    <span class="mb-source-pill" title="Audio source"><span class="d"></span>Kokoro</span>
+    <button class="mb-toggle" id="followToggle">Follow</button>
+    <button class="mb-toggle is-on" id="hlToggle">Highlight</button>
+    <select class="mb-speed" id="speedSelect">
+      <option value="0.75">0.75×</option>
+      <option value="1" selected>1.0×</option>
+      <option value="1.25">1.25×</option>
+      <option value="1.5">1.5×</option>
+    </select>
+  </div>
+</footer>
+
+<div class="modal-backdrop modal-image" id="modalImage">
+  <button class="m-close" id="modalImageClose">Close · Esc</button>
+  <img id="modalImageEl" alt="">
+  <span class="m-cap" id="modalImageCap"></span>
+</div>
+
+<div class="modal-backdrop" id="modalOverview">
+  <div class="overview-modal">
+    <div class="overview-head">
+      <h3>All pages · Lesson m1_l01</h3>
+      <button class="close" id="modalOverviewClose">Close · Esc</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toastMsg"></span>
+  <button id="toastAction">Jump</button>
+</div>
+
+<audio id="audio" preload="metadata" src="audio/kokoro_main.wav"></audio>
+
+<script id="lessonData" type="application/json">{
+  "id": "m1_l01",
+  "slug": "m1_l01_welcome_to_gwth_six_ways_ai_can_give_you_superpowers",
+  "module": {
+    "id": "m1",
+    "title": "Month 1"
+  },
+  "title": "Welcome to GWTH - Six Ways AI Can Give You Superpowers",
+  "lead": "For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without.",
+  "kicker": null,
+  "author": {
+    "name": null,
+    "role": null,
+    "avatar": null
+  },
+  "readMinutes": null,
+  "level": "beginner",
+  "updatedAt": "2026-05-10",
+  "position": {
+    "index": 1,
+    "total": 26
+  },
+  "prev": null,
+  "next": {
+    "id": "m1_l02",
+    "title": "Your AI Colleague - How to Get Brilliant Help Without Giving Up Your Judgement"
+  },
+  "heroImage": null,
+  "pages": [
+    {
+      "id": "p1",
+      "kind": "cover",
+      "sectionNumber": null,
+      "heading": null,
+      "blocks": []
+    },
+    {
+      "id": "p2",
+      "kind": "section",
+      "sectionNumber": null,
+      "heading": null,
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "For most of the last twenty years, getting better at the practical bits of life usually meant one of three things: you learnt to do it yourself, you paid someone else to do it, or you quietly went without."
+        },
+        {
+          "type": "paragraph",
+          "text": "That could mean drafting a difficult letter, making sense of a confusing bill, planning a project, getting your CV moving again, helping a family member understand an official form, or building a useful tool, workflow, or app you always assumed was beyond you."
+        },
+        {
+          "type": "paragraph",
+          "text": "In the last two years, that has started to change. Ordinary people in the UK, not just engineers, founders, or people working in big technology companies, now have a new option. They can ask for help from AI, shape the answer, try again, and make something useful from a blank page."
+        },
+        {
+          "type": "paragraph",
+          "text": "This course is about that shift, and it has a much more ambitious end goal than simply helping you \"try AI\". If you complete the course and do the projects, the aim is to put you in the top 1% of people in the UK for practical, applied AI ability. Not theory. Not buzzwords. The real skill of using AI to research, write, analyse, build, automate, test, and create useful things that other people can see."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-01.png",
+            "width": 1672,
+            "height": 941,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Paper-craft overview of GWTH projects and AI confidence",
+          "caption": null,
+          "figureNumber": "01",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "The course is written first for non-technical adults. You do not need to be a programmer, data analyst, or IT person to start. But it is also useful if you are already technical and want to broaden what you can do. A developer may use it to become better at research, product thinking, business workflows, communication, and AI-assisted delivery. A marketer, accountant, operations manager, teacher, charity worker, or small business owner may use it to build tools they would never have attempted before."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where work is heading. In the next year or two, many more people will become practical generalists. Not because everyone suddenly becomes an expert in everything, but because AI lets people step outside their old job boundaries with guidance. We can already see the shape of this in companies using AI and low-code tools. Anthropic has described non-technical teams such as marketing and data using AI coding tools to build tools and work through complex multi-step tasks. In the UK, companies such as Shell and Lloyds Banking Group have shown a similar direction with business employees building apps, automations, and AI-supported tools that help colleagues across the organisation."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the kind of confidence GWTH is trying to build. You may arrive as a beginner, but the point is not to stay in a beginner box. The point is to become someone who can cross boundaries: from idea to tool, from messy problem to clear plan, from useful prompt to working project."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 1 gives you the foundations and your first serious proof. You will learn how AI works well enough to use it properly, how to work with it as a colleague, how to choose tools, and how to use the six superpowers in real tasks. You will create practical artefacts such as research briefs, personal content, a first useful tool, a dashboard, career assets, and a FamilyBot-style project that can listen, organise, and share useful household or team information."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 2 moves from personal prototypes to business-ready AI tools. You will learn how to organise projects professionally, keep versions of your work, store real data safely, publish working apps, test that they behave properly, and build AI systems that answer from trusted company information rather than guessing. You will also learn how businesses can make themselves easier for AI search and shopping assistants to understand. The two big capstone routes are a company knowledge and support assistant, called AskMyCo, and an AI business-consultant assistant, called FractionalBuddy. Those names will make sense later. For now, the important point is simple: you will build things that could be useful to an employer, a client, a small business, or a future collaborator."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 3 is where the work becomes transformation-level. You will build towards an AI Readiness Assessment Tool: a system that can interview people in an organisation, capture spoken or written answers, organise the evidence, find patterns across teams, score how ready the organisation is for AI, and generate a practical roadmap and executive report. That is not a toy project. It is the kind of thing an AI transformation consultant would want in their toolkit."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-02.png",
+            "width": 1423,
+            "height": 763,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Three-month GWTH roadmap from foundations to transformation-level project work",
+          "caption": null,
+          "figureNumber": "02",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "If some of those words feel unfamiliar, that is completely fine. You have not started the course yet. You are not expected to know how a company knowledge assistant works, how an app gets published, or how an AI readiness tool is built today. The point of this first lesson is to show you where the path leads, not to ask you to understand every signpost before you have taken the first step."
+        },
+        {
+          "type": "paragraph",
+          "text": "Across the course, your GWTH Score will help you see progress. It is not a school mark. Think of it as a practical signal of your applied AI ability: how confident you are, how good your judgement is, how up to date your skills are, and how much useful work you have actually created. Over time, that can become valuable career evidence. It gives you a clearer way to say, \"I do not just follow AI news; I can use AI well, across real tasks.\" If you want to show it to an employer, client, manager, collaborator, or your own network, you can. If you prefer to keep it private and use it only to guide your own progress, that is completely fine too."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end, the aim is not that you have watched a set of videos. The aim is that you have a portfolio of useful work, a way to explain what you can now do, and enough practical confidence to be one of the people in your workplace, family, business, or local community who genuinely understands how to put AI to work."
+        },
+        {
+          "type": "paragraph",
+          "text": "The course is not about chasing every new tool or pretending AI is magic. It is about learning how to use AI in ordinary life, with your judgement still firmly in charge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Welcome to GWTH."
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "kind": "section",
+      "sectionNumber": "§ 1",
+      "heading": "What this lesson is, and what it is not",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "We start with the map, because the tools make more sense once you know what they are for."
+        },
+        {
+          "type": "paragraph",
+          "text": "This first lesson is not a chatbot comparison. We will not be ranking tools, choosing subscriptions, or showing you every button on a screen. Those things matter later, but they are not the best place to begin."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end, you should have a clear first map of the course: what GWTH is for, the six main ways AI can be useful in your work and home life, and the simple habit that keeps you in charge from day one."
+        },
+        {
+          "type": "paragraph",
+          "text": "You will also leave with your first practical task: a short personal document called *My AI Superpowers Wishlist*. It is the first thing in your GWTH portfolio, and it will help shape the rest of Month 1."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nothing here assumes you are technical. It does assume you are capable, curious, and busy. That is the level this course is written for."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-03.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Lesson 1 focus: course map, six superpowers, and first portfolio wishlist",
+          "caption": null,
+          "figureNumber": "03",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "kind": "section",
+      "sectionNumber": "§ 2",
+      "heading": "What GWTH stands for",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "GWTH is short for *Growth With Tech and Humans*. The order of those words matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Growth** comes first because growth is the point. The aim is not novelty, gadgets, or keeping up with whatever is trending this week. We are here because there are things you want to do at work, at home, for yourself, or for your family, and AI can now help you do some of them better, sooner, or with more confidence than before."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Tech** comes second because technology is the lever, not the hero. You will hear a lot about model versions, benchmarks, agents, and feature launches. Most of that does not matter at the start. What matters is that a small set of AI abilities has become good enough, affordable enough, and easy enough to be useful in real life."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Humans** comes last because humans decide what matters. AI can draft, summarise, compare, suggest, organise, and sometimes build. It cannot decide what a good life looks like for you. It cannot know which family trade-off you will regret, what tone feels respectful in your workplace, or whether a plan fits the week you are actually living through."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is why one line sits underneath this whole course:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "**AI suggests. Humans decide.**",
+          "attribution": null
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-04.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Growth With Tech and Humans pillars with the rule AI suggests, humans decide",
+          "caption": null,
+          "figureNumber": "04",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "AI can be fast, fluent, and surprisingly useful. But you remain the adult in the room."
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "kind": "section",
+      "sectionNumber": "§ 3",
+      "heading": "Why this matters now, in the UK",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three things are true at the same time in 2026."
+        },
+        {
+          "type": "paragraph",
+          "text": "The first is that AI is already here, but most people have not yet built the habit of using it in everyday work and life. According to Ofcom's *Online Nation 2025* report, roughly three in ten UK adults aged 16 and over had actively used a generative AI service. That means around seven in ten had not. So if you are starting today, you are not behind: most people are still learning how to use AI in everyday work and life."
+        },
+        {
+          "type": "paragraph",
+          "text": "At the same time, many people are meeting AI without choosing to. Ofcom also found that AI-written summaries were appearing at the top of many UK Google searches, and more than half of UK adults said they saw those summaries often. So even if you have never opened a chatbot, AI may already be shaping the first answer you see when you search for something."
+        },
+        {
+          "type": "paragraph",
+          "text": "The second thing is that the UK has decided to take AI skills seriously. The government's *AI Opportunities Action Plan* talks about the UK becoming an AI maker, not just an AI taker. Follow-up government reporting describes more than a million free AI courses delivered, with a target of upskilling ten million UK workers by 2030."
+        },
+        {
+          "type": "paragraph",
+          "text": "That does not mean everyone needs to become an AI engineer. The same government analysis describes three broad groups. There are AI experts, who build the systems. There are AI specialists, who help organisations put the systems to work. And then there is a much larger group: AI implementers."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI implementers are people who use AI to do their existing work better. That might be a teaching assistant, a small business owner, a project manager, a charity administrator, a carer, a receptionist, a designer, a sales manager, or someone trying to get back into work after time away."
+        },
+        {
+          "type": "paragraph",
+          "text": "That group is where most of us live."
+        },
+        {
+          "type": "paragraph",
+          "text": "The evidence so far is not a simple story of robots replacing people. It is more often a story of tasks changing inside jobs. In the ONS Business Insights and Conditions Survey published on 2 April 2026, 26% of businesses reported using at least one type of AI technology, up eight percentage points from late March 2025. In the same wave, 5% of businesses using AI said their workforce headcount had reduced because of AI technologies."
+        },
+        {
+          "type": "paragraph",
+          "text": "The third thing is that the boundary between \"technical\" and \"non-technical\" work is already moving. People in marketing, finance, operations, customer service, education, and management are beginning to build, automate, analyse, and test things that used to sit somewhere else in the organisation. They still need judgement, domain knowledge, taste, care, and responsibility. AI does not remove those things. It helps people turn them into working outputs."
+        },
+        {
+          "type": "paragraph",
+          "text": "So the practical question is not \"will AI replace everyone?\" The better question is: \"Which parts of my life and work could become easier, clearer, faster, or more ambitious if I learnt to use this well?\""
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the gap GWTH exists to close."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-05.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "UK 2026 AI skills context: most adults are still learning, AI is shaping everyday work and life, non-technical people can build useful outputs",
+          "caption": null,
+          "figureNumber": "05",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p6",
+      "kind": "section",
+      "sectionNumber": "§ 4",
+      "heading": "The six AI superpowers",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "So what can AI actually do for an ordinary person in 2026?"
+        },
+        {
+          "type": "paragraph",
+          "text": "We will use six categories. They are not scientific laws. They are a practical map. Six is enough to cover the important ground, and few enough to remember."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-06.png",
+            "width": 1313,
+            "height": 830,
+            "aspect": "3:2"
+          },
+          "svg": null,
+          "alt": "The six AI superpowers: research, content, thinking, building, data and automation",
+          "caption": null,
+          "figureNumber": "06",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "For each one, I will explain what it is, where it shows up in real UK life, and the simple checking habit that keeps you safe."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.1 Research"
+        },
+        {
+          "type": "paragraph",
+          "text": "Research means finding things out, summarising long things into short things, comparing options, and helping you understand a topic that is new or messy."
+        },
+        {
+          "type": "paragraph",
+          "text": "This could be a confusing energy-tariff change. It could be a school's attendance policy. It could be comparing broadband providers in your area without giving up a whole Saturday. It could be catching up on a topic like dementia care, solar batteries, tax-free childcare, or the rules around a particular benefit, so that you can have a more informed conversation with someone else."
+        },
+        {
+          "type": "paragraph",
+          "text": "The important point is that AI can reduce the fog. It can read quickly, pull out themes, explain things in plainer English, and say, \"Here are the three things that seem to matter most.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "But research is also where the first verification habit matters most."
+        },
+        {
+          "type": "paragraph",
+          "text": "For anything involving money, health, law, public services, or someone else's wellbeing, check the original source before acting. AI can help you understand a document, but it is not the document. It can summarise a council page, but it is not the council page. It can explain an NHS letter, but it is not the clinician."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to get your bearings. Then check the source that actually has authority."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-07.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Research superpower: reduce the fog, then check the original source",
+          "caption": null,
+          "figureNumber": "07",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.2 Content"
+        },
+        {
+          "type": "paragraph",
+          "text": "Content means writing and rewriting. Drafting, improving, translating, shortening, softening, strengthening, and making a piece of writing fit the person who will read it."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where many people first feel AI becoming useful."
+        },
+        {
+          "type": "paragraph",
+          "text": "You might ask it to draft a polite but firm complaint to your council. You might turn a panicky late-night email into a calm version you can send on Monday morning. You might ask it to rewrite your CV after a long break from paid work. You might use it to explain an insurance claim clearly, translate a letter for a neighbour, or find the right first sentence for something emotional, like a eulogy, a wedding speech, or a message of condolence."
+        },
+        {
+          "type": "paragraph",
+          "text": "The danger with AI writing is that it can sound smooth while not sounding like you. It may be too formal, too cheerful, too American, too corporate, or simply too vague."
+        },
+        {
+          "type": "paragraph",
+          "text": "So the content habit is simple: read it out loud before you send it. If the words sound like someone pretending to be you, change them. If a sentence makes a claim you would not defend, remove it. If the tone is wrong for the person receiving it, reshape it. One useful meta-prompt is to ask the AI to interview you first: \"Ask me three questions about the audience, tone, and point before you draft.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "AI can get you past the blank page. You still own the voice."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-08.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Content superpower: AI helps draft, the human keeps the voice",
+          "caption": null,
+          "figureNumber": "08",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.3 Thinking"
+        },
+        {
+          "type": "paragraph",
+          "text": "Thinking means using AI as a patient sounding board. Not because it knows your life better than you do, but because it can help you slow a problem down."
+        },
+        {
+          "type": "paragraph",
+          "text": "You might say, \"I am thinking of going part-time. Help me list the trade-offs honestly.\" Or, \"We are trying to decide whether Mum needs more care. What questions are we forgetting to ask?\" Or, \"I have eighteen things on my to-do list and three hours. Help me sort what matters most.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "This is one of the most valuable uses of AI, and one of the least obvious. Many beginners think AI is mainly there to give answers, but often it is better at helping you ask better questions."
+        },
+        {
+          "type": "paragraph",
+          "text": "It can help you compare options. It can challenge an assumption. It can show you what a reasonable person on the other side might say. It can turn a worry into a list, and a list into a plan. Here too, meta-prompting helps: before asking for advice, ask the AI what it needs to know to give you a better answer."
+        },
+        {
+          "type": "paragraph",
+          "text": "The thinking habit is to ask one follow-up question before you accept the answer:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "\"What would change your answer?\"",
+          "attribution": null
+        },
+        {
+          "type": "paragraph",
+          "text": "or:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "\"What would someone who disagreed with you say?\"",
+          "attribution": null
+        },
+        {
+          "type": "paragraph",
+          "text": "Those questions are powerful because AI often sounds certain. Asking it to explain what might weaken its answer makes the advice less shiny and more useful."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-09.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Thinking superpower: use AI as a sounding board and ask what would change the answer",
+          "caption": null,
+          "figureNumber": "09",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.4 Building"
+        },
+        {
+          "type": "paragraph",
+          "text": "Building means turning an idea into something useful: start small, test it, then grow it into a stronger tool, workflow, app, or AI system when the need is real."
+        },
+        {
+          "type": "paragraph",
+          "text": "That might be a checklist, a tracker, a spreadsheet, a reusable prompt, a simple web page, or a tiny tool that does one job for you. You do not need to start by writing code yourself. In many cases, AI can write the first version and explain what it has done."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the superpower many beginners assume is \"not for people like me\". It is. Not because everyone needs to become a software developer, but because the first version of a tool, workflow, or app is now much easier to make, and those first versions can grow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Imagine a packing checklist that asks where you are going, who is coming, and what the weather is likely to be. Imagine a reading-log tracker for a child that spots when the routine has slipped. Imagine a button that rewrites an email kinder, firmer, or shorter. Imagine a simple website for an allotment committee, a charity event, a local club, or a family history project."
+        },
+        {
+          "type": "paragraph",
+          "text": "None of those needs to be a business, and none of them needs to be impressive on LinkedIn. They are useful because they remove friction from real life."
+        },
+        {
+          "type": "paragraph",
+          "text": "The building habit is: test it with real examples before you trust it. AI can produce a tool that looks right but behaves wrongly in a corner you did not notice. Try the boring cases. Try the awkward cases. Try the thing you will actually use next Tuesday. Start small, test it with real examples, and then grow the useful parts iteratively."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-10.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Building superpower: start small, test, improve, and grow useful tools iteratively",
+          "caption": null,
+          "figureNumber": "10",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.5 Data"
+        },
+        {
+          "type": "paragraph",
+          "text": "Data means asking plain-English questions of spreadsheets, tables, lists, forms, survey answers, or messy notes."
+        },
+        {
+          "type": "paragraph",
+          "text": "You might upload a simple spreadsheet and ask, \"Where does most of this spending go?\" You might paste 200 customer reviews and ask, \"What are the three things people keep complaining about?\" You might take a parent survey and ask, \"What are the most common themes, and what are two comments that show each theme?\" You might look at a sleep tracker, exercise log, or timesheet and ask what changed in November."
+        },
+        {
+          "type": "paragraph",
+          "text": "This does not mean blindly trusting a chart. It means using AI to help you see patterns that would take longer by hand."
+        },
+        {
+          "type": "paragraph",
+          "text": "The data habit is to check a few rows yourself and make sure the totals still make sense. If a column has been misread, the answer can look polished and still be wrong. Open a few original rows, compare the totals, and ask which rows or assumptions created any surprising chart."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI can help you see the pattern. You still check whether the pattern is real."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-11.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Data superpower: find patterns, open original rows, and check totals",
+          "caption": null,
+          "figureNumber": "11",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4.6 Automation and agents"
+        },
+        {
+          "type": "paragraph",
+          "text": "Automation means AI doing a chain of small steps for you. You may also hear the word \"agent\". In plain English, an agent is an AI system that can carry out more than one step towards a goal, often using tools along the way."
+        },
+        {
+          "type": "paragraph",
+          "text": "For example, one click might turn a meeting recording into notes, action points, and a draft follow-up email. A weekly briefing might collect the important messages from your inbox and group them by topic. A small business owner might ask an AI assistant to draft replies to routine enquiries, leaving only the unusual ones for a human. A research assistant might read a set of articles and return a summary while you do something else."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the newest of the six superpowers, and it is moving quickly. It is also the one where beginners need the clearest boundary."
+        },
+        {
+          "type": "paragraph",
+          "text": "The beginner automation habit is this: do not let AI take the final action on anything that matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "If something sends, pays, posts, files, signs, deletes, books, or commits you to a decision, you click the final button. AI can prepare the action. You approve it. Later, some automations can approve low-risk cases against clear criteria; while learning, keep human approval for anything consequential."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-12.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Automation superpower: AI prepares, criteria handle low risk, humans approve consequences",
+          "caption": null,
+          "figureNumber": "12",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "That single rule prevents a lot of trouble."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Pause for a moment"
+        },
+        {
+          "type": "paragraph",
+          "text": "If I gave you a Saturday afternoon and said, \"Use AI for one useful thing\", which of the six would you reach for first?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Research. Content. Thinking. Building. Data. Automation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep your answer in mind. You will use it in your first project."
+        }
+      ]
+    },
+    {
+      "id": "p7",
+      "kind": "section",
+      "sectionNumber": "§ 5",
+      "heading": "The honest limits: the jagged frontier",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Before we go further, there is one limit worth naming clearly."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI is powerful, but it is uneven. It is brilliant at some tasks that look hard, and surprisingly poor at some tasks that look easy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Researchers often call this the *jagged frontier*. Imagine a border on a map, but instead of a neat line, it has spikes, dents, and odd corners. On one side are tasks AI can handle well. On the other side are tasks where it becomes unreliable. The awkward part is that the border is not always obvious until you cross it."
+        },
+        {
+          "type": "paragraph",
+          "text": "One well-known Harvard Business School study showed this clearly. Researchers gave experienced consultants access to AI for a set of real consulting tasks. On many tasks, the AI-assisted consultants did better: more tasks completed, faster, and at higher quality. But on a task designed to sit just outside what AI could reliably handle, the AI-assisted group did worse than the group without AI."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the lesson. AI help can make you better. It can also make a wrong answer feel more convincing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Three honest things follow from that."
+        },
+        {
+          "type": "paragraph",
+          "text": "First, AI can invent details. People often call this \"hallucination\". It means the system produces an answer that sounds fluent but is not true, or is not supported by the information it was given."
+        },
+        {
+          "type": "paragraph",
+          "text": "Second, AI can sound certain when it should be cautious. It often tries to be helpful, agreeable, and confident. That can be useful when you need momentum, but risky when you need accuracy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Third, the frontier is moving. Things that were not possible eighteen months ago are now ordinary. Things that are unreliable today may improve in six months. So the question is not simply, \"Can AI do this?\" The better question is, \"Can AI do this well enough today, for this situation, with the checks I can apply?\""
+        },
+        {
+          "type": "paragraph",
+          "text": "That is why the GWTH rule matters:"
+        },
+        {
+          "type": "pullQuote",
+          "text": "**AI suggests. Humans decide.**",
+          "attribution": null
+        },
+        {
+          "type": "paragraph",
+          "text": "If you leave this lesson thinking AI is magic, you will be disappointed. If you leave thinking it is pointless, you will miss useful opportunities. The grown-up position is more practical: AI is a powerful, uneven tool. The people who learn to use it well will often have an advantage. But nobody is being asked to hand over their judgement."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-13.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Jagged frontier: ask whether AI can do this well enough today with checks",
+          "caption": null,
+          "figureNumber": "13",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p8",
+      "kind": "section",
+      "sectionNumber": "§ 6",
+      "heading": "Demonstration: a council letter",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Let us make this concrete."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the kind of letter that can sit on the kitchen table for a fortnight. Not because it is impossible to understand, but because it takes concentration, and life is already full."
+        },
+        {
+          "type": "paragraph",
+          "text": "Here is the sort of prompt I might type into a chatbot. The wording matters because it gives the AI a clear job and clear boundaries."
+        },
+        {
+          "type": "paragraph",
+          "text": "*[on screen, in a code-style box:]*"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "I'm a UK adult and I've received this council parking-permit letter.\nPlease do four things, in this order:\n\n1. Summarise the letter in plain English in five lines or fewer.\n2. List the actions I need to take, with dates.\n3. Tell me anything that is unclear or that I should check on the council's website before acting.\n4. If I want to challenge the fee increase, draft a polite, clear paragraph in British English that I can use as a starting point.\n\nDo not invent details. If the letter doesn't say something, say \"not stated\".",
+          "caption": null
+        },
+        {
+          "type": "paragraph",
+          "text": "There are five useful choices in that prompt."
+        },
+        {
+          "type": "paragraph",
+          "text": "I said I am in the UK. I asked for a short plain-English summary. I gave the outputs in a numbered order. I asked for British English. And I added the most important line: \"Do not invent details. If the letter doesn't say something, say 'not stated'.\""
+        },
+        {
+          "type": "paragraph",
+          "text": "That last line is not magic, but it helps. It tells the AI that gaps matter."
+        },
+        {
+          "type": "paragraph",
+          "text": "The AI might then give me a summary, an action list, a list of things to check, and a draft challenge paragraph. None of that is the final answer. My job is to compare the summary against the original letter, check the dates, go to the council website if needed, and decide whether the draft paragraph says what I mean."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the whole course in miniature: AI makes the fog thinner, and you decide what to do."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-14.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Council letter demonstration as Excalidraw prompt structure: summarise, list actions, flag checks, draft paragraph",
+          "caption": null,
+          "figureNumber": "14",
+          "credit": null,
+          "treatment": "inline"
+        }
+      ]
+    },
+    {
+      "id": "p9",
+      "kind": "section",
+      "sectionNumber": "§ 7",
+      "heading": "The shape of the course",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This first lesson matters because it is the doorway into the whole course, so the wider promise needs to be clear."
+        },
+        {
+          "type": "paragraph",
+          "text": "GWTH is not a three-day introduction stretched across three months. It is a practical progression from beginner confidence to serious applied AI capability. The course starts gently because that is the right way to teach, but the destination is ambitious: by the end, if you have done the work, the aim is that you are in the top 1% of UK adults for applied AI."
+        },
+        {
+          "type": "paragraph",
+          "text": "That does not mean you know more AI trivia than everyone else. It means you can do things most people still cannot do. You can brief AI properly, check it, use different tools for different jobs, build useful tools and apps from small tested starts, work with data, create useful content, design AI helpers and repeatable workflows, test what you make, and explain your work clearly enough that someone else can trust it."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Month 1 is foundation, confidence, and visible proof.** You start with the six superpowers, the AI colleague model, and the useful parts of how AI works: context windows, models, memory, privacy, subscriptions, APIs, and multimodal inputs. Then you use those ideas in practical lessons on research, content, thinking, building, data, automation, and agents."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 1 also includes work that matters for jobs and confidence. You will improve career assets such as a CV or LinkedIn profile, practise job-search and interview support, make ideas visible through presentations or simple web pages, build a dashboard, learn about AI power tools such as connectors and command-line tools, and choose a sensible coding or building stack. The capstone is a FamilyBot or Team Meeting Bot style project: a helpful AI system that can take voice notes or meetings, turn them into text, extract tasks, meals, events, shopping or actions, and share useful outputs in a way real people can use."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end of Month 1, you should already have proof. Not just notes, but a portfolio: prompts, checked research, improved writing, a first tool, career assets, a dashboard or page, and a personal AI helper project. You should feel that AI is no longer something happening \"out there\". It is something you can direct."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-15.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Month 1 portfolio proof stack: prompts, research, writing, tool, dashboard, AI helper project",
+          "caption": null,
+          "figureNumber": "15",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "**Month 2 is where you become a practical AI builder.** The work moves from personal prototypes to business-ready tools. You learn how to write a clear brief for an app, keep the project organised, use AI coding assistants, save your work properly, store customer or business information in a database, publish an app so other people can try it, test it in a browser, protect private information, manage cost, and work at a pace that does not overwhelm you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Month 2 also teaches the business-grade versions of the superpowers. Research becomes a company knowledge system: instead of asking AI to guess from memory, you build a tool that searches trusted documents and answers with evidence. Building becomes working app development. Data becomes dashboards, reports, and quality checks. Automation becomes workflows where AI can carry out steps, but a human still approves anything important. Content becomes brand assets, proposals, slide decks, and websites. You will also learn how UK businesses can make their products and services easier for AI assistants to understand, compare, and recommend."
+        },
+        {
+          "type": "paragraph",
+          "text": "The two main Month 2 capstone routes make that concrete. One is a company knowledge and support assistant, which we call AskMyCo. Imagine a small business, charity, or team being able to ask questions about its own policies, services, FAQs, documents, and processes, and get answers with links back to the evidence. The other is an AI business-consultant assistant, which we call FractionalBuddy. Imagine a tool that helps a team understand a problem, plan next steps, research options, write useful documents, and keep human approval in the loop. These are not pretend exercises. They are portfolio projects that can support a job move, an internal promotion conversation, a freelance offer, or a small-business consultancy pitch."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Month 3 is transformation-level work.** This is where the course moves from \"I can build useful AI tools\" to \"I can help an organisation understand what to do with AI.\" The main capstone is an AI Readiness Assessment Tool. It is designed to interview people in a business, gather evidence, understand workflows and blockers, organise what it learns into a searchable knowledge base, find themes across teams, score how ready the organisation is for AI, and generate a practical transformation roadmap."
+        },
+        {
+          "type": "paragraph",
+          "text": "That Month 3 project brings together spoken interviews, consent and UK governance, company knowledge systems, pattern-finding, readiness scoring, cost and impact thinking, workflow redesign, AI helpers that can carry out steps safely, model choices, adoption planning, dashboards, executive reports, and a 90-day AI champion playbook. It is advanced, but it is built step by step from skills you have already practised."
+        },
+        {
+          "type": "paragraph",
+          "text": "Again, do not worry if some of that sounds like a lot. It is a lot. That is why the course takes you there gradually. At this stage, you only need to understand the promise: we start with ordinary tasks, then build towards serious projects that would put you far ahead of most people who have only used AI as a search box or a writing shortcut."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where the career value becomes much more visible. GWTH cannot promise anyone a job or a promotion; no honest course can. What it can do is help you build evidence that you are not just interested in AI, you can use it. More than that, you can use it across research, content, data, building, automation, agents, governance, and transformation. That matters in interviews, appraisals, small-business conversations, career changes, freelance work, and consultancy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Across all three months, your GWTH Score gives you a way to see that growth. It is not a school mark and not a leaderboard. It is a practical scorecard for confidence, judgement, tool use, project work, safety habits, portfolio evidence, and how current your AI skills are becoming. For your career, that matters because AI ability is hard to prove with vague phrases like \"I am good with AI\". A visible score, backed by real projects, gives you something stronger: evidence that you are building, testing, improving, and staying up to date. You may choose to show it off when it helps you, or keep it private when it does not. The score belongs to you."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-16.png",
+            "width": 1672,
+            "height": 941,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Paper-craft GWTH Score and portfolio evidence card",
+          "caption": null,
+          "figureNumber": "16",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "That is the journey: from beginner to someone with serious applied AI proof. Not scary, not theoretical, and not easy in the shallow sense. Useful, ambitious, and built one project at a time."
+        }
+      ]
+    },
+    {
+      "id": "p10",
+      "kind": "practice",
+      "sectionNumber": "§ 8",
+      "heading": "Your first project: the Superpowers Wishlist",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Build section below is where you actually make the first portfolio artefact: *My AI Superpowers Wishlist*."
+        },
+        {
+          "type": "paragraph",
+          "text": "For now, the important idea is simple. Before you choose tools, name the useful things you want AI to help with across work, career, home, family, hobbies, confidence, and admin. The six superpowers are the map. Your wishlist is the route."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end of the course, the goal is not that you have watched a lot of videos. The goal is that many of the useful things on your list have started moving, because you learnt how to work with AI without handing it the steering wheel."
+        }
+      ]
+    },
+    {
+      "id": "p11",
+      "kind": "section",
+      "sectionNumber": "§ 9",
+      "heading": "Recap",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three things to take with you. GWTH is human-first: AI is the lever, and you decide what to lift. The six superpowers give you a practical map: research, content, thinking, building, data, and automation. And the frontier is jagged, which means AI is excellent at some things and unreliable at others. That is why the rule matters: AI suggests, humans decide."
+        },
+        {
+          "type": "figure",
+          "image": {
+            "src": "images/fig-17.png",
+            "width": 1600,
+            "height": 900,
+            "aspect": "16:9"
+          },
+          "svg": null,
+          "alt": "Lesson 1 recap: human-first, six superpowers, jagged frontier, humans decide",
+          "caption": null,
+          "figureNumber": "17",
+          "credit": null,
+          "treatment": "inline"
+        },
+        {
+          "type": "paragraph",
+          "text": "Most UK adults are still learning how to use generative AI in everyday work and life. You are not behind."
+        }
+      ]
+    },
+    {
+      "id": "p12",
+      "kind": "section",
+      "sectionNumber": "§ 10",
+      "heading": "Bridge to L02",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Next lesson is *Your AI Colleague: How to Get Brilliant Help Without Giving Up Your Judgement*."
+        },
+        {
+          "type": "paragraph",
+          "text": "We will treat AI not as a magic answer machine, but as a very fast colleague: useful, tireless, sometimes surprising, and occasionally wrong about something obvious."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bring your wishlist. We will use it in the first activity."
+        },
+        {
+          "type": "paragraph",
+          "text": "See you there."
+        }
+      ]
+    }
+  ],
+  "footnotes": [],
+  "notes": []
+}
+</script>
+<script>
+// ============ SAFE STORAGE SHIM ============
+// Some sandboxed preview iframes block localStorage. Without this shim, the
+// raw localStorage.getItem at module-load throws SecurityError and aborts the
+// entire script — leaving only the static HTML shell visible (no outline, no
+// pages, no JS-driven UI). The shim falls back to an in-memory store.
+const _memStore = {};
+const safeStorage = {
+  getItem(k) { try { return localStorage.getItem(k); } catch (e) { return k in _memStore ? _memStore[k] : null; } },
+  setItem(k, v) { try { localStorage.setItem(k, v); } catch (e) { _memStore[k] = String(v); } },
+  removeItem(k) { try { localStorage.removeItem(k); } catch (e) { delete _memStore[k]; } }
+};
+
+// ============ DATA ============
+let LESSON;
+try { LESSON = JSON.parse(document.getElementById('lessonData').textContent); }
+catch (e) {
+  console.error('[viewer] Failed to parse lesson JSON', e);
+  LESSON = { id: 'unknown', title: 'Lesson failed to load', lead: '', module: {}, pages: [], footnotes: [], notes: [], position: {} };
+}
+
+// Mock alignment segments — audio is 83.77s, narrates start of lesson body
+const TIMINGS = {
+  segments: [
+    { start: 0,     end: 9.5,  pageId: 'p2', blockIndex: 0 },
+    { start: 9.5,   end: 22,   pageId: 'p2', blockIndex: 1 },
+    { start: 22,   end: 36,   pageId: 'p2', blockIndex: 2 },
+    { start: 36,   end: 55,   pageId: 'p2', blockIndex: 3 },
+    { start: 55,   end: 64,   pageId: 'p2', blockIndex: 4 },
+    { start: 64,   end: 83.77, pageId: 'p2', blockIndex: 5 }
+  ],
+  granularity: 'paragraph'
+};
+
+const COMMENTS_SEED = [
+  { id: 'c1', pageId: 'p2', blockIndex: 1, kind: 'text', status: 'open',
+    body: "Tighten this sentence — 'or you quietly went without' lands well, but the prior clause is doing a lot of work. Consider splitting.",
+    author: 'David U.', createdAt: '2026-05-12' },
+  { id: 'c2', pageId: 'p4', blockIndex: 5, kind: 'text', status: 'open',
+    body: "Pull quote could breathe more. Try +6px above and below the rules.",
+    author: 'David U.', createdAt: '2026-05-13' },
+  { id: 'c3', pageId: 'p6', blockIndex: 2, kind: 'image', status: 'archived',
+    body: "Earlier draft had five superpowers — confirming six is final and matches the lesson body.",
+    author: 'David U.', createdAt: '2026-05-09' }
+];
+
+let COMMENTS;
+try { COMMENTS = JSON.parse(safeStorage.getItem('gwth_l01_comments') || 'null') || COMMENTS_SEED.slice(); }
+catch (e) { COMMENTS = COMMENTS_SEED.slice(); }
+
+// ============ STATE ============
+const state = {
+  currentPage: 0,
+  audioPlaying: false,
+  followAudio: false,
+  highlight: true,
+  timingsHidden: false,
+  vv7bMissing: false,
+  approved: false,
+  archivedOpen: false,
+  mode: 'learner',
+  reviewOpen: false,
+  outlineOpen: !(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 960px)').matches),
+  filter: 'all',
+  activeTab: 'comments',
+  activeBlock: null,
+  composeFor: null,
+};
+
+// ============ UTILS ============
+const md = s => s
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+  .replace(/\*(.+?)\*/g,'<em>$1</em>')
+  .replace(/`(.+?)`/g,'<code class="inline">$1</code>')
+  .replace(/\[(\d+)\]/g,'<sup class="fn-ref"><a href="#fn$1">$1</a></sup>');
+
+const fmtTime = s => {
+  if (!isFinite(s) || s < 0) s = 0;
+  const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+};
+
+const pages = () => LESSON.pages;
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+function countFiguresOnPage(p) { return p.blocks.filter(b => b.type === 'figure').length; }
+function commentsOnPage(pageId) { return COMMENTS.filter(c => c.pageId === pageId && c.status !== 'archived').length; }
+
+// ============ RENDER OUTLINE ============
+function renderOutline() {
+  const list = $('#outlineList');
+  let html = '';
+  pages().forEach((p, i) => {
+    const num = String(i + 1).padStart(2, '0');
+    const label = p.kind === 'cover' ? 'Cover' :
+      p.kind === 'practice' ? p.heading || 'Practice' :
+      p.heading ? p.heading : 'Opening';
+    const sec = p.sectionNumber || '';
+    const figCount = countFiguresOnPage(p);
+    const audio = i === 1 ? '🔊' : '';
+    const com = commentsOnPage(p.id);
+    let metaHtml = '';
+    if (figCount > 0) metaHtml += `<span class="m-fig">${figCount} fig</span>`;
+    if (com > 0) metaHtml += `<span class="m-com">${com}c</span>`;
+    if (audio) metaHtml += `<span class="m-audio">♪</span>`;
+    html += `<div class="outline-item ${i === state.currentPage ? 'is-active' : ''}" data-page="${i}">
+      <span class="o-num">${num}</span>
+      <span class="o-label">${sec ? `<em style="color: var(--stone); font-style: normal; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;">${sec}</em> ` : ''}${label}</span>
+      <span class="o-meta">${metaHtml}</span>
+    </div>`;
+    if (p.kind === 'practice') {
+      const buildI = i;
+      html += `<div class="outline-item is-build" data-page="${buildI}" data-anchor="build">
+        <span class="o-num" style="color: var(--rust);">★</span>
+        <span class="o-label">Build · Superpowers Wishlist</span>
+        <span class="o-meta"><span class="m-fig">video</span></span>
+      </div>`;
+    }
+  });
+  list.innerHTML = html;
+  list.querySelectorAll('.outline-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const i = parseInt(el.dataset.page, 10);
+      goToPage(i, el.dataset.anchor || null);
+      if (typeof maybeCloseMobileRails === 'function') maybeCloseMobileRails();
+    });
+  });
+}
+
+// ============ RENDER PROGRESS ============
+function renderProgress() {
+  const strip = $('#progressStrip');
+  strip.innerHTML = pages().map((p, i) => {
+    const cls = i < state.currentPage ? 'is-done' : i === state.currentPage ? 'is-active' : '';
+    return `<div class="seg ${cls}" data-page="${i}" title="Page ${i + 1}"></div>`;
+  }).join('');
+  strip.querySelectorAll('.seg').forEach(el => {
+    el.addEventListener('click', () => goToPage(parseInt(el.dataset.page, 10)));
+  });
+}
+
+// ============ RENDER PAGES ============
+function renderBlock(block, pageId, i) {
+  const cmnt = COMMENTS.find(c => c.pageId === pageId && c.blockIndex === i && c.status !== 'archived');
+  const hasCmnt = cmnt ? `has-comment ${cmnt.status === 'fixed' ? 'is-fixed' : ''}` : '';
+  const actionsHtml = `
+    <div class="block-actions">
+      <button class="block-action-btn" data-action="comment" data-page="${pageId}" data-block="${i}" title="Comment">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 2h12v8H5l-4 3z"/></svg>
+      </button>
+    </div>`;
+  switch (block.type) {
+    case 'paragraph':
+      return `<div class="block b-para ${hasCmnt}" data-block-idx="${i}" data-page-id="${pageId}">${actionsHtml}<p>${md(block.text)}</p></div>`;
+    case 'heading':
+      const lvl = block.level || 3;
+      const m = block.text.match(/^(\d+\.\d+)\s+(.+)$/);
+      const h = m ? `<span class="h-num">${m[1]}</span>${m[2]}` : block.text;
+      return `<div class="block b-heading" data-block-idx="${i}" data-page-id="${pageId}"><h${lvl}>${h}</h${lvl}></div>`;
+    case 'pullQuote':
+      return `<div class="block b-pullquote ${hasCmnt}" data-block-idx="${i}" data-page-id="${pageId}">${actionsHtml}<blockquote>${md(block.text)}</blockquote></div>`;
+    case 'code':
+      return `<div class="block b-code" data-block-idx="${i}" data-page-id="${pageId}"><pre>${block.code.replace(/</g,'&lt;')}</pre></div>`;
+    case 'figure':
+      const src = block.image ? block.image.src : '';
+      const alt = block.alt || '';
+      const num = block.figureNumber || '';
+      const cap = block.caption || alt;
+      return `<div class="block b-figure ${hasCmnt}" data-block-idx="${i}" data-page-id="${pageId}">${actionsHtml}
+        <div class="figure-frame" data-img="${src}" data-cap="${alt}">
+          <img src="${src}" alt="${alt}" loading="lazy" decoding="async">
+        </div>
+        <div class="figure-cap"><span class="num">Fig. ${num}</span><span class="lab">${cap}</span></div>
+      </div>`;
+    default:
+      return '';
+  }
+}
+
+function renderCover() {
+  const p = pages()[0];
+  const lead = LESSON.lead;
+  const moduleTitle = LESSON.module ? LESSON.module.title : '';
+  const updated = LESSON.updatedAt;
+  const total = LESSON.position ? LESSON.position.total : '';
+  const nextRef = LESSON.next;
+  return `<div class="page is-current" data-page-id="${p.id}" data-page-idx="0">
+    <header class="cover-kicker">
+      <span>Lesson m1_l01</span><span class="sep"></span><span class="module">${moduleTitle} · Foundational</span>
+    </header>
+    <h1 class="cover-title">${LESSON.title}</h1>
+    <p class="cover-lead">${md(lead)}</p>
+    <div class="cover-meta">
+      <span>Read <strong>~12 min</strong></span><span class="cover-meta-dot"></span>
+      <span>Level <strong>Beginner</strong></span><span class="cover-meta-dot"></span>
+      <span>Updated <strong>${updated}</strong></span><span class="cover-meta-dot"></span>
+      <span>Position <strong>1 / ${total}</strong></span>
+    </div>
+
+    <div class="intro-frame" id="introFrame">
+      <video id="introVideo" preload="metadata" playsinline poster=""><source src="video/intro-placeholder.mp4" type="video/mp4"></video>
+      <span class="video-badge is-warn"><span class="dot"></span>Intro · Placeholder</span>
+      <div class="video-poster">
+        <button class="play-big" id="introPlay" aria-label="Play intro"><svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg></button>
+        <span class="poster-label">Lesson intro · 6 s placeholder</span>
+        <div class="vv7b-missing-panel" style="display: none;">
+          <h4>VV7B intro not generated</h4>
+          <p>The lesson has a Kokoro narration ready. The premium VV7B intro voice hasn't been rendered for this lesson yet.</p>
+          <button class="gen-btn" id="genVv7bBtn">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="2,7 6,11 12,3"/></svg>
+            Generate VV7B intro
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="intro-aside">
+      <span class="lab">Intro source</span>
+      <span>Placeholder MP4 · 6 s</span>
+      <span class="sep-dot"></span>
+      <span class="link" id="introTranscriptLink">Preview script</span>
+      <span class="sep-dot"></span>
+      <span class="link" id="introRegenLink">Re-render with VV7B</span>
+    </div>
+
+    <div class="cover-pair">
+      ${LESSON.prev ? `<a class="prev-next-card" data-go-prev="1">
+        <div class="pn-label">← Previous lesson</div>
+        <div class="pn-title">${LESSON.prev.title}</div>
+      </a>` : `<div class="prev-next-card is-firstmark">
+        <div class="pn-label">Start here</div>
+        <div class="pn-title">First lesson of the course</div>
+      </div>`}
+      ${nextRef ? `<a class="prev-next-card" data-go-next="1">
+        <div class="pn-label">Next lesson →</div>
+        <div class="pn-title">${nextRef.title}</div>
+      </a>` : ''}
+    </div>
+
+    ${pageFoot(0)}
+  </div>`;
+}
+
+function renderPracticeAndBuild(p, idx) {
+  let body = '';
+  p.blocks.forEach((b, i) => body += renderBlock(b, p.id, i));
+
+  const buildHtml = `
+    <div class="build-shell" id="buildShell">
+      <div class="build-status-row">
+        <span class="stat"><span class="lab">Build status</span></span>
+        <div class="build-progress" id="buildProgress">
+          <button data-st="todo" class="is-active todo">Not started</button>
+          <button data-st="doing">In progress</button>
+          <button data-st="done">Done</button>
+        </div>
+        <span class="stat" style="margin-left: auto;"><span class="lab">Est.</span> <span class="val">25–40 min</span></span>
+        <span class="stat"><span class="lab">Type</span> <span class="val">Portfolio artefact</span></span>
+      </div>
+
+      <div class="build-video" id="buildVideoFrame">
+        <video id="buildVideo" preload="metadata" playsinline><source src="video/build-placeholder.mp4" type="video/mp4"></video>
+        <div class="video-poster">
+          <button class="play-big" id="buildPlay" aria-label="Play build video"><svg viewBox="0 0 14 14"><polygon points="3,1 12,7 3,13"/></svg></button>
+          <span class="poster-label">Build walkthrough · 6 s placeholder</span>
+        </div>
+      </div>
+
+      <div class="build-overview">
+        <h4>Build overview</h4>
+        <p>Make your <em>AI Superpowers Wishlist</em> — the first artefact in your GWTH portfolio. It will not look like much yet. That is the point: a short, honest list of useful things you want AI to help with, tagged against the six superpowers, and prioritised for Month 1.</p>
+        <p>You can write the list straight into a document, or use the starter prompt below and shape what AI gives you. Either is fine. The goal is to leave with something you would actually open again next Tuesday.</p>
+      </div>
+
+      <h4 class="build-section-h">Steps</h4>
+      <div class="build-step">
+        <div class="s-num">01</div>
+        <div>
+          <h5>Brainstorm across seven life areas</h5>
+          <p>List useful things you might want AI to help with, across <em>work, career, home, family, hobbies, confidence, and admin</em>. Aim for 12–20 items. Do not edit yet — the boring ones often turn out to be the most useful.</p>
+        </div>
+      </div>
+      <div class="build-step">
+        <div class="s-num">02</div>
+        <div>
+          <h5>Tag each item with one superpower</h5>
+          <p>Beside each item, mark which of the six superpowers it leans on: <em>research, content, thinking, building, data, or automation</em>. Some will fit two — pick the dominant one.</p>
+        </div>
+      </div>
+      <div class="build-step">
+        <div class="s-num">03</div>
+        <div>
+          <h5>Pick three for Month 1</h5>
+          <p>Star the three that you would genuinely use this month. Save the list somewhere you'll see it. Bring the starred three to Lesson 02.</p>
+        </div>
+      </div>
+
+      <h4 class="build-section-h">Starter prompt</h4>
+      <p style="font-size: 14.5px; color: var(--ink-2); margin-bottom: 14px;">If you would like AI to help you brainstorm, this prompt is a good first move. Paste it into your AI tool and answer the questions.</p>
+      <div class="starter-prompt">I'm a UK adult building an "AI Superpowers Wishlist" — a short list of useful things I want AI to help me with across work, career, home, family, hobbies, confidence, and admin.
+
+Please do four things, in this order:
+
+1. Ask me three short questions about my life and work, so the suggestions can be specific.
+2. Suggest 12 candidate wishlist items based on my answers.
+3. For each one, tag it with one of: research, content, thinking, building, data, automation.
+4. Then ask me which three I want to focus on first.
+
+Do not invent details about me. If you need information, ask. Use British English.</div>
+
+      <h4 class="build-section-h">Checklist</h4>
+      <div class="checklist" id="buildChecklist">
+        <div class="checklist-item" data-ck="0"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">Open a new document or note titled "My AI Superpowers Wishlist"</span><span class="ck-tag">Setup</span></div>
+        <div class="checklist-item is-done" data-ck="1"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">Decide which AI tool you'll use (free tier is fine)</span><span class="ck-tag">Setup</span></div>
+        <div class="checklist-item" data-ck="2"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">List 3 useful things in <em>work</em></span><span class="ck-tag">Brainstorm</span></div>
+        <div class="checklist-item" data-ck="3"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">List 3 useful things in <em>home & family</em></span><span class="ck-tag">Brainstorm</span></div>
+        <div class="checklist-item" data-ck="4"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">List 2 useful things in <em>admin</em> (bills, letters, forms)</span><span class="ck-tag">Brainstorm</span></div>
+        <div class="checklist-item" data-ck="5"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">List 2 useful things for <em>career or confidence</em></span><span class="ck-tag">Brainstorm</span></div>
+        <div class="checklist-item" data-ck="6"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">Tag every item with one of the six superpowers</span><span class="ck-tag">Tag</span></div>
+        <div class="checklist-item" data-ck="7"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">Star the three you'd genuinely use this month</span><span class="ck-tag">Prioritise</span></div>
+        <div class="checklist-item" data-ck="8"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">Save the list somewhere you'll see it again</span><span class="ck-tag">Save</span></div>
+        <div class="checklist-item" data-ck="9"><span class="ck"><svg viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3"/></svg></span><span class="ck-label">Bring the starred three to Lesson 02</span><span class="ck-tag">Carry forward</span></div>
+      </div>
+
+      <h4 class="build-section-h">Resources</h4>
+      <div class="resources">
+        <a class="resource">
+          <div class="r-kind">Template · .md</div>
+          <h6>Wishlist template</h6>
+          <p>A blank list with the seven areas and the six superpower tags pre-filled. Copy and edit.</p>
+        </a>
+        <a class="resource">
+          <div class="r-kind">Library · prompts</div>
+          <h6>Starter prompts (12)</h6>
+          <p>A small library of prompts shaped for the six superpowers. Useful when you start step 2.</p>
+        </a>
+        <a class="resource">
+          <div class="r-kind">Tip · voice</div>
+          <h6>Voice-note this step</h6>
+          <p>If writing feels heavy, dictate the list into your phone first. AI can tidy it up after.</p>
+        </a>
+        <a class="resource">
+          <div class="r-kind">Carry to L02</div>
+          <h6>What you'll need next</h6>
+          <p>Lesson 02 opens with your starred three. Keep them visible.</p>
+        </a>
+      </div>
+    </div>
+  `;
+
+  return `<div class="page" data-page-id="${p.id}" data-page-idx="${idx}">
+    <header class="section-head">
+      ${p.sectionNumber ? `<div class="section-kicker">${p.sectionNumber} · Practice</div>` : ''}
+      <h2 class="section-heading">${p.heading || 'Practice'}</h2>
+    </header>
+    <div class="lesson-body">${body}</div>
+    ${buildHtml}
+    ${pageFoot(idx)}
+  </div>`;
+}
+
+function renderSection(p, idx) {
+  let body = '';
+  p.blocks.forEach((b, i) => body += renderBlock(b, p.id, i));
+  const head = (p.heading || p.sectionNumber) ? `<header class="section-head">
+    ${p.sectionNumber ? `<div class="section-kicker">${p.sectionNumber}</div>` : ''}
+    ${p.heading ? `<h2 class="section-heading">${p.heading}</h2>` : ''}
+  </header>` : '';
+  const isP2 = p.id === 'p2';
+  const banner = isP2 && state.timingsHidden ? `<div class="timing-banner"><span class="lab">Timings not available yet</span><span>Kokoro narration plays normally. Real-time text highlight will appear once the export adds word timings.</span></div>` : '';
+  return `<div class="page" data-page-id="${p.id}" data-page-idx="${idx}">${head}${banner}<div class="lesson-body">${body}</div>${pageFoot(idx)}</div>`;
+}
+
+function pageFoot(idx) {
+  const total = pages().length;
+  const prev = idx > 0 ? pages()[idx - 1] : null;
+  const next = idx < total - 1 ? pages()[idx + 1] : null;
+  const prevLabel = prev ? (prev.kind === 'cover' ? 'Cover' : prev.heading || 'Opening') : '';
+  const nextLabel = next ? (next.kind === 'cover' ? 'Cover' : next.heading || (next.kind === 'practice' ? 'Practice' : 'Section')) : '';
+  return `<nav class="page-foot">
+    <a class="prev ${prev ? '' : 'disabled'}" data-go="${idx - 1}">
+      <span class="pf-meta">← Previous</span>
+      <span class="pf-title">${prevLabel}</span>
+    </a>
+    <span class="pf-mid">Page ${idx + 1} of ${total}</span>
+    <a class="next ${next ? '' : 'disabled'}" data-go="${idx + 1}">
+      <span class="pf-meta">Next →</span>
+      <span class="pf-title">${nextLabel}</span>
+    </a>
+  </nav>`;
+}
+
+function renderPages() {
+  const inner = $('#readerInner');
+  let html = '';
+  pages().forEach((p, i) => {
+    if (i === 0) html += renderCover();
+    else if (p.kind === 'practice') html += renderPracticeAndBuild(p, i);
+    else html += renderSection(p, i);
+  });
+  inner.innerHTML = html;
+  // Wire page-foot links
+  $$('.page-foot a').forEach(a => a.addEventListener('click', e => {
+    const g = parseInt(a.dataset.go, 10);
+    if (!isNaN(g) && g >= 0 && g < pages().length) goToPage(g);
+  }));
+  // Wire prev-next-card navigation
+  $$('[data-go-next]').forEach(a => a.addEventListener('click', e => goToPage(parseInt(a.dataset.goNext, 10))));
+  $$('[data-go-prev]').forEach(a => a.addEventListener('click', e => {
+    // Cover page is index 0; cover's "previous lesson" link would belong to another lesson — we surface it as a no-op for now.
+  }));
+  // Wire image clicks
+  $$('.figure-frame').forEach(el => el.addEventListener('click', () => openImage(el.dataset.img, el.dataset.cap)));
+  // Wire block actions
+  $$('.block-action-btn[data-action="comment"]').forEach(btn => btn.addEventListener('click', e => {
+    e.stopPropagation();
+    openComposer(btn.dataset.page, parseInt(btn.dataset.block, 10));
+  }));
+  // Wire build interactions (delegated)
+}
+
+// ============ PAGE NAV ============
+function goToPage(idx, anchor) {
+  if (idx < 0 || idx >= pages().length) return;
+  state.currentPage = idx;
+  $$('.page').forEach(el => el.classList.toggle('is-current', parseInt(el.dataset.pageIdx, 10) === idx));
+  $('#topbarPage').textContent = String(idx + 1);
+  // Update outline active state
+  $$('.outline-item').forEach(el => el.classList.toggle('is-active', parseInt(el.dataset.page, 10) === idx && !el.dataset.anchor));
+  // Update progress
+  $$('.progress-strip .seg').forEach((el, i) => {
+    el.classList.remove('is-done', 'is-active');
+    if (i < idx) el.classList.add('is-done');
+    if (i === idx) el.classList.add('is-active');
+  });
+  // Scroll reader to top (or anchor)
+  $('#reader').scrollTo({ top: 0, behavior: 'instant' });
+  if (anchor === 'build') {
+    setTimeout(() => {
+      const el = $('#buildShell');
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const cont = $('#reader');
+        cont.scrollTo({ top: cont.scrollTop + r.top - 80, behavior: 'smooth' });
+      }
+    }, 80);
+  }
+  renderComments();
+  saveState();
+}
+
+// ============ AUDIO ============
+const audio = $('#audio');
+audio.addEventListener('loadedmetadata', () => { $('#durTime').textContent = fmtTime(audio.duration); });
+audio.addEventListener('timeupdate', updateAudio);
+audio.addEventListener('play', () => { state.audioPlaying = true; $('#playBtn').classList.add('is-playing'); });
+audio.addEventListener('pause', () => { state.audioPlaying = false; $('#playBtn').classList.remove('is-playing'); });
+audio.addEventListener('ended', () => { state.audioPlaying = false; $('#playBtn').classList.remove('is-playing'); });
+$('#playBtn').addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
+$('#scrub').addEventListener('click', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - r.left) / r.width) * (audio.duration || 83.77);
+});
+$('#followToggle').addEventListener('click', () => {
+  state.followAudio = !state.followAudio;
+  $('#followToggle').classList.toggle('is-on', state.followAudio);
+});
+$('#hlToggle').addEventListener('click', () => {
+  state.highlight = !state.highlight;
+  $('#hlToggle').classList.toggle('is-on', state.highlight);
+  if (!state.highlight) clearActiveBlock();
+});
+$('#speedSelect').addEventListener('change', e => { audio.playbackRate = parseFloat(e.target.value); });
+
+function updateAudio() {
+  const t = audio.currentTime;
+  const d = audio.duration || 83.77;
+  $('#curTime').textContent = fmtTime(t);
+  $('#scrubFill').style.width = ((t / d) * 100) + '%';
+  $('#scrubKnob').style.left = ((t / d) * 100) + '%';
+  if (!state.highlight || state.timingsHidden) { clearActiveBlock(); return; }
+  const seg = TIMINGS.segments.find(s => t >= s.start && t < s.end);
+  if (seg) setActiveBlock(seg.pageId, seg.blockIndex);
+  else clearActiveBlock();
+}
+
+function setActiveBlock(pageId, blockIdx) {
+  const key = `${pageId}:${blockIdx}`;
+  if (state.activeBlock === key) return;
+  clearActiveBlock();
+  state.activeBlock = key;
+  // If active is on different page, show toast OR auto-follow
+  const targetIdx = pages().findIndex(p => p.id === pageId);
+  if (targetIdx !== state.currentPage) {
+    if (state.followAudio) { goToPage(targetIdx); setTimeout(() => paintActive(pageId, blockIdx), 60); }
+    else showToast(`Audio is on page ${targetIdx + 1}`, () => goToPage(targetIdx));
+    return;
+  }
+  paintActive(pageId, blockIdx);
+}
+
+function paintActive(pageId, blockIdx) {
+  const el = document.querySelector(`.page[data-page-id="${pageId}"] [data-block-idx="${blockIdx}"]`);
+  if (!el) return;
+  el.classList.add('is-active');
+  if (state.followAudio) {
+    const cont = $('#reader');
+    const r = el.getBoundingClientRect();
+    const cr = cont.getBoundingClientRect();
+    const target = cont.scrollTop + r.top - cr.top - cr.height / 2 + r.height / 2;
+    cont.scrollTo({ top: target, behavior: 'smooth' });
+  }
+}
+
+function clearActiveBlock() {
+  $$('.block.is-active').forEach(el => el.classList.remove('is-active'));
+  state.activeBlock = null;
+}
+
+// ============ TOAST ============
+let toastTimer;
+function showToast(msg, action) {
+  $('#toastMsg').textContent = msg;
+  const btn = $('#toastAction');
+  btn.style.display = action ? '' : 'none';
+  btn.onclick = action || null;
+  $('#toast').classList.add('is-open');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $('#toast').classList.remove('is-open'), 4000);
+}
+
+// ============ IMAGE MODAL ============
+function openImage(src, cap) {
+  if (!src) return;
+  $('#modalImageEl').src = src;
+  $('#modalImageCap').textContent = cap || '';
+  $('#modalImage').classList.add('is-open');
+}
+$('#modalImageClose').addEventListener('click', () => $('#modalImage').classList.remove('is-open'));
+$('#modalImage').addEventListener('click', e => { if (e.target === $('#modalImage')) $('#modalImage').classList.remove('is-open'); });
+
+// ============ OVERVIEW MODAL ============
+function renderOverview() {
+  const grid = $('#overviewGrid');
+  grid.innerHTML = pages().map((p, i) => {
+    const num = String(i + 1).padStart(2, '0');
+    const title = p.kind === 'cover' ? LESSON.title : p.heading || 'Opening';
+    const section = p.sectionNumber || (p.kind === 'cover' ? 'Cover' : p.kind === 'practice' ? 'Practice' : 'Opening');
+    const figs = countFiguresOnPage(p);
+    const com = commentsOnPage(p.id);
+    return `<div class="overview-card ${i === state.currentPage ? 'is-current' : ''}" data-page="${i}">
+      <span class="oc-num">Page ${num}</span>
+      <span class="oc-section">${section}</span>
+      <span class="oc-title">${title}</span>
+      <div class="oc-stats">
+        ${figs > 0 ? `<span>${figs} fig</span>` : ''}
+        ${com > 0 ? `<span style="color: var(--rust);">${com} comments</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.overview-card').forEach(el => el.addEventListener('click', () => {
+    goToPage(parseInt(el.dataset.page, 10));
+    $('#modalOverview').classList.remove('is-open');
+  }));
+}
+$('#overviewBtn').addEventListener('click', () => { renderOverview(); $('#modalOverview').classList.add('is-open'); });
+$('#modalOverviewClose').addEventListener('click', () => $('#modalOverview').classList.remove('is-open'));
+$('#modalOverview').addEventListener('click', e => { if (e.target === $('#modalOverview')) $('#modalOverview').classList.remove('is-open'); });
+
+// ============ COMMENTS ============
+function renderComments() {
+  const list = $('#commentsList');
+  const arch = $('#archivedList');
+  const filter = state.filter;
+  const cur = pages()[state.currentPage]?.id;
+  const visible = COMMENTS.filter(c => {
+    if (c.status === 'archived') return false;
+    if (filter === 'open') return c.status === 'open';
+    if (filter === 'fixed') return c.status === 'fixed' || c.status === 'confirmed';
+    if (filter === 'page') return c.pageId === cur;
+    return true;
+  });
+  list.innerHTML = visible.length ? visible.map(commentHtml).join('') : '<div style="padding: 24px 16px; text-align: center; color: var(--muted); font-size: 13px; font-style: italic; font-family: var(--font-display);">No comments match this filter.</div>';
+  const archived = COMMENTS.filter(c => c.status === 'archived');
+  arch.innerHTML = archived.map(c => commentHtml(c, true)).join('');
+  $('#archivedCount').textContent = archived.length;
+  $('#openCount').textContent = COMMENTS.filter(c => c.status === 'open').length;
+  $('#commentCount').textContent = COMMENTS.filter(c => c.status !== 'archived').length;
+
+  list.querySelectorAll('.comment').forEach(c => wireCommentActions(c));
+  arch.querySelectorAll('.comment').forEach(c => wireCommentActions(c));
+}
+
+function commentHtml(c, archived = false) {
+  const pIdx = pages().findIndex(p => p.id === c.pageId);
+  const pageLabel = pIdx >= 0 ? `Page ${pIdx + 1}${pages()[pIdx].sectionNumber ? ' · ' + pages()[pIdx].sectionNumber : ''}` : '';
+  const anchor = c.kind === 'image' ? 'Image' : 'Text';
+  return `<div class="comment ${archived ? 'is-archived' : ''}" data-id="${c.id}">
+    <div class="c-anchor ${c.kind === 'image' ? 'is-image' : ''}">
+      <svg class="icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4">
+        ${c.kind === 'image' ? '<rect x="1" y="2" width="10" height="8"/><circle cx="4" cy="5" r="1"/><path d="M11 8L8 5 1 10"/>' : '<path d="M1 2h10v6H5l-4 3z"/>'}
+      </svg>
+      <span>${anchor} · ${pageLabel}</span>
+    </div>
+    <div class="c-body">${md(c.body)}</div>
+    <div class="c-meta">
+      <span><span class="author">${c.author}</span> · ${c.createdAt}</span>
+      <span class="c-status ${c.status}">${c.status}</span>
+    </div>
+    ${archived ? '' : `<div class="c-actions">
+      ${c.status === 'open' ? '<button data-act="fix" class="is-fix">Mark fixed</button>' : ''}
+      ${c.status === 'fixed' ? '<button data-act="confirm">Confirm</button><button data-act="reopen" class="is-reopen">Reopen</button>' : ''}
+      ${c.status === 'confirmed' ? '<button data-act="reopen" class="is-reopen">Reopen</button>' : ''}
+      <button data-act="archive" class="is-archive">Archive</button>
+    </div>`}
+  </div>`;
+}
+
+function wireCommentActions(commentEl) {
+  commentEl.addEventListener('click', e => {
+    if (e.target.closest('button')) return;
+    const id = commentEl.dataset.id;
+    const c = COMMENTS.find(x => x.id === id);
+    if (c) {
+      const pIdx = pages().findIndex(p => p.id === c.pageId);
+      goToPage(pIdx);
+      setTimeout(() => {
+        const target = document.querySelector(`.page[data-page-id="${c.pageId}"] [data-block-idx="${c.blockIndex}"]`);
+        if (target) {
+          target.classList.add('is-active');
+          setTimeout(() => target.classList.remove('is-active'), 1800);
+          const cont = $('#reader');
+          const r = target.getBoundingClientRect();
+          const cr = cont.getBoundingClientRect();
+          cont.scrollTo({ top: cont.scrollTop + r.top - cr.top - cr.height / 2 + r.height / 2, behavior: 'smooth' });
+        }
+      }, 200);
+    }
+  });
+  commentEl.querySelectorAll('button[data-act]').forEach(btn => btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const id = commentEl.dataset.id;
+    const act = btn.dataset.act;
+    const c = COMMENTS.find(x => x.id === id);
+    if (!c) return;
+    if (act === 'fix') c.status = 'fixed';
+    else if (act === 'confirm') c.status = 'confirmed';
+    else if (act === 'reopen') c.status = 'open';
+    else if (act === 'archive') c.status = 'archived';
+    saveComments();
+    renderPages(); // re-render to update has-comment markers
+    setTimeout(() => { goToPage(state.currentPage); renderComments(); }, 20);
+  }));
+}
+
+function saveComments() { safeStorage.setItem('gwth_l01_comments', JSON.stringify(COMMENTS)); }
+
+function openComposer(pageId, blockIdx) {
+  // Remove any existing composer
+  document.querySelectorAll('.comment-composer').forEach(el => el.remove());
+  state.composeFor = { pageId, blockIdx };
+  const target = document.querySelector(`.page[data-page-id="${pageId}"] [data-block-idx="${blockIdx}"]`);
+  if (!target) return;
+  target.classList.add('is-commenting');
+  const composer = document.createElement('div');
+  composer.className = 'comment-composer';
+  composer.innerHTML = `
+    <div class="cc-head">
+      <span class="dot"></span>
+      <span>Comment on this block</span>
+      <div class="cc-tools">
+        <button title="Voice typing (Microsoft / Whisper)">🎤 Voice</button>
+        <button data-cc="cancel">Cancel</button>
+      </div>
+    </div>
+    <textarea placeholder="Type a comment, or hold the voice button to dictate. Comments support markdown."></textarea>
+    <div class="cc-foot">
+      <button data-cc="cancel">Cancel</button>
+      <button class="is-primary" data-cc="save">Save comment</button>
+    </div>`;
+  target.insertAdjacentElement('afterend', composer);
+  composer.querySelector('textarea').focus();
+  composer.querySelectorAll('[data-cc]').forEach(btn => btn.addEventListener('click', e => {
+    const act = btn.dataset.cc;
+    if (act === 'cancel') { composer.remove(); target.classList.remove('is-commenting'); state.composeFor = null; }
+    if (act === 'save') {
+      const txt = composer.querySelector('textarea').value.trim();
+      if (txt) {
+        const newC = { id: 'c' + Date.now(), pageId, blockIndex: blockIdx, kind: 'text', status: 'open', body: txt, author: 'David U.', createdAt: new Date().toISOString().slice(0, 10) };
+        COMMENTS.push(newC);
+        saveComments();
+        renderPages();
+        setTimeout(() => { goToPage(state.currentPage); renderComments(); }, 20);
+      } else { composer.remove(); target.classList.remove('is-commenting'); }
+    }
+  }));
+}
+
+// ============ MODE / PANELS ============
+function setMode(m) {
+  state.mode = m;
+  document.body.classList.toggle('mode-review', m === 'review');
+  document.body.classList.toggle('mode-learner', m === 'learner');
+  $$('.mode-switch button').forEach(b => b.classList.toggle('is-active', b.dataset.mode === m));
+  if (m === 'review') { state.reviewOpen = true; }
+  else { state.reviewOpen = false; }
+  applyShellLayout();
+}
+
+function applyShellLayout() {
+  const sh = $('#shell');
+  sh.classList.toggle('review-collapsed', !state.reviewOpen);
+  sh.classList.toggle('outline-collapsed', !state.outlineOpen);
+  sh.classList.toggle('both-collapsed', !state.outlineOpen && !state.reviewOpen);
+  $('#progressStrip').classList.toggle('no-right', !state.reviewOpen);
+  $('#reviewToggleLabel').textContent = state.reviewOpen ? 'Review ✕' : 'Review';
+  // Scrim only when a rail is open AND we're at mobile width
+  const onMobile = window.matchMedia('(max-width: 960px)').matches;
+  const railOpen = state.outlineOpen || state.reviewOpen;
+  $('#railScrim')?.classList.toggle('is-on', onMobile && railOpen);
+}
+
+function maybeCloseMobileRails() {
+  if (window.matchMedia('(max-width: 960px)').matches) {
+    state.outlineOpen = false;
+    state.reviewOpen = false;
+    applyShellLayout();
+  }
+}
+
+function wireShellControls() {
+$$('.mode-switch button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+$('#reviewToggle')?.addEventListener('click', () => { state.reviewOpen = !state.reviewOpen; applyShellLayout(); });
+$('#outlineToggle')?.addEventListener('click', () => { state.outlineOpen = !state.outlineOpen; applyShellLayout(); });
+
+// Tappable scrim closes mobile rail overlays
+$('#railScrim')?.addEventListener('click', () => {
+  state.outlineOpen = false;
+  state.reviewOpen = false;
+  applyShellLayout();
+});
+
+// Re-evaluate scrim visibility on viewport resize
+window.addEventListener('resize', () => applyShellLayout());
+
+// Tabs
+$$('.rail-r-tabs button').forEach(b => b.addEventListener('click', () => {
+  state.activeTab = b.dataset.tab;
+  $$('.rail-r-tabs button').forEach(x => x.classList.toggle('is-active', x.dataset.tab === state.activeTab));
+  $$('.tab-panel').forEach(p => p.classList.toggle('is-current', p.dataset.tab === state.activeTab));
+}));
+
+// Filter
+$$('.comments-filter button').forEach(b => b.addEventListener('click', () => {
+  state.filter = b.dataset.filter;
+  $$('.comments-filter button').forEach(x => x.classList.toggle('is-active', x.dataset.filter === state.filter));
+  renderComments();
+}));
+
+// Archived toggle
+$('#archivedToggle')?.addEventListener('click', () => {
+  state.archivedOpen = !state.archivedOpen;
+  $('#archivedToggle').classList.toggle('is-open', state.archivedOpen);
+  $('#archivedList').classList.toggle('is-open', state.archivedOpen);
+});
+
+// Approval
+$('#approveBtn')?.addEventListener('click', () => { state.approved = true; renderApproval(); saveState(); });
+} // end wireShellControls
+function renderApproval() {
+  const area = $('#approvalArea');
+  const pill = $('#approvalPill');
+  if (state.approved) {
+    const today = new Date().toISOString().slice(0, 10);
+    area.innerHTML = `<div class="approved-card">
+      <div class="a-lab">Lesson approved</div>
+      <div class="a-title">Welcome to GWTH</div>
+      <div class="a-meta">
+        <span><strong>m1_l01</strong></span><span class="dot"></span>
+        <span>Approved <strong>${today}</strong></span><span class="dot"></span>
+        <span>by <strong>David U.</strong></span>
+      </div>
+      <button class="a-revoke" id="revokeBtn">Revoke approval</button>
+    </div>`;
+    pill.innerHTML = '<span class="dot" style="background: var(--forest);"></span>Approved · ' + today;
+    pill.classList.remove('is-amber', 'is-rust');
+    setTimeout(() => $('#revokeBtn')?.addEventListener('click', () => { state.approved = false; renderApproval(); saveState(); }), 0);
+  } else {
+    area.innerHTML = `<button class="approve-btn" id="approveBtn">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,7 6,11 12,3"/></svg>
+      Mark lesson approved
+    </button>`;
+    pill.innerHTML = '<span class="dot"></span>Draft · Review';
+    pill.classList.remove('is-amber', 'is-rust');
+    $('#approveBtn').addEventListener('click', () => { state.approved = true; renderApproval(); saveState(); });
+  }
+}
+
+// ============ DEMO STATE MENU ============
+function wireDemoMenu() {
+$('#stateMenuBtn')?.addEventListener('click', () => $('#stateMenu').classList.toggle('is-open'));
+document.addEventListener('click', e => {
+  const menu = $('#stateMenu');
+  if (!menu) return;
+  if (!e.target.closest('#stateMenu') && !e.target.closest('#stateMenuBtn')) menu.classList.remove('is-open');
+});
+$$('.state-toggle').forEach(t => t.addEventListener('click', () => {
+  const k = t.dataset.state;
+  if (k === 'audioPlaying') {
+    if (audio.paused) {
+      if (state.currentPage !== 1) goToPage(1);
+      state.followAudio = true; $('#followToggle').classList.add('is-on');
+      const p = audio.play();
+      if (p && p.catch) p.then(() => { t.classList.add('is-on'); }).catch(() => { showToast('Browser blocked autoplay — press play in the media bar to start.'); });
+      else { t.classList.add('is-on'); }
+    } else { audio.pause(); t.classList.remove('is-on'); }
+    return;
+  }
+  if (k === 'timingsMissing') { state.timingsHidden = !state.timingsHidden; t.classList.toggle('is-on', state.timingsHidden); $('#timingsCheck').className = 'check-pill ' + (state.timingsHidden ? 'miss' : 'warn'); $('#timingsCheck').innerHTML = '<span class="d"></span>' + (state.timingsHidden ? 'Missing' : 'Mocked'); renderPages(); goToPage(state.currentPage); return; }
+  if (k === 'vv7bMissing') {
+    state.vv7bMissing = !state.vv7bMissing; t.classList.toggle('is-on', state.vv7bMissing);
+    const frame = $('#introFrame');
+    if (frame) {
+      frame.classList.toggle('vv7b-missing', state.vv7bMissing);
+      const panel = frame.querySelector('.vv7b-missing-panel');
+      if (panel) panel.style.display = state.vv7bMissing ? 'flex' : 'none';
+      const playBig = frame.querySelector('.play-big');
+      if (playBig) playBig.style.display = state.vv7bMissing ? 'none' : 'flex';
+      const posterLabel = frame.querySelector('.poster-label');
+      if (posterLabel) posterLabel.style.display = state.vv7bMissing ? 'none' : '';
+    }
+    return;
+  }
+  if (k === 'approved') { state.approved = !state.approved; t.classList.toggle('is-on', state.approved); renderApproval(); return; }
+  if (k === 'archivedOpen') { state.archivedOpen = !state.archivedOpen; t.classList.toggle('is-on', state.archivedOpen); $('#archivedToggle').classList.toggle('is-open', state.archivedOpen); $('#archivedList').classList.toggle('is-open', state.archivedOpen); return; }
+}));
+} // end wireDemoMenu
+
+// ============ INTRO VIDEO ============
+function wireIntroVideo() {
+  const frame = $('#introFrame');
+  if (!frame) return;
+  const v = $('#introVideo');
+  const btn = $('#introPlay');
+  if (btn && v) btn.addEventListener('click', () => {
+    if (state.vv7bMissing) return;
+    if (v.paused) { v.play(); frame.classList.add('is-playing'); }
+    else { v.pause(); frame.classList.remove('is-playing'); }
+  });
+  if (v) v.addEventListener('ended', () => frame.classList.remove('is-playing'));
+  $('#genVv7bBtn')?.addEventListener('click', () => { showToast('Queued VV7B intro render — typically 90–120 seconds.'); });
+}
+
+// ============ BUILD VIDEO ============
+function wireBuildSection() {
+  const frame = $('#buildVideoFrame');
+  if (!frame) return;
+  const v = $('#buildVideo');
+  const btn = $('#buildPlay');
+  if (btn && v) btn.addEventListener('click', () => {
+    if (v.paused) { v.play(); frame.classList.add('is-playing'); }
+    else { v.pause(); frame.classList.remove('is-playing'); }
+  });
+  if (v) v.addEventListener('ended', () => frame.classList.remove('is-playing'));
+  // Checklist
+  $$('.checklist-item').forEach(item => item.addEventListener('click', () => item.classList.toggle('is-done')));
+  // Build progress
+  $$('#buildProgress button').forEach(b => b.addEventListener('click', () => {
+    $$('#buildProgress button').forEach(x => { x.classList.remove('is-active', 'todo', 'doing'); });
+    b.classList.add('is-active');
+    if (b.dataset.st === 'todo') b.classList.add('todo');
+    if (b.dataset.st === 'doing') b.classList.add('doing');
+  }));
+}
+
+// ============ KEYBOARD ============
+function wireKeyboard() {
+document.addEventListener('keydown', e => {
+  if (e.target.matches('textarea, input')) return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); goToPage(state.currentPage + 1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); goToPage(state.currentPage - 1); }
+  else if (e.key === 'Escape') {
+    const modalImg = $('#modalImage');
+    const modalOv = $('#modalOverview');
+    if (modalImg?.classList.contains('is-open')) modalImg.classList.remove('is-open');
+    else if (modalOv?.classList.contains('is-open')) modalOv.classList.remove('is-open');
+    else if (modalOv) { renderOverview(); modalOv.classList.add('is-open'); }
+  }
+  else if (e.key === ' ' && e.target === document.body) { e.preventDefault(); audio.paused ? audio.play() : audio.pause(); }
+});
+} // end wireKeyboard
+
+// ============ PERSIST STATE ============
+function saveState() {
+  safeStorage.setItem('gwth_l01_state', JSON.stringify({
+    currentPage: state.currentPage,
+    approved: state.approved,
+  }));
+}
+const STATE_VERSION = 3;
+function loadState() {
+  try {
+    if (parseInt(safeStorage.getItem('gwth_l01_v') || '0', 10) !== STATE_VERSION) {
+      safeStorage.removeItem('gwth_l01_state');
+      safeStorage.removeItem('gwth_l01_comments');
+      safeStorage.setItem('gwth_l01_v', String(STATE_VERSION));
+      return;
+    }
+    const saved = JSON.parse(safeStorage.getItem('gwth_l01_state') || 'null');
+    if (saved && typeof saved.currentPage === 'number' && isFinite(saved.currentPage)) {
+      const total = pages().length;
+      state.currentPage = Math.max(0, Math.min(Math.floor(saved.currentPage), total - 1));
+      state.approved = !!saved.approved;
+    }
+  } catch (e) {}
+}
+
+// ============ INIT ============
+function init() {
+  const safe = (label, fn) => { try { fn(); } catch (e) { console.error('[viewer]', label, e); } };
+  safe('loadState', loadState);
+  safe('renderOutline', renderOutline);
+  safe('renderProgress', renderProgress);
+  safe('renderPages', renderPages);
+  safe('renderComments', renderComments);
+  safe('renderApproval', renderApproval);
+  safe('wireIntroVideo', wireIntroVideo);
+  safe('wireBuildSection', wireBuildSection);
+  safe('wireShellControls', wireShellControls);
+  safe('wireDemoMenu', wireDemoMenu);
+  safe('wireKeyboard', wireKeyboard);
+  safe('applyShellLayout', applyShellLayout);
+  safe('goToPage', () => goToPage(state.currentPage));
+  // Defensive: if for any reason no page ended up active, force the cover.
+  if (!document.querySelector('.page.is-current')) {
+    const first = document.querySelector('.page[data-page-idx="0"]');
+    if (first) first.classList.add('is-current');
+  }
+  // Mark init complete so the diagnostic banner knows to hide itself.
+  document.body.setAttribute('data-viewer-init', 'ok');
+  const banner = document.getElementById('viewerDiag');
+  if (banner) banner.remove();
+}
+try { init(); }
+catch (e) {
+  console.error('[viewer] init() failed fatally', e);
+  document.body.setAttribute('data-viewer-init', 'failed');
+  const b = document.getElementById('viewerDiag');
+  if (b) {
+    b.style.display = 'flex';
+    b.innerHTML = '<div><strong>Lesson viewer failed to start.</strong><br>' +
+      '<span style="font-size:12px;opacity:.85">' + String(e.message || e) + '</span></div>' +
+      '<button onclick="location.reload()" style="background:#fff;color:#22301F;border:none;padding:8px 14px;border-radius:4px;font:inherit;font-weight:500;cursor:pointer;">Reload</button>';
+  }
+}
+</script>
+</body>
+</html>

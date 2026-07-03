@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH Score — Variant C: Fitness/Form Curve</title>
+<style>
+  :root {
+    --bg: oklch(0.98 0 0);
+    --fg: oklch(0.18 0.04 175);
+    --card: oklch(1 0 0);
+    --muted: oklch(0.95 0.01 220);
+    --muted-fg: oklch(0.5 0.02 220);
+    --primary: oklch(0.7 0.18 220);
+    --accent: oklch(0.65 0.16 165);
+    --warning: oklch(0.75 0.15 75);
+    --danger: oklch(0.65 0.21 27);
+    --success: oklch(0.6 0.18 145);
+    --border: oklch(0.9 0.02 220);
+  }
+  body.dark {
+    --bg: oklch(0.17 0.005 60);
+    --fg: oklch(0.93 0.008 60);
+    --card: oklch(0.21 0.005 60);
+    --muted: oklch(0.24 0.006 60);
+    --muted-fg: oklch(0.65 0.015 60);
+    --primary: oklch(0.75 0.16 220);
+    --accent: oklch(0.75 0.14 165);
+    --border: oklch(1 0 0 / 12%);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; height: 100%; }
+  body { display: grid; place-items: center; padding: 24px; }
+  .stage { width: 100%; max-width: 720px; }
+
+  .device { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 24px 48px oklch(0 0 0 / 0.08); overflow: hidden; }
+  .device-chrome { background: var(--muted); padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; } .dot.y { background: #ffbd2e; } .dot.g { background: #28ca42; }
+  .device-url { margin-left: 12px; font-size: 12px; color: var(--muted-fg); background: var(--bg); padding: 4px 12px; border-radius: 999px; font-family: 'JetBrains Mono', monospace; }
+
+  .body-pad { padding: 28px 32px 36px; }
+  .profile-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: grid; place-items: center; color: white; font-weight: 600; font-size: 18px; }
+  .profile-name { font-weight: 600; font-size: 16px; }
+  .profile-role { color: var(--muted-fg); font-size: 13px; margin-top: 2px; }
+
+  /* === CURVE === */
+  .curve-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; }
+  .curve-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .curve-title { font-size: 13px; font-weight: 600; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.05em; }
+  .example-pill { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: var(--muted); color: var(--muted-fg); font-weight: 600; letter-spacing: 0.05em; }
+  .score-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+  .score-num { font-size: 56px; font-weight: 700; line-height: 1; font-feature-settings: 'tnum'; letter-spacing: -0.02em; }
+  .score-status { color: var(--muted-fg); font-size: 13px; }
+  .score-status .pill-pass { color: var(--success); font-weight: 600; }
+
+  .chart { width: 100%; height: 180px; position: relative; }
+  .chart svg { width: 100%; height: 100%; }
+  .chart-axis-y { position: absolute; left: -4px; top: 0; bottom: 0; width: 30px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--muted-fg); padding: 4px 0; font-feature-settings: 'tnum'; text-align: right; }
+  .chart-axis-x { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted-fg); margin-top: 4px; padding: 0 8px; }
+
+  .annotation { font-size: 11px; padding: 4px 8px; border-radius: 4px; background: var(--card); border: 1px solid var(--border); position: absolute; pointer-events: none; }
+  .annotation.up { color: var(--success); }
+  .annotation.down { color: var(--warning); }
+
+  .caveat { margin-top: 14px; font-size: 11px; color: var(--muted-fg); font-style: italic; line-height: 1.4; }
+
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .toggle { font-size: 12px; padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; color: var(--fg); }
+  .scenarios { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .scenario { font-size: 11px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; background: transparent; color: var(--fg); }
+  .scenario.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="toolbar"><button class="toggle" onclick="document.body.classList.toggle('dark')">Toggle theme</button></div>
+
+  <div class="scenarios">
+    <button class="scenario active" data-score="104">Earned, decaying (today: 104)</button>
+    <button class="scenario" data-score="92">Currently below pass</button>
+    <button class="scenario" data-score="120">Climbing into bonus</button>
+  </div>
+
+  <div class="device">
+    <div class="device-chrome">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <div class="device-url">gwth.ai/dashboard</div>
+    </div>
+    <div class="body-pad">
+      <div class="profile-row">
+        <div class="avatar">AE</div>
+        <div>
+          <div class="profile-name">Alex Example</div>
+          <div class="profile-role">Engineering Manager · Manchester</div>
+        </div>
+      </div>
+
+      <div class="curve-card">
+        <div class="curve-header">
+          <div class="curve-title">GWTH Score · 90 days</div>
+          <div class="example-pill">EXAMPLE</div>
+        </div>
+        <div class="score-row">
+          <div class="score-num" id="curve-num">104</div>
+          <div class="score-status">Today · <span class="pill-pass" id="curve-status">Passing</span></div>
+        </div>
+
+        <div class="chart">
+          <svg viewBox="0 0 400 180" preserveAspectRatio="none" id="chart-svg">
+            <!-- Bands: y axis 0..130 mapped to 180..0 -->
+            <!-- Pass band 100..130 → y 14..0 actually inverted: y = 180 - (v/130)*180 -->
+            <!-- For 0..70 fail neutral; 70..100 amber; 100..130 green -->
+            <rect x="0" y="0" width="400" height="41" fill="oklch(0.6 0.18 145 / 0.10)" />
+            <rect x="0" y="41" width="400" height="42" fill="oklch(0.78 0.12 75 / 0.10)" />
+            <!-- 0..70 white-ish background already -->
+
+            <!-- Pass line at 100 → y = 180 - (100/130)*180 = 41.5 -->
+            <line x1="0" x2="400" y1="41.5" y2="41.5" stroke="var(--fg)" stroke-width="1" stroke-dasharray="6,4" opacity="0.55" />
+            <text x="396" y="38" text-anchor="end" font-size="10" fill="var(--fg)" opacity="0.7" font-weight="600">PASS · 100</text>
+
+            <!-- Curve & area — populated by JS -->
+            <path id="chart-area" fill="oklch(0.7 0.18 220 / 0.12)" d="" />
+            <path id="chart-line-above" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round" d="" />
+            <path id="chart-line-below" fill="none" stroke="var(--warning)" stroke-width="2.5" stroke-linejoin="round" d="" />
+
+            <!-- Today dot -->
+            <circle id="today-dot" cx="395" cy="40" r="5" fill="var(--primary)">
+              <animate attributeName="r" values="5;7;5" dur="1.6s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <div class="annotation up" style="left: 12px; top: 8px;">+18 from updates</div>
+          <div class="annotation down" style="right: 12px; bottom: 6px;">−14 decay</div>
+        </div>
+        <div class="chart-axis-x">
+          <span>90 days ago</span><span>60</span><span>30</span><span>today</span>
+        </div>
+
+        <div class="caveat">Illustrative — your actual GWTH Score reflects verified work.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Y mapping: value 0..130 → y 180..0
+  const yFor = v => 180 - (v / 130) * 180;
+  const xFor = (i, len) => (i / (len - 1)) * 400;
+
+  // Build a 90-day history that tells the "earned, decaying" story
+  function buildHistory(today) {
+    const hist = [];
+    let v = 70;
+    for (let i = 0; i < 90; i++) {
+      // Climb for first 50 days (active learning)
+      if (i < 50) v += 0.9 + Math.random() * 0.5;
+      // Plateau
+      else if (i < 65) v += (Math.random() - 0.4) * 0.6;
+      // Decay
+      else v -= 0.6 + Math.random() * 0.4;
+    }
+    // Renormalize so last value matches `today`
+    const last = v;
+    const ratio = today / last;
+    return hist.length === 90 ? hist : Array.from({length: 90}, (_, i) => {
+      let val;
+      if (i < 50) val = 70 + i * 1.0;
+      else if (i < 65) val = 120 - (i - 50) * 0.1;
+      else val = 118 - (i - 65) * (118 - today) / 25;
+      return Math.max(50, Math.min(130, val));
+    });
+  }
+
+  function render(today) {
+    const hist = buildHistory(today);
+    const N = hist.length;
+
+    // Build path commands, splitting at the pass line crossing
+    const passY = yFor(100);
+    let above = '', below = '';
+    let isFirstAbove = true, isFirstBelow = true;
+
+    for (let i = 0; i < N; i++) {
+      const x = xFor(i, N), y = yFor(hist[i]);
+      const v = hist[i];
+      if (v >= 100) {
+        above += (isFirstAbove ? `M ${x} ${y}` : ` L ${x} ${y}`);
+        isFirstAbove = false;
+        if (i > 0 && hist[i-1] < 100) {
+          // Started a new above-segment, restart below path
+          isFirstBelow = true;
+        }
+      } else {
+        below += (isFirstBelow ? `M ${x} ${y}` : ` L ${x} ${y}`);
+        isFirstBelow = false;
+        if (i > 0 && hist[i-1] >= 100) {
+          isFirstAbove = true;
+        }
+      }
+    }
+
+    document.getElementById('chart-line-above').setAttribute('d', above);
+    document.getElementById('chart-line-below').setAttribute('d', below);
+
+    // Area fill — use full curve, light primary
+    let area = `M 0 180`;
+    for (let i = 0; i < N; i++) area += ` L ${xFor(i, N)} ${yFor(hist[i])}`;
+    area += ` L 400 180 Z`;
+    document.getElementById('chart-area').setAttribute('d', area);
+
+    // Today dot
+    const dot = document.getElementById('today-dot');
+    dot.setAttribute('cx', 400);
+    dot.setAttribute('cy', yFor(today));
+    dot.setAttribute('fill', today >= 100 ? 'var(--primary)' : 'var(--warning)');
+
+    // Header
+    document.getElementById('curve-num').textContent = today;
+    const status = document.getElementById('curve-status');
+    status.textContent = today >= 100 ? 'Passing' : 'Below pass';
+    status.style.color = today >= 100 ? 'var(--success)' : 'var(--warning)';
+  }
+
+  document.querySelectorAll('.scenario').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.scenario').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render(+btn.dataset.score);
+  }));
+
+  render(104);
+</script>
+</body>
+</html>

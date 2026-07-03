@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH.ai — Lesson Viewer Widgets (23 May beta)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Vollkorn:ital,wght@1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: "Public Sans", sans-serif; }
+  .gwth-root::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="widgets.jsx"></script>
+<script type="text/babel" src="surfaces.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="primary"
+        title="GWTH.ai · Lesson viewer widgets"
+        subtitle="23 May 2026 UK beta · feedback panel + highlight/notes · Stone &amp; Sage register">
+
+        <DCArtboard id="s1" label="Surface 1 · Default state · 1440"
+                    width={1440} height={900}>
+          <SurfaceDefault />
+        </DCArtboard>
+
+        <DCArtboard id="s2" label="Surface 2 · Feedback panel + composer · 1440"
+                    width={1440} height={900}>
+          <SurfaceFeedbackOpen />
+        </DCArtboard>
+
+        <DCArtboard id="s3" label="Surface 3 · Notes panel + highlights · 1440"
+                    width={1440} height={900}>
+          <SurfaceNotesOpen />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="details"
+        title="Inline popovers (focused detail)"
+        subtitle="Anchored body affordances at full body width">
+
+        <DCArtboard id="s4" label="Surface 4 · Selection popover · 1440"
+                    width={1440} height={900}>
+          <SurfaceSelectionPopover />
+        </DCArtboard>
+
+        <DCArtboard id="s5" label="Surface 5 · Note compose popover · 1440"
+                    width={1440} height={900}>
+          <SurfaceNoteCompose />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mobile"
+        title="Mobile + edge cases"
+        subtitle="Bottom-sheet feedback, empty states, dark parity">
+
+        <DCArtboard id="m1" label="Surface 6a · Mobile collapsed · 412"
+                    width={412} height={900}>
+          <SurfaceMobile />
+        </DCArtboard>
+
+        <DCArtboard id="m2" label="Surface 6b · Mobile bottom sheet · 412"
+                    width={412} height={900}>
+          <SurfaceMobile sheet />
+        </DCArtboard>
+
+        <DCArtboard id="empty-fb" label="Empty · Feedback · 1440"
+                    width={1440} height={900}>
+          <SurfaceEmptyFeedback />
+        </DCArtboard>
+
+        <DCArtboard id="empty-nt" label="Empty · Notes · 1440"
+                    width={1440} height={900}>
+          <SurfaceEmptyNotes />
+        </DCArtboard>
+
+        <DCArtboard id="dark" label="Surface 1 · Dark mode · 1440"
+                    width={1440} height={900}>
+          <SurfaceDefault mode="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="handoff"
+        title="Implementation handoff"
+        subtitle="Components, state machine, and what the codebase needs">
+        <DCArtboard id="notes" label="Notes for the wiring pass"
+                    width={900} height={1180}>
+          <HandoffNotes />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

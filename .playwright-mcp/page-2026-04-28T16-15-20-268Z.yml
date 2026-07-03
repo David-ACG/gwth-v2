@@ -1,0 +1,71 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: redesign / impeccable-homepage
+      - heading "Four style worlds. Pick one." [level=1] [ref=e6]
+      - paragraph [ref=e7]: Stage 1 of a two-stage review. All four variants ship the same information architecture and the same Score-widget hero, so the comparison is purely about typography, palette, and pace. After you pick a winner, Stage 2 swaps in three hero artefact options.
+      - paragraph [ref=e8]: Each variant works in light + dark and at 412 / 768 / 1280+ viewports. Use the bar at the bottom of every variant page to switch between them and toggle the theme.
+    - list [ref=e9]:
+      - listitem [ref=e10]:
+        - link "/v-a A · Field Notebook Calm, UK-grounded. Mint drench mid-page, Ink-Deep-Teal panel near close. Albert Sans + JetBrains Mono. Reads like a serious practitioner's notebook. Open variant" [ref=e11] [cursor=pointer]:
+          - /url: /redesign/v-a
+          - generic [ref=e15]: /v-a
+          - heading "A · Field Notebook" [level=2] [ref=e16]
+          - paragraph [ref=e17]: Calm, UK-grounded. Mint drench mid-page, Ink-Deep-Teal panel near close. Albert Sans + JetBrains Mono. Reads like a serious practitioner's notebook.
+          - generic [ref=e18]:
+            - text: Open variant
+            - img [ref=e19]
+      - listitem [ref=e21]:
+        - link "/v-b B · Modern Technical Dark canonical. Aqua-drench hero, generous breathing room. Geist Sans + Geist Mono. Linear-style precision without the cramp. Open variant" [ref=e22] [cursor=pointer]:
+          - /url: /redesign/v-b
+          - generic [ref=e26]: /v-b
+          - heading "B · Modern Technical" [level=2] [ref=e27]
+          - paragraph [ref=e28]: Dark canonical. Aqua-drench hero, generous breathing room. Geist Sans + Geist Mono. Linear-style precision without the cramp.
+          - generic [ref=e29]:
+            - text: Open variant
+            - img [ref=e30]
+      - listitem [ref=e32]:
+        - link "/v-c C · Quiet Essay Warm cream surface, Source Serif 4 body, Manrope display. Burnt Sienna replaces Aqua. Reads like an Aeon long-read. Open variant" [ref=e33] [cursor=pointer]:
+          - /url: /redesign/v-c
+          - generic [ref=e37]: /v-c
+          - heading "C · Quiet Essay" [level=2] [ref=e38]
+          - paragraph [ref=e39]: Warm cream surface, Source Serif 4 body, Manrope display. Burnt Sienna replaces Aqua. Reads like an Aeon long-read.
+          - generic [ref=e40]:
+            - text: Open variant
+            - img [ref=e41]
+      - listitem [ref=e43]:
+        - link "/v-d D · Supportive Learning Friendly humanist sans (Figtree), Soft Warm Coral drench. Generous spacing, calm and supportive without being patronising. Open variant" [ref=e44] [cursor=pointer]:
+          - /url: /redesign/v-d
+          - generic [ref=e48]: /v-d
+          - heading "D · Supportive Learning" [level=2] [ref=e49]
+          - paragraph [ref=e50]: Friendly humanist sans (Figtree), Soft Warm Coral drench. Generous spacing, calm and supportive without being patronising.
+          - generic [ref=e51]:
+            - text: Open variant
+            - img [ref=e52]
+    - paragraph [ref=e55]:
+      - text: "Branch:"
+      - code [ref=e56]: redesign/impeccable-homepage
+      - text: . Logos PNG-locked, no SVG variants. Citations preserved on all variants. No fabricated stats, no “trusted by” logo row, no eyebrow pills.
+  - navigation "Redesign variant switcher" [ref=e57]:
+    - generic [ref=e58]:
+      - link "Index" [ref=e59] [cursor=pointer]:
+        - /url: /redesign
+      - link "A · Field Notebook" [ref=e61] [cursor=pointer]:
+        - /url: /redesign/v-a
+      - link "B · Modern Technical" [ref=e62] [cursor=pointer]:
+        - /url: /redesign/v-b
+      - link "C · Quiet Essay" [ref=e63] [cursor=pointer]:
+        - /url: /redesign/v-c
+      - link "D · Supportive Learning" [ref=e64] [cursor=pointer]:
+        - /url: /redesign/v-d
+      - button "Switch to dark mode" [ref=e66]:
+        - img [ref=e67]
+      - link "Live homepage" [ref=e69] [cursor=pointer]:
+        - /url: /
+        - text: Live homepage
+        - img [ref=e70]
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e74]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e81] [cursor=pointer]:
+    - img [ref=e82]
+  - alert [ref=e85]

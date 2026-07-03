@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH.ai — Student Dashboard (23 May beta)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Vollkorn:ital,wght@1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: "Public Sans", sans-serif; }
+  /* Hide artboard internal scrollbars */
+  .gwth-root::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="desktop-active.jsx"></script>
+<script type="text/babel" src="mobile-active.jsx"></script>
+<script type="text/babel" src="desktop-free.jsx"></script>
+<script type="text/babel" src="desktop-lapsed.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="primary"
+        title="GWTH.ai · Student Dashboard"
+        subtitle="23 May 2026 UK beta · E2-E Stone &amp; Sage register · ported into existing Next.js shell">
+        <DCArtboard id="desktop-active" label="Desktop · 1440 · Active paid Month 1" width={1440} height={2480}>
+          <DesktopActive />
+        </DCArtboard>
+        <DCArtboard id="mobile-active" label="Mobile · 412 · Active paid Month 1" width={412} height={2240}>
+          <MobileActive />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="states"
+        title="Other access states"
+        subtitle="Free, lapsed, and dark-mode parity">
+        <DCArtboard id="desktop-free" label="Desktop · 1440 · Free / registered" width={1440} height={1820}>
+          <DesktopFree />
+        </DCArtboard>
+        <DCArtboard id="desktop-lapsed" label="Desktop · 1440 · Lapsed payment, grace period" width={1440} height={2280}>
+          <DesktopLapsed />
+        </DCArtboard>
+        <DCArtboard id="desktop-active-dark" label="Desktop · 1440 · Active, dark mode" width={1440} height={2480}>
+          <DesktopActive dark />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="handoff"
+        title="Implementation handoff"
+        subtitle="Components, states, tokens, and what the codebase needs">
+        <DCArtboard id="notes" label="Notes for David" width={900} height={1180}>
+          <HandoffNotes />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+function HandoffNotes() {
+  return (
+    <div className="gwth-root" data-mode="light" data-variant="e2-e" style={{ padding: '40px 44px 48px', height: '100%', overflow: 'hidden' }}>
+      <div className="label">HANDOFF · GWTH.AI / DASHBOARD</div>
+      <h1 style={{ fontSize: 32, fontWeight: 700, letterSpacing: '-0.02em', margin: '8px 0 6px' }}>
+        Dashboard, in the shell you already have.
+      </h1>
+      <p className="serif" style={{ fontSize: 16, color: 'var(--muted-foreground)', margin: 0 }}>
+        Stone &amp; Sage register, applied to product UI. Calmer than the home page.
+      </p>
+
+      <div style={{ marginTop: 22, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+        <div>
+          <div className="label">PANELS / COMPONENTS TO BUILD</div>
+          <ul style={{ marginTop: 8, paddingLeft: 18, fontSize: 13.5, lineHeight: 1.6 }}>
+            <li><b>&lt;ScoreTicker&gt;</b> — locked share-ticker idiom. Reuse on dashboard, public score URL, future certificate page. Props: user, score, tier, delta, trendLabel, scoreUrl, frozen.</li>
+            <li><b>&lt;TopTaskBand&gt;</b> — greeting + state pill + next-action CTA. Two-col, border-y, not a hero.</li>
+            <li><b>&lt;LessonRow&gt; / &lt;LessonList&gt;</b> — done / current / pending / locked states.</li>
+            <li><b>&lt;CapstoneRow&gt;</b> — approved · in review · brief · changes · locked.</li>
+            <li><b>&lt;LabRow&gt;</b> — always carries an UNSCORED chip.</li>
+            <li><b>&lt;CredentialFreshness&gt;</b> — progress + decay-check date + Stable/Decaying/Frozen pill.</li>
+            <li><b>&lt;GracePeriodBanner&gt;</b> — warm panel, dismissible only when card is updated.</li>
+            <li><b>&lt;ActivityHeatmap&gt;</b> — 4×7. Don&rsquo;t over-render.</li>
+            <li><b>&lt;NotifRow&gt;</b> — mono timestamp · tag · body.</li>
+          </ul>
+        </div>
+        <div>
+          <div className="label">STATES &amp; ROUTES</div>
+          <ul style={{ marginTop: 8, paddingLeft: 18, fontSize: 13.5, lineHeight: 1.6 }}>
+            <li><code>(dashboard)/dashboard/page.tsx</code> branches: free, active, lapsed.</li>
+            <li>Active sub-states: pre-capstone, capstone-in-review, capstone-needs-changes.</li>
+            <li>Score states: improving, stable, decaying, frozen (lapsed).</li>
+            <li>Mobile: same data, condensed lanes — 412px, single column.</li>
+            <li>Dark mode: token swap only, no layout change.</li>
+          </ul>
+
+          <div className="label" style={{ marginTop: 18 }}>TOKEN CHOICES</div>
+          <ul style={{ marginTop: 8, paddingLeft: 18, fontSize: 13.5, lineHeight: 1.6 }}>
+            <li>All colors via the locked Stone &amp; Sage palette in <code>globals.css</code>. No new colors.</li>
+            <li>Section labels: <code>.label</code> mono 11px, tracking 0.18em.</li>
+            <li>Italic accent: Vollkorn italic, primary terracotta. Used at most once or twice per panel.</li>
+            <li>Buttons: <code>border-2</code>, <code>rounded-none</code>, uppercase, tracking-wider. Primary fills terracotta.</li>
+            <li>Pills: only ever functional (status, tier). Never decorative eyebrows.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 24, padding: '18px 20px', border: '2px solid var(--border-strong)' }}>
+        <div className="label">WHAT THE CODEBASE NEEDS BEFORE WIRING</div>
+        <ol style={{ marginTop: 8, paddingLeft: 20, fontSize: 13.5, lineHeight: 1.6 }}>
+          <li>QR encoder for the score-ticker QR (placeholder used here is a deterministic hash, not a real QR).</li>
+          <li>Capstone state model: <code>not_started | brief | submitted | in_review | approved | needs_changes</code>.</li>
+          <li>Score-decay job: weekly recompute, expose <code>freshness</code> 0..1 + <code>nextDecayCheck</code>.</li>
+          <li>Lapsed grace period field on the subscription record (<code>graceEndsAt</code>).</li>
+          <li>Public score URL must accept <code>?status=frozen</code> and render the dated last-verified line.</li>
+          <li>Locked logo PNGs wired through CMS or static export — do not let SVG sneak in.</li>
+        </ol>
+      </div>
+
+      <div style={{ marginTop: 24 }}>
+        <div className="label">DEFERRED FROM BETA</div>
+        <p style={{ fontSize: 13, color: 'var(--muted-foreground)', margin: '6px 0 0', lineHeight: 1.55 }}>
+          Tech Radar (per brief). Team / employer dashboard variants. Bookmarks reordering UI. Capstone collaborative review.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

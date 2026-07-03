@@ -1,0 +1,185 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation [ref=e4]:
+        - link "GWTH.ai home" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "GWTH.ai" [ref=e6]
+        - generic [ref=e7]:
+          - link "Free Labs" [ref=e8] [cursor=pointer]:
+            - /url: /labs
+          - link "Lessons" [ref=e9] [cursor=pointer]:
+            - /url: /lessons
+          - link "Pricing" [ref=e10] [cursor=pointer]:
+            - /url: /pricing
+          - link "For Teams" [ref=e11] [cursor=pointer]:
+            - /url: /for-teams
+          - link "About" [ref=e12] [cursor=pointer]:
+            - /url: /about
+          - link "News" [ref=e13] [cursor=pointer]:
+            - /url: /news
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15]:
+            - img
+          - link "Log in" [ref=e16] [cursor=pointer]:
+            - /url: /login
+          - link "Sign Up" [ref=e17] [cursor=pointer]:
+            - /url: /signup
+    - main [ref=e18]:
+      - generic [ref=e20]:
+        - paragraph [ref=e21]: Pricing · UK GBP
+        - heading "Less than the cost of one hour with an AI consultant." [level=1] [ref=e22]
+        - paragraph [ref=e23]: Start free. Unlock one course month at a time. Stay current for less than a flat white.
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - article [ref=e27]:
+            - generic [ref=e29]: Free Labs
+            - generic [ref=e30]:
+              - generic [ref=e31]: £0
+              - generic [ref=e32]: forever — no card required
+            - list [ref=e33]:
+              - listitem [ref=e34]:
+                - img [ref=e35]
+                - generic [ref=e37]: Access to all free labs
+              - listitem [ref=e38]:
+                - img [ref=e39]
+                - generic [ref=e41]: Build real projects with AI
+              - listitem [ref=e42]:
+                - img [ref=e43]
+                - generic [ref=e45]: No credit card required
+              - listitem [ref=e46]:
+                - img [ref=e47]
+                - generic [ref=e49]: No time limit — free forever
+            - link "Try a Free Lab" [ref=e51] [cursor=pointer]:
+              - /url: /labs
+          - article [ref=e52]:
+            - generic [ref=e53]: Starter pricing
+            - generic [ref=e55]: The Course
+            - generic [ref=e56]:
+              - generic [ref=e57]: £29
+              - generic [ref=e58]: /mo · unlock one month at a time
+            - list [ref=e59]:
+              - listitem [ref=e60]:
+                - img [ref=e61]
+                - generic [ref=e63]: Full Month 1 at beta launch; Months 2 and 3 follow
+              - listitem [ref=e64]:
+                - img [ref=e65]
+                - generic [ref=e67]: 64 core lessons plus 30 go-deeper optional lessons
+              - listitem [ref=e68]:
+                - img [ref=e69]
+                - generic [ref=e71]: Capstones for AskMyCo, FractionalBuddy, and AskEveryone
+              - listitem [ref=e72]:
+                - img [ref=e73]
+                - generic [ref=e75]: Industry-specific modules for your field
+              - listitem [ref=e76]:
+                - img [ref=e77]
+                - generic [ref=e79]: GWTH Score employers can verify
+              - listitem [ref=e80]:
+                - img [ref=e81]
+                - generic [ref=e83]: Starter price may rise after beta
+              - listitem [ref=e84]:
+                - img [ref=e85]
+                - generic [ref=e87]: No ads, no upsells, no hidden tier
+            - link "Join the Waitlist" [ref=e89] [cursor=pointer]:
+              - /url: /signup
+          - article [ref=e90]:
+            - generic [ref=e92]: Stay Current
+            - generic [ref=e93]:
+              - generic [ref=e94]: £7.50
+              - generic [ref=e95]: /mo after the course
+            - list [ref=e96]:
+              - listitem [ref=e97]:
+                - img [ref=e98]
+                - generic [ref=e100]: Keep your GWTH Score current when lessons significantly change
+              - listitem [ref=e101]:
+                - img [ref=e102]
+                - generic [ref=e104]: ~5 hours of new content every month
+              - listitem [ref=e105]:
+                - img [ref=e106]
+                - generic [ref=e108]: Work through the optional lessons you skipped
+              - listitem [ref=e109]:
+                - img [ref=e110]
+                - generic [ref=e112]: Score history and progression analytics
+              - listitem [ref=e113]:
+                - img [ref=e114]
+                - generic [ref=e116]: Cancel anytime — no lock-in
+            - generic [ref=e117]:
+              - button "Included after course" [disabled]
+        - paragraph [ref=e118]: No yearly price · Cancel anytime · No lock-in · UK-first pricing for teams
+      - generic [ref=e120]:
+        - generic [ref=e121]:
+          - paragraph [ref=e122]: Earlybird
+          - paragraph [ref=e123]: We are currently accepting earlybird testers. Create a free account to join the waiting list and be first to access the course when it launches. GWTH is built around UK examples, research, and GBP pricing; other countries are launching soon.
+        - generic [ref=e124]:
+          - paragraph [ref=e125]: No yearly price
+          - paragraph [ref=e126]: We believe the course is good enough that you will want to stay — but you are free to leave at any point. No lock-in. No penalty. That keeps us honest.
+      - generic [ref=e129]:
+        - generic [ref=e130]:
+          - paragraph [ref=e131]: For Teams
+          - heading "Same per-person price for UK teams of any size." [level=2] [ref=e132]
+          - paragraph [ref=e133]: No bulk discounts — it is already the lowest possible price. Teams of 5+ get an admin dashboard with progress tracking, completion rates, and the ability to choose which optional lessons each role completes. For teams of 100+, we can create bespoke lessons tailored specifically to your company's workflows, tools, and industry challenges.
+        - generic [ref=e134]:
+          - link "Get in Touch" [ref=e135] [cursor=pointer]:
+            - /url: /contact
+          - link "Learn more" [ref=e136] [cursor=pointer]:
+            - /url: /for-teams
+            - text: Learn more
+            - img
+    - contentinfo [ref=e137]:
+      - generic [ref=e138]:
+        - generic [ref=e139]:
+          - generic [ref=e140]:
+            - link "GWTH.ai" [ref=e141] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e142]: UK-focused applied AI training. Learn to research, automate, analyse, and build practical tools with AI-assisted coding.
+          - generic [ref=e143]:
+            - heading "Product" [level=3] [ref=e144]
+            - list [ref=e145]:
+              - listitem [ref=e146]:
+                - link "Pricing" [ref=e147] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e148]:
+                - link "Why GWTH" [ref=e149] [cursor=pointer]:
+                  - /url: /why-gwth
+              - listitem [ref=e150]:
+                - link "For Teams" [ref=e151] [cursor=pointer]:
+                  - /url: /for-teams
+              - listitem [ref=e152]:
+                - link "Contact" [ref=e153] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e154]:
+            - heading "Learn" [level=3] [ref=e155]
+            - list [ref=e156]:
+              - listitem [ref=e157]:
+                - link "Free Labs" [ref=e158] [cursor=pointer]:
+                  - /url: /labs
+              - listitem [ref=e159]:
+                - link "Lessons" [ref=e160] [cursor=pointer]:
+                  - /url: /lessons
+              - listitem [ref=e161]:
+                - link "News" [ref=e162] [cursor=pointer]:
+                  - /url: /news
+              - listitem [ref=e163]:
+                - link "Newsletter" [ref=e164] [cursor=pointer]:
+                  - /url: /newsletter
+              - listitem [ref=e165]:
+                - link "About GWTH" [ref=e166] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e167]:
+            - heading "Legal" [level=3] [ref=e168]
+            - list [ref=e169]:
+              - listitem [ref=e170]:
+                - link "Privacy" [ref=e171] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e172]:
+                - link "Terms" [ref=e173] [cursor=pointer]:
+                  - /url: /terms
+        - generic [ref=e175]:
+          - paragraph [ref=e176]: © 2026 GWTH.ai. All rights reserved.
+          - paragraph [ref=e177]: Independent. UK-based. No sponsors. No ads. No vendor partnerships.
+          - paragraph [ref=e178]: Based in the United Kingdom 🇬🇧
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e180]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e187] [cursor=pointer]:
+    - img [ref=e188]
+  - alert [ref=e191]

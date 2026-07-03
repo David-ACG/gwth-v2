@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH.ai — Public Credential Verify Page</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Vollkorn:ital,wght@1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: "Public Sans", sans-serif; }
+  .gwth-root::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="verify-shared.jsx"></script>
+<script type="text/babel" src="verify-desktop.jsx"></script>
+<script type="text/babel" src="verify-mobile.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="primary"
+        title="GWTH.ai · /score/[id] · Public credential verify page"
+        subtitle="23 May 2026 UK beta · Stone &amp; Sage register · standalone canonical record (no PublicNav, no marketing footer)">
+        <DCArtboard id="surface-1-verified" label="Surface 1 · Desktop 1440 · Default verified state" width={1440} height={2480}>
+          <DesktopVerified />
+        </DCArtboard>
+        <DCArtboard id="surface-2-firsttime" label="Surface 2 · Desktop 1440 · First-time visitor (educational)" width={1440} height={3080}>
+          <DesktopFirstTime />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="states"
+        title="Other credential states"
+        subtitle="Revoked, pending, and dark-mode parity">
+        <DCArtboard id="surface-3-revoked" label="Surface 3 · Desktop 1440 · Revoked" width={1440} height={1280}>
+          <DesktopRevoked />
+        </DCArtboard>
+        <DCArtboard id="surface-5-pending" label="Surface 5 · Desktop 1440 · Pending verification (24h window)" width={1440} height={1880}>
+          <DesktopPending />
+        </DCArtboard>
+        <DCArtboard id="surface-1-dark" label="Surface 1 · Desktop 1440 · Verified, dark mode" width={1440} height={2480}>
+          <DesktopVerified mode="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mobile"
+        title="Mobile 412"
+        subtitle="Same canonical record, recruiter-on-LinkedIn-on-the-train form factor">
+        <DCArtboard id="surface-4-mobile" label="Surface 4 · Mobile 412 · Verified" width={412} height={2240}>
+          <MobileVerified />
+        </DCArtboard>
+        <DCArtboard id="surface-4-mobile-dark" label="Mobile 412 · Verified, dark mode" width={412} height={2240}>
+          <MobileVerified mode="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="handoff"
+        title="Implementation handoff"
+        subtitle="Components, state machine, exact copy, and what the codebase needs">
+        <DCArtboard id="notes" label="Notes for David" width={920} height={1500}>
+          <HandoffNotes />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+function HandoffNotes() {
+  return (
+    <div className="gwth-root" data-mode="light" data-variant="e2-e" style={{ padding: '40px 44px 48px', height: '100%', overflow: 'hidden' }}>
+      <div className="label">HANDOFF · GWTH.AI / SCORE / [ID]</div>
+      <h1 style={{ fontSize: 30, fontWeight: 700, letterSpacing: '-0.02em', margin: '8px 0 4px' }}>
+        The credential&rsquo;s public face.
+      </h1>
+      <p className="serif" style={{ fontSize: 16, color: 'var(--muted-foreground)', margin: 0 }}>
+        Reuse the locked share-ticker score card. Standalone shell. No PublicNav, no marketing footer.
+      </p>
+
+      <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
+        <div>
+          <div className="label">COMPONENTS TO BUILD</div>
+          <ul style={{ marginTop: 8, paddingLeft: 18, fontSize: 13, lineHeight: 1.55 }}>
+            <li><b>&lt;ScoreTicker large hideEmployerExplainer&gt;</b> — extend existing primitive. Verify page passes both flags.</li>
+            <li><b>&lt;VerifyShell&gt;</b> — minimal top bar (gwth.ai mark + PUBLIC CREDENTIAL RECORD), centered body column, lock-icon footer.</li>
+            <li><b>&lt;MetaStrip&gt;</b> — institutional metadata band, mono uppercase. Bordered top &amp; bottom.</li>
+            <li><b>&lt;FiveReasonsPanel&gt;</b> — exact 5-reason copy. Numbered, italic Vollkorn lead, Public Sans muted body.</li>
+            <li><b>&lt;EducationalPanel&gt;</b> — Surface 2 only. Sits above credibility reasons.</li>
+            <li><b>&lt;CalcDisclosure&gt;</b> — collapsed by default. Inside: paragraph + 4-cell data list + score-history sparkline.</li>
+            <li><b>&lt;Sparkline&gt;</b> — 12-month score history primitive. Target line at 100, last point emphasised.</li>
+            <li><b>&lt;ShareRow&gt;</b> — two affordances only: Copy link (ghost) + Add to LinkedIn (primary, SOON badge).</li>
+            <li><b>&lt;RevokedHero&gt;</b>, <b>&lt;PendingHero&gt;</b> — replace the score card on those states.</li>
+            <li><b>Mobile primitives:</b> &lt;MobileScoreCard&gt; (vertical stack, QR row at bottom), &lt;MobileMetaList&gt;, &lt;MobileFiveReasons&gt; (tap to expand).</li>
+          </ul>
+        </div>
+        <div>
+          <div className="label">STATE MACHINE · /score/[id]</div>
+          <ul style={{ marginTop: 8, paddingLeft: 18, fontSize: 13, lineHeight: 1.55 }}>
+            <li><code>verified</code> · default. Returns score + tier + trend + last-verified.</li>
+            <li><code>pending</code> · 24h window after issuance. Score hidden, ETA shown.</li>
+            <li><code>frozen</code> · holder lapsed payment. Score visible but greyed, FROZEN pill.</li>
+            <li><code>revoked</code> · refund / fraud / manual-review fail. Replaces hero with grey panel.</li>
+            <li><code>not_found</code> · 404 handled outside this page (separate route).</li>
+          </ul>
+
+          <div className="label" style={{ marginTop: 16 }}>STATUS POLICY</div>
+          <p style={{ fontSize: 12.5, color: 'var(--muted-foreground)', margin: '6px 0 0', lineHeight: 1.55 }}>
+            Verification ID and canonical URL persist across every state, including revoked, so prior third-party references remain reconciliable. The page never returns 404 for a revoked credential.
+          </p>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 24, padding: '18px 22px', border: '2px solid var(--border-strong)' }}>
+        <div className="label">EXACT COPY USED · LOCKED</div>
+        <ol style={{ marginTop: 8, paddingLeft: 22, fontSize: 12.5, lineHeight: 1.55 }}>
+          <li><b>Always current.</b> Lessons update constantly so students stay on the cutting edge, and the score decays if they don&rsquo;t keep up.</li>
+          <li><b>Hands-on, not lectured.</b> Reaching 100 means completing 94+ hands-on projects across 3 modules, no passive watching.</li>
+          <li><b>Tested, not assumed.</b> Every lesson has check questions; the course requires 3 capstone projects to graduate.</li>
+          <li><b>Paced, not crammed.</b> The course is 3 months; lessons release in stages, no shortcuts, no rushing through.</li>
+          <li><b>A high score is a recent score.</b> Above 100 means top 1% of applied-AI practitioners today, not when they enrolled.</li>
+        </ol>
+      </div>
+
+      <div style={{ marginTop: 22, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
+        <div>
+          <div className="label">WHAT THE CODEBASE NEEDS BEFORE WIRING</div>
+          <ol style={{ marginTop: 8, paddingLeft: 20, fontSize: 12.5, lineHeight: 1.55 }}>
+            <li><b>Score history sparkline primitive</b> — weekly buckets, 12-month rolling window, expose target line at 100.</li>
+            <li><b>Verification ID hash format</b> — the brief uses <code>c67sg#dde5</code>; lock to <code>[6 alnum]#[4 alnum]</code>, lowercase.</li>
+            <li><b>LinkedIn deep-link URL pattern</b> — Phase 2/3, but stub the route now: <code>https://www.linkedin.com/profile/add?...&amp;name=GWTH+Certified+Practitioner&amp;certUrl=...&amp;certId=...</code>.</li>
+            <li><b>Revoked credential storage</b> — keep ID + name + revoked-at; everything else nulled. Same route, different state.</li>
+            <li><b>QR encoder</b> — placeholder pattern in <code>QrPlaceholder</code> is deterministic but NOT a real QR. Wire to a proper encoder for the canonical URL.</li>
+            <li><b>Real-time decay job</b> — the &ldquo;Last verified&rdquo; timestamp must be no older than the most recent decay run.</li>
+          </ol>
+        </div>
+        <div>
+          <div className="label">DELIBERATELY ABSENT</div>
+          <ul style={{ marginTop: 8, paddingLeft: 18, fontSize: 12.5, lineHeight: 1.55, color: 'var(--muted-foreground)' }}>
+            <li>No PublicNav, no marketing footer. Standalone canonical record.</li>
+            <li>No &ldquo;trusted by&rdquo; row, no testimonials, no urgency, no learner avatars.</li>
+            <li>No marketing CTA in the score card. Only Copy link + Add to LinkedIn.</li>
+            <li>No social-share spam. Two affordances at most.</li>
+            <li>No red destructive treatment on revoked. Quiet absence, not fraud alert.</li>
+            <li>No inline help copy explaining how to use the page. The interface explains itself.</li>
+            <li>No nested cards. Score card → meta strip → 5-reason panel → calc panel → share row. Five surfaces, never inside one another.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style={{
+        marginTop: 22, paddingTop: 16, borderTop: '1px solid var(--border)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16,
+      }}>
+        <div className="mono" style={{ fontSize: 10.5, letterSpacing: '0.16em', color: 'var(--muted-foreground)' }}>
+          ROUTE · src/app/(public)/score/[id]/page.tsx · STANDALONE LAYOUT
+        </div>
+        <div className="mono" style={{ fontSize: 10.5, letterSpacing: '0.16em', color: 'var(--muted-foreground)' }}>
+          PALETTE · STONE &amp; SAGE · LOCKED
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

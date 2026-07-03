@@ -1,0 +1,443 @@
+/* GWTH.ai dashboard tokens — E2-E "Stone & Sage" register
+ * Locked from /redesign_v2 home page (2026-05-08).
+ */
+
+:root,
+[data-mode="light"] {
+  --background: oklch(0.965 0.004 75);
+  --foreground: oklch(0.22 0.008 75);
+  --card: oklch(0.99 0.003 75);
+  --card-foreground: oklch(0.22 0.008 75);
+  --muted: oklch(0.92 0.005 75);
+  --muted-foreground: oklch(0.42 0.012 75);
+  --secondary: oklch(0.92 0.005 75);
+  --border: oklch(0.86 0.008 75);
+  --border-strong: oklch(0.22 0.008 75);
+  --primary: #a94c2e;
+  --primary-foreground: #ffffff;
+  --primary-soft: oklch(0.88 0.06 40 / 0.55);
+  --success: oklch(0.55 0.16 145);
+  --destructive: oklch(0.55 0.22 27);
+  --variant-warm: #c98a2b;
+  --variant-warm-panel: oklch(0.78 0.13 75);
+  --variant-drench: #2a3526;
+  --logo-wordmark: #22301f;
+  --logo-accent: #a94c2e;
+}
+
+[data-mode="dark"] {
+  --background: oklch(0.2 0.005 75);
+  --foreground: oklch(0.94 0.005 75);
+  --card: oklch(0.24 0.005 75);
+  --card-foreground: oklch(0.94 0.005 75);
+  --muted: oklch(0.25 0.005 75);
+  --muted-foreground: oklch(0.72 0.012 75);
+  --secondary: oklch(0.25 0.005 75);
+  --border: oklch(1 0 0 / 14%);
+  --border-strong: oklch(0.94 0.005 75);
+  --primary: #a94c2e;
+  --primary-foreground: #ffffff;
+  --primary-soft: oklch(0.45 0.10 40 / 0.4);
+  --success: oklch(0.7 0.16 145);
+  --destructive: oklch(0.7 0.19 22);
+  --variant-warm: #d6a04a;
+  --variant-warm-panel: oklch(0.55 0.12 75);
+  --variant-drench: #1a2418;
+  --logo-wordmark: #edeae6;
+  --logo-accent: #a94c2e;
+}
+
+.gwth-root {
+  font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gwth-root *,
+.gwth-root *::before,
+.gwth-root *::after {
+  box-sizing: border-box;
+}
+
+.gwth-root .serif {
+  font-family: "Vollkorn", "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.gwth-root .mono {
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  font-feature-settings: "ss01", "ss02";
+}
+
+.gwth-root .label {
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.gwth-root .label-warm {
+  color: var(--variant-warm);
+}
+
+.gwth-root .num {
+  font-feature-settings: "tnum", "lnum";
+}
+
+/* Sharp button — borders not shadows */
+.gwth-root .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 18px;
+  border: 2px solid var(--border-strong);
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  border-radius: 0;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+
+.gwth-root .btn:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.gwth-root .btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.gwth-root .btn-primary:hover {
+  background: oklch(0.45 0.13 40);
+  border-color: oklch(0.45 0.13 40);
+  color: #fff;
+}
+
+.gwth-root .btn-ghost {
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+.gwth-root .btn-sm {
+  padding: 8px 12px;
+  font-size: 10.5px;
+}
+
+.gwth-root .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.gwth-root .pill-tier {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: oklch(0.94 0.04 40 / 0.4);
+  font-weight: 600;
+}
+
+[data-mode="dark"] .gwth-root .pill-tier {
+  background: oklch(0.32 0.05 40 / 0.6);
+}
+
+.gwth-root .pill-success {
+  border-color: var(--success);
+  color: var(--success);
+  background: oklch(0.92 0.06 145 / 0.5);
+}
+
+[data-mode="dark"] .gwth-root .pill-success {
+  background: oklch(0.28 0.05 145 / 0.55);
+  border-color: oklch(0.6 0.13 145);
+  color: oklch(0.86 0.16 145);
+}
+
+.gwth-root .pill-warn {
+  border-color: var(--variant-warm);
+  color: var(--variant-warm);
+  background: oklch(0.93 0.07 75 / 0.5);
+}
+
+[data-mode="dark"] .gwth-root .pill-warn {
+  background: oklch(0.32 0.07 75 / 0.4);
+}
+
+.gwth-root .pill-muted {
+  border-color: var(--border);
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.gwth-root .panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.gwth-root .panel-strong {
+  border: 2px solid var(--border-strong);
+  background: var(--card);
+}
+
+.gwth-root .divider {
+  border-top: 1px solid var(--border);
+}
+
+.gwth-root .hr-strong {
+  border-top: 2px solid var(--border-strong);
+}
+
+.gwth-root h1.display {
+  font-family: "Public Sans", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  margin: 0;
+}
+
+.gwth-root .accent-italic {
+  font-family: "Vollkorn", serif;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--primary);
+  letter-spacing: -0.005em;
+}
+
+/* Logo wordmark — TEXT placeholder for the locked PNG.
+ * No SVG. Real implementation will swap in the licensed PNG. */
+.gwth-logo {
+  font-family: "Public Sans", sans-serif;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  color: var(--logo-wordmark);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.gwth-logo .ai {
+  color: var(--logo-accent);
+}
+
+/* Browser-frame chrome — used by the score-ticker card */
+.frame-chrome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.frame-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.frame-dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: block;
+}
+
+.frame-dots .r { background: #ec6a5e; }
+.frame-dots .y { background: #f5bf4f; }
+.frame-dots .g { background: #62c454; }
+
+.frame-url {
+  flex: 1;
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  background: var(--muted);
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin: 0 auto;
+  max-width: 280px;
+}
+
+[data-mode="dark"] .frame-url {
+  background: oklch(0.18 0.005 75);
+}
+
+/* Activity heatmap cells */
+.heat-cell {
+  width: 11px;
+  height: 11px;
+  background: var(--muted);
+  border-radius: 1px;
+}
+.heat-cell[data-h="1"] { background: oklch(0.82 0.04 40); }
+.heat-cell[data-h="2"] { background: oklch(0.7 0.08 40); }
+.heat-cell[data-h="3"] { background: oklch(0.6 0.12 40); }
+.heat-cell[data-h="4"] { background: var(--primary); }
+
+[data-mode="dark"] .heat-cell { background: oklch(0.28 0.005 75); }
+[data-mode="dark"] .heat-cell[data-h="1"] { background: oklch(0.4 0.05 40); }
+[data-mode="dark"] .heat-cell[data-h="2"] { background: oklch(0.5 0.09 40); }
+[data-mode="dark"] .heat-cell[data-h="3"] { background: oklch(0.6 0.13 40); }
+[data-mode="dark"] .heat-cell[data-h="4"] { background: var(--primary); }
+
+/* Sage-green postscript panel — matches home page footer */
+.panel-sage {
+  background: oklch(0.42 0.04 150);
+  color: oklch(0.95 0.01 75);
+  border: none;
+}
+
+[data-mode="dark"] .panel-sage {
+  background: oklch(0.32 0.04 150);
+}
+
+.panel-warm {
+  background: oklch(0.78 0.13 75);
+  color: oklch(0.22 0.008 75);
+}
+
+.panel-drench {
+  background: oklch(0.18 0.005 75);
+  color: oklch(0.94 0.005 75);
+}
+
+/* Tighten focus-mode container so artboards render natively */
+.gwth-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.gwth-root .num-display {
+  font-feature-settings: "tnum", "lnum";
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* QR placeholder grid — looks like a QR but isn't one (placeholder pattern) */
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 1px;
+  width: 64px;
+  height: 64px;
+  padding: 4px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.qr-grid span {
+  background: transparent;
+}
+
+.qr-grid span.on {
+  background: var(--foreground);
+}
+
+[data-mode="dark"] .qr-grid {
+  background: var(--card);
+}
+
+/* Lesson row */
+.lesson-row {
+  display: grid;
+  grid-template-columns: 30px 60px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.lesson-row:hover {
+  background: var(--muted);
+}
+
+.lesson-row[data-state="current"] {
+  background: oklch(0.94 0.04 40 / 0.5);
+}
+
+[data-mode="dark"] .lesson-row[data-state="current"] {
+  background: oklch(0.32 0.05 40 / 0.4);
+}
+
+.lesson-row[data-state="locked"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.lesson-row[data-state="locked"]:hover { background: transparent; }
+
+/* Status icon */
+.status-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border-strong);
+  flex-shrink: 0;
+}
+
+.status-icon[data-state="done"] {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+
+.status-icon[data-state="current"] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.status-icon[data-state="locked"] {
+  background: transparent;
+  border-color: var(--border);
+}
+
+/* Numbered marker (mono) */
+.mono-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Side-by-side bordered cells (home-page pricing pattern) */
+.cell-grid {
+  display: grid;
+  border: 2px solid var(--border-strong);
+}
+
+.cell-grid > * + * {
+  border-left: 2px solid var(--border-strong);
+}
+
+/* No scrollbar inside artboard cards */
+.gwth-root::-webkit-scrollbar { display: none; }
+.gwth-root { scrollbar-width: none; }

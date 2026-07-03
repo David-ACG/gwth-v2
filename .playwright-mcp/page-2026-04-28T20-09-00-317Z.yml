@@ -1,0 +1,210 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: redesign / impeccable-homepage
+      - heading "Style worlds under review." [level=1] [ref=e6]
+      - paragraph [ref=e7]: All variants ship the same information architecture and the same Score-widget hero, so the comparison is purely about typography, palette, and pace. The current focus is the E2 plus Gold family below — five earthier sub-variants of E2 built from feedback (less pink, no large red postscript, gold accents in Section 02, deeper non-pink dark-mode CTA).
+      - paragraph [ref=e8]: Each variant works in light + dark and at 412 / 768 / 1280+ viewports. Use the bar at the bottom of every variant page to switch between them and toggle the theme.
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "Round three — E2 plus Gold family · earthier, no pink, no red postscript" [level=2] [ref=e11]
+        - generic [ref=e12]: 5 variants
+      - list [ref=e13]:
+        - listitem [ref=e14]:
+          - 'link "/v-e-2-a no gradients E2-A · Linen Civic E2 with the pinkness fixed: cooler linen off-white, navy drench preserved, brick CTA, mustard gold postscript instead of red. Closest to E2 with feedback applied. Open variant" [ref=e15] [cursor=pointer]':
+            - /url: /redesign/v-e-2-a
+            - generic [ref=e16]:
+              - generic [ref=e20]: /v-e-2-a
+              - generic [ref=e21]: no gradients
+            - heading "E2-A · Linen Civic" [level=3] [ref=e22]
+            - paragraph [ref=e23]: "E2 with the pinkness fixed: cooler linen off-white, navy drench preserved, brick CTA, mustard gold postscript instead of red. Closest to E2 with feedback applied."
+            - generic [ref=e24]:
+              - text: Open variant
+              - img [ref=e25]
+        - listitem [ref=e27]:
+          - link "/v-e-2-b no gradients E2-B · Forest Editorial Linen background, deep forest green carrier replaces navy, brick CTA, oat parchment postscript. For the readers who preferred green over blue. Open variant" [ref=e28] [cursor=pointer]:
+            - /url: /redesign/v-e-2-b
+            - generic [ref=e29]:
+              - generic [ref=e33]: /v-e-2-b
+              - generic [ref=e34]: no gradients
+            - heading "E2-B · Forest Editorial" [level=3] [ref=e35]
+            - paragraph [ref=e36]: Linen background, deep forest green carrier replaces navy, brick CTA, oat parchment postscript. For the readers who preferred green over blue.
+            - generic [ref=e37]:
+              - text: Open variant
+              - img [ref=e38]
+        - listitem [ref=e40]:
+          - link "/v-e-2-c no gradients E2-C · English Cottage Plain English Kitchens energy. Oat parchment, sage drench, terracotta CTA, espresso brown postscript. The most explicitly earthy of the five. Open variant" [ref=e41] [cursor=pointer]:
+            - /url: /redesign/v-e-2-c
+            - generic [ref=e42]:
+              - generic [ref=e46]: /v-e-2-c
+              - generic [ref=e47]: no gradients
+            - heading "E2-C · English Cottage" [level=3] [ref=e48]
+            - paragraph [ref=e49]: Plain English Kitchens energy. Oat parchment, sage drench, terracotta CTA, espresso brown postscript. The most explicitly earthy of the five.
+            - generic [ref=e50]:
+              - text: Open variant
+              - img [ref=e51]
+        - listitem [ref=e53]:
+          - link "/v-e-2-d no gradients E2-D · Soho Bronze Warm cream, deep espresso brown carrier, bronze gold accent, brick CTA, bronze postscript. Soho House / leather-and-velvet register, very photo-friendly. Open variant" [ref=e54] [cursor=pointer]:
+            - /url: /redesign/v-e-2-d
+            - generic [ref=e55]:
+              - generic [ref=e59]: /v-e-2-d
+              - generic [ref=e60]: no gradients
+            - heading "E2-D · Soho Bronze" [level=3] [ref=e61]
+            - paragraph [ref=e62]: Warm cream, deep espresso brown carrier, bronze gold accent, brick CTA, bronze postscript. Soho House / leather-and-velvet register, very photo-friendly.
+            - generic [ref=e63]:
+              - text: Open variant
+              - img [ref=e64]
+        - listitem [ref=e66]:
+          - link "/v-e-2-e no gradients E2-E · Stone & Sage Most neutral of the five. Warm stone surface, charcoal-stone drench, mustard accent, brick CTA, soft sage postscript. OKA / muted-editorial. Open variant" [ref=e67] [cursor=pointer]:
+            - /url: /redesign/v-e-2-e
+            - generic [ref=e68]:
+              - generic [ref=e72]: /v-e-2-e
+              - generic [ref=e73]: no gradients
+            - heading "E2-E · Stone & Sage" [level=3] [ref=e74]
+            - paragraph [ref=e75]: Most neutral of the five. Warm stone surface, charcoal-stone drench, mustard accent, brick CTA, soft sage postscript. OKA / muted-editorial.
+            - generic [ref=e76]:
+              - text: Open variant
+              - img [ref=e77]
+    - generic [ref=e79]:
+      - generic [ref=e80]:
+        - heading "Round one — close to the original brand" [level=2] [ref=e81]
+        - generic [ref=e82]: 4 variants
+      - list [ref=e83]:
+        - listitem [ref=e84]:
+          - link "/v-a A · Field Notebook Calm, UK-grounded. Mint drench mid-page, Ink-Deep-Teal panel near close. Albert Sans + JetBrains Mono. Reads like a serious practitioner's notebook. Open variant" [ref=e85] [cursor=pointer]:
+            - /url: /redesign/v-a
+            - generic [ref=e90]: /v-a
+            - heading "A · Field Notebook" [level=3] [ref=e91]
+            - paragraph [ref=e92]: Calm, UK-grounded. Mint drench mid-page, Ink-Deep-Teal panel near close. Albert Sans + JetBrains Mono. Reads like a serious practitioner's notebook.
+            - generic [ref=e93]:
+              - text: Open variant
+              - img [ref=e94]
+        - listitem [ref=e96]:
+          - link "/v-b B · Modern Technical Dark canonical. Aqua-drench hero, generous breathing room. Geist Sans + Geist Mono. Linear-style precision without the cramp. Open variant" [ref=e97] [cursor=pointer]:
+            - /url: /redesign/v-b
+            - generic [ref=e102]: /v-b
+            - heading "B · Modern Technical" [level=3] [ref=e103]
+            - paragraph [ref=e104]: Dark canonical. Aqua-drench hero, generous breathing room. Geist Sans + Geist Mono. Linear-style precision without the cramp.
+            - generic [ref=e105]:
+              - text: Open variant
+              - img [ref=e106]
+        - listitem [ref=e108]:
+          - link "/v-c C · Quiet Essay Warm cream surface, Source Serif 4 body, Manrope display. Burnt Sienna replaces Aqua. Reads like an Aeon long-read. Open variant" [ref=e109] [cursor=pointer]:
+            - /url: /redesign/v-c
+            - generic [ref=e114]: /v-c
+            - heading "C · Quiet Essay" [level=3] [ref=e115]
+            - paragraph [ref=e116]: Warm cream surface, Source Serif 4 body, Manrope display. Burnt Sienna replaces Aqua. Reads like an Aeon long-read.
+            - generic [ref=e117]:
+              - text: Open variant
+              - img [ref=e118]
+        - listitem [ref=e120]:
+          - link "/v-d D · Supportive Learning Friendly humanist sans (Figtree), Soft Warm Coral drench. Generous spacing, calm and supportive without being patronising. Open variant" [ref=e121] [cursor=pointer]:
+            - /url: /redesign/v-d
+            - generic [ref=e126]: /v-d
+            - heading "D · Supportive Learning" [level=3] [ref=e127]
+            - paragraph [ref=e128]: Friendly humanist sans (Figtree), Soft Warm Coral drench. Generous spacing, calm and supportive without being patronising.
+            - generic [ref=e129]:
+              - text: Open variant
+              - img [ref=e130]
+    - generic [ref=e132]:
+      - generic [ref=e133]:
+        - heading "Round two — further from the original brand" [level=2] [ref=e134]
+        - generic [ref=e135]: 4 variants
+      - list [ref=e136]:
+        - listitem [ref=e137]:
+          - link "/v-e no gradients E · Civic Press Warm cream surface, deep navy carrier, burgundy accent. Vollkorn body + Public Sans display. GOV.UK / FT Weekend lineage. No gradients. Open variant" [ref=e138] [cursor=pointer]:
+            - /url: /redesign/v-e
+            - generic [ref=e139]:
+              - generic [ref=e143]: /v-e
+              - generic [ref=e144]: no gradients
+            - heading "E · Civic Press" [level=3] [ref=e145]
+            - paragraph [ref=e146]: Warm cream surface, deep navy carrier, burgundy accent. Vollkorn body + Public Sans display. GOV.UK / FT Weekend lineage. No gradients.
+            - generic [ref=e147]:
+              - text: Open variant
+              - img [ref=e148]
+        - listitem [ref=e150]:
+          - link "/v-f F · Soft Practitioner Pastel multi-tone (peach / sage / lavender). Bricolage Grotesque single-family. Soft section washes — most supportive of all. Open variant" [ref=e151] [cursor=pointer]:
+            - /url: /redesign/v-f
+            - generic [ref=e156]: /v-f
+            - heading "F · Soft Practitioner" [level=3] [ref=e157]
+            - paragraph [ref=e158]: Pastel multi-tone (peach / sage / lavender). Bricolage Grotesque single-family. Soft section washes — most supportive of all.
+            - generic [ref=e159]:
+              - text: Open variant
+              - img [ref=e160]
+        - listitem [ref=e162]:
+          - link "/v-g no gradients G · Architectural Solid colour blocks. Big Shoulders Display + Hanken Grotesk. Black + warm cream + saturated ochre. Mid-century / Bauhaus grid. No gradients. Open variant" [ref=e163] [cursor=pointer]:
+            - /url: /redesign/v-g
+            - generic [ref=e164]:
+              - generic [ref=e168]: /v-g
+              - generic [ref=e169]: no gradients
+            - heading "G · Architectural" [level=3] [ref=e170]
+            - paragraph [ref=e171]: Solid colour blocks. Big Shoulders Display + Hanken Grotesk. Black + warm cream + saturated ochre. Mid-century / Bauhaus grid. No gradients.
+            - generic [ref=e172]:
+              - text: Open variant
+              - img [ref=e173]
+        - listitem [ref=e175]:
+          - link "/v-h H · Editorial Premium Deep emerald carrier, warm cream surface, mustard accent. Domine serif + Onest sans. Stripe Press / Linear-blog premium feel. Open variant" [ref=e176] [cursor=pointer]:
+            - /url: /redesign/v-h
+            - generic [ref=e181]: /v-h
+            - heading "H · Editorial Premium" [level=3] [ref=e182]
+            - paragraph [ref=e183]: Deep emerald carrier, warm cream surface, mustard accent. Domine serif + Onest sans. Stripe Press / Linear-blog premium feel.
+            - generic [ref=e184]:
+              - text: Open variant
+              - img [ref=e185]
+    - paragraph [ref=e188]:
+      - text: "Branch:"
+      - code [ref=e189]: redesign/impeccable-homepage
+      - text: . Logos PNG-locked, no SVG variants. Citations preserved on all variants. No fabricated stats, no “trusted by” logo row, no eyebrow pills.
+  - navigation "Redesign variant switcher" [ref=e190]:
+    - generic [ref=e191]:
+      - link "Index" [ref=e192] [cursor=pointer]:
+        - /url: /redesign
+      - link "A · Field Notebook" [ref=e193] [cursor=pointer]:
+        - /url: /redesign/v-a
+      - link "B · Modern Technical" [ref=e194] [cursor=pointer]:
+        - /url: /redesign/v-b
+      - link "C · Quiet Essay" [ref=e195] [cursor=pointer]:
+        - /url: /redesign/v-c
+      - link "D · Supportive Learning" [ref=e196] [cursor=pointer]:
+        - /url: /redesign/v-d
+      - link "E · Civic Press" [ref=e197] [cursor=pointer]:
+        - /url: /redesign/v-e
+      - link "F · Soft Practitioner" [ref=e198] [cursor=pointer]:
+        - /url: /redesign/v-f
+      - link "G · Architectural" [ref=e199] [cursor=pointer]:
+        - /url: /redesign/v-g
+      - link "H · Editorial Premium" [ref=e200] [cursor=pointer]:
+        - /url: /redesign/v-h
+      - link "A1 · Refined" [ref=e201] [cursor=pointer]:
+        - /url: /redesign/v-a-1
+      - link "A2 · Annotated" [ref=e202] [cursor=pointer]:
+        - /url: /redesign/v-a-2
+      - link "A3 · Bold" [ref=e203] [cursor=pointer]:
+        - /url: /redesign/v-a-3
+      - link "E1 · Refined" [ref=e204] [cursor=pointer]:
+        - /url: /redesign/v-e-1
+      - link "E2 · Plus Gold" [ref=e205] [cursor=pointer]:
+        - /url: /redesign/v-e-2
+      - link "E3 · Tonal" [ref=e206] [cursor=pointer]:
+        - /url: /redesign/v-e-3
+      - link "E2-A · Linen" [ref=e207] [cursor=pointer]:
+        - /url: /redesign/v-e-2-a
+      - link "E2-B · Forest" [ref=e208] [cursor=pointer]:
+        - /url: /redesign/v-e-2-b
+      - link "E2-C · Cottage" [ref=e209] [cursor=pointer]:
+        - /url: /redesign/v-e-2-c
+      - link "E2-D · Bronze" [ref=e210] [cursor=pointer]:
+        - /url: /redesign/v-e-2-d
+      - link "E2-E · Stone" [ref=e211] [cursor=pointer]:
+        - /url: /redesign/v-e-2-e
+      - button "Switch to dark mode" [ref=e212]:
+        - img [ref=e213]
+      - link "Live homepage" [ref=e215] [cursor=pointer]:
+        - /url: /
+        - text: Live homepage
+        - img [ref=e216]
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e220]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e227] [cursor=pointer]:
+    - img [ref=e228]
+  - alert [ref=e231]

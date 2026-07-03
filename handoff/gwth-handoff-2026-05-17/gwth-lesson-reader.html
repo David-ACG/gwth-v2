@@ -1,0 +1,399 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 04.12 — How models think about uncertainty · GWTH.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500;1,8..60,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4; --bg-2: #F5F0E6; --surface: #FFFFFF; --sunken: #F0EBE0;
+  --border: #E5DFD2; --border-strong: #D4CCBA;
+  --ink: #22301F; --ink-2: #3F4A3B; --muted: #6F7569; --stone: #948A76;
+  --teal: #2A5D69; --teal-deep: #1E454F; --teal-soft: #C2D5D9;
+  --rust: #A94C2E; --forest: #5C7F4A; --forest-soft: #D4DCC9;
+  --sage: #7B8267; --amber: #B8893F; --amber-light: #D4A55B; --indigo: #3A4773;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, 'Courier New', monospace;
+  --radius-sm: 3px; --radius-md: 6px; --radius-lg: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 17px; -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.65; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-feature-settings: 'kern' 1, 'liga' 1; }
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+::selection { background: var(--teal-soft); color: var(--ink); }
+.app-header { position: sticky; top: 0; z-index: 10; background: rgba(251, 249, 244, 0.88); backdrop-filter: saturate(160%) blur(10px); -webkit-backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--border); }
+.app-header-inner { max-width: 1280px; margin: 0 auto; padding: 16px 32px; display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; }
+.brand { display: flex; align-items: center; gap: 0; }
+.brand svg { width: 96px; height: auto; display: block; }
+.crumbs { display: flex; align-items: center; gap: 14px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.crumbs .sep { color: var(--stone); opacity: 0.6; }
+.crumbs .cur { color: var(--ink); }
+.tools { display: flex; align-items: center; gap: 8px; }
+.tools button { background: transparent; border: 1px solid var(--border); color: var(--ink); padding: 7px 12px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: border-color 0.15s ease; }
+.tools button:hover { border-color: var(--border-strong); }
+.tools button.notes-btn { color: var(--teal); border-color: var(--teal-soft); }
+.tools button.notes-btn:hover { border-color: var(--teal); }
+.progress { height: 2px; background: var(--border); position: relative; }
+.progress-fill { position: absolute; inset: 0; width: 64%; background: var(--teal); }
+.reader { max-width: 1240px; margin: 0 auto; padding: 64px 32px 120px; display: grid; grid-template-columns: minmax(0, 680px) 1fr; gap: 80px; }
+article { min-width: 0; }
+.lesson-head { margin-bottom: 56px; }
+.lesson-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--rust); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.lesson-kicker .module { color: var(--muted); }
+.lesson-kicker .sep { width: 16px; height: 1px; background: var(--stone); opacity: 0.5; }
+.lesson-title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(40px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.018em; color: var(--ink); margin-bottom: 28px; text-wrap: balance; font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1; }
+.lesson-lead { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 22px; line-height: 1.5; color: var(--ink-2); margin-bottom: 36px; max-width: 56ch; text-wrap: pretty; }
+.lesson-meta { display: flex; gap: 24px; align-items: center; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 18px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.lesson-meta-item { display: flex; align-items: center; gap: 8px; }
+.lesson-meta-item strong { font-weight: 500; color: var(--ink); font-family: var(--font-mono); }
+.lesson-meta-dot { width: 3px; height: 3px; background: var(--stone); border-radius: 50%; opacity: 0.7; }
+.lesson-hero { margin: 48px 0 56px; background: var(--bg-2); border-radius: var(--radius-md); padding: 24px 32px 0; display: grid; grid-template-rows: auto 1fr; min-height: 220px; overflow: hidden; position: relative; }
+.lesson-hero-caption { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: flex; gap: 10px; align-items: center; }
+.lesson-hero-caption .dot { width: 4px; height: 4px; background: var(--stone); border-radius: 50%; }
+.lesson-hero-num { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(140px, 22vw, 220px); line-height: 0.82; color: var(--teal); align-self: end; justify-self: end; letter-spacing: -0.045em; margin-right: -4px; margin-bottom: -18px; }
+.lesson-body { font-size: 17.5px; line-height: 1.72; color: var(--ink); }
+.lesson-body > section { margin-bottom: 16px; }
+.lesson-body p { margin: 0 0 22px; text-wrap: pretty; max-width: 64ch; }
+.lesson-body p > em { font-style: italic; }
+.lesson-body p > strong { font-weight: 600; color: var(--ink); }
+.lesson-body h2 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 32px; line-height: 1.14; margin: 60px 0 24px; color: var(--ink); letter-spacing: -0.012em; text-wrap: balance; }
+.lesson-body h2 .secno { display: block; font-style: normal; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); font-weight: 500; margin-bottom: 10px; }
+.lesson-body h3 { font-family: var(--font-body); font-weight: 600; font-size: 17px; margin: 32px 0 10px; letter-spacing: -0.004em; color: var(--ink); }
+.lesson-body .first-p::first-letter { font-family: var(--font-display); font-style: italic; font-weight: 400; float: left; font-size: 76px; line-height: 0.86; padding: 6px 12px 0 0; color: var(--teal); }
+.lesson-body code { font-family: var(--font-mono); font-size: 0.86em; background: var(--bg-2); padding: 2px 7px; border-radius: var(--radius-sm); color: var(--ink); }
+.lesson-body pre { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px 26px; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7; overflow-x: auto; margin: 32px 0; color: var(--ink); }
+.lesson-body pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+.lesson-body pre .com { color: var(--muted); font-style: italic; }
+.lesson-body pre .key { color: var(--teal); font-weight: 500; }
+.lesson-body pre .str { color: var(--rust); }
+.lesson-body pre .lbl { color: var(--stone); }
+.lesson-body blockquote.pull { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(26px, 3.4vw, 32px); line-height: 1.22; color: var(--ink); text-align: center; text-wrap: balance; max-width: 22ch; margin: 48px auto; letter-spacing: -0.01em; position: relative; padding: 0; }
+.lesson-body blockquote.pull::before, .lesson-body blockquote.pull::after { content: ''; display: block; width: 40px; height: 1px; background: var(--ink); margin: 0 auto; opacity: 0.6; }
+.lesson-body blockquote.pull::before { margin-bottom: 28px; }
+.lesson-body blockquote.pull::after { margin-top: 28px; }
+.callout { background: var(--bg-2); padding: 22px 26px 24px; margin: 32px 0; border-radius: var(--radius-md); }
+.callout-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 12px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.callout-kicker .dot { width: 4px; height: 4px; background: var(--teal); border-radius: 50%; }
+.callout-kicker.is-example { color: var(--forest); }
+.callout-kicker.is-example .dot { background: var(--forest); }
+.callout-kicker.is-practice { color: var(--rust); }
+.callout-kicker.is-practice .dot { background: var(--rust); }
+.callout p { margin-bottom: 0; font-size: 16px; line-height: 1.6; max-width: none; color: var(--ink); }
+.callout p + p { margin-top: 12px; }
+.callout .dialogue { font-family: var(--font-display); font-style: italic; font-size: 17px; line-height: 1.55; }
+.callout .dialogue .speaker { font-style: normal; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 4px; margin-top: 14px; }
+.callout .dialogue .speaker:first-child { margin-top: 0; }
+.figure { margin: 40px 0; }
+.figure-frame { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px 32px 20px; }
+.figure-frame svg { display: block; width: 100%; height: auto; }
+.figure-caption { margin-top: 14px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; gap: 10px; align-items: baseline; }
+.figure-caption .num { color: var(--teal); font-weight: 500; }
+.figure-caption .label { text-transform: none; letter-spacing: 0; font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+.fn-ref { font-family: var(--font-mono); font-size: 0.7em; vertical-align: super; color: var(--teal); margin-left: 1px; font-weight: 500; cursor: pointer; text-decoration: none; }
+.fn-ref:hover { text-decoration: underline; }
+.takeaways { margin: 56px 0 32px; padding: 32px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.takeaways-h { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 26px; line-height: 1.16; color: var(--ink); margin-bottom: 22px; letter-spacing: -0.01em; }
+.takeaway { display: grid; grid-template-columns: 36px 1fr; gap: 14px; margin-bottom: 14px; font-size: 16.5px; line-height: 1.6; color: var(--ink); align-items: baseline; }
+.takeaway:last-child { margin-bottom: 0; }
+.takeaway-num { font-family: var(--font-mono); font-size: 11px; color: var(--teal); letter-spacing: 0.06em; padding-top: 4px; }
+.fn-list { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+.fn-list-h { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 18px; }
+.fn-item { display: grid; grid-template-columns: 24px 1fr; gap: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-2); margin-bottom: 14px; }
+.fn-num { color: var(--teal); font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding-top: 2px; }
+.fn-item em { font-style: italic; }
+.next-lesson { margin-top: 48px; background: var(--teal); color: var(--bg); border-radius: var(--radius-md); padding: 28px 32px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 32px; }
+.next-lesson-meta { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(251, 249, 244, 0.7); margin-bottom: 8px; }
+.next-lesson-title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 24px; line-height: 1.22; color: var(--bg); letter-spacing: -0.005em; }
+.next-lesson-sub { font-family: var(--font-body); font-size: 13.5px; color: rgba(251, 249, 244, 0.75); margin-top: 6px; }
+.next-lesson-cta { background: var(--bg); color: var(--teal); border: none; padding: 12px 22px; border-radius: var(--radius-md); font-family: var(--font-body); font-size: 14px; font-weight: 500; cursor: pointer; letter-spacing: -0.003em; white-space: nowrap; }
+.next-lesson-cta:hover { background: rgba(251, 249, 244, 0.92); }
+.pagi { margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto 1fr; gap: 32px; align-items: center; }
+.pagi-link { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: var(--ink); }
+.pagi-link:hover { color: var(--teal); text-decoration: none; }
+.pagi-link.next { text-align: right; align-items: flex-end; }
+.pagi-link-meta { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.pagi-link-title { font-family: var(--font-body); font-size: 14px; font-weight: 500; color: inherit; }
+.pagi-mid { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.margin-notes { position: relative; }
+.margin-notes-h { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; }
+.margin-notes-count { color: var(--ink); font-weight: 500; }
+.note { padding: 16px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 16px; }
+.note-anchor { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--stone); margin-bottom: 10px; display: block; }
+.note-body { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 15px; line-height: 1.5; color: var(--ink); margin-bottom: 12px; text-wrap: pretty; }
+.note-meta { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.note-meta-author { color: var(--ink); font-weight: 500; }
+.note-meta-dot { width: 3px; height: 3px; background: var(--stone); border-radius: 50%; opacity: 0.7; }
+.note-actions { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); display: flex; gap: 12px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+.note-actions a { color: var(--muted); cursor: pointer; }
+.note-actions a:hover { color: var(--teal); text-decoration: none; }
+.note-actions a.is-thread { color: var(--teal); }
+.note.spaced-md { margin-top: 96px; }
+.note.spaced-lg { margin-top: 200px; }
+.note.spaced-xl { margin-top: 220px; }
+.note-add { margin-top: 80px; background: var(--bg-2); border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 16px 18px; text-align: left; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); transition: border-color 0.15s ease, color 0.15s ease; }
+.note-add:hover { border-color: var(--teal); color: var(--teal); }
+.note-add .plus { font-size: 14px; width: 14px; height: 14px; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; line-height: 1; font-weight: 400; }
+@media (max-width: 1100px) {
+  .reader { grid-template-columns: 1fr; gap: 48px; padding: 48px 24px 96px; }
+  .margin-notes { padding-top: 32px; border-top: 1px solid var(--border); }
+  .note { margin-top: 0 !important; }
+  .note.spaced-md, .note.spaced-lg, .note.spaced-xl { margin-top: 0 !important; }
+  .note-add { margin-top: 16px; }
+}
+@media (max-width: 640px) {
+  .app-header-inner { grid-template-columns: auto 1fr; gap: 16px; }
+  .crumbs { display: none; }
+  .reader { padding: 32px 20px 64px; gap: 40px; }
+  .lesson-hero-num { font-size: 110px; }
+  .next-lesson { grid-template-columns: 1fr; gap: 20px; }
+  .next-lesson-cta { justify-self: start; }
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="app-header-inner">
+    <a class="brand" href="#" aria-label="GWTH.ai home">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GWTH.ai logo">
+        <path fill="#22301F" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon fill="#22301F" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon fill="#22301F" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon fill="#22301F" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path fill="#22301F" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect fill="#22301F" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path fill="#A94C2E" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse fill="#A94C2E" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse fill="#A94C2E" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+    </a>
+    <nav class="crumbs" aria-label="Course breadcrumb">
+      <span>Module 04</span><span class="sep">/</span>
+      <span>How models think</span><span class="sep">/</span>
+      <span class="cur">Lesson 04.12</span>
+    </nav>
+    <div class="tools">
+      <button type="button" class="notes-btn">Notes · 4</button>
+      <button type="button">A · A</button>
+      <button type="button">Theme</button>
+      <button type="button">Share</button>
+    </div>
+  </div>
+  <div class="progress"><div class="progress-fill"></div></div>
+</header>
+
+<main class="reader">
+  <article>
+    <header class="lesson-head">
+      <div class="lesson-kicker">
+        <span>Lesson 04.12</span><span class="sep"></span>
+        <span class="module">Module 04 · How models think</span>
+      </div>
+      <h1 class="lesson-title">How models think about uncertainty</h1>
+      <p class="lesson-lead">Large language models speak with confidence. Underneath, every word is a wager. Learning to read the wager — and to ask it back out loud — is the difference between using a model and being used by one.</p>
+      <div class="lesson-meta">
+        <div class="lesson-meta-item"><span>Read</span><strong>~9 min</strong></div>
+        <span class="lesson-meta-dot"></span>
+        <div class="lesson-meta-item"><span>By</span><strong>R. Halpern</strong></div>
+        <span class="lesson-meta-dot"></span>
+        <div class="lesson-meta-item"><span>Updated</span><strong>11 May 2026</strong></div>
+        <span class="lesson-meta-dot"></span>
+        <div class="lesson-meta-item"><span>Level</span><strong>Foundational</strong></div>
+      </div>
+      <div class="lesson-hero">
+        <div class="lesson-hero-caption"><span class="dot"></span><span>How models think about uncertainty</span></div>
+        <div class="lesson-hero-num">04.12</div>
+      </div>
+    </header>
+
+    <div class="lesson-body">
+      <section>
+        <h2><span class="secno">§ 1</span>Why uncertainty matters</h2>
+        <p class="first-p">When a model writes a sentence, it is not retrieving a fact from a database. It is sampling the next token from a probability distribution learned during training. A <em>confident wrong answer</em> feels exactly like a <em>confident right answer</em><a href="#fn1" class="fn-ref">1</a>, because the model has no separate machinery for "I am sure" versus "I am guessing".</p>
+        <p>This matters more every year. Models are now drafting legal memos, summarising medical histories, generating production code, and answering questions from children. The cost of treating a probability as a fact is no longer hypothetical.</p>
+        <p>The first move, before any prompting technique, is to read what the model is doing as a <strong>wager</strong> rather than a <strong>report</strong>. Everything else in this module follows from that one shift.</p>
+        <blockquote class="pull">A model isn't lying when it's wrong. It's predicting.</blockquote>
+      </section>
+
+      <section>
+        <h2><span class="secno">§ 2</span>Two ways to be wrong</h2>
+        <p>Most wrong answers fall into one of two categories.</p>
+        <h3>Hallucination</h3>
+        <p>A hallucinated citation gives a real journal, a real author, and a paper that has never existed. The model doesn't know it's hallucinating; the fabrication and the recall use the same machinery, run at the same temperature, and arrive at the same level of fluency.</p>
+        <h3>Stale knowledge</h3>
+        <p>A model trained on data through October 2023 will confidently report a 2023 fact in 2026 as if it were current. The confidence comes from the strength of the training prior, not from any check against today.</p>
+        <div class="callout">
+          <div class="callout-kicker"><span class="dot"></span>Insight</div>
+          <p>You can usually tell the two apart by asking for a source. Hallucinations cite a paper that does not exist; stale answers cite a real paper that has since been superseded. Both look identical until you check.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="secno">§ 3</span>Confidence vs. calibration</h2>
+        <p>Confidence is what a model <em>says</em> about itself. <strong>Calibration</strong> is whether that confidence matches reality. A perfectly calibrated model is right 80% of the time when it says it is 80% confident.</p>
+        <figure class="figure">
+          <div class="figure-frame">
+            <svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Calibration plot: predicted confidence on x-axis, observed accuracy on y-axis.">
+              <line x1="60" y1="240" x2="560" y2="240" stroke="#D4CCBA" stroke-width="1"/>
+              <line x1="60" y1="40" x2="60" y2="240" stroke="#D4CCBA" stroke-width="1"/>
+              <g stroke="#E5DFD2" stroke-width="1">
+                <line x1="60" y1="90" x2="560" y2="90"/>
+                <line x1="60" y1="140" x2="560" y2="140"/>
+                <line x1="60" y1="190" x2="560" y2="190"/>
+                <line x1="185" y1="40" x2="185" y2="240"/>
+                <line x1="310" y1="40" x2="310" y2="240"/>
+                <line x1="435" y1="40" x2="435" y2="240"/>
+              </g>
+              <line x1="60" y1="240" x2="560" y2="40" stroke="#948A76" stroke-width="1" stroke-dasharray="4 4"/>
+              <path d="M 60 240 C 120 230, 180 215, 240 192 C 300 168, 360 142, 420 110 C 480 78, 530 56, 560 50" fill="none" stroke="#2A5D69" stroke-width="2"/>
+              <g>
+                <circle cx="100" cy="232" r="3.5" fill="#2A5D69"/>
+                <circle cx="180" cy="216" r="3.5" fill="#2A5D69"/>
+                <circle cx="260" cy="187" r="3.5" fill="#2A5D69"/>
+                <circle cx="340" cy="156" r="3.5" fill="#2A5D69"/>
+                <circle cx="420" cy="110" r="4.5" fill="#A94C2E"/>
+                <circle cx="500" cy="74" r="3.5" fill="#2A5D69"/>
+                <circle cx="540" cy="56" r="3.5" fill="#2A5D69"/>
+              </g>
+              <g font-family="'JetBrains Mono', monospace" font-size="10" fill="#6F7569" letter-spacing="0.06em">
+                <text x="60" y="260">0</text>
+                <text x="180" y="260">25%</text>
+                <text x="305" y="260">50%</text>
+                <text x="430" y="260">75%</text>
+                <text x="540" y="260">100%</text>
+                <text x="50" y="244" text-anchor="end">0</text>
+                <text x="50" y="194" text-anchor="end">25%</text>
+                <text x="50" y="144" text-anchor="end">50%</text>
+                <text x="50" y="94" text-anchor="end">75%</text>
+                <text x="50" y="50" text-anchor="end">100%</text>
+                <text x="310" y="278" text-anchor="middle" fill="#22301F">PREDICTED CONFIDENCE</text>
+              </g>
+              <text font-family="'JetBrains Mono', monospace" font-size="10" fill="#22301F" letter-spacing="0.06em" transform="rotate(-90, 22, 140)" x="22" y="140" text-anchor="middle">OBSERVED ACCURACY</text>
+              <line x1="420" y1="110" x2="468" y2="80" stroke="#A94C2E" stroke-width="1"/>
+              <text font-family="'Source Sans 3', sans-serif" font-style="italic" font-size="12" fill="#A94C2E" x="472" y="78">claims 75%, right 60%</text>
+              <text font-family="'Source Sans 3', sans-serif" font-style="italic" font-size="12" fill="#948A76" x="330" y="138" transform="rotate(-22, 330, 138)">perfect calibration</text>
+            </svg>
+          </div>
+          <figcaption class="figure-caption">
+            <span class="num">Fig. 01</span>
+            <span class="label">Confidence vs. observed accuracy across 1,200 short-answer prompts. Perfect calibration sits on the diagonal; over-confident answers sit below it.</span>
+          </figcaption>
+        </figure>
+        <p>Most chat models are slightly over-confident: they say 90% when they should be saying 75%. You can correct for this at the prompt level by asking the model to estimate its confidence as a number:</p>
+        <pre><code><span class="lbl">prompt:  </span>"What year did Anthropic release Claude 3?
+          Estimate your confidence as a percentage."
+
+<span class="lbl">response:</span> <span class="str">"Claude 3 was released in March 2024."</span>
+          <span class="key">confidence</span> = <span class="str">0.80</span>
+          <span class="com"># grounded in pre-cutoff training data</span></code></pre>
+        <p>The number isn't a guarantee — it's a wager<a href="#fn2" class="fn-ref">2</a>, calibrated against what the model saw during training. Treat it that way and you'll catch most stale-knowledge errors before they ship.</p>
+      </section>
+
+      <section>
+        <h2><span class="secno">§ 4</span>Asking a probabilistic colleague</h2>
+        <p>The most useful pattern is to ask the model the questions a careful human colleague would expect to be asked.</p>
+        <ul style="list-style: none; padding: 0; margin: 0 0 24px;">
+          <li style="padding: 8px 0; border-bottom: 1px solid var(--border); font-family: var(--font-display); font-style: italic; font-size: 17px; color: var(--ink-2);">How confident are you in that answer?</li>
+          <li style="padding: 8px 0; border-bottom: 1px solid var(--border); font-family: var(--font-display); font-style: italic; font-size: 17px; color: var(--ink-2);">What would change your mind?</li>
+          <li style="padding: 8px 0; border-bottom: 1px solid var(--border); font-family: var(--font-display); font-style: italic; font-size: 17px; color: var(--ink-2);">Is there a source I should check before I rely on this?</li>
+          <li style="padding: 8px 0; font-family: var(--font-display); font-style: italic; font-size: 17px; color: var(--ink-2);">Could a reasonable expert disagree?</li>
+        </ul>
+        <p>The phrasing matters. "How confident are you?" reads as a meta-question and produces a calibrated estimate. "Are you sure?" reads as social pressure and produces an apology — even when the original answer was correct.</p>
+        <div class="callout">
+          <div class="callout-kicker is-example"><span class="dot"></span>Example dialogue</div>
+          <div class="dialogue">
+            <span class="speaker">You</span>"What's the boiling point of water at sea level?"
+            <span class="speaker">Model</span>"100&nbsp;°C. Confidence: very high."
+            <span class="speaker">You</span>"And at 2,500 m elevation?"
+            <span class="speaker">Model</span>"Approximately 91.7&nbsp;°C. Confidence: moderate — the exact value depends on local atmospheric pressure, which the model cannot observe."
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="secno">§ 5</span>When to trust, when to verify</h2>
+        <p>A working rule of thumb after all of the above.</p>
+        <h3>Trust</h3>
+        <p>Well-known patterns. Explaining a familiar concept, writing standard code, summarising a long passage, drafting copy. The error rate is low and the consequences of a wrong answer are usually small.</p>
+        <h3>Verify</h3>
+        <p>Anything dated, numbered, cited, legal, or medical. Run the model's output past the primary source before you act on it. The model isn't lying when it's wrong; it's predicting. Your job is to be the part of the system that checks the prediction.</p>
+        <div class="callout">
+          <div class="callout-kicker is-practice"><span class="dot"></span>Practice</div>
+          <p>Open a chat with the model you use most. Ask it the same question three different ways:</p>
+          <p style="font-family: var(--font-display); font-style: italic; font-size: 16.5px;">"Is X true?" — "What's the probability X is true?" — "What would you need to see to believe X isn't true?"</p>
+          <p>Compare the three answers. Where they disagree is where you should be paying attention.</p>
+        </div>
+      </section>
+
+      <div class="takeaways">
+        <div class="takeaways-h">Three takeaways</div>
+        <div class="takeaway"><span class="takeaway-num">01</span><span>Models predict the next token. They do not retrieve facts.</span></div>
+        <div class="takeaway"><span class="takeaway-num">02</span><span>Confidence and correctness are different signals. Calibration is the relationship between them.</span></div>
+        <div class="takeaway"><span class="takeaway-num">03</span><span>Ask the model out loud what it would change its mind about. That single sentence catches most errors before you ship.</span></div>
+      </div>
+
+      <div class="fn-list">
+        <div class="fn-list-h">Footnotes</div>
+        <div class="fn-item" id="fn1"><span class="fn-num">1</span><span>The technical name for this is <em>epistemic uncertainty</em> — uncertainty about the underlying truth, distinct from <em>aleatoric</em> uncertainty about random outcomes. Language models conflate the two.</span></div>
+        <div class="fn-item" id="fn2"><span class="fn-num">2</span><span>See <em>Calibration of Modern Neural Networks</em> (Guo et al., 2017) for the original formulation in vision models; the same pattern holds in language models, with slightly different shapes.</span></div>
+      </div>
+
+      <a href="#" class="next-lesson">
+        <div>
+          <div class="next-lesson-meta">Next · Lesson 04.13</div>
+          <div class="next-lesson-title">Calibration in practice</div>
+          <div class="next-lesson-sub">Five prompts you can use today to read a model's wager out loud. · ~7 min</div>
+        </div>
+        <span class="next-lesson-cta">Begin lesson  →</span>
+      </a>
+
+      <nav class="pagi">
+        <a href="#" class="pagi-link prev">
+          <span class="pagi-link-meta">← Lesson 04.11</span>
+          <span class="pagi-link-title">What models can and can't see</span>
+        </a>
+        <span class="pagi-mid">9 of 14 · Module 04</span>
+        <a href="#" class="pagi-link next">
+          <span class="pagi-link-meta">Lesson 04.13 →</span>
+          <span class="pagi-link-title">Calibration in practice</span>
+        </a>
+      </nav>
+    </div>
+  </article>
+
+  <aside class="margin-notes">
+    <div class="margin-notes-h"><span>Marginal notes</span><span class="margin-notes-count">4</span></div>
+    <div class="note">
+      <span class="note-anchor">Anchored to § 1</span>
+      <div class="note-body">"Re-read this three times. The whole module in one line."</div>
+      <div class="note-meta"><span class="note-meta-author">Theo B.</span><span class="note-meta-dot"></span><span>1 week ago</span></div>
+      <div class="note-actions"><a>Reply</a><a class="is-thread">Thread · 3</a></div>
+    </div>
+    <div class="note spaced-md">
+      <span class="note-anchor">Anchored to § 2</span>
+      <div class="note-body">"Tested this on a real model yesterday — hallucinated source had a fake DOI but a real journal name. Eerie."</div>
+      <div class="note-meta"><span class="note-meta-author">Mara K.</span><span class="note-meta-dot"></span><span>3 days ago</span></div>
+      <div class="note-actions"><a>Reply</a></div>
+    </div>
+    <div class="note spaced-lg">
+      <span class="note-anchor">Anchored to § 3 · Fig. 01</span>
+      <div class="note-body">"Worth flagging that this assumes a model with logprobs exposed. Most consumer chat surfaces don't — you have to ask out loud."</div>
+      <div class="note-meta"><span class="note-meta-author">Yuki H.</span><span class="note-meta-dot"></span><span>Today</span></div>
+      <div class="note-actions"><a>Reply</a><a class="is-thread">Thread · 1</a></div>
+    </div>
+    <div class="note spaced-xl">
+      <span class="note-anchor">Anchored to § 5</span>
+      <div class="note-body">"I keep this trust / verify list pinned at my desk. The verify column is longer than I'd like to admit."</div>
+      <div class="note-meta"><span class="note-meta-author">Devi R.</span><span class="note-meta-dot"></span><span>2 weeks ago</span></div>
+      <div class="note-actions"><a>Reply</a></div>
+    </div>
+    <button type="button" class="note-add"><span class="plus">+</span><span>Add a note</span></button>
+  </aside>
+</main>
+</body>
+</html>

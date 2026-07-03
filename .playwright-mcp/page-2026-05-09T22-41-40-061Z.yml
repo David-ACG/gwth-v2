@@ -1,0 +1,151 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "GWTH home" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "GWTH" [ref=e5]
+        - generic [ref=e8]: GWTH.ai
+      - generic [ref=e9]:
+        - img [ref=e10]
+        - generic [ref=e13]: Public Credential Record
+    - main [ref=e14]:
+      - generic [ref=e15]:
+        - figure "Illustrative — your actual GWTH Score reflects verified work." [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e23]: gwth.ai/score/c67sg#dde5
+            - generic [ref=e24]:
+              - generic [ref=e25]:
+                - generic [ref=e26]:
+                  - generic [ref=e27]: AE
+                  - generic [ref=e28]:
+                    - generic [ref=e29]: Alex Example
+                    - generic [ref=e30]: Operations Lead · UK
+                - img "Scan to open gwth.ai/score/c67sg#dde5" [ref=e32]
+              - generic [ref=e461]:
+                - generic [ref=e462]: Example
+                - generic [ref=e463]:
+                  - img "GWTH" [ref=e464]
+                  - generic [ref=e467]: GWTH Score
+                - generic [ref=e468]:
+                  - generic [ref=e469]:
+                    - generic [ref=e470]: "104"
+                    - generic [ref=e471]: Top 1%
+                  - generic [ref=e472]:
+                    - img [ref=e473]
+                    - generic [ref=e476]: trending up
+                    - text: "+49"
+                  - generic [ref=e477]: vs 3 months ago
+                - button "What this score tells an employer 5 reasons it's credible" [ref=e480]:
+                  - generic [ref=e481]:
+                    - img [ref=e483]
+                    - generic [ref=e485]:
+                      - generic [ref=e486]: What this score tells an employer
+                      - generic [ref=e487]: 5 reasons it's credible
+                  - img [ref=e488]
+          - generic [ref=e490]: Illustrative — your actual GWTH Score reflects verified work.
+        - generic [ref=e491]:
+          - generic [ref=e492]:
+            - generic [ref=e493]: LAST VERIFIED
+            - generic [ref=e494]: 2 MAY 2026
+          - generic [ref=e495]:
+            - generic [ref=e496]: VERIFICATION ID
+            - generic [ref=e497]: C67SG#DDE5
+          - generic [ref=e498]:
+            - generic [ref=e499]: STATUS
+            - generic [ref=e500]: VERIFIED
+        - generic [ref=e501]:
+          - generic [ref=e502]:
+            - generic [ref=e503]: CREDENTIAL
+            - heading "GWTH Certified Practitioner. Score 104, Top 1%." [level=1] [ref=e504]:
+              - text: GWTH Certified Practitioner.
+              - text: Score 104, Top 1%.
+            - paragraph [ref=e505]: Issued by GWTH.ai, United Kingdom. The credential certifies that the named holder has completed the GWTH applied-AI course, passed every check question, and shipped three reviewed capstone projects. The score above is live and recomputes weekly.
+          - generic [ref=e506]:
+            - generic [ref=e507]: FIRST TIME HERE
+            - heading "What is a GWTH Score?" [level=2] [ref=e508]
+            - paragraph [ref=e509]: "A GWTH Score is a verified, dynamic measure of an individual’s applied AI capability. The number above isn’t a snapshot, it’s a live reading: it climbs as the holder completes hands-on lesson work and reviewed capstone projects, and it decays if they stop keeping current."
+            - paragraph [ref=e510]: This page is the canonical record of the credential. The holder earned it on gwth.ai through 94+ projects across a 3-month course. The number, the tier, and the verification ID below are issued and maintained by GWTH.ai. Anyone with this URL can confirm the credential is live and current.
+          - generic [ref=e511]:
+            - generic [ref=e512]:
+              - generic [ref=e513]: SECTION 01 / CREDIBILITY
+              - heading "What this score tells an employer. 5 reasons it’s credible." [level=2] [ref=e514]:
+                - text: What this score tells an employer.
+                - text: 5 reasons it’s credible.
+            - list [ref=e515]:
+              - listitem [ref=e516]:
+                - generic [ref=e517]: "01"
+                - generic [ref=e518]: Always current. Lessons update constantly so students stay on the cutting edge, and the score decays if they don't keep up.
+              - listitem [ref=e519]:
+                - generic [ref=e520]: "02"
+                - generic [ref=e521]: Hands-on, not lectured. Reaching 100 means completing 94+ hands-on projects across 3 modules, no passive watching.
+              - listitem [ref=e522]:
+                - generic [ref=e523]: "03"
+                - generic [ref=e524]: Tested, not assumed. Every lesson has check questions; the course requires 3 capstone projects to graduate.
+              - listitem [ref=e525]:
+                - generic [ref=e526]: "04"
+                - generic [ref=e527]: Paced, not crammed. The course is 3 months; lessons release in stages, no shortcuts, no rushing through.
+              - listitem [ref=e528]:
+                - generic [ref=e529]: "05"
+                - generic [ref=e530]: A high score is a recent score. Above 100 means top 1% of applied-AI practitioners today, not when they enrolled.
+          - generic [ref=e531]:
+            - button "SECTION 02 / METHOD How this score is calculated — Collapse" [expanded] [ref=e532] [cursor=pointer]:
+              - generic [ref=e533]:
+                - generic [ref=e534]: SECTION 02 / METHOD
+                - heading "How this score is calculated" [level=3] [ref=e535]
+              - generic [ref=e536]: — Collapse
+            - generic [ref=e537]:
+              - paragraph [ref=e538]: "The GWTH Score is a weighted, decaying composite. It is recomputed weekly from four inputs: verified lesson completions, passing Q&A on every mandatory lesson, three reviewed capstone projects, and a currentness multiplier that reflects activity over the last 90 days. A score above 100 places the holder in the top 1% of GWTH-issued credentials at the time of verification, not at the time of enrolment."
+              - generic [ref=e539]:
+                - generic [ref=e540]: CURRENT STANDING
+                - generic [ref=e541]:
+                  - generic [ref=e542]:
+                    - generic [ref=e543]: LESSONS COMPLETED
+                    - generic [ref=e544]: 62 / 64
+                    - generic [ref=e545]: + 2 OPTIONAL
+                  - generic [ref=e546]:
+                    - generic [ref=e547]: CAPSTONES APPROVED
+                    - generic [ref=e548]: 3 / 3
+                    - generic [ref=e549]: ALL VERIFIED
+                  - generic [ref=e550]:
+                    - generic [ref=e551]: CURRENTNESS
+                    - generic [ref=e552]: 92%
+                    - generic [ref=e553]: LAST 90 DAYS
+                  - generic [ref=e554]:
+                    - generic [ref=e555]: DECAY CHECKED
+                    - generic [ref=e556]: 11 MAY
+                    - generic [ref=e557]: WEEKLY
+              - generic [ref=e558]:
+                - generic [ref=e559]:
+                  - generic [ref=e560]: SCORE HISTORY · 12 MONTHS
+                  - generic [ref=e561]: ENROLLED 8 MAY 2025 · GRADUATED 8 AUG 2025
+                - 'img "Score history: 55 twelve months ago to 104 today, target 100" [ref=e563]':
+                  - generic [ref=e564]: TARGET 100
+                  - generic [ref=e579]: 12 MONTHS AGO
+                  - generic [ref=e580]: 6 MONTHS AGO
+                  - generic [ref=e581]: TODAY · 104
+              - paragraph [ref=e582]: Holder reached 100 on 12 February 2026 and has held a Top 1% tier for 86 consecutive days. Underlying project files remain private; the credential proves the score, not the work product.
+          - generic [ref=e583]:
+            - button "Copy canonical URL to clipboard" [ref=e584]:
+              - img [ref=e585]
+              - text: Copy link
+            - button "Add to LinkedIn SOON" [disabled] [ref=e588]:
+              - img [ref=e589]
+              - text: Add to LinkedIn
+              - generic [ref=e593]: SOON
+            - generic [ref=e594]: Stable URL · safe to share
+          - generic [ref=e595]:
+            - generic [ref=e596]: Canonical URL · gwth.ai/score/c67sg#dde5
+            - generic [ref=e597]: Issued by GWTH.ai · UK · No expiry
+    - contentinfo [ref=e598]:
+      - generic [ref=e599]:
+        - generic [ref=e600]:
+          - img [ref=e601]
+          - generic [ref=e604]: Verified by gwth.ai
+        - generic [ref=e605]: Canonical record · 99.9 uptime
+      - link "About the GWTH Score →" [ref=e606] [cursor=pointer]:
+        - /url: /about
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e608]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e615] [cursor=pointer]:
+    - img [ref=e616]
+  - alert [ref=e619]

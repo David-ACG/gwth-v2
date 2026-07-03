@@ -1,0 +1,215 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "GWTH.ai" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+          - button "Collapse sidebar" [ref=e7]:
+            - img
+        - navigation "Main navigation" [ref=e8]:
+          - link "Dashboard" [ref=e9] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e10]
+            - generic [ref=e15]: Dashboard
+          - link "The Course" [ref=e16] [cursor=pointer]:
+            - /url: /course/applied-ai-skills
+            - img [ref=e17]
+            - generic [ref=e19]: The Course
+          - link "Labs" [ref=e20] [cursor=pointer]:
+            - /url: /labs
+            - img [ref=e21]
+            - generic [ref=e23]: Labs
+          - link "Progress" [ref=e24] [cursor=pointer]:
+            - /url: /progress
+            - img [ref=e25]
+            - generic [ref=e27]: Progress
+        - navigation "Secondary navigation" [ref=e28]:
+          - link "Bookmarks" [ref=e29] [cursor=pointer]:
+            - /url: /bookmarks
+            - img [ref=e30]
+            - generic [ref=e32]: Bookmarks
+          - link "Notifications" [ref=e33] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e34]
+            - generic [ref=e37]: Notifications
+          - link "Profile" [ref=e38] [cursor=pointer]:
+            - /url: /profile
+            - img [ref=e39]
+            - generic [ref=e42]: Profile
+          - link "Settings" [ref=e43] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e44]
+            - generic [ref=e47]: Settings
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "breadcrumb" [ref=e50]:
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "Demo" [ref=e53] [cursor=pointer]:
+                - /url: /demo
+            - listitem [ref=e54]:
+              - img [ref=e55]
+            - listitem [ref=e57]:
+              - link "Dashboard" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - button "Search... ⌘ K" [ref=e60]:
+            - img
+            - generic [ref=e61]: Search...
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button "Toggle theme" [ref=e62]:
+            - img
+          - button "U" [ref=e63]:
+            - generic [ref=e65]: U
+      - main [ref=e66]:
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: DASHBOARD · TODAY
+            - generic [ref=e71]: SAT 9 MAY 2026 · 19:27 BST
+            - generic [ref=e72]: BETA · v0.4.1
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e75]: PAYMENT FAILED · 4 MAY
+              - generic [ref=e76]: Your card was declined. You have 6 days left in your grace period before Month 2 access closes and your score is frozen at the public URL.
+            - generic [ref=e77]:
+              - link "Update payment" [ref=e78] [cursor=pointer]:
+                - /url: /settings
+              - link "Pause instead" [ref=e79] [cursor=pointer]:
+                - /url: /settings
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - generic [ref=e82]: TODAY · 19:27 BST
+              - heading "You’re still on track, Alex. Just not paid up." [level=1] [ref=e83]:
+                - text: You’re still on track,
+                - text: Alex.
+                - text: Just not paid up.
+              - paragraph [ref=e84]: Lessons stay open through 14 May. The public verification URL still works until then, marked as “frozen.” After that, employers checking the link will see your last verified score, dated.
+            - generic [ref=e85]:
+              - generic [ref=e86]: NEXT, IF YOU HAVE 24 MINUTES
+              - generic [ref=e87]: LESSON 13 · MONTH 1 · STILL OPEN
+              - generic [ref=e88]: "Building with Claude: your first useful tool."
+              - generic [ref=e89]: Lessons keep working through your grace window.
+              - generic [ref=e90]:
+                - link "Continue Lesson 13 →" [ref=e91] [cursor=pointer]:
+                  - /url: /course/applied-ai-skills
+                - link "Resubscribe" [ref=e92] [cursor=pointer]:
+                  - /url: /settings
+          - generic [ref=e93]:
+            - generic [ref=e94]:
+              - generic [ref=e95]: SECTION 01 — YOUR COURSE · STILL OPEN
+              - generic [ref=e96]:
+                - heading "Month 1 of 3." [level=2] [ref=e97]
+                - generic [ref=e98]: 12 / 24 mandatory
+              - generic [ref=e102]:
+                - generic [ref=e103]: OPEN UNTIL 14 MAY
+                - generic [ref=e104]: UPDATE PAYMENT TO CONTINUE
+              - generic [ref=e105]:
+                - generic [ref=e106] [cursor=pointer]:
+                  - img [ref=e109]
+                  - generic [ref=e111]: L13
+                  - generic [ref=e112]:
+                    - generic [ref=e113]: "Building with Claude: your first useful tool"
+                    - generic [ref=e114]: IN PROGRESS
+                  - generic [ref=e115]: 24 MIN
+                - generic [ref=e116] [cursor=pointer]:
+                  - generic [ref=e119]: L14
+                  - generic [ref=e121]: "Q&A: when to reach for which model"
+                  - generic [ref=e122]: 9 MIN
+                - generic [ref=e123] [cursor=pointer]:
+                  - generic [ref=e126]: L15
+                  - generic [ref=e128]: Reading docs without reading docs
+                  - generic [ref=e129]: 18 MIN
+                - generic [ref=e130]:
+                  - generic [ref=e133]: L16
+                  - generic [ref=e134]:
+                    - generic [ref=e135]: Codex for non-engineers, part one
+                    - generic [ref=e136]: NEXT MONTH
+                  - generic [ref=e137]: 22 MIN
+                - generic [ref=e138]:
+                  - generic [ref=e141]: L17
+                  - generic [ref=e142]:
+                    - generic [ref=e143]: Plain-English automations
+                    - generic [ref=e144]: NEXT MONTH
+                  - generic [ref=e145]: 26 MIN
+                - generic [ref=e146]:
+                  - generic [ref=e147]: LESSONS LOCK IF GRACE LAPSES
+                  - link "UPDATE CARD →" [ref=e148] [cursor=pointer]:
+                    - /url: /settings
+              - generic [ref=e149]:
+                - generic [ref=e150]:
+                  - generic [ref=e151]: IF YOU UPDATE BY 14 MAY
+                  - generic [ref=e152]: Nothing changes. Score keeps verifying, lessons stay open, capstone keeps its review slot.
+                - generic [ref=e153]:
+                  - generic [ref=e154]: IF YOU DON’T
+                  - generic [ref=e155]: Lessons close 15 May. Score freezes at 104 with a dated “last verified” line. You can resume at any time, no re-enrolment.
+            - generic [ref=e156]:
+              - generic [ref=e157]: SECTION 02 — YOUR GWTH SCORE · FROZEN
+              - heading "Holding. No new verification." [level=2] [ref=e158]
+              - figure "Illustrative — your actual GWTH Score reflects verified work." [ref=e160]:
+                - generic [ref=e161]:
+                  - generic [ref=e166]: gwth.ai/score/c67sg#dde5
+                  - generic [ref=e167]:
+                    - generic [ref=e168]:
+                      - generic [ref=e169]:
+                        - generic [ref=e170]: AE
+                        - generic [ref=e171]:
+                          - generic [ref=e172]: Alex Example
+                          - generic [ref=e173]: Operations Lead · UK
+                      - img "Scan to open gwth.ai/score/c67sg#dde5" [ref=e175]
+                    - generic [ref=e604]:
+                      - generic [ref=e605]: Example
+                      - generic [ref=e606]:
+                        - img "GWTH" [ref=e607]
+                        - generic [ref=e610]: GWTH Score
+                      - generic [ref=e611]:
+                        - generic [ref=e612]:
+                          - generic [ref=e613]: "104"
+                          - generic [ref=e614]: Top 1%
+                        - generic [ref=e615]:
+                          - img [ref=e616]
+                          - generic [ref=e619]: trending up
+                          - text: "+49"
+                        - generic [ref=e620]: vs 3 months ago
+                      - button "What this score tells an employer 5 reasons it's credible" [ref=e623]:
+                        - generic [ref=e624]:
+                          - img [ref=e626]
+                          - generic [ref=e628]:
+                            - generic [ref=e629]: What this score tells an employer
+                            - generic [ref=e630]: 5 reasons it's credible
+                        - img [ref=e631]
+                - generic [ref=e633]: Illustrative — your actual GWTH Score reflects verified work.
+              - generic [ref=e634]:
+                - generic [ref=e635]: WHAT EMPLOYERS SEE NOW
+                - generic [ref=e636]: The public URL works. Below the score it shows FROZEN · LAST VERIFIED 6 MAY 2026 instead of the up-trend pill.
+              - generic [ref=e637]:
+                - generic [ref=e638]: SECTION 03 — ACCOUNT
+                - generic [ref=e639]:
+                  - generic [ref=e640]:
+                    - generic [ref=e641]: VISA •••• 4421
+                    - generic [ref=e642]: Declined 4 May
+                  - generic [ref=e643]: "Bank reason: insufficient funds. We will retry 11 May."
+                  - generic [ref=e644]:
+                    - link "Update card" [ref=e645] [cursor=pointer]:
+                      - /url: /settings
+                    - link "Pause for a month" [ref=e646] [cursor=pointer]:
+                      - /url: /settings
+          - generic [ref=e647]:
+            - generic [ref=e648]: SECTION 04 — POSTSCRIPT
+            - heading "The credential decays if you stop. So does the gap." [level=3] [ref=e649]:
+              - text: The credential decays
+              - generic [ref=e650]: if you stop. So does the gap.
+            - paragraph [ref=e651]: You can pause for up to 60 days without losing your evidence. After that the score expires. Better to update the card and keep the rhythm.
+          - generic [ref=e652]:
+            - generic [ref=e653]: © 2026 GWTH.ai · UK
+            - generic [ref=e654]: Built for the 23 May beta · v0.4.1
+            - generic [ref=e655]: Privacy · Terms · Accessibility
+    - generic [ref=e656]:
+      - heading "Command Palette" [level=2] [ref=e657]
+      - paragraph [ref=e658]: Search for a command to run...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e660]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e667] [cursor=pointer]:
+    - img [ref=e668]
+  - alert [ref=e671]

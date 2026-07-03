@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH Homepage — Variant 1 (G-arrow) vs Variant 2 (Windmill)</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #1a1a1a; color: #ddd; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; height: 100%; }
+  header { padding: 16px 24px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { margin: 0; font-size: 16px; font-weight: 600; }
+  header .links a { color: #88c; margin-left: 16px; text-decoration: none; font-size: 13px; }
+  header .links a:hover { text-decoration: underline; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; height: calc(100vh - 53px); }
+  .pane { border-right: 1px solid #333; display: flex; flex-direction: column; min-height: 0; }
+  .pane:last-child { border-right: none; }
+  .pane-head { padding: 10px 16px; background: #232323; border-bottom: 1px solid #333; font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+  .pane-head .badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+  .v1 .badge { background: rgba(28,186,147,0.18); color: #5CC8A8; }
+  .v2 .badge { background: linear-gradient(90deg, #0E7C7B22, #1CBA9322, #33BBFF22, #4A6CF722); color: #ddd; }
+  iframe { flex: 1; width: 100%; border: 0; background: #2a2a2a; }
+</style>
+</head>
+<body>
+<header>
+  <h1>GWTH Homepage — pick a logo direction</h1>
+  <div class="links">
+    <a href="variant-1-garrow/Homepage Redesign.html" target="_blank">Open V1 in tab</a>
+    <a href="variant-2-windmill/Homepage Redesign.html" target="_blank">Open V2 in tab</a>
+  </div>
+</header>
+<div class="grid">
+  <div class="pane v1">
+    <div class="pane-head">
+      <span>Variant 1 — G-arrow logo (current Phase 0 lock)</span>
+      <span class="badge">Locked PNG</span>
+    </div>
+    <iframe src="variant-1-garrow/Homepage Redesign.html"></iframe>
+  </div>
+  <div class="pane v2">
+    <div class="pane-head">
+      <span>Variant 2 — Windmill icon + GWTH.ai text</span>
+      <span class="badge">Spiral palette</span>
+    </div>
+    <iframe src="variant-2-windmill/Homepage Redesign.html"></iframe>
+  </div>
+</div>
+</body>
+</html>

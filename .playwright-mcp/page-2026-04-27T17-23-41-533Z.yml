@@ -1,0 +1,65 @@
+- generic [ref=e2]:
+  - generic [ref=e3]: Option 2 · Collapsible Toggle
+  - generic [ref=e4]:
+    - generic [ref=e5]: Compact by default
+    - button "Toggle theme" [ref=e6] [cursor=pointer]
+  - generic [ref=e7]:
+    - button "Top 0.5%" [ref=e8] [cursor=pointer]
+    - button "Top 1% slipping" [ref=e9] [cursor=pointer]
+    - button "Top 5%" [ref=e10] [cursor=pointer]
+    - button "Working towards" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - generic [ref=e17]: gwth.ai/dashboard
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: AE
+        - generic [ref=e21]:
+          - generic [ref=e22]: Alex Example
+          - generic [ref=e23]: Operations Lead · UK
+      - generic [ref=e24]:
+        - generic [ref=e25]: Example
+        - generic [ref=e26]:
+          - img "GWTH" [ref=e27]
+          - generic [ref=e28]: GWTH Score
+        - generic [ref=e29]:
+          - img [ref=e30]
+          - generic:
+            - generic: "104"
+            - generic: Score
+        - generic [ref=e37]: Top 1%
+        - img [ref=e39]:
+          - generic [ref=e40]: TOP 1%
+        - generic [ref=e44]:
+          - generic [ref=e45]: 3 months ago
+          - generic [ref=e46]: today
+        - button "What this score tells an employer 5 reasons it's credible" [ref=e47] [cursor=pointer]:
+          - generic [ref=e48]:
+            - img [ref=e50]
+            - generic [ref=e52]:
+              - generic [ref=e53]: What this score tells an employer
+              - generic [ref=e54]: 5 reasons it's credible
+          - img [ref=e55]
+        - region "What this score tells an employer 5 reasons it's credible":
+          - list [ref=e57]:
+            - listitem [ref=e58]:
+              - img [ref=e60]
+              - generic [ref=e63]:
+                - text: Always current. Lessons update constantly so students stay on the cutting edge — and the score
+                - emphasis [ref=e64]: decays
+                - text: if they don't keep up.
+            - listitem [ref=e65]:
+              - img [ref=e67]
+              - generic [ref=e69]: Hands-on, not lectured. Reaching 100 means completing 94+ hands-on projects across 3 modules — no passive watching.
+            - listitem [ref=e70]:
+              - img [ref=e72]
+              - generic [ref=e75]: Tested, not assumed. Every lesson has check questions; the course requires 3 capstone projects to graduate.
+            - listitem [ref=e76]:
+              - img [ref=e78]
+              - generic [ref=e80]: Paced, not crammed. The course is 3 months; lessons release in stages — no shortcuts, no rushing through.
+            - listitem [ref=e81]:
+              - img [ref=e83]
+              - generic [ref=e85]:
+                - text: A high score is a recent score. Above 100 means top 1% of applied-AI practitioners
+                - emphasis [ref=e86]: today
+                - text: ", not when they enrolled."
+        - generic [ref=e87]: Illustrative — your actual GWTH Score reflects verified work.

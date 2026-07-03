@@ -1,0 +1,91 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation [ref=e4]:
+        - link "GWTH.ai home" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "GWTH.ai" [ref=e6]
+        - generic [ref=e16]:
+          - link "Free Labs" [ref=e17] [cursor=pointer]:
+            - /url: /labs
+          - link "Lessons" [ref=e18] [cursor=pointer]:
+            - /url: /lessons
+          - link "Pricing" [ref=e19] [cursor=pointer]:
+            - /url: /pricing
+          - link "For Teams" [ref=e20] [cursor=pointer]:
+            - /url: /for-teams
+          - link "About" [ref=e21] [cursor=pointer]:
+            - /url: /about
+          - link "News" [ref=e22] [cursor=pointer]:
+            - /url: /news
+        - generic [ref=e23]:
+          - button "Toggle theme" [ref=e24]:
+            - img
+          - link "Log in" [ref=e25] [cursor=pointer]:
+            - /url: /login
+          - link "Sign Up" [ref=e26] [cursor=pointer]:
+            - /url: /signup
+    - main [ref=e27]:
+      - generic [ref=e28]:
+        - status "Loading" [ref=e29]:
+          - img [ref=e30]
+          - img [ref=e33]
+        - paragraph [ref=e35]: Loading...
+    - contentinfo [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - link "GWTH.ai" [ref=e40] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e41]: UK-focused applied AI training. Learn to research, automate, analyse, and build practical tools with AI-assisted coding.
+          - generic [ref=e42]:
+            - heading "Product" [level=3] [ref=e43]
+            - list [ref=e44]:
+              - listitem [ref=e45]:
+                - link "Pricing" [ref=e46] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e47]:
+                - link "Why GWTH" [ref=e48] [cursor=pointer]:
+                  - /url: /why-gwth
+              - listitem [ref=e49]:
+                - link "For Teams" [ref=e50] [cursor=pointer]:
+                  - /url: /for-teams
+              - listitem [ref=e51]:
+                - link "Contact" [ref=e52] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e53]:
+            - heading "Learn" [level=3] [ref=e54]
+            - list [ref=e55]:
+              - listitem [ref=e56]:
+                - link "Free Labs" [ref=e57] [cursor=pointer]:
+                  - /url: /labs
+              - listitem [ref=e58]:
+                - link "Lessons" [ref=e59] [cursor=pointer]:
+                  - /url: /lessons
+              - listitem [ref=e60]:
+                - link "News" [ref=e61] [cursor=pointer]:
+                  - /url: /news
+              - listitem [ref=e62]:
+                - link "Newsletter" [ref=e63] [cursor=pointer]:
+                  - /url: /newsletter
+              - listitem [ref=e64]:
+                - link "About GWTH" [ref=e65] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e66]:
+            - heading "Legal" [level=3] [ref=e67]
+            - list [ref=e68]:
+              - listitem [ref=e69]:
+                - link "Privacy" [ref=e70] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e71]:
+                - link "Terms" [ref=e72] [cursor=pointer]:
+                  - /url: /terms
+        - generic [ref=e74]:
+          - paragraph [ref=e75]: © 2026 GWTH.ai. All rights reserved.
+          - paragraph [ref=e76]: Independent. UK-based. No sponsors. No ads. No vendor partnerships.
+          - paragraph [ref=e77]: Based in the United Kingdom 🇬🇧
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e79]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e86] [cursor=pointer]:
+    - img [ref=e87]
+  - alert [ref=e90]

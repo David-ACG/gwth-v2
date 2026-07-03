@@ -1,0 +1,35 @@
+## snag-1 — 2026-04-28 12:42
+Decision: Used the cropped PNGs at h-7 sm:h-8 (28-32px tall in the h-16 nav)
+Alternatives considered: render at h-10 (40px), h-8 (32px) only
+Reason: at ~5:1 aspect ratio the wordmark needs to feel light, not dominating. h-8 width ≈ 160px sits naturally beside the nav links without crowding.
+Risk: too small on 4K displays — but next/image's intrinsic sizing scales correctly with DPR.
+
+## snag-2 (v1) → snag-3 (v2) — 2026-04-28 13:05
+Decision: Split into 3 paragraphs (mt-6 / mt-4 / mt-4) instead of 2 or sentence-line breaks.
+Alternatives considered: keep one paragraph with a `<br/>` separator; split into 2 paragraphs.
+Reason: David's feedback "seems like quite a block" suggested the wall of text was the problem. Three paragraphs map to three discrete ideas (capabilities / score / trust line). Two would still feel dense; line-break-only doesn't visually delimit ideas.
+Risk: vertical height of the hero column grew — if it pushes the device mock below the fold on smaller laptops, may need to compress. Captured staging shots show it still fits at 1440x900.
+
+## snag-4 — 2026-04-28 13:10
+Decision: Moved 7-card 3+3+1-wide layout to 9-card 3+3+3 (no wide card).
+Alternatives considered: 3+3+1+2 (keep wide team-lead card, add 2 new in row 4); 3+3+3+0 (drop team-lead).
+Reason: a row of 2 in a 3-column grid is visually awkward. Keeping team-lead as wide and demoting it to standard width preserves the journey but makes all 9 cards parallel. The new cards (Proof, Keeping up) are arguably more important than team-lead since they map directly to the Dynamic Score USP and the Stay Current pricing tier.
+Risk: Team lead card was deliberately wide for For Teams sales emphasis. Shrinking it to standard width may dilute that pitch — but the For Teams chevron + clickable card preserves the link.
+
+## snag-4 / pills — 2026-04-28 13:10
+Decision: Kept the category pills (Worried / Reskilling / etc) for now; filed beads_GWTH-7bu for image replacement.
+Alternatives considered: remove pills entirely; replace with lucide-react icons inline.
+Reason: David said "we need to replace these with proper images" — proper images means designed assets, not lucide icons. Removing pills entirely would leave the cards looking truncated. Pills stay until designer hands over 9 illustrations.
+Risk: looks "AI slop" until images arrive — but per the eyebrow-pill rule these are FUNCTIONAL labels (categorising 9 personas), not decorative section setup. Functional pills are explicitly OK per ~/.claude/rules/06-code-quality.md.
+
+## snag-4 / copy refinement — 2026-04-28 13:10
+Decision: Did NOT autonomously refine the existing 7 cards' body copy.
+Alternatives considered: tighten card 1-7 bodies to match a target rhythm.
+Reason: David said "some of the text could be refined, as I think it has been added incrementally over time" — vague. Without a specific direction (which card sets the gold standard? what voice?) any rewrite risks moving away from his intent. Filed as beads_GWTH-3j7 for a guided pass.
+Risk: the "incremental" inconsistency stays visible on staging. Acceptable trade-off vs. burning trust on a misguided rewrite.
+
+## snag-4 / new card stats — 2026-04-28 13:10
+Decision: Card 7 (Proof) has no stat. Card 8 (Keeping up) has stat = "£7.50/mo" / "Stay Current after the first three months".
+Alternatives considered: add a "104" or "Top 1%" stat to the Proof card.
+Reason: A card-level "104" stat would clash with the hero device mock's example score also showing 104 — visitors would think the score on the page is the same one. The Stay Current price IS a stat in the sense of being a memorable number, and it directly maps to the pricing tier.
+Risk: stat-less Proof card may look visually lighter than its row-mates — but the body copy is dense enough to compensate.

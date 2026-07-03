@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard · GWTH.ai</title>
+<meta name="description" content="Sarah Mensah's GWTH.ai dashboard — continue learning, score, activity, notes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500;1,8..60,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4; --bg-2: #F5F0E6; --surface: #FFFFFF; --sunken: #F0EBE0;
+  --border: #E5DFD2; --border-strong: #D4CCBA;
+  --ink: #22301F; --ink-2: #3F4A3B; --ink-3: #6F7569; --muted: #6F7569; --stone: #948A76;
+  --teal: #2A5D69; --teal-deep: #1E454F; --teal-soft: #C2D5D9;
+  --rust: #A94C2E;
+  --forest: #5C7F4A; --forest-deep: #41603A; --forest-soft: #D4DCC9; --forest-mid: rgba(92,127,74,0.55);
+  --sage: #7B8267;
+  --amber: #B8893F; --amber-deep: #8A6730; --amber-soft: #EEDDB8;
+  --indigo: #3A4773; --indigo-soft: #D6DBE4;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 17px; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-feature-settings: 'kern' 1, 'liga' 1;
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+::selection { background: var(--teal-soft); color: var(--ink); }
+
+/* ── Topbar ───────────────────────────────────────── */
+.topbar { position: sticky; top: 0; z-index: 20; background: rgba(251,249,244,0.92); backdrop-filter: saturate(160%) blur(10px); -webkit-backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--border); }
+.topbar-inner { max-width: 1040px; margin: 0 auto; padding: 18px 32px; display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; }
+.brand-link { display: flex; align-items: center; }
+.brand-link svg { width: 100px; height: auto; display: block; }
+.topbar-nav { display: flex; gap: 28px; justify-self: center; }
+.topbar-nav a { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); font-weight: 500; letter-spacing: -0.003em; padding: 4px 0; }
+.topbar-nav a:hover { color: var(--ink); text-decoration: none; }
+.topbar-nav a.is-active { color: var(--ink); position: relative; }
+.topbar-nav a.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -19px; height: 1.5px; background: var(--ink); }
+.user-chip { display: inline-flex; align-items: center; gap: 10px; padding: 5px 8px 5px 6px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; background: transparent; color: var(--ink); font-family: var(--font-body); font-size: 13px; font-weight: 500; }
+.user-chip:hover { border-color: var(--border-strong); }
+.user-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--forest); color: #EDEAE6; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-style: italic; font-size: 13px; letter-spacing: -0.01em; }
+.user-chip .caret { font-family: var(--font-mono); font-size: 10px; color: var(--muted); margin-left: 2px; }
+
+/* ── Page wrapper ─────────────────────────────────── */
+.page { flex: 1; max-width: 1040px; width: 100%; margin: 0 auto; padding: 56px 32px 96px; }
+
+/* ── Section anatomy ──────────────────────────────── */
+.section { margin-bottom: 64px; }
+.section-h { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: baseline; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.section-h .label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink); font-weight: 500; }
+.section-h .sub { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.section-h .sub a { color: var(--muted); }
+.section-h .sub a:hover { color: var(--ink); text-decoration: none; }
+
+/* ── Greeting ─────────────────────────────────────── */
+.greeting { margin-bottom: 52px; }
+.greeting-date { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.greeting-date .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--forest); }
+.greeting h1 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(40px, 5.5vw, 56px); line-height: 1.04; letter-spacing: -0.018em; color: var(--ink); margin-bottom: 14px; text-wrap: balance; }
+.greeting-sub { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 20px; line-height: 1.45; color: var(--ink-2); max-width: 56ch; text-wrap: pretty; }
+.greeting-sub em { font-style: italic; color: var(--ink); }
+
+/* ── Continue lesson hero (teal) ──────────────────── */
+.continue-card { display: block; position: relative; background: var(--teal); color: #EDEAE6; border-radius: 4px; padding: 40px 44px 38px; text-decoration: none; transition: background 0.18s ease; overflow: hidden; }
+.continue-card:hover { background: var(--teal-deep); text-decoration: none; }
+.continue-card:hover .continue-cta { transform: translateX(3px); }
+.continue-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(237,234,230,0.72); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.continue-kicker .sep { width: 16px; height: 1px; background: rgba(237,234,230,0.4); }
+.continue-title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.08; letter-spacing: -0.014em; color: #EDEAE6; margin-bottom: 12px; max-width: 22ch; text-wrap: balance; }
+.continue-sub { font-family: var(--font-body); font-size: 15px; line-height: 1.5; color: rgba(237,234,230,0.85); margin-bottom: 24px; max-width: 48ch; }
+.continue-sub strong { color: #EDEAE6; font-weight: 500; }
+.continue-progress { height: 3px; background: rgba(237,234,230,0.18); border-radius: 1px; margin-bottom: 28px; overflow: hidden; }
+.continue-progress span { display: block; height: 100%; background: #EDEAE6; border-radius: 1px; }
+.continue-foot { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; }
+.continue-meta { display: flex; gap: 20px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,234,230,0.65); }
+.continue-meta .item { display: flex; align-items: center; gap: 7px; }
+.continue-meta .item strong { color: #EDEAE6; font-weight: 500; font-family: var(--font-mono); }
+.continue-cta { font-family: var(--font-body); font-size: 14px; font-weight: 500; color: #EDEAE6; padding: 11px 18px; border: 1px solid rgba(237,234,230,0.55); border-radius: 3px; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.18s ease, border-color 0.18s ease; background: transparent; }
+.continue-card:hover .continue-cta { border-color: #EDEAE6; }
+
+/* ── Score block ──────────────────────────────────── */
+.score-row { display: grid; grid-template-columns: 240px 1fr auto; gap: 56px; align-items: start; padding: 32px 0 28px; border-top: 1px solid var(--ink); }
+.score-num-cell { display: flex; flex-direction: column; gap: 6px; }
+.score-num { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(96px, 13vw, 144px); line-height: 0.84; letter-spacing: -0.04em; color: var(--ink); font-feature-settings: 'kern' 1, 'onum' 1; }
+.score-of { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 6px; }
+.score-status { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.score-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--forest); }
+.spark-cell { display: flex; flex-direction: column; gap: 8px; }
+.spark-cell .sub { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.spark-cell .sub strong { color: var(--ink); font-family: var(--font-mono); font-weight: 500; }
+.spark { width: 100%; height: 92px; display: block; }
+.score-meta { display: flex; flex-direction: column; gap: 14px; min-width: 180px; }
+.score-meta-row { display: flex; flex-direction: column; gap: 3px; }
+.score-meta-row .label { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.score-meta-row .value { font-family: var(--font-display); font-style: italic; font-size: 18px; color: var(--ink); line-height: 1.2; }
+.score-meta-row .value.upright { font-style: normal; }
+.score-link { font-family: var(--font-body); font-size: 13px; color: var(--teal); padding-top: 6px; }
+
+/* ── Activity heatmap ─────────────────────────────── */
+.activity-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: start; }
+.heatmap-wrap { display: flex; flex-direction: column; gap: 12px; }
+.heatmap-months { display: grid; grid-template-columns: 28px repeat(12, 1fr); gap: 4px; padding-left: 0; }
+.heatmap-months .m { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); align-self: end; padding-bottom: 4px; }
+.heatmap-months .m:first-child { grid-column: 1; }
+.heatmap { display: grid; grid-template-columns: 28px repeat(12, 1fr); grid-template-rows: repeat(7, auto); gap: 4px; align-items: stretch; }
+.heatmap-day-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: flex; align-items: center; justify-content: flex-start; }
+.heatmap-cell { aspect-ratio: 1; background: var(--bg-2); border-radius: 2px; position: relative; transition: outline-color 0.15s ease; }
+.heatmap-cell[data-level="1"] { background: var(--forest-soft); }
+.heatmap-cell[data-level="2"] { background: var(--forest-mid); }
+.heatmap-cell[data-level="3"] { background: var(--forest); }
+.heatmap-cell[data-level="4"] { background: var(--forest-deep); }
+.heatmap-cell[data-future] { background: transparent; border: 1px dashed var(--border); }
+.heatmap-cell[data-today] { outline: 1.5px solid var(--ink); outline-offset: 1.5px; }
+.heatmap-cell:hover { outline: 1px solid var(--ink); outline-offset: 1px; }
+.heatmap-legend { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.heatmap-legend .scale { display: flex; gap: 3px; }
+.heatmap-legend .scale span { width: 10px; height: 10px; border-radius: 2px; background: var(--bg-2); display: inline-block; }
+.heatmap-legend .scale span:nth-child(2) { background: var(--forest-soft); }
+.heatmap-legend .scale span:nth-child(3) { background: var(--forest-mid); }
+.heatmap-legend .scale span:nth-child(4) { background: var(--forest); }
+.heatmap-legend .scale span:nth-child(5) { background: var(--forest-deep); }
+.activity-stats { display: flex; flex-direction: column; gap: 28px; min-width: 168px; padding-left: 28px; border-left: 1px solid var(--border); }
+.activity-stat { display: flex; flex-direction: column; gap: 4px; }
+.activity-stat .num { font-family: var(--font-display); font-style: italic; font-size: 38px; line-height: 1; color: var(--ink); letter-spacing: -0.02em; font-feature-settings: 'onum' 1; }
+.activity-stat .num.is-streak { color: var(--forest-deep); }
+.activity-stat .label { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+/* ── Recent notes ─────────────────────────────────── */
+.notes-list { display: flex; flex-direction: column; gap: 14px; }
+.note-card { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 20px 24px 22px; display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: start; transition: border-color 0.15s ease; }
+.note-card:hover { border-color: var(--border-strong); }
+.note-card .anchor-mark { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); margin-top: 9px; flex-shrink: 0; }
+.note-card .note-body-wrap { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.note-card .note-anchor { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.note-card .note-anchor .lesson { color: var(--ink); font-weight: 500; font-family: var(--font-mono); }
+.note-card .note-anchor .sep { color: var(--stone); opacity: 0.6; }
+.note-card .note-body { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 17.5px; line-height: 1.45; color: var(--ink); text-wrap: pretty; max-width: 60ch; }
+.note-card .note-meta { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.note-card .note-time { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); align-self: start; padding-top: 6px; white-space: nowrap; }
+.notes-foot { margin-top: 18px; display: flex; justify-content: space-between; align-items: center; }
+.notes-foot a { font-family: var(--font-body); font-size: 13.5px; font-weight: 500; }
+.notes-foot .stats { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+/* ── Up next in module ────────────────────────────── */
+.upnext-sub { font-family: var(--font-display); font-size: 18px; color: var(--ink-2); margin-bottom: 22px; line-height: 1.45; max-width: 56ch; }
+.upnext-sub em { font-style: italic; color: var(--ink); }
+.lessons-list { display: flex; flex-direction: column; }
+.lesson-row { display: grid; grid-template-columns: 22px 60px 1fr auto auto; gap: 18px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--ink); transition: padding 0.15s ease; }
+.lesson-row:hover { text-decoration: none; padding-left: 6px; }
+.lesson-row:hover .lesson-arrow { color: var(--ink); }
+.lesson-row:last-child { border-bottom: 0; }
+.lesson-row .dot-cell { display: flex; align-items: center; justify-content: center; }
+.lesson-row .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--stone); opacity: 0.5; }
+.lesson-row.is-today .dot { background: var(--indigo); opacity: 1; }
+.lesson-row .lesson-num { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.lesson-row.is-today .lesson-num { color: var(--indigo); }
+.lesson-row .lesson-title { font-family: var(--font-display); font-size: 19px; font-style: italic; font-weight: 400; line-height: 1.22; color: var(--ink); letter-spacing: -0.005em; }
+.lesson-row .lesson-time { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.lesson-row .lesson-arrow { font-family: var(--font-body); font-size: 16px; color: var(--muted); transition: color 0.15s ease; }
+.lesson-row.is-today { background: var(--bg-2); margin: 0 -12px; padding-left: 12px; padding-right: 12px; border-radius: 3px; border-bottom: 1px solid transparent; position: relative; }
+.lesson-row.is-today + .lesson-row { border-top: 1px solid var(--border); }
+.today-tag { font-family: var(--font-mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--indigo); background: var(--indigo-soft); padding: 3px 7px; border-radius: 2px; margin-left: 10px; }
+
+/* ── Footer ──────────────────────────────────────── */
+.foot { margin-top: 64px; padding-top: 36px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: center; }
+.cred-block { display: flex; align-items: center; gap: 22px; }
+.cred-pill { width: 56px; height: 56px; border-radius: 50%; background: var(--forest-soft); color: var(--forest-deep); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-style: italic; font-size: 22px; letter-spacing: -0.01em; flex-shrink: 0; }
+.cred-text { display: flex; flex-direction: column; gap: 4px; }
+.cred-label { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.cred-id { font-family: var(--font-mono); font-size: 13.5px; color: var(--ink); letter-spacing: 0.04em; font-weight: 500; }
+.cred-meta { font-family: var(--font-body); font-size: 14px; color: var(--ink-2); margin-top: 2px; }
+.cred-link { font-family: var(--font-body); font-size: 13.5px; color: var(--teal); display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-weight: 500; }
+.foot-links { display: flex; gap: 24px; font-family: var(--font-body); font-size: 13.5px; }
+.foot-links a { color: var(--muted); }
+.foot-links a:hover { color: var(--ink); text-decoration: none; }
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 960px) {
+  .topbar-inner { grid-template-columns: auto 1fr auto; gap: 18px; }
+  .topbar-nav { display: none; }
+  .score-row { grid-template-columns: 1fr; gap: 28px; padding: 28px 0; }
+  .activity-grid { grid-template-columns: 1fr; gap: 32px; }
+  .activity-stats { flex-direction: row; padding-left: 0; border-left: 0; padding-top: 24px; border-top: 1px solid var(--border); gap: 36px; }
+  .foot { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 640px) {
+  .topbar-inner { padding: 14px 22px; }
+  .brand-link svg { width: 84px; }
+  .user-chip span:not(.user-avatar):not(.caret) { display: none; }
+  .page { padding: 36px 22px 64px; }
+  .greeting { margin-bottom: 40px; }
+  .continue-card { padding: 28px 24px 26px; }
+  .continue-foot { grid-template-columns: 1fr; gap: 18px; }
+  .continue-cta { justify-self: start; }
+  .section { margin-bottom: 48px; }
+  .section-h { grid-template-columns: 1fr; gap: 4px; }
+  .heatmap-months { font-size: 9px; }
+  .heatmap-day-label { font-size: 9px; }
+  .score-num { font-size: clamp(80px, 28vw, 110px); }
+  .activity-stats { flex-direction: column; gap: 20px; }
+  .note-card { grid-template-columns: auto 1fr; gap: 14px; padding: 16px 18px 18px; }
+  .note-card .note-time { display: none; }
+  .lesson-row { grid-template-columns: 18px 1fr auto; gap: 12px; padding: 14px 0; }
+  .lesson-row .lesson-num { display: none; }
+  .lesson-row .lesson-arrow { display: none; }
+  .today-tag { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand-link" href="#" aria-label="GWTH.ai home">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><style>.dl1{fill:#22301F;}.dl2{fill:#A94C2E;}</style></defs>
+        <path class="dl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="dl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="dl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="dl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="dl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="dl1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="dl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="dl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="dl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+    </a>
+    <nav class="topbar-nav" aria-label="Primary">
+      <a href="#" class="is-active">Dashboard</a>
+      <a href="gwth-lesson-viewer.html">Lessons</a>
+      <a href="gwth-lesson-script.html">Script</a>
+      <a href="#">Notes</a>
+      <a href="gwth-credential-verification.html">Credential</a>
+    </nav>
+    <button type="button" class="user-chip" aria-label="Account menu">
+      <span class="user-avatar" aria-hidden="true">S</span>
+      <span>Sarah</span>
+      <span class="caret">▾</span>
+    </button>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ── Greeting ─────────────────────────────────── -->
+  <section class="greeting">
+    <p class="greeting-date"><span class="dot"></span>Tuesday · 19 May 2026</p>
+    <h1>Good morning, Sarah.</h1>
+    <p class="greeting-sub">You're on a <em>9-day streak</em> — your longest yet. Pick up where you left off, or take a quieter day. Both count.</p>
+  </section>
+
+  <!-- ── Continue lesson (teal hero) ──────────────── -->
+  <section class="section" aria-label="Continue learning">
+    <header class="section-h">
+      <span class="label">Continue</span>
+      <span class="sub">Last opened · yesterday</span>
+    </header>
+    <a class="continue-card" href="gwth-lesson-viewer.html" aria-label="Continue Lesson 04.12 — How models think about uncertainty">
+      <div class="continue-kicker">
+        <span>Lesson 04.12</span>
+        <span class="sep"></span>
+        <span>Module 04 · How models think</span>
+      </div>
+      <h2 class="continue-title">How models think about uncertainty</h2>
+      <p class="continue-sub">You're on <strong>page 5 of 12</strong> — in the section on <strong>confidence and calibration</strong>. About 4 minutes of reading left to finish.</p>
+      <div class="continue-progress" aria-label="Lesson progress"><span style="width:42%"></span></div>
+      <div class="continue-foot">
+        <div class="continue-meta">
+          <span class="item"><span>Read</span><strong>~4 min left</strong></span>
+          <span class="item"><span>By</span><strong>R. Halpern</strong></span>
+          <span class="item"><span>Level</span><strong>Foundational</strong></span>
+        </div>
+        <span class="continue-cta">Continue lesson  →</span>
+      </div>
+    </a>
+  </section>
+
+  <!-- ── Your score ───────────────────────────────── -->
+  <section class="section" aria-label="GWTH Score">
+    <header class="section-h">
+      <span class="label">Your score</span>
+      <span class="sub">Updated <a href="gwth-credential-verification.html">today</a></span>
+    </header>
+    <div class="score-row">
+      <div class="score-num-cell">
+        <div class="score-num">812</div>
+        <div class="score-of">Out of 1,000</div>
+        <div class="score-status"><span class="dot"></span>Current peak · no decay</div>
+      </div>
+      <div class="spark-cell">
+        <svg class="spark" viewBox="0 0 480 92" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Score trajectory, last 12 weeks">
+          <defs>
+            <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2A5D69" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#2A5D69" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="84" x2="480" y2="84" stroke="#E5DFD2" stroke-width="1"/>
+          <line x1="0" y1="60" x2="480" y2="60" stroke="#F0EBE0" stroke-width="1" stroke-dasharray="2 4"/>
+          <line x1="0" y1="36" x2="480" y2="36" stroke="#F0EBE0" stroke-width="1" stroke-dasharray="2 4"/>
+          <path d="M0,82 L40,72 L80,60 L120,48 L160,38 L200,30 L240,24 L280,18 L320,14 L360,11 L400,8 L440,6 L480,4 L480,92 L0,92 Z" fill="url(#sparkfill)"/>
+          <path d="M0,82 L40,72 L80,60 L120,48 L160,38 L200,30 L240,24 L280,18 L320,14 L360,11 L400,8 L440,6 L480,4" fill="none" stroke="#2A5D69" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="480" cy="4" r="4" fill="#2A5D69"/>
+          <circle cx="480" cy="4" r="2" fill="#FBF9F4"/>
+          <text x="0" y="9" font-family="JetBrains Mono, monospace" font-size="10" fill="#948A76" letter-spacing="0.06em">1,000</text>
+          <text x="0" y="92" font-family="JetBrains Mono, monospace" font-size="10" fill="#948A76" letter-spacing="0.06em">0</text>
+          <text x="476" y="92" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" fill="#2A5D69" letter-spacing="0.06em" font-weight="500">812 · today</text>
+        </svg>
+        <div class="sub"><strong>+312 points</strong> in the last 12 weeks · trajectory tracking peak</div>
+      </div>
+      <div class="score-meta">
+        <div class="score-meta-row">
+          <span class="label">Peak achieved</span>
+          <span class="value">11 May 2026</span>
+        </div>
+        <div class="score-meta-row">
+          <span class="label">Cohort percentile</span>
+          <span class="value upright">Top 8%</span>
+        </div>
+        <a href="gwth-credential-verification.html" class="score-link">View public credential →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Recent activity ──────────────────────────── -->
+  <section class="section" aria-label="Recent activity">
+    <header class="section-h">
+      <span class="label">Recent activity</span>
+      <span class="sub">12 weeks · ending today</span>
+    </header>
+    <div class="activity-grid">
+      <div class="heatmap-wrap">
+        <div class="heatmap-months" aria-hidden="true">
+          <span></span>
+          <span class="m" style="grid-column: 2 / span 4;">Mar</span>
+          <span class="m" style="grid-column: 6 / span 4;">Apr</span>
+          <span class="m" style="grid-column: 10 / span 3;">May</span>
+        </div>
+        <div class="heatmap" role="img" aria-label="Daily learning activity, last 12 weeks. 9-day streak in progress.">
+          <span class="heatmap-day-label">Mon</span>
+          <div class="heatmap-cell" data-level="0" title="Mon · no activity"></div>
+          <div class="heatmap-cell" data-level="0" title="Mon · no activity"></div>
+          <div class="heatmap-cell" data-level="0" title="Mon · no activity"></div>
+          <div class="heatmap-cell" data-level="1" title="Mon · 30 min"></div>
+          <div class="heatmap-cell" data-level="1" title="Mon · 25 min"></div>
+          <div class="heatmap-cell" data-level="2" title="Mon · 55 min"></div>
+          <div class="heatmap-cell" data-level="2" title="Mon · 1 h"></div>
+          <div class="heatmap-cell" data-level="2" title="Mon · 50 min"></div>
+          <div class="heatmap-cell" data-level="3" title="Mon · 1 h 50 min"></div>
+          <div class="heatmap-cell" data-level="3" title="Mon · 2 h"></div>
+          <div class="heatmap-cell" data-level="4" title="Mon · 2 h 30 min · streak"></div>
+          <div class="heatmap-cell" data-level="4" title="Mon · 2 h · streak"></div>
+
+          <span class="heatmap-day-label">Tue</span>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="4"></div>
+          <div class="heatmap-cell" data-level="4" data-today title="Tue 19 May · today · 45 min so far"></div>
+
+          <span class="heatmap-day-label">Wed</span>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="4"></div>
+          <div class="heatmap-cell" data-future title="Wed 20 May · upcoming"></div>
+
+          <span class="heatmap-day-label">Thu</span>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="4"></div>
+          <div class="heatmap-cell" data-future></div>
+
+          <span class="heatmap-day-label">Fri</span>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="4"></div>
+          <div class="heatmap-cell" data-level="4"></div>
+          <div class="heatmap-cell" data-future></div>
+
+          <span class="heatmap-day-label">Sat</span>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="4"></div>
+          <div class="heatmap-cell" data-future></div>
+
+          <span class="heatmap-day-label">Sun</span>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="0"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="1"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="2"></div>
+          <div class="heatmap-cell" data-level="3"></div>
+          <div class="heatmap-cell" data-level="4"></div>
+          <div class="heatmap-cell" data-future></div>
+        </div>
+        <div class="heatmap-legend">
+          <span>Less</span>
+          <span class="scale"><span></span><span></span><span></span><span></span><span></span></span>
+          <span>More</span>
+        </div>
+      </div>
+      <aside class="activity-stats">
+        <div class="activity-stat">
+          <span class="num is-streak">9</span>
+          <span class="label">Day streak · longest yet</span>
+        </div>
+        <div class="activity-stat">
+          <span class="num">47</span>
+          <span class="label">Lessons this month</span>
+        </div>
+        <div class="activity-stat">
+          <span class="num">6h 22m</span>
+          <span class="label">Time this month</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ── Recent notes (Sarah's own) ───────────────── -->
+  <section class="section" aria-label="Your recent notes">
+    <header class="section-h">
+      <span class="label">Your recent notes</span>
+      <span class="sub">3 of 18 · <a href="#">all notes</a></span>
+    </header>
+    <ul class="notes-list">
+      <li class="note-card">
+        <span class="anchor-mark" aria-hidden="true"></span>
+        <div class="note-body-wrap">
+          <div class="note-anchor">
+            <span class="lesson">Lesson 04.12 · § 3</span>
+            <span class="sep">·</span>
+            <span>How models think about uncertainty</span>
+          </div>
+          <p class="note-body">"Confidence and correctness are different signals — re-read this whole section before the team meeting on Thursday."</p>
+        </div>
+        <span class="note-time">Yesterday</span>
+      </li>
+      <li class="note-card">
+        <span class="anchor-mark" aria-hidden="true"></span>
+        <div class="note-body-wrap">
+          <div class="note-anchor">
+            <span class="lesson">Lesson 04.11 · § 2</span>
+            <span class="sep">·</span>
+            <span>What models can and can't see</span>
+          </div>
+          <p class="note-body">"The point about context windows being a kind of working memory finally clicked. Going to use this framing when explaining it to Mum."</p>
+        </div>
+        <span class="note-time">3 days ago</span>
+      </li>
+      <li class="note-card">
+        <span class="anchor-mark" aria-hidden="true"></span>
+        <div class="note-body-wrap">
+          <div class="note-anchor">
+            <span class="lesson">Lesson 04.09 · § 5</span>
+            <span class="sep">·</span>
+            <span>The boundaries of attention</span>
+          </div>
+          <p class="note-body">"Save this trust-vs-verify list. Pinning to my desk."</p>
+        </div>
+        <span class="note-time">Last week</span>
+      </li>
+    </ul>
+    <div class="notes-foot">
+      <a href="#">All 18 notes  →</a>
+      <span class="stats">Across 11 lessons</span>
+    </div>
+  </section>
+
+  <!-- ── Up next in current module ────────────────── -->
+  <section class="section" aria-label="Up next">
+    <header class="section-h">
+      <span class="label">Up next</span>
+      <span class="sub">Module 04 · 4 lessons remaining</span>
+    </header>
+    <p class="upnext-sub">In <em>How models think</em>, after you finish 04.12. The first lesson is the system's pick for today.</p>
+    <div class="lessons-list">
+      <a class="lesson-row is-today" href="#">
+        <span class="dot-cell"><span class="dot"></span></span>
+        <span class="lesson-num">04.13</span>
+        <span class="lesson-title">Calibration in practice<span class="today-tag">Today's pick</span></span>
+        <span class="lesson-time">~7 min</span>
+        <span class="lesson-arrow">→</span>
+      </a>
+      <a class="lesson-row" href="#">
+        <span class="dot-cell"><span class="dot"></span></span>
+        <span class="lesson-num">04.14</span>
+        <span class="lesson-title">When the model says "I don't know"</span>
+        <span class="lesson-time">~9 min</span>
+        <span class="lesson-arrow">→</span>
+      </a>
+      <a class="lesson-row" href="#">
+        <span class="dot-cell"><span class="dot"></span></span>
+        <span class="lesson-num">04.15</span>
+        <span class="lesson-title">Probabilistic prompting</span>
+        <span class="lesson-time">~10 min</span>
+        <span class="lesson-arrow">→</span>
+      </a>
+      <a class="lesson-row" href="#">
+        <span class="dot-cell"><span class="dot"></span></span>
+        <span class="lesson-num">04.16</span>
+        <span class="lesson-title">Closing reflection</span>
+        <span class="lesson-time">~5 min</span>
+        <span class="lesson-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Footer with credential ───────────────────── -->
+  <footer class="foot">
+    <div class="cred-block">
+      <span class="cred-pill" aria-hidden="true">812</span>
+      <div class="cred-text">
+        <span class="cred-label">Your credential</span>
+        <span class="cred-id">GWTH-2026-A4F8B1</span>
+        <span class="cred-meta">AI Literacy · Foundations · 812 of 1,000</span>
+        <a class="cred-link" href="gwth-credential-verification.html">View public credential page →</a>
+      </div>
+    </div>
+    <nav class="foot-links" aria-label="Account">
+      <a href="#">Settings</a>
+      <a href="#">Help</a>
+      <a href="#">Sign out</a>
+    </nav>
+  </footer>
+
+</main>
+
+<script>
+  (function () {
+    'use strict';
+    var chip = document.querySelector('.user-chip');
+    if (chip) {
+      chip.addEventListener('click', function () {
+        // Account menu would open here; this is a static demo.
+      });
+    }
+  })();
+</script>
+</body>
+</html>

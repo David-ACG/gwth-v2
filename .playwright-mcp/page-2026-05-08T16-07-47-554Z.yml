@@ -1,0 +1,218 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - paragraph [ref=e4]: Score card · variant comparison
+      - heading "Pick a winner." [level=1] [ref=e5]
+      - paragraph [ref=e6]:
+        - text: Three takes on a share-ticker-style score card, each rendered across the three trend states (up / stable / down). Stable threshold is fixed at
+        - code [ref=e7]: "|Δ| < 3"
+        - text: score points. Toggle dark mode with the OS theme toggle to confirm contrast in both. Once you pick, I’ll port the winner into
+        - code [ref=e8]: HeroDevice
+        - text: .
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - heading "A · Minimal ticker" [level=2] [ref=e12]
+        - paragraph [ref=e13]: Number + trend pill + period. No chart, no tier.
+      - generic [ref=e14]:
+        - heading "B · Ticker + sparkline" [level=2] [ref=e15]
+        - paragraph [ref=e16]: Same as A with a small directional sparkline beneath.
+      - generic [ref=e17]:
+        - heading "C · Ticker + tier badge" [level=2] [ref=e18]
+        - paragraph [ref=e19]: Tier pill replaces the chart entirely.
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - heading "State · Up trend" [level=3] [ref=e22]
+        - generic [ref=e23]: 55 → 104
+      - generic [ref=e24]:
+        - figure "A · Minimal ticker · Up trend" [ref=e25]:
+          - generic [ref=e26]:
+            - generic [ref=e31]: gwth.ai/score
+            - generic [ref=e33]:
+              - generic [ref=e34]:
+                - generic [ref=e35]: Example
+                - generic [ref=e36]:
+                  - img "GWTH" [ref=e37]
+                  - generic [ref=e40]: GWTH Score
+              - generic [ref=e41]:
+                - generic [ref=e42]: "104"
+                - generic [ref=e43]:
+                  - img [ref=e44]
+                  - generic [ref=e47]: trending up
+                  - text: "+49"
+                  - generic [ref=e48]: +89.1%
+                - generic [ref=e49]: vs 3 months ago
+          - generic [ref=e50]: A · Minimal ticker · Up trend
+        - figure "B · Ticker + sparkline · Up trend" [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e57]: gwth.ai/score
+            - generic [ref=e59]:
+              - generic [ref=e60]:
+                - generic [ref=e61]: Example
+                - generic [ref=e62]:
+                  - img "GWTH" [ref=e63]
+                  - generic [ref=e66]: GWTH Score
+              - generic [ref=e67]:
+                - generic [ref=e68]: "104"
+                - generic [ref=e69]:
+                  - img [ref=e70]
+                  - generic [ref=e73]: trending up
+                  - text: "+49"
+                  - generic [ref=e74]: +89.1%
+              - generic [ref=e75]:
+                - img [ref=e76]
+                - generic [ref=e78]:
+                  - generic [ref=e79]: 3 months ago
+                  - generic [ref=e80]: today
+          - generic [ref=e81]: B · Ticker + sparkline · Up trend
+        - figure "C · Ticker + tier badge · Up trend" [ref=e82]:
+          - generic [ref=e83]:
+            - generic [ref=e88]: gwth.ai/score
+            - generic [ref=e90]:
+              - generic [ref=e91]:
+                - generic [ref=e92]: Example
+                - generic [ref=e93]:
+                  - img "GWTH" [ref=e94]
+                  - generic [ref=e97]: GWTH Score
+              - generic [ref=e98]:
+                - generic [ref=e99]:
+                  - generic [ref=e100]: "104"
+                  - generic [ref=e101]: Top 1%
+                - generic [ref=e102]:
+                  - img [ref=e103]
+                  - generic [ref=e106]: trending up
+                  - text: "+49"
+                  - generic [ref=e107]: +89.1%
+                - generic [ref=e108]: vs 3 months ago
+          - generic [ref=e109]: C · Ticker + tier badge · Up trend
+    - generic [ref=e110]:
+      - generic [ref=e111]:
+        - heading "State · Stable" [level=3] [ref=e112]
+        - generic [ref=e113]: 103 → 104
+      - generic [ref=e114]:
+        - figure "A · Minimal ticker · Stable" [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e121]: gwth.ai/score
+            - generic [ref=e123]:
+              - generic [ref=e124]:
+                - generic [ref=e125]: Example
+                - generic [ref=e126]:
+                  - img "GWTH" [ref=e127]
+                  - generic [ref=e130]: GWTH Score
+              - generic [ref=e131]:
+                - generic [ref=e132]: "104"
+                - generic [ref=e133]:
+                  - img [ref=e134]
+                  - generic [ref=e135]: stable
+                  - text: Stable
+                - generic [ref=e136]: vs 3 months ago
+          - generic [ref=e137]: A · Minimal ticker · Stable
+        - figure "B · Ticker + sparkline · Stable" [ref=e138]:
+          - generic [ref=e139]:
+            - generic [ref=e144]: gwth.ai/score
+            - generic [ref=e146]:
+              - generic [ref=e147]:
+                - generic [ref=e148]: Example
+                - generic [ref=e149]:
+                  - img "GWTH" [ref=e150]
+                  - generic [ref=e153]: GWTH Score
+              - generic [ref=e154]:
+                - generic [ref=e155]: "104"
+                - generic [ref=e156]:
+                  - img [ref=e157]
+                  - generic [ref=e158]: stable
+                  - text: Stable
+              - generic [ref=e159]:
+                - img [ref=e160]
+                - generic [ref=e162]:
+                  - generic [ref=e163]: 3 months ago
+                  - generic [ref=e164]: today
+          - generic [ref=e165]: B · Ticker + sparkline · Stable
+        - figure "C · Ticker + tier badge · Stable" [ref=e166]:
+          - generic [ref=e167]:
+            - generic [ref=e172]: gwth.ai/score
+            - generic [ref=e174]:
+              - generic [ref=e175]:
+                - generic [ref=e176]: Example
+                - generic [ref=e177]:
+                  - img "GWTH" [ref=e178]
+                  - generic [ref=e181]: GWTH Score
+              - generic [ref=e182]:
+                - generic [ref=e183]:
+                  - generic [ref=e184]: "104"
+                  - generic [ref=e185]: Top 1%
+                - generic [ref=e186]:
+                  - img [ref=e187]
+                  - generic [ref=e188]: stable
+                  - text: Stable
+                - generic [ref=e189]: vs 3 months ago
+          - generic [ref=e190]: C · Ticker + tier badge · Stable
+    - generic [ref=e191]:
+      - generic [ref=e192]:
+        - heading "State · Down trend" [level=3] [ref=e193]
+        - generic [ref=e194]: 120 → 95
+      - generic [ref=e195]:
+        - figure "A · Minimal ticker · Down trend" [ref=e196]:
+          - generic [ref=e197]:
+            - generic [ref=e202]: gwth.ai/score
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - generic [ref=e206]: Example
+                - generic [ref=e207]:
+                  - img "GWTH" [ref=e208]
+                  - generic [ref=e211]: GWTH Score
+              - generic [ref=e212]:
+                - generic [ref=e213]: "95"
+                - generic [ref=e214]:
+                  - img [ref=e215]
+                  - generic [ref=e218]: trending down
+                  - text: "-25"
+                  - generic [ref=e219]: "-20.8%"
+                - generic [ref=e220]: vs 3 months ago
+          - generic [ref=e221]: A · Minimal ticker · Down trend
+        - figure "B · Ticker + sparkline · Down trend" [ref=e222]:
+          - generic [ref=e223]:
+            - generic [ref=e228]: gwth.ai/score
+            - generic [ref=e230]:
+              - generic [ref=e231]:
+                - generic [ref=e232]: Example
+                - generic [ref=e233]:
+                  - img "GWTH" [ref=e234]
+                  - generic [ref=e237]: GWTH Score
+              - generic [ref=e238]:
+                - generic [ref=e239]: "95"
+                - generic [ref=e240]:
+                  - img [ref=e241]
+                  - generic [ref=e244]: trending down
+                  - text: "-25"
+                  - generic [ref=e245]: "-20.8%"
+              - generic [ref=e246]:
+                - img [ref=e247]
+                - generic [ref=e249]:
+                  - generic [ref=e250]: 3 months ago
+                  - generic [ref=e251]: today
+          - generic [ref=e252]: B · Ticker + sparkline · Down trend
+        - figure "C · Ticker + tier badge · Down trend" [ref=e253]:
+          - generic [ref=e254]:
+            - generic [ref=e259]: gwth.ai/score
+            - generic [ref=e261]:
+              - generic [ref=e262]:
+                - generic [ref=e263]: Example
+                - generic [ref=e264]:
+                  - img "GWTH" [ref=e265]
+                  - generic [ref=e268]: GWTH Score
+              - generic [ref=e269]:
+                - generic [ref=e270]:
+                  - generic [ref=e271]: "95"
+                  - generic [ref=e272]: Top 2%
+                - generic [ref=e273]:
+                  - img [ref=e274]
+                  - generic [ref=e277]: trending down
+                  - text: "-25"
+                  - generic [ref=e278]: "-20.8%"
+                - generic [ref=e279]: vs 3 months ago
+          - generic [ref=e280]: C · Ticker + tier badge · Down trend
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e282]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e289] [cursor=pointer]:
+    - img [ref=e290]
+  - alert [ref=e293]

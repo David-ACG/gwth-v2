@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GWTH Studio · Lesson pipeline</title>
+<meta name="description" content="Internal lesson production pipeline for GWTH.ai. Track lessons from draft to approved.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500;1,8..60,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4; --bg-2: #F5F0E6; --surface: #FFFFFF; --sunken: #F0EBE0;
+  --border: #E5DFD2; --border-strong: #D4CCBA;
+  --ink: #22301F; --ink-2: #3F4A3B; --ink-3: #6F7569; --muted: #6F7569; --stone: #948A76;
+  --teal: #2A5D69; --teal-deep: #1E454F; --teal-soft: #C2D5D9; --teal-tint: rgba(42,93,105,0.08);
+  --rust: #A94C2E;
+  --forest: #5C7F4A; --forest-deep: #41603A; --forest-soft: #D4DCC9; --forest-tint: rgba(92,127,74,0.10);
+  --sage: #7B8267;
+  --amber: #B8893F; --amber-deep: #8A6730; --amber-soft: #EEDDB8; --amber-tint: rgba(184,137,63,0.12);
+  --indigo: #3A4773;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-feature-settings: 'kern' 1, 'liga' 1; min-height: 100vh; display: flex; flex-direction: column; }
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+button { font: inherit; color: inherit; }
+::selection { background: var(--teal-soft); color: var(--ink); }
+
+/* ===== Topbar (Studio variant) ===== */
+.topbar { position: sticky; top: 0; z-index: 20; background: rgba(251,249,244,0.92); backdrop-filter: saturate(160%) blur(10px); -webkit-backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--border); }
+.topbar-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; }
+.brand-link { display: flex; align-items: center; gap: 14px; }
+.brand-link svg { width: 88px; height: auto; display: block; }
+.studio-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); padding: 3px 8px; border: 1px solid var(--border-strong); border-radius: 2px; line-height: 1; }
+.topbar-nav { display: flex; gap: 28px; justify-self: center; align-items: center; }
+.topbar-nav a { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); font-weight: 500; letter-spacing: -0.003em; padding: 4px 0; position: relative; }
+.topbar-nav a:hover { color: var(--ink); text-decoration: none; }
+.topbar-nav a.is-active { color: var(--ink); }
+.topbar-nav a.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -19px; height: 1.5px; background: var(--ink); }
+.user-chip { display: inline-flex; align-items: center; gap: 10px; padding: 5px 10px 5px 6px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; background: transparent; color: var(--ink); font-family: var(--font-body); font-size: 13px; font-weight: 500; }
+.user-chip:hover { border-color: var(--border-strong); }
+.user-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: #EDEAE6; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-style: italic; font-size: 12px; letter-spacing: -0.01em; }
+.user-chip .caret { font-family: var(--font-mono); font-size: 10px; color: var(--muted); margin-left: 2px; }
+
+/* ===== Page ===== */
+.page { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 48px 32px 96px; }
+
+/* ===== Greeting ===== */
+.greeting { margin-bottom: 40px; }
+.greeting-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.greeting-eyebrow .dot { width: 6px; height: 6px; background: var(--ink); border-radius: 50%; }
+.greeting h1 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(36px, 4.5vw, 48px); line-height: 1.05; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 12px; text-wrap: balance; max-width: 22ch; }
+.greeting-sub { font-family: var(--font-body); font-size: 16px; line-height: 1.55; color: var(--ink-2); max-width: 60ch; }
+.greeting-sub em { font-style: italic; color: var(--ink); }
+
+/* ===== Stats strip ===== */
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin: 0 0 40px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.stat { padding: 22px 24px 24px; border-right: 1px solid var(--border); }
+.stat:last-child { border-right: 0; }
+.stat-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.stat-label .dot { width: 6px; height: 6px; border-radius: 50%; }
+.stat[data-status="draft"] .stat-label .dot     { background: var(--stone); }
+.stat[data-status="review"] .stat-label .dot    { background: var(--teal); }
+.stat[data-status="ready"] .stat-label .dot     { background: var(--forest); }
+.stat[data-status="approved"] .stat-label .dot  { background: var(--forest-deep); }
+.stat[data-status="refresh"] .stat-label .dot   { background: var(--amber); }
+.stat-num { font-family: var(--font-display); font-weight: 400; font-size: 38px; line-height: 1; color: var(--ink); letter-spacing: -0.02em; font-feature-settings: 'tnum' 1, 'onum' 1; }
+.stat-meta { font-family: var(--font-body); font-size: 12.5px; color: var(--ink-3); margin-top: 6px; }
+
+/* ===== Filter bar ===== */
+.filterbar { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.filters { display: flex; flex-wrap: wrap; gap: 4px; }
+.filter-chip { background: transparent; border: 1px solid transparent; padding: 6px 12px; border-radius: 999px; font-family: var(--font-body); font-size: 13px; color: var(--ink-2); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+.filter-chip:hover { background: var(--bg-2); }
+.filter-chip.is-active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.filter-chip .count { font-family: var(--font-mono); font-size: 11px; opacity: 0.7; }
+.filter-chip.is-active .count { opacity: 0.7; }
+.filter-chip .dot { width: 5px; height: 5px; border-radius: 50%; }
+.filter-chip[data-status="all"] .dot { background: currentColor; opacity: 0.5; }
+.filter-chip[data-status="draft"] .dot    { background: var(--stone); }
+.filter-chip[data-status="review"] .dot   { background: var(--teal); }
+.filter-chip[data-status="ready"] .dot    { background: var(--forest); }
+.filter-chip[data-status="approved"] .dot { background: var(--forest-deep); }
+.filter-chip[data-status="refresh"] .dot  { background: var(--amber); }
+.search { display: flex; align-items: center; gap: 0; }
+.search-input { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 8px 14px; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.02em; color: var(--ink); outline: none; width: 240px; transition: border-color 0.15s ease; }
+.search-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }
+.search-input::placeholder { color: var(--muted); letter-spacing: 0.04em; }
+
+/* ===== Table ===== */
+.lessons { width: 100%; margin-bottom: 64px; }
+.lessons-head { display: grid; grid-template-columns: 88px 1fr 110px 80px 84px 116px 96px 80px 92px; gap: 14px; padding: 14px 8px 12px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); align-items: center; border-bottom: 1px solid var(--ink); }
+.lessons-head .col-title { text-align: left; }
+.lessons-head .col-words,
+.lessons-head .col-figs,
+.lessons-head .col-audio,
+.lessons-head .col-build,
+.lessons-head .col-comments,
+.lessons-head .col-updated,
+.lessons-head .col-action { text-align: left; }
+.lesson-row { display: grid; grid-template-columns: 88px 1fr 110px 80px 84px 116px 96px 80px 92px; gap: 14px; padding: 16px 8px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.12s ease; }
+.lesson-row:hover { background: var(--bg-2); }
+.lesson-row.is-hidden { display: none; }
+.lesson-row.is-emphasis { background: var(--teal-tint); }
+.lesson-row.is-emphasis:hover { background: var(--teal-tint); }
+.lesson-id { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; color: var(--ink-2); font-weight: 500; }
+.lesson-title-cell { font-family: var(--font-body); font-size: 14.5px; line-height: 1.35; color: var(--ink); text-wrap: pretty; }
+.lesson-title-cell .module { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 3px; font-weight: 400; }
+.status-pill { display: inline-flex; align-items: center; gap: 7px; padding: 4px 10px; border-radius: 999px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; line-height: 1; height: 22px; white-space: nowrap; }
+.status-pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-pill[data-status="draft"]    { background: var(--sunken);     color: var(--ink-2); }
+.status-pill[data-status="draft"] .dot     { background: var(--stone); }
+.status-pill[data-status="review"]   { background: var(--teal-tint);  color: var(--teal-deep); }
+.status-pill[data-status="review"] .dot    { background: var(--teal); }
+.status-pill[data-status="ready"]    { background: var(--forest-tint);color: var(--forest-deep); }
+.status-pill[data-status="ready"] .dot     { background: var(--forest); }
+.status-pill[data-status="approved"] { background: var(--forest-soft);color: var(--forest-deep); }
+.status-pill[data-status="approved"] .dot  { background: var(--forest-deep); }
+.status-pill[data-status="refresh"]  { background: var(--amber-tint); color: var(--amber-deep); }
+.status-pill[data-status="refresh"] .dot   { background: var(--amber); }
+.col-num { font-family: var(--font-mono); font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+.col-num.is-faint { color: var(--ink-3); }
+.media-cell { display: flex; flex-direction: column; gap: 3px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+.media-cell .row { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.media-cell .row.is-missing { color: var(--amber-deep); }
+.media-cell .row.is-ok { color: var(--forest-deep); }
+.media-cell .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--stone); }
+.media-cell .row.is-ok .dot { background: var(--forest); }
+.media-cell .row.is-missing .dot { background: var(--amber); }
+.comments-cell { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); letter-spacing: 0.04em; }
+.comments-cell.has-open { color: var(--teal-deep); font-weight: 500; }
+.comments-cell.zero { color: var(--ink-3); }
+.updated-cell { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em; color: var(--ink-2); }
+.updated-cell.is-today { color: var(--ink); font-weight: 500; }
+.action-cell { text-align: left; }
+.action-link { font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--teal); display: inline-flex; align-items: center; gap: 5px; }
+.action-link:hover { color: var(--teal-deep); text-decoration: none; }
+.action-link .arrow { font-family: var(--font-mono); font-size: 13px; }
+
+.empty-state { display: none; padding: 64px 24px; text-align: center; }
+.empty-state.show { display: block; }
+.empty-state h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 26px; color: var(--ink); margin-bottom: 8px; line-height: 1.25; }
+.empty-state p { font-family: var(--font-body); font-size: 14.5px; color: var(--ink-2); max-width: 42ch; margin: 0 auto; }
+
+/* ===== Audit log ===== */
+.audit { margin-top: 16px; }
+.section-h { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; display: flex; align-items: baseline; justify-content: space-between; }
+.section-h .right { color: var(--ink-2); font-weight: 500; }
+.audit-list { border-top: 1px solid var(--border); }
+.audit-row { display: grid; grid-template-columns: 100px 110px 1fr 140px; gap: 24px; padding: 14px 8px; border-bottom: 1px solid var(--border); align-items: baseline; }
+.audit-when { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); letter-spacing: 0.04em; }
+.audit-id { font-family: var(--font-mono); font-size: 12px; color: var(--ink); font-weight: 500; letter-spacing: 0.04em; }
+.audit-action { font-family: var(--font-body); font-size: 14px; color: var(--ink); font-style: italic; font-family: var(--font-display); font-weight: 400; font-feature-settings: 'kern' 1, 'liga' 1; }
+.audit-by { font-family: var(--font-body); font-size: 12.5px; color: var(--ink-2); }
+.audit-by .av { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); color: #EDEAE6; font-family: var(--font-display); font-style: italic; font-size: 10.5px; margin-right: 7px; vertical-align: -3px; }
+
+/* ===== Footer ===== */
+.footer { padding: 36px 0 0; margin-top: 64px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: center; }
+.footer-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.footer-meta .sep { color: var(--border-strong); margin: 0 10px; }
+.footer-links { display: flex; gap: 22px; }
+.footer-links a { font-family: var(--font-body); font-size: 13px; color: var(--ink-2); }
+.footer-links a:hover { color: var(--ink); text-decoration: none; }
+
+/* ===== Responsive ===== */
+@media (max-width: 1100px) {
+  .lessons-head, .lesson-row { grid-template-columns: 80px 1fr 110px 64px 84px 96px 76px 80px; gap: 12px; }
+  .lessons-head .col-build, .lesson-row .build-cell { display: none; }
+}
+@media (max-width: 880px) {
+  .stats { grid-template-columns: repeat(3, 1fr); }
+  .stat:nth-child(4), .stat:nth-child(5) { border-top: 1px solid var(--border); }
+  .stat:nth-child(3) { border-right: 0; }
+  .lessons-head { display: none; }
+  .lesson-row { grid-template-columns: 1fr auto; gap: 8px 16px; padding: 18px 8px; }
+  .lesson-row > .lesson-id { grid-column: 1 / -1; order: 0; }
+  .lesson-row > .lesson-title-cell { grid-column: 1; order: 1; }
+  .lesson-row > .status-pill { grid-column: 2; order: 1; justify-self: end; }
+  .lesson-row > .col-num,
+  .lesson-row > .media-cell,
+  .lesson-row > .comments-cell,
+  .lesson-row > .updated-cell { grid-column: 1 / -1; order: 2; font-size: 11px; }
+  .lesson-row > .build-cell { display: none; }
+  .lesson-row > .col-num.figs-cell { display: none; }
+  .lesson-row > .col-num.words-cell { display: none; }
+  .lesson-row > .action-cell { grid-column: 1 / -1; order: 3; justify-self: start; margin-top: 6px; }
+  .audit-row { grid-template-columns: 1fr 1fr; gap: 6px 18px; }
+  .audit-when, .audit-id, .audit-action, .audit-by { font-size: 12px; }
+  .audit-action { grid-column: 1 / -1; }
+  .topbar-inner { grid-template-columns: auto 1fr auto; gap: 18px; padding: 14px 22px; }
+  .topbar-nav { display: none; }
+  .studio-tag { display: none; }
+  .user-chip span:not(.user-avatar):not(.caret) { display: none; }
+  .filterbar { grid-template-columns: 1fr; gap: 12px; }
+  .search-input { width: 100%; }
+  .page { padding: 32px 22px 64px; }
+}
+
+@media print {
+  .topbar, .filterbar, .footer, .empty-state { display: none !important; }
+  body { background: #FFFFFF; }
+  .stats { border-color: #000; }
+  .lessons-head { border-color: #000; }
+  .lesson-row { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Topbar ===== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand-link" href="gwth-dashboard.html" aria-label="GWTH.ai home">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><style>.pl1{fill:#22301F;}.pl2{fill:#A94C2E;}</style></defs>
+        <path class="pl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="pl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="pl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="pl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="pl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="pl1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="pl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="pl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="pl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+      <span class="studio-tag">Studio</span>
+    </a>
+    <nav class="topbar-nav" aria-label="Primary">
+      <a href="#" class="is-active">Pipeline</a>
+      <a href="#">Library</a>
+      <a href="#">Activity</a>
+    </nav>
+    <button type="button" class="user-chip" aria-label="Account menu">
+      <span class="user-avatar" aria-hidden="true">D</span>
+      <span>David</span>
+      <span class="caret">▾</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== Page ===== -->
+<main class="page">
+
+  <!-- Greeting -->
+  <section class="greeting">
+    <p class="greeting-eyebrow"><span class="dot"></span>Pipeline · Tuesday 19 May 2026</p>
+    <h1>Eighteen lessons, four months in.</h1>
+    <p class="greeting-sub">Seven drafts in flight, three waiting on your review, and one that needs a refresh before Module 04 stays current. <em>Sarah's cohort hits Module 03 in eleven days.</em></p>
+  </section>
+
+  <!-- Stats strip -->
+  <section class="stats" aria-label="Pipeline status overview">
+    <div class="stat" data-status="draft">
+      <div class="stat-label"><span class="dot"></span>Draft</div>
+      <div class="stat-num">7</div>
+      <div class="stat-meta">in writing</div>
+    </div>
+    <div class="stat" data-status="review">
+      <div class="stat-label"><span class="dot"></span>In review</div>
+      <div class="stat-num">3</div>
+      <div class="stat-meta">waiting on you</div>
+    </div>
+    <div class="stat" data-status="ready">
+      <div class="stat-label"><span class="dot"></span>Ready</div>
+      <div class="stat-num">3</div>
+      <div class="stat-meta">queued to publish</div>
+    </div>
+    <div class="stat" data-status="approved">
+      <div class="stat-label"><span class="dot"></span>Approved</div>
+      <div class="stat-num">4</div>
+      <div class="stat-meta">live to learners</div>
+    </div>
+    <div class="stat" data-status="refresh">
+      <div class="stat-label"><span class="dot"></span>Needs refresh</div>
+      <div class="stat-num">1</div>
+      <div class="stat-meta">in Module 04</div>
+    </div>
+  </section>
+
+  <!-- Filter bar -->
+  <div class="filterbar">
+    <div class="filters" role="tablist" aria-label="Filter by status">
+      <button type="button" class="filter-chip is-active" data-status="all" role="tab"><span class="dot"></span>All <span class="count">18</span></button>
+      <button type="button" class="filter-chip" data-status="draft" role="tab"><span class="dot"></span>Draft <span class="count">7</span></button>
+      <button type="button" class="filter-chip" data-status="review" role="tab"><span class="dot"></span>In review <span class="count">3</span></button>
+      <button type="button" class="filter-chip" data-status="ready" role="tab"><span class="dot"></span>Ready <span class="count">3</span></button>
+      <button type="button" class="filter-chip" data-status="approved" role="tab"><span class="dot"></span>Approved <span class="count">4</span></button>
+      <button type="button" class="filter-chip" data-status="refresh" role="tab"><span class="dot"></span>Needs refresh <span class="count">1</span></button>
+    </div>
+    <div class="search">
+      <input class="search-input" id="searchInput" type="search" placeholder="Search title or M·L code…" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+
+  <!-- Lesson table -->
+  <section class="lessons" aria-label="All lessons">
+    <div class="lessons-head" role="row">
+      <span class="col-id">Lesson</span>
+      <span class="col-title">Title</span>
+      <span class="col-status">Status</span>
+      <span class="col-words">Words</span>
+      <span class="col-figs">Figures</span>
+      <span class="col-audio">Audio</span>
+      <span class="col-build">Build</span>
+      <span class="col-comments">Comments</span>
+      <span class="col-updated">Updated</span>
+      <span class="col-action"></span>
+    </div>
+
+    <div id="lessonRows">
+      <!-- M1 L01 — real lesson, in review with most comments -->
+      <article class="lesson-row is-emphasis" data-status="review" data-search="m1l01 welcome to gwth">
+        <span class="lesson-id">M1 · L01</span>
+        <div class="lesson-title-cell">Welcome to GWTH<span class="module">Module 01 · Foundations</span></div>
+        <span class="status-pill" data-status="review"><span class="dot"></span>In review</span>
+        <span class="col-num words-cell">1,847</span>
+        <span class="col-num figs-cell">17</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-missing"><span class="dot"></span>Intro missing</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell has-open">3 open</span>
+        <span class="updated-cell is-today">Today</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M1 L02 -->
+      <article class="lesson-row" data-status="ready" data-search="m1l02 what gwth is for">
+        <span class="lesson-id">M1 · L02</span>
+        <div class="lesson-title-cell">What GWTH is for<span class="module">Module 01 · Foundations</span></div>
+        <span class="status-pill" data-status="ready"><span class="dot"></span>Ready</span>
+        <span class="col-num words-cell">1,402</span>
+        <span class="col-num figs-cell">9</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">3d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M1 L03 -->
+      <article class="lesson-row" data-status="ready" data-search="m1l03 how a lesson works">
+        <span class="lesson-id">M1 · L03</span>
+        <div class="lesson-title-cell">How a lesson works<span class="module">Module 01 · Foundations</span></div>
+        <span class="status-pill" data-status="ready"><span class="dot"></span>Ready</span>
+        <span class="col-num words-cell">1,108</span>
+        <span class="col-num figs-cell">6</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">5d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M1 L04 -->
+      <article class="lesson-row" data-status="approved" data-search="m1l04 your gwth score">
+        <span class="lesson-id">M1 · L04</span>
+        <div class="lesson-title-cell">Your GWTH score<span class="module">Module 01 · Foundations</span></div>
+        <span class="status-pill" data-status="approved"><span class="dot"></span>Approved</span>
+        <span class="col-num words-cell">1,295</span>
+        <span class="col-num figs-cell">8</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">14 May</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M1 L05 -->
+      <article class="lesson-row" data-status="draft" data-search="m1l05 the four-month cycle four month cycle">
+        <span class="lesson-id">M1 · L05</span>
+        <div class="lesson-title-cell">The four-month cycle<span class="module">Module 01 · Foundations</span></div>
+        <span class="status-pill" data-status="draft"><span class="dot"></span>Draft</span>
+        <span class="col-num words-cell">684</span>
+        <span class="col-num figs-cell is-faint">2</span>
+        <div class="media-cell">
+          <span class="row is-missing"><span class="dot"></span>Narration —</span>
+          <span class="row is-missing"><span class="dot"></span>Intro —</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-missing"><span class="dot"></span>Video —</span>
+          <span class="row is-missing"><span class="dot"></span>Steps —</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">1d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Open<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M2 L01 -->
+      <article class="lesson-row" data-status="approved" data-search="m2l01 from rule-based to ml rule based machine learning">
+        <span class="lesson-id">M2 · L01</span>
+        <div class="lesson-title-cell">From rule-based to machine learning<span class="module">Module 02 · A short history</span></div>
+        <span class="status-pill" data-status="approved"><span class="dot"></span>Approved</span>
+        <span class="col-num words-cell">1,503</span>
+        <span class="col-num figs-cell">11</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">8 May</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M2 L02 -->
+      <article class="lesson-row" data-status="approved" data-search="m2l02 why deep learning won">
+        <span class="lesson-id">M2 · L02</span>
+        <div class="lesson-title-cell">Why deep learning won<span class="module">Module 02 · A short history</span></div>
+        <span class="status-pill" data-status="approved"><span class="dot"></span>Approved</span>
+        <span class="col-num words-cell">1,762</span>
+        <span class="col-num figs-cell">14</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">12 May</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M2 L03 -->
+      <article class="lesson-row" data-status="review" data-search="m2l03 the transformer turning point">
+        <span class="lesson-id">M2 · L03</span>
+        <div class="lesson-title-cell">The transformer turning point<span class="module">Module 02 · A short history</span></div>
+        <span class="status-pill" data-status="review"><span class="dot"></span>In review</span>
+        <span class="col-num words-cell">2,108</span>
+        <span class="col-num figs-cell">13</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-missing"><span class="dot"></span>Intro missing</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell has-open">2 open</span>
+        <span class="updated-cell">Yesterday</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M2 L04 -->
+      <article class="lesson-row" data-status="review" data-search="m2l04 todays foundation models today foundation models">
+        <span class="lesson-id">M2 · L04</span>
+        <div class="lesson-title-cell">Today's foundation models<span class="module">Module 02 · A short history</span></div>
+        <span class="status-pill" data-status="review"><span class="dot"></span>In review</span>
+        <span class="col-num words-cell">1,944</span>
+        <span class="col-num figs-cell">10</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell has-open">1 open</span>
+        <span class="updated-cell">2d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M2 L05 -->
+      <article class="lesson-row" data-status="draft" data-search="m2l05 what might come next">
+        <span class="lesson-id">M2 · L05</span>
+        <div class="lesson-title-cell">What might come next<span class="module">Module 02 · A short history</span></div>
+        <span class="status-pill" data-status="draft"><span class="dot"></span>Draft</span>
+        <span class="col-num words-cell is-faint">312</span>
+        <span class="col-num figs-cell is-faint">0</span>
+        <div class="media-cell">
+          <span class="row is-missing"><span class="dot"></span>Narration —</span>
+          <span class="row is-missing"><span class="dot"></span>Intro —</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-missing"><span class="dot"></span>Video —</span>
+          <span class="row is-missing"><span class="dot"></span>Steps —</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">4d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Open<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M3 L01 -->
+      <article class="lesson-row" data-status="ready" data-search="m3l01 the shape of a prompt">
+        <span class="lesson-id">M3 · L01</span>
+        <div class="lesson-title-cell">The shape of a prompt<span class="module">Module 03 · Working with prompts</span></div>
+        <span class="status-pill" data-status="ready"><span class="dot"></span>Ready</span>
+        <span class="col-num words-cell">1,621</span>
+        <span class="col-num figs-cell">8</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">6d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M3 L02 -->
+      <article class="lesson-row" data-status="draft" data-search="m3l02 asking for structure">
+        <span class="lesson-id">M3 · L02</span>
+        <div class="lesson-title-cell">Asking for structure<span class="module">Module 03 · Working with prompts</span></div>
+        <span class="status-pill" data-status="draft"><span class="dot"></span>Draft</span>
+        <span class="col-num words-cell">1,082</span>
+        <span class="col-num figs-cell is-faint">3</span>
+        <div class="media-cell">
+          <span class="row is-missing"><span class="dot"></span>Narration —</span>
+          <span class="row is-missing"><span class="dot"></span>Intro —</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-missing"><span class="dot"></span>Video —</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">2d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Open<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M3 L03 -->
+      <article class="lesson-row" data-status="draft" data-search="m3l03 common prompt failures">
+        <span class="lesson-id">M3 · L03</span>
+        <div class="lesson-title-cell">Common prompt failures<span class="module">Module 03 · Working with prompts</span></div>
+        <span class="status-pill" data-status="draft"><span class="dot"></span>Draft</span>
+        <span class="col-num words-cell">846</span>
+        <span class="col-num figs-cell is-faint">2</span>
+        <div class="media-cell">
+          <span class="row is-missing"><span class="dot"></span>Narration —</span>
+          <span class="row is-missing"><span class="dot"></span>Intro —</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-missing"><span class="dot"></span>Video —</span>
+          <span class="row is-missing"><span class="dot"></span>Steps —</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">4d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Open<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M3 L04 -->
+      <article class="lesson-row" data-status="draft" data-search="m3l04 refining iteratively">
+        <span class="lesson-id">M3 · L04</span>
+        <div class="lesson-title-cell">Refining iteratively<span class="module">Module 03 · Working with prompts</span></div>
+        <span class="status-pill" data-status="draft"><span class="dot"></span>Draft</span>
+        <span class="col-num words-cell is-faint">418</span>
+        <span class="col-num figs-cell is-faint">1</span>
+        <div class="media-cell">
+          <span class="row is-missing"><span class="dot"></span>Narration —</span>
+          <span class="row is-missing"><span class="dot"></span>Intro —</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-missing"><span class="dot"></span>Video —</span>
+          <span class="row is-missing"><span class="dot"></span>Steps —</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">7d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Open<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M4 L11 -->
+      <article class="lesson-row" data-status="ready" data-search="m4l11 what models cant see can not see">
+        <span class="lesson-id">M4 · L11</span>
+        <div class="lesson-title-cell">What models can't see<span class="module">Module 04 · How models think</span></div>
+        <span class="status-pill" data-status="ready"><span class="dot"></span>Ready</span>
+        <span class="col-num words-cell">1,512</span>
+        <span class="col-num figs-cell">9</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">28 Apr</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Review<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M4 L12 — needs refresh -->
+      <article class="lesson-row" data-status="refresh" data-search="m4l12 how models think about uncertainty">
+        <span class="lesson-id">M4 · L12</span>
+        <div class="lesson-title-cell">How models think about uncertainty<span class="module">Module 04 · How models think</span></div>
+        <span class="status-pill" data-status="refresh"><span class="dot"></span>Needs refresh</span>
+        <span class="col-num words-cell">1,876</span>
+        <span class="col-num figs-cell">11</span>
+        <div class="media-cell">
+          <span class="row is-ok"><span class="dot"></span>Narration ok</span>
+          <span class="row is-ok"><span class="dot"></span>Intro ok</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-ok"><span class="dot"></span>Video ok</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell has-open">2 open</span>
+        <span class="updated-cell">11 Feb</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Refresh<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M4 L13 -->
+      <article class="lesson-row" data-status="draft" data-search="m4l13 calibration in practice">
+        <span class="lesson-id">M4 · L13</span>
+        <div class="lesson-title-cell">Calibration in practice<span class="module">Module 04 · How models think</span></div>
+        <span class="status-pill" data-status="draft"><span class="dot"></span>Draft</span>
+        <span class="col-num words-cell">951</span>
+        <span class="col-num figs-cell is-faint">3</span>
+        <div class="media-cell">
+          <span class="row is-missing"><span class="dot"></span>Narration —</span>
+          <span class="row is-missing"><span class="dot"></span>Intro —</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-missing"><span class="dot"></span>Video —</span>
+          <span class="row is-ok"><span class="dot"></span>Steps written</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">3d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Open<span class="arrow">→</span></a></span>
+      </article>
+
+      <!-- M4 L14 -->
+      <article class="lesson-row" data-status="draft" data-search="m4l14 trust and verify">
+        <span class="lesson-id">M4 · L14</span>
+        <div class="lesson-title-cell">Trust and verify<span class="module">Module 04 · How models think</span></div>
+        <span class="status-pill" data-status="draft"><span class="dot"></span>Draft</span>
+        <span class="col-num words-cell is-faint">524</span>
+        <span class="col-num figs-cell is-faint">1</span>
+        <div class="media-cell">
+          <span class="row is-missing"><span class="dot"></span>Narration —</span>
+          <span class="row is-missing"><span class="dot"></span>Intro —</span>
+        </div>
+        <div class="media-cell build-cell">
+          <span class="row is-missing"><span class="dot"></span>Video —</span>
+          <span class="row is-missing"><span class="dot"></span>Steps —</span>
+        </div>
+        <span class="comments-cell zero">—</span>
+        <span class="updated-cell">6d ago</span>
+        <span class="action-cell"><a href="gwth-lesson-viewer-review.html" class="action-link">Open<span class="arrow">→</span></a></span>
+      </article>
+    </div>
+
+    <!-- Empty state for any filter that has no matches -->
+    <div class="empty-state" id="emptyState">
+      <h3>Nothing to see here.</h3>
+      <p>No lessons match the current filter. Pick a different status, clear the search, or write something new.</p>
+    </div>
+  </section>
+
+  <!-- Audit log -->
+  <section class="audit">
+    <div class="section-h">
+      <span>Recent decisions</span>
+      <span class="right">Last 14 days</span>
+    </div>
+    <div class="audit-list">
+      <div class="audit-row">
+        <span class="audit-when">14 May</span>
+        <span class="audit-id">M1 · L04</span>
+        <span class="audit-action">"Your GWTH score" approved &mdash; promoted to learners.</span>
+        <span class="audit-by"><span class="av">D</span>David U.</span>
+      </div>
+      <div class="audit-row">
+        <span class="audit-when">12 May</span>
+        <span class="audit-id">M2 · L02</span>
+        <span class="audit-action">"Why deep learning won" approved.</span>
+        <span class="audit-by"><span class="av">D</span>David U.</span>
+      </div>
+      <div class="audit-row">
+        <span class="audit-when">8 May</span>
+        <span class="audit-id">M2 · L01</span>
+        <span class="audit-action">"From rule-based to machine learning" approved.</span>
+        <span class="audit-by"><span class="av">D</span>David U.</span>
+      </div>
+      <div class="audit-row">
+        <span class="audit-when">6 May</span>
+        <span class="audit-id">M3 · L01</span>
+        <span class="audit-action">"The shape of a prompt" promoted to Ready.</span>
+        <span class="audit-by"><span class="av">D</span>David U.</span>
+      </div>
+      <div class="audit-row">
+        <span class="audit-when">28 Apr</span>
+        <span class="audit-id">M4 · L11</span>
+        <span class="audit-action">"What models can't see" promoted to Ready.</span>
+        <span class="audit-by"><span class="av">D</span>David U.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-meta">
+      <span>GWTH Studio</span>
+      <span class="sep">·</span>
+      <span>Pipeline as of 19 May 2026</span>
+      <span class="sep">·</span>
+      <span>Internal — not for learner view</span>
+    </div>
+    <div class="footer-links">
+      <a href="gwth-dashboard.html">Learner dashboard</a>
+      <a href="gwth-lesson-viewer.html">Lesson viewer</a>
+      <a href="gwth-design-system-tokens.html">Design tokens</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var memStore = {};
+  var safeStorage = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return memStore[k] != null ? memStore[k] : null; } },
+    set: function (k, v) { memStore[k] = v; try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  var chips = document.querySelectorAll('.filter-chip');
+  var rows  = document.querySelectorAll('.lesson-row');
+  var input = document.getElementById('searchInput');
+  var emptyState = document.getElementById('emptyState');
+
+  var state = {
+    status: safeStorage.get('pipelineStatus') || 'all',
+    query:  ''
+  };
+
+  function applyFilters() {
+    var q = state.query.trim().toLowerCase();
+    var visible = 0;
+    rows.forEach(function (row) {
+      var statusMatch = state.status === 'all' || row.getAttribute('data-status') === state.status;
+      var searchHay = row.getAttribute('data-search') || '';
+      var titleHay = row.querySelector('.lesson-title-cell').textContent.toLowerCase();
+      var queryMatch = !q || searchHay.indexOf(q) !== -1 || titleHay.indexOf(q) !== -1;
+      if (statusMatch && queryMatch) { row.classList.remove('is-hidden'); visible++; }
+      else { row.classList.add('is-hidden'); }
+    });
+    emptyState.classList.toggle('show', visible === 0);
+    chips.forEach(function (c) { c.classList.toggle('is-active', c.getAttribute('data-status') === state.status); });
+  }
+
+  chips.forEach(function (c) {
+    c.addEventListener('click', function () {
+      state.status = c.getAttribute('data-status');
+      safeStorage.set('pipelineStatus', state.status);
+      applyFilters();
+    });
+  });
+
+  if (input) {
+    input.addEventListener('input', function () {
+      state.query = input.value || '';
+      applyFilters();
+    });
+  }
+
+  applyFilters();
+})();
+</script>
+</body>
+</html>

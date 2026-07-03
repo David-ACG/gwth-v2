@@ -1,0 +1,407 @@
+/*
+ * W12 review scaffolding styles. Throwaway: this whole route is deleted at
+ * finalisation once David has picked. The FDE token block is copied whole from
+ * the register (explainer-video.module.css / DESIGN_FDE §2) so the review pages
+ * match the site in light and dark. No raw hex outside this token block.
+ */
+.shell {
+  --v-bg: #e8e9de;
+  --v-surface: #f1ecdc;
+  --v-ink: #1a1c18;
+  --v-soft: #3a3c34;
+  --v-muted: #5a5c52;
+  --v-line: #c8c8b8;
+  --v-line-soft: #d8d4c4;
+  --v-teal: #2c4a47;
+  --v-teal-deep: #1f3a37;
+  --v-cream: #ece8d2;
+  --v-ochre: #c08a36;
+
+  min-height: 100vh;
+  background: var(--v-bg);
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  color-scheme: light;
+}
+
+:global(.dark) .shell {
+  --v-bg: #14160f;
+  --v-surface: #1f211a;
+  --v-ink: #ece8d2;
+  --v-soft: #b8b5a3;
+  --v-muted: #8a8b7d;
+  --v-line: #2e3128;
+  --v-line-soft: #2a2c24;
+  --v-teal: #1f3a37;
+  --v-teal-deep: #162927;
+  --v-cream: #ece8d2;
+  --v-ochre: #d4a062;
+  color-scheme: dark;
+}
+
+.page {
+  margin: 0 auto;
+  width: min(1000px, calc(100% - 2.5rem));
+  padding: 2.5rem 0 5rem;
+}
+
+/* Top banner: functional mono, makes clear this is review scaffolding. */
+.banner {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.25rem;
+  background: var(--v-teal-deep);
+  color: var(--v-cream);
+  padding: 0.7rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--v-line);
+}
+
+.bannerLabel,
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.bannerNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  align-items: center;
+}
+
+.bannerNav a,
+.themeToggle {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v-cream);
+  text-decoration: none;
+  border: 1px solid rgba(236, 232, 210, 0.35);
+  padding: 0.3rem 0.6rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.bannerNav a[data-active="true"] {
+  background: var(--v-ochre);
+  color: var(--v-teal-deep);
+  border-color: var(--v-ochre);
+}
+
+.bannerNav a:hover,
+.themeToggle:hover {
+  border-color: var(--v-ochre);
+}
+
+.eyebrow {
+  color: var(--v-muted);
+  margin: 0 0 1rem;
+}
+
+.h1 {
+  font-size: clamp(2rem, 4.6vw, 3.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  margin: 0 0 1.1rem;
+}
+
+.h1 em {
+  font-style: italic;
+  color: var(--v-ochre);
+}
+
+.lead {
+  font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+  line-height: 1.55;
+  color: var(--v-soft);
+  max-width: 62ch;
+  margin: 0 0 2rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  margin: 2.5rem 0 0.4rem;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--v-line);
+  margin: 2.5rem 0;
+}
+
+/* Callout for the voice status (VV7B). */
+.callout {
+  border: 1px solid var(--v-line);
+  border-left: 3px solid var(--v-ochre);
+  background: var(--v-surface);
+  padding: 1rem 1.25rem;
+  margin: 1.75rem 0;
+}
+
+.callout p {
+  margin: 0.35rem 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
+.callout strong {
+  color: var(--v-ink);
+}
+
+/* Navigation cards on the hub. */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.navCard {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.35rem 1.4rem;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.navCard:hover {
+  border-color: var(--v-ochre);
+  transform: translateY(-2px);
+}
+
+.navCard h3 {
+  margin: 0.5rem 0 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.navCard p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.45;
+  color: var(--v-muted);
+}
+
+/* Framed video plate (matches the embed register). */
+.plate {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--v-teal-deep);
+  overflow: hidden;
+}
+
+.stage video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Script beat table. */
+.beats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin: 1.5rem 0;
+}
+
+.beat {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.25rem 1.35rem;
+}
+
+.beatHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.beatNo {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v-teal);
+  font-weight: 600;
+}
+
+:global(.dark) .beatNo {
+  color: var(--v-ochre);
+}
+
+.beatOnscreen {
+  font-size: 1.12rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+.beatVo {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--v-soft);
+  margin: 0;
+}
+
+.beatVo::before {
+  content: "VO  ";
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  color: var(--v-muted);
+}
+
+/* VO chunk list for recording / generation. */
+.chunks {
+  list-style: none;
+  counter-reset: chunk;
+  padding: 0;
+  margin: 1.25rem 0;
+}
+
+.chunks li {
+  counter-increment: chunk;
+  position: relative;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 0.9rem 1rem 0.9rem 2.8rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.chunks li::before {
+  content: counter(chunk);
+  position: absolute;
+  left: 0.9rem;
+  top: 0.9rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: var(--v-ochre);
+  font-weight: 700;
+}
+
+/* Motion archetype cards. */
+.motionGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.motionCard {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.35rem;
+}
+
+.motionCard h3 {
+  margin: 0 0 0.2rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.variant {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid var(--v-line);
+  color: var(--v-muted);
+}
+
+.variant[data-default="true"] {
+  border-color: var(--v-ochre);
+  color: var(--v-ink);
+  background: color-mix(in srgb, var(--v-ochre) 14%, transparent);
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: var(--v-muted);
+  margin: 0.5rem 0 0;
+  font-style: italic;
+}
+
+/* Script bake-off: two writers side by side per length. */
+.scriptRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .scriptRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scriptCol {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  padding: 1.25rem 1.35rem;
+}
+
+.scriptColHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.9rem;
+}
+
+.scriptBody p {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--v-ink);
+  margin: 0 0 0.85rem;
+}
+
+.scriptBody p:last-child {
+  margin-bottom: 0;
+}

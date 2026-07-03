@@ -1,0 +1,240 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "GWTH.ai" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+          - button "Collapse sidebar" [ref=e7]:
+            - img
+        - navigation "Main navigation" [ref=e8]:
+          - link "Dashboard" [ref=e9] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e10]
+            - generic [ref=e15]: Dashboard
+          - link "The Course" [ref=e16] [cursor=pointer]:
+            - /url: /course/applied-ai-skills
+            - img [ref=e17]
+            - generic [ref=e19]: The Course
+          - link "Labs" [ref=e20] [cursor=pointer]:
+            - /url: /labs
+            - img [ref=e21]
+            - generic [ref=e23]: Labs
+          - link "Progress" [ref=e24] [cursor=pointer]:
+            - /url: /progress
+            - img [ref=e25]
+            - generic [ref=e27]: Progress
+        - navigation "Secondary navigation" [ref=e28]:
+          - link "Bookmarks" [ref=e29] [cursor=pointer]:
+            - /url: /bookmarks
+            - img [ref=e30]
+            - generic [ref=e32]: Bookmarks
+          - link "Notifications" [ref=e33] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e34]
+            - generic [ref=e37]: Notifications
+          - link "Profile" [ref=e38] [cursor=pointer]:
+            - /url: /profile
+            - img [ref=e39]
+            - generic [ref=e42]: Profile
+          - link "Settings" [ref=e43] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e44]
+            - generic [ref=e47]: Settings
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "breadcrumb" [ref=e50]:
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "Demo" [ref=e53] [cursor=pointer]:
+                - /url: /demo
+            - listitem [ref=e54]:
+              - img [ref=e55]
+            - listitem [ref=e57]:
+              - link "Lesson" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - button "Search... ⌘ K" [ref=e60]:
+            - img
+            - generic [ref=e61]: Search...
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button "Toggle theme" [ref=e62]:
+            - img
+          - button "U" [ref=e63]:
+            - generic [ref=e65]: U
+      - main [ref=e66]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - complementary [ref=e71]:
+              - generic [ref=e72]: LESSON 13 · OUTLINE
+              - generic [ref=e73]:
+                - generic [ref=e74]:
+                  - img [ref=e76]
+                  - generic [ref=e78]:
+                    - generic [ref=e79]: Why this lesson exists
+                    - generic [ref=e80]: VIDEO · 4 MIN
+                  - generic [ref=e81]: P01
+                - generic [ref=e82]:
+                  - img [ref=e84]
+                  - generic [ref=e86]:
+                    - generic [ref=e87]: Picking the right problem
+                    - generic [ref=e88]: PROSE · 3 MIN
+                  - generic [ref=e89]: P02
+                - generic [ref=e90]:
+                  - img [ref=e92]
+                  - generic [ref=e94]:
+                    - generic [ref=e95]: The brief, in plain English
+                    - generic [ref=e96]: PROSE · 4 MIN
+                  - generic [ref=e97]: P03
+                - generic [ref=e98]:
+                  - img [ref=e100]
+                  - generic [ref=e102]:
+                    - generic [ref=e103]: Calling Claude from a script
+                    - generic [ref=e104]: CODE · 4 MIN
+                  - generic [ref=e105]: P04
+                - generic [ref=e106]:
+                  - img [ref=e108]
+                  - generic [ref=e110]:
+                    - generic [ref=e111]: When the model misreads you
+                    - generic [ref=e112]: PROSE · 3 MIN
+                  - generic [ref=e113]: P05
+                - generic [ref=e114]:
+                  - img [ref=e116]
+                  - generic [ref=e118]:
+                    - generic [ref=e119]: Shipping past your own desk
+                    - generic [ref=e120]: PROSE · 3 MIN
+                  - generic [ref=e121]: P06
+                - generic [ref=e122]:
+                  - img [ref=e124]
+                  - generic [ref=e126]:
+                    - generic [ref=e127]: Recap
+                    - generic [ref=e128]: PROSE · 1 MIN
+                  - generic [ref=e129]: P07
+                - generic [ref=e130]:
+                  - img [ref=e132]
+                  - generic [ref=e134]:
+                    - generic [ref=e135]: End-of-lesson Q&A
+                    - generic [ref=e136]: Q&A · 4 MIN
+                  - generic [ref=e137]: P08
+            - main [ref=e138]:
+              - generic [ref=e139]:
+                - generic [ref=e140]: COURSE · LESSON 13 · Q&A
+                - generic [ref=e141]: FRI 8 MAY 2026 · 14:24 BST
+                - generic [ref=e142]: Active · Month 1 of 3
+              - generic [ref=e144]:
+                - generic [ref=e145]:
+                  - generic [ref=e146]:
+                    - generic [ref=e147]: MONTH 1 · LESSON 13 · END-OF-LESSON
+                    - generic [ref=e148]: PAGE 8 OF 8
+                  - 'heading "Q&A: four short questions before this counts." [level=1] [ref=e149]'
+                  - generic [ref=e150]:
+                    - generic [ref=e152]:
+                      - generic [ref=e153]: LESSON 13 PROGRESS
+                      - generic [ref=e154]: 88%
+                    - generic [ref=e165]:
+                      - generic [ref=e166]: MONTH 1 PROGRESS
+                      - generic [ref=e167]: 12 / 24
+                - generic [ref=e171]:
+                  - paragraph [ref=e172]: Pass three of four to count this lesson toward Month 1. No clock, no streak, no penalty for retrying.
+                  - generic [ref=e173]:
+                    - generic [ref=e174]:
+                      - generic [ref=e175]: QUESTION 1 OF 4
+                      - generic [ref=e176]:
+                        - img [ref=e177]
+                        - text: CORRECT
+                    - generic [ref=e179]: Which best describes the brief you should write for your first useful tool?
+                    - generic [ref=e180]:
+                      - generic [ref=e181] [cursor=pointer]:
+                        - generic [ref=e182]: A
+                        - generic [ref=e183]: A two-page PRD with success metrics and acceptance criteria.
+                      - generic [ref=e184] [cursor=pointer]:
+                        - generic [ref=e185]: B
+                        - generic [ref=e186]: A paragraph that fits on a sticky note, specific to your own week.
+                        - img [ref=e187]
+                      - generic [ref=e189] [cursor=pointer]:
+                        - generic [ref=e190]: C
+                        - generic [ref=e191]: A list of every feature you might add later.
+                      - generic [ref=e192] [cursor=pointer]:
+                        - generic [ref=e193]: D
+                        - generic [ref=e194]: A demo problem from the course examples.
+                    - generic [ref=e195]: Right. Small, embarrassing, specific to your week.
+                  - generic [ref=e196]:
+                    - generic [ref=e198]: QUESTION 2 OF 4
+                    - generic [ref=e199]: The lesson lists three rules for picking the brief. Which is NOT one of them?
+                    - generic [ref=e200]:
+                      - generic [ref=e201] [cursor=pointer]:
+                        - generic [ref=e202]: A
+                        - generic [ref=e203]: The input has to come from a place you already go.
+                      - generic [ref=e204] [cursor=pointer]:
+                        - generic [ref=e205]: B
+                        - generic [ref=e206]: The output has to land in a place you already look.
+                      - generic [ref=e207] [cursor=pointer]:
+                        - generic [ref=e208]: C
+                        - generic [ref=e209]: The tool must use at least two model calls in a chain.
+                        - generic [ref=e210]: SELECTED
+                      - generic [ref=e211] [cursor=pointer]:
+                        - generic [ref=e212]: D
+                        - generic [ref=e213]: There is no new tab.
+                  - generic [ref=e214]:
+                    - generic [ref=e216]: QUESTION 3 OF 4
+                    - generic [ref=e217]: In the worked example, where did the tool deliver its output?
+                    - generic [ref=e218]:
+                      - generic [ref=e219] [cursor=pointer]:
+                        - generic [ref=e220]: A
+                        - generic [ref=e221]: A new dashboard at a new URL.
+                      - generic [ref=e222] [cursor=pointer]:
+                        - generic [ref=e223]: B
+                        - generic [ref=e224]: A draft reply inside Gmail, where the input already lived.
+                      - generic [ref=e225] [cursor=pointer]:
+                        - generic [ref=e226]: C
+                        - generic [ref=e227]: A Notion database labelled “triage”.
+                      - generic [ref=e228] [cursor=pointer]:
+                        - generic [ref=e229]: D
+                        - generic [ref=e230]: A weekly Slack digest at 9am.
+                  - generic [ref=e231]:
+                    - generic [ref=e233]: QUESTION 4 OF 4
+                    - generic [ref=e234]: Which outcome does the lesson explicitly say also counts?
+                    - generic [ref=e235]:
+                      - generic [ref=e236] [cursor=pointer]:
+                        - generic [ref=e237]: A
+                        - generic [ref=e238]: Shipping the tool to a colleague.
+                      - generic [ref=e239] [cursor=pointer]:
+                        - generic [ref=e240]: B
+                        - generic [ref=e241]: Running the tool then deciding to throw it away.
+                      - generic [ref=e242] [cursor=pointer]:
+                        - generic [ref=e243]: C
+                        - generic [ref=e244]: Shipping a polished version on the weekend.
+                      - generic [ref=e245] [cursor=pointer]:
+                        - generic [ref=e246]: D
+                        - generic [ref=e247]: Posting it to the cohort Slack.
+                  - generic [ref=e248]:
+                    - generic [ref=e249]: 1 PASSED · 1 SELECTED · 2 PENDING
+                    - button "SUBMIT Q&A" [ref=e250]:
+                      - text: SUBMIT Q&A
+                      - generic [ref=e251]: →
+              - generic [ref=e253]:
+                - button "Play" [ref=e254]:
+                  - img [ref=e255]
+                - generic [ref=e258]:
+                  - generic [ref=e259]:
+                    - generic [ref=e260]: NOW READING
+                    - generic [ref=e261]: Page 3 · The brief, in plain English
+                  - generic [ref=e262]: 00:00 / 03:42
+                - generic [ref=e266]:
+                  - button "1x" [ref=e267] [cursor=pointer]
+                  - button "1.25x" [ref=e268] [cursor=pointer]
+                  - button "1.5x" [ref=e269] [cursor=pointer]
+                - generic [ref=e271]:
+                  - generic [ref=e272]: AUTO-ADVANCE
+                  - switch [checked] [ref=e273] [cursor=pointer]
+                  - generic [ref=e275]: "ON"
+          - generic [ref=e276]: qa-3
+    - generic [ref=e277]:
+      - heading "Command Palette" [level=2] [ref=e278]
+      - paragraph [ref=e279]: Search for a command to run...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e281]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e288] [cursor=pointer]:
+    - img [ref=e289]
+  - alert [ref=e292]

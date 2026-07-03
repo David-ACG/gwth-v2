@@ -1,0 +1,63 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "GWTH home" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "GWTH" [ref=e5]
+        - generic [ref=e8]: GWTH.ai
+      - generic [ref=e9]:
+        - img [ref=e10]
+        - generic [ref=e13]: Public Credential Record
+    - main [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e21]: gwth.ai/score/c67sg#dde5
+          - generic [ref=e22]:
+            - generic [ref=e23]:
+              - generic [ref=e24]: AE
+              - generic [ref=e25]:
+                - generic [ref=e26]: Alex Example
+                - generic [ref=e27]: Operations Lead · UK
+            - generic [ref=e28]:
+              - generic [ref=e29]: Credential Revoked
+              - paragraph [ref=e30]: This credential is no longer valid as of 28 April 2026.
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]: REVOKED ON
+            - generic [ref=e34]: 28 APR 2026
+          - generic [ref=e35]:
+            - generic [ref=e36]: VERIFICATION ID
+            - generic [ref=e37]: C67SG#DDE5
+          - generic [ref=e38]:
+            - generic [ref=e39]: STATUS
+            - generic [ref=e40]: REVOKED
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]: CREDENTIAL · ON RECORD
+            - heading "GWTH Certified Practitioner. No longer recognised by the issuer." [level=1] [ref=e44]:
+              - text: GWTH Certified Practitioner.
+              - text: No longer recognised by the issuer.
+          - generic [ref=e45]:
+            - generic [ref=e46]: CONTACT
+            - paragraph [ref=e47]:
+              - text: If you believe this is in error, contact
+              - link "verify@gwth.ai" [ref=e48] [cursor=pointer]:
+                - /url: mailto:verify@gwth.ai
+              - text: .
+            - paragraph [ref=e49]: Revocation reasons include refund, manual review failure, or breach of the credential terms. The verification ID and the holder’s name remain on record so prior third-party references can be reconciled.
+          - generic [ref=e50]:
+            - generic [ref=e51]: Canonical URL · gwth.ai/score/c67sg#dde5
+            - generic [ref=e52]: Issued by GWTH.ai · UK · No expiry
+    - contentinfo [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - img [ref=e56]
+          - generic [ref=e59]: Verified by gwth.ai
+        - generic [ref=e60]: Canonical record · 99.9 uptime
+      - link "About the GWTH Score →" [ref=e61] [cursor=pointer]:
+        - /url: /about
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e63]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e70] [cursor=pointer]:
+    - img [ref=e71]
+  - alert [ref=e74]

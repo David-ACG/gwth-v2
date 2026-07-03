@@ -1,0 +1,317 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation [ref=e4]:
+        - link "GWTH.ai home" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "GWTH.ai" [ref=e6]
+        - generic [ref=e16]:
+          - link "Free Labs" [ref=e17] [cursor=pointer]:
+            - /url: /labs
+          - link "Lessons" [ref=e18] [cursor=pointer]:
+            - /url: /lessons
+          - link "Pricing" [ref=e19] [cursor=pointer]:
+            - /url: /pricing
+          - link "For Teams" [ref=e20] [cursor=pointer]:
+            - /url: /for-teams
+          - link "About" [ref=e21] [cursor=pointer]:
+            - /url: /about
+          - link "News" [ref=e22] [cursor=pointer]:
+            - /url: /news
+        - generic [ref=e23]:
+          - button "Toggle theme" [ref=e24]:
+            - img
+          - link "Log in" [ref=e25] [cursor=pointer]:
+            - /url: /login
+          - link "Sign Up" [ref=e26] [cursor=pointer]:
+            - /url: /signup
+    - main [ref=e27]:
+      - generic [ref=e29]:
+        - paragraph [ref=e30]: For Teams · UK
+        - heading "AI Training for Your Team" [level=1] [ref=e31]
+        - paragraph [ref=e32]: UK businesses are falling behind on AI skills. The gap is not tools — it is training.
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - paragraph [ref=e36]: The numbers
+          - heading "The numbers are clear" [level=2] [ref=e37]
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e40]: 21%
+            - paragraph [ref=e41]: of UK workers feel confident using AI at work
+          - generic [ref=e42]:
+            - generic [ref=e43]: 1 in 6
+            - paragraph [ref=e44]: UK businesses were using AI as of mid-2025
+          - generic [ref=e45]:
+            - generic [ref=e46]: 45%
+            - paragraph [ref=e47]: less likely for micro businesses to adopt AI vs large firms
+        - paragraph [ref=e48]: "Source: UK Government / DSIT (Jan 2026) · DSIT · ONS · CIPD · BCS · Tech UK · Innovate UK"
+        - paragraph [ref=e49]: Most AI training fails because it teaches tools, not skills. The UK government's own research shows only 21% of workers feel confident using AI. A 20-minute vendor course will not change that. 120 hours of hands-on, vendor-neutral training will.
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - heading "The real cost is not the course. It is your team's time." [level=2] [ref=e53]
+          - paragraph [ref=e54]:
+            - text: At £29.00/month for 3 months, the entire course costs
+            - strong [ref=e55]: £29.00/month per person
+            - text: . That is deliberately priced below even a short consultant call.
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - img [ref=e59]
+              - heading "Typical AI training" [level=3] [ref=e62]
+            - paragraph [ref=e63]: Padded with filler. Repetitive. Outdated within weeks. Your team spends 40 hours on content that could be covered in 10.
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - img [ref=e66]
+              - heading "GWTH" [level=3] [ref=e68]
+            - paragraph [ref=e69]: No repetition. No filler. Only the newest, most relevant applied AI topics. Every minute of your team's time produces a practical skill they use immediately.
+        - paragraph [ref=e70]: When your employees complete lessons during working hours — as many companies encourage — the quality and efficiency of every lesson matters even more. You want zero wasted time. That is exactly what we deliver.
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - paragraph [ref=e74]: Differentiators
+          - heading "Why GWTH for Teams" [level=2] [ref=e75]
+        - generic [ref=e76]:
+          - article [ref=e77]:
+            - generic [ref=e78]:
+              - generic [ref=e79]: "01"
+              - img [ref=e80]
+            - heading "Zero wasted time" [level=3] [ref=e82]
+            - paragraph [ref=e83]: No repetition. No filler. No outdated material. Every lesson teaches the newest, most relevant applied AI skills. Your team's time is more valuable than the course — we treat it that way.
+          - article [ref=e84]:
+            - generic [ref=e85]:
+              - generic [ref=e86]: "02"
+              - img [ref=e87]
+            - heading "Practical projects with walkthroughs" [level=3] [ref=e93]
+            - paragraph [ref=e94]: Not slides. Not theory. Lessons build towards real outputs your team members can use, show, or adapt at work.
+          - article [ref=e95]:
+            - generic [ref=e96]:
+              - generic [ref=e97]: "03"
+              - img [ref=e98]
+            - heading "Beginner-friendly, then builder-ready" [level=3] [ref=e103]
+            - paragraph [ref=e104]: Month 1 starts in plain English. Later lessons introduce AI-assisted coding and building patterns for teams ready to go deeper.
+          - article [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]: "04"
+              - img [ref=e108]
+            - heading "You choose the syllabus" [level=3] [ref=e111]
+            - paragraph [ref=e112]: 64 essential lessons are mandatory. 30 optional lessons cover industry-specific and advanced topics. Team admins assign the right optional lessons to each role — no one wastes time on irrelevant content.
+          - article [ref=e113]:
+            - generic [ref=e114]:
+              - generic [ref=e115]: "05"
+              - img [ref=e116]
+            - heading "Vendor-neutral applied AI" [level=3] [ref=e118]
+            - paragraph [ref=e119]: We do not sell tools. Your team learns transferable AI skills, not product-specific workflows that become obsolete.
+          - article [ref=e120]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: "06"
+              - img [ref=e123]
+            - heading "GWTH Score" [level=3] [ref=e125]
+            - paragraph [ref=e126]: The score reflects completion, demonstrated applied skill, and currentness rather than a one-time certificate.
+          - article [ref=e127]:
+            - generic [ref=e128]:
+              - generic [ref=e129]: "07"
+              - img [ref=e130]
+            - heading "Built for the enterprise conversation" [level=3] [ref=e132]
+            - paragraph [ref=e133]: Month 3 covers governance, ROI measurement, change management, and multi-agent systems. The strategic layer that boards and compliance teams need to hear.
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - paragraph [ref=e137]: Syllabus
+          - heading "Complete control over what your team learns" [level=2] [ref=e138]
+          - paragraph [ref=e139]: Not every role needs every lesson. The team admin dashboard lets you build the right syllabus for each department. Every concept is introduced with a clear explanation of why it matters — not just what it is — so your team stays engaged because they understand the practical benefit before learning the skill.
+        - generic [ref=e140]:
+          - article [ref=e141]:
+            - paragraph [ref=e142]: Month 1
+            - heading "Foundations" [level=3] [ref=e143]
+            - paragraph [ref=e144]: 24 mandatory
+            - paragraph [ref=e145]: Move beyond using ChatGPT like Google. Learn AI foundations, the six primitives, and practical AI-assisted building.
+          - article [ref=e146]:
+            - paragraph [ref=e147]: Month 2
+            - heading "Apps, Workflows & Consulting" [level=3] [ref=e148]
+            - paragraph [ref=e149]: 20 mandatory + 15 optional
+            - paragraph [ref=e150]: Go deeper into building, workflows, small-business use cases, and consultant-level applied AI skills.
+          - article [ref=e151]:
+            - paragraph [ref=e152]: Month 3
+            - heading "Enterprise Transformation" [level=3] [ref=e153]
+            - paragraph [ref=e154]: 20 mandatory + 15 optional
+            - paragraph [ref=e155]: Multi-agent systems, self-hosted AI, governance frameworks, ROI measurement, and change management. The strategic layer that turns individual skills into organisational capability.
+        - generic [ref=e156]:
+          - heading "How syllabus control works" [level=3] [ref=e157]
+          - list [ref=e158]:
+            - listitem [ref=e159]:
+              - img [ref=e160]
+              - generic [ref=e162]: 64 mandatory lessons cover the essential AI skills everyone needs — no choices required
+            - listitem [ref=e163]:
+              - img [ref=e164]
+              - generic [ref=e166]: 30 optional lessons cover industry-specific and advanced topics
+            - listitem [ref=e167]:
+              - img [ref=e168]
+              - generic [ref=e170]: Team admins assign relevant optional lessons per role via the dashboard
+            - listitem [ref=e171]:
+              - img [ref=e172]
+              - generic [ref=e174]: Individual learners (non-team) pick their own path from optional lessons
+            - listitem [ref=e175]:
+              - img [ref=e176]
+              - generic [ref=e178]: Progress tracking shows completion rates per person and per department
+      - generic [ref=e180]:
+        - generic [ref=e181]:
+          - paragraph [ref=e182]: Logistics
+          - heading "How it works" [level=2] [ref=e183]
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - generic [ref=e186]: 3 months
+            - paragraph [ref=e187]: structured curriculum
+          - generic [ref=e188]:
+            - generic [ref=e189]: 5 hours/week
+            - paragraph [ref=e190]: per team member
+          - generic [ref=e191]:
+            - generic [ref=e192]: Fully online
+            - paragraph [ref=e193]: no travel required
+          - generic [ref=e194]:
+            - generic [ref=e195]: Self-paced
+            - paragraph [ref=e196]: fits any schedule
+          - generic [ref=e197]:
+            - generic [ref=e198]: Daily updates
+            - paragraph [ref=e199]: always current
+      - generic [ref=e201]:
+        - generic [ref=e202]:
+          - paragraph [ref=e203]: Investment
+          - heading "Same per-person price for any team size." [level=2] [ref=e204]
+        - generic [ref=e205]:
+          - generic [ref=e206]:
+            - generic [ref=e207]: £29.00/month per person
+            - paragraph [ref=e208]: per course month, then £7.50/month optional Stay Current access after course access ends.
+          - list [ref=e209]:
+            - listitem [ref=e210]:
+              - img [ref=e211]
+              - generic [ref=e213]: Same price for teams — no bulk discount because it is already the lowest possible price
+            - listitem [ref=e214]:
+              - img [ref=e215]
+              - generic [ref=e217]: No minimum contract, no lock-in
+            - listitem [ref=e218]:
+              - img [ref=e219]
+              - generic [ref=e221]: Teams of 5+ get an admin dashboard with progress tracking and completion rates
+            - listitem [ref=e222]:
+              - img [ref=e223]
+              - generic [ref=e225]: Admin chooses which optional lessons each role completes
+            - listitem [ref=e226]:
+              - img [ref=e227]
+              - generic [ref=e229]: Cancel anytime, per seat
+        - paragraph [ref=e230]:
+          - text: All prices in GBP. International pricing coming soon. See the full pricing breakdown on the
+          - link "pricing page" [ref=e231] [cursor=pointer]:
+            - /url: /pricing
+          - text: .
+      - generic [ref=e233]:
+        - generic [ref=e234]:
+          - paragraph [ref=e235]: Questions
+          - heading "Frequently asked questions" [level=2] [ref=e236]
+        - generic [ref=e237]:
+          - heading "Can we choose which lessons our team completes?" [level=3] [ref=e239]:
+            - button "Can we choose which lessons our team completes?" [ref=e240]:
+              - text: Can we choose which lessons our team completes?
+              - img
+          - heading "Will this displace our employees?" [level=3] [ref=e242]:
+            - button "Will this displace our employees?" [ref=e243]:
+              - text: Will this displace our employees?
+              - img
+          - heading "Is our data safe?" [level=3] [ref=e245]:
+            - button "Is our data safe?" [ref=e246]:
+              - text: Is our data safe?
+              - img
+          - heading "What is the ROI?" [level=3] [ref=e248]:
+            - button "What is the ROI?" [ref=e249]:
+              - text: What is the ROI?
+              - img
+          - heading "Our team is not technical. Is this appropriate?" [level=3] [ref=e251]:
+            - button "Our team is not technical. Is this appropriate?" [ref=e252]:
+              - text: Our team is not technical. Is this appropriate?
+              - img
+          - heading "How is this different from vendor-specific training?" [level=3] [ref=e254]:
+            - button "How is this different from vendor-specific training?" [ref=e255]:
+              - text: How is this different from vendor-specific training?
+              - img
+          - heading "How does this compare to the government's AI Skills Boost?" [level=3] [ref=e257]:
+            - button "How does this compare to the government's AI Skills Boost?" [ref=e258]:
+              - text: How does this compare to the government's AI Skills Boost?
+              - img
+          - heading "Can employees complete this during working hours?" [level=3] [ref=e260]:
+            - button "Can employees complete this during working hours?" [ref=e261]:
+              - text: Can employees complete this during working hours?
+              - img
+          - heading "Can we pilot with a small group first?" [level=3] [ref=e263]:
+            - button "Can we pilot with a small group first?" [ref=e264]:
+              - text: Can we pilot with a small group first?
+              - img
+          - heading "Can you create bespoke content for our company?" [level=3] [ref=e266]:
+            - button "Can you create bespoke content for our company?" [ref=e267]:
+              - text: Can you create bespoke content for our company?
+              - img
+      - generic [ref=e269]:
+        - heading "Ready to upskill your UK team?" [level=2] [ref=e270]
+        - paragraph [ref=e271]: Get in touch to discuss your team's needs, or let your people try a free lab right now.
+        - generic [ref=e272]:
+          - link "Get in Touch" [ref=e273] [cursor=pointer]:
+            - /url: /contact
+            - img
+            - text: Get in Touch
+          - link "Try Free Labs" [ref=e274] [cursor=pointer]:
+            - /url: /labs
+            - text: Try Free Labs
+            - img
+    - contentinfo [ref=e275]:
+      - generic [ref=e276]:
+        - generic [ref=e277]:
+          - generic [ref=e278]:
+            - link "GWTH.ai" [ref=e279] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e280]: UK-focused applied AI training. Learn to research, automate, analyse, and build practical tools with AI-assisted coding.
+          - generic [ref=e281]:
+            - heading "Product" [level=3] [ref=e282]
+            - list [ref=e283]:
+              - listitem [ref=e284]:
+                - link "Pricing" [ref=e285] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e286]:
+                - link "Why GWTH" [ref=e287] [cursor=pointer]:
+                  - /url: /why-gwth
+              - listitem [ref=e288]:
+                - link "For Teams" [ref=e289] [cursor=pointer]:
+                  - /url: /for-teams
+              - listitem [ref=e290]:
+                - link "Contact" [ref=e291] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e292]:
+            - heading "Learn" [level=3] [ref=e293]
+            - list [ref=e294]:
+              - listitem [ref=e295]:
+                - link "Free Labs" [ref=e296] [cursor=pointer]:
+                  - /url: /labs
+              - listitem [ref=e297]:
+                - link "Lessons" [ref=e298] [cursor=pointer]:
+                  - /url: /lessons
+              - listitem [ref=e299]:
+                - link "News" [ref=e300] [cursor=pointer]:
+                  - /url: /news
+              - listitem [ref=e301]:
+                - link "Newsletter" [ref=e302] [cursor=pointer]:
+                  - /url: /newsletter
+              - listitem [ref=e303]:
+                - link "About GWTH" [ref=e304] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e305]:
+            - heading "Legal" [level=3] [ref=e306]
+            - list [ref=e307]:
+              - listitem [ref=e308]:
+                - link "Privacy" [ref=e309] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e310]:
+                - link "Terms" [ref=e311] [cursor=pointer]:
+                  - /url: /terms
+        - generic [ref=e313]:
+          - paragraph [ref=e314]: © 2026 GWTH.ai. All rights reserved.
+          - paragraph [ref=e315]: Independent. UK-based. No sponsors. No ads. No vendor partnerships.
+          - paragraph [ref=e316]: Based in the United Kingdom 🇬🇧
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e318]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e325] [cursor=pointer]:
+    - img [ref=e326]
+  - alert [ref=e329]

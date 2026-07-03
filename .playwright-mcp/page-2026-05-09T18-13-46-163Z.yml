@@ -1,0 +1,14 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e6]
+      - generic [ref=e9]: GWTH.ai Preview
+      - generic [ref=e10]: This site is currently in private preview. Enter the access password to continue.
+    - generic [ref=e12]:
+      - textbox "Enter access password" [active] [ref=e14]
+      - button "Enter Site" [disabled]
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e16]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e23] [cursor=pointer]:
+    - img [ref=e24]
+  - alert [ref=e27]

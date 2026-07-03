@@ -1,0 +1,194 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "GWTH.ai" [ref=e6] [cursor=pointer]:
+            - /url: /dashboard
+          - button "Collapse sidebar" [ref=e7]:
+            - img
+        - navigation "Main navigation" [ref=e8]:
+          - link "Dashboard" [ref=e9] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e10]
+            - generic [ref=e15]: Dashboard
+          - link "The Course" [ref=e16] [cursor=pointer]:
+            - /url: /course/applied-ai-skills
+            - img [ref=e17]
+            - generic [ref=e19]: The Course
+          - link "Labs" [ref=e20] [cursor=pointer]:
+            - /url: /labs
+            - img [ref=e21]
+            - generic [ref=e23]: Labs
+          - link "Progress" [ref=e24] [cursor=pointer]:
+            - /url: /progress
+            - img [ref=e25]
+            - generic [ref=e27]: Progress
+        - navigation "Secondary navigation" [ref=e28]:
+          - link "Bookmarks" [ref=e29] [cursor=pointer]:
+            - /url: /bookmarks
+            - img [ref=e30]
+            - generic [ref=e32]: Bookmarks
+          - link "Notifications" [ref=e33] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e34]
+            - generic [ref=e37]: Notifications
+          - link "Profile" [ref=e38] [cursor=pointer]:
+            - /url: /profile
+            - img [ref=e39]
+            - generic [ref=e42]: Profile
+          - link "Settings" [ref=e43] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e44]
+            - generic [ref=e47]: Settings
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "breadcrumb" [ref=e50]:
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "Demo" [ref=e53] [cursor=pointer]:
+                - /url: /demo
+            - listitem [ref=e54]:
+              - img [ref=e55]
+            - listitem [ref=e57]:
+              - link "Dashboard" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - button "Search... ⌘ K" [ref=e60]:
+            - img
+            - generic [ref=e61]: Search...
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button "Toggle theme" [ref=e62]:
+            - img
+          - button "U" [ref=e63]:
+            - generic [ref=e65]: U
+      - main [ref=e66]:
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: DASHBOARD · LABS
+            - generic [ref=e71]: SAT 9 MAY 2026 · 19:27 BST
+            - generic [ref=e72]: BETA · v0.4.1
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e75]: FREE ACCOUNT · NO COURSE PURCHASED
+              - heading "Welcome, Sam. Try a lab. Decide later." [level=1] [ref=e76]:
+                - text: Welcome, Sam.
+                - text: Try a lab. Decide later.
+              - paragraph [ref=e77]: You have access to all 18 free labs. Labs are practice, not credential. When you are ready, Month 1 of the course is £29 and unlocks the GWTH Score that employers can verify on the spot.
+            - generic [ref=e78]:
+              - generic [ref=e79]: BETA · 23 MAY 2026
+              - generic [ref=e80]: Month 1 unlocks Building with Claude, Codex and the consultant’s prompt patterns.
+              - generic [ref=e81]: 24 mandatory lessons, six optional. Five hours a week.
+              - generic [ref=e82]:
+                - link "Buy month 1 · £29" [ref=e83] [cursor=pointer]:
+                  - /url: /pricing
+                - link "Read the brief" [ref=e84] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e85]:
+            - generic [ref=e86]: SECTION 01 — WHAT MONTH 1 ACTUALLY CONTAINS
+            - heading "24 lessons. Plain English." [level=2] [ref=e87]
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - generic [ref=e90]: UNIT 01
+                - generic [ref=e91]: Past ChatGPT-as-Google
+                - generic [ref=e92]: Six lessons that move you from search-style prompting to real intent and iteration.
+              - generic [ref=e93]:
+                - generic [ref=e94]: UNIT 02
+                - generic [ref=e95]: Three small builds
+                - generic [ref=e96]: A spreadsheet QA, an email triage, a brief generator. All shippable, all reviewed.
+              - generic [ref=e97]:
+                - generic [ref=e98]: UNIT 03
+                - generic [ref=e99]: Capstone 01
+                - generic [ref=e100]: One internal-use tool you build with Claude Code. Reviewed by a human.
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - generic [ref=e103]: SECTION 02 — FREE LABS · UNSCORED
+              - generic [ref=e104]:
+                - heading "18 public labs. Use them tonight." [level=2] [ref=e105]
+                - generic [ref=e106]: NO CARD REQUIRED
+              - generic [ref=e107]:
+                - generic [ref=e108]:
+                  - generic [ref=e109]: JOB SEARCH
+                  - generic [ref=e110]: Resume rewriter for non-tech roles
+                  - generic [ref=e111]: 40 MIN
+                  - link "OPEN →" [ref=e112] [cursor=pointer]:
+                    - /url: /labs
+                - generic [ref=e113]:
+                  - generic [ref=e114]: OPS
+                  - generic [ref=e115]: Email triage with three rules
+                  - generic [ref=e116]: 25 MIN
+                  - link "OPEN →" [ref=e117] [cursor=pointer]:
+                    - /url: /labs
+                - generic [ref=e118]:
+                  - generic [ref=e119]: OPS
+                  - generic [ref=e120]: Spreadsheet QA in plain English
+                  - generic [ref=e121]: 35 MIN
+                  - link "OPEN →" [ref=e122] [cursor=pointer]:
+                    - /url: /labs
+                - generic [ref=e123]:
+                  - generic [ref=e124]: MARKETING
+                  - generic [ref=e125]: Brief generator for marketing teams
+                  - generic [ref=e126]: 50 MIN
+                  - link "OPEN →" [ref=e127] [cursor=pointer]:
+                    - /url: /labs
+                - generic [ref=e128]:
+                  - generic [ref=e129]: RESEARCH
+                  - generic [ref=e130]: Reading dense PDFs without reading them
+                  - generic [ref=e131]: 30 MIN
+                  - link "OPEN →" [ref=e132] [cursor=pointer]:
+                    - /url: /labs
+                - generic [ref=e133]:
+                  - generic [ref=e134]: + 13 MORE
+                  - link "BROWSE ALL 18 →" [ref=e135] [cursor=pointer]:
+                    - /url: /labs
+            - generic [ref=e136]:
+              - generic [ref=e137]: SECTION 03 — WHAT THE SCORE LOOKS LIKE
+              - heading "Illustrative. Yours starts at zero." [level=2] [ref=e138]
+              - figure "Illustrative — your actual GWTH Score reflects verified work." [ref=e140]:
+                - generic [ref=e141]:
+                  - generic [ref=e146]: gwth.ai/score/c67sg#dde5
+                  - generic [ref=e147]:
+                    - generic [ref=e148]:
+                      - generic [ref=e149]:
+                        - generic [ref=e150]: AE
+                        - generic [ref=e151]:
+                          - generic [ref=e152]: Alex Example
+                          - generic [ref=e153]: Operations Lead · UK
+                      - img "Scan to open gwth.ai/score/c67sg#dde5" [ref=e155]
+                    - generic [ref=e584]:
+                      - generic [ref=e585]: Example
+                      - generic [ref=e586]:
+                        - img "GWTH" [ref=e587]
+                        - generic [ref=e590]: GWTH Score
+                      - generic [ref=e591]:
+                        - generic [ref=e592]:
+                          - generic [ref=e593]: "104"
+                          - generic [ref=e594]: Top 1%
+                        - generic [ref=e595]:
+                          - img [ref=e596]
+                          - generic [ref=e599]: trending up
+                          - text: "+49"
+                        - generic [ref=e600]: vs 3 months ago
+                      - button "What this score tells an employer 5 reasons it's credible" [ref=e603]:
+                        - generic [ref=e604]:
+                          - img [ref=e606]
+                          - generic [ref=e608]:
+                            - generic [ref=e609]: What this score tells an employer
+                            - generic [ref=e610]: 5 reasons it's credible
+                        - img [ref=e611]
+                - generic [ref=e613]: Illustrative — your actual GWTH Score reflects verified work.
+              - paragraph [ref=e614]: Buy Month 1 to start your own. The score reflects only verified work, decays without activity, and updates the public URL employers see.
+          - paragraph [ref=e616]: Stay Current opens after the course. Keep your score current and your knowledge updated, with about two hours of new content a month.
+          - generic [ref=e617]:
+            - generic [ref=e618]: © 2026 GWTH.ai · UK
+            - generic [ref=e619]: Built for the 23 May beta · v0.4.1
+            - generic [ref=e620]: Privacy · Terms · Accessibility
+    - generic [ref=e621]:
+      - heading "Command Palette" [level=2] [ref=e622]
+      - paragraph [ref=e623]: Search for a command to run...
+  - region "Notifications alt+T"
+  - 'button "DEV: Month 3" [ref=e625]': "DEV: Month 3"
+  - button "Open Next.js Dev Tools" [ref=e632] [cursor=pointer]:
+    - img [ref=e633]
+  - alert [ref=e636]

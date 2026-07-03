@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GWTH.ai — Lab Page (23 May beta)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Vollkorn:ital,wght@1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: "Public Sans", sans-serif; }
+  .gwth-root::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="lesson-shell.jsx"></script>
+<script type="text/babel" src="lab-shell.jsx"></script>
+<script type="text/babel" src="lab-workspace.jsx"></script>
+<script type="text/babel" src="lab-surfaces.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="primary"
+        title="GWTH.ai · Single Lab page · /labs/[slug]"
+        subtitle="23 May 2026 UK beta · Instructions + workspace, no context switch · Honest unscored framing">
+
+        <DCArtboard id="s1-landing"
+          label="Surface 1 · Desktop · Lab landing · Step 1 · workspace empty"
+          width={1440} height={1080}>
+          <LabLandingSurface />
+        </DCArtboard>
+
+        <DCArtboard id="s2-progress"
+          label="Surface 2 · Desktop · In progress · Step 2 · workspace populated · hint expanded"
+          width={1440} height={1080}>
+          <LabProgressSurface />
+        </DCArtboard>
+
+        <DCArtboard id="s3-complete"
+          label="Surface 3 · Desktop · Lab complete · conversion card visible"
+          width={1440} height={1180}>
+          <LabCompleteSurface anonymous />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mobile-and-dark"
+        title="Mobile + dark"
+        subtitle="412px viewport · plus dark-mode parity for Surface 1">
+        <DCArtboard id="s4-mobile"
+          label="Surface 4 · Mobile 412 · Step 2 · workspace populated"
+          width={412} height={1080}>
+          <LabMobileSurface />
+        </DCArtboard>
+
+        <DCArtboard id="s1-dark"
+          label="Optional · Surface 1 · Dark mode · warm forest"
+          width={1440} height={1080}>
+          <LabLandingSurface dark />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="workspace-variants"
+        title="Workspace variants"
+        subtitle="Same shell, different lab shape · for the manifest">
+        <DCArtboard id="ws-tool"
+          label="Workspace · TOOL WALKTHROUGH · annotated screenshot frame"
+          width={1440} height={1080}>
+          <LabProgressSurface workspaceVariant="tool" />
+        </DCArtboard>
+
+        <DCArtboard id="ws-build"
+          label="Workspace · BUILD CHALLENGE · textarea + rubric reveal"
+          width={1440} height={1080}>
+          <LabProgressSurface workspaceVariant="build" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="handoff"
+        title="Implementation handoff"
+        subtitle="Components · state machine · locked button copy · what the codebase needs first">
+        <DCArtboard id="notes" label="Notes for the build" width={920} height={1180}>
+          <HandoffNotes />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+/* Extras for the 2026-04-27 dirB iteration: new classes added when
+   replacing fake proof and 2-tier pricing with real research stats
+   and 3-tier pricing. */
+
+/* HERO STATS — replaces the fabricated trust line */
+.hero-stats {
+  display: flex; gap: 32px; flex-wrap: wrap;
+  margin-top: 28px;
+  font-size: 14px; color: var(--fg-muted);
+}
+.hero-stats > div { white-space: nowrap; }
+.hero-stats strong {
+  display: block; font-size: 22px; color: var(--fg);
+  font-weight: 700; line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.gwth.is-mobile .hero-stats { gap: 20px; margin-top: 20px; }
+.gwth.is-mobile .hero-stats strong { font-size: 18px; }
+
+/* PRODUCT — see-the-curriculum link */
+.prod-link {
+  display: inline-block; margin-top: 16px;
+  color: var(--mint-500); font-weight: 500;
+  text-decoration: none; font-size: 14px;
+}
+.theme-dark .prod-link { color: var(--mint-300); }
+.prod-link:hover { color: var(--mint-600); }
+
+/* CURRICULUM CAPSTONE block inside the curriculum vis */
+.curr-mod-capstone {
+  display: flex; flex-direction: column; gap: 2px;
+  margin-top: 8px; padding: 8px 10px;
+  background: var(--bg-muted); border-radius: 6px;
+  font-size: 12px;
+}
+.curr-mod-capstone .mono {
+  font-size: 10px; color: var(--fg-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.curr-mod-capstone strong { font-size: 13px; color: var(--fg); }
+.curr-mod-capstone span:last-child { color: var(--fg-muted); font-size: 11px; }
+
+.curr-foot {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--fg-muted);
+  text-align: center;
+}
+
+/* RESEARCH SECTION — replaces the fabricated proof block */
+.research-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; max-width: 920px; margin: 48px auto 0;
+}
+.gwth.is-mobile .research-grid { grid-template-columns: 1fr; gap: 16px; }
+.rstat {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px 24px;
+  text-align: center;
+}
+.rstat-num {
+  display: block; font-size: 48px; font-weight: 700;
+  color: var(--mint-500); line-height: 1;
+  letter-spacing: -0.02em;
+}
+.theme-dark .rstat-num { color: var(--mint-300); }
+.rstat-lbl {
+  display: block; margin-top: 12px;
+  font-size: 14px; color: var(--fg-muted);
+  line-height: 1.5;
+}
+.research-source {
+  text-align: center; margin-top: 32px;
+  font-size: 11px; color: var(--fg-muted);
+  font-style: normal;
+}
+
+/* THREE-TIER PRICING — replaces 2-tier */
+.pricing-row--three {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; max-width: 1080px; margin: 0 auto;
+}
+.gwth.is-mobile .pricing-row--three { grid-template-columns: 1fr; }
+.pricing-row--three .pcard {
+  display: flex; flex-direction: column;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px 24px;
+  position: relative;
+}
+.pcard--featured {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px -12px var(--accent);
+}
+.pcard-flag {
+  position: absolute; top: -10px; left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px; border-radius: 20px;
+  background: var(--accent); color: var(--accent-fg);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.pricing-row--three .pcard-tag {
+  font-size: 14px; font-weight: 600;
+  color: var(--fg); margin-bottom: 8px;
+}
+.pricing-row--three .pcard-price {
+  display: flex; flex-direction: column; gap: 4px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.pricing-row--three .pcard-amount {
+  font-size: 40px; font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.pricing-row--three .pcard-per {
+  font-size: 13px; color: var(--fg-muted);
+}
+.pricing-row--three .pcard-list {
+  flex: 1; list-style: none; padding: 0; margin: 0 0 20px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pricing-row--three .pcard-list li {
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 13px; line-height: 1.5;
+  color: var(--fg-muted);
+}
+.pricing-row--three .pcard-btn { width: 100%; justify-content: center; }
+.btn--disabled {
+  opacity: 0.5; cursor: not-allowed; pointer-events: none;
+}
+.pricing-foot {
+  text-align: center; margin-top: 24px;
+  font-size: 12px; color: var(--fg-muted);
+}
+.pricing-foot a { color: var(--accent); text-decoration: none; }
+.pricing-foot a:hover { text-decoration: underline; }

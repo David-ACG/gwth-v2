@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pricing · GWTH.ai</title>
+<meta name="description" content="GWTH.ai pricing — Free, Member, and Team plans. Twelve lessons free, no card needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500;1,8..60,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF9F4; --bg-2: #F5F0E6; --surface: #FFFFFF; --sunken: #F0EBE0;
+  --border: #E5DFD2; --border-strong: #D4CCBA;
+  --ink: #22301F; --ink-2: #3F4A3B; --ink-3: #6F7569; --muted: #6F7569; --stone: #948A76;
+  --teal: #2A5D69; --teal-deep: #1E454F; --teal-soft: #C2D5D9;
+  --rust: #A94C2E;
+  --forest: #5C7F4A; --forest-deep: #41603A; --forest-soft: #D4DCC9;
+  --sage: #7B8267;
+  --amber: #B8893F; --amber-deep: #8A6730; --amber-soft: #EEDDB8;
+  --indigo: #3A4773; --indigo-soft: #D6DBE4;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 17px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-feature-settings: 'kern' 1, 'liga' 1; }
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+::selection { background: var(--teal-soft); color: var(--ink); }
+
+/* Topbar (same as home) */
+.topbar { position: sticky; top: 0; z-index: 20; background: rgba(251,249,244,0.92); backdrop-filter: saturate(160%) blur(10px); -webkit-backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--border); }
+.topbar-inner { max-width: 1080px; margin: 0 auto; padding: 18px 32px; display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; }
+.brand-link { display: flex; align-items: center; }
+.brand-link svg { width: 100px; height: auto; display: block; }
+.topbar-nav { display: flex; gap: 28px; justify-self: end; }
+.topbar-nav a { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); font-weight: 500; letter-spacing: -0.003em; padding: 4px 0; }
+.topbar-nav a:hover { color: var(--ink); text-decoration: none; }
+.topbar-nav a.is-active { color: var(--ink); position: relative; }
+.topbar-nav a.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -19px; height: 1.5px; background: var(--ink); }
+.topbar-cta { display: flex; align-items: center; gap: 18px; }
+.topbar-cta .signin { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); font-weight: 500; }
+.topbar-cta .signin:hover { color: var(--ink); text-decoration: none; }
+.btn { font-family: var(--font-body); font-size: 14px; font-weight: 500; padding: 9px 18px; border-radius: 3px; border: 1px solid transparent; cursor: pointer; letter-spacing: -0.003em; display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; line-height: 1; text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.btn-primary { background: var(--ink); color: var(--bg); }
+.btn-primary:hover { background: var(--teal); text-decoration: none; }
+.btn-secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+.btn-secondary:hover { border-color: var(--ink); text-decoration: none; }
+.btn-small { padding: 7px 13px; font-size: 13px; }
+.btn-large { padding: 13px 22px; font-size: 15px; }
+
+.page { max-width: 1080px; width: 100%; margin: 0 auto; padding: 0 32px; }
+
+/* Page head */
+.head { padding: 96px 0 80px; }
+.head-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 24px; }
+.head h1 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(48px, 7vw, 72px); line-height: 1.02; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 22px; text-wrap: balance; max-width: 18ch; }
+.head-lead { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 20px; line-height: 1.5; color: var(--ink-2); max-width: 56ch; text-wrap: pretty; }
+
+/* Billing toggle */
+.billing-toggle { display: inline-flex; align-items: center; gap: 0; padding: 4px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 999px; margin-top: 36px; }
+.billing-toggle button { font-family: var(--font-body); font-size: 13px; font-weight: 500; padding: 7px 16px; border: 0; background: transparent; color: var(--ink-2); border-radius: 999px; cursor: pointer; letter-spacing: -0.003em; }
+.billing-toggle button.is-active { background: var(--ink); color: var(--bg); }
+.billing-toggle button:hover:not(.is-active) { color: var(--ink); }
+.billing-save { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--forest); margin-left: 14px; }
+
+/* Tiers */
+.tiers { padding: 24px 0 96px; }
+.tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
+.tier { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 36px 32px 30px; display: flex; flex-direction: column; gap: 18px; }
+.tier-name { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink); font-weight: 500; }
+.tier-tag { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--forest); background: var(--forest-soft); padding: 3px 8px; border-radius: 2px; display: inline-block; align-self: flex-start; }
+.tier-name-row { display: flex; justify-content: space-between; align-items: center; }
+.tier h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 26px; line-height: 1.16; letter-spacing: -0.008em; color: var(--ink); }
+.tier-price { display: flex; align-items: baseline; gap: 10px; }
+.tier-price .amount { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 56px; line-height: 0.96; letter-spacing: -0.022em; color: var(--ink); }
+.tier-price .amount.is-custom { font-size: 32px; }
+.tier-price .per { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.tier-blurb { font-family: var(--font-body); font-size: 15px; line-height: 1.55; color: var(--ink-2); padding: 12px 0 4px; border-top: 1px solid var(--border); max-width: 32ch; }
+.tier ul { list-style: none; display: flex; flex-direction: column; gap: 11px; padding-top: 4px; }
+.tier li { font-family: var(--font-body); font-size: 14px; line-height: 1.55; color: var(--ink); display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: baseline; }
+.tier li::before { content: ''; width: 6px; height: 6px; background: var(--forest); border-radius: 50%; transform: translateY(2px); }
+.tier li.is-muted { color: var(--muted); }
+.tier li.is-muted::before { background: var(--border-strong); }
+.tier .btn { width: 100%; justify-content: center; margin-top: auto; padding: 11px 14px; }
+.tier-foot { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: -6px; text-align: center; min-height: 12px; }
+.tier.is-featured { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tier.is-featured .tier-name { color: rgba(251,249,244,0.65); }
+.tier.is-featured h3 { color: var(--bg); }
+.tier.is-featured .tier-price .amount { color: var(--bg); }
+.tier.is-featured .tier-price .per { color: rgba(251,249,244,0.6); }
+.tier.is-featured .tier-blurb { color: rgba(251,249,244,0.78); border-color: rgba(251,249,244,0.18); }
+.tier.is-featured li { color: var(--bg); }
+.tier.is-featured li::before { background: var(--forest-soft); }
+.tier.is-featured li.is-muted { color: rgba(251,249,244,0.6); }
+.tier.is-featured .btn-primary { background: var(--bg); color: var(--ink); }
+.tier.is-featured .btn-primary:hover { background: #FFFFFF; }
+.tier.is-featured .tier-foot { color: rgba(251,249,244,0.55); }
+.tier.is-featured .tier-tag { background: rgba(212,220,201,0.16); color: var(--forest-soft); }
+
+/* Comparison */
+.compare { padding: 80px 0 96px; border-top: 1px solid var(--border); background: var(--bg-2); }
+.compare-h { margin-bottom: 36px; }
+.compare-h .section-h-eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px; }
+.compare-h h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(28px, 3.6vw, 38px); line-height: 1.1; color: var(--ink); letter-spacing: -0.01em; max-width: 24ch; }
+.compare-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 4px; overflow: hidden; }
+.compare-table thead th { padding: 22px 24px 16px; text-align: left; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink); font-weight: 500; border-bottom: 1px solid var(--border); background: var(--surface); }
+.compare-table thead th:first-child { color: var(--muted); }
+.compare-table tbody td { padding: 18px 24px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); border-bottom: 1px solid var(--border); vertical-align: top; }
+.compare-table tbody tr:last-child td { border-bottom: 0; }
+.compare-table .row-label { font-family: var(--font-body); color: var(--ink); font-weight: 500; max-width: 28ch; }
+.compare-table .row-label .desc { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 2px; line-height: 1.45; }
+.compare-table .yes { color: var(--forest); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; }
+.compare-table .no { color: var(--stone); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; }
+.compare-table .val { font-family: var(--font-mono); font-size: 13px; color: var(--ink); letter-spacing: 0.04em; }
+
+/* Org callout */
+.org-callout { padding: 96px 0; border-top: 1px solid var(--border); }
+.org-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+.org-meta .section-h-eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
+.org-meta .section-h-eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--indigo); }
+.org-meta h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(34px, 4.4vw, 48px); line-height: 1.04; letter-spacing: -0.014em; color: var(--ink); margin-bottom: 22px; max-width: 18ch; text-wrap: balance; }
+.org-meta p { font-family: var(--font-body); font-size: 16px; line-height: 1.65; color: var(--ink-2); margin-bottom: 16px; max-width: 44ch; }
+.org-block { background: var(--indigo); color: var(--bg); border-radius: 4px; padding: 36px 36px 32px; }
+.org-block .lbl { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(251,249,244,0.6); margin-bottom: 18px; }
+.org-block h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 26px; line-height: 1.16; color: var(--bg); margin-bottom: 14px; letter-spacing: -0.008em; max-width: 22ch; }
+.org-block p { font-family: var(--font-body); font-size: 14.5px; line-height: 1.6; color: rgba(251,249,244,0.85); margin-bottom: 22px; max-width: 32ch; }
+.org-block .org-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding-top: 18px; border-top: 1px solid rgba(251,249,244,0.18); margin-bottom: 24px; }
+.org-block .org-stat { display: flex; flex-direction: column; gap: 4px; }
+.org-block .org-stat .v { font-family: var(--font-display); font-style: italic; font-size: 26px; color: var(--bg); letter-spacing: -0.008em; }
+.org-block .org-stat .l { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(251,249,244,0.6); }
+.org-block .btn { background: var(--bg); color: var(--ink); }
+.org-block .btn:hover { background: #FFFFFF; }
+
+/* FAQ */
+.faq { padding: 96px 0; border-top: 1px solid var(--border); background: var(--bg-2); }
+.faq-inner { max-width: 760px; margin: 0 auto; }
+.faq-h { margin-bottom: 48px; }
+.faq-h .section-h-eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px; }
+.faq-h h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(34px, 4.4vw, 44px); line-height: 1.04; letter-spacing: -0.014em; color: var(--ink); max-width: 22ch; text-wrap: balance; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { padding: 26px 0; border-bottom: 1px solid var(--border-strong); }
+.faq-item:first-child { border-top: 1px solid var(--ink); }
+.faq-item summary { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 22px; line-height: 1.28; color: var(--ink); cursor: pointer; list-style: none; display: grid; grid-template-columns: 1fr 24px; gap: 24px; align-items: baseline; letter-spacing: -0.005em; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; font-family: var(--font-mono); font-size: 18px; color: var(--ink-2); font-style: normal; font-weight: 400; justify-self: end; transition: transform 0.15s ease; line-height: 1; }
+.faq-item[open] summary::after { content: '−'; }
+.faq-item summary:hover { color: var(--teal); }
+.faq-item p { font-family: var(--font-body); font-size: 16px; line-height: 1.65; color: var(--ink-2); margin-top: 14px; max-width: 56ch; }
+
+/* Closing CTA */
+.close-cta { padding: 120px 0 96px; border-top: 1px solid var(--border); text-align: center; }
+.close-cta h2 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(40px, 5.5vw, 60px); line-height: 1.04; letter-spacing: -0.018em; color: var(--ink); margin-bottom: 24px; text-wrap: balance; max-width: 18ch; margin-left: auto; margin-right: auto; }
+.close-cta p { font-family: var(--font-display); font-style: normal; font-weight: 400; font-size: 19px; line-height: 1.5; color: var(--ink-2); margin-bottom: 36px; max-width: 44ch; margin-left: auto; margin-right: auto; }
+.close-cta .fineprint { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: block; margin-top: 22px; }
+
+/* Footer (same as home) */
+.footer { padding: 56px 0 48px; border-top: 1px solid var(--border); background: var(--bg); }
+.footer-inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 56px; align-items: start; }
+.footer-brand { display: flex; flex-direction: column; gap: 12px; }
+.footer-brand svg { width: 92px; height: auto; display: block; }
+.footer-brand p { font-family: var(--font-body); font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 28ch; }
+.footer-col h4 { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 14px; font-weight: 500; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-col a { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-2); }
+.footer-col a:hover { color: var(--ink); text-decoration: none; }
+.footer-bottom { max-width: 1080px; margin: 36px auto 0; padding: 22px 32px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.footer-bottom a { color: var(--muted); }
+
+@media (max-width: 960px) {
+  .tiers-grid { grid-template-columns: 1fr; gap: 18px; }
+  .org-grid { grid-template-columns: 1fr; gap: 48px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width: 760px) {
+  .head { padding: 64px 0 56px; }
+  .tiers { padding: 16px 0 72px; }
+  .compare-table thead { display: none; }
+  .compare-table, .compare-table tbody, .compare-table tr, .compare-table td { display: block; width: 100%; }
+  .compare-table tbody tr { padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .compare-table tbody tr:last-child { border-bottom: 0; }
+  .compare-table tbody td { padding: 6px 24px; border: 0; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; }
+  .compare-table tbody td.row-label { padding-bottom: 10px; }
+  .compare-table tbody td.row-label .desc { display: block; }
+  .compare-table tbody td[data-col]::before { content: attr(data-col); font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .compare-h h2 { font-size: 28px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; gap: 14px; align-items: flex-start; padding-top: 16px; }
+}
+@media (max-width: 640px) {
+  .topbar-inner { grid-template-columns: 1fr auto; gap: 18px; }
+  .topbar-nav { grid-column: 1 / -1; justify-self: start; gap: 18px; padding-top: 10px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .topbar-cta { grid-column: 2; gap: 12px; }
+  .topbar-cta .signin { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand-link" href="gwth-home.html" aria-label="GWTH.ai home">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><style>.pl1{fill:#22301F;}.pl2{fill:#A94C2E;}</style></defs>
+        <path class="pl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="pl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="pl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="pl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="pl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="pl1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="pl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="pl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="pl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+    </a>
+    <nav class="topbar-nav" aria-label="Primary">
+      <a href="gwth-home.html">Home</a>
+      <a href="gwth-pricing.html" class="is-active">Pricing</a>
+      <a href="gwth-about.html">About</a>
+    </nav>
+    <div class="topbar-cta">
+      <a href="gwth-dashboard.html" class="signin">Sign in</a>
+      <a href="#" class="btn btn-primary btn-small">Start free</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Head ─────────────────────────────────── -->
+  <section class="head">
+    <div class="page">
+      <p class="head-kicker">Pricing · 2026</p>
+      <h1>Three ways to learn. Twelve lessons free.</h1>
+      <p class="head-lead">Start free and stay free, or upgrade when you want the credential. Teams can roll out across a department without sending anyone on a bootcamp.</p>
+      <div class="billing-toggle" role="tablist" aria-label="Billing period">
+        <button type="button" data-period="monthly" role="tab">Monthly</button>
+        <button type="button" data-period="yearly" class="is-active" role="tab" aria-selected="true">Yearly</button>
+      </div>
+      <span class="billing-save">Save 16% with yearly</span>
+    </div>
+  </section>
+
+  <!-- ── Tiers ────────────────────────────────── -->
+  <section class="tiers">
+    <div class="page">
+      <div class="tiers-grid">
+
+        <div class="tier">
+          <div class="tier-name-row">
+            <span class="tier-name">Free</span>
+          </div>
+          <h3>Twelve lessons. No card.</h3>
+          <div class="tier-price">
+            <span class="amount">£0</span>
+            <span class="per">Forever</span>
+          </div>
+          <p class="tier-blurb">Enough to know whether the format suits you. Read at your own pace.</p>
+          <ul>
+            <li>Twelve free lessons, narrated</li>
+            <li>Full reader experience</li>
+            <li>Personal notes &amp; bookmarks</li>
+            <li class="is-muted">No credential issued</li>
+            <li class="is-muted">No score</li>
+          </ul>
+          <a href="gwth-lesson-viewer.html" class="btn btn-secondary">Start reading</a>
+          <span class="tier-foot">No card needed</span>
+        </div>
+
+        <div class="tier is-featured">
+          <div class="tier-name-row">
+            <span class="tier-name">Member</span>
+            <span class="tier-tag">Most chosen</span>
+          </div>
+          <h3>Full curriculum. Verifiable credential.</h3>
+          <div class="tier-price">
+            <span class="amount" data-monthly="£14" data-yearly="£11">£11</span>
+            <span class="per">per month · billed yearly</span>
+          </div>
+          <p class="tier-blurb">Everything in the curriculum. A public credential employers can verify.</p>
+          <ul>
+            <li>All current lessons, all four arcs</li>
+            <li>GWTH Score with monthly refresh</li>
+            <li>Verifiable credential &amp; public URL</li>
+            <li>Audio narration for every lesson</li>
+            <li>Personal dashboard &amp; activity log</li>
+            <li>New lessons as they're written</li>
+          </ul>
+          <a href="#" class="btn btn-primary">Become a member</a>
+          <span class="tier-foot">Cancel anytime · 30-day refund</span>
+        </div>
+
+        <div class="tier">
+          <div class="tier-name-row">
+            <span class="tier-name">Team</span>
+          </div>
+          <h3>For organisations rolling out AI literacy.</h3>
+          <div class="tier-price">
+            <span class="amount is-custom">From £9</span>
+            <span class="per">per seat · 10 seats min</span>
+          </div>
+          <p class="tier-blurb">Everything in Member, plus the rails a team lead needs to run a cohort.</p>
+          <ul>
+            <li>All Member features for every seat</li>
+            <li>Cohort manager dashboard</li>
+            <li>Aggregate score reporting</li>
+            <li>SSO &amp; provisioning (SAML, SCIM)</li>
+            <li>HR / LMS integration</li>
+            <li>Onboarding support</li>
+          </ul>
+          <a href="mailto:teams@gwth.ai" class="btn btn-secondary">Talk to us</a>
+          <span class="tier-foot">Custom invoicing available</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Comparison ──────────────────────────── -->
+  <section class="compare">
+    <div class="page">
+      <div class="compare-h">
+        <p class="section-h-eyebrow">A closer look</p>
+        <h2>What each plan actually includes.</h2>
+      </div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Free</th>
+            <th>Member</th>
+            <th>Team</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Lessons<span class="desc">Calm, narrated, read at your own pace.</span></td>
+            <td data-col="Free"><span class="val">12 free</span></td>
+            <td data-col="Member"><span class="val">All current + new</span></td>
+            <td data-col="Team"><span class="val">All current + new</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Audio narration<span class="desc">Listen on the train; text follows along.</span></td>
+            <td data-col="Free"><span class="yes">Included</span></td>
+            <td data-col="Member"><span class="yes">Included</span></td>
+            <td data-col="Team"><span class="yes">Included</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">GWTH Score<span class="desc">Your current proficiency, refreshed as you read.</span></td>
+            <td data-col="Free"><span class="no">—</span></td>
+            <td data-col="Member"><span class="yes">Personal</span></td>
+            <td data-col="Team"><span class="yes">Personal + aggregate</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Verifiable credential<span class="desc">Public URL, unique ID, QR code, audit log.</span></td>
+            <td data-col="Free"><span class="no">—</span></td>
+            <td data-col="Member"><span class="yes">One per arc</span></td>
+            <td data-col="Team"><span class="yes">One per arc · per seat</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Personal notes<span class="desc">Marginalia attached to any paragraph or figure.</span></td>
+            <td data-col="Free"><span class="yes">Included</span></td>
+            <td data-col="Member"><span class="yes">Included</span></td>
+            <td data-col="Team"><span class="yes">Included</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Cohort manager<span class="desc">Dashboard showing who's where in the curriculum.</span></td>
+            <td data-col="Free"><span class="no">—</span></td>
+            <td data-col="Member"><span class="no">—</span></td>
+            <td data-col="Team"><span class="yes">Included</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">SSO &amp; provisioning<span class="desc">SAML, SCIM, automatic seat management.</span></td>
+            <td data-col="Free"><span class="no">—</span></td>
+            <td data-col="Member"><span class="no">—</span></td>
+            <td data-col="Team"><span class="yes">Included</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Onboarding support<span class="desc">A real person to help with the rollout.</span></td>
+            <td data-col="Free"><span class="no">—</span></td>
+            <td data-col="Member"><span class="no">—</span></td>
+            <td data-col="Team"><span class="yes">Included</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Org callout ──────────────────────────── -->
+  <section class="org-callout">
+    <div class="page">
+      <div class="org-grid">
+        <div class="org-meta">
+          <p class="section-h-eyebrow"><span class="dot"></span>For teams of ten or more</p>
+          <h2>Roll out AI literacy without sending anyone on a bootcamp.</h2>
+          <p>The Team plan gives a manager a quiet, calm view of who is where in the curriculum — without surveillance theatre, without leaderboards, without the gamified noise that other platforms ship.</p>
+          <p>Credentials are issued per seat and verifiable by your HR system through a standard API. You decide whether scores are visible across the team.</p>
+        </div>
+        <div class="org-block">
+          <div class="lbl">Team plan · at a glance</div>
+          <h3>One contract, real outcomes, calm rollout.</h3>
+          <p>Built around how adult learning actually works — short lessons, quiet practice, a credential that holds up.</p>
+          <div class="org-stats">
+            <div class="org-stat">
+              <span class="v">From £9</span>
+              <span class="l">Per seat / month</span>
+            </div>
+            <div class="org-stat">
+              <span class="v">10</span>
+              <span class="l">Seats minimum</span>
+            </div>
+          </div>
+          <a href="mailto:teams@gwth.ai" class="btn btn-primary">Talk to us →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ──────────────────────────────────── -->
+  <section class="faq">
+    <div class="faq-inner page">
+      <div class="faq-h">
+        <p class="section-h-eyebrow">Common questions</p>
+        <h2>Pricing, billing, what's included.</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary>Is the free tier really free forever?</summary>
+          <p>Yes. Twelve lessons, no card needed, no expiry. You can read them as often as you like. The credential and the full curriculum sit behind the paid tiers.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What does a "seat" mean on the Team plan?</summary>
+          <p>One seat is one learner — their own dashboard, their own score, their own credential. Seats are reassignable while someone is inactive but cannot be shared in real time.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do I need to pay yearly?</summary>
+          <p>No. The Member plan is available monthly at £14 or yearly at £11/month. The yearly price saves you about 16%. Team plans are typically yearly contracts but we offer monthly for smaller cohorts.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I cancel anytime?</summary>
+          <p>Yes. Cancel from your account settings — your access continues to the end of the period you've already paid for. We don't charge cancellation fees and we offer a 30-day refund on first-time Member subscriptions.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Will my credential stay valid if I cancel?</summary>
+          <p>Yes. The credential you earn is yours. Its public verification URL stays live. Your score will continue to decay over time as the curriculum updates — that's the same for everyone, member or not.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do you offer student or non-profit discounts?</summary>
+          <p>Yes. We offer 50% off the Member plan for students with a valid .edu/.ac email, and bespoke pricing for registered charities. Write to <a href="mailto:hello@gwth.ai">hello@gwth.ai</a>.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What payment methods do you accept?</summary>
+          <p>Card and bank transfer. We use Stripe for card processing and never store card details ourselves. Team plans can be invoiced and paid by bank transfer with net-30 terms.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Closing CTA ──────────────────────────── -->
+  <section class="close-cta">
+    <div class="page">
+      <h2>Twelve lessons free. See if it suits you.</h2>
+      <p>About two hours of careful reading. No card. Decide whether you want the credential after that.</p>
+      <a href="gwth-lesson-viewer.html" class="btn btn-primary btn-large">Start reading →</a>
+      <span class="fineprint">No card needed</span>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 578.07 101.64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><style>.fl1{fill:#22301F;}.fl2{fill:#A94C2E;}</style></defs>
+        <path class="fl1" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+        <polygon class="fl1" points="220.13 72.24 199.89 6.6 184.17 6.6 163.93 72.24 143.7 6.6 126.25 6.6 154.33 96.06 171.84 96.06 192.03 31.77 212.22 96.06 229.72 96.06 257.8 6.6 240.36 6.6 220.13 72.24"/>
+        <polygon class="fl1" points="294.15 6.6 265.81 6.6 265.81 20.64 294.15 20.64 294.15 96.06 309.6 96.06 309.6 20.64 339.65 20.64 339.65 6.6 309.6 6.6 294.15 6.6"/>
+        <polygon class="fl1" points="413.08 42.83 367.41 42.83 367.41 6.6 351.95 6.6 351.95 96.06 367.41 96.06 367.41 57.38 413.08 57.38 413.08 96.06 428.54 96.06 428.54 6.6 413.08 6.6 413.08 42.83"/>
+        <path class="fl1" d="M511.83,29.25c-14.42-1.55-26.76,3.06-33.44,8.43l5.82,10.68a32.07,32.07,0,0,1,18.17-6.64c11.2-.57,18.79,3.15,18.79,15H497.39c-8,0-21.34,5.64-21.68,17.88s9.24,22,22.43,22.11c11.14.11,19.58-2.19,23.83-9,.18,4.73.31,8,.31,8h14.05V55.82C536.33,38.27,526.25,30.8,511.83,29.25Zm9.69,45.08s-3.66,11.78-17.43,10.94-14.78-10.11-10.76-14.38,11.25-4.06,16.59-4.06h11.4c.06,2.42.12,5,.2,7.5Z"/>
+        <rect class="fl1" x="552.68" y="29.93" width="16.62" height="66.13"/>
+        <path class="fl2" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+        <ellipse class="fl2" cx="560.99" cy="11.01" rx="9.56" ry="9.25"/>
+        <ellipse class="fl2" cx="454.29" cy="86.81" rx="10.77" ry="10.43"/>
+      </svg>
+      <p>AI literacy for non-technical adults. Calm lessons, real practice, credentials that stay current.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="gwth-home.html">Home</a></li>
+        <li><a href="gwth-pricing.html">Pricing</a></li>
+        <li><a href="gwth-lesson-viewer.html">Sample lesson</a></li>
+        <li><a href="gwth-credential-verification.html">Verify a credential</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="gwth-about.html">About</a></li>
+        <li><a href="#">Curriculum</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="mailto:hello@gwth.ai">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Credential policy</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 GWTH.ai</span>
+    <span>Made with care · Designed slowly</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    'use strict';
+    var memStore = {};
+    var safeStorage = {
+      get: function (k) { try { return localStorage.getItem(k); } catch (e) { return memStore[k] != null ? memStore[k] : null; } },
+      set: function (k, v) { memStore[k] = v; try { localStorage.setItem(k, v); } catch (e) {} }
+    };
+    var toggle = document.querySelector('.billing-toggle');
+    if (!toggle) return;
+    var buttons = toggle.querySelectorAll('button');
+    var memberAmount = document.querySelector('.tier.is-featured .tier-price .amount');
+    var memberPer = document.querySelector('.tier.is-featured .tier-price .per');
+    function applyPeriod(period) {
+      buttons.forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-period') === period); b.setAttribute('aria-selected', b.getAttribute('data-period') === period ? 'true' : 'false'); });
+      if (memberAmount) {
+        memberAmount.textContent = period === 'yearly' ? memberAmount.getAttribute('data-yearly') : memberAmount.getAttribute('data-monthly');
+      }
+      if (memberPer) {
+        memberPer.textContent = period === 'yearly' ? 'per month · billed yearly' : 'per month';
+      }
+      safeStorage.set('gwthPricingPeriod', period);
+    }
+    buttons.forEach(function (b) { b.addEventListener('click', function () { applyPeriod(b.getAttribute('data-period')); }); });
+    var saved = safeStorage.get('gwthPricingPeriod');
+    if (saved === 'monthly' || saved === 'yearly') applyPeriod(saved);
+  })();
+</script>
+
+</body>
+</html>

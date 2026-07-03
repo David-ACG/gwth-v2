@@ -1,0 +1,15 @@
+[
+  { "id": 1, "title": "Navbar wordmark", "deliverable_ref": 15, "status": "fixed-confirmed", "commit": "35b7833" },
+  { "id": 2, "title": "Hero copy v1 (score reference)", "deliverable_ref": 14, "status": "iterated", "commit": "3f112ae" },
+  { "id": 3, "title": "Hero copy v2 (every lesson and project + paragraphs)", "deliverable_ref": 14, "status": "fixed", "commit": "4f39ea4" },
+  { "id": 4, "title": "Journey grid: 9 cards in 3+3+3, callout stats, drop messy CTAs", "deliverable_ref": 14, "status": "fixed", "commit": "ef6970a" },
+  { "id": 5, "title": "Hero device URL bar /dashboard -> /score", "annotation": "Shape 1 (y=185, top-right)", "status": "fixed", "commit": "a68284a" },
+  { "id": 6, "title": "ResearchStrip 'Built around UK research' font fix", "annotation": "Shape 2 (y=941)", "status": "fixed", "commit": "a68284a" },
+  { "id": 7, "title": "Journey grid heading punchier (Different reasons. Same course.)", "annotation": "Shape 3 (y=1137, h=188)", "status": "fixed", "commit": "a68284a" },
+  { "id": 8, "title": "Pills -> images (deferred to user-supplied assets)", "annotation": "Shapes 4-9 (pills in 6 cards)", "status": "deferred", "ref": "beads_GWTH-7bu" },
+  { "id": 9, "title": "ProductPillars H2 'Plain English in.' -> 'Plain English.'", "annotation": "Implicit in 'unpolished' note", "status": "fixed", "commit": "a68284a" },
+  { "id": 10, "title": "View the curriculum -> Lessons", "annotation": "Shape 13 area + note", "status": "fixed", "commit": "a68284a" },
+  { "id": 11, "title": "Remove Zapier from copy", "annotation": "Notes (no zapier lessons)", "status": "fixed", "commit": "a68284a" },
+  { "id": 12, "title": "ProductPillars feels unpolished", "annotation": "Shapes 11-14 area", "status": "open-needs-direction", "evidence": "broad visual concern; no concrete fix proposed without David's per-row direction" },
+  { "id": 13, "title": "Misc shapes 10 (y=2099) and 15 (y=3737) without notes", "annotation": "Unmapped boxes", "status": "open-needs-clarification", "evidence": "Boxes drawn but no text note ties them to specific issues — need David to clarify" }
+]
