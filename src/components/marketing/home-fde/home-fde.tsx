@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import Link from "next/link"
 import {
   CURRICULUM,
@@ -6,6 +7,28 @@ import {
   UK_STATS,
 } from "@/components/marketing/data"
 import styles from "./home-fde.module.css"
+
+/**
+ * Anchor points where an optional explainer block (W12) may be injected on the
+ * home layout. Used by the embed-demo review route and, once David picks, by
+ * the live wiring. `replace-quote` swaps the centred pull quote for the video.
+ */
+export type ExplainerPlacement =
+  | "after-hero"
+  | "after-curriculum"
+  | "before-pricing"
+  | "replace-quote"
+
+/** Props for {@link HomeFde}. All optional so the live `/` renders unchanged. */
+export interface HomeFdeProps {
+  /**
+   * Optional explainer block injected at {@link HomeFdeProps.explainerAt}.
+   * Omit entirely for the live homepage (the default, byte-for-byte unchanged).
+   */
+  explainer?: ReactNode
+  /** Where `explainer` is inserted. Ignored when `explainer` is omitted. */
+  explainerAt?: ExplainerPlacement
+}
 
 /** FAQ entries shown on the FDE-register homepage variant. */
 const faqs = [
@@ -59,7 +82,7 @@ const STAT_SOURCES = ["DSIT, 2025", "ONS, 2025", "ONS, 2025"]
  * for pricing. Serif body throughout (Source Serif 4), JetBrains Mono for
  * labels. Full light/dark parity via scoped palette variables.
  */
-export function HomeFde() {
+export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
   return (
     <div className={styles.shell}>
       <section className={styles.hero} data-section="hero">
@@ -98,6 +121,8 @@ export function HomeFde() {
           </div>
         </div>
       </section>
+
+      {explainer && explainerAt === "after-hero" ? explainer : null}
 
       <section className={styles.section} data-section="journey">
         <div className={styles.page}>
@@ -141,14 +166,21 @@ export function HomeFde() {
         </div>
       </section>
 
-      <section className={styles.pullQuote} data-section="pull-quote">
-        <div className={styles.page}>
-          <blockquote>
-            If you can describe what you want, <em>you can begin to build it.</em>
-          </blockquote>
-          <p className={styles.pullQuoteSource}>Lesson M1 L01 · Welcome to GWTH</p>
-        </div>
-      </section>
+      {explainer && explainerAt === "replace-quote" ? (
+        explainer
+      ) : (
+        <section className={styles.pullQuote} data-section="pull-quote">
+          <div className={styles.page}>
+            <blockquote>
+              If you can describe what you want,{" "}
+              <em>you can begin to build it.</em>
+            </blockquote>
+            <p className={styles.pullQuoteSource}>
+              Lesson M1 L01 · Welcome to GWTH
+            </p>
+          </div>
+        </section>
+      )}
 
       <section className={styles.section} data-section="curriculum">
         <div className={styles.page}>
@@ -184,6 +216,8 @@ export function HomeFde() {
           </div>
         </div>
       </section>
+
+      {explainer && explainerAt === "after-curriculum" ? explainer : null}
 
       <section className={styles.section} data-section="progress-vis">
         <div className={`${styles.page} ${styles.credentialSplit}`}>
@@ -240,6 +274,8 @@ export function HomeFde() {
           </Link>
         </div>
       </section>
+
+      {explainer && explainerAt === "before-pricing" ? explainer : null}
 
       <section className={styles.dispatch} data-section="pricing">
         <div className={styles.page}>
