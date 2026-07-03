@@ -28,6 +28,7 @@ export default function W12ReviewLayout({
         <nav className={styles.bannerNav}>
           <Link href="/w12-review">Overview</Link>
           <Link href="/w12-review/scripts">Scripts</Link>
+          <Link href="/w12-review/takes">Takes</Link>
           <Link href="/w12-review/motion">Motion</Link>
           <Link href="/w12-embed-demo?at=after-hero&chrome=framed">
             Embed demos
