@@ -80,12 +80,16 @@ form maps to the rust banner).
 
 - Signup copy: dropped the stale "23 June" date (panel + page metadata).
 - `/error` and the root 404 secondary action: "Go home" → "Home".
-- Auth masthead logo accent: locked terracotta `--logo-accent` (was ochre).
-- Favicon set replaced: old spiral → **G-with-arrow brand mark** —
-  `icon.svg` (flips ink/cream by tab colour scheme, terracotta arrow),
-  `favicon.ico` (16/32/48) and `apple-touch-icon.png` (180) on the
-  paper-cream square. Browsers cache favicons hard: hard-refresh or a
-  fresh tab may be needed to see it.
+- Auth masthead logo accent: **mustard** (`--v-ochre-bright` #d4a062).
+  David compared mustard vs the terracotta brand accent on the teal band
+  across two review rounds and picked mustard; terracotta `--logo-accent`
+  stays canonical on light/sage grounds (public nav, score page).
+- Favicon set replaced: old spiral → **G-with-arrow brand mark, V1
+  "Masthead match"** (picked from a 5-variant demo sheet): teal #2c4a47
+  ground, cream G, mustard arrow — `icon.svg`, `favicon.ico` (16/32/48),
+  `apple-touch-icon.png` (180). The teal ground reads on light and dark
+  tab bars. Browsers cache favicons hard: hard-refresh or a fresh tab may
+  be needed to see it.
 - Two more clean-build bugs found and fixed en route (same root cause as
   the remotion fix — the dev tree had uncommitted state master needed):
   `fix(fonts)` committed the Source Serif 4/Sans 3 loaders (clean builds
