@@ -76,6 +76,23 @@ form maps to the rust banner).
 > had been broken since the W12 explainer landed, stranding `:3001` on a
 > 7-day-old image. Excluding the sub-project restores reproducible builds.
 
+### Review fixes (David, /verify/W1, 2026-07-03)
+
+- Signup copy: dropped the stale "23 June" date (panel + page metadata).
+- `/error` and the root 404 secondary action: "Go home" → "Home".
+- Auth masthead logo accent: locked terracotta `--logo-accent` (was ochre).
+- Favicon set replaced: old spiral → **G-with-arrow brand mark** —
+  `icon.svg` (flips ink/cream by tab colour scheme, terracotta arrow),
+  `favicon.ico` (16/32/48) and `apple-touch-icon.png` (180) on the
+  paper-cream square. Browsers cache favicons hard: hard-refresh or a
+  fresh tab may be needed to see it.
+- Two more clean-build bugs found and fixed en route (same root cause as
+  the remotion fix — the dev tree had uncommitted state master needed):
+  `fix(fonts)` committed the Source Serif 4/Sans 3 loaders (clean builds
+  rendered every FDE surface in Inter), and `fix(brand)` committed the
+  locked `--logo-wordmark`/`--logo-accent` vars (undefined in an SVG fill
+  computes to black, so clean builds shipped a black logo arrow site-wide).
+
 ## Structure (how the re-skin is scoped — no backend/schema/infra change)
 
 Pure front-end re-skin. No DB, API, auth-provider or route change. The register
