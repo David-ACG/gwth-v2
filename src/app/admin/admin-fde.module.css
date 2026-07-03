@@ -611,6 +611,24 @@
   max-width: 52rem;
 }
 
+/* ── Loading placeholders ─────────────────────────────────────────────── */
+
+.skeletonTitle {
+  width: 14rem;
+  height: 2rem;
+  background: var(--v-line-soft);
+}
+
+.skeletonKicker {
+  width: 6rem;
+  height: 0.8rem;
+  background: var(--v-line-soft);
+}
+
+.skeletonCard {
+  min-height: 7rem;
+}
+
 /* ── Access-denied / error card ───────────────────────────────────────── */
 
 .center {
