@@ -1,5 +1,10 @@
 import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
+import {
+  Inter,
+  JetBrains_Mono,
+  Source_Serif_4,
+  Source_Sans_3,
+} from "next/font/google"
 import Script from "next/script"
 import { RootProvider } from "@/providers/root-provider"
 import { RouteProgress } from "@/components/shared/route-progress"
@@ -15,6 +20,22 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
+})
+
+// FDE journal register fonts (DESIGN_FDE.md §3). Every *-fde module and the
+// auth surfaces set `font-family: var(--font-source-serif), Georgia, serif`
+// on their .shell — without these loaders the var is undefined, the whole
+// declaration is dropped, and FDE pages silently fall back to Inter.
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-source-serif",
+  display: "swap",
+})
+
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-source-sans",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -56,7 +77,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${sourceSerif.variable} ${sourceSans.variable}`}
       suppressHydrationWarning
     >
       <head>
