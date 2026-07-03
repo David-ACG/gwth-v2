@@ -88,6 +88,12 @@
 :root {
   --radius: 0.625rem;
 
+  /* Locked GWTH.ai logo colours (decision 2026-04-29 via /logo_picker).
+     LogoGwth / LogoGwthMark default to these; the accent terracotta also
+     matches the favicon set. Referenced by the public nav on every page. */
+  --logo-wordmark: #22301f;
+  --logo-accent: #a94c2e;
+
   --background: oklch(0.98 0 0);
   --foreground: oklch(0.18 0.04 175);
 
@@ -157,6 +163,9 @@
 
 .dark {
   /* Graphite Warm — bg: #191817, card: #232221 */
+  --logo-wordmark: #edeae6;
+  --logo-accent: #a94c2e;
+
   --background: oklch(0.17 0.005 60);
   --foreground: oklch(0.93 0.008 60);
 
