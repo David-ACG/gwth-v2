@@ -38,12 +38,23 @@ docker run -d --name "$NAME" \
   -e HOST=0.0.0.0 \
   -e HOSTNAME=0.0.0.0 \
   -e PORT="$CONTAINER_PORT" \
-  -e NEXT_PUBLIC_SITE_URL="http://192.168.178.50:${HOST_PORT}" \
-  -e BETTER_AUTH_URL="http://192.168.178.50:${HOST_PORT}" \
+  -e NEXT_PUBLIC_SITE_URL="http://hlab.taila51191.ts.net:${HOST_PORT}" \
+  -e BETTER_AUTH_URL="http://hlab.taila51191.ts.net:${HOST_PORT}" \
   -e ENABLE_DEV_MOCK_USER=true \
   "$IMAGE" >/dev/null
 # ENABLE_DEV_MOCK_USER (W3): the W8-beta staging review env surfaces the mock
 # learner so reviewers see imported Month-1 content unlocked. Remove this -e
 # line before any public/production deploy.
+#
+# Canonical staging origin = the Tailscale MagicDNS name (2026-07-01, David):
+# reachable from every tailnet device (remote incl.), WireGuard-encrypted on
+# the wire despite the http scheme, and Better Auth auto-trusts its own
+# baseURL origin so tailnet browsers pass the CSRF origin check. The LAN
+# origin (http://192.168.178.50:3001) keeps working via the hardcoded
+# trustedOrigins list in src/lib/better-auth.ts — the on-box smoke uses it.
+# Deliberately NOT https via `tailscale serve`: the app stamps
+# Strict-Transport-Security on every response, and HSTS pins per-HOSTNAME —
+# one https page-load would break every plain-http service on hlab
+# (:8090 board, :3001 itself) in that browser for max-age (2 years).
 
 echo "deployed $NAME on :${HOST_PORT} (network=$NET, secrets via SOPS, Supabase env dropped)"

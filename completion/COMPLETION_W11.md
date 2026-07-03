@@ -7,7 +7,7 @@ COMPLETE). Run the live `:3001` round-trip smoke and resolve the hard
 Clerk fallback **NOT** invoked. One David-only follow-up remains (staging OAuth
 app registration + consent click-through — not automatable headlessly).
 
-**Primary test URL:** http://192.168.178.50:3001/login
+**Primary test URL:** http://hlab.taila51191.ts.net:3001/login (Tailscale — works from any tailnet device; LAN fallback: http://192.168.178.50:3001/login)
 **Decision register:** D4 — gate resolution note recorded 2026-06-23.
 
 > **Re-verified at completion 2026-07-01.** Independently re-ran the live smoke
@@ -22,6 +22,23 @@ app registration + consent click-through — not automatable headlessly).
 > - OAuth init still 500 on staging (creds never provisioned) — the one David-only
 >   residual below; provider-agnostic, so *not* a Better Auth defect and not a gate
 >   failure. Better Auth **still HOLDS**; Clerk fallback remains NOT invoked.
+
+> **Addendum 2026-07-01 — staging re-pointed to the Tailscale origin.** David
+> reviews remotely, so the canonical staging origin is now the tailnet name:
+> `BETTER_AUTH_URL=http://hlab.taila51191.ts.net:3001` (deploy/run-staging.sh;
+> WireGuard-encrypted on the wire despite the http scheme). No app code changed:
+> Better Auth auto-trusts its own `baseURL` origin, and the LAN origin stays
+> trusted via the existing `trustedOrigins` list in `src/lib/better-auth.ts`.
+> Re-verified by running the full smoke against **both** origins after redeploy:
+> - `W11_SMOKE_BASE=http://hlab.taila51191.ts.net:3001 bash deploy/smoke-w11-auth.sh` → **15/15 green**
+> - `bash deploy/smoke-w11-auth.sh` (LAN default) → **15/15 green** (no regression)
+>
+> Deliberately **not** HTTPS via `tailscale serve`: the app stamps an HSTS header
+> on every response, and browsers pin HSTS per-hostname — one https page-load on
+> `hlab.taila51191.ts.net` would break every plain-http service on hlab (the
+> :8090 board, :3001 itself) in that browser for the 2-year max-age. An https
+> staging origin (needed for Google/LinkedIn OAuth redirect URIs) requires
+> gating that header first — filed as follow-up work.
 
 ---
 
@@ -115,13 +132,20 @@ invoked and this is escalated to David.
 
 ## What David should verify (3)
 
-1. **OAuth consent (the only open item).** Register staging OAuth apps for
-   Google/GitHub/LinkedIn with redirect URIs on `http://192.168.178.50:3001`,
-   drop the client id/secret into `deploy/secrets.staging.env` (SOPS), redeploy
-   (`bash deploy/run-staging.sh`), then click each "Continue with …" on
-   http://192.168.178.50:3001/login. (Prod uses gwth.ai-scoped apps separately.)
+1. **OAuth consent (the only open item).** Register the staging OAuth apps
+   against the Tailscale origin. **GitHub** accepts a plain-http callback —
+   redirect URI `http://hlab.taila51191.ts.net:3001/api/auth/callback/github` —
+   so it can be done today. **Google and LinkedIn require an https redirect
+   URI**, which staging doesn't have yet (see the HSTS note in the 2026-07-01
+   addendum) — deferred to the https-staging follow-up. Drop each client
+   id/secret into `deploy/secrets.staging.env` (SOPS), redeploy
+   (`bash deploy/run-staging.sh`), then click "Continue with …" on
+   http://hlab.taila51191.ts.net:3001/login. (Prod uses gwth.ai-scoped apps
+   separately — https, so all 3 providers work there.)
 2. **The gate call.** Confirm you accept "Better Auth HOLDS, Clerk fallback NOT
    invoked" — the load-bearing proxy/CSRF/session risk is retired (smoke step 5
    + the Origin-enforcement note). See the D4 note in the decision register.
 3. **Re-run the smoke any time:** `bash deploy/smoke-w11-auth.sh` (creates +
-   cleans up its own throwaway users on the staging DB).
+   cleans up its own throwaway users on the staging DB); add
+   `W11_SMOKE_BASE=http://hlab.taila51191.ts.net:3001` to smoke the Tailscale
+   origin.
