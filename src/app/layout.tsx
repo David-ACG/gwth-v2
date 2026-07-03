@@ -59,7 +59,13 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: { card: "summary_large_image" },
-  robots: { index: false, follow: false },
+  // Pre-launch lockdown blocks indexing. ALLOW_INDEXING=1 (set by the
+  // Lighthouse harness; will also drop in for production launch) inverts
+  // the default so the SEO is-crawlable audit can pass.
+  robots:
+    process.env.ALLOW_INDEXING === "1"
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
