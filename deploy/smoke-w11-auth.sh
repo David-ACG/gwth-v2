@@ -16,7 +16,10 @@
 # path, which is the load-bearing D4 risk.
 set -uo pipefail
 
-B="http://192.168.178.50:3001"
+# Default = the LAN origin (trusted via the hardcoded list in better-auth.ts);
+# override with W11_SMOKE_BASE to smoke another trusted origin, e.g. the
+# Tailscale one: W11_SMOKE_BASE=http://hlab.taila51191.ts.net:3001
+B="${W11_SMOKE_BASE:-http://192.168.178.50:3001}"
 JARA="$(mktemp)"; JARB="$(mktemp)"
 EA="w11-smoke-a-$(date +%s)@example.com"
 EB="w11-smoke-b-$(date +%s)@example.com"
