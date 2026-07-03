@@ -1,16 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <!-- GWTH.ai brand mark: the wordmark's leading G with the accent arrow
-       (geometry = LogoGwthMark in src/components/marketing/redesign/logo-gwth.tsx).
-       Locked brand colours (globals.css): wordmark ink #22301f (cream #edeae6 in
-       dark tabs via the media query), accent terracotta #a94c2e in both modes. -->
-  <style>
-    .wm { fill: #22301f; }
-    @media (prefers-color-scheme: dark) {
-      .wm { fill: #edeae6; }
-    }
-  </style>
-  <g transform="translate(4,15.8) scale(0.945)">
-    <path class="wm" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
-    <path fill="#a94c2e" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
+  <!-- GWTH.ai favicon, V1 "Masthead match" (David's pick, 2026-07-03):
+       teal ground, cream G, mustard arrow — the auth-masthead logo treatment.
+       Geometry = LogoGwthMark (src/components/marketing/redesign/logo-gwth.tsx).
+       The teal ground reads on light AND dark tab bars; no per-mode variant. -->
+  <rect width="128" height="128" fill="#2c4a47"/>
+  <g transform="translate(11.5,21.8) scale(0.828)">
+    <path fill="#ece8d2" d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"/>
+    <path fill="#d4a062" d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"/>
   </g>
 </svg>
