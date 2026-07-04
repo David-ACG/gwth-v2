@@ -232,7 +232,7 @@ export const RemotionRoot: React.FC = () => {
         fps={fps}
         width={width}
         height={height}
-        defaultProps={{ audioSrc: "audio/vo-david-draft.wav" }}
+        defaultProps={{ audioSrc: "audio/vo-final-take005.wav" }}
       />
 
       {/* ---- Step 2a: motion-option reels (David picks one per archetype) ---- */}
