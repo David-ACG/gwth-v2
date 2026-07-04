@@ -101,24 +101,28 @@ for (const [mode, dark] of [["light", false], ["dark", true]]) {
 
   await page.goto(`${BASE}/admin`, { waitUntil: "networkidle" })
   const cards = await page.locator('[data-section="cohort-health"] a').count()
-  cards === 4 ? ok("overview: 4 metric cards") : bad(`overview: ${cards} metric cards`)
+  if (cards === 4) ok("overview: 4 metric cards")
+  else bad(`overview: ${cards} metric cards`)
 
   await page.goto(`${BASE}/admin/roster`, { waitUntil: "networkidle" })
   const rosterRows = await page.locator('[data-section="roster"] tbody tr').count()
-  rosterRows >= 5 ? ok(`roster: ${rosterRows} rows`) : bad(`roster: only ${rosterRows} rows`)
+  if (rosterRows >= 5) ok(`roster: ${rosterRows} rows`)
+  else bad(`roster: only ${rosterRows} rows`)
   const granted = await page.locator("text=✓ granted").count()
-  granted >= 4 ? ok(`roster: ${granted} granted labels`) : bad(`roster: ${granted} granted labels`)
+  if (granted >= 4) ok(`roster: ${granted} granted labels`)
+  else bad(`roster: ${granted} granted labels`)
 
   await page.goto(`${BASE}/admin/funnel`, { waitUntil: "networkidle" })
   const funnelRows = await page.locator('[data-section="funnel"] tbody tr').count()
-  funnelRows >= 3 ? ok(`funnel: ${funnelRows} granted testers`) : bad(`funnel: ${funnelRows} rows`)
-  ;(await page.locator("text=● stalled").count()) >= 1
-    ? ok("funnel: stalled tester surfaced")
-    : bad("funnel: no stalled label found")
+  if (funnelRows >= 3) ok(`funnel: ${funnelRows} granted testers`)
+  else bad(`funnel: ${funnelRows} rows`)
+  if ((await page.locator("text=● stalled").count()) >= 1) ok("funnel: stalled tester surfaced")
+  else bad("funnel: no stalled label found")
 
   await page.goto(`${BASE}/admin/feedback`, { waitUntil: "networkidle" })
   const items = await page.locator('[data-section="inbox-list"] li').count()
-  items >= 2 ? ok(`feedback: ${items} inbox items`) : bad(`feedback: ${items} items`)
+  if (items >= 2) ok(`feedback: ${items} inbox items`)
+  else bad(`feedback: ${items} items`)
 
   // ── 2. Grant round-trip: form → toast → roster shows the new state ──
   await page.goto(`${BASE}/admin/roster`, { waitUntil: "networkidle" })
@@ -147,9 +151,8 @@ for (const [mode, dark] of [["light", false], ["dark", true]]) {
   await ctx.addCookies(jarCookies(TESTER_JAR))
   const page = await ctx.newPage()
   await page.goto(`${BASE}/admin`, { waitUntil: "networkidle" })
-  page.url().includes("/dashboard")
-    ? ok(`non-admin redirected to ${new URL(page.url()).pathname}`)
-    : bad(`non-admin NOT redirected (at ${page.url()})`)
+  if (page.url().includes("/dashboard")) ok(`non-admin redirected to ${new URL(page.url()).pathname}`)
+  else bad(`non-admin NOT redirected (at ${page.url()})`)
   await page.screenshot({ path: `${OUT}/admin-nonadmin-redirect.png`, fullPage: false })
   await ctx.close()
 }
@@ -159,9 +162,8 @@ for (const [mode, dark] of [["light", false], ["dark", true]]) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   const page = await ctx.newPage()
   await page.goto(`${BASE}/admin`, { waitUntil: "networkidle" })
-  page.url().includes("/login")
-    ? ok("anonymous /admin -> /login")
-    : bad(`anonymous /admin NOT bounced (at ${page.url()})`)
+  if (page.url().includes("/login")) ok("anonymous /admin -> /login")
+  else bad(`anonymous /admin NOT bounced (at ${page.url()})`)
   await ctx.close()
 }
 
@@ -172,21 +174,24 @@ for (const [mode, dark] of [["light", false], ["dark", true]]) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id: FEEDBACK_ID, read: true }),
   })
-  anon.status === 401 ? ok("API: anonymous PATCH feedback -> 401") : bad(`API: anon -> ${anon.status}`)
+  if (anon.status === 401) ok("API: anonymous PATCH feedback -> 401")
+  else bad(`API: anon -> ${anon.status}`)
 
   const tester = await fetch(`${BASE}/api/admin/feedback`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json", Cookie: jarHeader(TESTER_JAR) },
     body: JSON.stringify({ id: FEEDBACK_ID, read: true }),
   })
-  tester.status === 401 ? ok("API: non-admin PATCH feedback -> 401") : bad(`API: tester -> ${tester.status}`)
+  if (tester.status === 401) ok("API: non-admin PATCH feedback -> 401")
+  else bad(`API: tester -> ${tester.status}`)
 
   const anonGrant = await fetch(`${BASE}/api/admin/grant`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: "x@y.com", months: 3, sendInvite: false }),
   })
-  anonGrant.status === 401 ? ok("API: anonymous POST grant -> 401") : bad(`API: anon grant -> ${anonGrant.status}`)
+  if (anonGrant.status === 401) ok("API: anonymous POST grant -> 401")
+  else bad(`API: anon grant -> ${anonGrant.status}`)
 
   if (FEEDBACK_ID) {
     const admin = await fetch(`${BASE}/api/admin/feedback`, {
@@ -194,7 +199,8 @@ for (const [mode, dark] of [["light", false], ["dark", true]]) {
       headers: { "Content-Type": "application/json", Cookie: jarHeader(ADMIN_JAR) },
       body: JSON.stringify({ id: FEEDBACK_ID, read: true }),
     })
-    admin.status === 200 ? ok("API: admin PATCH feedback -> 200") : bad(`API: admin -> ${admin.status}`)
+    if (admin.status === 200) ok("API: admin PATCH feedback -> 200")
+    else bad(`API: admin -> ${admin.status}`)
   }
 }
 

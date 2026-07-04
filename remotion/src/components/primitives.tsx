@@ -57,6 +57,10 @@ export const FitToFrame: React.FC<{
       // offsetHeight is a layout metric: transforms (ours or the entrance
       // animations') never feed back into it, so this settles in one pass.
       const height = el.offsetHeight;
+      // Reading `offsetHeight` is an external-system (browser layout) read that
+      // can't be derived during render, so this setState is legitimate — the
+      // rule's static heuristic can't see that. It settles in a single pass.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setScale(height > maxHeight ? maxHeight / height : 1);
     }
     continueRender(handle);
