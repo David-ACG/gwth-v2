@@ -22,7 +22,6 @@ for (const mode of MODES) {
     await ctx.addInitScript((m) => {
       try { localStorage.setItem("theme", m) } catch {}
     }, mode)
-    const page = await ctx.newContext ? null : null
     const p = await ctx.newPage()
     p.on("console", (msg) => {
       if (msg.type() === "error") {

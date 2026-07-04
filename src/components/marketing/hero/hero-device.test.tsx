@@ -3,11 +3,6 @@ import { render } from "@testing-library/react"
 import { HeroDevice } from "./hero-device"
 import { EXAMPLE_SCORE_VALUE } from "@/components/marketing/score-vis/example-data"
 
-const textOf = (root: HTMLElement, selector: string): string =>
-  Array.from(root.querySelectorAll(selector))
-    .map((el) => el.textContent ?? "")
-    .join(" | ")
-
 describe("HeroDevice", () => {
   it("renders the generic example name and role", () => {
     const { container } = render(<HeroDevice />)

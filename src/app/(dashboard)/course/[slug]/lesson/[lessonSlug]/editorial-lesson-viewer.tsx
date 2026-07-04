@@ -111,7 +111,7 @@ export function EditorialLessonViewer({
   const [surface, setSurface] = React.useState<EditorialLessonSurface>(
     initialSurface
   )
-  const [pageNum, setPageNum] = React.useState(initialPage)
+  const [pageNum] = React.useState(initialPage)
   const [autoAdvance, setAutoAdvance] = React.useState(true)
   const [speed, setSpeed] = React.useState<"1x" | "1.25x" | "1.5x">("1x")
 
@@ -126,11 +126,7 @@ export function EditorialLessonViewer({
   if (surface === "mobile") {
     return (
       <div className={styles.shell}>
-        <MobileSurface
-          lesson={lesson}
-          autoAdvance={autoAdvance}
-          onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
-        />
+        <MobileSurface lesson={lesson} autoAdvance={autoAdvance} />
         <LessonWidgets
           lessonNumber={lesson.lessonNumber}
           mobile
@@ -197,7 +193,7 @@ export function EditorialLessonViewer({
 
             <div className="flex flex-1 justify-center py-9">
               {isVideo ? (
-                <VideoPageBody pageTotal={lesson.pages.length} />
+                <VideoPageBody />
               ) : isQa ? (
                 lesson.questions && lesson.questions.length > 0 ? (
                   <RealQAPageBody questions={lesson.questions} />
@@ -952,7 +948,7 @@ function Callout({
 
 // ─── Video page ──────────────────────────────────────────────────────────────
 
-function VideoPageBody({ pageTotal: _pageTotal }: { pageTotal: number }) {
+function VideoPageBody() {
   return (
     <div className="w-full max-w-[880px]">
       <div className="mb-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
@@ -1464,11 +1460,9 @@ function LessonCompleteSurface({ lesson }: { lesson: EditorialLessonMeta }) {
 function MobileSurface({
   lesson,
   autoAdvance,
-  onToggleAutoAdvance: _onToggleAutoAdvance,
 }: {
   lesson: EditorialLessonMeta
   autoAdvance: boolean
-  onToggleAutoAdvance: () => void
 }) {
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[412px] flex-col">
