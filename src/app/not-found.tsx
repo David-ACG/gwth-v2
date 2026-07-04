@@ -1,22 +1,45 @@
 import Link from "next/link"
 
+import styles from "@/app/boundary-fde.module.css"
+
 /**
- * Custom 404 page. Shown when a route doesn't match any page.
+ * Custom 404 page. Shown when a route doesn't match any page. Renders the
+ * FDE journal register's paper panel (DESIGN_FDE.md) with an ochre
+ * wayfinding glyph and a mono status label.
  */
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-4 text-center">
-      <div className="text-6xl font-bold text-muted-foreground/30">404</div>
-      <h1 className="text-2xl font-semibold">Page not found</h1>
-      <p className="max-w-md text-muted-foreground">
-        The page you&apos;re looking for doesn&apos;t exist or has been moved.
-      </p>
-      <Link
-        href="/"
-        className="mt-2 rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-      >
-        Home
-      </Link>
-    </div>
+    <main className={`${styles.shell} ${styles.shellFull}`} data-section="not-found">
+      <div className={styles.panelColumn}>
+        <div className={styles.panel}>
+          <p className={`${styles.status} ${styles.statusNotFound}`}>
+            <svg
+              aria-hidden="true"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polygon
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
+              />
+            </svg>
+            <span>404 · Not found</span>
+          </p>
+          <h1 className={styles.title}>Page not found</h1>
+          <p className={styles.body}>
+            The page you&apos;re looking for doesn&apos;t exist or has been moved.
+          </p>
+          <div className={styles.actions}>
+            <Link href="/" className={styles.buttonSolid}>
+              Home
+            </Link>
+          </div>
+        </div>
+      </div>
+    </main>
   )
 }
