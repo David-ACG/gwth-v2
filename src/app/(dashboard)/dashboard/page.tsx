@@ -2,7 +2,11 @@ import * as React from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getCourses } from "@/lib/data/courses"
-import { getAllCourseProgress, getStreak } from "@/lib/data/progress"
+import {
+  getAllCourseProgress,
+  getAllLessonProgress,
+  getStreak,
+} from "@/lib/data/progress"
 import { getNotifications } from "@/lib/data/notifications"
 import {
   getDashboardUser,
@@ -12,7 +16,13 @@ import {
 import { HeroDevice } from "@/components/marketing/hero/hero-device"
 import { ENABLE_BILLING, ENABLE_GWTH_SCORE, COURSE_MONTHLY_PRICE } from "@/lib/config"
 import { cn } from "@/lib/utils"
-import type { User, Course, CourseProgress } from "@/lib/types"
+import type {
+  User,
+  Course,
+  CourseProgress,
+  LessonProgress,
+  LessonSummary,
+} from "@/lib/types"
 import styles from "./dashboard-fde.module.css"
 
 /**
@@ -44,16 +54,19 @@ export const DASHBOARD_BREAKOUT =
  * (see DESIGN_FDE.md): Source Serif 4 display + body, JetBrains Mono metadata,
  * paper surfaces with hairline rules, dash-progress strips, square corners.
  *
- * Real data: user identity, course title, lesson progress, notifications,
- * streak. Fixture data: capstone status, progress history, lessons-updated feed,
- * portfolio. Post-beta score panel reuses <HeroDevice /> behind a flag.
+ * All numbers shown to a real session are real (W14): course progress and the
+ * streak derive from `lesson_progress`, lesson rows come from the imported
+ * course, and stores that do not exist yet (labs, portfolio, capstones,
+ * notifications) render designed honest-zero states instead of fixtures.
+ * Post-beta score panel reuses <HeroDevice /> behind a flag.
  */
 export default async function DashboardPage() {
-  const [user, courses, courseProgress, streak, notifications] =
+  const [user, courses, courseProgress, lessonProgress, streak, notifications] =
     await Promise.all([
       getDashboardUser(),
       getCourses(),
       getAllCourseProgress(),
+      getAllLessonProgress(),
       getStreak(),
       getNotifications(),
     ])
@@ -83,6 +96,7 @@ export default async function DashboardPage() {
           user={user}
           course={course}
           progress={progress}
+          lessonProgress={lessonProgress}
           notifications={notifications}
         />
       </div>
@@ -96,6 +110,7 @@ export default async function DashboardPage() {
           user={user}
           course={course}
           progress={progress}
+          lessonProgress={lessonProgress}
           streak={streak}
           notifications={notifications}
         />
@@ -116,14 +131,51 @@ export type ActiveDashboardProps = {
   user: User
   course: Course
   progress: CourseProgress | undefined
+  /** The user's real lesson-progress rows; empty for a fresh account. */
+  lessonProgress: LessonProgress[]
   streak: Awaited<ReturnType<typeof getStreak>>
   notifications: Awaited<ReturnType<typeof getNotifications>>
+}
+
+/**
+ * A lesson from the course outline paired with its 1-based position and the
+ * user's real progress row (if any). Derived per render in `deriveLessonPlan`.
+ */
+type PlannedLesson = {
+  lesson: LessonSummary
+  number: number
+  row: LessonProgress | undefined
+}
+
+/**
+ * Flattens the course outline in section/lesson order and splits it around
+ * the user's real progress: how many are complete, and which lessons come
+ * next. Honest zero for a fresh account: 0 complete, lesson 1 up next.
+ */
+function deriveLessonPlan(course: Course, rows: LessonProgress[]) {
+  const ordered = [...course.sections]
+    .sort((a, b) => a.order - b.order)
+    .flatMap((section) => [...section.lessons].sort((a, b) => a.order - b.order))
+  const rowByLesson = new Map(rows.map((row) => [row.lessonId, row]))
+  const planned: PlannedLesson[] = ordered.map((lesson, index) => ({
+    lesson,
+    number: index + 1,
+    row: rowByLesson.get(lesson.id),
+  }))
+  const upcoming = planned.filter((p) => !p.row?.isCompleted)
+  return { planned, upcoming, next: upcoming[0] }
+}
+
+/** Formats seconds of study time as decimal hours for the activity panel. */
+function formatHours(seconds: number): string {
+  return (seconds / 3600).toFixed(1)
 }
 
 export function ActiveDashboard({
   user,
   course,
   progress,
+  lessonProgress,
   streak,
   notifications,
 }: ActiveDashboardProps) {
@@ -133,7 +185,18 @@ export function ActiveDashboard({
     course.sections.flatMap((s) => s.lessons).length ??
     24
   const monthNumber = Math.max(1, user.subscriptionMonth)
-  const nextLessonNumber = completed + 1
+  const { upcoming, next } = deriveLessonPlan(course, lessonProgress)
+  const nextLessonNumber = next?.number ?? completed + 1
+  const nextLessonStarted = (next?.row?.progress ?? 0) > 0
+  const nextLessonHref = next
+    ? `/course/${course.slug}/lesson/${next.lesson.slug}`
+    : `/course/${course.slug}`
+  const timeSpentSeconds = lessonProgress.reduce(
+    (sum, row) => sum + row.timeSpent,
+    0
+  )
+  const quizzesPassed = lessonProgress.filter((row) => row.quizPassed).length
+  const daysActive = streak.yearlyActivity.filter((d) => d.count > 0).length
 
   return (
     <div className={styles.shell} data-section="dashboard-active">
@@ -144,36 +207,59 @@ export function ActiveDashboard({
         <div>
           <p className={styles.mono}>TODAY · {formatTimeBst()}</p>
           <h1 className={styles.bandTitle}>
-            Welcome back, {firstName(user.name)}.
+            Welcome{completed > 0 ? " back" : ""}, {firstName(user.name)}.
             <br />
-            <em>Five hours this week.</em>
+            <em>
+              {completed > 0
+                ? `${completed} of ${total} lessons complete.`
+                : "Your first lesson is ready."}
+            </em>
           </h1>
           <p className={styles.bandLead}>
-            Month {monthNumber}, lesson {nextLessonNumber}. {ENABLE_GWTH_SCORE
-              ? "Capstone 01 approved 6 May. Score 104, verified two days ago."
-              : "Your course progress is ready to continue."}
+            Month {monthNumber}, lesson {nextLessonNumber}.{" "}
+            {ENABLE_GWTH_SCORE
+              ? "Your GWTH Score grows as you complete verified work."
+              : completed > 0
+                ? "Your course progress is ready to continue."
+                : "Everything starts from lesson one."}
           </p>
         </div>
         <div className={styles.bandAside}>
-          <p className={styles.mono}>NEXT, IF YOU HAVE 24 MINUTES</p>
+          <p className={styles.mono}>
+            {next
+              ? `NEXT, IF YOU HAVE ${next.lesson.duration} MINUTES`
+              : "MONTH COMPLETE"}
+          </p>
           <p className={cn(styles.mono, "mt-3")}>
-            LESSON {nextLessonNumber} · MONTH {monthNumber}
+            {next
+              ? `LESSON ${nextLessonNumber} · MONTH ${monthNumber}`
+              : `MONTH ${monthNumber} · ALL LESSONS DONE`}
           </p>
           <div className={styles.asideTitle}>
-            Building with Claude: your first useful tool.
+            {next ? next.lesson.title : "Every lesson is complete."}
           </div>
           <div className={styles.asideNote}>
-            You wrote the brief yesterday. Today you ship it.
+            {next
+              ? nextLessonStarted
+                ? "Pick up where you left off."
+                : completed > 0
+                  ? "Fresh lesson, same rhythm."
+                  : "Start here. It sets up everything that follows."
+              : "New content unlocks with your next month."}
           </div>
           <div className={styles.actionRow}>
-            <Link href={`/course/${course.slug}`} className={styles.buttonSolid}>
-              Continue Lesson {nextLessonNumber}
+            <Link href={nextLessonHref} className={styles.buttonSolid}>
+              {next
+                ? completed > 0
+                  ? `Continue Lesson ${nextLessonNumber}`
+                  : "Start Lesson 1"
+                : "Review the course"}
             </Link>
             <Link
               href={`/course/${course.slug}`}
               className={cn(styles.buttonOutline, styles.buttonSm)}
             >
-              Skip to Q&amp;A
+              Course outline
             </Link>
           </div>
         </div>
@@ -196,11 +282,13 @@ export function ActiveDashboard({
           <Dashes value={completed} total={total} />
         </div>
         <div className={styles.dashMeta}>
-          <span className={styles.mono}>UNLOCKED 8 APR</span>
-          <span className={styles.mono}>TARGET 24 LESSONS · 7 JUN</span>
+          <span className={styles.mono}>MONTH {monthNumber} OF 3</span>
+          <span className={styles.mono}>
+            {completed} DONE · {Math.max(0, total - completed)} TO GO
+          </span>
         </div>
 
-        {/* lesson list */}
+        {/* lesson list — real course outline + real progress rows */}
         <div className={styles.table}>
           <div className={styles.tableHead}>
             <span />
@@ -208,64 +296,54 @@ export function ActiveDashboard({
             <span className={styles.mono}>LESSON</span>
             <span className={styles.mono}>LENGTH</span>
           </div>
-          {/* compressed previous range */}
-          <div className={styles.tableRow}>
-            <span className={styles.glyphDone} aria-hidden="true">
-              ✓
-            </span>
-            <span className={styles.mono}>
-              L01–L{String(Math.max(completed, 12)).padStart(2, "0")}
-            </span>
-            <span className={styles.rowTitle}>
-              {Math.max(completed, 12)} foundations, complete.{" "}
-              <span className={styles.rowNote}>
-                ChatGPT past Google, prompt patterns, three small builds.
+          {completed > 0 && (
+            <div className={styles.tableRow}>
+              <span className={styles.glyphDone} aria-hidden="true">
+                ✓
               </span>
-            </span>
-            <Link href={`/course/${course.slug}`} className={styles.monoLinkMuted}>
-              REVIEW →
-            </Link>
-          </div>
-          <LessonRow
-            num={nextLessonNumber}
-            title="Building with Claude: your first useful tool"
-            length="24 MIN"
-            state="current"
-          />
-          <LessonRow
-            num={nextLessonNumber + 1}
-            title="Q&A: when to reach for which model"
-            length="9 MIN"
-            state="pending"
-          />
-          <LessonRow
-            num={nextLessonNumber + 2}
-            title="Reading docs without reading docs"
-            length="18 MIN"
-            state="pending"
-          />
-          <LessonRow
-            num={nextLessonNumber + 3}
-            title="Codex for non-engineers, part one"
-            length="22 MIN"
-            state="pending"
-          />
-          <LessonRow
-            num={nextLessonNumber + 4}
-            title="Plain-English automations"
-            length="26 MIN"
-            state="pending"
-            tag="OPTIONAL"
-          />
-          <LessonRow
-            num={nextLessonNumber + 5}
-            title="Two-week capstone brief"
-            length="14 MIN"
-            state="pending"
-          />
+              <span className={styles.mono}>DONE</span>
+              <span className={styles.rowTitle}>
+                {completed} lesson{completed === 1 ? "" : "s"} complete.{" "}
+                <span className={styles.rowNote}>
+                  Revisit any of them from the course page.
+                </span>
+              </span>
+              <Link href={`/course/${course.slug}`} className={styles.monoLinkMuted}>
+                REVIEW →
+              </Link>
+            </div>
+          )}
+          {upcoming.slice(0, 6).map((planned, index) => (
+            <LessonRow
+              key={planned.lesson.id}
+              num={planned.number}
+              title={planned.lesson.title}
+              length={`${planned.lesson.duration} MIN`}
+              state={
+                index === 0
+                  ? nextLessonStarted
+                    ? "current"
+                    : "next"
+                  : "pending"
+              }
+              tag={planned.lesson.isOptional ? "OPTIONAL" : undefined}
+            />
+          ))}
+          {upcoming.length === 0 && (
+            <div className={styles.tableRow}>
+              <span className={styles.glyphDone} aria-hidden="true">
+                ✓
+              </span>
+              <span className={styles.mono}>ALL</span>
+              <span className={styles.rowTitle}>
+                Every lesson this month is complete.
+              </span>
+              <span />
+            </div>
+          )}
           <div className={styles.tableFoot}>
             <span className={styles.mono}>
-              + {Math.max(0, total - nextLessonNumber - 5)} MORE LESSONS THIS MONTH
+              + {Math.max(0, upcoming.length - 6)} MORE LESSONS THIS MONTH
             </span>
             <Link href={`/course/${course.slug}`} className={styles.monoLink}>
               VIEW ALL {total} →
@@ -286,7 +364,7 @@ export function ActiveDashboard({
                 20 mandatory plus 15 optional. Build towards app fluency.
               </p>
               <div className={styles.cardFoot}>
-                <span className={styles.monoStrong}>UNLOCKS 8 JUN</span>
+                <span className={styles.monoStrong}>UNLOCKS AFTER MONTH 01</span>
                 <span className={styles.cardPrice}>
                   £{COURSE_MONTHLY_PRICE.toFixed(0)}
                 </span>
@@ -304,7 +382,7 @@ export function ActiveDashboard({
                 20 mandatory plus 15 optional. Build towards enterprise fluency.
               </p>
               <div className={styles.cardFoot}>
-                <span className={styles.monoStrong}>UNLOCKS 8 JUL</span>
+                <span className={styles.monoStrong}>UNLOCKS AFTER MONTH 02</span>
                 <span className={styles.cardPrice}>
                   £{COURSE_MONTHLY_PRICE.toFixed(0)}
                 </span>
@@ -323,11 +401,15 @@ export function ActiveDashboard({
           <h2 className={cn(styles.sectionTitle, "mt-3")}>
             {ENABLE_GWTH_SCORE ? (
               <>
-                <em>Improving.</em> Verified two days ago.
+                <em>Your score.</em> It grows with verified work.
+              </>
+            ) : completed > 0 ? (
+              <>
+                <em>{completed} complete.</em> {total - completed} lessons to go.
               </>
             ) : (
               <>
-                <em>{completed} complete.</em> {total - completed} lessons to go.
+                <em>Not started yet.</em> {total} lessons ahead of you.
               </>
             )}
           </h2>
@@ -370,108 +452,67 @@ export function ActiveDashboard({
             {ENABLE_GWTH_SCORE ? "SECTION 03 · CREDENTIAL CURRENTNESS" : "SECTION 03 · COURSE CURRENTNESS"}
           </p>
           <h2 className={cn(styles.sectionTitle, "mt-3")}>
-            {ENABLE_GWTH_SCORE ? "Score is current." : "Course is current."}{" "}
-            <em>Keep going to stay up to date.</em>
+            Course is current.{" "}
+            <em>It updates as the tools change.</em>
           </h2>
           <div className={styles.panel}>
             <div className="flex justify-between items-start gap-4">
               <div>
                 <div className={styles.listTitle}>
-                  {ENABLE_GWTH_SCORE ? "Last verified work: Capstone 01." : "Last completed milestone: Capstone 01."}
+                  Lessons track the tools they teach.
                 </div>
                 <div className={styles.listMeta}>
-                  Approved 6 May by reviewer M. Patel.
+                  When a tool changes, the affected lesson is re-recorded.
                 </div>
               </div>
-              <span className={styles.statusGood}>✓ Stable</span>
-            </div>
-            <div className="mt-4">
-              <Dashes value={92} total={100} segments={20} />
-              <div className={styles.dashMeta}>
-                <span className={styles.mono}>
-                  {ENABLE_GWTH_SCORE ? "FRESHNESS 92%" : "CURRENTNESS 92%"}
-                </span>
-                <span className={styles.mono}>
-                  {ENABLE_GWTH_SCORE ? "NEXT DECAY CHECK 11 MAY" : "NEXT REVIEW CHECK 11 MAY"}
-                </span>
-              </div>
+              <span className={styles.statusGood}>✓ Current</span>
             </div>
           </div>
 
-          {/* Lessons updated */}
+          {/* Lessons updated — no update log store yet, honest empty feed */}
           <div className="mt-7">
             <div className="flex justify-between items-baseline gap-4">
-              <p className={styles.mono}>UPDATED SINCE YOU LAST WATCHED · 4</p>
-              <Link href="#" className={styles.monoLinkMuted}>
-                MARK ALL REVIEWED
-              </Link>
+              <p className={styles.mono}>UPDATED SINCE YOU LAST WATCHED · 0</p>
             </div>
             <p className={cn(styles.note, "mt-2")}>
-              The course updates as the tools do. A short re-watch keeps your
-              work current and in step with what employers are using right now.
+              The course updates as the tools do. When a lesson you have
+              watched is re-recorded, it will be listed here for a short
+              re-watch.
             </p>
-            <div className={styles.updatedList}>
-              <UpdatedLessonRow
-                num="L09"
-                title="Reading docs without reading docs"
-                change="New section on Claude Sonnet 4.5 doc-tool, 4 min added at 12:18."
-                date="2 DAYS AGO"
-              />
-              <UpdatedLessonRow
-                num="L11"
-                title="Spreadsheets, plain English"
-                change="Replaced the GPT-4 demo with Claude Code, same brief, faster path."
-                date="5 DAYS AGO"
-              />
-              <UpdatedLessonRow
-                num="L07"
-                title="When to reach for which model"
-                change="Updated pricing table and Apr-2026 model line-up. Two new examples."
-                date="1 WEEK AGO"
-              />
-              <UpdatedLessonRow
-                num="L04"
-                title="Prompt patterns that survive a model swap"
-                change="Re-recorded with new Claude voice. Same six patterns."
-                date="2 WEEKS AGO"
-              />
-            </div>
-            <div className="mt-3 flex justify-between items-center gap-4 flex-wrap">
-              <span className={styles.mono}>
-                REVIEWING UPDATED LESSONS HOLDS YOUR CURRENTNESS ABOVE 90%
-              </span>
-              <Link href="#" className={styles.monoLink}>
-                UPDATE LOG →
-              </Link>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* ACTIVITY */}
+      {/* ACTIVITY — all values derived from lesson_progress (W14) */}
       <section className={styles.section}>
         <div className={styles.sectionHead}>
           <h2 className={styles.sectionTitle}>
-            Five-hour rhythm. <em>Held for {streak.currentStreak} days.</em>
+            Five-hour rhythm.{" "}
+            <em>
+              {streak.currentStreak > 0
+                ? `Held for ${streak.currentStreak} day${streak.currentStreak === 1 ? "" : "s"}.`
+                : "It starts with your first session."}
+            </em>
           </h2>
           <p className={styles.mono}>SECTION 04 · ACTIVITY</p>
         </div>
         <div className={styles.activityGrid}>
           <div className={styles.activityCell}>
-            <p className={styles.mono}>HOURS THIS WEEK</p>
-            <div className={styles.hugeNum}>5.2</div>
+            <p className={styles.mono}>HOURS LOGGED · ALL TIME</p>
+            <div className={styles.hugeNum}>{formatHours(timeSpentSeconds)}</div>
             <p className={styles.activityNote}>
-              On target. The course is built around five hours a week, you are
-              exactly there.
+              {timeSpentSeconds > 0
+                ? "Logged against your lessons. The course is built around five hours a week."
+                : "The course is built around five hours a week. Your study time will log here."}
             </p>
             <div className={styles.factPair}>
               <div>
-                <p className={styles.mono}>VS LAST WEEK</p>
-                <p className={styles.factValue}>+0.8 HRS</p>
+                <p className={styles.mono}>LESSONS COMPLETE</p>
+                <p className={styles.factValue}>{completed}</p>
               </div>
               <div>
-                <p className={styles.mono}>4-WEEK AVG</p>
-                <p className={styles.factValue}>4.9 HRS</p>
+                <p className={styles.mono}>QUIZZES PASSED</p>
+                <p className={styles.factValue}>{quizzesPassed}</p>
               </div>
             </div>
           </div>
@@ -479,10 +520,14 @@ export function ActiveDashboard({
           <div className={styles.activityCell}>
             <div className="flex justify-between items-baseline gap-3 flex-wrap">
               <p className={styles.mono}>LAST 12 WEEKS</p>
-              <p className={styles.mono}>EVERY GREEN CELL · A SESSION YOU SHIPPED</p>
+              <p className={styles.mono}>EVERY GREEN CELL · A DAY YOU STUDIED</p>
             </div>
             <div className="mt-5">
-              <ActivityHeatmap />
+              <ActivityHeatmap
+                data={streak.yearlyActivity
+                  .slice(-84)
+                  .map((day) => Math.min(day.count, 4))}
+              />
             </div>
           </div>
 
@@ -493,15 +538,17 @@ export function ActiveDashboard({
               <span className={styles.hugeNumUnit}>DAYS</span>
             </div>
             <p className={styles.activityNoteCream}>
-              Longest yet: {streak.longestStreak} days.
+              {streak.longestStreak > 0
+                ? `Longest yet: ${streak.longestStreak} day${streak.longestStreak === 1 ? "" : "s"}.`
+                : "Complete a lesson to start your streak."}
             </p>
             <div className={styles.tealDivider}>
-              <p className={styles.tealMono}>PROJECTS SHIPPED</p>
+              <p className={styles.tealMono}>DAYS ACTIVE</p>
               <div className={styles.hugeNumCream} style={{ fontSize: "2.6rem" }}>
-                10
+                {daysActive}
               </div>
               <p className={styles.activityNoteCream}>
-                Across nine lesson projects and one capstone.
+                Calendar days with study activity this year.
               </p>
             </div>
           </div>
@@ -517,104 +564,35 @@ export function ActiveDashboard({
           <p className={styles.mono}>SECTION 05 · PORTFOLIO</p>
         </div>
 
-        {/* capstone strip */}
+        {/* capstone strip — no capstone store yet, honest zero (W14) */}
         <div className={styles.capstoneStrip}>
-          <span className={styles.tealMono}>CAPSTONES · 1 OF 3</span>
+          <span className={styles.tealMono}>CAPSTONES · 0 OF 3</span>
           <span className="flex gap-2 items-center">
-            <CapstoneTick state="approved" label="C01" />
-            <CapstoneTick state="brief" label="C02" />
+            <CapstoneTick state="brief" label="C01" />
+            <CapstoneTick state="locked" label="C02" />
             <CapstoneTick state="locked" label="C03" />
           </span>
           <span className={styles.capstoneNote}>
             Three pieces of verifiable work, one per month. These projects count
             for credential.
           </span>
-          <Link href="#" className={styles.creamLink}>
-            EVIDENCE LOCKER →
-          </Link>
         </div>
 
-        {/* portfolio grid */}
+        {/* portfolio grid — no portfolio store yet, designed empty state */}
         <div className={styles.portfolioGrid}>
           <div className={styles.portfolioCell}>
-            <div className="flex justify-between items-baseline gap-3 flex-wrap">
-              <p className={styles.mono}>SHIPPED · 12 PROJECTS</p>
-              <div className={styles.filterRow}>
-                <FilterChip active>ALL</FilterChip>
-                <FilterChip>CAPSTONES</FilterChip>
-                <FilterChip>LESSONS</FilterChip>
-                <FilterChip>LABS</FilterChip>
-              </div>
+            <p className={styles.mono}>SHIPPED · 0 PROJECTS</p>
+            <div
+              className={cn(styles.listTitle, "mt-2")}
+              style={{ fontSize: "1.05rem" }}
+            >
+              Your first build lands here.
             </div>
-            <div className="mt-3 flex flex-col">
-              <PortfolioRow
-                tag="CAPSTONE 01"
-                tagKind="capstone"
-                title="Internal ops assistant"
-                meta="Built in M1 · Claude + Notion API · approved by M. Patel"
-                statusKind="approved"
-                statusLabel="APPROVED"
-                date="6 MAY"
-              />
-              <PortfolioRow
-                tag="L09"
-                tagKind="lesson"
-                title="Doc triage scanner for inbound briefs"
-                meta="Lesson project · ChatGPT · 240 lines TS"
-                statusKind="public"
-                statusLabel="PUBLIC"
-                date="4 MAY"
-              />
-              <PortfolioRow
-                tag="L08"
-                tagKind="lesson"
-                title="Three-rule email triage"
-                meta="Lesson project · Claude + Gmail filter export"
-                statusKind="public"
-                statusLabel="PUBLIC"
-                date="1 MAY"
-              />
-              <PortfolioRow
-                tag="LAB"
-                tagKind="lab"
-                title="Spreadsheet QA in plain English"
-                meta="Lab · practice · Claude + Sheets"
-                statusKind="public"
-                statusLabel="PUBLIC"
-                date="28 APR"
-              />
-              <PortfolioRow
-                tag="L07"
-                tagKind="lesson"
-                title="Meeting recap to Jira tickets"
-                meta="Lesson project · Claude Code · 1 webhook"
-                statusKind="public"
-                statusLabel="PUBLIC"
-                date="24 APR"
-              />
-              <PortfolioRow
-                tag="L06"
-                tagKind="lesson"
-                title="Personal CRM in Notion + Claude"
-                meta="Lesson project · private build"
-                statusKind="private"
-                statusLabel="PRIVATE"
-                date="20 APR"
-              />
-              <PortfolioRow
-                tag="LAB"
-                tagKind="lab"
-                title="Resume rewriter for non-tech roles"
-                meta="Lab · practice · public template"
-                statusKind="public"
-                statusLabel="PUBLIC"
-                date="17 APR"
-              />
-            </div>
+            <p className={cn(styles.note, "mt-2")}>
+              Every lesson ships a small project. As you complete builds and
+              capstones they are collected here, ready to show.
+            </p>
             <div className="mt-4 flex justify-between items-center gap-3 flex-wrap">
-              <Link href="#" className={styles.monoLink}>
-                VIEW ALL 12 →
-              </Link>
               <span className={styles.mono}>
                 LESSON PROJECTS ARE REVIEWED SEPARATELY · LABS ARE PRACTICE
               </span>
@@ -622,42 +600,18 @@ export function ActiveDashboard({
           </div>
 
           <div className={styles.portfolioCell}>
-            <p className={styles.mono}>SAVED · 12 ITEMS</p>
+            <p className={styles.mono}>SAVED</p>
             <div className={cn(styles.listTitle, "mt-2")} style={{ fontSize: "1.05rem" }}>
               Bookmarks, drafts, notes.
             </div>
-            <div className="mt-3 flex flex-col">
-              <SavedRow
-                kind="DRAFT"
-                title="Capstone 02 brief"
-                date="YESTERDAY"
-              />
-              <SavedRow
-                kind="NOTE"
-                title="Six prompt patterns I keep reusing"
-                date="2 MAY"
-              />
-              <SavedRow
-                kind="LESSON"
-                title="L09 · Reading docs without reading docs"
-                date="29 APR"
-              />
-              <SavedRow
-                kind="LAB"
-                title="Email triage with three rules"
-                date="24 APR"
-              />
-              <SavedRow
-                kind="DRAFT"
-                title="Lab idea, invoice chaser"
-                date="22 APR"
-              />
-            </div>
+            <p className={cn(styles.note, "mt-2")}>
+              Bookmark lessons and labs to keep them within reach.
+            </p>
             <Link
               href="/bookmarks"
               className={cn(styles.monoLink, "mt-4 inline-block")}
             >
-              OPEN ALL SAVED →
+              OPEN SAVED →
             </Link>
           </div>
         </div>
@@ -827,18 +781,30 @@ export function LapsedDashboard({
   user,
   course,
   progress,
+  lessonProgress,
 }: {
   user: User
   course: Course | undefined
   progress: CourseProgress | undefined
+  /** The user's real lesson-progress rows; empty for a fresh account. */
+  lessonProgress: LessonProgress[]
   notifications: Awaited<ReturnType<typeof getNotifications>>
 }) {
-  const completed = progress?.completedLessons ?? 13
+  const completed = progress?.completedLessons ?? 0
   const total =
     progress?.totalLessons ??
     course?.sections.flatMap((s) => s.lessons).length ??
     24
-  const nextLessonNumber = completed + 1
+  const { upcoming, next } = course
+    ? deriveLessonPlan(course, lessonProgress)
+    : { upcoming: [], next: undefined }
+  const nextLessonNumber = next?.number ?? completed + 1
+  const nextLessonStarted = (next?.row?.progress ?? 0) > 0
+  const graceEndsLabel = user.gracePeriodEnds
+    ? user.gracePeriodEnds
+        .toLocaleDateString("en-GB", { day: "numeric", month: "short" })
+        .toUpperCase()
+    : null
   return (
     <div className={styles.shell} data-section="dashboard-lapsed">
       <MastRow section="DASHBOARD · TODAY" date={formatToday()} />
@@ -877,24 +843,36 @@ export function LapsedDashboard({
             <em>{ENABLE_BILLING ? "Just not paid up." : "Access under review."}</em>
           </h1>
           <p className={styles.bandLead}>
-            Lessons stay open through 14 May. Your course progress is paused
-            until access is restored manually.
+            {graceEndsLabel
+              ? `Lessons stay open through ${graceEndsLabel}. `
+              : "Lessons stay open through your grace window. "}
+            Your course progress is paused until access is restored manually.
           </p>
         </div>
         <div className={styles.bandAside}>
-          <p className={styles.mono}>NEXT, IF YOU HAVE 24 MINUTES</p>
+          <p className={styles.mono}>
+            {next
+              ? `NEXT, IF YOU HAVE ${next.lesson.duration} MINUTES`
+              : "YOUR COURSE"}
+          </p>
           <p className={cn(styles.mono, "mt-3")}>
             LESSON {nextLessonNumber} · MONTH {user.subscriptionMonth} · STILL OPEN
           </p>
           <div className={styles.asideTitle}>
-            Building with Claude: your first useful tool.
+            {next ? next.lesson.title : "Your lessons are still open."}
           </div>
           <div className={styles.asideNote}>
             Lessons keep working through your grace window.
           </div>
           <div className={styles.actionRow}>
             <Link
-              href={course ? `/course/${course.slug}` : "/courses"}
+              href={
+                next && course
+                  ? `/course/${course.slug}/lesson/${next.lesson.slug}`
+                  : course
+                    ? `/course/${course.slug}`
+                    : "/courses"
+              }
               className={styles.buttonOutline}
             >
               Continue Lesson {nextLessonNumber} →
@@ -924,43 +902,33 @@ export function LapsedDashboard({
             <Dashes value={completed} total={total} frozen />
           </div>
           <div className={styles.dashMeta}>
-            <span className={styles.mono}>OPEN UNTIL 14 MAY</span>
+            <span className={styles.mono}>
+              {graceEndsLabel
+                ? `OPEN UNTIL ${graceEndsLabel}`
+                : "OPEN THROUGH YOUR GRACE WINDOW"}
+            </span>
             <span className={styles.statusWarm}>
               ▲ {ENABLE_BILLING ? "UPDATE PAYMENT TO CONTINUE" : "MANUAL REVIEW REQUIRED"}
             </span>
           </div>
 
           <div className={styles.table}>
-            <LessonRow
-              num={nextLessonNumber}
-              title="Building with Claude: your first useful tool"
-              length="24 MIN"
-              state="current"
-            />
-            <LessonRow
-              num={nextLessonNumber + 1}
-              title="Q&A: when to reach for which model"
-              length="9 MIN"
-              state="pending"
-            />
-            <LessonRow
-              num={nextLessonNumber + 2}
-              title="Reading docs without reading docs"
-              length="18 MIN"
-              state="pending"
-            />
-            <LessonRow
-              num={nextLessonNumber + 3}
-              title="Codex for non-engineers, part one"
-              length="22 MIN"
-              state="locked"
-            />
-            <LessonRow
-              num={nextLessonNumber + 4}
-              title="Plain-English automations"
-              length="26 MIN"
-              state="locked"
-            />
+            {upcoming.slice(0, 5).map((planned, index) => (
+              <LessonRow
+                key={planned.lesson.id}
+                num={planned.number}
+                title={planned.lesson.title}
+                length={`${planned.lesson.duration} MIN`}
+                state={
+                  index === 0
+                    ? nextLessonStarted
+                      ? "current"
+                      : "next"
+                    : "pending"
+                }
+                tag={planned.lesson.isOptional ? "OPTIONAL" : undefined}
+              />
+            ))}
             <div className={styles.tableFoot}>
               <span className={styles.statusWarm}>
                 ▲ LESSONS LOCK IF GRACE LAPSES
@@ -975,7 +943,11 @@ export function LapsedDashboard({
           <div className={styles.impactGrid}>
             <div className={styles.impactCell}>
               <p className={styles.mono}>
-                {ENABLE_BILLING ? "IF YOU UPDATE BY 14 MAY" : "IF ACCESS IS RESTORED"}
+                {ENABLE_BILLING
+                  ? graceEndsLabel
+                    ? `IF YOU UPDATE BY ${graceEndsLabel}`
+                    : "IF YOU UPDATE IN TIME"
+                  : "IF ACCESS IS RESTORED"}
               </p>
               <p className={styles.impactNote}>
                 Nothing changes. Lessons stay open and your capstone keeps its
@@ -985,8 +957,8 @@ export function LapsedDashboard({
             <div className={styles.impactCell}>
               <p className={styles.statusWarm}>▲ IF YOU DON&rsquo;T</p>
               <p className={styles.impactNote}>
-                Lessons close 15 May. Your progress is retained, and you can
-                resume at any time with no re-enrolment.
+                Lessons close when your grace window ends. Your progress is
+                retained, and you can resume at any time with no re-enrolment.
               </p>
             </div>
           </div>
@@ -1035,11 +1007,12 @@ export function LapsedDashboard({
             {ENABLE_BILLING ? (
               <div className={styles.panel}>
                 <div className="flex justify-between items-center mb-2 gap-3">
-                  <span className={styles.monoStrong}>VISA •••• 4421</span>
-                  <span className={styles.statusWarm}>▲ Declined 4 May</span>
+                  <span className={styles.monoStrong}>PAYMENT METHOD</span>
+                  <span className={styles.statusWarm}>▲ Payment failed</span>
                 </div>
                 <div className={styles.note}>
-                  Bank reason: insufficient funds. We will retry 11 May.
+                  Your last payment did not go through. Update your card in
+                  settings to keep access.
                 </div>
                 <div className={cn(styles.actionRow, "mt-4")}>
                   <Link href="/settings" className={cn(styles.buttonSolid, styles.buttonSm)}>
@@ -1131,8 +1104,11 @@ function Dashes({
   )
 }
 
+/** The visual states a lesson row can be in. `next` = up next, untouched. */
+type LessonRowState = "done" | "current" | "next" | "pending" | "locked"
+
 /** Lesson-state glyph. Always paired with the row's text state label. */
-function StateGlyph({ state }: { state: "done" | "current" | "pending" | "locked" }) {
+function StateGlyph({ state }: { state: LessonRowState }) {
   if (state === "done") {
     return (
       <span className={styles.glyphDone} aria-hidden="true">
@@ -1140,7 +1116,7 @@ function StateGlyph({ state }: { state: "done" | "current" | "pending" | "locked
       </span>
     )
   }
-  if (state === "current") {
+  if (state === "current" || state === "next") {
     return (
       <span className={styles.glyphCurrent} aria-hidden="true">
         ●
@@ -1164,12 +1140,14 @@ function LessonRow({
   num: number
   title: string
   length: string
-  state: "done" | "current" | "pending" | "locked"
+  state: LessonRowState
   tag?: string
 }) {
+  const highlighted = state === "current" || state === "next"
   const stateLabel = {
     done: "DONE",
     current: "IN PROGRESS",
+    next: "NEXT UP",
     pending: "",
     locked: "NEXT MONTH",
   }[state]
@@ -1177,7 +1155,7 @@ function LessonRow({
     <div
       className={cn(
         styles.tableRow,
-        state === "current" && styles.tableRowCurrent,
+        highlighted && styles.tableRowCurrent,
         state === "locked" && styles.tableRowLocked
       )}
     >
@@ -1187,7 +1165,7 @@ function LessonRow({
         <span
           className={cn(
             styles.rowTitle,
-            state === "current" && styles.rowTitleCurrent
+            highlighted && styles.rowTitleCurrent
           )}
         >
           {title}
@@ -1199,7 +1177,7 @@ function LessonRow({
           <span
             className={cn(
               "block mt-0.5",
-              state === "current" ? styles.statusGood : styles.statusMuted
+              highlighted ? styles.statusGood : styles.statusMuted
             )}
           >
             {stateLabel}
@@ -1211,46 +1189,12 @@ function LessonRow({
   )
 }
 
-function UpdatedLessonRow({
-  num,
-  title,
-  change,
-  date,
-}: {
-  num: string
-  title: string
-  change: string
-  date: string
-}) {
-  return (
-    <div className={styles.updatedRow}>
-      <span className={styles.updatedNum}>{num}</span>
-      <span>
-        <span className="flex items-baseline gap-2.5 justify-between">
-          <span className={styles.listTitle}>{title}</span>
-          <Link href="#" className={cn(styles.monoLink, "whitespace-nowrap")}>
-            RE-WATCH →
-          </Link>
-        </span>
-        <span className={cn(styles.updatedChange, "block")}>{change}</span>
-      </span>
-      <span className={cn(styles.mono, "whitespace-nowrap")}>{date}</span>
-    </div>
-  )
-}
-
-function ActivityHeatmap({ data }: { data?: number[] }) {
-  // 12 weeks × 7 days = 84 cells. Default fixture matches the bundle's
-  // intensity rhythm: an established 5-hour-a-week cadence with one or
-  // two darker bursts per fortnight.
-  const cells =
-    data ??
-    [
-      0, 1, 1, 2, 3, 0, 0, 1, 2, 2, 3, 4, 1, 0, 1, 1, 2, 3, 4, 1, 0, 2, 3, 1,
-      2, 4, 2, 0, 2, 3, 2, 1, 3, 4, 1, 1, 4, 3, 2, 3, 2, 1, 3, 2, 4, 3, 3, 2,
-      4, 2, 3, 4, 3, 2, 1, 1, 3, 2, 4, 4, 3, 2, 0, 2, 3, 4, 3, 2, 4, 1, 2, 4,
-      3, 2, 1, 4, 3, 2, 2, 3, 1, 2, 4, 3,
-    ]
+/**
+ * 12-week activity heatmap (12 × 7 = 84 cells). `data` is the user's REAL
+ * per-day activity counts, oldest first (W14) — there is no fixture default.
+ */
+function ActivityHeatmap({ data }: { data: number[] }) {
+  const cells = data
   const days = ["M", "T", "W", "T", "F", "S", "S"]
   return (
     <div className={styles.heatGrid}>
@@ -1299,86 +1243,6 @@ function CapstoneTick({
       {state === "approved" ? "✓ " : state === "brief" ? "● " : "○ "}
       {label}
     </span>
-  )
-}
-
-function FilterChip({
-  children,
-  active = false,
-}: {
-  children: React.ReactNode
-  active?: boolean
-}) {
-  return (
-    <Link
-      href="#"
-      className={cn(styles.filterChip, active && styles.filterChipActive)}
-    >
-      {children}
-    </Link>
-  )
-}
-
-function PortfolioRow({
-  tag,
-  tagKind,
-  title,
-  meta,
-  statusKind,
-  statusLabel,
-  date,
-}: {
-  tag: string
-  tagKind: "capstone" | "lesson" | "lab"
-  title: string
-  meta: string
-  statusKind: "approved" | "public" | "private"
-  statusLabel: string
-  date: string
-}) {
-  return (
-    <div className={styles.listRow}>
-      <span
-        className={
-          tagKind === "capstone"
-            ? styles.listTagCapstone
-            : tagKind === "lesson"
-              ? styles.listTagLesson
-              : styles.listTagLab
-        }
-      >
-        {tag}
-      </span>
-      <span>
-        <span className={cn(styles.listTitle, "block")}>{title}</span>
-        <span className={cn(styles.listMeta, "block")}>{meta}</span>
-      </span>
-      <span
-        className={statusKind === "approved" ? styles.statusGood : styles.statusMuted}
-      >
-        {statusKind === "approved" ? "✓ " : statusKind === "private" ? "○ " : "· "}
-        {statusLabel}
-      </span>
-      <span className={cn(styles.mono, "text-right whitespace-nowrap")}>{date}</span>
-    </div>
-  )
-}
-
-function SavedRow({
-  kind,
-  title,
-  date,
-}: {
-  kind: string
-  title: string
-  date: string
-}) {
-  return (
-    <div className={styles.savedRow}>
-      <span className={styles.mono}>{kind}</span>
-      <span className={styles.savedTitle}>{title}</span>
-      <span className={styles.mono}>{date}</span>
-    </div>
   )
 }
 
