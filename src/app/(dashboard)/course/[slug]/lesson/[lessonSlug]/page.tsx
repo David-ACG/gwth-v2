@@ -2,14 +2,16 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getLesson } from "@/lib/data/lessons"
 import { getCourse } from "@/lib/data/courses"
-import { getAllCourseProgress } from "@/lib/data/progress"
+import { getAllCourseProgress, getLessonProgress } from "@/lib/data/progress"
 import { cn } from "@/lib/utils"
 import {
   EditorialLessonViewer,
   type EditorialLessonMeta,
   type EditorialLessonPage,
   type EditorialLessonSurface,
+  type EditorialNextLesson,
 } from "./editorial-lesson-viewer"
+import type { Course } from "@/lib/types"
 import type { LessonWidgetSurface } from "./lesson-widgets"
 
 type PageProps = {
@@ -125,6 +127,27 @@ function buildLessonPages(lesson: {
  * lets developers preview each surface against the bundle HTML; the
  * default surface is `prose`.
  */
+/**
+ * Finds the lesson that follows the given slug in course order (sections by
+ * order, lessons by order within each section). Returns null on the last
+ * lesson.
+ */
+function findNextLesson(
+  course: Course,
+  lessonSlug: string
+): EditorialNextLesson | null {
+  const ordered = [...course.sections]
+    .sort((a, b) => a.order - b.order)
+    .flatMap((s) => [...s.lessons].sort((a, b) => a.order - b.order))
+  const idx = ordered.findIndex((l) => l.slug === lessonSlug)
+  if (idx === -1 || idx + 1 >= ordered.length) return null
+  const next = ordered[idx + 1]!
+  return {
+    title: next.title,
+    href: `/course/${course.slug}/lesson/${next.slug}`,
+  }
+}
+
 export default async function LessonPage({
   params,
   searchParams,
@@ -138,11 +161,17 @@ export default async function LessonPage({
   ])
   if (!lesson || !course) notFound()
 
+  // Per-user persisted progress for this lesson (null when never started, or
+  // when unauthenticated — the viewer then starts from a clean slate and
+  // writes are safe no-ops server-side).
+  const lessonProgress = await getLessonProgress(lesson.id)
+
   const courseProgress = allProgress.find((p) => p.courseId === course.id)
   const monthLessonCount = course.sections
     .filter((s) => s.month === lesson.month)
     .flatMap((s) => s.lessons).length
   const meta: EditorialLessonMeta = {
+    id: lesson.id,
     monthLabel: `MONTH ${lesson.month} · LESSON ${String(lesson.order).padStart(2, "0")}`,
     lessonNumber: lesson.order,
     title: lesson.title,
@@ -162,15 +191,25 @@ export default async function LessonPage({
             explanation: q.explanation,
           }))
         : undefined,
+    // Raw media references from the lesson row; the viewer resolves them
+    // through mediaUrl() so the CDN cutover (I3) needs no viewer change.
+    audioFileUrl: lesson.audioFileUrl,
+    audioDuration: lesson.audioDuration,
+    introVideoUrl: lesson.introVideoUrl,
   }
 
-  const surfaceParam = sp.surface ?? "prose"
+  // Default entry: page 1 (the intro video when the lesson has one). The
+  // ?surface= / ?page= params remain as demo/review overrides.
+  const defaultSurface: EditorialLessonSurface = lesson.introVideoUrl
+    ? "video"
+    : "prose"
+  const surfaceParam = sp.surface ?? ""
   const initialSurface: EditorialLessonSurface = VALID_SURFACES.has(
     surfaceParam
   )
     ? (surfaceParam as EditorialLessonSurface)
-    : "prose"
-  const initialPage = sp.page ? parseInt(sp.page, 10) : 3
+    : defaultSurface
+  const initialPage = sp.page ? parseInt(sp.page, 10) : 1
 
   const widgetParam = sp.widget ?? "none"
   const initialWidgetSurface: LessonWidgetSurface = VALID_WIDGET_SURFACES.has(
@@ -184,8 +223,11 @@ export default async function LessonPage({
       <EditorialLessonViewer
         lesson={meta}
         initialSurface={initialSurface}
-        initialPage={Number.isFinite(initialPage) ? initialPage : 3}
+        initialPage={Number.isFinite(initialPage) ? initialPage : 1}
         initialWidgetSurface={initialWidgetSurface}
+        initialProgress={lessonProgress}
+        nextLesson={findNextLesson(course, lessonSlug)}
+        courseHref={`/course/${course.slug}`}
       />
     </div>
   )
