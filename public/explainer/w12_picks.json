@@ -1,0 +1,20 @@
+{
+  "recorded_at": "2026-07-04T18:55:00Z",
+  "recorded_by": "Claude Fable 5 session on hlab, picks given by David in chat (the /w12-review/motion and /w12-embed-demo pages have no in-browser persistence)",
+  "voiceover": {
+    "final_take": "vv7b_explainer_fable100_perfect_005.wav",
+    "source": "sidecar david_review 5/5/5 + selected_as_final true, 2026-07-04T17:36:07Z"
+  },
+  "motion": {
+    "note": "page defaults for all 5 archetypes, as marked default on /w12-review/motion",
+    "title_cover": "frame-draw",
+    "single_statement": "line-fade",
+    "feature": "stagger",
+    "comparison_two_up": "divider-first",
+    "cta_dispatch": "stagger"
+  },
+  "embed": {
+    "placement": "after-hero",
+    "chrome": "framed"
+  }
+}
