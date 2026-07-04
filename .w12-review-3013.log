@@ -1,9 +1,54 @@
 
-> gwth-v2@0.1.0 start
-> next start
+> gwth-v2@0.1.0 dev
+> next dev -p 3013 -H 0.0.0.0
 
-▲ Next.js 16.2.4
+▲ Next.js 16.2.4 (Turbopack)
 - Local:         http://localhost:3013
-- Network:       http://192.168.178.50:3013
-✓ Ready in 137ms
-⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+- Network:       http://0.0.0.0:3013
+- Environments: .env.local
+✓ Ready in 408ms
+- Experiments (use with caution):
+  · optimizePackageImports
+
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/w12-revie..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <LoadingBoundaryProvider loading={[...]}>
+                      <SegmentViewNode type="layout" pagePath="layout.tsx">
+                        <SegmentTrieNode>
+                        <link>
+                        <script>
+                        <script>
+                        <script>
+                        <RootLayout>
+                          <html lang="en" className="inter_5901..." suppressHydrationWarning={true}>
+                            <head>
+                            <body
+                              className="antialiased"
+-                             cz-shortcut-listen="true"
+                            >
+                  ...
+ 
+ GET /w12-review 200 in 1373ms (next.js: 1278ms, proxy.ts: 6ms, application-code: 89ms)
+ GET /w12-review/takes 200 in 61ms (next.js: 4ms, proxy.ts: 7ms, application-code: 50ms)
+ GET /w12-review/takes 200 in 1779ms (next.js: 1149ms, proxy.ts: 207ms, application-code: 423ms)
