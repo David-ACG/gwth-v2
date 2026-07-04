@@ -691,25 +691,6 @@ export function ActiveDashboard({
         </div>
       </section>
 
-      {/* POSTSCRIPT */}
-      <section className={styles.postscript}>
-        <p className={styles.tealMono}>SECTION 07 · POSTSCRIPT</p>
-        <div className={styles.postscriptGrid}>
-          <h3 className={styles.postscriptTitle}>
-            Five hours a week.
-            <br />
-            <em>Decide later, but keep going.</em>
-          </h3>
-          <p className={styles.postscriptBody}>
-            {ENABLE_GWTH_SCORE
-              ? "Your score reflects the last 90 days. Skip a week and the freshness check will tell you."
-              : "Your progress reflects steady work. Skip a week and the review checklist will tell you where to restart."}
-            Stay Current opens after Month 3 to keep things current without
-            resitting the whole course.
-          </p>
-        </div>
-      </section>
-
       <DashFooter />
     </div>
   )
