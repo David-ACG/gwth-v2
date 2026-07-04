@@ -1,7 +1,18 @@
 import type { Metadata } from "next"
+import { redirect } from "next/navigation"
 import { getDashboardUser } from "@/lib/auth"
 import { formatDate } from "@/lib/utils"
 import styles from "./profile-fde.module.css"
+
+/**
+ * Render per request, never statically. Profile is a per-user authed page
+ * (real user via `getDashboardUser()` → `getCurrentUser()`); `getCurrentUser()`
+ * short-circuits before touching cookies when `DATABASE_URL` is unset (build
+ * time), which let Next statically optimise this route — the empty
+ * no-user render was baked into the image and served to everyone (W7). See
+ * the matching notes on the dashboard and progress pages.
+ */
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -35,8 +46,11 @@ function SubscriptionStatus({ state }: { state: string }) {
 export default async function ProfilePage() {
   const user = await getDashboardUser()
 
+  // Anonymous traffic is bounced to /login by the proxy guard before this
+  // renders; a live session without a beta grant resolves to null here and
+  // belongs on the invite-required FreeDashboard, not a blank shell.
   if (!user) {
-    return null
+    redirect("/dashboard")
   }
 
   return (
