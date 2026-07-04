@@ -37,11 +37,12 @@ export default async function LabDetailPage({ params }: PageProps) {
   if (!lab) notFound()
 
   const totalSteps = lab.instructions.length
+  // No progress row means the lab is honestly not started (W14): step 0,
+  // every step "Not started". Real accounts have no lab fixtures.
   const currentStep = progress?.currentStep ?? 0
 
   /** Status per step: colour + glyph + text, never colour alone. */
   const stepStatus = (step: number) => {
-    if (!progress) return null
     if (step < currentStep)
       return (
         <span className={`${styles.status} ${styles.statusDone}`}>
@@ -89,7 +90,7 @@ export default async function LabDetailPage({ params }: PageProps) {
       </header>
 
       {/* Step progress (§4.5 dash-progress, paired with text) */}
-      {progress && (
+      {totalSteps > 0 && (
         <div className={styles.progressWrap}>
           <div className={styles.dashes} aria-hidden="true">
             {Array.from({ length: totalSteps }, (_, dash) => (
@@ -100,7 +101,9 @@ export default async function LabDetailPage({ params }: PageProps) {
             ))}
           </div>
           <p className={styles.progressText}>
-            Step {currentStep}/{totalSteps}
+            {currentStep > 0
+              ? `Step ${currentStep}/${totalSteps}`
+              : `Not started · ${totalSteps} steps`}
           </p>
         </div>
       )}

@@ -403,8 +403,8 @@ export interface StudyStreak {
   currentStreak: number
   /** Longest streak ever achieved */
   longestStreak: number
-  /** Date of last study activity */
-  lastActiveDate: Date
+  /** Date of last study activity, null when the account has none yet */
+  lastActiveDate: Date | null
   /** Last 7 days of activity (index 0 = 6 days ago, index 6 = today) */
   weeklyActivity: boolean[]
   /** Last 365 days of activity data for the heatmap */
@@ -415,7 +415,7 @@ export interface StudyStreak {
 export interface DayActivity {
   /** The date */
   date: Date
-  /** Number of items completed that day */
+  /** Number of lessons studied (accessed or completed) that day */
   count: number
 }
 

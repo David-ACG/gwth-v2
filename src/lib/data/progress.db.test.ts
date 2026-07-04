@@ -29,6 +29,8 @@ vi.mock("@/lib/auth", () => ({
 // Stable test ids (uuids for users, text ids for the course/section/lesson).
 const USER_A = "00000000-0000-0000-0000-00000000000a"
 const USER_B = "00000000-0000-0000-0000-00000000000b"
+// W14: a brand-new account with no lesson_progress rows at all.
+const USER_C = "00000000-0000-0000-0000-00000000000c"
 const COURSE_ID = "w7_test_course"
 const SECTION_ID = "w7_test_section"
 const LESSON_ID = "w7_test_lesson_1"
@@ -61,11 +63,12 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     await sql`delete from lessons where id in (${LESSON_ID}, ${LESSON_ID_2})`
     await sql`delete from sections where id = ${SECTION_ID}`
     await sql`delete from courses where id = ${COURSE_ID}`
-    await sql`delete from "user" where id in (${USER_A}, ${USER_B})`
+    await sql`delete from "user" where id in (${USER_A}, ${USER_B}, ${USER_C})`
 
     await sql`insert into "user" (id, name, email) values
       (${USER_A}, 'W7 Test A', 'w7-test-a@example.com'),
-      (${USER_B}, 'W7 Test B', 'w7-test-b@example.com')`
+      (${USER_B}, 'W7 Test B', 'w7-test-b@example.com'),
+      (${USER_C}, 'W14 Fresh C', 'w14-fresh-c@example.com')`
     await sql`insert into courses (id, slug, title) values (${COURSE_ID}, ${COURSE_ID}, 'W7 Test Course')`
     await sql`insert into sections (id, course_id, title, month) values (${SECTION_ID}, ${COURSE_ID}, 'W7 Test Section', 1)`
     await sql`insert into lessons (id, slug, title, section_id, course_id, month)
@@ -78,7 +81,7 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     await sql`delete from lessons where id in (${LESSON_ID}, ${LESSON_ID_2})`
     await sql`delete from sections where id = ${SECTION_ID}`
     await sql`delete from courses where id = ${COURSE_ID}`
-    await sql`delete from "user" where id in (${USER_A}, ${USER_B})`
+    await sql`delete from "user" where id in (${USER_A}, ${USER_B}, ${USER_C})`
     await sql.end({ timeout: 5 })
   })
 
@@ -180,5 +183,46 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     expect(after.n).toBe(before.n) // but persisted nothing
     expect(await data.getLessonProgress(LESSON_ID)).toBeNull()
     expect(await data.getAllLessonProgress()).toEqual([])
+  })
+
+  // ── W14: fixture data must never reach a real session ─────────────────────
+
+  it("W14: a brand-new account derives honest zeros, never fixtures", async () => {
+    setUser(USER_C)
+
+    const streak = await data.getStreak()
+    expect(streak.currentStreak).toBe(0) // never the fixture 5
+    expect(streak.longestStreak).toBe(0) // never the fixture 14
+    expect(streak.weeklyActivity.every((day) => day === false)).toBe(true)
+
+    expect(await data.getAllCourseProgress()).toEqual([]) // never 12/24
+    expect(await data.getAllLabProgress()).toEqual([]) // never lab_001/002
+    expect(await data.getLabProgress("lab_001")).toBeNull()
+    expect((await data.getDynamicScore()).overallScore).toBe(0)
+  })
+
+  it("W14: a completed lesson surfaces as real derived course progress", async () => {
+    setUser(USER_A)
+    // Complete the seeded lesson (80%+ video was set earlier; pass the quiz).
+    await data.updateLessonProgress(LESSON_ID, {
+      introVideoProgress: 1,
+      bestQuizScore: 100,
+    })
+
+    const all = await data.getAllCourseProgress()
+    const courseProgress = all.find((p) => p.courseId === COURSE_ID)
+    expect(courseProgress).toBeTruthy()
+    expect(courseProgress!.totalLessons).toBe(2)
+    expect(courseProgress!.completedLessons).toBe(1)
+    expect(courseProgress!.progress).toBeCloseTo(0.5)
+
+    // Same via the single-course accessor, addressed by id (slug also works).
+    const single = await data.getCourseProgress(COURSE_ID)
+    expect(single?.completedLessons).toBe(1)
+
+    // Real activity today: the derived streak reflects it.
+    const streak = await data.getStreak()
+    expect(streak.currentStreak).toBeGreaterThanOrEqual(1)
+    expect(streak.longestStreak).toBeGreaterThanOrEqual(streak.currentStreak)
   })
 })

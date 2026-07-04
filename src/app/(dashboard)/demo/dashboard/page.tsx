@@ -1,8 +1,12 @@
 import type { Metadata } from "next"
 import { cn } from "@/lib/utils"
 import { getCourses } from "@/lib/data/courses"
-import { getAllCourseProgress, getStreak } from "@/lib/data/progress"
-import { getNotifications } from "@/lib/data/notifications"
+import {
+  mockCourseProgress,
+  mockLessonProgress,
+  mockNotifications,
+  mockStudyStreak,
+} from "@/lib/data/mock-data"
 import {
   ActiveDashboard,
   FreeDashboard,
@@ -43,12 +47,13 @@ export default async function DemoDashboardPage({
   const params = await searchParams
   const state = params.state ?? "active"
 
-  const [courses, courseProgress, streak, notifications] = await Promise.all([
-    getCourses(),
-    getAllCourseProgress(),
-    getStreak(),
-    getNotifications(),
-  ])
+  // A demo surface, not a session: it always renders the design fixtures
+  // (real sessions get real derived data via the dashboard route, W14).
+  const courses = await getCourses()
+  const courseProgress = mockCourseProgress
+  const lessonProgress = mockLessonProgress
+  const streak = mockStudyStreak
+  const notifications = mockNotifications
   const course = courses[0]
   const progress = course
     ? courseProgress.find((p) => p.courseId === course.id)
@@ -87,6 +92,7 @@ export default async function DemoDashboardPage({
           user={user}
           course={course}
           progress={progress}
+          lessonProgress={lessonProgress}
           notifications={notifications}
         />
       </div>
@@ -108,6 +114,7 @@ export default async function DemoDashboardPage({
         user={user}
         course={course}
         progress={progress}
+        lessonProgress={lessonProgress}
         streak={streak}
         notifications={notifications}
       />
