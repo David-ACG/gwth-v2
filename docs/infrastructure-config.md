@@ -2,7 +2,7 @@
 
 > Living document. Updated as infrastructure is built.
 >
-> Last updated: 2026-07-04 (I2 re-verify: fixed Coolify control-plane SSH lockout that had silently killed scheduled backups; re-proved backup pipeline end-to-end)
+> Last updated: 2026-07-04 (I2/D3 offsite leg LIVE: Cloudflare R2 bucket + Coolify S3 destination wired, live backup verified in R2, R2-copy restore drill PASSED — I2 complete)
 
 ---
 
@@ -175,7 +175,7 @@ build; live at the W6 cutover deploy).
 | Leg | Mechanism | Schedule | State |
 | --- | --------- | -------- | ----- |
 | Primary dump | Coolify scheduled `pg_dump` (custom format) → `/data/coolify/backups/databases/root-team-0/gwth-v2-db-prod-zo0gk…/` | 03:00 daily, retain 7 | LIVE (exec id 2 success 2026-07-04 11:01). **Note:** the 03:00 slot was silently NOT firing until 2026-07-04 — Coolify only dispatches scheduled backups when the server is `is_reachable/is_usable`, which the SSH hardening had broken (see the SSH reconciliation note above). Fixed + re-proven with a real dispatch. |
-| Offsite (R2) | Coolify S3 destination → Cloudflare R2 bucket `gwth-db-backups` | with primary | **BLOCKED on David**: create the R2 bucket + scoped token (Cloudflare dashboard → R2), then Coolify UI → Storages → add S3 (endpoint `https://<account-id>.r2.cloudflarestorage.com`), then on the DB backup set `save_s3 = true` |
+| Offsite (R2) | Coolify S3 destination (`s3_storages` id 1, uuid `o4g0kkscgc84o4c8w44kokk8`) → Cloudflare R2 bucket `gwth-db-backups` (**EU jurisdiction** — S3 endpoint MUST be `https://<account-id>.eu.r2.cloudflarestorage.com`; the plain non-`.eu` endpoint returns AccessDenied), retain 7 in S3 | with primary | LIVE 2026-07-04 (exec id 3 success 16:45, dump 69,877 B verified present in R2; R2-copy restore drill PASSED same day — see below). Creds: `R2_*` keys in `deploy/secrets.hetzner-ops.env` (account-scoped R2 API token, Object Read & Write on this bucket only) |
 | Backstop | P520 pull: `/home/david/backups/gwth-v2-db/pull.sh` — sudo-rsync dumps off-box, freshness gate (<26 h), restic snapshot `/home/david/backups/gwth-v2-db/restic-repo` (keep 14d/8w), key `/home/david/backups/restic-keys/gwth-v2-db.key` | 03:30 daily (P520 cron) | LIVE (snapshot `ce7365db` verified) |
 | Dead-man | Kuma push monitor 4 → Telegram; pull.sh heartbeats **only after** a fresh dump is snapshotted, so a never-fired Coolify cron, a stale dump, or a failed pull all stop the heartbeat (alert ≤26 h) | 26 h window | LIVE |
 
@@ -185,6 +185,14 @@ match with source (`pg_dump --schema-only`, ignoring pg17's random `\restrict`
 token lines); (b) known-row: canary present; (c) **RTO ≈ 2 s restore / ~40 s
 including container spin-up** at current (empty-data) size. Re-drill after real
 content lands.
+
+**R2-copy restore drill (2026-07-04, gate PASSED):** same protocol but sourced
+from the **offsite copy** — dump downloaded from the R2 bucket (S3 API, `.eu.`
+endpoint) to hlab, restored into a throwaway `postgres:17.10-alpine`. Gate:
+(a) schema fingerprint vs live prod = MATCH (only `\restrict` lines ignored);
+(b) canary row `waitlist.email=backup-canary@gwth.internal` = 1;
+(c) **RTO 0.68 s restore** (25 tables, empty-data size). This proves the full
+offsite path: prod → Coolify S3 upload → R2 → download → restore.
 
 ### Hetzner Applied Hardening Baseline (I2 / D8 — FULL public-grade delta, 2026-07-03)
 
@@ -492,4 +500,6 @@ ssh hetzner 'docker logs plausible-plausible-1 --tail 50'
 | 2026-07-04 | I2 re-verify: reconciled — root key-only from internal docker bridge (`zz-coolify-internal-root.conf` Match block); fail2ban ignoreip internal subnets; `.bak-i2` re-open vector deleted; Coolify `is_reachable/is_usable=t` | FIXED |
 | 2026-07-04 | I2 re-verify: real backup dispatched (exec id 2 success 11:01), fresh dump pulled to P520, restic snapshot `82fd44ad`; full pipeline re-proven end-to-end | OK |
 | 2026-07-04 | I2 re-verify: hardening posture intact (auditd/UFW/fail2ban active, docker flags, :8080 guard, root-from-internet refused, fresh david login OK) | OK |
-| 2026-07-03 | PENDING (David): R2 bucket `gwth-db-backups` + scoped token → flip backup `save_s3`; external-SaaS key rotations | TODO |
+| 2026-07-04 | I2/D3: R2 offsite leg LIVE — bucket `gwth-db-backups` (EU jurisdiction) + account-scoped R2 token created by David; Coolify S3 storage id 1 (`testConnection` OK), backup id 1 `save_s3=true` retain-7; live dispatch exec id 3 success, dump verified in R2; R2 keys added to SOPS ops store | OK |
+| 2026-07-04 | I2/D3: R2-copy restore drill PASSED — R2 download → throwaway PG 17.10, schema fingerprint MATCH vs prod, canary row = 1, RTO 0.68 s | OK |
+| 2026-07-03 | PENDING (David): external-SaaS key rotations (Google/GitHub OAuth, Stripe, MailerSend/Lite) | TODO |
