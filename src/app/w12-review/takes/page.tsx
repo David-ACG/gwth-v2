@@ -24,6 +24,7 @@ interface TakeMeta {
   sentence_gap_ms?: number
   do_sample?: boolean
   temperature?: number
+  ellipsis?: boolean
   selected_as_final?: boolean
   david_review?: TakeForReview["review"]
 }
@@ -34,9 +35,10 @@ function settingsLine(meta: TakeMeta): string {
   const sampling = meta.do_sample
     ? `sampled t=${meta.temperature}`
     : "greedy"
+  const pauses = meta.ellipsis === false ? " · flowing (no ellipsis pauses)" : ""
   return (
     `cfg ${meta.cfg_scale} · ${meta.speed}x speed · ` +
-    `${meta.sentence_gap_ms}ms gaps · ${sampling}`
+    `${meta.sentence_gap_ms}ms gaps · ${sampling}${pauses}`
   )
 }
 
