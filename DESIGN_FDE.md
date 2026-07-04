@@ -146,6 +146,29 @@ use only, never the sole carrier of information):**
 **Rule: never raw hex in components.** The hex values live exactly once, in
 the module's `.shell` / `.dark` blocks. Everything else says `var(--v-*)`.
 
+### The logo — one mark, two inks (ratified default, David 2026-07-03)
+
+The GWTH.ai mark is the `LogoGwth` / `LogoGwthMark` vector
+([src/components/marketing/redesign/logo-gwth.tsx](src/components/marketing/redesign/logo-gwth.tsx)).
+The geometry never changes; the two inks adapt to the ground:
+
+| Ground | Wordmark | Arrow + dots |
+|---|---|---|
+| **Light** (sage/paper: public nav, score page) | `--logo-wordmark` `#22301f` ink | `--logo-accent` `#a94c2e` terracotta ("brown") |
+| **Dark** (dark mode nav, teal bands: auth masthead) | `#edeae6` cream | `#d4a062` mustard |
+
+- The vars are declared once in `globals.css` (`:root` + `.dark` override), so
+  any component using the `LogoGwth` defaults gets the right treatment for
+  free. The auth masthead sets cream + `--v-ochre-bright` explicitly — the
+  same mustard.
+- **Never terracotta on dark grounds** (it sinks into dark green, and reads
+  black if the var is missing) and **never mustard on light** (too faint).
+  The two-ink adaptation IS the brand treatment; do not "standardise" it to
+  one accent. David compared both on both grounds and ratified this rule.
+- The **favicon** is the same rule at tile size: V1 "Masthead match" — teal
+  `#2c4a47` ground, cream G, mustard arrow (`public/icon.svg`,
+  `favicon.ico` 16/32/48, `apple-touch-icon.png` 180).
+
 ---
 
 ## 3. Type system
@@ -651,8 +674,11 @@ obligations on every FDE surface:
    stat list or a mono suffix line.
 8. **No fabricated proof.** No invented learner counts, finish rates,
    testimonials, or logo walls.
-9. **Locked logo.** The GWTH.ai PNGs are the only wordmark. No SVG
-   recreations (2026-04-28).
+9. **Locked logo.** The GWTH.ai mark is the locked `LogoGwth` /
+   `LogoGwthMark` vector (geometry locked 2026-04-28; the inline SVG
+   component superseded the PNGs when W10 shipped the nav). Colours follow
+   the two-ink rule in §2 "The logo" — never redraw the mark, never invent
+   new colourways.
 10. **Reduced motion.** The register is nearly static already; anything
     animated beyond the 200ms colour transitions must respect
     `prefers-reduced-motion`.
