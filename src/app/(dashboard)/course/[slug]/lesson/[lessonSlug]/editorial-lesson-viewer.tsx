@@ -76,6 +76,12 @@ export interface EditorialNextLesson {
   title: string
   /** In-app href to the next lesson. */
   href: string
+  /**
+   * The next lesson's own number within its month/section. Not
+   * necessarily the current lesson's number + 1 — the next lesson can
+   * begin a new section/month where the order resets to 1.
+   */
+  lessonNumber: number
 }
 
 /** Static lesson metadata required by the viewer chrome. */
@@ -209,6 +215,14 @@ export function EditorialLessonViewer({
     null
   )
 
+  // handleEnded fires from a native listener attached once per audio source.
+  // Read the live page/auto-advance state through refs so the listener sees
+  // fresh values without re-subscribing every render.
+  const pageNumRef = React.useRef(pageNum)
+  pageNumRef.current = pageNum
+  const autoAdvanceRef = React.useRef(autoAdvance)
+  autoAdvanceRef.current = autoAdvance
+
   function cancelAdvance() {
     if (advanceTimer.current) {
       clearTimeout(advanceTimer.current)
@@ -237,8 +251,8 @@ export function EditorialLessonViewer({
   }
 
   // Attach media listeners natively (media events don't bubble through
-  // React) and re-check every render so a remounted element (surface
-  // switch) is always the one being listened to.
+  // React), re-subscribing when the audio source changes so the listeners
+  // always target the current element.
   React.useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
@@ -258,8 +272,8 @@ export function EditorialLessonViewer({
       setSurface((s) => (s === "prose-playing" ? "prose" : s))
     }
     function handleEnded() {
-      const next = pageNum + 1
-      if (autoAdvance && lesson.pages[next - 1]?.kind === "prose") {
+      const next = pageNumRef.current + 1
+      if (autoAdvanceRef.current && lesson.pages[next - 1]?.kind === "prose") {
         setSurface("advancing")
         advanceTimer.current = setTimeout(() => goToPage(next), AUTO_ADVANCE_DELAY_MS)
       }
@@ -277,7 +291,10 @@ export function EditorialLessonViewer({
       audio.removeEventListener("pause", handlePause)
       audio.removeEventListener("ended", handleEnded)
     }
-  })
+    // Listeners are keyed to the audio source; page/auto-advance state is
+    // read live through refs inside handleEnded.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioSrc])
 
   // Playback speed applies to the live element whenever the user changes it.
   React.useEffect(() => {
@@ -285,6 +302,17 @@ export function EditorialLessonViewer({
       audioRef.current.playbackRate = AUDIO_SPEEDS[speed]
     }
   }, [speed])
+
+  // Clear any pending auto-advance timer on unmount so it can't fire
+  // goToPage() (a state update / navigation) against an unmounted viewer.
+  React.useEffect(() => {
+    return () => {
+      if (advanceTimer.current) {
+        clearTimeout(advanceTimer.current)
+        advanceTimer.current = null
+      }
+    }
+  }, [])
 
   function handleTogglePlay() {
     const audio = audioRef.current
@@ -1968,7 +1996,7 @@ function LessonCompleteSurface({
             <div className="px-7 py-7">
               <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
                 {nextLesson
-                  ? `UP NEXT · LESSON ${lesson.lessonNumber + 1}`
+                  ? `UP NEXT · LESSON ${nextLesson.lessonNumber}`
                   : "UP NEXT"}
               </div>
               <div className="mt-2 text-[26px] font-semibold leading-[1.15] tracking-[-0.015em]">
@@ -1988,7 +2016,7 @@ function LessonCompleteSurface({
                     className="min-w-[220px]"
                     href={nextLesson.href}
                   >
-                    START LESSON {lesson.lessonNumber + 1}{" "}
+                    START LESSON {nextLesson.lessonNumber}{" "}
                     <span aria-hidden="true">→</span>
                   </SharpButton>
                 )}

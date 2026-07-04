@@ -145,6 +145,7 @@ function findNextLesson(
   return {
     title: next.title,
     href: `/course/${course.slug}/lesson/${next.slug}`,
+    lessonNumber: next.order,
   }
 }
 
