@@ -1,60 +1,76 @@
 import { readdir, readFile } from "node:fs/promises"
 import path from "node:path"
 import styles from "../review.module.css"
+import { TakesRater, type TakeForReview } from "./takes-rater"
 
-/** Takes are staged here (copied from the TTS pipeline output when ready). */
+/** Takes are staged here by the run supervisor as each one passes the gate. */
 const TAKES_DIR = path.join(process.cwd(), "public", "explainer", "takes")
 
 /** Reads fresh on every request so new takes appear without a rebuild. */
 export const dynamic = "force-dynamic"
 
-interface Take {
-  /** File name under /explainer/takes/. */
-  file: string
-  /** Script variant key parsed from the file name. */
-  variant: "fable100" | "gpt100"
-  /** Take number parsed from the file name. */
-  take: number
-  /** Whisper WER from the sidecar meta, if present. */
-  wer?: number
-  /** Duration in seconds from the sidecar meta, if present. */
-  duration?: number
-}
-
-const VARIANT_LABELS: Record<Take["variant"], string> = {
+const VARIANT_LABELS: Record<string, string> = {
   fable100: "Claude Fable · 100s (your favourite)",
   gpt100: "Fable + ChatGPT 5.5 Extra High · 100s (second favourite)",
 }
 
-/** Lists staged takes with their sidecar metadata; empty until staged. */
-async function loadTakes(): Promise<Take[]> {
+/** Shape of the pipeline sidecar fields this page reads. */
+interface TakeMeta {
+  wer?: number
+  duration_seconds?: number
+  variant_label?: string
+  cfg_scale?: number
+  speed?: number
+  sentence_gap_ms?: number
+  do_sample?: boolean
+  temperature?: number
+  selected_as_final?: boolean
+  david_review?: TakeForReview["review"]
+}
+
+/** Formats the settings recipe line shown under each take heading. */
+function settingsLine(meta: TakeMeta): string {
+  if (meta.cfg_scale === undefined) return "settings unknown"
+  const sampling = meta.do_sample
+    ? `sampled t=${meta.temperature}`
+    : "greedy"
+  return (
+    `cfg ${meta.cfg_scale} · ${meta.speed}x speed · ` +
+    `${meta.sentence_gap_ms}ms gaps · ${sampling}`
+  )
+}
+
+/** Lists staged takes with settings + any saved review; empty until staged. */
+async function loadTakes(): Promise<TakeForReview[]> {
   let files: string[] = []
   try {
     files = await readdir(TAKES_DIR)
   } catch {
     return []
   }
-  const takes: Take[] = []
+  const takes: TakeForReview[] = []
   for (const file of files) {
-    const match = /^vv7b_explainer_(fable100|gpt100)_perfect_(\d+)\.wav$/.exec(
-      file,
-    )
-    if (!match) continue
-    const take: Take = {
-      file,
-      variant: match[1] as Take["variant"],
-      take: Number(match[2]),
-    }
+    const match = /^vv7b_explainer_([a-z0-9]+)_perfect_(\d+)\.wav$/.exec(file)
+    if (!match || !match[1] || !match[2]) continue
+    let meta: TakeMeta = {}
     try {
-      const meta = JSON.parse(
+      meta = JSON.parse(
         await readFile(path.join(TAKES_DIR, `${file}.meta.json`), "utf-8"),
-      ) as { wer?: number; duration_seconds?: number }
-      take.wer = meta.wer
-      take.duration = meta.duration_seconds
+      ) as TakeMeta
     } catch {
-      // sidecar optional; the player still works without it
+      // sidecar optional; the player and rater still work without it
     }
-    takes.push(take)
+    takes.push({
+      file,
+      variant: match[1],
+      take: Number(match[2]),
+      variantLabel: meta.variant_label ?? "baseline (lesson recipe)",
+      settings: settingsLine(meta),
+      wer: meta.wer,
+      duration: meta.duration_seconds,
+      review: meta.david_review,
+      selectedAsFinal: meta.selected_as_final === true,
+    })
   }
   return takes.sort(
     (a, b) => a.variant.localeCompare(b.variant) || a.take - b.take,
@@ -62,9 +78,11 @@ async function loadTakes(): Promise<Take[]> {
 }
 
 /**
- * VV7B takes for David's ear (decision: which take becomes the explainer VO).
- * Ten quality-gated takes, five per script variant, in David's cloned VV7B
- * voice with G-W-T-H spelled out. Review-only; deleted at finalisation.
+ * VV7B takes for David's ear — now a rate-and-pick page mirroring the
+ * lesson-intro-video review flow. Each take shows its settings recipe;
+ * David scores pacing/lifelikeness/accuracy, comments, and picks the final.
+ * Ratings persist into the takes' meta sidecars so the winning settings are
+ * recorded for the runner-up script render and future videos.
  */
 export default async function W12TakesPage() {
   const takes = await loadTakes()
@@ -74,22 +92,23 @@ export default async function W12TakesPage() {
     <main className={styles.page}>
       <p className={styles.eyebrow}>Decision 2 · the voice take</p>
       <h1 className={styles.h1}>
-        Ten takes, <em>your ear decides</em>.
+        Rate the takes, <em>pick the final</em>.
       </h1>
       <p className={styles.lead}>
-        Every take below passed the lesson-grade quality gate: chunked VV7B
-        generation in your voice, Whisper word-error check on each chunk and on
-        the stitched whole, no garbled openings, no warmup residue, GWTH spoken
-        as G, W, T, H. Listen with headphones, note the script and take number
-        you like, and tell me in chat.
+        Every take passed the lesson-grade quality gate (chunked VV7B in your
+        voice, Whisper word-error checks, GWTH spoken as G, W, T, H). Each take
+        uses a different pace and energy recipe — the settings are printed on
+        the card. Score all three dimensions, note what you hear, and pick one
+        as the final. Ratings save to the take&rsquo;s metadata so the winning
+        settings drive the runner-up script and future videos.
       </p>
 
       {takes.length === 0 ? (
         <div className={styles.callout}>
           <p>
             <strong>Still rendering.</strong> The pipeline is generating and
-            quality-checking takes now. Refresh this page later; takes appear
-            here as soon as they are staged.
+            quality-checking takes now. Refresh this page; takes appear here as
+            soon as they are staged.
           </p>
         </div>
       ) : (
@@ -98,34 +117,10 @@ export default async function W12TakesPage() {
           if (group.length === 0) return null
           return (
             <section key={variant} style={{ marginTop: "2.5rem" }}>
-              <h2 className={styles.sectionTitle}>{VARIANT_LABELS[variant]}</h2>
-              <div className={styles.beats}>
-                {group.map((take) => (
-                  <article className={styles.beat} key={take.file}>
-                    <div className={styles.beatHead}>
-                      <span className={styles.beatNo}>
-                        Take {take.take}
-                      </span>
-                      <span className={styles.mono}>
-                        {take.duration
-                          ? `${Math.round(take.duration)}s`
-                          : ""}
-                        {take.wer !== undefined
-                          ? ` · wer ${take.wer.toFixed(3)}`
-                          : ""}
-                      </span>
-                    </div>
-                    {/* Native audio keeps this dependency-free; preload none
-                        so ten WAVs do not download eagerly. */}
-                    <audio
-                      controls
-                      preload="none"
-                      src={`/explainer/takes/${take.file}`}
-                      style={{ width: "100%" }}
-                    />
-                  </article>
-                ))}
-              </div>
+              <h2 className={styles.sectionTitle}>
+                {VARIANT_LABELS[variant] ?? variant}
+              </h2>
+              <TakesRater takes={group} />
             </section>
           )
         })

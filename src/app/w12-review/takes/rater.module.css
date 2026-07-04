@@ -1,0 +1,128 @@
+/* Rating controls for the W12 takes page. Inherits the FDE token block from
+ * review.module.css via CSS variables on the shared .shell ancestor. */
+
+.finalCard {
+  border-left: 3px solid var(--v-ochre);
+}
+
+.settings {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--v-muted);
+  margin: 0 0 0.75rem;
+}
+
+.scoreRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0.9rem 0 0.75rem;
+}
+
+.scoreRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.scoreLabel {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  min-width: 10.5rem;
+}
+
+.scoreButtons {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.scoreButton {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--v-line);
+  background: transparent;
+  color: var(--v-soft);
+  cursor: pointer;
+}
+
+.scoreButton:hover {
+  border-color: var(--v-ochre);
+}
+
+.scoreButton[data-active="true"] {
+  background: var(--v-ochre);
+  border-color: var(--v-ochre);
+  color: var(--v-teal-deep);
+}
+
+.notes {
+  width: 100%;
+  border: 1px solid var(--v-line);
+  background: transparent;
+  color: var(--v-ink);
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  padding: 0.6rem 0.75rem;
+  resize: vertical;
+  margin-bottom: 0.75rem;
+}
+
+.notes:focus-visible {
+  outline: 2px solid var(--v-ochre);
+  outline-offset: 1px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.saveButton,
+.pickButton {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--v-ink);
+  background: var(--v-ink);
+  color: var(--v-bg);
+  cursor: pointer;
+}
+
+.saveButton:disabled,
+.pickButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.pickButton {
+  background: transparent;
+  color: var(--v-ink);
+}
+
+.pickButton[data-picked="true"] {
+  background: var(--v-ochre);
+  border-color: var(--v-ochre);
+  color: var(--v-teal-deep);
+}
+
+.error {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ochre);
+}
