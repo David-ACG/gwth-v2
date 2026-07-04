@@ -4,10 +4,15 @@ import bundleAnalyzer from "@next/bundle-analyzer"
 const nextConfig: NextConfig = {
   output: "standalone",
   compress: true,
-  // Dev-only: David reviews the dev server from his P53 over the LAN.
-  // Without this, Next 16 blocks /_next/* requests from the IP origin and
-  // pages render but never hydrate (dead buttons, no interactivity).
-  allowedDevOrigins: ["192.168.178.50"],
+  // Dev-only: David reviews the dev server from his P53 over the LAN and
+  // over Tailscale. Without this, Next 16 blocks /_next/* requests (incl.
+  // the HMR websocket) from these origins — pages render but never hydrate
+  // or hot-reload (dead buttons, stale tabs that miss later edits).
+  allowedDevOrigins: [
+    "192.168.178.50",
+    "hlab.taila51191.ts.net",
+    "100.79.248.39",
+  ],
   images: {
     remotePatterns: [
       // Add patterns as external image sources are identified
