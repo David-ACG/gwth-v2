@@ -9,6 +9,19 @@ import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { unstable_cache, revalidateTag } from "next/cache"
 import { NEWS_PAGE_SIZE } from "@/lib/config"
 
+/**
+ * True when the Supabase news backend is configured. When false the read
+ * functions return empty results so pages render their empty states instead
+ * of crashing — the staging deploy intentionally drops the Supabase env
+ * (see deploy/run-staging.sh).
+ */
+function isSupabaseConfigured(): boolean {
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
+}
+
 // ─── Row → Type Mappers ─────────────────────────────────────────────────────
 
 /** Maps a Supabase news_articles row (snake_case) to a NewsArticle (camelCase). */
@@ -66,6 +79,8 @@ export async function getNews(params: {
   page?: number
   limit?: number
 }): Promise<{ articles: NewsArticle[]; total: number }> {
+  if (!isSupabaseConfigured()) return { articles: [], total: 0 }
+
   const sort = params.sort ?? "new"
   const limit = params.limit ?? NEWS_PAGE_SIZE
   const page = params.page ?? 1
@@ -133,6 +148,8 @@ export async function getNews(params: {
 export async function getNewsArticle(
   slug: string
 ): Promise<NewsArticle | null> {
+  if (!isSupabaseConfigured()) return null
+
   return unstable_cache(
     async () => {
       const supabase = createAdminClient()
@@ -159,6 +176,8 @@ export async function getNewsFilters(): Promise<{
   categories: string[]
   tags: string[]
 }> {
+  if (!isSupabaseConfigured()) return { categories: [], tags: [] }
+
   return unstable_cache(
     async () => {
       const supabase = createAdminClient()
@@ -187,6 +206,8 @@ export async function getNewsFilters(): Promise<{
  * Used to show the filled/unfilled vote button state.
  */
 export async function getUserVotes(userId: string): Promise<string[]> {
+  if (!isSupabaseConfigured()) return []
+
   const supabase = createAdminClient()
 
   const { data, error } = await supabase
@@ -230,6 +251,8 @@ export async function toggleVote(
 export async function getNewsComments(
   articleId: string
 ): Promise<NewsComment[]> {
+  if (!isSupabaseConfigured()) return []
+
   return unstable_cache(
     async () => {
       const supabase = createAdminClient()
