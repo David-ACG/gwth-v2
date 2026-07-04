@@ -10,6 +10,16 @@ import {
 import { BillingActions } from "@/components/billing/billing-actions"
 import styles from "./settings-fde.module.css"
 
+/**
+ * Render per request, never statically. Settings is a per-user authed page
+ * (real user via `getDashboardUser()` → `getCurrentUser()`); `getCurrentUser()`
+ * short-circuits before touching cookies when `DATABASE_URL` is unset (build
+ * time), which let Next statically optimise this route — the baked
+ * "visitor / no subscription" render was served to everyone (W7). See the
+ * matching notes on the dashboard, progress, and profile pages.
+ */
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Settings",
   description: "Manage your account settings, subscription, and preferences.",
