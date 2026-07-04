@@ -22,6 +22,7 @@
  * `getCurrentUser()`). Client components must call the mutation through the
  * Server Action in `@/lib/actions/progress`, never import this file directly.
  */
+import { cache } from "react"
 import type {
   LessonProgress,
   LabProgress,
@@ -273,8 +274,13 @@ function updateLessonProgressMock(
  * Fetches the user's rows for the current request's data mode: the real
  * `lesson_progress` rows in `user` mode, fixtures in `mock` mode, nothing
  * when anonymous. Shared by the course-progress and streak derivations.
+ *
+ * Wrapped in React `cache()` so the dashboard's three consumers
+ * (`getAllLessonProgress`, `getAllCourseProgress`, `getStreak`) share a single
+ * `SELECT ... FROM lesson_progress` (and one `resolveDataMode` cookie read)
+ * per request instead of fanning out one query each.
  */
-async function lessonRowsForMode(): Promise<{
+const lessonRowsForMode = cache(async function lessonRowsForMode(): Promise<{
   mode: Awaited<ReturnType<typeof resolveDataMode>>
   rows: LessonProgress[]
 }> {
@@ -288,7 +294,7 @@ async function lessonRowsForMode(): Promise<{
     .from(lessonProgress)
     .where(eq(lessonProgress.userId, mode.userId))
   return { mode, rows: dbRows.map(mapLessonRow) }
-}
+})
 
 /**
  * Fetches the user's progress on a specific lab.
