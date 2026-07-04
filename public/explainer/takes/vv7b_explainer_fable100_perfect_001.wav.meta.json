@@ -21,8 +21,8 @@
   "quality_reasons": [],
   "quality_warnings": [],
   "quality_score": 0.65,
-  "music_heuristic_score": 0.0,
-  "music_seconds_over_threshold": 0.0,
+  "music_heuristic_score": 0,
+  "music_seconds_over_threshold": 0,
   "suggested_trim_start_s": 0,
   "manual_tags": [
     "codex_candidate",
@@ -41,28 +41,28 @@
       {
         "index": 1,
         "source_file": "fable100_v01_chunk01.wav",
-        "wer": 0.0,
-        "quality_score": 1.0,
+        "wer": 0,
+        "quality_score": 1,
         "transcript": "Most people use chatGPT like a search box, type a question, get an answer, move on. That works, but it barely scratches the surface of what these tools can do."
       },
       {
         "index": 2,
         "source_file": "fable100_v01_chunk02.wav",
-        "wer": 0.0,
-        "quality_score": 1.0,
+        "wer": 0,
+        "quality_score": 1,
         "transcript": "GWTH is an applied AI course for UK adults, built to take you from that first prompt to serious, useful work. It runs for three months, about five hours a week, in monthly parts. It starts in plain English, no jargon, and no coding needed to begin. Building comes later, and by the end, it is the spine of the course."
       },
       {
         "index": 3,
         "source_file": "fable100_v01_chunk03.wav",
-        "wer": 0.0,
-        "quality_score": 1.0,
+        "wer": 0,
+        "quality_score": 1,
         "transcript": "You do not sit through theory. You build small apps. You automate the jobs you repeat every week. You research faster and you make sense of your own data. Every lesson leaves real work behind. Evidence you can actually show, not a certificate that goes stale in a drawer. The credential is verifiable and it stays current. We are independent. No sponsors, no vendor deals, just what works."
       },
       {
         "index": 4,
         "source_file": "fable100_v01_chunk04.wav",
-        "wer": 0.0,
+        "wer": 0,
         "quality_score": 0.65,
         "transcript": "You can start free with real labs and no card, if it suits you. Course access is \u00a329 a month, paid a month at a time and you can stop whenever you like. Here is the promise the whole course rests on. If you can describe what you want, you can begin to build it. If that sounds like you, come and take a look at GWTH.AI."
       }
