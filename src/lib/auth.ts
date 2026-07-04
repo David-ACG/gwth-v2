@@ -7,6 +7,7 @@
  * beta access gate (returns null for users without a live manual_beta grant).
  */
 
+import { cache } from "react"
 import { headers } from "next/headers"
 import type { User, SubscriptionState } from "@/lib/types"
 import { getAccessForUser } from "@/lib/billing/access"
@@ -39,8 +40,15 @@ const MOCK_USER: User = {
  * a backend, so this resolves to null and the dev mock path takes over via
  * `getDashboardUser()`. `getAuth()` is imported lazily so this module never
  * constructs the auth context (or touches the DB) at import time.
+ *
+ * Wrapped in React `cache()` so the several per-request consumers
+ * (`getDashboardUser`, `resolveDataMode` via notifications/progress/score)
+ * collapse to a single session validation + `getAccessForUser()` DB lookup
+ * per server request instead of re-resolving 2-3x.
  */
-export async function getCurrentUser(): Promise<User | null> {
+export const getCurrentUser = cache(async function getCurrentUser(): Promise<
+  User | null
+> {
   // No DB configured → no real session is possible (mock mode handles users
   // via getDashboardUser()). Avoid constructing getAuth() (which resolves the
   // DB) in that case.
@@ -83,7 +91,7 @@ export async function getCurrentUser(): Promise<User | null> {
     createdAt: new Date(sessionUser.createdAt),
     updatedAt: new Date(sessionUser.updatedAt ?? sessionUser.createdAt),
   }
-}
+})
 
 /**
  * Returns the mock user for dashboard UI development.
