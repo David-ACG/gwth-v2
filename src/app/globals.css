@@ -88,9 +88,12 @@
 :root {
   --radius: 0.625rem;
 
-  /* Locked GWTH.ai logo colours (decision 2026-04-29 via /logo_picker).
-     LogoGwth / LogoGwthMark default to these; the accent terracotta also
-     matches the favicon set. Referenced by the public nav on every page. */
+  /* Locked GWTH.ai logo colours (decision 2026-04-29 via /logo_picker;
+     dark-ground rule added by David 2026-07-03): ink wordmark + terracotta
+     arrow on LIGHT grounds; cream wordmark + mustard arrow on DARK grounds
+     (see the .dark override — matches the auth masthead and the favicon).
+     LogoGwth / LogoGwthMark default to these vars; the public nav on every
+     page inherits them. */
   --logo-wordmark: #22301f;
   --logo-accent: #a94c2e;
 
@@ -164,7 +167,9 @@
 .dark {
   /* Graphite Warm — bg: #191817, card: #232221 */
   --logo-wordmark: #edeae6;
-  --logo-accent: #a94c2e;
+  /* Mustard on dark grounds (David 2026-07-03): terracotta sinks into dark
+     backgrounds; matches the auth masthead accent and the V1 favicon. */
+  --logo-accent: #d4a062;
 
   --background: oklch(0.17 0.005 60);
   --foreground: oklch(0.93 0.008 60);
