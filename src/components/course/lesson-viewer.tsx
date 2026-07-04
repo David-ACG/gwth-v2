@@ -21,6 +21,7 @@ import {
   StickyNote,
 } from "lucide-react"
 import { cn, formatDuration } from "@/lib/utils"
+import { mediaUrl } from "@/lib/media/url"
 import dynamic from "next/dynamic"
 import type {
   Lesson,
@@ -239,7 +240,7 @@ export function LessonViewer({
                 >
                   <SectionHeading number={num} title="Intro Video" />
                   <VideoPlayer
-                    src={lesson.introVideoUrl!}
+                    src={mediaUrl(lesson.introVideoUrl)!}
                     title={`${lesson.title} — Introduction`}
                     onProgressChange={handleIntroVideoProgress}
                   />
@@ -260,7 +261,7 @@ export function LessonViewer({
                   {lesson.audioFileUrl && (
                     <div className="mb-6">
                       <AudioBar
-                        src={lesson.audioFileUrl}
+                        src={mediaUrl(lesson.audioFileUrl)}
                         duration={lesson.audioDuration ?? undefined}
                       />
                     </div>
@@ -282,7 +283,7 @@ export function LessonViewer({
                   {lesson.buildVideoUrl && (
                     <div className="mb-6">
                       <VideoPlayer
-                        src={lesson.buildVideoUrl}
+                        src={mediaUrl(lesson.buildVideoUrl)}
                         title={`${lesson.title} — Build Along`}
                       />
                     </div>
