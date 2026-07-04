@@ -1987,9 +1987,13 @@ function LessonCompleteSurface({
                 <span className={styles.accent}>{introWatchedPct}%</span>.{" "}
               </>
             ) : null}
-            Q&amp;A passed at{" "}
-            <span className={styles.accent}>{quizScorePct}%</span>. This
-            counts toward Month 1.
+            {lesson.questions?.length ? (
+              <>
+                Q&amp;A passed at{" "}
+                <span className={styles.accent}>{quizScorePct}%</span>.{" "}
+              </>
+            ) : null}
+            This counts toward Month 1.
           </p>
 
           <div className="mt-9 grid grid-cols-[1.4fr_1fr] border border-foreground">

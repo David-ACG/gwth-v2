@@ -222,6 +222,7 @@ export default async function LessonPage({
   return (
     <div className={cn(LESSON_BREAKOUT)} data-variant="e2-e">
       <EditorialLessonViewer
+        key={meta.id}
         lesson={meta}
         initialSurface={initialSurface}
         initialPage={Number.isFinite(initialPage) ? initialPage : 1}
