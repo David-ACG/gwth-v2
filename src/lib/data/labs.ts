@@ -11,7 +11,7 @@ import type { Lab, LabStep } from "@/lib/types"
 import { mockLabs } from "./mock-data"
 import { getDb } from "@/db"
 import { labs } from "@/db/schema"
-import { asc, eq } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 
 /**
  * True when a real database is configured. When false the layer falls back to
