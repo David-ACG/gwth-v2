@@ -82,7 +82,7 @@ try {
   await page.goto(BASE + "/", { waitUntil: "networkidle" })
   await page.evaluate(() => {
     document.documentElement.classList.add("dark")
-    try { localStorage.setItem("theme", "dark") } catch (e) {}
+    try { localStorage.setItem("theme", "dark") } catch {}
   })
   await page.waitForTimeout(400)
   await probe(page, "/ (dark)")

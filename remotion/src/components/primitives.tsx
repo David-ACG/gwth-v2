@@ -48,7 +48,6 @@ export const FitToFrame: React.FC<{
   style?: React.CSSProperties;
 }> = ({ children, maxHeight = 960, style }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
   const [handle] = useState(() => delayRender("fit-to-frame measure"));
 
   useEffect(() => {
@@ -57,7 +56,12 @@ export const FitToFrame: React.FC<{
       // offsetHeight is a layout metric: transforms (ours or the entrance
       // animations') never feed back into it, so this settles in one pass.
       const height = el.offsetHeight;
-      setScale(height > maxHeight ? maxHeight / height : 1);
+      const scale = height > maxHeight ? maxHeight / height : 1;
+      // Apply the fit transform straight to the measured node. Deriving it into
+      // React state would only re-render this same element with a value we
+      // already hold — and the extra render is exactly what triggers the
+      // cascading-render lint.
+      el.style.transform = scale < 1 ? `scale(${scale})` : "";
     }
     continueRender(handle);
   }, [handle, maxHeight]);
@@ -66,7 +70,6 @@ export const FitToFrame: React.FC<{
     <div
       ref={ref}
       style={{
-        transform: scale < 1 ? `scale(${scale})` : undefined,
         transformOrigin: "center center",
         ...style,
       }}
