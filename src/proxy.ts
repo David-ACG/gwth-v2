@@ -13,6 +13,19 @@ import { getSessionCookie } from "better-auth/cookies"
  * indexable — without that, Lighthouse SEO can't clear 0.69 because the
  * is-crawlable audit fails.
  */
+/**
+ * Lesson media on the staging review env is served straight from the P520
+ * pipeline over plain http (legacy `http://192.168.178.50:8088/api/lessons/...`
+ * URLs — see `src/lib/media/url.ts`). `media-src https:` would block it, so
+ * the pipeline origin is allowed ONLY under the staging review flag
+ * (`ENABLE_DEV_MOCK_USER`, never set in production). Production media rides
+ * the https CDN and stays covered by `https:`.
+ */
+const STAGING_MEDIA_ORIGIN =
+  process.env.ENABLE_DEV_MOCK_USER === "true"
+    ? " http://192.168.178.50:8088"
+    : ""
+
 const baseSecurityHeaders = {
   "X-DNS-Prefetch-Control": "on",
   "X-Frame-Options": "SAMEORIGIN",
@@ -29,7 +42,7 @@ const baseSecurityHeaders = {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     "connect-src 'self' https:",
-    "media-src 'self' https:",
+    `media-src 'self' https:${STAGING_MEDIA_ORIGIN}`,
     "frame-src 'self'",
     "base-uri 'self'",
     "form-action 'self'",
