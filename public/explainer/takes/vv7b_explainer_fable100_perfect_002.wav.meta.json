@@ -1,0 +1,68 @@
+{
+  "engine": "vibevoice_7b",
+  "voice_reference": "wav_24_48k_mono_28s_Audiate_Equalizer",
+  "asset": "w12_homepage_explainer",
+  "script_variant": "fable100",
+  "take": 2,
+  "variant_label": "brisk",
+  "wer": 0.0044,
+  "cfg_scale": 1.3,
+  "inference_steps": 10,
+  "temperature": 0.7,
+  "speed": 1.0,
+  "sentence_gap_ms": 200,
+  "do_sample": false,
+  "duration_seconds": 97.893333,
+  "generated_at": "2026-07-04T13:17:57.811003",
+  "strict_quality_gate": true,
+  "warmup_enabled": true,
+  "warmup_text": "Right. Let's begin.",
+  "warmup_trim_applied": true,
+  "quality_gate_status": "pass",
+  "quality_reasons": [],
+  "quality_warnings": [],
+  "quality_score": 0.65,
+  "music_heuristic_score": 0.0,
+  "music_seconds_over_threshold": 0.0,
+  "suggested_trim_start_s": 0,
+  "manual_tags": [
+    "codex_candidate",
+    "w12_explainer",
+    "variant_brisk",
+    "transcript_reviewed",
+    "manual_listen_pending",
+    "chunked_stitched"
+  ],
+  "selected_as_final": false,
+  "score_notes": "W12 explainer take 2 (fable100, variant 'brisk': cfg 1.3, speed 1.0, gap 200ms, greedy). Chunked VV7B, strict gate. Awaiting David manual listen.",
+  "scored_at": "2026-07-04T13:17:57.811021",
+  "chunked_generation": {
+    "run_id": "20260704_131551",
+    "pipeline_final_wer": 0.0175,
+    "chunks": [
+      {
+        "index": 1,
+        "source_file": "fable100_v02_chunk01.wav",
+        "wer": 0.0,
+        "quality_score": 0.805,
+        "transcript": "Most people use chat GPT like a search box. Type a question, get an answer, move on. That works, but it barely scratches the surface of what these tools can do. GWTH is an applied AI course for UK adults, built to take you from that first prompt to serious useful work. It runs for three months, about five hours a week, in monthly parts. It starts in plain English, no jargon and no coding needed to begin. Building comes later, and by the end, it is the spine of the course."
+      },
+      {
+        "index": 2,
+        "source_file": "fable100_v02_chunk02.wav",
+        "wer": 0.0,
+        "quality_score": 1.0,
+        "transcript": "You do not sit through theory. You build small apps. You automate the jobs you repeat every week. You research faster and you make sense of your own data. Every lesson leaves real work behind. Evidence you can actually show, not a certificate that goes stale in a drawer. The credential is verifiable and it stays current. We are independent. No sponsors, no vendor deals. Just what works."
+      },
+      {
+        "index": 3,
+        "source_file": "fable100_v02_chunk03.wav",
+        "wer": 0.0145,
+        "quality_score": 0.65,
+        "transcript": "you can start free with real labs and no cardie. If it suits you, course access is \u00a329 a month, paid a month at a time and you can stop whenever you like. Here is the promise the whole course rests on. If you can describe what you want, you can begin to build it. If that sounds like you, come and take a look at GWTH.AI."
+      }
+    ],
+    "final_transcript": "Most people use chatGPT like a search box. Type a question, get an answer, move on. That works, but it barely scratches the surface of what these tools can do. GWTH is an applied AI course for UK adults, built to take you from that first prompt to serious useful work. It runs for three months, about five hours a week, in monthly parts. It starts in plain English, no jargon and no coding needed to begin. Building comes later, and by the end, it is the spine of the course. You do not sit through theory. You build small apps. You automate the jobs you repeat every week. You research faster, and you make sense of your own data. Every lesson leaves real work behind. Evidence you can actually show, not a certificate that goes stale in a drawer. The credential is verifiable, and it stays current. We are independent, no sponsors, no vendor deals, just what works. You can start free, with real labs and no cardie. If it suits you, course access is \u00a329 a month, paid a month at a time, and you can stop whenever you like. Here is the promise the whole course rests on. If you can describe what you want, you can begin to build it. If that sounds like you, come and take a look at GWTH.AI.",
+    "final_opening_ok": true
+  }
+}
