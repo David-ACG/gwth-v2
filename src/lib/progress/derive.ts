@@ -179,20 +179,19 @@ export function deriveCourseProgress(
   const completedLessons = completedRows.length
   const isCourseComplete = totalLessons > 0 && completedLessons === totalLessons
 
+  const completionTimes = completedRows
+    .map((row) => (row.completedAt ? new Date(row.completedAt).getTime() : null))
+    .filter((ms): ms is number => ms !== null)
+
   return {
     courseId: course.id,
     progress: totalLessons === 0 ? 0 : completedLessons / totalLessons,
     completedLessons,
     totalLessons,
-    completedAt: isCourseComplete
-      ? new Date(
-          Math.max(
-            ...completedRows.map((row) =>
-              new Date(row.completedAt ?? 0).getTime()
-            )
-          )
-        )
-      : null,
+    completedAt:
+      isCourseComplete && completionTimes.length > 0
+        ? new Date(Math.max(...completionTimes))
+        : null,
   }
 }
 
