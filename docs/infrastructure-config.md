@@ -2,7 +2,7 @@
 
 > Living document. Updated as infrastructure is built.
 >
-> Last updated: 2026-07-03 (I2: Hetzner prod DB + full hardening delta + backups + rollback)
+> Last updated: 2026-07-04 (I2 re-verify: fixed Coolify control-plane SSH lockout that had silently killed scheduled backups; re-proved backup pipeline end-to-end)
 
 ---
 
@@ -38,11 +38,44 @@
 | --------------- | --------------------------------------------------- |
 | Port            | 111                                                 |
 | Auth            | Public key only (password disabled)                 |
-| Root login      | Disabled                                            |
+| Root login      | Refused from the public internet; key-only from the internal docker bridge (see note) |
 | Max auth tries  | 3                                                   |
-| Allowed users   | david                                               |
-| Config file     | `/etc/ssh/sshd_config.d/00-hardened.conf`           |
+| Allowed users   | david, root (root gated by `PermitRootLogin`, see note) |
+| Config files    | `/etc/ssh/sshd_config.d/00-hardened.conf`, `99-gwth-algos.conf`, `zz-coolify-internal-root.conf` |
 | Socket override | `/lib/systemd/system/ssh.socket` (ListenStream=111) |
+
+> **Coolify control-plane SSH reconciliation (I2 re-verify, 2026-07-04 — IMPORTANT).**
+> Coolify manages its **own** host over SSH as `root` via the internal docker
+> bridge (`host.docker.internal` → `10.0.0.1:111`). The initial I2 hardening
+> (2026-07-03) set `AllowUsers david` and `PermitRootLogin no` globally, which
+> **locked Coolify out of its own server**: its root logins started failing,
+> fail2ban banned the Coolify container IP (`10.0.1.9`), Coolify marked the
+> server `is_reachable=false / is_usable=false`, and **every Coolify scheduled
+> job silently stopped** — including the nightly DB backup (only the initial
+> 22:12 setup dump ever ran; the 03:00 slot never fired). Deploy capability was
+> also down.
+>
+> **Fix applied (additive/restorative, NOT a lockdown — zero `david`-lockout
+> risk):** global `AllowUsers david root` + `PermitRootLogin no`, plus
+> `zz-coolify-internal-root.conf`:
+> ```
+> Match Address 10.0.0.0/8,127.0.0.1
+>     PermitRootLogin prohibit-password
+> Match all
+> ```
+> Net effect (verified with `sshd -T -C`): root is **refused from the public
+> internet** (`permitrootlogin no`) and **allowed key-only from the internal
+> docker bridge** (`prohibit-password`); `david` unaffected. `Match all` resets
+> context so the main-file globals after the `Include` are untouched. fail2ban
+> now `ignoreip = 127.0.0.1/8 ::1 10.0.0.0/8 172.16.0.0/12`
+> (`/etc/fail2ban/jail.d/00-ignoreip-internal.conf`) so it can never re-ban the
+> control plane; the stale ban on `10.0.1.9` was cleared. The dangerous
+> `00-hardened.conf.bak-i2` (which held a global `AllowUsers david root` +
+> `PermitRootLogin prohibit-password` — one rename from re-opening root to the
+> internet) was deleted. Applied with a held-open control-master break-glass
+> session, `sshd -t`-gated, `reload` (not restart), fresh-`david`-login verified
+> and root-from-internet re-confirmed refused. After the fix Coolify reports
+> `is_reachable=t / is_usable=t` and a real backup produced a fresh dump.
 
 ### Firewall (UFW)
 
@@ -141,7 +174,7 @@ build; live at the W6 cutover deploy).
 
 | Leg | Mechanism | Schedule | State |
 | --- | --------- | -------- | ----- |
-| Primary dump | Coolify scheduled `pg_dump` (custom format) → `/data/coolify/backups/databases/root-team-0/gwth-v2-db-prod-zo0gk…/` | 03:00 daily, retain 7 | LIVE (backup id 1, first run success) |
+| Primary dump | Coolify scheduled `pg_dump` (custom format) → `/data/coolify/backups/databases/root-team-0/gwth-v2-db-prod-zo0gk…/` | 03:00 daily, retain 7 | LIVE (exec id 2 success 2026-07-04 11:01). **Note:** the 03:00 slot was silently NOT firing until 2026-07-04 — Coolify only dispatches scheduled backups when the server is `is_reachable/is_usable`, which the SSH hardening had broken (see the SSH reconciliation note above). Fixed + re-proven with a real dispatch. |
 | Offsite (R2) | Coolify S3 destination → Cloudflare R2 bucket `gwth-db-backups` | with primary | **BLOCKED on David**: create the R2 bucket + scoped token (Cloudflare dashboard → R2), then Coolify UI → Storages → add S3 (endpoint `https://<account-id>.r2.cloudflarestorage.com`), then on the DB backup set `save_s3 = true` |
 | Backstop | P520 pull: `/home/david/backups/gwth-v2-db/pull.sh` — sudo-rsync dumps off-box, freshness gate (<26 h), restic snapshot `/home/david/backups/gwth-v2-db/restic-repo` (keep 14d/8w), key `/home/david/backups/restic-keys/gwth-v2-db.key` | 03:30 daily (P520 cron) | LIVE (snapshot `ce7365db` verified) |
 | Dead-man | Kuma push monitor 4 → Telegram; pull.sh heartbeats **only after** a fresh dump is snapshotted, so a never-fired Coolify cron, a stale dump, or a failed pull all stop the heartbeat (alert ≤26 h) | 26 h window | LIVE |
@@ -162,7 +195,7 @@ post-launch (default-deny egress, `userland-proxy:false`, `icc:false`) remain de
 | ---- | ----- |
 | auditd | **ACTIVE**, `-e 1`, ruleset `/etc/audit/rules.d/gwth-prelaunch.rules` (identity, sudoers, sshd, pam, docker/ufw config, cron persistence, kernel modules, root-exec trail) — closes the #1 forensic gap |
 | Egress logging | UFW `logging medium` (outbound/new-connection visibility — miner C2 would light up) |
-| SSH | `PermitRootLogin no`; `AllowUsers david` (root **dropped**); modern algorithm set `/etc/ssh/sshd_config.d/99-gwth-algos.conf` (sntrup761x25519/curve25519 kex, AEAD ciphers, etm MACs); `LoginGraceTime 30`. ssh-audit: **6 fail / 9 warn → 0 / 0**. Applied watched, one change per reconnect, fresh-login verified each step, 10-min auto-revert net armed/disarmed per change |
+| SSH | `PermitRootLogin no` globally (root refused from the public internet); `AllowUsers david root` with root **key-only from the internal docker bridge** via `zz-coolify-internal-root.conf` (`Match Address 10.0.0.0/8,127.0.0.1`) — **reconciled 2026-07-04** so Coolify can manage its own host (see the SSH reconciliation note above; the original `AllowUsers david`/root-dropped form had silently killed Coolify's control plane + backups); modern algorithm set `/etc/ssh/sshd_config.d/99-gwth-algos.conf` (sntrup761x25519/curve25519 kex, AEAD ciphers, etm MACs); `LoginGraceTime 30`. ssh-audit: **6 fail / 9 warn → 0 / 0**. Applied watched, one change per reconnect, fresh-login verified each step |
 | Docker daemon | `live-restore: true` (applied via SIGHUP first) + `no-new-privileges: true` (daemon restart; **all 19 containers survived**, gwth.ai stayed up apart from Traefik's ~seconds docker-provider reconnect) |
 | Published-port reconcile | Traefik `:8080` (dead dashboard mapping, nothing listens) — DOCKER-USER DROP guard, persisted via `docker-user-rules.service`; Coolify realtime `:6001-2` kept (required by Coolify UI terminal/logs) and made intentional via commented UFW allow rules |
 | CIS-reference score | Lynis hardening index **62 → 63** (before/after reports `/var/log/lynis-report.{BEFORE,AFTER}-i2.dat`); big wins (auditd, SSH) show in ssh-audit + closed gaps rather than Lynis' weighting of deferred post-launch items |
@@ -455,4 +488,8 @@ ssh hetzner 'docker logs plausible-plausible-1 --tail 50'
 | 2026-07-03 | I2: Docker live-restore + no-new-privileges (19/19 containers survived restart); :8080 DOCKER-USER guard; :6001-2 documented | OK |
 | 2026-07-03 | I2: SOPS prod + ops stores committed; plaintext connection-secrets.md deleted; new Coolify API token | OK |
 | 2026-07-03 | I2: external P520→Hetzner watcher (5-min cron → Telegram); rollback procedure documented + dry-checked | OK |
+| 2026-07-04 | I2 re-verify: found the SSH hardening had locked Coolify out of its own host (root dropped from AllowUsers) → server marked unreachable → **all scheduled backups silently stopped** | FOUND |
+| 2026-07-04 | I2 re-verify: reconciled — root key-only from internal docker bridge (`zz-coolify-internal-root.conf` Match block); fail2ban ignoreip internal subnets; `.bak-i2` re-open vector deleted; Coolify `is_reachable/is_usable=t` | FIXED |
+| 2026-07-04 | I2 re-verify: real backup dispatched (exec id 2 success 11:01), fresh dump pulled to P520, restic snapshot `82fd44ad`; full pipeline re-proven end-to-end | OK |
+| 2026-07-04 | I2 re-verify: hardening posture intact (auditd/UFW/fail2ban active, docker flags, :8080 guard, root-from-internet refused, fresh david login OK) | OK |
 | 2026-07-03 | PENDING (David): R2 bucket `gwth-db-backups` + scoped token → flip backup `save_s3`; external-SaaS key rotations | TODO |
