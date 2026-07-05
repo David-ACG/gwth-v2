@@ -1,0 +1,78 @@
+{
+  "checks": [
+    {
+      "name": "home renders",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "login renders form",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "UI login reached /dashboard",
+      "ok": true,
+      "detail": "https://gwth.ai/dashboard"
+    },
+    {
+      "name": "dashboard greets W6",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Month 1 unlocked (no invite-required lock)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mentions Month 1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "honest zeros: 'Not started yet'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no fake streak / fake counts",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "real lesson renders with <video>",
+      "ok": false,
+      "detail": "HTTP 200, 'Lesson not found'=true — prod lessons table is empty (content never imported)"
+    },
+    {
+      "name": "lab renders",
+      "ok": true,
+      "detail": "[\"Build Your Prompt Cheat Sheet in a Claude Project\"]"
+    },
+    {
+      "name": "guide renders",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "feedback panel present on /guide",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "feedback submitted (Thank you surface)",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": {
+    "home": [],
+    "login": [],
+    "dashboard": [],
+    "lesson": [],
+    "lab": [],
+    "guide": []
+  },
+  "media": {}
+}
