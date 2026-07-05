@@ -36,7 +36,7 @@ export type Journey = {
   title: string
   /** Card body paragraph */
   body: string
-  /** Tailwind accent token — drives tag pill colour */
+  /** Tailwind accent token; drives tag pill colour */
   accent: JourneyAccent
   /** Optional research stat shown in the card footer */
   stat?: JourneyStat
@@ -120,7 +120,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Reskilling",
     title: "You have been made redundant and need to reskill",
     body:
-      "Five hours a week for three months. Every project you build goes in your portfolio. Your course progress stays visible and practical. UK employers are hiring for exactly these skills — and only 21% of UK workers feel confident using AI. That gap is your opportunity.",
+      "Five hours a week for three months. Every project you build goes in your portfolio. Your course progress stays visible and practical. UK employers are hiring for exactly these skills, and only 21% of UK workers feel confident using AI. That gap is your opportunity.",
     accent: "aqua",
     stat: { value: "21%", label: "of UK workers feel confident using AI" },
     cta: "See pricing",
@@ -131,7 +131,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Small business",
     title: "You run a small business",
     body:
-      "UK micro businesses are 45% less likely to adopt AI than large companies. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant — you will be able to do it all yourself.",
+      "UK micro businesses are 45% less likely to adopt AI than large companies. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant. You will be able to do it all yourself.",
     accent: "mint",
     stat: { value: "45%", label: "less likely to adopt AI than large companies" },
     cta: "See pricing",
@@ -142,7 +142,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Parent",
     title: "You are a parent thinking about the future",
     body:
-      "AI fluency will not be a nice-to-have — it will be table stakes. Start with plain English, then learn the practical building and AI-assisted coding patterns that make ideas real.",
+      "AI fluency will not be a nice-to-have. It will be table stakes. Start with plain English, then learn the practical building and AI-assisted coding patterns that make ideas real.",
     accent: "aqua",
     cta: "Try a free lab",
     href: "/labs",
@@ -162,7 +162,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Income",
     title: "You know AI fluency is now worth more",
     body:
-      "AI is one of the highest-premium skill sets in the UK job market right now. Three months, real artefacts in your portfolio, and a clear record of completed work. Show up to your next salary conversation — or your next interview — with proof.",
+      "AI is one of the highest-premium skill sets in the UK job market right now. Three months, real artefacts in your portfolio, and a clear record of completed work. Show up to your next salary conversation (or your next interview) with proof.",
     accent: "aqua",
     cta: "See pricing",
     href: "/pricing",
@@ -193,7 +193,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Team lead",
     title: "You lead a team and your competitors are moving faster",
     body:
-      "The bottleneck is not the tools — it is whether your team can actually use them well. The beta is individual-first, with a light For Teams path for managers who want to talk about future group access.",
+      "The bottleneck is not the tools. It is whether your team can actually use them well. The beta is individual-first, with a light For Teams path for managers who want to talk about future group access.",
     accent: "mint",
     cta: "For Teams",
     href: "/for-teams",
@@ -250,7 +250,7 @@ export const UK_STATS: readonly UkStat[] = [
 const monthAt = (idx: number) => {
   const m = MONTH_CONFIGS[idx]
   if (!m) {
-    throw new Error(`MONTH_CONFIGS[${idx}] is undefined — config and marketing data out of sync`)
+    throw new Error(`MONTH_CONFIGS[${idx}] is undefined: config and marketing data out of sync`)
   }
   return m
 }
@@ -292,12 +292,12 @@ export const PRICING: readonly PricingTier[] = [
     badge: "Free Labs",
     price: "£0",
     pricePence: 0,
-    per: "forever — no card required",
+    per: "forever, no card required",
     features: [
       "Access to all free labs",
       "Build real projects with AI",
       "No credit card required",
-      "No time limit — free forever",
+      "No time limit, free forever",
     ],
     cta: { label: "Try a Free Lab", href: "/labs", style: "ghost" },
   },
@@ -330,13 +330,13 @@ export const PRICING: readonly PricingTier[] = [
       "~5 hours of new content every month",
       "Work through the optional lessons you skipped",
       "Progress history and review analytics",
-      "Cancel anytime — no lock-in",
+      "Cancel anytime, no lock-in",
     ],
     cta: { label: "Included after course", href: "#", style: "disabled" },
   },
 ]
 
-// ─── Progress categories (post-beta score data — see score-vis/example-data.ts) ────────
+// ─── Progress categories (post-beta score data, see score-vis/example-data.ts) ────────
 
 export const SCORE_CATEGORIES: readonly ScoreCategory[] = [
   { l: "Foundations", v: 92 },

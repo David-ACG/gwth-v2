@@ -57,9 +57,6 @@ const PASSWORD_EXEMPT_PATHS = [
   "/access",     // The password page itself
   "/auth",       // OAuth callback
   "/api",        // API routes
-  "/redesign",   // Internal homepage redesign review (noindex, removed at promotion)
-  "/redesign_v2", // E2-E palette explorer (noindex, removed at promotion)
-  "/logo_picker", // Vector logo colour explorer (noindex, removed at promotion)
 ]
 
 /**
@@ -108,7 +105,42 @@ const AUTH_PATHS = [
 ]
 
 /** Paths that never need an auth check */
-const PUBLIC_ONLY_PATHS = ["/demo", "/api/health"]
+const PUBLIC_ONLY_PATHS = ["/api/health"]
+
+/**
+ * Internal dev/review leftovers (W15): auth-gated in EVERY production build
+ * (including the ENABLE_DEV_MOCK_USER staging env) so none of them answers 200
+ * to anonymous traffic on a public deploy. A logged-in session still reaches
+ * them for review. /w12-review and /explainer-preview are deliberately NOT
+ * listed: they stay publicly reachable (noindex via the pre-launch header)
+ * until W12 closes; add them here (or delete the routes) afterwards.
+ */
+const DEV_REVIEW_PATHS = [
+  "/demo",
+  "/logo_picker",
+  "/redesign",
+  "/redesign_v2",
+  "/old-design",
+  "/score-card-variants",
+]
+
+/**
+ * Bounces anonymous production traffic off the internal dev/review routes to
+ * /login. Runs regardless of ENABLE_DEV_MOCK_USER (unlike guardRoute) so the
+ * staging review flag can never re-expose these pages.
+ */
+function guardDevReviewRoute(request: NextRequest): NextResponse | null {
+  const { pathname } = request.nextUrl
+  const isDevReview = DEV_REVIEW_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  )
+  if (!isDevReview) return null
+  if (getSessionCookie(request)) return null
+
+  const url = request.nextUrl.clone()
+  url.pathname = "/login"
+  return NextResponse.redirect(url)
+}
 
 /**
  * Optimistic Better Auth route guard (D-W11-7).
@@ -179,6 +211,13 @@ export async function proxy(request: NextRequest) {
       url.searchParams.set("from", pathname)
       return NextResponse.redirect(url)
     }
+  }
+
+  // Dev/review leftovers (W15): auth-gated in every production build, even
+  // when ENABLE_DEV_MOCK_USER relaxes the main guard below.
+  if (process.env.NODE_ENV === "production") {
+    const devReviewRedirect = guardDevReviewRoute(request)
+    if (devReviewRedirect) return devReviewRedirect
   }
 
   // Route protection — production only (dev no-op, see above). The W8-beta

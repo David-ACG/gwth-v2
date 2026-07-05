@@ -54,6 +54,19 @@ function buildAuth() {
   // http staging → not secure → cookie persists. Mirrors site-access.ts:32.
   const isSecureOrigin = (process.env.BETTER_AUTH_URL ?? "").startsWith("https://")
 
+  // W15: only register providers whose app credentials actually exist. A
+  // provider registered with undefined credentials made /api/auth/sign-in/social
+  // 500 (no app was ever registered; the COMPLETION_W11 David-only residual).
+  // An absent provider is rejected cleanly instead, and the login page hides
+  // its button via getEnabledOAuthProviders(). Setting the two env vars brings
+  // the provider back untouched.
+  const googleId = process.env.GOOGLE_CLIENT_ID
+  const googleSecret = process.env.GOOGLE_CLIENT_SECRET
+  const githubId = process.env.GITHUB_CLIENT_ID
+  const githubSecret = process.env.GITHUB_CLIENT_SECRET
+  const linkedinId = process.env.LINKEDIN_CLIENT_ID
+  const linkedinSecret = process.env.LINKEDIN_CLIENT_SECRET
+
   return betterAuth({
     baseURL,
     secret: process.env.BETTER_AUTH_SECRET,
@@ -121,18 +134,15 @@ function buildAuth() {
       },
     },
     socialProviders: {
-      google: {
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      },
-      github: {
-        clientId: process.env.GITHUB_CLIENT_ID!,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      },
-      linkedin: {
-        clientId: process.env.LINKEDIN_CLIENT_ID!,
-        clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-      },
+      ...(googleId && googleSecret
+        ? { google: { clientId: googleId, clientSecret: googleSecret } }
+        : {}),
+      ...(githubId && githubSecret
+        ? { github: { clientId: githubId, clientSecret: githubSecret } }
+        : {}),
+      ...(linkedinId && linkedinSecret
+        ? { linkedin: { clientId: linkedinId, clientSecret: linkedinSecret } }
+        : {}),
     },
     databaseHooks: {
       user: {

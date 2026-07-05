@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { CourseJsonLd } from "@/components/marketing/json-ld/course-jsonld"
 import { HomeFde } from "@/components/marketing/home-fde/home-fde"
+import { ExplainerVideo } from "@/components/marketing/home-fde/explainer-video"
 
 export const metadata: Metadata = {
   title: "GWTH.ai | Beginner-to-Advanced Applied AI",
@@ -16,12 +17,29 @@ export const metadata: Metadata = {
  * homepage comparison round. Source module: `marketing/home-fde/`. The
  * inner public pages (/labs, /lessons, /pricing, /for-teams, /about,
  * /news) share the same register via their *-fde modules.
+ *
+ * The explainer embed placement (after-hero) and chrome (framed) are David's
+ * W12 picks, 2026-07-04, recorded in `public/explainer/w12_picks.json`; the
+ * video is the final cut on VV7B fable100 take 005.
  */
 export default function HomePage() {
   return (
     <>
       <CourseJsonLd />
-      <HomeFde />
+      <HomeFde
+        explainerAt="after-hero"
+        explainer={
+          <ExplainerVideo
+            src="/explainer/explainer.mp4"
+            poster="/explainer/poster.png"
+            captionsSrc="/explainer/explainer.vtt"
+            chrome="framed"
+            kicker="The 90-second tour"
+            heading="See it in ninety seconds."
+            label="Play the 90-second tour"
+          />
+        }
+      />
     </>
   )
 }

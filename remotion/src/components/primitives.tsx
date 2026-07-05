@@ -48,28 +48,43 @@ export const FitToFrame: React.FC<{
   style?: React.CSSProperties;
 }> = ({ children, maxHeight = 960, style }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
   const [handle] = useState(() => delayRender("fit-to-frame measure"));
 
   useEffect(() => {
     const el = ref.current;
-    if (el) {
-      // offsetHeight is a layout metric: transforms (ours or the entrance
-      // animations') never feed back into it, so this settles in one pass.
-      const height = el.offsetHeight;
-      const scale = height > maxHeight ? maxHeight / height : 1;
-      // Apply the fit transform straight to the measured node. Deriving it into
-      // React state would only re-render this same element with a value we
-      // already hold — and the extra render is exactly what triggers the
-      // cascading-render lint.
-      el.style.transform = scale < 1 ? `scale(${scale})` : "";
+    if (!el) {
+      continueRender(handle);
+      return;
     }
-    continueRender(handle);
+    let raf = 0;
+    let tries = 0;
+    // On the first effect tick the wrapper can report offsetWidth 0 (layout
+    // not yet settled in the render host). Measuring then is catastrophic:
+    // zero width means no wrapping, so healthy content measures thousands of
+    // pixels tall and everything gets scaled to a thumbnail. Wait for a real
+    // layout before trusting offsetHeight; transforms (ours or the entrance
+    // animations') never feed back into it, so once width is real the
+    // measure settles in one pass.
+    const measure = () => {
+      if (el.offsetWidth === 0 && tries < 30) {
+        tries += 1;
+        raf = requestAnimationFrame(measure);
+        return;
+      }
+      const height = el.offsetHeight;
+      setScale(el.offsetWidth > 0 && height > maxHeight ? maxHeight / height : 1);
+      continueRender(handle);
+    };
+    measure();
+    return () => cancelAnimationFrame(raf);
   }, [handle, maxHeight]);
 
   return (
     <div
       ref={ref}
       style={{
+        transform: scale < 1 ? `scale(${scale})` : undefined,
         transformOrigin: "center center",
         ...style,
       }}
