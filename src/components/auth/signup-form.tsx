@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
+import type { OAuthProviderId } from "@/lib/oauth-providers"
 import styles from "@/components/auth/auth-fde.module.css"
 
 /**
@@ -52,12 +53,21 @@ export function SignupForm() {
   )
 }
 
+/** Props for {@link PostBetaSignupForm}. */
+interface PostBetaSignupFormProps {
+  /**
+   * Social providers with a registered app (see `getEnabledOAuthProviders()`).
+   * The OAuth block is hidden while this is empty (W15 guard).
+   */
+  oauthProviders?: readonly OAuthProviderId[]
+}
+
 /**
  * Post-beta public registration form (name, email, password) in the FDE
  * register. Dormant during the invite-only beta; kept wired to the authClient
  * sign-up so it can be re-enabled without a rebuild.
  */
-export function PostBetaSignupForm() {
+export function PostBetaSignupForm({ oauthProviders = [] }: PostBetaSignupFormProps) {
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [submittedName, setSubmittedName] = useState("")
   const [serverError, setServerError] = useState<string | null>(null)
@@ -124,8 +134,12 @@ export function PostBetaSignupForm() {
         </p>
       </div>
 
-      <OAuthButtons />
-      <OAuthDivider />
+      {oauthProviders.length > 0 && (
+        <>
+          <OAuthButtons providers={oauthProviders} />
+          <OAuthDivider />
+        </>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>

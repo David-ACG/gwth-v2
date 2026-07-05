@@ -68,6 +68,7 @@ Confirm in Coolify **before deploy** (values copied from staging env — never c
 - [ ] `DATABASE_URL` → self-hosted Postgres (NOT Supabase). See [`DECISION_2026-06-12_database-off-supabase.md`](architecture/DECISION_2026-06-12_database-off-supabase.md).
 - [ ] Auth provider env vars for the **D4-ratified provider** (W11). Supabase Auth is **retired** — its keys must be absent/unused.
 - [ ] Plunk (transactional email) API key set.
+- [ ] **Assert `ENABLE_DEV_MOCK_USER` is absent in prod env** (staging-only review flag; it hands anonymous visitors a logged-in mock learner). Backstop: `src/instrumentation.ts` refuses to boot when the flag is set while `BETTER_AUTH_URL` is gwth.ai (W15).
 - [ ] Any other secret the build needs (cross-check against `.env.example` / staging).
 
 ---

@@ -18,14 +18,25 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
+import type { OAuthProviderId } from "@/lib/oauth-providers"
 import styles from "@/components/auth/auth-fde.module.css"
+
+/** Props for {@link LoginForm}. */
+interface LoginFormProps {
+  /**
+   * Social providers with a registered app, computed server-side by the login
+   * page via `getEnabledOAuthProviders()`. The whole OAuth block (buttons +
+   * divider) is hidden while this is empty (W15 guard).
+   */
+  oauthProviders?: readonly OAuthProviderId[]
+}
 
 /**
  * Login form with OAuth social buttons and email/password validation, in the
  * FDE journal register (paper panel, square hairline inputs, mono labels).
  * Calls the authClient sign-in and redirects to dashboard on success.
  */
-export function LoginForm() {
+export function LoginForm({ oauthProviders = [] }: LoginFormProps) {
   const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
   const form = useForm<LoginFormData>({
@@ -71,8 +82,12 @@ export function LoginForm() {
         </p>
       </div>
 
-      <OAuthButtons />
-      <OAuthDivider />
+      {oauthProviders.length > 0 && (
+        <>
+          <OAuthButtons providers={oauthProviders} />
+          <OAuthDivider />
+        </>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>

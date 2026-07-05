@@ -1,5 +1,12 @@
 # W12 explainer — open decisions for David
 
+> **ALL FOUR GATES CLOSED 2026-07-04.** David's picks are recorded in
+> `../public/explainer/w12_picks.json`: script = Claude Fable 100s (spoken
+> G-W-T-H), voice = VV7B fable100 take 005, motion = the defaults below,
+> embed = after-hero + framed. The final cut is wired into the live `/`
+> (`src/app/(public)/page.tsx`). This file is kept as the decision record;
+> the details below describe the pre-decision option set.
+
 This was built as far as it can go autonomously. Four gates need your eye. Each
 has options prepared so you are picking, not starting from scratch. Nothing
 below is wired into the live homepage yet; the live `/` is untouched.

@@ -3,12 +3,11 @@
 import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
+import type { OAuthProviderId } from "@/lib/oauth-providers"
 import styles from "@/components/auth/auth-fde.module.css"
 
-type OAuthProvider = "google" | "github" | "linkedin"
-
 /** Provider display config */
-const providers: { id: OAuthProvider; label: string; icon: React.ReactNode }[] = [
+const providerConfig: { id: OAuthProviderId; label: string; icon: React.ReactNode }[] = [
   {
     id: "google",
     label: "Google",
@@ -41,17 +40,28 @@ const providers: { id: OAuthProvider; label: string; icon: React.ReactNode }[] =
   },
 ]
 
+/** Props for {@link OAuthButtons}. */
+interface OAuthButtonsProps {
+  /**
+   * Providers with a registered app (client id + secret in the env). Compute
+   * server-side via `getEnabledOAuthProviders()` and pass down; nothing is
+   * rendered when the list is empty (W15 guard: unregistered providers used
+   * to render anyway and 500 on click).
+   */
+  providers?: readonly OAuthProviderId[]
+}
+
 /**
  * Social OAuth login buttons for Google, GitHub, and LinkedIn, in the FDE
  * register (square outline buttons, mono labels). Uses the Better Auth client
- * to trigger social sign-in. Works on both login and signup pages — Better
+ * to trigger social sign-in. Works on both login and signup pages: Better
  * Auth provisions the account for new OAuth users, and the user.create
  * database hook applies any matching beta grant.
  */
-export function OAuthButtons() {
-  const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
+export function OAuthButtons({ providers = [] }: OAuthButtonsProps) {
+  const [loadingProvider, setLoadingProvider] = useState<OAuthProviderId | null>(null)
 
-  async function handleOAuth(provider: OAuthProvider) {
+  async function handleOAuth(provider: OAuthProviderId) {
     setLoadingProvider(provider)
 
     const { error } = await authClient.signIn.social({
@@ -68,9 +78,12 @@ export function OAuthButtons() {
     // On success, the browser redirects — no need to clear loading state
   }
 
+  const visible = providerConfig.filter(({ id }) => providers.includes(id))
+  if (visible.length === 0) return null
+
   return (
     <div className={styles.oauthGroup}>
-      {providers.map(({ id, label, icon }) => (
+      {visible.map(({ id, label, icon }) => (
         <button
           key={id}
           type="button"
