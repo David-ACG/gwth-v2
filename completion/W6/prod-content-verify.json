@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "name": "dashboard shows real 26-lesson scope",
+      "ok": true,
+      "detail": "26 lessons"
+    },
+    {
+      "name": "dashboard NOT 95-lesson mock catalog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard honest zeros (Not started yet)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson HTTP 200",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "lesson not 404 / not-found",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson title renders",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "video/audio elements present",
+      "ok": true,
+      "detail": "videos=1 audios=1"
+    },
+    {
+      "name": "media srcs point at https://media.gwth.ai",
+      "ok": true,
+      "detail": "[\"https://media.gwth.ai/lessons/19e4bc1c-ab8a-43b0-830e-f5f7447b295e/video/lesson_01_intro.mp4\",\"https://media.gwth.ai/lessons/19e4bc1c-ab8a-43b0-830e-f5f7447b295e/audio/kokoro_main.wav\"]"
+    },
+    {
+      "name": "video plays, currentTime advances",
+      "ok": true,
+      "detail": "{\"ok\":true,\"t0\":0.001408,\"t1\":2.461344}"
+    },
+    {
+      "name": "/labs lists labs",
+      "ok": true,
+      "detail": "lab links=30"
+    },
+    {
+      "name": "/labs mentions prompt cheat sheet lab",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lab detail renders",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "no console errors on dashboard",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors on lesson",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors on labs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors on lab",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": {
+    "dashboard": [],
+    "lesson": [],
+    "labs": [],
+    "lab": []
+  },
+  "media": {
+    "lesson": {
+      "videos": [
+        "https://media.gwth.ai/lessons/19e4bc1c-ab8a-43b0-830e-f5f7447b295e/video/lesson_01_intro.mp4"
+      ],
+      "audios": [
+        "https://media.gwth.ai/lessons/19e4bc1c-ab8a-43b0-830e-f5f7447b295e/audio/kokoro_main.wav"
+      ]
+    },
+    "play": {
+      "ok": true,
+      "t0": 0.001408,
+      "t1": 2.461344
+    }
+  }
+}
