@@ -1,12 +1,27 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "project": ["src/**/*.{ts,tsx}"],
+  "project": [
+    "src/**/*.{ts,tsx}"
+  ],
   "ignore": [
     "src/components/ui/**",
     "src/components/course/courses-filter.tsx",
-    "src/components/landing/waitlist-form.tsx",
+    "src/components/course/lesson-nav.tsx",
+    "src/components/lab/lab-card.tsx",
+    "src/components/lab/labs-filter.tsx",
+    "src/components/landing/_archived/**",
+    "src/components/landing/hero-section.tsx",
+    "src/components/marketing/editorial-homepage/editorial-homepage.tsx",
+    "src/components/marketing/index.ts",
     "src/components/shared/audio-player.tsx",
-    "src/components/tech-radar/tech-radar-grid.tsx"
+    "src/components/shared/bookmark-button.tsx",
+    "src/components/shared/notes-panel.tsx",
+    "src/components/tech-radar/tech-radar-grid.tsx",
+    "src/components/tech-radar/tech-radar-table.tsx",
+    "src/hooks/use-bookmark.ts",
+    "src/hooks/use-reduced-motion.ts",
+    "src/lib/data/notes.ts",
+    "src/lib/media/s3.ts"
   ],
   "ignoreDependencies": [
     "tw-animate-css",
@@ -16,6 +31,9 @@
     "date-fns",
     "react-day-picker",
     "@nosecone/next",
-    "fast-check"
+    "fast-check",
+    "@aws-sdk/client-s3",
+    "@aws-sdk/s3-request-presigner",
+    "server-only"
   ]
 }

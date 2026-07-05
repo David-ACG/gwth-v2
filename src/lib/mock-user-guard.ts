@@ -25,7 +25,7 @@ const DISABLED_VALUES = new Set(["", "false", "0"])
  * The `env` parameter exists for tests; production callers use the default.
  */
 export function assertMockUserFlagAllowed(
-  env: NodeJS.ProcessEnv = process.env
+  env: Record<string, string | undefined> = process.env
 ): void {
   const flag = env.ENABLE_DEV_MOCK_USER
   if (flag === undefined || DISABLED_VALUES.has(flag.trim().toLowerCase())) {

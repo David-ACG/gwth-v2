@@ -1,36 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import styles from "./review.module.css"
 
 /**
  * Minimal light/dark toggle for the W12 review scaffolding (the review pages
- * live outside the public nav, which is where the real toggle sits). Guarded by
- * a mounted flag so the label does not cause a hydration mismatch.
+ * live outside the public nav, which is where the real toggle sits). The label
+ * is driven by CSS `dark:` variants rather than a mounted-state hydration dance,
+ * so it renders identically on the server and client (no hydration mismatch).
  */
 export function ReviewThemeToggle() {
-  const [mounted, setMounted] = useState(false)
   const { resolvedTheme, setTheme } = useTheme()
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setMounted(true), 0)
-    return () => window.clearTimeout(timer)
-  }, [])
-
-  const isDark = resolvedTheme === "dark"
 
   return (
     <button
       type="button"
       className={styles.themeToggle}
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={
-        mounted ? `Switch to ${isDark ? "light" : "dark"} mode` : "Toggle theme"
-      }
-      suppressHydrationWarning
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      aria-label="Toggle theme"
     >
-      {mounted ? (isDark ? "Light mode" : "Dark mode") : "Theme"}
+      <span className="hidden dark:inline">Light mode</span>
+      <span className="inline dark:hidden">Dark mode</span>
     </button>
   )
 }
