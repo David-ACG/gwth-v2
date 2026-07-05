@@ -12,6 +12,10 @@ RUN npm ci
 # --- Builder ---
 FROM base AS builder
 WORKDIR /app
+# NEXT_PUBLIC_* values are inlined into the client bundle by `next build`,
+# so they must arrive as build args (Coolify passes buildtime envs this way).
+ARG NEXT_PUBLIC_MEDIA_CDN_BASE_URL
+ENV NEXT_PUBLIC_MEDIA_CDN_BASE_URL=$NEXT_PUBLIC_MEDIA_CDN_BASE_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
