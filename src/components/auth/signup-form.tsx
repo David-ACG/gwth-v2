@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,35 +21,31 @@ import type { OAuthProviderId } from "@/lib/oauth-providers"
 import styles from "@/components/auth/auth-fde.module.css"
 
 /**
- * Invite-only beta signup surface in the FDE journal register. The full
- * email/password registration form remains below as PostBetaSignupForm for
- * post-beta reactivation.
+ * Invite-only beta signup surface in the FDE journal register. Renders the
+ * real registration form under invite-only framing: an invited tester creates
+ * their account here with the email address GWTH approved, and the Better
+ * Auth create hook applies the pre-registered beta grant automatically.
+ * Un-invited visitors can still register but get free labs only (W8), so the
+ * open form does not open the beta.
  */
-export function SignupForm() {
+export function SignupForm({ oauthProviders = [] }: PostBetaSignupFormProps) {
   return (
-    <div className={styles.panel}>
-      <div className={styles.panelHead}>
-        <h1 className={styles.title}>Invite-only beta</h1>
-        <p className={styles.subtitle}>
-          The beta is closed to public signup. Access is granted manually by
-          the GWTH team.
-        </p>
-      </div>
-      <p className={styles.notice}>
-        If you have been invited, sign in with a social provider (Google,
-        GitHub or LinkedIn) using the email address GWTH approved. That first
-        sign-in creates your account and applies your beta access. Otherwise,
-        join the waitlist and we will contact you when more beta places open.
-      </p>
-      <div className={styles.actions}>
-        <Link href="/login" className={styles.buttonSolid}>
-          Log in
-        </Link>
-        <Link href="/" className={styles.buttonOutline}>
-          Join the waitlist
-        </Link>
-      </div>
-    </div>
+    <PostBetaSignupForm
+      oauthProviders={oauthProviders}
+      title="Invite-only beta"
+      subtitle="The beta is closed to public signup. Access is granted manually by the GWTH team."
+      notice={
+        <>
+          If you have been invited, create your account below with the exact
+          email address GWTH approved; your beta access is applied
+          automatically at signup. Not invited yet?{" "}
+          <Link href="/" className={styles.link}>
+            Join the waitlist
+          </Link>{" "}
+          and we will contact you when more beta places open.
+        </>
+      }
+    />
   )
 }
 
@@ -60,6 +56,12 @@ interface PostBetaSignupFormProps {
    * The OAuth block is hidden while this is empty (W15 guard).
    */
   oauthProviders?: readonly OAuthProviderId[]
+  /** Panel headline; defaults to the public post-beta copy. */
+  title?: string
+  /** Panel sub-headline; defaults to the public post-beta copy. */
+  subtitle?: string
+  /** Optional notice paragraph rendered between the head and the form. */
+  notice?: ReactNode
 }
 
 /**
@@ -67,7 +69,12 @@ interface PostBetaSignupFormProps {
  * register. Dormant during the invite-only beta; kept wired to the authClient
  * sign-up so it can be re-enabled without a rebuild.
  */
-export function PostBetaSignupForm({ oauthProviders = [] }: PostBetaSignupFormProps) {
+export function PostBetaSignupForm({
+  oauthProviders = [],
+  title = "Create your account",
+  subtitle = "Sign up to start learning. We'll send you a confirmation email.",
+  notice,
+}: PostBetaSignupFormProps) {
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [submittedName, setSubmittedName] = useState("")
   const [serverError, setServerError] = useState<string | null>(null)
@@ -128,11 +135,11 @@ export function PostBetaSignupForm({ oauthProviders = [] }: PostBetaSignupFormPr
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
-        <h1 className={styles.title}>Create your account</h1>
-        <p className={styles.subtitle}>
-          Sign up to start learning. We&apos;ll send you a confirmation email.
-        </p>
+        <h1 className={styles.title}>{title}</h1>
+        <p className={styles.subtitle}>{subtitle}</p>
       </div>
+
+      {notice && <p className={styles.notice}>{notice}</p>}
 
       {oauthProviders.length > 0 && (
         <>
