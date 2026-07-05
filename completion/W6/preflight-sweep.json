@@ -1,0 +1,226 @@
+{
+  "phase": "sweep",
+  "base": "http://192.168.178.50:3001",
+  "at": "2026-07-05T08:08:35.989Z",
+  "pages": {
+    "home-light-1280": "completion/W6/home-light-1280.png",
+    "login-light-1280": "completion/W6/login-light-1280.png",
+    "dashboard-light-1280": "completion/W6/dashboard-light-1280.png",
+    "lesson-light-1280": "completion/W6/lesson-light-1280.png",
+    "lab-light-1280": "completion/W6/lab-light-1280.png",
+    "guide-light-1280": "completion/W6/guide-light-1280.png",
+    "admin-light-1280": "completion/W6/admin-light-1280.png",
+    "progress-light-1280": "completion/W6/progress-light-1280.png",
+    "signup-light-1280": "completion/W6/signup-light-1280.png",
+    "home-light-412": "completion/W6/home-light-412.png",
+    "login-light-412": "completion/W6/login-light-412.png",
+    "dashboard-light-412": "completion/W6/dashboard-light-412.png",
+    "lesson-light-412": "completion/W6/lesson-light-412.png",
+    "lab-light-412": "completion/W6/lab-light-412.png",
+    "guide-light-412": "completion/W6/guide-light-412.png",
+    "admin-light-412": "completion/W6/admin-light-412.png",
+    "progress-light-412": "completion/W6/progress-light-412.png",
+    "home-dark-1280": "completion/W6/home-dark-1280.png",
+    "login-dark-1280": "completion/W6/login-dark-1280.png",
+    "dashboard-dark-1280": "completion/W6/dashboard-dark-1280.png",
+    "lesson-dark-1280": "completion/W6/lesson-dark-1280.png",
+    "lab-dark-1280": "completion/W6/lab-dark-1280.png",
+    "guide-dark-1280": "completion/W6/guide-dark-1280.png",
+    "admin-dark-1280": "completion/W6/admin-dark-1280.png",
+    "progress-dark-1280": "completion/W6/progress-dark-1280.png",
+    "home-dark-412": "completion/W6/home-dark-412.png",
+    "login-dark-412": "completion/W6/login-dark-412.png",
+    "dashboard-dark-412": "completion/W6/dashboard-dark-412.png",
+    "lesson-dark-412": "completion/W6/lesson-dark-412.png",
+    "lab-dark-412": "completion/W6/lab-dark-412.png",
+    "guide-dark-412": "completion/W6/guide-dark-412.png",
+    "admin-dark-412": "completion/W6/admin-dark-412.png",
+    "progress-dark-412": "completion/W6/progress-dark-412.png"
+  },
+  "checks": [
+    {
+      "name": "home-light-1280: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home-light-1280: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-light-1280: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-light-1280: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "fresh dashboard honest zeros",
+      "ok": true,
+      "detail": "expects 'Not started yet', no 5-day streak, no 12/24"
+    },
+    {
+      "name": "fresh dashboard greets the FRESH session (not mock/admin)",
+      "ok": true,
+      "detail": "session identity must be the fresh account"
+    },
+    {
+      "name": "lesson-light-1280: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-light-1280: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "fresh /progress honest zeros",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "signup page shows invite-only copy",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "7c: OAuth buttons hidden with creds unset",
+      "ok": true,
+      "detail": "signup=0 login=0"
+    },
+    {
+      "name": "home-light-412: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home-light-412: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-light-412: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-light-412: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-light-412: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-light-412: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home-dark-1280: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home-dark-1280: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-dark-1280: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-dark-1280: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-dark-1280: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-dark-1280: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home-dark-412: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home-dark-412: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-dark-412: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dashboard-dark-412: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-dark-412: no checkout CTA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-dark-412: no GWTH Score widget",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors on any swept page",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": {
+    "home-light-1280": [],
+    "login-light-1280": [],
+    "dashboard-light-1280": [],
+    "lesson-light-1280": [],
+    "lab-light-1280": [],
+    "guide-light-1280": [],
+    "admin-light-1280": [],
+    "progress-light-1280": [],
+    "home-light-412": [],
+    "login-light-412": [],
+    "dashboard-light-412": [],
+    "lesson-light-412": [],
+    "lab-light-412": [],
+    "guide-light-412": [],
+    "admin-light-412": [],
+    "progress-light-412": [],
+    "home-dark-1280": [],
+    "login-dark-1280": [],
+    "dashboard-dark-1280": [],
+    "lesson-dark-1280": [],
+    "lab-dark-1280": [],
+    "guide-dark-1280": [],
+    "admin-dark-1280": [],
+    "progress-dark-1280": [],
+    "home-dark-412": [],
+    "login-dark-412": [],
+    "dashboard-dark-412": [],
+    "lesson-dark-412": [],
+    "lab-dark-412": [],
+    "guide-dark-412": [],
+    "admin-dark-412": [],
+    "progress-dark-412": []
+  }
+}

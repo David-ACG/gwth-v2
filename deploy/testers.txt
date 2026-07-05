@@ -1,0 +1,6 @@
+# W6 beta cohort — one email per line. Fill in the hand-picked testers, then
+# run ./deploy/invite-testers.sh (David's action only; see
+# docs/tester-onboarding.md and docs/runbook-go-live.md section 7).
+#
+# Example (remove before sending):
+# tester@example.com

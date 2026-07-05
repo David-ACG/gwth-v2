@@ -1,0 +1,66 @@
+{
+  "phase": "media",
+  "base": "http://192.168.178.50:3001",
+  "at": "2026-07-05T08:10:21.759Z",
+  "pages": {},
+  "checks": [
+    {
+      "name": "UI login reached /dashboard",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "intro video PLAYS (currentTime advances)",
+      "ok": true,
+      "detail": "currentTime=2.43s"
+    },
+    {
+      "name": "intro video watched past 80%",
+      "ok": true,
+      "detail": "85.3/89.5s"
+    },
+    {
+      "name": "lesson audio PLAYS (currentTime advances)",
+      "ok": true,
+      "detail": "currentTime=2.46s"
+    },
+    {
+      "name": "qa: clicked one option per question",
+      "ok": true,
+      "detail": "3/3 (rows=12)"
+    },
+    {
+      "name": "qa: submitted and passed",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson-complete surface shown",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "signed out via UI control",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "after re-login /progress shows the completion",
+      "ok": false,
+      "detail": "expects 1 completed lesson reflected"
+    },
+    {
+      "name": "dashboard streak started after completion",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors during round-trip",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": {
+    "media-roundtrip": []
+  }
+}
