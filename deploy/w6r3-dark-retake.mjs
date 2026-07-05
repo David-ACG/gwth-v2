@@ -1,0 +1,12 @@
+import { chromium } from "playwright"
+const browser = await chromium.launch()
+const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" })
+await ctx.addInitScript(() => { try { localStorage.setItem("theme", "dark") } catch {} })
+const page = await ctx.newPage()
+await page.goto("http://192.168.178.50:3001/signup", { waitUntil: "networkidle" })
+await page.waitForTimeout(500)
+const htmlClass = await page.locator("html").getAttribute("class")
+const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+console.log("html class:", htmlClass, "| body bg:", bg)
+await page.screenshot({ path: "/home/david/projects/GWTH_V2/completion/W6/signup-fixed-dark-1280.png", fullPage: true })
+await browser.close()

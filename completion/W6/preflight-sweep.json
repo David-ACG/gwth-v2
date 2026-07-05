@@ -1,7 +1,7 @@
 {
   "phase": "sweep",
   "base": "http://192.168.178.50:3001",
-  "at": "2026-07-05T08:08:35.989Z",
+  "at": "2026-07-05T19:28:08.856Z",
   "pages": {
     "home-light-1280": "completion/W6/home-light-1280.png",
     "login-light-1280": "completion/W6/login-light-1280.png",

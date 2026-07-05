@@ -235,7 +235,8 @@ if (PHASE === "media") {
   await uiLogin(page, FRESH_EMAIL, FRESH_PW)
   await page.goto(`${BASE}/progress`, { waitUntil: "networkidle" })
   await page.waitForTimeout(700)
-  const pb = await page.content()
+  // strip tags first — "1 of 26 lessons" renders with markup between tokens
+  const pb = (await page.content()).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ")
   check("after re-login /progress shows the completion", /1 (of|\/) 26|1 lesson/i.test(pb),
     "expects 1 completed lesson reflected")
   await page.screenshot({ path: `${OUT}/progress-after-relogin-1280.png`, fullPage: true })

@@ -1,7 +1,7 @@
 {
   "phase": "media",
   "base": "http://192.168.178.50:3001",
-  "at": "2026-07-05T08:10:21.759Z",
+  "at": "2026-07-05T19:29:48.965Z",
   "pages": {},
   "checks": [
     {
@@ -12,7 +12,7 @@
     {
       "name": "intro video PLAYS (currentTime advances)",
       "ok": true,
-      "detail": "currentTime=2.43s"
+      "detail": "currentTime=2.42s"
     },
     {
       "name": "intro video watched past 80%",
