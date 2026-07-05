@@ -109,7 +109,7 @@ describe("OAuthButtons", () => {
     "calls signIn.social with provider %s",
     async (label, provider) => {
       const user = userEvent.setup()
-      render(<OAuthButtons />)
+      render(<OAuthButtons providers={["google", "github", "linkedin"]} />)
 
       await user.click(
         screen.getByRole("button", { name: new RegExp(`continue with ${label}`, "i") })
@@ -122,6 +122,47 @@ describe("OAuthButtons", () => {
       })
     }
   )
+
+  // W15 guard: providers without a registered app (env unset) must not render
+  // a button at all, so the 500-on-click path is unreachable from the UI.
+  it("renders nothing when no provider is enabled", () => {
+    const { container } = render(<OAuthButtons />)
+    expect(container).toBeEmptyDOMElement()
+    expect(screen.queryByRole("button")).not.toBeInTheDocument()
+  })
+
+  it("renders only the enabled providers", () => {
+    render(<OAuthButtons providers={["github"]} />)
+    expect(
+      screen.getByRole("button", { name: /continue with github/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /continue with google/i })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /continue with linkedin/i })
+    ).not.toBeInTheDocument()
+  })
+})
+
+describe("LoginForm OAuth block (W15 guard)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it("shows no social buttons when no provider env is configured", () => {
+    render(<LoginForm />)
+    expect(screen.queryByText(/continue with/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/or continue with email/i)).not.toBeInTheDocument()
+  })
+
+  it("shows the OAuth block again when providers are enabled", () => {
+    render(<LoginForm oauthProviders={["google"]} />)
+    expect(
+      screen.getByRole("button", { name: /continue with google/i })
+    ).toBeInTheDocument()
+    expect(screen.getByText(/or continue with email/i)).toBeInTheDocument()
+  })
 })
 
 describe("ForgotPasswordForm", () => {
