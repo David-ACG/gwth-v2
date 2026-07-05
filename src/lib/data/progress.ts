@@ -11,14 +11,18 @@
  * Mock fallback: when `DATABASE_URL` is not set the layer keeps the original
  * in-memory mock behaviour so the app still runs in mock mode (W7 requirement).
  *
- * Lab / course / study-streak / GWTH-score progress remain mock-backed: there
- * are no tables for them in the schema yet, so they are served from mock-data
- * unchanged. Wiring those to the DB is out of scope for W7 (see follow-ups).
+ * Course progress and the study streak are DERIVED from `lesson_progress`
+ * (W14): real values for authenticated users, honest zeros for fresh or
+ * unauthenticated accounts. Lab progress has no table yet, so real accounts
+ * honestly report no lab activity (post-beta follow-up). Fixtures are served
+ * ONLY via `resolveDataMode()` (no DB, or the ENABLE_DEV_MOCK_USER review
+ * path with no real session) and can never reach a real logged-in session.
  *
  * This is a server-side module (it reaches the DB and reads auth cookies via
  * `getCurrentUser()`). Client components must call the mutation through the
  * Server Action in `@/lib/actions/progress`, never import this file directly.
  */
+import { cache } from "react"
 import type {
   LessonProgress,
   LabProgress,
@@ -27,6 +31,7 @@ import type {
 } from "@/lib/types"
 import type { DynamicScore } from "@/lib/types"
 import {
+  mockCourses,
   mockLessonProgress,
   mockLabProgress,
   mockCourseProgress,
@@ -38,6 +43,14 @@ import {
   hasPassedQuiz,
   isLessonComplete,
 } from "@/lib/progress/completion"
+import {
+  deriveCourseProgress,
+  deriveStreak,
+  emptyDynamicScore,
+  emptyStreak,
+} from "@/lib/progress/derive"
+import { resolveDataMode } from "./mode"
+import { getCourses } from "./courses"
 import { getDb } from "@/db"
 import { lessonProgress } from "@/db/schema"
 import { and, eq } from "drizzle-orm"
@@ -92,12 +105,11 @@ function mapLessonRow(row: LessonProgressRow): LessonProgress {
 export async function getLessonProgress(
   lessonId: string
 ): Promise<LessonProgress | null> {
-  if (!isDbConfigured()) {
+  const mode = await resolveDataMode()
+  if (mode.kind === "mock") {
     return mockLessonProgress.find((p) => p.lessonId === lessonId) ?? null
   }
-
-  const userId = await currentUserId()
-  if (!userId) return null
+  if (mode.kind === "anonymous") return null
 
   const db = getDb()
   const rows = await db
@@ -105,7 +117,7 @@ export async function getLessonProgress(
     .from(lessonProgress)
     .where(
       and(
-        eq(lessonProgress.userId, userId),
+        eq(lessonProgress.userId, mode.userId),
         eq(lessonProgress.lessonId, lessonId)
       )
     )
@@ -119,20 +131,8 @@ export async function getLessonProgress(
  * Returns an empty array when unauthenticated.
  */
 export async function getAllLessonProgress(): Promise<LessonProgress[]> {
-  if (!isDbConfigured()) {
-    return [...mockLessonProgress]
-  }
-
-  const userId = await currentUserId()
-  if (!userId) return []
-
-  const db = getDb()
-  const rows = await db
-    .select()
-    .from(lessonProgress)
-    .where(eq(lessonProgress.userId, userId))
-
-  return rows.map(mapLessonRow)
+  const { rows } = await lessonRowsForMode()
+  return rows
 }
 
 /**
@@ -268,56 +268,118 @@ function updateLessonProgressMock(
   return merged
 }
 
-// ─── Lab / course / streak / score (mock-backed — no DB tables yet) ──────────
+// ─── Lab / course / streak / score (derived or honest-empty — W14) ───────────
+
+/**
+ * Fetches the user's rows for the current request's data mode: the real
+ * `lesson_progress` rows in `user` mode, fixtures in `mock` mode, nothing
+ * when anonymous. Shared by the course-progress and streak derivations.
+ *
+ * Wrapped in React `cache()` so the dashboard's three consumers
+ * (`getAllLessonProgress`, `getAllCourseProgress`, `getStreak`) share a single
+ * `SELECT ... FROM lesson_progress` (and one `resolveDataMode` cookie read)
+ * per request instead of fanning out one query each.
+ */
+const lessonRowsForMode = cache(async function lessonRowsForMode(): Promise<{
+  mode: Awaited<ReturnType<typeof resolveDataMode>>
+  rows: LessonProgress[]
+}> {
+  const mode = await resolveDataMode()
+  if (mode.kind === "mock") return { mode, rows: [...mockLessonProgress] }
+  if (mode.kind === "anonymous") return { mode, rows: [] }
+
+  const db = getDb()
+  const dbRows = await db
+    .select()
+    .from(lessonProgress)
+    .where(eq(lessonProgress.userId, mode.userId))
+  return { mode, rows: dbRows.map(mapLessonRow) }
+})
 
 /**
  * Fetches the user's progress on a specific lab.
- * Mock-backed: there is no lab_progress table yet (W7 follow-up).
+ * There is no lab_progress table yet (post-beta follow-up), so real accounts
+ * honestly have no lab activity; the pre-completed lab_001/lab_002 fixtures
+ * are only served on the mock/dev path, never to a real session (W14).
  */
 export async function getLabProgress(
   labId: string
 ): Promise<LabProgress | null> {
-  return mockLabProgress.find((p) => p.labId === labId) ?? null
+  const mode = await resolveDataMode()
+  if (mode.kind === "mock") {
+    return mockLabProgress.find((p) => p.labId === labId) ?? null
+  }
+  return null
 }
 
 /**
  * Fetches progress for all labs the user has interacted with.
- * Mock-backed: there is no lab_progress table yet (W7 follow-up).
+ * No lab_progress table yet (post-beta follow-up): real accounts honestly
+ * report no lab activity; fixtures are mock/dev-path only (W14).
  */
 export async function getAllLabProgress(): Promise<LabProgress[]> {
-  return [...mockLabProgress]
+  const mode = await resolveDataMode()
+  if (mode.kind === "mock") return [...mockLabProgress]
+  return []
 }
 
 /**
- * Fetches the user's progress on a specific course.
- * Mock-backed: there is no course_progress table yet (W7 follow-up).
+ * Fetches the user's progress on a specific course, derived from their real
+ * `lesson_progress` rows (W14). Accepts the course id or slug (route callers
+ * pass the slug). Returns null when the user has not started the course.
  */
 export async function getCourseProgress(
-  courseId: string
+  courseIdOrSlug: string
 ): Promise<CourseProgress | null> {
-  return mockCourseProgress.find((p) => p.courseId === courseId) ?? null
+  const { mode, rows } = await lessonRowsForMode()
+  const courses = mode.kind === "mock" ? mockCourses : await getCourses()
+  const course = courses.find(
+    (c) => c.id === courseIdOrSlug || c.slug === courseIdOrSlug
+  )
+  if (!course) return null
+
+  if (mode.kind === "mock") {
+    // Preserve the fixture shape on the dev path (12/24 etc.).
+    return mockCourseProgress.find((p) => p.courseId === course.id) ?? null
+  }
+  return deriveCourseProgress(course, rows)
 }
 
 /**
- * Fetches progress for all courses the user has interacted with.
- * Mock-backed: there is no course_progress table yet (W7 follow-up).
+ * Fetches progress for all courses the user has interacted with, derived
+ * from their real `lesson_progress` rows (W14). A fresh account gets an
+ * empty array — the honest-zero state — never the 12/24 fixture.
  */
 export async function getAllCourseProgress(): Promise<CourseProgress[]> {
-  return [...mockCourseProgress]
+  const { mode, rows } = await lessonRowsForMode()
+  if (mode.kind === "mock") return [...mockCourseProgress]
+  if (rows.length === 0) return []
+
+  const courses = await getCourses()
+  return courses
+    .map((course) => deriveCourseProgress(course, rows))
+    .filter((p): p is CourseProgress => p !== null)
 }
 
 /**
- * Fetches the user's study streak data.
- * Mock-backed: there is no study_streak table yet (W7 follow-up).
+ * Fetches the user's study streak, derived from real `lesson_progress`
+ * activity dates (W14). A fresh account gets 0 current / 0 longest — never
+ * the fixture 5/14. See `deriveStreak` for the undercounting caveat.
  */
 export async function getStreak(): Promise<StudyStreak> {
-  return { ...mockStudyStreak }
+  const { mode, rows } = await lessonRowsForMode()
+  if (mode.kind === "mock") return { ...mockStudyStreak }
+  if (rows.length === 0) return emptyStreak()
+  return deriveStreak(rows)
 }
 
 /**
- * Fetches the user's GWTH Score data.
- * Mock-backed: derived/aggregate, no dedicated table (W7 follow-up).
+ * Fetches the user's GWTH Score data. Real score computation is post-beta
+ * (the panel is behind ENABLE_GWTH_SCORE), so real sessions get an honest
+ * zero score; the fixture score is mock/dev-path only (W14).
  */
 export async function getDynamicScore(): Promise<DynamicScore> {
-  return { ...mockDynamicScore }
+  const mode = await resolveDataMode()
+  if (mode.kind === "mock") return { ...mockDynamicScore }
+  return emptyDynamicScore()
 }

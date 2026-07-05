@@ -6,6 +6,17 @@ import { formatRelativeDate } from "@/lib/utils"
 import type { NotificationType } from "@/lib/types"
 import styles from "./notifications-fde.module.css"
 
+/**
+ * Render per request, never statically. Notifications are mode-gated per
+ * request via `resolveDataMode()` (W14): real sessions get an honest empty
+ * list; only the mock/dev path sees fixtures. At build time `DATABASE_URL`
+ * is unset, so the mode resolved to "mock" before touching cookies and Next
+ * statically baked the fixture notifications into the image — serving them
+ * to every visitor, including real accounts (W7). See the matching notes on
+ * the dashboard, progress, profile, and settings pages.
+ */
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Notifications",
   description: "Your notifications and alerts.",
