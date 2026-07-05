@@ -209,7 +209,8 @@ export default async function ProgressPage() {
         <div className={styles.empty}>
           <p className={styles.emptyTitle}>No certificates yet</p>
           <p className={styles.emptyBody}>
-            Complete the course to earn your certificate.
+            Certificates are coming after the beta. Your completed lessons and
+            projects already count towards your progress record.
           </p>
           <div className="mt-5">
             <Link
