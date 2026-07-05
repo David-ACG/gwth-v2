@@ -1,72 +1,120 @@
-# Completion: W12 — Remotion homepage explainer + reusable FDE slide library
+# Completion: W12 — Homepage explainer video, LIVE on / (final VV7B voice cut)
 
-**Date:** 2026-06-23 · **Repo:** GWTH_V2 · **Commit(s):** see RECORD note
-**Test URL:** http://192.168.178.50:3009/explainer-preview  ·  **Status:** partial (3 design/voice gates await David — by design, this is an interactive task)
+**Date:** 2026-07-04 · **Repo:** GWTH_V2 · **Commit(s):** see RECORD note
+**Test URL:** http://192.168.178.50:3013/ (staging mirror: http://192.168.178.50:3001/ after next deploy) · **Status:** verified — all four of David's picks wired in
 
-## What changed (this is an interactive design task; built to the gates, not past them)
-- **New Remotion workspace** at [remotion/](../remotion/) — a self-contained React 18 / Remotion 4 project that renders the explainer **and** holds the keepable deliverable: five typed, props-driven FDE-register slide templates.
-- **Reusable slide library** ([remotion/src/slides/](../remotion/src/slides/)): `TitleCover`, `SingleStatement`, `Feature`, `ComparisonTwoUp`, `CtaDispatch` — FDE tokens only (no raw hex), long-text safe, each with 2–3 `motionVariant`s.
-- **Composed 65s explainer** in **David's cloned voice** (F5-TTS draft) — [remotion/out/explainer-draft-vo.mp4](../remotion/out/explainer-draft-vo.mp4), staged for the site at [public/explainer/explainer.mp4](../public/explainer/explainer.mp4) with a captions track.
-- **FDE embed component** ([explainer-video.tsx](../src/components/marketing/home-fde/explainer-video.tsx)) + a **non-live preview route** (`/explainer-preview`) showing two chrome options. The live homepage `/` is **unchanged** (David picks chrome + placement first — Gate 2b).
-- **Remotion verdict** written ([REMOTION_REPORT.md](../remotion/REMOTION_REPORT.md)).
+> Refreshes the 2026-06-23 packet, which described the superseded F5-TTS /
+> :3009 draft state. Voice engine is **VibeVoice-7B** (David's redirect), the
+> review site is **:3013**, and the explainer is now **live on the homepage**.
 
-## Content — the explainer, as a viewer sees it
-- **Video (David's cloned voice, draft):** [remotion/out/explainer-draft-vo.mp4](../remotion/out/explainer-draft-vo.mp4) — 65.0s, 1080p h264 + aac, ~3.9MB. Served at `/explainer/explainer.mp4`. Poster + WebVTT captions included.
-- **Script:** [remotion/SCRIPT.md](../remotion/SCRIPT.md) (≈66s, British English, no em dashes, facts from the live homepage).
-- **Motion-option reels for David's pick (Gate 2a):** `remotion/out/motion-{title,statement,feature,comparison,dispatch}.mp4`.
+## David's picks (all four gates closed 2026-07-04)
 
-Poster frame:
+Recorded in [public/explainer/w12_picks.json](../public/explainer/w12_picks.json)
+(sentinel `W12_PICKS_COMPLETE`):
 
-![video poster](W12/video-poster.png)
+| Gate | Pick |
+|------|------|
+| Script | **Claude Fable 100s** (226 words, GWTH spoken "G-W-T-H") |
+| Voice take | **`vv7b_explainer_fable100_perfect_005.wav`** — rated 5/5/5 on /w12-review/takes, `selected_as_final` |
+| Motion | Page defaults for all 5 archetypes (frame-draw / line-fade / stagger / divider-first / stagger) |
+| Embed | **After the hero**, **framed** chrome |
 
-The five reusable templates (rendered stills):
+## The video, as a visitor sees it
 
-![title/cover](W12/slide-title.png)
-![single-statement](W12/slide-statement.png)
-![feature](W12/slide-feature.png)
-![comparison/two-up](W12/slide-comparison.png)
-![cta/dispatch](W12/slide-dispatch.png)
+- **Live embed:** http://192.168.178.50:3013/ — first block after the hero,
+  poster + click-to-play, captions on by default.
+- **Direct file:** http://192.168.178.50:3013/explainer/explainer.mp4
+  ([public/explainer/explainer.mp4](../public/explainer/explainer.mp4)) —
+  **95.7s, 1080p h264 + aac, 5.9 MB**, word-aligned WebVTT captions
+  ([explainer.vtt](../public/explainer/explainer.vtt)) + poster.
+- **Final voice:** VV7B fable100 take 005 (winning recipe: cfg 1.4 ·
+  10 steps · temp 0.7 · greedy · 1.06x · 120ms gaps), Whisper-gated at
+  WER 0.000, loudnorm −16 LUFS.
 
-## UI — the embed in FDE context (preview route)
-Test it: **http://192.168.178.50:3009/explainer-preview** (light + dark; toggle the site theme)
+The re-timed cut — 9 beats, each boundary placed at the midpoint of the spoken
+pause between script sections (word-level Whisper timestamps of the final
+take), so slides change exactly where the voice does:
 
-Desktop, light:
-![preview light desktop](W12/embed-preview-light-1440.png)
+![beats 1-3](W12/storyboard-beats-1-3.png)
+![beats 4-6](W12/storyboard-beats-4-6.png)
+![beats 7-9](W12/storyboard-beats-7-9.png)
 
-Desktop, dark:
-![preview dark desktop](W12/embed-preview-dark-1440.png)
+Two beats are new for the final 226-word script (both verbatim from the
+approved VO copy, inheriting David's motion picks): a "How it runs" feature
+slide and a "No sponsors. No vendor deals." statement; the cut now ends on a
+`gwth.ai` end card.
 
-Mobile (412):
-![preview mobile](W12/embed-preview-mobile-412.png)
+## UI — the embed live on the homepage
 
-Live homepage is untouched (shown for proof of no regression):
-![home unchanged](W12/home-unchanged-light-1440.png)
+Test it: **http://192.168.178.50:3013/** (light + dark; theme toggle in the nav)
 
-## Backend / infra — voiceover pipeline (no DB/schema change)
+Desktop light / dark (1440):
+
+![home embed light](W12/home-embed-light-1440.png)
+![home embed dark](W12/home-embed-dark-1440.png)
+
+Playing, with the word-aligned captions on (click-to-play, no autoplay):
+
+![home embed playing](W12/home-embed-playing-1440.png)
+
+Mobile (412), light / dark:
+
+![home embed mobile light](W12/home-embed-light-412.png)
+![home embed mobile dark](W12/home-embed-dark-412.png)
+
+## Template hardening (the 3 long-text-fragile slides)
+
+The review-build FitToFrame guard on Feature / ComparisonTwoUp / CtaDispatch
+was measuring before layout settled (offsetWidth 0 → no wrapping → healthy
+content "measured" ~2 800px tall) and silently scaled **every** slide to ~1/3
+size. Fixed in [primitives.tsx](../remotion/src/components/primitives.tsx):
+the measure now waits for a real layout. Verified with roughly double-length
+content on all three templates (committed proofs in
+[remotion/out/fitcheck/](../remotion/out/fitcheck/)) — oversized copy scales
+down to fit the canvas instead of clipping:
+
+![fit stress feature](W12/fitstress-feature-fixed.png)
+
+## How the final VO was produced (pipeline change)
+
 ```mermaid
 flowchart LR
-  S[David voice sample<br/>david-TTS-sample-65-15.wav] --> F[F5-TTS clone<br/>cfg 2.2 · speed 0.95 · em-dash uptalk guard]
-  SC[SCRIPT.md beats] --> F
-  F --> C[6 beat WAVs]
-  C --> A[ffmpeg: lead/tail pad + concat<br/>= 65.0s VO track]
-  A --> T[explainer-content.ts<br/>beat seconds re-timed to audio]
-  T --> R[Remotion render<br/>1080p mp4 + aac]
-  R --> P[public/explainer/explainer.mp4]
+  S[script_fable100_tts.md<br/>226 words] --> H[harness v2<br/>chunk + warmup]
+  H -->|dir-queue jobs| J[VV7B jobserver<br/>resident on RTX 3090]
+  O[Ollama evicted<br/>keep_alive 0] -.-> J
+  J --> W[Whisper WER gate<br/>tolerant canon, <= 0.018]
+  W -->|pass| ST[stitch + loudnorm<br/>take NNN + meta sidecar]
+  ST --> R[staged to public/explainer/takes<br/>rated on /w12-review/takes]
+  R -->|David picks 005| C[Remotion re-time<br/>9 beats, word-aligned]
+  C --> F[explainer.mp4 1080p<br/>live on /]
 ```
-What changed & why it's safe: no database, schema, or live-site change. New files only (a sibling Remotion project, one unused-by-default app component, and a `noindex` review route). The live `/` homepage and all existing routes are byte-for-byte unchanged; `npm test` stays green (298 passed). Rollback = delete the new files.
+
+Safe: the jobserver holds the model once (no VRAM race with Ollama), the
+supervisor survives container restarts and only stages gate-passed takes, and
+staged sidecars carrying David's ratings are never overwritten. The gpt100
+runner-up script renders with the same winning recipe + the same WER gate, so
+David gets a same-settings A/B pair on /w12-review/takes.
+
+## Verification actually run
+
+- `npm test` — **331 passed, 11 skipped** (DB suites skip off-net), 0 failed.
+- `npx tsc --noEmit` — clean (site repo and remotion workspace).
+- Playwright CLI on `/` (light + dark × 1440/768/412): embed present directly
+  after the hero, poster visible, click-to-play mounts `<video>` with a
+  captions track, **0 console errors** in all 6 runs.
+- Review scaffolding still renders (all HTTP 200): /w12-review,
+  /w12-review/takes, /w12-review/motion, /w12-review/script, /w12-embed-demo,
+  /explainer-preview — removal stays with W15's dev-route sweep.
+- Final MP4 watched via frame-extraction at every beat boundary (19 sample
+  points): every slide lands with its spoken section; audio mean −19.7 dB /
+  peak −4.4 dB.
 
 ## What David should verify
-- [ ] Open **http://192.168.178.50:3009/explainer-preview**, play the tour, and judge the **draft VO in your cloned voice** (note: "GWTH" is pronounced "growth" — confirm or correct). Approve or choose to re-record (Gate 3, [DECISIONS.md](../remotion/DECISIONS.md)).
-- [ ] Watch the five motion reels in `remotion/out/motion-*.mp4` and pick one entrance per archetype (Gate 2a), then the embed **chrome (A framed / B bare)** and **placement** (Gate 2b).
-- [ ] Read [REMOTION_REPORT.md](../remotion/REMOTION_REPORT.md) and decide whether to standardise on Remotion for lesson/marketing video.
 
-## Verification run
-```
-npx tsc --noEmit (remotion)        → clean
-npx vitest run (GWTH_V2)           → 298 passed | 11 skipped (45 files)
-ffprobe explainer-draft-vo.mp4     → 65.045s, h264 + aac
-Playwright CLI (preview + home,    → 12 shots, light+dark @ 1440/768/412
-  6 surfaces)                         Console/page errors: 0
-curl /, /explainer-preview,        → 200 / 200 / 200
-  /explainer/explainer.mp4
-```
+- [ ] Open **http://192.168.178.50:3013/** and play the video after the hero:
+      the voice is take 005 ("fast"), slides change with the voice, and the
+      captions read correctly (toggle CC off/on).
+- [ ] Flip light ↔ dark and 412-width: the framed mat follows the theme and
+      the layout below (Nine journeys onward) is untouched.
+- [ ] On /w12-review/takes, listen to the new **gpt100** A/B take (same
+      recipe as your pick) and confirm the fable100 script remains the winner.

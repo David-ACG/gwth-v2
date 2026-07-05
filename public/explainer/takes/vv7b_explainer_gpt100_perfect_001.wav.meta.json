@@ -1,0 +1,76 @@
+{
+  "engine": "vibevoice_7b",
+  "voice_reference": "wav_24_48k_mono_28s_Audiate_Equalizer",
+  "asset": "w12_homepage_explainer",
+  "script_variant": "gpt100",
+  "take": 1,
+  "variant_label": "fast",
+  "wer": 0.0041,
+  "cfg_scale": 1.4,
+  "inference_steps": 10,
+  "temperature": 0.7,
+  "speed": 1.06,
+  "sentence_gap_ms": 120,
+  "do_sample": false,
+  "ellipsis": true,
+  "duration_seconds": 105.797714,
+  "generated_at": "2026-07-04T20:16:39.401396",
+  "strict_quality_gate": true,
+  "warmup_enabled": true,
+  "warmup_text": "Right. Let's begin.",
+  "warmup_trim_applied": true,
+  "quality_gate_status": "pass",
+  "quality_reasons": [],
+  "quality_warnings": [],
+  "quality_score": 0.65,
+  "music_heuristic_score": 0.0,
+  "music_seconds_over_threshold": 0.0,
+  "suggested_trim_start_s": 0,
+  "manual_tags": [
+    "codex_candidate",
+    "w12_explainer",
+    "variant_fast",
+    "transcript_reviewed",
+    "manual_listen_pending",
+    "chunked_stitched"
+  ],
+  "selected_as_final": false,
+  "score_notes": "W12 explainer take 1 (gpt100, variant 'fast': cfg 1.4, speed 1.06, gap 120ms, greedy). Chunked VV7B, strict gate. Awaiting David manual listen.",
+  "scored_at": "2026-07-04T20:16:39.401420",
+  "chunked_generation": {
+    "run_id": "20260704_200123",
+    "pipeline_final_wer": 0.0408,
+    "chunks": [
+      {
+        "index": 1,
+        "source_file": "gpt100_v01_chunk01.wav",
+        "wer": 0.0,
+        "quality_score": 0.65,
+        "transcript": "Most people use chat GPT like a search box. Ask a question, get an answer, move on. That is useful. It is not the real shift. GWTH is a UK-focused applied AI course for adults who want to do serious practical work with these tools. It is for re-skillers, small business owners, parents, team leads, and people already using chat GPT who know they are only scratching the surface."
+      },
+      {
+        "index": 2,
+        "source_file": "gpt100_v01_chunk02.wav",
+        "wer": 0.0093,
+        "quality_score": 0.834,
+        "transcript": "The course runs over three months, about five hours a week, in monthly parts. It starts in plain English with no jargon and no coding required. To begin, as you go, building an AI-assisted coding become the spine of the work. You build small apps, you automate repetitive workflows, you research faster, you make sense of your own data. The point is not to collect theory. It is to leave with real artifacts, real evidence, and work you can show. GWTH is built against certificate mills. Every lesson and project leaves something behind. The credential is verifiable and it stays current rather than becoming a stale PDF."
+      },
+      {
+        "index": 3,
+        "source_file": "gpt100_v01_chunk03.wav",
+        "wer": 0.0,
+        "quality_score": 0.65,
+        "transcript": "We are independent, no sponsors, no vendor partnerships, UK grounded and focused on what works. You can start free with real labs and no card. Course access is \u00a329 a month, paid month by month, and you can stop whenever you like. After the course, staying current is optional."
+      },
+      {
+        "index": 4,
+        "source_file": "gpt100_v01_chunk04.wav",
+        "wer": 0.0,
+        "quality_score": 0.65,
+        "transcript": "If you can describe what you want, you can begin to build it. Take a look when you are ready at GWTH.AI."
+      }
+    ],
+    "final_transcript": "Most people use ChatGPT like a search box. Ask a question, get an answer, move on. That is useful. It is not the real shift. GWTH is a UK-focused applied AI course for adults who want to do serious practical work with these tools. It is for re-skillers, small business owners, parents, team leads, and people already using ChatGPT who know they are only scratching the surface. The course runs over three months, about five hours a week, in monthly parts. It starts in plain English with no jargon and no coding required to begin, as you go, building an AI-assisted coding become the spine of the work. You build small apps, you automate repetitive workflows, you research faster, you make sense of your own data. The point is not to collect theory. It is to leave with real artifacts, real evidence, and work you can show. GWTH is built against certificate mills. Every lesson and project leaves something behind. The credential is verifiable, and it stays current rather than becoming a stale PDF. We are independent, no sponsors, no vendor partnerships. UK grounded and focused on what works. You can start free with real labs and no card. Course access is 29 pounds a month, paid month by month, and you can stop whenever you like. After the course, staying current is optional. If you can describe what you want, you can begin to build it. Take a look when you are ready at GWTH.AI",
+    "final_opening_ok": true
+  }
+}
