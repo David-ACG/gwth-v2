@@ -114,6 +114,21 @@ describe("proxy route guard (W11)", () => {
       }
     })
 
+    it("lets an anonymous visitor through to the course overview (teaser page)", async () => {
+      setSessionCookie(null)
+      const response = await proxy(request("/course/applied-ai-skills"))
+      expect(redirectPath(response)).toBeNull()
+    })
+
+    it("still bounces anonymous traffic off lesson routes under /course", async () => {
+      setSessionCookie(null)
+      const response = await proxy(
+        request("/course/applied-ai-skills/lesson/welcome-to-gwth")
+      )
+      expect(response.status).toBe(307)
+      expect(redirectPath(response)).toBe("/login")
+    })
+
     it("(c) lets a public path through regardless of session (cookie present)", async () => {
       setSessionCookie("session-token")
       for (const path of ["/labs", "/api/health"]) {

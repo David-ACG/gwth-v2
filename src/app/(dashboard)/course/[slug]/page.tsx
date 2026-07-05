@@ -79,6 +79,95 @@ export default async function CourseDetailPage({ params }: PageProps) {
     0
   )
 
+  const jsonLd = (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: course.title,
+          description: course.description,
+          provider: {
+            "@type": "Organization",
+            name: "GWTH.ai",
+          },
+        }),
+      }}
+    />
+  )
+
+  // Visitors without course access (anonymous, or registered without the
+  // beta grant — getDashboardUser() is null for both) get basic info only.
+  // The full syllabus must never reach their DOM: the locked accordion
+  // below still ships every section and lesson title in the HTML, which
+  // is exactly the scrape-the-syllabus leak this branch closes. Month
+  // themes and capstones stay: they are already public marketing copy
+  // (MONTH_CONFIGS on /lessons).
+  if (!user) {
+    return (
+      <>
+        {jsonLd}
+        <div className={styles.shell} data-section="course-detail">
+          <header>
+            <div className={styles.head}>
+              <h1 className={styles.title}>{course.title}</h1>
+              <p className={styles.mono}>Course</p>
+            </div>
+            <p className={styles.lead}>{course.description}</p>
+            <p className={styles.metaRow}>
+              {totalLessons} lessons ·{" "}
+              {formatDuration(course.estimatedDuration)} · 3 months
+            </p>
+          </header>
+
+          {MONTH_CONFIGS.map((config) => (
+            <section key={config.month} className={styles.issue}>
+              <div className={styles.issueHead}>
+                <p className={styles.issueKicker}>
+                  Issue 0{config.month} · Month {config.month}
+                </p>
+                <p className={styles.lockedTag}>
+                  <Lock className="size-3" aria-hidden="true" />
+                  Members only
+                </p>
+              </div>
+              <h2 className={styles.issueTitle}>{config.title}</h2>
+              <p className={styles.issueSub}>
+                {config.subtitle} · {config.mandatoryLessons} mandatory
+                {config.optionalLessons > 0 &&
+                  ` + ${config.optionalLessons} optional`}{" "}
+                lessons
+              </p>
+              <div className={styles.capstone}>
+                <p className={styles.capstoneKicker}>Capstone Project</p>
+                <p className={styles.capstoneName}>{config.capstoneName}</p>
+                <p className={styles.capstoneBody}>
+                  {config.capstoneDescription}
+                </p>
+              </div>
+            </section>
+          ))}
+
+          <div className={styles.teaser}>
+            <p className={styles.teaserBody}>
+              The full lesson list opens with course access. The beta is
+              currently invite-only.
+            </p>
+            <div className={styles.teaserActions}>
+              <Link href="/waitlist" className={styles.buttonSolid}>
+                Join the waitlist
+              </Link>
+              <Link href="/login" className={styles.buttonOutline}>
+                Log in
+              </Link>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   // Group sections by month
   const sectionsByMonth = [1, 2, 3].map((month) => ({
     month: month as 1 | 2 | 3,
@@ -93,22 +182,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
   return (
     <>
-      {/* JSON-LD structured data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            name: course.title,
-            description: course.description,
-            provider: {
-              "@type": "Organization",
-              name: "GWTH.ai",
-            },
-          }),
-        }}
-      />
+      {jsonLd}
 
       <div className={styles.shell} data-section="course-detail">
         {/* Course header */}

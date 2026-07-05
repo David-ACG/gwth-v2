@@ -105,6 +105,18 @@
   color: var(--v-cream-muted);
 }
 
+/* Inline link inside the masthead standfirst (used by waitlist-fde, which
+   shares this stylesheet). Cream underline on the teal band. */
+.standfirstLink {
+  color: var(--v-cream);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.standfirstLink:hover {
+  color: var(--v-ochre-bright);
+}
+
 /* ---------------- Form section ---------------- */
 
 .section {

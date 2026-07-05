@@ -52,7 +52,7 @@ export function LabsFde({ labs, categories, technologies }: LabsFdeProps) {
             Read them free, no account needed.
           </p>
           <div className={styles.mastheadActions}>
-            <Link href="/signup" className={styles.buttonSolid}>
+            <Link href="/waitlist" className={styles.buttonSolid}>
               Join waitlist
             </Link>
           </div>
@@ -139,7 +139,7 @@ export function LabsFde({ labs, categories, technologies }: LabsFdeProps) {
             and ship, with plain progress tracking as you go.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/signup" className={styles.buttonSolid}>
+            <Link href="/waitlist" className={styles.buttonSolid}>
               Join waitlist
             </Link>
             <Link href="/pricing" className={styles.buttonOutline}>

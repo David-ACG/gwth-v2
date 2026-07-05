@@ -40,11 +40,12 @@ docker run -d --name "$NAME" \
   -e PORT="$CONTAINER_PORT" \
   -e NEXT_PUBLIC_SITE_URL="http://hlab.taila51191.ts.net:${HOST_PORT}" \
   -e BETTER_AUTH_URL="http://hlab.taila51191.ts.net:${HOST_PORT}" \
-  -e ENABLE_DEV_MOCK_USER=true \
   "$IMAGE" >/dev/null
-# ENABLE_DEV_MOCK_USER (W3): the W8-beta staging review env surfaces the mock
-# learner so reviewers see imported Month-1 content unlocked. Remove this -e
-# line before any public/production deploy.
+# ENABLE_DEV_MOCK_USER removed 2026-07-05: the mock learner made every
+# anonymous visitor look like a logged-in student (and disabled the proxy
+# route guard), so David's pre-launch snag testing saw the wrong reality
+# (full syllabus without an account). Staging now matches production auth:
+# use a real tester account (the staging DB carries beta_access_grants).
 #
 # Canonical staging origin = the Tailscale MagicDNS name (2026-07-01, David):
 # reachable from every tailnet device (remote incl.), WireGuard-encrypted on

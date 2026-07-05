@@ -687,3 +687,49 @@
   gap: 0.875rem;
   margin-top: 2.25rem;
 }
+
+/* ── Paper-craft imagery set (2026-07-05) ─────────────────────────────────
+   Five Gemini flat-lay plates breaking up the text-only run, in mixed
+   sizes/orientations. Each sits as a bordered paper plate on the ground. */
+
+.coverBand {
+  /* Full-width cover plate between hero and journey; the journey section's
+     own top padding provides the gap below, so only pad the top. */
+  padding: clamp(2.5rem, 5vw, 4rem) 0 0;
+}
+
+.figure {
+  margin: 0;
+  border: 1px solid var(--v-line);
+  background: var(--v-surface);
+}
+
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.figureCover {
+  /* spans the full .page width */
+}
+
+.figureInset {
+  max-width: 52rem;
+  margin: 2.5rem auto 0;
+}
+
+.figureRight {
+  max-width: 40rem;
+  margin: 2.5rem 0 0 auto;
+}
+
+.figurePortrait {
+  max-width: 19rem;
+  margin-top: 2.25rem;
+}
+
+.figureBanner {
+  max-width: 56rem;
+  margin: 0 auto clamp(2.5rem, 5vw, 3.5rem);
+}

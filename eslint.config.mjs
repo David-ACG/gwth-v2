@@ -18,6 +18,9 @@ const eslintConfig = defineConfig([
     "kanban/**",
     // Unrelated sub-project, has its own toolchain
     "gwth_projects/**",
+    // Leftover agent worktrees (stale tree copies incl. their .next build
+    // output) are not this tree's source
+    ".claude/**",
   ]),
 ]);
 

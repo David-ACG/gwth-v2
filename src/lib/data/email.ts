@@ -7,7 +7,8 @@
  * - PLUNK_SECRET_KEY — required for real email delivery
  */
 
-import { createClient } from "@supabase/supabase-js"
+import { getDb } from "@/db"
+import { waitlist } from "@/db/schema"
 
 const PLUNK_API_URL = "https://api.useplunk.com/v1/send"
 const FROM_EMAIL = "david@gwth.ai"
@@ -148,28 +149,22 @@ function buildAdminNotificationHtml(name: string, email: string): string {
 }
 
 /**
- * Persists a waitlist signup to the Supabase waitlist table.
+ * Persists a waitlist signup to the waitlist table (app Postgres via Drizzle).
  * Uses upsert on email to avoid duplicates. Logs errors but does not throw —
  * email delivery is the primary path, persistence is secondary.
  */
 async function persistWaitlistSignup(email: string, name: string): Promise<void> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!supabaseUrl || !serviceRoleKey) return
-
   try {
-    const supabase = createClient(supabaseUrl, serviceRoleKey)
-    const { error } = await supabase
-      .from("waitlist")
-      .upsert(
-        { email: email.toLowerCase().trim(), name: name.trim() },
-        { onConflict: "email" }
-      )
-    if (error) {
-      console.error("[Waitlist DB] Insert failed:", error.message)
-    }
+    const db = getDb()
+    await db
+      .insert(waitlist)
+      .values({ email: email.toLowerCase().trim(), name: name.trim() })
+      .onConflictDoUpdate({
+        target: waitlist.email,
+        set: { name: name.trim() },
+      })
   } catch (err) {
-    console.error("[Waitlist DB] Unexpected error:", err)
+    console.error("[Waitlist DB] Insert failed:", err)
   }
 }
 

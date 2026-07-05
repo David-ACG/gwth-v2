@@ -160,10 +160,18 @@ function guardRoute(request: NextRequest): NextResponse | null {
   )
   if (isPublicOnly) return null
 
+  // The course overview (/course/<slug>, no deeper segments) is public: the
+  // page itself renders a basic-info teaser for visitors without course
+  // access and never ships the syllabus to them (snag fix 2026-07-05).
+  // Lesson routes (/course/<slug>/lesson/...) stay behind the cookie guard.
+  const isCourseOverview = /^\/course\/[^/]+$/.test(pathname)
+
   const isProtected =
     PROTECTED_PATHS.some(
       (path) => pathname === path || pathname.startsWith(`${path}/`)
-    ) && pathname !== "/labs"
+    ) &&
+    pathname !== "/labs" &&
+    !isCourseOverview
 
   const isAuthRoute = AUTH_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`)

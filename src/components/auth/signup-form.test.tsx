@@ -23,7 +23,7 @@ describe("SignupForm", () => {
 
     expect(
       screen.getByRole("link", { name: /join the waitlist/i })
-    ).toHaveAttribute("href", "/")
+    ).toHaveAttribute("href", "/waitlist")
     expect(screen.getByRole("link", { name: /log in/i })).toHaveAttribute(
       "href",
       "/login"

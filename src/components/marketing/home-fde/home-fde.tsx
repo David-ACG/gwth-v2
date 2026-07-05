@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import {
   CURRICULUM,
@@ -106,7 +107,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
                 UK applied AI · 5 hours a week · 3 months
               </p>
               <div className={styles.heroActions}>
-                <Link href="/signup" className={styles.buttonSolid}>
+                <Link href="/waitlist" className={styles.buttonSolid}>
                   Join waitlist
                 </Link>
                 <Link href="/labs" className={styles.buttonOutline}>
@@ -124,6 +125,21 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
 
       {explainer && explainerAt === "after-hero" ? explainer : null}
 
+      {/* Paper-craft cover plate (2026-07-05 imagery set): full-width
+          landscape under the hero, breaking the text-only run. */}
+      <div className={styles.coverBand} data-section="cover-image">
+        <div className={styles.page}>
+          <figure className={`${styles.figure} ${styles.figureCover}`}>
+            <Image
+              src="/home/home-build-desk-a.png"
+              alt="Paper-craft flat-lay of a builder's desk: a laptop showing a small app and chart, sticky notes, and an automation flow of five linked cards"
+              width={1376}
+              height={768}
+            />
+          </figure>
+        </div>
+      </div>
+
       <section className={styles.section} data-section="journey">
         <div className={styles.page}>
           <div className={styles.sectionHead}>
@@ -135,6 +151,14 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             keep your team ahead, the end point is the same: practical work
             and portfolio evidence someone else can inspect.
           </p>
+          <figure className={`${styles.figure} ${styles.figureInset}`}>
+            <Image
+              src="/home/home-nine-journeys-a.png"
+              alt="Nine pastel paper cards, each with its own motif, joined by dashed paper trails that converge on one cream card with a gold star"
+              width={1264}
+              height={848}
+            />
+          </figure>
           <div className={styles.cardsRow}>
             {JOURNEYS.slice(0, 9).map((journey, index) => (
               <Link
@@ -193,6 +217,14 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             basics first, then building and workflows, then enterprise-scale
             applied work. Each month closes with a capstone you can show.
           </p>
+          <figure className={`${styles.figure} ${styles.figureRight}`}>
+            <Image
+              src="/home/home-three-issues-a.png"
+              alt="Three paper-craft journal booklets labelled Month 1, Month 2, and Month 3, with a chat bubble, gears, and a rocket motif"
+              width={2400}
+              height={1792}
+            />
+          </figure>
           <div className={styles.issueList}>
             {CURRICULUM.map((module, index) => (
               <article className={styles.issue} key={module.m}>
@@ -243,6 +275,14 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
                 </div>
               ))}
             </div>
+            <figure className={`${styles.figure} ${styles.figurePortrait}`}>
+              <Image
+                src="/home/home-progress-trail-a.png"
+                alt="A winding trail of paper dashes climbing past pastel milestone flags to a cream card with a gold star seal"
+                width={928}
+                height={1152}
+              />
+            </figure>
           </div>
           <Link
             href="/signup"
@@ -326,6 +366,14 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
 
       <section className={styles.closing} data-section="final-cta">
         <div className={styles.page}>
+          <figure className={`${styles.figure} ${styles.figureBanner}`}>
+            <Image
+              src="/home/home-shipped-row-a.png"
+              alt="A calm row of five finished paper-craft artefacts: a web page, a bar chart, an automation flow, a friendly robot, and a portfolio folder with a gold star"
+              width={1584}
+              height={672}
+            />
+          </figure>
           <h2>
             Start free, <em>decide later.</em>
           </h2>
@@ -335,7 +383,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             beta progress tracking.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/signup" className={styles.buttonSolid}>
+            <Link href="/waitlist" className={styles.buttonSolid}>
               Join waitlist
             </Link>
             <Link href="/pricing" className={styles.buttonOutline}>

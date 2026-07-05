@@ -71,7 +71,7 @@ export function LessonsFde() {
             practical projects, and enterprise transformation.
           </p>
           <div className={styles.mastheadActions}>
-            <Link href="/signup" className={styles.buttonSolid}>
+            <Link href="/waitlist" className={styles.buttonSolid}>
               Join waitlist
             </Link>
             <Link href="/labs" className={styles.buttonOutline}>
@@ -216,7 +216,7 @@ export function LessonsFde() {
             works.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/signup" className={styles.buttonSolid}>
+            <Link href="/waitlist" className={styles.buttonSolid}>
               Join waitlist
             </Link>
             <Link href="/pricing" className={styles.buttonOutline}>

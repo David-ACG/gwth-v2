@@ -122,7 +122,7 @@ export function VerifyFdeDisabled() {
               learners. Public credential pages return after beta.
             </p>
             <div className={styles.disabledActions}>
-              <a href="/signup" className={styles.buttonSolid}>
+              <a href="/waitlist" className={styles.buttonSolid}>
                 Join waitlist
               </a>
             </div>

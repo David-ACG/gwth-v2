@@ -70,7 +70,7 @@ export function EditorialHomepage() {
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="/signup"
+                  href="/waitlist"
                   className="inline-flex items-center justify-center gap-1.5 border-2 border-primary bg-primary px-6 py-3 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                   Join waitlist
@@ -414,7 +414,7 @@ export function EditorialHomepage() {
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/signup"
+                href="/waitlist"
                 className="inline-flex items-center justify-center gap-1.5 border-2 border-primary-foreground bg-primary-foreground px-7 py-3.5 text-sm font-bold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-transparent hover:text-primary-foreground"
               >
                 Join waitlist

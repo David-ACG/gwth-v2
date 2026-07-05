@@ -266,33 +266,44 @@
 
 /* ---------------- Launcher (floating trigger + overlay) ---------------- */
 
-/* Fixed trigger button, bottom-right, offset to clear the lesson-viewer audio
-   bar. Square, ink-bordered paper chip with the mono label idiom. */
+/* Fixed trigger as a right-edge vertical tab, vertically centred. The old
+   bottom-right chip shared its corner with the lesson viewer's Continue /
+   auto-advance controls and covered them (snag 2026-07-05); the mid-right
+   screen edge is dead space on every surface, desktop and mobile. At rest
+   the tab sits tucked slightly into the edge; hover/keyboard focus slides
+   it fully out. On touch there is no hover: the first tap simply opens
+   the dialog, the tab never needs expanding. */
 .launchButton {
   position: fixed;
-  right: 1rem;
-  bottom: 5.5rem;
+  right: 0;
+  top: 50%;
+  transform: translate(0.3rem, -50%);
   z-index: 40;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  writing-mode: vertical-rl;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 0.7rem 1rem;
+  padding: 0.9rem 0.55rem;
   border-radius: 0;
   cursor: pointer;
   background: var(--v-action);
   color: var(--v-action-text);
   border: 1px solid var(--v-action);
-  box-shadow: 0.3rem 0.3rem 0 0 var(--v-teal-deep);
-  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-right: 0;
+  box-shadow: -0.25rem 0.25rem 0 0 var(--v-teal-deep);
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.launchButton:hover {
+.launchButton:hover,
+.launchButton:focus-visible {
   background: var(--v-teal-deep);
+  transform: translate(0, -50%);
 }
 
 .launchButton:focus-visible {

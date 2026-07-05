@@ -132,7 +132,7 @@ function ScoreDisabledForBeta() {
             Public credential pages return after beta.
           </p>
           <Link
-            href="/signup"
+            href="/waitlist"
             className="mt-6 inline-flex border-2 border-primary bg-primary px-5 py-3 font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-primary-foreground"
           >
             Join waitlist

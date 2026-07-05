@@ -39,7 +39,7 @@ export function SignupForm({ oauthProviders = [] }: PostBetaSignupFormProps) {
           If you have been invited, create your account below with the exact
           email address GWTH approved; your beta access is applied
           automatically at signup. Not invited yet?{" "}
-          <Link href="/" className={styles.link}>
+          <Link href="/waitlist" className={styles.link}>
             Join the waitlist
           </Link>{" "}
           and we will contact you when more beta places open.

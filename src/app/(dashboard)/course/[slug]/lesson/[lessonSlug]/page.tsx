@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { getLesson } from "@/lib/data/lessons"
 import { getCourse } from "@/lib/data/courses"
+import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
 import { getAllCourseProgress, getLessonProgress } from "@/lib/data/progress"
 import { cn } from "@/lib/utils"
 import {
@@ -155,12 +156,22 @@ export default async function LessonPage({
 }: PageProps) {
   const { slug, lessonSlug } = await params
   const sp = await searchParams
-  const [lesson, course, allProgress] = await Promise.all([
+  const [lesson, course, allProgress, user] = await Promise.all([
     getLesson(lessonSlug),
     getCourse(slug),
     getAllCourseProgress(),
+    getDashboardUser(),
   ])
   if (!lesson || !course) notFound()
+
+  // Lesson content is members-only. The proxy's optimistic cookie check
+  // lets any session through (including free registered accounts), so the
+  // real gate is here: no beta/paid access to this lesson's month means no
+  // lesson body, only the course overview teaser (snag fix 2026-07-05).
+  const lessonMonth = lesson.month as 1 | 2 | 3
+  if (!user || !canUserAccessMonth(user, lessonMonth)) {
+    redirect(`/course/${slug}`)
+  }
 
   // Per-user persisted progress for this lesson (null when never started, or
   // when unauthenticated — the viewer then starts from a clean slate and

@@ -79,7 +79,7 @@ export default function ScoreCardVariantsPage() {
             The 23 June beta uses plain course progress. Post-beta credential
             design previews stay hidden unless the feature flag is enabled.
           </p>
-          <Link href="/signup" className="mt-6 inline-flex border-2 border-primary bg-primary px-5 py-3 font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-primary-foreground">
+          <Link href="/waitlist" className="mt-6 inline-flex border-2 border-primary bg-primary px-5 py-3 font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-primary-foreground">
             Join waitlist
           </Link>
         </section>
