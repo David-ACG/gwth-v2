@@ -38,11 +38,11 @@ Light/dark mode toggle button using `next-themes`. Animates between Sun and Moon
 ## Main Entry Points
 
 - `EmptyState` is used on any list page that can be empty.
-- `BookmarkButton` is used in `LessonViewer` and can be added to any card component.
-- `MarkdownRenderer` is dynamically imported by `LessonViewer` for lesson content.
-- `VideoPlayer` is dynamically imported by `LessonViewer` for intro and build videos.
-- `AudioPlayer` is dynamically imported by `LessonViewer` for the audio version of lessons.
-- `NotesPanel` is dynamically imported by `LessonViewer` for the notes sidebar.
+- `BookmarkButton` can be added to any card or lesson component (not currently wired into a page after the W13 lesson-viewer rebuild).
+- `MarkdownRenderer` renders lesson/lab/news content — imported by the editorial lesson viewer, the labs page, and the news page.
+- `VideoPlayer` is dynamically imported by the editorial lesson viewer (and the demo lesson viewers) for the intro video.
+- `AudioPlayer` is a standalone audio player; the editorial lesson viewer renders its own native `<audio>` element instead, so this component is not currently wired into a page.
+- `NotesPanel` is the shared slide-out notes panel; the lesson viewer's notes surface is now provided by the local `NotesPanel` in `lesson-widgets.tsx`, so the shared component is not currently wired into a page.
 - `Spinner` / `PageSpinner` are used in all `loading.tsx` files.
 - `RouteProgress` is mounted in the root layout for navigation transitions.
 - `ThemeToggle` is used in `PublicNav` and `DashboardHeader`.

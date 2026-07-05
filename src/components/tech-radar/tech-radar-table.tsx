@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react"
 import type { TechRadarTool } from "@/lib/types"
-import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {

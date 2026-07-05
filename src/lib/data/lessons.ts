@@ -15,7 +15,7 @@ import type { Lesson, LessonSummary, QuizQuestion, Resource } from "@/lib/types"
 import { mockLessons, mockCourses } from "./mock-data"
 import { getDb } from "@/db"
 import { lessons, quizQuestions, lessonResources } from "@/db/schema"
-import { and, asc, eq } from "drizzle-orm"
+import { asc, eq } from "drizzle-orm"
 
 /**
  * True when a real database is configured. When false the layer falls back to
