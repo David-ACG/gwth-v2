@@ -33,7 +33,7 @@ const PROVIDER_ENV_PREFIX: Record<OAuthProviderId, string> = {
  * parameter exists for tests.
  */
 export function getEnabledOAuthProviders(
-  env: NodeJS.ProcessEnv = process.env
+  env: Record<string, string | undefined> = process.env
 ): OAuthProviderId[] {
   return ALL_OAUTH_PROVIDERS.filter((id) => {
     const prefix = PROVIDER_ENV_PREFIX[id]
