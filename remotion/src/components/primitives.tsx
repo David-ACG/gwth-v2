@@ -53,17 +53,31 @@ export const FitToFrame: React.FC<{
 
   useEffect(() => {
     const el = ref.current;
-    if (el) {
-      // offsetHeight is a layout metric: transforms (ours or the entrance
-      // animations') never feed back into it, so this settles in one pass.
-      const height = el.offsetHeight;
-      // Reading `offsetHeight` is an external-system (browser layout) read that
-      // can't be derived during render, so this setState is legitimate — the
-      // rule's static heuristic can't see that. It settles in a single pass.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setScale(height > maxHeight ? maxHeight / height : 1);
+    if (!el) {
+      continueRender(handle);
+      return;
     }
-    continueRender(handle);
+    let raf = 0;
+    let tries = 0;
+    // On the first effect tick the wrapper can report offsetWidth 0 (layout
+    // not yet settled in the render host). Measuring then is catastrophic:
+    // zero width means no wrapping, so healthy content measures thousands of
+    // pixels tall and everything gets scaled to a thumbnail. Wait for a real
+    // layout before trusting offsetHeight; transforms (ours or the entrance
+    // animations') never feed back into it, so once width is real the
+    // measure settles in one pass.
+    const measure = () => {
+      if (el.offsetWidth === 0 && tries < 30) {
+        tries += 1;
+        raf = requestAnimationFrame(measure);
+        return;
+      }
+      const height = el.offsetHeight;
+      setScale(el.offsetWidth > 0 && height > maxHeight ? maxHeight / height : 1);
+      continueRender(handle);
+    };
+    measure();
+    return () => cancelAnimationFrame(raf);
   }, [handle, maxHeight]);
 
   return (

@@ -46,7 +46,11 @@ jobs:
   deploy-hetzner:
     name: Deploy to Hetzner (Production)
     needs: check
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # W6 launch gate (2026-07-05): production deploys are opt-in per push.
+    # A green master push alone must NOT deploy while the I3 CDN/DNS cutover
+    # is pending; include "[deploy]" in the commit message to ship to prod.
+    # See docs/runbook-go-live.md section 3.
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy]')
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Coolify deployment
@@ -66,7 +70,10 @@ jobs:
   deploy-p520:
     name: Deploy to P520 (Test)
     needs: check
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # Same opt-in gate as deploy-hetzner: the :3001 staging container on P520
+    # is managed by deploy/run-staging.sh, and an unsolicited Coolify deploy
+    # must not race it. Include "[deploy]" in the commit message to run.
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy]')
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Coolify deployment via SSH

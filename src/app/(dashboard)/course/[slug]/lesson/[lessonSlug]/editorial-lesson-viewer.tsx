@@ -2,10 +2,29 @@
 
 import * as React from "react"
 import Link from "next/link"
+import dynamic from "next/dynamic"
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { mediaUrl } from "@/lib/media/url"
+import { useProgress } from "@/hooks/use-progress"
+import {
+  getLessonCompletionStatus,
+  INTRO_VIDEO_COMPLETION_THRESHOLD,
+  QUIZ_PASS_SCORE,
+} from "@/lib/progress/completion"
+import { Skeleton } from "@/components/ui/skeleton"
 import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
+import type { LessonProgress } from "@/lib/types"
 import styles from "./lesson-fde.module.css"
+
+// The video player is heavy (native <video> + controls chrome); load it only
+// when a lesson actually renders the intro-video surface.
+const VideoPlayer = dynamic(
+  () =>
+    import("@/components/shared/video-player").then((m) => m.VideoPlayer),
+  { loading: () => <Skeleton className="aspect-video w-full rounded-none" /> }
+)
 
 /**
  * Public surface name for selecting the initial render of the editorial
@@ -51,8 +70,24 @@ export interface EditorialLessonQuestion {
   explanation?: string
 }
 
+/** Summary of the next lesson, used by the lesson-complete surface. */
+export interface EditorialNextLesson {
+  /** Next lesson display title. */
+  title: string
+  /** In-app href to the next lesson. */
+  href: string
+  /**
+   * The next lesson's own number within its month/section. Not
+   * necessarily the current lesson's number + 1 — the next lesson can
+   * begin a new section/month where the order resets to 1.
+   */
+  lessonNumber: number
+}
+
 /** Static lesson metadata required by the viewer chrome. */
 export interface EditorialLessonMeta {
+  /** Lesson id, the key every progress write is recorded under. */
+  id: string
   /** Course month label, e.g. `"MONTH 1 · LESSON 13"`. */
   monthLabel: string
   /** Lesson number within the course month. */
@@ -75,6 +110,19 @@ export interface EditorialLessonMeta {
    * surface renders these instead of the bundled design placeholder.
    */
   questions?: EditorialLessonQuestion[]
+  /**
+   * Lesson narration audio reference as stored on the lesson row. Resolved
+   * through `mediaUrl()` at render time; when absent the audio bar renders
+   * an honest "narration not available" state instead of a fake player.
+   */
+  audioFileUrl?: string | null
+  /** Narration duration in seconds, shown before audio metadata loads. */
+  audioDuration?: number | null
+  /**
+   * Intro video reference as stored on the lesson row. Resolved through
+   * `mediaUrl()`; drives the real player on the intro-video surface.
+   */
+  introVideoUrl?: string | null
 }
 
 interface EditorialLessonViewerProps {
@@ -90,9 +138,37 @@ interface EditorialLessonViewerProps {
    * each widget surface against the design bundle.
    */
   initialWidgetSurface?: LessonWidgetSurface
+  /**
+   * The user's persisted progress row for this lesson (null when the lesson
+   * was never started). Seeds the optimistic `useProgress` state so the
+   * video gate and Q&A pick up where the user left off.
+   */
+  initialProgress?: LessonProgress | null
+  /** Next lesson in course order, for the lesson-complete surface. */
+  nextLesson?: EditorialNextLesson | null
+  /** Href back to the parent course page. */
+  courseHref?: string
 }
 
 const ADVANCING_PING_LABEL = "ADVANCING IN 2S"
+
+/** Milliseconds the tap-to-stay overlay shows before auto-advancing. */
+const AUTO_ADVANCE_DELAY_MS = 2000
+
+/** Audio bar speeds mapped to the HTMLMediaElement playbackRate they set. */
+const AUDIO_SPEEDS: Record<"1x" | "1.25x" | "1.5x", number> = {
+  "1x": 1,
+  "1.25x": 1.25,
+  "1.5x": 1.5,
+}
+
+/** Formats seconds as the audio bar's `MM:SS` readout (e.g. `02:14`). */
+function formatClock(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds <= 0) return "00:00"
+  const m = Math.floor(seconds / 60)
+  const s = Math.floor(seconds % 60)
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
+}
 
 /**
  * The editorial Stone & Sage lesson viewer ported from the
@@ -101,19 +177,219 @@ const ADVANCING_PING_LABEL = "ADVANCING IN 2S"
  * section borders run edge-to-edge. Owns: outline rail, mast row,
  * lesson chrome, body surface (prose / video / Q&A / lesson-complete /
  * mobile), persistent audio bar with auto-advance state machine.
+ *
+ * W13: media and persistence are real. The audio bar drives an actual
+ * `<audio>` element (src via `mediaUrl()`), the intro-video surface renders
+ * the shared `VideoPlayer`, and both the video 80% gate and the Q&A result
+ * persist through `useProgress` → `updateLessonProgressAction` → the
+ * `lesson_progress` table (the W7-tested write path).
  */
 export function EditorialLessonViewer({
   lesson,
   initialSurface = "prose",
-  initialPage = 3,
+  initialPage = 1,
   initialWidgetSurface = "none",
+  initialProgress = null,
+  nextLesson = null,
+  courseHref,
 }: EditorialLessonViewerProps) {
   const [surface, setSurface] = React.useState<EditorialLessonSurface>(
     initialSurface
   )
-  const [pageNum] = React.useState(initialPage)
+  const [pageNum, setPageNum] = React.useState(initialPage)
   const [autoAdvance, setAutoAdvance] = React.useState(true)
   const [speed, setSpeed] = React.useState<"1x" | "1.25x" | "1.5x">("1x")
+
+  // Persistence: the same optimistic wrapper over the W7-tested
+  // updateLessonProgressAction that the rest of the app uses. No second
+  // write path.
+  const { progress, markComplete, submitQuizScore, updateIntroVideoProgress } =
+    useProgress(initialProgress)
+
+  // ── Narration audio engine ────────────────────────────────────────────
+  const audioSrc = mediaUrl(lesson.audioFileUrl) || null
+  const audioRef = React.useRef<HTMLAudioElement>(null)
+  const [audioTime, setAudioTime] = React.useState(0)
+  const [audioDur, setAudioDur] = React.useState(lesson.audioDuration ?? 0)
+  const advanceTimer = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  )
+
+  // handleEnded fires from a native listener attached once per audio source.
+  // Read the live page/auto-advance state through refs so the listener sees
+  // fresh values without re-subscribing every render.
+  const pageNumRef = React.useRef(pageNum)
+  pageNumRef.current = pageNum
+  const autoAdvanceRef = React.useRef(autoAdvance)
+  autoAdvanceRef.current = autoAdvance
+
+  function cancelAdvance() {
+    if (advanceTimer.current) {
+      clearTimeout(advanceTimer.current)
+      advanceTimer.current = null
+    }
+    setSurface((s) => (s === "advancing" ? "prose" : s))
+  }
+
+  function goToPage(n: number) {
+    if (advanceTimer.current) {
+      clearTimeout(advanceTimer.current)
+      advanceTimer.current = null
+    }
+    const clamped = Math.min(Math.max(n, 1), lesson.pages.length)
+    const kind = lesson.pages[clamped - 1]?.kind
+    setPageNum(clamped)
+    if (kind === "video" || kind === "qa") {
+      // Narration mutes for the video page and stops for the Q&A.
+      audioRef.current?.pause()
+      setSurface(kind === "video" ? "video" : "qa")
+    } else {
+      setSurface(
+        audioRef.current && !audioRef.current.paused ? "prose-playing" : "prose"
+      )
+    }
+  }
+
+  // Attach media listeners natively (media events don't bubble through
+  // React), re-subscribing when the audio source changes so the listeners
+  // always target the current element.
+  React.useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    function handleTimeUpdate() {
+      setAudioTime(audio!.currentTime)
+    }
+    function handleLoadedMetadata() {
+      if (Number.isFinite(audio!.duration) && audio!.duration > 0) {
+        setAudioDur(audio!.duration)
+      }
+    }
+    function handlePlay() {
+      setSurface((s) => (s === "prose" ? "prose-playing" : s))
+    }
+    function handlePause() {
+      setSurface((s) => (s === "prose-playing" ? "prose" : s))
+    }
+    function handleEnded() {
+      const next = pageNumRef.current + 1
+      if (autoAdvanceRef.current && lesson.pages[next - 1]?.kind === "prose") {
+        setSurface("advancing")
+        advanceTimer.current = setTimeout(() => goToPage(next), AUTO_ADVANCE_DELAY_MS)
+      }
+    }
+
+    audio.addEventListener("timeupdate", handleTimeUpdate)
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata)
+    audio.addEventListener("play", handlePlay)
+    audio.addEventListener("pause", handlePause)
+    audio.addEventListener("ended", handleEnded)
+    return () => {
+      audio.removeEventListener("timeupdate", handleTimeUpdate)
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata)
+      audio.removeEventListener("play", handlePlay)
+      audio.removeEventListener("pause", handlePause)
+      audio.removeEventListener("ended", handleEnded)
+    }
+    // Listeners are keyed to the audio source; page/auto-advance state is
+    // read live through refs inside handleEnded.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioSrc])
+
+  // Playback speed applies to the live element whenever the user changes it.
+  React.useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = AUDIO_SPEEDS[speed]
+    }
+  }, [speed])
+
+  // Clear any pending auto-advance timer on unmount so it can't fire
+  // goToPage() (a state update / navigation) against an unmounted viewer.
+  React.useEffect(() => {
+    return () => {
+      if (advanceTimer.current) {
+        clearTimeout(advanceTimer.current)
+        advanceTimer.current = null
+      }
+    }
+  }, [])
+
+  function handleTogglePlay() {
+    const audio = audioRef.current
+    if (!audio || !audioSrc) return
+    if (surface === "advancing") cancelAdvance()
+    if (audio.paused) {
+      void audio.play().catch(() => {
+        toast.error("The narration audio could not be played.")
+      })
+    } else {
+      audio.pause()
+    }
+  }
+
+  function handleSeek(fraction: number) {
+    const audio = audioRef.current
+    if (!audio || !audioDur) return
+    audio.currentTime = Math.max(0, Math.min(1, fraction)) * audioDur
+  }
+
+  // ── Intro-video 80% gate ──────────────────────────────────────────────
+  const persistedWatched = progress?.introVideoProgress ?? 0
+  const [liveWatched, setLiveWatched] = React.useState(persistedWatched)
+  const watchedFraction = Math.max(persistedWatched, liveWatched)
+  const videoGateReported = React.useRef(
+    persistedWatched >= INTRO_VIDEO_COMPLETION_THRESHOLD
+  )
+
+  function handleIntroVideoProgress(fraction: number) {
+    setLiveWatched((prev) => Math.max(prev, fraction))
+    if (
+      fraction >= INTRO_VIDEO_COMPLETION_THRESHOLD &&
+      !videoGateReported.current
+    ) {
+      videoGateReported.current = true
+      updateIntroVideoProgress(lesson.id, fraction)
+      toast.success("Intro video counted. Gate 1 of 2 cleared.")
+    }
+  }
+
+  // ── Q&A + completion ──────────────────────────────────────────────────
+  const [lastQuizScore, setLastQuizScore] = React.useState<number | null>(
+    null
+  )
+  const bestQuizScore = Math.max(
+    progress?.bestQuizScore ?? 0,
+    lastQuizScore ?? 0
+  )
+  const completionStatus = getLessonCompletionStatus({
+    hasIntroVideo: Boolean(lesson.introVideoUrl),
+    questionCount: lesson.questions?.length ?? 0,
+    introVideoProgress: watchedFraction,
+    bestQuizScore: lastQuizScore === null && !progress ? null : bestQuizScore,
+  })
+
+  function handleQuizSubmit(score: number) {
+    setLastQuizScore(score)
+    submitQuizScore(lesson.id, score)
+    if (score >= QUIZ_PASS_SCORE) {
+      toast.success(`Q&A passed at ${score}%. Saved to your progress.`)
+    } else {
+      toast.error(
+        `Score ${score}%. You need ${QUIZ_PASS_SCORE}% to pass. Retry when ready.`
+      )
+    }
+  }
+
+  function handleFinishLesson() {
+    if (!completionStatus.canComplete) {
+      toast.error(
+        completionStatus.missingReasons[0] ?? "Lesson is not ready to complete yet"
+      )
+      return
+    }
+    markComplete(lesson.id)
+    setSurface("complete")
+  }
 
   // Lesson widgets show on prose / prose-playing / advancing only. They
   // don't make sense on the intro video, the Q&A, or the lesson-complete
@@ -123,10 +399,30 @@ export function EditorialLessonViewer({
     surface === "prose-playing" ||
     surface === "advancing"
 
+  const playing = surface === "prose-playing" || surface === "advancing"
+  const audioProgressPct = audioDur > 0 ? (audioTime / audioDur) * 100 : 0
+  const audioElement = (
+    <audio ref={audioRef} src={audioSrc ?? undefined} preload="metadata" />
+  )
+
   if (surface === "mobile") {
     return (
       <div className={styles.shell}>
-        <MobileSurface lesson={lesson} autoAdvance={autoAdvance} />
+        {audioElement}
+        <MobileSurface
+          lesson={lesson}
+          pageNum={pageNum}
+          playing={playing}
+          audioAvailable={Boolean(audioSrc)}
+          currentTime={formatClock(audioTime)}
+          totalTime={formatClock(audioDur)}
+          progressPct={audioProgressPct}
+          onTogglePlay={handleTogglePlay}
+          speed={speed}
+          onChangeSpeed={setSpeed}
+          autoAdvance={autoAdvance}
+          onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
+        />
         <LessonWidgets
           lessonNumber={lesson.lessonNumber}
           mobile
@@ -141,14 +437,22 @@ export function EditorialLessonViewer({
   }
 
   if (surface === "complete") {
-    return <LessonCompleteSurface lesson={lesson} />
+    return (
+      <LessonCompleteSurface
+        lesson={lesson}
+        introWatchedPct={Math.round(watchedFraction * 100)}
+        quizScorePct={bestQuizScore}
+        nextLesson={nextLesson}
+        courseHref={courseHref}
+      />
+    )
   }
 
-  const playing = surface === "prose-playing" || surface === "advancing"
   const advancing = surface === "advancing"
   const isVideo = surface === "video"
   const isQa = surface === "qa"
   const currentPage = isVideo ? 1 : isQa ? lesson.pages.length : pageNum
+  const nextPageTitle = lesson.pages[1]?.title ?? null
 
   return (
     <div
@@ -158,11 +462,13 @@ export function EditorialLessonViewer({
       )}
       data-section="lesson-viewer"
     >
+      {audioElement}
       <div className="flex flex-1 min-h-0">
         <OutlineRail
           pages={lesson.pages}
           currentPage={currentPage}
           lessonNumber={lesson.lessonNumber}
+          onSelectPage={goToPage}
         />
 
         <main className="flex flex-1 min-w-0 flex-col">
@@ -182,7 +488,7 @@ export function EditorialLessonViewer({
               lessonNumber={lesson.lessonNumber}
               title={
                 isQa
-                  ? "Q&A: four short questions before this counts."
+                  ? `Q&A: ${lesson.questions?.length ?? 4} short questions before this counts.`
                   : lesson.title
               }
               pageNum={currentPage}
@@ -193,10 +499,27 @@ export function EditorialLessonViewer({
 
             <div className="flex flex-1 justify-center py-9">
               {isVideo ? (
-                <VideoPageBody />
+                <VideoPageBody
+                  videoUrl={mediaUrl(lesson.introVideoUrl) || null}
+                  lessonTitle={lesson.title}
+                  pageTitle={lesson.pages[0]?.title ?? "Why this lesson exists"}
+                  pageTotal={lesson.pages.length}
+                  watchedPct={Math.round(watchedFraction * 100)}
+                  cleared={
+                    watchedFraction >= INTRO_VIDEO_COMPLETION_THRESHOLD
+                  }
+                  nextPageTitle={nextPageTitle}
+                  onProgressChange={handleIntroVideoProgress}
+                />
               ) : isQa ? (
                 lesson.questions && lesson.questions.length > 0 ? (
-                  <RealQAPageBody questions={lesson.questions} />
+                  <RealQAPageBody
+                    questions={lesson.questions}
+                    onSubmit={handleQuizSubmit}
+                    onFinish={handleFinishLesson}
+                    canFinish={completionStatus.canComplete}
+                    missingReason={completionStatus.missingReasons[0] ?? null}
+                  />
                 ) : (
                   <QAPageBody />
                 )
@@ -218,6 +541,19 @@ export function EditorialLessonViewer({
                     pageNum={currentPage}
                     pageTotal={lesson.pages.length}
                     advancing={advancing}
+                    onPrev={() => goToPage(currentPage - 1)}
+                    onNext={() =>
+                      currentPage >= lesson.pages.length
+                        ? handleFinishLesson()
+                        : goToPage(currentPage + 1)
+                    }
+                    onCancelAdvance={cancelAdvance}
+                    prevDisabled={currentPage <= 1}
+                    nextLabel={
+                      currentPage >= lesson.pages.length
+                        ? "FINISH LESSON"
+                        : "CONTINUE"
+                    }
                   />
                 </div>
               </div>
@@ -225,21 +561,34 @@ export function EditorialLessonViewer({
 
             {isVideo && (
               <div className="mx-auto mb-7 w-full max-w-[880px]">
-                <PageFooter pageNum={1} pageTotal={lesson.pages.length} />
+                <PageFooter
+                  pageNum={1}
+                  pageTotal={lesson.pages.length}
+                  onNext={() => goToPage(2)}
+                  prevDisabled
+                />
               </div>
             )}
           </div>
 
           <AudioBar
-            variant={isVideo ? "muted" : playing ? "playing" : "paused"}
+            variant={
+              isVideo
+                ? "muted"
+                : !audioSrc
+                  ? "unavailable"
+                  : playing
+                    ? "playing"
+                    : "paused"
+            }
             autoAdvance={autoAdvance}
             speed={speed}
-            currentTime={playing ? "02:14" : "00:00"}
-            totalTime="03:42"
-            progress={playing ? 60 : 0}
-            onTogglePlay={() =>
-              setSurface(playing ? "prose" : "prose-playing")
-            }
+            nowReading={lesson.title}
+            currentTime={formatClock(audioTime)}
+            totalTime={formatClock(audioDur)}
+            progress={audioProgressPct}
+            onTogglePlay={handleTogglePlay}
+            onSeek={handleSeek}
             onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
             onChangeSpeed={setSpeed}
           />
@@ -252,9 +601,6 @@ export function EditorialLessonViewer({
           initialSurface={initialWidgetSurface}
         />
       )}
-
-      {/* unused param wired so the linter accepts the controlled state */}
-      <span className="sr-only">{`${surface}-${pageNum}`}</span>
     </div>
   )
 }
@@ -265,10 +611,13 @@ function OutlineRail({
   pages,
   currentPage,
   lessonNumber,
+  onSelectPage,
 }: {
   pages: EditorialLessonPage[]
   currentPage: number
   lessonNumber: number
+  /** Jump straight to a page (1-indexed) from the rail. */
+  onSelectPage?: (page: number) => void
 }) {
   return (
     <aside className="hidden w-[248px] shrink-0 border-r border-border bg-card px-[22px] py-8 lg:block">
@@ -281,10 +630,13 @@ function OutlineRail({
           const state =
             n < currentPage ? "done" : n === currentPage ? "current" : "pending"
           return (
-            <div
+            <button
               key={page.title}
+              type="button"
+              onClick={() => onSelectPage?.(n)}
+              aria-current={state === "current" ? "page" : undefined}
               className={cn(
-                "grid grid-cols-[20px_1fr_auto] items-start gap-2.5 border-b border-border py-2.5 pl-1 pr-1",
+                "grid w-full cursor-pointer grid-cols-[20px_1fr_auto] items-start gap-2.5 border-x-0 border-b border-t-0 border-solid border-border bg-transparent py-2.5 pl-1 pr-1 text-left transition-colors hover:bg-muted",
                 i === 0 && "border-t",
                 state === "pending" && "opacity-60"
               )}
@@ -306,7 +658,7 @@ function OutlineRail({
               <span className="font-mono text-[10.5px] tabular-nums text-muted-foreground">
                 P{String(n).padStart(2, "0")}
               </span>
-            </div>
+            </button>
           )
         })}
       </div>
@@ -449,32 +801,52 @@ function PageFooter({
   pageNum,
   pageTotal,
   advancing,
+  onPrev,
+  onNext,
+  onCancelAdvance,
+  prevDisabled,
+  nextLabel = "CONTINUE",
 }: {
   pageNum: number
   pageTotal: number
   advancing?: boolean
+  onPrev?: () => void
+  onNext?: () => void
+  /** Cancels a pending auto-advance ("tap to stay"). */
+  onCancelAdvance?: () => void
+  prevDisabled?: boolean
+  nextLabel?: string
 }) {
   return (
     <div className="mt-9 flex items-center justify-between gap-4 border-t border-border pt-[22px]">
-      <SharpButton variant="ghost" className="min-w-[160px]">
+      <SharpButton
+        variant="ghost"
+        className="min-w-[160px]"
+        onClick={onPrev}
+        disabled={prevDisabled}
+      >
         <span aria-hidden="true">←</span> PREVIOUS PAGE
       </SharpButton>
       <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
         PAGE {pageNum} OF {pageTotal}
       </div>
       <div className="relative flex min-w-[220px] justify-end">
-        {advancing && <AdvancingPing />}
-        <SharpButton variant="primary" className="min-w-[220px]">
-          CONTINUE <span aria-hidden="true">→</span>
+        {advancing && <AdvancingPing onCancel={onCancelAdvance} />}
+        <SharpButton variant="primary" className="min-w-[220px]" onClick={onNext}>
+          {nextLabel} <span aria-hidden="true">→</span>
         </SharpButton>
       </div>
     </div>
   )
 }
 
-function AdvancingPing() {
+function AdvancingPing({ onCancel }: { onCancel?: () => void }) {
   return (
-    <div className="absolute bottom-[calc(100%+10px)] right-0 flex items-center gap-2.5 whitespace-nowrap border border-primary bg-card px-3 py-2">
+    <button
+      type="button"
+      onClick={onCancel}
+      className="absolute bottom-[calc(100%+10px)] right-0 flex cursor-pointer items-center gap-2.5 whitespace-nowrap border border-primary bg-card px-3 py-2"
+    >
       <span className="size-2 animate-pulse bg-primary" />
       <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-primary">
         {ADVANCING_PING_LABEL}
@@ -483,36 +855,42 @@ function AdvancingPing() {
       <span className="text-[12px] font-semibold text-foreground">
         tap to stay
       </span>
-    </div>
+    </button>
   )
 }
 
 // ─── Audio bar ────────────────────────────────────────────────────────────────
 
-type AudioBarVariant = "paused" | "playing" | "muted"
+type AudioBarVariant = "paused" | "playing" | "muted" | "unavailable"
 
 function AudioBar({
   variant,
   autoAdvance,
   speed,
+  nowReading,
   currentTime,
   totalTime,
   progress,
   onTogglePlay,
+  onSeek,
   onToggleAutoAdvance,
   onChangeSpeed,
 }: {
   variant: AudioBarVariant
   autoAdvance: boolean
   speed: "1x" | "1.25x" | "1.5x"
+  /** Title shown after the NOW READING label. */
+  nowReading: string
   currentTime: string
   totalTime: string
   progress: number
   onTogglePlay: () => void
+  /** Seeks the narration to a fraction (0 to 1) of its duration. */
+  onSeek?: (fraction: number) => void
   onToggleAutoAdvance: () => void
   onChangeSpeed: (s: "1x" | "1.25x" | "1.5x") => void
 }) {
-  if (variant === "muted") {
+  if (variant === "muted" || variant === "unavailable") {
     return (
       <div className="sticky bottom-0 z-[5] border-t border-foreground bg-card px-7 py-3.5">
         <div className="flex items-center justify-between gap-3">
@@ -522,10 +900,14 @@ function AudioBar({
             </span>
             <div>
               <div className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                NARRATION MUTED FOR VIDEO
+                {variant === "muted"
+                  ? "NARRATION MUTED FOR VIDEO"
+                  : "NARRATION NOT AVAILABLE YET"}
               </div>
               <div className="mt-0.5 font-serif text-[13px] italic text-muted-foreground">
-                Audio resumes on the next prose page.
+                {variant === "muted"
+                  ? "Audio resumes on the next prose page."
+                  : "This lesson's narration is still in production. Read on at your own pace."}
               </div>
             </div>
           </div>
@@ -543,7 +925,7 @@ function AudioBar({
       <div className="grid items-center gap-[22px] [grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]">
         <button
           type="button"
-          aria-label={playing ? "Pause" : "Play"}
+          aria-label={playing ? "Pause narration" : "Play narration"}
           onClick={onTogglePlay}
           className={cn(
             "inline-flex size-12 items-center justify-center border",
@@ -562,18 +944,14 @@ function AudioBar({
                 NOW READING
               </span>
               <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[13px] font-semibold">
-                Page 3 · The brief, in plain English
+                {nowReading}
               </span>
             </div>
             <span className="whitespace-nowrap font-mono text-[11.5px] tabular-nums text-muted-foreground">
               {currentTime} / {totalTime}
             </span>
           </div>
-          {playing ? (
-            <Waveform progress={progress} />
-          ) : (
-            <Scrubber progress={progress} />
-          )}
+          <SeekableTrack progress={progress} playing={playing} onSeek={onSeek} />
         </div>
 
         <div className="flex border border-border">
@@ -624,6 +1002,57 @@ function SpeakerOffIcon() {
     <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
       <path d="M2 4v6h2.5L9 13V1L4.5 4H2zm10 1l-2 2 2 2-1 1-2-2-2 2-1-1 2-2-2-2 1-1 2 2 2-2z" />
     </svg>
+  )
+}
+
+/**
+ * Interactive wrapper around the Scrubber/Waveform visuals: click or use
+ * arrow keys to seek the narration. Rendered as a slider for assistive tech.
+ */
+function SeekableTrack({
+  progress,
+  playing,
+  onSeek,
+}: {
+  progress: number
+  playing: boolean
+  onSeek?: (fraction: number) => void
+}) {
+  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+    if (!onSeek) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    onSeek((e.clientX - rect.left) / rect.width)
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (!onSeek) return
+    const fraction = progress / 100
+    if (e.key === "ArrowLeft") onSeek(Math.max(0, fraction - 0.05))
+    else if (e.key === "ArrowRight") onSeek(Math.min(1, fraction + 0.05))
+    else if (e.key === "Home") onSeek(0)
+    else if (e.key === "End") onSeek(1)
+    else return
+    e.preventDefault()
+  }
+
+  return (
+    <div
+      role="slider"
+      tabIndex={0}
+      aria-label="Narration position"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(progress)}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      className="cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-ochre)]"
+    >
+      {playing ? (
+        <Waveform progress={progress} />
+      ) : (
+        <Scrubber progress={progress} />
+      )}
+    </div>
   )
 }
 
@@ -739,6 +1168,7 @@ function SharpButton({
   children,
   type = "button",
   onClick,
+  disabled,
 }: {
   href?: string
   variant?: "primary" | "ghost"
@@ -746,12 +1176,14 @@ function SharpButton({
   children: React.ReactNode
   type?: "button" | "submit"
   onClick?: () => void
+  disabled?: boolean
 }) {
   const classes = cn(
     "inline-flex items-center justify-center gap-2 border px-4.5 py-3 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-ochre)]",
     variant === "primary"
       ? "border-primary bg-primary text-primary-foreground hover:border-[var(--v-teal-deep)] hover:bg-[var(--v-teal-deep)]"
       : "border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background",
+    disabled && "pointer-events-none opacity-45",
     className
   )
   if (href) {
@@ -762,7 +1194,7 @@ function SharpButton({
     )
   }
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} className={classes} disabled={disabled}>
       {children}
     </button>
   )
@@ -948,99 +1380,121 @@ function Callout({
 
 // ─── Video page ──────────────────────────────────────────────────────────────
 
-function VideoPageBody() {
+function VideoPageBody({
+  videoUrl,
+  lessonTitle,
+  pageTitle,
+  pageTotal,
+  watchedPct,
+  cleared,
+  nextPageTitle,
+  onProgressChange,
+}: {
+  /** Resolved intro-video URL (already through `mediaUrl()`), or null. */
+  videoUrl: string | null
+  lessonTitle: string
+  pageTitle: string
+  pageTotal: number
+  /** Highest watched fraction as a whole percentage (persisted or live). */
+  watchedPct: number
+  /** True once the 80% completion gate is cleared. */
+  cleared: boolean
+  nextPageTitle: string | null
+  onProgressChange: (fraction: number) => void
+}) {
   return (
     <div className="w-full max-w-[880px]">
       <div className="mb-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-        PAGE 1 OF 8 · INTRO VIDEO · 4:12
+        PAGE 1 OF {pageTotal} · INTRO VIDEO
       </div>
       <h2 className="mb-[18px] max-w-[720px] text-[22px] font-semibold leading-[1.15] tracking-[-0.015em]">
-        Why this lesson, in four minutes.
+        {pageTitle}
       </h2>
 
-      <div
-        className="relative overflow-hidden border border-foreground"
-        style={{ aspectRatio: "16 / 9", background: "var(--v-video-bg)" }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <button
-            type="button"
-            aria-label="Play video"
-            className="inline-flex size-[88px] items-center justify-center border-2 border-white text-white"
-            style={{ background: "var(--v-video-scrim)" }}
-          >
-            <svg width="28" height="32" viewBox="0 0 14 16" fill="currentColor">
-              <polygon points="2,1 13,8 2,15" />
-            </svg>
-          </button>
+      {videoUrl ? (
+        <div className="border border-foreground">
+          <VideoPlayer
+            src={videoUrl}
+            title={`${lessonTitle} intro video`}
+            className="rounded-none"
+            onProgressChange={onProgressChange}
+          />
         </div>
-        <div className="absolute left-4 top-3.5 font-mono text-[10.5px] uppercase tracking-[0.18em] text-white/85">
-          L13 · INTRO · NARR. PALMER
+      ) : (
+        <div
+          className="relative flex items-center justify-center border border-foreground"
+          style={{ aspectRatio: "16 / 9", background: "var(--v-video-bg)" }}
+        >
+          <div className="border border-border bg-card px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            INTRO VIDEO NOT AVAILABLE YET
+          </div>
         </div>
-        <div className="absolute bottom-3.5 right-4 font-mono text-[11px] tracking-[0.1em] text-white/85">
-          03:22 / 04:12
-        </div>
+      )}
 
-        <div className="absolute inset-x-0 bottom-0 px-4 pb-3">
-          <div className="relative h-[5px] bg-white/20">
-            <div className="absolute left-0 top-0 bottom-0 w-[80%] bg-white" />
-            <div
-              className="absolute -top-[5px] -bottom-[5px] w-[2px] bg-primary"
-              style={{ left: "80%" }}
-            />
-            <div
-              className="absolute -top-[22px] whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.18em]"
-              style={{
-                left: "80%",
-                transform: "translateX(-50%)",
-                color: "var(--v-ochre-bright)",
-              }}
-            >
-              80% MARK
+      {cleared ? (
+        <div
+          className="mt-[18px] grid grid-cols-[auto_1fr_auto] items-center gap-[18px] border bg-card px-5 py-4"
+          style={{
+            borderColor: "var(--success)",
+          }}
+        >
+          <StatusIcon state="done" />
+          <div>
+            <div className="text-[14.5px] font-semibold">
+              Counts toward completion.{" "}
+              <span className={styles.accent}>
+                You passed the 80% mark.
+              </span>
+            </div>
+            <div className="mt-0.5 text-[13px] italic text-muted-foreground">
+              Lesson completion needs the intro watched to 80% and the Q&amp;A
+              passed. One down.
             </div>
           </div>
+          <span
+            className="font-mono text-[10.5px] font-bold uppercase tracking-[0.18em]"
+            style={{ color: "var(--success)" }}
+          >
+            GATE 1 / 2 · CLEARED
+          </span>
         </div>
-      </div>
-
-      <div
-        className="mt-[18px] grid grid-cols-[auto_1fr_auto] items-center gap-[18px] border bg-card px-5 py-4"
-        style={{
-          borderColor: "var(--success)",
-        }}
-      >
-        <StatusIcon state="done" />
-        <div>
-          <div className="text-[14.5px] font-semibold">
-            Counts toward completion.{" "}
-            <span className={styles.accent}>
-              You passed the 80% mark a moment ago.
-            </span>
+      ) : (
+        <div className="mt-[18px] grid grid-cols-[auto_1fr_auto] items-center gap-[18px] border border-foreground bg-card px-5 py-4">
+          <StatusIcon state="current" />
+          <div>
+            <div className="text-[14.5px] font-semibold">
+              Counts toward completion.{" "}
+              <span className={styles.accent}>
+                Watch to the 80% mark to clear this gate.
+              </span>
+            </div>
+            <div className="mt-0.5 text-[13px] italic text-muted-foreground">
+              Lesson completion needs the intro watched to 80% and the Q&amp;A
+              passed.
+            </div>
           </div>
-          <div className="mt-0.5 text-[13px] italic text-muted-foreground">
-            Lesson completion needs the intro watched to 80% and the Q&amp;A
-            passed. One down.
-          </div>
+          <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            GATE 1 / 2 · {watchedPct}% WATCHED
+          </span>
         </div>
-        <span
-          className="font-mono text-[10.5px] font-bold uppercase tracking-[0.18em]"
-          style={{ color: "var(--success)" }}
-        >
-          GATE 1 / 2 · CLEARED
-        </span>
-      </div>
+      )}
 
       <div className="mt-3.5 grid grid-cols-3 border border-border">
-        <VideoMeta tag="DURATION" value="4:12" sub="watched 3:22" />
+        <VideoMeta
+          tag="WATCHED"
+          value={`${watchedPct}%`}
+          sub={cleared ? "gate cleared" : "keep watching"}
+        />
         <VideoMeta
           tag="THRESHOLD"
           value="80%"
-          sub="cleared at 3:22"
+          sub="counts as watched"
           bordered
         />
         <VideoMeta
           tag="UP NEXT"
           value="Page 2"
-          sub="Picking the right problem"
+          sub={nextPageTitle ?? "End of lesson"}
           bordered
         />
       </div>
@@ -1194,16 +1648,64 @@ function QAPageBody() {
 
 /**
  * Renders the real, imported end-of-lesson Q&A (from Postgres) using the same
- * editorial QAItem chrome as the design placeholder. Options are shown in the
- * neutral `idle` state — the static viewer does not reveal answers or grade
- * inline; the answer key stays server-side. Falls back to the bundled
- * `QAPageBody` when no questions are imported.
+ * editorial QAItem chrome as the design placeholder. Fully interactive (W13):
+ * the learner selects an answer per question, submits, and the score is
+ * graded inline and persisted via the viewer's `onSubmit` (the W7 progress
+ * write path). A passing score unlocks the FINISH LESSON action.
  */
 function RealQAPageBody({
   questions,
+  onSubmit,
+  onFinish,
+  canFinish,
+  missingReason,
 }: {
   questions: EditorialLessonQuestion[]
+  /** Called once per submission with the graded score (0 to 100). */
+  onSubmit: (score: number) => void
+  /** Called when the learner finishes a passed lesson. */
+  onFinish: () => void
+  /** Whether both completion gates are cleared. */
+  canFinish: boolean
+  /** First unmet completion requirement, shown when finish is blocked. */
+  missingReason: string | null
 }) {
+  const [selected, setSelected] = React.useState<Record<number, number>>({})
+  const [submittedAnswers, setSubmittedAnswers] = React.useState<Record<
+    number,
+    number
+  > | null>(null)
+  const [score, setScore] = React.useState<number | null>(null)
+
+  const submitted = submittedAnswers !== null
+  const answeredCount = questions.filter(
+    (_, i) => selected[i] !== undefined
+  ).length
+  const allAnswered = answeredCount === questions.length
+  const passed = score !== null && score >= QUIZ_PASS_SCORE
+
+  function handleSelect(questionIndex: number, optionIndex: number) {
+    if (submitted) return
+    setSelected((prev) => ({ ...prev, [questionIndex]: optionIndex }))
+  }
+
+  function handleSubmit() {
+    if (!allAnswered || submitted) return
+    const correct = questions.filter(
+      (q, i) => selected[i] === q.correctOptionIndex
+    ).length
+    const graded = Math.round((correct / questions.length) * 100)
+    setSubmittedAnswers(selected)
+    setScore(graded)
+    onSubmit(graded)
+  }
+
+  function handleRetry() {
+    setSelected({})
+    setSubmittedAnswers(null)
+    setScore(null)
+  }
+
   return (
     <div className="w-full max-w-[720px]">
       <p className="m-0 mb-7 text-[17px] italic leading-[1.55] text-muted-foreground">
@@ -1214,27 +1716,74 @@ function RealQAPageBody({
         </span>
       </p>
 
-      {questions.map((q, i) => (
-        <QAItem
-          key={i}
-          num={i + 1}
-          total={questions.length}
-          state="open"
-          prompt={q.question}
-          options={q.options.map((label) => ({
-            label,
-            state: "idle" as const,
-          }))}
-        />
-      ))}
+      {questions.map((q, i) => {
+        const chosen = submitted ? submittedAnswers[i] : selected[i]
+        const gotItRight = submitted && chosen === q.correctOptionIndex
+        return (
+          <QAItem
+            key={i}
+            num={i + 1}
+            total={questions.length}
+            state={gotItRight ? "passed" : "open"}
+            prompt={q.question}
+            options={q.options.map((label, oi) => ({
+              label,
+              state: submitted
+                ? oi === q.correctOptionIndex
+                  ? ("correct" as const)
+                  : oi === chosen
+                    ? ("wrong" as const)
+                    : ("idle" as const)
+                : oi === chosen
+                  ? ("selected" as const)
+                  : ("idle" as const),
+            }))}
+            onSelect={(oi) => handleSelect(i, oi)}
+            disabled={submitted}
+            feedback={submitted && q.explanation ? q.explanation : undefined}
+          />
+        )
+      })}
 
-      <div className="mt-8 flex items-center justify-between border-t border-border pt-[22px]">
+      <div className="mt-8 flex items-center justify-between gap-4 border-t border-border pt-[22px]">
         <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
-          {questions.length} QUESTION{questions.length === 1 ? "" : "S"}
+          {submitted
+            ? `SCORE ${score}% · ${passed ? "PASSED" : `${QUIZ_PASS_SCORE}% NEEDED`}`
+            : `${answeredCount} OF ${questions.length} ANSWERED`}
         </div>
-        <SharpButton variant="primary" className="min-w-[240px]">
-          SUBMIT Q&amp;A <span aria-hidden="true">→</span>
-        </SharpButton>
+        {!submitted ? (
+          <SharpButton
+            variant="primary"
+            className="min-w-[240px]"
+            onClick={handleSubmit}
+            disabled={!allAnswered}
+          >
+            SUBMIT Q&amp;A <span aria-hidden="true">→</span>
+          </SharpButton>
+        ) : passed ? (
+          <div className="flex flex-col items-end gap-1.5">
+            <SharpButton
+              variant="primary"
+              className="min-w-[240px]"
+              onClick={onFinish}
+            >
+              FINISH LESSON <span aria-hidden="true">→</span>
+            </SharpButton>
+            {!canFinish && missingReason && (
+              <span className="text-[12.5px] italic text-muted-foreground">
+                {missingReason}
+              </span>
+            )}
+          </div>
+        ) : (
+          <SharpButton
+            variant="ghost"
+            className="min-w-[240px]"
+            onClick={handleRetry}
+          >
+            RETRY Q&amp;A <span aria-hidden="true">→</span>
+          </SharpButton>
+        )}
       </div>
     </div>
   )
@@ -1249,6 +1798,8 @@ function QAItem({
   options,
   state,
   feedback,
+  onSelect,
+  disabled,
 }: {
   num: number
   total: number
@@ -1256,6 +1807,10 @@ function QAItem({
   options: { label: string; state: QAOptionState }[]
   state: "passed" | "open" | "locked"
   feedback?: string
+  /** Called with the option index when the learner picks an answer. */
+  onSelect?: (optionIndex: number) => void
+  /** Locks option interaction (post-submit). */
+  disabled?: boolean
 }) {
   const isPassed = state === "passed"
   const isLocked = state === "locked"
@@ -1301,6 +1856,8 @@ function QAItem({
             label={o.label}
             state={o.state}
             letter={String.fromCharCode(65 + i)}
+            onClick={onSelect ? () => onSelect(i) : undefined}
+            disabled={disabled}
           />
         ))}
       </div>
@@ -1322,10 +1879,14 @@ function QAOption({
   letter,
   label,
   state,
+  onClick,
+  disabled,
 }: {
   letter: string
   label: string
   state: QAOptionState
+  onClick?: () => void
+  disabled?: boolean
 }) {
   const optionStyles = {
     idle: { border: "border-foreground", bg: "bg-transparent" },
@@ -1340,9 +1901,15 @@ function QAOption({
     },
   }[state]
   return (
-    <div
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-pressed={state === "selected"}
       className={cn(
-        "grid cursor-pointer grid-cols-[32px_1fr_auto] items-center gap-3.5 border px-3.5 py-3",
+        "grid w-full cursor-pointer grid-cols-[32px_1fr_auto] items-center gap-3.5 border border-solid px-3.5 py-3 text-left",
+        !disabled && state === "idle" && "hover:bg-muted",
+        disabled && "cursor-default",
         optionStyles.border,
         optionStyles.bg
       )}
@@ -1372,13 +1939,27 @@ function QAOption({
         </span>
       )}
       {state === "idle" && <span className="w-4" />}
-    </div>
+    </button>
   )
 }
 
 // ─── Lesson-complete editorial state ─────────────────────────────────────────
 
-function LessonCompleteSurface({ lesson }: { lesson: EditorialLessonMeta }) {
+function LessonCompleteSurface({
+  lesson,
+  introWatchedPct,
+  quizScorePct,
+  nextLesson,
+  courseHref,
+}: {
+  lesson: EditorialLessonMeta
+  /** Real intro-video watched percentage from the progress row. */
+  introWatchedPct: number
+  /** Real best Q&A score (0 to 100). */
+  quizScorePct: number
+  nextLesson?: EditorialNextLesson | null
+  courseHref?: string
+}) {
   return (
     <div
       className={cn(
@@ -1400,29 +1981,52 @@ function LessonCompleteSurface({ lesson }: { lesson: EditorialLessonMeta }) {
           </h1>
 
           <p className="mt-6 max-w-[600px] text-[17px] leading-[1.55] text-muted-foreground">
-            Intro watched to <span className={styles.accent}>92%</span>.
-            Q&amp;A passed <span className={styles.accent}>4 of 4</span>. This
-            counts toward Month 1.
+            {lesson.introVideoUrl ? (
+              <>
+                Intro watched to{" "}
+                <span className={styles.accent}>{introWatchedPct}%</span>.{" "}
+              </>
+            ) : null}
+            {lesson.questions?.length ? (
+              <>
+                Q&amp;A passed at{" "}
+                <span className={styles.accent}>{quizScorePct}%</span>.{" "}
+              </>
+            ) : null}
+            This counts toward Month 1.
           </p>
 
           <div className="mt-9 grid grid-cols-[1.4fr_1fr] border border-foreground">
             <div className="px-7 py-7">
               <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                UP NEXT · LESSON {lesson.lessonNumber + 1}
+                {nextLesson
+                  ? `UP NEXT · LESSON ${nextLesson.lessonNumber}`
+                  : "UP NEXT"}
               </div>
               <div className="mt-2 text-[26px] font-semibold leading-[1.15] tracking-[-0.015em]">
-                Q&amp;A: when to reach for which model.
+                {nextLesson
+                  ? nextLesson.title
+                  : "You are at the end of the published lessons."}
               </div>
               <div className="mt-2 text-[14px] italic text-muted-foreground">
-                9 minutes. Three pages, no video. Picks up where this one
-                stopped.
+                {nextLesson
+                  ? "Picks up where this one stopped."
+                  : "New lessons unlock as the month releases."}
               </div>
               <div className="mt-[22px] flex gap-2.5">
-                <SharpButton variant="primary" className="min-w-[220px]">
-                  START LESSON {lesson.lessonNumber + 1}{" "}
-                  <span aria-hidden="true">→</span>
+                {nextLesson && (
+                  <SharpButton
+                    variant="primary"
+                    className="min-w-[220px]"
+                    href={nextLesson.href}
+                  >
+                    START LESSON {nextLesson.lessonNumber}{" "}
+                    <span aria-hidden="true">→</span>
+                  </SharpButton>
+                )}
+                <SharpButton variant="ghost" href={courseHref ?? "/dashboard"}>
+                  BACK TO COURSE
                 </SharpButton>
-                <SharpButton variant="ghost">BACK TO COURSE</SharpButton>
               </div>
             </div>
             <div className="border-l border-foreground bg-card px-7 py-7">
@@ -1459,11 +2063,32 @@ function LessonCompleteSurface({ lesson }: { lesson: EditorialLessonMeta }) {
 
 function MobileSurface({
   lesson,
+  pageNum,
+  playing,
+  audioAvailable,
+  currentTime,
+  totalTime,
+  progressPct,
+  onTogglePlay,
+  speed,
+  onChangeSpeed,
   autoAdvance,
+  onToggleAutoAdvance,
 }: {
   lesson: EditorialLessonMeta
+  pageNum: number
+  playing: boolean
+  audioAvailable: boolean
+  currentTime: string
+  totalTime: string
+  progressPct: number
+  onTogglePlay: () => void
+  speed: "1x" | "1.25x" | "1.5x"
+  onChangeSpeed: (s: "1x" | "1.25x" | "1.5x") => void
   autoAdvance: boolean
+  onToggleAutoAdvance: () => void
 }) {
+  const pageTitle = lesson.pages[pageNum - 1]?.title ?? lesson.title
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[412px] flex-col">
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -1504,7 +2129,7 @@ function MobileSurface({
             <path d="M2 4h10M2 7h10M2 10h7" />
           </svg>
           <span className="absolute -right-1 -top-1 bg-primary px-1 font-mono text-[8.5px] font-bold tracking-[0.06em] text-primary-foreground">
-            3/{lesson.pages.length}
+            {pageNum}/{lesson.pages.length}
           </span>
         </button>
       </div>
@@ -1515,13 +2140,13 @@ function MobileSurface({
             {lesson.monthLabel}
           </div>
           <div className="font-mono text-[9.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-            P3 / {lesson.pages.length}
+            P{pageNum} / {lesson.pages.length}
           </div>
         </div>
         <h1 className="my-2 mb-3.5 text-[22px] font-semibold leading-[1.2] tracking-[-0.02em]">
           {lesson.title}
         </h1>
-        <SegmentedBar value={2} total={lesson.pages.length} />
+        <SegmentedBar value={pageNum - 1} total={lesson.pages.length} />
       </div>
 
       <div className="flex-1 px-[22px] py-5">
@@ -1562,32 +2187,41 @@ function MobileSurface({
         <div className="flex items-center gap-3">
           <button
             type="button"
-            aria-label="Pause"
-            className="inline-flex size-10 shrink-0 items-center justify-center border border-primary bg-primary text-primary-foreground"
+            aria-label={playing ? "Pause narration" : "Play narration"}
+            onClick={onTogglePlay}
+            disabled={!audioAvailable}
+            className={cn(
+              "inline-flex size-10 shrink-0 items-center justify-center border",
+              playing
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-foreground bg-foreground text-background",
+              !audioAvailable && "pointer-events-none opacity-45"
+            )}
           >
-            <PauseIcon />
+            {playing ? <PauseIcon /> : <PlayIcon />}
           </button>
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex justify-between">
               <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[12px] font-semibold">
-                P3 · The brief, in plain English
+                P{pageNum} · {pageTitle}
               </span>
               <span className="whitespace-nowrap font-mono text-[10.5px] tabular-nums text-muted-foreground">
-                02:14 / 03:42
+                {audioAvailable ? `${currentTime} / ${totalTime}` : "NO AUDIO"}
               </span>
             </div>
-            <Waveform progress={60} />
+            <Waveform progress={progressPct} />
           </div>
         </div>
         <div className="mt-2.5 flex items-center justify-between">
           <div className="flex border border-border">
-            {(["1x", "1.25x", "1.5x"] as const).map((s, i) => (
+            {(["1x", "1.25x", "1.5x"] as const).map((s) => (
               <button
                 key={s}
                 type="button"
+                onClick={() => onChangeSpeed(s)}
                 className={cn(
                   "min-w-[38px] cursor-pointer border-none px-2 py-1 font-mono text-[10.5px] font-bold",
-                  i === 0
+                  s === speed
                     ? "bg-foreground text-background"
                     : "bg-transparent text-muted-foreground"
                 )}
@@ -1596,7 +2230,7 @@ function MobileSurface({
               </button>
             ))}
           </div>
-          <AutoAdvanceToggle on={autoAdvance} onToggle={() => {}} compact />
+          <AutoAdvanceToggle on={autoAdvance} onToggle={onToggleAutoAdvance} compact />
         </div>
       </div>
     </div>

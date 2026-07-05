@@ -108,7 +108,7 @@ describe("proxy route guard (W11)", () => {
 
     it("(c) lets a public path through regardless of session (no cookie)", async () => {
       setSessionCookie(null)
-      for (const path of ["/labs", "/demo", "/api/health"]) {
+      for (const path of ["/labs", "/api/health"]) {
         const response = await proxy(request(path))
         expect(redirectPath(response)).toBeNull()
       }
@@ -116,7 +116,56 @@ describe("proxy route guard (W11)", () => {
 
     it("(c) lets a public path through regardless of session (cookie present)", async () => {
       setSessionCookie("session-token")
-      for (const path of ["/labs", "/demo", "/api/health"]) {
+      for (const path of ["/labs", "/api/health"]) {
+        const response = await proxy(request(path))
+        expect(redirectPath(response)).toBeNull()
+      }
+    })
+
+    it("(W15) bounces anonymous traffic off every dev/review leftover route", async () => {
+      setSessionCookie(null)
+      for (const path of [
+        "/demo",
+        "/demo/dashboard",
+        "/logo_picker",
+        "/redesign",
+        "/redesign_v2",
+        "/redesign/v-a",
+        "/old-design",
+        "/score-card-variants",
+      ]) {
+        const response = await proxy(request(path))
+        expect(response.status, `${path} must not answer anonymously`).toBe(307)
+        expect(redirectPath(response)).toBe("/login")
+      }
+    })
+
+    it("(W15) still gates dev/review routes when ENABLE_DEV_MOCK_USER relaxes the main guard", async () => {
+      const original = process.env.ENABLE_DEV_MOCK_USER
+      process.env.ENABLE_DEV_MOCK_USER = "true"
+      try {
+        setSessionCookie(null)
+        const response = await proxy(request("/demo/dashboard"))
+        expect(response.status).toBe(307)
+        expect(redirectPath(response)).toBe("/login")
+      } finally {
+        if (original === undefined) {
+          delete process.env.ENABLE_DEV_MOCK_USER
+        } else {
+          process.env.ENABLE_DEV_MOCK_USER = original
+        }
+      }
+    })
+
+    it("(W15) lets a logged-in session reach a dev/review route", async () => {
+      setSessionCookie("session-token")
+      const response = await proxy(request("/demo"))
+      expect(redirectPath(response)).toBeNull()
+    })
+
+    it("(W15) keeps /w12-review and /explainer-preview public until W12 closes", async () => {
+      setSessionCookie(null)
+      for (const path of ["/w12-review", "/explainer-preview"]) {
         const response = await proxy(request(path))
         expect(redirectPath(response)).toBeNull()
       }
@@ -155,6 +204,12 @@ describe("proxy route guard (W11)", () => {
     it("(d) never redirects a logged-out auth route either", async () => {
       setSessionCookie(null)
       const response = await proxy(request("/login"))
+      expect(redirectPath(response)).toBeNull()
+    })
+
+    it("(W15) leaves dev/review routes open in development", async () => {
+      setSessionCookie(null)
+      const response = await proxy(request("/demo/dashboard"))
       expect(redirectPath(response)).toBeNull()
     })
   })

@@ -130,3 +130,22 @@ describe("marketing/data — supporting collections", () => {
     }
   })
 })
+
+describe("marketing/data: em-dash sweep sentinel (W15)", () => {
+  it("no exported copy contains an em dash (U+2014)", () => {
+    // The 2026-07-04 pre-launch sweep removed all em dashes from the locked
+    // homepage copy; this pins the sweep so new copy cannot reintroduce them.
+    const allCopy = JSON.stringify({
+      JOURNEYS,
+      PRODUCT_PILLARS,
+      RESEARCH_SOURCES,
+      UK_STATS,
+      CURRICULUM,
+      PRICING,
+      SCORE_CATEGORIES,
+      NAV_LINKS,
+      FOOTER_COLS,
+    })
+    expect(allCopy).not.toContain("—")
+  })
+})
