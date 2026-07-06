@@ -71,3 +71,29 @@ export function mediaUrl<T extends string | null | undefined>(ref: T): T {
 export function mediaCdnBase(): string {
   return CDN_BASE
 }
+
+/**
+ * Resolve a markdown image src from pipeline lesson bodies (learnContent) to
+ * a renderable URL, or null when it should not be requested at all.
+ *
+ * The pipeline embeds figures as bare R2 keys ("lessons/<id>/assets/…" or
+ * "lessons/<id>/images/…", W16) which resolve through mediaUrl(). Anything
+ * absolute or self-contained (http(s)/data:/blob:) passes through, legacy
+ * /api/lessons refs fold onto the CDN, and every other relative ref returns
+ * null — those files are not hosted, so emitting them would only 404.
+ */
+export function markdownImageUrl(src: unknown): string | null {
+  if (typeof src !== "string") return null
+  const value = src.trim()
+  if (!value) return null
+  if (/^(data:|blob:)/i.test(value)) return value
+  if (isAbsolute(value)) return mediaUrl(value)
+
+  const key = value.replace(/^\/+/, "")
+  if (/^(lessons|api\/lessons)\//i.test(key)) {
+    const resolved = mediaUrl(key.startsWith("api/") ? `/${key}` : key)
+    // Without a CDN base the key stays relative — hide it rather than 404.
+    return isAbsolute(resolved) ? resolved : null
+  }
+  return null
+}

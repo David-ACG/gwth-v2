@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import DOMPurify from "isomorphic-dompurify"
 import { cn } from "@/lib/utils"
+import { markdownImageUrl } from "@/lib/media/url"
 import { CalloutBox } from "@/components/lesson/callout-box"
 import type { CalloutVariant } from "@/components/lesson/callout-box"
 import { KeyTermTooltip } from "@/components/lesson/key-term-tooltip"
@@ -150,19 +151,17 @@ function GracefulImage({
   ...props
 }: ImgHTMLAttributes<HTMLImageElement>) {
   const [failed, setFailed] = useState(false)
-  // Only request images from a real, hosted origin. Pipeline lesson bodies
-  // reference figures by relative path (e.g. `assets/generated/…`) whose assets
-  // are not hosted on the site yet — emitting those would 404 (and clutter the
-  // console). Skip anything that isn't an absolute http(s)/data/blob URL; once
-  // image hosting is wired, absolute URLs render normally. `onError` still
-  // hides a hosted image that fails at runtime.
-  const isHosted =
-    typeof src === "string" && /^(https?:|data:|blob:)/i.test(src)
-  if (!src || failed || !isHosted) return null
+  // Pipeline lesson bodies embed figures as bare R2 keys ("lessons/…", W16)
+  // which markdownImageUrl resolves onto the media CDN; absolute and data/blob
+  // URLs pass through, and any other relative ref (an unhosted file) resolves
+  // to null so the surrounding prose stays clean instead of showing a broken
+  // image. `onError` still hides a hosted image that fails at runtime.
+  const resolved = markdownImageUrl(src)
+  if (!resolved || failed) return null
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
+      src={resolved}
       alt={alt ?? ""}
       loading="lazy"
       onError={() => setFailed(true)}
