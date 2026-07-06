@@ -125,14 +125,14 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
 
       {explainer && explainerAt === "after-hero" ? explainer : null}
 
-      {/* Paper-craft cover plate (2026-07-05 imagery set): full-width
+      {/* Cutout-register cover plate (2026-07-06 imagery, David's picks): full-width
           landscape under the hero, breaking the text-only run. */}
       <div className={styles.coverBand} data-section="cover-image">
         <div className={styles.page}>
           <figure className={`${styles.figure} ${styles.figureCover}`}>
             <Image
-              src="/home/home-build-desk-a.png"
-              alt="Paper-craft flat-lay of a builder's desk: a laptop showing a small app and chart, sticky notes, and an automation flow of five linked cards"
+              src="/home/home-build-desk-c.png"
+              alt="A person photographed from above working at a pastel-blue paper laptop, surrounded by sticker doodles of gears, a lightbulb, a database, and an app chart"
               width={1376}
               height={768}
             />
@@ -153,8 +153,8 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
           </p>
           <figure className={`${styles.figure} ${styles.figureInset}`}>
             <Image
-              src="/home/home-nine-journeys-a.png"
-              alt="Nine pastel paper cards, each with its own motif, joined by dashed paper trails that converge on one cream card with a gold star"
+              src="/home/home-nine-journeys-c.png"
+              alt="A person holding a cream credential card with a gold star seal, joined by dashed ink lines to nine sticker cards with doodle motifs"
               width={1264}
               height={848}
             />
@@ -219,8 +219,8 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
           </p>
           <figure className={`${styles.figure} ${styles.figureRight}`}>
             <Image
-              src="/home/home-three-issues-a.png"
-              alt="Three paper-craft journal booklets labelled Month 1, Month 2, and Month 3, with a chat bubble, gears, and a rocket motif"
+              src="/home/home-three-issues-c.png"
+              alt="Three pinned paper journal booklets labelled Month 1, Month 2, and Month 3, with a chat bubble, gears, and a rocket doodle sticker"
               width={2400}
               height={1792}
             />
@@ -277,8 +277,8 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             </div>
             <figure className={`${styles.figure} ${styles.figurePortrait}`}>
               <Image
-                src="/home/home-progress-trail-a.png"
-                alt="A winding trail of paper dashes climbing past pastel milestone flags to a cream card with a gold star seal"
+                src="/home/home-progress-trail-c.png"
+                alt="A hand placing a coral paper flag on a winding trail of ink dashes leading up to a cream credential card with a gold star seal"
                 width={928}
                 height={1152}
               />
@@ -368,8 +368,8 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
         <div className={styles.page}>
           <figure className={`${styles.figure} ${styles.figureBanner}`}>
             <Image
-              src="/home/home-shipped-row-a.png"
-              alt="A calm row of five finished paper-craft artefacts: a web page, a bar chart, an automation flow, a friendly robot, and a portfolio folder with a gold star"
+              src="/home/home-shipped-row-c.png"
+              alt="Two hands arranging a calm row of five paper artefacts: a web page, a bar chart, an automation flow, a friendly robot, and a portfolio folder with a gold star"
               width={1584}
               height={672}
             />
