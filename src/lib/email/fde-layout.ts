@@ -8,7 +8,8 @@
  * - 1px ink hairlines for structure. Square corners. NO gradients, NO shadows,
  *   NO border-radius, NO images required to read the message.
  * - One solid-teal bulletproof table-button CTA, sentence case.
- * - Terracotta text logo on the light ground.
+ * - The real GWTH.ai wordmark (hosted /logo-email.png, ink wordmark +
+ *   terracotta accent) on the light ground. Email is light-ground only.
  * - British English, no emojis, no em dashes.
  *
  * Every builder returns BOTH an HTML part and a matching plain-text part
@@ -107,7 +108,7 @@ function renderCtaHtml(cta: EmailCta): string {
 
 /**
  * Renders the full FDE email as HTML + plain-text parts. The HTML is a single
- * 600px table on a cream ground with a terracotta text logo, ink hairlines and
+ * 600px table on a cream ground with the GWTH.ai wordmark image, ink hairlines and
  * square corners; the plain-text part mirrors the same content.
  */
 export function renderFdeEmail(input: EmailLayoutInput): EmailParts {
@@ -152,7 +153,7 @@ export function renderFdeEmail(input: EmailLayoutInput): EmailParts {
           <!-- Masthead -->
           <tr>
             <td style="padding:16px 24px;border-bottom:1px solid ${COLOR.ink};">
-              <span style="font-family:${MONO};font-weight:bold;font-size:16px;color:${COLOR.terracotta};letter-spacing:0.02em;">GWTH.ai</span>
+              <img src="https://gwth.ai/logo-email.png" width="150" height="26" alt="GWTH.ai" style="display:block;border:0;outline:none;text-decoration:none;height:26px;width:150px;">
             </td>
           </tr>
           <!-- Body -->
