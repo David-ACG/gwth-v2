@@ -1,6 +1,6 @@
 # Completion: W17 — Rebuild transactional email to the FDE email register
 
-**Date:** 2026-07-06 · **Repo:** GWTH_V2 · **Commit:** `<HASH>` (parent `998f516`)
+**Date:** 2026-07-06 · **Repo:** GWTH_V2 · **Commit:** `afde726` (parent `998f516`)
 **Bible item:** `email-register` — status `pending` (DRAFT for review), no entry in `bible_progress.yaml` and no `changes_requested` verdict. Per the W17 gate, proceeded with the recipe exactly as written (David chose the FDE direction 2026-07-06).
 **Status:** implemented; typecheck + lint + tests all green; screenshots below show correct FDE rendering at 600px and a narrow mobile width, light client.
 
