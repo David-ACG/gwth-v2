@@ -135,3 +135,42 @@
 .statusActive {
   color: var(--v-dash-active);
 }
+
+/* Gate ticks: the wordless completion signal (video corner, CONTINUE button,
+   progress-bar segments). Pop in, then the check strokes itself on. */
+.tickPop {
+  animation: tick-pop 0.35s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.tickDraw path {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: tick-draw 0.4s ease 0.2s forwards;
+}
+
+@keyframes tick-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes tick-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tickPop {
+    animation: none;
+  }
+  .tickDraw path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

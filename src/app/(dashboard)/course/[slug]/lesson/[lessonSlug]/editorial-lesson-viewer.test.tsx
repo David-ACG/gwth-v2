@@ -229,14 +229,29 @@ describe("EditorialLessonViewer intro video", () => {
     expect(updateAction).toHaveBeenCalledTimes(1)
   })
 
-  it("shows the honest gate state before and after the 80% mark", async () => {
+  it("signals the 80% mark with the wordless ticks, not gate copy", async () => {
     const user = userEvent.setup()
     render(
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="video" />
     )
-    expect(screen.getByText(/GATE 1 \/ 2 · 0% WATCHED/)).toBeInTheDocument()
+    // Before the mark: no ticks anywhere.
+    expect(screen.queryByTestId("video-watched-tick")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("continue-tick")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("gate-tick")).not.toBeInTheDocument()
+
     await user.click(screen.getByText("simulate-watch-85"))
-    expect(await screen.findByText("GATE 1 / 2 · CLEARED")).toBeInTheDocument()
+
+    // After: tick on the video, tick in CONTINUE, tick on progress segment 1.
+    expect(await screen.findByTestId("video-watched-tick")).toBeInTheDocument()
+    expect(screen.getByTestId("continue-tick")).toBeInTheDocument()
+    expect(screen.getByTestId("gate-tick")).toBeInTheDocument()
+
+    // The mechanics copy is gone for good.
+    expect(screen.queryByText(/GATE 1 \/ 2/)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Counts toward completion/)
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText("THRESHOLD")).not.toBeInTheDocument()
   })
 
   it("renders an honest placeholder when the lesson has no intro video", () => {

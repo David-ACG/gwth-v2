@@ -196,6 +196,11 @@ export default async function CourseDetailPage({ params }: PageProps) {
             {totalLessons} lessons · {formatDuration(course.estimatedDuration)}{" "}
             · 3 months
           </p>
+          {/* Completion rules live here, said once — never inside lessons. */}
+          <p className={styles.metaRow}>
+            A lesson counts once its intro video is watched and its short
+            Q&amp;A is passed.
+          </p>
           {progress && (
             <div className={styles.progressWrap}>
               <div className={styles.dashes} aria-hidden="true">

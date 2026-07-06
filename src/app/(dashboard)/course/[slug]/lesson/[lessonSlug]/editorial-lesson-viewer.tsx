@@ -349,7 +349,6 @@ export function EditorialLessonViewer({
     ) {
       videoGateReported.current = true
       updateIntroVideoProgress(lesson.id, fraction)
-      toast.success("Intro video counted. Gate 1 of 2 cleared.")
     }
   }
 
@@ -452,7 +451,8 @@ export function EditorialLessonViewer({
   const isVideo = surface === "video"
   const isQa = surface === "qa"
   const currentPage = isVideo ? 1 : isQa ? lesson.pages.length : pageNum
-  const nextPageTitle = lesson.pages[1]?.title ?? null
+  const videoCleared = watchedFraction >= INTRO_VIDEO_COMPLETION_THRESHOLD
+  const quizPassed = bestQuizScore >= QUIZ_PASS_SCORE
 
   return (
     <div
@@ -495,6 +495,9 @@ export function EditorialLessonViewer({
               pageTotal={lesson.pages.length}
               monthCompleted={lesson.monthCompleted}
               monthTotal={lesson.monthTotal}
+              videoFraction={watchedFraction}
+              videoCleared={videoCleared}
+              quizPassed={quizPassed}
             />
 
             <div className="flex flex-1 justify-center py-9">
@@ -504,11 +507,7 @@ export function EditorialLessonViewer({
                   lessonTitle={lesson.title}
                   pageTitle={lesson.pages[0]?.title ?? "Why this lesson exists"}
                   pageTotal={lesson.pages.length}
-                  watchedPct={Math.round(watchedFraction * 100)}
-                  cleared={
-                    watchedFraction >= INTRO_VIDEO_COMPLETION_THRESHOLD
-                  }
-                  nextPageTitle={nextPageTitle}
+                  cleared={videoCleared}
                   onProgressChange={handleIntroVideoProgress}
                 />
               ) : isQa ? (
@@ -566,6 +565,8 @@ export function EditorialLessonViewer({
                   pageTotal={lesson.pages.length}
                   onNext={() => goToPage(2)}
                   prevDisabled
+                  nextVariant={videoCleared ? "primary" : "ghost"}
+                  nextTick={videoCleared}
                 />
               </div>
             )}
@@ -694,6 +695,9 @@ function LessonChrome({
   pageTotal,
   monthCompleted,
   monthTotal,
+  videoFraction = 0,
+  videoCleared = false,
+  quizPassed = false,
 }: {
   monthLabel: string
   lessonNumber: number
@@ -702,9 +706,25 @@ function LessonChrome({
   pageTotal: number
   monthCompleted: number
   monthTotal: number
+  /** Live intro-video watched fraction (0–1); part-fills the first segment. */
+  videoFraction?: number
+  videoCleared?: boolean
+  quizPassed?: boolean
 }) {
-  const lessonPct = ((pageNum - 1) / pageTotal) * 100
+  // The lesson bar is the single progress channel: segment 1 fills as the
+  // intro video is watched (tick at the 80% gate), middle segments fill by
+  // page position, the last segment fills when the Q&A is passed.
+  const progress = Math.max(
+    pageNum - 1,
+    videoCleared ? 1 : Math.min(videoFraction, 0.99),
+    quizPassed ? pageTotal : 0
+  )
+  const lessonPct = (progress / pageTotal) * 100
   const monthPct = (monthCompleted / monthTotal) * 100
+  const gateTicks = [
+    ...(videoCleared ? [0] : []),
+    ...(quizPassed ? [pageTotal - 1] : []),
+  ]
   return (
     <div className="border-b border-border pb-[18px] pt-[22px]">
       <div className="flex items-center justify-between gap-4">
@@ -725,7 +745,12 @@ function LessonChrome({
             <span>LESSON {String(lessonNumber).padStart(2, "0")} PROGRESS</span>
             <span>{Math.round(lessonPct)}%</span>
           </div>
-          <SegmentedBar value={pageNum - 1} total={pageTotal} />
+          <SegmentedBar
+            value={Math.floor(progress)}
+            partial={progress - Math.floor(progress)}
+            ticks={gateTicks}
+            total={pageTotal}
+          />
         </div>
         <div>
           <div className="mb-1 flex justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
@@ -745,30 +770,61 @@ function SegmentedBar({
   value,
   total,
   frozen,
+  partial = 0,
+  ticks = [],
 }: {
   value: number
   total: number
   frozen?: boolean
+  /** 0–1 part-fill of the segment at index `value` (live video progress). */
+  partial?: number
+  /** Segment indices that carry a gate tick (video watched, Q&A passed). */
+  ticks?: number[]
 }) {
+  const fillClass = frozen ? "bg-[var(--v-muted)]" : "bg-[var(--v-dash-active)]"
   return (
     <div
       className="grid gap-[3px]"
       style={{ gridTemplateColumns: `repeat(${total}, 1fr)` }}
     >
       {Array.from({ length: total }).map((_, i) => (
-        <div
-          key={i}
-          className={cn(
-            "h-[3px]",
-            i < value
-              ? frozen
-                ? "bg-[var(--v-muted)]"
-                : "bg-[var(--v-dash-active)]"
-              : "bg-[var(--v-dash)]"
+        <div key={i} className="relative h-[3px] bg-[var(--v-dash)]">
+          {(i < value || (i === value && partial > 0)) && (
+            <div
+              className={cn("absolute inset-y-0 left-0", fillClass)}
+              style={{ width: i < value ? "100%" : `${partial * 100}%` }}
+            />
           )}
-        />
+          {ticks.includes(i) && <GateTick />}
+        </div>
       ))}
     </div>
+  )
+}
+
+/** Small square tick pinned to a segment's end — a cleared gate, no words. */
+function GateTick() {
+  return (
+    <span
+      data-testid="gate-tick"
+      className={cn(
+        "absolute -top-[5px] right-0 z-10 flex size-[13px] items-center justify-center bg-[var(--v-dash-active)] text-background",
+        styles.tickPop
+      )}
+    >
+      <svg
+        width="8"
+        height="8"
+        viewBox="0 0 10 10"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        <path d="M2 5l2 2 4-4" />
+      </svg>
+    </span>
   )
 }
 
@@ -806,6 +862,8 @@ function PageFooter({
   onCancelAdvance,
   prevDisabled,
   nextLabel = "CONTINUE",
+  nextVariant = "primary",
+  nextTick,
 }: {
   pageNum: number
   pageTotal: number
@@ -816,6 +874,10 @@ function PageFooter({
   onCancelAdvance?: () => void
   prevDisabled?: boolean
   nextLabel?: string
+  /** Video page renders CONTINUE as ghost until the watch gate clears. */
+  nextVariant?: "primary" | "ghost"
+  /** Draws a tick inside CONTINUE the moment the gate clears. */
+  nextTick?: boolean
 }) {
   return (
     <div className="mt-9 flex items-center justify-between gap-4 border-t border-border pt-[22px]">
@@ -832,7 +894,28 @@ function PageFooter({
       </div>
       <div className="relative flex min-w-[220px] justify-end">
         {advancing && <AdvancingPing onCancel={onCancelAdvance} />}
-        <SharpButton variant="primary" className="min-w-[220px]" onClick={onNext}>
+        <SharpButton
+          variant={nextVariant}
+          className="min-w-[220px]"
+          onClick={onNext}
+        >
+          {nextTick && (
+            <svg
+              data-testid="continue-tick"
+              className={styles.tickDraw}
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M2 6.5l2.5 2.5L10 3.5" />
+            </svg>
+          )}
           {nextLabel} <span aria-hidden="true">→</span>
         </SharpButton>
       </div>
@@ -1385,9 +1468,7 @@ function VideoPageBody({
   lessonTitle,
   pageTitle,
   pageTotal,
-  watchedPct,
   cleared,
-  nextPageTitle,
   onProgressChange,
 }: {
   /** Resolved intro-video URL (already through `mediaUrl()`), or null. */
@@ -1395,11 +1476,8 @@ function VideoPageBody({
   lessonTitle: string
   pageTitle: string
   pageTotal: number
-  /** Highest watched fraction as a whole percentage (persisted or live). */
-  watchedPct: number
   /** True once the 80% completion gate is cleared. */
   cleared: boolean
-  nextPageTitle: string | null
   onProgressChange: (fraction: number) => void
 }) {
   return (
@@ -1412,13 +1490,39 @@ function VideoPageBody({
       </h2>
 
       {videoUrl ? (
-        <div className="border border-foreground">
+        <div className="relative border border-foreground">
           <VideoPlayer
             src={videoUrl}
             title={`${lessonTitle} intro video`}
             className="rounded-none"
             onProgressChange={onProgressChange}
           />
+          {cleared && (
+            <span
+              data-testid="video-watched-tick"
+              role="img"
+              aria-label="Watched. Counts toward lesson completion."
+              className={cn(
+                "absolute right-3 top-3 z-10 flex size-[22px] items-center justify-center bg-primary text-primary-foreground",
+                styles.tickPop
+              )}
+            >
+              <svg
+                className={styles.tickDraw}
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M2 6.5l2.5 2.5L10 3.5" />
+              </svg>
+            </span>
+          )}
         </div>
       ) : (
         <div
@@ -1430,105 +1534,6 @@ function VideoPageBody({
           </div>
         </div>
       )}
-
-      {cleared ? (
-        <div
-          className="mt-[18px] grid grid-cols-[auto_1fr_auto] items-center gap-[18px] border bg-card px-5 py-4"
-          style={{
-            borderColor: "var(--success)",
-          }}
-        >
-          <StatusIcon state="done" />
-          <div>
-            <div className="text-[14.5px] font-semibold">
-              Counts toward completion.{" "}
-              <span className={styles.accent}>
-                You passed the 80% mark.
-              </span>
-            </div>
-            <div className="mt-0.5 text-[13px] italic text-muted-foreground">
-              Lesson completion needs the intro watched to 80% and the Q&amp;A
-              passed. One down.
-            </div>
-          </div>
-          <span
-            className="font-mono text-[10.5px] font-bold uppercase tracking-[0.18em]"
-            style={{ color: "var(--success)" }}
-          >
-            GATE 1 / 2 · CLEARED
-          </span>
-        </div>
-      ) : (
-        <div className="mt-[18px] grid grid-cols-[auto_1fr_auto] items-center gap-[18px] border border-foreground bg-card px-5 py-4">
-          <StatusIcon state="current" />
-          <div>
-            <div className="text-[14.5px] font-semibold">
-              Counts toward completion.{" "}
-              <span className={styles.accent}>
-                Watch to the 80% mark to clear this gate.
-              </span>
-            </div>
-            <div className="mt-0.5 text-[13px] italic text-muted-foreground">
-              Lesson completion needs the intro watched to 80% and the Q&amp;A
-              passed.
-            </div>
-          </div>
-          <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-            GATE 1 / 2 · {watchedPct}% WATCHED
-          </span>
-        </div>
-      )}
-
-      <div className="mt-3.5 grid grid-cols-3 border border-border">
-        <VideoMeta
-          tag="WATCHED"
-          value={`${watchedPct}%`}
-          sub={cleared ? "gate cleared" : "keep watching"}
-        />
-        <VideoMeta
-          tag="THRESHOLD"
-          value="80%"
-          sub="counts as watched"
-          bordered
-        />
-        <VideoMeta
-          tag="UP NEXT"
-          value="Page 2"
-          sub={nextPageTitle ?? "End of lesson"}
-          bordered
-        />
-      </div>
-    </div>
-  )
-}
-
-function VideoMeta({
-  tag,
-  value,
-  sub,
-  bordered,
-}: {
-  tag: string
-  value: string
-  sub: string
-  bordered?: boolean
-}) {
-  return (
-    <div
-      className={cn(
-        "px-[18px] py-3.5",
-        bordered && "border-l border-border"
-      )}
-    >
-      <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-        {tag}
-      </div>
-      <div className="mt-1 text-[22px] font-semibold tabular-nums tracking-[-0.02em]">
-        {value}
-      </div>
-      <div className="text-[12.5px] italic text-muted-foreground">
-        {sub}
-      </div>
     </div>
   )
 }
