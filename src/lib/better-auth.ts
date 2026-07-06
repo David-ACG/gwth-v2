@@ -26,6 +26,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { nextCookies } from "better-auth/next-js"
 import { getDb, schema } from "@/db"
 import { sendPlunkEmail } from "@/lib/email/plunk"
+import { renderFdeEmail } from "@/lib/email/fde-layout"
 import {
   applyBetaAccessGrantToUser,
   isEmailGrantedBetaAccess,
@@ -104,13 +105,26 @@ function buildAuth() {
       requireEmailVerification: true,
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: async ({ user, url }) => {
+        const parts = renderFdeEmail({
+          kicker: "Password reset",
+          heading: `Reset your password, ${user.name || "there"}.`,
+          blocks: [
+            {
+              type: "p",
+              text: "We received a request to reset your GWTH.ai password. Use the button below to choose a new one.",
+            },
+            {
+              type: "p",
+              text: "If you didn't request this, you can safely ignore this email.",
+            },
+          ],
+          cta: { label: "Reset your password", href: url },
+        })
         await sendPlunkEmail({
           to: user.email,
           subject: "Reset your GWTH.ai password",
-          body: `<p>Hi ${user.name || "there"},</p>
-<p>We received a request to reset your GWTH.ai password. Click the link below to choose a new one:</p>
-<p><a href="${url}">Reset your password</a></p>
-<p>If you didn't request this, you can safely ignore this email.</p>`,
+          body: parts.html,
+          text: parts.text,
         })
       },
     },
@@ -123,13 +137,26 @@ function buildAuth() {
       sendOnSignIn: true,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
+        const parts = renderFdeEmail({
+          kicker: "Confirm your email",
+          heading: `Welcome to GWTH.ai, ${user.name || "there"}.`,
+          blocks: [
+            {
+              type: "p",
+              text: "Please confirm your email address using the button below to finish setting up your account.",
+            },
+            {
+              type: "p",
+              text: "If you didn't create this account, you can safely ignore this email.",
+            },
+          ],
+          cta: { label: "Verify your email", href: url },
+        })
         await sendPlunkEmail({
           to: user.email,
           subject: "Verify your GWTH.ai email",
-          body: `<p>Hi ${user.name || "there"},</p>
-<p>Welcome to GWTH.ai. Please confirm your email address by clicking the link below:</p>
-<p><a href="${url}">Verify your email</a></p>
-<p>If you didn't create this account, you can safely ignore this email.</p>`,
+          body: parts.html,
+          text: parts.text,
         })
       },
     },

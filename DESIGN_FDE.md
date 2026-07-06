@@ -690,6 +690,50 @@ already ships; the register's ink/paper does the work.
 - If line emphasis is ever needed, use a `--v-ochre` left rule on the line,
   never a coloured background wash — the palette stays ink/paper/ochre.
 
+### 5.12 Transactional email (W17, bible item email-register)
+
+All transactional + nurture email (waitlist confirm, beta invite, email
+verification, password reset, admin notifications) uses one email-safe FDE
+adaptation, built by the shared helper `renderFdeEmail()` in
+`src/lib/email/fde-layout.ts`. Every builder returns `{ html, text }` so a
+plain-text part always ships alongside the HTML. Email clients strip `<style>`
+blocks and web fonts, so everything is inline and uses **email-safe hex** (not
+`--v-*` tokens) and **system serif/mono** faces only.
+
+The recipe (binding):
+
+- **Layout:** a single 600px single-column `<table>`, centred on a paper-cream
+  ground `#faf6ef`, 1px ink border (`#1a1c18`). No fluid multi-column.
+- **Type:** `Georgia, 'Times New Roman', Times, serif` for display + body;
+  `'Courier New', Courier, monospace` for the mono kicker, footer and logo.
+- **Masthead:** a terracotta (`#a94c2e`) `GWTH.ai` mono text logo on the cream
+  ground, an ink hairline below. No image logo (nothing image-required to read).
+- **Body:** optional mono uppercase kicker (`--v-muted` grey `#5a5c52`), a serif
+  bold headline, serif body paragraphs (`#3a3c34`). List blocks are a
+  hairline-boxed set of ticked lines (`&#10003;`).
+- **CTA:** at most one bulletproof solid-teal (`#2c4a47`) table button, cream
+  label, **sentence case**, square corners.
+- **Structure:** 1px ink hairlines only. Square corners everywhere. NO
+  gradients, NO shadows, NO border-radius, NO images required to read.
+- **Copy:** British English, no emojis, no em dashes. The plain-text part
+  mirrors the same content (kicker uppercased, list as `-` bullets, CTA as
+  `label: href`).
+
+```ts
+import { renderFdeEmail } from "@/lib/email/fde-layout"
+
+const { html, text } = renderFdeEmail({
+  kicker: "Waitlist confirmed",
+  heading: "You're on the list, Sam.",
+  blocks: [{ type: "p", text: "..." }, { type: "list", items: ["..."] }],
+  cta: { label: "Explore the Tech Radar", href: "https://gwth.ai/tech-radar" },
+})
+await sendPlunkEmail({ to, subject, body: html, text })
+```
+
+The old gradient-header `buildWaitlistEmailHtml()` (rounded corners, sans-serif,
+blue button) was the bible-flagged VIOLATION and is retired.
+
 ---
 
 ## 6. Application map

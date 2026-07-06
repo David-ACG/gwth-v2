@@ -9,6 +9,7 @@ import {
   stateForCourseMonth,
 } from "@/lib/billing/access"
 import { sendPlunkEmail } from "@/lib/email/plunk"
+import { renderFdeEmail } from "@/lib/email/fde-layout"
 
 const betaAccessSchema = z.object({
   apiKey: z.string().min(1),
@@ -32,17 +33,30 @@ const betaAccessSchema = z.object({
 async function sendBetaInviteEmail(email: string): Promise<boolean> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://gwth.ai"
   try {
+    const parts = renderFdeEmail({
+      kicker: "Beta access granted",
+      heading: "You're in. Your GWTH.ai beta access is ready.",
+      blocks: [
+        {
+          type: "p",
+          text: "You have been given early access to the GWTH.ai beta. There is nothing to pay, your access is on us during the beta.",
+        },
+        {
+          type: "p",
+          text: `To get started, sign up with this email address at ${siteUrl}/signup and confirm your email. Then read the short beta guide at ${siteUrl}/guide: what is ready, what is switched off on purpose, and how to report problems.`,
+        },
+        {
+          type: "p",
+          text: "If anything looks wrong, please use the report a problem panel inside the app. Thank you for testing early.",
+        },
+      ],
+      cta: { label: "Sign up and confirm", href: `${siteUrl}/signup` },
+    })
     return await sendPlunkEmail({
       to: email,
       subject: "You're in: your GWTH.ai beta access",
-      body: `<p>Hi,</p>
-<p>You have been given early access to the GWTH.ai beta. There is nothing to pay, your access is on us during the beta.</p>
-<p>To get started:</p>
-<ol>
-<li>Sign up with this email address at <a href="${siteUrl}/signup">${siteUrl}/signup</a>, then confirm your email.</li>
-<li>Read the short beta guide at <a href="${siteUrl}/guide">${siteUrl}/guide</a>: what is ready, what is switched off on purpose, and how to report problems.</li>
-</ol>
-<p>If anything looks wrong, please use the report a problem panel inside the app. Thank you for testing early.</p>`,
+      body: parts.html,
+      text: parts.text,
     })
   } catch {
     return false

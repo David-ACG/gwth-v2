@@ -1,0 +1,14 @@
+GWTH.ai
+
+NEW CONTACT MESSAGE
+
+Someone sent a message via the contact form.
+
+Name: Sam Rivera
+
+Email: sam@example.com
+
+Message: Loving the Tech Radar. When does the course open for earlybirds?
+
+--
+GWTH.ai admin notification.

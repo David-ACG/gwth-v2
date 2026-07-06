@@ -9,6 +9,7 @@
 
 import { getDb } from "@/db"
 import { waitlist } from "@/db/schema"
+import { renderFdeEmail, type EmailParts } from "@/lib/email/fde-layout"
 
 const PLUNK_API_URL = "https://api.useplunk.com/v1/send"
 const FROM_EMAIL = "david@gwth.ai"
@@ -22,7 +23,10 @@ const ADMIN_EMAIL = "david@agilecommercegroup.com"
 async function sendEmail(params: {
   to: string
   subject: string
+  /** HTML part. */
   body: string
+  /** Optional plain-text alternative shipped alongside the HTML (W17). */
+  text?: string
   name?: string
 }): Promise<boolean> {
   const secretKey = process.env.PLUNK_SECRET_KEY
@@ -39,6 +43,7 @@ async function sendEmail(params: {
         to: params.to,
         subject: params.subject,
         body: params.body,
+        ...(params.text ? { text: params.text } : {}),
         from: FROM_EMAIL,
         name: params.name ?? FROM_NAME,
       }),
@@ -58,94 +63,60 @@ async function sendEmail(params: {
 }
 
 /**
- * Builds the waitlist confirmation HTML email.
- * Friendly, professional, and on-brand.
+ * Builds the waitlist confirmation email on the FDE register (W17).
+ * Returns both an HTML part and a matching plain-text part.
  */
-function buildWaitlistEmailHtml(name: string): string {
-  const firstName = name.split(" ")[0]
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:560px;margin:40px auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#0E7C7B,#33BBFF);padding:32px 40px;text-align:center;">
-      <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:700;letter-spacing:-0.5px;">GWTH.ai</h1>
-      <p style="margin:8px 0 0;color:rgba(255,255,255,0.9);font-size:14px;">Learn to Build with AI</p>
-    </div>
-
-    <!-- Body -->
-    <div style="padding:40px;">
-      <h2 style="margin:0 0 16px;color:#0F2624;font-size:22px;font-weight:600;">You're on the list, ${firstName}.</h2>
-      <p style="margin:0 0 16px;color:#5E6E85;font-size:16px;line-height:1.6;">
-        Thanks for joining the GWTH earlybird waitlist. We are building something genuinely different — an AI course that is updated every single day, built by practitioners, and completely independent. No sponsors. No ads. No vendor partnerships.
-      </p>
-      <p style="margin:0 0 16px;color:#5E6E85;font-size:16px;line-height:1.6;">
-        As an earlybird, you will be among the first to access the course when it launches. We will email you as soon as it is ready.
-      </p>
-
-      <!-- What to expect -->
-      <div style="background:#f8fafb;border-radius:8px;padding:20px;margin:24px 0;">
-        <p style="margin:0 0 12px;color:#0F2624;font-size:14px;font-weight:600;">What you will get:</p>
-        <table style="width:100%;border-collapse:collapse;">
-          <tr>
-            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; 94 hands-on projects — no theory, no fluff</td>
-          </tr>
-          <tr>
-            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; Video walkthroughs for every single project</td>
-          </tr>
-          <tr>
-            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; 60+ AI tools tracked and compared daily</td>
-          </tr>
-          <tr>
-            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; Content updated every day so your skills never go stale</td>
-          </tr>
-          <tr>
-            <td style="padding:6px 0;color:#5E6E85;font-size:14px;line-height:1.5;">&#10003;&ensp; No coding required — everything in plain English</td>
-          </tr>
-        </table>
-      </div>
-
-      <p style="margin:0 0 24px;color:#5E6E85;font-size:16px;line-height:1.6;">
-        In the meantime, feel free to explore the <a href="https://gwth.ai/tech-radar" style="color:#33BBFF;text-decoration:none;font-weight:500;">Tech Radar</a> — it is live right now and tracks 60+ AI tools daily.
-      </p>
-
-      <!-- CTA -->
-      <div style="text-align:center;margin:32px 0 8px;">
-        <a href="https://gwth.ai/tech-radar" style="display:inline-block;background:#33BBFF;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:600;">Explore the Tech Radar</a>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div style="padding:24px 40px;border-top:1px solid #eee;text-align:center;">
-      <p style="margin:0;color:#9CA3AF;font-size:12px;line-height:1.5;">
-        GWTH.ai — Independent AI education, updated every day.<br>
-        You are receiving this because you joined the earlybird waitlist.
-      </p>
-    </div>
-  </div>
-</body>
-</html>`
+function buildWaitlistEmail(name: string): EmailParts {
+  const firstName = name.split(" ")[0]?.trim() || "there"
+  return renderFdeEmail({
+    kicker: "Waitlist confirmed",
+    heading: `You're on the list, ${firstName}.`,
+    blocks: [
+      {
+        type: "p",
+        text: "Thanks for joining the GWTH earlybird waitlist. We are building something genuinely different: an AI course that is updated every single day, built by practitioners, and completely independent. No sponsors, no ads, no vendor partnerships.",
+      },
+      {
+        type: "p",
+        text: "As an earlybird, you will be among the first to access the course when it launches. We will email you as soon as it is ready.",
+      },
+      {
+        type: "list",
+        items: [
+          "94 hands-on projects, no theory and no fluff",
+          "Video walkthroughs for every single project",
+          "60+ AI tools tracked and compared daily",
+          "Content updated every day so your skills never go stale",
+          "No coding required, everything in plain English",
+        ],
+      },
+      {
+        type: "p",
+        text: "In the meantime, explore the Tech Radar. It is live right now and tracks 60+ AI tools daily.",
+      },
+    ],
+    cta: { label: "Explore the Tech Radar", href: "https://gwth.ai/tech-radar" },
+    footer: [
+      "GWTH.ai. Independent AI education, updated every day.",
+      "You are receiving this because you joined the earlybird waitlist.",
+    ],
+  })
 }
 
 /**
- * Builds the admin notification HTML for a new waitlist signup.
+ * Builds the admin notification email for a new waitlist signup (FDE register).
  */
-function buildAdminNotificationHtml(name: string, email: string): string {
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:480px;margin:20px auto;padding:24px;background:#ffffff;border-radius:8px;border:1px solid #e5e7eb;">
-    <h2 style="margin:0 0 16px;color:#0F2624;font-size:18px;">New Waitlist Signup</h2>
-    <p style="margin:0 0 8px;color:#5E6E85;font-size:14px;"><strong>Name:</strong> ${name}</p>
-    <p style="margin:0 0 8px;color:#5E6E85;font-size:14px;"><strong>Email:</strong> ${email}</p>
-    <p style="margin:0;color:#5E6E85;font-size:14px;"><strong>Time:</strong> ${new Date().toISOString()}</p>
-  </div>
-</body>
-</html>`
+function buildAdminNotification(name: string, email: string): EmailParts {
+  return renderFdeEmail({
+    kicker: "New waitlist signup",
+    heading: "A new earlybird joined the waitlist.",
+    blocks: [
+      { type: "p", text: `Name: ${name}` },
+      { type: "p", text: `Email: ${email}` },
+      { type: "p", text: `Time: ${new Date().toISOString()}` },
+    ],
+    footer: ["GWTH.ai admin notification."],
+  })
 }
 
 /**
@@ -193,17 +164,21 @@ export async function subscribeToWaitlist(params: {
   }
 
   try {
+    const userEmail = buildWaitlistEmail(params.name)
+    const adminEmail = buildAdminNotification(params.name, params.email)
     // Send both emails concurrently
     const [userSent, adminSent] = await Promise.all([
       sendEmail({
         to: params.email,
         subject: "You're on the GWTH earlybird list",
-        body: buildWaitlistEmailHtml(params.name),
+        body: userEmail.html,
+        text: userEmail.text,
       }),
       sendEmail({
         to: ADMIN_EMAIL,
         subject: `New waitlist signup: ${params.name}`,
-        body: buildAdminNotificationHtml(params.name, params.email),
+        body: adminEmail.html,
+        text: adminEmail.text,
       }),
     ])
 
@@ -260,17 +235,21 @@ export async function submitContactForm(params: {
     }
   }
 
+  const contactEmail = renderFdeEmail({
+    kicker: "New contact message",
+    heading: "Someone sent a message via the contact form.",
+    blocks: [
+      { type: "p", text: `Name: ${params.name}` },
+      { type: "p", text: `Email: ${params.email}` },
+      { type: "p", text: `Message: ${params.message}` },
+    ],
+    footer: ["GWTH.ai admin notification."],
+  })
   await sendEmail({
     to: ADMIN_EMAIL,
     subject: `Contact form: ${params.name}`,
-    body: `
-<div style="font-family:sans-serif;max-width:480px;margin:20px auto;padding:24px;background:#fff;border-radius:8px;border:1px solid #e5e7eb;">
-  <h2 style="margin:0 0 16px;font-size:18px;">New Contact Form Message</h2>
-  <p><strong>Name:</strong> ${params.name}</p>
-  <p><strong>Email:</strong> ${params.email}</p>
-  <p><strong>Message:</strong></p>
-  <p style="white-space:pre-wrap;">${params.message}</p>
-</div>`,
+    body: contactEmail.html,
+    text: contactEmail.text,
   })
 
   return {

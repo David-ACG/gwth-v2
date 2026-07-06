@@ -26,7 +26,10 @@ const FROM_NAME = "GWTH.ai"
 export async function sendPlunkEmail(params: {
   to: string
   subject: string
+  /** HTML part. */
   body: string
+  /** Optional plain-text alternative shipped alongside the HTML (W17). */
+  text?: string
 }): Promise<boolean> {
   const apiKey = process.env.PLUNK_SECRET_KEY ?? process.env.PLUNK_API_KEY
   if (!apiKey) {
@@ -47,6 +50,7 @@ export async function sendPlunkEmail(params: {
         to: params.to,
         subject: params.subject,
         body: params.body,
+        ...(params.text ? { text: params.text } : {}),
         from: FROM_EMAIL,
         name: FROM_NAME,
       }),
