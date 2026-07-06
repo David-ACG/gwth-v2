@@ -108,10 +108,10 @@ export default async function NewsPage({
           {articles.length === 0 ? (
             <div className="mt-6">
               <EmptyState
-                icon={Newspaper}
+                kicker="No results"
                 title="No articles found"
                 description="Try adjusting your filters or search query."
-                action={{ label: "Clear Filters", href: "/news" }}
+                action={{ label: "Clear filters", href: "/news" }}
               />
             </div>
           ) : (

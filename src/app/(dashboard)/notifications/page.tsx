@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { getNotifications } from "@/lib/data/notifications"
 import { EmptyState } from "@/components/shared/empty-state"
-import { Bell, Trophy, Clock, Megaphone } from "lucide-react"
+import { Trophy, Clock, Megaphone } from "lucide-react"
 import { formatRelativeDate } from "@/lib/utils"
 import type { NotificationType } from "@/lib/types"
 import styles from "./notifications-fde.module.css"
@@ -40,9 +40,9 @@ export default async function NotificationsPage() {
 
       {notifications.length === 0 ? (
         <EmptyState
-          icon={Bell}
-          title="No notifications"
-          description="You're all caught up! Check back later for updates."
+          kicker="No notifications"
+          title="You're all caught up"
+          description="Check back later for updates on your learning."
         />
       ) : (
         <ul className={styles.list}>

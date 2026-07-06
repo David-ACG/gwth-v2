@@ -3,7 +3,6 @@ import { getBookmarks } from "@/lib/data/bookmarks"
 import { getCourses } from "@/lib/data/courses"
 import { getLabs } from "@/lib/data/labs"
 import { EmptyState } from "@/components/shared/empty-state"
-import { Bookmark } from "lucide-react"
 import { formatRelativeDate } from "@/lib/utils"
 import Link from "next/link"
 import styles from "./bookmarks-fde.module.css"
@@ -65,10 +64,10 @@ export default async function BookmarksPage() {
 
       {items.length === 0 ? (
         <EmptyState
-          icon={Bookmark}
-          title="No bookmarks yet"
+          kicker="No bookmarks yet"
+          title="Nothing saved yet"
           description="Save lessons and labs to access them quickly later."
-          action={{ label: "Start Learning", href: "/course/applied-ai-skills" }}
+          action={{ label: "Start learning", href: "/course/applied-ai-skills" }}
         />
       ) : (
         <div className={styles.list}>

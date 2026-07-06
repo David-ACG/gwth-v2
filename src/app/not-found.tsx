@@ -1,22 +1,29 @@
 import Link from "next/link"
+import styles from "@/components/shared/state-fde.module.css"
 
 /**
- * Custom 404 page. Shown when a route doesn't match any page.
+ * Custom 404 page. FDE journal register (bible item empty-error-states):
+ * paper panel, ink border, mono kicker, serif line, one way home. No giant
+ * ghost "404" numeral. See DESIGN_FDE.md §5 "Empty/error states".
  */
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-4 text-center">
-      <div className="text-6xl font-bold text-muted-foreground/30">404</div>
-      <h1 className="text-2xl font-semibold">Page not found</h1>
-      <p className="max-w-md text-muted-foreground">
-        The page you&apos;re looking for doesn&apos;t exist or has been moved.
-      </p>
-      <Link
-        href="/"
-        className="mt-2 rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-      >
-        Home
-      </Link>
+    <div className={styles.shell}>
+      <div className={`${styles.page} ${styles.pageTall}`}>
+        <div className={styles.panel} role="status">
+          <p className={styles.kicker}>Page not found</p>
+          <h1 className={styles.title}>We couldn&apos;t find that page</h1>
+          <p className={styles.body}>
+            The page you&apos;re looking for doesn&apos;t exist or has been
+            moved.
+          </p>
+          <div className={styles.action}>
+            <Link href="/" className={styles.button}>
+              Back home
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

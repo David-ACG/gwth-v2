@@ -608,6 +608,88 @@ The FDE recipe, derived from the register's idioms:
 The footer follows the same conversion: `--v-surface` ground, ink top rule,
 mono column headers, serif links.
 
+### 5.10 Empty / error states (W18, bible item empty-error-states — DRAFT)
+
+One recipe covers all three "there is nothing to show" surfaces — empty
+lists, error boundaries and 404s. A centred paper panel with a **1px ink**
+border (stronger than a card's `--v-line`), a mono kicker stating the state,
+a serif one-line explanation and **at most one** §5.3 button as the way out.
+No illustrations, no icons-in-circles, no giant ghost "404", no rounded
+shadow. The shared implementation is
+[src/components/shared/state-fde.module.css](src/components/shared/state-fde.module.css)
+(consumed by `empty-state.tsx`, `app/error.tsx`, `not-found.tsx` and every
+route-group variant).
+
+```css
+.panel {
+  width: min(30rem, 100%);
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.85rem;
+}
+.kicker {                        /* the state, mono §3 */
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--v-muted);
+}
+.kickerFault { color: var(--v-rust); }   /* error boundaries only */
+.title { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
+.body  { font-size: 0.98rem; line-height: 1.65; color: var(--v-soft); max-width: 34rem; }
+```
+
+- **Kickers are fixed by state, not by page.** Empty lists: a short subject
+  line ("No bookmarks yet", "No results"). Errors: `SOMETHING WENT WRONG` in
+  rust (`.kickerFault`) — colour + text, never colour alone (§7). 404s:
+  `PAGE NOT FOUND`. The serif `.title` carries the friendly sentence, the
+  `.body` the one-line explanation.
+- **One way out.** A single `.buttonSolid` (§5.3) — "Try again" (reset) for
+  errors, "Back home" / "Browse labs" for 404s, a start CTA for empty lists.
+  Never two buttons, never a "contact support" secondary link.
+- **Two frames.** `.inline` (padded, no min-height) sits inside an existing
+  page measure for empty lists; `.page` (`min-height: 60vh`, or `.pageTall`
+  100vh at the root) owns the viewport for error boundaries and 404s.
+- **Dev digest only.** `error.message` renders in a quiet mono `.digest`
+  block gated on `NODE_ENV === "development"` — never in production.
+- Admin keeps its own denser `AdminEmptyState` / `admin-fde` error card
+  (§6 functional-priority surface); it already follows this recipe.
+
+### 5.11 Lesson code page (mono code block on paper)
+
+Code shown inside a lesson (snippets, terminal output, config) is a mono
+block on paper, framed like every other FDE panel — **not** a syntax-themed
+IDE card. No new highlighter dependency, no imported colour theme beyond what
+already ships; the register's ink/paper does the work.
+
+```css
+.codeBlock {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.85rem; line-height: 1.6;
+  color: var(--v-ink);
+  background: var(--v-surface);
+  border: 1px solid var(--v-ink);      /* 1px ink border, square corners */
+  border-radius: 0;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;                    /* wide lines scroll, never wrap-break */
+  white-space: pre;
+}
+.codeCaption {                          /* optional file/lang label above */
+  composes: mono;                       /* 0.7rem, 0.16em, uppercase, --v-muted */
+  margin-bottom: 0.5rem;
+}
+```
+
+- Ink border (§5.7 strength), square corners, `--v-surface` paper — it reads
+  as a page artefact, not a floating widget. No shadow at rest.
+- An optional mono caption above names the file or language
+  (`app/config.ts`, `BASH`) in the §3 mono voice; the code itself stays ink
+  on paper. Inline `code` inside body copy uses the same mono face at
+  `--v-ink` with no background box.
+- If line emphasis is ever needed, use a `--v-ochre` left rule on the line,
+  never a coloured background wash — the palette stays ink/paper/ochre.
+
 ---
 
 ## 6. Application map
