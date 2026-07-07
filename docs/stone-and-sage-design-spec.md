@@ -1,5 +1,7 @@
 # GWTH Redesign — "Stone & Sage" (E2-E)
 
+> SUPERSEDED 2026-06-12: Stone & Sage is no longer the current GWTH student-facing register. Use `../DESIGN_FDE.md` and the GWTH style bible item `fde-register` for all new style guidance.
+
 **Locked 2026-04-29 via the `/redesign_v2` swatch picker.** Variant E2-E from the redesign exploration. Lives in production at `/` (and the variant file at `src/app/redesign/v-e-2-e/page.tsx`). Authoritative tokens: `src/app/globals.css` (`:root` and `.dark`, lines ~103–256) and `src/app/redesign/v-e-2-e/page.tsx` for the layout.
 
 ## Colour palette

@@ -852,6 +852,8 @@ Student opens lesson → Learn tab (video + content)
 
 ## 10. Copy & Messaging Guidelines
 
+> Canonical note: this section remains current through the GWTH style bible item `copy-tone`.
+
 ### 10.1 Tone
 
 - Conversational but professional
@@ -898,80 +900,9 @@ When messaging touches these audiences, use these angles:
 
 ## 11. Design System Reference
 
-The full design system is defined in `src/app/globals.css` and documented in `CLAUDE.md`. Key points for page design:
+> SUPERSEDED 2026-06-12: section 11 only is replaced by `DESIGN_FDE.md` and the GWTH style bible item `fde-register`.
 
-### 11.1 Colors (OKLCH)
-
-| Role | Light Mode | Dark Mode ("Graphite Warm") |
-|------|-----------|---------------------------|
-| Background | `oklch(0.98 0 0)` near-white | `oklch(0.17 0.005 60)` warm charcoal |
-| Foreground | `oklch(0.18 0.04 175)` dark teal | `oklch(0.93 0.008 60)` warm off-white |
-| Primary | `oklch(0.7 0.18 220)` bright aqua | `oklch(0.75 0.16 220)` lighter aqua |
-| Accent | `oklch(0.65 0.16 165)` mint green | `oklch(0.75 0.14 165)` lighter mint |
-| Card | `oklch(1 0 0)` white | `oklch(0.21 0.005 60)` slightly lighter than bg |
-| Destructive | Red | Red |
-| Success | Green | Green |
-| Warning | Amber | Amber |
-
-### 11.2 Typography
-
-- **Body & Headings:** Inter (variable, `--font-inter`)
-- **Code blocks:** JetBrains Mono (variable, `--font-jetbrains`)
-- Loaded via `next/font/google` for zero layout shift
-
-### 11.3 Layout
-
-- Sidebar: 280px (collapsed: 64px)
-- Header: 64px
-- Content max-width: 1400px
-- Corners: 0.625rem radius
-- Shadows: subtle
-
-### 11.4 Status Colors
-
-| Status | Color |
-|--------|-------|
-| Completed | Green (success) |
-| In-progress | Aqua (primary) |
-| Available / Not started | Grey (muted) |
-| Locked | Dark grey with lock icon |
-
-### 11.5 Grade Colors
-
-| Grade | Color |
-|-------|-------|
-| A (90-100) | Green |
-| B (80-89) | Mint |
-| C (70-79) | Amber |
-| D (60-69) | Orange |
-| F (<60) | Red |
-
-### 11.6 Animation
-
-- Use Motion (motion.dev) for transitions and interactions
-- Keep animations subtle and purposeful
-- Respect `prefers-reduced-motion`
-- Landing page: cascading spiral windmill background (see CLAUDE.md for full spec)
-- Dashboard: progress ring animations, staggered card loading
-- Lesson viewer: smooth tab transitions, sidebar collapse/expand
-
-### 11.7 Components
-
-Use shadcn/ui as the component foundation. Key custom components:
-- `CourseCard` — thumbnail, title, progress bar, lesson count
-- `ProgressRing` — circular SVG with Motion animation
-- `StatusBadge` — colored badge with icon + text
-- `StudyStreakCalendar` — GitHub-style activity heatmap
-- `EmptyState` — icon, title, description, CTA
-- `BookmarkButton` — toggle with optimistic UI
-- `SearchPalette` — Cmd+K command palette
-- `QuizEngine` — interactive quiz with scoring
-- `VideoPlayer` — lazy-loaded video embed
-- `AudioPlayer` — inline audio with playback speed
-- `MarkdownRenderer` — lesson content with Shiki code blocks
-- `NotesPanel` — slide-out annotations panel
-- `Spinner` / `PageSpinner` — dual-ring loading indicators
-- `RouteProgress` — top-of-page navigation progress bar
+Do not use the OKLCH, Inter, rounded-corner, shadow, spiral, gradient, or old shadcn styling guidance that previously lived here. For current student-facing page design, use `DESIGN_FDE.md`, the shipped `src/components/marketing/home-fde/` exemplar, and the style bible.
 
 ---
 

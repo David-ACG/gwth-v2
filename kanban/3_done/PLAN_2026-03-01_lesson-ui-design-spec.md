@@ -1,5 +1,7 @@
 # Lesson UI Redesign — Full Design Specification
 
+> SUPERSEDED 2026-07-06: this single-scroll lesson plan is historical only. The shipped lesson design is the page-flip viewer described by GWTH style bible item `lesson-viewer-layout` and `DESIGN_FDE.md`.
+
 **Date:** 2026-03-01
 **Referenced by:** PROMPT_6, PROMPT_7, PROMPT_8
 
