@@ -11,8 +11,10 @@ import * as React from "react"
  * — used by the live colour explorer and any one-off contexts that
  * need a different treatment (mono print, OG images, etc.).
  *
- * The static `/logo-gwth.svg` keeps the original brand colours for
- * any non-React usage (favicons, OG images, emails).
+ * The static `/logo-gwth.svg` carries the locked LIGHT-ground brand
+ * colours (wordmark #22301f, terracotta accent #a94c2e) for any
+ * non-React usage (favicons, OG images, emails). Regenerated from
+ * this geometry in W19 (2026-07-07); it is no longer the retired green.
  */
 export type LogoGwthProps = {
   /** Hex/colour for the GWTH.ai wordmark glyphs. Defaults to `var(--logo-wordmark)`. */
