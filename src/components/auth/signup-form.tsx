@@ -135,6 +135,7 @@ export function PostBetaSignupForm({
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
+        <p className={styles.panelKicker}>Create account</p>
         <h1 className={styles.title}>{title}</h1>
         <p className={styles.subtitle}>{subtitle}</p>
       </div>

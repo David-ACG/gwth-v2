@@ -86,6 +86,7 @@ function ResetPasswordForm() {
     return (
       <div className={styles.panel}>
         <div className={styles.panelHead}>
+          <p className={styles.panelKicker}>Reset password</p>
           <h1 className={styles.title}>Reset link invalid</h1>
           <p className={styles.subtitle}>
             This reset link is missing its token or has expired.
@@ -103,6 +104,7 @@ function ResetPasswordForm() {
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
+        <p className={styles.panelKicker}>Reset password</p>
         <h1 className={styles.title}>Choose a new password</h1>
         <p className={styles.subtitle}>
           Enter a new password for your GWTH.ai account.

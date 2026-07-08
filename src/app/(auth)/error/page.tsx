@@ -31,6 +31,7 @@ export default async function AuthErrorPage({
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
+        <p className={styles.panelKicker}>Sign-in error</p>
         <h1 className={styles.title}>Sign-in didn&apos;t work</h1>
         <p className={styles.subtitle}>{description}</p>
       </div>
