@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sheet"
 import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
+import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
 import type { LessonProgress } from "@/lib/types"
 import styles from "./lesson-fde.module.css"
 
@@ -863,7 +864,6 @@ function MastRow({
         </button>
       )}
       <span className="truncate">{section}</span>
-      <span className="hidden md:inline">FRI 8 MAY 2026 · 14:24 BST</span>
       <span
         className={cn(
           styles.statusActive,
@@ -871,8 +871,7 @@ function MastRow({
         )}
       >
         <span aria-hidden="true">▸</span>
-        <span className="hidden sm:inline">Active · Month 1 of 3</span>
-        <span className="sm:hidden">Active</span>
+        Active
       </span>
     </div>
   )
@@ -1121,7 +1120,7 @@ function AdvancingPing({ onCancel }: { onCancel?: () => void }) {
       onClick={onCancel}
       className="absolute bottom-[calc(100%+10px)] right-0 flex cursor-pointer items-center gap-2.5 whitespace-nowrap border border-primary bg-card px-3 py-2"
     >
-      <span className="size-2 animate-pulse bg-primary" />
+      <span className="size-2 animate-pulse bg-primary motion-reduce:animate-none" />
       <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-primary">
         {ADVANCING_PING_LABEL}
       </span>
@@ -1368,7 +1367,7 @@ function Waveform({ progress }: { progress: number }) {
             className={cn(
               "w-[3px]",
               isHead
-                ? "animate-pulse bg-primary"
+                ? "animate-pulse bg-primary motion-reduce:animate-none"
                 : isPlayed
                   ? "bg-foreground"
                   : "bg-foreground/35"
@@ -2309,9 +2308,8 @@ function MobileSurface({
             <path d="M9 2L4 7l5 5" />
           </svg>
         </button>
-        <span className="text-[16px] font-bold tracking-[-0.02em]">
-          GWTH<span className="text-[var(--v-ochre)]">.ai</span>
-        </span>
+        <LogoGwth className="h-5 w-auto" />
+
         <button
           type="button"
           aria-label="Lesson outline"
