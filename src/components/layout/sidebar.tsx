@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useSidebar } from "@/hooks/use-sidebar"
+import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { SIDEBAR_WIDTH, SIDEBAR_COLLAPSED_WIDTH } from "@/lib/config"
@@ -51,8 +52,12 @@ export function Sidebar() {
       {/* Logo + collapse toggle */}
       <div className="flex h-16 items-center justify-between px-4">
         {isOpen && (
-          <Link href="/dashboard" className={styles.wordmark}>
-            GWTH.ai
+          <Link
+            href="/dashboard"
+            aria-label="GWTH.ai dashboard"
+            className="inline-flex items-center"
+          >
+            <LogoGwth className="h-6 w-auto" />
           </Link>
         )}
         <Button

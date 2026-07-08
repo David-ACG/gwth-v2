@@ -115,21 +115,21 @@ export default async function ProgressPage() {
       <div className={styles.statList}>
         <div className={styles.statListRow}>
           <span className={styles.statListValue}>{completedLessons}</span>
-          <span className={styles.statListLabel}>Lessons Completed</span>
+          <span className={styles.statListLabel}>Lessons completed</span>
           <span className={styles.mono}>All time</span>
         </div>
         <div className={styles.statListRow}>
           <span className={styles.statListValue}>
             {formatDuration(Math.round(totalTimeSpent / 60))}
           </span>
-          <span className={styles.statListLabel}>Time Spent</span>
+          <span className={styles.statListLabel}>Time spent</span>
           <span className={styles.mono}>All time</span>
         </div>
         <div className={styles.statListRow}>
           <span className={styles.statListValue}>
             {streak.currentStreak} days
           </span>
-          <span className={styles.statListLabel}>Current Streak</span>
+          <span className={styles.statListLabel}>Current streak</span>
           <span className={styles.mono}>
             Longest {streak.longestStreak} days
           </span>
@@ -138,7 +138,7 @@ export default async function ProgressPage() {
           <span className={styles.statListValue}>
             {avgQuizScore !== null ? `${avgQuizScore}%` : "·"}
           </span>
-          <span className={styles.statListLabel}>Avg Quiz Score</span>
+          <span className={styles.statListLabel}>Avg quiz score</span>
           <span className={styles.mono}>
             {avgQuizScore !== null ? "Best attempts" : "No quizzes yet"}
           </span>
@@ -153,7 +153,9 @@ export default async function ProgressPage() {
       {/* Course progress */}
       <section className={styles.section}>
         <div className={styles.sectionHead}>
-          <h2 className={styles.sectionTitle}>Course Progress</h2>
+          <h2 className={styles.sectionTitle}>
+            Your course <em>progress.</em>
+          </h2>
           <p className={styles.mono}>Issue by issue</p>
         </div>
         {courseProgress.length === 0 ? (
@@ -203,7 +205,9 @@ export default async function ProgressPage() {
       {/* Certificates placeholder */}
       <section className={styles.section}>
         <div className={styles.sectionHead}>
-          <h2 className={styles.sectionTitle}>Certificates</h2>
+          <h2 className={styles.sectionTitle}>
+            Your <em>certificates.</em>
+          </h2>
           <p className={styles.mono}>Credential</p>
         </div>
         <div className={styles.empty}>
@@ -227,7 +231,9 @@ export default async function ProgressPage() {
       {lessonProgress.filter((lp) => lp.bestQuizScore !== null).length > 0 && (
         <section className={styles.section}>
           <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>Quiz Scores</h2>
+            <h2 className={styles.sectionTitle}>
+              Your quiz <em>scores.</em>
+            </h2>
             <p className={styles.mono}>Best attempts</p>
           </div>
           <div className={styles.quizGrid}>

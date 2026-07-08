@@ -1068,7 +1068,7 @@ function MastRow({ section, date }: { section: string; date: string }) {
     <div className={styles.mastRow}>
       <span className={styles.mono}>{section}</span>
       <span className={styles.mono}>{date}</span>
-      <span className={styles.mono}>BETA · v0.4.1</span>
+      <span className={styles.mono}>BETA</span>
     </div>
   )
 }
@@ -1307,7 +1307,7 @@ function DashFooter() {
   return (
     <footer className={styles.dashFooter}>
       <span className={styles.mono}>© 2026 GWTH.ai · UK</span>
-      <span className={styles.mono}>Built for the 23 May beta · v0.4.1</span>
+      <span className={styles.mono}>Built for the GWTH beta</span>
       <span className={styles.mono}>Privacy · Terms · Accessibility</span>
     </footer>
   )

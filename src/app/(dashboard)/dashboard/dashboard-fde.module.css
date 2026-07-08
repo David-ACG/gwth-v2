@@ -984,7 +984,6 @@
 .graceBanner {
   border-bottom: 1px solid var(--v-ink);
   background: var(--v-surface);
-  border-left: 3px solid var(--v-rust);
   padding: 1.1rem 2rem;
   display: flex;
   align-items: center;
