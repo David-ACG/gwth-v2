@@ -25,6 +25,11 @@ export type JourneyStat = {
   value: string
   /** One-line context, e.g. "of UK workers feel confident using AI" */
   label: string
+  /**
+   * Named UK source for the figure (DESIGN_FDE.md §7 Citation Rule), e.g.
+   * "DSIT, 2025". Omitted for non-stat figures such as prices.
+   */
+  source?: string
 }
 
 export type Journey = {
@@ -122,7 +127,11 @@ export const JOURNEYS: readonly Journey[] = [
     body:
       "Five hours a week for three months. Every project you build goes in your portfolio. Your course progress stays visible and practical. UK employers are hiring for exactly these skills, and only 21% of UK workers feel confident using AI. That gap is your opportunity.",
     accent: "aqua",
-    stat: { value: "21%", label: "of UK workers feel confident using AI" },
+    stat: {
+      value: "21%",
+      label: "of UK workers feel confident using AI",
+      source: "DSIT, 2025",
+    },
     cta: "See pricing",
     href: "/pricing",
   },
@@ -133,7 +142,11 @@ export const JOURNEYS: readonly Journey[] = [
     body:
       "UK micro businesses are 45% less likely to adopt AI than large companies. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant. You will be able to do it all yourself.",
     accent: "mint",
-    stat: { value: "45%", label: "less likely to adopt AI than large companies" },
+    stat: {
+      value: "45%",
+      label: "less likely to adopt AI than large companies",
+      source: "ONS, 2025",
+    },
     cta: "See pricing",
     href: "/pricing",
   },

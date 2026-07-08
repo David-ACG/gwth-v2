@@ -347,6 +347,19 @@
   margin-right: 0.25rem;
 }
 
+/* §7 Citation Rule: named UK source beside every stat, mono voice
+   (mirrors the §5.6 stat-list third column). */
+.cardStatSource {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
 /* ---------------- Pull quote ---------------- */
 
 .pullQuote {

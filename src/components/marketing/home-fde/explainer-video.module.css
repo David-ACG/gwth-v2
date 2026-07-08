@@ -14,9 +14,16 @@
   --v-teal: #2c4a47;
   --v-teal-deep: #1f3a37;
   --v-cream: #ece8d2;
+  --v-cream-muted: rgba(236, 232, 210, 0.85);
+  --v-hero-line: rgba(236, 232, 210, 0.25);
   --v-ochre: #c08a36;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #2a4530;
+  --v-rust: #a87528;
   --v-action: #2c4a47;
   --v-action-text: #ffffff;
+  --v-dash: rgba(26, 28, 24, 0.18);
+  --v-dash-active: #2c4a47;
 
   background: var(--v-bg);
   color: var(--v-ink);
@@ -35,10 +42,15 @@
   --v-line-soft: #2a2c24;
   --v-teal: #1f3a37;
   --v-teal-deep: #162927;
-  --v-cream: #ece8d2;
+  --v-hero-line: rgba(236, 232, 210, 0.18);
   --v-ochre: #d4a062;
+  --v-ochre-bright: #d4a062;
+  --v-moss: #3a5a3f;
+  --v-rust: #c08a36;
   --v-action: #4d7a55;
   --v-action-text: #ece8d2;
+  --v-dash: rgba(236, 232, 210, 0.18);
+  --v-dash-active: #6ea877;
   color-scheme: dark;
 }
 
@@ -157,7 +169,7 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--v-cream);
-  background: rgba(31, 58, 55, 0.72);
+  background: color-mix(in srgb, var(--v-teal-deep) 72%, transparent);
   padding: 0.5rem 0.85rem;
 }
 

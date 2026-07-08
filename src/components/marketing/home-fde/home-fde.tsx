@@ -61,7 +61,7 @@ const CARD_FLAVOURS = [styles.flvTeal, styles.flvMoss, styles.flvRust]
  */
 const JOURNEY_BLURBS: Record<string, string> = {
   "01": "The defence is fluency. Build real AI skill in three months and walk in with proof, not promises.",
-  "02": "Five hours a week and a portfolio of real projects. Only 21% of UK workers feel confident with AI: that gap is your opening.",
+  "02": "Five hours a week and a portfolio of real projects. Most UK workers still lack confidence with AI: that gap is your opening.",
   "03": "No developer, no consultant. Learn to build the automations and tools your business needs yourself.",
   "04": "AI fluency will be table stakes for your children's working lives. Learn it properly first, in plain English.",
   "05": "You use AI daily but suspect there is more. There is: design with it, automate with it, and save more than the course costs on your AI subscriptions.",
@@ -181,6 +181,11 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
                   {journey.stat ? (
                     <p className={styles.cardStatLine}>
                       <strong>{journey.stat.value}</strong> {journey.stat.label}
+                      {journey.stat.source ? (
+                        <span className={styles.cardStatSource}>
+                          {journey.stat.source}
+                        </span>
+                      ) : null}
                     </p>
                   ) : null}
                 </div>
