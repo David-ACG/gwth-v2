@@ -13,6 +13,12 @@ import {
   QUIZ_PASS_SCORE,
 } from "@/lib/progress/completion"
 import { Skeleton } from "@/components/ui/skeleton"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
 import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
 import type { LessonProgress } from "@/lib/types"
@@ -199,6 +205,10 @@ export function EditorialLessonViewer({
   const [pageNum, setPageNum] = React.useState(initialPage)
   const [autoAdvance, setAutoAdvance] = React.useState(true)
   const [speed, setSpeed] = React.useState<"1x" | "1.25x" | "1.5x">("1x")
+  // Mobile outline sheet (main responsive render). The desktop OutlineRail is
+  // `hidden lg:block`; below lg the mast row exposes a hamburger that opens
+  // this sheet with the same items.
+  const [outlineOpen, setOutlineOpen] = React.useState(false)
 
   // Persistence: the same optimistic wrapper over the W7-tested
   // updateLessonProgressAction that the rest of the app uses. No second
@@ -421,6 +431,9 @@ export function EditorialLessonViewer({
           onChangeSpeed={setSpeed}
           autoAdvance={autoAdvance}
           onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
+          onSelectPage={(n) =>
+            setPageNum(Math.min(Math.max(n, 1), lesson.pages.length))
+          }
         />
         <LessonWidgets
           lessonNumber={lesson.lessonNumber}
@@ -471,6 +484,15 @@ export function EditorialLessonViewer({
           onSelectPage={goToPage}
         />
 
+        <OutlineSheet
+          open={outlineOpen}
+          onOpenChange={setOutlineOpen}
+          pages={lesson.pages}
+          currentPage={currentPage}
+          lessonNumber={lesson.lessonNumber}
+          onSelectPage={goToPage}
+        />
+
         <main className="flex flex-1 min-w-0 flex-col">
           <MastRow
             section={
@@ -478,6 +500,10 @@ export function EditorialLessonViewer({
                 ? `COURSE · LESSON ${lesson.lessonNumber} · Q&A`
                 : `COURSE · LESSON ${lesson.lessonNumber}`
             }
+            currentPage={currentPage}
+            pageTotal={lesson.pages.length}
+            onOpenOutline={() => setOutlineOpen(true)}
+            outlineOpen={outlineOpen}
           />
 
           <div className="flex flex-1 flex-col px-14">
@@ -667,21 +693,186 @@ function OutlineRail({
   )
 }
 
+// ─── Mobile outline sheet ─────────────────────────────────────────────────────
+
+/**
+ * Mobile presentation of the outline. Mirrors {@link OutlineRail} in a shadcn
+ * bottom `Sheet` (same pattern as the lesson-widgets mobile feedback sheet).
+ * Tapping an item jumps to that page and closes the sheet. Keyboard: Up/Down
+ * or J/K move a highlight cursor, Enter jumps, Esc closes (Esc + focus-trap
+ * are handled by the underlying Radix dialog). The audio-scrubber arrow keys
+ * live on their own focused `role="slider"` element and are untouched.
+ *
+ * The sheet renders in a portal outside the viewer's `.shell`, so it re-applies
+ * `styles.shell` to keep the FDE `--v-*` token remap (background, border,
+ * primary, ring, serif) on-register.
+ */
+function OutlineSheet({
+  open,
+  onOpenChange,
+  pages,
+  currentPage,
+  lessonNumber,
+  onSelectPage,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  pages: EditorialLessonPage[]
+  currentPage: number
+  lessonNumber: number
+  onSelectPage: (page: number) => void
+}) {
+  // Highlight cursor for keyboard navigation, seeded to the current page each
+  // time the sheet opens.
+  const [cursor, setCursor] = React.useState(currentPage)
+  const itemRefs = React.useRef<Array<HTMLButtonElement | null>>([])
+
+  React.useEffect(() => {
+    if (open) setCursor(currentPage)
+  }, [open, currentPage])
+
+  // Move DOM focus to the highlighted item so it scrolls into view and reads
+  // to assistive tech; only while the sheet is open.
+  React.useEffect(() => {
+    if (open) itemRefs.current[cursor - 1]?.focus()
+  }, [open, cursor])
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === "ArrowDown" || e.key === "j" || e.key === "J") {
+      e.preventDefault()
+      setCursor((c) => Math.min(pages.length, c + 1))
+    } else if (e.key === "ArrowUp" || e.key === "k" || e.key === "K") {
+      e.preventDefault()
+      setCursor((c) => Math.max(1, c - 1))
+    } else if (e.key === "Enter") {
+      e.preventDefault()
+      onSelectPage(cursor)
+      onOpenChange(false)
+    }
+    // Esc closes via Radix; other keys pass through.
+  }
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="bottom"
+        onKeyDown={handleKeyDown}
+        className={cn(
+          styles.shell,
+          "max-h-[80vh] gap-0 overflow-y-auto border-t border-border bg-card p-0"
+        )}
+      >
+        <SheetHeader className="border-b border-border px-[22px] py-4">
+          <SheetTitle className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            LESSON {String(lessonNumber).padStart(2, "0")} · OUTLINE
+          </SheetTitle>
+        </SheetHeader>
+        <div className="flex flex-col px-[22px] pb-[max(2rem,env(safe-area-inset-bottom))]">
+          {pages.map((page, i) => {
+            const n = i + 1
+            const state =
+              n < currentPage ? "done" : n === currentPage ? "current" : "pending"
+            return (
+              <button
+                key={page.title}
+                ref={(el) => {
+                  itemRefs.current[i] = el
+                }}
+                type="button"
+                onClick={() => {
+                  onSelectPage(n)
+                  onOpenChange(false)
+                }}
+                aria-current={state === "current" ? "page" : undefined}
+                className={cn(
+                  "grid w-full cursor-pointer grid-cols-[20px_1fr_auto] items-start gap-2.5 border-x-0 border-b border-t-0 border-solid border-border bg-transparent py-3 pl-1 pr-1 text-left transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--v-ochre)]",
+                  i === 0 && "border-t",
+                  n === cursor && "bg-muted",
+                  state === "pending" && "opacity-60"
+                )}
+              >
+                <StatusIcon state={state} small />
+                <div>
+                  <div
+                    className={cn(
+                      "text-[14px] leading-[1.3]",
+                      state === "current" ? "font-semibold" : "font-medium"
+                    )}
+                  >
+                    {page.title}
+                  </div>
+                  <div className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                    {page.kindLabel}
+                  </div>
+                </div>
+                <span className="font-mono text-[10.5px] tabular-nums text-muted-foreground">
+                  P{String(n).padStart(2, "0")}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+}
+
 // ─── Mast row + lesson chrome ─────────────────────────────────────────────────
 
-function MastRow({ section }: { section: string }) {
+function MastRow({
+  section,
+  currentPage,
+  pageTotal,
+  onOpenOutline,
+  outlineOpen,
+}: {
+  section: string
+  /** Present only in the main responsive render, where the mobile
+   *  hamburger (below lg) needs to open the outline sheet. */
+  currentPage?: number
+  pageTotal?: number
+  onOpenOutline?: () => void
+  outlineOpen?: boolean
+}) {
   return (
-    <div className="flex items-center justify-between border-b border-border px-10 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">
-      <span>{section}</span>
-      <span>FRI 8 MAY 2026 · 14:24 BST</span>
+    <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground lg:px-10">
+      {onOpenOutline && (
+        <button
+          type="button"
+          onClick={onOpenOutline}
+          aria-label="Open lesson outline"
+          aria-haspopup="dialog"
+          aria-expanded={outlineOpen ?? false}
+          className="inline-flex shrink-0 items-center gap-2 border border-border bg-transparent px-2 py-1.5 text-foreground lg:hidden"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 14 14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path d="M2 4h10M2 7h10M2 10h7" />
+          </svg>
+          <span className="tabular-nums">
+            P{currentPage ?? 1}/{pageTotal ?? 1}
+          </span>
+        </button>
+      )}
+      <span className="truncate">{section}</span>
+      <span className="hidden md:inline">FRI 8 MAY 2026 · 14:24 BST</span>
       <span
         className={cn(
           styles.statusActive,
-          "inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
+          "inline-flex shrink-0 items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
         )}
       >
         <span aria-hidden="true">▸</span>
-        Active · Month 1 of 3
+        <span className="hidden sm:inline">Active · Month 1 of 3</span>
+        <span className="sm:hidden">Active</span>
       </span>
     </div>
   )
@@ -2079,6 +2270,7 @@ function MobileSurface({
   onChangeSpeed,
   autoAdvance,
   onToggleAutoAdvance,
+  onSelectPage,
 }: {
   lesson: EditorialLessonMeta
   pageNum: number
@@ -2092,8 +2284,11 @@ function MobileSurface({
   onChangeSpeed: (s: "1x" | "1.25x" | "1.5x") => void
   autoAdvance: boolean
   onToggleAutoAdvance: () => void
+  /** Jump to a page from the outline sheet (stays on the mobile surface). */
+  onSelectPage: (page: number) => void
 }) {
   const pageTitle = lesson.pages[pageNum - 1]?.title ?? lesson.title
+  const [outlineOpen, setOutlineOpen] = React.useState(false)
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[412px] flex-col">
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -2120,6 +2315,9 @@ function MobileSurface({
         <button
           type="button"
           aria-label="Lesson outline"
+          aria-haspopup="dialog"
+          aria-expanded={outlineOpen}
+          onClick={() => setOutlineOpen(true)}
           className="relative inline-flex size-8 items-center justify-center border border-border bg-transparent text-foreground"
         >
           <svg
@@ -2138,6 +2336,15 @@ function MobileSurface({
           </span>
         </button>
       </div>
+
+      <OutlineSheet
+        open={outlineOpen}
+        onOpenChange={setOutlineOpen}
+        pages={lesson.pages}
+        currentPage={pageNum}
+        lessonNumber={lesson.lessonNumber}
+        onSelectPage={onSelectPage}
+      />
 
       <div className="border-b border-border px-[22px] py-4">
         <div className="flex items-center justify-between">
