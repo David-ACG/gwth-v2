@@ -29,6 +29,45 @@ CAT = {
 DEFAULT = ("Foundations", "Hands-on Exercise", "oklch(0.7 0.18 220)", "Sparkles")
 ALLOWED_DIFF = {"beginner", "intermediate", "advanced"}
 
+# --- Picks filter (bead gwth-launch-9u6) --------------------------------------
+# Serve ONLY the labs David picked in his 2026-06-16 review, and additionally
+# drop the stub-triage removals (STUB_TRIAGE.md, 2026-07-11) so skipped labs,
+# drops, folds and test fixtures never reach prod. Picks come from
+# _review_picks.json (index -> pick/skip); indices map to dir slugs via the LABS
+# array in _review.html. Folds (familybot/family-brain-dump/portfolio) land in
+# lessons later (Wave 5) but must stop being served now.
+REVIEW_DIR = "/home/david/gwth-dashboard/generated_lessons/labs"
+PICKS_JSON = f"{REVIEW_DIR}/_review_picks.json"
+REVIEW_HTML = f"{REVIEW_DIR}/_review.html"
+
+# Stub-triage removals: DROP (no fold target) + FOLD (fold lands later) + fixtures.
+EXCLUDE_SLUGS = {
+    # DROP
+    "a-developer-toolkit-for-nothing",
+    "cursor-vs-claude-code-vs-codex-vs-antigravity",
+    "fix-my-page",
+    "ship-it-publish-a-real-web-page",
+    # FOLD-INTO-LESSON (stop serving now; content folds into lessons in Wave 5)
+    "familybot-prototype-gem",
+    "the-family-brain-dump",
+    "month-1-portfolio-page",
+    # test fixtures
+    "api-test-lab",
+    "status-test-lab",
+}
+
+def load_allowed_slugs():
+    picks = json.load(open(PICKS_JSON))["picks"]
+    html = open(REVIEW_HTML).read()
+    m = re.search(r"const LABS = (\[.*?\]);", html, re.S)
+    labs = json.loads(m.group(1))
+    idx_to_slug = {str(l["n"]): l["slug"] for l in labs}
+    picked = {idx_to_slug[i] for i, v in picks.items()
+              if v == "pick" and i in idx_to_slug}
+    return picked - EXCLUDE_SLUGS
+
+ALLOWED_SLUGS = load_allowed_slugs()
+
 def clean(s): return re.sub(r"\s+", " ", str(s)).strip()
 def strip_md(s): return re.sub(r"[*_`#>]", "", s)
 
@@ -100,6 +139,8 @@ for f in files:
     if not ("month-1" in tags or rl.startswith("m1")):
         continue  # M1 only (beta scope)
     slug = os.path.basename(os.path.dirname(f)).replace("LAB_", "")
+    if slug not in ALLOWED_SLUGS:
+        continue  # picks-only + stub-triage removals (bead gwth-launch-9u6)
     diff = str(fm.get("difficulty", "beginner")).strip().lower()
     if diff not in ALLOWED_DIFF: diff = "beginner"
     dm = re.search(r"\d+", str(fm.get("duration", "60")))
@@ -165,8 +206,22 @@ header = (
 with open(OUT, "w") as fh:
     fh.write(header + "\n".join(emit(e) for e in entries) + "\n]\n")
 
-# --- wire into mock-data.ts: mockLabs -> m1Labs ---
-lines = open(MOCK).read().split("\n")
+print(f"M1 labs generated: {len(entries)}")
+print("with instructions:", sum(1 for e in entries if e["instructions"]))
+print("categories:", sorted(set(e["category"] for e in entries)))
+miss_desc = [e["id"] for e in entries if len(e["description"]) < 20]
+print("short descriptions:", miss_desc or "none")
+print("wrote", OUT)
+
+# --- wire into mock-data.ts: mockLabs -> m1Labs (idempotent) ---
+# Once mockLabs is a reference to m1Labs there is nothing left to patch; re-running
+# the array-replacement below would be destructive (its end-of-array search would
+# swallow the following export), so skip it when the wiring is already in place.
+mock_src = open(MOCK).read()
+if "export const mockLabs: Lab[] = m1Labs" in mock_src:
+    print("mock-data.ts already wired to m1Labs; no patch needed")
+    raise SystemExit(0)
+lines = mock_src.split("\n")
 # 1) insert import after the first top-level import statement block
 imp = 'import { m1Labs } from "./m1-labs"'
 if imp not in "\n".join(lines):
@@ -182,11 +237,4 @@ start = next(i for i, ln in enumerate(lines) if ln.startswith("export const mock
 end = next(i for i in range(start + 1, len(lines)) if lines[i].startswith("]"))
 lines[start:end + 1] = ["export const mockLabs: Lab[] = m1Labs"]
 open(MOCK, "w").write("\n".join(lines))
-
-print(f"M1 labs generated: {len(entries)}")
-print("with instructions:", sum(1 for e in entries if e["instructions"]))
-print("categories:", sorted(set(e["category"] for e in entries)))
-miss_desc = [e["id"] for e in entries if len(e["description"]) < 20]
-print("short descriptions:", miss_desc or "none")
-print("wrote", OUT)
 print("patched", MOCK)
