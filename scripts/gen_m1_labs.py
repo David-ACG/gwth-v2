@@ -8,7 +8,9 @@ new DB table (that DB-backed path is W3/W7). This becomes the accurate fallback.
 """
 import re, glob, os, json, yaml
 
-LAB_DIR = "/home/david/projects/1_gwthpipeline520/data/generated_lessons/labs"
+# Repointed 2026-07-13: the dashboard store is canonical since L22 (all L22 tone
+# edits land there; the picks JSON below already reads it); the pipeline copy is stale.
+LAB_DIR = "/home/david/gwth-dashboard/generated_lessons/labs"
 GV2 = "/home/david/projects/GWTH_V2"
 OUT = f"{GV2}/src/lib/data/m1-labs.ts"
 MOCK = f"{GV2}/src/lib/data/mock-data.ts"
