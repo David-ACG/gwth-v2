@@ -8,7 +8,10 @@ import type { TocHeading } from "@/components/lesson"
 /**
  * Generates TOC headings from the lesson content markdown.
  * Extracts H2 and H3 headings and creates ids matching the
- * MarkdownRenderer heading id generation.
+ * MarkdownRenderer heading id generation. The parsed headings are
+ * always wrapped in a fixed scaffold: `intro` and `objectives` are
+ * prepended, and `quiz` ("Check Your Understanding") and `project`
+ * are appended, so the returned list is never empty.
  */
 export function extractHeadings(markdown: string): TocHeading[] {
   const headings: TocHeading[] = []
