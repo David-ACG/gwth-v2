@@ -81,7 +81,7 @@ export function TableOfContents({ headings, className }: TableOfContentsProps) {
                 type="button"
                 onClick={() => handleClick(heading.id)}
                 className={cn(
-                  "block w-full text-left text-sm transition-colors hover:text-foreground",
+                  "block w-full rounded-sm text-left text-sm transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   heading.level === 3 && "pl-3",
                   activeId === heading.id
                     ? "font-medium text-primary"
