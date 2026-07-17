@@ -95,6 +95,7 @@ export function PublicNav({ user }: PublicNavProps) {
                 <Button
                   variant="ghost"
                   size="icon"
+                  aria-label="Open user menu"
                   className={cn("size-8", styles.avatarButton)}
                 >
                   <Avatar className={cn("size-8", styles.avatar)}>
