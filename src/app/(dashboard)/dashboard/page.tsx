@@ -143,27 +143,56 @@ export type ActiveDashboardProps = {
  */
 type PlannedLesson = {
   lesson: LessonSummary
+  /** The month of the section this lesson belongs to (for the display month). */
+  month: number
   number: number
   row: LessonProgress | undefined
 }
 
 /**
- * Flattens the course outline in section/lesson order and splits it around
- * the user's real progress: how many are complete, and which lessons come
- * next. Honest zero for a fresh account: 0 complete, lesson 1 up next.
+ * Flattens the course outline into syllabus order and splits it around the
+ * user's real progress: how many are complete, and which lessons come next.
+ * Honest zero for a fresh account: 0 complete, lesson 1 up next.
+ *
+ * Ordering is by the authoritative per-lesson `order` (1..N), NOT by section
+ * grouping: the `sections` rows are unreliable (several tie at `order=0` with
+ * scrambled ids), which previously scrambled the list and pointed Continue at
+ * the wrong lesson (gwth-launch-26b). Each lesson carries its section month so
+ * the dashboard can show the month of the content actually being studied.
  */
 function deriveLessonPlan(course: Course, rows: LessonProgress[]) {
-  const ordered = [...course.sections]
-    .sort((a, b) => a.order - b.order)
-    .flatMap((section) => [...section.lessons].sort((a, b) => a.order - b.order))
+  const ordered = course.sections
+    .flatMap((section) =>
+      section.lessons.map((lesson) => ({ lesson, month: section.month }))
+    )
+    .sort((a, b) => a.lesson.order - b.lesson.order)
   const rowByLesson = new Map(rows.map((row) => [row.lessonId, row]))
-  const planned: PlannedLesson[] = ordered.map((lesson, index) => ({
-    lesson,
+  const planned: PlannedLesson[] = ordered.map((entry, index) => ({
+    lesson: entry.lesson,
+    month: entry.month,
     number: index + 1,
-    row: rowByLesson.get(lesson.id),
+    row: rowByLesson.get(entry.lesson.id),
   }))
   const upcoming = planned.filter((p) => !p.row?.isCompleted)
   return { planned, upcoming, next: upcoming[0] }
+}
+
+/**
+ * The month number shown across the dashboard. Derived from the content the
+ * student is actually on (the section month of their next incomplete lesson,
+ * or the last lesson's month once the syllabus is complete), rather than the
+ * raw `subscriptionMonth` grant, which defaults to 3 for manual beta grants
+ * even though only Month 1 is live (gwth-launch-26b). Clamped to 1..3.
+ */
+function deriveDisplayMonth(
+  plan: ReturnType<typeof deriveLessonPlan>,
+  subscriptionMonth: number
+): number {
+  const fromContent =
+    plan.next?.month ??
+    plan.planned[plan.planned.length - 1]?.month ??
+    Math.max(1, subscriptionMonth)
+  return Math.min(3, Math.max(1, fromContent))
 }
 
 /** Formats seconds of study time as decimal hours for the activity panel. */
@@ -184,8 +213,9 @@ export function ActiveDashboard({
     progress?.totalLessons ??
     course.sections.flatMap((s) => s.lessons).length ??
     24
-  const monthNumber = Math.max(1, user.subscriptionMonth)
-  const { upcoming, next } = deriveLessonPlan(course, lessonProgress)
+  const plan = deriveLessonPlan(course, lessonProgress)
+  const { upcoming, next } = plan
+  const monthNumber = deriveDisplayMonth(plan, user.subscriptionMonth)
   const nextLessonNumber = next?.number ?? completed + 1
   const nextLessonStarted = (next?.row?.progress ?? 0) > 0
   const nextLessonHref = next
@@ -795,9 +825,11 @@ export function LapsedDashboard({
     progress?.totalLessons ??
     course?.sections.flatMap((s) => s.lessons).length ??
     24
-  const { upcoming, next } = course
-    ? deriveLessonPlan(course, lessonProgress)
-    : { upcoming: [], next: undefined }
+  const plan = course ? deriveLessonPlan(course, lessonProgress) : null
+  const { upcoming, next } = plan ?? { upcoming: [], next: undefined }
+  const monthNumber = plan
+    ? deriveDisplayMonth(plan, user.subscriptionMonth)
+    : Math.max(1, user.subscriptionMonth)
   const nextLessonNumber = next?.number ?? completed + 1
   const nextLessonStarted = (next?.row?.progress ?? 0) > 0
   const graceEndsLabel = user.gracePeriodEnds
@@ -856,7 +888,7 @@ export function LapsedDashboard({
               : "YOUR COURSE"}
           </p>
           <p className={cn(styles.mono, "mt-3")}>
-            LESSON {nextLessonNumber} · MONTH {user.subscriptionMonth} · STILL OPEN
+            LESSON {nextLessonNumber} · MONTH {monthNumber} · STILL OPEN
           </p>
           <div className={styles.asideTitle}>
             {next ? next.lesson.title : "Your lessons are still open."}
@@ -889,7 +921,7 @@ export function LapsedDashboard({
         <div className={styles.splitCell}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              Month {user.subscriptionMonth} of 3.
+              Month {monthNumber} of 3.
             </h2>
             <p className={styles.mono}>SECTION 01 · YOUR COURSE · STILL OPEN</p>
           </div>

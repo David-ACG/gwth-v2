@@ -160,3 +160,80 @@ describe("ActiveDashboard honest-zero state (W14)", () => {
     expect(view.getAllByText("Lesson 2").length).toBeGreaterThan(0)
   })
 })
+
+describe("ActiveDashboard month + ordering (gwth-launch-26b)", () => {
+  // A course whose `sections` rows are broken exactly as prod's are: several
+  // sections tie at order=0 with the lessons distributed out of array order.
+  // The authoritative signal is each lesson's global `order` (1..N).
+  const scrambledCourse: Course = {
+    ...course,
+    sections: [
+      {
+        id: "s_b",
+        title: "Second in array",
+        order: 0,
+        month: 1,
+        lessons: [
+          { id: "lesson_13", slug: "lesson-13", title: "Lesson 13", order: 13, duration: 20, status: "available" },
+          { id: "lesson_2", slug: "lesson-2", title: "Lesson 2", order: 2, duration: 20, status: "available" },
+        ],
+      },
+      {
+        id: "s_a",
+        title: "First in array",
+        order: 0,
+        month: 1,
+        lessons: [
+          { id: "lesson_1", slug: "lesson-1", title: "Lesson 1", order: 1, duration: 20, status: "available" },
+          { id: "lesson_14", slug: "lesson-14", title: "Lesson 14", order: 14, duration: 20, status: "available" },
+        ],
+      },
+    ],
+  }
+
+  // A Month-1 student whose grant defaulted to Month 3 (the prod defect).
+  const month3Grant: User = { ...user, subscriptionMonth: 3, subscriptionState: "month3" }
+
+  it("orders lessons by global order and points Continue at the first incomplete lesson", () => {
+    const view = within(
+      render(
+        <ActiveDashboard
+          user={month3Grant}
+          course={scrambledCourse}
+          progress={undefined}
+          lessonProgress={[]}
+          streak={emptyStreak()}
+          notifications={[]}
+        />
+      ).container
+    )
+
+    // Fresh account: lesson order-1 is up next, NOT the section-array-first
+    // lesson 13 that the old (section.order, lesson.order) sort surfaced.
+    expect(view.getByText("Start Lesson 1")).toBeInTheDocument()
+    // The up-next row carries the order-1 lesson title, not the array-first
+    // lesson 13 that the old (section.order, lesson.order) sort surfaced.
+    expect(view.getAllByText("Lesson 1").length).toBeGreaterThan(0)
+    expect(view.queryByText("Continue Lesson 13")).not.toBeInTheDocument()
+  })
+
+  it("shows the month of the live content, not the (defaulted) grant month", () => {
+    const view = within(
+      render(
+        <ActiveDashboard
+          user={month3Grant}
+          course={scrambledCourse}
+          progress={undefined}
+          lessonProgress={[]}
+          streak={emptyStreak()}
+          notifications={[]}
+        />
+      ).container
+    )
+
+    // Only Month 1 content is live, so a Month-1 student reads "MONTH 1 OF 3"
+    // even though their grant defaulted to subscriptionMonth=3.
+    expect(view.getByText("MONTH 1 OF 3")).toBeInTheDocument()
+    expect(view.queryByText("MONTH 3 OF 3")).not.toBeInTheDocument()
+  })
+})

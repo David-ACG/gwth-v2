@@ -258,7 +258,10 @@ export async function applyBetaAccessGrantToUser(
   const grant = await getBetaAccessGrantForEmail(email, now)
   if (!grant) return false
 
-  const month = (clampCourseMonth(grant.subscription_month || 3) || 3) as
+  // Default to Month 1: only Month 1 content is live in the beta, so a grant
+  // with no explicit month must land the learner on Month 1, not Month 3
+  // (gwth-launch-26b: the old `|| 3` default surfaced as "Month 3 of 3").
+  const month = (clampCourseMonth(grant.subscription_month || 1) || 1) as
     | 1
     | 2
     | 3

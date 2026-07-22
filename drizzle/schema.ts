@@ -477,7 +477,7 @@ export const waitlist = pgTable("waitlist", {
 export const betaAccessGrants = pgTable("beta_access_grants", {
 	email: text().primaryKey().notNull(),
 	userId: text("user_id"),
-	subscriptionMonth: integer("subscription_month").default(3).notNull(),
+	subscriptionMonth: integer("subscription_month").default(1).notNull(),
 	validUntil: timestamp("valid_until", { withTimezone: true, mode: 'string' }),
 	notes: text(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),

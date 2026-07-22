@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/sheet"
 import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
 import type { LessonProgress } from "@/lib/types"
 import styles from "./lesson-fde.module.css"
@@ -63,6 +65,12 @@ export interface EditorialLessonPage {
   kindLabel: string
   /** Page kind, drives body rendering. */
   kind: EditorialLessonPageKind
+  /**
+   * Markdown for this prose/code page's body. Derived per `##` section of the
+   * lesson (gwth-launch-qar), so pagination renders one real section at a time
+   * instead of the whole body on one page. Absent for video/qa pages.
+   */
+  content?: string
 }
 
 /** A real Q&A question wired into the end-of-lesson surface. */
@@ -551,11 +559,19 @@ export function EditorialLessonViewer({
                 )
               ) : (
                 <ProseBody>
-                  {lesson.learnContent ? (
-                    <MarkdownRenderer content={lesson.learnContent} />
-                  ) : (
-                    <DefaultProseContent />
-                  )}
+                  {(() => {
+                    // Render only the current page's section (gwth-launch-qar):
+                    // pagination now moves through real `##` sections. Fall back
+                    // to the whole body, then the design placeholder, so a
+                    // lesson with no per-page content still renders.
+                    const pageContent = lesson.pages[currentPage - 1]?.content
+                    const body = pageContent ?? lesson.learnContent
+                    return body ? (
+                      <MarkdownRenderer content={body} />
+                    ) : (
+                      <DefaultProseContent />
+                    )
+                  })()}
                 </ProseBody>
               )}
             </div>
@@ -1986,6 +2002,29 @@ function RealQAPageBody({
 
 type QAOptionState = "idle" | "selected" | "correct" | "wrong"
 
+/**
+ * Renders a short markdown string inline (bold, italic, inline code, links)
+ * without wrapping it in a block `<p>`. The end-of-lesson Q&A stores literal
+ * markdown in its prompts, option labels and feedback (e.g. `**GWTH**`,
+ * `**jagged frontier**`); rendering those as plain JSX showed the raw
+ * asterisks (bug gwth-launch-5vh). The full `MarkdownRenderer` is not used
+ * here because it wraps content in `.lesson-prose` block paragraphs, which
+ * would break the option grid; this keeps the text inline. No `rehype-raw`,
+ * so no HTML passthrough in quiz strings.
+ */
+function InlineMarkdown({ children }: { children: string }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        p: ({ children }) => <>{children}</>,
+      }}
+    >
+      {children}
+    </ReactMarkdown>
+  )
+}
+
 function QAItem({
   num,
   total,
@@ -2042,7 +2081,7 @@ function QAItem({
         )}
       </div>
       <div className="mb-4 text-[17px] font-semibold leading-[1.4]">
-        {prompt}
+        <InlineMarkdown>{prompt}</InlineMarkdown>
       </div>
       <div className="flex flex-col gap-2">
         {options.map((o, i) => (
@@ -2063,7 +2102,7 @@ function QAItem({
             borderColor: "var(--success)",
           }}
         >
-          {feedback}
+          <InlineMarkdown>{feedback}</InlineMarkdown>
         </div>
       )}
     </div>
@@ -2113,7 +2152,7 @@ function QAOption({
         {letter}
       </span>
       <div className="text-[14.5px] leading-[1.45] text-foreground">
-        {label}
+        <InlineMarkdown>{label}</InlineMarkdown>
       </div>
       {state === "correct" && (
         <svg

@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils"
 import {
   EditorialLessonViewer,
   type EditorialLessonMeta,
-  type EditorialLessonPage,
   type EditorialLessonSurface,
   type EditorialNextLesson,
 } from "./editorial-lesson-viewer"
+import { buildLessonOutline } from "@/lib/lessons/lesson-outline"
 import type { Course } from "@/lib/types"
 import type { LessonWidgetSurface } from "./lesson-widgets"
 
@@ -61,64 +61,6 @@ const VALID_WIDGET_SURFACES: ReadonlySet<string> = new Set([
   "mobile-sheet",
   "mobile-collapsed",
 ])
-
-/**
- * Maps a real `Lesson` shape into the bundle's multi-page outline. The
- * production Lesson model stores one block of `learnContent` and one
- * audio file; the editorial viewer expects 8-12 short pages plus a video
- * and a Q&A. For Stage 2 we surface a minimal three-page outline (intro
- * video if present, content, Q&A if present). Real per-page splitting
- * lives behind the audio-manifest follow-up issue.
- */
-function buildLessonPages(lesson: {
-  introVideoUrl: string | null
-  questions: { question: string }[]
-}): EditorialLessonPage[] {
-  const pages: EditorialLessonPage[] = []
-  if (lesson.introVideoUrl) {
-    pages.push({
-      title: "Why this lesson exists",
-      kindLabel: "VIDEO · 4 MIN",
-      kind: "video",
-    })
-  }
-  pages.push(
-    {
-      title: "Picking the right problem",
-      kindLabel: "PROSE · 3 MIN",
-      kind: "prose",
-    },
-    {
-      title: "The brief, in plain English",
-      kindLabel: "PROSE · 4 MIN",
-      kind: "prose",
-    },
-    {
-      title: "Calling Claude from a script",
-      kindLabel: "CODE · 4 MIN",
-      kind: "code",
-    },
-    {
-      title: "When the model misreads you",
-      kindLabel: "PROSE · 3 MIN",
-      kind: "prose",
-    },
-    {
-      title: "Shipping past your own desk",
-      kindLabel: "PROSE · 3 MIN",
-      kind: "prose",
-    },
-    { title: "Recap", kindLabel: "PROSE · 1 MIN", kind: "prose" }
-  )
-  if (lesson.questions.length > 0) {
-    pages.push({
-      title: "End-of-lesson Q&A",
-      kindLabel: "Q&A · 4 MIN",
-      kind: "qa",
-    })
-  }
-  return pages
-}
 
 /**
  * Lesson viewer page, ported from the 2026-05-08 Stone & Sage bundle. The
@@ -189,7 +131,13 @@ export default async function LessonPage({
     title: lesson.title,
     monthCompleted: courseProgress?.completedLessons ?? 0,
     monthTotal: monthLessonCount > 0 ? monthLessonCount : 24,
-    pages: buildLessonPages(lesson),
+    // Outline + pagination derived from the lesson's real markdown headings
+    // (one page per `##` section), not a hardcoded placeholder (gwth-launch-qar).
+    pages: buildLessonOutline({
+      learnContent: lesson.learnContent,
+      hasIntroVideo: Boolean(lesson.introVideoUrl),
+      questionCount: lesson.questions.length,
+    }),
     // Real imported content (Postgres/Drizzle). The viewer renders these in
     // the prose + Q&A surfaces, falling back to the design placeholders only
     // when a lesson has no body / no questions.

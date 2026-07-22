@@ -4,7 +4,6 @@ import dynamic from "next/dynamic"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
-import DOMPurify from "isomorphic-dompurify"
 import { cn } from "@/lib/utils"
 import { markdownImageUrl } from "@/lib/media/url"
 import { CalloutBox } from "@/components/lesson/callout-box"
@@ -29,7 +28,16 @@ interface MarkdownRendererProps {
 /**
  * Renders markdown content using react-markdown with remark-gfm (tables,
  * strikethrough, task lists) and rehype-raw (HTML passthrough).
- * Sanitises HTML via DOMPurify before rendering.
+ *
+ * Content through this component is all first-party (lesson/lab/admin bodies
+ * imported from our own Postgres), so it is NOT run through an HTML sanitiser
+ * on the source string. An earlier `DOMPurify.sanitize()` pre-parse pass
+ * silently broke Markdown: DOMPurify treats the source as HTML and, whenever
+ * the body contains any `<` (every lesson carries `<!-- VERIFY -->` authoring
+ * comments), re-serialises `>` as `&gt;`, which killed every `> blockquote`,
+ * including the course's flagship rule "AI suggests. Humans decide." (bug
+ * gwth-launch-5vh). `rehypeRaw` still strips HTML comments at the hast layer,
+ * so the authoring comments never reach the DOM.
  *
  * Supports custom syntax:
  * - Callouts: `:::note`, `:::warning`, `:::tip`, `:::deep-dive[Title]`
@@ -42,16 +50,6 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
   // that react-markdown + rehype-raw can handle
   const processed = preprocessMarkdown(content)
 
-  // Sanitise — allow our custom data attributes
-  const sanitised = DOMPurify.sanitize(processed, {
-    ADD_ATTR: [
-      "data-callout",
-      "data-callout-title",
-      "data-keyterm",
-      "data-definition",
-    ],
-  })
-
   return (
     <div className={cn("lesson-prose", className)}>
       <ReactMarkdown
@@ -59,7 +57,7 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
         rehypePlugins={[rehypeRaw]}
         components={markdownComponents}
       >
-        {sanitised}
+        {processed}
       </ReactMarkdown>
     </div>
   )
