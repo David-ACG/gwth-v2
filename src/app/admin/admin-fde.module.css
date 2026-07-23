@@ -78,7 +78,7 @@
 
 .mono {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -154,7 +154,7 @@
   justify-content: center;
   gap: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.72rem;
+  font-size: var(--fde-mono-md);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -276,7 +276,7 @@
 }
 
 .metricCaption {
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.5;
   color: var(--v-soft);
 }
@@ -297,12 +297,12 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: var(--fde-body-sm);
 }
 
 .table th {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.66rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -350,7 +350,7 @@
 
 .cellEmail {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.72rem;
+  font-size: var(--fde-mono-md);
   letter-spacing: 0.02em;
   color: var(--v-muted);
   display: block;
@@ -360,7 +360,7 @@
 
 .cellMuted {
   color: var(--v-muted);
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   white-space: nowrap;
 }
 
@@ -372,7 +372,7 @@
 
 .status {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.68rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -431,7 +431,7 @@
 }
 
 .dashesLabel {
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   color: var(--v-soft);
   white-space: nowrap;
 }
@@ -461,7 +461,7 @@
 }
 
 .panelLead {
-  font-size: 0.92rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.6;
   color: var(--v-soft);
   max-width: 52rem;
@@ -493,7 +493,7 @@
 .input,
 .select {
   font-family: var(--font-source-serif), Georgia, serif;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   color: var(--v-ink);
   background: var(--v-bg);
   border: 1px solid var(--v-line);
@@ -522,13 +522,13 @@
 }
 
 .checkboxLabel {
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   color: var(--v-soft);
 }
 
 .formError {
   width: 100%;
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   color: var(--v-rust);
   font-weight: 600;
 }
@@ -561,7 +561,7 @@
 }
 
 .inboxMessage {
-  font-size: 0.98rem;
+  font-size: var(--fde-body);
   line-height: 1.65;
   color: var(--v-soft);
   max-width: 62ch;
@@ -605,7 +605,7 @@
 }
 
 .emptyBody {
-  font-size: 0.92rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.6;
   color: var(--v-soft);
   max-width: 52rem;

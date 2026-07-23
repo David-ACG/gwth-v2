@@ -76,7 +76,7 @@
 
 .mono {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -143,7 +143,7 @@
 .panelKicker {
   margin-bottom: 0.7rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -186,7 +186,7 @@
 
 .label {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -233,7 +233,7 @@
 
 /* Field validation message (colour + weight; paired with the invalid border). */
 .error {
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   font-weight: 600;
   line-height: 1.5;
   color: var(--v-ink);
@@ -248,7 +248,7 @@
   border: 1px solid var(--v-rust);
   background: transparent;
   padding: 0.75rem 0.85rem;
-  font-size: 0.9rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.5;
   font-weight: 600;
   color: var(--v-ink);
@@ -271,7 +271,7 @@
   justify-content: center;
   gap: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.74rem;
+  font-size: var(--fde-mono-md);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -361,7 +361,7 @@
 
 .dividerLabel {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.66rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -374,7 +374,7 @@
   margin-top: 1.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--v-line);
-  font-size: 0.92rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.6;
   color: var(--v-soft);
   text-align: center;
@@ -403,7 +403,7 @@
 /* The forgot-password link sits inline with the field label — mono, small. */
 .inlineLink {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.64rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -424,7 +424,7 @@
 /* ---------------- Notice + action rows (invite-only, error, reset-invalid) --- */
 
 .notice {
-  font-size: 0.98rem;
+  font-size: var(--fde-body);
   line-height: 1.7;
   color: var(--v-soft);
 }
@@ -450,7 +450,7 @@
 }
 
 .successBody {
-  font-size: 0.98rem;
+  font-size: var(--fde-body);
   line-height: 1.7;
   color: var(--v-soft);
   max-width: 42ch;

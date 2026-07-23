@@ -67,7 +67,7 @@
 
 .mono {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -161,7 +161,7 @@
 .credentialBody {
   margin-top: 0.9rem;
   max-width: 52ch;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   line-height: 1.65;
   color: var(--v-soft);
 }
@@ -198,7 +198,7 @@
   display: grid;
   gap: 0.45rem;
   text-align: right;
-  font-size: 0.88rem;
+  font-size: var(--fde-body-sm);
 }
 
 .credentialFacts span {
@@ -251,7 +251,7 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.74rem;
+  font-size: var(--fde-mono-md);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;

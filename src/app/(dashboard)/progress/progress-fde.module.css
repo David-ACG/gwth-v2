@@ -74,7 +74,7 @@
 
 .mono {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -163,7 +163,7 @@
 }
 
 .statListLabel {
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   line-height: 1.5;
   color: var(--v-soft);
 }
@@ -205,7 +205,7 @@
 .scoreFactValue {
   margin-top: 0.2rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   font-weight: 600;
   color: var(--v-ink);
 }
@@ -252,7 +252,7 @@
 }
 
 .courseMeta {
-  font-size: 0.9rem;
+  font-size: var(--fde-body-sm);
   color: var(--v-soft);
 }
 
@@ -303,7 +303,7 @@
 }
 
 .quizTitle {
-  font-size: 0.92rem;
+  font-size: var(--fde-body-sm);
   font-weight: 600;
 }
 
@@ -338,7 +338,7 @@
 
 .emptyBody {
   margin-top: 0.4rem;
-  font-size: 0.93rem;
+  font-size: var(--fde-body);
   color: var(--v-soft);
 }
 
@@ -347,7 +347,7 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.72rem;
+  font-size: var(--fde-mono-md);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;

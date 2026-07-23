@@ -62,7 +62,7 @@
 
 .mono {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -79,7 +79,7 @@
 
 .mastheadKicker {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -109,7 +109,7 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.74rem;
+  font-size: var(--fde-mono-md);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -231,7 +231,7 @@
 
 .founderNote p + p {
   margin-top: 0.85rem;
-  font-size: 0.98rem;
+  font-size: var(--fde-body);
   font-style: italic;
   line-height: 1.7;
   color: var(--v-soft);
@@ -265,7 +265,7 @@
 
 .numberedIndex {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -280,7 +280,7 @@
 
 .numberedItem h3 + p {
   margin-top: 0.5rem;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   line-height: 1.65;
   color: var(--v-soft);
   max-width: 60ch;
@@ -331,7 +331,7 @@
   display: block;
   margin-top: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.66rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -362,7 +362,7 @@
 .closing p {
   margin: 1.25rem auto 0;
   max-width: 36rem;
-  font-size: 1.05rem;
+  font-size: var(--fde-body-lg);
   line-height: 1.65;
   color: var(--v-soft);
 }

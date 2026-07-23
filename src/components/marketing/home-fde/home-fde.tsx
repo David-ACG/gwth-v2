@@ -126,9 +126,17 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
       {explainer && explainerAt === "after-hero" ? explainer : null}
 
       {/* Cutout-register cover plate (2026-07-06 imagery, David's picks): full-width
-          landscape under the hero, breaking the text-only run. */}
+          landscape under the tour video, introduced by a line of copy so two
+          media blocks are not stacked without connective text (W23). */}
       <div className={styles.coverBand} data-section="cover-image">
         <div className={styles.page}>
+          <div className={styles.coverLead}>
+            <p className={styles.mono}>What building looks like</p>
+            <p className={styles.coverLeadText}>
+              Less watching, more making. Each month you build something real
+              in plain English and keep the evidence.
+            </p>
+          </div>
           <figure className={`${styles.figure} ${styles.figureCover}`}>
             <Image
               src="/home/home-build-desk-c.png"
@@ -158,6 +166,9 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               width={1264}
               height={848}
             />
+            <figcaption className={styles.figCaption}>
+              Nine ways in, one proof at the end.
+            </figcaption>
           </figure>
           <div className={styles.cardsRow}>
             {JOURNEYS.slice(0, 9).map((journey, index) => (

@@ -97,6 +97,27 @@
   --logo-wordmark: #22301f;
   --logo-accent: #a94c2e;
 
+  /* On-dark logo inks (mode-independent): a teal masthead band is always a
+     dark ground, so the auth masthead and any on-band lockup use cream +
+     mustard regardless of light/dark. Consumed by the LogoGwth `onDark`
+     variant so the treatment is named, not hand-hardcoded per page (W23). */
+  --logo-wordmark-on-dark: #edeae6;
+  --logo-accent-on-dark: #d4a062;
+
+  /* ---------------------------------------------------------------
+     FDE shared type scale (W23). One ramp for every *-fde surface so
+     small text is raised in ONE place, not per module. Floors chosen
+     for the CIPD demo audience (50-60, reading glasses, Teams share):
+     mono labels >=0.8rem, body 1.06-1.12rem on desktop. Sizes do not
+     flip by mode, so they live in :root and inherit into every .shell.
+     --------------------------------------------------------------- */
+  --fde-mono-xs: 0.8rem;   /* was 0.62-0.66: avatar initials, menu email, footer legal, citations */
+  --fde-mono-sm: 0.82rem;  /* was 0.68-0.70: base .mono, nav links, card tops, kickers */
+  --fde-mono-md: 0.85rem;  /* was 0.72-0.78: buttons, widget meta, digests */
+  --fde-body-sm: 1rem;     /* was 0.85-0.92: captions, stat lines, small body */
+  --fde-body: 1.06rem;     /* was 0.93-0.98: standard body copy */
+  --fde-body-lg: 1.12rem;  /* was 1.02-1.05: lesson prose, section leads */
+
   --background: oklch(0.98 0 0);
   --foreground: oklch(0.18 0.04 175);
 
@@ -359,7 +380,9 @@
 
 .lesson-prose {
   font-family: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
-  font-size: 1rem;
+  /* Raised for the CIPD demo audience (W23): the lesson body is the core
+     reading surface, so it sits at the top of the shared FDE body ramp. */
+  font-size: var(--fde-body-lg);
   line-height: 1.75;
   color: var(--foreground);
   max-width: 720px;
@@ -476,7 +499,7 @@
   width: 100%;
   border-collapse: collapse;
   margin: 1.25em 0;
-  font-size: 0.9375rem;
+  font-size: var(--fde-body-sm);
 }
 
 .lesson-prose th {

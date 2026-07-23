@@ -105,7 +105,7 @@
   background: transparent;
   color: var(--v-muted);
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.66rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -139,7 +139,7 @@
   border: 1px solid var(--v-line-soft);
   border-radius: 0;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.62rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.08em;
   color: var(--v-muted);
@@ -178,7 +178,7 @@
   background: var(--v-teal);
   color: var(--v-cream);
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.62rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 600;
   letter-spacing: 0.1em;
 }
@@ -195,21 +195,21 @@
 }
 
 .menuName {
-  font-size: 0.92rem;
+  font-size: var(--fde-body-sm);
   font-weight: 600;
   color: var(--v-ink);
 }
 
 .menuMeta {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.64rem;
+  font-size: var(--fde-mono-xs);
   letter-spacing: 0.06em;
   color: var(--v-muted);
 }
 
 .menu :global([data-slot="dropdown-menu-item"]) {
   border-radius: 0;
-  font-size: 0.92rem;
+  font-size: var(--fde-body-sm);
   color: var(--v-ink);
 }
 

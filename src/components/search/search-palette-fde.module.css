@@ -87,7 +87,7 @@
 .palette :global([data-slot="command-input"]) {
   border-radius: 0;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.78rem;
+  font-size: var(--fde-mono-md);
   letter-spacing: 0.06em;
   color: var(--v-ink);
 }
@@ -111,7 +111,7 @@
 
 .palette :global([cmdk-group-heading]) {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.66rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -121,7 +121,7 @@
 .palette :global([data-slot="command-item"]) {
   border-radius: 0;
   font-family: var(--font-source-serif), Georgia, serif;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   color: var(--v-ink);
 }
 
@@ -136,6 +136,6 @@
 
 .palette :global([data-slot="command-empty"]) {
   font-family: var(--font-source-serif), Georgia, serif;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   color: var(--v-soft);
 }

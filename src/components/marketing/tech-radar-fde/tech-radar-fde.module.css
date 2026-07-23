@@ -67,7 +67,7 @@
 
 .mono {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -84,7 +84,7 @@
 
 .mastheadKicker {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -126,7 +126,7 @@
 
 .mastheadFoot p {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -141,7 +141,7 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.74rem;
+  font-size: var(--fde-mono-md);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -208,7 +208,7 @@
   border-radius: 0;
   color: var(--v-ink);
   font-family: var(--font-source-serif), Georgia, serif;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   line-height: 1.4;
   padding: 0.65rem 0.9rem;
   transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -288,7 +288,7 @@
 
 .radarTable th {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -301,7 +301,7 @@
 .radarTable td {
   padding: 0.8rem 1rem 0.8rem 0;
   vertical-align: baseline;
-  font-size: 0.93rem;
+  font-size: var(--fde-body);
   line-height: 1.55;
   color: var(--v-soft);
   border-bottom: 1px solid var(--v-line);
@@ -334,7 +334,7 @@
 
 .linkGlyph {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.75rem;
+  font-size: var(--fde-mono-md);
   color: var(--v-muted);
   margin-left: 0.3rem;
 }
@@ -412,7 +412,7 @@
 .empty p {
   margin: 0.6rem auto 1.5rem;
   max-width: 32rem;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   line-height: 1.6;
   color: var(--v-soft);
 }
@@ -441,7 +441,7 @@
 .closing p {
   margin: 1.25rem auto 0;
   max-width: 36rem;
-  font-size: 1.05rem;
+  font-size: var(--fde-body-lg);
   line-height: 1.65;
   color: var(--v-soft);
 }

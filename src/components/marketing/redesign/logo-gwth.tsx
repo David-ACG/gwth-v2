@@ -21,6 +21,15 @@ export type LogoGwthProps = {
   wordmarkColor?: string
   /** Hex/colour for the arrow inside the G plus the two accent dots. Defaults to `var(--logo-accent)`. */
   accentColor?: string
+  /**
+   * Render the mark for a DARK ground (e.g. the teal auth masthead or any
+   * colour band) rather than the page ground. Uses the mode-independent
+   * `--logo-wordmark-on-dark` (cream) + `--logo-accent-on-dark` (mustard)
+   * so the on-band lockup is a named, deliberate variant instead of a
+   * per-page colour hardcode (W23). Ignored when `wordmarkColor` /
+   * `accentColor` are passed explicitly.
+   */
+  onDark?: boolean
   /** Width in CSS units; height auto-scales (aspect ≈ 5.69:1). */
   width?: number | string
   /** Optional accessible label. Defaults to "GWTH.ai". */
@@ -29,12 +38,36 @@ export type LogoGwthProps = {
 }
 
 export function LogoGwth({
-  wordmarkColor = "var(--logo-wordmark)",
-  accentColor = "var(--logo-accent)",
+  wordmarkColor,
+  accentColor,
+  onDark = false,
   width,
   title = "GWTH.ai",
   className,
 }: LogoGwthProps) {
+  const wordmark =
+    wordmarkColor ??
+    (onDark ? "var(--logo-wordmark-on-dark)" : "var(--logo-wordmark)")
+  const accent =
+    accentColor ??
+    (onDark ? "var(--logo-accent-on-dark)" : "var(--logo-accent)")
+  return renderWordmark({ wordmark, accent, width, title, className })
+}
+
+/** Internal: the wordmark SVG with resolved inks. */
+function renderWordmark({
+  wordmark: wordmarkColor,
+  accent: accentColor,
+  width,
+  title,
+  className,
+}: {
+  wordmark: string
+  accent: string
+  width?: number | string
+  title: string
+  className?: string
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -108,6 +141,11 @@ export type LogoGwthMarkProps = {
   wordmarkColor?: string
   /** Hex/colour for the arrow inside the G. Defaults to `var(--logo-accent)`. */
   accentColor?: string
+  /**
+   * Render for a DARK ground using the mode-independent on-dark inks
+   * (cream + mustard). See {@link LogoGwthProps.onDark} (W23).
+   */
+  onDark?: boolean
   /** Width in CSS units; height auto-scales (aspect ≈ 1.18:1). */
   width?: number | string
   /** Optional accessible label. Defaults to "GWTH". */
@@ -127,12 +165,19 @@ export type LogoGwthMarkProps = {
  * the full wordmark would be too dense.
  */
 export function LogoGwthMark({
-  wordmarkColor = "var(--logo-wordmark)",
-  accentColor = "var(--logo-accent)",
+  wordmarkColor,
+  accentColor,
+  onDark = false,
   width,
   title = "GWTH",
   className,
 }: LogoGwthMarkProps) {
+  const resolvedWordmark =
+    wordmarkColor ??
+    (onDark ? "var(--logo-wordmark-on-dark)" : "var(--logo-wordmark)")
+  const resolvedAccent =
+    accentColor ??
+    (onDark ? "var(--logo-accent-on-dark)" : "var(--logo-accent)")
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -145,12 +190,12 @@ export function LogoGwthMark({
       <title>{title}</title>
       {/* G outline */}
       <path
-        fill={wordmarkColor}
+        fill={resolvedWordmark}
         d="M60.79,1.33C28,.82,2.16,27.79,8.49,60.16s35.41,42.4,50.8,23.12c0,0-23.24.29-31.87-21.74S34.78,23.1,52.77,18.71s33.4,7,40.38,14.56l13.08-12.11S93.61,1.84,60.79,1.33Z"
       />
       {/* Arrow inside the G */}
       <path
-        fill={accentColor}
+        fill={resolvedAccent}
         d="M86.13,64.61h0S62.07,93.38,47.73,98.16c0,0,14.34,4.86,28.54,0,9.71-3.32,19.59-13,24.86-18.74L119,97.06V46.89H68.17Z"
       />
     </svg>

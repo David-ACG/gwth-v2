@@ -64,7 +64,7 @@
 
 .mono {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -146,7 +146,7 @@
 
 .heroFoot p {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -161,7 +161,7 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.74rem;
+  font-size: var(--fde-mono-md);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -247,7 +247,7 @@
 
 .sectionLead {
   max-width: 44rem;
-  font-size: 1.05rem;
+  font-size: var(--fde-body-lg);
   line-height: 1.7;
   color: var(--v-soft);
   margin-bottom: 2.5rem;
@@ -286,7 +286,7 @@
   padding: 0.6rem 1.25rem;
   color: var(--v-cream);
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.68rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -325,7 +325,7 @@
 }
 
 .cardBody > p {
-  font-size: 0.93rem;
+  font-size: var(--fde-body);
   line-height: 1.6;
   color: var(--v-soft);
   flex: 1;
@@ -334,7 +334,7 @@
 .cardStatLine {
   border-top: 1px solid var(--v-line-soft);
   padding-top: 0.85rem;
-  font-size: 0.85rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.5;
   color: var(--v-muted);
 }
@@ -353,7 +353,7 @@
   display: block;
   margin-top: 0.4rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.65rem;
+  font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -432,7 +432,7 @@
 
 .issue > p {
   margin-top: 0.6rem;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   line-height: 1.65;
   color: var(--v-soft);
 }
@@ -441,7 +441,7 @@
   margin-top: 1.3rem;
   border-top: 1px solid var(--v-line-soft);
   padding-top: 1rem;
-  font-size: 0.9rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.55;
   color: var(--v-soft);
 }
@@ -468,7 +468,7 @@
 }
 
 .credentialProse p {
-  font-size: 1.05rem;
+  font-size: var(--fde-body-lg);
   line-height: 1.7;
   color: var(--v-soft);
   margin-top: 1.25rem;
@@ -497,7 +497,7 @@
 }
 
 .statListRow p {
-  font-size: 0.92rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.5;
   color: var(--v-soft);
 }
@@ -523,7 +523,7 @@
 
 .credentialPanel > p {
   margin-top: 0.7rem;
-  font-size: 0.95rem;
+  font-size: var(--fde-body);
   line-height: 1.65;
   color: var(--v-soft);
 }
@@ -554,7 +554,7 @@
   display: grid;
   gap: 0.45rem;
   text-align: right;
-  font-size: 0.88rem;
+  font-size: var(--fde-body-sm);
 }
 
 .credentialFacts span {
@@ -612,7 +612,7 @@
 
 .dispatchPrice p {
   margin-top: 0.3rem;
-  font-size: 0.88rem;
+  font-size: var(--fde-body-sm);
   line-height: 1.5;
   color: var(--v-cream-muted);
 }
@@ -659,7 +659,7 @@
 .faqItem p {
   padding-bottom: 1.4rem;
   max-width: 62ch;
-  font-size: 0.98rem;
+  font-size: var(--fde-body);
   line-height: 1.7;
   color: var(--v-soft);
 }
@@ -688,7 +688,7 @@
 .closing p {
   margin: 1.25rem auto 0;
   max-width: 36rem;
-  font-size: 1.05rem;
+  font-size: var(--fde-body-lg);
   line-height: 1.65;
   color: var(--v-soft);
 }
@@ -706,9 +706,24 @@
    sizes/orientations. Each sits as a bordered paper plate on the ground. */
 
 .coverBand {
-  /* Full-width cover plate between hero and journey; the journey section's
-     own top padding provides the gap below, so only pad the top. */
+  /* Full-width cover plate between the tour video and the journey section;
+     the journey section's own top padding provides the gap below, so only
+     pad the top. */
   padding: clamp(2.5rem, 5vw, 4rem) 0 0;
+}
+
+/* Connective copy above the cover plate (W23): a line of text so the tour
+   video and the cutout image are not two media blocks stacked bare. */
+.coverLead {
+  max-width: 44rem;
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.coverLeadText {
+  margin-top: 0.8rem;
+  font-size: var(--fde-body-lg);
+  line-height: 1.6;
+  color: var(--v-soft);
 }
 
 .figure {
@@ -723,13 +738,29 @@
   height: auto;
 }
 
+/* Editorial figure caption: a mono strip under the plate, hairline-topped,
+   giving the image a voice and connecting it to the grid that follows (W23). */
+.figCaption {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  text-align: center;
+  border-top: 1px solid var(--v-line);
+  padding: 0.85rem 1rem;
+}
+
 .figureCover {
   /* spans the full .page width */
 }
 
 .figureInset {
+  /* Extra bottom breathing room so the plate does not jam against the
+     journey card grid immediately below it (W23). */
   max-width: 52rem;
-  margin: 2.5rem auto 0;
+  margin: 2.5rem auto clamp(2.5rem, 5vw, 3.5rem);
 }
 
 .figureRight {
