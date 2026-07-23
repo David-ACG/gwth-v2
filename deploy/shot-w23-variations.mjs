@@ -110,18 +110,19 @@ for (const t of TREATMENTS) {
     await ctx.addCookies(jarCookies(JAR))
     await ctx.addInitScript(() => { try { localStorage.setItem("theme", "light") } catch {} })
     const page = await ctx.newPage()
-    await page.goto(BASE + pg.path, { waitUntil: "networkidle", timeout: 45000 })
+    await page.goto(BASE + pg.path, { waitUntil: "load", timeout: 45000 })
+    // nudge scroll so every in-view lazy plate starts loading, then settle
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await page.waitForTimeout(1200)
+    await page.evaluate(() => window.scrollTo(0, 0))
     if (t.spec.font) {
       try {
         await page.addStyleTag({ url: `https://fonts.googleapis.com/css2?family=${t.spec.font.family}&display=swap` })
-        await page.evaluate((fam) => document.fonts.load(`600 1rem '${fam}'`).then(() => document.fonts.ready), t.spec.font.css)
-        await page.waitForTimeout(500)
+        await page.waitForTimeout(1200)
       } catch (e) { console.log(`  font load failed for ${t.id}: ${e.message}`) }
     }
     const n = await page.evaluate(applySpec, t.spec)
-    // wait for every in-viewport image to finish decoding
-    await page.evaluate(() => Promise.all(Array.from(document.images).map((im) => im.complete ? null : im.decode().catch(() => {}))))
-    await page.waitForTimeout(600)
+    await page.waitForTimeout(1000)
     const region = REGION[t.group][pg.id]
     const file = `${OUT}/${t.id}-${pg.id}.png`
     await page.screenshot({ path: file, clip: { x: 0, y: region.y, width: 1440, height: region.h } })
