@@ -1,0 +1,73 @@
+{
+  "id": "arena_001",
+  "slug": "job-advert-claude-vs-chatgpt",
+  "format": "model-arena",
+  "title": "Write a job advert: Claude vs ChatGPT",
+  "status": "live",
+  "category": "HR",
+  "testedOn": "2026-07-23",
+  "brief": "You are an HR advisor at a small charity that runs a care home in rural Shropshire. A Registered Nurse post has sat open for four months, and the current advert is dry and forgettable. You give the same tired advert to two AI tools and ask each to rewrite it. Then you decide which rewrite you would actually be happy to post, and why. The skill you are practising is not writing the advert yourself. It is judging which tool did the better job, on a task you understand.",
+  "matchup": [
+    {
+      "name": "Claude",
+      "modelId": "claude-opus-4-8",
+      "modelLabel": "Claude Opus 4.8 (1M-context variant)",
+      "howRun": "Generated directly from Claude Opus 4.8 on 2026-07-23."
+    },
+    {
+      "name": "ChatGPT",
+      "modelId": "gpt-5.6-sol",
+      "modelLabel": "OpenAI GPT-5.6",
+      "howRun": "Generated via the Codex CLI 0.144.1 at high reasoning effort on 2026-07-23. The consumer ChatGPT app uses the same GPT-5.6 family."
+    }
+  ],
+  "prompt": "You are helping a busy HR advisor at a small charity that runs a care home in rural Shropshire. We have been trying to fill a Registered Nurse vacancy for four months with no luck. Here is our current job advert, which we think is part of the problem:\n\nRegistered Nurse required. Applicants must hold a valid NMC pin and have a minimum of two years post-registration experience. Duties include administering medication, managing care plans, supervising healthcare assistants and liaising with GPs and families. Shift work including nights and weekends is required. Competitive salary. To apply, send your CV to recruitment@example.org.uk.\n\nPlease rewrite this advert so it is more likely to attract good candidates. Keep it honest and accurate, keep it to about 250 words, use British English, and make it warm and human without overselling the role. Include a short, genuine reason a nurse might actually want to work here.",
+  "outputs": [
+    {
+      "by": "Claude",
+      "verbatim": "Registered Nurse, small charity care home in rural Shropshire\n\nWe look after older people in a care home in rural Shropshire, and we are a small charity rather than a large chain. We are looking for a Registered Nurse to join us.\n\nHere is the honest version of the job. You would lead the nursing care for a small group of residents you come to know by name. That means keeping their care plans up to date, giving medication safely, supporting and supervising our healthcare assistants, and staying in touch with families and GPs. The role is on a rota that includes nights and weekends, so some flexibility is needed, and we would rather say that plainly now than surprise you later.\n\nYou will need a current NMC pin and at least two years of experience since you registered.\n\nThe real reason nurses stay with us is time and continuity. In a busy hospital you rarely find out how someone gets on after they leave your ward. Here you care for the same residents week after week, so you actually see your work make a difference, and you are given the time to do it properly. Being small also means you are a person to us, not a number on a rota, and senior staff are on the floor beside you rather than behind a door.\n\nIf that is the kind of nursing you came into the profession to do, we would love to hear from you. Send your CV to recruitment@example.org.uk, or call us first for a chat."
+    },
+    {
+      "by": "ChatGPT",
+      "verbatim": "## Registered Nurse – Rural Shropshire Care Home\n\nAre you a compassionate Registered Nurse looking for a role where you can build meaningful relationships with the people you care for?\n\nWe are a small charity running a care home in rural Shropshire. We are looking for an experienced Registered Nurse to join our team and help us provide safe, thoughtful and person-centred care to our residents.\n\nOne genuine reason to work with us is the continuity: you will get to know our residents, their families and your colleagues properly—and see the difference your care makes over time.\n\nYour responsibilities will include:\n\n- Administering medication safely\n- Reviewing and managing residents’ care plans\n- Supervising and supporting healthcare assistants\n- Liaising with GPs, families and other professionals\n- Helping the wider team maintain high standards of care\n\nYou will need a valid NMC pin and at least two years’ post-registration experience. Just as importantly, you will be calm, dependable and comfortable communicating with residents, relatives and colleagues.\n\nThis is a shift-based role covering days, nights and weekends. We want to be open about that from the outset, as flexibility is an essential part of providing consistent care around the clock.\n\nWe offer a competitive salary and the opportunity to work in a close-knit care-home team within a purpose-led charitable organisation.\n\nIf this sounds like the kind of nursing role you are looking for, please send your CV to **recruitment@example.org.uk**. We would be pleased to hear from you."
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Does it sound like a real person wrote it, or like a template?",
+      "goodLooksLike": "Warm, natural sentences you could imagine a manager saying, not stock advert phrases."
+    },
+    {
+      "criterion": "Is it honest about the hard parts, like the nights and weekends?",
+      "goodLooksLike": "The shifts are stated plainly and early, not buried or dressed up."
+    },
+    {
+      "criterion": "Does it give a real, specific reason to want this job?",
+      "goodLooksLike": "A concrete reason tied to this workplace, not a vague perk like 'competitive salary'."
+    },
+    {
+      "criterion": "Is the British English and punctuation clean for a UK advert?",
+      "goodLooksLike": "British spelling and no stray dashes or Americanisms you would have to fix before posting."
+    },
+    {
+      "criterion": "Is it easy to skim in ten seconds?",
+      "goodLooksLike": "Short paragraphs or a list, so a busy nurse can scan the key facts fast."
+    },
+    {
+      "criterion": "Would you post it with only light edits?",
+      "goodLooksLike": "You would change a detail or two, not rewrite it from scratch."
+    }
+  ],
+  "verdict": {
+    "winner": "Close, slight edge to Claude for this brief",
+    "callText": "This one is close, and both rewrites are a big improvement on the original. ChatGPT is the more polished advert at a glance: it opens with a clear heading, lists the duties as bullet points, and would drop straight onto a job board. But it leans on advert clichés the brief asked us to avoid, such as the 'Are you a compassionate Registered Nurse...' opener and phrases like 'person-centred care' and 'purpose-led charitable organisation'. It also slipped in an en dash in the heading and an em dash in the body, and a UK advert would want those tidied. Claude reads warmer and more human, and its genuine reason is stronger and more specific: seeing the same residents week after week, being a person rather than a number on a rota, senior staff on the floor beside you. It is honest about the shifts in plain words. Its weakness is that it is all prose, so it is harder to skim than ChatGPT's bulleted duties. For this brief, which asked for warmth, honesty and a genuine reason without overselling, Claude fits slightly better. The best real-world answer is to take Claude's honesty and specific reason and borrow ChatGPT's bulleted duties for skim-ability.",
+    "freshnessNote": "Tested on 2026-07-23 with Claude Opus 4.8 and OpenAI GPT-5.6. Models change often, so this verdict is only true for these versions on this date. The archived version of this lab shows how the two tools compared at this point, which is useful once newer models arrive."
+  },
+  "tryItYourself": [
+    "Find a real advert for a role you know is hard to fill, or use the care home one above.",
+    "Open claude.ai and chatgpt.com. Both have a free option and neither needs payment for this.",
+    "Paste the exact same prompt into both, word for word, so the test is fair.",
+    "Read both rewrites and score each one against the six questions in the rubric above.",
+    "Pick the one you would actually post, write one line on why, and note anything you would still change by hand."
+  ]
+}

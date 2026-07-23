@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gwth.ai/schemas/model-arena-lab.schema.json",
+  "title": "Model Arena lab",
+  "description": "A GWTH lab: one realistic task, two AI models run head-to-head on the same prompt, outputs shown verbatim side by side, a beginner rubric, and a dated verdict. Deliberately perishable; superseded when models change. See MODEL_ARENA_TEMPLATE.md.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "format",
+    "title",
+    "status",
+    "brief",
+    "matchup",
+    "prompt",
+    "outputs",
+    "rubric",
+    "verdict",
+    "tryItYourself",
+    "testedOn"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "description": "Stable unique id, e.g. arena_001." },
+    "slug": { "type": "string", "description": "URL-friendly slug." },
+    "format": { "const": "model-arena", "description": "Discriminates this from the retired tiered-lab format." },
+    "title": { "type": "string", "description": "Plain and specific: the task, then the matchup." },
+    "status": {
+      "type": "string",
+      "enum": ["live", "archived"],
+      "description": "live = one of the ~6 current labs; archived = superseded but kept for the archive."
+    },
+    "category": { "type": "string", "description": "Broad task area, e.g. Writing, HR, Research, Admin." },
+    "testedOn": { "type": "string", "format": "date", "description": "The date both outputs were generated (ISO yyyy-mm-dd)." },
+    "brief": {
+      "type": "string",
+      "description": "One paragraph: who the student pretends to be, the realistic task, why it matters. Plain English."
+    },
+    "matchup": {
+      "type": "array",
+      "description": "Exactly two contestants.",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["name", "modelId", "howRun"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "Friendly product name, e.g. Claude, ChatGPT." },
+          "modelId": { "type": "string", "description": "Exact model id, never rounded, e.g. claude-opus-4-8, gpt-5.6-sol." },
+          "modelLabel": { "type": "string", "description": "Human model label, e.g. Claude Opus 4.8." },
+          "howRun": { "type": "string", "description": "Exactly how it was run, e.g. Codex CLI 0.144.1 at high reasoning effort." }
+        }
+      }
+    },
+    "prompt": {
+      "type": "string",
+      "description": "The single prompt given to BOTH models, verbatim and identical."
+    },
+    "outputs": {
+      "type": "array",
+      "description": "Each contestant's real answer, quoted verbatim. Same order as matchup.",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["by", "verbatim"],
+        "additionalProperties": false,
+        "properties": {
+          "by": { "type": "string", "description": "Which contestant produced it (matches matchup.name)." },
+          "verbatim": { "type": "string", "description": "The output exactly as generated. Never edited, trimmed or paraphrased." }
+        }
+      }
+    },
+    "rubric": {
+      "type": "array",
+      "description": "4-6 criteria a beginner can score by reading.",
+      "minItems": 4,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["criterion", "goodLooksLike"],
+        "additionalProperties": false,
+        "properties": {
+          "criterion": { "type": "string", "description": "A plain question the student answers for each output." },
+          "goodLooksLike": { "type": "string", "description": "One line on what a strong answer looks like." }
+        }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "required": ["callText", "freshnessNote"],
+      "additionalProperties": false,
+      "properties": {
+        "winner": { "type": "string", "description": "Contestant name, or 'Close' / 'Tie'. Honest, never rigged." },
+        "callText": { "type": "string", "description": "The reasoned verdict, fair to the loser." },
+        "freshnessNote": { "type": "string", "description": "Reminder that models change, so this holds only for these versions and this date." }
+      }
+    },
+    "tryItYourself": {
+      "type": "array",
+      "description": "Short numbered steps for the student to run the same task themselves.",
+      "minItems": 1,
+      "items": { "type": "string" }
+    }
+  }
+}
