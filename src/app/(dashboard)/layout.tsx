@@ -24,9 +24,14 @@ export default async function DashboardLayout({
   return (
     <div className={`${styles.shell} flex min-h-screen`}>
       <Sidebar />
-      <div className="flex flex-1 flex-col">
+      {/* min-w-0: without it this flex child keeps its default min-width:auto
+          (= min-content of the widest descendant, e.g. a code block or the
+          streak calendar), which balloons the whole page and produces the
+          mobile horizontal scroll. min-w-0 lets it shrink so the inner
+          overflow-x-auto scroll containers engage instead (gwth-launch-sg6). */}
+      <div className="flex min-w-0 flex-1 flex-col">
         <DashboardHeader userName={user?.name} userEmail={user?.email} userAvatarUrl={user?.avatarUrl} />
-        <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
+        <main className="min-w-0 flex-1 overflow-auto p-4 md:p-6 lg:p-8">
           <div className="mx-auto max-w-[1400px]">
             {children}
           </div>

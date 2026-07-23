@@ -38,6 +38,17 @@ export default async function ProgressPage() {
       getDynamicScore(),
     ])
 
+  // Map raw lesson ids (e.g. "m1_l01") to human lesson titles so the quiz
+  // rows never leak internal identifiers into the UI (gwth-launch-fqp).
+  const lessonTitles = new Map<string, string>()
+  for (const course of courses) {
+    for (const section of course.sections ?? []) {
+      for (const lesson of section.lessons ?? []) {
+        lessonTitles.set(lesson.id, lesson.title)
+      }
+    }
+  }
+
   const totalTimeSpent = lessonProgress.reduce(
     (sum, lp) => sum + lp.timeSpent,
     0
@@ -127,11 +138,13 @@ export default async function ProgressPage() {
         </div>
         <div className={styles.statListRow}>
           <span className={styles.statListValue}>
-            {streak.currentStreak} days
+            {streak.currentStreak}{" "}
+            {streak.currentStreak === 1 ? "day" : "days"}
           </span>
           <span className={styles.statListLabel}>Current streak</span>
           <span className={styles.mono}>
-            Longest {streak.longestStreak} days
+            Longest {streak.longestStreak}{" "}
+            {streak.longestStreak === 1 ? "day" : "days"}
           </span>
         </div>
         <div className={styles.statListRow}>
@@ -244,7 +257,9 @@ export default async function ProgressPage() {
                 return (
                   <div key={lp.lessonId} className={styles.quizRow}>
                     <div>
-                      <p className={styles.quizTitle}>Lesson {lp.lessonId}</p>
+                      <p className={styles.quizTitle}>
+                        {lessonTitles.get(lp.lessonId) ?? "Lesson"}
+                      </p>
                       <p className={styles.quizMeta}>
                         {lp.quizAttempts} attempt
                         {lp.quizAttempts !== 1 ? "s" : ""}

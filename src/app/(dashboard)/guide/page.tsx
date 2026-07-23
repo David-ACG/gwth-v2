@@ -77,7 +77,8 @@ export default async function GuidePage() {
                       <span aria-hidden="true" className={styles.listMark} />
                       <span>
                         <strong>Month 1 lessons.</strong> Every lesson for the
-                        first month, with the reading, video and audio.
+                        first month to read and work through, with video and
+                        narration rolling out lesson by lesson during the beta.
                       </span>
                     </div>
                     <div className={styles.listItem}>

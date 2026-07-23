@@ -35,9 +35,9 @@ export const mockCourses: Course[] = [
   {
     id: "course_gwth",
     slug: "applied-ai-skills",
-    title: "GWTH — Applied AI Skills",
+    title: "Applied AI Skills",
     description:
-      "Master AI in plain English. Build real apps, automate workflows, and transform your career — no coding required. A 3-month journey from AI beginner to enterprise-ready practitioner.",
+      "Practical AI in plain English. Build real apps, automate everyday work, and research faster, with no coding required. A three-month course, about five hours a week.",
     thumbnail: "/images/courses/applied-ai-skills.jpg",
     blurDataUrl: null,
     price: 0,

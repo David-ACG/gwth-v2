@@ -395,9 +395,7 @@ export function ActiveDashboard({
               </p>
               <div className={styles.cardFoot}>
                 <span className={styles.monoStrong}>UNLOCKS AFTER MONTH 01</span>
-                <span className={styles.cardPrice}>
-                  £{COURSE_MONTHLY_PRICE.toFixed(0)}
-                </span>
+                <span className={styles.mono}>35 lessons</span>
               </div>
             </div>
           </div>
@@ -413,9 +411,7 @@ export function ActiveDashboard({
               </p>
               <div className={styles.cardFoot}>
                 <span className={styles.monoStrong}>UNLOCKS AFTER MONTH 02</span>
-                <span className={styles.cardPrice}>
-                  £{COURSE_MONTHLY_PRICE.toFixed(0)}
-                </span>
+                <span className={styles.mono}>35 lessons</span>
               </div>
             </div>
           </div>
@@ -565,7 +561,9 @@ export function ActiveDashboard({
             <p className={styles.tealMono}>CURRENT STREAK</p>
             <div className={styles.hugeNumCream}>
               {streak.currentStreak}
-              <span className={styles.hugeNumUnit}>DAYS</span>
+              <span className={styles.hugeNumUnit}>
+                {streak.currentStreak === 1 ? "DAY" : "DAYS"}
+              </span>
             </div>
             <p className={styles.activityNoteCream}>
               {streak.longestStreak > 0
@@ -703,7 +701,7 @@ export function FreeDashboard({ user }: { user: User | null }) {
           </p>
         </div>
         <div className={styles.bandAside}>
-          <p className={styles.mono}>BETA · 23 JUNE 2026</p>
+          <p className={styles.mono}>BETA · INVITE ONLY</p>
           <div className={styles.asideTitle}>
             Month 1 unlocks Building with Claude, Codex and the consultant&rsquo;s
             prompt patterns.

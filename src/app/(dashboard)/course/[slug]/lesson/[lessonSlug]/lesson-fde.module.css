@@ -126,6 +126,10 @@
 /* Serif reading measure (§3): 62ch, 1.02rem / 1.7. */
 .proseBody {
   max-width: 62ch;
+  /* min-width:0 so a wide markdown artefact (table, code block) can't stretch
+     the reading column past the viewport on mobile; the artefact scrolls
+     inside its own overflow-x container instead (gwth-launch-sg6). */
+  min-width: 0;
   font-size: 1.02rem;
   line-height: 1.7;
   color: var(--v-soft);

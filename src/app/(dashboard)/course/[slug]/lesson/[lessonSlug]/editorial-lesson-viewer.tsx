@@ -515,7 +515,7 @@ export function EditorialLessonViewer({
             outlineOpen={outlineOpen}
           />
 
-          <div className="flex flex-1 flex-col px-14">
+          <div className="flex min-w-0 flex-1 flex-col px-5 sm:px-8 lg:px-14">
             <LessonChrome
               monthLabel={
                 isQa ? `${lesson.monthLabel} · END-OF-LESSON` : lesson.monthLabel
@@ -535,7 +535,7 @@ export function EditorialLessonViewer({
               quizPassed={quizPassed}
             />
 
-            <div className="flex flex-1 justify-center py-9">
+            <div className="flex min-w-0 flex-1 justify-center py-9">
               {isVideo ? (
                 <VideoPageBody
                   videoUrl={mediaUrl(lesson.introVideoUrl) || null}
@@ -2204,7 +2204,7 @@ function LessonCompleteSurface({
       <MastRow
         section={`COURSE · LESSON ${lesson.lessonNumber} · COMPLETE`}
       />
-      <div className="flex flex-1 items-center justify-center px-14 py-10">
+      <div className="flex min-w-0 flex-1 items-center justify-center px-5 py-10 sm:px-8 lg:px-14">
         <div className="w-full max-w-[920px]">
           <div className="mb-6 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
             {lesson.monthLabel} · COMPLETE

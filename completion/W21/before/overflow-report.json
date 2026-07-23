@@ -1,0 +1,874 @@
+[
+  {
+    "name": "home",
+    "path": "/",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/home-light-1440.png"
+  },
+  {
+    "name": "login",
+    "path": "/login",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/login-light-1440.png"
+  },
+  {
+    "name": "waitlist",
+    "path": "/waitlist",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/waitlist-light-1440.png"
+  },
+  {
+    "name": "pricing",
+    "path": "/pricing",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/pricing-light-1440.png"
+  },
+  {
+    "name": "labs-public",
+    "path": "/labs",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/labs-public-light-1440.png"
+  },
+  {
+    "name": "dashboard",
+    "path": "/dashboard",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/dashboard-light-1440.png"
+  },
+  {
+    "name": "course",
+    "path": "/course/applied-ai-skills",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/course-light-1440.png"
+  },
+  {
+    "name": "lesson",
+    "path": "/course/applied-ai-skills/lesson/welcome-to-gwth",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lesson-light-1440.png"
+  },
+  {
+    "name": "lesson-agents",
+    "path": "/course/applied-ai-skills/lesson/ai-agents-intro",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lesson-agents-light-1440.png"
+  },
+  {
+    "name": "progress",
+    "path": "/progress",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/progress-light-1440.png"
+  },
+  {
+    "name": "lab-detail",
+    "path": "/labs/the-prompt-ladder",
+    "scheme": "light",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lab-detail-light-1440.png"
+  },
+  {
+    "name": "home",
+    "path": "/",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/home-light-390.png"
+  },
+  {
+    "name": "login",
+    "path": "/login",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/login-light-390.png"
+  },
+  {
+    "name": "waitlist",
+    "path": "/waitlist",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/waitlist-light-390.png"
+  },
+  {
+    "name": "pricing",
+    "path": "/pricing",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/pricing-light-390.png"
+  },
+  {
+    "name": "labs-public",
+    "path": "/labs",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 1205,
+    "overflow": 815,
+    "offenders": [
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "PromptingFreeThe Prompt Ladder: Vague vs"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "WritingFreeThree Chatbots, One Difficult"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "PromptingFreeBuild Your Prompt Cheat She"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "ResearchFreeCatch the Hallucination: Fac"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "PromptingFreeThe Jagged Frontier Test: P"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "ProductivityFreeWhere AI Already Lives: "
+      }
+    ],
+    "file": "completion/W21/before/labs-public-light-390.png"
+  },
+  {
+    "name": "dashboard",
+    "path": "/dashboard",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/dashboard-light-390.png"
+  },
+  {
+    "name": "course",
+    "path": "/course/applied-ai-skills",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/course-light-390.png"
+  },
+  {
+    "name": "lesson",
+    "path": "/course/applied-ai-skills/lesson/welcome-to-gwth",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 556,
+    "overflow": 166,
+    "offenders": [
+      {
+        "tag": "div",
+        "cls": "flex flex-1 flex-col",
+        "right": 556,
+        "width": 556,
+        "text": "Course/Applied Ai Skills/Lesson/Welcome "
+      },
+      {
+        "tag": "header",
+        "cls": "header-fde-module__Mea_LW__shell header-fde-module__Mea_LW__",
+        "right": 556,
+        "width": 556,
+        "text": "Course/Applied Ai Skills/Lesson/Welcome "
+      },
+      {
+        "tag": "main",
+        "cls": "flex-1 overflow-auto p-4 md:p-6 lg:p-8",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      },
+      {
+        "tag": "div",
+        "cls": "-mx-4 md:-mx-6 lg:-mx-8 -my-4 md:-my-6 lg:-my-8",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      },
+      {
+        "tag": "div",
+        "cls": "lesson-fde-module__6p3usa__shell flex min-h-[calc(100vh-4rem",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      },
+      {
+        "tag": "div",
+        "cls": "flex flex-1 min-h-0",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      }
+    ],
+    "file": "completion/W21/before/lesson-light-390.png"
+  },
+  {
+    "name": "lesson-agents",
+    "path": "/course/applied-ai-skills/lesson/ai-agents-intro",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lesson-agents-light-390.png"
+  },
+  {
+    "name": "progress",
+    "path": "/progress",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 797,
+    "overflow": 407,
+    "offenders": [
+      {
+        "tag": "div",
+        "cls": "flex flex-1 flex-col",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressSearch⌘KARProgressYour recordTra"
+      },
+      {
+        "tag": "header",
+        "cls": "header-fde-module__Mea_LW__shell header-fde-module__Mea_LW__",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressSearch⌘KAR"
+      },
+      {
+        "tag": "main",
+        "cls": "flex-1 overflow-auto p-4 md:p-6 lg:p-8",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressYour recordTrack your learning j"
+      },
+      {
+        "tag": "div",
+        "cls": "progress-fde-module__8QK_aq__shell",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressYour recordTrack your learning j"
+      },
+      {
+        "tag": "div",
+        "cls": "ml-auto flex items-center gap-2",
+        "right": 781,
+        "width": 112,
+        "text": "Search⌘KAR"
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center justify-center gap-2 whitespace-now",
+        "right": 781,
+        "width": 32,
+        "text": "AR"
+      }
+    ],
+    "file": "completion/W21/before/progress-light-390.png"
+  },
+  {
+    "name": "lab-detail",
+    "path": "/labs/the-prompt-ladder",
+    "scheme": "light",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 528,
+    "overflow": 138,
+    "offenders": [
+      {
+        "tag": "code",
+        "cls": "",
+        "right": 1733,
+        "width": 1696,
+        "text": "[your one-sentence task]. Before you ans"
+      },
+      {
+        "tag": "span",
+        "cls": "line",
+        "right": 1733,
+        "width": 1696,
+        "text": "[your one-sentence task]. Before you ans"
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 1733,
+        "width": 1696,
+        "text": "[your one-sentence task]. Before you ans"
+      },
+      {
+        "tag": "code",
+        "cls": "",
+        "right": 701,
+        "width": 664,
+        "text": "Role: Act as a [type of expert] with exp"
+      },
+      {
+        "tag": "span",
+        "cls": "line",
+        "right": 701,
+        "width": 664,
+        "text": "Constraints: Keep within [budget, time, "
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 701,
+        "width": 664,
+        "text": "Constraints: Keep within [budget, time, "
+      }
+    ],
+    "file": "completion/W21/before/lab-detail-light-390.png"
+  },
+  {
+    "name": "home",
+    "path": "/",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/home-dark-1440.png"
+  },
+  {
+    "name": "login",
+    "path": "/login",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/login-dark-1440.png"
+  },
+  {
+    "name": "waitlist",
+    "path": "/waitlist",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/waitlist-dark-1440.png"
+  },
+  {
+    "name": "pricing",
+    "path": "/pricing",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/pricing-dark-1440.png"
+  },
+  {
+    "name": "labs-public",
+    "path": "/labs",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/labs-public-dark-1440.png"
+  },
+  {
+    "name": "dashboard",
+    "path": "/dashboard",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/dashboard-dark-1440.png"
+  },
+  {
+    "name": "course",
+    "path": "/course/applied-ai-skills",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/course-dark-1440.png"
+  },
+  {
+    "name": "lesson",
+    "path": "/course/applied-ai-skills/lesson/welcome-to-gwth",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lesson-dark-1440.png"
+  },
+  {
+    "name": "lesson-agents",
+    "path": "/course/applied-ai-skills/lesson/ai-agents-intro",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lesson-agents-dark-1440.png"
+  },
+  {
+    "name": "progress",
+    "path": "/progress",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/progress-dark-1440.png"
+  },
+  {
+    "name": "lab-detail",
+    "path": "/labs/the-prompt-ladder",
+    "scheme": "dark",
+    "w": "1440",
+    "status": 200,
+    "vw": 1440,
+    "scrollW": 1440,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lab-detail-dark-1440.png"
+  },
+  {
+    "name": "home",
+    "path": "/",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/home-dark-390.png"
+  },
+  {
+    "name": "login",
+    "path": "/login",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/login-dark-390.png"
+  },
+  {
+    "name": "waitlist",
+    "path": "/waitlist",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/waitlist-dark-390.png"
+  },
+  {
+    "name": "pricing",
+    "path": "/pricing",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/pricing-dark-390.png"
+  },
+  {
+    "name": "labs-public",
+    "path": "/labs",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 1205,
+    "overflow": 815,
+    "offenders": [
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "PromptingFreeThe Prompt Ladder: Vague vs"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "WritingFreeThree Chatbots, One Difficult"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "PromptingFreeBuild Your Prompt Cheat She"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "ResearchFreeCatch the Hallucination: Fac"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "PromptingFreeThe Jagged Frontier Test: P"
+      },
+      {
+        "tag": "a",
+        "cls": "labs-fde-module__s2u6sG__card",
+        "right": 1205,
+        "width": 1185,
+        "text": "ProductivityFreeWhere AI Already Lives: "
+      }
+    ],
+    "file": "completion/W21/before/labs-public-dark-390.png"
+  },
+  {
+    "name": "dashboard",
+    "path": "/dashboard",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/dashboard-dark-390.png"
+  },
+  {
+    "name": "course",
+    "path": "/course/applied-ai-skills",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/course-dark-390.png"
+  },
+  {
+    "name": "lesson",
+    "path": "/course/applied-ai-skills/lesson/welcome-to-gwth",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 556,
+    "overflow": 166,
+    "offenders": [
+      {
+        "tag": "div",
+        "cls": "flex flex-1 flex-col",
+        "right": 556,
+        "width": 556,
+        "text": "Course/Applied Ai Skills/Lesson/Welcome "
+      },
+      {
+        "tag": "header",
+        "cls": "header-fde-module__Mea_LW__shell header-fde-module__Mea_LW__",
+        "right": 556,
+        "width": 556,
+        "text": "Course/Applied Ai Skills/Lesson/Welcome "
+      },
+      {
+        "tag": "main",
+        "cls": "flex-1 overflow-auto p-4 md:p-6 lg:p-8",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      },
+      {
+        "tag": "div",
+        "cls": "-mx-4 md:-mx-6 lg:-mx-8 -my-4 md:-my-6 lg:-my-8",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      },
+      {
+        "tag": "div",
+        "cls": "lesson-fde-module__6p3usa__shell flex min-h-[calc(100vh-4rem",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      },
+      {
+        "tag": "div",
+        "cls": "flex flex-1 min-h-0",
+        "right": 556,
+        "width": 556,
+        "text": "LESSON 01 · OUTLINEWhy this lesson exist"
+      }
+    ],
+    "file": "completion/W21/before/lesson-dark-390.png"
+  },
+  {
+    "name": "lesson-agents",
+    "path": "/course/applied-ai-skills/lesson/ai-agents-intro",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 390,
+    "overflow": 0,
+    "offenders": [],
+    "file": "completion/W21/before/lesson-agents-dark-390.png"
+  },
+  {
+    "name": "progress",
+    "path": "/progress",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 797,
+    "overflow": 407,
+    "offenders": [
+      {
+        "tag": "div",
+        "cls": "flex flex-1 flex-col",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressSearch⌘KARProgressYour recordTra"
+      },
+      {
+        "tag": "header",
+        "cls": "header-fde-module__Mea_LW__shell header-fde-module__Mea_LW__",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressSearch⌘KAR"
+      },
+      {
+        "tag": "main",
+        "cls": "flex-1 overflow-auto p-4 md:p-6 lg:p-8",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressYour recordTrack your learning j"
+      },
+      {
+        "tag": "div",
+        "cls": "progress-fde-module__8QK_aq__shell",
+        "right": 797,
+        "width": 797,
+        "text": "ProgressYour recordTrack your learning j"
+      },
+      {
+        "tag": "div",
+        "cls": "ml-auto flex items-center gap-2",
+        "right": 781,
+        "width": 112,
+        "text": "Search⌘KAR"
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center justify-center gap-2 whitespace-now",
+        "right": 781,
+        "width": 32,
+        "text": "AR"
+      }
+    ],
+    "file": "completion/W21/before/progress-dark-390.png"
+  },
+  {
+    "name": "lab-detail",
+    "path": "/labs/the-prompt-ladder",
+    "scheme": "dark",
+    "w": "390",
+    "status": 200,
+    "vw": 390,
+    "scrollW": 528,
+    "overflow": 138,
+    "offenders": [
+      {
+        "tag": "code",
+        "cls": "",
+        "right": 1733,
+        "width": 1696,
+        "text": "[your one-sentence task]. Before you ans"
+      },
+      {
+        "tag": "span",
+        "cls": "line",
+        "right": 1733,
+        "width": 1696,
+        "text": "[your one-sentence task]. Before you ans"
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 1733,
+        "width": 1696,
+        "text": "[your one-sentence task]. Before you ans"
+      },
+      {
+        "tag": "code",
+        "cls": "",
+        "right": 701,
+        "width": 664,
+        "text": "Role: Act as a [type of expert] with exp"
+      },
+      {
+        "tag": "span",
+        "cls": "line",
+        "right": 701,
+        "width": 664,
+        "text": "Constraints: Keep within [budget, time, "
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 701,
+        "width": 664,
+        "text": "Constraints: Keep within [budget, time, "
+      }
+    ],
+    "file": "completion/W21/before/lab-detail-dark-390.png"
+  }
+]

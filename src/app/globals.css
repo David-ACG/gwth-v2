@@ -363,6 +363,24 @@
   line-height: 1.75;
   color: var(--foreground);
   max-width: 720px;
+  /* Mobile containment (gwth-launch-sg6): keep the reading column shrinkable
+     and break long words/URLs rather than forcing horizontal page scroll. */
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+/* Wide markdown artefacts scroll inside their own box instead of stretching
+   the page. Tables become block-level scroll containers; code blocks (the
+   CodeBlock component also sets overflow-x internally) are belt-and-braces. */
+.lesson-prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.lesson-prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 /* Headings */

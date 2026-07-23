@@ -294,17 +294,17 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             className={styles.credentialPanel}
           >
             <p className={styles.mono}>Beta progress preview</p>
-            <h3>Sarah Mensah</h3>
+            <h3>Applied AI Skills</h3>
             <p>
-              Has completed AI Literacy Foundations: practical AI for
-              non-technical adults, refreshed against the live curriculum.
+              An example progress record: practical AI for non-technical
+              adults, refreshed against the live curriculum as lessons change.
             </p>
             <div className={styles.credentialRow}>
               <div className={styles.credentialNumber}>64/94</div>
               <div className={styles.credentialFacts}>
                 <div>
-                  <span>Issued</span>
-                  <strong>12 Feb 2026</strong>
+                  <span>Format</span>
+                  <strong>Live record</strong>
                 </div>
                 <div>
                   <span>Progress</span>

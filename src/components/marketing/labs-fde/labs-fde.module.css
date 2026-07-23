@@ -295,6 +295,11 @@
 
 .cardsRow {
   display: grid;
+  /* Explicit single-column track so the card can shrink below its content's
+     max-content width on mobile. Without this the implicit `auto` track grows
+     to fit the longest card line on one line (~1185px), forcing horizontal
+     scroll at 390px (gwth-launch-sg6). */
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.75rem;
 }
 
