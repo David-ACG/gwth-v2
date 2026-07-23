@@ -1,0 +1,128 @@
+[
+  {
+    "group": "typeface",
+    "id": "typ-a",
+    "page": "home",
+    "file": "completion/W23/variations/typ-a-home.png",
+    "shells": 3
+  },
+  {
+    "group": "typeface",
+    "id": "typ-a",
+    "page": "lesson",
+    "file": "completion/W23/variations/typ-a-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "typeface",
+    "id": "typ-b",
+    "page": "home",
+    "file": "completion/W23/variations/typ-b-home.png",
+    "shells": 3
+  },
+  {
+    "group": "typeface",
+    "id": "typ-b",
+    "page": "lesson",
+    "file": "completion/W23/variations/typ-b-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "typeface",
+    "id": "typ-c",
+    "page": "home",
+    "file": "completion/W23/variations/typ-c-home.png",
+    "shells": 3
+  },
+  {
+    "group": "typeface",
+    "id": "typ-c",
+    "page": "lesson",
+    "file": "completion/W23/variations/typ-c-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "palette",
+    "id": "pal-a",
+    "page": "home",
+    "file": "completion/W23/variations/pal-a-home.png",
+    "shells": 3
+  },
+  {
+    "group": "palette",
+    "id": "pal-a",
+    "page": "lesson",
+    "file": "completion/W23/variations/pal-a-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "palette",
+    "id": "pal-b",
+    "page": "home",
+    "file": "completion/W23/variations/pal-b-home.png",
+    "shells": 3
+  },
+  {
+    "group": "palette",
+    "id": "pal-b",
+    "page": "lesson",
+    "file": "completion/W23/variations/pal-b-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "palette",
+    "id": "pal-c",
+    "page": "home",
+    "file": "completion/W23/variations/pal-c-home.png",
+    "shells": 3
+  },
+  {
+    "group": "palette",
+    "id": "pal-c",
+    "page": "lesson",
+    "file": "completion/W23/variations/pal-c-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "imagery",
+    "id": "img-a",
+    "page": "home",
+    "file": "completion/W23/variations/img-a-home.png",
+    "shells": 3
+  },
+  {
+    "group": "imagery",
+    "id": "img-a",
+    "page": "lesson",
+    "file": "completion/W23/variations/img-a-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "imagery",
+    "id": "img-b",
+    "page": "home",
+    "file": "completion/W23/variations/img-b-home.png",
+    "shells": 3
+  },
+  {
+    "group": "imagery",
+    "id": "img-b",
+    "page": "lesson",
+    "file": "completion/W23/variations/img-b-lesson.png",
+    "shells": 1
+  },
+  {
+    "group": "imagery",
+    "id": "img-c",
+    "page": "home",
+    "file": "completion/W23/variations/img-c-home.png",
+    "shells": 3
+  },
+  {
+    "group": "imagery",
+    "id": "img-c",
+    "page": "lesson",
+    "file": "completion/W23/variations/img-c-lesson.png",
+    "shells": 1
+  }
+]

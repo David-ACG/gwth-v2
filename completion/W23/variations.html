@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>W23 · design-direction variations for W24</title>
+<style>
+  :root{
+    --bg:#e8e9de; --surface:#f1ecdc; --ink:#1a1c18; --soft:#3a3c34; --muted:#5a5c52;
+    --line:#c8c8b8; --line-soft:#d8d4c4; --teal:#2c4a47; --moss:#2a4530; --rust:#a87528; --ochre:#c08a36;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Source Serif 4',Georgia,serif;line-height:1.55;
+    padding:2rem 1.5rem 5rem;}
+  .wrap{max-width:1240px;margin:0 auto;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  h1{font-size:1.8rem;margin:0 0 .4rem;font-weight:600;letter-spacing:-.015em;}
+  .sub{color:var(--soft);margin:0 0 .3rem;font-size:1.05rem;max-width:60rem;}
+  .meta{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:.2rem 0 0;}
+  .warn{border:1px solid var(--ink);background:var(--surface);padding:.9rem 1.1rem;margin:1.4rem 0 0;
+    font-size:.95rem;color:var(--soft);}
+  .warn b{color:var(--ink);}
+  section.q{margin-top:3rem;border-top:1px solid var(--ink);padding-top:1.2rem;}
+  .qhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem 2rem;}
+  h2{font-size:1.35rem;margin:0;font-weight:600;letter-spacing:-.01em;}
+  .qkick{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.7rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);}
+  .qbody{margin:.5rem 0 1.2rem;font-size:1rem;color:var(--soft);max-width:66rem;}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;}
+  @media(max-width:900px){.three{grid-template-columns:1fr;}}
+  .opt{background:var(--surface);border:1px solid var(--line);}
+  .opt.cur{border-color:var(--teal);box-shadow:4px 4px 0 var(--teal);}
+  .opt .cap{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;
+    padding:.6rem .8rem;border-bottom:1px solid var(--line-soft);}
+  .opt .cap b{font-size:.95rem;font-weight:600;}
+  .tag{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.6rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);}
+  .tag.cur{color:var(--teal);}
+  .opt img{display:block;width:100%;height:auto;border-top:1px solid var(--line-soft);
+    background:#fff;}
+  .pair{display:grid;grid-template-columns:1fr;gap:.4rem;}
+  .plabel{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.58rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);padding:.35rem .8rem 0;}
+  footer{margin-top:3.5rem;border-top:1px solid var(--line);padding-top:1rem;color:var(--muted);font-size:.85rem;}
+  a{color:var(--teal);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Design directions for the demo path</h1>
+  <p class="sub">Three side-by-side questions surfaced by the W23 audit. Each shows the same real pages
+  (home hero + journeys grid, and the lesson viewer) with one treatment applied. <b>Option A is always
+  the current live UI.</b> Pick a direction and W24 builds it for real.</p>
+  <p class="meta">GWTH.ai · W23 · rendered from staging :3001 · light mode · 1440px</p>
+
+  <div class="warn">
+    <b>Nothing here is live.</b> These are preview renders only: each treatment is applied as a runtime
+    style override on top of the current staging build, never written to source, never merged to master,
+    never deployed. The mechanical polish that <i>did</i> ship (type scale, logo consolidation, media
+    rhythm) is separate and is documented in the completion packet.
+  </div>
+
+  <!-- Q1 TYPEFACE -->
+  <section class="q">
+    <div class="qhead"><h2>Body typeface</h2><span class="qkick">Direction Q1</span></div>
+    <p class="qbody">The register is currently all-serif (Source Serif 4 carries display <i>and</i> body).
+    For the 50-60 reading-glasses audience, a sans body can read more easily at length, especially on the
+    saturated teal/near-black grounds. Headings stay serif in every option. B uses Inter; C uses Source Sans 3.</p>
+    <div class="three">
+      <div class="opt cur">
+        <div class="cap"><b>Serif body</b><span class="tag cur">A · Current</span></div>
+        <div class="plabel">Home · hero + copy</div><img src="variations/typ-a-home.png" alt="typeface current home">
+        <div class="plabel">Lesson viewer</div><img src="variations/typ-a-lesson.png" alt="typeface current lesson">
+      </div>
+      <div class="opt">
+        <div class="cap"><b>Inter body</b><span class="tag">B</span></div>
+        <div class="plabel">Home · hero + copy</div><img src="variations/typ-b-home.png" alt="typeface inter home">
+        <div class="plabel">Lesson viewer</div><img src="variations/typ-b-lesson.png" alt="typeface inter lesson">
+      </div>
+      <div class="opt">
+        <div class="cap"><b>Source Sans 3 body</b><span class="tag">C</span></div>
+        <div class="plabel">Home · hero + copy</div><img src="variations/typ-c-home.png" alt="typeface source sans home">
+        <div class="plabel">Lesson viewer</div><img src="variations/typ-c-lesson.png" alt="typeface source sans lesson">
+      </div>
+    </div>
+  </section>
+
+  <!-- Q2 PALETTE -->
+  <section class="q">
+    <div class="qhead"><h2>Colour: separate the two dark greens</h2><span class="qkick">Direction Q2</span></div>
+    <p class="qbody">The card-flavour rotation uses teal <span class="mono">#2c4a47</span> and moss
+    <span class="mono">#2a4530</span>. Side by side they read as one green, so the colour-coding is lost
+    (worse at arm's length over a screen share). B shifts the hues apart (bluer teal, leaf-green moss);
+    C keeps teal and replaces moss with a clearly different indigo. Frame shows the journeys card grid.</p>
+    <div class="three">
+      <div class="opt cur">
+        <div class="cap"><b>Teal + moss</b><span class="tag cur">A · Current</span></div>
+        <div class="plabel">Home · journeys grid</div><img src="variations/pal-a-home.png" alt="palette current grid">
+      </div>
+      <div class="opt">
+        <div class="cap"><b>Hue-shift</b><span class="tag">B</span></div>
+        <div class="plabel">Home · journeys grid</div><img src="variations/pal-b-home.png" alt="palette hue-shift grid">
+      </div>
+      <div class="opt">
+        <div class="cap"><b>Replacement accent</b><span class="tag">C</span></div>
+        <div class="plabel">Home · journeys grid</div><img src="variations/pal-c-home.png" alt="palette indigo grid">
+      </div>
+    </div>
+  </section>
+
+  <!-- Q3 IMAGERY -->
+  <section class="q">
+    <div class="qhead"><h2>Homepage imagery density</h2><span class="qkick">Direction Q3</span></div>
+    <p class="qbody">The home page runs five cutout photo/illustration plates. The audit read them as busy
+    and slightly off-register for a careful journal. A keeps all plates; B keeps one lead image and lets
+    typography carry the rest; C is image-light (typography + hairlines only). Frame shows the full home run.</p>
+    <div class="three">
+      <div class="opt cur">
+        <div class="cap"><b>Five plates</b><span class="tag cur">A · Current</span></div>
+        <div class="plabel">Home · full run</div><img src="variations/img-a-home.png" alt="imagery current">
+      </div>
+      <div class="opt">
+        <div class="cap"><b>One lead image</b><span class="tag">B</span></div>
+        <div class="plabel">Home · full run</div><img src="variations/img-b-home.png" alt="imagery one image">
+      </div>
+      <div class="opt">
+        <div class="cap"><b>Image-light</b><span class="tag">C</span></div>
+        <div class="plabel">Home · full run</div><img src="variations/img-c-home.png" alt="imagery none">
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    W23 variation previews for W24. Render harness: <span class="mono">deploy/shot-w23-variations.mjs</span>
+    (runtime overrides, throwaway; never committed to master or deployed). Two further direction
+    questions from the audit are data/content calls, not CSS treatments, so they are written up in the
+    completion packet rather than rendered here: <b>demo on an empty vs a seeded account</b>, and
+    <b>render the lab markdown vs keep it byte-verbatim</b>.
+  </footer>
+</div>
+</body>
+</html>
