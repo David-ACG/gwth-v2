@@ -52,6 +52,12 @@ in authored copy, no new dependencies, no old lab deleted.
 
 ![after archive legacy 1440](W22/after-archive-legacy-1440.png)
 
+## Dark mode (FDE light + dark parity, staging)
+
+| Landing (dark, 1440) | Pilot detail (dark, 1440) |
+|---|---|
+| ![dark labs 1440](W22/dark-labs-1440.png) | ![dark pilot 1440](W22/dark-pilot-1440.png) |
+
 ## Anon-access proof (bbg fixed)
 
 Verified against **production** (`https://gwth.ai`) with no session cookie. The
