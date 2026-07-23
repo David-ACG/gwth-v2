@@ -227,68 +227,51 @@
   line-height: 1.1;
 }
 
-/* ---------------- Filter row ---------------- */
+.sectionLead {
+  margin: -0.75rem 0 2rem;
+  max-width: 44rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--v-soft);
+}
 
-.filterRow {
+/* ---------------- How-it-works explainer ---------------- */
+
+.explainer {
+  border-bottom: 1px solid var(--v-line);
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0;
+}
+
+.explainerRow {
   display: grid;
-  gap: 0.75rem;
-  margin-bottom: 2.25rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
 }
 
 @media (min-width: 48rem) {
-  .filterRow {
-    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  .explainerRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem;
   }
 }
 
-.input,
-.select {
-  width: 100%;
-  appearance: none;
-  background: var(--v-surface);
-  border: 1px solid var(--v-line);
-  border-radius: 0;
-  color: var(--v-ink);
-  font-family: var(--font-source-serif), Georgia, serif;
+.explainerItem {
+  border-top: 1px solid var(--v-ink);
+  padding-top: 1rem;
+}
+
+.explainerTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.explainerItem p {
+  margin-top: 0.6rem;
   font-size: 0.95rem;
-  line-height: 1.4;
-  padding: 0.65rem 0.9rem;
-  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.input:hover,
-.select:hover {
-  border-color: var(--v-ink);
-}
-
-.input:focus-visible,
-.select:focus-visible {
-  outline: 2px solid var(--v-ochre);
-  outline-offset: 1px;
-}
-
-.input::placeholder {
-  color: var(--v-muted);
-}
-
-.selectWrap {
-  position: relative;
-}
-
-.selectWrap::after {
-  content: "\25BE";
-  position: absolute;
-  right: 0.9rem;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  font-size: 0.7rem;
-  color: var(--v-muted);
-}
-
-.select {
-  cursor: pointer;
-  padding-right: 2.2rem;
+  line-height: 1.6;
+  color: var(--v-soft);
 }
 
 /* ---------------- Lab cards (journal card grid) ---------------- */
@@ -383,27 +366,24 @@
   color: var(--v-ochre);
 }
 
-.cardBody > p {
+.cardMatchup {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v-ochre);
+}
+
+.cardBrief {
   font-size: 0.93rem;
   line-height: 1.6;
   color: var(--v-soft);
   flex: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.cardTech {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--v-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .cardStatLine {
@@ -421,6 +401,82 @@
   letter-spacing: -0.01em;
   color: var(--v-ochre);
   margin-right: 0.25rem;
+}
+
+/* ---------------- Archive list (dated hairline rows) ---------------- */
+
+.archiveList {
+  border-top: 1px solid var(--v-ink);
+}
+
+.archiveItem {
+  border-bottom: 1px solid var(--v-line);
+}
+
+.archiveLink {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 1.1rem 0;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.archiveMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.archiveTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.archiveLink:hover .archiveTitle {
+  color: var(--v-ochre);
+}
+
+.archiveMeta {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+.archiveTail {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-shrink: 0;
+}
+
+.archiveBadge {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  border: 1px solid var(--v-line);
+  padding: 0.25rem 0.55rem;
+}
+
+.archiveDate {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v-soft);
+  white-space: nowrap;
 }
 
 /* ---------------- Empty state ---------------- */

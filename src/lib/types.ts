@@ -339,6 +339,86 @@ export interface LabStep {
   content: string
 }
 
+// ─── Model Arena labs (the current lab format, David 2026-07-22) ──────────────
+
+/**
+ * One contestant in a Model Arena matchup: a named AI tool run on the shared
+ * task, recorded with its exact model id so the test is checkable and dated.
+ */
+export interface ArenaContestant {
+  /** Friendly product name, e.g. "Claude", "ChatGPT". */
+  name: string
+  /** Exact model id, never rounded, e.g. "claude-opus-4-8", "gpt-5.6-sol". */
+  modelId: string
+  /** Human model label, e.g. "Claude Opus 4.8". */
+  modelLabel?: string
+  /** Exactly how it was run, e.g. "Codex CLI 0.144.1 at high reasoning effort". */
+  howRun: string
+}
+
+/** One contestant's verbatim answer to the shared prompt. */
+export interface ArenaOutput {
+  /** Which contestant produced it (matches {@link ArenaContestant.name}). */
+  by: string
+  /** The output exactly as generated. Never edited, trimmed or paraphrased. */
+  verbatim: string
+}
+
+/** A single rubric criterion a beginner scores each output against. */
+export interface ArenaRubricItem {
+  /** A plain question the student answers for each output. */
+  criterion: string
+  /** One line on what a strong answer looks like. */
+  goodLooksLike: string
+}
+
+/** The dated verdict for a matchup, always fair to the loser. */
+export interface ArenaVerdict {
+  /** Contestant name, or "Close" / "Tie". Honest, never rigged. */
+  winner?: string
+  /** The reasoned verdict, fair to the loser. */
+  callText: string
+  /** Reminder that models change, so this holds only for these versions/date. */
+  freshnessNote: string
+}
+
+/**
+ * A Model Arena lab: one realistic task, two AI models run head-to-head on the
+ * same prompt, outputs shown verbatim side by side, a beginner rubric, and a
+ * dated verdict. Deliberately perishable; superseded to the archive when models
+ * change. Authored to `model-arena.schema.json` (launch task L23).
+ */
+export interface ModelArenaLab {
+  /** Stable unique id, e.g. "arena_001". */
+  id: string
+  /** URL-friendly slug. */
+  slug: string
+  /** Discriminates this from the retired tiered-lab format. */
+  format: "model-arena"
+  /** Plain and specific: the task, then the matchup. */
+  title: string
+  /** live = one of the ~6 current labs; archived = superseded but kept. */
+  status: "live" | "archived"
+  /** Broad task area, e.g. "Writing", "HR", "Research", "Admin". */
+  category?: string
+  /** The date both outputs were generated (ISO yyyy-mm-dd). */
+  testedOn: string
+  /** One paragraph: who the student pretends to be, the task, why it matters. */
+  brief: string
+  /** Exactly two contestants. */
+  matchup: [ArenaContestant, ArenaContestant]
+  /** The single prompt given to BOTH models, verbatim and identical. */
+  prompt: string
+  /** Each contestant's real answer, verbatim, in the same order as matchup. */
+  outputs: [ArenaOutput, ArenaOutput]
+  /** 4-6 criteria a beginner can score by reading. */
+  rubric: ArenaRubricItem[]
+  /** The dated verdict. */
+  verdict: ArenaVerdict
+  /** Short numbered steps for the student to run the same task themselves. */
+  tryItYourself: string[]
+}
+
 // ─── Progress ─────────────────────────────────────────────────────────────────
 
 /** User's progress on a specific lesson */

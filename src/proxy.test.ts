@@ -108,7 +108,11 @@ describe("proxy route guard (W11)", () => {
 
     it("(c) lets a public path through regardless of session (no cookie)", async () => {
       setSessionCookie(null)
-      for (const path of ["/labs", "/api/health"]) {
+      for (const path of [
+        "/labs",
+        "/labs/job-advert-claude-vs-chatgpt",
+        "/api/health",
+      ]) {
         const response = await proxy(request(path))
         expect(redirectPath(response)).toBeNull()
       }
@@ -129,9 +133,27 @@ describe("proxy route guard (W11)", () => {
       expect(redirectPath(response)).toBe("/login")
     })
 
+    it("(bbg) lets an anonymous visitor read a lab detail page (no login redirect)", async () => {
+      setSessionCookie(null)
+      for (const path of [
+        "/labs/job-advert-claude-vs-chatgpt",
+        "/labs/some-archived-lab",
+      ]) {
+        const response = await proxy(request(path))
+        expect(
+          redirectPath(response),
+          `${path} must be publicly readable (labs are the free taster)`
+        ).toBeNull()
+      }
+    })
+
     it("(c) lets a public path through regardless of session (cookie present)", async () => {
       setSessionCookie("session-token")
-      for (const path of ["/labs", "/api/health"]) {
+      for (const path of [
+        "/labs",
+        "/labs/job-advert-claude-vs-chatgpt",
+        "/api/health",
+      ]) {
         const response = await proxy(request(path))
         expect(redirectPath(response)).toBeNull()
       }

@@ -81,7 +81,6 @@ const PROTECTED_PATHS = [
   "/dashboard",
   "/courses",
   "/course",
-  "/labs",
   "/progress",
   "/settings",
   "/profile",
@@ -150,7 +149,9 @@ function guardDevReviewRoute(request: NextRequest): NextResponse | null {
  * access verification still happens server-side in `getCurrentUser()` (the
  * single accessor seam), which returns null for ungranted users; this guard
  * only keeps anonymous traffic out of protected routes and logged-in traffic
- * off the auth pages. `/labs` stays public (matches the old middleware).
+ * off the auth pages. The whole `/labs` subtree stays public: labs are the free
+ * marketing taster, and lab detail must be readable with no login redirect
+ * (gwth-launch-bbg — the public copy promises "free, no account required").
  */
 function guardRoute(request: NextRequest): NextResponse | null {
   const { pathname } = request.nextUrl
@@ -169,9 +170,7 @@ function guardRoute(request: NextRequest): NextResponse | null {
   const isProtected =
     PROTECTED_PATHS.some(
       (path) => pathname === path || pathname.startsWith(`${path}/`)
-    ) &&
-    pathname !== "/labs" &&
-    !isCourseOverview
+    ) && !isCourseOverview
 
   const isAuthRoute = AUTH_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`)
