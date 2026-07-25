@@ -3,7 +3,8 @@ import { DashboardHeader } from "@/components/layout/header"
 import { SearchPalette } from "@/components/search/search-palette"
 import { ReportProblemLauncher } from "@/components/feedback/report-problem-launcher"
 import { getCurrentUser } from "@/lib/auth"
-import { getSearchIndex } from "@/lib/data/search-index"
+import { canViewPrivateContent } from "@/lib/content-access"
+import { EMPTY_SEARCH_INDEX, getSearchIndex } from "@/lib/data/search-index"
 import styles from "./dashboard-fde.module.css"
 
 /**
@@ -20,7 +21,18 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const user = await getCurrentUser()
+  const [user, contentAllowed] = await Promise.all([
+    getCurrentUser(),
+    canViewPrivateContent(),
+  ])
+
+  // A layout renders in PARALLEL with its page, so the page-level gate does
+  // not protect anything built here. Without this check a caller holding a
+  // forged session cookie gets an empty page but a full search index — every
+  // course and lab title — in the layout's RSC payload. Verified against a
+  // running container before the fix: 30 lab titles for zero valid
+  // credentials.
+  const searchIndex = contentAllowed ? getSearchIndex() : EMPTY_SEARCH_INDEX
 
   return (
     <div className={`${styles.shell} flex min-h-screen`}>
@@ -41,7 +53,7 @@ export default async function DashboardLayout({
       {/* The index is built server-side and passed down: the palette used to
           import the content modules directly, which shipped real lab prose
           into a public /_next/static chunk (W25, see lib/data/search-index). */}
-      <SearchPalette index={getSearchIndex()} />
+      <SearchPalette index={searchIndex} />
       <ReportProblemLauncher />
     </div>
   )

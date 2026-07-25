@@ -24,6 +24,23 @@ export interface SearchIndex {
 }
 
 /**
+ * An index with nothing in it, for callers who must not receive one.
+ *
+ * App Router renders a layout IN PARALLEL with its page, so a layout that
+ * builds this index unconditionally hands every course and lab title to any
+ * caller who reaches the layout — including one holding a forged session
+ * cookie, whose gated PAGE renders nothing. Titles are not bodies, but they
+ * are the syllabus, and enumerable slugs are what make the ungated
+ * media.gwth.ai origin addressable. The layout therefore checks
+ * `canViewPrivateContent()` and passes this instead.
+ */
+export const EMPTY_SEARCH_INDEX: SearchIndex = {
+  courses: [],
+  labs: [],
+  news: [],
+}
+
+/**
  * Builds the palette's navigation index on the server (W25).
  *
  * `search-palette.tsx` used to import `mockCourses`/`mockLabs`/

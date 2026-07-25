@@ -217,6 +217,24 @@ describe("proxy route guard (W11)", () => {
       expect(redirectPath(response)).toBeNull()
     })
 
+    it("(W25) sends /access home when no password gate is configured", async () => {
+      // SITE_PASSWORD was removed from production on 2026-07-05, which left
+      // /access answering 200 with a form that could never succeed.
+      setSessionCookie(null)
+      const response = await proxy(request("/access?from=/labs"))
+      expect(response.status).toBe(307)
+      expect(redirectPath(response)).toBe("/")
+    })
+
+    it("(W25) still serves /access when SITE_PASSWORD IS set", async () => {
+      // The route must exist exactly as long as the feature does, or
+      // re-arming the gate would bounce every visitor off its own login page.
+      process.env.SITE_PASSWORD = "hunter2"
+      setSessionCookie(null)
+      const response = await proxy(request("/access"))
+      expect(redirectPath(response)).toBeNull()
+    })
+
     it("(W25) no longer serves the deleted W12 review leftovers", async () => {
       // Deliberately updated: this assertion used to require /w12-review and
       // /explainer-preview to answer 200 "until W12 closes". W12 has closed,

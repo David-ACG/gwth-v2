@@ -268,6 +268,20 @@ export async function proxy(request: NextRequest) {
   // Site password gate: redirect to /access if no site_access cookie
   // Only applies when SITE_PASSWORD env var is set
   const sitePassword = process.env.SITE_PASSWORD
+
+  // W25: with no password gate configured there is nothing for /access to do,
+  // yet it answered 200 on production with a form that could never succeed
+  // (SITE_PASSWORD was removed from the env store on 2026-07-05). The page
+  // itself also calls notFound(), but a force-dynamic page that has already
+  // flushed its shell can only signal that in-band — the status stays 200.
+  // Deciding it here, before any render, gives an honest status code.
+  if (!sitePassword && pathname === "/access") {
+    const url = request.nextUrl.clone()
+    url.pathname = "/"
+    url.search = ""
+    return NextResponse.redirect(url)
+  }
+
   if (sitePassword && !isPasswordExempt(pathname)) {
     const hasAccess = request.cookies.get("site_access")?.value === "granted"
     if (!hasAccess) {
