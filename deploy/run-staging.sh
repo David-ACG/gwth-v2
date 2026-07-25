@@ -40,7 +40,18 @@ docker run -d --name "$NAME" \
   -e PORT="$CONTAINER_PORT" \
   -e NEXT_PUBLIC_SITE_URL="http://hlab.taila51191.ts.net:${HOST_PORT}" \
   -e BETTER_AUTH_URL="http://hlab.taila51191.ts.net:${HOST_PORT}" \
+  -e CONTENT_ALLOWED_EMAILS="david@agilecommercegroup.com,familyuccelli@gmail.com" \
   "$IMAGE" >/dev/null
+# W25 private content gate: PRIVATE_CONTENT_MODE is deliberately NOT set here,
+# so staging inherits the fail-closed default and is LOCKED exactly like
+# production. This box is reachable on the LAN (192.168.178.50:3001) and over
+# Tailscale and it serves the same lessons and labs, so unlocking it would
+# leave an open mirror of everything production is hiding.
+# CONTENT_ALLOWED_EMAILS is set so (a) the boot guard does not crash-loop the
+# container and (b) those accounts can still review content here when the
+# staging DB carries them. Email addresses are not secrets, so they live in git
+# rather than in the SOPS env file.
+#
 # ENABLE_DEV_MOCK_USER removed 2026-07-05: the mock learner made every
 # anonymous visitor look like a logged-in student (and disabled the proxy
 # route guard), so David's pre-launch snag testing saw the wrong reality

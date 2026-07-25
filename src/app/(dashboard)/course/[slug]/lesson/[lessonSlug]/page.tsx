@@ -14,6 +14,7 @@ import {
 import { buildLessonOutline } from "@/lib/lessons/lesson-outline"
 import type { Course } from "@/lib/types"
 import type { LessonWidgetSurface } from "./lesson-widgets"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 type PageProps = {
   params: Promise<{ slug: string; lessonSlug: string }>
@@ -92,10 +93,20 @@ function findNextLesson(
   }
 }
 
+/**
+ * Render per request, never statically. The W25 content gate reads the live
+ * session and the runtime PRIVATE_CONTENT_MODE value, so a prerendered
+ * render would freeze the build machine's verdict into the image.
+ */
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export default async function LessonPage({
   params,
   searchParams,
 }: PageProps) {
+  await requireContentAccessOrRedirect()
+
   const { slug, lessonSlug } = await params
   const sp = await searchParams
   const [lesson, course, allProgress, user] = await Promise.all([

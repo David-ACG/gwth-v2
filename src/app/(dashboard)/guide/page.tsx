@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import { getDashboardUser } from "@/lib/auth"
 import { ReportProblemPanel } from "@/components/feedback/report-problem-panel"
 import styles from "./guide-fde.module.css"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Beta tester guide",
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
  * would serve the gated guide to anonymous visitors.
  */
 export const dynamic = "force-dynamic"
+
+/**
+ * Paired with force-dynamic so the W25 content gate is evaluated per request
+ * and can never be served from a cached or prerendered render.
+ */
+export const revalidate = 0
 
 /**
  * Negates the dashboard layout padding so the teal masthead band runs
@@ -37,6 +44,8 @@ const BREAKOUT = "-mx-4 md:-mx-6 lg:-mx-8 -my-4 md:-my-6 lg:-my-8"
  * 60rem (so it is single-column well before 412px).
  */
 export default async function GuidePage() {
+  await requireContentAccessOrRedirect()
+
   const user = await getDashboardUser()
   if (!user) redirect("/login")
 

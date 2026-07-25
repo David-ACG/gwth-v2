@@ -5,6 +5,7 @@ import { Trophy, Clock, Megaphone } from "lucide-react"
 import { formatRelativeDate } from "@/lib/utils"
 import type { NotificationType } from "@/lib/types"
 import styles from "./notifications-fde.module.css"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 /**
  * Render per request, never statically. Notifications are mode-gated per
@@ -16,6 +17,12 @@ import styles from "./notifications-fde.module.css"
  * the dashboard, progress, profile, and settings pages.
  */
 export const dynamic = "force-dynamic"
+
+/**
+ * Paired with force-dynamic so the W25 content gate is evaluated per request
+ * and can never be served from a cached or prerendered render.
+ */
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: "Notifications",
@@ -29,6 +36,8 @@ const typeIcons: Record<NotificationType, React.ElementType> = {
 }
 
 export default async function NotificationsPage() {
+  await requireContentAccessOrRedirect()
+
   const notifications = await getNotifications()
 
   return (

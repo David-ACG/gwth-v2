@@ -1,17 +1,18 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getSessionCookie } from "better-auth/cookies"
+import { isPrivateContentMode } from "@/lib/content-mode"
 
 /**
  * Security headers applied to all responses.
  * Uses recommended security headers for Next.js apps.
  * @see https://docs.arcjet.com/nosecone/quick-start
  *
- * X-Robots-Tag (noindex …) is intentionally only emitted while the site
- * password gate is active (SITE_PASSWORD env set). Once the gate is
- * removed for public launch, the header drops away and the page becomes
- * indexable — without that, Lighthouse SEO can't clear 0.69 because the
- * is-crawlable audit fails.
+ * X-Robots-Tag (noindex …) is intentionally only emitted while a pre-launch
+ * lockdown is active — the SITE_PASSWORD gate or, since W25, private content
+ * mode. Once both are lifted for public launch the header drops away and the
+ * page becomes indexable; without that, Lighthouse SEO can't clear 0.69
+ * because the is-crawlable audit fails.
  */
 /**
  * Lesson media on the staging review env is served straight from the P520
@@ -110,9 +111,18 @@ const PUBLIC_ONLY_PATHS = ["/api/health"]
  * Internal dev/review leftovers (W15): auth-gated in EVERY production build
  * (including the ENABLE_DEV_MOCK_USER staging env) so none of them answers 200
  * to anonymous traffic on a public deploy. A logged-in session still reaches
- * them for review. /w12-review and /explainer-preview are deliberately NOT
- * listed: they stay publicly reachable (noindex via the pre-launch header)
- * until W12 closes; add them here (or delete the routes) afterwards.
+ * them for review.
+ *
+ * W12 has closed, so W25 took the other option this list's original comment
+ * offered and DELETED the leftovers outright rather than gating them:
+ * /w12-review (+ /script, /scripts, /motion, /takes), /explainer-preview,
+ * /w12-embed-demo, the unauthenticated POST /api/w12-take-review, and the
+ * /demo/lesson-v1..v11 viewers (client components that shipped real lesson
+ * prose into a public /_next/static chunk). Deletion is the only closure that
+ * survives a forged session cookie — see guardDevReviewRoute.
+ *
+ * `/demo` stays listed: the route tree is gone, but keeping the prefix means a
+ * future scratch page under it is gated by default rather than by memory.
  */
 const DEV_REVIEW_PATHS = [
   "/demo",
@@ -122,6 +132,17 @@ const DEV_REVIEW_PATHS = [
   "/old-design",
   "/score-card-variants",
 ]
+
+/**
+ * Product-content prefixes that are NOT already covered by PROTECTED_PATHS.
+ *
+ * Only /labs qualifies: every other content route (/dashboard, /course,
+ * /progress, ...) is already in PROTECTED_PATHS. Labs were made deliberately
+ * public in W22 (gwth-launch-bbg, "free, no account required"); W25 closes
+ * them for the private pre-launch period and PRIVATE_CONTENT_MODE=off restores
+ * the W22 behaviour in one env change.
+ */
+const PRIVATE_CONTENT_PATHS = ["/labs"]
 
 /**
  * Bounces anonymous production traffic off the internal dev/review routes to
@@ -142,6 +163,38 @@ function guardDevReviewRoute(request: NextRequest): NextResponse | null {
 }
 
 /**
+ * Bounces anonymous traffic off the product-content paths while private mode
+ * is on (W25).
+ *
+ * This is an OPTIMISATION, not the security boundary. `getSessionCookie` only
+ * checks that a cookie is PRESENT — it parses the Cookie header and returns
+ * the raw token with no signature check and no database lookup
+ * (node_modules/better-auth/dist/cookies/index.mjs), so
+ * `curl -H 'Cookie: better-auth.session_token=forged'` passes it. The real
+ * gate is `requireContentAccessOrRedirect()` running as the first await inside
+ * each page component, which validates the session server-side and checks the
+ * allowlist. This guard exists only to spare the anonymous case a render.
+ *
+ * Deliberately NOT nested inside the `NODE_ENV === "production"` block that
+ * wraps the other two guards: NODE_ENV is itself an unvalidated env var, and a
+ * missing or misspelt value would silently disable the bounce.
+ */
+function guardPrivateContentRoute(request: NextRequest): NextResponse | null {
+  if (!isPrivateContentMode()) return null
+
+  const { pathname } = request.nextUrl
+  const isPrivateContent = PRIVATE_CONTENT_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  )
+  if (!isPrivateContent) return null
+  if (getSessionCookie(request)) return null
+
+  const url = request.nextUrl.clone()
+  url.pathname = "/login"
+  return NextResponse.redirect(url)
+}
+
+/**
  * Optimistic Better Auth route guard (D-W11-7).
  *
  * Uses the OPTIMISTIC session-cookie presence check (`getSessionCookie`) — it
@@ -149,9 +202,14 @@ function guardDevReviewRoute(request: NextRequest): NextResponse | null {
  * access verification still happens server-side in `getCurrentUser()` (the
  * single accessor seam), which returns null for ungranted users; this guard
  * only keeps anonymous traffic out of protected routes and logged-in traffic
- * off the auth pages. The whole `/labs` subtree stays public: labs are the free
- * marketing taster, and lab detail must be readable with no login redirect
- * (gwth-launch-bbg — the public copy promises "free, no account required").
+ * off the auth pages.
+ *
+ * `/labs` is absent from PROTECTED_PATHS on purpose and is handled instead by
+ * guardPrivateContentRoute above. Labs are the free marketing taster and lab
+ * detail must be readable with no login redirect once the site is public
+ * (gwth-launch-bbg — the copy promises "free, no account required"), so their
+ * gating has to lift with PRIVATE_CONTENT_MODE=off rather than being wired
+ * permanently into this list.
  */
 function guardRoute(request: NextRequest): NextResponse | null {
   const { pathname } = request.nextUrl
@@ -220,6 +278,13 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // Private content mode (W25): runs in EVERY environment, deliberately
+  // outside both the NODE_ENV and the ENABLE_DEV_MOCK_USER conditions below,
+  // so neither an unset NODE_ENV nor the staging review flag can re-open the
+  // content paths. Optimisation only — the page-level gate is the boundary.
+  const privateContentRedirect = guardPrivateContentRoute(request)
+  if (privateContentRedirect) return privateContentRedirect
+
   // Dev/review leftovers (W15): auth-gated in every production build, even
   // when ENABLE_DEV_MOCK_USER relaxes the main guard below.
   if (process.env.NODE_ENV === "production") {
@@ -246,13 +311,21 @@ export async function proxy(request: NextRequest) {
   for (const [key, value] of Object.entries(baseSecurityHeaders)) {
     response.headers.set(key, value)
   }
-  // Only stamp noindex while the pre-launch lockdown is active.
-  // ALLOW_INDEXING=1 explicitly overrides the gate (used by the
-  // Lighthouse audit harness so the SEO is-crawlable check passes
-  // against a production build that still has SITE_PASSWORD wired up
-  // via .env.local for staging).
+  // Only stamp noindex while a pre-launch lockdown is active. Two independent
+  // lockdowns qualify: the legacy SITE_PASSWORD gate, and (W25) private
+  // content mode. Before W25 the header hung off SITE_PASSWORD alone, which
+  // was removed from the production env on 2026-07-05 — so production emitted
+  // no X-Robots-Tag at all and the noindex rested entirely on the page-level
+  // meta tag and an advisory robots.txt.
+  //
+  // ALLOW_INDEXING=1 explicitly overrides both (used by the Lighthouse audit
+  // harness so the SEO is-crawlable check passes against a production build
+  // that still has SITE_PASSWORD wired up via .env.local for staging), and it
+  // is the same variable David flips at public launch.
   const allowIndexing = process.env.ALLOW_INDEXING === "1"
-  if (process.env.SITE_PASSWORD && !allowIndexing) {
+  const preLaunchLockdown =
+    Boolean(process.env.SITE_PASSWORD) || isPrivateContentMode()
+  if (preLaunchLockdown && !allowIndexing) {
     response.headers.set("X-Robots-Tag", PRE_LAUNCH_NOINDEX)
   }
 

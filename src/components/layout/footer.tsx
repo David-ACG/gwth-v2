@@ -36,13 +36,31 @@ const footerLinks = [
   links: col.links.filter((link) => ENABLE_NEWS || link.href !== "/news"),
 }))
 
+/** Props for {@link Footer}. */
+interface FooterProps {
+  /**
+   * Whether to show the Labs link (W25). Resolved once per request in
+   * `(public)/layout.tsx` and passed in rather than read from env here, so the
+   * footer and the nav can never disagree, and so this stays a pure component
+   * that a static render cannot bake a stale answer into.
+   */
+  showLabs: boolean
+}
+
 /**
  * Site footer for public pages, in the FDE journal register
  * (DESIGN_FDE.md §5.9): paper surface band, 1px ink top rule, mono
  * uppercase column headers, serif links.
  * Shows logo, tagline, organised link columns, and copyright.
  */
-export function Footer() {
+export function Footer({ showLabs }: FooterProps) {
+  const groups = showLabs
+    ? footerLinks
+    : footerLinks.map((col) => ({
+        ...col,
+        links: col.links.filter((link) => link.href !== "/labs"),
+      }))
+
   return (
     <footer
       data-section="footer"
@@ -59,7 +77,7 @@ export function Footer() {
               workflows, research faster, analyse data, and prove your progress.
             </p>
           </div>
-          {footerLinks.map((group) => (
+          {groups.map((group) => (
             <div key={group.title}>
               <h3 className={styles.colHeader}>{group.title}</h3>
               <ul className="mt-3 space-y-2">

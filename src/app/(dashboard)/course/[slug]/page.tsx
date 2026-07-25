@@ -4,6 +4,7 @@ import Link from "next/link"
 import { getCourse } from "@/lib/data/courses"
 import { getCourseProgress } from "@/lib/data/progress"
 import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
+import { canViewPrivateContent } from "@/lib/content-access"
 import {
   Accordion,
   AccordionContent,
@@ -59,18 +60,39 @@ const STATUS_DISPLAY: Record<
 }
 
 /**
+ * Force runtime evaluation. This route reads the live session AND the runtime
+ * `PRIVATE_CONTENT_MODE` value to decide between the public teaser and the
+ * full syllabus, so a prerendered render would freeze the build machine's
+ * verdict into the image (W25; same lesson as src/app/robots.ts).
+ */
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
+/**
  * Course detail page showing sections accordion with lesson list,
  * month indicators, optional lesson badges, and access gating.
  * FDE journal register: issue framing per month, hairline lesson rows,
  * dash-progress for course completion (DESIGN_FDE.md §4.4, §4.5, §5.8).
+ *
+ * Unlike the other content routes this page does NOT redirect when the caller
+ * fails the W25 content gate: /course/<slug> is the deliberately public course
+ * landing page (src/proxy.ts carves it out of PROTECTED_PATHS) and already
+ * branches to a teaser that keeps every lesson title out of the anonymous DOM.
+ * The gate therefore feeds that existing branch instead of replacing it, so
+ * the marketing surface survives while the syllabus stays private.
  */
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const [course, progress, user] = await Promise.all([
+  const [course, progress, dashboardUser, contentAllowed] = await Promise.all([
     getCourse(slug),
     getCourseProgress(slug),
     getDashboardUser(),
+    canViewPrivateContent(),
   ])
+
+  // A signed-in account that is not on the content allowlist is treated
+  // exactly like a visitor here: full syllabus withheld, teaser shown.
+  const user = contentAllowed ? dashboardUser : null
 
   if (!course) notFound()
 

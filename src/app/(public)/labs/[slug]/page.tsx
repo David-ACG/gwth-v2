@@ -4,6 +4,11 @@ import { getArenaLab } from "@/lib/data/model-arena"
 import { getLab } from "@/lib/data/labs"
 import { ArenaLabDetail } from "@/components/lab/arena/arena-lab-detail"
 import { ArchiveLabDetail } from "@/components/lab/arena/archive-lab-detail"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
+
+/** Per-request evaluation of the content gate — see the note in ../page.tsx. */
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -35,15 +40,22 @@ export async function generateMetadata({
 }
 
 /**
- * Public lab detail page. Labs are the free marketing taster, so this route is
- * public (no login redirect, see gwth-launch-bbg) and lives in the (public)
- * group under the marketing nav.
+ * Lab detail page. Labs are the free marketing taster once the site is public
+ * (see gwth-launch-bbg), which is why this lives in the (public) group under
+ * the marketing nav rather than the dashboard shell.
  *
  * It renders two shapes from the same URL: a live or archived Model Arena lab
  * (head-to-head), or a retired tiered-format lab presented read-only as part of
  * the archive. A slug matching neither is a 404.
+ *
+ * The gate is the FIRST await, before `params` is even unwrapped, so no lab
+ * body reaches the RSC payload while private mode is on. `generateMetadata`
+ * above is intentionally left ungated: it emits only a title and a
+ * description, and gating it would swallow the 404 for unknown slugs.
  */
 export default async function LabDetailPage({ params }: PageProps) {
+  await requireContentAccessOrRedirect()
+
   const { slug } = await params
 
   const arena = getArenaLab(slug)

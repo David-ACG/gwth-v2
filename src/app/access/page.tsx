@@ -1,78 +1,25 @@
-"use client"
-
-import { useState, useTransition } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Lock, AlertCircle } from "lucide-react"
-import { verifySitePassword } from "@/lib/actions/site-access"
+import { notFound } from "next/navigation"
+import { AccessForm } from "./access-form"
 
 /**
- * Password gate page. Visitors must enter the site password to access
- * any page other than the home page during pre-launch.
+ * Force runtime evaluation: `SITE_PASSWORD` is a runtime-only variable, so a
+ * prerendered /access would freeze whichever value the BUILD machine had. Same
+ * reasoning as `src/app/robots.ts` and the W25 content gate.
  */
-export default function AccessPage() {
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [isPending, startTransition] = useTransition()
-  const router = useRouter()
-  const searchParams = useSearchParams()
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
-  const redirectTo = searchParams.get("from") || "/"
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError("")
-
-    startTransition(async () => {
-      const result = await verifySitePassword(password)
-      if (result.success) {
-        router.push(redirectTo)
-        router.refresh()
-      } else {
-        setError(result.error || "Incorrect password")
-        setPassword("")
-      }
-    })
-  }
-
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-            <Lock className="h-8 w-8 text-primary" />
-          </div>
-          <CardTitle className="text-2xl">GWTH.ai Preview</CardTitle>
-          <CardDescription>
-            This site is currently in private preview. Enter the access password to continue.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Input
-                type="password"
-                placeholder="Enter access password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={isPending}
-                autoFocus
-              />
-            </div>
-            {error && (
-              <div className="flex items-center gap-2 text-sm text-destructive">
-                <AlertCircle className="h-4 w-4 shrink-0" />
-                {error}
-              </div>
-            )}
-            <Button type="submit" className="w-full" disabled={isPending || !password}>
-              {isPending ? "Verifying..." : "Enter Site"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
-  )
+/**
+ * Site-password gate page.
+ *
+ * The gate itself lives in `src/proxy.ts` and only engages when `SITE_PASSWORD`
+ * is set. That variable was deliberately removed from the production env on
+ * 2026-07-05 (docs/runbook-go-live.md §2), which left this page answering 200
+ * anonymously on gwth.ai with a password form that could never succeed. It now
+ * 404s whenever the gate is off, so the route exists exactly as long as the
+ * feature does (W25).
+ */
+export default async function AccessPage() {
+  if (!process.env.SITE_PASSWORD) notFound()
+  return <AccessForm />
 }

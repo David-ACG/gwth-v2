@@ -6,13 +6,24 @@ import { EmptyState } from "@/components/shared/empty-state"
 import { formatRelativeDate } from "@/lib/utils"
 import Link from "next/link"
 import styles from "./bookmarks-fde.module.css"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Bookmarks",
   description: "Your saved lessons and labs.",
 }
 
+/**
+ * Render per request, never statically. The W25 content gate reads the live
+ * session and the runtime PRIVATE_CONTENT_MODE value, so a prerendered
+ * render would freeze the build machine's verdict into the image.
+ */
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export default async function BookmarksPage() {
+  await requireContentAccessOrRedirect()
+
   const [bookmarks, courses, labs] = await Promise.all([
     getBookmarks(),
     getCourses(),

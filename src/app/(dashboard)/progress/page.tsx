@@ -11,6 +11,7 @@ import { getCourses } from "@/lib/data/courses"
 import { StudyStreakCalendar } from "@/components/progress/study-streak-calendar"
 import { formatDuration, formatProgress, getGradeFromScore } from "@/lib/utils"
 import styles from "./progress-fde.module.css"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Progress",
@@ -28,7 +29,15 @@ export const metadata: Metadata = {
  */
 export const dynamic = "force-dynamic"
 
+/**
+ * Paired with force-dynamic so the W25 content gate is evaluated per request
+ * and can never be served from a cached or prerendered render.
+ */
+export const revalidate = 0
+
 export default async function ProgressPage() {
+  await requireContentAccessOrRedirect()
+
   const [courseProgress, lessonProgress, streak, courses, dynamicScore] =
     await Promise.all([
       getAllCourseProgress(),

@@ -94,6 +94,44 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<
 })
 
 /**
+ * Returns the email address on the current validated Better Auth session, or
+ * null. Added for the W25 private content gate.
+ *
+ * Deliberately NOT built on `getCurrentUser()`. That accessor applies the
+ * invite-only beta gate and returns null for any account without a live
+ * `manual_beta` grant (see above), which is correct for deciding what a
+ * STUDENT may study but wrong for deciding who may see the site at all: a
+ * lapsed or mis-scoped grant row would lock the allowlisted owner out of his
+ * own content mid-demo, with no env rollback. This resolves identity only.
+ *
+ * It is not a weaker check. `getAuth().api.getSession` validates the session
+ * cookie's signature against the database, so a forged
+ * `better-auth.session_token` header — which walks straight past the proxy's
+ * presence-only `getSessionCookie` bounce — resolves to null here.
+ *
+ * Wrapped in React `cache()` so the several gated surfaces on one request
+ * (page gate, layout, nav) collapse to a single session validation rather than
+ * one DB round-trip each.
+ */
+export const getSessionEmail = cache(async function getSessionEmail(): Promise<
+  string | null
+> {
+  // No DB configured → no real session is possible. Callers in
+  // src/lib/content-access.ts touch headers() BEFORE calling this, so this
+  // short-circuit can never let a gated route slip back into being static.
+  if (!process.env.DATABASE_URL) return null
+
+  const { getAuth } = await import("@/lib/better-auth")
+
+  try {
+    const session = await getAuth().api.getSession({ headers: await headers() })
+    return session?.user?.email ?? null
+  } catch {
+    return null
+  }
+})
+
+/**
  * Returns the mock user for dashboard UI development.
  * Use this only in dashboard pages that need a fake logged-in state.
  */

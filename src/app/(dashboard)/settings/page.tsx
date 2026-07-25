@@ -9,6 +9,7 @@ import {
 } from "@/lib/config"
 import { BillingActions } from "@/components/billing/billing-actions"
 import styles from "./settings-fde.module.css"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 /**
  * Render per request, never statically. Settings is a per-user authed page
@@ -19,6 +20,12 @@ import styles from "./settings-fde.module.css"
  * matching notes on the dashboard, progress, and profile pages.
  */
 export const dynamic = "force-dynamic"
+
+/**
+ * Paired with force-dynamic so the W25 content gate is evaluated per request
+ * and can never be served from a cached or prerendered render.
+ */
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -52,6 +59,8 @@ function SubscriptionStatus({ state }: { state: string }) {
 }
 
 export default async function SettingsPage() {
+  await requireContentAccessOrRedirect()
+
   const user = await getDashboardUser()
   const state = user?.subscriptionState ?? "visitor"
 

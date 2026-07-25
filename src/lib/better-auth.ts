@@ -31,6 +31,7 @@ import {
   applyBetaAccessGrantToUser,
   isEmailGrantedBetaAccess,
 } from "@/lib/billing/access"
+import { isPrivateContentMode } from "@/lib/content-mode"
 
 // Construct the instance. Kept as a standalone builder so its concrete return
 // type (carrying the exact options shape) drives `Auth` — using the generic
@@ -68,6 +69,26 @@ function buildAuth() {
   const linkedinId = process.env.LINKEDIN_CLIENT_ID
   const linkedinSecret = process.env.LINKEDIN_CLIENT_SECRET
 
+  // W25: no new accounts while the site is private. This is the API-layer
+  // block, not a UI one — before it, /signup rendered invite-only COPY while
+  // POST /api/auth/sign-up/email happily created a real account for anyone
+  // (the gate was downstream in getCurrentUser(), so strangers got a valid
+  // session and an invite-required dashboard). Sign-IN is untouched, so the
+  // demo accounts still work.
+  //
+  // Two different property paths, verified against better-auth 1.6.19:
+  // sign-up.mjs:143 reads `emailAndPassword.disableSignUp`, while the OAuth
+  // path that actually creates users (callback.mjs:150) reads
+  // `provider.options?.disableSignUp` — and the provider factory stores the
+  // whole config object you pass as `.options`, so setting the key beside
+  // clientId/clientSecret is what lands in the right place. The types declare
+  // it at both levels, so tsc cannot catch getting this wrong.
+  //
+  // getAuth() caches the instance on globalThis, so this is read ONCE per
+  // process: flipping PRIVATE_CONTENT_MODE needs a container restart, which
+  // the Coolify redeploy that accompanies an env change already provides.
+  const lockSignUp = isPrivateContentMode()
+
   return betterAuth({
     baseURL,
     secret: process.env.BETTER_AUTH_SECRET,
@@ -102,6 +123,7 @@ function buildAuth() {
     },
     emailAndPassword: {
       enabled: true,
+      disableSignUp: lockSignUp,
       requireEmailVerification: true,
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: async ({ user, url }) => {
@@ -162,13 +184,31 @@ function buildAuth() {
     },
     socialProviders: {
       ...(googleId && googleSecret
-        ? { google: { clientId: googleId, clientSecret: googleSecret } }
+        ? {
+            google: {
+              clientId: googleId,
+              clientSecret: googleSecret,
+              disableSignUp: lockSignUp,
+            },
+          }
         : {}),
       ...(githubId && githubSecret
-        ? { github: { clientId: githubId, clientSecret: githubSecret } }
+        ? {
+            github: {
+              clientId: githubId,
+              clientSecret: githubSecret,
+              disableSignUp: lockSignUp,
+            },
+          }
         : {}),
       ...(linkedinId && linkedinSecret
-        ? { linkedin: { clientId: linkedinId, clientSecret: linkedinSecret } }
+        ? {
+            linkedin: {
+              clientId: linkedinId,
+              clientSecret: linkedinSecret,
+              disableSignUp: lockSignUp,
+            },
+          }
         : {}),
     },
     databaseHooks: {

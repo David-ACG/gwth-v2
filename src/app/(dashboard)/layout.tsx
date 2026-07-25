@@ -3,6 +3,7 @@ import { DashboardHeader } from "@/components/layout/header"
 import { SearchPalette } from "@/components/search/search-palette"
 import { ReportProblemLauncher } from "@/components/feedback/report-problem-launcher"
 import { getCurrentUser } from "@/lib/auth"
+import { getSearchIndex } from "@/lib/data/search-index"
 import styles from "./dashboard-fde.module.css"
 
 /**
@@ -37,7 +38,10 @@ export default async function DashboardLayout({
           </div>
         </main>
       </div>
-      <SearchPalette />
+      {/* The index is built server-side and passed down: the palette used to
+          import the content modules directly, which shipped real lab prose
+          into a public /_next/static chunk (W25, see lib/data/search-index). */}
+      <SearchPalette index={getSearchIndex()} />
       <ReportProblemLauncher />
     </div>
   )

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import { getDashboardUser } from "@/lib/auth"
 import { formatDate } from "@/lib/utils"
 import styles from "./profile-fde.module.css"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 /**
  * Render per request, never statically. Profile is a per-user authed page
@@ -13,6 +14,12 @@ import styles from "./profile-fde.module.css"
  * the matching notes on the dashboard and progress pages.
  */
 export const dynamic = "force-dynamic"
+
+/**
+ * Paired with force-dynamic so the W25 content gate is evaluated per request
+ * and can never be served from a cached or prerendered render.
+ */
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -44,6 +51,8 @@ function SubscriptionStatus({ state }: { state: string }) {
 }
 
 export default async function ProfilePage() {
+  await requireContentAccessOrRedirect()
+
   const user = await getDashboardUser()
 
   // Anonymous traffic is bounced to /login by the proxy guard before this

@@ -19,8 +19,9 @@ export const metadata: Metadata = {
  * /news) share the same register via their *-fde modules.
  *
  * The explainer embed placement (after-hero) and chrome (framed) are David's
- * W12 picks, 2026-07-04, recorded in `public/explainer/w12_picks.json`; the
- * video is the final cut on VV7B fable100 take 005.
+ * W12 picks, 2026-07-04, recorded in `completion/COMPLETION_W12.md` (the
+ * review scaffolding they were captured in was deleted in W25); the video is
+ * the final cut on VV7B fable100 take 005.
  */
 export default function HomePage() {
   return (

@@ -38,6 +38,14 @@ const navLinks = [
 interface PublicNavProps {
   /** Authenticated user info, or null if not logged in */
   user: { name: string; email: string } | null
+  /**
+   * Whether to show the Labs link (W25). Resolved on the server in
+   * `(public)/layout.tsx` and passed down: this is a client component, so
+   * `process.env.PRIVATE_CONTENT_MODE` is simply undefined here and reading it
+   * would both hide the link forever and produce an SSR/hydration mismatch on
+   * every marketing page.
+   */
+  showLabs: boolean
 }
 
 /**
@@ -47,8 +55,15 @@ interface PublicNavProps {
  * login/signup CTAs. When authenticated, shows user avatar with dropdown
  * instead of login buttons. Responsive: hamburger menu on mobile.
  */
-export function PublicNav({ user }: PublicNavProps) {
+export function PublicNav({ user, showLabs }: PublicNavProps) {
   const pathname = usePathname()
+
+  // Hiding a link is presentation, not protection: /labs is gated in the proxy
+  // and again inside the page. This only keeps a visitor who cannot open Labs
+  // from being offered them.
+  const links = showLabs
+    ? navLinks
+    : navLinks.filter((link) => link.href !== "/labs")
 
   const initials = user
     ? user.name
@@ -72,7 +87,7 @@ export function PublicNav({ user }: PublicNavProps) {
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -163,7 +178,7 @@ export function PublicNav({ user }: PublicNavProps) {
             >
               <SheetTitle className="sr-only">Menu</SheetTitle>
               <nav className={cn("mt-8", styles.sheetNav)}>
-                {navLinks.map((link) => (
+                {links.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}

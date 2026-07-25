@@ -24,6 +24,7 @@ import type {
   LessonSummary,
 } from "@/lib/types"
 import styles from "./dashboard-fde.module.css"
+import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 /**
  * Render per request, never statically. The dashboard is a per-user authed
@@ -32,6 +33,12 @@ import styles from "./dashboard-fde.module.css"
  * hide real state (W7). See the matching note on the progress page.
  */
 export const dynamic = "force-dynamic"
+
+/**
+ * Paired with force-dynamic so the W25 content gate is evaluated per request
+ * and can never be served from a cached or prerendered render.
+ */
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -61,6 +68,8 @@ export const DASHBOARD_BREAKOUT =
  * Post-beta score panel reuses <HeroDevice /> behind a flag.
  */
 export default async function DashboardPage() {
+  await requireContentAccessOrRedirect()
+
   const [user, courses, courseProgress, lessonProgress, streak, notifications] =
     await Promise.all([
       getDashboardUser(),
