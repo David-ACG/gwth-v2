@@ -23,13 +23,15 @@ export function formatDuration(minutes: number): string {
 }
 
 /**
- * Formats a date to a localized string.
- * @example formatDate(new Date()) → "Feb 15, 2026"
+ * Formats a date for display. British English, per the house style rule - the
+ * locale was "en-US" until 2026-07-25, which rendered archive rows as
+ * "Jun 17, 2026" on /labs while adjacent copy used British dates.
+ * @example formatDate(new Date()) → "15 Feb 2026"
  */
 export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
+  return new Intl.DateTimeFormat("en-GB", {
     day: "numeric",
+    month: "short",
     year: "numeric",
   }).format(date)
 }

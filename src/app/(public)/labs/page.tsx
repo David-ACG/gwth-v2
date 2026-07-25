@@ -7,7 +7,7 @@ import {
 import { LabsFde } from "@/components/marketing/labs-fde/labs-fde"
 
 export const metadata: Metadata = {
-  title: "Labs — the Model Arena",
+  title: "Labs: the Model Arena",
   description:
     "Free head-to-head AI labs: two tools run the same real task, outputs side by side, a rubric, and a dated verdict. Read them free, no account required.",
 }
