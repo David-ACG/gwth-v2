@@ -46,12 +46,37 @@ describe("PricingPage", () => {
     expect(screen.getByText("Available after course")).toBeInTheDocument()
   })
 
-  it("has Try a Free Lab CTA on the free tier", () => {
+  it("(W25) sends the free tier to the waitlist while Labs are private", () => {
+    // Deliberately updated. This used to assert a "Try a Free Lab" link to
+    // /labs unconditionally. The free tier IS the labs, so while
+    // PRIVATE_CONTENT_MODE is on that button would land the visitor on a login
+    // wall for a product whose signup is closed. Unset means LOCKED, which is
+    // the production configuration, so that is the default asserted here.
     render(<PricingPage />)
-    expect(screen.getByRole("link", { name: "Try a Free Lab" })).toHaveAttribute(
-      "href",
-      "/labs"
-    )
+    // Two of them: the free tier card and the closing block.
+    const waitlistLinks = screen.getAllByRole("link", {
+      name: "Join the waitlist",
+    })
+    expect(waitlistLinks.length).toBeGreaterThan(0)
+    for (const link of waitlistLinks) {
+      expect(link).toHaveAttribute("href", "/waitlist")
+    }
+    expect(screen.queryByRole("link", { name: "Try a Free Lab" })).toBeNull()
+    expect(screen.queryByRole("link", { name: "Try a free lab" })).toBeNull()
+  })
+
+  it("(W25) restores the free-lab CTA once the mode is explicitly off", () => {
+    const original = process.env.PRIVATE_CONTENT_MODE
+    process.env.PRIVATE_CONTENT_MODE = "off"
+    try {
+      render(<PricingPage />)
+      expect(
+        screen.getByRole("link", { name: "Try a Free Lab" })
+      ).toHaveAttribute("href", "/labs")
+    } finally {
+      if (original === undefined) delete process.env.PRIVATE_CONTENT_MODE
+      else process.env.PRIVATE_CONTENT_MODE = original
+    }
   })
 
   it("has Join the Waitlist CTA on the member tier", () => {

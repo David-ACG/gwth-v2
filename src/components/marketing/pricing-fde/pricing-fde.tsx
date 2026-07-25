@@ -45,7 +45,12 @@ export function PricingFde() {
       price: free.price,
       per: free.per,
       features: free.features,
-      cta: { label: free.cta.label, href: free.cta.href },
+      // The free tier IS the labs, so this card's CTA is the one place on the
+      // page that must follow the gate rather than the shared PRICING data
+      // (W25). While /labs is private the button would land on a login wall.
+      cta: canPromoteLabs()
+        ? { label: free.cta.label, href: free.cta.href }
+        : { label: "Join the waitlist", href: "/waitlist" },
       featured: false,
     },
     {
