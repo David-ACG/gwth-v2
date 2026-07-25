@@ -43,7 +43,7 @@ const faqs = [
   },
   {
     q: "Is there still proof of work?",
-    a: "Yes. The beta emphasis is completed lessons, capstones, and portfolio evidence.",
+    a: "Yes. The beta emphasis is completed lessons, Capstone projects, and portfolio evidence.",
   },
   {
     q: "How much time does the course take?",
@@ -61,12 +61,12 @@ const CARD_FLAVOURS = [styles.flvTeal, styles.flvMoss, styles.flvRust]
  */
 const JOURNEY_BLURBS: Record<string, string> = {
   "01": "The defence is fluency. Build real AI skill in three months and walk in with proof, not promises.",
-  "02": "Five hours a week and a portfolio of real projects. Most UK workers still lack confidence with AI: that gap is your opening.",
-  "03": "No developer, no consultant. Learn to build the automations and tools your business needs yourself.",
-  "04": "AI fluency will be table stakes for your children's working lives. Learn it properly first, in plain English.",
+  "02": "Five hours a week and a portfolio of real projects. Most UK workers still lack confidence with AI: that gap is your opening. Month 1 is your own CV, your own interviews, your own week.",
+  "03": "No developer, no consultant. Build the automations and tools your business needs yourself, and the ones that quietly run your household while you are at it.",
+  "04": "AI will be part of your children's working lives whatever they end up doing. Learn it properly first, with no jargon and nothing to install, then sit down and show them.",
   "05": "You use AI daily but suspect there is more. There is: design with it, automate with it, and save more than the course costs on your AI subscriptions.",
   "06": "AI fluency is one of the highest-premium skills in the UK market. Show up to your next salary conversation with proof.",
-  "07": "Every lesson, capstone, and refresh leaves a practical progress trail: no PDFs, no stale certificates.",
+  "07": "Every lesson, Capstone project and refresh leaves a practical progress trail: no PDFs, no stale certificates.",
   "08": "Three months gets you current. After that, £7.50 a month keeps you there with weekly summaries and refreshed lessons.",
   "09": "Your competitors are already moving. Five hours a week makes you the one who knows what to build next.",
 }
@@ -106,12 +106,14 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               <p className={styles.heroByline}>
                 UK applied AI · 5 hours a week · 3 months
               </p>
+              {/* "Try a free lab" is deliberately absent while /labs is gated
+                  to David's account for the CIPD demo (W25). Advertising a
+                  call to action a visitor cannot reach is worse than one
+                  button. To bring it back, restore the buttonOutline Link to
+                  /labs below "Join waitlist" (bead gwth-launch-ynk). */}
               <div className={styles.heroActions}>
                 <Link href="/waitlist" className={styles.buttonSolid}>
                   Join waitlist
-                </Link>
-                <Link href="/labs" className={styles.buttonOutline}>
-                  Try a free lab
                 </Link>
               </div>
             </div>
@@ -133,8 +135,9 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
           <div className={styles.coverLead}>
             <p className={styles.mono}>What building looks like</p>
             <p className={styles.coverLeadText}>
-              Less watching, more making. Each month you build something real
-              in plain English and keep the evidence.
+              Everything here ends up as something you can open, run and hand
+              to somebody else. It stays yours after the lesson finishes, and
+              most of it keeps working without you.
             </p>
           </div>
           <figure className={`${styles.figure} ${styles.figureCover}`}>
@@ -157,7 +160,11 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
           <p className={styles.sectionLead}>
             Whether you are reskilling, running a small business, or trying to
             keep your team ahead, the end point is the same: practical work
-            and portfolio evidence someone else can inspect.
+            and portfolio evidence someone else can inspect. Month 1 starts
+            with personal projects on purpose. They matter to everybody and
+            they are good fun, which is what carries people through the first
+            few weeks. After that you choose the lessons that fit your own
+            skills and where you want to get to.
           </p>
           <figure className={`${styles.figure} ${styles.figureInset}`}>
             <Image
@@ -229,9 +236,12 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             <p className={styles.mono}>Curriculum</p>
           </div>
           <p className={styles.sectionLead}>
-            The course reads like a careful journal, delivered monthly: AI
-            basics first, then building and workflows, then enterprise-scale
-            applied work. Each month closes with a capstone you can show.
+            Month 1 stays close to your own life. You rewrite your CV and your
+            LinkedIn profile, get ready for interviews, turn a messy
+            spreadsheet into a dashboard, then build the Family AI Bot, which
+            is the Month 1 Capstone project. Month 2 moves the same skills
+            into business work, and Month 3 takes them to organisation scale.
+            Every month ends with a Capstone project you can show somebody.
           </p>
           <figure className={`${styles.figure} ${styles.figureRight}`}>
             <Image
@@ -275,10 +285,10 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               A progress trail that changes as your skill changes.
             </h2>
             <p>
-              Beta progress does not pretend a certificate from six months ago
-              is the same thing as current ability. When lessons are revised,
-              learners refresh the updated material and the course shows
-              that work clearly.
+              A certificate from six months ago tells you what somebody once
+              passed. It does not tell you what they can do today. So when a
+              lesson is revised, learners work through the new version, and
+              their record shows that they have.
             </p>
             <div className={styles.statList}>
               {UK_STATS.map((stat, index) => (
@@ -304,11 +314,12 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             href="/signup"
             className={styles.credentialPanel}
           >
-            <p className={styles.mono}>Beta progress preview</p>
+            <p className={styles.mono}>What your record looks like</p>
             <h3>Applied AI Skills</h3>
             <p>
-              An example progress record: practical AI for non-technical
-              adults, refreshed against the live curriculum as lessons change.
+              Practical AI for non-technical adults, kept in step with the
+              live curriculum as lessons change. The figures below are an
+              example, not a real learner.
             </p>
             <div className={styles.credentialRow}>
               <div className={styles.credentialNumber}>64/94</div>

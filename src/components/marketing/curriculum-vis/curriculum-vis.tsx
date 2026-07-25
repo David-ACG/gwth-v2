@@ -40,7 +40,7 @@ export function CurriculumVis() {
 
             <div className="mt-4 flex-1 rounded-lg border border-border bg-muted/40 p-3">
               <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-                Capstone
+                Capstone project
               </span>
               <strong className="mt-1 block text-sm text-foreground">
                 {module.capstone}

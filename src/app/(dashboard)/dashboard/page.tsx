@@ -594,7 +594,7 @@ export function ActiveDashboard({
 
         {/* capstone strip — no capstone store yet, honest zero (W14) */}
         <div className={styles.capstoneStrip}>
-          <span className={styles.tealMono}>CAPSTONES · 0 OF 3</span>
+          <span className={styles.tealMono}>CAPSTONE PROJECTS · 0 OF 3</span>
           <span className="flex gap-2 items-center">
             <CapstoneTick state="brief" label="C01" />
             <CapstoneTick state="locked" label="C02" />
@@ -618,7 +618,7 @@ export function ActiveDashboard({
             </div>
             <p className={cn(styles.note, "mt-2")}>
               Every lesson ships a small project. As you complete builds and
-              capstones they are collected here, ready to show.
+              Capstone projects they are collected here, ready to show.
             </p>
             <div className="mt-4 flex justify-between items-center gap-3 flex-wrap">
               <span className={styles.mono}>
@@ -745,7 +745,7 @@ export function FreeDashboard({ user }: { user: User | null }) {
           />
           <TeaserCol
             num="03"
-            title="Capstone 01"
+            title="Capstone project 01"
             body="One internal-use tool you build with Claude Code. Reviewed by a human."
           />
         </div>
@@ -980,8 +980,8 @@ export function LapsedDashboard({
                   : "IF ACCESS IS RESTORED"}
               </p>
               <p className={styles.impactNote}>
-                Nothing changes. Lessons stay open and your capstone keeps its
-                review slot.
+                Nothing changes. Lessons stay open and your Capstone project keeps
+                its review slot.
               </p>
             </div>
             <div className={styles.impactCell}>

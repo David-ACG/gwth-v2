@@ -80,7 +80,7 @@ export function LessonsFde() {
           </div>
           <div className={styles.mastheadFoot}>
             <p>Video in every lesson</p>
-            <p>One capstone per month</p>
+            <p>One Capstone project per month</p>
             <p>Plain progress tracking</p>
           </div>
         </div>

@@ -155,10 +155,13 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Parent",
     title: "You are a parent thinking about the future",
     body:
-      "AI fluency will not be a nice-to-have. It will be table stakes. Start with plain English, then learn the practical building and AI-assisted coding patterns that make ideas real.",
+      "AI will be part of your children's working lives whatever they end up doing. You start with no jargon and nothing to install, then learn the practical building and AI-assisted coding patterns that make ideas real.",
     accent: "aqua",
-    cta: "Try a free lab",
-    href: "/labs",
+    // Points at pricing rather than /labs while Labs is gated for the CIPD
+    // demo (W25). Restore "Try a free lab" / "/labs" when Labs comes back,
+    // alongside the hero button (bead gwth-launch-ynk).
+    cta: "See pricing",
+    href: "/pricing",
   },
   {
     n: "05",
@@ -185,7 +188,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Proof",
     title: "You want proof that you are fluent in Applied AI",
     body:
-      "Every completed lesson, Q&A pass, capstone, and current update leaves a practical progress trail. Use the portfolio pieces on LinkedIn or your CV: the emphasis for beta is real work, not a one-shot certificate that goes stale a month after issue.",
+      "Every completed lesson, Q&A pass, Capstone project, and current update leaves a practical progress trail. Use the portfolio pieces on LinkedIn or your CV: the emphasis for beta is real work, not a one-shot certificate that goes stale a month after issue.",
     accent: "aqua",
     cta: "See pricing",
     href: "/pricing",
@@ -197,7 +200,11 @@ export const JOURNEYS: readonly Journey[] = [
     body:
       "Even Andrej Karpathy admits keeping up is exhausting. Three months gets you up to date. After that, £7.50/month keeps you there: weekly summaries of what changed, and which lessons to revisit.",
     accent: "mint",
-    stat: { value: "£7.50/mo", label: "Stay Current after the first three months" },
+    // No stat here on purpose. The £7.50/mo Stay Current price is our own
+    // pricing, not research, and the card stat slot sits beside sourced UK
+    // figures (DSIT, ONS), so a price rendered there reads as an unsourced
+    // statistic. The price is stated in the body copy instead, and it is on
+    // /pricing (bead gwth-launch-jws).
     cta: "See pricing",
     href: "/pricing",
   },

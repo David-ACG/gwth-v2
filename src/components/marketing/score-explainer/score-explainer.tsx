@@ -63,7 +63,7 @@ const BULLETS: readonly Bullet[] = [
     key: "Tested, not assumed.",
     body: (
       <>
-        Every lesson has check questions; the course requires <Num>3</Num> capstone
+        Every lesson has check questions; the course requires <Num>3</Num> Capstone
         projects to graduate.
       </>
     ),

@@ -129,7 +129,7 @@ describe("ActiveDashboard honest-zero state (W14)", () => {
     expect(view.queryByText("5.2")).not.toBeInTheDocument()
     expect(view.queryByText(/12 PROJECTS/)).not.toBeInTheDocument()
     expect(view.getByText("SHIPPED · 0 PROJECTS")).toBeInTheDocument()
-    expect(view.getByText("CAPSTONES · 0 OF 3")).toBeInTheDocument()
+    expect(view.getByText("CAPSTONE PROJECTS · 0 OF 3")).toBeInTheDocument()
     expect(view.getByText("No notifications yet.")).toBeInTheDocument()
   })
 
