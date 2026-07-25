@@ -161,6 +161,30 @@ built image with a third address added in MIXED CASE with padding
 which reached `/labs`, the lesson, the dashboard and the syllabus. **A
 single-value implementation would have failed those tests.**
 
+#### Screenshots
+
+**The demo student, signed in on production.** Dashboard, the L1 lesson with
+its full 13-page outline, Labs, and a lab detail:
+
+![Demo student dashboard on production](W25/student-dashboard.png)
+
+![L1 lesson body and outline, signed in as the demo student](W25/student-lesson-l1.png)
+
+![Labs Model Arena, signed in as the demo student](W25/student-labs.png)
+
+![Lab detail, signed in as the demo student](W25/student-lab-detail.png)
+
+![Course syllabus, signed in as the demo student](W25/student-syllabus.png)
+
+**Anonymous.** /labs bounces to the login page, /signup shows an honest closed
+notice, and /pricing no longer offers a Labs button it cannot honour:
+
+![Anonymous /labs bounced to the login page](W25/anon-labs-bounced.png)
+
+![Anonymous /signup shows the registration-closed panel](W25/anon-signup-closed.png)
+
+![Anonymous /pricing with no dead-end Labs CTA](W25/anon-pricing-no-labs-cta.png)
+
 ### 5. Fail-closed unit tests
 
 `src/lib/content-mode.test.ts` (17) and `src/lib/content-access.test.ts` (14).
