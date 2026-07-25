@@ -23,7 +23,7 @@ export function MarketingFooter() {
           <div>
             <p className="text-lg font-semibold text-foreground">GWTH.ai</p>
             <p className="mt-3 max-w-md text-sm text-muted-foreground">
-              Growth With Tech and Humans. A UK-first applied AI programme for
+              Grow With The Help of AI. A UK-first applied AI programme for
               working adults. Independent. UK-based. No sponsors. No ads. No vendor
               partnerships.
             </p>

@@ -31,7 +31,7 @@ describe("MarketingFooter", () => {
   it("renders the locked brand tagline", () => {
     const { container } = render(<MarketingFooter />)
     const text = container.textContent ?? ""
-    expect(text).toContain("Growth With Tech and Humans")
+    expect(text).toContain("Grow With The Help of AI")
     expect(text).toContain("Independent")
   })
 
