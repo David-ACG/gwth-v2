@@ -5,9 +5,25 @@ import { SignupClosedNotice } from "@/components/auth/signup-closed-notice"
 import { getEnabledOAuthProviders } from "@/lib/oauth-providers"
 import { isPrivateContentMode } from "@/lib/content-mode"
 
-export const metadata: Metadata = {
-  title: "Invite-only Beta",
-  description: "The beta is invite-only. Join the waitlist or sign up with an approved email.",
+/**
+ * Metadata branches on the same flag as the body. A static export would leave
+ * the tab title reading "Invite-only Beta" and the description inviting the
+ * reader to "sign up with an approved email" on a page that has no form and an
+ * API that answers 400 (W25).
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  if (isPrivateContentMode()) {
+    return {
+      title: "Registration closed",
+      description:
+        "New accounts are paused while the course is finished. Join the waitlist and we will write to you when places open.",
+    }
+  }
+  return {
+    title: "Invite-only Beta",
+    description:
+      "The beta is invite-only. Join the waitlist or sign up with an approved email.",
+  }
 }
 
 /**

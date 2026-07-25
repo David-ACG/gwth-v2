@@ -33,7 +33,6 @@
     "@nosecone/next",
     "fast-check",
     "@aws-sdk/client-s3",
-    "@aws-sdk/s3-request-presigner",
-    "server-only"
+    "@aws-sdk/s3-request-presigner"
   ]
 }

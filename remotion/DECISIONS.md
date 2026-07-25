@@ -44,7 +44,9 @@ comparison `divider-first`, dispatch `stagger`.
 
 ## Gate 2b — Embed chrome + placement (pick one of each)
 
-**Chrome** — review at `/explainer-preview` on the dev site (light and dark):
+**Chrome** — reviewed at `/explainer-preview` on the dev site (light and dark).
+That route no longer exists: W25 deleted it once W12 closed, per the
+instruction below. Review the final embed on the home page instead:
 - **Option A — framed:** paper mat + hairline border + mono caption + a small
   section head. Sits like a journal plate. (Recommended — matches the register.)
 - **Option B — bare:** edge-to-edge video, no mat.
@@ -72,7 +74,8 @@ import { ExplainerVideo } from "./explainer-video"
 />
 ```
 
-Then delete the `src/app/explainer-preview/` review route.
+Then delete the `src/app/explainer-preview/` review route. (Done in W25,
+2026-07-25, together with the rest of the W12 review scaffolding.)
 
 ---
 

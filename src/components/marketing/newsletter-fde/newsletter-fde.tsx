@@ -1,5 +1,6 @@
 import Link from "next/link"
 import styles from "./newsletter-fde.module.css"
+import { canPromoteLabs } from "@/lib/labs-cta"
 
 const INCLUDES = [
   "A practical AI tip you can use that day",
@@ -101,9 +102,15 @@ export function NewsletterFde() {
             </div>
 
             <div className={styles.ctaRow}>
-              <Link href="/labs" className={styles.buttonOutline}>
-                Try a free lab
-              </Link>
+              {canPromoteLabs() ? (
+                <Link href="/labs" className={styles.buttonOutline}>
+                  Try a free lab
+                </Link>
+              ) : (
+                <Link href="/lessons" className={styles.buttonOutline}>
+                  See the curriculum
+                </Link>
+              )}
               <Link href="/pricing" className={styles.buttonOutline}>
                 See pricing
               </Link>

@@ -1,0 +1,5 @@
+user_id,access_source,subscription_state,subscription_month,valid_until,grace_period_ends,last_payment_at,stripe_customer_id,stripe_subscription_id,stripe_price_id,stripe_subscription_status,notes,created_at,updated_at
+ZlPmssQWUxX4ceCxvzySCBT02Pk3EquC,manual_beta,month1,1,,,,,,,,W6 post-deploy check,2026-07-05 19:53:42.154843+00,2026-07-05 19:53:42.154843+00
+O25jf7afB8Mb7UK5ieVp8z4p5zWHm7dE,manual_beta,month1,1,,,,,,,,"W16 image verification smoke account, temp, created 2026-07-06, safe to delete",2026-07-06 09:36:06.204327+00,2026-07-06 09:36:06.204327+00
+8UnjHGq6LOR297BuzXoXNxYxwbNeG114,manual_beta,month1,1,,,,,,,,,2026-07-22 22:57:17.272936+00,2026-07-22 22:57:17.272936+00
+uToNaMwLN2QcicYNaXQDfcYIZnsuQBHn,manual_beta,month1,1,,,,,,,,beta cohort 1 (2026-07-08),2026-07-25 19:46:15.182775+00,2026-07-25 19:46:15.182775+00

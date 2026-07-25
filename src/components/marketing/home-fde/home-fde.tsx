@@ -47,7 +47,12 @@ const faqs = [
   },
   {
     q: "How much time does the course take?",
-    a: "The main course is designed around roughly five hours a week for three months. Free labs let you try the format before joining.",
+    // No "try a free lab first" while /labs is gated for the CIPD demo (W25).
+    // The hero CTA was removed for that reason in W27; an FAQ answer telling
+    // the reader to do something they cannot do is the same defect in prose.
+    // The pricing band's £0 line stays: it describes the pricing model rather
+    // than offering a link.
+    a: "The main course is designed around roughly five hours a week for three months.",
   },
 ]
 

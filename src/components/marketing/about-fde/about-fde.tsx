@@ -1,5 +1,6 @@
 import Link from "next/link"
 import styles from "./about-fde.module.css"
+import { canPromoteLabs } from "@/lib/labs-cta"
 
 /** Course principles for the numbered journal list. */
 const PRINCIPLES = [
@@ -191,13 +192,19 @@ export function AboutFde() {
             Ready when <em>you are.</em>
           </h2>
           <p>
-            Start with the free labs, then decide whether you want the full
-            course and progress evidence that can actually be checked.
+            Take a look at what the course covers, then decide whether you want
+            the full thing and progress evidence that can actually be checked.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/labs" className={styles.buttonSolid}>
-              Try a free lab
-            </Link>
+            {canPromoteLabs() ? (
+              <Link href="/labs" className={styles.buttonSolid}>
+                Try a free lab
+              </Link>
+            ) : (
+              <Link href="/waitlist" className={styles.buttonSolid}>
+                Join the waitlist
+              </Link>
+            )}
             <Link href="/pricing" className={styles.buttonOutline}>
               See pricing
             </Link>

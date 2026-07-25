@@ -44,11 +44,13 @@ for (const scheme of ["light", "dark"]) {
 }
 
 // Gated dev route: anonymous visit must land on /login (redirect, not 200).
+// Was /demo/dashboard until W25 deleted the demo tree; /score-card-variants is
+// a surviving DEV_REVIEW_PATHS entry and proves the same guard.
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
 const page = await ctx.newPage()
-const resp = await page.goto(`${BASE}/demo/dashboard`, { waitUntil: "networkidle", timeout: 45000 })
+const resp = await page.goto(`${BASE}/score-card-variants`, { waitUntil: "networkidle", timeout: 45000 })
 await page.waitForTimeout(500)
-console.log(`gated /demo/dashboard -> final url ${page.url()} [http ${resp.status()}]`)
+console.log(`gated /score-card-variants -> final url ${page.url()} [http ${resp.status()}]`)
 await page.screenshot({ path: `${OUT}/gated-demo-redirect-1440.png`, fullPage: true })
 await ctx.close()
 await browser.close()

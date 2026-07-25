@@ -6,6 +6,7 @@ import {
   TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
 import styles from "./lessons-fde.module.css"
+import { canPromoteLabs } from "@/lib/labs-cta"
 
 /**
  * Colour-block card headers keyed by course month, mirroring the
@@ -74,9 +75,15 @@ export function LessonsFde() {
             <Link href="/waitlist" className={styles.buttonSolid}>
               Join waitlist
             </Link>
-            <Link href="/labs" className={styles.buttonOutline}>
-              Try a free lab
-            </Link>
+            {canPromoteLabs() ? (
+              <Link href="/labs" className={styles.buttonOutline}>
+                Try a free lab
+              </Link>
+            ) : (
+              <Link href="/pricing" className={styles.buttonOutline}>
+                See pricing
+              </Link>
+            )}
           </div>
           <div className={styles.mastheadFoot}>
             <p>Video in every lesson</p>
@@ -212,8 +219,8 @@ export function LessonsFde() {
             Ready to start <em>building?</em>
           </h2>
           <p>
-            Join the waitlist for the course, or try a free lab first to see
-            works.
+            Join the waitlist for the course and we will write to you when
+            places open.
           </p>
           <div className={styles.closingActions}>
             <Link href="/waitlist" className={styles.buttonSolid}>

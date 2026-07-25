@@ -9,8 +9,9 @@ const OUT = process.env.OUT || "completion/W12-shots"
 mkdirSync(OUT, { recursive: true })
 
 const widths = [1440, 768, 412]
+// The /explainer-preview review route was deleted in W25 once W12 closed; the
+// homepage carries the final embed, which is what this now shoots.
 const targets = [
-  { name: "preview", path: "/explainer-preview" },
   { name: "home", path: "/" },
 ]
 const errors = []

@@ -1,0 +1,4 @@
+email,user_id,subscription_month,valid_until,notes,created_at,updated_at
+w6-prodcheck-1783281150@example.com,ZlPmssQWUxX4ceCxvzySCBT02Pk3EquC,1,,W6 post-deploy check,2026-07-05 19:52:30.529581+00,2026-07-05 19:52:30.529581+00
+w16-smoke@gwth.ai,O25jf7afB8Mb7UK5ieVp8z4p5zWHm7dE,1,,"W16 image verification smoke account, temp, created 2026-07-06, safe to delete",2026-07-06 09:35:56.805545+00,2026-07-06 09:35:56.805545+00
+familyuccelli@gmail.com,uToNaMwLN2QcicYNaXQDfcYIZnsuQBHn,1,,beta cohort 1 (2026-07-08),2026-07-05 20:09:48.569115+00,2026-07-05 20:09:48.569115+00

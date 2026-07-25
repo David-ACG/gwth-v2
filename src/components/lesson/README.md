@@ -1,6 +1,8 @@
 # Lesson Components
 
-Components for the redesigned 5-section lesson page layout. Built for the GWTH v2 learning platform.
+Presentational pieces used inside rendered lesson prose. They reach the page
+through `../shared/markdown-renderer.tsx`, which parses custom markdown syntax
+into them, rather than being composed by hand.
 
 ## Components
 
@@ -8,25 +10,12 @@ Components for the redesigned 5-section lesson page layout. Built for the GWTH v
 |-----------|-------------|
 | `CalloutBox` | Styled callout with 4 variants: note (aqua), warning (amber), tip (green), deep-dive (mint, collapsible) |
 | `CollapsibleSection` | Animated expand/collapse with Motion. Used by deep-dive callouts |
-| `TableOfContents` | Right-side sticky TOC with scroll-spy via Intersection Observer |
-| `ObjectivesCard` | "What you'll learn" card with icon checklist |
 | `KeyTermTooltip` | Inline dotted-underline term with tooltip definition |
-| `ImageLightbox` | Click-to-expand image with fullscreen overlay |
-| `StepProgress` | Numbered milestones with checkboxes and progress bar |
 | `CodeBlock` | Shiki-highlighted code with copy button and theme switching |
-| `QuizSection` | Inline quiz with immediate feedback and score summary |
-| `AudioBar` | Compact audio player with speed control, collapsible |
-| `LessonSection` | Wrapper for consistent spacing and optional section numbering |
 
 ## Usage
 
-Import from the barrel export:
-
-```tsx
-import { CalloutBox, ObjectivesCard, QuizSection } from "@/components/lesson"
-```
-
-Or import individual components:
+Import the component directly. There is no barrel export.
 
 ```tsx
 import { CodeBlock } from "@/components/lesson/code-block"
@@ -39,3 +28,19 @@ The enhanced `MarkdownRenderer` (in `../shared/markdown-renderer.tsx`) parses cu
 - `:::note` / `:::warning` / `:::tip` / `:::deep-dive[Title]` → `CalloutBox`
 - `==term|definition==` → `KeyTermTooltip`
 - Fenced code blocks → `CodeBlock` (with Shiki highlighting)
+
+## History
+
+This directory originally held an eleven-component kit for a proposed
+five-section lesson layout: `TableOfContents`, `ObjectivesCard`,
+`ImageLightbox`, `StepProgress`, `QuizSection`, `AudioBar`, `LessonSection`,
+plus the `index.ts` barrel and `src/lib/demo-utils.ts`.
+
+That layout was never adopted. The shipped lesson viewer is
+`src/app/(dashboard)/course/[slug]/lesson/[lessonSlug]/editorial-lesson-viewer.tsx`,
+which carries its own audio bar, quiz and progress UI. The kit survived only
+because the `/demo/lesson-v1..v11` design-variant routes still imported it.
+W25 deleted those routes (they were client components shipping real lesson
+prose into a public `/_next/static` chunk) and the eight orphans went with
+them, so nobody mistakes them for live viewer code. They are in git history if
+the five-section idea is ever revived.

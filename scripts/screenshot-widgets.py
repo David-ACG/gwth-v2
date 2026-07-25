@@ -2,6 +2,11 @@
 
 Saves PNGs into kanban/design-artefacts/2026-05-08/lesson-widgets-design-bundle/after/
 matching the names called out in the Stage 3 handoff.
+
+HISTORICAL: this drives `/demo/lesson?surface=...&widget=...`, a route that
+W25 deleted (2026-07-25) along with the rest of the demo scratch tree. Kept
+for the record of how the May design bundle was captured; it will not run
+against the current site without being repointed at the real lesson viewer.
 """
 
 from __future__ import annotations

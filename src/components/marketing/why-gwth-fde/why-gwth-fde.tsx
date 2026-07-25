@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { COURSE_MONTHLY_PRICE } from "@/lib/config"
 import styles from "./why-gwth-fde.module.css"
+import { canPromoteLabs } from "@/lib/labs-cta"
 
 /**
  * Press quotes with source attribution, all sourced from research files.
@@ -441,15 +442,17 @@ export function WhyGwthFde() {
             lessons, practical projects, vendor-neutral, built for the UK.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/signup" className={styles.buttonSolid}>
-              Get started
+            <Link href="/waitlist" className={styles.buttonSolid}>
+              Join the waitlist
             </Link>
             <Link href="/pricing" className={styles.buttonOutline}>
               See our pricing
             </Link>
-            <Link href="/labs" className={styles.buttonOutline}>
-              Try a free lab
-            </Link>
+            {canPromoteLabs() && (
+              <Link href="/labs" className={styles.buttonOutline}>
+                Try a free lab
+              </Link>
+            )}
           </div>
         </div>
       </section>

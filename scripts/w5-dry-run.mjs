@@ -13,6 +13,13 @@ import { chromium } from "@playwright/test"
 import { mkdir } from "node:fs/promises"
 import { join } from "node:path"
 
+// W25 deleted the /demo/lesson scratch viewer (it shipped real lesson prose
+// into a public static chunk). The report-a-problem launcher this script
+// exercises lives on the REAL lesson viewer, so drive that instead. It is
+// gated, which is why the script already signs in and reuses storageState.
+const LESSON_PATH =
+  process.env.LESSON_PATH ||
+  "/course/applied-ai-skills/lesson/welcome-to-gwth-six-ways-ai-can-give-you-superpowers"
 const BASE = process.env.STAGING_URL ?? "http://192.168.178.50:3001"
 const EMAIL = process.env.TEST_EMAIL ?? "w5-dryrun@gwth.ai"
 const PW = process.env.TEST_PW ?? "BetaTest2026"
@@ -71,7 +78,7 @@ try {
     console.log(`captured guide-${c.name}`)
 
     // Lesson viewer + launcher overlay (the report form opened from a lesson)
-    await page.goto(`${BASE}/demo/lesson`, { waitUntil: "domcontentloaded" })
+    await page.goto(`${BASE}${LESSON_PATH}`, { waitUntil: "domcontentloaded" })
     await settle(page)
     await page.getByRole("button", { name: /report a problem/i }).first().click()
     await page.waitForTimeout(400)
@@ -88,7 +95,7 @@ try {
     storageState,
   })
   const page = await ctx.newPage()
-  await page.goto(`${BASE}/demo/lesson`, { waitUntil: "domcontentloaded" })
+  await page.goto(`${BASE}${LESSON_PATH}`, { waitUntil: "domcontentloaded" })
   await settle(page)
   await page.getByRole("button", { name: /report a problem/i }).first().click()
   await page.waitForTimeout(300)
@@ -103,7 +110,7 @@ try {
   await page.getByText(/thank you/i).first().waitFor({ timeout: 15000 })
   await page.waitForTimeout(400)
   await page.screenshot({ path: join(OUT, "feedback-success.png") })
-  console.log("feedback submitted from /demo/lesson")
+  console.log(`feedback submitted from ${LESSON_PATH}`)
   await ctx.close()
 } finally {
   await browser.close()

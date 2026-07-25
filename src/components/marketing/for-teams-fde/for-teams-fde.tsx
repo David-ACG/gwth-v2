@@ -7,6 +7,7 @@ import {
 } from "@/lib/config"
 import { UK_STATS, RESEARCH_SOURCES } from "@/components/marketing/data"
 import styles from "./for-teams-fde.module.css"
+import { canPromoteLabs } from "@/lib/labs-cta"
 
 /** Differentiator entries for the numbered journal list. */
 const WHY_GWTH = [
@@ -175,9 +176,15 @@ export function ForTeamsFde() {
             <Link href="/contact" className={styles.buttonSolid}>
               Get in touch
             </Link>
-            <Link href="/labs" className={styles.buttonOutline}>
-              Try a free lab
-            </Link>
+            {canPromoteLabs() ? (
+              <Link href="/labs" className={styles.buttonOutline}>
+                Try a free lab
+              </Link>
+            ) : (
+              <Link href="/lessons" className={styles.buttonOutline}>
+                See the curriculum
+              </Link>
+            )}
           </div>
           <div className={styles.mastheadFoot}>
             <p>3 months · 5 hours a week</p>
@@ -418,16 +425,22 @@ export function ForTeamsFde() {
             Ready to upskill <em>your UK team?</em>
           </h2>
           <p>
-            Get in touch to discuss your team&apos;s needs, or let your
-            people try a free lab right now.
+            Get in touch to discuss your team&apos;s needs, or take a look at
+            what the course covers.
           </p>
           <div className={styles.closingActions}>
             <Link href="/contact" className={styles.buttonSolid}>
               Get in touch
             </Link>
-            <Link href="/labs" className={styles.buttonOutline}>
-              Try a free lab
-            </Link>
+            {canPromoteLabs() ? (
+              <Link href="/labs" className={styles.buttonOutline}>
+                Try a free lab
+              </Link>
+            ) : (
+              <Link href="/lessons" className={styles.buttonOutline}>
+                See the curriculum
+              </Link>
+            )}
           </div>
         </div>
       </section>

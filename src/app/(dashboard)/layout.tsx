@@ -8,6 +8,16 @@ import { EMPTY_SEARCH_INDEX, getSearchIndex } from "@/lib/data/search-index"
 import styles from "./dashboard-fde.module.css"
 
 /**
+ * Render per request, never statically. This layout consults the W25 content
+ * gate to decide what goes into the search index, so it must not be
+ * prerendered. Both awaits below already reach `headers()` unconditionally;
+ * the explicit exports are the second brace, so the guarantee survives a
+ * future refactor of either helper. Same reasoning as (public)/layout.tsx.
+ */
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
+/**
  * Layout for authenticated dashboard pages.
  * Includes collapsible sidebar and dashboard header with breadcrumbs.
  * Fetches the current user and passes name/email to the header.

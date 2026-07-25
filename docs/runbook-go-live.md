@@ -113,6 +113,65 @@ Confirmed in the Coolify env store **2026-07-05 night** (values verified via API
 - [x] **I3 media vars SET** (set by the I3 run 2026-07-05): `MEDIA_CDN_BASE_URL=https://media.gwth.ai` (runtime) and `NEXT_PUBLIC_MEDIA_CDN_BASE_URL=https://media.gwth.ai` (**is_build_time=true**, required since NEXT_PUBLIC_* is inlined at `next build`; the Dockerfile takes it as a build arg since `17bbfae`).
 - [x] **`SITE_PASSWORD` REMOVED from the Coolify env store this run (2026-07-05 night, decision executed).** Rationale: the invite email contains no password and testers must reach `/signup`, `/login`, `/guide`; keeping the gate breaks the invite flow. The value is preserved in the canonical SOPS store `deploy/secrets.production.env` (intentional drift, restore from there if a gate is ever needed again). Consequence: the password gate and its `X-Robots-Tag: noindex` header drop with the next deploy. `ALLOW_INDEXING` stays UNSET, so robots.txt and the meta robots tag keep the site noindexed during the invite-only beta; David flips `ALLOW_INDEXING=1` at public launch.
 
+### §2a — Private content mode (W25, added 2026-07-25)
+
+Two runtime-only variables restrict product content to a named allowlist while
+the site is private. Both were added to the Coolify env store on 2026-07-25 with
+`is_buildtime=false`, `is_runtime=true` — do **not** tick "Build Variable?" on
+either, and note that ticking it would be actively dangerous, not merely
+useless: a build that saw an opening value cannot be re-locked by a runtime env
+change.
+
+- [x] `PRIVATE_CONTENT_MODE=on` — the master switch.
+- [x] `CONTENT_ALLOWED_EMAILS=david@agilecommercegroup.com,familyuccelli@gmail.com`
+      — comma-separated, case-insensitive. Both addresses are required: the
+      CIPD demo is walked as the **student** (`familyuccelli@gmail.com`), not as
+      the owner.
+
+**What is gated:** `/labs`, `/labs/[slug]`, the lesson viewer, the full course
+syllabus, and every `(dashboard)` route. **What stays public:** `/`, `/lessons`,
+`/pricing`, `/about`, `/for-teams`, `/waitlist`, the `/course/<slug>` teaser,
+and `/score/[id]` — the last of these deliberately, because the homepage QR
+code points at `https://gwth.ai/score/c67sg`.
+
+**Launch off-switch (one change):**
+
+```
+PRIVATE_CONTENT_MODE=off      # in Coolify, then redeploy
+```
+
+That restores public Labs and open signup in a single flip. Note it is one
+combined decision, not two.
+
+**REMOVING the variable does the OPPOSITE — it re-locks the site.** That is
+deliberate. The switch fails closed by inversion: the gate is ON unless the
+value is explicitly the word `off` or `public`. Unset, empty, misspelt, quoted
+(`"off"`), `on`, `0` and `false` all stay LOCKED, so no configuration mistake
+can expose content. `0` and `false` are pointedly not opening values even
+though every other flag here reads truthy-means-more, because a
+`${PRIVATE_CONTENT_MODE:-0}` template default would otherwise open the site.
+
+**If the allowlist is empty while the mode is on, the container crash-loops on
+purpose** (`assertContentGateConfigured` in `src/instrumentation.ts`). The
+failure it is there to catch is a typo in the variable NAME: a misspelt
+`CONTENT_ALLOWED_EMAILS` falls back to `ADMIN_EMAILS`, which is unset in
+production, and would otherwise lock everyone out silently. If the app will not
+start after an env edit, check the spelling of that variable first.
+
+**A redeploy is required, not just an env edit.** `getAuth()` caches the auth
+instance on `globalThis`, so the signup block is read once per process.
+
+Anonymous verification matrix (expected while the mode is on):
+
+```
+for p in / /lessons /pricing /about /for-teams /waitlist /score/c67sg; do
+  curl -s -o /dev/null -w "$p %{http_code}\n" "https://gwth.ai$p"; done   # all 200
+for p in /labs /labs/job-advert-claude-vs-chatgpt /dashboard; do
+  curl -s -o /dev/null -w "$p %{http_code}\n" "https://gwth.ai$p"; done   # all 307 -> /login
+curl -s -o /dev/null -w "%{http_code}\n" \
+  https://gwth.ai/gwth-handoff/mp8g6bol-lesson-m1_l01.json                # 404
+```
+
 ---
 
 ## §3 — Deploy procedure

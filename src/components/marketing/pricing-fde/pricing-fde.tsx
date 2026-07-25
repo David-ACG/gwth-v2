@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { PRICING } from "@/components/marketing/data"
 import styles from "./pricing-fde.module.css"
+import { canPromoteLabs } from "@/lib/labs-cta"
 
 /** Extra capabilities included for teams of 5 or more. */
 const TEAM_FEATURES = [
@@ -82,12 +83,12 @@ export function PricingFde() {
             Three ways to learn. <em>Start free.</em>
           </h1>
           <p className={styles.standfirst}>
-            Less than the cost of one hour with an AI consultant. Try the
-            free labs, join the course when you are ready, and bring teams in
-            without hidden enterprise games.
+            Less than the cost of one hour with an AI consultant. Join the
+            course when you are ready, and bring teams in without hidden
+            enterprise games.
           </p>
           <div className={styles.mastheadFoot}>
-            <p>Free labs forever</p>
+            <p>Unlock as you go</p>
             <p>Unlock one month at a time</p>
             <p>Cancel anytime</p>
           </div>
@@ -216,14 +217,21 @@ export function PricingFde() {
             Try before <em>you join.</em>
           </h2>
           <p>
-            Free labs are there so the course has to earn your attention
-            first. No card, no timer, no pretend scarcity.
+            You unlock one month at a time, so the course has to earn your
+            attention first. No card up front, no timer, no pretend scarcity.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/labs" className={styles.buttonSolid}>
-              Try a free lab
-            </Link>
-            <Link href="/signup" className={styles.buttonOutline}>
+            {canPromoteLabs() && (
+              <Link href="/labs" className={styles.buttonSolid}>
+                Try a free lab
+              </Link>
+            )}
+            <Link
+              href="/waitlist"
+              className={
+                canPromoteLabs() ? styles.buttonOutline : styles.buttonSolid
+              }
+            >
               Join the waitlist
             </Link>
           </div>
