@@ -4,7 +4,11 @@ import { HomeFde } from "@/components/marketing/home-fde/home-fde"
 import { ExplainerVideo } from "@/components/marketing/home-fde/explainer-video"
 
 export const metadata: Metadata = {
-  title: "GWTH.ai | Beginner-to-Advanced Applied AI",
+  // `absolute` opts out of the root layout's "%s | GWTH.ai" template. This
+  // title already carries the brand, so the template was stacking a second
+  // one and the browser tab read "GWTH.ai | Beginner-to-Advanced Applied AI |
+  // GWTH.ai" (W26).
+  title: { absolute: "GWTH.ai | Beginner-to-Advanced Applied AI" },
   description:
     "A UK-focused applied AI course that takes you from ChatGPT basics to serious practical skill: building, research, coding with AI, projects, and portfolio evidence.",
   alternates: {
