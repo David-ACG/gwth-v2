@@ -16,6 +16,7 @@ import { mockLessons, mockCourses } from "./mock-data"
 import { getDb } from "@/db"
 import { lessons, quizQuestions, lessonResources } from "@/db/schema"
 import { asc, eq } from "drizzle-orm"
+import { mediaUrl } from "@/lib/media/url"
 
 /**
  * True when a real database is configured. When false the layer falls back to
@@ -52,11 +53,19 @@ function rowToLesson(
     month: row.month as 1 | 2 | 3,
     isOptional: row.isOptional || false,
     optionalTrack: row.optionalTrack || undefined,
-    introVideoUrl: row.introVideoUrl ?? null,
+    // Media is rewritten to the CDN HERE, at the data boundary, not at render.
+    // The pipeline stores absolute P520 LAN URLs
+    // (http://192.168.178.50:8088/api/lessons/...), and rewriting only in the
+    // component left the raw value in the serialised props: a lesson page on
+    // production shipped the internal host and port to anyone viewing source,
+    // and any future client code reading the field directly would have tried to
+    // fetch an unreachable address from a visitor's browser. `mediaUrl` is
+    // idempotent, so the existing render-time calls remain harmless no-ops.
+    introVideoUrl: mediaUrl(row.introVideoUrl ?? null),
     learnContent: row.learnContent || "",
-    audioFileUrl: row.audioFileUrl ?? null,
+    audioFileUrl: mediaUrl(row.audioFileUrl ?? null),
     audioDuration: row.audioDuration ?? null,
-    buildVideoUrl: row.buildVideoUrl ?? null,
+    buildVideoUrl: mediaUrl(row.buildVideoUrl ?? null),
     buildInstructions: row.buildInstructions ?? null,
     questions,
     resources,
