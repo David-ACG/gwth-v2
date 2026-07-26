@@ -27,7 +27,7 @@ export async function generateMetadata({
   if (arena) {
     return {
       title: arena.title,
-      description: `${arena.matchup[0].name} vs ${arena.matchup[1].name} on one real task, tested ${arena.testedOn}. Outputs side by side, a rubric, and a dated verdict. Free to read.`,
+      description: `${arena.matchup[0].name} vs ${arena.matchup[1].name} on one real task, tested ${arena.testedOn}. Outputs side by side, a rubric, and a dated verdict.`,
     }
   }
 

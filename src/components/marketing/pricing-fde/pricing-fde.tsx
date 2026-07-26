@@ -61,7 +61,10 @@ export function PricingFde() {
       price: course.price,
       per: course.per,
       features: course.features,
-      cta: { label: course.cta.label, href: course.cta.href },
+      // The shared PRICING data still points this CTA at /signup, but W25 shut
+      // registration, so /signup renders "Registration closed" under a button
+      // labelled "Join the Waitlist". Send it where the label says it goes.
+      cta: { label: course.cta.label, href: "/waitlist" },
       featured: true,
     },
     {

@@ -33,7 +33,7 @@ export function ArchiveLabDetail({ lab }: ArchiveLabDetailProps) {
           <h1 className={styles.matchupTitle}>{lab.title}</h1>
           <div className={styles.matchupFoot}>
             <p>Archived {formatDate(lab.updatedAt)}</p>
-            <p>{formatDuration(lab.duration)} · Free to read</p>
+            <p>{formatDuration(lab.duration)} · Kept for reference</p>
           </div>
         </div>
       </header>

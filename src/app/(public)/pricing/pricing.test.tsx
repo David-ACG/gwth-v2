@@ -80,10 +80,14 @@ describe("PricingPage", () => {
   })
 
   it("has Join the Waitlist CTA on the member tier", () => {
+    // Deliberately updated (W26). This used to assert /signup, but W25 shut
+    // registration, so /signup renders "Registration closed" behind a button
+    // labelled "Join the Waitlist". Every waitlist-labelled CTA on the page
+    // now goes to /waitlist, so the label tells the truth.
     render(<PricingPage />)
     expect(
       screen.getByRole("link", { name: "Join the Waitlist" })
-    ).toHaveAttribute("href", "/signup")
+    ).toHaveAttribute("href", "/waitlist")
   })
 
   it("does not expose a Stripe checkout CTA during beta", () => {

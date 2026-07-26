@@ -60,7 +60,7 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
 
           <div className={styles.matchupFoot}>
             <p>Tested on {formatTestedOn(lab.testedOn)}</p>
-            <p>Same prompt to both · Free to read</p>
+            <p>Same prompt to both · Outputs unedited</p>
           </div>
         </div>
       </header>

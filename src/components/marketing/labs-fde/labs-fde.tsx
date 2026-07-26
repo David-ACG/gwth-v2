@@ -59,7 +59,9 @@ interface ArchiveRow {
  *
  * Structure: drenched teal masthead, a "how it works" explainer, a LIVE NOW
  * card row, a dated ARCHIVE list (arena first, then retired tiered labs), and a
- * closing band pointing at the course. Everything is free and needs no account.
+ * closing band pointing at the course. Labs are included free with a beta
+ * place; during the private pre-launch period (W25) the route itself is behind
+ * the content gate, so the copy must not promise anonymous reading.
  */
 export function LabsFde({
   liveLabs,
@@ -89,7 +91,9 @@ export function LabsFde({
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>The Model Arena · Free, no account</p>
+          <p className={styles.mastheadKicker}>
+            The Model Arena · Dated head-to-head tests
+          </p>
           <h1 className={styles.mastheadTitle}>
             Two tools, one task. <em>You judge.</em>
           </h1>
@@ -113,7 +117,7 @@ export function LabsFde({
             </Link>
           </div>
           <div className={styles.mastheadFoot}>
-            <p>Read free · No account needed</p>
+            <p>Included free with your beta place</p>
             <p>New matchups as the models change</p>
           </div>
         </div>
@@ -230,8 +234,9 @@ export function LabsFde({
             Labs show you which tool. <em>The course shows you how.</em>
           </h2>
           <p>
-            The labs are the free taster. The course is three months of building
-            with AI: plain English, real projects, and progress you can see.
+            The labs tell you which tool earns its keep this month. The course
+            is three months of building with AI: plain English, real projects,
+            and progress you can see.
           </p>
           <div className={styles.closingActions}>
             <Link href="/pricing" className={styles.buttonSolid}>
