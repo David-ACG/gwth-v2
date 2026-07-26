@@ -427,6 +427,99 @@ describe("EditorialLessonViewer navigation", () => {
   })
 })
 
+// ── Narration follows the page ───────────────────────────────────────────────
+
+/**
+ * David, 2026-07-26: "The recording always starts from where a student left
+ * off. Change it so it starts from the page they are viewing and they can
+ * click on a section and it starts from there."
+ *
+ * The narration is one file for the whole lesson, so a single playhead used to
+ * carry on from wherever it was left no matter which page the reader moved to.
+ * Page offsets come from the pipeline's word timings when they load; these
+ * tests use the proportional fallback (no network in jsdom), which is enough to
+ * pin the behaviour: the playhead moves with the reader.
+ */
+const NARRATED_PAGES: EditorialLessonMeta["pages"] = [
+  {
+    title: "One",
+    kindLabel: "PROSE · 1 MIN",
+    kind: "prose",
+    content: "alpha bravo charlie delta",
+  },
+  {
+    title: "Two",
+    kindLabel: "PROSE · 1 MIN",
+    kind: "prose",
+    content: "echo foxtrot golf hotel",
+  },
+  {
+    title: "Three",
+    kindLabel: "PROSE · 1 MIN",
+    kind: "prose",
+    content: "india juliett kilo lima",
+  },
+]
+
+describe("EditorialLessonViewer narration start position", () => {
+  function renderNarrated(initialPage = 1) {
+    return render(
+      <EditorialLessonViewer
+        lesson={makeLesson({
+          pages: NARRATED_PAGES,
+          introVideoUrl: null,
+          audioDuration: 300,
+        })}
+        initialSurface="prose"
+        initialPage={initialPage}
+      />
+    )
+  }
+
+  it("moves the playhead to the page opened from the outline rail", async () => {
+    const user = userEvent.setup()
+    renderNarrated()
+    const audio = getAudioElement()
+    expect(audio.currentTime).toBe(0)
+
+    // Three equal-length pages over a 300s recording: page 3 starts at 200s.
+    await user.click(screen.getAllByRole("button", { name: /Three/ })[0]!)
+    expect(Math.round(audio.currentTime)).toBe(200)
+
+    await user.click(screen.getAllByRole("button", { name: /Two/ })[0]!)
+    expect(Math.round(audio.currentTime)).toBe(100)
+  })
+
+  it("moves the playhead when CONTINUE turns the page", async () => {
+    const user = userEvent.setup()
+    renderNarrated()
+    const audio = getAudioElement()
+    await user.click(screen.getByRole("button", { name: /CONTINUE/ }))
+    expect(Math.round(audio.currentTime)).toBe(100)
+  })
+
+  it("starts play on the page being read, not where it was left off", async () => {
+    const user = userEvent.setup()
+    renderNarrated(3)
+    const audio = getAudioElement()
+    // Simulate a playhead left behind on page one.
+    audio.currentTime = 12
+    await user.click(screen.getByRole("button", { name: /Play narration/ }))
+    expect(Math.round(audio.currentTime)).toBe(200)
+    expect(audio.paused).toBe(false)
+  })
+
+  it("resumes where it paused when the reader has not left the page", async () => {
+    const user = userEvent.setup()
+    renderNarrated(2)
+    const audio = getAudioElement()
+    // 150s is inside page two's 100s-200s span.
+    audio.currentTime = 150
+    await user.click(screen.getByRole("button", { name: /Play narration/ }))
+    expect(Math.round(audio.currentTime)).toBe(150)
+  })
+})
+
 // ── Student project page ─────────────────────────────────────────────────────
 
 /**
@@ -577,12 +670,16 @@ describe("EditorialLessonViewer mobile layout", () => {
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />
     )
     const play = screen.getByRole("button", { name: /Play narration/ })
-    // The five-column audio grid is what pushed this button to left=-46, so
-    // it must be reachable only from `sm` up.
+    // The five-column audio grid is what pushed this button to left=-46, so it
+    // must be reachable only from `xl` up. It was gated at `sm`, which was far
+    // too early: the reading column also carries the dashboard sidebar and the
+    // 248px outline rail, so between roughly 640px and 1300px the three fixed
+    // `auto` columns starved `minmax(0,1fr)` and the lesson title measured
+    // zero pixels wide.
     const grid = play.parentElement
     expect(grid).not.toBeNull()
     expect(grid!.className).toContain(
-      "sm:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]"
+      "xl:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]"
     )
     expect(grid!.className).toContain("[grid-template-columns:52px_minmax(0,1fr)]")
   })

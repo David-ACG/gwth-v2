@@ -307,7 +307,11 @@ function EdgePill({
       aria-label={`Toggle ${label.toLowerCase()} panel, ${count} items`}
       aria-pressed={active}
       className={cn(
-        "fixed z-30 w-9 cursor-pointer select-none",
+        // `grid place-items-center` centres the rotated label across the 36px
+        // tab. `text-align` cannot do it: inside `writing-mode: vertical-rl`
+        // the inline axis runs vertically, so text-center centres the label
+        // along its length and leaves it flush against one side.
+        "fixed z-30 grid w-9 cursor-pointer select-none place-items-center",
         "border-y border-l",
         active
           ? "border-primary bg-primary text-primary-foreground"
@@ -319,11 +323,22 @@ function EdgePill({
       }}
     >
       <span
-        className="block py-3.5 text-center font-mono text-[11px] font-semibold uppercase tracking-[0.16em]"
+        className="block font-mono text-[11px] font-semibold uppercase tracking-[0.16em]"
         style={{
           writingMode: "vertical-rl",
           textOrientation: "mixed",
           transform: "rotate(180deg)",
+          // PHYSICAL padding on purpose. Tailwind's `py-*` compiles to
+          // `padding-block`, which is LOGICAL: under `writing-mode:
+          // vertical-rl` the block axis runs horizontally, so `py-3.5` put the
+          // 14px on the left and right and left the label touching the top and
+          // bottom borders (measured insets: 1px). David, 2026-07-26: "The
+          // Notes and Feedback tabs have no padding for the text so it looks
+          // squashed."
+          paddingTop: "0.875rem",
+          paddingBottom: "0.875rem",
+          paddingLeft: 0,
+          paddingRight: 0,
         }}
       >
         {label}

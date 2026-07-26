@@ -21,6 +21,12 @@ import {
 } from "@/components/ui/sheet"
 import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
+import {
+  alignPagesToAudio,
+  estimatePageStarts,
+  timestampsUrlFor,
+  type AudioWord,
+} from "@/lib/lessons/audio-alignment"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
@@ -252,6 +258,59 @@ export function EditorialLessonViewer({
   const autoAdvanceRef = React.useRef(autoAdvance)
   autoAdvanceRef.current = autoAdvance
 
+  // ── Per-page narration offsets ────────────────────────────────────────
+  // The narration is one file for the whole lesson, so a single playhead used
+  // to carry on from wherever it was left no matter which page you moved to.
+  // These offsets say where each page begins in the recording, so play always
+  // reads the page you are looking at and jumping to a section jumps the
+  // audio with it.
+  const narratedPages = React.useMemo(
+    () =>
+      lesson.pages.map((p) => ({
+        content: p.content,
+        title: p.title,
+        // Only the lesson body is narrated: the intro video has its own
+        // soundtrack, and the Q&A and the project are not in the recording.
+        narrated: p.kind === "prose" || p.kind === "code",
+      })),
+    [lesson.pages]
+  )
+  // Seed with the proportional estimate so the very first play is already on
+  // the right page; the word-timing alignment replaces it when it arrives.
+  const [pageStarts, setPageStarts] = React.useState<(number | null)[]>(() =>
+    estimatePageStarts(narratedPages, lesson.audioDuration ?? 0)
+  )
+
+  React.useEffect(() => {
+    const url = timestampsUrlFor(audioSrc)
+    if (!url) return
+    let cancelled = false
+    void fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((words: AudioWord[] | null) => {
+        if (cancelled || !Array.isArray(words) || words.length === 0) return
+        setPageStarts(alignPagesToAudio(narratedPages, words))
+      })
+      // No sidecar (or it failed to load): keep the proportional estimate.
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [audioSrc, narratedPages])
+
+  /**
+   * Moves the playhead to the top of a page's narration. Called on every page
+   * change, and before starting playback, so the recording follows the reader
+   * rather than the other way round.
+   */
+  function seekToPageStart(page: number) {
+    const audio = audioRef.current
+    const start = pageStarts[page - 1]
+    if (!audio || start === null || start === undefined) return
+    audio.currentTime = start
+    setAudioTime(start)
+  }
+
   function cancelAdvance() {
     if (advanceTimer.current) {
       clearTimeout(advanceTimer.current)
@@ -273,6 +332,11 @@ export function EditorialLessonViewer({
       audioRef.current?.pause()
       setSurface(kind === "video" ? "video" : "qa")
     } else {
+      // Follow the reader: the narration moves to the top of the page they
+      // just opened, whether they got there by CONTINUE or by clicking the
+      // outline rail. Playback state is left as it was, so this cues a paused
+      // reader and carries a listening one straight into the new section.
+      seekToPageStart(clamped)
       setSurface(
         audioRef.current && !audioRef.current.paused ? "prose-playing" : "prose"
       )
@@ -343,11 +407,29 @@ export function EditorialLessonViewer({
     }
   }, [])
 
+  /**
+   * True when the playhead is somewhere inside the page being read. Used to
+   * decide whether pressing play should resume or jump to the top of the page:
+   * a reader who paused mid-page and pressed play again expects to carry on,
+   * but a reader who has moved pages expects to hear THIS page.
+   */
+  function playheadIsOnPage(page: number): boolean {
+    const start = pageStarts[page - 1]
+    if (start === null || start === undefined) return true
+    const laterStarts = pageStarts
+      .slice(page)
+      .filter((s): s is number => s !== null && s !== undefined)
+    const end = laterStarts.length ? laterStarts[0]! : Number.POSITIVE_INFINITY
+    const now = audioRef.current?.currentTime ?? 0
+    return now >= start && now < end
+  }
+
   function handleTogglePlay() {
     const audio = audioRef.current
     if (!audio || !audioSrc) return
     if (surface === "advancing") cancelAdvance()
     if (audio.paused) {
+      if (!playheadIsOnPage(pageNum)) seekToPageStart(pageNum)
       void audio.play().catch(() => {
         toast.error("The narration audio could not be played.")
       })
@@ -1261,16 +1343,22 @@ function AudioBar({
 
   const playing = variant === "playing"
   return (
-    // Below `sm` the bar is two rows: play button + scrubber on top, speed and
-    // auto-advance beneath. The five-column desktop grid returns at `sm`.
+    // Two rows by default: play button + scrubber on top, speed and
+    // auto-advance beneath. The five-column desktop grid returns at `xl`.
     //
     // WHY: the desktop template asks for 52px + 1fr + three `auto` columns and
     // four 22px gaps inside px-7 padding. The `auto` columns are sized by their
     // content (a 3-up speed switch of 44px buttons plus the auto-advance
     // toggle), so the row's minimum exceeded 390px and shunted the play button
     // to left=-46 — all but 2px of the narration control off-screen.
+    //
+    // The single-row layout used to return at `sm`, which was far too early:
+    // the reading column also carries the dashboard sidebar and the 248px
+    // outline rail, so from roughly 640px to 1300px the fixed `auto` columns
+    // starved `minmax(0,1fr)` and the lesson title measured ZERO pixels wide.
+    // `xl` is where the row genuinely fits (verified 390px to 2200px).
     <div className="sticky top-0 z-[5] mb-1 border-b border-foreground bg-card px-4 py-3.5 sm:px-7">
-      <div className="grid items-center gap-x-[22px] gap-y-3 [grid-template-columns:52px_minmax(0,1fr)] sm:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]">
+      <div className="grid items-center gap-x-[22px] gap-y-3 [grid-template-columns:52px_minmax(0,1fr)] xl:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]">
         <button
           type="button"
           aria-label={playing ? "Pause narration" : "Play narration"}
@@ -1286,16 +1374,28 @@ function AudioBar({
         </button>
 
         <div className="min-w-0">
-          <div className="mb-2 flex items-baseline justify-between">
-            <div className="flex min-w-0 items-center gap-3">
-              <span className="whitespace-nowrap font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          {/* The title truncates; the clock never does.
+              David, 2026-07-26: the label and the clock "look like chinese" —
+              they were painting on top of each other. Measured on the real
+              page, the clock sat 95px INSIDE the label between roughly 800px
+              and 1300px of viewport: the row was `justify-between`, and the
+              un-shrinkable `whitespace-nowrap` label overflowed its own flex
+              box once the column got tight, spilling across the clock.
+              Three things keep them apart at every width now: the title group
+              is `min-w-0 flex-1 overflow-hidden` so nothing can paint outside
+              it, the clock is `shrink-0` behind a real gap, and the label only
+              appears at `2xl`, the only width where it fits beside a readable
+              title (verified 390px to 2200px). */}
+          <div className="mb-2 flex items-baseline gap-4">
+            <div className="flex min-w-0 flex-1 items-baseline gap-3 overflow-hidden">
+              <span className="hidden whitespace-nowrap font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground 2xl:inline">
                 NOW READING
               </span>
-              <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[13px] font-semibold">
+              <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[13px] font-semibold">
                 {nowReading}
               </span>
             </div>
-            <span className="whitespace-nowrap font-mono text-[11.5px] tabular-nums text-muted-foreground">
+            <span className="shrink-0 whitespace-nowrap font-mono text-[11.5px] tabular-nums text-muted-foreground">
               {currentTime} / {totalTime}
             </span>
           </div>
@@ -1305,7 +1405,7 @@ function AudioBar({
         {/* Second row below `sm`: the speed switch and auto-advance toggle sit
             under the scrubber, spanning both columns, so neither can force the
             grid wider than the viewport. */}
-        <div className="col-span-2 flex flex-wrap items-center gap-x-[22px] gap-y-3 sm:col-span-1 sm:contents">
+        <div className="col-span-2 flex flex-wrap items-center gap-x-[22px] gap-y-3 xl:col-span-1 xl:contents">
           <div className="flex shrink-0 border border-border">
             {(["1x", "1.25x", "1.5x"] as const).map((s) => (
               <button
