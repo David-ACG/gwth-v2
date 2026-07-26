@@ -45,6 +45,11 @@ export function VariantSwitcher() {
   const currentSlug = pathname.split("/").filter(Boolean)[1]
   const currentTheme = mounted ? resolvedTheme : "light"
 
+  // The /redesign/syllabus-* comparison (W27) is a different question with a
+  // different option list, and it mounts its own switcher. Showing the
+  // homepage variant bar there as well would offer 20 irrelevant links.
+  if (currentSlug?.startsWith("syllabus-")) return null
+
   return (
     <div
       role="navigation"

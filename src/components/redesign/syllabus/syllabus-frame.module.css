@@ -1,0 +1,38 @@
+/*
+ * Sandbox chrome for the /redesign/syllabus-* comparison (W27) ONLY.
+ *
+ * The live page inherits its padding, max width and paper ground from the
+ * (dashboard) layout, which the redesign sandbox does not mount. This frame
+ * reproduces that framing so all four options are photographed in identical
+ * conditions. It is review chrome, not a component, which is why the two
+ * ground values are literal rather than --v-* tokens (the tokens are declared
+ * inside each option's own .shell, one level down).
+ */
+
+.frame {
+  min-height: 100vh;
+  background: #e8e9de;
+  padding: 1rem;
+}
+
+:global(.dark) .frame {
+  background: #14160f;
+}
+
+@media (min-width: 768px) {
+  .frame {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .frame {
+    padding: 2rem;
+  }
+}
+
+.inner {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding-bottom: 4rem;
+}
