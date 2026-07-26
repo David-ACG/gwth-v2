@@ -29,6 +29,14 @@ const CACHE_CONTROL = "public, max-age=3600, s-maxage=86400, stale-while-revalid
 const UPSTREAM_USER_AGENT = "Mozilla/5.0 (compatible; GWTH-site/1.0; +https://gwth.ai)"
 
 /**
+ * Fetched sidecars, kept for the life of the process. A lesson's word timings
+ * only change when its audio is re-cut, and there are 26 lessons, so this is
+ * bounded and tiny. It also means the intermittent Cloudflare challenge below
+ * is paid at most once per lesson per container.
+ */
+const memoryCache = new Map<string, string>()
+
+/**
  * True when `src` is a timings file on the configured media CDN. Anything else
  * is refused: this endpoint takes a URL from the client, so the origin check is
  * what stops it becoming an open proxy into the private network.
@@ -57,34 +65,64 @@ export async function GET(request: Request) {
     )
   }
 
-  let upstream: Response
-  try {
-    // Plain fetch, NOT Next's data cache: a 469KB body through the
-    // incremental cache failed in the standalone production image while the
-    // same request from a shell in that container succeeded. Edge caching is
-    // handled by the Cache-Control below instead.
-    upstream = await fetch(src, {
-      cache: "no-store",
-      headers: { "user-agent": UPSTREAM_USER_AGENT, accept: "application/json" },
-    })
-  } catch (error) {
-    console.error("[lesson-timings] upstream fetch failed", src, error)
-    return NextResponse.json(
-      { error: "timings fetch failed", reason: String(error) },
-      { status: 502 }
-    )
-  }
-  if (!upstream.ok) {
+  const cached = memoryCache.get(src)
+  if (cached) return timingsResponse(cached)
+
+  let body: string | null = null
+  let lastStatus = 0
+  // Cloudflare answers the FIRST request from this server with a managed
+  // challenge (`cf-mitigated: challenge`, HTTP 403) and then lets the next one
+  // straight through — observed repeatedly from inside the production
+  // container. One retry is enough in practice; three is cheap insurance.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let upstream: Response
+    try {
+      // Plain fetch, NOT Next's data cache: this response is 469KB and is
+      // memoised below instead.
+      upstream = await fetch(src, {
+        cache: "no-store",
+        headers: {
+          "user-agent": UPSTREAM_USER_AGENT,
+          accept: "application/json",
+        },
+      })
+    } catch (error) {
+      console.error("[lesson-timings] fetch threw", src, error)
+      return NextResponse.json(
+        { error: "timings fetch failed", reason: String(error) },
+        { status: 502 }
+      )
+    }
+    lastStatus = upstream.status
+    if (upstream.ok) {
+      body = await upstream.text()
+      break
+    }
     // A lesson with no sidecar is normal, not an error: the viewer falls back
-    // to word-count estimates. Pass the status through so it can tell.
-    console.error("[lesson-timings] upstream", upstream.status, src)
-    return NextResponse.json(
-      { error: "timings not available", upstream: upstream.status },
-      { status: upstream.status === 404 ? 404 : 502 }
+    // to word-count estimates. Do not burn retries on it.
+    if (upstream.status === 404) break
+    console.warn(
+      "[lesson-timings] upstream",
+      upstream.status,
+      upstream.headers.get("cf-mitigated") ?? "",
+      `attempt ${attempt + 1}`,
+      src
     )
   }
 
-  const body = await upstream.text()
+  if (body === null) {
+    return NextResponse.json(
+      { error: "timings not available", upstream: lastStatus },
+      { status: lastStatus === 404 ? 404 : 502 }
+    )
+  }
+
+  memoryCache.set(src, body)
+  return timingsResponse(body)
+}
+
+/** The JSON response, with the caching headers the edge should honour. */
+function timingsResponse(body: string): NextResponse {
   return new NextResponse(body, {
     status: 200,
     headers: {
