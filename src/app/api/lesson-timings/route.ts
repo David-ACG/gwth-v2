@@ -50,15 +50,24 @@ export async function GET(request: Request) {
 
   let upstream: Response
   try {
-    upstream = await fetch(src, { next: { revalidate: 86400 } })
-  } catch {
-    return NextResponse.json({ error: "timings fetch failed" }, { status: 502 })
+    // Plain fetch, NOT Next's data cache: a 469KB body through the
+    // incremental cache failed in the standalone production image while the
+    // same request from a shell in that container succeeded. Edge caching is
+    // handled by the Cache-Control below instead.
+    upstream = await fetch(src, { cache: "no-store" })
+  } catch (error) {
+    console.error("[lesson-timings] upstream fetch failed", src, error)
+    return NextResponse.json(
+      { error: "timings fetch failed", reason: String(error) },
+      { status: 502 }
+    )
   }
   if (!upstream.ok) {
     // A lesson with no sidecar is normal, not an error: the viewer falls back
     // to word-count estimates. Pass the status through so it can tell.
+    console.error("[lesson-timings] upstream", upstream.status, src)
     return NextResponse.json(
-      { error: "timings not available" },
+      { error: "timings not available", upstream: upstream.status },
       { status: upstream.status === 404 ? 404 : 502 }
     )
   }
