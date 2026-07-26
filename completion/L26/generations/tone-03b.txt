@@ -1,0 +1,2 @@
+FAIL
+1. "rubric" is unexplained jargon. Fix: "score them against a simple checklist".

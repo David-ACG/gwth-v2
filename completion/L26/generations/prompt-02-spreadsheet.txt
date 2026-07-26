@@ -1,0 +1,27 @@
+I am the office manager at a small community centre in Leeds. Our volunteers sign in and out on a tablet, and once a month I export the log as a spreadsheet. I have pasted the April export below exactly as it came out.
+
+Date,Volunteer,Session,Hours,Notes
+01/04/2026,Jane Smith,Lunch club,3.5,
+2026-04-02,J. Smith,Lunch club,3.5,
+02/04/2026,Ahmed Khan,Warm space,4,
+3 Apr 26,Marta Nowak,Lunch club,7:30,
+03/04/2026,ahmed khan,Warm space,4,
+04/04/2026,Jane Smith,Admin,half day,
+04/04/2026,Marta Nowak,Warm space,4,
+07/04/2026,Ahmed Khan,Lunch club,,did not sign out
+07/04/2026,Jane Smith,Lunch club,3.5,
+08/04/2026,Marta Nowak,Admin,N/A,
+09/04/2026,Ahmed Khan,Warm space,40,
+09/04/2026,Ahmed Khan,Warm space,40,
+10/04/2026,Marta Nowak,Lunch club,3.5,
+11/04/2026,Jane Smith,Warm space,4,
+14/04/2026,Dev Patel,Lunch club,3.5,new starter
+15/04/2026,Marta Nowak,Lunch club,3.5,
+16/04/2026,Dev Patel,Warm space,4,
+17/04/2026,Jane Smith,Lunch club,3.5,
+2026-03-31,Ahmed Khan,Warm space,4,
+TOTAL,,,89.5,
+
+I have to report two things to our trustees next week: the total volunteer hours we received in April 2026, and our top three volunteers by hours in April.
+
+Please work them out for me. Then tell me plainly which of these numbers I should not fully trust, and what I would need to check or fix before I put them in front of the trustees. Use British English and write it for someone who is not confident with spreadsheets.

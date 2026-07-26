@@ -17,6 +17,42 @@ describe("model-arena data", () => {
     expect(pilot?.format).toBe("model-arena")
   })
 
+  it("runs four labs in the live rotation, newest first", () => {
+    const live = getLiveArenaLabs()
+    expect(live).toHaveLength(4)
+    expect(live.map((l) => l.slug)).toEqual([
+      "messy-spreadsheet-claude-vs-chatgpt",
+      "cite-your-sources-claude-vs-chatgpt",
+      "automate-a-weekly-chore-claude-vs-chatgpt",
+      "job-advert-claude-vs-chatgpt",
+    ])
+  })
+
+  it("keeps ids and slugs unique, so routing cannot collide", () => {
+    const labs = getArenaLabs()
+    expect(new Set(labs.map((l) => l.id)).size).toBe(labs.length)
+    expect(new Set(labs.map((l) => l.slug)).size).toBe(labs.length)
+  })
+
+  it("covers different kinds of work, so labs do not repeat one task type", () => {
+    const categories = getLiveArenaLabs().map((l) => l.category)
+    expect(new Set(categories).size).toBe(categories.length)
+  })
+
+  it("carries a real prompt and two non-empty verbatim outputs per lab", () => {
+    for (const lab of getArenaLabs()) {
+      expect(lab.prompt.trim().length).toBeGreaterThan(0)
+      for (const output of lab.outputs) {
+        expect(output.verbatim.trim().length).toBeGreaterThan(0)
+      }
+      // Every contestant is pinned to an exact model id, never rounded off.
+      for (const contestant of lab.matchup) {
+        expect(contestant.modelId.trim().length).toBeGreaterThan(0)
+        expect(contestant.howRun.trim().length).toBeGreaterThan(0)
+      }
+    }
+  })
+
   it("gives every lab exactly two contestants and two outputs, same order", () => {
     for (const lab of getArenaLabs()) {
       expect(lab.matchup).toHaveLength(2)

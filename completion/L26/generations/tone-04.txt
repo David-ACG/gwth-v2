@@ -1,0 +1,13 @@
+FAIL
+
+1. Quote: `PREVIEW — NO EMAIL SENT`  
+   Fix: replace the em dash with a colon: `PREVIEW: NO EMAIL SENT`.
+
+2. Quote: `TEST — Reminder: please complete your hours for week ending`  
+   Fix: replace the em dash with a colon: `TEST: Reminder: please complete your hours for week ending`.
+
+3. Quote: `Timesheet reminder summary — `  
+   Fix: replace the em dash with a colon: `Timesheet reminder summary: `.
+
+4. Quote: `3.45–4.15pm`  
+   Fix: replace the en dash with words: `3.45pm to 4.15pm`.

@@ -1,0 +1,24 @@
+I have checked all three on GOV.UK just now. Here they are, ready to paste.
+
+1. National Living Wage, 21 and over
+£12.71 an hour, from 1 April 2026.
+Source: https://www.gov.uk/national-minimum-wage-rates
+
+2. Statutory Sick Pay, standard weekly rate
+£123.25 a week, or 80% of the employee's normal weekly earnings, whichever is lower. This is the 2026 to 2027 tax year rate.
+Source: https://www.gov.uk/statutory-sick-pay/what-youll-get
+
+3. Maximum weekly pay for statutory redundancy pay
+£751 a week, for redundancies on or after 6 April 2026. That caps a statutory redundancy payment at £22,530.
+Source: https://www.gov.uk/redundancy-your-rights/redundancy-pay
+
+Two things worth flagging to your finance director, because they are easy to miss.
+
+The SSP figure is no longer a simple flat rate. From 6 April 2026 it is the lower of £123.25 and 80% of the employee's normal weekly earnings, so for your lower paid staff the answer will often be less than £123.25. If your payroll software has not been updated, check it.
+
+The two dates are different. The wage rate changed on 1 April 2026, the redundancy cap on 6 April 2026. Anyone made redundant between those dates falls under the previous cap.
+
+One page that has all three in one place, if your finance director would rather have a single link:
+https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027
+
+I have quoted the figures as GOV.UK states them today, 26 July 2026. These rates normally change each April, so it is worth re-checking the pages rather than reusing this email next spring.

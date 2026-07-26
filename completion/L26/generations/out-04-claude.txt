@@ -1,0 +1,122 @@
+Yes, this is very doable, and you do not need to understand the code to make it work. Google Sheets has a built in automation tool called Apps Script. You paste in a block of instructions, change a few lines to match your sheet, and tell Google to run it every Friday at 4pm. It runs on Google's computers, so your laptop can be shut and you can be on a train.
+
+Before we start, one promise: the version below will not email a single colleague until you switch it on deliberately. It emails only you first, so you can see exactly what your team would have received.
+
+WHAT YOUR SHEET NEEDS TO LOOK LIKE
+
+The script needs three things in the tab where people log their hours: a column with each person's name, a column with their work email address, and the column where they type their hours for this week. They can be any columns, in any order, and you can have as many other columns as you like. You just have to tell the script which is which, and that is the only editing you will do.
+
+If you do not currently keep email addresses in the sheet, add a column now and fill it in. Take the addresses from your Outlook or Gmail contacts so there are no typos.
+
+STEP BY STEP
+
+1. Open the Google Sheet the team fill in.
+2. In the menu at the top, click Extensions, then Apps Script. A new tab opens with a code editor. Do not worry about how it looks.
+3. You will see a small amount of text already there, usually "function myFunction() { }". Select all of it and delete it, so the page is empty.
+4. Copy everything in the grey box below and paste it into that empty page.
+5. Change only the seven lines in the SETTINGS section at the very top. They are explained underneath.
+6. Click the floppy disk Save icon.
+7. At the top there is a dropdown that says "Function". Choose "chaseMissingTimesheets", then click Run.
+8. Google will ask for permission. This bit looks alarming and is normal. Click Review permissions, choose your work Google account, then click Advanced, then "Go to Untitled project (unsafe)", then Allow. The word unsafe means Google has not reviewed the script, not that anything is wrong. You wrote it, or rather you pasted it, so you know what it does.
+9. Check your inbox. You will have one email showing exactly who would have been chased and what they would have been sent. Nobody else has been emailed.
+10. When you are happy, come back to the script, change the line that says TEST_MODE: true to TEST_MODE: false, and Save.
+11. Now set it to run by itself. In the left hand sidebar of the script editor, click the alarm clock icon (Triggers), then the blue "Add Trigger" button at the bottom right. Set: function to run = chaseMissingTimesheets, event source = Time driven, type of time based trigger = Week timer, day of week = Friday, time of day = 4pm to 5pm. Click Save.
+
+That is it. It will now run every Friday afternoon without you.
+
+THE CODE
+
+  const SETTINGS = {
+    TAB_NAME: 'Sheet1',
+    FIRST_DATA_ROW: 2,
+    NAME_COLUMN: 'A',
+    EMAIL_COLUMN: 'B',
+    HOURS_COLUMN: 'C',
+    TEST_MODE: true,
+    YOUR_EMAIL: 'you@yourhousingassociation.org.uk'
+  };
+
+  function chaseMissingTimesheets() {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SETTINGS.TAB_NAME);
+    if (!sheet) {
+      throw new Error('No tab called ' + SETTINGS.TAB_NAME + '. Check the tab name at the bottom of your sheet.');
+    }
+
+    const nameCol = letterToNumber(SETTINGS.NAME_COLUMN);
+    const emailCol = letterToNumber(SETTINGS.EMAIL_COLUMN);
+    const hoursCol = letterToNumber(SETTINGS.HOURS_COLUMN);
+    const rows = sheet.getDataRange().getValues();
+
+    const chased = [];
+
+    for (let i = SETTINGS.FIRST_DATA_ROW - 1; i < rows.length; i++) {
+      const name = String(rows[i][nameCol - 1]).trim();
+      const email = String(rows[i][emailCol - 1]).trim();
+      const hours = String(rows[i][hoursCol - 1]).trim();
+
+      if (!name || !email) continue;
+      if (hours !== '') continue;
+
+      const subject = 'Your timesheet for this week';
+      const body = 'Hello ' + name.split(' ')[0] + ',\n\n'
+        + 'Your hours for this week have not been logged yet. When you have five minutes, please fill them in here:\n\n'
+        + SpreadsheetApp.getActiveSpreadsheet().getUrl() + '\n\n'
+        + 'Thank you,\n'
+        + 'This is an automatic reminder.';
+
+      if (SETTINGS.TEST_MODE) {
+        chased.push(name + ' (' + email + ')');
+      } else {
+        MailApp.sendEmail(email, subject, body);
+        chased.push(name + ' (' + email + ')');
+      }
+    }
+
+    if (SETTINGS.TEST_MODE) {
+      MailApp.sendEmail(
+        SETTINGS.YOUR_EMAIL,
+        'TEST: timesheet chaser found ' + chased.length + ' people',
+        'No emails were sent to anyone. These are the people who would have been chased:\n\n'
+          + (chased.join('\n') || 'Nobody. Everyone has filled theirs in.')
+      );
+    }
+  }
+
+  function letterToNumber(letter) {
+    let number = 0;
+    const upper = letter.toUpperCase();
+    for (let i = 0; i < upper.length; i++) {
+      number = number * 26 + (upper.charCodeAt(i) - 64);
+    }
+    return number;
+  }
+
+WHAT TO CHANGE, LINE BY LINE
+
+TAB_NAME: the name on the tab at the bottom of your sheet. If the tab is called Hours, put 'Hours'. Keep the quote marks.
+FIRST_DATA_ROW: the row number where your first real person appears. If row 1 is your headings and Adam is in row 2, leave it as 2.
+NAME_COLUMN, EMAIL_COLUMN, HOURS_COLUMN: the letters at the top of those three columns.
+TEST_MODE: leave as true until you have seen a test email you are happy with.
+YOUR_EMAIL: your own work email address.
+
+WHAT COULD GO WRONG
+
+It chases people who have genuinely nothing to log. Someone on annual leave has an empty cell and gets a nudge. Ask the team to type 0, or the word Leave, in the hours box rather than leaving it blank. Anything typed in the box counts as filled in.
+
+The hours column is the wrong one. If you point it at a column that is always full, nobody is ever chased, and if you point it at one that is always empty, everyone is chased every week. The test email catches both, which is why step 9 matters.
+
+Your sheet has one column per week. Very common, and this script does not handle it, because "this week" moves along one column every Friday. If that is your layout, either add a single "This week" column that you point the script at, or tell me your layout and I will adjust the script.
+
+The reminder goes out at the wrong time. Apps Script uses the time zone set on the script, not on your computer. In the script editor click the cog icon for Project Settings and check the time zone says London. Google also treats 4pm as "some time between 4pm and 5pm", which is fine for this.
+
+Somebody leaves or joins. The script reads the sheet each time, so a new starter is chased automatically once they are in it, and a leaver stops being chased when you remove their row. Nothing else to update.
+
+Google sending limits. A free Gmail account can send around 100 emails a day and a Google Workspace account around 1,500. You are sending twelve, so this will never trouble you.
+
+The email lands in junk. Send yourself a real one after you turn TEST_MODE off, and if it lands in spam, ask your IT contact to allow it, or ask two colleagues to mark it as not junk.
+
+It stops working silently. If the script errors on a Friday, Google emails you a failure notice. Do not ignore those. The most common cause is somebody renaming the tab or deleting the email column.
+
+ONE THING WORTH DOING
+
+Run it in TEST_MODE for one Friday before you switch it on properly. You will get the list you would normally work out by hand, you can compare the two, and you will know it is right before your team ever sees an automatic email from you.

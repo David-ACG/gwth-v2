@@ -15,14 +15,25 @@
 
 import type { ModelArenaLab } from "@/lib/types"
 import pilotJobAdvert from "./model-arena/lab-01-job-advert-claude-vs-chatgpt.json"
+import messySpreadsheet from "./model-arena/lab-02-messy-spreadsheet-claude-vs-chatgpt.json"
+import citeYourSources from "./model-arena/lab-03-cite-your-sources-claude-vs-chatgpt.json"
+import weeklyChore from "./model-arena/lab-04-automate-a-weekly-chore-claude-vs-chatgpt.json"
 
 /**
  * The authored Model Arena labs, newest test first. Sourced from the staged
- * L23 JSON fixtures. The cast is safe because the JSON is authored to
- * `model-arena.schema.json` (validated by L23's tone/schema gate); the `format`
- * discriminant is `"model-arena"` for every entry.
+ * JSON fixtures: the job-advert pilot (L23) plus the data, research and
+ * automation matchups added by L26 to bring the live rotation to four. The cast
+ * is safe because the JSON is authored to `model-arena.schema.json` (validated
+ * by the authoring tone/schema gate); the `format` discriminant is
+ * `"model-arena"` for every entry.
+ *
+ * Labs of the same test date keep this order, because `byNewest` compares only
+ * the date and Array.prototype.sort is stable.
  */
 const ARENA_LABS: ModelArenaLab[] = [
+  messySpreadsheet as unknown as ModelArenaLab,
+  citeYourSources as unknown as ModelArenaLab,
+  weeklyChore as unknown as ModelArenaLab,
   pilotJobAdvert as unknown as ModelArenaLab,
 ]
 

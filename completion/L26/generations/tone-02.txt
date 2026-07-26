@@ -1,0 +1,2 @@
+FAIL
+1. “4 hours—not 40—on 9 April” uses em dashes. Fix: “4 hours, not 40, on 9 April”.

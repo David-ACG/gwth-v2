@@ -1,0 +1,5 @@
+FAIL
+1. “PREVIEW — NO EMAIL SENT” uses an em dash. Change to “PREVIEW: NO EMAIL SENT”.
+2. “TEST — Reminder: please complete your hours for week ending” uses an em dash. Change to “TEST: Reminder: please complete your hours for week ending”.
+3. “Timesheet reminder summary — ” uses an em dash. Change to “Timesheet reminder summary: ”.
+4. “3.45–4.15pm” uses an en dash. Change to “3.45pm to 4.15pm”.

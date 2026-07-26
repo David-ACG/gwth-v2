@@ -1,0 +1,3 @@
+FAIL
+
+1. “OpenAI GPT-5.6 (model id gpt-5.6-sol), run at high reasoning effort” uses unexplained model-setting jargon. Fix to plain wording, for example: “OpenAI GPT-5.6, using its more careful answer setting.”

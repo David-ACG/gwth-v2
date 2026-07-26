@@ -1,0 +1,3 @@
+I manage a team of twelve at a housing association. Every Friday afternoon I open a Google Sheet where the team log the hours they have worked that week, I work out who has not filled theirs in, and I email each of those people a reminder. It takes me about half an hour and I dread it.
+
+Can you set this up so it happens on its own every Friday at 4pm? I have never written a line of code in my life, and nobody at work is going to help me. Tell me exactly what to click, exactly what I need to change to make it work with my sheet, and anything that could go wrong. Use British English.

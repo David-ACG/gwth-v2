@@ -1,0 +1,7 @@
+Checked against GOV.UK on 26 July 2026:
+
+1. **National Living Wage (age 21+)**: **£12.71 per hour**, from **1 April 2026**. [GOV.UK rates](https://www.gov.uk/national-minimum-wage-rates)
+
+2. **Statutory Sick Pay**: **£123.25 per week**, from **6 April 2026**. The amount payable is the lower of £123.25 and 80% of average weekly earnings. [GOV.UK SSP guidance](https://www.gov.uk/guidance/statutory-sick-pay-manually-calculate-your-employees-payments)
+
+3. **Statutory redundancy pay weekly-pay cap**: **£751 per week**, for redundancies on or after **6 April 2026**. [GOV.UK redundancy guidance](https://www.gov.uk/redundancy-your-rights/redundancy-pay)

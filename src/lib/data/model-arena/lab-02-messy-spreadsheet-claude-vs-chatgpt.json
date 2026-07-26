@@ -1,0 +1,69 @@
+{
+  "id": "arena_002",
+  "slug": "messy-spreadsheet-claude-vs-chatgpt",
+  "format": "model-arena",
+  "title": "Make sense of a messy spreadsheet: Claude vs ChatGPT",
+  "status": "live",
+  "category": "Data",
+  "testedOn": "2026-07-26",
+  "brief": "You are the office manager at a small community centre in Leeds. Once a month you export the volunteer sign-in log, and this month's export is a mess: three different date formats, one volunteer's name spelled two ways, hours logged as \"7:30\", \"half day\" and \"N/A\", a row that says 40 hours and appears twice, and a total at the bottom that does not add up. The trustees meet next week and they want two numbers. You give the same export to two AI tools and see which one gets you to a figure you could defend.",
+  "matchup": [
+    {
+      "name": "Claude",
+      "modelId": "claude-opus-5",
+      "modelLabel": "Claude Opus 5",
+      "howRun": "Generated directly from Claude Opus 5 on 2026-07-26, with no web search and no other tools. The prompt was the only input."
+    },
+    {
+      "name": "ChatGPT",
+      "modelId": "gpt-5.6-sol",
+      "modelLabel": "OpenAI GPT-5.6",
+      "howRun": "Generated via the Codex CLI 0.144.1 on 2026-07-26, set to its most careful answer mode, which OpenAI calls high reasoning effort. Web search was available to it but it made no searches for this task. The consumer ChatGPT app uses the same GPT-5.6 family."
+    }
+  ],
+  "prompt": "I am the office manager at a small community centre in Leeds. Our volunteers sign in and out on a tablet, and once a month I export the log as a spreadsheet. I have pasted the April export below exactly as it came out.\n\nDate,Volunteer,Session,Hours,Notes\n01/04/2026,Jane Smith,Lunch club,3.5,\n2026-04-02,J. Smith,Lunch club,3.5,\n02/04/2026,Ahmed Khan,Warm space,4,\n3 Apr 26,Marta Nowak,Lunch club,7:30,\n03/04/2026,ahmed khan,Warm space,4,\n04/04/2026,Jane Smith,Admin,half day,\n04/04/2026,Marta Nowak,Warm space,4,\n07/04/2026,Ahmed Khan,Lunch club,,did not sign out\n07/04/2026,Jane Smith,Lunch club,3.5,\n08/04/2026,Marta Nowak,Admin,N/A,\n09/04/2026,Ahmed Khan,Warm space,40,\n09/04/2026,Ahmed Khan,Warm space,40,\n10/04/2026,Marta Nowak,Lunch club,3.5,\n11/04/2026,Jane Smith,Warm space,4,\n14/04/2026,Dev Patel,Lunch club,3.5,new starter\n15/04/2026,Marta Nowak,Lunch club,3.5,\n16/04/2026,Dev Patel,Warm space,4,\n17/04/2026,Jane Smith,Lunch club,3.5,\n2026-03-31,Ahmed Khan,Warm space,4,\nTOTAL,,,89.5,\n\nI have to report two things to our trustees next week: the total volunteer hours we received in April 2026, and our top three volunteers by hours in April.\n\nPlease work them out for me. Then tell me plainly which of these numbers I should not fully trust, and what I would need to check or fix before I put them in front of the trustees. Use British English and write it for someone who is not confident with spreadsheets.",
+  "outputs": [
+    {
+      "by": "Claude",
+      "verbatim": "I can give you figures, but I want to be straight with you first: this export has five rows that cannot be read reliably, and one row that is simply wrong. So the honest answer is a range with a clear note attached, not a single confident number.\n\nWHAT I CAN STAND BEHIND\n\nCounting only rows dated in April 2026, and only where the Hours cell is a plain number:\n\n  Jane Smith    18.0 hours   (5 sessions)\n  Marta Nowak   11.0 hours   (3 sessions)\n  Ahmed Khan     8.0 hours   (2 sessions)\n  Dev Patel      7.5 hours   (2 sessions)\n  ------------------------------------------\n  Total         44.5 hours\n\nIf you also accept the 3 April entry for Marta Nowak, where the Hours cell reads \"7:30\" and almost certainly means seven and a half hours, the picture becomes:\n\n  Marta Nowak   18.5 hours\n  Jane Smith    18.0 hours\n  Ahmed Khan     8.0 hours\n  Dev Patel      7.5 hours\n  ------------------------------------------\n  Total         52.0 hours\n\nTOP THREE VOLUNTEERS\n\nYour top three are Marta Nowak, Jane Smith and Ahmed Khan, in some order. The three names are safe. The order is not, and I would not print a ranking until you have checked the rows below.\n\nMarta and Jane are separated by half an hour, and that half hour depends entirely on how you read one cell. Ahmed is third on the countable rows, but he has three rows I could not use, and two of them read 40 hours, so his true total could be anything from 8 to 88.\n\nWHAT I WOULD NOT TRUST, AND WHY\n\n1. The TOTAL row at the bottom says 89.5. I cannot reproduce that figure under any reading of the data, so please do not use it. Exported total rows are also a common cause of double counting, because a spreadsheet will happily add the total row into your total. Delete it before you do anything else.\n\n2. Two identical rows on 9 April: Ahmed Khan, Warm space, 40 hours, listed twice. Two things are wrong here. Forty hours in one warm space session is not plausible, and it looks like 4 typed with a stray zero. And the row appears twice, which usually means a double sign-in rather than two real sessions. I have left both out. If you count them at face value Ahmed becomes your top volunteer by a wide margin, which is why this one matters.\n\n3. Marta Nowak, 3 April, Hours \"7:30\". I have read this as 7.5 hours. It could also be a start time somebody typed into the wrong box. Worth a two second check with Marta.\n\n4. Jane Smith, 4 April, Hours \"half day\". Someone has typed words where a number should go. You will need to decide what a half day is worth at your centre, probably 3.5 or 4 hours, and apply it consistently.\n\n5. Ahmed Khan, 7 April, Hours blank, note \"did not sign out\". Genuinely missing. Either ask him or leave it out and say so.\n\n6. Marta Nowak, 8 April, Hours \"N/A\". Same problem as above. N/A is not zero, it means nobody recorded it.\n\n7. The row dated 2026-03-31 for Ahmed Khan is in March, not April. I have excluded it. Do check that your March report did not also exclude it, or those four hours have disappeared from both reports.\n\n8. Names are inconsistent. \"Jane Smith\" and \"J. Smith\" are almost certainly the same person, and \"Ahmed Khan\" and \"ahmed khan\" definitely are. A spreadsheet treats those as different people unless you tidy them, so any per person total done automatically will be wrong.\n\n9. Dates are in three different formats: 01/04/2026, 2026-04-02 and 3 Apr 26. A spreadsheet will read some of those as dates and leave others as text, which quietly breaks any filter by month.\n\nWHAT I WOULD DO BEFORE THE TRUSTEES MEETING\n\nFifteen minutes of checking would turn this into a number you can defend:\n\n  1. Delete the TOTAL row.\n  2. Ask Ahmed about 9 April. One session or two, and four hours or forty.\n  3. Ask Marta about 3 April and 8 April, and Jane about 4 April.\n  4. Agree what a half day means and write it down for next time.\n  5. Make the names consistent, one spelling per person.\n  6. Then total it again.\n\nWHAT TO SAY IF YOU RUN OUT OF TIME\n\n\"In April 2026 we recorded 52 volunteer hours across four volunteers. Five entries were incomplete or unclear, so the real figure is a little higher. Our most active volunteers were Marta Nowak, Jane Smith and Ahmed Khan.\"\n\nThat is honest, it is defensible, and it quietly makes the case for tightening up the sign out process, which is the real story in this data."
+    },
+    {
+      "by": "ChatGPT",
+      "verbatim": "My best provisional calculation is:\n\n| Rank | Volunteer | April hours |\n|---|---|---:|\n| 1 | Marta Nowak | 18.5 |\n| 2 | Jane Smith | 18.0 |\n| 3 | Ahmed Khan | 12.0 |\n\n**Provisional April total: 56.0 hours.**\n\nThis assumes that:\n\n- “J. Smith” is Jane Smith.\n- “7:30” means 7 hours 30 minutes, or 7.5 hours.\n- One of Ahmed’s identical 9 April entries is a duplicate.\n- The remaining “40” on 9 April should be 4.0 hours.\n- Entries saying “half day”, blank or “N/A” are left out because they do not give a usable number.\n- The 31 March entry and the “TOTAL” line are excluded.\n\n### What you should not fully trust\n\nDo **not** present the 56 hours or the ranking as final until these points are checked:\n\n- Ask Ahmed, or check the tablet record, for his missing sign-out on 7 April.\n- Confirm that Ahmed worked 4 hours—not 40—on 9 April, and that only one of the two identical entries is genuine.\n- Find out how many hours Jane’s “half day” on 4 April represents.\n- Find out what Marta’s “N/A” on 8 April means.\n- Confirm that Marta’s “7:30” is a duration of 7½ hours, rather than a clock time or typing error.\n- Confirm that “J. Smith” is Jane Smith.\n\nThe exported total of **89.5 hours should not be used**. It does not agree with the April entries, contains an out-of-month record, and appears to include unresolved errors.\n\nFor reassurance, the completely clear, ordinary April entries add up to **41.0 hours**. The final total must be at least that much, but it cannot be settled accurately until the questionable entries above have been corrected. Jane and Marta may also swap first and second place once their missing information is resolved."
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Does it give you a number you could actually put in front of the trustees?",
+      "goodLooksLike": "A clear figure, with the assumptions behind it stated so you can argue with them."
+    },
+    {
+      "criterion": "Did it spot the rows that cannot be trusted?",
+      "goodLooksLike": "It names the 40 hour rows, the blank, the \"N/A\", the \"half day\" and the March date."
+    },
+    {
+      "criterion": "Does it warn you off the total at the bottom of the export?",
+      "goodLooksLike": "It says plainly that the 89.5 does not add up and should not be used."
+    },
+    {
+      "criterion": "Could you follow it without being confident with spreadsheets?",
+      "goodLooksLike": "Plain English, no formulas you would have to go and look up."
+    },
+    {
+      "criterion": "Does it tell you what to check before the meeting?",
+      "goodLooksLike": "A short list of specific questions to ask specific people, not \"clean your data\"."
+    }
+  ],
+  "verdict": {
+    "winner": "Close, slight edge to ChatGPT for getting to a usable number",
+    "callText": "This one is close, and the two answers are strong in different places. ChatGPT gets to the point. It opens with a ranked table, commits to one provisional total of 56 hours, and lists the six assumptions behind it plainly enough that you could disagree with any of them. It also makes the judgement Claude declined to make: that Ahmed's 40 hours on 9 April is a mistyped 4, and that the second identical row is a duplicate. That is the call most office managers would make, and saying it out loud is more useful than leaving it open. Claude catches more. It flags two problems ChatGPT does not mention at all: the three different date formats, which quietly break any attempt to filter by month, and the 31 March row, which may have been left out of the March report as well, so those four hours could disappear from both. It also hands you a sentence you could read out at the meeting. The cost is length. Claude's answer is nearly three times longer, and the number the trustees actually want is harder to find in it. Both tell you not to use the exported total of 89.5, which is the single most valuable thing either of them says. Look closely at the two safe floor figures, because they look like a contradiction and are not. Claude says 44.5 hours are beyond doubt, ChatGPT says 41.0. The difference is one row: the 2 April entry logged as \"J. Smith\". Claude counts it as Jane Smith, ChatGPT sets it aside until you confirm who it is. Both are defensible, and you can check it yourself in a minute, which is rather the point. For a report you have to write this week, ChatGPT's is the answer you would work from. Claude's is the one you would read before you sent it.",
+    "freshnessNote": "Tested on 2026-07-26 with Claude Opus 5 and OpenAI GPT-5.6. Models change often, so this verdict is only true for these versions on this date. The archived version of this lab shows how the two tools handled the same messy export at this point in time."
+  },
+  "tryItYourself": [
+    "Take a real export you have to make sense of every month, and delete anything private first. Real names, email addresses and anything you would not put on a postcard.",
+    "Open claude.ai and chatgpt.com. Both have a free option and neither needs payment for this.",
+    "Paste the same data and the same question into both, word for word, so the test is fair. Ask for the numbers and for what you should not trust.",
+    "Score both answers against the five questions above.",
+    "Check one of their totals by hand. Whichever tool you preferred, this is the habit that keeps you out of trouble."
+  ]
+}

@@ -1,0 +1,1638 @@
+OpenAI Codex v0.144.1
+--------
+workdir: /tmp/claude-1000/-home-david-projects-1-gwthpipeline520/91a2cbe5-82ef-44c3-930f-c66370a065fa/scratchpad/arena/run
+model: gpt-5.6-sol
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019f9fce-5931-78f1-a766-655594d769b8
+--------
+user
+I manage a team of twelve at a housing association. Every Friday afternoon I open a Google Sheet where the team log the hours they have worked that week, I work out who has not filled theirs in, and I email each of those people a reminder. It takes me about half an hour and I dread it.
+
+Can you set this up so it happens on its own every Friday at 4pm? I have never written a line of code in my life, and nobody at work is going to help me. Tell me exactly what to click, exactly what I need to change to make it work with my sheet, and anything that could go wrong. Use British English.
+
+warning: Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+codex
+I’m going to base this on Google Sheets’ built-in Apps Script, because it can read the sheet, send the reminders from your Google account, and run weekly without paid software. I’ll verify the current Google instructions, then give you a copy-and-paste setup with a small section clearly marked for your sheet’s details.
+web search: 
+web search: site:developers.google.com/apps-script guides triggers installable time-driven weekly atHour nearMinute official ...
+web search: 
+web search: site:developers.google.com/apps-script/guides/triggers/installable time-driven Friday at hour near minute ...
+codex
+I’ve made the setup deliberately cautious: it has a preview that sends nothing, a test that emails only you, protection against duplicate reminders, a weekly audit tab, and an optional pause date for annual leave. The reminder never includes anyone’s hours—only that their entry appears to be missing.
+codex
+Yes. The simplest dependable option is Google Apps Script. It is built into Google Workspace, costs nothing for this volume, and can send from your work account.
+
+This setup:
+
+- checks the sheet every Friday at approximately 4pm;
+- emails only people whose hours are blank;
+- sends you a summary;
+- keeps an audit log;
+- avoids sending the same reminder twice;
+- lets you preview the result without emailing anybody.
+
+Google only guarantees the trigger within about 15 minutes of the chosen time, so “4pm” means roughly 3.45–4.15pm. [Google documents this timing limitation here.](https://developers.google.com/apps-script/reference/script/clock-trigger-builder)
+
+## 1. Check which sheet layout you have
+
+This script supports either of these layouts.
+
+### Layout A: one column per week
+
+Use this if your sheet resembles:
+
+| Name | 24/07/2026 | 31/07/2026 |
+|---|---:|---:|
+| Aisha Khan | 37 | |
+| Ben Davies | 35 | 35 |
+
+A blank weekly cell means the person has not completed their hours.
+
+### Layout B: one row per weekly submission
+
+Use this if it resembles:
+
+| Name | Date | Hours |
+|---|---|---:|
+| Aisha Khan | 24/07/2026 | 37 |
+| Ben Davies | 24/07/2026 | 35 |
+
+Use this only when each row represents a complete weekly submission. It is not suitable if people add one row per day.
+
+If neither example resembles your sheet, do not install the trigger yet. The checking rule would need adjusting to match your layout.
+
+## 2. Add the team list
+
+Open the Google Sheet.
+
+1. At the bottom left, click the **+** button.
+2. Double-click the new tab’s name.
+3. Rename it exactly:
+
+   `Team`
+
+4. Enter these four headings in row 1:
+
+| Cell | Enter |
+|---|---|
+| A1 | Name |
+| B1 | Email |
+| C1 | Active |
+| D1 | Pause until |
+
+5. Put your twelve team members underneath.
+6. The names must be written the same way as they are in the hours sheet.
+7. Put `TRUE` in the **Active** column for current team members.
+8. Leave **Pause until** blank normally.
+
+For somebody on leave, enter the Friday date in **Pause until**. They will not be reminded that week. For a permanent leaver, change **Active** to `FALSE`.
+
+Do not include yourself unless you also submit hours and should receive reminders.
+
+## 3. Copy your spreadsheet ID
+
+Look at the address at the top of your browser. It will resemble:
+
+```text
+https://docs.google.com/spreadsheets/d/1AbCdEfGhIjKlMnOpQrStUvWxYz/edit
+```
+
+Copy only the part between `/d/` and `/edit`:
+
+```text
+1AbCdEfGhIjKlMnOpQrStUvWxYz
+```
+
+## 4. Create the private automation
+
+Do this from your work Google account.
+
+1. Open [script.google.com](https://script.google.com).
+2. Click **New project**.
+3. At the top, click **Untitled project**.
+4. Rename it:
+
+   `Weekly timesheet reminders`
+
+5. On the left, click **Editor** if it is not already selected.
+6. Click inside `Code.gs`.
+7. Press **Ctrl+A**, then **Backspace**.
+8. Paste all of the following code:
+
+```javascript
+const CONFIG = {
+  // CHANGE THESE FIVE SETTINGS.
+  spreadsheetId: 'PASTE_SPREADSHEET_ID_HERE',
+  layout: 'WEEK_COLUMNS', // Use 'WEEK_COLUMNS' or 'ROW_LOG'.
+  hoursSheet: 'Hours',    // The exact name of your existing hours tab.
+  managerEmail: 'your.name@organisation.org.uk',
+  signOffName: 'Your name',
+
+  // Normally leave everything below this line unchanged.
+  teamSheet: 'Team',
+  auditSheet: 'Reminder audit',
+  timeZone: 'Europe/London',
+
+  teamHeaders: {
+    name: 'Name',
+    email: 'Email',
+    active: 'Active',
+    pauseUntil: 'Pause until'
+  },
+
+  // Settings for WEEK_COLUMNS.
+  weeklyHeaderRow: 1,
+  weeklyNameHeader: 'Name',
+
+  // Settings for ROW_LOG.
+  rowLogHeaders: {
+    name: 'Name',
+    date: 'Date',
+    hours: 'Hours'
+  },
+
+  // TRUE means an entered zero counts as having completed the sheet.
+  zeroCountsAsComplete: true
+};
+
+
+/**
+ * STEP 1: Run this first. It sends no email.
+ * Look at the "Reminder audit" tab afterwards.
+ */
+function previewMissingTimesheets() {
+  const result = checkTimesheets_();
+  writeAudit_('PREVIEW — NO EMAIL SENT', result, []);
+
+  console.log(
+    result.missing.length
+      ? 'Would remind: ' +
+          result.missing.map(person => person.name).join(', ')
+      : 'Nobody would be reminded.'
+  );
+}
+
+
+/**
+ * STEP 2: Sends one example reminder to the manager only.
+ */
+function sendTestReminderToMe() {
+  validateEmail_(CONFIG.managerEmail, 'managerEmail');
+
+  const spreadsheet = getSpreadsheet_();
+  const week = currentWeek_();
+
+  MailApp.sendEmail({
+    to: CONFIG.managerEmail,
+    subject:
+      'TEST — Reminder: please complete your hours for week ending ' +
+      britishDate_(week.end),
+    body: reminderBody_(
+      'Example team member',
+      week,
+      spreadsheet.getUrl(),
+      true
+    ),
+    name: CONFIG.signOffName
+  });
+}
+
+
+/**
+ * STEP 3: Run this once to schedule the Friday automation.
+ * Running it again replaces the old schedule instead of creating duplicates.
+ */
+function installFridayTrigger() {
+  validateConfiguration_();
+
+  ScriptApp.getProjectTriggers()
+    .filter(trigger =>
+      trigger.getHandlerFunction() === 'sendTimesheetReminders'
+    )
+    .forEach(trigger => ScriptApp.deleteTrigger(trigger));
+
+  ScriptApp.newTrigger('sendTimesheetReminders')
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.FRIDAY)
+    .atHour(16)
+    .nearMinute(0)
+    .everyWeeks(1)
+    .inTimezone(CONFIG.timeZone)
+    .create();
+}
+
+
+/**
+ * Runs automatically each Friday.
+ */
+function sendTimesheetReminders() {
+  const lock = LockService.getScriptLock();
+
+  if (!lock.tryLock(30000)) {
+    throw new Error(
+      'Another reminder check is already running. No second run was started.'
+    );
+  }
+
+  try {
+    validateConfiguration_();
+
+    const result = checkTimesheets_();
+    const properties = PropertiesService.getScriptProperties();
+
+    const peopleToEmail = result.missing.filter(person => {
+      return !properties.getProperty(reminderKey_(result.week, person.email));
+    });
+
+    // Include one recipient for the manager's summary.
+    const recipientsNeeded = peopleToEmail.length + 1;
+    const quotaRemaining = MailApp.getRemainingDailyQuota();
+
+    if (quotaRemaining < recipientsNeeded) {
+      throw new Error(
+        'Not enough email allowance remains today. Needed ' +
+          recipientsNeeded +
+          ', but only ' +
+          quotaRemaining +
+          ' recipients remain.'
+      );
+    }
+
+    const spreadsheet = getSpreadsheet_();
+    const sent = [];
+
+    peopleToEmail.forEach(person => {
+      MailApp.sendEmail({
+        to: person.email,
+        subject:
+          'Reminder: please complete your hours for week ending ' +
+          britishDate_(result.week.end),
+        body: reminderBody_(
+          person.name,
+          result.week,
+          spreadsheet.getUrl(),
+          false
+        ),
+        name: CONFIG.signOffName
+      });
+
+      properties.setProperty(
+        reminderKey_(result.week, person.email),
+        new Date().toISOString()
+      );
+
+      sent.push(person);
+    });
+
+    writeAudit_('LIVE', result, sent);
+    sendManagerSummary_(result, sent, spreadsheet.getUrl());
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+
+function checkTimesheets_() {
+  validateConfiguration_();
+
+  const spreadsheet = getSpreadsheet_();
+  const week = currentWeek_();
+  const team = readTeam_(spreadsheet, week);
+
+  const completed =
+    CONFIG.layout === 'WEEK_COLUMNS'
+      ? readWeeklyColumns_(spreadsheet, week)
+      : readRowLog_(spreadsheet, week);
+
+  return {
+    week: week,
+    missing: team.filter(person => !completed.has(normalise_(person.name)))
+  };
+}
+
+
+function readTeam_(spreadsheet, week) {
+  const sheet = requiredSheet_(spreadsheet, CONFIG.teamSheet);
+  const values = sheet.getDataRange().getValues();
+
+  if (values.length < 2) {
+    throw new Error('The Team tab does not contain any team members.');
+  }
+
+  const headings = values[0];
+  const nameColumn = findHeader_(headings, CONFIG.teamHeaders.name);
+  const emailColumn = findHeader_(headings, CONFIG.teamHeaders.email);
+  const activeColumn = findHeader_(headings, CONFIG.teamHeaders.active);
+  const pauseColumn = findHeader_(headings, CONFIG.teamHeaders.pauseUntil);
+
+  const people = [];
+  const namesSeen = new Set();
+
+  for (let row = 1; row < values.length; row++) {
+    const name = String(values[row][nameColumn] || '').trim();
+    const email = String(values[row][emailColumn] || '').trim();
+
+    if (!name && !email) {
+      continue;
+    }
+
+    if (!name || !email) {
+      throw new Error(
+        'Team row ' + (row + 1) + ' needs both a name and an email address.'
+      );
+    }
+
+    if (!isActive_(values[row][activeColumn])) {
+      continue;
+    }
+
+    const pauseUntil = dateKey_(values[row][pauseColumn]);
+
+    // A pause date during or after this week suppresses the reminder.
+    if (pauseUntil && pauseUntil >= week.start) {
+      continue;
+    }
+
+    validateEmail_(email, 'email in Team row ' + (row + 1));
+
+    const normalisedName = normalise_(name);
+
+    if (namesSeen.has(normalisedName)) {
+      throw new Error(
+        'The name "' + name + '" appears more than once on the Team tab.'
+      );
+    }
+
+    namesSeen.add(normalisedName);
+    people.push({ name: name, email: email });
+  }
+
+  return people;
+}
+
+
+function readWeeklyColumns_(spreadsheet, week) {
+  const sheet = requiredSheet_(spreadsheet, CONFIG.hoursSheet);
+  const values = sheet.getDataRange().getValues();
+  const headerIndex = CONFIG.weeklyHeaderRow - 1;
+
+  if (headerIndex < 0 || headerIndex >= values.length) {
+    throw new Error('weeklyHeaderRow does not point to a valid row.');
+  }
+
+  const headings = values[headerIndex];
+  const nameColumn = findHeader_(headings, CONFIG.weeklyNameHeader);
+
+  const currentWeekColumns = [];
+
+  headings.forEach((heading, column) => {
+    const date = dateKey_(heading);
+
+    if (date && date >= week.start && date <= week.end) {
+      currentWeekColumns.push(column);
+    }
+  });
+
+  if (!currentWeekColumns.length) {
+    throw new Error(
+      'No date heading for the current week was found on "' +
+        CONFIG.hoursSheet +
+        '". The date must be in row ' +
+        CONFIG.weeklyHeaderRow +
+        '.'
+    );
+  }
+
+  const completed = new Set();
+
+  for (let row = headerIndex + 1; row < values.length; row++) {
+    const name = String(values[row][nameColumn] || '').trim();
+
+    if (!name) {
+      continue;
+    }
+
+    if (
+      currentWeekColumns.some(column =>
+        hasEntry_(values[row][column])
+      )
+    ) {
+      completed.add(normalise_(name));
+    }
+  }
+
+  return completed;
+}
+
+
+function readRowLog_(spreadsheet, week) {
+  const sheet = requiredSheet_(spreadsheet, CONFIG.hoursSheet);
+  const values = sheet.getDataRange().getValues();
+
+  if (values.length < 2) {
+    return new Set();
+  }
+
+  const headings = values[0];
+  const nameColumn = findHeader_(headings, CONFIG.rowLogHeaders.name);
+  const dateColumn = findHeader_(headings, CONFIG.rowLogHeaders.date);
+  const hoursColumn = findHeader_(headings, CONFIG.rowLogHeaders.hours);
+
+  const completed = new Set();
+
+  for (let row = 1; row < values.length; row++) {
+    const name = String(values[row][nameColumn] || '').trim();
+    const date = dateKey_(values[row][dateColumn]);
+
+    if (
+      name &&
+      date &&
+      date >= week.start &&
+      date <= week.end &&
+      hasEntry_(values[row][hoursColumn])
+    ) {
+      completed.add(normalise_(name));
+    }
+  }
+
+  return completed;
+}
+
+
+function reminderBody_(name, week, spreadsheetUrl, isTest) {
+  const testNotice = isTest
+    ? 'THIS IS A TEST. No team member has been emailed.\n\n'
+    : '';
+
+  return (
+    testNotice +
+    'Hello ' +
+    name +
+    ',\n\n' +
+    'This is an automatic reminder that I cannot yet see your hours for ' +
+    'the week ending Friday ' +
+    britishDate_(week.end) +
+    '.\n\n' +
+    'Please complete them here:\n' +
+    spreadsheetUrl +
+    '\n\n' +
+    'If you have already completed them, or you were not expected to submit ' +
+    'hours this week, please reply to this email.\n\n' +
+    'Thank you,\n' +
+    CONFIG.signOffName
+  );
+}
+
+
+function sendManagerSummary_(result, sent, spreadsheetUrl) {
+  const lines = sent.length
+    ? sent.map(person => '• ' + person.name + ' <' + person.email + '>')
+    : ['No new reminders were sent.'];
+
+  const alreadySentCount = result.missing.length - sent.length;
+
+  MailApp.sendEmail({
+    to: CONFIG.managerEmail,
+    subject:
+      'Timesheet reminder summary — ' + britishDate_(result.week.end),
+    body:
+      'The Friday timesheet check has completed.\n\n' +
+      'New reminders sent:\n' +
+      lines.join('\n') +
+      '\n\n' +
+      'Missing entries found: ' +
+      result.missing.length +
+      '\n' +
+      'Previously reminded this week: ' +
+      alreadySentCount +
+      '\n\n' +
+      'Sheet:\n' +
+      spreadsheetUrl,
+    name: CONFIG.signOffName
+  });
+}
+
+
+function writeAudit_(mode, result, sent) {
+  const spreadsheet = getSpreadsheet_();
+  let sheet = spreadsheet.getSheetByName(CONFIG.auditSheet);
+
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(CONFIG.auditSheet);
+    sheet.appendRow([
+      'Run at',
+      'Mode',
+      'Week starting',
+      'Week ending',
+      'Missing found',
+      'Reminders sent',
+      'People found missing'
+    ]);
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    new Date(),
+    mode,
+    result.week.start,
+    result.week.end,
+    result.missing.length,
+    sent.length,
+    result.missing
+      .map(person => person.name + ' <' + person.email + '>')
+      .join(', ')
+  ]);
+}
+
+
+function currentWeek_() {
+  const todayKey = Utilities.formatDate(
+    new Date(),
+    CONFIG.timeZone,
+    'yyyy-MM-dd'
+  );
+
+  const today = new Date(todayKey + 'T12:00:00Z');
+  const daysSinceMonday = (today.getUTCDay() + 6) % 7;
+
+  const monday = new Date(today);
+  monday.setUTCDate(today.getUTCDate() - daysSinceMonday);
+
+  const friday = new Date(monday);
+  friday.setUTCDate(monday.getUTCDate() + 4);
+
+  return {
+    start: isoDate_(monday),
+    end: isoDate_(friday)
+  };
+}
+
+
+function dateKey_(value) {
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    return Utilities.formatDate(value, CONFIG.timeZone, 'yyyy-MM-dd');
+  }
+
+  const text = String(value || '').trim();
+
+  let match = text.match(/\b(\d{4})-(\d{1,2})-(\d{1,2})\b/);
+  if (match) {
+    return match[1] + '-' + pad_(match[2]) + '-' + pad_(match[3]);
+  }
+
+  match = text.match(/\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/);
+  if (match) {
+    return match[3] + '-' + pad_(match[2]) + '-' + pad_(match[1]);
+  }
+
+  return '';
+}
+
+
+function hasEntry_(value) {
+  if (value === '' || value === null) {
+    return false;
+  }
+
+  if (typeof value === 'string' && value.trim() === '') {
+    return false;
+  }
+
+  if (!CONFIG.zeroCountsAsComplete && Number(value) === 0) {
+    return false;
+  }
+
+  return true;
+}
+
+
+function isActive_(value) {
+  return !['false', 'no', 'n', '0', 'inactive'].includes(
+    normalise_(value)
+  );
+}
+
+
+function requiredSheet_(spreadsheet, name) {
+  const sheet = spreadsheet.getSheetByName(name);
+
+  if (!sheet) {
+    throw new Error(
+      'Could not find a sheet tab named "' +
+        name +
+        '". Check spelling, spaces and capital letters.'
+    );
+  }
+
+  return sheet;
+}
+
+
+function findHeader_(headings, requiredHeading) {
+  const wanted = normalise_(requiredHeading);
+  const index = headings.findIndex(
+    heading => normalise_(heading) === wanted
+  );
+
+  if (index === -1) {
+    throw new Error(
+      'Could not find the heading "' + requiredHeading + '".'
+    );
+  }
+
+  return index;
+}
+
+
+function validateConfiguration_() {
+  if (
+    !CONFIG.spreadsheetId ||
+    CONFIG.spreadsheetId === 'PASTE_SPREADSHEET_ID_HERE'
+  ) {
+    throw new Error('Paste your spreadsheet ID into CONFIG.spreadsheetId.');
+  }
+
+  if (!['WEEK_COLUMNS', 'ROW_LOG'].includes(CONFIG.layout)) {
+    throw new Error(
+      "CONFIG.layout must be 'WEEK_COLUMNS' or 'ROW_LOG'."
+    );
+  }
+
+  validateEmail_(CONFIG.managerEmail, 'managerEmail');
+
+  if (!CONFIG.signOffName || CONFIG.signOffName === 'Your name') {
+    throw new Error('Change CONFIG.signOffName to your name.');
+  }
+}
+
+
+function validateEmail_(email, description) {
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email || '').trim())) {
+    throw new Error('Invalid ' + description + ': "' + email + '".');
+  }
+}
+
+
+function getSpreadsheet_() {
+  return SpreadsheetApp.openById(CONFIG.spreadsheetId);
+}
+
+
+function reminderKey_(week, email) {
+  return 'reminded|' + week.end + '|' + normalise_(email);
+}
+
+
+function normalise_(value) {
+  return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+
+function isoDate_(date) {
+  return (
+    date.getUTCFullYear() +
+    '-' +
+    pad_(date.getUTCMonth() + 1) +
+    '-' +
+    pad_(date.getUTCDate())
+  );
+}
+
+
+function britishDate_(isoDate) {
+  const parts = isoDate.split('-');
+  return parts[2] + '/' + parts[1] + '/' + parts[0];
+}
+
+
+function pad_(value) {
+  return String(value).padStart(2, '0');
+}
+```
+
+## 5. Change the five settings
+
+Near the top of the code, change:
+
+```javascript
+spreadsheetId: 'PASTE_SPREADSHEET_ID_HERE',
+```
+
+Paste the ID you copied, keeping the quote marks.
+
+Change:
+
+```javascript
+layout: 'WEEK_COLUMNS',
+```
+
+Use:
+
+- `'WEEK_COLUMNS'` for Layout A; or
+- `'ROW_LOG'` for Layout B.
+
+Change:
+
+```javascript
+hoursSheet: 'Hours',
+```
+
+Replace `Hours` with the exact name written on your existing hours tab.
+
+Change:
+
+```javascript
+managerEmail: 'your.name@organisation.org.uk',
+signOffName: 'Your name',
+```
+
+Use your work email address and name.
+
+If your existing headings are not called `Name`, `Date` and `Hours`, change the relevant heading names in the configuration section. Do not change anything else.
+
+Click the **Save project** icon.
+
+## 6. Set the time zone
+
+1. On the left, click the cog labelled **Project Settings**.
+2. Find **Time zone**.
+3. Select **(GMT+00:00) London** or **Europe/London**.
+4. Return to **Editor**.
+
+The code also explicitly uses `Europe/London`, which handles the switch between GMT and British Summer Time.
+
+## 7. Preview without emailing anybody
+
+At the top of the editor:
+
+1. Open the function drop-down.
+2. Select `previewMissingTimesheets`.
+3. Click **Run**.
+
+The first time, Google will request permission:
+
+1. Click **Review permissions**.
+2. Choose your work account.
+3. Read the permissions.
+4. Click **Allow** or **Continue**.
+
+The script uses `MailApp`, which can send email but cannot read your Gmail inbox. [Google explains that distinction here.](https://developers.google.com/apps-script/reference/mail/mail-app)
+
+If Google says your organisation has blocked Apps Script or the application, only your Google Workspace administrator can enable it. Do not use a personal account as a workaround for work data.
+
+Return to your spreadsheet. A new tab called **Reminder audit** should have appeared. Check its newest row carefully:
+
+- Is the week correct?
+- Are the right people listed?
+- Is anybody incorrectly listed?
+- Is anybody missing from the list?
+
+Do not continue until the preview agrees with the check you would have made manually.
+
+## 8. Send a test only to yourself
+
+Back in Apps Script:
+
+1. Select `sendTestReminderToMe` from the function drop-down.
+2. Click **Run**.
+3. Check your inbox.
+4. Check the wording and spreadsheet link.
+
+The subject begins with `TEST`, and no team member is contacted.
+
+## 9. Switch on the weekly automation
+
+1. Select `installFridayTrigger`.
+2. Click **Run**.
+3. On the left, click the alarm-clock icon labelled **Triggers**.
+4. Confirm there is one row for `sendTimesheetReminders`.
+5. Its event source should be **Time-driven**.
+
+That completes the setup. The trigger runs as the Google account that created it, and the reminders will come from that account. [Google confirms that installable triggers run under their creator’s account.](https://developers.google.com/apps-script/guides/triggers/installable)
+
+## Things that could go wrong
+
+- **Names do not match.** Capital letters and spare spaces are ignored, but `Liz Jones` and `Elizabeth Jones` are different people.
+- **The weekly heading is not a date.** Use a genuine date such as `31/07/2026`, not `Week 31`.
+- **A formula produces zero for an empty entry.** Zero currently counts as completed. If zero always means missing in your organisation, change `zeroCountsAsComplete: true` to `false`.
+- **Someone legitimately records zero hours.** Leave the setting as `true`, or that person will receive a reminder.
+- **A tab or heading is renamed.** Update the corresponding name near the top of the code.
+- **People complete their hours after 4pm.** They may already have been reminded.
+- **Annual leave and bank holidays.** The automation still runs. Use **Pause until**, or temporarily delete the trigger.
+- **Your access changes.** If you lose access to the spreadsheet or your account is disabled, the automation stops.
+- **Google temporarily fails.** Apps Script normally emails the trigger owner a failure notice. You can also open Apps Script and click **Executions** to see failures. [Google’s failure-monitoring instructions are here.](https://developers.google.com/apps-script/guides/triggers/installable#errors_in_triggers)
+- **Email limits.** Google Workspace currently permits far more than the maximum thirteen weekly recipients used here, although Google can change quotas. [Current Apps Script quotas are listed here.](https://developers.google.com/apps-script/guides/services/quotas)
+- **Workplace restrictions.** Because this reads employee records and sends workplace email, use your work account and follow your association’s information-governance rules. Do not put salary, tenancy or health information in the reminder or audit.
+- **Other people editing the automation.** The script project is separate from the shared spreadsheet. Do not share the script project with the team.
+- **It is not exact to the minute.** Expect delivery between approximately 3.45pm and 4.15pm, not precisely at 4.00pm.
+tokens used
+48,969
+Yes. The simplest dependable option is Google Apps Script. It is built into Google Workspace, costs nothing for this volume, and can send from your work account.
+
+This setup:
+
+- checks the sheet every Friday at approximately 4pm;
+- emails only people whose hours are blank;
+- sends you a summary;
+- keeps an audit log;
+- avoids sending the same reminder twice;
+- lets you preview the result without emailing anybody.
+
+Google only guarantees the trigger within about 15 minutes of the chosen time, so “4pm” means roughly 3.45–4.15pm. [Google documents this timing limitation here.](https://developers.google.com/apps-script/reference/script/clock-trigger-builder)
+
+## 1. Check which sheet layout you have
+
+This script supports either of these layouts.
+
+### Layout A: one column per week
+
+Use this if your sheet resembles:
+
+| Name | 24/07/2026 | 31/07/2026 |
+|---|---:|---:|
+| Aisha Khan | 37 | |
+| Ben Davies | 35 | 35 |
+
+A blank weekly cell means the person has not completed their hours.
+
+### Layout B: one row per weekly submission
+
+Use this if it resembles:
+
+| Name | Date | Hours |
+|---|---|---:|
+| Aisha Khan | 24/07/2026 | 37 |
+| Ben Davies | 24/07/2026 | 35 |
+
+Use this only when each row represents a complete weekly submission. It is not suitable if people add one row per day.
+
+If neither example resembles your sheet, do not install the trigger yet. The checking rule would need adjusting to match your layout.
+
+## 2. Add the team list
+
+Open the Google Sheet.
+
+1. At the bottom left, click the **+** button.
+2. Double-click the new tab’s name.
+3. Rename it exactly:
+
+   `Team`
+
+4. Enter these four headings in row 1:
+
+| Cell | Enter |
+|---|---|
+| A1 | Name |
+| B1 | Email |
+| C1 | Active |
+| D1 | Pause until |
+
+5. Put your twelve team members underneath.
+6. The names must be written the same way as they are in the hours sheet.
+7. Put `TRUE` in the **Active** column for current team members.
+8. Leave **Pause until** blank normally.
+
+For somebody on leave, enter the Friday date in **Pause until**. They will not be reminded that week. For a permanent leaver, change **Active** to `FALSE`.
+
+Do not include yourself unless you also submit hours and should receive reminders.
+
+## 3. Copy your spreadsheet ID
+
+Look at the address at the top of your browser. It will resemble:
+
+```text
+https://docs.google.com/spreadsheets/d/1AbCdEfGhIjKlMnOpQrStUvWxYz/edit
+```
+
+Copy only the part between `/d/` and `/edit`:
+
+```text
+1AbCdEfGhIjKlMnOpQrStUvWxYz
+```
+
+## 4. Create the private automation
+
+Do this from your work Google account.
+
+1. Open [script.google.com](https://script.google.com).
+2. Click **New project**.
+3. At the top, click **Untitled project**.
+4. Rename it:
+
+   `Weekly timesheet reminders`
+
+5. On the left, click **Editor** if it is not already selected.
+6. Click inside `Code.gs`.
+7. Press **Ctrl+A**, then **Backspace**.
+8. Paste all of the following code:
+
+```javascript
+const CONFIG = {
+  // CHANGE THESE FIVE SETTINGS.
+  spreadsheetId: 'PASTE_SPREADSHEET_ID_HERE',
+  layout: 'WEEK_COLUMNS', // Use 'WEEK_COLUMNS' or 'ROW_LOG'.
+  hoursSheet: 'Hours',    // The exact name of your existing hours tab.
+  managerEmail: 'your.name@organisation.org.uk',
+  signOffName: 'Your name',
+
+  // Normally leave everything below this line unchanged.
+  teamSheet: 'Team',
+  auditSheet: 'Reminder audit',
+  timeZone: 'Europe/London',
+
+  teamHeaders: {
+    name: 'Name',
+    email: 'Email',
+    active: 'Active',
+    pauseUntil: 'Pause until'
+  },
+
+  // Settings for WEEK_COLUMNS.
+  weeklyHeaderRow: 1,
+  weeklyNameHeader: 'Name',
+
+  // Settings for ROW_LOG.
+  rowLogHeaders: {
+    name: 'Name',
+    date: 'Date',
+    hours: 'Hours'
+  },
+
+  // TRUE means an entered zero counts as having completed the sheet.
+  zeroCountsAsComplete: true
+};
+
+
+/**
+ * STEP 1: Run this first. It sends no email.
+ * Look at the "Reminder audit" tab afterwards.
+ */
+function previewMissingTimesheets() {
+  const result = checkTimesheets_();
+  writeAudit_('PREVIEW — NO EMAIL SENT', result, []);
+
+  console.log(
+    result.missing.length
+      ? 'Would remind: ' +
+          result.missing.map(person => person.name).join(', ')
+      : 'Nobody would be reminded.'
+  );
+}
+
+
+/**
+ * STEP 2: Sends one example reminder to the manager only.
+ */
+function sendTestReminderToMe() {
+  validateEmail_(CONFIG.managerEmail, 'managerEmail');
+
+  const spreadsheet = getSpreadsheet_();
+  const week = currentWeek_();
+
+  MailApp.sendEmail({
+    to: CONFIG.managerEmail,
+    subject:
+      'TEST — Reminder: please complete your hours for week ending ' +
+      britishDate_(week.end),
+    body: reminderBody_(
+      'Example team member',
+      week,
+      spreadsheet.getUrl(),
+      true
+    ),
+    name: CONFIG.signOffName
+  });
+}
+
+
+/**
+ * STEP 3: Run this once to schedule the Friday automation.
+ * Running it again replaces the old schedule instead of creating duplicates.
+ */
+function installFridayTrigger() {
+  validateConfiguration_();
+
+  ScriptApp.getProjectTriggers()
+    .filter(trigger =>
+      trigger.getHandlerFunction() === 'sendTimesheetReminders'
+    )
+    .forEach(trigger => ScriptApp.deleteTrigger(trigger));
+
+  ScriptApp.newTrigger('sendTimesheetReminders')
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.FRIDAY)
+    .atHour(16)
+    .nearMinute(0)
+    .everyWeeks(1)
+    .inTimezone(CONFIG.timeZone)
+    .create();
+}
+
+
+/**
+ * Runs automatically each Friday.
+ */
+function sendTimesheetReminders() {
+  const lock = LockService.getScriptLock();
+
+  if (!lock.tryLock(30000)) {
+    throw new Error(
+      'Another reminder check is already running. No second run was started.'
+    );
+  }
+
+  try {
+    validateConfiguration_();
+
+    const result = checkTimesheets_();
+    const properties = PropertiesService.getScriptProperties();
+
+    const peopleToEmail = result.missing.filter(person => {
+      return !properties.getProperty(reminderKey_(result.week, person.email));
+    });
+
+    // Include one recipient for the manager's summary.
+    const recipientsNeeded = peopleToEmail.length + 1;
+    const quotaRemaining = MailApp.getRemainingDailyQuota();
+
+    if (quotaRemaining < recipientsNeeded) {
+      throw new Error(
+        'Not enough email allowance remains today. Needed ' +
+          recipientsNeeded +
+          ', but only ' +
+          quotaRemaining +
+          ' recipients remain.'
+      );
+    }
+
+    const spreadsheet = getSpreadsheet_();
+    const sent = [];
+
+    peopleToEmail.forEach(person => {
+      MailApp.sendEmail({
+        to: person.email,
+        subject:
+          'Reminder: please complete your hours for week ending ' +
+          britishDate_(result.week.end),
+        body: reminderBody_(
+          person.name,
+          result.week,
+          spreadsheet.getUrl(),
+          false
+        ),
+        name: CONFIG.signOffName
+      });
+
+      properties.setProperty(
+        reminderKey_(result.week, person.email),
+        new Date().toISOString()
+      );
+
+      sent.push(person);
+    });
+
+    writeAudit_('LIVE', result, sent);
+    sendManagerSummary_(result, sent, spreadsheet.getUrl());
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+
+function checkTimesheets_() {
+  validateConfiguration_();
+
+  const spreadsheet = getSpreadsheet_();
+  const week = currentWeek_();
+  const team = readTeam_(spreadsheet, week);
+
+  const completed =
+    CONFIG.layout === 'WEEK_COLUMNS'
+      ? readWeeklyColumns_(spreadsheet, week)
+      : readRowLog_(spreadsheet, week);
+
+  return {
+    week: week,
+    missing: team.filter(person => !completed.has(normalise_(person.name)))
+  };
+}
+
+
+function readTeam_(spreadsheet, week) {
+  const sheet = requiredSheet_(spreadsheet, CONFIG.teamSheet);
+  const values = sheet.getDataRange().getValues();
+
+  if (values.length < 2) {
+    throw new Error('The Team tab does not contain any team members.');
+  }
+
+  const headings = values[0];
+  const nameColumn = findHeader_(headings, CONFIG.teamHeaders.name);
+  const emailColumn = findHeader_(headings, CONFIG.teamHeaders.email);
+  const activeColumn = findHeader_(headings, CONFIG.teamHeaders.active);
+  const pauseColumn = findHeader_(headings, CONFIG.teamHeaders.pauseUntil);
+
+  const people = [];
+  const namesSeen = new Set();
+
+  for (let row = 1; row < values.length; row++) {
+    const name = String(values[row][nameColumn] || '').trim();
+    const email = String(values[row][emailColumn] || '').trim();
+
+    if (!name && !email) {
+      continue;
+    }
+
+    if (!name || !email) {
+      throw new Error(
+        'Team row ' + (row + 1) + ' needs both a name and an email address.'
+      );
+    }
+
+    if (!isActive_(values[row][activeColumn])) {
+      continue;
+    }
+
+    const pauseUntil = dateKey_(values[row][pauseColumn]);
+
+    // A pause date during or after this week suppresses the reminder.
+    if (pauseUntil && pauseUntil >= week.start) {
+      continue;
+    }
+
+    validateEmail_(email, 'email in Team row ' + (row + 1));
+
+    const normalisedName = normalise_(name);
+
+    if (namesSeen.has(normalisedName)) {
+      throw new Error(
+        'The name "' + name + '" appears more than once on the Team tab.'
+      );
+    }
+
+    namesSeen.add(normalisedName);
+    people.push({ name: name, email: email });
+  }
+
+  return people;
+}
+
+
+function readWeeklyColumns_(spreadsheet, week) {
+  const sheet = requiredSheet_(spreadsheet, CONFIG.hoursSheet);
+  const values = sheet.getDataRange().getValues();
+  const headerIndex = CONFIG.weeklyHeaderRow - 1;
+
+  if (headerIndex < 0 || headerIndex >= values.length) {
+    throw new Error('weeklyHeaderRow does not point to a valid row.');
+  }
+
+  const headings = values[headerIndex];
+  const nameColumn = findHeader_(headings, CONFIG.weeklyNameHeader);
+
+  const currentWeekColumns = [];
+
+  headings.forEach((heading, column) => {
+    const date = dateKey_(heading);
+
+    if (date && date >= week.start && date <= week.end) {
+      currentWeekColumns.push(column);
+    }
+  });
+
+  if (!currentWeekColumns.length) {
+    throw new Error(
+      'No date heading for the current week was found on "' +
+        CONFIG.hoursSheet +
+        '". The date must be in row ' +
+        CONFIG.weeklyHeaderRow +
+        '.'
+    );
+  }
+
+  const completed = new Set();
+
+  for (let row = headerIndex + 1; row < values.length; row++) {
+    const name = String(values[row][nameColumn] || '').trim();
+
+    if (!name) {
+      continue;
+    }
+
+    if (
+      currentWeekColumns.some(column =>
+        hasEntry_(values[row][column])
+      )
+    ) {
+      completed.add(normalise_(name));
+    }
+  }
+
+  return completed;
+}
+
+
+function readRowLog_(spreadsheet, week) {
+  const sheet = requiredSheet_(spreadsheet, CONFIG.hoursSheet);
+  const values = sheet.getDataRange().getValues();
+
+  if (values.length < 2) {
+    return new Set();
+  }
+
+  const headings = values[0];
+  const nameColumn = findHeader_(headings, CONFIG.rowLogHeaders.name);
+  const dateColumn = findHeader_(headings, CONFIG.rowLogHeaders.date);
+  const hoursColumn = findHeader_(headings, CONFIG.rowLogHeaders.hours);
+
+  const completed = new Set();
+
+  for (let row = 1; row < values.length; row++) {
+    const name = String(values[row][nameColumn] || '').trim();
+    const date = dateKey_(values[row][dateColumn]);
+
+    if (
+      name &&
+      date &&
+      date >= week.start &&
+      date <= week.end &&
+      hasEntry_(values[row][hoursColumn])
+    ) {
+      completed.add(normalise_(name));
+    }
+  }
+
+  return completed;
+}
+
+
+function reminderBody_(name, week, spreadsheetUrl, isTest) {
+  const testNotice = isTest
+    ? 'THIS IS A TEST. No team member has been emailed.\n\n'
+    : '';
+
+  return (
+    testNotice +
+    'Hello ' +
+    name +
+    ',\n\n' +
+    'This is an automatic reminder that I cannot yet see your hours for ' +
+    'the week ending Friday ' +
+    britishDate_(week.end) +
+    '.\n\n' +
+    'Please complete them here:\n' +
+    spreadsheetUrl +
+    '\n\n' +
+    'If you have already completed them, or you were not expected to submit ' +
+    'hours this week, please reply to this email.\n\n' +
+    'Thank you,\n' +
+    CONFIG.signOffName
+  );
+}
+
+
+function sendManagerSummary_(result, sent, spreadsheetUrl) {
+  const lines = sent.length
+    ? sent.map(person => '• ' + person.name + ' <' + person.email + '>')
+    : ['No new reminders were sent.'];
+
+  const alreadySentCount = result.missing.length - sent.length;
+
+  MailApp.sendEmail({
+    to: CONFIG.managerEmail,
+    subject:
+      'Timesheet reminder summary — ' + britishDate_(result.week.end),
+    body:
+      'The Friday timesheet check has completed.\n\n' +
+      'New reminders sent:\n' +
+      lines.join('\n') +
+      '\n\n' +
+      'Missing entries found: ' +
+      result.missing.length +
+      '\n' +
+      'Previously reminded this week: ' +
+      alreadySentCount +
+      '\n\n' +
+      'Sheet:\n' +
+      spreadsheetUrl,
+    name: CONFIG.signOffName
+  });
+}
+
+
+function writeAudit_(mode, result, sent) {
+  const spreadsheet = getSpreadsheet_();
+  let sheet = spreadsheet.getSheetByName(CONFIG.auditSheet);
+
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(CONFIG.auditSheet);
+    sheet.appendRow([
+      'Run at',
+      'Mode',
+      'Week starting',
+      'Week ending',
+      'Missing found',
+      'Reminders sent',
+      'People found missing'
+    ]);
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    new Date(),
+    mode,
+    result.week.start,
+    result.week.end,
+    result.missing.length,
+    sent.length,
+    result.missing
+      .map(person => person.name + ' <' + person.email + '>')
+      .join(', ')
+  ]);
+}
+
+
+function currentWeek_() {
+  const todayKey = Utilities.formatDate(
+    new Date(),
+    CONFIG.timeZone,
+    'yyyy-MM-dd'
+  );
+
+  const today = new Date(todayKey + 'T12:00:00Z');
+  const daysSinceMonday = (today.getUTCDay() + 6) % 7;
+
+  const monday = new Date(today);
+  monday.setUTCDate(today.getUTCDate() - daysSinceMonday);
+
+  const friday = new Date(monday);
+  friday.setUTCDate(monday.getUTCDate() + 4);
+
+  return {
+    start: isoDate_(monday),
+    end: isoDate_(friday)
+  };
+}
+
+
+function dateKey_(value) {
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    return Utilities.formatDate(value, CONFIG.timeZone, 'yyyy-MM-dd');
+  }
+
+  const text = String(value || '').trim();
+
+  let match = text.match(/\b(\d{4})-(\d{1,2})-(\d{1,2})\b/);
+  if (match) {
+    return match[1] + '-' + pad_(match[2]) + '-' + pad_(match[3]);
+  }
+
+  match = text.match(/\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/);
+  if (match) {
+    return match[3] + '-' + pad_(match[2]) + '-' + pad_(match[1]);
+  }
+
+  return '';
+}
+
+
+function hasEntry_(value) {
+  if (value === '' || value === null) {
+    return false;
+  }
+
+  if (typeof value === 'string' && value.trim() === '') {
+    return false;
+  }
+
+  if (!CONFIG.zeroCountsAsComplete && Number(value) === 0) {
+    return false;
+  }
+
+  return true;
+}
+
+
+function isActive_(value) {
+  return !['false', 'no', 'n', '0', 'inactive'].includes(
+    normalise_(value)
+  );
+}
+
+
+function requiredSheet_(spreadsheet, name) {
+  const sheet = spreadsheet.getSheetByName(name);
+
+  if (!sheet) {
+    throw new Error(
+      'Could not find a sheet tab named "' +
+        name +
+        '". Check spelling, spaces and capital letters.'
+    );
+  }
+
+  return sheet;
+}
+
+
+function findHeader_(headings, requiredHeading) {
+  const wanted = normalise_(requiredHeading);
+  const index = headings.findIndex(
+    heading => normalise_(heading) === wanted
+  );
+
+  if (index === -1) {
+    throw new Error(
+      'Could not find the heading "' + requiredHeading + '".'
+    );
+  }
+
+  return index;
+}
+
+
+function validateConfiguration_() {
+  if (
+    !CONFIG.spreadsheetId ||
+    CONFIG.spreadsheetId === 'PASTE_SPREADSHEET_ID_HERE'
+  ) {
+    throw new Error('Paste your spreadsheet ID into CONFIG.spreadsheetId.');
+  }
+
+  if (!['WEEK_COLUMNS', 'ROW_LOG'].includes(CONFIG.layout)) {
+    throw new Error(
+      "CONFIG.layout must be 'WEEK_COLUMNS' or 'ROW_LOG'."
+    );
+  }
+
+  validateEmail_(CONFIG.managerEmail, 'managerEmail');
+
+  if (!CONFIG.signOffName || CONFIG.signOffName === 'Your name') {
+    throw new Error('Change CONFIG.signOffName to your name.');
+  }
+}
+
+
+function validateEmail_(email, description) {
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email || '').trim())) {
+    throw new Error('Invalid ' + description + ': "' + email + '".');
+  }
+}
+
+
+function getSpreadsheet_() {
+  return SpreadsheetApp.openById(CONFIG.spreadsheetId);
+}
+
+
+function reminderKey_(week, email) {
+  return 'reminded|' + week.end + '|' + normalise_(email);
+}
+
+
+function normalise_(value) {
+  return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+
+function isoDate_(date) {
+  return (
+    date.getUTCFullYear() +
+    '-' +
+    pad_(date.getUTCMonth() + 1) +
+    '-' +
+    pad_(date.getUTCDate())
+  );
+}
+
+
+function britishDate_(isoDate) {
+  const parts = isoDate.split('-');
+  return parts[2] + '/' + parts[1] + '/' + parts[0];
+}
+
+
+function pad_(value) {
+  return String(value).padStart(2, '0');
+}
+```
+
+## 5. Change the five settings
+
+Near the top of the code, change:
+
+```javascript
+spreadsheetId: 'PASTE_SPREADSHEET_ID_HERE',
+```
+
+Paste the ID you copied, keeping the quote marks.
+
+Change:
+
+```javascript
+layout: 'WEEK_COLUMNS',
+```
+
+Use:
+
+- `'WEEK_COLUMNS'` for Layout A; or
+- `'ROW_LOG'` for Layout B.
+
+Change:
+
+```javascript
+hoursSheet: 'Hours',
+```
+
+Replace `Hours` with the exact name written on your existing hours tab.
+
+Change:
+
+```javascript
+managerEmail: 'your.name@organisation.org.uk',
+signOffName: 'Your name',
+```
+
+Use your work email address and name.
+
+If your existing headings are not called `Name`, `Date` and `Hours`, change the relevant heading names in the configuration section. Do not change anything else.
+
+Click the **Save project** icon.
+
+## 6. Set the time zone
+
+1. On the left, click the cog labelled **Project Settings**.
+2. Find **Time zone**.
+3. Select **(GMT+00:00) London** or **Europe/London**.
+4. Return to **Editor**.
+
+The code also explicitly uses `Europe/London`, which handles the switch between GMT and British Summer Time.
+
+## 7. Preview without emailing anybody
+
+At the top of the editor:
+
+1. Open the function drop-down.
+2. Select `previewMissingTimesheets`.
+3. Click **Run**.
+
+The first time, Google will request permission:
+
+1. Click **Review permissions**.
+2. Choose your work account.
+3. Read the permissions.
+4. Click **Allow** or **Continue**.
+
+The script uses `MailApp`, which can send email but cannot read your Gmail inbox. [Google explains that distinction here.](https://developers.google.com/apps-script/reference/mail/mail-app)
+
+If Google says your organisation has blocked Apps Script or the application, only your Google Workspace administrator can enable it. Do not use a personal account as a workaround for work data.
+
+Return to your spreadsheet. A new tab called **Reminder audit** should have appeared. Check its newest row carefully:
+
+- Is the week correct?
+- Are the right people listed?
+- Is anybody incorrectly listed?
+- Is anybody missing from the list?
+
+Do not continue until the preview agrees with the check you would have made manually.
+
+## 8. Send a test only to yourself
+
+Back in Apps Script:
+
+1. Select `sendTestReminderToMe` from the function drop-down.
+2. Click **Run**.
+3. Check your inbox.
+4. Check the wording and spreadsheet link.
+
+The subject begins with `TEST`, and no team member is contacted.
+
+## 9. Switch on the weekly automation
+
+1. Select `installFridayTrigger`.
+2. Click **Run**.
+3. On the left, click the alarm-clock icon labelled **Triggers**.
+4. Confirm there is one row for `sendTimesheetReminders`.
+5. Its event source should be **Time-driven**.
+
+That completes the setup. The trigger runs as the Google account that created it, and the reminders will come from that account. [Google confirms that installable triggers run under their creator’s account.](https://developers.google.com/apps-script/guides/triggers/installable)
+
+## Things that could go wrong
+
+- **Names do not match.** Capital letters and spare spaces are ignored, but `Liz Jones` and `Elizabeth Jones` are different people.
+- **The weekly heading is not a date.** Use a genuine date such as `31/07/2026`, not `Week 31`.
+- **A formula produces zero for an empty entry.** Zero currently counts as completed. If zero always means missing in your organisation, change `zeroCountsAsComplete: true` to `false`.
+- **Someone legitimately records zero hours.** Leave the setting as `true`, or that person will receive a reminder.
+- **A tab or heading is renamed.** Update the corresponding name near the top of the code.
+- **People complete their hours after 4pm.** They may already have been reminded.
+- **Annual leave and bank holidays.** The automation still runs. Use **Pause until**, or temporarily delete the trigger.
+- **Your access changes.** If you lose access to the spreadsheet or your account is disabled, the automation stops.
+- **Google temporarily fails.** Apps Script normally emails the trigger owner a failure notice. You can also open Apps Script and click **Executions** to see failures. [Google’s failure-monitoring instructions are here.](https://developers.google.com/apps-script/guides/triggers/installable#errors_in_triggers)
+- **Email limits.** Google Workspace currently permits far more than the maximum thirteen weekly recipients used here, although Google can change quotas. [Current Apps Script quotas are listed here.](https://developers.google.com/apps-script/guides/services/quotas)
+- **Workplace restrictions.** Because this reads employee records and sends workplace email, use your work account and follow your association’s information-governance rules. Do not put salary, tenancy or health information in the reminder or audit.
+- **Other people editing the automation.** The script project is separate from the shared spreadsheet. Do not share the script project with the team.
+- **It is not exact to the minute.** Expect delivery between approximately 3.45pm and 4.15pm, not precisely at 4.00pm.

@@ -1,0 +1,44 @@
+OpenAI Codex v0.144.1
+--------
+workdir: /tmp/claude-1000/-home-david-projects-1-gwthpipeline520/91a2cbe5-82ef-44c3-930f-c66370a065fa/scratchpad/arena/run
+model: gpt-5.6-sol
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019f9fce-5353-7ef3-a0e2-75cf9e267719
+--------
+user
+I look after payroll and HR admin for a small company in England with eighteen staff. I need three current figures, and I need to be able to show my finance director exactly where each one comes from.
+
+1. The National Living Wage hourly rate for a worker aged 21 or over.
+2. The standard weekly rate of Statutory Sick Pay.
+3. The maximum weekly pay figure used when working out statutory redundancy pay.
+
+For each one, give me the figure, the date it applies from, and a link to the official GOV.UK page I can check it on myself. If you are not certain a figure is current, say so plainly rather than guessing. Use British English and keep it short enough to paste into an email.
+
+warning: Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+codex
+I’ll verify all three against current GOV.UK sources and give you an email-ready summary with effective dates.
+web search: 
+web search: site:gov.uk National Living Wage rates 1 April 2026 age 21 over ...
+web search: 
+web search: site:gov.uk/national-minimum-wage-rates £12.71 2026 ...
+codex
+Checked against GOV.UK on 26 July 2026:
+
+1. **National Living Wage (age 21+)**: **£12.71 per hour**, from **1 April 2026**. [GOV.UK rates](https://www.gov.uk/national-minimum-wage-rates)
+
+2. **Statutory Sick Pay**: **£123.25 per week**, from **6 April 2026**. The amount payable is the lower of £123.25 and 80% of average weekly earnings. [GOV.UK SSP guidance](https://www.gov.uk/guidance/statutory-sick-pay-manually-calculate-your-employees-payments)
+
+3. **Statutory redundancy pay weekly-pay cap**: **£751 per week**, for redundancies on or after **6 April 2026**. [GOV.UK redundancy guidance](https://www.gov.uk/redundancy-your-rights/redundancy-pay)
+tokens used
+33,306
+Checked against GOV.UK on 26 July 2026:
+
+1. **National Living Wage (age 21+)**: **£12.71 per hour**, from **1 April 2026**. [GOV.UK rates](https://www.gov.uk/national-minimum-wage-rates)
+
+2. **Statutory Sick Pay**: **£123.25 per week**, from **6 April 2026**. The amount payable is the lower of £123.25 and 80% of average weekly earnings. [GOV.UK SSP guidance](https://www.gov.uk/guidance/statutory-sick-pay-manually-calculate-your-employees-payments)
+
+3. **Statutory redundancy pay weekly-pay cap**: **£751 per week**, for redundancies on or after **6 April 2026**. [GOV.UK redundancy guidance](https://www.gov.uk/redundancy-your-rights/redundancy-pay)

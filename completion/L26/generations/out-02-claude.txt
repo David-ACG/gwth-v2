@@ -1,0 +1,64 @@
+I can give you figures, but I want to be straight with you first: this export has five rows that cannot be read reliably, and one row that is simply wrong. So the honest answer is a range with a clear note attached, not a single confident number.
+
+WHAT I CAN STAND BEHIND
+
+Counting only rows dated in April 2026, and only where the Hours cell is a plain number:
+
+  Jane Smith    18.0 hours   (5 sessions)
+  Marta Nowak   11.0 hours   (3 sessions)
+  Ahmed Khan     8.0 hours   (2 sessions)
+  Dev Patel      7.5 hours   (2 sessions)
+  ------------------------------------------
+  Total         44.5 hours
+
+If you also accept the 3 April entry for Marta Nowak, where the Hours cell reads "7:30" and almost certainly means seven and a half hours, the picture becomes:
+
+  Marta Nowak   18.5 hours
+  Jane Smith    18.0 hours
+  Ahmed Khan     8.0 hours
+  Dev Patel      7.5 hours
+  ------------------------------------------
+  Total         52.0 hours
+
+TOP THREE VOLUNTEERS
+
+Your top three are Marta Nowak, Jane Smith and Ahmed Khan, in some order. The three names are safe. The order is not, and I would not print a ranking until you have checked the rows below.
+
+Marta and Jane are separated by half an hour, and that half hour depends entirely on how you read one cell. Ahmed is third on the countable rows, but he has three rows I could not use, and two of them read 40 hours, so his true total could be anything from 8 to 88.
+
+WHAT I WOULD NOT TRUST, AND WHY
+
+1. The TOTAL row at the bottom says 89.5. I cannot reproduce that figure under any reading of the data, so please do not use it. Exported total rows are also a common cause of double counting, because a spreadsheet will happily add the total row into your total. Delete it before you do anything else.
+
+2. Two identical rows on 9 April: Ahmed Khan, Warm space, 40 hours, listed twice. Two things are wrong here. Forty hours in one warm space session is not plausible, and it looks like 4 typed with a stray zero. And the row appears twice, which usually means a double sign-in rather than two real sessions. I have left both out. If you count them at face value Ahmed becomes your top volunteer by a wide margin, which is why this one matters.
+
+3. Marta Nowak, 3 April, Hours "7:30". I have read this as 7.5 hours. It could also be a start time somebody typed into the wrong box. Worth a two second check with Marta.
+
+4. Jane Smith, 4 April, Hours "half day". Someone has typed words where a number should go. You will need to decide what a half day is worth at your centre, probably 3.5 or 4 hours, and apply it consistently.
+
+5. Ahmed Khan, 7 April, Hours blank, note "did not sign out". Genuinely missing. Either ask him or leave it out and say so.
+
+6. Marta Nowak, 8 April, Hours "N/A". Same problem as above. N/A is not zero, it means nobody recorded it.
+
+7. The row dated 2026-03-31 for Ahmed Khan is in March, not April. I have excluded it. Do check that your March report did not also exclude it, or those four hours have disappeared from both reports.
+
+8. Names are inconsistent. "Jane Smith" and "J. Smith" are almost certainly the same person, and "Ahmed Khan" and "ahmed khan" definitely are. A spreadsheet treats those as different people unless you tidy them, so any per person total done automatically will be wrong.
+
+9. Dates are in three different formats: 01/04/2026, 2026-04-02 and 3 Apr 26. A spreadsheet will read some of those as dates and leave others as text, which quietly breaks any filter by month.
+
+WHAT I WOULD DO BEFORE THE TRUSTEES MEETING
+
+Fifteen minutes of checking would turn this into a number you can defend:
+
+  1. Delete the TOTAL row.
+  2. Ask Ahmed about 9 April. One session or two, and four hours or forty.
+  3. Ask Marta about 3 April and 8 April, and Jane about 4 April.
+  4. Agree what a half day means and write it down for next time.
+  5. Make the names consistent, one spelling per person.
+  6. Then total it again.
+
+WHAT TO SAY IF YOU RUN OUT OF TIME
+
+"In April 2026 we recorded 52 volunteer hours across four volunteers. Five entries were incomplete or unclear, so the real figure is a little higher. Our most active volunteers were Marta Nowak, Jane Smith and Ahmed Khan."
+
+That is honest, it is defensible, and it quietly makes the case for tightening up the sign out process, which is the real story in this data.
