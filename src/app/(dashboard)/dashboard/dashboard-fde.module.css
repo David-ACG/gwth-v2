@@ -123,19 +123,27 @@
   align-items: end;
 }
 
+/* Q3 option B (David, 2026-07-26 audit): the greeting was the largest type on
+   the page and carried no information, while the one thing a student is here to
+   do sat smaller and to the right. The two columns swap visual weight: the
+   greeting narrows and drops to body scale, the next-lesson panel gets the room
+   and the headline size. Tops align so the lesson title is the first thing the
+   eye lands on. The hairline between the halves stays - it was missing in the
+   mock only because of how the mock was made. */
 @media (min-width: 64rem) {
   .band {
-    grid-template-columns: minmax(0, 1fr) 460px;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 420px) minmax(0, 660px);
+    gap: 4.5rem;
+    align-items: start;
   }
 }
 
 .bandTitle {
   margin-top: 1rem;
-  font-size: clamp(2.1rem, 4.2vw, 3.2rem);
+  font-size: clamp(1.6rem, 2.6vw, 1.85rem);
   font-weight: 600;
-  line-height: 1.06;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .bandTitle em {
@@ -158,11 +166,11 @@
 }
 
 .asideTitle {
-  margin-top: 0.4rem;
-  font-size: 1.4rem;
+  margin-top: 0.25rem;
+  font-size: clamp(1.9rem, 3.4vw, 2.5rem);
   font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 .asideNote {

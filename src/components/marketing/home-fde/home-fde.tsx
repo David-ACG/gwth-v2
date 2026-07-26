@@ -258,23 +258,30 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             <h2 className={styles.sectionTitle}>Three monthly issues.</h2>
             <p className={styles.mono}>Curriculum</p>
           </div>
-          <p className={styles.sectionLead}>
-            Month 1 stays close to your own life. You rewrite your CV and your
-            LinkedIn profile, get ready for interviews, turn a messy
-            spreadsheet into a dashboard, then build the Family AI Bot, which
-            is the Month 1 Capstone project. Month 2 moves the same skills
-            into business work, and Month 3 takes them to organisation scale.
-            Every month ends with a Capstone project you can show somebody.
-          </p>
-          <figure className={`${styles.figure} ${styles.figureRight}`}>
-            <Image
-              src="/home/home-three-issues-c.png"
-              alt="Three pinned paper journal booklets labelled Month 1, Month 2, and Month 3, with a chat bubble, gears, and a rocket doodle sticker"
-              width={2400}
-              height={1792}
-              sizes="(max-width: 768px) 100vw, 640px"
-            />
-          </figure>
+          {/* The lead and the plate sit side by side (David, 2026-07-26 audit):
+              the image used to be pushed to the right on its own row, leaving a
+              630x480 hole to its left and butting straight into the issue cards
+              below. Pairing it with the text is the hero's own composition and
+              closes both gaps at once. */}
+          <div className={styles.curriculumIntro}>
+            <p className={styles.sectionLead}>
+              Month 1 stays close to your own life. You rewrite your CV and your
+              LinkedIn profile, get ready for interviews, turn a messy
+              spreadsheet into a dashboard, then build the Family AI Bot, which
+              is the Month 1 Capstone project. Month 2 moves the same skills
+              into business work, and Month 3 takes them to organisation scale.
+              Every month ends with a Capstone project you can show somebody.
+            </p>
+            <figure className={`${styles.figure} ${styles.curriculumFigure}`}>
+              <Image
+                src="/home/home-three-issues-c.png"
+                alt="Three pinned paper journal booklets labelled Month 1, Month 2, and Month 3, with a chat bubble, gears, and a rocket doodle sticker"
+                width={2400}
+                height={1792}
+                sizes="(max-width: 64rem) 100vw, 560px"
+              />
+            </figure>
+          </div>
           <div className={styles.issueList}>
             {CURRICULUM.map((module, index) => (
               <article className={styles.issue} key={module.m}>

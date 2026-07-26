@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { mediaUrl } from "@/lib/media/url"
 import { useProgress } from "@/hooks/use-progress"
+import { useReadingMode } from "@/hooks/use-sidebar"
 import {
   getLessonCompletionStatus,
   INTRO_VIDEO_COMPLETION_THRESHOLD,
@@ -243,6 +244,11 @@ export function EditorialLessonViewer({
   // `hidden lg:block`; below lg the mast row exposes a hamburger that opens
   // this sheet with the same items.
   const [outlineOpen, setOutlineOpen] = React.useState(false)
+
+  // The app rail collapses while a lesson is open and comes back on the way
+  // out (option C, David's 2026-07-26 layout audit). The lesson's own outline
+  // rail still says where you are; the app nav becomes icons for the duration.
+  useReadingMode(true)
 
   // Persistence: the same optimistic wrapper over the W7-tested
   // updateLessonProgressAction that the rest of the app uses. No second

@@ -97,3 +97,33 @@ export function useSidebar() {
 
   return { isOpen, isMobile, toggle, open, close }
 }
+
+/**
+ * Collapse the app rail while a reading surface is open, and put it back on the
+ * way out.
+ *
+ * David picked option C in the 2026-07-26 demo-path audit: a lesson page was
+ * spending 528px of a 1440px screen on navigation before a word of the lesson
+ * appeared. Collapsing the rail is the sidebar's own existing state, so this is
+ * a default rather than a new mode.
+ *
+ * It deliberately does NOT write STORAGE_KEY: reading is a per-surface default,
+ * and persisting it would silently collapse the dashboard too. A collapse the
+ * reader makes by hand still persists, through toggle/close as before, and is
+ * respected here - the rail is only auto-collapsed when it was open on entry,
+ * and only that auto-collapse is undone on exit.
+ */
+export function useReadingMode(active: boolean): void {
+  useEffect(() => {
+    if (!active) return
+    if (!sidebarOpen) return // already collapsed: leave the reader's choice alone
+    sidebarOpen = false
+    notifyListeners()
+    return () => {
+      const stored =
+        typeof window === "undefined" ? null : localStorage.getItem(STORAGE_KEY)
+      sidebarOpen = stored === null ? true : stored === "true"
+      notifyListeners()
+    }
+  }, [active])
+}

@@ -135,6 +135,55 @@
   color: var(--v-cream-muted);
 }
 
+/* Two-column masthead (David picked option B, 2026-07-26 demo-path audit).
+   Every inner page used a single left column and left the right half of the
+   first screen as empty colour, while the home hero - the strongest surface on
+   the site - is a two-column composition. This applies the home shape: headline
+   left on a wider measure, standfirst and buttons right, the rule under the
+   kicker carried through, and the foot spanning both. Below 64rem it stays a
+   single stacked column, unchanged. */
+@media (min-width: 64rem) {
+  .masthead .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr);
+    column-gap: 4.5rem;
+    align-items: start;
+  }
+
+  .mastheadKicker {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .mastheadTitle {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 1rem;
+    max-width: 22ch;
+  }
+
+  .standfirst {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    margin-top: 1rem;
+    border-top: 1px solid var(--v-hero-line);
+    padding-top: 1.6rem;
+    max-width: 46ch;
+  }
+
+  .mastheadActions {
+    grid-column: 2;
+    grid-row: 3;
+    margin-top: 1.6rem;
+  }
+
+  .mastheadFoot {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+}
+
 /* ---------------- Buttons ---------------- */
 
 .buttonSolid,

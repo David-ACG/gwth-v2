@@ -995,9 +995,30 @@
   margin: 2.5rem auto clamp(2.5rem, 5vw, 3.5rem);
 }
 
-.figureRight {
-  max-width: 40rem;
-  margin: 2.5rem 0 0 auto;
+/* Curriculum intro: lead text and the three-issues plate as one row, the same
+   composition as the hero (David, 2026-07-26 audit). Replaces .figureRight,
+   which floated the plate right on its own line with dead space beside it and
+   no separation from the cards underneath. */
+.curriculumIntro {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.curriculumIntro .sectionLead {
+  margin-bottom: 0;
+}
+
+.curriculumFigure {
+  margin: 0;
+}
+
+@media (min-width: 64rem) {
+  .curriculumIntro {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+    gap: 3.5rem;
+    align-items: start;
+  }
 }
 
 .figurePortrait {
