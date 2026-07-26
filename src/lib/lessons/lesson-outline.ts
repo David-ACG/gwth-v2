@@ -120,11 +120,65 @@ const LEAD_IN_TITLE = "Overview"
 const PROJECT_FALLBACK_TITLE = "Your project"
 
 /**
- * Boilerplate the pipeline puts in front of the artefact name in a project
- * markdown's `#` heading ("Student Project - My AI Superpowers Wishlist").
- * Stripped so the rail reads "Your project: My AI Superpowers Wishlist".
+ * Filing boilerplate the lesson authors put in front of the artefact name in a
+ * project markdown's `#` heading. Month 1 alone ships six conventions —
+ * "Student Project - X", "Student Project — X", "Project: X", "M1 L14 —
+ * Student Project: X", "M1L22 — Student Project: X", "Student Project — M1
+ * L23: X" — so the pieces are stripped repeatedly and in any order rather than
+ * matched as one fixed prefix.
  */
-const PROJECT_HEADING_PREFIX = /^(?:student\s+)?project\s*(?:[-–—:]|\bis\b)\s*/i
+const PROJECT_HEADING_NOISE = [
+  /^m\s*\d+\s*l\s*\d+/i, // lesson code: "M1 L14", "M1L22"
+  /^(?:student\s+)?project/i, // "Student Project", "Project"
+]
+
+/** A dash or colon joining heading boilerplate to the artefact name. */
+const HEADING_SEPARATOR = /^[-–—:]\s*/
+
+/** Markdown emphasis/code wrappers around a heading, e.g. `*My AI Map*`. */
+const HEADING_WRAPPERS: ReadonlyArray<readonly [string, string]> = [
+  ["**", "**"],
+  ["*", "*"],
+  ["_", "_"],
+  ["`", "`"],
+]
+
+/** Removes markdown emphasis/code marks wrapping a whole heading. */
+function unwrapEmphasis(heading: string): string {
+  let out = heading.trim()
+  for (;;) {
+    const before = out
+    for (const [open, close] of HEADING_WRAPPERS) {
+      if (
+        out.length > open.length + close.length &&
+        out.startsWith(open) &&
+        out.endsWith(close)
+      ) {
+        out = out.slice(open.length, out.length - close.length).trim()
+      }
+    }
+    if (out === before) return out
+  }
+}
+
+/**
+ * Reduces a project markdown's `#` heading to just the artefact name:
+ * `"M1 L14 — Student Project: \`CV Or LinkedIn Upgrade Pack\`"` becomes
+ * `"CV Or LinkedIn Upgrade Pack"`. Returns "" when nothing is left.
+ */
+export function projectArtefactName(heading: string): string {
+  let out = heading.trim()
+  for (;;) {
+    const before = out
+    for (const noise of PROJECT_HEADING_NOISE) {
+      const match = noise.exec(out)
+      if (match) out = out.slice(match[0].length).trimStart()
+    }
+    out = out.replace(HEADING_SEPARATOR, "").trimStart()
+    if (out === before) break
+  }
+  return unwrapEmphasis(out)
+}
 
 /**
  * Splits a leading `# Heading` off a markdown document. Returns the heading
@@ -200,9 +254,7 @@ export function buildLessonOutline({
   const project = (buildInstructions ?? "").trim()
   if (project) {
     const { heading, body } = splitLeadingH1(project)
-    const artefact = heading
-      ? heading.replace(PROJECT_HEADING_PREFIX, "").trim()
-      : ""
+    const artefact = heading ? projectArtefactName(heading) : ""
     pages.push({
       title: projectPageTitle(artefact || null),
       kindLabel: `PROJECT · ${readingMinutes(body)} MIN`,

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   buildLessonOutline,
+  projectArtefactName,
   splitMarkdownSections,
 } from "./lesson-outline"
 
@@ -192,6 +193,57 @@ describe("buildLessonOutline - student project page", () => {
     expect(page!.title).toBe("Your project")
     expect(page!.projectHeading).toBeUndefined()
     expect(page!.content).toContain("Do the thing.")
+  })
+
+  /**
+   * The real `#` headings of all 26 published Month-1 projects, read out of the
+   * production `lessons.build_instructions` column on 2026-07-26. Six different
+   * filing conventions, several with em dashes and one wrapped in emphasis —
+   * the rail must show the artefact name and nothing else in every case.
+   */
+  it.each([
+    ["# Student Project - My AI Superpowers Wishlist", "My AI Superpowers Wishlist"],
+    ["# Student Project — My AI Colleague Agreement", "My AI Colleague Agreement"],
+    [
+      "# Student Project — My AI User Manual and Prompt Cheat Sheet",
+      "My AI User Manual and Prompt Cheat Sheet",
+    ],
+    ["# Student Project — My AI Tooling Landscape Map", "My AI Tooling Landscape Map"],
+    ["# Student Project — *My AI Toolkit Map*", "My AI Toolkit Map"],
+    ["# Project — Your One-Page Sourced Comparison", "Your One-Page Sourced Comparison"],
+    ["# Project: Safe First Automation", "Safe First Automation"],
+    ["# Project — Agent Audit", "Agent Audit"],
+    [
+      "# M1 L14 — Student Project: `CV Or LinkedIn Upgrade Pack`",
+      "CV Or LinkedIn Upgrade Pack",
+    ],
+    ["# M1 L16 - Student Project: Make It Visible", "Make It Visible"],
+    ["# M1L22 — Student Project: Your First FamilyBot Transcript", "Your First FamilyBot Transcript"],
+    ["# Student Project — M1 L23: Your Weekly Household Brief", "Your Weekly Household Brief"],
+    ["# Student Project — The Month 1 Review Sheet", "The Month 1 Review Sheet"],
+  ])("names the artefact cleanly for %s", (h1, artefact) => {
+    const [page] = buildLessonOutline({
+      learnContent: "",
+      hasIntroVideo: false,
+      questionCount: 0,
+      buildInstructions: `${h1}\n\n## Step\n\nDo it.`,
+    })
+    expect(page!.projectHeading).toBe(artefact)
+    expect(page!.title).toBe(`Your project: ${artefact}`)
+    // David's standing rule: no em or en dashes in anything a student reads.
+    expect(page!.title).not.toMatch(/[—–]/)
+  })
+
+  it("falls back to the generic title when a heading is only boilerplate", () => {
+    expect(projectArtefactName("M1 L14 — Student Project")).toBe("")
+    const [page] = buildLessonOutline({
+      learnContent: "",
+      hasIntroVideo: false,
+      questionCount: 0,
+      buildInstructions: "# Student Project\n\nDo it.",
+    })
+    expect(page!.title).toBe("Your project")
+    expect(page!.projectHeading).toBeUndefined()
   })
 
   it("adds no project page when the lesson has no build instructions", () => {
