@@ -26,6 +26,17 @@ const segmentLabels: Record<string, string> = {
 }
 
 /**
+ * Path segments that exist only to namespace the route and have no page of
+ * their own (W26).
+ *
+ * `/course/applied-ai-skills` was rendering a "COURSE" crumb linking to
+ * `/course`, which 404s — a dead link one click from the demo lesson. Same for
+ * the `lesson` segment in `/course/<slug>/lesson/<lessonSlug>`. They still read
+ * as crumbs, they just are not clickable.
+ */
+const NON_NAVIGABLE_SEGMENTS = new Set(["course", "lesson"])
+
+/**
  * Dynamic breadcrumb navigation that builds from the current URL path.
  * Handles route groups by filtering out segments in parentheses.
  */
@@ -63,6 +74,11 @@ export function BreadcrumbNav() {
                   <BreadcrumbPage className={styles.crumbCurrent}>
                     {label}
                   </BreadcrumbPage>
+                ) : NON_NAVIGABLE_SEGMENTS.has(segment) ? (
+                  // A plain span, not BreadcrumbPage: this crumb is neither a
+                  // link nor the current page, and BreadcrumbPage would tell
+                  // assistive tech it is the page you are on.
+                  <span className={styles.crumbLink}>{label}</span>
                 ) : (
                   <BreadcrumbLink href={href} className={styles.crumbLink}>
                     {label}
