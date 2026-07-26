@@ -1,0 +1,25 @@
+LOGIN(390) -> https://gwth.ai/dashboard
+
+── PAGE 1 @390 ──
+  CONTINUE: {"left":226,"right":370,"top":745,"bottom":789,"w":144,"h":44,"text":"CONTINUE →"}  (right<=390? true)
+  PREVIOUS: {"left":20,"right":189,"top":745,"bottom":789,"w":169,"h":44}
+  PAGINATION ROW: {"left":20,"right":370,"top":722,"bottom":817,"w":350,"h":95,"text":"← | PREVIOUS PAGE | PAGE 1 OF 13 | CONTINUE | →"}  (left>=0? true)
+  NARRATION BTN: null  (fully on screen? n/a)
+  OUTLINE TOGGLE: {"left":16,"right":93,"top":74,"bottom":104,"w":77,"h":30,"text":"P1/13"}
+  BREADCRUMB: {"left":64,"right":246,"top":22,"bottom":41,"w":182,"h":19,"text":"COURSE / APPLIED AI SKILLS / LESSON / WELCOME TO GWTH SIX WAYS AI CAN GIVE YOU S"}
+  BREADCRUMB x OUTLINE: {"xOverlap":29,"yOverlap":-33,"intersects":false}
+  scrollWidth=390 clientWidth=390 innerWidth=390 bodyScrollWidth=390 (equal? true)
+landed: PAGE 2 OF 13
+after F5 reload: PAGE 1 OF 13  (page state survives reload? false)
+re-advanced to: PAGE 2 OF 13
+
+── PAGE 2 @390 ──
+  CONTINUE: {"left":246,"right":370,"top":6324,"bottom":6367,"w":124,"h":44,"text":"CONTINUE →"}  (right<=390? true)
+  PREVIOUS: {"left":20,"right":189,"top":6324,"bottom":6367,"w":169,"h":44}
+  PAGINATION ROW: {"left":20,"right":370,"top":6301,"bottom":6395,"w":350,"h":95,"text":"← | PREVIOUS PAGE | PAGE 2 OF 13 | CONTINUE | →"}  (left>=0? true)
+  NARRATION BTN: {"left":16,"right":64,"top":6422,"bottom":6470,"w":48,"h":48,"label":"Play narration"}  (fully on screen? true)
+  OUTLINE TOGGLE: {"left":16,"right":93,"top":74,"bottom":104,"w":77,"h":30,"text":"P2/13"}
+  BREADCRUMB: {"left":64,"right":246,"top":22,"bottom":41,"w":182,"h":19,"text":"COURSE / APPLIED AI SKILLS / LESSON / WELCOME TO GWTH SIX WAYS AI CAN GIVE YOU S"}
+  BREADCRUMB x OUTLINE: {"xOverlap":29,"yOverlap":-33,"intersects":false}
+  scrollWidth=390 clientWidth=390 innerWidth=390 bodyScrollWidth=390 (equal? true)
+L2 AUDIO BAR @390: {"snippet":"NO READ-ALONG ON THIS LESSON\nRead-along audio is being added lesson by lesson through the beta. This one is a reading lesson.\nAUTO-ADVANCE ON\nFEEDBACK· 3\nNOTES· 7\nCommand Palette\n\nSearch for a command","stillProduction":false}

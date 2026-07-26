@@ -1,0 +1,50 @@
+### BEFORE the fix (captured 2026-07-26 01:30 UTC, prod commit ec81933)
+$ curl -s -o /dev/null -D - -H "Range: bytes=0-999" https://gwth.ai/explainer/explainer.mp4 -w "SIZE=%{size_download} CODE=%{http_code}"
+  HTTP/2 200
+  content-type: video/mp4
+  vary: Accept-Encoding
+  cf-cache-status: REVALIDATED
+  (no accept-ranges, no content-range)
+  SIZE=5870949 CODE=200
+
+### The origin was never at fault, same moment, bypassing Cloudflare
+$ curl -sk --resolve gwth.ai:443:195.201.177.66 -H "Range: bytes=0-999" https://gwth.ai/explainer/explainer.mp4
+  HTTP/2 206
+  accept-ranges: bytes
+  content-range: bytes 0-999/5870949
+  SIZE=1000 CODE=206
+
+### AFTER the fix, live now
+2026-07-26 02:20:12 UTC
+$ curl -s -o /dev/null -D - -H 'Range: bytes=0-999' https://gwth.ai/explainer/explainer.mp4
+  HTTP/2 206 
+  content-length: 1000
+  accept-ranges: bytes
+  cache-control: private, max-age=14400
+  content-range: bytes 0-999/5870949
+  cf-cache-status: BYPASS
+  bytes served match the source file: YES (sha256 head 5656f34f010e2846)
+
+$ curl -s -o /dev/null -D - -H 'Range: bytes=2000000-2000999' https://gwth.ai/explainer/explainer.mp4
+  HTTP/2 206 
+  content-length: 1000
+  accept-ranges: bytes
+  cache-control: private, max-age=14400
+  content-range: bytes 2000000-2000999/5870949
+  cf-cache-status: BYPASS
+  bytes served match the source file: YES (sha256 head 2823a30a023ed86d)
+
+$ curl -s -o /dev/null -D - -H 'Range: bytes=5870449-5870948' https://gwth.ai/explainer/explainer.mp4
+  HTTP/2 206 
+  content-length: 500
+  accept-ranges: bytes
+  cache-control: private, max-age=14400
+  content-range: bytes 5870449-5870948/5870949
+  cf-cache-status: BYPASS
+  bytes served match the source file: YES (sha256 head 228fb89ae04fd0b2)
+
+### The captions track, which Cloudflare never cached, always worked. Kept as the control.
+  HTTP/2 206 
+  accept-ranges: bytes
+  content-range: bytes 0-99/2047
+  cf-cache-status: DYNAMIC

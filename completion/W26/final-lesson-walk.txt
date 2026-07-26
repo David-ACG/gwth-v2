@@ -1,0 +1,48 @@
+LOGIN ok -> https://gwth.ai/dashboard
+?page=13 deep link http 200 -> quiz present=false
+outline sidebar jump -> quiz present=true
+WRONG picked. status before submit: "3 OF 3 ANSWERED"
+WRONG SUBMIT status: "SCORE 0% · 67% NEEDED"
+WRONG detail: {"score":"SCORE 0% · 67% NEEDED","retryPresent":true,"finishPresent":false,"toasts":["Score 0%. You need 67% to pass. Retry when ready."]}
+after RETRY status: "0 OF 3 ANSWERED"
+RIGHT picked. status before submit: "3 OF 3 ANSWERED"
+RIGHT SUBMIT status: "SCORE 100% · PASSED"
+RIGHT detail: {"retryPresent":false,"finishPresent":true,"finishRect":[996,975,240,43],"finishEnabled":true,"blockedHint":null,"toasts":["Q&A passed at 100%. Saved to your progress."]}
+NAV lesson links: []
+NAV prev/next candidates: []
+LESSON PAGER: []
+OUTLINE entries (13): ["Why this lesson existsVIDEO · 4 MINP01","OverviewPROSE · 6 MINP02","What this lesson is, and what it is notPROSE · 1 MINP03","What GWTH stands forPROSE · 1 MINP04","Why this matters now, in the UKPROSE · 3 MINP05","The six AI superpowersPROSE · 8 MINP06","The honest limits: the jagged frontierPROSE · 2 MINP07","Demonstration: a council letterCODE · 2 MINP08","The shape of the coursePROSE · 6 MINP09","Your first project: the Superpowers WishlistPROSE · 1 MINP10","RecapPROSE · 1 MINP11","Bridge to L02PROSE · 1 MINP12","End-of-lesson Q&AQ&A · 3 QUESTIONSP13"]
+PROJECT link candidates: []
+PROJECT PROBE /projects -> http 404 url=https://gwth.ai/projects title="GWTH.ai | Applied AI Course for the UK" bodyLen=115
+PROJECT PROBE /course/applied-ai-skills/project/superpowers-wishlist -> http 404 url=https://gwth.ai/course/applied-ai-skills/project/superpowers-wishlist title="GWTH.ai | Applied AI Course for the UK" bodyLen=115
+PROJECT PROBE /labs -> http 200 url=https://gwth.ai/labs title="Labs: the Model Arena | GWTH.ai" bodyLen=4574
+COURSE http 200
+COURSE lesson links (26):
+   /course/applied-ai-skills/lesson/welcome-to-gwth-six-ways-ai-can-give-you-superpowers :: M1 L01Welcome to GWTH: Six Ways AI Can Give You Superpowers45m○Not started
+   /course/applied-ai-skills/lesson/your-ai-colleague-how-to-get-brilliant-help-without-giving-up-your-judgement :: M1 L02Your AI Colleague: How to Get Brilliant Help Without Giving Up Your Judgement45m○Not
+   /course/applied-ai-skills/lesson/how-ai-works-the-useful-bits-that-make-you-better-at-it :: M1 L03How AI Works: The Useful Bits That Make You Better At It45m○Not started
+   /course/applied-ai-skills/lesson/the-ai-tooling-landscape-where-ai-shows-up-in-real-life :: M1 L04The AI Tooling Landscape: Where AI Shows Up in Real Life45m○Not started
+   /course/applied-ai-skills/lesson/frontier-labs-tooling-openai-anthropic-google-and-what-to-use-when :: M1 L05Frontier Labs Tooling: OpenAI, Anthropic, Google and What to Use When45m○Not started
+   /course/applied-ai-skills/lesson/research-superpower-find-compare-and-verify-anything :: M1 L06Research Superpower: Find, Compare and Verify Anything45m○Not started
+   /course/applied-ai-skills/lesson/content-superpower-write-design-and-communicate-in-your-voice :: M1 L07Content Superpower: Write, Design and Communicate in Your Voice45m○Not started
+   /course/applied-ai-skills/lesson/thinking-superpower-plan-decide-and-learn-faster :: M1 L08Thinking Superpower: Plan, Decide and Learn Faster45m○Not started
+   /course/applied-ai-skills/lesson/building-superpower-make-your-first-useful-thing-without-coding :: M1 L09Building Superpower: Make Your First Useful Thing Without Coding45m○Not started
+   /course/applied-ai-skills/lesson/data-superpower-turn-messy-information-into-answers :: M1 L10Data Superpower: Turn Messy Information Into Answers45m○Not started
+   /course/applied-ai-skills/lesson/automation-superpower-save-time-by-connecting-repeatable-steps :: M1 L11Automation Superpower: Save Time by Connecting Repeatable Steps45m○Not started
+   /course/applied-ai-skills/lesson/agents-superpower-ai-that-can-do-things-for-you :: M1 L12Agents Superpower: AI That Can Do Things for You45m○Not started
+   /course/applied-ai-skills/lesson/agent-safety-how-to-stay-in-control :: M1 L13Agent Safety: How to Stay in Control45m○Not started
+   /course/applied-ai-skills/lesson/cv-and-linkedin-upgrade-tell-your-story-better-with-ai :: M1 L14CV and LinkedIn Upgrade: Tell Your Story Better with AI45m○Not started
+   /course/applied-ai-skills/lesson/job-search-and-interview-confidence-with-ai :: M1 L15Job Search and Interview Confidence with AI45m○Not started
+   /course/applied-ai-skills/lesson/ai-presentations-and-websites-make-ideas-visible :: M1 L16AI Presentations and Websites: Make Ideas Visible45m○Not started
+   /course/applied-ai-skills/lesson/ai-data-dashboards-turn-numbers-into-decisions :: M1 L17AI Data Dashboards: Turn Numbers Into Decisions45m○Not started
+   /course/applied-ai-skills/lesson/ai-power-tools-mcps-clis-skills-plugins-and-connectors :: M1 L18AI Power Tools: MCPs, CLIs, Skills, Plugins and Connectors45m○Not started
+   /course/applied-ai-skills/lesson/choosing-your-coding-tool-a-framework-that-outlives-the-names :: M1 L19Choosing Your Coding Tool: A Framework That Outlives the Names45m○Not started
+   /course/applied-ai-skills/lesson/ai-efficiency-better-results-for-less-cost :: M1 L20AI Efficiency: Better Results for Less Cost45m○Not started
+   /course/applied-ai-skills/lesson/familybot-blueprint-design-a-helpful-ai-for-home-life :: M1 L21FamilyBot Blueprint: Design a Helpful AI for Home Life45m○Not started
+   /course/applied-ai-skills/lesson/familybot-listens-turn-voice-notes-or-meetings-into-useful-text :: M1 L22FamilyBot Listens: Turn Voice Notes or Meetings Into Useful Text45m○Not started
+   /course/applied-ai-skills/lesson/familybot-organises-extract-tasks-meals-events-and-shopping :: M1 L23FamilyBot Organises: Extract Tasks, Meals, Events and Shopping45m○Not started
+   /course/applied-ai-skills/lesson/familybot-shares-make-the-outputs-useful-for-real-life :: M1 L24FamilyBot Shares: Make the Outputs Useful for Real Life45m○Not started
+   /course/applied-ai-skills/lesson/month-1-portfolio-show-what-you-can-now-do-with-ai :: M1 L25Month 1 Portfolio: Show What You Can Now Do with AI45m○Not started
+   /course/applied-ai-skills/lesson/month-1-review-your-next-step-toward-month-2 :: M1 L26Month 1 Review: Your Next Step Towards Month 245m○Not started
+L2 http 200 h1="Your AI Colleague: How to Get Brilliant Help Without Giving Up Your Judgement" mainTextLen=3349
+L2 AUDIO BAR: {"snippet":"NO READ-ALONG ON THIS LESSON\nRead-along audio is being added lesson by lesson through the beta. This one is a reading lesson.\nAUTO-ADVANCE ON\nFEEDBACK· 3\nNOTES· 7\nCommand Palette\n\nSearch for a command to run...","hasAudioEl":true,"stillSaysProduction":false,"barRect":[528,2168,912,66]}
