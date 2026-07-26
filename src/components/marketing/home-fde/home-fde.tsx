@@ -145,12 +145,21 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               most of it keeps working without you.
             </p>
           </div>
+          {/*
+            Every home figure carries `sizes` mirroring the width its column
+            actually renders at. Without it next/image assumes 100vw and picks
+            a candidate from the viewport alone, so a 390px phone was pulling
+            the w=3840 variant of the issues image (209 KB) into a 348px slot
+            when the w=640 variant (24 KB) would do. About 250 KB of wasted
+            payload on a mobile home-page load (W26).
+          */}
           <figure className={`${styles.figure} ${styles.figureCover}`}>
             <Image
               src="/home/home-build-desk-c.png"
               alt="A person photographed from above working at a pastel-blue paper laptop, surrounded by sticker doodles of gears, a lightbulb, a database, and an app chart"
               width={1376}
               height={768}
+              sizes="(max-width: 768px) 100vw, 1100px"
             />
           </figure>
         </div>
@@ -177,6 +186,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               alt="A person holding a cream credential card with a gold star seal, joined by dashed ink lines to nine sticker cards with doodle motifs"
               width={1264}
               height={848}
+              sizes="(max-width: 768px) 100vw, 840px"
             />
             <figcaption className={styles.figCaption}>
               Nine ways in, one proof at the end.
@@ -254,6 +264,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               alt="Three pinned paper journal booklets labelled Month 1, Month 2, and Month 3, with a chat bubble, gears, and a rocket doodle sticker"
               width={2400}
               height={1792}
+              sizes="(max-width: 768px) 100vw, 640px"
             />
           </figure>
           <div className={styles.issueList}>
@@ -312,6 +323,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
                 alt="A hand placing a coral paper flag on a winding trail of ink dashes leading up to a cream credential card with a gold star seal"
                 width={928}
                 height={1152}
+                sizes="(max-width: 768px) 100vw, 320px"
               />
             </figure>
           </div>
@@ -404,6 +416,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               alt="Two hands arranging a calm row of five paper artefacts: a web page, a bar chart, an automation flow, a friendly robot, and a portfolio folder with a gold star"
               width={1584}
               height={672}
+              sizes="(max-width: 768px) 100vw, 900px"
             />
           </figure>
           <h2>
