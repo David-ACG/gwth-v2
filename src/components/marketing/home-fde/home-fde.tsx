@@ -105,7 +105,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
               <p className={styles.heroStandfirst}>
                 A three-month applied AI course for UK adults: build apps,
                 automate workflows, research faster, and analyse data in plain
-                English. Every lesson and project leaves practical progress
+                English. Every lesson and project builds practical progress
                 and portfolio evidence.
               </p>
               <p className={styles.heroByline}>
@@ -140,9 +140,12 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
           <div className={styles.coverLead}>
             <p className={styles.mono}>What building looks like</p>
             <p className={styles.coverLeadText}>
-              Everything here ends up as something you can open, run and hand
-              to somebody else. It stays yours after the lesson finishes, and
-              most of it keeps working without you.
+              Everything you build in the practical &ldquo;projects&rdquo;
+              part of lessons ends up as something you can open, run and hand
+              to somebody else like a friend or colleague. It stays yours
+              after the lesson finishes, and most of it, like sites, apps or
+              documents are automatically placed in your portfolio for future
+              reference.
             </p>
           </div>
           {/*
@@ -173,12 +176,12 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
           </div>
           <p className={styles.sectionLead}>
             Whether you are reskilling, running a small business, or trying to
-            keep your team ahead, the end point is the same: practical work
-            and portfolio evidence someone else can inspect. Month 1 starts
-            with personal projects on purpose. They matter to everybody and
-            they are good fun, which is what carries people through the first
-            few weeks. After that you choose the lessons that fit your own
-            skills and where you want to get to.
+            keep your team ahead of the curve, the end point is the same:
+            practical work and portfolio evidence someone else can inspect.
+            Month 1 starts with personal projects on purpose. They matter to
+            everybody and they are good fun, which is what carries people
+            through the first few weeks. After that you choose the lessons
+            that fit your own skills and where you want to get to.
           </p>
           <figure className={`${styles.figure} ${styles.figureInset}`}>
             <Image
@@ -420,12 +423,13 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             />
           </figure>
           <h2>
-            Start free, <em>decide later.</em>
+            Try one month and <em>decide if you want to continue.</em>
           </h2>
           <p>
-            Try the labs, read a lesson, and see whether the calm practical
-            route fits. Join the waitlist when you want the full course and
-            beta progress tracking.
+            We charge per month and you can stop at any time. We also offer a
+            money back guarantee during the first month - so if you find it is
+            not for you, just cancel and you will get a refund if you have
+            completed less than 5 hours of lessons.
           </p>
           <div className={styles.closingActions}>
             <Link href="/waitlist" className={styles.buttonSolid}>
