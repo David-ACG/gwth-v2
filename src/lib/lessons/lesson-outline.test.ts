@@ -117,6 +117,35 @@ describe("buildLessonOutline (gwth-launch-qar)", () => {
     expect(core?.kindLabel).toContain("CODE")
   })
 
+  /**
+   * Real M1 L05 headings. The rail renders plain text, so `*` and backticks in
+   * a `##` heading were printed literally: "Your project: *My AI Toolkit Map*".
+   */
+  it("strips markdown emphasis out of section titles", () => {
+    const pages = buildLessonOutline({
+      learnContent:
+        "## Your project: *My AI Toolkit Map*\n\nBody.\n\n" +
+        "## A short, honest aside about what we have *not* taught\n\nBody.\n\n" +
+        "## Run `npm run build` first\n\nBody.\n",
+      hasIntroVideo: false,
+      questionCount: 0,
+    })
+    expect(pages.map((p) => p.title)).toEqual([
+      "Your project: My AI Toolkit Map",
+      "A short, honest aside about what we have not taught",
+      "Run npm run build first",
+    ])
+  })
+
+  it("leaves snake_case alone (underscores are not emphasis here)", () => {
+    const [page] = buildLessonOutline({
+      learnContent: "## Save it as m1l01_my_ai_superpowers_wishlist\n\nBody.\n",
+      hasIntroVideo: false,
+      questionCount: 0,
+    })
+    expect(page!.title).toBe("Save it as m1l01_my_ai_superpowers_wishlist")
+  })
+
   it("produces DIFFERENT outlines for different lessons (no placebo)", () => {
     const welcome = buildLessonOutline({
       learnContent: WELCOME,

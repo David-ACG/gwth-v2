@@ -469,6 +469,53 @@ describe("EditorialLessonViewer student project page", () => {
     ).toBeInTheDocument()
   })
 
+  /**
+   * M1 L05 carries a body section called "Your project: My AI Toolkit Map" AND
+   * a project page of the same name, so the rail holds two identically titled
+   * rows. The rows used to be keyed by title, which React warns about and
+   * explicitly calls unsupported ("children may be duplicated and/or
+   * omitted"); they are keyed by position now. This pins the behaviour that
+   * matters either way: the second row is reachable and selects the project.
+   */
+  it("tracks the right rail row when two pages share a title", async () => {
+    const duplicate: EditorialLessonMeta["pages"] = [
+      {
+        title: "Your project: My AI Toolkit Map",
+        kindLabel: "PROSE · 2 MIN",
+        kind: "prose",
+        content: "The lesson introduces the project.",
+      },
+      {
+        title: "Your project: My AI Toolkit Map",
+        kindLabel: "PROJECT · 9 MIN",
+        kind: "project",
+        projectHeading: "My AI Toolkit Map",
+        content: "## What you are making\n\nThe map.",
+      },
+    ]
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson({ pages: duplicate, introVideoUrl: null })}
+        initialSurface="prose"
+        initialPage={1}
+      />
+    )
+    const rows = screen.getAllByRole("button", {
+      name: /Your project: My AI Toolkit Map/,
+    })
+    expect(rows).toHaveLength(2)
+    expect(rows[0]).toHaveAttribute("aria-current", "page")
+
+    // Jumping to the second row must move the current marker onto it and
+    // switch the body to the project - not re-select the identically named
+    // first row.
+    await user.click(rows[1]!)
+    expect(rows[1]).toHaveAttribute("aria-current", "page")
+    expect(rows[0]).not.toHaveAttribute("aria-current")
+    expect(screen.getByText("MAKE THIS")).toBeInTheDocument()
+  })
+
   it("shows the project in the outline rail and reaches it via CONTINUE", async () => {
     const user = userEvent.setup()
     render(

@@ -135,30 +135,22 @@ const PROJECT_HEADING_NOISE = [
 /** A dash or colon joining heading boilerplate to the artefact name. */
 const HEADING_SEPARATOR = /^[-–—:]\s*/
 
-/** Markdown emphasis/code wrappers around a heading, e.g. `*My AI Map*`. */
-const HEADING_WRAPPERS: ReadonlyArray<readonly [string, string]> = [
-  ["**", "**"],
-  ["*", "*"],
-  ["_", "_"],
-  ["`", "`"],
-]
-
-/** Removes markdown emphasis/code marks wrapping a whole heading. */
-function unwrapEmphasis(heading: string): string {
-  let out = heading.trim()
-  for (;;) {
-    const before = out
-    for (const [open, close] of HEADING_WRAPPERS) {
-      if (
-        out.length > open.length + close.length &&
-        out.startsWith(open) &&
-        out.endsWith(close)
-      ) {
-        out = out.slice(open.length, out.length - close.length).trim()
-      }
-    }
-    if (out === before) return out
-  }
+/**
+ * Strips markdown emphasis and code marks out of a heading so the outline rail
+ * shows words, not syntax. Real Month-1 headings carry them mid-title
+ * ("Your project: *My AI Toolkit Map*", "what we have *not* taught"), and the
+ * rail renders plain text, so the marks were showing up literally.
+ *
+ * Underscores are deliberately left alone: headings in this corpus do not use
+ * `_emphasis_`, but they do carry snake_case filenames that a `_..._` rule
+ * would silently mangle.
+ */
+export function plainHeading(heading: string): string {
+  return heading
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .trim()
 }
 
 /**
@@ -177,7 +169,7 @@ export function projectArtefactName(heading: string): string {
     out = out.replace(HEADING_SEPARATOR, "").trimStart()
     if (out === before) break
   }
-  return unwrapEmphasis(out)
+  return plainHeading(out)
 }
 
 /**
@@ -240,7 +232,9 @@ export function buildLessonOutline({
       for (const section of sections) {
         const isCode = hasCodeFence(section.body)
         pages.push({
-          title: section.title || LEAD_IN_TITLE,
+          // The rail renders plain text, so markdown emphasis in a `##`
+          // heading has to come off or the marks show up literally.
+          title: plainHeading(section.title) || LEAD_IN_TITLE,
           kindLabel: `${isCode ? "CODE" : "PROSE"} · ${readingMinutes(section.body)} MIN`,
           kind: isCode ? "code" : "prose",
           content: section.body,

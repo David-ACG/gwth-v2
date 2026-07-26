@@ -701,7 +701,11 @@ function OutlineRail({
             n < currentPage ? "done" : n === currentPage ? "current" : "pending"
           return (
             <button
-              key={page.title}
+              // Keyed by position, not title: a lesson can legitimately carry
+              // two pages with the same name (L05 has a body section "Your
+              // project: My AI Toolkit Map" AND the project page of that name),
+              // and a duplicate key makes React reuse the wrong row.
+              key={n}
               type="button"
               onClick={() => onSelectPage?.(n)}
               aria-current={state === "current" ? "page" : undefined}
@@ -817,7 +821,9 @@ function OutlineSheet({
               n < currentPage ? "done" : n === currentPage ? "current" : "pending"
             return (
               <button
-                key={page.title}
+                // Position, not title — see the OutlineRail note; here a
+                // duplicate key would also cross the focus refs.
+                key={n}
                 ref={(el) => {
                   itemRefs.current[i] = el
                 }}
