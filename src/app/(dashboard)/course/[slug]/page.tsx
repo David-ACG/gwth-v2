@@ -222,9 +222,11 @@ export default async function CourseDetailPage({ params }: PageProps) {
             <p className={styles.mono}>Course</p>
           </div>
           <p className={styles.lead}>{course.description}</p>
+          {/* Same two-scope trap as the teaser header above (W26): the lesson
+              count is what exists today, the hours are the whole course. */}
           <p className={styles.metaRow}>
-            {totalLessons} lessons · {formatDuration(course.estimatedDuration)}{" "}
-            · 3 months
+            {totalLessons} lessons available now ·{" "}
+            {formatDuration(course.estimatedDuration)} across 3 months
           </p>
           {/* Completion rules live here, said once — never inside lessons. */}
           <p className={styles.metaRow}>

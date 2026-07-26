@@ -270,10 +270,111 @@ if (ONLY === "all" || ONLY === "student") {
       record(`${step.path} @${w.name} loads`, resp.status() === 200 && !page.url().includes("/login"),
         `http ${resp.status()} at ${page.url()}`)
       await page.screenshot({ path: `${OUT}/prod-${step.shot}-${w.name}.png`, fullPage: true })
+
+      // ── Per-surface assertions for the specific defects W26 closed ────────
+      if (step.path === LESSON) {
+        // The blocker: a skeleton that never came down sat over the intro
+        // video, hiding it and swallowing the click that would start it.
+        const intro = await page.evaluate(async () => {
+          const v = document.querySelector("video")
+          if (!v) return { present: false }
+          const skeletons = [...document.querySelectorAll('[data-slot="skeleton"]')]
+          const covering = skeletons.filter((s) => {
+            const r = s.getBoundingClientRect()
+            const vr = v.getBoundingClientRect()
+            return r.width > 0 && r.right > vr.left && r.left < vr.right &&
+              r.bottom > vr.top && r.top < vr.bottom
+          })
+          v.muted = true
+          await v.play().catch(() => {})
+          await new Promise((r) => setTimeout(r, 3500))
+          return {
+            present: true,
+            covering: covering.length,
+            readyState: v.readyState,
+            currentTime: v.currentTime,
+            duration: v.duration,
+          }
+        })
+        record(`lesson intro video is not covered by a skeleton @${w.name}`,
+          intro.present && intro.covering === 0,
+          intro.present
+            ? `${intro.covering} covering skeleton(s), readyState ${intro.readyState}`
+            : "no <video> element")
+        record(`lesson intro video plays @${w.name}`,
+          Boolean(intro.present && intro.currentTime > 0.5),
+          `currentTime ${(intro.currentTime ?? 0).toFixed(2)}s of ${(intro.duration ?? 0).toFixed(1)}s`)
+
+        const h1 = (await page.locator("h1").first().innerText().catch(() => "")).trim()
+        record(`lesson H1 punctuation restored @${w.name}`,
+          h1.includes("Welcome to GWTH:"),
+          `H1 reads "${h1}"`)
+        record(`lesson H1 carries no em dash @${w.name}`, !h1.includes("—"), `H1 "${h1}"`)
+      }
+
+      if (step.path === "/course/applied-ai-skills") {
+        const dead = await page.locator('a[href="/course"]').count()
+        record(`no breadcrumb link to the 404 route /course @${w.name}`, dead === 0,
+          `${dead} anchors with href="/course"`)
+        const meta = await page.locator("body").innerText()
+        record(`course header names what each number measures @${w.name}`,
+          /lessons available now/i.test(meta) && /across 3 months/i.test(meta),
+          meta.match(/\d+ LESSONS[^\n]*/i)?.[0] ?? "meta row not found")
+      }
+
+      if (step.path === "/labs" || step.path === "/labs/job-advert-claude-vs-chatgpt") {
+        const text = await page.locator("body").innerText()
+        const promises = ["no account", "free to read", "no account needed"].filter((s) =>
+          text.toLowerCase().includes(s)
+        )
+        record(`${step.path} no longer promises anonymous access @${w.name}`,
+          promises.length === 0,
+          promises.length ? `still says: ${promises.join(", ")}` : "no anonymous-access promise")
+      }
+
+      if (step.path === "/pricing") {
+        const bad = await page.locator('a[href="/signup"]').count()
+        record(`no waitlist CTA pointing at closed signup @${w.name}`, bad === 0,
+          `${bad} anchors with href="/signup"`)
+      }
+
+      if (step.path === "/") {
+        record(`home title carries the brand once @${w.name}`,
+          (await page.title()).split("GWTH.ai").length === 2,
+          `title "${await page.title()}"`)
+      }
+
+      if (step.path === "/progress" || step.path === "/dashboard") {
+        // The launcher used to sit 5px past the viewport and 2px from
+        // right-aligned stat meta, so the meta read as truncated.
+        const tab = await page.evaluate(() => {
+          const el = [...document.querySelectorAll("button")].find((b) =>
+            /report a problem/i.test(b.textContent || "")
+          )
+          if (!el) return null
+          const r = el.getBoundingClientRect()
+          return { right: Math.round(r.right), width: Math.round(r.width) }
+        })
+        record(`report-a-problem tab stays inside the viewport @${w.name}`,
+          Boolean(tab && tab.right <= w.width),
+          tab ? `right edge ${tab.right} against ${w.width}px` : "launcher not found")
+      }
     }
 
     await ctx.close()
   }
+}
+
+// ── 4. robots.txt names the search crawlers ─────────────────────────────────
+if (ONLY === "all" || ONLY === "robots") {
+  const ctx = await browser.newContext({ userAgent: UA })
+  const body = await (await ctx.request.get(`${BASE}/robots.txt`)).text()
+  for (const bot of ["Googlebot", "Bingbot", "DuckDuckBot", "Applebot"]) {
+    const named = new RegExp(`^User-Agent: ${bot}$\\nDisallow: /$`, "mi").test(body)
+    record(`robots.txt blocks ${bot} by name`, named,
+      named ? "named group present with Disallow: /" : "no named group")
+  }
+  await ctx.close()
 }
 
 await browser.close()
