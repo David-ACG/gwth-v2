@@ -191,8 +191,10 @@ describe("EditorialLessonViewer audio bar", () => {
         initialSurface="prose"
       />
     )
+    // W26 reframed this state: still honest, no longer worded as though
+    // something behind the scenes were broken.
     expect(
-      screen.getByText("NARRATION NOT AVAILABLE YET")
+      screen.getByText("NO READ-ALONG ON THIS LESSON")
     ).toBeInTheDocument()
     expect(
       screen.queryByRole("button", { name: "Play narration" })

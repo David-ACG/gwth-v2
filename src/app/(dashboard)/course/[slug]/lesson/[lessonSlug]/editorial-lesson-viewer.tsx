@@ -1199,15 +1199,23 @@ function AudioBar({
               <SpeakerOffIcon />
             </span>
             <div>
+              {/*
+                25 of the 26 Month-1 lessons have no narration yet, so this is
+                the state a visitor meets on almost every lesson. It used to
+                say the narration was "still in production", which reads as
+                something broken behind the scenes rather than as a plan. The
+                honest state is unchanged, the framing is not: read-along audio
+                is being added lesson by lesson through the beta (W26).
+              */}
               <div className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 {variant === "muted"
                   ? "NARRATION MUTED FOR VIDEO"
-                  : "NARRATION NOT AVAILABLE YET"}
+                  : "NO READ-ALONG ON THIS LESSON"}
               </div>
               <div className="mt-0.5 font-serif text-[13px] italic text-muted-foreground">
                 {variant === "muted"
                   ? "Audio resumes on the next prose page."
-                  : "This lesson's narration is still in production. Read on at your own pace."}
+                  : "Read-along audio is being added lesson by lesson through the beta. This one is a reading lesson."}
               </div>
             </div>
           </div>
