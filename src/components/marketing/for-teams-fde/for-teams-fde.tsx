@@ -1,6 +1,7 @@
 import Link from "next/link"
 import {
   COURSE_MONTHLY_PRICE,
+  MONTH_CONFIGS,
   ONGOING_MONTHLY_PRICE,
   TOTAL_MANDATORY_LESSONS,
   TOTAL_OPTIONAL_LESSONS,
@@ -8,6 +9,17 @@ import {
 import { UK_STATS, RESEARCH_SOURCES } from "@/components/marketing/data"
 import styles from "./for-teams-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
+
+/**
+ * Per-month lesson counts, read from config rather than retyped, so this page
+ * cannot drift from the course page and the dashboard (W26 defect 4).
+ */
+function lessonCount(month: 1 | 2 | 3): string {
+  const config = MONTH_CONFIGS[month - 1]!
+  return config.optionalLessons > 0
+    ? `${config.mandatoryLessons} mandatory + ${config.optionalLessons} optional`
+    : `${config.mandatoryLessons} mandatory`
+}
 
 /** Differentiator entries for the numbered journal list. */
 const WHY_GWTH = [
@@ -52,7 +64,7 @@ const MONTHS = [
   {
     month: 1,
     title: "Foundations",
-    lessons: "24 mandatory",
+    lessons: lessonCount(1),
     flavour: "flvTeal" as const,
     description:
       "Move beyond using ChatGPT like Google. Learn AI foundations, the six primitives, and practical AI-assisted building.",
@@ -60,7 +72,7 @@ const MONTHS = [
   {
     month: 2,
     title: "Apps, Workflows & Consulting",
-    lessons: "20 mandatory + 15 optional",
+    lessons: lessonCount(2),
     flavour: "flvMoss" as const,
     description:
       "Go deeper into building, workflows, small-business use cases, and consultant-level applied AI skills.",
@@ -68,7 +80,7 @@ const MONTHS = [
   {
     month: 3,
     title: "Enterprise Transformation",
-    lessons: "20 mandatory + 15 optional",
+    lessons: lessonCount(3),
     flavour: "flvRust" as const,
     description:
       "Multi-agent systems, self-hosted AI, governance frameworks, ROI measurement, and change management. The strategic layer that turns individual skills into organisational capability.",
@@ -93,7 +105,7 @@ const FAQS = [
   },
   {
     question: "What is the ROI?",
-    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE.toFixed(2)}/month for each person, with monthly access rather than an annual lock-in. By Month 1, your team should be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives.`,
+    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE}/mo for each person, with monthly access rather than an annual lock-in. By Month 1, your team should be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives.`,
   },
   {
     question: "Our team is not technical. Is this appropriate?",
@@ -235,10 +247,9 @@ export function ForTeamsFde() {
             </h2>
           </div>
           <p className={styles.sectionLead}>
-            At £{COURSE_MONTHLY_PRICE.toFixed(2)}/month for 3 months, the
-            entire course costs £{COURSE_MONTHLY_PRICE.toFixed(2)}/month per
-            person. That is deliberately priced below even a short consultant
-            call.
+            At £{COURSE_MONTHLY_PRICE}/mo for 3 months, the entire course
+            costs £{COURSE_MONTHLY_PRICE}/mo per person. That is deliberately
+            priced below even a short consultant call.
           </p>
           <div className={styles.compareRow}>
             <article className={styles.compareCard}>
@@ -378,12 +389,12 @@ export function ForTeamsFde() {
             </div>
             <div className={styles.investBody}>
               <p className={styles.investPrice}>
-                <strong>£{COURSE_MONTHLY_PRICE.toFixed(2)}</strong>
-                <span>/month per person</span>
+                <strong>£{COURSE_MONTHLY_PRICE}</strong>
+                <span>/mo per person</span>
               </p>
               <p>
-                per course month, then £{ONGOING_MONTHLY_PRICE.toFixed(2)}
-                /month optional Stay Current access after course access ends.
+                per course month, then £{ONGOING_MONTHLY_PRICE.toFixed(2)}/mo
+                optional Stay Current access after course access ends.
               </p>
               <ul className={styles.ruledList}>
                 {TEAM_PRICE_FEATURES.map((feature) => (

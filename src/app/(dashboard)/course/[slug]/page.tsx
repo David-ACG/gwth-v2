@@ -137,9 +137,17 @@ export default async function CourseDetailPage({ params }: PageProps) {
               <p className={styles.mono}>Course</p>
             </div>
             <p className={styles.lead}>{course.description}</p>
+            {/*
+              Two different scopes sat side by side unlabelled and read as one
+              claim: totalLessons counts the lessons that exist today (Month 1,
+              26 of them at 45 minutes each, so 19.5 hours) while
+              estimatedDuration covers the whole three-month course. "26
+              lessons · 98h · 3 months" therefore looked like arithmetic that
+              does not work. Naming each scope is the smallest true fix (W26).
+            */}
             <p className={styles.metaRow}>
-              {totalLessons} lessons ·{" "}
-              {formatDuration(course.estimatedDuration)} · 3 months
+              {totalLessons} lessons available now ·{" "}
+              {formatDuration(course.estimatedDuration)} across 3 months
             </p>
           </header>
 

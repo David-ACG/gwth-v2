@@ -107,9 +107,6 @@ export const ONGOING_NEW_CONTENT_HOURS = 5
 /** Total optional lessons available across Months 2 & 3 */
 export const TOTAL_OPTIONAL_LESSONS = 30
 
-/** Total mandatory lessons across all 3 months */
-export const TOTAL_MANDATORY_LESSONS = 64
-
 /** Total course cost for 3 months (GBP) */
 export const TOTAL_COURSE_COST = COURSE_MONTHLY_PRICE * TOTAL_COURSE_MONTHS
 
@@ -135,7 +132,11 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     subtitle: "AI for Your Life",
     description:
       "Move beyond using ChatGPT like Google. Learn AI foundations, the six primitives, and AI-assisted coding/building as the main spine: apps, websites, dashboards, research projects, content packages, AI assistants, and automations.",
-    mandatoryLessons: 24,
+    // 26, not 24: production really holds 26 Month-1 lessons (months=1,
+    // orders 1..26), and the course page, the dashboard and the lesson viewer
+    // all count the rows rather than this config. Verified against the
+    // production database 2026-07-26 (W26 defect 4).
+    mandatoryLessons: 26,
     optionalLessons: 0,
     capstoneName: "Family AI Bot",
     capstoneDomain: "familyaibot.com",
@@ -169,6 +170,18 @@ export const MONTH_CONFIGS: MonthConfig[] = [
       "A working tool that evaluates any business's AI maturity and produces an actionable transformation roadmap.",
   },
 ]
+
+/**
+ * Total mandatory lessons across all 3 months.
+ *
+ * Derived from {@link MONTH_CONFIGS} rather than hardcoded: it used to be a
+ * standalone 64 and drifted out of step with the per-month numbers, so the
+ * marketing pages and the course page disagreed (W26 defect 4).
+ */
+export const TOTAL_MANDATORY_LESSONS = MONTH_CONFIGS.reduce(
+  (total, month) => total + month.mandatoryLessons,
+  0
+)
 
 /** Additional official capstones beyond the primary month card capstone */
 export const ADDITIONAL_CAPSTONES = [

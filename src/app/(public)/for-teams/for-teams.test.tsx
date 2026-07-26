@@ -1,6 +1,7 @@
 import { render, screen, cleanup } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import ForTeamsPage from "./page"
+import { TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 
 afterEach(cleanup)
 
@@ -17,9 +18,9 @@ describe("ForTeamsPage", () => {
     expect(
       screen.getByText(/The real cost is not the course/)
     ).toBeInTheDocument()
-    expect(
-      screen.getByText(/£29\.00\/month per person/)
-    ).toBeInTheDocument()
+    // Deliberately updated (W26): the page now uses the "£29/mo" form that
+    // home and /pricing already use, instead of a third "£29.00/month" form.
+    expect(screen.getByText(/£29\/mo per person/)).toBeInTheDocument()
   })
 
   it("renders the syllabus flexibility section", () => {
@@ -27,8 +28,12 @@ describe("ForTeamsPage", () => {
     expect(
       screen.getByText("Complete control over what your team learns")
     ).toBeInTheDocument()
+    // Read from config rather than hardcoded (W26): the standalone 64 drifted
+    // out of step with the per-month numbers once Month 1 became 26.
     expect(
-      screen.getAllByText(/64 mandatory lessons/).length
+      screen.getAllByText(
+        new RegExp(`${TOTAL_MANDATORY_LESSONS} mandatory lessons`)
+      ).length
     ).toBeGreaterThanOrEqual(1)
     expect(
       screen.getAllByText(/30 optional lessons/).length
@@ -88,8 +93,9 @@ describe("ForTeamsPage", () => {
 
   it("displays the pricing", () => {
     render(<ForTeamsPage />)
-    expect(screen.getByText("£29.00")).toBeInTheDocument()
-    expect(screen.getByText(/£7\.50\/month/)).toBeInTheDocument()
+    // Deliberately updated (W26): "£29" + "/mo", matching home and /pricing.
+    expect(screen.getByText("£29")).toBeInTheDocument()
+    expect(screen.getByText(/£7\.50\/mo/)).toBeInTheDocument()
   })
 
   it("has contact CTA", () => {

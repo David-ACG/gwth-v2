@@ -14,6 +14,8 @@ import {
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
   MONTH_CONFIGS,
+  TOTAL_MANDATORY_LESSONS,
+  TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -225,7 +227,9 @@ export const JOURNEYS: readonly Journey[] = [
 export const PRODUCT_PILLARS: readonly ProductPillar[] = [
   {
     n: "01",
-    label: "64 core lessons. 30 go-deeper lessons.",
+    // Derived, not typed out: the same number was hardcoded in four places and
+    // went stale the moment Month 1 grew from 24 lessons to 26 (W26).
+    label: `${TOTAL_MANDATORY_LESSONS} core lessons. ${TOTAL_OPTIONAL_LESSONS} go-deeper lessons.`,
     title: "Three months. Three levels of applied AI capability.",
     body:
       "Five hours a week. Async-first, so it works around the day job. Month 1 moves you beyond ChatGPT-as-Google. Month 2 turns that into apps and consulting skill. Month 3 moves into enterprise transformation.",
@@ -330,7 +334,7 @@ export const PRICING: readonly PricingTier[] = [
     per: "/mo · unlock one month at a time",
     features: [
       "Full Month 1 at beta launch; Months 2 and 3 follow",
-      "64 core lessons plus 30 go-deeper optional lessons",
+      `${TOTAL_MANDATORY_LESSONS} core lessons plus ${TOTAL_OPTIONAL_LESSONS} go-deeper optional lessons`,
       "Capstones for AskMyCo, FractionalBuddy, and AskEveryone",
       "Industry-specific modules for your field",
       "Plain course progress tracking",
