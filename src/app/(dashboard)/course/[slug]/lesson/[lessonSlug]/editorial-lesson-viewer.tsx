@@ -24,7 +24,7 @@ import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
 import {
   alignPagesToAudio,
   estimatePageStarts,
-  timestampsUrlFor,
+  timestampsFetchUrl,
   type AudioWord,
 } from "@/lib/lessons/audio-alignment"
 import ReactMarkdown from "react-markdown"
@@ -291,7 +291,10 @@ export function EditorialLessonViewer({
   )
 
   React.useEffect(() => {
-    const url = timestampsUrlFor(audioSrc)
+    // Through the site's own proxy: the media CDN sends no CORS header, so a
+    // direct cross-origin fetch is blocked and we would silently keep the
+    // estimate.
+    const url = timestampsFetchUrl(audioSrc)
     if (!url) return
     let cancelled = false
     void fetch(url)

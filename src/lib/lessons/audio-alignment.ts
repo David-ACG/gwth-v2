@@ -40,6 +40,24 @@ export function timestampsUrlFor(audioUrl: string | null | undefined): string | 
 }
 
 /**
+ * The URL the BROWSER should fetch the timings from: the site's own proxy at
+ * /api/lesson-timings.
+ *
+ * The media CDN sends no `Access-Control-Allow-Origin`, so fetching the
+ * sidecar cross-origin is blocked and the viewer silently drops to word-count
+ * estimates (this is exactly what happened on the first production deploy).
+ * `<img>` and `<audio>` are not CORS-gated, so nothing else on the page
+ * noticed.
+ */
+export function timestampsFetchUrl(
+  audioUrl: string | null | undefined
+): string | null {
+  const src = timestampsUrlFor(audioUrl)
+  if (!src) return null
+  return `/api/lesson-timings?src=${encodeURIComponent(src)}`
+}
+
+/**
  * Reduces markdown to the words a narrator actually speaks, lowercased and
  * split on non-alphanumerics.
  *
