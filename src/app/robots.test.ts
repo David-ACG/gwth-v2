@@ -34,6 +34,19 @@ describe("robots.txt", () => {
     }
   })
 
+  it("(W26) names the search crawlers so they outrank Cloudflare's wildcard Allow", () => {
+    // Cloudflare prepends a managed block whose own `User-agent: *` carries
+    // `Allow: /`. A crawler obeys the most specific matching group, so only a
+    // named group actually blocks the engines that drive indexing.
+    const result = robots()
+    const rules = result.rules as Array<{ userAgent: string; disallow: string }>
+    for (const crawler of ["Googlebot", "Bingbot", "DuckDuckBot", "Applebot"]) {
+      const rule = rules.find((r) => r.userAgent === crawler)
+      expect(rule, `Missing rule for ${crawler}`).toBeDefined()
+      expect(rule!.disallow).toBe("/")
+    }
+  })
+
   it("does not expose a sitemap", () => {
     const result = robots()
     expect(result.sitemap).toBeUndefined()
