@@ -1085,24 +1085,35 @@ function PageFooter({
   /** Draws a tick inside CONTINUE the moment the gate clears. */
   nextTick?: boolean
 }) {
+  // Below `sm` the three items are laid out as a two-row grid (buttons on the
+  // top row, page label centred beneath) and the fixed min-widths are dropped.
+  // The desktop row is unchanged from `sm` up.
+  //
+  // WHY: the old single row asked for 160px + ~110px label + 220px + two 16px
+  // gaps = ~522px of irreducible width. At 390px that cannot be satisfied, and
+  // because no ancestor scrolls horizontally (documentElement scrollWidth ===
+  // clientWidth) flexbox resolved it by pushing CONTINUE's right edge to 464px
+  // and PREVIOUS PAGE's left edge to -54px, so both were clipped off-screen
+  // rather than merely overflowing. min-w-0 on the flex/grid children is what
+  // lets them shrink; the fixed floors only apply once there is room for them.
   return (
-    <div className="mt-9 flex items-center justify-between gap-4 border-t border-border pt-[22px]">
+    <div className="mt-9 grid grid-cols-2 items-center gap-x-3 gap-y-3 border-t border-border pt-[22px] sm:flex sm:items-center sm:justify-between sm:gap-4">
       <SharpButton
         variant="ghost"
-        className="min-w-[160px]"
+        className="min-w-0 sm:min-w-[160px]"
         onClick={onPrev}
         disabled={prevDisabled}
       >
         <span aria-hidden="true">←</span> PREVIOUS PAGE
       </SharpButton>
-      <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="order-last col-span-2 text-center font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground sm:order-none sm:col-span-1 sm:text-left">
         PAGE {pageNum} OF {pageTotal}
       </div>
-      <div className="relative flex min-w-[220px] justify-end">
+      <div className="relative flex min-w-0 justify-end sm:min-w-[220px]">
         {advancing && <AdvancingPing onCancel={onCancelAdvance} />}
         <SharpButton
           variant={nextVariant}
-          className="min-w-[220px]"
+          className="min-w-0 sm:min-w-[220px]"
           onClick={onNext}
         >
           {nextTick && (
@@ -1210,14 +1221,22 @@ function AudioBar({
 
   const playing = variant === "playing"
   return (
-    <div className="sticky bottom-0 z-[5] border-t border-foreground bg-card px-7 py-3.5">
-      <div className="grid items-center gap-[22px] [grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]">
+    // Below `sm` the bar is two rows: play button + scrubber on top, speed and
+    // auto-advance beneath. The five-column desktop grid returns at `sm`.
+    //
+    // WHY: the desktop template asks for 52px + 1fr + three `auto` columns and
+    // four 22px gaps inside px-7 padding. The `auto` columns are sized by their
+    // content (a 3-up speed switch of 44px buttons plus the auto-advance
+    // toggle), so the row's minimum exceeded 390px and shunted the play button
+    // to left=-46 — all but 2px of the narration control off-screen.
+    <div className="sticky bottom-0 z-[5] border-t border-foreground bg-card px-4 py-3.5 sm:px-7">
+      <div className="grid items-center gap-x-[22px] gap-y-3 [grid-template-columns:52px_minmax(0,1fr)] sm:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]">
         <button
           type="button"
           aria-label={playing ? "Pause narration" : "Play narration"}
           onClick={onTogglePlay}
           className={cn(
-            "inline-flex size-12 items-center justify-center border",
+            "inline-flex size-12 shrink-0 items-center justify-center border",
             playing
               ? "border-primary bg-primary text-primary-foreground"
               : "border-foreground bg-foreground text-background"
@@ -1243,27 +1262,33 @@ function AudioBar({
           <SeekableTrack progress={progress} playing={playing} onSeek={onSeek} />
         </div>
 
-        <div className="flex border border-border">
-          {(["1x", "1.25x", "1.5x"] as const).map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => onChangeSpeed(s)}
-              className={cn(
-                "min-w-[44px] cursor-pointer border-none px-2.5 py-1.5 font-mono text-[11px] font-bold tracking-[0.04em]",
-                s === speed
-                  ? "bg-foreground text-background"
-                  : "bg-transparent text-muted-foreground"
-              )}
-            >
-              {s}
-            </button>
-          ))}
+        {/* Second row below `sm`: the speed switch and auto-advance toggle sit
+            under the scrubber, spanning both columns, so neither can force the
+            grid wider than the viewport. */}
+        <div className="col-span-2 flex flex-wrap items-center gap-x-[22px] gap-y-3 sm:col-span-1 sm:contents">
+          <div className="flex shrink-0 border border-border">
+            {(["1x", "1.25x", "1.5x"] as const).map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => onChangeSpeed(s)}
+                className={cn(
+                  "min-w-[44px] cursor-pointer border-none px-2.5 py-1.5 font-mono text-[11px] font-bold tracking-[0.04em]",
+                  s === speed
+                    ? "bg-foreground text-background"
+                    : "bg-transparent text-muted-foreground"
+                )}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          {/* Hairline separator only reads between side-by-side controls. */}
+          <div className="hidden h-9 w-px bg-border sm:block" />
+
+          <AutoAdvanceToggle on={autoAdvance} onToggle={onToggleAutoAdvance} />
         </div>
-
-        <div className="h-9 w-px bg-border" />
-
-        <AutoAdvanceToggle on={autoAdvance} onToggle={onToggleAutoAdvance} />
       </div>
     </div>
   )

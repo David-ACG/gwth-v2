@@ -90,6 +90,67 @@
   color-scheme: dark;
 }
 
+/* ── Sticky-header breadcrumb containment (mobile) ────────────────────
+ *
+ * The dashboard header is a fixed h-16 (64px) bar, but its breadcrumb trail
+ * is free to wrap. On a lesson URL the last crumb is the full lesson slug
+ * ("WELCOME TO GWTH SIX WAYS AI CAN GIVE YOU SUPERPOWERS"), which at 390px
+ * wrapped onto four lines and measured 160px tall: it overflowed the header
+ * top AND bottom (rect top:-49 bottom:112 against a header ending at 64), so
+ * the leading crumbs were clipped off the top of the screen and the trailing
+ * ones were painted straight through the viewer's own "P1/13" outline toggle
+ * at top:74..104. Both were left hard to read.
+ *
+ * The header and breadcrumb components are owned elsewhere, so the fix is
+ * applied from the viewer's own stylesheet and is deliberately scoped two
+ * ways: `:has([data-section="lesson-viewer"])` means it only ever engages on
+ * a page that actually renders this viewer, and the max-width query means it
+ * only engages below the `sm` breakpoint. Desktop breadcrumbs are untouched.
+ *
+ * The trail is forced onto one line and the final crumb ellipsised. The full
+ * title stays available to assistive tech: this only clips the visual glyphs,
+ * the accessible name of the crumb element is unchanged.
+ */
+@media (max-width: 639px) {
+  /* The <nav> is a flex child of the header with the default min-width:auto,
+     so on its own `nowrap` below just makes it grow past the viewport (it
+     measured 431px wide and pushed document scrollWidth to 623). Bounding the
+     nav is what gives the ellipsis a width to resolve against; `flex-shrink`
+     lets it yield to the search/theme/avatar cluster beside it. */
+  :global(body:has([data-section="lesson-viewer"]) header nav) {
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+
+  :global(body:has([data-section="lesson-viewer"]) header nav ol) {
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  /* min-width:0 defeats the default min-width:auto on the flex items so the
+     last crumb is allowed to shrink below its content width and ellipsise. */
+  :global(body:has([data-section="lesson-viewer"]) header nav ol li) {
+    min-width: 0;
+  }
+
+  :global(body:has([data-section="lesson-viewer"]) header nav ol li:last-child),
+  :global(
+    body:has([data-section="lesson-viewer"]) header nav ol li:last-child > *
+  ) {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* The separators and namespace crumbs must not be squeezed to nothing. */
+  :global(body:has([data-section="lesson-viewer"]) header nav ol li:not(:last-child)),
+  :global(body:has([data-section="lesson-viewer"]) header nav ol > :not(li)) {
+    flex-shrink: 0;
+  }
+}
+
 /* ── Register idioms used by the viewer ──────────────────────────────── */
 
 .mono {

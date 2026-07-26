@@ -386,3 +386,54 @@ describe("EditorialLessonViewer navigation", () => {
     ).toBeInTheDocument()
   })
 })
+
+// ── Mobile layout ────────────────────────────────────────────────────────────
+
+/**
+ * At 390px the pagination row and the audio bar both used to demand more
+ * width than the viewport had, and because nothing scrolls horizontally the
+ * overflow was CLIPPED: CONTINUE rendered at right=464 against a 390px
+ * viewport and the narration play button at left=-46.
+ *
+ * jsdom has no layout engine, so these assert the class contract that carries
+ * the fix rather than pretending to measure geometry (the real numbers are
+ * verified with Playwright at 390x844). The invariant each one protects is
+ * that the fixed desktop floor is gated behind `sm:` and the element is free
+ * to shrink below it.
+ */
+describe("EditorialLessonViewer mobile layout", () => {
+  it("lets the pagination buttons shrink below the sm breakpoint", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="prose"
+        initialPage={2}
+      />
+    )
+    const next = screen.getByRole("button", { name: /CONTINUE/ })
+    // The 220px floor must only apply from `sm` up; unprefixed it re-creates
+    // the clipped-off-screen button at 390px.
+    expect(next.className).toContain("sm:min-w-[220px]")
+    expect(next.className).toContain("min-w-0")
+    expect(next.className).not.toMatch(/(^|\s)min-w-\[220px\]/)
+
+    const prev = screen.getByRole("button", { name: /PREVIOUS PAGE/ })
+    expect(prev.className).toContain("sm:min-w-[160px]")
+    expect(prev.className).not.toMatch(/(^|\s)min-w-\[160px\]/)
+  })
+
+  it("keeps the narration controls inside the viewport on mobile", () => {
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />
+    )
+    const play = screen.getByRole("button", { name: /Play narration/ })
+    // The five-column audio grid is what pushed this button to left=-46, so
+    // it must be reachable only from `sm` up.
+    const grid = play.parentElement
+    expect(grid).not.toBeNull()
+    expect(grid!.className).toContain(
+      "sm:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]"
+    )
+    expect(grid!.className).toContain("[grid-template-columns:52px_minmax(0,1fr)]")
+  })
+})
