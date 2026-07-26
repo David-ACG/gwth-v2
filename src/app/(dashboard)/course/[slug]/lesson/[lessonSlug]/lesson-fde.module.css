@@ -90,6 +90,98 @@
   color-scheme: dark;
 }
 
+/* ── Tool chrome palette (three-up for David's pick) ──────────────────
+ *
+ * David, 2026-07-26: "Please can we use a bit more subtle colour as
+ * backgrounds of tools e.g. play bar, current lesson etc. It currently does
+ * not highlight the most important parts of the page."
+ *
+ * The chrome (narration bar, outline rail, edge tabs, controls) is currently
+ * drawn in near-black ink at full strength: 1px --v-ink borders and solid
+ * --v-ink fills on the play button and the selected speed. That is the same
+ * weight as the reading text, so nothing tells the eye where it should go.
+ *
+ * These six tokens are the only thing the variants change. Every chrome
+ * element below reads them, so a variant is a token block and nothing else --
+ * no component churn when David picks one, and the loser blocks just get
+ * deleted. Defaults reproduce today's look exactly, so no `data-chrome`
+ * attribute means no visual change.
+ */
+.shell {
+  --v-tool-bg: var(--v-surface);
+  --v-tool-line: var(--v-ink);
+  --v-tool-strong: var(--v-ink);
+  --v-tool-strong-text: var(--v-bg);
+  --v-current-bg: transparent;
+  --v-current-marker: transparent;
+}
+
+/* A — Recede. Chrome drops to the page's own paper with hairline rules, and
+   the only saturated thing left on the page is the control you can press.
+   Where you are is a soft cream block with a teal edge. */
+.shell[data-chrome="a"] {
+  --v-tool-bg: var(--v-bg);
+  --v-tool-line: var(--v-line);
+  --v-tool-strong: var(--v-teal);
+  --v-tool-strong-text: var(--v-cream);
+  --v-current-bg: var(--v-cream);
+  --v-current-marker: var(--v-teal);
+}
+
+/* B — Sand tray. The tools sit together on a warm sand surface, clearly a
+   toolbar and clearly not the page, but low contrast against it. Ochre marks
+   the current thing. */
+.shell[data-chrome="b"] {
+  --v-tool-bg: #e3e1d1;
+  --v-tool-line: #cfcdba;
+  --v-tool-strong: var(--v-teal);
+  --v-tool-strong-text: var(--v-cream);
+  --v-current-bg: #f1ecdc;
+  --v-current-marker: var(--v-ochre);
+}
+
+/* C — Teal wash. Chrome is quiet paper, and a 10% teal wash is spent ONLY on
+   the active thing: the page you are reading, the control that is running.
+   The strongest colour on the page marks your position in it. */
+.shell[data-chrome="c"] {
+  --v-tool-bg: var(--v-surface);
+  --v-tool-line: var(--v-line);
+  --v-tool-strong: var(--v-teal);
+  --v-tool-strong-text: var(--v-cream);
+  --v-current-bg: rgba(44, 74, 71, 0.1);
+  --v-current-marker: var(--v-teal);
+}
+
+:global(.dark) .shell[data-chrome="b"] {
+  --v-tool-bg: #23251d;
+  --v-tool-line: #333629;
+  --v-current-bg: #2a2c24;
+}
+
+:global(.dark) .shell[data-chrome="c"] {
+  --v-current-bg: rgba(110, 168, 119, 0.16);
+}
+
+/* A tool surface: the narration bar, the outline rail, an edge tab. */
+.toolSurface {
+  background: var(--v-tool-bg);
+  border-color: var(--v-tool-line);
+}
+
+/* A solid control: the play button, the selected speed chip. */
+.toolControl {
+  background: var(--v-tool-strong);
+  border-color: var(--v-tool-strong);
+  color: var(--v-tool-strong-text);
+}
+
+/* The row you are on in the outline rail. The inset shadow is the edge
+   marker, drawn inside the row so it cannot shift the rail's layout. */
+.railCurrent {
+  background: var(--v-current-bg);
+  box-shadow: inset 3px 0 0 0 var(--v-current-marker);
+}
+
 /* ── Sticky-header breadcrumb containment (mobile) ────────────────────
  *
  * The dashboard header is a fixed h-16 (64px) bar, but its breadcrumb trail

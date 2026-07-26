@@ -179,6 +179,14 @@ interface EditorialLessonViewerProps {
   nextLesson?: EditorialNextLesson | null
   /** Href back to the parent course page. */
   courseHref?: string
+  /**
+   * Tool-chrome palette under review (`?chrome=a|b|c`). Undefined renders the
+   * current look. Only the six `--v-tool-*` / `--v-current-*` tokens change;
+   * see the variant blocks in lesson-fde.module.css. Temporary: this exists so
+   * David can compare the three side by side on the real page and pick one,
+   * after which the winner becomes the default and this prop goes away.
+   */
+  chrome?: "a" | "b" | "c"
 }
 
 const ADVANCING_PING_LABEL = "ADVANCING IN 2S"
@@ -223,6 +231,7 @@ export function EditorialLessonViewer({
   initialProgress = null,
   nextLesson = null,
   courseHref,
+  chrome,
 }: EditorialLessonViewerProps) {
   const [surface, setSurface] = React.useState<EditorialLessonSurface>(
     initialSurface
@@ -577,6 +586,7 @@ export function EditorialLessonViewer({
         "flex min-h-[calc(100vh-4rem)] flex-col"
       )}
       data-section="lesson-viewer"
+      data-chrome={chrome}
     >
       {audioElement}
       <div className="flex flex-1 min-h-0">
@@ -772,7 +782,12 @@ function OutlineRail({
   onSelectPage?: (page: number) => void
 }) {
   return (
-    <aside className="hidden w-[248px] shrink-0 border-r border-border bg-card px-[22px] py-8 lg:block">
+    <aside
+      className={cn(
+        "hidden w-[248px] shrink-0 border-r px-[22px] py-8 lg:block",
+        styles.toolSurface
+      )}
+    >
       <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
         LESSON {String(lessonNumber).padStart(2, "0")} · OUTLINE
       </div>
@@ -794,7 +809,10 @@ function OutlineRail({
               className={cn(
                 "grid w-full cursor-pointer grid-cols-[20px_1fr_auto] items-start gap-2.5 border-x-0 border-b border-t-0 border-solid border-border bg-transparent py-2.5 pl-1 pr-1 text-left transition-colors hover:bg-muted",
                 i === 0 && "border-t",
-                state === "pending" && "opacity-60"
+                state === "pending" && "opacity-60",
+                // "Where I am" is the one thing the rail should shout. Weight
+                // alone was doing that job.
+                state === "current" && cn(styles.railCurrent, "pl-2.5")
               )}
             >
               <StatusIcon state={state} small />
@@ -1357,7 +1375,12 @@ function AudioBar({
     // outline rail, so from roughly 640px to 1300px the fixed `auto` columns
     // starved `minmax(0,1fr)` and the lesson title measured ZERO pixels wide.
     // `xl` is where the row genuinely fits (verified 390px to 2200px).
-    <div className="sticky top-0 z-[5] mb-1 border-b border-foreground bg-card px-4 py-3.5 sm:px-7">
+    <div
+      className={cn(
+        "sticky top-0 z-[5] mb-1 border-b px-4 py-3.5 sm:px-7",
+        styles.toolSurface
+      )}
+    >
       <div className="grid items-center gap-x-[22px] gap-y-3 [grid-template-columns:52px_minmax(0,1fr)] xl:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]">
         <button
           type="button"
@@ -1367,7 +1390,7 @@ function AudioBar({
             "inline-flex size-12 shrink-0 items-center justify-center border",
             playing
               ? "border-primary bg-primary text-primary-foreground"
-              : "border-foreground bg-foreground text-background"
+              : styles.toolControl
           )}
         >
           {playing ? <PauseIcon /> : <PlayIcon />}
@@ -1415,7 +1438,7 @@ function AudioBar({
                 className={cn(
                   "min-w-[44px] cursor-pointer border-none px-2.5 py-1.5 font-mono text-[11px] font-bold tracking-[0.04em]",
                   s === speed
-                    ? "bg-foreground text-background"
+                    ? styles.toolControl
                     : "bg-transparent text-muted-foreground"
                 )}
               >
@@ -1666,7 +1689,11 @@ function StatusIcon({
       className={cn(
         "inline-flex shrink-0 items-center justify-center border",
         small ? "size-4" : "size-[18px]",
-        state === "done" && "border-foreground bg-foreground text-background",
+        // Done ticks are solid ink today. There is one per finished page, so
+        // on a 14-page lesson they are the heaviest thing in the rail: the
+        // chrome variants route them through the same token as the other
+        // solid controls.
+        state === "done" && styles.toolControl,
         state === "current" &&
           "border-primary bg-primary text-primary-foreground",
         state === "pending" && "border-border bg-transparent",

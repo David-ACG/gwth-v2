@@ -22,6 +22,7 @@ type PageProps = {
     surface?: string
     page?: string
     widget?: string
+    chrome?: string
   }>
 }
 
@@ -185,6 +186,14 @@ export default async function LessonPage({
     : defaultSurface
   const initialPage = sp.page ? parseInt(sp.page, 10) : 1
 
+  // `?chrome=a|b|c` previews a tool-chrome palette on the real page so David
+  // can pick one (see the variant blocks in lesson-fde.module.css). Anything
+  // else renders the current look.
+  const chrome =
+    sp.chrome === "a" || sp.chrome === "b" || sp.chrome === "c"
+      ? sp.chrome
+      : undefined
+
   const widgetParam = sp.widget ?? "none"
   const initialWidgetSurface: LessonWidgetSurface = VALID_WIDGET_SURFACES.has(
     widgetParam
@@ -203,6 +212,7 @@ export default async function LessonPage({
         initialProgress={lessonProgress}
         nextLesson={findNextLesson(course, lessonSlug)}
         courseHref={`/course/${course.slug}`}
+        chrome={chrome}
       />
     </div>
   )

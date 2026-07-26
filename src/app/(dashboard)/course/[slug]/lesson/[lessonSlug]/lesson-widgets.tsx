@@ -2,6 +2,9 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
+// Same scoped stylesheet the viewer uses: the edge tabs are part of the tool
+// chrome, so they read the same `--v-tool-*` tokens the chrome variants swap.
+import styles from "./lesson-fde.module.css"
 
 /**
  * Public surface name for selecting the initial widget state on mount.
@@ -315,7 +318,7 @@ function EdgePill({
         "border-y border-l",
         active
           ? "border-primary bg-primary text-primary-foreground"
-          : "border-foreground bg-card text-foreground hover:bg-muted"
+          : cn(styles.toolSurface, "text-foreground hover:bg-muted")
       )}
       style={{
         right: position.right,
