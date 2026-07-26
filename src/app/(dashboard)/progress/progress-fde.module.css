@@ -166,6 +166,23 @@
   font-size: var(--fde-body);
   line-height: 1.5;
   color: var(--v-soft);
+  /* Grid items default to min-width:auto, so the label refused to shrink
+     below its longest word and overprinted the trailing meta on phones. */
+  min-width: 0;
+}
+
+/* On phones the 7rem value track plus a right-aligned meta leaves the label
+   too little room to shrink honestly, so the meta drops onto its own row
+   beneath the value/label pair (observed overprint at 390px, W26). */
+@media (max-width: 29.99rem) {
+  .statListRow {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.35rem 1rem;
+  }
+
+  .statListRow > .mono {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ---------------- GWTH Score panel (flag-gated) ---------------- */

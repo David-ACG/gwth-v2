@@ -1190,10 +1190,25 @@
 
   .tableHead,
   .tableRow {
-    grid-template-columns: 20px 44px minmax(0, 1fr) auto;
-    gap: 0.6rem;
+    grid-template-columns: 20px 44px minmax(0, 1fr);
+    gap: 0.35rem 0.6rem;
     padding-left: 0.8rem;
     padding-right: 0.8rem;
+  }
+
+  /* Holding a fixed LENGTH column on a 390px screen squeezed lesson titles
+     into ~150px and wrapped them over five lines. The fourth cell drops
+     under the title as an inline meta line instead. It is not always the
+     duration — the summary row puts a REVIEW link here — so it is moved
+     rather than hidden, which would lose that link. */
+  .tableRow > :nth-child(4) {
+    grid-column: 3 / -1;
+  }
+
+  /* The LENGTH heading has nothing left to label once the cell is a meta
+     line under each title, and the row content stays self-describing. */
+  .tableHead > :nth-child(4) {
+    display: none;
   }
 
   .listRow {

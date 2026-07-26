@@ -272,12 +272,20 @@
    screen edge is dead space on every surface, desktop and mobile. At rest
    the tab sits tucked slightly into the edge; hover/keyboard focus slides
    it fully out. On touch there is no hover: the first tap simply opens
-   the dialog, the tab never needs expanding. */
+   the dialog, the tab never needs expanding.
+
+   The rest transform used to push the tab 0.3rem OUTWARDS, which put its
+   right edge past the viewport (measured [1410..1445] in a 1440 viewport)
+   and left only 2px of clearance from right-aligned page content, so stat
+   meta strings read as truncated (beads GWTH-81d). The tab now rests flush
+   inside the edge, the hover/focus reveal slides inwards instead, and the
+   inline padding is trimmed so the whole tab fits within the dashboard's
+   own right gutter (2rem at lg) and stops sitting on right-aligned text. */
 .launchButton {
   position: fixed;
   right: 0;
   top: 50%;
-  transform: translate(0.3rem, -50%);
+  transform: translate(0, -50%);
   z-index: 40;
   display: inline-flex;
   align-items: center;
@@ -288,7 +296,7 @@
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 0.9rem 0.55rem;
+  padding: 0.9rem 0.35rem;
   border-radius: 0;
   cursor: pointer;
   background: var(--v-action);
@@ -303,7 +311,8 @@
 .launchButton:hover,
 .launchButton:focus-visible {
   background: var(--v-teal-deep);
-  transform: translate(0, -50%);
+  /* Reveal now slides inwards (negative X) rather than out over the edge. */
+  transform: translate(-0.3rem, -50%);
 }
 
 .launchButton:focus-visible {
