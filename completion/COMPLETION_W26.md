@@ -36,7 +36,13 @@ The final production run is **78/78 checks passed** at 1440 and 390, plus
   tonight. Please click it yourself.
 - **Reset drill.** The demo student's progress was cleared back to zero after
   testing (see "Demo account reset" below), so Monday starts on "Your first
-  lesson is ready". Sign in and confirm the dashboard still says `0 / 26`.
+  lesson is ready". Sign in and confirm the dashboard still says `0 / 26`, and
+  run `bash deploy/w26-reset-demo-progress.sh` again after Sunday's dry run.
+
+One decision is yours and I have deliberately left it alone: the intro video's
+burnt-in title card still shows the old lesson title with an em dash
+(`gwth-launch-1c0`). It needs a pipeline re-render, which is not something to
+do 36 hours out without your say-so.
 
 ---
 
@@ -192,6 +198,15 @@ component chose from the start. Narration for l02 to l26 stays on bead
 
 Raw evidence: [`W26/final-lesson-walk.txt`](W26/final-lesson-walk.txt) and
 [`W26/final-mobile-geometry.txt`](W26/final-mobile-geometry.txt).
+
+An independent adversarial re-walk of the whole lesson after the last deploy
+returned **11/11 PASS**: video click no longer swallowed (`elementFromPoint` at
+the video centre returns the `<video>` itself), zero markdown hits across all
+13 pages on eight separate patterns, narration `206 audio/wav` advancing
+`00:00 → 00:04 / 32:11`, quiz 0% then 100% with the right toasts, the
+completion screen's "UP NEXT · LESSON 2" resolving 200, and **zero console
+errors and zero responses at 400 or above** across the whole run. It also found
+three things worth knowing, all now on beads and listed below.
 
 ---
 
@@ -385,6 +400,9 @@ Every one has a bead. Nothing here is silent.
 | `gwth-launch-0mg` | The tone gate reads "Superpowers" across the Month-1 lesson names as hype, and "AI Power Tools: MCPs, CLIs..." as beginner jargon | It failed the first pass on the lesson NAMES, not on my punctuation change. Re-run scoped to the punctuation delta it passed, and only the punctuation shipped. Renaming is a curriculum-wide decision for you |
 | `gwth-launch-ps5` | The explainer voice sounds strange towards the end | Measured tonight and the words and timings are clean, so this is timbre. **Not re-voiced deliberately: that is L25 and needs your ear** |
 | `gwth-launch-0xo` | 25 of 26 Month-1 lessons still have no narration | Pre-existing and out of scope. The state now reads as a plan rather than a fault |
+| **`gwth-launch-1c0` (P1)** | **The intro video's burnt-in title card still reads "Welcome to GWTH — What AI Can Actually Do For You": the superseded title, with an em dash.** The page around it now says "Welcome to GWTH: Six Ways AI Can Give You Superpowers" | It is baked into the MP4, so it is a pipeline re-render and re-upload. Doing that 36 hours before the demo is a bigger risk than one title card, but it is the one item here an attentive viewer might actually catch, so it is P1 |
+| `gwth-launch-a8p` | Reloading mid-lesson returns to page 1, and `?page=13` does not deep-link | Harmless for a linear demo; the workaround is not to refresh mid-lesson. Lesson-level progress IS persisted, it is only the within-lesson cursor that is not |
+| `gwth-launch-9za` | The lesson route renders two `<main>` elements | Accessibility smell, no user-visible impact |
 
 ---
 
