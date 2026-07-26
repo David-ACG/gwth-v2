@@ -289,6 +289,12 @@ export function EditorialLessonViewer({
   const [pageStarts, setPageStarts] = React.useState<(number | null)[]>(() =>
     estimatePageStarts(narratedPages, lesson.audioDuration ?? 0)
   )
+  // The timeupdate listener is attached once per audio source, so it closes
+  // over the FIRST render's offsets — which are the estimates, replaced a
+  // moment later by the real word timings. Read them through a ref, the same
+  // way the listener already reads the live page number.
+  const pageStartsRef = React.useRef(pageStarts)
+  pageStartsRef.current = pageStarts
 
   React.useEffect(() => {
     // Through the site's own proxy: the media CDN sends no CORS header, so a
@@ -321,6 +327,28 @@ export function EditorialLessonViewer({
     if (!audio || start === null || start === undefined) return
     audio.currentTime = start
     setAudioTime(start)
+  }
+
+  /**
+   * The other half of following: while the narration is playing, the page
+   * turns when the recording reaches the next section.
+   *
+   * Without this the reader is left behind the moment the narrator crosses a
+   * heading, which the page offsets make obvious — you would hear section
+   * seven while looking at section six. Deliberately no seek (the playhead is
+   * already in the right place) and forward only by one page, so this can
+   * never fight a reader who is navigating by hand.
+   */
+  function turnPageWithNarration(now: number) {
+    if (!autoAdvanceRef.current) return
+    const current = pageNumRef.current
+    const nextStart = pageStartsRef.current[current]
+    if (nextStart === null || nextStart === undefined) return
+    if (now < nextStart) return
+    if (lesson.pages[current]?.kind !== "prose" && lesson.pages[current]?.kind !== "code") {
+      return
+    }
+    setPageNum(current + 1)
   }
 
   function cancelAdvance() {
@@ -364,6 +392,7 @@ export function EditorialLessonViewer({
 
     function handleTimeUpdate() {
       setAudioTime(audio!.currentTime)
+      turnPageWithNarration(audio!.currentTime)
     }
     function handleLoadedMetadata() {
       if (Number.isFinite(audio!.duration) && audio!.duration > 0) {
@@ -1611,6 +1640,9 @@ function AutoAdvanceToggle({
         type="button"
         role="switch"
         aria-checked={on}
+        // A switch with no accessible name reads as just "switch" to a screen
+        // reader; the visible AUTO-ADVANCE text is a sibling, not a label.
+        aria-label="Auto-advance pages with the narration"
         onClick={onToggle}
         className={cn(
           "relative cursor-pointer border p-0",

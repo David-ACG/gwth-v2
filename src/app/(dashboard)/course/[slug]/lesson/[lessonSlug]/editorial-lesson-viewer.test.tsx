@@ -509,6 +509,33 @@ describe("EditorialLessonViewer narration start position", () => {
     expect(audio.paused).toBe(false)
   })
 
+  it("turns the page when the narration reaches the next section", async () => {
+    const user = userEvent.setup()
+    renderNarrated(1)
+    const audio = getAudioElement()
+    await user.click(screen.getByRole("button", { name: /Play narration/ }))
+    expect(screen.getAllByText("PAGE 1 OF 3").length).toBeGreaterThan(0)
+
+    // The narrator crosses into page two (which starts at 100s).
+    audio.currentTime = 104
+    fireEvent(audio, new Event("timeupdate"))
+    expect(screen.getAllByText("PAGE 2 OF 3").length).toBeGreaterThan(0)
+    // No seek: the playhead is already in the right place.
+    expect(Math.round(audio.currentTime)).toBe(104)
+  })
+
+  it("does not turn the page when auto-advance is off", async () => {
+    const user = userEvent.setup()
+    renderNarrated(1)
+    const audio = getAudioElement()
+    await user.click(
+      screen.getAllByRole("switch", { name: /Auto-advance/i })[0]!
+    )
+    audio.currentTime = 104
+    fireEvent(audio, new Event("timeupdate"))
+    expect(screen.getAllByText("PAGE 1 OF 3").length).toBeGreaterThan(0)
+  })
+
   it("resumes where it paused when the reader has not left the page", async () => {
     const user = userEvent.setup()
     renderNarrated(2)
