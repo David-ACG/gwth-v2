@@ -439,4 +439,29 @@ describe("proxy route guard (W11)", () => {
       }
     })
   })
+
+  describe("playable media stays out of the edge cache (W26)", () => {
+    // Cloudflare caches .mp4 by default and then answers a Range request with
+    // the whole body and a 200, which kills scrubbing on the home-page
+    // explainer and stops Safari/iOS playing it at all. `private` keeps the
+    // object out of the edge cache so the Range reaches the origin, which
+    // already answers 206.
+    it("marks the explainer video private so Cloudflare proxies byte ranges", async () => {
+      setSessionCookie(null)
+      const response = await proxy(request("/explainer/explainer.mp4"))
+      expect(response.headers.get("Cache-Control")).toBe("private, max-age=3600")
+    })
+
+    it("covers audio too, so lesson narration can be scrubbed", async () => {
+      setSessionCookie(null)
+      const response = await proxy(request("/media/lesson-01.mp3"))
+      expect(response.headers.get("Cache-Control")).toBe("private, max-age=3600")
+    })
+
+    it("leaves every other response's caching alone", async () => {
+      setSessionCookie(null)
+      const response = await proxy(request("/"))
+      expect(response.headers.get("Cache-Control")).toBeNull()
+    })
+  })
 })

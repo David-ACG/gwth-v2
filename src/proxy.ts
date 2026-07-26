@@ -52,6 +52,27 @@ const baseSecurityHeaders = {
 
 const PRE_LAUNCH_NOINDEX = "noindex, nofollow, noarchive, nosnippet, noimageindex"
 
+/**
+ * Media that a browser plays through a `<video>`/`<audio>` element and
+ * therefore fetches with HTTP Range requests.
+ *
+ * The origin already answers those correctly — Next's static handler emits
+ * `206 Partial Content` with `accept-ranges: bytes` for /explainer/explainer.mp4,
+ * confirmed by curl straight at the Hetzner IP. Cloudflare is what loses it:
+ * `.mp4` is one of its default-cached extensions, and once the object is in the
+ * edge cache a Range request comes back `200` with the whole 5.9 MB body and no
+ * `accept-ranges`. Consequence on the home-page explainer: no scrubbing, no
+ * mid-video start, and Safari/iOS refuse to play the element at all.
+ *
+ * Marking the response `private` keeps Cloudflare from caching it (the same
+ * reason the .vtt captions track, which Cloudflare does not cache, already
+ * range-serves correctly on production), so the Range is proxied through to the
+ * origin untouched. `private` is deliberate rather than `no-store`: the browser
+ * still caches the file for an hour, so a repeat view inside the demo does not
+ * re-download it.
+ */
+const RANGE_SERVED_MEDIA = /\.(?:mp4|m4v|mov|webm|m4a|mp3|ogg)$/i
+
 /** Paths that bypass the site password gate */
 const PASSWORD_EXEMPT_PATHS = [
   "/",           // Home page is always public
@@ -324,6 +345,11 @@ export async function proxy(request: NextRequest) {
   // Apply security headers to the response
   for (const [key, value] of Object.entries(baseSecurityHeaders)) {
     response.headers.set(key, value)
+  }
+
+  // Keep playable media out of the edge cache so byte ranges survive the CDN.
+  if (RANGE_SERVED_MEDIA.test(pathname)) {
+    response.headers.set("Cache-Control", "private, max-age=3600")
   }
   // Only stamp noindex while a pre-launch lockdown is active. Two independent
   // lockdowns qualify: the legacy SITE_PASSWORD gate, and (W25) private
