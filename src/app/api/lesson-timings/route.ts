@@ -20,6 +20,15 @@ import { mediaCdnBase } from "@/lib/media/url"
 const CACHE_CONTROL = "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800"
 
 /**
+ * The media hostname sits behind Cloudflare bot protection, which answers 403
+ * to Node's default `user-agent: node`. Measured from inside the production
+ * container: bare fetch 403, this UA 200, and a spoofed Chrome UA 403 as well
+ * (Cloudflare cross-checks the TLS fingerprint, so pretending to be a browser
+ * is worse than saying who we are). Identify the site honestly.
+ */
+const UPSTREAM_USER_AGENT = "Mozilla/5.0 (compatible; GWTH-site/1.0; +https://gwth.ai)"
+
+/**
  * True when `src` is a timings file on the configured media CDN. Anything else
  * is refused: this endpoint takes a URL from the client, so the origin check is
  * what stops it becoming an open proxy into the private network.
@@ -54,7 +63,10 @@ export async function GET(request: Request) {
     // incremental cache failed in the standalone production image while the
     // same request from a shell in that container succeeded. Edge caching is
     // handled by the Cache-Control below instead.
-    upstream = await fetch(src, { cache: "no-store" })
+    upstream = await fetch(src, {
+      cache: "no-store",
+      headers: { "user-agent": UPSTREAM_USER_AGENT, accept: "application/json" },
+    })
   } catch (error) {
     console.error("[lesson-timings] upstream fetch failed", src, error)
     return NextResponse.json(
