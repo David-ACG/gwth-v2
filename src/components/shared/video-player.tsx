@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils"
 /** How long to wait for the video to start loading before showing error (ms) */
 const LOAD_TIMEOUT = 8000
 
+/** HTMLMediaElement.HAVE_METADATA: duration and dimensions are known. */
+const HAVE_METADATA = 1
+
 interface VideoPlayerProps {
   /** URL of the video to play (MP4, YouTube embed, or other embeddable source) */
   src: string
@@ -52,7 +55,7 @@ export function VideoPlayer({
     const video = videoRef.current
     if (!video) return
 
-    function handleLoadedData() {
+    function handleReady() {
       setIsLoading(false)
     }
 
@@ -73,21 +76,45 @@ export function VideoPlayer({
       setIsPlaying(false)
     }
 
-    video.addEventListener("loadeddata", handleLoadedData)
+    // `loadedmetadata` as well as `loadeddata`: with preload="metadata" the
+    // element settles at HAVE_METADATA and a browser is under no obligation to
+    // decode a first frame, so `loadeddata` alone can never arrive. By
+    // HAVE_METADATA we have dimensions and duration, which is all the skeleton
+    // was covering for.
+    video.addEventListener("loadedmetadata", handleReady)
+    video.addEventListener("loadeddata", handleReady)
+    video.addEventListener("canplay", handleReady)
     video.addEventListener("error", handleError)
     video.addEventListener("timeupdate", handleTimeUpdate)
     video.addEventListener("ended", handleEnded)
 
-    // Timeout fallback: if the video hasn't loaded after LOAD_TIMEOUT ms
-    // and readyState is still 0 (HAVE_NOTHING), treat as error
+    // Reconcile with the state the element is ALREADY in. Media events are not
+    // replayed for a late listener, and the element regularly reaches
+    // readyState 4 before this effect runs (a warm CDN cache does it every
+    // time). Without this the skeleton stayed up for ever over a perfectly
+    // healthy video, covering it and swallowing the click that would start it
+    // — which is exactly what the lesson-1 intro video did on production.
+    if (video.error) {
+      handleError()
+    } else if (video.readyState >= HAVE_METADATA) {
+      handleReady()
+    }
+
+    // Timeout fallback: if the video still has nothing after LOAD_TIMEOUT ms,
+    // treat it as an error. Anything past HAVE_NOTHING is working, so clear the
+    // skeleton rather than leaving the viewer staring at it.
     const timeout = setTimeout(() => {
       if (video.readyState === 0) {
         handleError()
+      } else {
+        handleReady()
       }
     }, LOAD_TIMEOUT)
 
     return () => {
-      video.removeEventListener("loadeddata", handleLoadedData)
+      video.removeEventListener("loadedmetadata", handleReady)
+      video.removeEventListener("loadeddata", handleReady)
+      video.removeEventListener("canplay", handleReady)
       video.removeEventListener("error", handleError)
       video.removeEventListener("timeupdate", handleTimeUpdate)
       video.removeEventListener("ended", handleEnded)
@@ -170,9 +197,11 @@ export function VideoPlayer({
         className
       )}
     >
-      {/* Loading skeleton */}
+      {/* Loading skeleton. pointer-events-none is deliberate: if this ever
+          lingers again the viewer can still click through to the video rather
+          than being locked out by a decorative overlay. */}
       {isLoading && (
-        <Skeleton className="absolute inset-0 z-10 aspect-video rounded-lg" />
+        <Skeleton className="pointer-events-none absolute inset-0 z-10 aspect-video rounded-lg" />
       )}
 
       <video
