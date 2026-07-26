@@ -100,6 +100,16 @@ function buildAuth() {
       "https://gwth.ai",
       "http://192.168.178.50:3001",
       "http://localhost:3000",
+      // Extra origins for dev and review previews, comma-separated. Production
+      // does not set this, so the list above is unchanged there. It exists
+      // because a preview served over Tailscale (a different origin from the
+      // one the server was started with) is rejected with INVALID_ORIGIN, and
+      // the workaround was otherwise to hardcode a tailnet host in this
+      // security-relevant list. Never point it at an origin you do not control.
+      ...(process.env.AUTH_EXTRA_TRUSTED_ORIGINS ?? "")
+        .split(",")
+        .map((o) => o.trim())
+        .filter(Boolean),
     ],
     advanced: {
       useSecureCookies: isSecureOrigin,
