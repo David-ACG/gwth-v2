@@ -427,6 +427,69 @@ describe("EditorialLessonViewer navigation", () => {
   })
 })
 
+// ── Student project page ─────────────────────────────────────────────────────
+
+/**
+ * David, 2026-07-26: "There doesn't seem to be any project for L1."
+ *
+ * Every GWTH lesson ships a student project (`content/project.md` →
+ * `lessons.build_instructions`), and the L1 body even says "the Build section
+ * below is where you actually make the first portfolio artefact" — but the
+ * viewer had no page kind for it, so the project was imported and never shown.
+ */
+const PROJECT_PAGES: EditorialLessonMeta["pages"] = [
+  { title: "Overview", kindLabel: "PROSE · 3 MIN", kind: "prose", content: "Read this." },
+  {
+    title: "Your project: My AI Superpowers Wishlist",
+    kindLabel: "PROJECT · 5 MIN",
+    kind: "project",
+    projectHeading: "My AI Superpowers Wishlist",
+    content:
+      "## What you are making\n\nA list of real things you want AI to help with.",
+  },
+  { title: "End-of-lesson Q&A", kindLabel: "Q&A · 2 QUESTIONS", kind: "qa" },
+]
+
+describe("EditorialLessonViewer student project page", () => {
+  it("renders the project artefact and its instructions", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson({ pages: PROJECT_PAGES, introVideoUrl: null })}
+        initialSurface="prose"
+        initialPage={2}
+      />
+    )
+    expect(screen.getByText("MAKE THIS")).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { name: "My AI Superpowers Wishlist" })
+    ).toBeInTheDocument()
+    expect(screen.getByText("What you are making")).toBeInTheDocument()
+    expect(
+      screen.getByText(/A list of real things you want AI to help with/)
+    ).toBeInTheDocument()
+  })
+
+  it("shows the project in the outline rail and reaches it via CONTINUE", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson({ pages: PROJECT_PAGES, introVideoUrl: null })}
+        initialSurface="prose"
+        initialPage={1}
+      />
+    )
+    expect(screen.getAllByText("PROJECT · 5 MIN").length).toBeGreaterThan(0)
+    expect(screen.queryByText("MAKE THIS")).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole("button", { name: /CONTINUE/ }))
+    expect(screen.getByText("MAKE THIS")).toBeInTheDocument()
+    // The mast row names the page kind so the student knows this is the doing.
+    expect(
+      screen.getAllByText(/COURSE · LESSON 1 · PROJECT/).length
+    ).toBeGreaterThan(0)
+  })
+})
+
 // ── Mobile layout ────────────────────────────────────────────────────────────
 
 /**

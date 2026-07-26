@@ -55,7 +55,12 @@ export type EditorialLessonSurface =
   | "mobile"
 
 /** Kind tag attached to each lesson page in the outline rail. */
-export type EditorialLessonPageKind = "video" | "prose" | "code" | "qa"
+export type EditorialLessonPageKind =
+  | "video"
+  | "prose"
+  | "code"
+  | "qa"
+  | "project"
 
 /** A single page in the multi-page lesson reading flow. */
 export interface EditorialLessonPage {
@@ -66,11 +71,16 @@ export interface EditorialLessonPage {
   /** Page kind, drives body rendering. */
   kind: EditorialLessonPageKind
   /**
-   * Markdown for this prose/code page's body. Derived per `##` section of the
-   * lesson (gwth-launch-qar), so pagination renders one real section at a time
-   * instead of the whole body on one page. Absent for video/qa pages.
+   * Markdown for this prose/code/project page's body. Derived per `##` section
+   * of the lesson (gwth-launch-qar), so pagination renders one real section at
+   * a time instead of the whole body on one page. Absent for video/qa pages.
    */
   content?: string
+  /**
+   * The artefact a project page asks the student to make (e.g. `"My AI
+   * Superpowers Wishlist"`), rendered as the project page's heading.
+   */
+  projectHeading?: string
 }
 
 /** A real Q&A question wired into the end-of-lesson surface. */
@@ -473,6 +483,8 @@ export function EditorialLessonViewer({
   const isVideo = surface === "video"
   const isQa = surface === "qa"
   const currentPage = isVideo ? 1 : isQa ? lesson.pages.length : pageNum
+  const currentPageData = lesson.pages[currentPage - 1]
+  const isProject = !isVideo && !isQa && currentPageData?.kind === "project"
   const videoCleared = watchedFraction >= INTRO_VIDEO_COMPLETION_THRESHOLD
   const quizPassed = bestQuizScore >= QUIZ_PASS_SCORE
 
@@ -507,7 +519,9 @@ export function EditorialLessonViewer({
             section={
               isQa
                 ? `COURSE · LESSON ${lesson.lessonNumber} · Q&A`
-                : `COURSE · LESSON ${lesson.lessonNumber}`
+                : isProject
+                  ? `COURSE · LESSON ${lesson.lessonNumber} · PROJECT`
+                  : `COURSE · LESSON ${lesson.lessonNumber}`
             }
             currentPage={currentPage}
             pageTotal={lesson.pages.length}
@@ -585,6 +599,11 @@ export function EditorialLessonViewer({
                 ) : (
                   <QAPageBody />
                 )
+              ) : isProject ? (
+                <ProjectPageBody
+                  heading={currentPageData?.projectHeading}
+                  content={currentPageData?.content ?? ""}
+                />
               ) : (
                 <ProseBody>
                   {(() => {
@@ -592,7 +611,7 @@ export function EditorialLessonViewer({
                     // pagination now moves through real `##` sections. Fall back
                     // to the whole body, then the design placeholder, so a
                     // lesson with no per-page content still renders.
-                    const pageContent = lesson.pages[currentPage - 1]?.content
+                    const pageContent = currentPageData?.content
                     const body = pageContent ?? lesson.learnContent
                     return body ? (
                       <MarkdownRenderer content={body} />
@@ -1579,6 +1598,48 @@ function StatusIcon({
 
 function ProseBody({ children }: { children: React.ReactNode }) {
   return <article className={styles.proseBody}>{children}</article>
+}
+
+/**
+ * The student-project page: what the lesson asks the learner to actually make.
+ * Rendered from the lesson's `build_instructions` markdown (the pipeline's
+ * `content/project.md`), which the importer has always carried but the viewer
+ * never showed — so lesson bodies that said "the Build section below" pointed
+ * at nothing.
+ *
+ * It reads as prose (same 62ch serif measure as every other page) with a mono
+ * MAKE THIS rule above the artefact name, so a student paging through the
+ * lesson can tell at a glance that this page is the doing, not the reading.
+ */
+function ProjectPageBody({
+  heading,
+  content,
+}: {
+  heading?: string
+  content: string
+}) {
+  return (
+    <ProseBody>
+      <div
+        className="mb-6 border-b border-border pb-4"
+        data-section="lesson-project-header"
+      >
+        <div className={styles.mono}>MAKE THIS</div>
+        {heading && (
+          <h2 className="mt-2 font-serif text-[1.6rem] font-semibold leading-[1.2] tracking-[-0.01em] text-foreground">
+            {heading}
+          </h2>
+        )}
+      </div>
+      {content ? (
+        <MarkdownRenderer content={content} />
+      ) : (
+        <p className="m-0">
+          This lesson&rsquo;s project has not been published yet.
+        </p>
+      )}
+    </ProseBody>
+  )
 }
 
 function DefaultProseContent() {

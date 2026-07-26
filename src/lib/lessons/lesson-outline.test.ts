@@ -39,6 +39,18 @@ print("hi")
 Done.
 `
 
+// Shape of a real pipeline `content/project.md` → `lessons.build_instructions`.
+const PROJECT = `# Student Project - My AI Superpowers Wishlist
+
+## What you are making
+
+You are making a short personal document.
+
+## Completion checklist
+
+- It has between 5 and 10 entries.
+`
+
 describe("splitMarkdownSections (gwth-launch-qar)", () => {
   it("splits on `##` headings and keeps `###` inside the parent section", () => {
     const sections = splitMarkdownSections(WELCOME)
@@ -129,5 +141,68 @@ describe("buildLessonOutline (gwth-launch-qar)", () => {
     expect(pages).toHaveLength(1)
     expect(pages[0]!.kind).toBe("prose")
     expect(pages[0]!.content).toContain("Just a paragraph")
+  })
+})
+
+describe("buildLessonOutline - student project page", () => {
+  it("adds a project page after the prose and before the Q&A", () => {
+    const pages = buildLessonOutline({
+      learnContent: WELCOME,
+      hasIntroVideo: true,
+      questionCount: 3,
+      buildInstructions: PROJECT,
+    })
+    const kinds = pages.map((p) => p.kind)
+    expect(kinds[0]).toBe("video")
+    expect(kinds[kinds.length - 1]).toBe("qa")
+    expect(kinds[kinds.length - 2]).toBe("project")
+    expect(kinds.filter((k) => k === "project")).toHaveLength(1)
+  })
+
+  it("titles the page from the project heading, minus the boilerplate prefix", () => {
+    const [page] = buildLessonOutline({
+      learnContent: "",
+      hasIntroVideo: false,
+      questionCount: 0,
+      buildInstructions: PROJECT,
+    })
+    expect(page!.title).toBe("Your project: My AI Superpowers Wishlist")
+    expect(page!.projectHeading).toBe("My AI Superpowers Wishlist")
+    expect(page!.kindLabel).toMatch(/^PROJECT · \d+ MIN$/)
+  })
+
+  it("lifts the `#` heading out of the body so it is not rendered twice", () => {
+    const [page] = buildLessonOutline({
+      learnContent: "",
+      hasIntroVideo: false,
+      questionCount: 0,
+      buildInstructions: PROJECT,
+    })
+    expect(page!.content).not.toContain("# Student Project")
+    expect(page!.content!.startsWith("## What you are making")).toBe(true)
+  })
+
+  it("falls back to a generic title when the project has no `#` heading", () => {
+    const [page] = buildLessonOutline({
+      learnContent: "",
+      hasIntroVideo: false,
+      questionCount: 0,
+      buildInstructions: "## Step one\n\nDo the thing.",
+    })
+    expect(page!.title).toBe("Your project")
+    expect(page!.projectHeading).toBeUndefined()
+    expect(page!.content).toContain("Do the thing.")
+  })
+
+  it("adds no project page when the lesson has no build instructions", () => {
+    for (const buildInstructions of [undefined, null, "", "   \n  "]) {
+      const pages = buildLessonOutline({
+        learnContent: WELCOME,
+        hasIntroVideo: false,
+        questionCount: 0,
+        buildInstructions,
+      })
+      expect(pages.some((p) => p.kind === "project")).toBe(false)
+    }
   })
 })

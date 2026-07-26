@@ -148,6 +148,9 @@ export default async function LessonPage({
       learnContent: lesson.learnContent,
       hasIntroVideo: Boolean(lesson.introVideoUrl),
       questionCount: lesson.questions.length,
+      // Every GWTH lesson ships a student project (`content/project.md` →
+      // `lessons.build_instructions`). It gets its own page before the Q&A.
+      buildInstructions: lesson.buildInstructions,
     }),
     // Real imported content (Postgres/Drizzle). The viewer renders these in
     // the prose + Q&A surfaces, falling back to the design placeholders only
