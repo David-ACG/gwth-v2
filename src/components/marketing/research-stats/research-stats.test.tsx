@@ -20,12 +20,15 @@ describe("ResearchStats", () => {
     }
   })
 
-  it("renders the canonical 21% / 1 in 6 / 45% values", () => {
+  // Refreshed 2026-07-26: the ONS figures moved to the June 2026 BICS wave
+  // ("1 in 6" -> 29%), and the micro-business stat now publishes the raw ONS
+  // pair instead of a derived ratio ("45% less likely" -> "28% vs 49%").
+  it("renders the canonical 21% / 29% / 28% vs 49% values", () => {
     const { container } = render(<ResearchStats />)
     const text = container.textContent ?? ""
     expect(text).toMatch(/21%/)
-    expect(text).toMatch(/1 in 6/)
-    expect(text).toMatch(/45%/)
+    expect(text).toMatch(/29%/)
+    expect(text).toMatch(/28% vs 49%/)
   })
 
   it("renders the DSIT citation footer with all 6 source organisations", () => {

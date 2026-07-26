@@ -29,7 +29,9 @@ export type JourneyStat = {
   label: string
   /**
    * Named UK source for the figure (DESIGN_FDE.md §7 Citation Rule), e.g.
-   * "DSIT, 2025". Omitted for non-stat figures such as prices.
+   * "ONS, 2026". Where the publication year and the fieldwork year differ,
+   * the label must say so, e.g. "DSIT, published 2026 (fieldwork 2024)".
+   * Omitted for non-stat figures such as prices.
    */
   source?: string
 }
@@ -132,7 +134,11 @@ export const JOURNEYS: readonly Journey[] = [
     stat: {
       value: "21%",
       label: "of UK workers feel confident using AI",
-      source: "DSIT, 2025",
+      // Ipsos for DSIT, "AI Skills for Life and Work: General public survey
+      // findings", published 28 January 2026 from fieldwork 29 February to
+      // 7 March 2024. Labelled with both dates because neither alone is
+      // honest. No like-for-like 2026 survey of worker AI confidence exists.
+      source: "DSIT, published 2026 (fieldwork 2024)",
     },
     cta: "See pricing",
     href: "/pricing",
@@ -142,12 +148,16 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Small business",
     title: "You run a small business",
     body:
-      "UK micro businesses are 45% less likely to adopt AI than large companies. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant. You will be able to do it all yourself.",
+      "Only 28% of the smallest UK businesses use AI, against 49% of large firms. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant. You will be able to do it all yourself.",
     accent: "mint",
+    // Raw ONS pair rather than a derived ratio: a ratio invites "how did you
+    // calculate that", and the 2026 data computes to 43%, not the 45% this
+    // card used to carry. ONS, "Artificial intelligence in UK businesses:
+    // 2023 to 2026", published 20 July 2026, fieldwork 15 to 28 June 2026.
     stat: {
-      value: "45%",
-      label: "less likely to adopt AI than large companies",
-      source: "ONS, 2025",
+      value: "28% vs 49%",
+      label: "of the smallest UK businesses use AI, against half of large firms",
+      source: "ONS, 2026",
     },
     cta: "See pricing",
     href: "/pricing",
@@ -217,6 +227,15 @@ export const JOURNEYS: readonly Journey[] = [
     body:
       "The bottleneck is not the tools. It is whether your team can actually use them well. The beta is individual-first, with a light For Teams path for managers who want to talk about future group access.",
     accent: "mint",
+    // CIPD's own research, which is why it sits on the card that argues the
+    // bottleneck is capability rather than tooling. YouGov for CIPD,
+    // "Futureproofing your skills", published 29 April 2026, fieldwork
+    // 14 January to 3 February 2026, n=1,342.
+    stat: {
+      value: "45%",
+      label: "of organisations say their AI use is still ad hoc or experimental",
+      source: "CIPD, 2026",
+    },
     cta: "For Teams",
     href: "/for-teams",
   },
@@ -261,12 +280,20 @@ export const RESEARCH_SOURCES: readonly string[] = [
   "Innovate UK",
 ]
 
-// ─── UK research stats (DSIT, AI Skills Boost programme, Jan 2026) ─────────
+// ─── UK research stats (DSIT and ONS; see STAT_SOURCES for the per-stat
+// citation, which is index-matched to this array in home-fde.tsx) ──────────
+//
+// [0] Ipsos for DSIT, "AI Skills for Life and Work", published 28 January
+//     2026, fieldwork 29 February to 7 March 2024.
+// [1] ONS, "Business insights and impact on the UK economy", published
+//     2 July 2026, BICS wave 159, fieldwork 15 to 28 June 2026.
+// [2] ONS, "Artificial intelligence in UK businesses: 2023 to 2026",
+//     published 20 July 2026, same June 2026 fieldwork.
 
 export const UK_STATS: readonly UkStat[] = [
   { value: "21%", label: "of UK workers feel confident using AI at work" },
-  { value: "1 in 6", label: "UK businesses were using AI as of mid-2025" },
-  { value: "45%", label: "less likely for micro businesses to adopt AI vs large firms" },
+  { value: "29%", label: "of UK businesses were using at least one AI technology in June 2026" },
+  { value: "28% vs 49%", label: "of the smallest UK businesses use AI, against half of large firms" },
 ]
 
 // ─── Curriculum (sourced from MONTH_CONFIGS in src/lib/config.ts) ───────────
