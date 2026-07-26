@@ -480,13 +480,35 @@
   border-top: 1px solid var(--v-line);
 }
 
+/*
+ * The citation column is capped rather than `auto`: an honest source line can
+ * be long (a DSIT figure has to name both its publication year and its
+ * fieldwork year), and an auto column lets the longest one starve the stat
+ * label down to one word per line. Capped, it wraps within its own column and
+ * the three rows stay aligned.
+ */
 .statListRow {
   display: grid;
-  grid-template-columns: 6rem minmax(0, 1fr) auto;
+  grid-template-columns: 6rem minmax(0, 1fr) minmax(0, 11rem);
   align-items: baseline;
   gap: 1.25rem;
   border-bottom: 1px solid var(--v-line);
   padding: 0.9rem 0;
+}
+
+.statListRow .mono {
+  line-height: 1.6;
+}
+
+@media (max-width: 40rem) {
+  .statListRow {
+    grid-template-columns: 5rem minmax(0, 1fr);
+    row-gap: 0.45rem;
+  }
+
+  .statListRow .mono {
+    grid-column: 2;
+  }
 }
 
 .statListValue {
@@ -560,6 +582,216 @@
 .credentialFacts span {
   color: var(--v-muted);
   margin-right: 0.6rem;
+}
+
+/*
+ * Record visual (the 2026-04-27 "Variant B" ring + sparkline, in FDE dress).
+ * One accent drives both shapes so light and dark stay in step: teal reads on
+ * cream, but dark-mode --v-teal is near-black, so the accent flips to ochre
+ * exactly as .credentialNumber already does.
+ */
+.recordVis {
+  --record-accent: var(--v-teal);
+  --record-flag: var(--v-rust);
+}
+
+/*
+ * Dark mode flips the accent to ochre, which is the same family as --v-rust,
+ * so the revision flag moves to the warm grey to stay tellable apart from the
+ * progress line. Colour never carries the meaning on its own either way: the
+ * flag is labelled in the chart and restated in .recordCaption.
+ */
+:global(.dark) .shell .recordVis {
+  --record-accent: var(--v-ochre);
+  --record-flag: var(--v-soft);
+}
+
+.credentialKicker {
+  line-height: 1.7;
+}
+
+.recordVis .credentialRow {
+  align-items: center;
+}
+
+.recordRing {
+  position: relative;
+  flex: none;
+  width: 148px;
+  height: 148px;
+}
+
+.recordRingSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.recordRingTrack {
+  stroke: var(--v-line);
+}
+
+.recordRingArc {
+  stroke: var(--record-accent);
+}
+
+.recordRingCentre {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.recordRingCentre .credentialNumber {
+  font-size: 2rem;
+}
+
+.recordRingCentre .mono {
+  font-size: var(--fde-mono-xs);
+}
+
+.recordChart {
+  margin-top: 1.5rem;
+}
+
+.recordChart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.recordChartBaseline {
+  stroke: var(--v-line);
+  stroke-width: 1;
+}
+
+.recordChartReference {
+  stroke: var(--v-muted);
+  stroke-width: 1;
+  opacity: 0.7;
+}
+
+.recordChartArea {
+  fill: var(--record-accent);
+  fill-opacity: 0.1;
+  stroke: none;
+}
+
+.recordChartLine {
+  stroke: var(--record-accent);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+}
+
+.recordChartPoint {
+  fill: var(--v-surface);
+  stroke: var(--record-accent);
+  stroke-width: 1.5;
+}
+
+.recordChartPointToday {
+  fill: var(--record-accent);
+  stroke: var(--record-accent);
+  stroke-width: 1.5;
+}
+
+.recordChartMarker {
+  stroke: var(--record-flag);
+  stroke-width: 1;
+}
+
+.recordChartLabel,
+.recordChartAxis,
+.recordChartToday,
+.recordChartMarkerLabel {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.recordChartLabel,
+.recordChartAxis {
+  fill: var(--v-muted);
+}
+
+.recordChartToday {
+  fill: var(--record-accent);
+  font-weight: 600;
+}
+
+.recordChartMarkerLabel {
+  fill: var(--record-flag);
+}
+
+.recordCaption {
+  margin-top: 1.1rem;
+  border-top: 1px solid var(--v-line);
+  padding-top: 0.9rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
+}
+
+/*
+ * Narrow screens. The chart is one SVG scaled by width, so its text shrinks
+ * with it; the in-chart type is therefore sized back up in viewBox units here
+ * rather than being left to render at about five pixels. The revision label is
+ * the one annotation with no room left at this width, so it drops and the
+ * caption underneath carries it instead.
+ */
+@media (max-width: 30rem) {
+  .credentialKicker {
+    letter-spacing: 0.1em;
+  }
+
+  .recordVis .credentialRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+
+  .recordRing {
+    width: 116px;
+    height: 116px;
+    margin: 0 auto;
+  }
+
+  .recordRingCentre .credentialNumber {
+    font-size: 1.6rem;
+  }
+
+  .credentialFacts {
+    text-align: left;
+  }
+
+  .credentialFacts div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .credentialFacts span {
+    margin-right: 0;
+  }
+
+  .recordChartLabel,
+  .recordChartToday,
+  .recordChartAxis {
+    font-size: 16px;
+    letter-spacing: 0.08em;
+  }
+
+  .recordChartMarkerLabel {
+    display: none;
+  }
 }
 
 /* ---------------- Dispatch band (pricing) ---------------- */

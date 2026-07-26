@@ -7,6 +7,7 @@ import {
   RESEARCH_SOURCES,
   UK_STATS,
 } from "@/components/marketing/data"
+import { RecordVis } from "./record-vis"
 import styles from "./home-fde.module.css"
 
 /**
@@ -77,7 +78,11 @@ const JOURNEY_BLURBS: Record<string, string> = {
 }
 
 /** UK sources cited beside the stats list, index-matched to UK_STATS. */
-const STAT_SOURCES = ["DSIT, 2025", "ONS, 2025", "ONS, 2025"]
+const STAT_SOURCES = [
+  "DSIT, published 2026 (fieldwork 2024)",
+  "ONS, 2026",
+  "ONS, 2026",
+]
 
 /**
  * Variant B of the homepage redesign comparison: the GWTH homepage rebuilt
@@ -334,30 +339,17 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             href="/signup"
             className={styles.credentialPanel}
           >
-            <p className={styles.mono}>What your record looks like</p>
+            <p className={`${styles.mono} ${styles.credentialKicker}`}>
+              What your record looks like to your employer or prospective
+              employers
+            </p>
             <h3>Applied AI Skills</h3>
             <p>
               Practical AI for non-technical adults, kept in step with the
               live curriculum as lessons change. The figures below are an
               example, not a real learner.
             </p>
-            <div className={styles.credentialRow}>
-              <div className={styles.credentialNumber}>64/94</div>
-              <div className={styles.credentialFacts}>
-                <div>
-                  <span>Format</span>
-                  <strong>Live record</strong>
-                </div>
-                <div>
-                  <span>Progress</span>
-                  <strong>Visible</strong>
-                </div>
-                <div>
-                  <span>Status</span>
-                  <strong>Current</strong>
-                </div>
-              </div>
-            </div>
+            <RecordVis />
           </Link>
         </div>
       </section>
