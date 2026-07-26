@@ -178,6 +178,7 @@ PAGE 1  CONTINUE right edge 370 (<= 390)      PAGE 2  CONTINUE right edge 370
 ```
 
 ![Demo lesson page 1, 390, after the fix](W26/final-lesson-page1-390.png)
+![The intro video, clickable again on production](W26/final-lesson-video-clickable-1440.png)
 
 ### Lessons that are not demoable
 
