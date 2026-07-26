@@ -98,6 +98,17 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
             <h2 className={styles.sectionTitle}>The answers</h2>
             <p className={styles.mono}>Verbatim · Side by side</p>
           </div>
+          {/*
+            The outputs are printed exactly as returned, so ChatGPT's markdown
+            headings and bold markers show as raw characters beside Claude's
+            plain prose. Said out loud that reads as a difference between the
+            tools; left unsaid it reads as a broken page.
+          */}
+          <p className={styles.sectionNote}>
+            Each answer is printed exactly as the tool returned it, formatting
+            marks and all, so you are judging the real output rather than a
+            tidied-up version of it.
+          </p>
           <div className={styles.outputsGrid}>
             {lab.outputs.map((output) => {
               const contestant = lab.matchup.find((m) => m.name === output.by)
