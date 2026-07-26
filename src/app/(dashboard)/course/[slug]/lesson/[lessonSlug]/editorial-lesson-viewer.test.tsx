@@ -135,6 +135,44 @@ function getAudioElement(): HTMLAudioElement {
 
 // ── Audio bar ────────────────────────────────────────────────────────────────
 
+/**
+ * David, 2026-07-26: "Please move the play button to the top of the text in
+ * each lesson so students see this first."
+ *
+ * The narration control used to be a bar pinned to the bottom of the window,
+ * so a student met the wall of text before they discovered they could listen
+ * to it. It now sits directly under the lesson title and above the body.
+ */
+describe("EditorialLessonViewer narration control placement", () => {
+  /** True when `a` comes before `b` in document order. */
+  function precedes(a: Element, b: Element) {
+    return Boolean(
+      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING
+    )
+  }
+
+  it("puts the play button above the lesson body, not below it", () => {
+    const { container } = render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />
+    )
+    const play = screen.getByRole("button", { name: /play narration/i })
+    const body = container.querySelector("article, [data-page-body]")
+      ?? screen.getByText(makeLesson().pages[1]?.title ?? "", { exact: false })
+    expect(precedes(play, body as Element)).toBe(true)
+  })
+
+  it("sticks to the top of the reading column, not the bottom", () => {
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />
+    )
+    const play = screen.getByRole("button", { name: /play narration/i })
+    const bar = play.closest("div.sticky")
+    expect(bar).not.toBeNull()
+    expect(bar!.className).toContain("top-0")
+    expect(bar!.className).not.toContain("bottom-0")
+  })
+})
+
 describe("EditorialLessonViewer audio bar", () => {
   it("renders a real audio element with the lesson's media src", () => {
     render(

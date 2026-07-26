@@ -220,6 +220,14 @@ export const ENABLE_GWTH_SCORE = envFlagEnabled(process.env.GWTH_SCORE_ENABLED)
 /** Whether the dev state switcher toolbar is shown (development only) */
 export const ENABLE_DEV_TOOLBAR = process.env.NODE_ENV === "development"
 
+/**
+ * Route of the one live course. There is a single course during beta, so the
+ * dashboard sidebar and the public nav both need this literal; keeping it here
+ * stops the two drifting apart. When a second course exists this becomes a
+ * lookup, and both call sites already read from one place.
+ */
+export const COURSE_PATH = "/course/applied-ai-skills"
+
 // ─── News ────────────────────────────────────────────────────────────────────
 
 /**

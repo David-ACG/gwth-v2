@@ -15,6 +15,7 @@ import {
   PanelLeft,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { COURSE_PATH } from "@/lib/config"
 import { useSidebar } from "@/hooks/use-sidebar"
 import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
 import { Button } from "@/components/ui/button"
@@ -24,7 +25,7 @@ import styles from "./sidebar-fde.module.css"
 
 const mainNavItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/course/applied-ai-skills", label: "The Course", icon: BookOpen },
+  { href: COURSE_PATH, label: "The Course", icon: BookOpen },
   { href: "/labs", label: "Labs", icon: FlaskConical },
   { href: "/progress", label: "Progress", icon: BarChart3 },
 ]

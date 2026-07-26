@@ -46,6 +46,16 @@ interface PublicNavProps {
    * every marketing page.
    */
   showLabs: boolean
+  /**
+   * Where the "Lessons" link should point for THIS viewer. Anonymous visitors
+   * get `/lessons`, the public marketing page. A signed-in learner with course
+   * access gets their actual course instead: clicking "Lessons" while logged in
+   * and landing on an advert for the thing you already bought is the defect
+   * David reported on 2026-07-26. Resolved on the server in
+   * `(public)/layout.tsx` for the same reason as `showLabs` — this is a client
+   * component and cannot read the session itself.
+   */
+  lessonsHref: string
 }
 
 /**
@@ -55,15 +65,17 @@ interface PublicNavProps {
  * login/signup CTAs. When authenticated, shows user avatar with dropdown
  * instead of login buttons. Responsive: hamburger menu on mobile.
  */
-export function PublicNav({ user, showLabs }: PublicNavProps) {
+export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
   const pathname = usePathname()
 
   // Hiding a link is presentation, not protection: /labs is gated in the proxy
   // and again inside the page. This only keeps a visitor who cannot open Labs
   // from being offered them.
-  const links = showLabs
-    ? navLinks
-    : navLinks.filter((link) => link.href !== "/labs")
+  const links = (
+    showLabs ? navLinks : navLinks.filter((link) => link.href !== "/labs")
+  ).map((link) =>
+    link.href === "/lessons" ? { ...link, href: lessonsHref } : link
+  )
 
   const initials = user
     ? user.name

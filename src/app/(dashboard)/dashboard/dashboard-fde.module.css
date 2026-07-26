@@ -426,6 +426,28 @@
   opacity: 0.55;
 }
 
+/*
+ * A lesson row that opens its lesson. The row already animates
+ * background-color, so hover reuses the same surface the current row sits on
+ * and the pointer says the rest. Colour is deliberately not used to signal the
+ * link: these rows sit inside a hairline FDE table where a coloured hover would
+ * read as a state change rather than affordance.
+ */
+.tableRowLink {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tableRowLink:hover {
+  background: var(--v-bg);
+}
+
+.tableRowLink:focus-visible {
+  outline: 2px solid var(--v-ink);
+  outline-offset: -2px;
+}
+
 .rowTitle {
   font-size: var(--fde-body);
   font-weight: 500;

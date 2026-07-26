@@ -535,6 +535,34 @@ export function EditorialLessonViewer({
               quizPassed={quizPassed}
             />
 
+            {/* The narration control sits directly under the lesson title and
+                above the body, not pinned to the bottom of the window. David
+                asked for this on 2026-07-26: students should meet "listen to
+                this" before they meet the wall of text, and a bottom bar is
+                found only after you have already started reading. It stays
+                sticky so it is still reachable once you scroll. */}
+            <AudioBar
+              variant={
+                isVideo
+                  ? "muted"
+                  : !audioSrc
+                    ? "unavailable"
+                    : playing
+                      ? "playing"
+                      : "paused"
+              }
+              autoAdvance={autoAdvance}
+              speed={speed}
+              nowReading={lesson.title}
+              currentTime={formatClock(audioTime)}
+              totalTime={formatClock(audioDur)}
+              progress={audioProgressPct}
+              onTogglePlay={handleTogglePlay}
+              onSeek={handleSeek}
+              onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
+              onChangeSpeed={setSpeed}
+            />
+
             <div className="flex min-w-0 flex-1 justify-center py-9">
               {isVideo ? (
                 <VideoPageBody
@@ -615,27 +643,6 @@ export function EditorialLessonViewer({
             )}
           </div>
 
-          <AudioBar
-            variant={
-              isVideo
-                ? "muted"
-                : !audioSrc
-                  ? "unavailable"
-                  : playing
-                    ? "playing"
-                    : "paused"
-            }
-            autoAdvance={autoAdvance}
-            speed={speed}
-            nowReading={lesson.title}
-            currentTime={formatClock(audioTime)}
-            totalTime={formatClock(audioDur)}
-            progress={audioProgressPct}
-            onTogglePlay={handleTogglePlay}
-            onSeek={handleSeek}
-            onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
-            onChangeSpeed={setSpeed}
-          />
         </main>
       </div>
 
@@ -1237,7 +1244,7 @@ function AudioBar({
     // content (a 3-up speed switch of 44px buttons plus the auto-advance
     // toggle), so the row's minimum exceeded 390px and shunted the play button
     // to left=-46 — all but 2px of the narration control off-screen.
-    <div className="sticky bottom-0 z-[5] border-t border-foreground bg-card px-4 py-3.5 sm:px-7">
+    <div className="sticky top-0 z-[5] mb-1 border-b border-foreground bg-card px-4 py-3.5 sm:px-7">
       <div className="grid items-center gap-x-[22px] gap-y-3 [grid-template-columns:52px_minmax(0,1fr)] sm:[grid-template-columns:52px_minmax(0,1fr)_auto_auto_auto]">
         <button
           type="button"

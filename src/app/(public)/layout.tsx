@@ -1,7 +1,8 @@
 import { PublicNav } from "@/components/layout/public-nav"
 import { Footer } from "@/components/layout/footer"
-import { getCurrentUser } from "@/lib/auth"
+import { getCurrentUser, canUserAccessCourse } from "@/lib/auth"
 import { canViewPrivateContent } from "@/lib/content-access"
+import { COURSE_PATH } from "@/lib/config"
 
 /**
  * Render per request, never statically.
@@ -42,11 +43,20 @@ export default async function PublicLayout({
     canViewPrivateContent(),
   ])
 
+  // A signed-in learner clicking "Lessons" wants their course, not the advert
+  // for it (David, 2026-07-26). `getCurrentUser()` already returns null without
+  // a live grant, so this only redirects people who can actually open the
+  // course. /lessons itself stays public and unchanged for everyone else, which
+  // W25 requires so CIPD can research the site afterwards.
+  const lessonsHref =
+    user && canUserAccessCourse(user) ? COURSE_PATH : "/lessons"
+
   return (
     <div className="flex min-h-screen flex-col">
       <PublicNav
         user={user ? { name: user.name, email: user.email } : null}
         showLabs={showLabs}
+        lessonsHref={lessonsHref}
       />
       <main className="flex-1">{children}</main>
       <Footer showLabs={showLabs} />

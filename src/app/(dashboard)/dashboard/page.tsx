@@ -366,6 +366,7 @@ export function ActiveDashboard({
                   : "pending"
               }
               tag={planned.lesson.isOptional ? "OPTIONAL" : undefined}
+              href={`/course/${course.slug}/lesson/${planned.lesson.slug}`}
             />
           ))}
           {upcoming.length === 0 && (
@@ -966,6 +967,11 @@ export function LapsedDashboard({
                     : "pending"
                 }
                 tag={planned.lesson.isOptional ? "OPTIONAL" : undefined}
+                href={
+                  course
+                    ? `/course/${course.slug}/lesson/${planned.lesson.slug}`
+                    : undefined
+                }
               />
             ))}
             <div className={styles.tableFoot}>
@@ -1169,18 +1175,30 @@ function StateGlyph({ state }: { state: LessonRowState }) {
   )
 }
 
+/**
+ * One lesson in a dashboard list.
+ *
+ * The whole row is a link when `href` is given. It used to be an inert `<div>`,
+ * so clicking a lesson did nothing and the only way in was the "Start lesson"
+ * button at the top of the page: David reported on 2026-07-26 that this is not
+ * what anyone expects, and that the button should stay as well as the rows
+ * working. A locked row stays inert, because there is nothing to open yet.
+ */
 function LessonRow({
   num,
   title,
   length,
   state,
   tag,
+  href,
 }: {
   num: number
   title: string
   length: string
   state: LessonRowState
   tag?: string
+  /** Lesson URL. Omit (or pass undefined) to render an inert row. */
+  href?: string
 }) {
   const highlighted = state === "current" || state === "next"
   const stateLabel = {
@@ -1190,14 +1208,19 @@ function LessonRow({
     pending: "",
     locked: "NEXT MONTH",
   }[state]
-  return (
-    <div
-      className={cn(
-        styles.tableRow,
-        highlighted && styles.tableRowCurrent,
-        state === "locked" && styles.tableRowLocked
-      )}
-    >
+  // A locked row has nothing to open, so it stays inert even if a href is
+  // passed. Branching on the element rather than using a dynamic tag keeps
+  // next/link's `href` required, so a missing URL is a type error not a
+  // silently dead row.
+  const interactive = state !== "locked" && Boolean(href)
+  const className = cn(
+    styles.tableRow,
+    highlighted && styles.tableRowCurrent,
+    state === "locked" && styles.tableRowLocked,
+    interactive && styles.tableRowLink
+  )
+  const inner = (
+    <>
       <StateGlyph state={state} />
       <span className={styles.mono}>L{String(num).padStart(2, "0")}</span>
       <span>
@@ -1224,8 +1247,16 @@ function LessonRow({
         )}
       </span>
       <span className={styles.mono}>{length}</span>
-    </div>
+    </>
   )
+  if (interactive) {
+    return (
+      <Link href={href as string} className={className}>
+        {inner}
+      </Link>
+    )
+  }
+  return <div className={className}>{inner}</div>
 }
 
 /**

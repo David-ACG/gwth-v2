@@ -237,3 +237,75 @@ describe("ActiveDashboard month + ordering (gwth-launch-26b)", () => {
     expect(view.queryByText("MONTH 3 OF 3")).not.toBeInTheDocument()
   })
 })
+
+/**
+ * David, 2026-07-26: "when I'm in the dashboard and I click on lesson one in
+ * month one or three, it doesn't actually go to lesson one. I have to click on
+ * the button at the top called start lesson one. This isn't natural."
+ *
+ * The rows were inert `<div>`s. They are links now, and the Start button stays.
+ */
+describe("ActiveDashboard lesson rows are links", () => {
+  function renderFresh() {
+    const { container } = render(
+      <ActiveDashboard
+        user={user}
+        course={course}
+        progress={undefined}
+        lessonProgress={[]}
+        streak={emptyStreak()}
+        notifications={[]}
+      />
+    )
+    return container
+  }
+
+  /** Anchors whose text is a lesson table row, keyed by href. */
+  function rowLinks(container: HTMLElement) {
+    return Array.from(container.querySelectorAll("a")).filter((a) =>
+      /^\/course\/applied-ai-skills\/lesson\//.test(a.getAttribute("href") ?? "")
+    )
+  }
+
+  it("makes the lesson row itself open that lesson", () => {
+    const container = renderFresh()
+    // The row reading "L01 ... Lesson 1 ... NEXT UP" is an anchor to lesson 1.
+    const row = rowLinks(container).find((a) =>
+      (a.textContent ?? "").includes("L01")
+    )
+    expect(row).toBeDefined()
+    expect(row!.getAttribute("href")).toBe(
+      "/course/applied-ai-skills/lesson/lesson-1"
+    )
+    expect(row!.textContent).toContain("Lesson 1")
+  })
+
+  it("points each row at its own lesson, not all at the first", () => {
+    const container = renderFresh()
+    const byLabel = new Map(
+      rowLinks(container).map((a) => [
+        (a.textContent ?? "").slice(1, 4),
+        a.getAttribute("href"),
+      ])
+    )
+    expect(byLabel.get("L02")).toBe(
+      "/course/applied-ai-skills/lesson/lesson-2"
+    )
+    expect(byLabel.get("L03")).toBe(
+      "/course/applied-ai-skills/lesson/lesson-3"
+    )
+  })
+
+  it("keeps the Start Lesson button as well as the clickable rows", () => {
+    const container = renderFresh()
+    const start = Array.from(container.querySelectorAll("a")).find((a) =>
+      (a.textContent ?? "").trim().startsWith("Start Lesson 1")
+    )
+    expect(start).toBeDefined()
+    expect(start!.getAttribute("href")).toBe(
+      "/course/applied-ai-skills/lesson/lesson-1"
+    )
+    // Six upcoming rows are listed, and every one of them is now a link.
+    expect(rowLinks(container).length).toBeGreaterThanOrEqual(6)
+  })
+})
