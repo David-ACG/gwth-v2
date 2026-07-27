@@ -91,9 +91,11 @@ export function PricingFde() {
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
+          {/* The kicker used to carry both prices too. With priceLine saying
+              it directly below in headline type, that was the same sentence
+              twice in one block. */}
           <p className={styles.mastheadKicker}>
-            Pricing in GBP · No yearly lock-in · £{COURSE_MONTHLY_PRICE} while
-            you learn, £{ONGOING_MONTHLY_PRICE.toFixed(2)} to stay current
+            Pricing in GBP · No yearly lock-in
           </p>
           <h1 className={styles.mastheadTitle}>
             Three ways to learn. <em>Start free.</em>
