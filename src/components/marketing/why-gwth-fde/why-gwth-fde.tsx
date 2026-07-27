@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { COURSE_MONTHLY_PRICE } from "@/lib/config"
+import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import styles from "./why-gwth-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 
@@ -438,8 +438,10 @@ export function WhyGwthFde() {
           </h2>
           <p>
             The foundation is free. The transformation starts at
-            &pound;{COURSE_MONTHLY_PRICE.toFixed(2)}/month. Structured
-            lessons, practical projects, vendor-neutral, built for the UK.
+            &pound;{COURSE_MONTHLY_PRICE.toFixed(2)}/month, and drops to
+            &pound;{ONGOING_MONTHLY_PRICE.toFixed(2)}/month once you have
+            finished. Structured lessons, a practical project in every lesson,
+            vendor-neutral, built for the UK.
           </p>
           <div className={styles.closingActions}>
             <Link href="/waitlist" className={styles.buttonSolid}>

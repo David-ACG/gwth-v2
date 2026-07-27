@@ -6,7 +6,7 @@ import {
   TOTAL_MANDATORY_LESSONS,
   TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
-import { UK_STATS, RESEARCH_SOURCES } from "@/components/marketing/data"
+import { UK_STATS } from "@/components/marketing/data"
 import styles from "./for-teams-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 
@@ -105,7 +105,7 @@ const FAQS = [
   },
   {
     question: "What is the ROI?",
-    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE}/mo for each person, with monthly access rather than an annual lock-in. By Month 1, your team should be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives.`,
+    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE}/mo for each person, with monthly access rather than an annual lock-in, and £${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo per person after the course to stay current. By Month 1, your team should be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives.`,
   },
   {
     question: "Our team is not technical. Is this appropriate?",
@@ -219,13 +219,13 @@ export function ForTeamsFde() {
               <div key={stat.value} className={styles.stat} data-testid="for-teams-stat">
                 <strong>{stat.value}</strong>
                 <p>{stat.label}</p>
+                {/* Per-stat, because one blanket "DSIT" line over a list of six
+                    organisations told the reader nothing about which number
+                    came from where. */}
+                <p className={styles.statSource}>Source: {stat.source}</p>
               </div>
             ))}
           </div>
-          <p className={styles.statsFoot}>
-            Source: UK Government / DSIT (Jan 2026) ·{" "}
-            {RESEARCH_SOURCES.join(" · ")}
-          </p>
           <p className={styles.statsNote}>
             Most AI training fails because it teaches tools, not skills. The
             UK government&apos;s own research shows only 21% of workers feel
@@ -248,8 +248,9 @@ export function ForTeamsFde() {
           </div>
           <p className={styles.sectionLead}>
             At £{COURSE_MONTHLY_PRICE}/mo for 3 months, the entire course
-            costs £{COURSE_MONTHLY_PRICE}/mo per person. That is deliberately
-            priced below even a short consultant call.
+            costs £{COURSE_MONTHLY_PRICE}/mo per person, dropping to £
+            {ONGOING_MONTHLY_PRICE.toFixed(2)}/mo once the teaching is done.
+            That is deliberately priced below even a short consultant call.
           </p>
           <div className={styles.compareRow}>
             <article className={styles.compareCard}>

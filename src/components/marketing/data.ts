@@ -65,6 +65,13 @@ export type ProductPillar = {
 export type UkStat = {
   value: string
   label: string
+  /**
+   * The citation for THIS number. Rendered against the stat itself: the page
+   * used to print one blanket "Source: UK Government / DSIT" line followed by
+   * every research body named anywhere on the site, which read as though six
+   * organisations stood behind three figures.
+   */
+  source: string
 }
 
 export type CurriculumModule = {
@@ -138,7 +145,7 @@ export const JOURNEYS: readonly Journey[] = [
       // findings", published 28 January 2026 from fieldwork 29 February to
       // 7 March 2024. Labelled with both dates because neither alone is
       // honest. No like-for-like 2026 survey of worker AI confidence exists.
-      source: "DSIT, published 2026 (fieldwork 2024)",
+      source: "DSIT, published 2026",
     },
     cta: "See pricing",
     href: "/pricing",
@@ -200,7 +207,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Proof",
     title: "You want proof that you are fluent in Applied AI",
     body:
-      "Every completed lesson, Q&A pass, Capstone project, and current update leaves a practical progress trail. Use the portfolio pieces on LinkedIn or your CV: the emphasis for beta is real work, not a one-shot certificate that goes stale a month after issue.",
+      "Every completed lesson, Q&A pass, Capstone project, and current update leaves a practical progress trail. Use the portfolio pieces on LinkedIn or your CV: the emphasis is real work, not a one-shot certificate that goes stale a month after issue.",
     accent: "aqua",
     cta: "See pricing",
     href: "/pricing",
@@ -225,7 +232,7 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Team lead",
     title: "You lead a team and your competitors are moving faster",
     body:
-      "The bottleneck is not the tools. It is whether your team can actually use them well. The beta is individual-first, with a light For Teams path for managers who want to talk about future group access.",
+      "The bottleneck is not the tools. It is whether your team can actually use them well. GWTH is individual-first, with a light For Teams path for managers who want to talk about group access.",
     accent: "mint",
     // CIPD's own research, which is why it sits on the card that argues the
     // bottleneck is capability rather than tooling. YouGov for CIPD,
@@ -258,7 +265,7 @@ export const PRODUCT_PILLARS: readonly ProductPillar[] = [
     label: "Course progress",
     title: "Visible progress that keeps the course grounded in real work.",
     body:
-      "Your progress reflects completion, applied skill, and currentness. During beta, GWTH shows plain progress and portfolio evidence while the verifiable score stays reserved for post-beta.",
+      "Your progress reflects completion, applied skill, and currentness. GWTH shows plain progress and portfolio evidence: every lesson ends in a practical project, and the work you keep is the proof.",
   },
   {
     n: "03",
@@ -291,9 +298,21 @@ export const RESEARCH_SOURCES: readonly string[] = [
 //     published 20 July 2026, same June 2026 fieldwork.
 
 export const UK_STATS: readonly UkStat[] = [
-  { value: "21%", label: "of UK workers feel confident using AI at work" },
-  { value: "29%", label: "of UK businesses were using at least one AI technology in June 2026" },
-  { value: "28% vs 49%", label: "of the smallest UK businesses use AI, against half of large firms" },
+  {
+    value: "21%",
+    label: "of UK workers feel confident using AI at work",
+    source: "DSIT, published 2026",
+  },
+  {
+    value: "29%",
+    label: "of UK businesses were using at least one AI technology in June 2026",
+    source: "ONS, 2026",
+  },
+  {
+    value: "28% vs 49%",
+    label: "of the smallest UK businesses use AI, against half of large firms",
+    source: "ONS, 2026",
+  },
 ]
 
 // ─── Curriculum (sourced from MONTH_CONFIGS in src/lib/config.ts) ───────────
@@ -345,10 +364,10 @@ export const PRICING: readonly PricingTier[] = [
     pricePence: 0,
     per: "forever, no card required",
     features: [
-      "Access to all free labs",
-      "Build real projects with AI",
-      "No credit card required",
-      "No time limit, free forever",
+      "Every free lab, no card required",
+      "Side-by-side comparisons of the newest AI tools on one real task",
+      "New labs as new tools launch",
+      "Lessons and their projects come with the course, not the free tier",
     ],
     cta: { label: "Try a Free Lab", href: "/labs", style: "ghost" },
   },
@@ -360,12 +379,12 @@ export const PRICING: readonly PricingTier[] = [
     pricePence: COURSE_MONTHLY_PRICE * 100,
     per: "/mo · unlock one month at a time",
     features: [
-      "Full Month 1 at beta launch; Months 2 and 3 follow",
+      "Full Month 1 available now; Months 2 and 3 follow",
       `${TOTAL_MANDATORY_LESSONS} core lessons plus ${TOTAL_OPTIONAL_LESSONS} go-deeper optional lessons`,
       "Capstones for AskMyCo, FractionalBuddy, and AskEveryone",
       "Industry-specific modules for your field",
       "Plain course progress tracking",
-      "Starter price may rise after beta",
+      "Starter price may rise later",
       "No ads, no upsells, no hidden tier",
     ],
     cta: { label: "Join the Waitlist", href: "/signup", style: "accent2" },

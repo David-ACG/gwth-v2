@@ -31,7 +31,7 @@ const progressVis = (
     <div className="mt-5 text-center">
       <div className="text-6xl font-bold tracking-tight">64/94</div>
       <p className="mt-3 text-sm text-muted-foreground">
-        Plain beta progress: lessons, projects, capstones, and refresh work.
+        Plain progress: lessons, projects, capstones, and refresh work.
       </p>
     </div>
   </div>
@@ -55,7 +55,7 @@ const ROW_CONFIGS: readonly RowConfig[] = [
           "Decays if you stop, keeps it honest",
         ]
       : [
-          "Plain beta progress",
+          "Plain progress",
           "Portfolio evidence, no public credential",
           "Refresh work keeps currentness visible",
         ],

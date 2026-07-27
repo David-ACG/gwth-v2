@@ -54,7 +54,7 @@ describe("ProductPillars", () => {
     const r2 = container.querySelector('[data-row="2"]') as HTMLElement
     expect(r2.querySelector('[data-role="score-pulse"]')).toBeNull()
     expect(r2.querySelector('[data-section="progress-vis"]')).not.toBeNull()
-    expect(r2.textContent ?? "").toContain("Plain beta progress")
+    expect(r2.textContent ?? "").toContain("Plain progress")
   })
 
   it("row 3 mounts PromptVis", async () => {

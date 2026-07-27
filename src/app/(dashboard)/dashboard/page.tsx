@@ -14,7 +14,12 @@ import {
   isInGracePeriod,
 } from "@/lib/auth"
 import { HeroDevice } from "@/components/marketing/hero/hero-device"
-import { ENABLE_BILLING, ENABLE_GWTH_SCORE, COURSE_MONTHLY_PRICE } from "@/lib/config"
+import {
+  ENABLE_BILLING,
+  ENABLE_GWTH_SCORE,
+  COURSE_MONTHLY_PRICE,
+  ONGOING_MONTHLY_PRICE,
+} from "@/lib/config"
 import { cn } from "@/lib/utils"
 import type {
   User,
@@ -698,7 +703,7 @@ export function FreeDashboard({ user }: { user: User | null }) {
 
       <section className={styles.band}>
         <div>
-          <p className={styles.mono}>FREE LABS · BETA INVITE REQUIRED FOR COURSE</p>
+          <p className={styles.mono}>FREE LABS · INVITE REQUIRED FOR COURSE</p>
           <h1 className={styles.bandTitle}>
             Welcome, {name}.
             <br />
@@ -706,7 +711,8 @@ export function FreeDashboard({ user }: { user: User | null }) {
           </h1>
           <p className={styles.bandLead}>
             You have access to all 18 free labs. The course is £
-            {COURSE_MONTHLY_PRICE.toFixed(0)}/month when beta billing reopens;
+            {COURSE_MONTHLY_PRICE.toFixed(0)}/month, one month at a time, and £
+            {ONGOING_MONTHLY_PRICE.toFixed(2)}/month to stay current after it;
             access is currently invite-only and manually granted.
           </p>
         </div>

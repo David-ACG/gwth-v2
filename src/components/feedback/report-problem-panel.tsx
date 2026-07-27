@@ -103,7 +103,7 @@ export function ReportProblemPanel({
             <h2 className={styles.title}>Thank you</h2>
             <p className={styles.successBody}>
               Your feedback has gone straight to the team. It really does help
-              shape the beta.
+              shape the course.
             </p>
             <button
               type="button"

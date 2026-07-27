@@ -18,7 +18,7 @@ export function WaitlistFde() {
           <p className={styles.mastheadKicker}>Waitlist</p>
           <h1 className={styles.mastheadTitle}>Join the Waitlist</h1>
           <p className={styles.standfirst}>
-            The beta is invite-only while we work closely with a small group
+            Access is invite-only while we work closely with a small group
             of testers. Leave your name and email and we will contact you
             when more places open. Already invited?{" "}
             <Link href="/signup" className={styles.standfirstLink}>

@@ -31,8 +31,8 @@ export function Hero() {
               evidence.
             </p>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground sm:text-xl">
-              Built around UK examples, UK research, and GBP pricing. The beta
-              is invite-only; join the waitlist for the next access window.
+              Built around UK examples, UK research, and GBP pricing. Access is
+              invite-only; join the waitlist for the next access window.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">

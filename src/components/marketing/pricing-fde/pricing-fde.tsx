@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { PRICING } from "@/components/marketing/data"
+import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import styles from "./pricing-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 
@@ -12,16 +13,20 @@ const TEAM_FEATURES = [
 ]
 
 /** Feature comparison rows: [feature, Free, Member, Team]. */
+// Every "Free" cell here has to survive a signed-out visitor actually trying
+// it. There is no lesson preview and no progress tracking without an account,
+// so both used to promise something the product does not do.
 const COMPARISONS = [
   ["Free labs", "Included", "Included", "Included"],
-  ["Full core course", "Preview only", "Included", "Included"],
+  ["Full core course", "No", "Included", "Included"],
+  ["A practical project in every lesson", "No", "Included", "Included"],
+  ["Plain progress tracking", "No", "Included", "Team visibility"],
   [
-    "Plain progress tracking",
-    "Included",
-    "Included",
-    "Team visibility",
+    "Stay Current refreshes",
+    "No",
+    `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo after the course`,
+    "Team policy",
   ],
-  ["Stay Current refreshes", "No", "Available after course", "Team policy"],
   ["Admin dashboard", "No", "No", "Included for 5+"],
 ]
 
@@ -85,7 +90,8 @@ export function PricingFde() {
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
           <p className={styles.mastheadKicker}>
-            Pricing in GBP · No yearly lock-in
+            Pricing in GBP · No yearly lock-in · £{COURSE_MONTHLY_PRICE} while
+            you learn, £{ONGOING_MONTHLY_PRICE.toFixed(2)} to stay current
           </p>
           <h1 className={styles.mastheadTitle}>
             Three ways to learn. <em>Start free.</em>
@@ -93,7 +99,9 @@ export function PricingFde() {
           <p className={styles.standfirst}>
             Less than the cost of one hour with an AI consultant. Join the
             course when you are ready, and bring teams in without hidden
-            enterprise games.
+            enterprise games. When the teaching is done the price drops to £
+            {ONGOING_MONTHLY_PRICE.toFixed(2)} a month, because you should not
+            keep paying course prices for a course you have finished.
           </p>
           <div className={styles.mastheadFoot}>
             <p>Unlock as you go</p>
@@ -227,6 +235,8 @@ export function PricingFde() {
           <p>
             You unlock one month at a time, so the course has to earn your
             attention first. No card up front, no timer, no pretend scarcity.
+            After the three months it is £{ONGOING_MONTHLY_PRICE.toFixed(2)} a
+            month to stay current, and you can stop that too.
           </p>
           <div className={styles.closingActions}>
             {canPromoteLabs() && (

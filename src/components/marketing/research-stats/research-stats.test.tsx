@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { render } from "@testing-library/react"
 import { ResearchStats } from "./research-stats"
-import { UK_STATS, RESEARCH_SOURCES } from "@/components/marketing/data"
+import { UK_STATS } from "@/components/marketing/data"
 
 describe("ResearchStats", () => {
   it("sets data-section=research-stats on the root", () => {
@@ -31,13 +31,26 @@ describe("ResearchStats", () => {
     expect(text).toMatch(/28% vs 49%/)
   })
 
-  it("renders the DSIT citation footer with all 6 source organisations", () => {
+  // Deliberately updated: the blanket "Source: UK Government / DSIT (Jan
+  // 2026)" footer trailed by all six RESEARCH_SOURCES made it impossible to
+  // tell which body stood behind which number, and named four that are not
+  // cited here at all. Each tile now carries its own citation.
+  it("cites each stat against its own source", () => {
+    const { container } = render(<ResearchStats />)
+    const sources = Array.from(
+      container.querySelectorAll('[data-testid="research-stat-source"]')
+    )
+    expect(sources).toHaveLength(UK_STATS.length)
+    sources.forEach((node, i) => {
+      expect(node.textContent).toBe(`Source: ${UK_STATS[i]!.source}`)
+    })
+  })
+
+  it("no longer implies six organisations stand behind three figures", () => {
     const { container } = render(<ResearchStats />)
     const text = container.textContent ?? ""
-    expect(text).toContain("DSIT")
-    expect(text).toContain("Jan 2026")
-    for (const source of RESEARCH_SOURCES) {
-      expect(text).toContain(source)
-    }
+    expect(text).not.toContain("Jan 2026")
+    expect(text).not.toContain("Tech UK")
+    expect(text).not.toContain("Innovate UK")
   })
 })

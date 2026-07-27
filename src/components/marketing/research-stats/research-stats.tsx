@@ -1,11 +1,12 @@
 import { MotionSection } from "@/components/marketing/motion-section"
-import { UK_STATS, RESEARCH_SOURCES } from "@/components/marketing/data"
+import { UK_STATS } from "@/components/marketing/data"
 
 /**
- * ResearchStats — three-tile UK research callout. Numbers are sourced
- * from DSIT (UK Government / AI Skills Boost programme, January 2026).
- * Citation footer lists the six research bodies cited across the site;
- * they are SOURCES, not partners or sponsors.
+ * ResearchStats — three-tile UK research callout. Each tile carries its OWN
+ * citation. It used to print one blanket "Source: UK Government / DSIT" line
+ * trailed by all six research bodies named anywhere on the site, which left a
+ * reader unable to tell which organisation stood behind which number, and
+ * implied four organisations that had not been cited here at all.
  */
 export function ResearchStats() {
   return (
@@ -31,13 +32,15 @@ export function ResearchStats() {
                 {stat.value}
               </div>
               <p className="mt-3 text-sm text-muted-foreground">{stat.label}</p>
+              <p
+                data-testid="research-stat-source"
+                className="mt-4 font-mono text-[11px] uppercase tracking-wide text-muted-foreground"
+              >
+                Source: {stat.source}
+              </p>
             </div>
           ))}
         </div>
-
-        <p className="mt-10 text-center font-mono text-xs uppercase tracking-wide text-muted-foreground">
-          Source: UK Government / DSIT (Jan 2026) · {RESEARCH_SOURCES.join(" · ")}
-        </p>
       </div>
     </MotionSection>
   )

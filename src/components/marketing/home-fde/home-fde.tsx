@@ -39,12 +39,12 @@ const faqs = [
     a: "No. GWTH starts in plain English. You learn how to use AI well first, then build your way into more capable workflows and AI-assisted coding when it becomes useful.",
   },
   {
-    q: "How does progress tracking work during beta?",
-    a: "Beta shows plain lesson, project, and refresh progress for invited learners.",
+    q: "How does progress tracking work?",
+    a: "GWTH shows plain progress: the lessons you have completed, the project from each lesson, and the refresh work you have done since.",
   },
   {
     q: "Is there still proof of work?",
-    a: "Yes. The beta emphasis is completed lessons, Capstone projects, and portfolio evidence.",
+    a: "Yes. The emphasis is completed lessons, the practical project attached to every lesson, Capstone projects, and portfolio evidence.",
   },
   {
     q: "How much time does the course take?",
@@ -79,7 +79,7 @@ const JOURNEY_BLURBS: Record<string, string> = {
 
 /** UK sources cited beside the stats list, index-matched to UK_STATS. */
 const STAT_SOURCES = [
-  "DSIT, published 2026 (fieldwork 2024)",
+  "DSIT, published 2026",
   "ONS, 2026",
   "ONS, 2026",
 ]
@@ -372,7 +372,7 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
           <div className={styles.dispatchRow}>
             <div className={styles.dispatchPrice}>
               <strong>£0</strong>
-              <p>Free labs and sample lessons, no card required</p>
+              <p>Free labs, no card required. Lessons come with the course.</p>
             </div>
             <div className={styles.dispatchPrice}>
               <strong>£29/mo</strong>
@@ -380,7 +380,10 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             </div>
             <div className={styles.dispatchPrice}>
               <strong>£7.50/mo</strong>
-              <p>Optional Stay Current access after the course ends</p>
+              <p>
+                After the course. The price drops when the teaching is done, so
+                you are never paying course prices out of habit.
+              </p>
             </div>
             <Link href="/pricing" className={styles.buttonSolid}>
               See pricing
@@ -425,10 +428,12 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
             Try one month and <em>decide if you want to continue.</em>
           </h2>
           <p>
-            We charge per month and you can stop at any time. We also offer a
-            money back guarantee during the first month - so if you find it is
-            not for you, just cancel and you will get a refund if you have
-            completed less than 5 hours of lessons.
+            We charge per month and you can stop at any time. When the three
+            months are done the price drops to £7.50 a month to stay current,
+            and you can stop that too. We also offer a money back guarantee
+            during the first month - so if you find it is not for you, just
+            cancel and you will get a refund if you have completed less than 5
+            hours of lessons.
           </p>
           <div className={styles.closingActions}>
             <Link href="/waitlist" className={styles.buttonSolid}>

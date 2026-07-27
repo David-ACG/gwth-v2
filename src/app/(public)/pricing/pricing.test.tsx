@@ -43,7 +43,9 @@ describe("PricingPage", () => {
     render(<PricingPage />)
     expect(screen.getByText(/Stay Current remains available/)).toBeInTheDocument()
     expect(screen.getByText("Stay Current refreshes")).toBeInTheDocument()
-    expect(screen.getByText("Available after course")).toBeInTheDocument()
+    // Deliberately updated: the Member cell used to read "Available after
+    // course", which hid the one number that proves there is no lock-in.
+    expect(screen.getByText("£7.50/mo after the course")).toBeInTheDocument()
   })
 
   it("(W25) sends the free tier to the waitlist while Labs are private", () => {

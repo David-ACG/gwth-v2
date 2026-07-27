@@ -107,7 +107,7 @@ export function EditorialHomepage() {
                     64/94
                   </div>
                   <p className="variant-serif mt-3 text-[15px] leading-[1.6] text-muted-foreground">
-                    Plain beta progress for lessons, projects, capstones, and refresh work.
+                    Plain progress for lessons, projects, capstones, and refresh work.
                   </p>
                 </div>
               )}

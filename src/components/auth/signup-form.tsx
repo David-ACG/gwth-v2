@@ -33,7 +33,7 @@ export function SignupForm({ oauthProviders = [] }: PostBetaSignupFormProps) {
     <PostBetaSignupForm
       oauthProviders={oauthProviders}
       title="Invite-only beta"
-      subtitle="The beta is closed to public signup. Access is granted manually by the GWTH team."
+      subtitle="Registration is closed to public signup. Access is granted manually by the GWTH team."
       notice={
         <>
           If you have been invited, create your account below with the exact

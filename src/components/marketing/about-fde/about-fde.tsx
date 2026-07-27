@@ -17,7 +17,7 @@ const PRINCIPLES = [
   {
     n: "03",
     title: "Proof should be verifiable.",
-    body: "During beta, progress evidence matters more than screenshots or static PDFs: completed lessons, reviewed projects, and current refresh work.",
+    body: "Progress evidence matters more than screenshots or static PDFs: completed lessons, the practical project attached to every lesson, and current refresh work.",
   },
   {
     n: "04",

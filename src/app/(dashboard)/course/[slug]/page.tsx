@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getCourse } from "@/lib/data/courses"
-import { getCourseProgress } from "@/lib/data/progress"
+import { getAllLessonProgress, getCourseProgress } from "@/lib/data/progress"
 import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
 import { canViewPrivateContent } from "@/lib/content-access"
 import {
@@ -83,12 +83,21 @@ export const revalidate = 0
  */
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const [course, progress, dashboardUser, contentAllowed] = await Promise.all([
-    getCourse(slug),
-    getCourseProgress(slug),
-    getDashboardUser(),
-    canViewPrivateContent(),
-  ])
+  const [course, progress, lessonRows, dashboardUser, contentAllowed] =
+    await Promise.all([
+      getCourse(slug),
+      getCourseProgress(slug),
+      getAllLessonProgress(),
+      getDashboardUser(),
+      canViewPrivateContent(),
+    ])
+
+  // `lessons.status` is the AUTHORING state of the row (is this lesson
+  // published), not this learner's state. Rendering it directly is why a
+  // finished lesson still read "Not started" here while the header counted
+  // it as 1/26 — the header comes from lesson_progress, the rows did not.
+  // Index the learner's own rows so the two can agree.
+  const progressByLesson = new Map(lessonRows.map((row) => [row.lessonId, row]))
 
   // A signed-in account that is not on the content allowlist is treated
   // exactly like a visitor here: full syllabus withheld, teaser shown.
@@ -298,6 +307,23 @@ export default async function CourseDetailPage({ params }: PageProps) {
                     {section.lessons.map((lesson) => {
                       const isLocked =
                         !canAccess || lesson.status === "locked"
+                      // The learner's own row wins over the authoring status:
+                      // finished is finished, and part-way through is not
+                      // "Not started".
+                      const row = progressByLesson.get(lesson.id)
+                      const displayStatus: Exclude<LessonStatus, "locked"> =
+                        row?.isCompleted
+                          ? "completed"
+                          : row && row.progress > 0
+                            ? "in-progress"
+                            : ((lesson.status === "completed" ||
+                                lesson.status === "in-progress"
+                                ? lesson.status
+                                : "available") as Exclude<
+                                LessonStatus,
+                                "locked"
+                              >)
+                      const display = STATUS_DISPLAY[displayStatus]
                       const lessonId = `M${month} L${String(
                         lesson.order
                       ).padStart(2, "0")}`
@@ -328,28 +354,14 @@ export default async function CourseDetailPage({ params }: PageProps) {
                           ) : (
                             <span
                               className={`${styles.status} ${
-                                STATUS_DISPLAY[
-                                  lesson.status as Exclude<
-                                    LessonStatus,
-                                    "locked"
-                                  >
-                                ]?.className ?? styles.statusPending
+                                display?.className ?? styles.statusPending
                               }`}
+                              data-status={displayStatus}
                             >
                               <span className={styles.glyph} aria-hidden="true">
-                                {STATUS_DISPLAY[
-                                  lesson.status as Exclude<
-                                    LessonStatus,
-                                    "locked"
-                                  >
-                                ]?.glyph ?? "○"}
+                                {display?.glyph ?? "○"}
                               </span>
-                              {STATUS_DISPLAY[
-                                lesson.status as Exclude<
-                                  LessonStatus,
-                                  "locked"
-                                >
-                              ]?.label ?? "Not started"}
+                              {display?.label ?? "Not started"}
                             </span>
                           )}
                         </>

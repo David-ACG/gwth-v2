@@ -2397,16 +2397,31 @@ function QAOption({
   onClick?: () => void
   disabled?: boolean
 }) {
+  // Correct and wrong used to share the same faint `--v-bg` wash and differ
+  // only by border colour, so after answering you could not tell which row you
+  // had picked or which one was right. The marked rows now carry a real tint
+  // and a 2px border; idle rows keep the hairline so the answered ones read as
+  // the exception.
   const optionStyles = {
-    idle: { border: "border-foreground", bg: "bg-transparent" },
-    selected: { border: "border-foreground", bg: "bg-muted" },
+    idle: {
+      border: "border-foreground",
+      background: "transparent",
+      borderWidth: 1,
+    },
+    selected: {
+      border: "border-foreground",
+      background: "var(--muted)",
+      borderWidth: 2,
+    },
     correct: {
       border: "border-[var(--success)]",
-      bg: "bg-[var(--v-bg)]",
+      background: "color-mix(in srgb, var(--success) 20%, transparent)",
+      borderWidth: 2,
     },
     wrong: {
       border: "border-[var(--destructive)]",
-      bg: "bg-[var(--v-bg)]",
+      background: "color-mix(in srgb, var(--destructive) 14%, transparent)",
+      borderWidth: 2,
     },
   }[state]
   return (
@@ -2415,12 +2430,16 @@ function QAOption({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={state === "selected"}
+      data-option-state={state}
+      style={{
+        background: optionStyles.background,
+        borderWidth: optionStyles.borderWidth,
+      }}
       className={cn(
-        "grid w-full cursor-pointer grid-cols-[32px_1fr_auto] items-center gap-3.5 border border-solid px-3.5 py-3 text-left",
+        "grid w-full cursor-pointer grid-cols-[32px_1fr_auto] items-center gap-3.5 border-solid px-3.5 py-3 text-left",
         !disabled && state === "idle" && "hover:bg-muted",
         disabled && "cursor-default",
-        optionStyles.border,
-        optionStyles.bg
+        optionStyles.border
       )}
     >
       <span className="inline-flex size-[26px] items-center justify-center border border-foreground font-mono text-[11px] font-bold tracking-[0.06em]">
@@ -2441,6 +2460,11 @@ function QAOption({
         >
           <path d="M2 5l2 2 4-4" />
         </svg>
+      )}
+      {state === "wrong" && (
+        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--destructive)]">
+          YOUR ANSWER
+        </span>
       )}
       {state === "selected" && (
         <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">

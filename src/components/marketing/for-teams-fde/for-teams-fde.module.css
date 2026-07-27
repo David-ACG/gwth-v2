@@ -333,6 +333,17 @@
   color: var(--v-soft);
 }
 
+/* Citation for a single stat, sitting inside its own tile. */
+.statSource {
+  margin-top: 0.9rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: var(--fde-mono-xs);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
 .statsFoot {
   margin-top: 2rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;

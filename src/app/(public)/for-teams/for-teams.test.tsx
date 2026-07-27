@@ -95,7 +95,9 @@ describe("ForTeamsPage", () => {
     render(<ForTeamsPage />)
     // Deliberately updated (W26): "£29" + "/mo", matching home and /pricing.
     expect(screen.getByText("£29")).toBeInTheDocument()
-    expect(screen.getByText(/£7\.50\/mo/)).toBeInTheDocument()
+    // The ongoing price is quoted everywhere the course price is quoted now,
+    // so this is deliberately getAllByText: more than one is the point.
+    expect(screen.getAllByText(/£7\.50\/mo/).length).toBeGreaterThan(0)
   })
 
   it("has contact CTA", () => {
