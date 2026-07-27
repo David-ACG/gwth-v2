@@ -363,21 +363,24 @@
    prices the moment the course stops teaching you. So it reads at the top of
    the card, in the accent colour, not in the small print. */
 .tierAfter {
-  margin: 0.6rem 0 0;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.4rem;
+  margin: 0.7rem 0 0;
+  /* Block, not inline-flex: the copy wraps to two or three lines in these
+     narrow cards, and baseline-aligned flex items ragged the wrapped lines to
+     the right instead of stacking flush under the first word. */
+  display: block;
+  text-align: left;
   border-left: 3px solid var(--v-ochre);
   padding-left: 0.7rem;
   font-size: var(--fde-body);
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--v-ink);
 }
 
 .tierAfter strong {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: -0.01em;
+  white-space: nowrap;
   color: var(--v-ochre);
 }
 
