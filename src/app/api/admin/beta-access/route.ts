@@ -10,6 +10,7 @@ import {
 } from "@/lib/billing/access"
 import { sendPlunkEmail } from "@/lib/email/plunk"
 import { renderFdeEmail } from "@/lib/email/fde-layout"
+import { resolvePublicEmailBase } from "@/lib/email/auth-links"
 
 const betaAccessSchema = z.object({
   apiKey: z.string().min(1),
@@ -31,7 +32,10 @@ const betaAccessSchema = z.object({
  * Plunk accepted the send.
  */
 async function sendBetaInviteEmail(email: string): Promise<boolean> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://gwth.ai"
+  // Not NEXT_PUBLIC_SITE_URL directly: on a dev box that is http://localhost:3000,
+  // which would put three unreachable links in a real invite (the same fault that
+  // sent David a localhost verify button on 2026-07-26).
+  const siteUrl = resolvePublicEmailBase()
   try {
     const parts = renderFdeEmail({
       kicker: "Beta access granted",

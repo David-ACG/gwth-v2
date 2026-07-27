@@ -27,6 +27,7 @@ import { nextCookies } from "better-auth/next-js"
 import { getDb, schema } from "@/db"
 import { sendPlunkEmail } from "@/lib/email/plunk"
 import { renderFdeEmail } from "@/lib/email/fde-layout"
+import { toPublicEmailLink } from "@/lib/email/auth-links"
 import {
   applyBetaAccessGrantToUser,
   isEmailGrantedBetaAccess,
@@ -150,7 +151,7 @@ function buildAuth() {
               text: "If you didn't request this, you can safely ignore this email.",
             },
           ],
-          cta: { label: "Reset your password", href: url },
+          cta: { label: "Reset your password", href: toPublicEmailLink(url) },
         })
         await sendPlunkEmail({
           to: user.email,
@@ -182,7 +183,7 @@ function buildAuth() {
               text: "If you didn't create this account, you can safely ignore this email.",
             },
           ],
-          cta: { label: "Verify your email", href: url },
+          cta: { label: "Verify your email", href: toPublicEmailLink(url) },
         })
         await sendPlunkEmail({
           to: user.email,
