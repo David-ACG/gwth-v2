@@ -114,7 +114,8 @@ export function HomeFde({ explainer, explainerAt }: HomeFdeProps = {}) {
                 and portfolio evidence.
               </p>
               <p className={styles.heroByline}>
-                UK applied AI · 5 hours a week · 3 months
+                UK applied AI · 5 hours a week · 3 months · £29/mo, then
+                £7.50/mo
               </p>
               {/* "Try a free lab" is deliberately absent while /labs is gated
                   to David's account for the CIPD demo (W25). Advertising a

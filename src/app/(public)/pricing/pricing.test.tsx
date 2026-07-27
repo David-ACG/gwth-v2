@@ -45,7 +45,18 @@ describe("PricingPage", () => {
     expect(screen.getByText("Stay Current refreshes")).toBeInTheDocument()
     // Deliberately updated: the Member cell used to read "Available after
     // course", which hid the one number that proves there is no lock-in.
-    expect(screen.getByText("£7.50/mo after the course")).toBeInTheDocument()
+    // getAllByText because the drop is now stated in several places on the
+    // page, which is the point (David could not find it when it was said once).
+    expect(
+      screen.getAllByText("£7.50/mo after the course").length
+    ).toBeGreaterThan(0)
+    // ...including beside the headline price on the Member card.
+    const afters = screen.getAllByTestId("tier-after")
+    expect(afters.length).toBeGreaterThanOrEqual(2)
+    expect(afters[0]!.textContent).toContain("£7.50/mo")
+    expect(screen.getByTestId("masthead-price-line").textContent).toContain(
+      "Then £7.50 a month"
+    )
   })
 
   it("(W25) sends the free tier to the waitlist while Labs are private", () => {

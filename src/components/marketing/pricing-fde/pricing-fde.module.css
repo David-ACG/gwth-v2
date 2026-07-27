@@ -110,6 +110,20 @@
   color: var(--v-cream-muted);
 }
 
+/* Both numbers, in the masthead, at headline weight. The pricing page's whole
+   argument is the drop, so it should be readable before any card is. */
+.priceLine {
+  margin-top: 1rem;
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  line-height: 1.35;
+  color: var(--v-cream);
+}
+
+.priceLine em {
+  font-style: italic;
+  color: var(--v-ochre-bright);
+}
+
 .mastheadFoot {
   margin-top: clamp(2.25rem, 5vw, 3.5rem);
   border-top: 1px solid var(--v-hero-line);
@@ -341,6 +355,30 @@
 .tierPrice span {
   font-size: var(--fde-body-sm);
   color: var(--v-muted);
+}
+
+/* The price AFTER the course, sat directly under the headline price.
+   David had to hunt for the £7.50 (it was a fineprint line under the cards),
+   and it is the strongest trust point on the page: you stop paying course
+   prices the moment the course stops teaching you. So it reads at the top of
+   the card, in the accent colour, not in the small print. */
+.tierAfter {
+  margin: 0.6rem 0 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  border-left: 3px solid var(--v-ochre);
+  padding-left: 0.7rem;
+  font-size: var(--fde-body);
+  line-height: 1.35;
+  color: var(--v-ink);
+}
+
+.tierAfter strong {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-ochre);
 }
 
 .tierFeatures {

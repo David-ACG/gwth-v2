@@ -70,6 +70,7 @@ export function PricingFde() {
       // registration, so /signup renders "Registration closed" under a button
       // labelled "Join the Waitlist". Send it where the label says it goes.
       cta: { label: course.cta.label, href: "/waitlist" },
+      after: "to stay current once the three months are done",
       featured: true,
     },
     {
@@ -81,6 +82,7 @@ export function PricingFde() {
       per: "per-person price",
       features: TEAM_FEATURES,
       cta: { label: "Talk to us", href: "/contact" },
+      after: "per person after the course",
       featured: false,
     },
   ]
@@ -96,6 +98,10 @@ export function PricingFde() {
           <h1 className={styles.mastheadTitle}>
             Three ways to learn. <em>Start free.</em>
           </h1>
+          <p className={styles.priceLine} data-testid="masthead-price-line">
+            £{COURSE_MONTHLY_PRICE} a month while you learn.{" "}
+            <em>Then £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month.</em>
+          </p>
           <p className={styles.standfirst}>
             Less than the cost of one hour with an AI consultant. Join the
             course when you are ready, and bring teams in without hidden
@@ -104,8 +110,8 @@ export function PricingFde() {
             keep paying course prices for a course you have finished.
           </p>
           <div className={styles.mastheadFoot}>
-            <p>Unlock as you go</p>
             <p>Unlock one month at a time</p>
+            <p>£{ONGOING_MONTHLY_PRICE.toFixed(2)}/mo after the course</p>
             <p>Cancel anytime</p>
           </div>
         </div>
@@ -133,6 +139,12 @@ export function PricingFde() {
                     <strong>{tier.price}</strong>
                     <span>{tier.per}</span>
                   </p>
+                  {tier.after && (
+                    <p className={styles.tierAfter} data-testid="tier-after">
+                      then <strong>£{ONGOING_MONTHLY_PRICE.toFixed(2)}/mo</strong>{" "}
+                      {tier.after}
+                    </p>
+                  )}
                   <ul className={styles.tierFeatures}>
                     {tier.features.map((feature) => (
                       <li key={feature}>{feature}</li>

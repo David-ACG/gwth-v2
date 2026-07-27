@@ -134,7 +134,8 @@ export default async function SettingsPage() {
           <div className={styles.noticeMuted}>
             <p className={styles.strongLine}>Ready to start the course?</p>
             <p className={`${styles.bodyText} mt-1`}>
-              Subscribe for £{COURSE_MONTHLY_PRICE.toFixed(2)}/month to
+              Subscribe for £{COURSE_MONTHLY_PRICE.toFixed(2)}/month, dropping
+              to £{ONGOING_MONTHLY_PRICE.toFixed(2)}/month once the course is done, to
               unlock the course one month at a time once billing reopens
               for approved beta learners.
             </p>

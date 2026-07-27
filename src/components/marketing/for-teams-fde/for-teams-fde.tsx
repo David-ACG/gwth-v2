@@ -201,7 +201,10 @@ export function ForTeamsFde() {
           <div className={styles.mastheadFoot}>
             <p>3 months · 5 hours a week</p>
             <p>Fully online</p>
-            <p>No lock-in</p>
+            <p>
+              £{COURSE_MONTHLY_PRICE}/mo, then £
+              {ONGOING_MONTHLY_PRICE.toFixed(2)}/mo
+            </p>
           </div>
         </div>
       </section>
