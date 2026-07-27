@@ -26,30 +26,6 @@ const PRINCIPLES = [
   },
 ]
 
-/** How a lesson is produced, start to refresh. */
-const PROCESS = [
-  {
-    n: "01",
-    title: "Pick a practical skill",
-    body: "Start with something a learner can use in work or life.",
-  },
-  {
-    n: "02",
-    title: "Write the lesson",
-    body: "Explain the why before the tool, with enough context to make judgement possible.",
-  },
-  {
-    n: "03",
-    title: "Build the artefact",
-    body: "Turn the lesson into a project, example, workflow, or assessment.",
-  },
-  {
-    n: "04",
-    title: "Keep it current",
-    body: "Refresh lessons when the field moves enough that the old advice is no longer enough.",
-  },
-]
-
 /** Headline numbers for the ruled stat columns. */
 const STATS = [
   { value: "64", label: "core lessons" },
@@ -128,34 +104,6 @@ export function AboutFde() {
                   <div>
                     <h3>{principle.title}</h3>
                     <p>{principle.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.section} data-section="process">
-        <div className={styles.page}>
-          <div className={styles.listGrid}>
-            <div>
-              <p className={styles.mono}>How a lesson is made</p>
-              <h2 className={styles.sectionTitle}>
-                Editorial care, practical output, <em>then refresh.</em>
-              </h2>
-              <p className={styles.sectionLead}>
-                The public promise is simple: each lesson should help
-                someone do something useful.
-              </p>
-            </div>
-            <ol className={styles.numberedList}>
-              {PROCESS.map((step) => (
-                <li key={step.n} className={styles.numberedItem}>
-                  <p className={styles.numberedIndex}>{step.n}</p>
-                  <div>
-                    <h3>{step.title}</h3>
-                    <p>{step.body}</p>
                   </div>
                 </li>
               ))}
