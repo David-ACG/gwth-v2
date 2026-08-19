@@ -1,0 +1,2099 @@
+{
+  "segments": [
+    {
+      "start": 2.26,
+      "end": 12.26,
+      "text": "Hi, Steve. Hi, Steve. Sorry, I'm running late. That's fine. I believe you just joined as well, Ben."
+    },
+    {
+      "start": 12.26,
+      "end": 20.26,
+      "text": "Okay, good. So have we had introductions? No, literally it was like the same second you joined."
+    },
+    {
+      "start": 21.26,
+      "end": 38.26,
+      "text": "Excellent. Good. I was just trying to get another call. Well, Steve, Dave is just someone who's got, I think I sent you Dave's LinkedIn profile."
+    },
+    {
+      "start": 38.26,
+      "end": 62.26,
+      "text": "So you've seen his background and has been working on a development programme. I just thought given the interest that we've got and some of the work you've already done in this area, it would just be a good opportunity to review and discuss."
+    },
+    {
+      "start": 62.26,
+      "end": 71.26,
+      "text": "And Dave, Steve is our head of learning and so basically covers all the development of all our learning products for the profession."
+    },
+    {
+      "start": 71.26,
+      "end": 78.26,
+      "text": "Cool. I just looked at your LinkedIn actually, Steve, and sent you a LinkedIn request."
+    },
+    {
+      "start": 78.26,
+      "end": 95.26,
+      "text": "Happiness. Okay, I'll make sure I accept that. Cool. Yeah, I currently work for Amazon, but I've been thinking about leaving for a long time and have been doing this in the background ready for when I did leave."
+    },
+    {
+      "start": 95.26,
+      "end": 110.26,
+      "text": "But yeah, there's been developments and I still don't know whether I am going to leave or not. But I'm definitely going to launch this as soon as possible now, whether I stay or not."
+    },
+    {
+      "start": 110.26,
+      "end": 134.86,
+      "text": "So yeah, so I started doing it maybe two years ago, but only very lightly. And it was really only for myself to learn AI. But since then, lots of people have requested this kind of thing. So I thought I'd make it into a proper course."
+    },
+    {
+      "start": 134.86,
+      "end": 144.86,
+      "text": "Should I share my screen and then you can see? Yes, please. Yeah, I've got your micro screen which is on the key sideways. I'm paying attention."
+    },
+    {
+      "start": 144.86,
+      "end": 159.55,
+      "text": "Sorry, I don't normally use Microsoft as I work at Amazon. They don't like Microsoft. One sec, I'm just choosing there."
+    },
+    {
+      "start": 159.55,
+      "end": 188.07,
+      "text": "So you can do screen or window. Oh, right. Yeah, window. I think it. Can you see it now? I've lost you though. I can't see you. Yes, you can. I can't see you anymore though. One sec. It's just sort of slowly coming back."
+    },
+    {
+      "start": 188.07,
+      "end": 207.65,
+      "text": "Yeah, so this is the home page. This is actually already online, but you can't log in yet. You've just got to join a wait list for the moment."
+    },
+    {
+      "start": 207.65,
+      "end": 223.65,
+      "text": "And then there's a video to kind of explain what it is and how it works. But it's also on the page here. So basically it's quite a long course."
+    },
+    {
+      "start": 223.65,
+      "end": 243.65,
+      "text": "It's three months and you're meant to do around five hours a week. And that's been specifically chosen because that's where a lot of studies have agreed that five hours a week actually really does help you improve."
+    },
+    {
+      "start": 243.65,
+      "end": 260.65,
+      "text": "It's not too much and it's not too little. And it's based around lots of practical projects. So there's about 90 lessons, but each one has a large practical element to it."
+    },
+    {
+      "start": 260.65,
+      "end": 280.99,
+      "text": "And you can keep all of those practical parts where it automatically stores it for you. And you can keep that for when you finish the course and then you're trying to find a job or something and you can use it as proof."
+    },
+    {
+      "start": 280.99,
+      "end": 299.99,
+      "text": "So this is the sort of one proof message that you get a score at the end. And also the other major thing is that it's constantly kept up to date. So that score actually goes down if you don't keep yourself up to date."
+    },
+    {
+      "start": 299.99,
+      "end": 315.27,
+      "text": "But I'm not trying to lock people in. So the pricing, which I'll show you in a minute, changes after the first three months. It goes right down. So these are reasons why you might do it."
+    },
+    {
+      "start": 315.27,
+      "end": 331.27,
+      "text": "You're worried about AI taking a job or you want to help your kids or you want to increase your income, that kind of thing. Or you need a team who wants to learn about AI. And I've already used quotes from CIPD."
+    },
+    {
+      "start": 331.27,
+      "end": 338.68,
+      "text": "You notice there. Are you still there? Because I can't see you."
+    },
+    {
+      "start": 338.68,
+      "end": 340.68,
+      "text": "Yeah, yeah, yeah. Sorry."
+    },
+    {
+      "start": 340.68,
+      "end": 342.68,
+      "text": "Sorry."
+    },
+    {
+      "start": 342.68,
+      "end": 343.68,
+      "text": "Can you?"
+    },
+    {
+      "start": 343.68,
+      "end": 349.68,
+      "text": "Yeah, I can't see either of you. It's just... Oh there, I can see you now, Ben."
+    },
+    {
+      "start": 349.68,
+      "end": 368.68,
+      "text": "Yeah, so there's three months that you go through and there's split. There's quite a big split between each one. So the first one is like kind of a foundation and you're learning how to use AI and what it can do."
+    },
+    {
+      "start": 368.68,
+      "end": 382.68,
+      "text": "And that's mostly around personal tasks. There's things like improving your LinkedIn, updating your CV. And you do one project per lesson. There's 26 lessons."
+    },
+    {
+      "start": 382.68,
+      "end": 396.68,
+      "text": "And then you do one big project at the end. And in this one it's a family AI bot that helps you plan everything to do with your family."
+    },
+    {
+      "start": 396.68,
+      "end": 407.68,
+      "text": "And then in month two, it's far more work orientated. So you build apps. I mean, you do build apps in month one as well, but you build more commercial apps in month two."
+    },
+    {
+      "start": 407.68,
+      "end": 420.68,
+      "text": "Look at workflows and then even start doing... you could even start doing consulting after doing month two. It helps you work out how you'd help another company or your own company."
+    },
+    {
+      "start": 420.68,
+      "end": 449.06,
+      "text": "And then you do another capstone project, which is AI customer support chat bot. And actually you do two in this one. So there's two. The other one is fractional buddy, which is like a personal AI for people who are doing fractional work."
+    },
+    {
+      "start": 449.06,
+      "end": 460.06,
+      "text": "So maybe they've got lots of different, three different jobs and they want to quickly change between each job because maybe they spend half a day on one, half a day on another."
+    },
+    {
+      "start": 460.06,
+      "end": 477.06,
+      "text": "And you don't want to spend an hour sort of switching context. So this helps you switch context and keeps all your diary in one place and updates you when you're behind on one of your fractional jobs."
+    },
+    {
+      "start": 477.06,
+      "end": 491.06,
+      "text": "That's kind of a Gen Z or the newest Gen type thing to help them. And then month three is more around enterprise."
+    },
+    {
+      "start": 491.06,
+      "end": 513.88,
+      "text": "So you're doing like digital transformation, how you can really build huge apps for your company and how to actually launch them and keep them working without bugs."
+    },
+    {
+      "start": 513.88,
+      "end": 533.88,
+      "text": "And this is usually where software engineers work in this sort of area or consultants, but AI has helped so much. And with the context of month one and two, you're actually able to do quite advanced things in month three."
+    },
+    {
+      "start": 533.88,
+      "end": 558.88,
+      "text": "And then you do an AI readiness assessment tool for your final project. And that looks at your whole company and works out how ready you are for transforming using AI and asks all of your employees questions and then analyzes those answers all automatically."
+    },
+    {
+      "start": 558.88,
+      "end": 570.88,
+      "text": "So it's a speech box that asks the questions and then it listens to the answers, then it analyzes it and then it puts into a huge sort of strategy document."
+    },
+    {
+      "start": 570.88,
+      "end": 581.88,
+      "text": "So it's pretty advanced. That's the kind of thing that, you know, big consultancies are selling for, you know, tens of thousands, if not hundreds of thousands."
+    },
+    {
+      "start": 582.88,
+      "end": 594.88,
+      "text": "So Dave, if you were a Chief People Officer, you could potentially use it to get a beat on where you were as an organization, if you had done this course?"
+    },
+    {
+      "start": 594.88,
+      "end": 624.02,
+      "text": "Yeah, definitely. And if I skip to the lessons part. So this is once you've logged in. So it shows you all of month one, but in month two and three, you get much more choice around the lessons."
+    },
+    {
+      "start": 624.02,
+      "end": 637.02,
+      "text": "So actually, this probably isn't the best page to look at it. The best one is for teams. So it's also built for teams. And you get your own dashboard for your company if you've got more than five people."
+    },
+    {
+      "start": 637.02,
+      "end": 651.02,
+      "text": "And it costs the same amount, whether you for each person, whether it's an individual or a huge team. But the main difference is that you get your own dashboard."
+    },
+    {
+      "start": 651.02,
+      "end": 669.02,
+      "text": "But you can pick. So there's mandatory lessons and month one, they're all mandatory. But then in month two and month three, there's lots of optional ones and you can say if you're in a company, you can pick those optional ones for your workforce."
+    },
+    {
+      "start": 669.02,
+      "end": 687.48,
+      "text": "So you could pick HR related lessons specifically for people who work for you, if you're paying for the course for them. So yeah, it's quite flexible for big companies and individuals."
+    },
+    {
+      "start": 687.48,
+      "end": 693.48,
+      "text": "What sort of lessons for your HR team could you suggest?"
+    },
+    {
+      "start": 693.48,
+      "end": 719.48,
+      "text": "Well, in the enterprise transformation one, there's lots around how to manage agents, how it's going to affect the company, how to manage change, how to make that change more successful."
+    },
+    {
+      "start": 719.48,
+      "end": 733.95,
+      "text": "And it's all based on real data from reports that have come out. And that's kept up to date all the time."
+    },
+    {
+      "start": 733.95,
+      "end": 743.58,
+      "text": "So yeah, it's \u00a329 per person. I'll go to the pricing page."
+    },
+    {
+      "start": 743.58,
+      "end": 758.58,
+      "text": "So you get labs. I changed this slightly recently. So labs used to be very similar to lessons and you just got to see some free lessons basically in labs."
+    },
+    {
+      "start": 758.58,
+      "end": 770.58,
+      "text": "But I changed that because there was such a big overlap and it was quite confusing between whether you should be looking at the lesson or at the lab if you were an actual member."
+    },
+    {
+      "start": 770.58,
+      "end": 801.34,
+      "text": "So now labs are just more side by side comparisons of the newest AI tools. So it compares models or what's called harnesses or the codecs compared to Claude code or co-work compared to, I think, OpenAI are now calling it just work."
+    },
+    {
+      "start": 801.34,
+      "end": 819.34,
+      "text": "So they're equivalent of co-work. So that's what labs is for. But if you remember, then it's \u00a329 per month for three months. And then after that, it's \u00a37.50 per month."
+    },
+    {
+      "start": 819.34,
+      "end": 835.34,
+      "text": "So it goes down a lot. But that's so that you can keep up to date because I'm planning that lessons, about 10 lessons generally get updated every month."
+    },
+    {
+      "start": 835.34,
+      "end": 855.93,
+      "text": "And in order to keep your score high, which I haven't mentioned properly yet, but in order to keep that high, you need to keep up to date so you can carry on taking any new lessons ongoing for \u00a37.50 a month."
+    },
+    {
+      "start": 855.93,
+      "end": 859.93,
+      "text": "Any other questions around this?"
+    },
+    {
+      "start": 859.93,
+      "end": 874.93,
+      "text": "Are you still going to be building on this day in terms of the sort of bespokeness? Or do you feel like that's it for the moment? You're going to sort of see how it goes?"
+    },
+    {
+      "start": 874.93,
+      "end": 895.16,
+      "text": "Yeah, I think I probably need to make more optional lessons. So at the moment it's 15 for month two and month three."
+    },
+    {
+      "start": 895.16,
+      "end": 914.16,
+      "text": "And they're sort of split between things like HR or finance or programming or building rather than programming, because there's no actual writing of code in any of this."
+    },
+    {
+      "start": 914.16,
+      "end": 927.47,
+      "text": "Yeah, it's probably split between those three. I mean, there may be other specialist areas that I want to add or if there's a massive demand from one area, I'll add more lessons."
+    },
+    {
+      "start": 927.47,
+      "end": 944.47,
+      "text": "I'll shuffle them away because I'm going off-piste talking about these sorts of products. But we were sort of thinking about when we were looking at support members around AI."
+    },
+    {
+      "start": 944.47,
+      "end": 968.47,
+      "text": "So three areas. One is around the key. As an individual, how do you use AI to become better at your job? If you're a practitioner, how do you use AI? Whether you're an HR director or an HR manager or an L&D specialist, how do you use AI to get better at your job?"
+    },
+    {
+      "start": 968.47,
+      "end": 976.47,
+      "text": "And that's mainly in month one. So that's covered month one. So that makes you more efficient and you start building stuff in month one."
+    },
+    {
+      "start": 976.47,
+      "end": 988.47,
+      "text": "Yes, that would work. That would work really well. Would that be applicable, do you think, to HR people thinking about their particular jobs and their particular scope?"
+    },
+    {
+      "start": 988.47,
+      "end": 1003.47,
+      "text": "Yeah, I think it's applicable to anyone because... actually let me go into one of the lessons. So there's really six areas where... so this is one of the lessons."
+    },
+    {
+      "start": 1003.47,
+      "end": 1025.04,
+      "text": "So you start off with a video that explains everything and then you go onto text and you can play this text so you can listen to it on the train or with it in your pocket and walking or whatever."
+    },
+    {
+      "start": 1025.04,
+      "end": 1055.74,
+      "text": "So yeah, there's several different areas that AI can help and this is where it sort of gets introduced. One sec, let me find the right page. Maybe I've missed it."
+    },
+    {
+      "start": 1055.74,
+      "end": 1078.28,
+      "text": "And it takes you through an example and then asks you to do a practical. Let me... must be an overview somewhere. Sorry, I haven't looked at this one for a while."
+    },
+    {
+      "start": 1078.28,
+      "end": 1098.28,
+      "text": "So there's basically six areas. Oh, here you go, six superpowers. So you've got research, creating content, then helping you think, then actually building stuff like apps, looking at data and then automation."
+    },
+    {
+      "start": 1098.28,
+      "end": 1113.39,
+      "text": "And these can be... these fit everything. So every single role that anyone has, these all fit it and that's why we've introduced it in the very first lesson."
+    },
+    {
+      "start": 1113.39,
+      "end": 1124.39,
+      "text": "And then different roles obviously concentrate on different things. If you're doing data analysis, then you're looking at data more."
+    },
+    {
+      "start": 1124.39,
+      "end": 1133.39,
+      "text": "But it turns out that almost everyone needs the building part. In order to do automation you need building."
+    },
+    {
+      "start": 1133.39,
+      "end": 1144.39,
+      "text": "These days, in order to do data really well, you need building. And for these other ones, research, you need building. You can use building to automate it all."
+    },
+    {
+      "start": 1144.39,
+      "end": 1157.39,
+      "text": "And then for content, again, you could... you want to build something maybe for a long workflow. And then thinking, maybe you want it more interactive for thinking."
+    },
+    {
+      "start": 1157.39,
+      "end": 1168.39,
+      "text": "But you can also build something around that as well, where it transcodes a meeting and then gives you ideas from that meeting or whatever."
+    },
+    {
+      "start": 1168.39,
+      "end": 1187.39,
+      "text": "That's what it does in month three. But yeah, I don't think... I think maybe it's a misconception that you need a separate course for each role in a company."
+    },
+    {
+      "start": 1187.39,
+      "end": 1189.39,
+      "text": "You apply these..."
+    },
+    {
+      "start": 1189.39,
+      "end": 1192.39,
+      "text": "Yeah, foundations to everything."
+    },
+    {
+      "start": 1192.39,
+      "end": 1199.39,
+      "text": "These foundation skills will apply regardless and you can apply it to thinking about how you... your particular or how you do your job."
+    },
+    {
+      "start": 1199.39,
+      "end": 1200.39,
+      "text": "Yeah, exactly."
+    },
+    {
+      "start": 1200.39,
+      "end": 1202.39,
+      "text": "Yeah, that makes sense."
+    },
+    {
+      "start": 1202.39,
+      "end": 1208.39,
+      "text": "I'll stop talking, but I've got... Steve, yeah, I'll stop talking."
+    },
+    {
+      "start": 1208.39,
+      "end": 1224.39,
+      "text": "I really like the approach that you've described in the lessons, presumably because it's not coding."
+    },
+    {
+      "start": 1224.39,
+      "end": 1234.39,
+      "text": "It doesn't matter if they're using Claude or ChatGPT or Cobyla or anything else, because that's... it's more about the principles of successful implementation than around the usage."
+    },
+    {
+      "start": 1234.39,
+      "end": 1235.39,
+      "text": "Is that right?"
+    },
+    {
+      "start": 1235.39,
+      "end": 1245.39,
+      "text": "Yeah, and that seems to be happening even more now because, like, Claude is pretty much all in one app if you use the desktop app."
+    },
+    {
+      "start": 1245.39,
+      "end": 1254.39,
+      "text": "Whether you're doing a co-work or just asking chat or doing coding, it's all in one app."
+    },
+    {
+      "start": 1254.39,
+      "end": 1259.39,
+      "text": "And you can switch really easily between them."
+    },
+    {
+      "start": 1259.39,
+      "end": 1264.39,
+      "text": "And now, even in the last few days, it's all come out on mobile."
+    },
+    {
+      "start": 1264.39,
+      "end": 1277.39,
+      "text": "So you can switch between your desktop and mobile really easily and between coding and maybe thinking using chat really easily."
+    },
+    {
+      "start": 1278.39,
+      "end": 1291.39,
+      "text": "But what the next few lessons after this one explain is that you need to think about your context and your context window."
+    },
+    {
+      "start": 1291.39,
+      "end": 1297.39,
+      "text": "So it goes into some fundamentals to help you with your prompting."
+    },
+    {
+      "start": 1298.39,
+      "end": 1315.39,
+      "text": "But it takes you through examples the whole way and then asks you to do the work as well to prove to yourself that, you know, if you ask something, a million small questions, it gets silly at the end."
+    },
+    {
+      "start": 1315.39,
+      "end": 1322.39,
+      "text": "The model gets... its context window fills up and it starts giving the wrong answers."
+    },
+    {
+      "start": 1322.39,
+      "end": 1327.39,
+      "text": "There's lots of techniques where you can get around that."
+    },
+    {
+      "start": 1327.39,
+      "end": 1336.39,
+      "text": "But not many courses actually explain that in really simple terms."
+    },
+    {
+      "start": 1336.39,
+      "end": 1349.39,
+      "text": "They either seem to go into immense detail around how the model was built and that's why the context is this size and you can't... all that sort of thing."
+    },
+    {
+      "start": 1349.39,
+      "end": 1351.39,
+      "text": "And for most people, they just turn off with that."
+    },
+    {
+      "start": 1351.39,
+      "end": 1355.39,
+      "text": "And then there's other courses that just brush over it too much."
+    },
+    {
+      "start": 1355.39,
+      "end": 1365.39,
+      "text": "And then people wonder why if they kept the same chat window open for ages, they're getting really silly answers from chat GPT or whatever."
+    },
+    {
+      "start": 1367.39,
+      "end": 1378.39,
+      "text": "So yeah, the first sort of two weeks maybe is just getting the fundamentals and understanding how things work, but in a really simple way so that everyone can do it."
+    },
+    {
+      "start": 1378.39,
+      "end": 1387.99,
+      "text": "I always see, you know, all HR people who are the next generation."
+    },
+    {
+      "start": 1387.99,
+      "end": 1393.99,
+      "text": "Well, and the current generation should be starting to use learning skills, arguably."
+    },
+    {
+      "start": 1393.99,
+      "end": 1396.99,
+      "text": "Yeah, absolutely. Yeah."
+    },
+    {
+      "start": 1396.99,
+      "end": 1399.99,
+      "text": "And it's changing so fast."
+    },
+    {
+      "start": 1400.99,
+      "end": 1412.99,
+      "text": "However, if you've got the foundations from the sort of early days where context windows were tiny in the very beginning, so you really had to understand how it worked."
+    },
+    {
+      "start": 1412.99,
+      "end": 1427.99,
+      "text": "Now there are a million tokens in a context window you don't really need to understand, but then you have problems when you run out of context because you've just asked so many questions that you can't cope."
+    },
+    {
+      "start": 1429.99,
+      "end": 1433.99,
+      "text": "So you still need to understand the fundamentals, I think."
+    },
+    {
+      "start": 1433.99,
+      "end": 1458.99,
+      "text": "But hopefully I've done it in a fun way where you create, you know, useful apps and useful content, such as like writing a letter because your car got damaged by a pothole or something like that."
+    },
+    {
+      "start": 1458.99,
+      "end": 1465.99,
+      "text": "And working out the law behind it and whether, yeah, that kind of thing."
+    },
+    {
+      "start": 1465.99,
+      "end": 1474.99,
+      "text": "Yeah, I really like it. I like the kind of points decay mechanism you described as well, if people don't go in and keep themselves up to date."
+    },
+    {
+      "start": 1474.99,
+      "end": 1476.99,
+      "text": "Yeah, that's really nice touch."
+    },
+    {
+      "start": 1476.99,
+      "end": 1477.99,
+      "text": "Cool."
+    },
+    {
+      "start": 1477.99,
+      "end": 1485.99,
+      "text": "So I really like it being transparent. I can't see how it fits in with what we're currently doing at the moment."
+    },
+    {
+      "start": 1485.99,
+      "end": 1490.99,
+      "text": "Much as I love it, but that's not to say that won't be in the future."
+    },
+    {
+      "start": 1490.99,
+      "end": 1501.99,
+      "text": "So what we're doing in terms of our AI learning provision is scaling back, and this is why I think there may be a conversation to have in the future."
+    },
+    {
+      "start": 1501.99,
+      "end": 1511.99,
+      "text": "We're scaling back what we're doing around that introductory level because we're finding what we currently offer to people is either too basic or too advanced basically."
+    },
+    {
+      "start": 1511.99,
+      "end": 1520.99,
+      "text": "So a kind of rebuilding suite is going to be around 14 different products around AI learning."
+    },
+    {
+      "start": 1520.99,
+      "end": 1530.99,
+      "text": "But again, where the bulk of our market wants us to operating at the moment is around virtual classroom and face to face, not around the self-directed."
+    },
+    {
+      "start": 1530.99,
+      "end": 1540.99,
+      "text": "But one concern that I've got is around how we baseline people before we come into those environments because we're getting people coming in thinking they're better than they are"
+    },
+    {
+      "start": 1540.99,
+      "end": 1551.99,
+      "text": "or having different fundamental understandings to other people in the room, which then creates complexity for the person doing the training delivery."
+    },
+    {
+      "start": 1551.99,
+      "end": 1559.99,
+      "text": "And I think something like what you've shown here could be a fantastic precursor to people going on some of those courses,"
+    },
+    {
+      "start": 1559.99,
+      "end": 1567.99,
+      "text": "particularly some of the more senior leadership ones where there is going to be more around the implementation of it with the strategic thinking behind it,"
+    },
+    {
+      "start": 1567.99,
+      "end": 1575.99,
+      "text": "how they lead the teams through that implementation, not necessarily the creating stuff, which the bulk of our other courses are going to be predicated on."
+    },
+    {
+      "start": 1575.99,
+      "end": 1580.99,
+      "text": "So our other courses are going to be doing all that coding stuff that you mentioned you don't cover."
+    },
+    {
+      "start": 1580.99,
+      "end": 1590.99,
+      "text": "That's the area we're most heavily going into and which leaves a gap around all this stuff that you've described and shown us here."
+    },
+    {
+      "start": 1590.99,
+      "end": 1596.99,
+      "text": "So I think it's definitely worth us keeping conversations going."
+    },
+    {
+      "start": 1596.99,
+      "end": 1602.99,
+      "text": "I think even if there's not anything immediate where there's a space."
+    },
+    {
+      "start": 1602.99,
+      "end": 1609.99,
+      "text": "So what kind of courses do you offer now or will you offer in the future?"
+    },
+    {
+      "start": 1610.99,
+      "end": 1622.99,
+      "text": "We offer a couple of self-directed ones on responsible use of AI and there's a basics of implementation one, both which get very low uptake."
+    },
+    {
+      "start": 1622.99,
+      "end": 1629.99,
+      "text": "We have a two day introduction to AI one that starts on foundation and goes into prompt engineering."
+    },
+    {
+      "start": 1629.99,
+      "end": 1633.99,
+      "text": "The market for that has dropped off a cliff over the last six months."
+    },
+    {
+      "start": 1634.99,
+      "end": 1637.99,
+      "text": "Prompt engineering is no longer."
+    },
+    {
+      "start": 1637.99,
+      "end": 1650.99,
+      "text": "You obviously need it, but you can ask a chat GPT quite simple questions and get a reasonable answer."
+    },
+    {
+      "start": 1650.99,
+      "end": 1653.99,
+      "text": "But and people don't people then just say, oh, well, that's fine."
+    },
+    {
+      "start": 1653.99,
+      "end": 1659.99,
+      "text": "I'll take that. They don't go to the sort of extremes of optimizing it."
+    },
+    {
+      "start": 1659.99,
+      "end": 1662.99,
+      "text": "So where we're finding this still demand is public sector."
+    },
+    {
+      "start": 1662.99,
+      "end": 1671.99,
+      "text": "So what we're doing, we've condensed that today into a one day, which is going to be a foundations of AI for HR and a literacy one."
+    },
+    {
+      "start": 1671.99,
+      "end": 1675.99,
+      "text": "So they are literacy one all combined into a single day."
+    },
+    {
+      "start": 1675.99,
+      "end": 1680.99,
+      "text": "We have a generative AI course that's fairly generic."
+    },
+    {
+      "start": 1680.99,
+      "end": 1682.99,
+      "text": "We're producing a follow on to it."
+    },
+    {
+      "start": 1682.99,
+      "end": 1685.99,
+      "text": "There's going to be assistance and agents."
+    },
+    {
+      "start": 1685.99,
+      "end": 1694.99,
+      "text": "We're doing seven specialist courses, which are things like AI for recruitment, AI for analytics, AI for performance management, AI for people management and so on."
+    },
+    {
+      "start": 1694.99,
+      "end": 1703.99,
+      "text": "And then we're going to do two senior leadership courses, which are around AI strategy and leading implementation within your organization."
+    },
+    {
+      "start": 1703.99,
+      "end": 1710.99,
+      "text": "And then there's a kind of satellite one around ethics and responsible use that we'll look at bringing in in January."
+    },
+    {
+      "start": 1711.99,
+      "end": 1713.99,
+      "text": "So that's where we are."
+    },
+    {
+      "start": 1713.99,
+      "end": 1717.99,
+      "text": "And how are you keeping up with all the latest updates?"
+    },
+    {
+      "start": 1717.99,
+      "end": 1722.99,
+      "text": "I mean, because some of the recruitment stuff is moving so fast."
+    },
+    {
+      "start": 1722.99,
+      "end": 1724.99,
+      "text": "This is exactly our problem."
+    },
+    {
+      "start": 1724.99,
+      "end": 1727.99,
+      "text": "So and again, it's a problem around the different tools."
+    },
+    {
+      "start": 1727.99,
+      "end": 1732.99,
+      "text": "So some of our customers, particularly B2B, will want us to do it, especially for Claude or especially the co-pilot."
+    },
+    {
+      "start": 1732.99,
+      "end": 1737.99,
+      "text": "And we can't create three versions of every course and update it every two weeks."
+    },
+    {
+      "start": 1737.99,
+      "end": 1742.99,
+      "text": "So what we have, we have an associate pool of around 60 associates who do the delivery for us."
+    },
+    {
+      "start": 1742.99,
+      "end": 1745.99,
+      "text": "And what we're doing is creating a framework of content."
+    },
+    {
+      "start": 1745.99,
+      "end": 1750.99,
+      "text": "And then we're relying on their expertise to update it just before they deliver it basically."
+    },
+    {
+      "start": 1750.99,
+      "end": 1754.99,
+      "text": "So they always get a couple of weeks notice before they go into a room and deliver it."
+    },
+    {
+      "start": 1754.99,
+      "end": 1762.99,
+      "text": "And it's not updating on the fly, but they're responsible for making sure that the content is current and updated as they go into the room to deliver it."
+    },
+    {
+      "start": 1763.99,
+      "end": 1770.99,
+      "text": "All our other courses go on a six monthly review and update cycle, but on AI it has to be absolutely constant."
+    },
+    {
+      "start": 1770.99,
+      "end": 1780.99,
+      "text": "And so I would have thought that companies, modern companies, use quite advanced B2B software."
+    },
+    {
+      "start": 1780.99,
+      "end": 1786.99,
+      "text": "I mean, I know I've come across some for recruitment."
+    },
+    {
+      "start": 1786.99,
+      "end": 1791.99,
+      "text": "So they record all of the, it's quite amazing."
+    },
+    {
+      "start": 1791.99,
+      "end": 1803.99,
+      "text": "I can't remember the name of it, but it comes up with prompts as you're interviewing for the interviewer and says, you know, you should ask this question next."
+    },
+    {
+      "start": 1803.99,
+      "end": 1809.99,
+      "text": "And they look, the candidate looks weak on this area, ask this question next."
+    },
+    {
+      "start": 1809.99,
+      "end": 1812.99,
+      "text": "And then it compares all of the different candidates."
+    },
+    {
+      "start": 1812.99,
+      "end": 1822.27,
+      "text": "And it's changing all the time, even in the last sort of six weeks that I saw it once."
+    },
+    {
+      "start": 1822.27,
+      "end": 1825.27,
+      "text": "And then again, it changed."
+    },
+    {
+      "start": 1825.27,
+      "end": 1832.27,
+      "text": "So are they not, are your customers not using those kind of really advanced?"
+    },
+    {
+      "start": 1832.27,
+      "end": 1835.27,
+      "text": "So some of them probably will be, yeah."
+    },
+    {
+      "start": 1835.27,
+      "end": 1843.27,
+      "text": "But our delivery associates were often people who are consulting within those customers or they're working within that profession."
+    },
+    {
+      "start": 1843.27,
+      "end": 1850.27,
+      "text": "So they're not in-house staff, they're people who are, who we contract or are in the market working, who do training delivery as well."
+    },
+    {
+      "start": 1850.27,
+      "end": 1861.5,
+      "text": "So one of the reasons we recruit them is precisely for that level of expertise and staying current."
+    },
+    {
+      "start": 1861.5,
+      "end": 1875.5,
+      "text": "But like I say, it leaves a gap exactly in the areas that you've shown us, which is one area of concern I've got, is because our customers are so focused on the practical implementation side."
+    },
+    {
+      "start": 1875.5,
+      "end": 1885.5,
+      "text": "It's a real danger that we miss that building block and that foundational skill level and that thinking level that needs to underpin all that practice that they're coming to us for at the moment."
+    },
+    {
+      "start": 1885.5,
+      "end": 1892.5,
+      "text": "And have you seen the government courses that they say they offer for free?"
+    },
+    {
+      "start": 1892.5,
+      "end": 1894.5,
+      "text": "I haven't seen them yet."
+    },
+    {
+      "start": 1894.5,
+      "end": 1901.5,
+      "text": "Yeah, my colleague Lizzie Crowley, who's our skills advisor, has been through them. She says they're a bit shit, Dave."
+    },
+    {
+      "start": 1901.5,
+      "end": 1905.5,
+      "text": "They are. Did you say clickbait?"
+    },
+    {
+      "start": 1905.5,
+      "end": 1907.5,
+      "text": "No."
+    },
+    {
+      "start": 1907.5,
+      "end": 1909.5,
+      "text": "What?"
+    },
+    {
+      "start": 1909.5,
+      "end": 1912.5,
+      "text": "My colleague Lizzie said they're a bit shit."
+    },
+    {
+      "start": 1912.5,
+      "end": 1922.5,
+      "text": "Yes. Also, they don't do what they say because there's been a huge fanfare."
+    },
+    {
+      "start": 1922.5,
+      "end": 1930.5,
+      "text": "The government paid PWC $27 million to create these courses, and they didn't actually create any courses."
+    },
+    {
+      "start": 1930.5,
+      "end": 1942.5,
+      "text": "They just linked to other courses that were already freely available from Amazon and Microsoft and Google and whatever."
+    },
+    {
+      "start": 1942.5,
+      "end": 1954.5,
+      "text": "And then you've got universities that are giving really advanced courses on how to build LLMs or whatever."
+    },
+    {
+      "start": 1954.5,
+      "end": 1961.5,
+      "text": "But the problem with all of it is that it's all sort of a year, two years, even three years old."
+    },
+    {
+      "start": 1961.5,
+      "end": 1966.5,
+      "text": "A lot of it is just before even AI. It's all machine learning stuff."
+    },
+    {
+      "start": 1966.5,
+      "end": 1973.5,
+      "text": "They're asking you to pay six grand for a course."
+    },
+    {
+      "start": 1973.5,
+      "end": 1978.5,
+      "text": "That was where this was meant to compete with."
+    },
+    {
+      "start": 1978.5,
+      "end": 1984.5,
+      "text": "This was meant to offer something that was affordable for everyone."
+    },
+    {
+      "start": 1984.5,
+      "end": 1987.5,
+      "text": "You knew what level you were getting to."
+    },
+    {
+      "start": 1987.5,
+      "end": 1993.5,
+      "text": "It was all the weaknesses of that this was meant to compete with."
+    },
+    {
+      "start": 1993.5,
+      "end": 1998.5,
+      "text": "You knew what you were paying. You knew what you were getting."
+    },
+    {
+      "start": 1998.5,
+      "end": 2002.5,
+      "text": "And it's constantly updated."
+    },
+    {
+      "start": 2002.5,
+      "end": 2012.5,
+      "text": "And it doesn't go into the real how to build an LLM because only a few hundred people in the UK want to know that."
+    },
+    {
+      "start": 2012.5,
+      "end": 2015.5,
+      "text": "Absolutely."
+    },
+    {
+      "start": 2015.5,
+      "end": 2018.5,
+      "text": "And they're probably way ahead of the course anyway."
+    },
+    {
+      "start": 2018.5,
+      "end": 2021.5,
+      "text": "They don't need the course."
+    },
+    {
+      "start": 2021.5,
+      "end": 2027.5,
+      "text": "I really like it. I can see how it solves all those things."
+    },
+    {
+      "start": 2027.5,
+      "end": 2036.04,
+      "text": "Cool. You mentioned there might be a gap later."
+    },
+    {
+      "start": 2036.04,
+      "end": 2042.04,
+      "text": "When should we get together again to see whether there is a gap?"
+    },
+    {
+      "start": 2042.04,
+      "end": 2045.04,
+      "text": "I'd suggest towards the back end of October."
+    },
+    {
+      "start": 2045.04,
+      "end": 2046.04,
+      "text": "That would be good."
+    },
+    {
+      "start": 2046.04,
+      "end": 2054.04,
+      "text": "I don't know how much you're aware from Ben of what we've got going on here with the new CEO coming in and various other bits and pieces."
+    },
+    {
+      "start": 2054.04,
+      "end": 2060.04,
+      "text": "A lot of what we're doing at the moment is not on hold as such."
+    },
+    {
+      "start": 2060.04,
+      "end": 2071.04,
+      "text": "We're putting together plans for approval and trying to carry on with business as usual in an environment where it's slightly challenging to do business as usual."
+    },
+    {
+      "start": 2071.04,
+      "end": 2077.04,
+      "text": "From October onwards it will become much clearer where the direction is and where we need to be putting our efforts."
+    },
+    {
+      "start": 2077.04,
+      "end": 2087.04,
+      "text": "So that's the kind of time I'll be presenting how far we've gotten in our implementation so far of the AI learning strategy and where I'd like to take it."
+    },
+    {
+      "start": 2087.04,
+      "end": 2090.04,
+      "text": "Which, like I say, one of my concerns has been exactly this gap."
+    },
+    {
+      "start": 2090.04,
+      "end": 2097.04,
+      "text": "So I'll be including in that plan that gap around the baseline piece."
+    },
+    {
+      "start": 2097.04,
+      "end": 2100.04,
+      "text": "And we've also got the gap around some of the responsible usage stuff."
+    },
+    {
+      "start": 2100.04,
+      "end": 2106.04,
+      "text": "So those would be the areas that to me are risks of having an incomplete portfolio basically."
+    },
+    {
+      "start": 2106.04,
+      "end": 2111.04,
+      "text": "So kind of towards the back end of October, early November perhaps would be a good time to talk to you."
+    },
+    {
+      "start": 2111.04,
+      "end": 2112.04,
+      "text": "Yeah, it does."
+    },
+    {
+      "start": 2112.04,
+      "end": 2121.04,
+      "text": "It does. And are there any areas where, you know, you've only seen a sort of quick preview and you haven't seen the whole syllabus,"
+    },
+    {
+      "start": 2121.04,
+      "end": 2132.04,
+      "text": "but are there any areas where you think I should concentrate in order to help fill the gap?"
+    },
+    {
+      "start": 2132.04,
+      "end": 2138.04,
+      "text": "If you'd be comfortable sending it across the syllabus, I'd be really happy to have a look through and name it."
+    },
+    {
+      "start": 2138.04,
+      "end": 2147.04,
+      "text": "I mean, I've got every lesson in the syllabus, but it's mainly covered by the..."
+    },
+    {
+      "start": 2147.04,
+      "end": 2157.22,
+      "text": "If I go to the main page, I know that goes back to that."
+    },
+    {
+      "start": 2157.22,
+      "end": 2162.22,
+      "text": "But yeah, it's mainly covered by the abouts."
+    },
+    {
+      "start": 2162.22,
+      "end": 2179.14,
+      "text": "Maybe it's in the abouts, but here the capstone projects and the description of what's in each month covers it at a high level."
+    },
+    {
+      "start": 2179.14,
+      "end": 2191.14,
+      "text": "But yeah, there's about 30 lessons or more in month two and month three, including the optional ones."
+    },
+    {
+      "start": 2191.14,
+      "end": 2199.14,
+      "text": "Yeah, 35. But yeah, I can unlock those and I can give you a demo actually."
+    },
+    {
+      "start": 2199.14,
+      "end": 2203.14,
+      "text": "Well, give you a demo account, I mean, later."
+    },
+    {
+      "start": 2203.14,
+      "end": 2208.14,
+      "text": "If you're comfortable to do so, if you want me to find an NDA or anything first, I can do that."
+    },
+    {
+      "start": 2208.14,
+      "end": 2211.14,
+      "text": "It's whatever makes you comfortable."
+    },
+    {
+      "start": 2211.14,
+      "end": 2214.14,
+      "text": "Yeah, OK, that might be a good idea."
+    },
+    {
+      "start": 2214.14,
+      "end": 2225.8,
+      "text": "Because that's the reason I've kept it locked in the demo part, was I didn't want people taking these bits."
+    },
+    {
+      "start": 2225.8,
+      "end": 2233.8,
+      "text": "Because the foundation part is probably covered in other areas, although it's not covered in from a UK point of view."
+    },
+    {
+      "start": 2233.8,
+      "end": 2240.8,
+      "text": "I didn't really emphasize that, but everything in here is from a UK point of view."
+    },
+    {
+      "start": 2240.8,
+      "end": 2247.8,
+      "text": "So it's all around UK tax and UK accounts and UK, if you're using AI to do that."
+    },
+    {
+      "start": 2247.8,
+      "end": 2255.8,
+      "text": "Working out where you go on holiday from the UK, that kind of thing."
+    },
+    {
+      "start": 2255.8,
+      "end": 2260.8,
+      "text": "I'll be happy to find an NDA and then."
+    },
+    {
+      "start": 2260.8,
+      "end": 2263.8,
+      "text": "Yeah, cool."
+    },
+    {
+      "start": 2263.8,
+      "end": 2273.8,
+      "text": "One area, so we've got the three areas, one is sort of how you use AI to get better at your job."
+    },
+    {
+      "start": 2273.8,
+      "end": 2283.8,
+      "text": "Then you've got the enterprise, as an HR director, how do you ensure that AI is optimized,"
+    },
+    {
+      "start": 2283.8,
+      "end": 2289.8,
+      "text": "adopted responsibly to an integrated across your operations to improve productivity?"
+    },
+    {
+      "start": 2289.8,
+      "end": 2293.8,
+      "text": "And then the one in the middle is also as an HR director,"
+    },
+    {
+      "start": 2293.8,
+      "end": 2304.8,
+      "text": "how do you ensure that your HR function is optimized by AI to become more strategic, support the business better?"
+    },
+    {
+      "start": 2304.8,
+      "end": 2310.8,
+      "text": "And I suppose things that we're looking at as well are in the research side."
+    },
+    {
+      "start": 2310.8,
+      "end": 2321.8,
+      "text": "That's probably maybe slightly outside of this, but we're looking at how HR operating models are changing in light of digital transformation."
+    },
+    {
+      "start": 2321.8,
+      "end": 2325.8,
+      "text": "And I don't know if there's anything that you've got in that space at all."
+    },
+    {
+      "start": 2325.8,
+      "end": 2329.8,
+      "text": "Yeah, that's in month three mostly."
+    },
+    {
+      "start": 2329.8,
+      "end": 2333.8,
+      "text": "So that's all around the AI transformation."
+    },
+    {
+      "start": 2333.8,
+      "end": 2336.8,
+      "text": "Would it touch on things like HR operating models?"
+    },
+    {
+      "start": 2336.8,
+      "end": 2343.8,
+      "text": "Yeah, and hiring and teams, so how you structure your teams."
+    },
+    {
+      "start": 2343.8,
+      "end": 2354.8,
+      "text": "Teams are getting smaller and smaller."
+    },
+    {
+      "start": 2354.8,
+      "end": 2359.8,
+      "text": "Amazon used to say two pizza teams and people used to think, oh, that's quite small,"
+    },
+    {
+      "start": 2359.8,
+      "end": 2364.8,
+      "text": "because it was a team that you could feed with two pizzas."
+    },
+    {
+      "start": 2364.8,
+      "end": 2371.8,
+      "text": "And now they're saying either two croissant teams or three croissant teams."
+    },
+    {
+      "start": 2371.8,
+      "end": 2382.43,
+      "text": "So there's only two or three people in a team, which is quite small."
+    },
+    {
+      "start": 2382.43,
+      "end": 2387.43,
+      "text": "And there's a lot of people who I think in the future,"
+    },
+    {
+      "start": 2387.43,
+      "end": 2392.43,
+      "text": "There's going to be far fewer managers and far more doers,"
+    },
+    {
+      "start": 2392.43,
+      "end": 2402.43,
+      "text": "because the doers will be managing agents instead of people."
+    },
+    {
+      "start": 2402.43,
+      "end": 2407.43,
+      "text": "But yeah, there's lots on that in month three."
+    },
+    {
+      "start": 2407.43,
+      "end": 2411.43,
+      "text": "And it goes through all the stats as well."
+    },
+    {
+      "start": 2411.43,
+      "end": 2418.43,
+      "text": "From CIPD as well, because I've seen quite a few papers from you."
+    },
+    {
+      "start": 2418.43,
+      "end": 2424.43,
+      "text": "And then there's papers from McKinsey and others that it looks at."
+    },
+    {
+      "start": 2424.43,
+      "end": 2430.43,
+      "text": "And from the OpenAI and Anthropic release a lot of papers as well"
+    },
+    {
+      "start": 2430.43,
+      "end": 2439.43,
+      "text": "on how businesses are using AI and how it's affected them, including themselves,"
+    },
+    {
+      "start": 2439.43,
+      "end": 2443.43,
+      "text": "which is really interesting, because they're always, I don't know,"
+    },
+    {
+      "start": 2443.43,
+      "end": 2447.43,
+      "text": "six months or a year or three years ahead of most companies."
+    },
+    {
+      "start": 2447.43,
+      "end": 2457.67,
+      "text": "No, I think that would be really useful for senior practitioners,"
+    },
+    {
+      "start": 2457.67,
+      "end": 2463.67,
+      "text": "chief people officers thinking about that strategic change piece."
+    },
+    {
+      "start": 2463.67,
+      "end": 2468.67,
+      "text": "So yeah, that would be one that we'd be interested in."
+    },
+    {
+      "start": 2468.67,
+      "end": 2473.67,
+      "text": "Well, certainly we'd be interested when we're thinking through our research as well,"
+    },
+    {
+      "start": 2473.67,
+      "end": 2479.67,
+      "text": "because what we're looking at is sort of further case study research"
+    },
+    {
+      "start": 2479.67,
+      "end": 2485.67,
+      "text": "with employers that are going through this AI adoption journey to help them understand,"
+    },
+    {
+      "start": 2485.67,
+      "end": 2491.67,
+      "text": "to understand what that sort of shift around the HR operating model is looking like."
+    },
+    {
+      "start": 2491.67,
+      "end": 2496.67,
+      "text": "Yeah. Yeah, that's what month three is mostly about."
+    },
+    {
+      "start": 2496.67,
+      "end": 2506.14,
+      "text": "It's kind of a strategy around guiding your business with AI in mind."
+    },
+    {
+      "start": 2506.14,
+      "end": 2513.97,
+      "text": "Well, that sounds like, well, anyway, sounds from what you're saying, Steve,"
+    },
+    {
+      "start": 2513.97,
+      "end": 2517.97,
+      "text": "it's sort of your further conversation, sort of, yeah."
+    },
+    {
+      "start": 2517.97,
+      "end": 2522.97,
+      "text": "I'll leave it to you and Dave to sort of have a great introduction,"
+    },
+    {
+      "start": 2522.97,
+      "end": 2524.97,
+      "text": "because I'm sort of slightly off-peak,"
+    },
+    {
+      "start": 2524.97,
+      "end": 2528.97,
+      "text": "so I'll leave the two of you to decide when the best time to meet."
+    },
+    {
+      "start": 2528.97,
+      "end": 2532.97,
+      "text": "Thank you. Thanks for the introduction, Ben. I really appreciate you taking them through."
+    },
+    {
+      "start": 2532.97,
+      "end": 2534.97,
+      "text": "Yeah, no worries."
+    },
+    {
+      "start": 2534.97,
+      "end": 2538.97,
+      "text": "I really like it. I wish there was more of a immediate use trip, because I like it."
+    },
+    {
+      "start": 2538.97,
+      "end": 2542.97,
+      "text": "Yeah, let's switch up again late October, early November."
+    },
+    {
+      "start": 2542.97,
+      "end": 2548.97,
+      "text": "Well, yeah, I mean, the other way maybe is if you promoted it."
+    },
+    {
+      "start": 2548.97,
+      "end": 2555.97,
+      "text": "Is there any kind of way that you promote this kind of thing?"
+    },
+    {
+      "start": 2555.97,
+      "end": 2559.97,
+      "text": "Sadly, we don't promote the work of other organisations."
+    },
+    {
+      "start": 2559.97,
+      "end": 2567.97,
+      "text": "That's not a learning thing. It's a CIPD thing, which is a shame."
+    },
+    {
+      "start": 2567.97,
+      "end": 2571.97,
+      "text": "Yeah, I mean, it's in a much simpler way."
+    },
+    {
+      "start": 2571.97,
+      "end": 2577.97,
+      "text": "That's one of the way my thinking has gone is whether there's opportunity for member benefit."
+    },
+    {
+      "start": 2577.97,
+      "end": 2582.97,
+      "text": "We should be a decision made by our membership people."
+    },
+    {
+      "start": 2582.97,
+      "end": 2585.97,
+      "text": "Yeah, all conversations to have in a few weeks, I think."
+    },
+    {
+      "start": 2585.97,
+      "end": 2588.97,
+      "text": "Yeah, cool."
+    },
+    {
+      "start": 2588.97,
+      "end": 2591.97,
+      "text": "Yeah, it's really interesting. Thank you."
+    },
+    {
+      "start": 2591.97,
+      "end": 2595.97,
+      "text": "No worries. And I think once I launch it, it'll change quite a lot,"
+    },
+    {
+      "start": 2595.97,
+      "end": 2604.97,
+      "text": "because obviously with all the stats around what people choose as their optional lessons,"
+    },
+    {
+      "start": 2604.97,
+      "end": 2610.97,
+      "text": "and I'll be going in that direction if there's lots of demand for one area,"
+    },
+    {
+      "start": 2610.97,
+      "end": 2613.97,
+      "text": "I'll move in that direction."
+    },
+    {
+      "start": 2613.97,
+      "end": 2614.97,
+      "text": "Yeah."
+    },
+    {
+      "start": 2614.97,
+      "end": 2620.97,
+      "text": "And whether people click off, because I've got a sort of back end for it as well"
+    },
+    {
+      "start": 2620.97,
+      "end": 2624.97,
+      "text": "that monitors exactly what people are doing and how far they've got"
+    },
+    {
+      "start": 2624.97,
+      "end": 2629.97,
+      "text": "and whether they drop off and that kind of thing."
+    },
+    {
+      "start": 2629.97,
+      "end": 2633.97,
+      "text": "So it should get optimised as well by then."
+    },
+    {
+      "start": 2633.97,
+      "end": 2636.97,
+      "text": "Great. Love it."
+    },
+    {
+      "start": 2636.97,
+      "end": 2637.97,
+      "text": "Cool."
+    },
+    {
+      "start": 2637.97,
+      "end": 2638.97,
+      "text": "Thank you."
+    },
+    {
+      "start": 2638.97,
+      "end": 2641.97,
+      "text": "No worries. Nice to meet you."
+    },
+    {
+      "start": 2641.97,
+      "end": 2643.97,
+      "text": "Nice to meet you as well. Thank you."
+    },
+    {
+      "start": 2643.97,
+      "end": 2644.97,
+      "text": "Cheers, Ben."
+    },
+    {
+      "start": 2644.97,
+      "end": 2645.97,
+      "text": "Good to see you, Dave."
+    },
+    {
+      "start": 2645.97,
+      "end": 2646.97,
+      "text": "See you soon."
+    },
+    {
+      "start": 2646.97,
+      "end": 2647.97,
+      "text": "See you soon, yeah."
+    },
+    {
+      "start": 2647.97,
+      "end": 2650.97,
+      "text": "By the way, Joe said thanks for his biology."
+    },
+    {
+      "start": 2650.97,
+      "end": 2652.97,
+      "text": "Ah, cool."
+    },
+    {
+      "start": 2652.97,
+      "end": 2658.97,
+      "text": "Obviously, he's so chuffed with it. It's brilliant. It's really cheered him up."
+    },
+    {
+      "start": 2658.97,
+      "end": 2659.97,
+      "text": "That's good."
+    },
+    {
+      "start": 2659.97,
+      "end": 2665.97,
+      "text": "Yeah. He said it's just given him a really good structure and shape"
+    },
+    {
+      "start": 2665.97,
+      "end": 2668.97,
+      "text": "to how to approach the subject."
+    },
+    {
+      "start": 2668.97,
+      "end": 2670.97,
+      "text": "So yeah, it's really..."
+    },
+    {
+      "start": 2670.97,
+      "end": 2672.97,
+      "text": "Because he was getting really down..."
+    },
+    {
+      "start": 2672.97,
+      "end": 2677.97,
+      "text": "Because I think last time we saw you, he was thinking you might give it up"
+    },
+    {
+      "start": 2677.97,
+      "end": 2679.97,
+      "text": "and start trying to do English Lips and Scratch."
+    },
+    {
+      "start": 2679.97,
+      "end": 2682.97,
+      "text": "So he's definitely sticking with biology now,"
+    },
+    {
+      "start": 2682.97,
+      "end": 2691.97,
+      "text": "and your AI frame has definitely contributed to him feeling that he can do that."
+    },
+    {
+      "start": 2691.97,
+      "end": 2692.97,
+      "text": "Oh, good."
+    },
+    {
+      "start": 2692.97,
+      "end": 2693.97,
+      "text": "So thanks so much for that."
+    },
+    {
+      "start": 2693.97,
+      "end": 2694.97,
+      "text": "Yeah, no worries."
+    },
+    {
+      "start": 2694.97,
+      "end": 2699.97,
+      "text": "Well, if he gives me any more sort of feedback around what he wants from it,"
+    },
+    {
+      "start": 2699.97,
+      "end": 2705.97,
+      "text": "I know he wants more questions, but yeah, I'll add that as well."
+    },
+    {
+      "start": 2705.97,
+      "end": 2709.97,
+      "text": "That is actually in the course as well."
+    },
+    {
+      "start": 2710.97,
+      "end": 2716.97,
+      "text": "I'm definitely going to do the course myself, so that's really, really good."
+    },
+    {
+      "start": 2716.97,
+      "end": 2719.97,
+      "text": "And yeah, I really like your building block thing."
+    },
+    {
+      "start": 2719.97,
+      "end": 2723.97,
+      "text": "That's just a really nice way to approach it."
+    },
+    {
+      "start": 2723.97,
+      "end": 2727.97,
+      "text": "We just don't know yet until our new CEO comes in."
+    },
+    {
+      "start": 2727.97,
+      "end": 2729.97,
+      "text": "Yeah, yeah, yeah."
+    },
+    {
+      "start": 2729.97,
+      "end": 2731.97,
+      "text": "But they are..."
+    },
+    {
+      "start": 2731.97,
+      "end": 2736.97,
+      "text": "The whole sort of digital transformation piece is going to be..."
+    },
+    {
+      "start": 2736.97,
+      "end": 2740.97,
+      "text": "We know for sure it's going to be a massive priority for us,"
+    },
+    {
+      "start": 2740.97,
+      "end": 2742.97,
+      "text": "how to shift the profession."
+    },
+    {
+      "start": 2742.97,
+      "end": 2751.97,
+      "text": "So I think Steve will hopefully be able to find us a way of working..."
+    },
+    {
+      "start": 2751.97,
+      "end": 2755.97,
+      "text": "I don't know quite how, but it would be nice to work in partnership"
+    },
+    {
+      "start": 2755.97,
+      "end": 2760.97,
+      "text": "to promote or make sure members are having access"
+    },
+    {
+      "start": 2760.97,
+      "end": 2763.97,
+      "text": "with whatever sort of agreement that would require"
+    },
+    {
+      "start": 2763.97,
+      "end": 2767.97,
+      "text": "so that it's sort of worth both parties working together."
+    },
+    {
+      "start": 2767.97,
+      "end": 2769.97,
+      "text": "Because it looks really good to me."
+    },
+    {
+      "start": 2769.97,
+      "end": 2770.97,
+      "text": "Cool."
+    },
+    {
+      "start": 2770.97,
+      "end": 2774.97,
+      "text": "Yeah, I mean, I want to keep it really cheap."
+    },
+    {
+      "start": 2774.97,
+      "end": 2779.97,
+      "text": "Ideally, if the government..."
+    },
+    {
+      "start": 2779.97,
+      "end": 2786.97,
+      "text": "Hopefully they're going to realise that what they've got at the moment is rubbish."
+    },
+    {
+      "start": 2786.97,
+      "end": 2792.97,
+      "text": "And they've spent an absolute fortune on it compared to what they could have done."
+    },
+    {
+      "start": 2793.97,
+      "end": 2796.97,
+      "text": "I mean, yeah, I don't know if you..."
+    },
+    {
+      "start": 2796.97,
+      "end": 2801.97,
+      "text": "My colleague Lizzie Foley is our senior skills advisor."
+    },
+    {
+      "start": 2801.97,
+      "end": 2803.97,
+      "text": "She'd be really interested in this as well, I think."
+    },
+    {
+      "start": 2803.97,
+      "end": 2806.97,
+      "text": "Because she's the one who's been to the government resources"
+    },
+    {
+      "start": 2806.97,
+      "end": 2809.97,
+      "text": "or the links to those courses and has just been so disappointed."
+    },
+    {
+      "start": 2809.97,
+      "end": 2811.97,
+      "text": "I haven't looked at it myself."
+    },
+    {
+      "start": 2811.97,
+      "end": 2814.97,
+      "text": "So she may well be really interested in this."
+    },
+    {
+      "start": 2814.97,
+      "end": 2818.97,
+      "text": "And she's quite useful because she speaks to government..."
+    },
+    {
+      "start": 2818.97,
+      "end": 2824.97,
+      "text": "She's our lead advisor, engaging with skills policy people."
+    },
+    {
+      "start": 2824.97,
+      "end": 2828.97,
+      "text": "So she could be worth a demo as well at some point."
+    },
+    {
+      "start": 2828.97,
+      "end": 2830.97,
+      "text": "I think she'd find it interesting."
+    },
+    {
+      "start": 2830.97,
+      "end": 2838.97,
+      "text": "Yeah, because apparently the new AI minister is good."
+    },
+    {
+      "start": 2838.97,
+      "end": 2842.97,
+      "text": "A lot of people have said that he's good, apparently."
+    },
+    {
+      "start": 2842.97,
+      "end": 2845.97,
+      "text": "I have no idea."
+    },
+    {
+      "start": 2845.97,
+      "end": 2850.97,
+      "text": "I do know the new future work minister, Kate Deartham."
+    },
+    {
+      "start": 2850.97,
+      "end": 2852.97,
+      "text": "So, yeah."
+    },
+    {
+      "start": 2852.97,
+      "end": 2857.97,
+      "text": "And it seems like if we've got this government portal that is promoting courses,"
+    },
+    {
+      "start": 2857.97,
+      "end": 2861.97,
+      "text": "it'd be a great place for your course to live, wouldn't it?"
+    },
+    {
+      "start": 2861.97,
+      "end": 2864.97,
+      "text": "Yeah, and I think it's very easy to join."
+    },
+    {
+      "start": 2864.97,
+      "end": 2866.97,
+      "text": "It's just you get lost."
+    },
+    {
+      "start": 2866.97,
+      "end": 2870.97,
+      "text": "Because I think there's something about 650 courses on there."
+    },
+    {
+      "start": 2871.97,
+      "end": 2879.97,
+      "text": "And they've just promoted ones from Microsoft's, Google, Amazon, things like that."
+    },
+    {
+      "start": 2879.97,
+      "end": 2882.97,
+      "text": "And they're all the rubbish ones that are too old."
+    },
+    {
+      "start": 2882.97,
+      "end": 2890.97,
+      "text": "I feel like this would be worth CIPD having a link."
+    },
+    {
+      "start": 2890.97,
+      "end": 2894.97,
+      "text": "Because what we want to do is show that the reason you're a CIPD member"
+    },
+    {
+      "start": 2894.97,
+      "end": 2901.97,
+      "text": "is because we can lift you up with really trusted, high quality support."
+    },
+    {
+      "start": 2901.97,
+      "end": 2907.97,
+      "text": "Because otherwise there's so much crap out there."
+    },
+    {
+      "start": 2907.97,
+      "end": 2913.97,
+      "text": "So I feel like there's a good alignment potentially."
+    },
+    {
+      "start": 2913.97,
+      "end": 2916.97,
+      "text": "And it sounds like Steve's interested."
+    },
+    {
+      "start": 2916.97,
+      "end": 2919.97,
+      "text": "And he's quite a thoughtful guy."
+    },
+    {
+      "start": 2919.97,
+      "end": 2922.97,
+      "text": "I think he will be reflecting."
+    },
+    {
+      "start": 2922.97,
+      "end": 2925.97,
+      "text": "And hopefully when we've got a bit more direction,"
+    },
+    {
+      "start": 2925.97,
+      "end": 2930.97,
+      "text": "there'll be an opportunity to have a further fruitful chat between the two of you."
+    },
+    {
+      "start": 2930.97,
+      "end": 2931.97,
+      "text": "Yeah, cool."
+    },
+    {
+      "start": 2931.97,
+      "end": 2933.97,
+      "text": "Once you've got a new guy in."
+    },
+    {
+      "start": 2933.97,
+      "end": 2935.97,
+      "text": "Do you know who you're getting?"
+    },
+    {
+      "start": 2935.97,
+      "end": 2937.97,
+      "text": "Yeah, he's called Neil Carberry."
+    },
+    {
+      "start": 2937.97,
+      "end": 2941.97,
+      "text": "He's the current Chief Executive of the Recruitment and Employment Confederation."
+    },
+    {
+      "start": 2941.97,
+      "end": 2943.97,
+      "text": "He used to work at CBI."
+    },
+    {
+      "start": 2943.97,
+      "end": 2945.97,
+      "text": "I know him, but not very well."
+    },
+    {
+      "start": 2945.97,
+      "end": 2948.97,
+      "text": "But I think he's a good guy."
+    },
+    {
+      "start": 2948.97,
+      "end": 2951.97,
+      "text": "I'm hoping that he's going to make some good decisions for CIPD."
+    },
+    {
+      "start": 2951.97,
+      "end": 2952.97,
+      "text": "Fingers crossed."
+    },
+    {
+      "start": 2952.97,
+      "end": 2953.97,
+      "text": "Yeah, cool."
+    },
+    {
+      "start": 2953.97,
+      "end": 2954.97,
+      "text": "Brilliant."
+    },
+    {
+      "start": 2954.97,
+      "end": 2956.97,
+      "text": "I'll see you soon, yeah?"
+    },
+    {
+      "start": 2956.97,
+      "end": 2957.97,
+      "text": "Yeah, see you soon."
+    },
+    {
+      "start": 2957.97,
+      "end": 2959.97,
+      "text": "Thanks a lot for setting this up."
+    },
+    {
+      "start": 2959.97,
+      "end": 2960.97,
+      "text": "No worries, Troy."
+    },
+    {
+      "start": 2960.97,
+      "end": 2961.97,
+      "text": "That was really interesting though."
+    },
+    {
+      "start": 2961.97,
+      "end": 2963.97,
+      "text": "I'm definitely going to, when you're launched,"
+    },
+    {
+      "start": 2963.97,
+      "end": 2965.97,
+      "text": "I'm going to be one of your first..."
+    },
+    {
+      "start": 2965.97,
+      "end": 2968.97,
+      "text": "But you can be like a beta tester."
+    },
+    {
+      "start": 2968.97,
+      "end": 2969.97,
+      "text": "Okay."
+    },
+    {
+      "start": 2969.97,
+      "end": 2972.97,
+      "text": "Well, you've got to have some money somewhere though."
+    },
+    {
+      "start": 2972.97,
+      "end": 2974.97,
+      "text": "\u00a329 is, you know, a month."
+    },
+    {
+      "start": 2974.97,
+      "end": 2976.97,
+      "text": "I think it's really good anyway."
+    },
+    {
+      "start": 2976.97,
+      "end": 2978.97,
+      "text": "Yeah, and then it reduces to..."
+    },
+    {
+      "start": 2978.97,
+      "end": 2980.97,
+      "text": "Because I didn't want people to think,"
+    },
+    {
+      "start": 2980.97,
+      "end": 2983.97,
+      "text": "oh, I've done the three months, right, I'll stop now."
+    },
+    {
+      "start": 2983.97,
+      "end": 2986.97,
+      "text": "No, \u00a37, I think it's a really good deal."
+    },
+    {
+      "start": 2986.97,
+      "end": 2988.97,
+      "text": "Actually, for maintenance, you know."
+    },
+    {
+      "start": 2988.97,
+      "end": 2990.97,
+      "text": "And it's a reminder, isn't it, to stay coming?"
+    },
+    {
+      "start": 2990.97,
+      "end": 2991.97,
+      "text": "Yeah."
+    },
+    {
+      "start": 2991.97,
+      "end": 2992.97,
+      "text": "So no."
+    },
+    {
+      "start": 2992.97,
+      "end": 2994.97,
+      "text": "So I think it's a really good model."
+    },
+    {
+      "start": 2994.97,
+      "end": 2996.97,
+      "text": "Cool, brilliant."
+    },
+    {
+      "start": 2996.97,
+      "end": 2998.97,
+      "text": "Well, say hi to Kerry and me and see you soon, yeah?"
+    },
+    {
+      "start": 2998.97,
+      "end": 2999.97,
+      "text": "Yeah, I will."
+    },
+    {
+      "start": 2999.97,
+      "end": 3000.97,
+      "text": "See you soon."
+    },
+    {
+      "start": 3000.97,
+      "end": 3001.97,
+      "text": "Cheers."
+    },
+    {
+      "start": 3001.97,
+      "end": 3002.97,
+      "text": "Bye."
+    },
+    {
+      "start": 3002.97,
+      "end": 3003.97,
+      "text": "Bye."
+    }
+  ],
+  "language": "en",
+  "duration": 3072.9,
+  "model": "medium",
+  "device": "cpu",
+  "asr_seconds": 881.0
+}
