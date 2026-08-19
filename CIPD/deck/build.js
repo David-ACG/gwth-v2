@@ -172,7 +172,7 @@ function bullets(slide, items, o) {
     ["members use AI to do their HR roles better", "Month 1: the six things AI is good at, applied to your own job; every lesson ends in a built, kept artefact", "HR-flavoured examples and projects chosen from the existing bank; the first lab is already 'Write a job advert: Claude vs ChatGPT'"],
     ["HR functions become more efficient while managing people risks such as discrimination, as operating models change", "Months 2 and 3: workflows and apps for the function; governance, change management, how teams and managers change when people manage agents", "A CIPD-curated 'responsible use and people risk' strand written with CIPD guidance, kept current on the same monthly cycle"],
     ["HR directors and OD lead responsible, integrated AI adoption across the business", "Month 3: enterprise AI, agents, self-hosted AI, ROI; capstone is an AI readiness assessment of a whole organisation", "A senior-leader path: the Month 3 core as the pre-read before CIPD's strategy and leading-implementation courses"],
-    ["organisations upskill their whole workforce to use AI in their jobs", "The whole course is role-agnostic by design; the Teams dashboard assigns optional lessons per role and tracks completion", "Employer cohorts bought through CIPD, with a baseline report per cohort before they reach a classroom"],
+    ["organisations upskill their whole workforce to use AI in their jobs", "The whole course is role-agnostic by design; the Teams dashboard assigns optional lessons per role and tracks completion", "Members and their employers join through CIPD; each record shows the level reached before a classroom course"],
   ];
   const tbl = rows.map((r, ri) => r.map((c, ci) => ({
     text: c,
@@ -186,26 +186,26 @@ function bullets(slide, items, o) {
 // ---------- 7 From Teams to Curated ----------
 {
   const s = pres.addSlide(); chrome(s, 7);
-  title(s, "The idea: from 'Teams' to 'Curated by CIPD'", false, "Teams already gives an employer its own dashboard and a choice of optional lessons. A curated edition turns that into a wrapper a partner controls.");
+  title(s, "The idea: from 'Teams' to 'Curated by CIPD'", false, "Teams already gives an employer its own dashboard and a choice of optional lessons. A curated edition turns that into a co-branded path a partner shapes.");
   // left: layered diagram
   const lx = 0.6, ly = 1.9;
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: lx, y: ly, w: 5.6, h: 4.6, fill: { color: CREAM }, line: { color: LINE, width: 0.75 }, rectRadius: 0.1 });
   s.addText("CIPD edition (wrapper)", { x: lx + 0.25, y: ly + 0.15, w: 5.1, h: 0.35, fontFace: BODY, fontSize: 13, bold: true, color: RUST, margin: 0 });
-  s.addText("cipd.gwth.ai or an address CIPD chooses. CIPD branding, CIPD framing pages, CIPD research woven in, member pricing.", { x: lx + 0.25, y: ly + 0.5, w: 5.1, h: 0.55, fontFace: BODY, fontSize: 11, color: MUTED, margin: 0, valign: "top" });
+  s.addText("Co-branded GWTH and CIPD. CIPD framing pages, CIPD research woven in, member pricing.", { x: lx + 0.25, y: ly + 0.5, w: 5.1, h: 0.55, fontFace: BODY, fontSize: 11, color: MUTED, margin: 0, valign: "top" });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: lx + 0.25, y: ly + 1.15, w: 5.1, h: 3.2, fill: { color: WHITE }, line: { color: LINE, width: 0.75 }, rectRadius: 0.1 });
   s.addText("Curated paths (Teams engine)", { x: lx + 0.5, y: ly + 1.28, w: 4.6, h: 0.35, fontFace: BODY, fontSize: 13, bold: true, color: TEAL, margin: 0 });
-  s.addText("Which lessons are core for an HR practitioner, an HRD, a recruiter; which optional lessons are switched on; cohort dashboard and baseline report.", { x: lx + 0.5, y: ly + 1.63, w: 4.6, h: 0.6, fontFace: BODY, fontSize: 11, color: MUTED, margin: 0, valign: "top" });
+  s.addText("Which lessons are core for an HR practitioner, an HRD, a recruiter; which optional lessons are switched on; the record shows the baseline reached.", { x: lx + 0.5, y: ly + 1.63, w: 4.6, h: 0.6, fontFace: BODY, fontSize: 11, color: MUTED, margin: 0, valign: "top" });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: lx + 0.5, y: ly + 2.3, w: 4.6, h: 1.8, fill: { color: TEAL }, line: { color: TEAL, width: 0 }, rectRadius: 0.1 });
   s.addText("GWTH core", { x: lx + 0.75, y: ly + 2.42, w: 4.1, h: 0.35, fontFace: BODY, fontSize: 13, bold: true, color: CREAM, margin: 0 });
   s.addText("96 lessons, labs, projects, the record, monthly updates. One body of content, maintained once, served through every wrapper.", { x: lx + 0.75, y: ly + 2.78, w: 4.1, h: 1.2, fontFace: BODY, fontSize: 11, color: PAPER, margin: 0, valign: "top" });
   // right: what CIPD controls
   s.addText("What CIPD would control", { x: 6.7, y: 1.9, w: 6.0, h: 0.4, fontFace: HEAD, fontSize: 18, bold: true, color: INK, margin: 0 });
   const items = [
-    ["Look", "Co-branded or fully white-labelled, so it reads as CIPD-curated"],
+    ["Look", "Co-branded so it reads as CIPD-curated"],
     ["Path", "Which lessons are core per HR role, which are optional; a senior-leader path"],
     ["Voice", "CIPD framing at the start of each month, CIPD research and guidance cited inside lessons"],
-    ["People", "Member access and pricing; employer cohorts; a dashboard per cohort"],
-    ["Proof", "The record carries the CIPD pathway, and feeds a baseline report to the course tutor"],
+    ["People", "Member access and pricing"],
+    ["Proof", "The certificate says the student took the CIPD pathway"],
     ["Hand-off", "Each path ends by pointing to the matching CIPD or partner course"],
   ];
   items.forEach((it, i) => {
@@ -214,7 +214,7 @@ function bullets(slide, items, o) {
     s.addText(it[0], { x: 7.2, y, w: 1.1, h: 0.42, fontFace: BODY, fontSize: 13, bold: true, color: INK, margin: 0, valign: "middle" });
     s.addText(it[1], { x: 8.3, y, w: 4.4, h: 0.6, fontFace: BODY, fontSize: 11.5, color: MUTED, margin: 0, valign: "top" });
   });
-  s.addNotes("This is the 'different wrapper' Ben suggested on 12 August. Be clear what exists: the Teams page promises a dashboard, per-role optional lessons and bespoke lessons for 100+ seats; the curated-edition layer on top (branding, paths, cohort reports, hand-offs) is what I will build and show the week after this call. The whole point is that CIPD does not write or maintain the lessons: one core, updated monthly, many wrappers.");
+  s.addNotes("This is the 'different wrapper' Ben suggested on 12 August. Be clear what exists: the Teams page promises a dashboard, per-role optional lessons and bespoke lessons for 100+ seats; the curated-edition layer on top (co-branding, paths, the CIPD pathway on the certificate, hand-offs) is what I will build and show the week after this call. Not white-labelled: it stays visibly GWTH, co-branded with CIPD. No cohorts in the first version (too much to manage); the tooling for employer cohorts with a dashboard could be built later if CIPD wants it. The whole point is that CIPD does not write or maintain the lessons: one core, updated monthly, many wrappers.");
 }
 
 // ---------- 8 Foundation flow ----------
@@ -224,7 +224,7 @@ function bullets(slide, items, o) {
   const steps = [
     ["1", "Member joins the CIPD edition", "Self-directed, five hours a week, from anywhere. Starts with the Month 1 foundation or a CIPD-chosen path.", TEAL],
     ["2", "Builds and banks proof", "A project in every lesson; the record shows what was built and how current it is.", MOSS],
-    ["3", "Baseline report to the tutor", "Before a CIPD virtual-classroom or specialist course, the cohort's level is known. No more mixed rooms.", MUSTARD],
+    ["3", "Baseline visible to the tutor", "Before a CIPD virtual-classroom or specialist course, each student's record shows the level reached. No more mixed rooms.", MUSTARD],
     ["4", "Specialist and leadership courses", "CIPD's 14 products and partner courses build on the foundation instead of re-teaching it.", RUST],
     ["5", "Stays current", "£7.50 a month keeps the updates coming; the record decays if they stop. Currency becomes visible.", TEAL],
   ];
@@ -240,7 +240,7 @@ function bullets(slide, items, o) {
     { text: "Why this works for CIPD: ", options: { bold: true, color: TEAL } },
     { text: "CIPD keeps its market (classroom, face-to-face, associates who stay current) and plugs the two gaps Steve named, the baseline and responsible use, without building and maintaining self-directed content. Why it works for GWTH: distribution to the profession that most needs it, and a trusted name on the door." },
   ], { x: 0.6, y: 5.7, w: W - 1.2, h: 0.95, fontFace: BODY, fontSize: 12.5, color: INK, margin: 0, valign: "top" });
-  s.addNotes("Ben: 'I thought about what Steve said and will lean into being the foundation for other AI courses, mainly as it would be great marketing.' This slide is that. The hand-off at the end of each path can point at CIPD's own courses or partner courses, and the baseline report is the thing Steve does not have today.");
+  s.addNotes("Ben: 'I thought about what Steve said and will lean into being the foundation for other AI courses, mainly as it would be great marketing.' This slide is that. The hand-off at the end of each path can point at CIPD's own courses or partner courses, and a visible per-student baseline is the thing Steve does not have today.");
 }
 
 // ---------- 9 Asks ----------
@@ -267,12 +267,12 @@ function bullets(slide, items, o) {
 // ---------- 10 Next steps ----------
 {
   const s = pres.addSlide(); chrome(s, 10, true);
-  title(s, "Next steps", true, "Fast and concrete. Nothing here needs a decision from CIPD today.");
+  title(s, "Possible next steps", true, "Fast and concrete. Nothing here needs a decision from CIPD today.");
   const steps = [
-    ["This week", "Build the CIPD-curated edition prototype: branding, an HR path, a senior-leader path, cohort dashboard mock, baseline report."],
-    ["Week after", "Show it to Ben and Lizzie; fold in today's benchmark feedback; NDA and demo account for Steve to review the full syllabus."],
-    ["September", "Soft launch with friends, then the waitlist. Feedback from real use before anything is promoted."],
-    ["Late Oct / early Nov", "Reconvene with Steve once the new CEO has set direction; the baseline gap is in his October plan."],
+    ["Step 1", "Build the CIPD-curated edition prototype: co-branding, an HR path, a senior-leader path, the CIPD pathway on the certificate."],
+    ["Step 2", "Show it to Ben and Lizzie; fold in today's benchmark feedback; NDA and demo account for Steve to review the full syllabus."],
+    ["Step 3", "Soft launch with friends, then the waitlist. Feedback from real use before anything is promoted."],
+    ["Step 4", "Late October / early November: reconvene with Steve once the new CEO has set direction; the baseline gap is in his October plan."],
   ];
   steps.forEach((st, i) => {
     const y = 1.9 + i * 1.05;
