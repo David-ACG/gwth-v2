@@ -2327,10 +2327,10 @@ function RealQAPageBody({
               ? `SCORE ${score}% · ${passed ? "PASSED" : `${grade?.passMark ?? QUIZ_PASS_SCORE}% NEEDED`}`
               : grading
                 ? "CHECKING YOUR ANSWERS"
-                : exhausted
-                  ? `ALL ${maxAttempts} ATTEMPTS USED · BEST ${bestScore}%`
-                  : alreadyPassed
-                    ? `PASSED · BEST ${bestScore}%`
+                : alreadyPassed
+                  ? `PASSED · BEST ${bestScore}%`
+                  : exhausted
+                    ? `ALL ${maxAttempts} ATTEMPTS USED · BEST ${bestScore}%`
                     : `${answeredCount} OF ${questions.length} ANSWERED`}
         </div>
         {showFinish ? (

@@ -5,11 +5,11 @@
  * The DB-path test uses a fake Drizzle client to pin the SHAPE of the write:
  * every derived field must be a SQL expression computed by the database from
  * the row it is updating (increment, GREATEST, cap), never a number computed
- * in JS from an earlier read — that earlier-read pattern is exactly the race
+ * in JS from an earlier read - that earlier-read pattern is exactly the race
  * the defect describes (two concurrent submissions read the same prior row;
  * one attempt increment is lost and a slower low score overwrites a passing
- * one). The end-to-end behaviour against a real Postgres — including two
- * genuinely concurrent submissions — is covered in progress.db.test.ts.
+ * one). The end-to-end behaviour against a real Postgres - including two
+ * genuinely concurrent submissions - is covered in progress.db.test.ts.
  *
  * The mock-mode path shares the cap and GREATEST semantics in TS, tested
  * below against the in-memory store.
@@ -50,7 +50,7 @@ vi.mock("@/lib/auth", () => ({
   getCurrentUser: async () => ({ id: "user_atomic_test" }),
 }))
 
-import { recordQuizSubmission } from "./progress"
+import { recordIntroVideoProgress, recordQuizSubmission } from "./progress"
 
 const LESSON_ID = "atomic_test_lesson"
 const OPTS = { passMark: 67, maxAttempts: 3 }
@@ -88,7 +88,7 @@ describe("recordQuizSubmission is one atomic SQL statement (QA defect 6)", () =>
     const { config } = fakeDb.state.insertCalls[0]!
 
     // The race-carrying fields must be SQL expressions (increment, GREATEST,
-    // derived pass/completion) — a plain number here means a JS-side
+    // derived pass/completion) - a plain number here means a JS-side
     // read-modify-write crept back in.
     expect(config.set.quizAttempts).toBeInstanceOf(SQL)
     expect(config.set.bestQuizScore).toBeInstanceOf(SQL)
@@ -97,6 +97,9 @@ describe("recordQuizSubmission is one atomic SQL statement (QA defect 6)", () =>
     expect(config.set.completedAt).toBeInstanceOf(SQL)
     // The current-attempt score is legitimately this submission's number.
     expect(config.set.quizScore).toBe(50)
+    // The overall fraction is DERIVED in the same statement, never taken
+    // from a client (QA round-2 defect 5).
+    expect(config.set.progress).toBeInstanceOf(SQL)
   })
 
   it("enforces the attempt cap inside the same statement (setWhere)", async () => {
@@ -125,6 +128,54 @@ describe("recordQuizSubmission is one atomic SQL statement (QA defect 6)", () =>
     expect(result.outcome).toBe("recorded")
     expect(result.progress.bestQuizScore).toBe(100)
     expect(result.progress.quizAttempts).toBe(2)
+  })
+})
+
+describe("recordIntroVideoProgress is one atomic SQL statement (QA round-2 defect 8)", () => {
+  it("computes the credit, bank, fraction and completion IN SQL, from the row being updated", async () => {
+    await recordIntroVideoProgress(LESSON_ID, 0.85)
+
+    expect(fakeDb.state.insertCalls).toHaveLength(1)
+    const { values, config } = fakeDb.state.insertCalls[0]!
+
+    // A fresh row may only hold the bootstrap credit, whatever was claimed.
+    expect(values.introVideoProgress).toBeCloseTo(0.15, 5)
+
+    // Every derived field is a SQL expression over the OLD row: elapsed
+    // time, the banked seconds, the credited fraction, completion and the
+    // derived overall fraction - a plain number here means a JS-side
+    // read-modify-write crept back in (the round-1 defect).
+    expect(config.set.introVideoProgress).toBeInstanceOf(SQL)
+    expect(config.set.timeSpent).toBeInstanceOf(SQL)
+    expect(config.set.isCompleted).toBeInstanceOf(SQL)
+    expect(config.set.completedAt).toBeInstanceOf(SQL)
+    expect(config.set.progress).toBeInstanceOf(SQL)
+    // No cap-refusal clause here: video reports are never refused, only
+    // credit-limited.
+    expect(config.setWhere).toBeUndefined()
+  })
+})
+
+describe("recordIntroVideoProgress mock-mode crediting", () => {
+  it("banks wall-clock time and credits monotonically", async () => {
+    delete process.env.DATABASE_URL
+    const lessonId = `mock_video_${Date.now()}`
+
+    // A forged full-watch first report earns only the bootstrap.
+    const first = await recordIntroVideoProgress(lessonId, 1)
+    expect(first.introVideoProgress).toBeCloseTo(0.15, 5)
+
+    // Backdate the mock row's last write by 30s: the next report may bank
+    // 30s, allowing 30 * 2 / 180 = 1/3 of the video.
+    first.lastAccessedAt = new Date(Date.now() - 30_000)
+    const second = await recordIntroVideoProgress(lessonId, 1)
+    expect(second.timeSpent).toBe(30)
+    expect(second.introVideoProgress).toBeCloseTo(1 / 3, 2)
+
+    // A lower report never regresses the stored fraction.
+    second.lastAccessedAt = new Date(Date.now() - 30_000)
+    const third = await recordIntroVideoProgress(lessonId, 0.1)
+    expect(third.introVideoProgress).toBeCloseTo(1 / 3, 2)
   })
 })
 

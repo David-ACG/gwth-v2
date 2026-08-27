@@ -11,7 +11,7 @@
 
 /**
  * Dashboard routes that require authentication (W11 route guard).
- * `/admin` is here for the optimistic no-cookie bounce only — the REAL admin
+ * `/admin` is here for the optimistic no-cookie bounce only - the REAL admin
  * gate (session + ADMIN_EMAILS allowlist) lives in src/app/admin/layout.tsx
  * and in requireAdminForApi for /api/admin/*; per W11 there is no middleware.
  */
@@ -40,7 +40,7 @@ export const PROTECTED_PATHS = [
  * /w12-embed-demo, the unauthenticated POST /api/w12-take-review, and the
  * /demo/lesson-v1..v11 viewers (client components that shipped real lesson
  * prose into a public /_next/static chunk). Deletion is the only closure that
- * survives a forged session cookie — see guardDevReviewRoute.
+ * survives a forged session cookie - see guardDevReviewRoute.
  *
  * `/demo` stays listed: the route tree is gone, but keeping the prefix means a
  * future scratch page under it is gated by default rather than by memory.

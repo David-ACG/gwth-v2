@@ -154,13 +154,15 @@ export function toPublicQuizQuestions(
  * lesson id, for server-side grading only (gwth-launch-va6). Never pass the
  * result to a client component — use `toPublicQuizQuestions` for props.
  *
- * Reads Postgres when configured. The mock fallback applies ONLY when no DB
- * is configured, or when the LESSON itself is not in the DB (the dev
- * "not imported yet" case, matching `getLesson`). A DB lesson whose
- * `quiz_questions` rows are missing or unseeded returns an EMPTY array so
- * grading fails loudly upstream - before this guard the bundled mock answer
- * key silently graded (and persisted) real submissions against the wrong
- * questions (N2 QA defect 7).
+ * When a database is configured it is the ONLY answer-key source: zero rows
+ * mean an empty result and grading fails loudly upstream, whether the quiz
+ * rows are unseeded or the lessons row itself is missing/re-keyed (N2 QA
+ * defect 7, and its round-2 residual: the earlier "lesson not imported"
+ * probe still fell back to the bundled mock key when a production lessons
+ * row was deleted mid re-import, silently grading real submissions against
+ * the wrong questions). The mock set serves pure mock mode (no
+ * `DATABASE_URL`) only - grading against fixtures is never an option once
+ * real persistence exists.
  */
 export async function getQuizQuestionsByLessonId(
   lessonId: string
@@ -173,25 +175,13 @@ export async function getQuizQuestionsByLessonId(
       .where(eq(quizQuestions.lessonId, lessonId))
       .orderBy(asc(quizQuestions.order))
 
-    if (rows.length > 0) {
-      return rows.map((q) => ({
-        id: q.id,
-        question: q.question,
-        options: q.options,
-        correctOptionIndex: q.correctOptionIndex,
-        explanation: q.explanation,
-      }))
-    }
-
-    // Zero quiz rows: distinguish "lesson not imported into the DB" (mock
-    // fallback keeps dev working) from "imported lesson with missing quiz
-    // rows" (return [] and let the caller refuse to grade).
-    const lessonRows = await db
-      .select({ id: lessons.id })
-      .from(lessons)
-      .where(eq(lessons.id, lessonId))
-      .limit(1)
-    if (lessonRows.length > 0) return []
+    return rows.map((q) => ({
+      id: q.id,
+      question: q.question,
+      options: q.options,
+      correctOptionIndex: q.correctOptionIndex,
+      explanation: q.explanation,
+    }))
   }
 
   return mockLessons.find((l) => l.id === lessonId)?.questions ?? []
@@ -203,8 +193,10 @@ export async function getQuizQuestionsByLessonId(
  * must verify the caller's subscription actually covers this lesson's month
  * before it grades anything. Returns null when the lesson is unknown.
  *
- * Reads Postgres when configured; falls back to the mock set when the DB is
- * absent or does not hold the lesson (same pattern as `getLesson`).
+ * When a database is configured it is the ONLY source (N2 QA round-2 defect
+ * 9): a lesson id the DB does not hold resolves to null and the access gate
+ * REFUSES, rather than resolving a month from the mock fixture and letting
+ * grading proceed against it. The mock set serves pure mock mode only.
  */
 export async function getLessonMonthById(
   lessonId: string
@@ -217,8 +209,7 @@ export async function getLessonMonthById(
       .where(eq(lessons.id, lessonId))
       .limit(1)
     const month = rows[0]?.month
-    if (month === 1 || month === 2 || month === 3) return month
-    if (rows.length > 0) return null
+    return month === 1 || month === 2 || month === 3 ? month : null
   }
 
   const mockMonth = mockLessons.find((l) => l.id === lessonId)?.month

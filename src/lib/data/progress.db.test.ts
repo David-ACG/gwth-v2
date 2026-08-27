@@ -234,6 +234,8 @@ describeDb("lesson-progress user isolation (live DB)", () => {
   it("QA-6: two CONCURRENT submissions lose no attempt and keep the best score", async () => {
     setUser(USER_Q)
     const opts = { passMark: 67, maxAttempts: 3 }
+    // Self-contained (QA round-2 style note 4): start from no row.
+    await sql`delete from lesson_progress where user_id = ${USER_Q} and lesson_id = ${LESSON_ID}`
 
     // Genuinely concurrent: both start with no row / the same prior row.
     // Before the atomic upsert, both read attempts=0, both wrote attempts=1
@@ -257,8 +259,11 @@ describeDb("lesson-progress user isolation (live DB)", () => {
   it("QA-5: the cap refuses the write past MAX attempts and changes nothing", async () => {
     setUser(USER_Q)
     const opts = { passMark: 67, maxAttempts: 3 }
-
-    // Attempt 3 (attempts are at 2 after the concurrency test).
+    // Self-contained (QA round-2 style note 4): burn all three attempts
+    // inside this test rather than inheriting state from the previous one.
+    await sql`delete from lesson_progress where user_id = ${USER_Q} and lesson_id = ${LESSON_ID}`
+    await data.recordQuizSubmission(LESSON_ID, 100, opts)
+    await data.recordQuizSubmission(LESSON_ID, 30, opts)
     const third = await data.recordQuizSubmission(LESSON_ID, 40, opts)
     expect(third.outcome).toBe("recorded")
     expect(third.progress.quizAttempts).toBe(3)
@@ -279,6 +284,8 @@ describeDb("lesson-progress user isolation (live DB)", () => {
   it("QA-6: the atomic write derives completion from the stored video fraction", async () => {
     setUser(USER_Q)
     const opts = { passMark: 67, maxAttempts: 10 }
+    // Self-contained (QA round-2 style note 4).
+    await sql`delete from lesson_progress where user_id = ${USER_Q} and lesson_id = ${LESSON_ID_2}`
 
     // Fresh lesson row on LESSON_ID_2: pass the quiz with no video watched.
     const graded = await data.recordQuizSubmission(LESSON_ID_2, 100, opts)
@@ -286,12 +293,37 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     expect(graded.progress.quizPassed).toBe(true)
     expect(graded.progress.isCompleted).toBe(false) // video gate not cleared
 
-    // Clear the video gate, then submit again: completion derives in SQL.
+    // Clear the video gate (direct data-layer write, as the W7 tests above
+    // do - the credited client path is proven separately below), then
+    // submit again: completion derives in SQL.
     await data.updateLessonProgress(LESSON_ID_2, { introVideoProgress: 0.9 })
     const again = await data.recordQuizSubmission(LESSON_ID_2, 30, opts)
     expect(again.outcome).toBe("recorded")
     expect(again.progress.bestQuizScore).toBe(100)
     expect(again.progress.isCompleted).toBe(true)
     expect(again.progress.completedAt).toBeInstanceOf(Date)
+  })
+
+  it("QA-3 (round 2): video watch credit is banked wall-clock time, atomically in SQL", async () => {
+    setUser(USER_Q)
+    await sql`delete from lesson_progress where user_id = ${USER_Q} and lesson_id = ${LESSON_ID}`
+
+    // A forged full-watch first report earns only the bootstrap.
+    const first = await data.recordIntroVideoProgress(LESSON_ID, 1)
+    expect(first.introVideoProgress).toBeCloseTo(0.15, 5)
+
+    // Backdate the row's last write by 45s: the next report may bank 45s,
+    // which at the 2x/180s calibration allows 0.5 of the video.
+    await sql`update lesson_progress set last_accessed_at = now() - interval '45 seconds'
+              where user_id = ${USER_Q} and lesson_id = ${LESSON_ID}`
+    const second = await data.recordIntroVideoProgress(LESSON_ID, 1)
+    expect(second.timeSpent).toBe(45)
+    expect(second.introVideoProgress).toBeCloseTo(0.5, 2)
+
+    // An immediate re-report banks ~nothing more: the fraction barely moves
+    // and never regresses (GREATEST).
+    const third = await data.recordIntroVideoProgress(LESSON_ID, 1)
+    expect(third.introVideoProgress).toBeGreaterThanOrEqual(0.5 - 1e-6)
+    expect(third.introVideoProgress).toBeLessThan(0.53)
   })
 })

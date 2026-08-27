@@ -66,6 +66,30 @@ export function isLessonComplete(
   return videoComplete && quizPassed
 }
 
+/**
+ * Server-side derivation of the overall lesson `progress` fraction (N2 QA
+ * round-2 defect 5). The fraction is DERIVED from the two completion gates,
+ * never accepted from a client: half for the verified watch fraction
+ * (scaled so clearing the 80% gate fills the half), half for the quiz pass.
+ * A complete lesson reads 1. The dashboard's "started" flag (`progress >
+ * 0`) flips on the first credited watch report or quiz pass, exactly the
+ * activities that are actually verified.
+ */
+export function deriveLessonFraction(
+  row: Pick<
+    LessonProgress,
+    "introVideoProgress" | "quizPassed" | "bestQuizScore"
+  >
+): number {
+  if (isLessonComplete(row)) return 1
+  const videoHalf =
+    Math.min((row.introVideoProgress ?? 0) / INTRO_VIDEO_COMPLETION_THRESHOLD, 1) *
+    0.5
+  const quizHalf =
+    (row.quizPassed ?? hasPassedQuiz(row.bestQuizScore)) ? 0.5 : 0
+  return Math.min(0.99, videoHalf + quizHalf)
+}
+
 export function createEmptyLessonProgress(lessonId: string): LessonProgress {
   return {
     lessonId,

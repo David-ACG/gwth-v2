@@ -1,6 +1,6 @@
 "use client"
 
-import { useOptimistic, useTransition } from "react"
+import { useOptimistic, useState, useTransition } from "react"
 import {
   submitQuizAnswersAction,
   updateLessonProgressAction,
@@ -13,17 +13,22 @@ import type { LessonProgress, QuizSubmitResult } from "@/lib/types"
  * Uses React 19's useOptimistic for instant feedback while
  * the server-side update completes in the background.
  *
- * N2 security (gwth-launch-va6): the client never computes or submits quiz
- * outcomes any more. `submitQuizAnswers` sends the learner's raw answers to
- * `submitQuizAnswersAction`, which grades them against the DB answer key and
- * writes quizScore/bestQuizScore/quizPassed itself; the optimistic numbers
- * here are display-only.
+ * N2 security (gwth-launch-va6 / gwth-launch-avo): the client never computes
+ * or submits quiz outcomes, and no stored fraction is client-writable. What
+ * the client sends are REPORTS (watch fraction, raw quiz answers); every
+ * persisted value comes back from the server, and each action's returned row
+ * is folded into `serverProgress` so the hook's exposed `progress` reflects
+ * what was actually credited/persisted rather than going stale (QA style
+ * note: the old submitQuizAnswers pass-through never reconciled).
  */
 export function useProgress(initialProgress: LessonProgress | null) {
   const [isPending, startTransition] = useTransition()
 
+  // The last row the SERVER returned; the optimistic layer sits on top.
+  const [serverProgress, setServerProgress] = useState(initialProgress)
+
   const [optimisticProgress, setOptimisticProgress] = useOptimistic(
-    initialProgress,
+    serverProgress,
     (_current, update: Partial<LessonProgress>) => {
       const lessonId = update.lessonId ?? _current?.lessonId
       if (!_current && !lessonId) return null
@@ -32,9 +37,10 @@ export function useProgress(initialProgress: LessonProgress | null) {
   )
 
   /**
-   * Marks a lesson as completed with optimistic UI update. Only the progress
-   * fraction is sent; the server recomputes `isCompleted`/`completedAt` from
-   * the merged gates, so a client cannot claim completion it has not earned.
+   * Marks a lesson as completed with optimistic UI update. The request body
+   * is EMPTY on purpose: completion is recomputed server-side from the
+   * stored, verified gates, and the overall fraction is derived there too -
+   * a client cannot claim either (gwth-launch-avo, QA round-2 defect 5).
    */
   function markComplete(lessonId: string) {
     setOptimisticProgress({
@@ -44,32 +50,42 @@ export function useProgress(initialProgress: LessonProgress | null) {
       progress: 1,
     })
     startTransition(async () => {
-      await updateLessonProgressAction(lessonId, { progress: 1 })
+      const row = await updateLessonProgressAction(lessonId, {})
+      setServerProgress(row)
     })
   }
 
   /**
    * Submits the learner's answers for server-side grading and returns the
-   * graded result (score, pass verdict, and the post-submission answer
-   * reveal), or the server's attempt-limit refusal once MAX_QUIZ_ATTEMPTS
-   * is used up. The persisted quiz fields come back on `result.progress`
-   * for a graded result; a refusal writes (and returns) nothing new.
+   * graded result (score, pass verdict, and the post-submission reveal the
+   * server chose to include), or the server's attempt-limit refusal once
+   * MAX_QUIZ_ATTEMPTS is used up. A graded result's persisted row is folded
+   * into the hook's progress; a refusal changes nothing.
    */
   async function submitQuizAnswers(
     lessonId: string,
     answers: Record<string, number>
   ): Promise<QuizSubmitResult> {
-    return submitQuizAnswersAction(lessonId, answers)
+    const result = await submitQuizAnswersAction(lessonId, answers)
+    if (!("attemptLimitReached" in result)) {
+      setServerProgress(result.progress)
+    }
+    return result
   }
 
-  /** Updates intro video progress with optimistic UI */
+  /**
+   * Reports intro-video watch progress. The server CREDITS the report
+   * against banked wall-clock time, so the persisted fraction may lag the
+   * optimistic one; the returned row is what was actually credited.
+   */
   function updateIntroVideoProgress(lessonId: string, progress: number) {
     const boundedProgress = Math.max(0, Math.min(1, progress))
     setOptimisticProgress({ lessonId, introVideoProgress: boundedProgress })
     startTransition(async () => {
-      await updateLessonProgressAction(lessonId, {
+      const row = await updateLessonProgressAction(lessonId, {
         introVideoProgress: boundedProgress,
       })
+      setServerProgress(row)
     })
   }
 

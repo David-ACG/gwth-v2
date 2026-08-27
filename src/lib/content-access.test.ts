@@ -37,6 +37,7 @@ vi.mock("@/lib/auth", () => ({
 
 import {
   canViewPrivateContent,
+  isSessionlessMockRequest,
   requireContentAccessOrRedirect,
   requireSessionOrRedirect,
 } from "./content-access"
@@ -171,6 +172,11 @@ describe("private content gate (W25)", () => {
       else process.env.DATABASE_URL = originalDb
       if (originalMock === undefined) delete process.env.ENABLE_DEV_MOCK_USER
       else process.env.ENABLE_DEV_MOCK_USER = originalMock
+      // Belt and braces against env leakage between tests (QA style note):
+      // the outer hooks already delete/restore PRIVATE_CONTENT_MODE, but a
+      // security test file should not depend on that at a distance.
+      delete process.env.PRIVATE_CONTENT_MODE
+      requestCookies.cookie = null
     })
 
     /** Runs the session gate and reports the redirect it threw, or null. */
@@ -249,7 +255,37 @@ describe("private content gate (W25)", () => {
     it("awaits headers() on every path, including the skips", async () => {
       delete process.env.DATABASE_URL
       await requireSessionOrRedirect()
-      expect(headersCalls.count).toBe(1)
+      expect(headersCalls.count).toBeGreaterThanOrEqual(1)
+    })
+
+    // The shared helper every mock-admitting boundary must use (round-2
+    // defect 1 + style note 3): the quiz-grading action calls this same
+    // function, so its semantics are pinned here once.
+    describe("isSessionlessMockRequest (the ONE shared mock-env check)", () => {
+      it("is true for a cookie-less request in a mock env", async () => {
+        delete process.env.DATABASE_URL
+        expect(await isSessionlessMockRequest()).toBe(true)
+
+        process.env.DATABASE_URL =
+          "postgresql://gwth:x@localhost:5443/gwth_v2"
+        process.env.ENABLE_DEV_MOCK_USER = "true"
+        expect(await isSessionlessMockRequest()).toBe(true)
+      })
+
+      it("is false the moment ANY session cookie is presented", async () => {
+        process.env.DATABASE_URL =
+          "postgresql://gwth:x@localhost:5443/gwth_v2"
+        process.env.ENABLE_DEV_MOCK_USER = "true"
+        requestCookies.cookie = "better-auth.session_token=forged"
+        expect(await isSessionlessMockRequest()).toBe(false)
+      })
+
+      it("is false outside the mock envs regardless of cookies", async () => {
+        process.env.DATABASE_URL =
+          "postgresql://gwth:x@localhost:5443/gwth_v2"
+        delete process.env.ENABLE_DEV_MOCK_USER
+        expect(await isSessionlessMockRequest()).toBe(false)
+      })
     })
   })
 

@@ -31,18 +31,26 @@ vi.mock("@/lib/actions/progress", () => ({
   updateLessonProgressAction: vi.fn(() => Promise.resolve({})),
   submitQuizAnswersAction: vi.fn(
     async (lessonId: string, answers: Record<string, number>) => {
-      const perQuestion = Object.entries(QUIZ_KEY).map(([questionId, key]) => ({
+      const graded = Object.entries(QUIZ_KEY).map(([questionId, key]) => ({
         questionId,
         correct: answers[questionId] === key.correctOptionIndex,
         correctOptionIndex: key.correctOptionIndex,
         explanation: key.explanation,
       }))
       const score = Math.round(
-        (perQuestion.filter((p) => p.correct).length / perQuestion.length) * 100
+        (graded.filter((p) => p.correct).length / graded.length) * 100
+      )
+      const passed = score >= 67
+      // Mirror the real action's reveal policy (QA round-2 defect 2): a
+      // wrong answer's key/explanation is withheld while a retry remains.
+      const perQuestion = graded.map((g) =>
+        g.correct || passed
+          ? g
+          : { questionId: g.questionId, correct: false }
       )
       return {
         score,
-        passed: score >= 67,
+        passed,
         passMark: 67,
         perQuestion,
         progress: { lessonId, quizScore: score, bestQuizScore: score },
@@ -414,7 +422,7 @@ describe("EditorialLessonViewer Q&A", () => {
     expect(updateAction).not.toHaveBeenCalled()
   })
 
-  it("marks a failed run honestly, reveals feedback from the server, and offers a retry", async () => {
+  it("marks a failed run honestly, offers a retry, and withholds the key while one remains", async () => {
     const user = userEvent.setup()
     render(
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
@@ -429,8 +437,24 @@ describe("EditorialLessonViewer Q&A", () => {
       screen.getByRole("button", { name: /RETRY Q&A/ })
     ).toBeInTheDocument()
     expect(gradeAction).toHaveBeenCalledWith(LESSON_ID, { q1: 0, q2: 0 })
-    // The explanation arrives in the grading RESPONSE (the reveal), not in
-    // the component's props - which no longer carry the answer key at all.
+    // Reveal policy (QA round-2 defect 2): while a retry remains, a wrong
+    // answer's explanation and correct option are NOT in the response, so
+    // nothing here can render them - read-key-then-resubmit is dead.
+    expect(
+      screen.queryByText("Small and specific to your own week.")
+    ).not.toBeInTheDocument()
+  })
+
+  it("reveals explanations once the run is passed", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
+    )
+    await answerAll(user, ["A pocket knife", "A place you already look"])
+    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+
+    expect(await screen.findByText(/SCORE 100% · PASSED/)).toBeInTheDocument()
+    // Passed: no further grading can use the reveal, so feedback shows.
     expect(
       screen.getByText("Small and specific to your own week.")
     ).toBeInTheDocument()
@@ -469,9 +493,10 @@ describe("EditorialLessonViewer Q&A", () => {
     expect(screen.getByText("90%")).toBeInTheDocument()
     expect(screen.getByText("100%")).toBeInTheDocument()
     await waitFor(() => {
-      // Only the whitelisted fraction goes over the wire; the server
-      // recomputes isCompleted from the merged gates (gwth-launch-va6).
-      expect(updateAction).toHaveBeenCalledWith(LESSON_ID, { progress: 1 })
+      // The FINISH request body is EMPTY: completion and the overall
+      // fraction are recomputed server-side from the stored verified gates
+      // (gwth-launch-va6 / QA round-2 defect 5).
+      expect(updateAction).toHaveBeenCalledWith(LESSON_ID, {})
     })
   })
 })
@@ -569,7 +594,7 @@ describe("EditorialLessonViewer quiz attempt cap", () => {
     expect(await screen.findByText("Lesson complete.")).toBeInTheDocument()
     expect(gradeAction).not.toHaveBeenCalled()
     await waitFor(() => {
-      expect(updateAction).toHaveBeenCalledWith(LESSON_ID, { progress: 1 })
+      expect(updateAction).toHaveBeenCalledWith(LESSON_ID, {})
     })
   })
 })

@@ -286,16 +286,25 @@ export interface QuizQuestionPublic {
   options: string[]
 }
 
-/** Per-question outcome inside a `QuizGradeResult`, revealed post-submission */
+/**
+ * Per-question outcome inside a `QuizGradeResult`.
+ *
+ * Reveal policy (N2 QA round-2 defect 2): while the learner can still
+ * retry (attempts remain and the quiz is not passed), a WRONG answer's
+ * `correctOptionIndex` and `explanation` are withheld - otherwise attempt 1
+ * hands over the key and attempt 2 is a guaranteed forged pass. The full
+ * reveal arrives only when no further grading can change the record: the
+ * quiz is passed, or this grade consumed the final attempt.
+ */
 export interface QuizQuestionGrade {
   /** The graded question's id */
   questionId: string
   /** Whether the learner's answer matched the key */
   correct: boolean
-  /** Index of the correct answer, revealed only after submission */
-  correctOptionIndex: number
-  /** Explanation shown as feedback after submission */
-  explanation: string
+  /** Index of the correct answer; absent while a wrong answer is retryable */
+  correctOptionIndex?: number
+  /** Explanation feedback; absent while a wrong answer is retryable */
+  explanation?: string
 }
 
 /**

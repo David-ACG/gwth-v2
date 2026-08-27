@@ -4,17 +4,17 @@
  *
  * Before this guard, `getQuizQuestionsByLessonId` fell back to the mock
  * answer key whenever the configured database held zero quiz rows for the
- * lesson — so a production lesson whose `quiz_questions` rows were dropped
+ * lesson - so a production lesson whose `quiz_questions` rows were dropped
  * or never seeded graded (and persisted) real submissions against the mock
- * fixture with no error anywhere. Now:
- *   - DB configured + lesson row exists + zero quiz rows  → []  (grading
- *     fails loudly upstream: "has no quiz to grade")
- *   - DB configured + lesson row absent                   → mock fallback
- *     (the dev "lesson not imported yet" case, matching getLesson)
- *   - no DB configured                                    → mock fallback
+ * fixture with no error anywhere. Now, with a database configured, the DB
+ * is the ONLY source (round-2 defect 9 closed the "lesson row absent" mock
+ * fallback too): zero quiz rows mean [] (grading fails loudly upstream:
+ * "has no quiz to grade") and an unknown lesson id resolves no month, so
+ * the access gate refuses. The mock set serves pure mock mode (no
+ * DATABASE_URL) only.
  *
  * The fake DB distinguishes the two queries by their terminal call: the quiz
- * read ends in `.orderBy(...)`, the lesson-existence probe in `.limit(1)`.
+ * read ends in `.orderBy(...)`, the lessons read in `.limit(1)`.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -39,7 +39,7 @@ vi.mock("@/db", () => ({
 import { getLessonMonthById, getQuizQuestionsByLessonId } from "./lessons"
 import { mockLessons } from "./mock-data"
 
-// A lesson that EXISTS in the mock fixture with a real answer key — the
+// A lesson that EXISTS in the mock fixture with a real answer key - the
 // dangerous fallback source.
 const MOCK_LESSON_ID = "m1_l01"
 
@@ -74,7 +74,7 @@ describe("getQuizQuestionsByLessonId grading source (QA defect 7)", () => {
     expect(questions[0]!.id).toBe("db_q1")
   })
 
-  it("returns [] — NOT the mock key — for a DB lesson with zero quiz rows", async () => {
+  it("returns [] - NOT the mock key - for a DB lesson with zero quiz rows", async () => {
     dbState.quizRows = []
     dbState.lessonRows = [{ id: MOCK_LESSON_ID }] // the lesson IS imported
 
@@ -88,12 +88,13 @@ describe("getQuizQuestionsByLessonId grading source (QA defect 7)", () => {
     expect(mockQuestions.length).toBeGreaterThan(0)
   })
 
-  it("still falls back to the mock set for a lesson the DB has never seen", async () => {
+  it("returns [] even when the lessons row itself is gone (round-2 defect 9)", async () => {
+    // A deleted/re-keyed lessons row must fail loudly too - the old
+    // "lesson not imported" probe fell back to the mock key here.
     dbState.quizRows = []
-    dbState.lessonRows = [] // not imported: the dev fallback case
+    dbState.lessonRows = []
     const questions = await getQuizQuestionsByLessonId(MOCK_LESSON_ID)
-    expect(questions.length).toBeGreaterThan(0)
-    expect(questions[0]!.id).toMatch(/^m1_l01_q/)
+    expect(questions).toEqual([])
   })
 
   it("uses the mock set when no database is configured", async () => {
@@ -109,13 +110,16 @@ describe("getLessonMonthById", () => {
     expect(await getLessonMonthById(MOCK_LESSON_ID)).toBe(2)
   })
 
-  it("falls back to the mock set when the DB has never seen the lesson", async () => {
+  it("returns null - the access gate then REFUSES - when the DB has never seen the lesson", async () => {
+    // Round-2 defect 9: resolving a month from the mock fixture here let
+    // the access check pass and grading proceed against fixture data.
     dbState.lessonRows = []
-    expect(await getLessonMonthById(MOCK_LESSON_ID)).toBe(1)
+    expect(await getLessonMonthById(MOCK_LESSON_ID)).toBeNull()
   })
 
-  it("returns null for a lesson id nobody knows", async () => {
-    dbState.lessonRows = []
+  it("reads the month from the mock set in pure mock mode only", async () => {
+    delete process.env.DATABASE_URL
+    expect(await getLessonMonthById(MOCK_LESSON_ID)).toBe(1)
     expect(await getLessonMonthById("no_such_lesson")).toBeNull()
   })
 })

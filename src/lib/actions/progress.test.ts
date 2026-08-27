@@ -1,20 +1,21 @@
 /**
  * Regression tests for the hardened progress actions (gwth-launch-va6, N2
- * security; re-hardened after the N2 QA chain, gwth-launch-avo).
+ * security; re-hardened twice under the N2 QA chain, gwth-launch-avo).
  *
  * Properties under test:
- *  1. `updateLessonProgressAction` forwards ONLY the whitelisted client
- *     fields — an authenticated curl can no longer write
- *     `bestQuizScore: 100, quizPassed: true` (or any quiz/completion field)
- *     straight into the progress row.
- *  2. The intro-video watch fraction is CREDITED against elapsed wall-clock
- *     time, so one forged write cannot claim a full watch (QA defect 3).
- *  3. `submitQuizAnswersAction` refuses callers without a valid session and
- *     content access BEFORE reading the answer key (QA defect 4).
- *  4. MAX_QUIZ_ATTEMPTS is enforced server-side from the persisted row, and
+ *  1. No stored fraction is client-writable: `updateLessonProgressAction`
+ *     routes a watch REPORT to the credited `recordIntroVideoProgress` and
+ *     drops everything else (forged quiz outcomes, the overall `progress`
+ *     fraction - QA round-2 defect 5) into an empty recompute ping.
+ *  2. `submitQuizAnswersAction` refuses callers without a valid session and
+ *     content access BEFORE reading the answer key (QA defect 4); mock envs
+ *     are admitted only via the shared sessionless check (round-2 defect 1).
+ *  3. MAX_QUIZ_ATTEMPTS is enforced server-side from the persisted row, and
  *     a refusal carries NO answer reveal (QA defect 5).
- *  5. The quiz outcome persists through ONE atomic `recordQuizSubmission`
- *     call - never the old read-modify-write pair (QA defect 6).
+ *  4. The quiz outcome persists through ONE atomic `recordQuizSubmission`
+ *     call - never a read-modify-write pair (QA defect 6).
+ *  5. A wrong answer's key/explanation is revealed only when no further
+ *     grading can change the record (round-2 defect 2).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -22,6 +23,7 @@ const dataLayer = vi.hoisted(() => ({
   updateLessonProgress: vi.fn(),
   getLessonProgress: vi.fn(),
   recordQuizSubmission: vi.fn(),
+  recordIntroVideoProgress: vi.fn(),
 }))
 
 const lessonsLayer = vi.hoisted(() => ({
@@ -33,10 +35,15 @@ const authLayer = vi.hoisted(() => ({
   getCurrentUser: vi.fn(),
 }))
 
+const accessLayer = vi.hoisted(() => ({
+  isSessionlessMockRequest: vi.fn(),
+}))
+
 vi.mock("@/lib/data/progress", () => ({
   updateLessonProgress: dataLayer.updateLessonProgress,
   getLessonProgress: dataLayer.getLessonProgress,
   recordQuizSubmission: dataLayer.recordQuizSubmission,
+  recordIntroVideoProgress: dataLayer.recordIntroVideoProgress,
 }))
 
 vi.mock("@/lib/data/lessons", () => ({
@@ -52,6 +59,10 @@ vi.mock("@/lib/auth", () => ({
     user: { subscriptionMonth: number },
     month: number
   ) => month <= user.subscriptionMonth,
+}))
+
+vi.mock("@/lib/content-access", () => ({
+  isSessionlessMockRequest: accessLayer.isSessionlessMockRequest,
 }))
 
 import {
@@ -96,12 +107,7 @@ function asGrade(result: QuizSubmitResult): QuizGradeResult {
   return result
 }
 
-const ENV_KEYS = [
-  "DATABASE_URL",
-  "ENABLE_DEV_MOCK_USER",
-  "PRIVATE_CONTENT_MODE",
-  "CONTENT_ALLOWED_EMAILS",
-] as const
+const ENV_KEYS = ["PRIVATE_CONTENT_MODE", "CONTENT_ALLOWED_EMAILS"] as const
 const savedEnv: Partial<Record<(typeof ENV_KEYS)[number], string | undefined>> =
   {}
 
@@ -109,14 +115,13 @@ beforeEach(() => {
   vi.clearAllMocks()
   for (const key of ENV_KEYS) savedEnv[key] = process.env[key]
 
-  // Default: a real deployment with a real signed-in month-3 student and
-  // content mode off (the launch state).
-  process.env.DATABASE_URL = "postgresql://gwth:x@localhost:5443/gwth_v2"
-  delete process.env.ENABLE_DEV_MOCK_USER
+  // Default: a real signed-in month-3 student, content mode off (the launch
+  // state), and NOT the sessionless mock learner.
   process.env.PRIVATE_CONTENT_MODE = "off"
   delete process.env.CONTENT_ALLOWED_EMAILS
 
   authLayer.getCurrentUser.mockResolvedValue(STUDENT)
+  accessLayer.isSessionlessMockRequest.mockResolvedValue(false)
   lessonsLayer.getLessonMonthById.mockResolvedValue(1)
   lessonsLayer.getQuizQuestionsByLessonId.mockResolvedValue(QUESTIONS)
 
@@ -124,6 +129,12 @@ beforeEach(() => {
     async (lessonId: string, update: Record<string, unknown>) => ({
       lessonId,
       ...update,
+    })
+  )
+  dataLayer.recordIntroVideoProgress.mockImplementation(
+    async (lessonId: string, fraction: number) => ({
+      lessonId,
+      introVideoProgress: fraction,
     })
   )
   dataLayer.getLessonProgress.mockResolvedValue(null)
@@ -153,12 +164,12 @@ afterEach(() => {
   }
 })
 
-describe("updateLessonProgressAction whitelist", () => {
-  it("drops forged quiz and completion fields entirely", async () => {
+describe("updateLessonProgressAction: no stored fraction is client-writable", () => {
+  it("drops forged quiz, completion AND overall-progress fields entirely", async () => {
     await updateLessonProgressAction(LESSON_ID, {
-      progress: 0.5,
-      // A hostile payload: every one of these must be stripped before the
-      // data layer sees the update.
+      // A hostile payload: every one of these must be stripped. `progress`
+      // is included on purpose (QA round-2 defect 5): it used to persist.
+      progress: 1,
       bestQuizScore: 100,
       quizScore: 100,
       quizPassed: true,
@@ -168,91 +179,39 @@ describe("updateLessonProgressAction whitelist", () => {
       timeSpent: 123456,
     } as never)
 
+    // Nothing creditable in the payload: an empty recompute ping only.
     expect(dataLayer.updateLessonProgress).toHaveBeenCalledTimes(1)
-    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {
-      progress: 0.5,
-    })
+    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {})
+    expect(dataLayer.recordIntroVideoProgress).not.toHaveBeenCalled()
   })
 
-  it("passes both legitimate fractions through, clamped to 0..1", async () => {
-    await updateLessonProgressAction(LESSON_ID, {
-      progress: 7,
-      introVideoProgress: -3,
-    })
-    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {
-      progress: 1,
-      introVideoProgress: 0,
-    })
+  it("routes a watch report to the CREDITED path, clamped to 0..1", async () => {
+    await updateLessonProgressAction(LESSON_ID, { introVideoProgress: 7 })
+    expect(dataLayer.recordIntroVideoProgress).toHaveBeenCalledWith(
+      LESSON_ID,
+      1
+    )
+    expect(dataLayer.updateLessonProgress).not.toHaveBeenCalled()
   })
 
-  it("drops non-numeric and non-finite values instead of persisting them", async () => {
+  it("treats a non-numeric watch report as absent", async () => {
     await updateLessonProgressAction(LESSON_ID, {
-      progress: Number.NaN,
       introVideoProgress: "0.9",
     } as never)
+    expect(dataLayer.recordIntroVideoProgress).not.toHaveBeenCalled()
+    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {})
+  })
+
+  it("sends the FINISH ping as an empty update (completion derives server-side)", async () => {
+    await updateLessonProgressAction(LESSON_ID, {})
     expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {})
   })
 })
 
-describe("intro-video watch crediting (QA defect 3)", () => {
-  it("grants a forged full-watch first write only the bootstrap credit", async () => {
-    dataLayer.getLessonProgress.mockResolvedValue(null)
-    await updateLessonProgressAction(LESSON_ID, { introVideoProgress: 1 })
-    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {
-      introVideoProgress: 0.15,
-    })
-  })
-
-  it("credits by elapsed wall-clock time since the last write", async () => {
-    // 9 seconds at the 2x/90s allowance earns 0.2 of the video.
-    dataLayer.getLessonProgress.mockResolvedValue({
-      lessonId: LESSON_ID,
-      introVideoProgress: 0.5,
-      lastAccessedAt: new Date(Date.now() - 9_000),
-    })
-    await updateLessonProgressAction(LESSON_ID, { introVideoProgress: 1 })
-    const [, update] = dataLayer.updateLessonProgress.mock.calls[0]!
-    expect(update.introVideoProgress).toBeCloseTo(0.7, 5)
-  })
-
-  it("caps a single write's credit even after a long gap", async () => {
-    dataLayer.getLessonProgress.mockResolvedValue({
-      lessonId: LESSON_ID,
-      introVideoProgress: 0.5,
-      lastAccessedAt: new Date(Date.now() - 3_600_000), // an hour ago
-    })
-    await updateLessonProgressAction(LESSON_ID, { introVideoProgress: 1 })
-    const [, update] = dataLayer.updateLessonProgress.mock.calls[0]!
-    expect(update.introVideoProgress).toBeCloseTo(0.75, 5) // 0.5 + 0.25 cap
-  })
-
-  it("grants the requested fraction in full when earned credit covers it", async () => {
-    dataLayer.getLessonProgress.mockResolvedValue({
-      lessonId: LESSON_ID,
-      introVideoProgress: 0.5,
-      lastAccessedAt: new Date(Date.now() - 10_000),
-    })
-    await updateLessonProgressAction(LESSON_ID, { introVideoProgress: 0.6 })
-    const [, update] = dataLayer.updateLessonProgress.mock.calls[0]!
-    expect(update.introVideoProgress).toBeCloseTo(0.6, 5)
-  })
-
-  it("never lowers the stored fraction", async () => {
-    dataLayer.getLessonProgress.mockResolvedValue({
-      lessonId: LESSON_ID,
-      introVideoProgress: 0.9,
-      lastAccessedAt: new Date(),
-    })
-    await updateLessonProgressAction(LESSON_ID, { introVideoProgress: 0.4 })
-    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {
-      introVideoProgress: 0.9,
-    })
-  })
-})
-
-describe("submitQuizAnswersAction authorization (QA defect 4)", () => {
+describe("submitQuizAnswersAction authorization (QA defect 4; round-2 defect 1)", () => {
   it("refuses an unauthenticated caller BEFORE the answer key is read", async () => {
     authLayer.getCurrentUser.mockResolvedValue(null)
+    accessLayer.isSessionlessMockRequest.mockResolvedValue(false)
     await expect(
       submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
     ).rejects.toThrow(/sign in/i)
@@ -260,6 +219,28 @@ describe("submitQuizAnswersAction authorization (QA defect 4)", () => {
     expect(lessonsLayer.getQuizQuestionsByLessonId).not.toHaveBeenCalled()
     expect(dataLayer.recordQuizSubmission).not.toHaveBeenCalled()
     expect(dataLayer.updateLessonProgress).not.toHaveBeenCalled()
+  })
+
+  it("admits the SESSIONLESS mock learner only via the shared check", async () => {
+    authLayer.getCurrentUser.mockResolvedValue(null)
+    accessLayer.isSessionlessMockRequest.mockResolvedValue(true)
+    const result = asGrade(
+      await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
+    )
+    expect(result.score).toBe(100)
+    expect(accessLayer.isSessionlessMockRequest).toHaveBeenCalledTimes(1)
+  })
+
+  it("refuses a forged cookie in a mock env (the shared check says no)", async () => {
+    // isSessionlessMockRequest returns FALSE for any presented session
+    // cookie, even under ENABLE_DEV_MOCK_USER - so a forged cookie that
+    // fails validation (getCurrentUser null) is refused (round-2 defect 1).
+    authLayer.getCurrentUser.mockResolvedValue(null)
+    accessLayer.isSessionlessMockRequest.mockResolvedValue(false)
+    await expect(
+      submitQuizAnswersAction(LESSON_ID, { q1: 1 })
+    ).rejects.toThrow(/sign in/i)
+    expect(lessonsLayer.getQuizQuestionsByLessonId).not.toHaveBeenCalled()
   })
 
   it("refuses a learner whose subscription does not cover the lesson's month", async () => {
@@ -291,22 +272,6 @@ describe("submitQuizAnswersAction authorization (QA defect 4)", () => {
 
     process.env.CONTENT_ALLOWED_EMAILS =
       "david@agilecommercegroup.com, student@example.com"
-    const result = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
-    expect(result.score).toBe(50)
-  })
-
-  it("still grades in pure mock mode (no DATABASE_URL, no session possible)", async () => {
-    delete process.env.DATABASE_URL
-    authLayer.getCurrentUser.mockResolvedValue(null)
-    const result = asGrade(
-      await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
-    )
-    expect(result.score).toBe(100)
-  })
-
-  it("still grades for the staging mock learner (ENABLE_DEV_MOCK_USER, no session)", async () => {
-    process.env.ENABLE_DEV_MOCK_USER = "true"
-    authLayer.getCurrentUser.mockResolvedValue(null)
     const result = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
     expect(result.score).toBe(50)
   })
@@ -406,24 +371,6 @@ describe("submitQuizAnswersAction server grading", () => {
     expect(result.progress.quizPassed).toBe(true)
   })
 
-  it("reveals the key and explanation only in the grading response", async () => {
-    const result = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
-    expect(result.perQuestion).toEqual([
-      {
-        questionId: "q1",
-        correct: true,
-        correctOptionIndex: 1,
-        explanation: "Small and specific to your own week.",
-      },
-      {
-        questionId: "q2",
-        correct: false,
-        correctOptionIndex: 1,
-        explanation: "Meet yourself where you already are.",
-      },
-    ])
-  })
-
   it("ignores unknown question ids and non-integer answers", async () => {
     const result = asGrade(
       await submitQuizAnswersAction(LESSON_ID, {
@@ -441,5 +388,62 @@ describe("submitQuizAnswersAction server grading", () => {
     )
     expect(dataLayer.recordQuizSubmission).not.toHaveBeenCalled()
     expect(dataLayer.updateLessonProgress).not.toHaveBeenCalled()
+  })
+})
+
+describe("answer-reveal policy (QA round-2 defect 2)", () => {
+  it("withholds a wrong answer's key and explanation while a retry remains", async () => {
+    // Attempt 1 of 3, failed: q1 right, q2 wrong.
+    const result = asGrade(
+      await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 0 })
+    )
+    expect(result.passed).toBe(false)
+    expect(result.perQuestion).toEqual([
+      {
+        questionId: "q1",
+        correct: true,
+        correctOptionIndex: 1,
+        explanation: "Small and specific to your own week.",
+      },
+      // The wrong answer reveals NOTHING an attacker could resubmit with.
+      { questionId: "q2", correct: false },
+    ])
+  })
+
+  it("reveals everything on a pass", async () => {
+    const result = asGrade(
+      await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
+    )
+    expect(result.passed).toBe(true)
+    for (const grade of result.perQuestion) {
+      expect(grade.correctOptionIndex).toBe(1)
+      expect(grade.explanation).toBeTruthy()
+    }
+  })
+
+  it("reveals everything once the FINAL attempt is spent (no grading can use it)", async () => {
+    dataLayer.getLessonProgress.mockResolvedValue({
+      lessonId: LESSON_ID,
+      quizAttempts: MAX_QUIZ_ATTEMPTS - 1,
+      bestQuizScore: 0,
+    })
+    dataLayer.recordQuizSubmission.mockResolvedValue({
+      outcome: "recorded",
+      progress: {
+        lessonId: LESSON_ID,
+        quizScore: 0,
+        bestQuizScore: 0,
+        quizPassed: false,
+        quizAttempts: MAX_QUIZ_ATTEMPTS,
+      },
+    })
+    const result = asGrade(
+      await submitQuizAnswersAction(LESSON_ID, { q1: 0, q2: 0 })
+    )
+    expect(result.passed).toBe(false)
+    for (const grade of result.perQuestion) {
+      expect(grade.correctOptionIndex).toBe(1)
+      expect(grade.explanation).toBeTruthy()
+    }
   })
 })

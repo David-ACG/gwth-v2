@@ -2,35 +2,34 @@
 
 /**
  * Server Actions for lesson-progress mutations (W7, hardened under N2
- * security / gwth-launch-va6, re-hardened after the N2 QA chain /
+ * security / gwth-launch-va6, re-hardened twice under the N2 QA chain /
  * gwth-launch-avo).
  *
  * Called from Client Components (the `useProgress` hook) and run on the server.
  * The data layer (`@/lib/data/progress`) reaches the DB and reads auth cookies,
- * so it cannot be imported into a client bundle directly — this action is the
- * client-callable boundary. Per-user scoping is enforced inside the data layer
- * via `getCurrentUser()`; unauthenticated calls are a safe no-op there.
+ * so it cannot be imported into a client bundle directly - this action is the
+ * client-callable boundary.
  *
  * TRUST BOUNDARY: everything arriving here is attacker-controlled. The
  * hardening, in layers:
  *
- *  - `updateLessonProgressAction` forwards ONLY the whitelisted fields the UI
- *    legitimately sends (watch fraction and reading fraction). Every quiz
- *    outcome (`quizScore`, `bestQuizScore`, `quizPassed`, `quizAttempts`) is
- *    computed exclusively by `submitQuizAnswersAction`.
- *  - `submitQuizAnswersAction` refuses to grade for callers without a valid
- *    session AND access to the lesson's month/content (QA defect 4): before
- *    that check an anonymous POST to the server-action endpoint harvested the
- *    full answer key from the grading response.
+ *  - NO stored fraction is client-writable any more. The overall `progress`
+ *    fraction is DERIVED server-side from the verified gates (QA round-2
+ *    defect 5), and the intro-video watch fraction is CREDITED atomically
+ *    against banked wall-clock time in `recordIntroVideoProgress` (QA
+ *    defect 3; round-2 defects 6-8) - a console call asserting a full watch
+ *    earns only what real elapsed time justifies.
+ *  - Every quiz outcome (`quizScore`, `bestQuizScore`, `quizPassed`,
+ *    `quizAttempts`) is computed exclusively by `submitQuizAnswersAction`,
+ *    which refuses callers without a validated session AND access to the
+ *    lesson (QA defect 4) - the sessionless mock learner is admitted only
+ *    via the ONE shared `isSessionlessMockRequest()` check, which never
+ *    admits a presented (forged) cookie (round-2 defect 1).
  *  - MAX_QUIZ_ATTEMPTS is enforced server-side from the persisted row (QA
- *    defect 5), and the whole quiz write is a single atomic upsert in
- *    `recordQuizSubmission` (QA defect 6), so races cannot lose attempts or
- *    let a low score overwrite a concurrent passing one.
- *  - The intro-video watch fraction is CREDITED, not accepted (QA defect 3):
- *    a write may only raise it by what real wall-clock time since the last
- *    write could have earned at generous playback speed, so a single console
- *    call `updateLessonProgressAction(id, { introVideoProgress: 1 })` no
- *    longer forges the watch half of the completion record.
+ *    defect 5) inside one atomic upsert (QA defect 6), and the answer key is
+ *    revealed for a WRONG answer only when no further grading can change the
+ *    record - passed, or final attempt spent (round-2 defect 2) - so
+ *    read-key-then-resubmit no longer yields a forged pass.
  */
 import {
   QUIZ_PASS_SCORE,
@@ -39,6 +38,7 @@ import {
 import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
 import {
   getLessonProgress,
+  recordIntroVideoProgress,
   recordQuizSubmission,
   updateLessonProgress as updateLessonProgressData,
 } from "@/lib/data/progress"
@@ -47,6 +47,7 @@ import {
   getQuizQuestionsByLessonId,
 } from "@/lib/data/lessons"
 import { canUserAccessMonth, getCurrentUser } from "@/lib/auth"
+import { isSessionlessMockRequest } from "@/lib/content-access"
 import {
   isContentAllowedEmail,
   isPrivateContentMode,
@@ -54,22 +55,22 @@ import {
 import type {
   LessonProgress,
   QuizAttemptLimitResult,
+  QuizQuestionGrade,
   QuizSubmitResult,
 } from "@/lib/types"
 
 /**
- * The only fields a client may write directly, each a fraction the UI
- * observes locally (video watched, page read). Quiz fields are deliberately
- * absent — see `submitQuizAnswersAction`. `isCompleted`/`completedAt` are
- * absent because the data layer recomputes them from the merged state via
- * `isLessonComplete()` regardless of what a caller sends.
+ * The only field a client may report directly: the fraction of the intro
+ * video its player has shown. It is a REPORT, not a write - the server
+ * credits it against banked wall-clock time (see
+ * `recordIntroVideoProgress`). The overall `progress` fraction is absent on
+ * purpose (QA round-2 defect 5): it is derived server-side from the
+ * verified gates, so an empty update `{}` is the legitimate way to ask for
+ * a completion recompute (the FINISH button's path). Quiz fields are
+ * absent - see `submitQuizAnswersAction`.
  */
 export type LessonProgressClientUpdate = {
-  /** Overall lesson progress fraction, clamped to 0..1 (display only - the
-   *  completion gates never read it) */
-  progress?: number
-  /** Intro-video watched fraction, clamped to 0..1 and then CREDIT-LIMITED
-   *  by elapsed time (see `creditableIntroVideoFraction`) */
+  /** Intro-video watched fraction, clamped to 0..1 and then credit-limited */
   introVideoProgress?: number
 }
 
@@ -79,111 +80,50 @@ function sanitizeFraction(value: unknown): number | null {
   return Math.max(0, Math.min(1, value))
 }
 
-// ── Intro-video watch crediting (QA defect 3) ────────────────────────────────
-//
-// The watch fraction is the video half of the completion gate, and the server
-// cannot see the player, so the fraction itself is client-asserted. What the
-// server CAN verify is wall-clock time: watching more video takes real time.
-// A write may therefore only raise the stored fraction by
-//   elapsed-seconds-since-last-write × MAX_SPEED ÷ MIN_DURATION
-// capped per call, with a small bootstrap allowance for the first write of a
-// viewing session. The real viewer reports at every 10% of playback, so
-// honest watching (any speed up to 2x, any intro longer than ~40s) accrues
-// full credit; a forged `introVideoProgress: 1` gets only the bootstrap.
-//
-// Residual risk, accepted and documented: an attacker who WAITS the length
-// of the video while scripting periodic calls earns credit exactly as a real
-// 2x watcher would. Without server-side playback telemetry that is the floor;
-// the defect's one-console-call forgery is closed.
-
-/** The shortest intro video the credit model assumes (seconds). */
-const INTRO_VIDEO_MIN_DURATION_SECONDS = 90
-/** The fastest playback the credit model honours. */
-const INTRO_VIDEO_MAX_PLAYBACK_SPEED = 2
-/** Largest fraction a single write may add on top of elapsed-time credit. */
-const INTRO_VIDEO_PER_CALL_CAP = 0.25
-/** Credit allowed on the first write of a lesson's watch session. */
-const INTRO_VIDEO_BOOTSTRAP_CREDIT = 0.15
-
 /**
- * Returns the intro-video fraction the caller has actually EARNED: monotonic,
- * and raised at most by what elapsed wall-clock time allows.
- */
-async function creditableIntroVideoFraction(
-  lessonId: string,
-  requested: number
-): Promise<number> {
-  const existing = await getLessonProgress(lessonId)
-  const already = existing?.introVideoProgress ?? 0
-  if (requested <= already) return already // monotonic: never un-watch
-
-  let credit = INTRO_VIDEO_BOOTSTRAP_CREDIT
-  if (existing?.lastAccessedAt) {
-    const elapsedSeconds = Math.max(
-      0,
-      (Date.now() - new Date(existing.lastAccessedAt).getTime()) / 1000
-    )
-    const earned =
-      (elapsedSeconds * INTRO_VIDEO_MAX_PLAYBACK_SPEED) /
-      INTRO_VIDEO_MIN_DURATION_SECONDS
-    credit = Math.min(earned, INTRO_VIDEO_PER_CALL_CAP)
-  }
-  return Math.min(requested, Math.min(1, already + credit))
-}
-
-/**
- * Persists a partial lesson-progress update for the current user.
- * Returns the merged, completion-evaluated progress row.
+ * Persists a lesson-progress update for the current user and returns the
+ * merged, completion-evaluated row.
  *
- * Only the whitelisted `LessonProgressClientUpdate` fields survive; anything
- * else in the payload (forged quiz outcomes included) is dropped before the
- * data layer sees it, and the watch fraction is credit-limited (see above).
+ * A watch report goes through the atomic time-banked crediting; anything
+ * else in the payload (forged quiz outcomes, forged fractions) is dropped,
+ * and the empty remainder still triggers the server-side completion
+ * recompute from the stored gates.
  */
 export async function updateLessonProgressAction(
   lessonId: string,
   update: LessonProgressClientUpdate
 ): Promise<LessonProgress> {
-  const safe: Partial<LessonProgress> = {}
-
-  const progress = sanitizeFraction(update?.progress)
-  if (progress !== null) safe.progress = progress
-
   const introVideoProgress = sanitizeFraction(update?.introVideoProgress)
   if (introVideoProgress !== null) {
-    safe.introVideoProgress = await creditableIntroVideoFraction(
-      lessonId,
-      introVideoProgress
-    )
+    return recordIntroVideoProgress(lessonId, introVideoProgress)
   }
-
-  return updateLessonProgressData(lessonId, safe)
+  // No creditable report: recompute completion/fraction from stored state.
+  return updateLessonProgressData(lessonId, {})
 }
 
-// ── Quiz submission authorization (QA defect 4) ──────────────────────────────
+// ── Quiz submission authorization (QA defect 4; round-2 defect 1) ────────────
 
 /**
  * Refuses the submission unless the caller holds a valid session with access
  * to this lesson's content. Mirrors the lesson PAGE's gates
- * (`requireContentAccessOrRedirect` + `canUserAccessMonth` in
+ * (`requireSessionOrRedirect` + `requireContentAccessOrRedirect` +
+ * `canUserAccessMonth` in
  * src/app/(dashboard)/course/[slug]/lesson/[lessonSlug]/page.tsx) - the
  * server-action endpoint is reachable without ever rendering the page, so it
  * needs the same checks itself. Throws on refusal (a server action cannot
  * redirect meaningfully for a scripted caller; the real UI never hits this).
  *
- * The two mock environments mirror `resolveDataMode()` in
- * src/lib/data/mode.ts and persist nothing real: no `DATABASE_URL` (pure
- * local fixtures) and `ENABLE_DEV_MOCK_USER=true` with no real session (the
- * staging mock learner). Everywhere else a missing/invalid/ungranted session
- * is refused BEFORE any question row is read.
+ * The mock environments are admitted ONLY through the shared
+ * `isSessionlessMockRequest()` (src/lib/content-access.ts): a request with
+ * no session cookie at all in a mock env is the mock learner; a PRESENTED
+ * cookie - forged or real - must validate as a real session, so this can
+ * never fail open the way QA round-2 defect 1 describes.
  */
 async function assertQuizSubmissionAllowed(lessonId: string): Promise<void> {
   const user = await getCurrentUser()
 
   if (!user) {
-    const mockEnv =
-      !process.env.DATABASE_URL ||
-      process.env.ENABLE_DEV_MOCK_USER === "true"
-    if (mockEnv) return
+    if (await isSessionlessMockRequest()) return
     throw new Error("Sign in to submit this quiz.")
   }
 
@@ -223,10 +163,9 @@ function attemptLimitResult(
  * @param lessonId The lesson whose quiz is being submitted.
  * @param answers Map of question id to the chosen option index. Unanswered
  *   or unknown question ids simply grade as wrong; extra keys are ignored.
- * @returns The graded result - including the post-submission answer reveal
- *   (correct option + explanation per question) - or a
- *   `QuizAttemptLimitResult` refusal carrying NO reveal when the persisted
- *   attempt count has reached MAX_QUIZ_ATTEMPTS.
+ * @returns The graded result, or a `QuizAttemptLimitResult` refusal carrying
+ *   NO reveal when the persisted attempt count has reached
+ *   MAX_QUIZ_ATTEMPTS.
  *
  * Order of operations, and why it matters:
  *  1. Authorization (session + content access) BEFORE any question row is
@@ -238,6 +177,10 @@ function attemptLimitResult(
  *     completion, re-checking the cap in SQL so a double-submit race cannot
  *     slip a 4th attempt in between the pre-check and the write; if the race
  *     loses, the reveal is discarded and the refusal returned instead.
+ *  5. The response reveals a wrong answer's key/explanation ONLY when no
+ *     further grading can change the record (passed, or final attempt
+ *     spent) - otherwise attempt 1 hands over the key and attempt 2 is a
+ *     guaranteed forged pass (QA round-2 defect 2).
  */
 export async function submitQuizAnswersAction(
   lessonId: string,
@@ -259,7 +202,7 @@ export async function submitQuizAnswersAction(
     throw new Error(`Lesson ${lessonId} has no quiz to grade`)
   }
 
-  const perQuestion = questions.map((q) => {
+  const graded = questions.map((q) => {
     const chosen = answers?.[q.id]
     const correct =
       typeof chosen === "number" &&
@@ -273,8 +216,9 @@ export async function submitQuizAnswersAction(
     }
   })
 
-  const correctCount = perQuestion.filter((p) => p.correct).length
+  const correctCount = graded.filter((p) => p.correct).length
   const score = Math.round((correctCount / questions.length) * 100)
+  const passed = score >= QUIZ_PASS_SCORE
 
   // One atomic write: increment, GREATEST, cap and completion all in SQL
   // (QA defect 6).
@@ -288,9 +232,21 @@ export async function submitQuizAnswersAction(
     return attemptLimitResult(recorded.progress)
   }
 
+  // Reveal policy (QA round-2 defect 2): a wrong answer's key stays hidden
+  // while another graded attempt could still use it.
+  const revealAll =
+    passed ||
+    hasPassedQuiz(recorded.progress.bestQuizScore) ||
+    (recorded.progress.quizAttempts ?? 0) >= MAX_QUIZ_ATTEMPTS
+  const perQuestion: QuizQuestionGrade[] = graded.map((g) =>
+    g.correct || revealAll
+      ? g
+      : { questionId: g.questionId, correct: false }
+  )
+
   return {
     score,
-    passed: score >= QUIZ_PASS_SCORE,
+    passed,
     passMark: QUIZ_PASS_SCORE,
     perQuestion,
     progress: recorded.progress,

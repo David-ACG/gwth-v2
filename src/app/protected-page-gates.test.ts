@@ -79,11 +79,22 @@ const EXEMPT_PAGES: Record<string, string> = {
     "canViewPrivateContent(); the proxy exempts /course/<slug> to match",
 }
 
-/** Session gates that validate server-side in EVERY mode (QA defect 1). */
+/**
+ * Session gates that validate server-side in EVERY mode (QA defect 1). The
+ * marker requires the `await`ed CALL, so a bare mention (an import line, a
+ * type reference, dead identifier) does not bless a page (round-2 defect 3).
+ */
 const SUFFICIENT_GATES = [
-  "requireSessionOrRedirect(",
-  "requireAdminOrRedirect(",
+  "await requireSessionOrRedirect()",
+  "await requireAdminOrRedirect(",
 ]
+
+/**
+ * Proxy prefixes whose route trees were deliberately DELETED (kept in the
+ * proxy list so a future scratch page is gated by default). Only these may
+ * map to a directory that does not exist on disk (QA round-2 style note 5).
+ */
+const DELETED_PREFIXES = new Set(["/demo"])
 
 /**
  * Strips comments and string/template literals so markers only match real
@@ -163,8 +174,12 @@ function collectPages(dir: string): string[] {
 export function isGated(source: string): boolean {
   const code = stripCommentsAndStrings(source)
   if (SUFFICIENT_GATES.some((marker) => code.includes(marker))) return true
-  // Pure-redirect page: calls redirect and returns NO JSX on any branch.
-  return code.includes("redirect(") && !/\breturn\s*[(<]/.test(code)
+  // Pure-redirect page: calls redirect and RETURNS NOTHING ELSE, anywhere.
+  // Any other `return` - JSX literal, or JSX held in a variable
+  // (`return body`) - disqualifies the fallback (round-2 defect 3), because
+  // a page that returns anything renders on some branch and needs a real
+  // gate.
+  return code.includes("redirect(") && !/\breturn\b(?!\s*redirect\()/.test(code)
 }
 
 describe("the scan covers every prefix the proxy protects", () => {
@@ -186,6 +201,20 @@ describe("the scan covers every prefix the proxy protects", () => {
       expect(prefixes, `${key} is mapped but not proxy-protected`).toContain(
         key
       )
+    }
+  })
+
+  it("every mapped directory exists on disk (a renamed tree cannot silently leave the scan)", () => {
+    for (const [prefix, dirs] of Object.entries(ROUTE_DIR_MAP)) {
+      if (DELETED_PREFIXES.has(prefix)) continue
+      for (const dir of dirs) {
+        expect(
+          existsSync(join(APP_DIR, dir)),
+          `${prefix} maps to src/app/${dir}, which does not exist - if the ` +
+            "tree moved, move the mapping; if it was deleted on purpose, " +
+            "record it in DELETED_PREFIXES"
+        ).toBe(true)
+      }
     }
   })
 })
@@ -232,6 +261,22 @@ describe("every proxy-protected page carries a server-validated gate", () => {
         code.includes("canViewPrivateContent("),
         `${page}: the exemption rests on canViewPrivateContent(); it is gone`
       ).toBe(true)
+      // ...and its RESULT must still control what renders (round-2 defect
+      // 4): the page binds it to `contentAllowed` and branches on it
+      // (`contentAllowed ? dashboardUser : null` feeds the teaser-vs-full
+      // decision). A call whose result is ignored would pass the check
+      // above while rendering the full syllabus to everyone. If the
+      // variable is renamed, update this pin in the same commit.
+      expect(
+        /\bcontentAllowed\b/.test(code),
+        `${page}: canViewPrivateContent()'s result is no longer bound to ` +
+          "contentAllowed - re-verify the teaser gating and update this pin"
+      ).toBe(true)
+      expect(
+        /\bcontentAllowed\s*\?/.test(code),
+        `${page}: contentAllowed no longer drives a conditional - the ` +
+          "gate's result may be ignored; re-verify the teaser gating"
+      ).toBe(true)
     }
   })
 })
@@ -267,6 +312,39 @@ describe("the gate classifier itself (QA defects 1 + 2)", () => {
       "}",
     ].join("\n")
     expect(isGated(source)).toBe(false)
+  })
+
+  it("does not accept a one-branch redirect returning JSX held in a variable (round-2 defect 3)", () => {
+    const source = [
+      'import { redirect } from "next/navigation"',
+      "export default function Page() {",
+      '  if (!flag) redirect("/login")',
+      "  const body = buildBody()",
+      "  return body",
+      "}",
+    ].join("\n")
+    expect(isGated(source)).toBe(false)
+  })
+
+  it("does not accept a bare gate mention without the awaited call", () => {
+    const source = [
+      'import { requireSessionOrRedirect } from "@/lib/content-access"',
+      "const gate = requireSessionOrRedirect",
+      "export default function Page() {",
+      "  return <main>open</main>",
+      "}",
+    ].join("\n")
+    expect(isGated(source)).toBe(false)
+  })
+
+  it("still accepts a page that returns its redirect", () => {
+    const source = [
+      'import { redirect } from "next/navigation"',
+      "export default function Page() {",
+      '  return redirect("/course/applied-ai-skills")',
+      "}",
+    ].join("\n")
+    expect(isGated(source)).toBe(true)
   })
 
   it("does not accept the content-mode gates as a session gate", () => {

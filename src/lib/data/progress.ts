@@ -41,6 +41,7 @@ import {
 import {
   INTRO_VIDEO_COMPLETION_THRESHOLD,
   createEmptyLessonProgress,
+  deriveLessonFraction,
   hasPassedQuiz,
   isLessonComplete,
 } from "@/lib/progress/completion"
@@ -253,7 +254,15 @@ export async function recordQuizSubmission(
   score: number,
   opts: { passMark: number; maxAttempts: number }
 ): Promise<QuizSubmissionOutcome> {
-  if (!isDbConfigured()) {
+  // Mode via resolveDataMode, like every other user-scoped path (N2 QA
+  // round-2 defect 1): the staging mock learner (DB configured,
+  // ENABLE_DEV_MOCK_USER, no session) lands in the MOCK store, where the
+  // attempt cap is enforced and attempts accumulate - the old
+  // userId-less no-op branch never counted attempts, so a sessionless
+  // staging caller could grade without limit.
+  const mode = await resolveDataMode()
+
+  if (mode.kind === "mock") {
     // Mock mode is single-threaded in-memory; enforce the same cap, then
     // reuse the shared merge so completion semantics stay identical.
     const existing = mockLessonProgress.find((p) => p.lessonId === lessonId)
@@ -271,11 +280,11 @@ export async function recordQuizSubmission(
     return { outcome: "recorded", progress }
   }
 
-  const userId = await currentUserId()
-  if (!userId) {
-    // Same safe no-op contract as updateLessonProgress: nothing persists.
-    // (The grading action refuses unauthenticated callers before this -
-    // this branch only serves the staging mock-learner path.)
+  if (mode.kind === "anonymous") {
+    // Safe no-op contract, mirrored from updateLessonProgress: nothing
+    // persists. Unreachable through submitQuizAnswersAction (it refuses
+    // sessionless callers outside mock envs first); kept as defence in
+    // depth for any other caller.
     const best = Math.max(score, 0)
     return {
       outcome: "recorded",
@@ -288,11 +297,14 @@ export async function recordQuizSubmission(
     }
   }
 
+  const userId = mode.userId
   const db = getDb()
   const nowIso = new Date().toISOString()
   const bestExpr = sql`greatest(coalesce(${lessonProgress.bestQuizScore}, 0), ${score})`
   const passedExpr = sql`${bestExpr} >= ${opts.passMark}`
   const completeExpr = sql`(coalesce(${lessonProgress.introVideoProgress}, 0) >= ${INTRO_VIDEO_COMPLETION_THRESHOLD} and ${passedExpr})`
+  // Overall fraction, derived like deriveLessonFraction(): never client data.
+  const fractionExpr = sql`greatest(coalesce(${lessonProgress.progress}, 0), case when ${completeExpr} then 1 else least(0.99, least(coalesce(${lessonProgress.introVideoProgress}, 0) / ${INTRO_VIDEO_COMPLETION_THRESHOLD}, 1) * 0.5 + case when ${passedExpr} then 0.5 else 0 end) end)`
 
   const rows = await db
     .insert(lessonProgress)
@@ -300,7 +312,11 @@ export async function recordQuizSubmission(
       userId,
       lessonId,
       isCompleted: false,
-      progress: 0,
+      progress: deriveLessonFraction({
+        introVideoProgress: 0,
+        quizPassed: score >= opts.passMark,
+        bestQuizScore: score,
+      }),
       quizScore: score,
       bestQuizScore: score,
       quizPassed: score >= opts.passMark,
@@ -319,6 +335,7 @@ export async function recordQuizSubmission(
         quizAttempts: sql`${lessonProgress.quizAttempts} + 1`,
         isCompleted: completeExpr,
         completedAt: sql`case when ${completeExpr} then coalesce(${lessonProgress.completedAt}, now()) else null end`,
+        progress: fractionExpr,
         lastAccessedAt: nowIso,
       },
       // The server-side attempt cap (N2 QA defect 5). When it excludes the
@@ -336,6 +353,147 @@ export async function recordQuizSubmission(
     }
   }
   return { outcome: "recorded", progress: mapLessonRow(row) }
+}
+
+// ── Intro-video watch crediting (N2 QA defect 3; round-2 defects 6/7/8) ─────
+//
+// The watch fraction is the video half of the completion gate and the server
+// cannot see the player, so the only server-verifiable quantity is
+// WALL-CLOCK TIME between reports. Each video report banks the elapsed time
+// since the row's last write into `time_spent` (capped per report, so a
+// stale row does not hand over a huge window), and the stored fraction may
+// rise only as far as that banked time allows at a generous playback speed.
+// Banking (rather than crediting each report independently) means an honest
+// viewer's unused credit carries over instead of being truncated per report.
+//
+// All of it happens in ONE upsert: elapsed time, the bank, the fraction, and
+// the completion recompute are SQL expressions over the row being updated,
+// so concurrent reports cannot regress the fraction (GREATEST) or lose bank
+// deposits - the same atomicity treatment the quiz write got.
+//
+// Honest limits, documented (round-2 defects 6 + 7): the server holds no
+// per-video duration (no such column exists this side of the N6 migration
+// lane), so fraction-per-second is calibrated to the catalogue's shortest
+// real intro at the fastest supported playback. A scripted caller can still
+// earn the gate by WAITING the same wall-clock a 2x watcher would spend -
+// with no trusted duration that is the enforceable floor - and a 2x watcher
+// of an intro much shorter than the calibration clears the gate only near
+// the video's end.
+
+/** Calibration: the shortest real intro the fraction model assumes (s). */
+const INTRO_VIDEO_ASSUMED_MIN_SECONDS = 180
+/** The fastest playback the credit model honours. */
+const INTRO_VIDEO_MAX_PLAYBACK_SPEED = 2
+/** Longest gap a single report may bank (anti stale-row windfall). */
+const INTRO_VIDEO_PER_REPORT_ELAPSED_CAP_SECONDS = 60
+/** Fraction allowed before any time is banked (covers the first report). */
+const INTRO_VIDEO_BOOTSTRAP_FRACTION = 0.15
+
+/** Fraction the banked seconds justify, floored by the bootstrap. */
+function allowedFractionForBank(bankedSeconds: number): number {
+  return Math.max(
+    INTRO_VIDEO_BOOTSTRAP_FRACTION,
+    (bankedSeconds * INTRO_VIDEO_MAX_PLAYBACK_SPEED) /
+      INTRO_VIDEO_ASSUMED_MIN_SECONDS
+  )
+}
+
+/**
+ * Records an intro-video watch report: monotonic, time-banked, atomic.
+ * Returns the persisted row (or the optimistic shape on the no-op paths).
+ */
+export async function recordIntroVideoProgress(
+  lessonId: string,
+  requested: number
+): Promise<LessonProgress> {
+  const mode = await resolveDataMode()
+
+  if (mode.kind === "mock") {
+    const existing = mockLessonProgress.find((p) => p.lessonId === lessonId)
+    if (!existing) {
+      return updateLessonProgressMock(lessonId, {
+        introVideoProgress: Math.min(
+          requested,
+          INTRO_VIDEO_BOOTSTRAP_FRACTION
+        ),
+      })
+    }
+    const elapsed = Math.min(
+      Math.max(
+        0,
+        (Date.now() - new Date(existing.lastAccessedAt).getTime()) / 1000
+      ),
+      INTRO_VIDEO_PER_REPORT_ELAPSED_CAP_SECONDS
+    )
+    const banked = (existing.timeSpent ?? 0) + Math.floor(elapsed)
+    const fraction = Math.max(
+      existing.introVideoProgress ?? 0,
+      Math.min(requested, allowedFractionForBank(banked))
+    )
+    return updateLessonProgressMock(lessonId, {
+      introVideoProgress: fraction,
+      timeSpent: banked,
+    })
+  }
+
+  if (mode.kind === "anonymous") {
+    // Safe no-op: optimistic shape only, nothing persists.
+    return mergeLessonProgress(createEmptyLessonProgress(lessonId), {
+      introVideoProgress: Math.min(requested, INTRO_VIDEO_BOOTSTRAP_FRACTION),
+    })
+  }
+
+  const db = getDb()
+  const nowIso = new Date().toISOString()
+  // Every expression reads the OLD row (SQL update semantics), so the whole
+  // credit computation is one atomic step.
+  const elapsedExpr = sql`least(extract(epoch from (now() - coalesce(${lessonProgress.lastAccessedAt}, now()))), ${INTRO_VIDEO_PER_REPORT_ELAPSED_CAP_SECONDS})`
+  const bankExpr = sql`(coalesce(${lessonProgress.timeSpent}, 0) + ${elapsedExpr})`
+  const allowedExpr = sql`greatest(${INTRO_VIDEO_BOOTSTRAP_FRACTION}, ${bankExpr} * ${INTRO_VIDEO_MAX_PLAYBACK_SPEED} / ${INTRO_VIDEO_ASSUMED_MIN_SECONDS})`
+  const newFracExpr = sql`greatest(coalesce(${lessonProgress.introVideoProgress}, 0), least(${requested}, ${allowedExpr}))`
+  const completeExpr = sql`(${newFracExpr} >= ${INTRO_VIDEO_COMPLETION_THRESHOLD} and ${lessonProgress.quizPassed})`
+  const fractionExpr = sql`greatest(coalesce(${lessonProgress.progress}, 0), case when ${completeExpr} then 1 else least(0.99, least(${newFracExpr} / ${INTRO_VIDEO_COMPLETION_THRESHOLD}, 1) * 0.5 + case when ${lessonProgress.quizPassed} then 0.5 else 0 end) end)`
+
+  const initialFraction = Math.min(requested, INTRO_VIDEO_BOOTSTRAP_FRACTION)
+  const rows = await db
+    .insert(lessonProgress)
+    .values({
+      userId: mode.userId,
+      lessonId,
+      isCompleted: false,
+      progress: deriveLessonFraction({
+        introVideoProgress: initialFraction,
+        quizPassed: false,
+        bestQuizScore: null,
+      }),
+      quizScore: null,
+      bestQuizScore: null,
+      quizPassed: false,
+      quizAttempts: 0,
+      timeSpent: 0,
+      introVideoProgress: initialFraction,
+      lastAccessedAt: nowIso,
+      completedAt: null,
+    })
+    .onConflictDoUpdate({
+      target: [lessonProgress.userId, lessonProgress.lessonId],
+      set: {
+        introVideoProgress: newFracExpr,
+        timeSpent: sql`(coalesce(${lessonProgress.timeSpent}, 0) + floor(${elapsedExpr}))::int`,
+        isCompleted: completeExpr,
+        completedAt: sql`case when ${completeExpr} then coalesce(${lessonProgress.completedAt}, now()) else null end`,
+        progress: fractionExpr,
+        lastAccessedAt: nowIso,
+      },
+    })
+    .returning()
+
+  const row = rows[0]
+  return row
+    ? mapLessonRow(row)
+    : mergeLessonProgress(createEmptyLessonProgress(lessonId), {
+        introVideoProgress: initialFraction,
+      })
 }
 
 /**
@@ -365,6 +523,14 @@ function mergeLessonProgress(
   } else {
     merged.completedAt = null
   }
+
+  // The overall fraction is DERIVED from the verified gates, never accepted
+  // from an update (N2 QA round-2 defect 5): before this, a client-supplied
+  // `progress: 1` persisted unchanged onto every reporting surface.
+  merged.progress = Math.max(
+    base.progress ?? 0,
+    deriveLessonFraction(merged)
+  )
 
   merged.lastAccessedAt = update.lastAccessedAt ?? new Date()
   return merged

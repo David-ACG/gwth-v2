@@ -127,19 +127,37 @@ export async function requireContentAccessOrRedirect(): Promise<void> {
  */
 export async function requireSessionOrRedirect(): Promise<void> {
   // FIRST, and unconditionally — see canViewPrivateContent().
-  const requestHeaders = await headers()
+  await headers()
 
-  const mockEnv =
-    !process.env.DATABASE_URL ||
-    process.env.ENABLE_DEV_MOCK_USER === "true"
-  if (mockEnv) {
-    // Better Auth's cookie is `better-auth.session_token` (or the
-    // `__Secure-` prefixed variant); matching on the token name covers both.
-    const cookieHeader = requestHeaders.get("cookie") ?? ""
-    if (!cookieHeader.includes("session_token")) return
-    // A session cookie was presented - validate it for real below.
-  }
+  if (await isSessionlessMockRequest()) return
 
   const email = await getSessionEmail()
   if (!email) redirect("/login")
+}
+
+/**
+ * THE one shared mock-environment check (N2 QA round-2 defect 1 + style
+ * note 3): true only when this request may act as the sessionless mock
+ * learner. Every security boundary that wants to admit the mock learner
+ * (`requireSessionOrRedirect`, the quiz-grading action) calls THIS, so the
+ * fail-open pattern - an unconditional env-flag skip that also admits
+ * forged cookies - cannot quietly reappear in one copy of the logic.
+ *
+ * Two conditions, BOTH required:
+ *  - a mock environment: no `DATABASE_URL` (pure local fixtures, no real
+ *    session possible) or `ENABLE_DEV_MOCK_USER=true` (the staging review
+ *    env; never set on the public production deploy, W6/W15); AND
+ *  - the request presents NO session cookie at all. A presented
+ *    `better-auth.session_token` (or `__Secure-` variant) is a claimed
+ *    identity and must validate server-side like production - so this
+ *    returns false and the caller's real session check runs.
+ */
+export async function isSessionlessMockRequest(): Promise<boolean> {
+  const requestHeaders = await headers()
+  const mockEnv =
+    !process.env.DATABASE_URL ||
+    process.env.ENABLE_DEV_MOCK_USER === "true"
+  if (!mockEnv) return false
+  const cookieHeader = requestHeaders.get("cookie") ?? ""
+  return !cookieHeader.includes("session_token")
 }
