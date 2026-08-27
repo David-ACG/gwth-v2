@@ -5,7 +5,10 @@ import { Trophy, Clock, Megaphone } from "lucide-react"
 import { formatRelativeDate } from "@/lib/utils"
 import type { NotificationType } from "@/lib/types"
 import styles from "./notifications-fde.module.css"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 /**
  * Render per request, never statically. Notifications are mode-gated per
@@ -36,6 +39,9 @@ const typeIcons: Record<NotificationType, React.ElementType> = {
 }
 
 export default async function NotificationsPage() {
+  // Session first (server-validated; a forged cookie bounces here even
+  // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const notifications = await getNotifications()

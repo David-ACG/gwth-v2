@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { LogoExplorer } from "@/components/marketing/redesign/logo-explorer"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Logo Picker · Vector Mark Explorer · GWTH.ai",
@@ -13,6 +14,9 @@ export const metadata: Metadata = {
  * options, live-rendered against a dummy E2-E homepage so the mark
  * can be judged in masthead, footer, and at multiple sizes in context.
  */
-export default function LogoPickerPage() {
+export default async function LogoPickerPage() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   return <LogoExplorer />
 }

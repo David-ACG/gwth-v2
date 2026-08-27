@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "E2-D · Soho Bronze · Redesign",
@@ -23,7 +24,10 @@ export const metadata = {
  * a pull-quote highlight, and small marginalia accents. Adds warmth
  * for the long-haul reader without breaking the no-gradient discipline.
  */
-export default function VariantE2() {
+export default async function VariantE2() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

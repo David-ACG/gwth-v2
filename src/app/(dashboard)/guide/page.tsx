@@ -3,7 +3,10 @@ import { redirect } from "next/navigation"
 import { getDashboardUser } from "@/lib/auth"
 import { ReportProblemPanel } from "@/components/feedback/report-problem-panel"
 import styles from "./guide-fde.module.css"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Beta tester guide",
@@ -44,6 +47,9 @@ const BREAKOUT = "-mx-4 md:-mx-6 lg:-mx-8 -my-4 md:-my-6 lg:-my-8"
  * 60rem (so it is single-column well before 412px).
  */
 export default async function GuidePage() {
+  // Session first (server-validated; a forged cookie bounces here even
+  // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const user = await getDashboardUser()

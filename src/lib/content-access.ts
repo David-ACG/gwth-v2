@@ -91,3 +91,39 @@ export async function requireContentAccessOrRedirect(): Promise<void> {
   if (!email) redirect("/login")
   if (!isContentAllowedEmail(email)) redirect("/")
 }
+
+/**
+ * Page-level SESSION gate (gwth-launch-dgc, N2 security). Call as the first
+ * await in any page the proxy nominally protects.
+ *
+ * Exists because the two gates above stop validating sessions the moment
+ * `PRIVATE_CONTENT_MODE=off` (the launch state), while the proxy's
+ * `getSessionCookie` bounce is presence-only forever: a forged
+ * `better-auth.session_token=anything` cookie walks past it in every mode.
+ * This gate is mode-independent — it validates the session against Better
+ * Auth server-side (a real DB lookup via `getSessionEmail`) and bounces
+ * anyone without one to /login, so account pages and dev/review mocks are
+ * never reachable with a forged cookie regardless of the content-mode
+ * switch.
+ *
+ * Unlike `requireContentAccessOrRedirect` it checks NO allowlist: any
+ * validated session passes. Use both on allowlist-gated content pages; use
+ * this alone on pages that just require being logged in.
+ *
+ * Two deliberate skips, mirroring `resolveDataMode()` in
+ * src/lib/data/mode.ts:
+ *  - no `DATABASE_URL`: pure local mock mode, no real session is possible;
+ *  - `ENABLE_DEV_MOCK_USER=true`: the staging review env browses account
+ *    pages as the mock learner without a session. The flag is never set on
+ *    the public production deploy (W6/W15), so production always validates.
+ */
+export async function requireSessionOrRedirect(): Promise<void> {
+  // FIRST, and unconditionally — see canViewPrivateContent().
+  await headers()
+
+  if (!process.env.DATABASE_URL) return
+  if (process.env.ENABLE_DEV_MOCK_USER === "true") return
+
+  const email = await getSessionEmail()
+  if (!email) redirect("/login")
+}

@@ -10,6 +10,7 @@ import {
   RESEARCH_SOURCES,
   CURRICULUM,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "D · Supportive Learning · Redesign",
@@ -25,7 +26,10 @@ const PILLAR_ICONS = [Calendar, Sparkles, GraduationCap] as const
  * functional callouts. Generous spacing, big readable body type, calm
  * supportive tone — closest to "wide audience, everyone likes it".
  */
-export default function VariantD() {
+export default async function VariantD() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

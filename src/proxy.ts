@@ -216,14 +216,19 @@ function guardPrivateContentRoute(request: NextRequest): NextResponse | null {
 }
 
 /**
- * Optimistic Better Auth route guard (D-W11-7).
+ * Optimistic Better Auth route guard (D-W11-7). ROUTING-ONLY, never the
+ * security boundary (gwth-launch-dgc).
  *
  * Uses the OPTIMISTIC session-cookie presence check (`getSessionCookie`) — it
- * does NOT hit the DB, so it is safe in the edge/proxy hot path. The full beta
- * access verification still happens server-side in `getCurrentUser()` (the
- * single accessor seam), which returns null for ungranted users; this guard
- * only keeps anonymous traffic out of protected routes and logged-in traffic
- * off the auth pages.
+ * does NOT hit the DB, so it is safe in the edge/proxy hot path. It checks
+ * only that a cookie NAME exists: `Cookie: better-auth.session_token=forged`
+ * passes it, so nothing behind this guard is protected by it. Real
+ * enforcement is server-side in every page it nominally covers:
+ * `requireSessionOrRedirect()` / `requireContentAccessOrRedirect()`
+ * (src/lib/content-access.ts) as the page's first await, plus
+ * `getCurrentUser()` (the single accessor seam) which returns null for
+ * ungranted users. This guard only spares anonymous traffic a render and
+ * keeps logged-in traffic off the auth pages.
  *
  * `/labs` is absent from PROTECTED_PATHS on purpose and is handled instead by
  * guardPrivateContentRoute above. Labs are the free marketing taster and lab

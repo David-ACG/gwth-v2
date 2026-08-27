@@ -9,7 +9,10 @@ import {
 } from "@/lib/config"
 import { BillingActions } from "@/components/billing/billing-actions"
 import styles from "./settings-fde.module.css"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 /**
  * Render per request, never statically. Settings is a per-user authed page
@@ -59,6 +62,9 @@ function SubscriptionStatus({ state }: { state: string }) {
 }
 
 export default async function SettingsPage() {
+  // Session first (server-validated; a forged cookie bounces here even
+  // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const user = await getDashboardUser()

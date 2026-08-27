@@ -6,7 +6,10 @@ import { EmptyState } from "@/components/shared/empty-state"
 import { formatRelativeDate } from "@/lib/utils"
 import Link from "next/link"
 import styles from "./bookmarks-fde.module.css"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Bookmarks",
@@ -22,6 +25,9 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export default async function BookmarksPage() {
+  // Session first (server-validated; a forged cookie bounces here even
+  // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const [bookmarks, courses, labs] = await Promise.all([

@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "A · Field Notebook · Redesign",
@@ -22,7 +23,10 @@ export const metadata = {
  * Mono for functional callouts. Asymmetric type-led hero with the score
  * widget anchored to the right.
  */
-export default function VariantA() {
+export default async function VariantA() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   // 6 reasons in a calm 3+3 grid
   const journeys = JOURNEYS.slice(0, 6)
 

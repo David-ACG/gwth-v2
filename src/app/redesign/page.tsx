@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import type { Metadata } from "next"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Redesign · GWTH.ai",
@@ -160,7 +161,10 @@ const VARIANTS: readonly Variant[] = [
   },
 ]
 
-export default function RedesignIndex() {
+export default async function RedesignIndex() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   return (
     <div className="min-h-screen bg-neutral-50 px-6 py-16 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
       <div className="mx-auto max-w-5xl">

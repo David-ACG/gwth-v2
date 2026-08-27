@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "A1 · Field Notebook · Refined · Redesign",
@@ -24,7 +25,10 @@ const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"] as const
  * Roman numerals, refines the masthead, and tightens hero rhythm.
  * Same Albert Sans + JetBrains Mono palette.
  */
-export default function VariantA1() {
+export default async function VariantA1() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

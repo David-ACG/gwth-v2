@@ -9,6 +9,7 @@ import { PricingCards } from "@/components/marketing/pricing-cards/pricing-cards
 import { FinalCTA } from "@/components/marketing/final-cta/final-cta"
 import { MarketingFooter } from "@/components/marketing/marketing-footer/marketing-footer"
 import styles from "@/components/marketing/gwth-redesign/gwth-redesign.module.css"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Old public design",
@@ -17,7 +18,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function OldDesignPage() {
+export default async function OldDesignPage() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   return (
     <>
       <div className={styles.oldNotice}>

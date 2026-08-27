@@ -29,7 +29,10 @@ import type {
   LessonSummary,
 } from "@/lib/types"
 import styles from "./dashboard-fde.module.css"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 /**
  * Render per request, never statically. The dashboard is a per-user authed
@@ -73,6 +76,9 @@ export const DASHBOARD_BREAKOUT =
  * Post-beta score panel reuses <HeroDevice /> behind a flag.
  */
 export default async function DashboardPage() {
+  // Session first (server-validated; a forged cookie bounces here even
+  // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const [user, courses, courseProgress, lessonProgress, streak, notifications] =

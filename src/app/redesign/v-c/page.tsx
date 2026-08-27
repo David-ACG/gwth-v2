@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "C · Quiet Essay · Redesign",
@@ -25,7 +26,10 @@ export const metadata = {
  * essay rhythm in the credential explainer. Citations live in margin
  * notes next to claims rather than in footers.
  */
-export default function VariantC() {
+export default async function VariantC() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

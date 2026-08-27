@@ -11,7 +11,10 @@ import { getCourses } from "@/lib/data/courses"
 import { StudyStreakCalendar } from "@/components/progress/study-streak-calendar"
 import { formatDuration, formatProgress, getGradeFromScore } from "@/lib/utils"
 import styles from "./progress-fde.module.css"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: "Progress",
@@ -36,6 +39,9 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export default async function ProgressPage() {
+  // Session first (server-validated; a forged cookie bounces here even
+  // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const [courseProgress, lessonProgress, streak, courses, dynamicScore] =

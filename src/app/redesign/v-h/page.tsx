@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "H · Editorial Premium · Redesign",
@@ -22,7 +23,10 @@ export const metadata = {
  * premium feel. Subtle gradient mood overlays on hero and section
  * transitions, never flashy.
  */
-export default function VariantH() {
+export default async function VariantH() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

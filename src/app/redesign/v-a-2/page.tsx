@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "A2 · Field Notebook · Annotated · Redesign",
@@ -24,7 +25,10 @@ export const metadata = {
  * Aims to remove the "generic" risk of A by leaning hard into a
  * structured, annotated practitioner-textbook personality.
  */
-export default function VariantA2() {
+export default async function VariantA2() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

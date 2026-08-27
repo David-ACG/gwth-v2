@@ -5,6 +5,7 @@ import { ENABLE_GWTH_SCORE } from "@/lib/config"
 import { ScoreCardMinimal } from "@/components/marketing/score-card-variants/score-card-minimal"
 import { ScoreCardSparkline } from "@/components/marketing/score-card-variants/score-card-sparkline"
 import { ScoreCardTier } from "@/components/marketing/score-card-variants/score-card-tier"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata: Metadata = {
   title: ENABLE_GWTH_SCORE ? "Score card variants · GWTH.ai" : "Score card variants disabled for beta",
@@ -64,7 +65,10 @@ const VARIANTS = [
  * ticker-style replacement for the current ring-and-graph score
  * card before porting the winner into HeroDevice.
  */
-export default function ScoreCardVariantsPage() {
+export default async function ScoreCardVariantsPage() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   if (!ENABLE_GWTH_SCORE) {
     return (
       <main className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-3xl flex-col justify-center px-5 py-16 sm:px-8">

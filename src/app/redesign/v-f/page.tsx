@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "F · Soft Practitioner · Redesign",
@@ -23,7 +24,10 @@ const PILLAR_ICONS = [Calendar, Sparkles, GraduationCap] as const
  * single-family. Soft section washes — most "supportive learning"
  * variant of the eight. Notion / Loom / Tella lineage.
  */
-export default function VariantF() {
+export default async function VariantF() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

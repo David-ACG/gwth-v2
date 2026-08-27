@@ -10,6 +10,7 @@ import {
   RESEARCH_SOURCES,
   CURRICULUM,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "B · Modern Technical · Redesign",
@@ -23,7 +24,10 @@ export const metadata = {
  * borders, 1px Aqua underline as a recurring motif. Linear-style
  * precision with generous breathing room — not cramped.
  */
-export default function VariantB() {
+export default async function VariantB() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (

@@ -3,7 +3,10 @@ import { redirect } from "next/navigation"
 import { getDashboardUser } from "@/lib/auth"
 import { formatDate } from "@/lib/utils"
 import styles from "./profile-fde.module.css"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 /**
  * Render per request, never statically. Profile is a per-user authed page
@@ -51,6 +54,9 @@ function SubscriptionStatus({ state }: { state: string }) {
 }
 
 export default async function ProfilePage() {
+  // Session first (server-validated; a forged cookie bounces here even
+  // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const user = await getDashboardUser()

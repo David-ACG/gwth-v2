@@ -34,6 +34,7 @@ vi.mock("@/lib/auth", () => ({
 import {
   canViewPrivateContent,
   requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
 } from "./content-access"
 
 describe("private content gate (W25)", () => {
@@ -153,6 +154,70 @@ describe("private content gate (W25)", () => {
 
       sessionState.email = "stranger@example.com"
       expect(await gate()).toBeNull()
+    })
+  })
+
+  describe("requireSessionOrRedirect (gwth-launch-dgc)", () => {
+    const originalDb = process.env.DATABASE_URL
+    const originalMock = process.env.ENABLE_DEV_MOCK_USER
+
+    afterEach(() => {
+      if (originalDb === undefined) delete process.env.DATABASE_URL
+      else process.env.DATABASE_URL = originalDb
+      if (originalMock === undefined) delete process.env.ENABLE_DEV_MOCK_USER
+      else process.env.ENABLE_DEV_MOCK_USER = originalMock
+    })
+
+    /** Runs the session gate and reports the redirect it threw, or null. */
+    async function sessionGate(): Promise<string | null> {
+      try {
+        await requireSessionOrRedirect()
+        return null
+      } catch (error) {
+        const message = error instanceof Error ? error.message : ""
+        if (message.startsWith("NEXT_REDIRECT:")) {
+          return message.slice("NEXT_REDIRECT:".length)
+        }
+        throw error
+      }
+    }
+
+    it("bounces a forged session cookie to /login regardless of content mode", async () => {
+      // The proxy's presence-only check passes a garbage cookie; the page-level
+      // gate must not. A forged token fails Better Auth's server-side lookup,
+      // so getSessionEmail() resolves null - and unlike the content gate this
+      // bounce holds even with PRIVATE_CONTENT_MODE=off (the launch state).
+      process.env.DATABASE_URL = "postgresql://gwth:x@localhost:5443/gwth_v2"
+      delete process.env.ENABLE_DEV_MOCK_USER
+      process.env.PRIVATE_CONTENT_MODE = "off"
+      sessionState.email = null
+      expect(await sessionGate()).toBe("/login")
+    })
+
+    it("lets any validated session through, allowlisted or not", async () => {
+      process.env.DATABASE_URL = "postgresql://gwth:x@localhost:5443/gwth_v2"
+      delete process.env.ENABLE_DEV_MOCK_USER
+      sessionState.email = "stranger@example.com"
+      expect(await sessionGate()).toBeNull()
+    })
+
+    it("skips in pure mock mode (no DATABASE_URL)", async () => {
+      delete process.env.DATABASE_URL
+      sessionState.email = null
+      expect(await sessionGate()).toBeNull()
+    })
+
+    it("skips for the staging review env (ENABLE_DEV_MOCK_USER)", async () => {
+      process.env.DATABASE_URL = "postgresql://gwth:x@localhost:5443/gwth_v2"
+      process.env.ENABLE_DEV_MOCK_USER = "true"
+      sessionState.email = null
+      expect(await sessionGate()).toBeNull()
+    })
+
+    it("awaits headers() on every path, including the skips", async () => {
+      delete process.env.DATABASE_URL
+      await requireSessionOrRedirect()
+      expect(headersCalls.count).toBe(1)
     })
   })
 

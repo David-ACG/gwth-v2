@@ -9,6 +9,7 @@ import {
   UK_STATS,
   RESEARCH_SOURCES,
 } from "@/components/marketing/data"
+import { requireSessionOrRedirect } from "@/lib/content-access"
 
 export const metadata = {
   title: "G · Architectural · Redesign",
@@ -25,7 +26,10 @@ export const metadata = {
  * The score widget's gradient flattens because `--accent` is collapsed
  * to match `--primary` in this variant scope.
  */
-export default function VariantG() {
+export default async function VariantG() {
+  // Dev/review mock: the proxy bounce for this route is presence-only, so
+  // the real gate is this server-validated session check (gwth-launch-dgc).
+  await requireSessionOrRedirect()
   const journeys = JOURNEYS.slice(0, 6)
 
   return (
