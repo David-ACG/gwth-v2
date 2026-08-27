@@ -47,6 +47,7 @@ import {
   getQuizQuestionsByLessonId,
 } from "@/lib/data/lessons"
 import { canUserAccessMonth, getCurrentUser, getMockUser } from "@/lib/auth"
+import { isAdminEmail } from "@/lib/admin"
 import { isSessionlessMockRequest } from "@/lib/content-access"
 import {
   isContentAllowedEmail,
@@ -133,8 +134,16 @@ async function assertQuizSubmissionAllowed(lessonId: string): Promise<void> {
     user = await getMockUser()
   }
 
-  // Private content mode: same allowlist the page gate applies.
-  if (isPrivateContentMode() && !isContentAllowedEmail(user.email)) {
+  // Private content mode: same allowlist the page gate applies. Admins are
+  // additionally admitted (QA round-3 appendix 3): ADMIN_EMAILS accounts can
+  // reach quiz content through the admin surfaces regardless of
+  // CONTENT_ALLOWED_EMAILS, so refusing them ONLY at grading was an
+  // inconsistency a reviewer would hit mid-demo, not a protection.
+  if (
+    isPrivateContentMode() &&
+    !isContentAllowedEmail(user.email) &&
+    !isAdminEmail(user.email)
+  ) {
     throw new Error("This lesson is not available to your account yet.")
   }
 

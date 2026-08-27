@@ -113,7 +113,11 @@ function asGrade(result: QuizSubmitResult): QuizGradeResult {
   return result
 }
 
-const ENV_KEYS = ["PRIVATE_CONTENT_MODE", "CONTENT_ALLOWED_EMAILS"] as const
+const ENV_KEYS = [
+  "PRIVATE_CONTENT_MODE",
+  "CONTENT_ALLOWED_EMAILS",
+  "ADMIN_EMAILS",
+] as const
 const savedEnv: Partial<Record<(typeof ENV_KEYS)[number], string | undefined>> =
   {}
 
@@ -125,6 +129,7 @@ beforeEach(() => {
   // state), and NOT the sessionless mock learner.
   process.env.PRIVATE_CONTENT_MODE = "off"
   delete process.env.CONTENT_ALLOWED_EMAILS
+  delete process.env.ADMIN_EMAILS
 
   authLayer.getCurrentUser.mockResolvedValue(STUDENT)
   accessLayer.isSessionlessMockRequest.mockResolvedValue(false)
@@ -288,6 +293,14 @@ describe("submitQuizAnswersAction authorization (QA defect 4; round-2 defect 1)"
 
     process.env.CONTENT_ALLOWED_EMAILS =
       "david@agilecommercegroup.com, student@example.com"
+    const result = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
+    expect(result.score).toBe(50)
+  })
+
+  it("admits an ADMIN not on the content allowlist, like every other surface (QA round-3 appendix 3)", async () => {
+    delete process.env.PRIVATE_CONTENT_MODE // private mode ON
+    process.env.CONTENT_ALLOWED_EMAILS = "someone-else@example.com"
+    process.env.ADMIN_EMAILS = "student@example.com" // our caller is an admin
     const result = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
     expect(result.score).toBe(50)
   })
