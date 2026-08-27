@@ -16,14 +16,9 @@ Filter bar for the courses listing page. Provides a search input, category dropd
 
 Course navigation sidebar tree showing sections and lessons with progress indicators (completed, in-progress, locked, available). Auto-expands the section containing the current lesson. Highlights the active lesson. Locked lessons are rendered as non-clickable items. Used in the lesson viewer page. Client component.
 
-### `QuizEngine` (`quiz-engine.tsx`)
-
-Interactive multiple-choice quiz with scoring. Uses `react-hook-form` for answer state and an `AlertDialog` for submit confirmation. Shows score, grade, and per-question explanations after submission. Enforces a maximum attempt limit from `lib/config.ts`.
-
 ## Tests
 
 - `course-card.test.tsx` -- tests for CourseCard rendering, badges, progress, and links.
-- `quiz-engine.test.tsx` -- tests for QuizEngine interaction, scoring, and attempt limits.
 
 ## Main Entry Points
 

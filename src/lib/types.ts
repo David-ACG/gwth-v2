@@ -270,6 +270,53 @@ export interface QuizQuestion {
   explanation: string
 }
 
+/**
+ * The quiz-question shape that may enter CLIENT component props
+ * (gwth-launch-va6, N2 security). Deliberately has no `correctOptionIndex`
+ * and no `explanation`: the full `QuizQuestion` row never leaves the server.
+ * Grading happens in `submitQuizAnswersAction`, whose `QuizGradeResult`
+ * reveals the correct answer and explanation only AFTER submission.
+ */
+export interface QuizQuestionPublic {
+  /** Unique question identifier — the key a submitted answer is graded under */
+  id: string
+  /** The question text */
+  question: string
+  /** Available answer options */
+  options: string[]
+}
+
+/** Per-question outcome inside a `QuizGradeResult`, revealed post-submission */
+export interface QuizQuestionGrade {
+  /** The graded question's id */
+  questionId: string
+  /** Whether the learner's answer matched the key */
+  correct: boolean
+  /** Index of the correct answer, revealed only after submission */
+  correctOptionIndex: number
+  /** Explanation shown as feedback after submission */
+  explanation: string
+}
+
+/**
+ * Server-computed quiz outcome returned by `submitQuizAnswersAction`.
+ * The client renders from this and never computes a score or pass mark
+ * itself, so its numbers are display-only and cannot be forged into the
+ * progress record.
+ */
+export interface QuizGradeResult {
+  /** Score 0..100, server computed */
+  score: number
+  /** Whether `score` clears the pass mark */
+  passed: boolean
+  /** The pass mark applied (QUIZ_PASS_SCORE) */
+  passMark: number
+  /** Per-question verdicts with the post-submission answer reveal */
+  perQuestion: QuizQuestionGrade[]
+  /** The merged, persisted progress row, for client reconciliation */
+  progress: LessonProgress
+}
+
 /** A supplementary resource attached to a lesson */
 export interface Resource {
   /** Resource title */

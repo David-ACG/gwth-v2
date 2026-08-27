@@ -31,7 +31,7 @@ import {
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
-import type { LessonProgress } from "@/lib/types"
+import type { LessonProgress, QuizGradeResult } from "@/lib/types"
 import styles from "./lesson-fde.module.css"
 
 // The video player is heavy (native <video> + controls chrome); load it only
@@ -90,16 +90,22 @@ export interface EditorialLessonPage {
   projectHeading?: string
 }
 
-/** A real Q&A question wired into the end-of-lesson surface. */
+/**
+ * A real Q&A question wired into the end-of-lesson surface.
+ *
+ * PUBLIC shape only (gwth-launch-va6): this interface serialises into the
+ * client payload, so it must never carry `correctOptionIndex` or
+ * `explanation`. Grading happens server-side in `submitQuizAnswersAction`;
+ * the `QuizGradeResult` it returns reveals the correct answer and the
+ * explanation after submission.
+ */
 export interface EditorialLessonQuestion {
+  /** Question id — the key the submitted answer is graded under. */
+  id: string
   /** The question prompt. */
   question: string
   /** Answer options (rendered A, B, C…). */
   options: string[]
-  /** Index of the correct option. */
-  correctOptionIndex: number
-  /** Optional explanation shown as feedback. */
-  explanation?: string
 }
 
 /** Summary of the next lesson, used by the lesson-complete surface. */
@@ -252,8 +258,9 @@ export function EditorialLessonViewer({
 
   // Persistence: the same optimistic wrapper over the W7-tested
   // updateLessonProgressAction that the rest of the app uses. No second
-  // write path.
-  const { progress, markComplete, submitQuizScore, updateIntroVideoProgress } =
+  // write path. Quiz answers go to the server-grading action; the client
+  // never computes a score (gwth-launch-va6).
+  const { progress, markComplete, submitQuizAnswers, updateIntroVideoProgress } =
     useProgress(initialProgress)
 
   // ── Narration audio engine ────────────────────────────────────────────
@@ -525,16 +532,24 @@ export function EditorialLessonViewer({
     bestQuizScore: lastQuizScore === null && !progress ? null : bestQuizScore,
   })
 
-  function handleQuizSubmit(score: number) {
-    setLastQuizScore(score)
-    submitQuizScore(lesson.id, score)
-    if (score >= QUIZ_PASS_SCORE) {
-      toast.success(`Q&A passed at ${score}%. Saved to your progress.`)
+  /**
+   * Sends the learner's answers for server-side grading and reflects the
+   * graded result locally. The returned reveal (correct options +
+   * explanations) is what RealQAPageBody renders its feedback from.
+   */
+  async function handleQuizSubmit(
+    answers: Record<string, number>
+  ): Promise<QuizGradeResult> {
+    const result = await submitQuizAnswers(lesson.id, answers)
+    setLastQuizScore(result.score)
+    if (result.passed) {
+      toast.success(`Q&A passed at ${result.score}%. Saved to your progress.`)
     } else {
       toast.error(
-        `Score ${score}%. You need ${QUIZ_PASS_SCORE}% to pass. Retry when ready.`
+        `Score ${result.score}%. You need ${result.passMark}% to pass. Retry when ready.`
       )
     }
+    return result
   }
 
   function handleFinishLesson() {
@@ -2135,9 +2150,11 @@ function QAPageBody() {
 /**
  * Renders the real, imported end-of-lesson Q&A (from Postgres) using the same
  * editorial QAItem chrome as the design placeholder. Fully interactive (W13):
- * the learner selects an answer per question, submits, and the score is
- * graded inline and persisted via the viewer's `onSubmit` (the W7 progress
- * write path). A passing score unlocks the FINISH LESSON action.
+ * the learner selects an answer per question and submits; the answers are
+ * graded SERVER-SIDE via the viewer's `onSubmit` (gwth-launch-va6), and the
+ * per-question feedback (correct option + explanation) is rendered from the
+ * grading response — the answer key is never in this component's props.
+ * A passing score unlocks the FINISH LESSON action.
  */
 function RealQAPageBody({
   questions,
@@ -2147,8 +2164,8 @@ function RealQAPageBody({
   missingReason,
 }: {
   questions: EditorialLessonQuestion[]
-  /** Called once per submission with the graded score (0 to 100). */
-  onSubmit: (score: number) => void
+  /** Grades the answers (question id → option index) on the server. */
+  onSubmit: (answers: Record<string, number>) => Promise<QuizGradeResult>
   /** Called when the learner finishes a passed lesson. */
   onFinish: () => void
   /** Whether both completion gates are cleared. */
@@ -2161,35 +2178,50 @@ function RealQAPageBody({
     number,
     number
   > | null>(null)
-  const [score, setScore] = React.useState<number | null>(null)
+  const [grade, setGrade] = React.useState<QuizGradeResult | null>(null)
+  const [grading, setGrading] = React.useState(false)
 
-  const submitted = submittedAnswers !== null
+  const submitted = grade !== null
+  const score = grade?.score ?? null
   const answeredCount = questions.filter(
     (_, i) => selected[i] !== undefined
   ).length
   const allAnswered = answeredCount === questions.length
-  const passed = score !== null && score >= QUIZ_PASS_SCORE
+  const passed = grade?.passed ?? false
+
+  /** The graded verdict for a question id, once the server has answered. */
+  function verdictFor(questionId: string) {
+    return grade?.perQuestion.find((p) => p.questionId === questionId) ?? null
+  }
 
   function handleSelect(questionIndex: number, optionIndex: number) {
-    if (submitted) return
+    if (submitted || grading) return
     setSelected((prev) => ({ ...prev, [questionIndex]: optionIndex }))
   }
 
-  function handleSubmit() {
-    if (!allAnswered || submitted) return
-    const correct = questions.filter(
-      (q, i) => selected[i] === q.correctOptionIndex
-    ).length
-    const graded = Math.round((correct / questions.length) * 100)
-    setSubmittedAnswers(selected)
-    setScore(graded)
-    onSubmit(graded)
+  async function handleSubmit() {
+    if (!allAnswered || submitted || grading) return
+    const answers: Record<string, number> = {}
+    questions.forEach((q, i) => {
+      const chosen = selected[i]
+      if (chosen !== undefined) answers[q.id] = chosen
+    })
+    setGrading(true)
+    try {
+      const result = await onSubmit(answers)
+      setSubmittedAnswers(selected)
+      setGrade(result)
+    } catch {
+      toast.error("Could not check your answers. Try submitting again.")
+    } finally {
+      setGrading(false)
+    }
   }
 
   function handleRetry() {
     setSelected({})
     setSubmittedAnswers(null)
-    setScore(null)
+    setGrade(null)
   }
 
   return (
@@ -2203,8 +2235,11 @@ function RealQAPageBody({
       </p>
 
       {questions.map((q, i) => {
-        const chosen = submitted ? submittedAnswers[i] : selected[i]
-        const gotItRight = submitted && chosen === q.correctOptionIndex
+        const chosen = submitted ? submittedAnswers?.[i] : selected[i]
+        // Post-submission reveal comes from the server's grading response,
+        // never from the props (which carry no answer key).
+        const verdict = verdictFor(q.id)
+        const gotItRight = verdict?.correct ?? false
         return (
           <QAItem
             key={i}
@@ -2214,19 +2249,24 @@ function RealQAPageBody({
             prompt={q.question}
             options={q.options.map((label, oi) => ({
               label,
-              state: submitted
-                ? oi === q.correctOptionIndex
-                  ? ("correct" as const)
+              state:
+                submitted && verdict
+                  ? oi === verdict.correctOptionIndex
+                    ? ("correct" as const)
+                    : oi === chosen
+                      ? ("wrong" as const)
+                      : ("idle" as const)
                   : oi === chosen
-                    ? ("wrong" as const)
-                    : ("idle" as const)
-                : oi === chosen
-                  ? ("selected" as const)
-                  : ("idle" as const),
+                    ? ("selected" as const)
+                    : ("idle" as const),
             }))}
             onSelect={(oi) => handleSelect(i, oi)}
-            disabled={submitted}
-            feedback={submitted && q.explanation ? q.explanation : undefined}
+            disabled={submitted || grading}
+            feedback={
+              submitted && verdict?.explanation
+                ? verdict.explanation
+                : undefined
+            }
           />
         )
       })}
@@ -2234,17 +2274,20 @@ function RealQAPageBody({
       <div className="mt-8 flex items-center justify-between gap-4 border-t border-border pt-[22px]">
         <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
           {submitted
-            ? `SCORE ${score}% · ${passed ? "PASSED" : `${QUIZ_PASS_SCORE}% NEEDED`}`
-            : `${answeredCount} OF ${questions.length} ANSWERED`}
+            ? `SCORE ${score}% · ${passed ? "PASSED" : `${grade?.passMark ?? QUIZ_PASS_SCORE}% NEEDED`}`
+            : grading
+              ? "CHECKING YOUR ANSWERS"
+              : `${answeredCount} OF ${questions.length} ANSWERED`}
         </div>
         {!submitted ? (
           <SharpButton
             variant="primary"
             className="min-w-[240px]"
             onClick={handleSubmit}
-            disabled={!allAnswered}
+            disabled={!allAnswered || grading}
           >
-            SUBMIT Q&amp;A <span aria-hidden="true">→</span>
+            {grading ? "CHECKING" : "SUBMIT Q&A"}{" "}
+            <span aria-hidden="true">→</span>
           </SharpButton>
         ) : passed ? (
           <div className="flex flex-col items-end gap-1.5">

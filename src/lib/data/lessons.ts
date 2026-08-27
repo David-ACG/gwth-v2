@@ -11,7 +11,13 @@
  * backend is in use.
  */
 
-import type { Lesson, LessonSummary, QuizQuestion, Resource } from "@/lib/types"
+import type {
+  Lesson,
+  LessonSummary,
+  QuizQuestion,
+  QuizQuestionPublic,
+  Resource,
+} from "@/lib/types"
 import { mockLessons, mockCourses } from "./mock-data"
 import { getDb } from "@/db"
 import { lessons, quizQuestions, lessonResources } from "@/db/schema"
@@ -126,6 +132,55 @@ export async function getLesson(slug: string): Promise<Lesson | null> {
   }
 
   return mockLessons.find((l) => l.slug === slug) ?? null
+}
+
+/**
+ * Strips a lesson's quiz questions down to the shape that may enter client
+ * component props (gwth-launch-va6): id, question, options — no answer key,
+ * no explanation. `submitQuizAnswersAction` reveals both after submission.
+ */
+export function toPublicQuizQuestions(
+  questions: QuizQuestion[]
+): QuizQuestionPublic[] {
+  return questions.map((q) => ({
+    id: q.id,
+    question: q.question,
+    options: q.options,
+  }))
+}
+
+/**
+ * Fetches the FULL quiz rows (including the answer key) for a lesson by
+ * lesson id, for server-side grading only (gwth-launch-va6). Never pass the
+ * result to a client component — use `toPublicQuizQuestions` for props.
+ *
+ * Reads Postgres when configured; falls back to the mock set when the DB is
+ * absent or holds no questions for the lesson (same fallback pattern as
+ * `getLesson`).
+ */
+export async function getQuizQuestionsByLessonId(
+  lessonId: string
+): Promise<QuizQuestion[]> {
+  if (isDbConfigured()) {
+    const db = getDb()
+    const rows = await db
+      .select()
+      .from(quizQuestions)
+      .where(eq(quizQuestions.lessonId, lessonId))
+      .orderBy(asc(quizQuestions.order))
+
+    if (rows.length > 0) {
+      return rows.map((q) => ({
+        id: q.id,
+        question: q.question,
+        options: q.options,
+        correctOptionIndex: q.correctOptionIndex,
+        explanation: q.explanation,
+      }))
+    }
+  }
+
+  return mockLessons.find((l) => l.id === lessonId)?.questions ?? []
 }
 
 /**

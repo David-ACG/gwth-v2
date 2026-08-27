@@ -15,9 +15,40 @@ import {
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
 // The single progress write path. Every persistence assertion in this file
-// goes through this mock.
+// goes through these mocks. Quiz grading is SERVER-side (gwth-launch-va6):
+// the mocked submitQuizAnswersAction grades against QUIZ_KEY exactly the way
+// the real action grades against the quiz_questions rows, and its response
+// carries the post-submission reveal the viewer renders feedback from.
+const QUIZ_KEY = vi.hoisted(
+  () =>
+    ({
+      q1: { correctOptionIndex: 1, explanation: "Small and specific to your own week." },
+      q2: { correctOptionIndex: 1, explanation: "" },
+    }) as Record<string, { correctOptionIndex: number; explanation: string }>
+)
+
 vi.mock("@/lib/actions/progress", () => ({
   updateLessonProgressAction: vi.fn(() => Promise.resolve({})),
+  submitQuizAnswersAction: vi.fn(
+    async (lessonId: string, answers: Record<string, number>) => {
+      const perQuestion = Object.entries(QUIZ_KEY).map(([questionId, key]) => ({
+        questionId,
+        correct: answers[questionId] === key.correctOptionIndex,
+        correctOptionIndex: key.correctOptionIndex,
+        explanation: key.explanation,
+      }))
+      const score = Math.round(
+        (perQuestion.filter((p) => p.correct).length / perQuestion.length) * 100
+      )
+      return {
+        score,
+        passed: score >= 67,
+        passMark: 67,
+        perQuestion,
+        progress: { lessonId, quizScore: score, bestQuizScore: score },
+      }
+    }
+  ),
 }))
 
 // next/dynamic is only used for the VideoPlayer in this module; replace it
@@ -44,9 +75,13 @@ vi.mock("next/dynamic", () => ({
     },
 }))
 
-import { updateLessonProgressAction } from "@/lib/actions/progress"
+import {
+  submitQuizAnswersAction,
+  updateLessonProgressAction,
+} from "@/lib/actions/progress"
 
 const updateAction = vi.mocked(updateLessonProgressAction)
+const gradeAction = vi.mocked(submitQuizAnswersAction)
 
 // jsdom does not implement HTMLMediaElement playback; emulate just enough
 // for play/pause state to round-trip through the element's events.
@@ -107,17 +142,19 @@ function makeLesson(
       },
       { title: "End-of-lesson Q&A", kindLabel: "Q&A · 4 MIN", kind: "qa" },
     ],
+    // PUBLIC question shape only (gwth-launch-va6): the viewer's props carry
+    // no correctOptionIndex and no explanation. The key lives in QUIZ_KEY,
+    // standing in for the server's quiz_questions rows.
     questions: [
       {
+        id: "q1",
         question: "What should your first tool be?",
         options: ["A portfolio piece", "A pocket knife"],
-        correctOptionIndex: 1,
-        explanation: "Small and specific to your own week.",
       },
       {
+        id: "q2",
         question: "Where should the output land?",
         options: ["A new tab", "A place you already look"],
-        correctOptionIndex: 1,
       },
     ],
     audioFileUrl: "https://media.test/lessons/l01/audio/kokoro_main.wav",
@@ -320,7 +357,7 @@ async function answerAll(
 }
 
 describe("EditorialLessonViewer Q&A", () => {
-  it("grades a perfect run and persists the quiz score", async () => {
+  it("submits raw answers for server grading and shows the graded pass", async () => {
     const user = userEvent.setup()
     render(
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
@@ -332,21 +369,18 @@ describe("EditorialLessonViewer Q&A", () => {
     await answerAll(user, ["A pocket knife", "A place you already look"])
     await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
 
-    expect(screen.getByText(/SCORE 100% · PASSED/)).toBeInTheDocument()
-    await waitFor(() => {
-      expect(updateAction).toHaveBeenCalledWith(
-        LESSON_ID,
-        expect.objectContaining({
-          quizScore: 100,
-          bestQuizScore: 100,
-          quizPassed: true,
-          quizAttempts: 1,
-        })
-      )
-    })
+    expect(
+      await screen.findByText(/SCORE 100% · PASSED/)
+    ).toBeInTheDocument()
+    // The client sends answers keyed by question id and computes NOTHING:
+    // no score, no pass verdict (gwth-launch-va6).
+    expect(gradeAction).toHaveBeenCalledWith(LESSON_ID, { q1: 1, q2: 1 })
+    // Persistence happens inside the grading action, never via the client
+    // update path.
+    expect(updateAction).not.toHaveBeenCalled()
   })
 
-  it("marks a failed run honestly and offers a retry", async () => {
+  it("marks a failed run honestly, reveals feedback from the server, and offers a retry", async () => {
     const user = userEvent.setup()
     render(
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
@@ -354,16 +388,18 @@ describe("EditorialLessonViewer Q&A", () => {
     await answerAll(user, ["A portfolio piece", "A new tab"])
     await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
 
-    expect(screen.getByText(/SCORE 0% · 67% NEEDED/)).toBeInTheDocument()
+    expect(
+      await screen.findByText(/SCORE 0% · 67% NEEDED/)
+    ).toBeInTheDocument()
     expect(
       screen.getByRole("button", { name: /RETRY Q&A/ })
     ).toBeInTheDocument()
-    await waitFor(() => {
-      expect(updateAction).toHaveBeenCalledWith(
-        LESSON_ID,
-        expect.objectContaining({ quizScore: 0, quizPassed: false })
-      )
-    })
+    expect(gradeAction).toHaveBeenCalledWith(LESSON_ID, { q1: 0, q2: 0 })
+    // The explanation arrives in the grading RESPONSE (the reveal), not in
+    // the component's props - which no longer carry the answer key at all.
+    expect(
+      screen.getByText("Small and specific to your own week.")
+    ).toBeInTheDocument()
   })
 
   it("finishing a passed lesson persists completion and shows the complete surface", async () => {
@@ -390,17 +426,18 @@ describe("EditorialLessonViewer Q&A", () => {
 
     await answerAll(user, ["A pocket knife", "A place you already look"])
     await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
-    await user.click(screen.getByRole("button", { name: /FINISH LESSON/ }))
+    await user.click(
+      await screen.findByRole("button", { name: /FINISH LESSON/ })
+    )
 
     expect(await screen.findByText("Lesson complete.")).toBeInTheDocument()
     // Honest stats on the complete surface: real watched % and real score.
     expect(screen.getByText("90%")).toBeInTheDocument()
     expect(screen.getByText("100%")).toBeInTheDocument()
     await waitFor(() => {
-      expect(updateAction).toHaveBeenCalledWith(
-        LESSON_ID,
-        expect.objectContaining({ isCompleted: true, progress: 1 })
-      )
+      // Only the whitelisted fraction goes over the wire; the server
+      // recomputes isCompleted from the merged gates (gwth-launch-va6).
+      expect(updateAction).toHaveBeenCalledWith(LESSON_ID, { progress: 1 })
     })
   })
 })

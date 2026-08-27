@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
-import { getLesson } from "@/lib/data/lessons"
+import { getLesson, toPublicQuizQuestions } from "@/lib/data/lessons"
 import { getCourse } from "@/lib/data/courses"
 import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
 import { getAllCourseProgress, getLessonProgress } from "@/lib/data/progress"
@@ -157,14 +157,13 @@ export default async function LessonPage({
     // the prose + Q&A surfaces, falling back to the design placeholders only
     // when a lesson has no body / no questions.
     learnContent: lesson.learnContent || undefined,
+    // PUBLIC shape only (gwth-launch-va6): no correctOptionIndex, no
+    // explanation. These props serialise into the client payload, so the
+    // answer key must never be here — grading happens server-side in
+    // submitQuizAnswersAction, which reveals the key after submission.
     questions:
       lesson.questions.length > 0
-        ? lesson.questions.map((q) => ({
-            question: q.question,
-            options: q.options,
-            correctOptionIndex: q.correctOptionIndex,
-            explanation: q.explanation,
-          }))
+        ? toPublicQuizQuestions(lesson.questions)
         : undefined,
     // Raw media references from the lesson row; the viewer resolves them
     // through mediaUrl() so the CDN cutover (I3) needs no viewer change.

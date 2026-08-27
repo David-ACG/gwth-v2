@@ -1,14 +1,23 @@
 "use client"
 
 import { useOptimistic, useTransition } from "react"
-import { updateLessonProgressAction } from "@/lib/actions/progress"
-import { createEmptyLessonProgress, hasPassedQuiz } from "@/lib/progress/completion"
-import type { LessonProgress } from "@/lib/types"
+import {
+  submitQuizAnswersAction,
+  updateLessonProgressAction,
+} from "@/lib/actions/progress"
+import { createEmptyLessonProgress } from "@/lib/progress/completion"
+import type { LessonProgress, QuizGradeResult } from "@/lib/types"
 
 /**
  * Provides optimistic UI updates for lesson progress tracking.
  * Uses React 19's useOptimistic for instant feedback while
  * the server-side update completes in the background.
+ *
+ * N2 security (gwth-launch-va6): the client never computes or submits quiz
+ * outcomes any more. `submitQuizAnswers` sends the learner's raw answers to
+ * `submitQuizAnswersAction`, which grades them against the DB answer key and
+ * writes quizScore/bestQuizScore/quizPassed itself; the optimistic numbers
+ * here are display-only.
  */
 export function useProgress(initialProgress: LessonProgress | null) {
   const [isPending, startTransition] = useTransition()
@@ -22,7 +31,11 @@ export function useProgress(initialProgress: LessonProgress | null) {
     }
   )
 
-  /** Marks a lesson as completed with optimistic UI update */
+  /**
+   * Marks a lesson as completed with optimistic UI update. Only the progress
+   * fraction is sent; the server recomputes `isCompleted`/`completedAt` from
+   * the merged gates, so a client cannot claim completion it has not earned.
+   */
   function markComplete(lessonId: string) {
     setOptimisticProgress({
       lessonId,
@@ -31,33 +44,20 @@ export function useProgress(initialProgress: LessonProgress | null) {
       progress: 1,
     })
     startTransition(async () => {
-      await updateLessonProgressAction(lessonId, {
-        isCompleted: true,
-        completedAt: new Date(),
-        progress: 1,
-      })
+      await updateLessonProgressAction(lessonId, { progress: 1 })
     })
   }
 
-  /** Updates quiz score with optimistic UI */
-  function submitQuizScore(lessonId: string, score: number) {
-    const bestQuizScore = Math.max(score, optimisticProgress?.bestQuizScore ?? 0)
-    setOptimisticProgress({
-      lessonId,
-      quizScore: score,
-      bestQuizScore,
-      quizPassed: hasPassedQuiz(bestQuizScore),
-      quizAttempts: (optimisticProgress?.quizAttempts ?? 0) + 1,
-    })
-    startTransition(async () => {
-      const persistedBestScore = Math.max(score, initialProgress?.bestQuizScore ?? 0)
-      await updateLessonProgressAction(lessonId, {
-        quizScore: score,
-        bestQuizScore: persistedBestScore,
-        quizPassed: hasPassedQuiz(persistedBestScore),
-        quizAttempts: (initialProgress?.quizAttempts ?? 0) + 1,
-      })
-    })
+  /**
+   * Submits the learner's answers for server-side grading and returns the
+   * graded result (score, pass verdict, and the post-submission answer
+   * reveal). The persisted quiz fields come back on `result.progress`.
+   */
+  async function submitQuizAnswers(
+    lessonId: string,
+    answers: Record<string, number>
+  ): Promise<QuizGradeResult> {
+    return submitQuizAnswersAction(lessonId, answers)
   }
 
   /** Updates intro video progress with optimistic UI */
@@ -75,7 +75,7 @@ export function useProgress(initialProgress: LessonProgress | null) {
     progress: optimisticProgress,
     isPending,
     markComplete,
-    submitQuizScore,
+    submitQuizAnswers,
     updateIntroVideoProgress,
   }
 }
