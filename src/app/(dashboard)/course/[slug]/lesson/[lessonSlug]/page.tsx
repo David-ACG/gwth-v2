@@ -14,7 +14,10 @@ import {
 import { buildLessonOutline } from "@/lib/lessons/lesson-outline"
 import type { Course } from "@/lib/types"
 import type { LessonWidgetSurface } from "./lesson-widgets"
-import { requireContentAccessOrRedirect } from "@/lib/content-access"
+import {
+  requireContentAccessOrRedirect,
+  requireSessionOrRedirect,
+} from "@/lib/content-access"
 
 type PageProps = {
   params: Promise<{ slug: string; lessonSlug: string }>
@@ -106,6 +109,9 @@ export default async function LessonPage({
   params,
   searchParams,
 }: PageProps) {
+  // Session first (mode-independent, bounces forged cookies even with
+  // PRIVATE_CONTENT_MODE=off - N2 QA defect 1), then the content allowlist.
+  await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
   const { slug, lessonSlug } = await params

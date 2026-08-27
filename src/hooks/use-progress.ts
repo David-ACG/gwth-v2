@@ -6,7 +6,7 @@ import {
   updateLessonProgressAction,
 } from "@/lib/actions/progress"
 import { createEmptyLessonProgress } from "@/lib/progress/completion"
-import type { LessonProgress, QuizGradeResult } from "@/lib/types"
+import type { LessonProgress, QuizSubmitResult } from "@/lib/types"
 
 /**
  * Provides optimistic UI updates for lesson progress tracking.
@@ -51,12 +51,14 @@ export function useProgress(initialProgress: LessonProgress | null) {
   /**
    * Submits the learner's answers for server-side grading and returns the
    * graded result (score, pass verdict, and the post-submission answer
-   * reveal). The persisted quiz fields come back on `result.progress`.
+   * reveal), or the server's attempt-limit refusal once MAX_QUIZ_ATTEMPTS
+   * is used up. The persisted quiz fields come back on `result.progress`
+   * for a graded result; a refusal writes (and returns) nothing new.
    */
   async function submitQuizAnswers(
     lessonId: string,
     answers: Record<string, number>
-  ): Promise<QuizGradeResult> {
+  ): Promise<QuizSubmitResult> {
     return submitQuizAnswersAction(lessonId, answers)
   }
 

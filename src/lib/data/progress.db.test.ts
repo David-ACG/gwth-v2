@@ -31,6 +31,8 @@ const USER_A = "00000000-0000-0000-0000-00000000000a"
 const USER_B = "00000000-0000-0000-0000-00000000000b"
 // W14: a brand-new account with no lesson_progress rows at all.
 const USER_C = "00000000-0000-0000-0000-00000000000c"
+// N2 QA defects 5+6: dedicated user for the atomic quiz-write tests.
+const USER_Q = "00000000-0000-0000-0000-00000000000d"
 const COURSE_ID = "w7_test_course"
 const SECTION_ID = "w7_test_section"
 const LESSON_ID = "w7_test_lesson_1"
@@ -63,12 +65,13 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     await sql`delete from lessons where id in (${LESSON_ID}, ${LESSON_ID_2})`
     await sql`delete from sections where id = ${SECTION_ID}`
     await sql`delete from courses where id = ${COURSE_ID}`
-    await sql`delete from "user" where id in (${USER_A}, ${USER_B}, ${USER_C})`
+    await sql`delete from "user" where id in (${USER_A}, ${USER_B}, ${USER_C}, ${USER_Q})`
 
     await sql`insert into "user" (id, name, email) values
       (${USER_A}, 'W7 Test A', 'w7-test-a@example.com'),
       (${USER_B}, 'W7 Test B', 'w7-test-b@example.com'),
-      (${USER_C}, 'W14 Fresh C', 'w14-fresh-c@example.com')`
+      (${USER_C}, 'W14 Fresh C', 'w14-fresh-c@example.com'),
+      (${USER_Q}, 'N2 Quiz Q', 'n2-quiz-q@example.com')`
     await sql`insert into courses (id, slug, title) values (${COURSE_ID}, ${COURSE_ID}, 'W7 Test Course')`
     await sql`insert into sections (id, course_id, title, month) values (${SECTION_ID}, ${COURSE_ID}, 'W7 Test Section', 1)`
     await sql`insert into lessons (id, slug, title, section_id, course_id, month)
@@ -81,7 +84,7 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     await sql`delete from lessons where id in (${LESSON_ID}, ${LESSON_ID_2})`
     await sql`delete from sections where id = ${SECTION_ID}`
     await sql`delete from courses where id = ${COURSE_ID}`
-    await sql`delete from "user" where id in (${USER_A}, ${USER_B}, ${USER_C})`
+    await sql`delete from "user" where id in (${USER_A}, ${USER_B}, ${USER_C}, ${USER_Q})`
     await sql.end({ timeout: 5 })
   })
 
@@ -224,5 +227,71 @@ describeDb("lesson-progress user isolation (live DB)", () => {
     const streak = await data.getStreak()
     expect(streak.currentStreak).toBeGreaterThanOrEqual(1)
     expect(streak.longestStreak).toBeGreaterThanOrEqual(streak.currentStreak)
+  })
+
+  // ── N2 QA defects 5 + 6: atomic quiz writes against the real database ──────
+
+  it("QA-6: two CONCURRENT submissions lose no attempt and keep the best score", async () => {
+    setUser(USER_Q)
+    const opts = { passMark: 67, maxAttempts: 3 }
+
+    // Genuinely concurrent: both start with no row / the same prior row.
+    // Before the atomic upsert, both read attempts=0, both wrote attempts=1
+    // and the slower 30 could overwrite the 100.
+    const [a, b] = await Promise.all([
+      data.recordQuizSubmission(LESSON_ID, 100, opts),
+      data.recordQuizSubmission(LESSON_ID, 30, opts),
+    ])
+    expect(a.outcome).toBe("recorded")
+    expect(b.outcome).toBe("recorded")
+
+    const row = one(
+      await sql`select quiz_attempts, best_quiz_score, quiz_passed from lesson_progress
+                where user_id = ${USER_Q} and lesson_id = ${LESSON_ID}`
+    )
+    expect(Number(row.quiz_attempts)).toBe(2) // no lost increment
+    expect(Number(row.best_quiz_score)).toBe(100) // low score never overwrites
+    expect(Boolean(row.quiz_passed)).toBe(true)
+  })
+
+  it("QA-5: the cap refuses the write past MAX attempts and changes nothing", async () => {
+    setUser(USER_Q)
+    const opts = { passMark: 67, maxAttempts: 3 }
+
+    // Attempt 3 (attempts are at 2 after the concurrency test).
+    const third = await data.recordQuizSubmission(LESSON_ID, 40, opts)
+    expect(third.outcome).toBe("recorded")
+    expect(third.progress.quizAttempts).toBe(3)
+    expect(third.progress.bestQuizScore).toBe(100) // GREATEST held
+
+    // Attempt 4: refused ATOMICALLY (setWhere) - nothing written.
+    const fourth = await data.recordQuizSubmission(LESSON_ID, 100, opts)
+    expect(fourth.outcome).toBe("attempt-limit")
+    const row = one(
+      await sql`select quiz_attempts, best_quiz_score, quiz_score from lesson_progress
+                where user_id = ${USER_Q} and lesson_id = ${LESSON_ID}`
+    )
+    expect(Number(row.quiz_attempts)).toBe(3)
+    expect(Number(row.best_quiz_score)).toBe(100)
+    expect(Number(row.quiz_score)).toBe(40) // the refused 100 never landed
+  })
+
+  it("QA-6: the atomic write derives completion from the stored video fraction", async () => {
+    setUser(USER_Q)
+    const opts = { passMark: 67, maxAttempts: 10 }
+
+    // Fresh lesson row on LESSON_ID_2: pass the quiz with no video watched.
+    const graded = await data.recordQuizSubmission(LESSON_ID_2, 100, opts)
+    expect(graded.outcome).toBe("recorded")
+    expect(graded.progress.quizPassed).toBe(true)
+    expect(graded.progress.isCompleted).toBe(false) // video gate not cleared
+
+    // Clear the video gate, then submit again: completion derives in SQL.
+    await data.updateLessonProgress(LESSON_ID_2, { introVideoProgress: 0.9 })
+    const again = await data.recordQuizSubmission(LESSON_ID_2, 30, opts)
+    expect(again.outcome).toBe("recorded")
+    expect(again.progress.bestQuizScore).toBe(100)
+    expect(again.progress.isCompleted).toBe(true)
+    expect(again.progress.completedAt).toBeInstanceOf(Date)
   })
 })

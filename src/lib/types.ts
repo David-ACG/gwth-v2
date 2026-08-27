@@ -317,6 +317,30 @@ export interface QuizGradeResult {
   progress: LessonProgress
 }
 
+/**
+ * Server refusal when the persisted attempt count has reached
+ * MAX_QUIZ_ATTEMPTS (N2 QA defect 5). Carries NO per-question reveal - the
+ * answer key stays server-side on a refused submission - and a
+ * ready-to-render message so the UI can explain the cap.
+ */
+export interface QuizAttemptLimitResult {
+  /** Discriminant: nothing was graded, revealed or written */
+  attemptLimitReached: true
+  /** Attempts already on the persisted lesson_progress row */
+  attemptsUsed: number
+  /** The enforced cap (MAX_QUIZ_ATTEMPTS) */
+  maxAttempts: number
+  /** Best score already on record, for the UI to show */
+  bestQuizScore: number
+  /** The pass mark applied (QUIZ_PASS_SCORE) */
+  passMark: number
+  /** Human-readable refusal the UI can render directly */
+  message: string
+}
+
+/** Everything `submitQuizAnswersAction` can return */
+export type QuizSubmitResult = QuizGradeResult | QuizAttemptLimitResult
+
 /** A supplementary resource attached to a lesson */
 export interface Resource {
   /** Resource title */

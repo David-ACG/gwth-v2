@@ -31,7 +31,13 @@ import {
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
-import type { LessonProgress, QuizGradeResult } from "@/lib/types"
+import type {
+  LessonProgress,
+  QuizAttemptLimitResult,
+  QuizGradeResult,
+  QuizSubmitResult,
+} from "@/lib/types"
+import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
 import styles from "./lesson-fde.module.css"
 
 // The video player is heavy (native <video> + controls chrome); load it only
@@ -502,17 +508,19 @@ export function EditorialLessonViewer({
   const persistedWatched = progress?.introVideoProgress ?? 0
   const [liveWatched, setLiveWatched] = React.useState(persistedWatched)
   const watchedFraction = Math.max(persistedWatched, liveWatched)
-  const videoGateReported = React.useRef(
-    persistedWatched >= INTRO_VIDEO_COMPLETION_THRESHOLD
+  // Persist at every 10% of playback, not once at the 80% mark: the server
+  // CREDITS the fraction against elapsed wall-clock time (N2 QA defect 3 -
+  // a single forged write can no longer claim a full watch), so honest
+  // progress has to arrive in steps for the credit to accrue.
+  const lastReportedDecile = React.useRef(
+    Math.floor(Math.min(persistedWatched, 1) * 10)
   )
 
   function handleIntroVideoProgress(fraction: number) {
     setLiveWatched((prev) => Math.max(prev, fraction))
-    if (
-      fraction >= INTRO_VIDEO_COMPLETION_THRESHOLD &&
-      !videoGateReported.current
-    ) {
-      videoGateReported.current = true
+    const decile = Math.floor(Math.min(fraction, 1) * 10)
+    if (decile > lastReportedDecile.current) {
+      lastReportedDecile.current = decile
       updateIntroVideoProgress(lesson.id, fraction)
     }
   }
@@ -535,12 +543,18 @@ export function EditorialLessonViewer({
   /**
    * Sends the learner's answers for server-side grading and reflects the
    * graded result locally. The returned reveal (correct options +
-   * explanations) is what RealQAPageBody renders its feedback from.
+   * explanations) is what RealQAPageBody renders its feedback from. A
+   * `QuizAttemptLimitResult` means the server refused to grade (the
+   * MAX_QUIZ_ATTEMPTS cap is enforced server-side, N2 QA defect 5).
    */
   async function handleQuizSubmit(
     answers: Record<string, number>
-  ): Promise<QuizGradeResult> {
+  ): Promise<QuizSubmitResult> {
     const result = await submitQuizAnswers(lesson.id, answers)
+    if ("attemptLimitReached" in result) {
+      toast.error(result.message)
+      return result
+    }
     setLastQuizScore(result.score)
     if (result.passed) {
       toast.success(`Q&A passed at ${result.score}%. Saved to your progress.`)
@@ -740,6 +754,10 @@ export function EditorialLessonViewer({
                     onFinish={handleFinishLesson}
                     canFinish={completionStatus.canComplete}
                     missingReason={completionStatus.missingReasons[0] ?? null}
+                    attemptsUsed={progress?.quizAttempts ?? 0}
+                    maxAttempts={MAX_QUIZ_ATTEMPTS}
+                    alreadyPassed={quizPassed}
+                    bestScore={bestQuizScore}
                   />
                 ) : (
                   <QAPageBody />
@@ -2162,16 +2180,29 @@ function RealQAPageBody({
   onFinish,
   canFinish,
   missingReason,
+  attemptsUsed,
+  maxAttempts,
+  alreadyPassed,
+  bestScore,
 }: {
   questions: EditorialLessonQuestion[]
-  /** Grades the answers (question id → option index) on the server. */
-  onSubmit: (answers: Record<string, number>) => Promise<QuizGradeResult>
+  /** Grades the answers (question id → option index) on the server, or
+   *  refuses with a `QuizAttemptLimitResult` once the cap is used up. */
+  onSubmit: (answers: Record<string, number>) => Promise<QuizSubmitResult>
   /** Called when the learner finishes a passed lesson. */
   onFinish: () => void
   /** Whether both completion gates are cleared. */
   canFinish: boolean
   /** First unmet completion requirement, shown when finish is blocked. */
   missingReason: string | null
+  /** Attempts already on the persisted progress row. */
+  attemptsUsed: number
+  /** The server-enforced MAX_QUIZ_ATTEMPTS cap. */
+  maxAttempts: number
+  /** Whether the persisted best score already clears the pass mark. */
+  alreadyPassed: boolean
+  /** Persisted best score, for the exhausted/passed status lines. */
+  bestScore: number
 }) {
   const [selected, setSelected] = React.useState<Record<number, number>>({})
   const [submittedAnswers, setSubmittedAnswers] = React.useState<Record<
@@ -2179,6 +2210,7 @@ function RealQAPageBody({
     number
   > | null>(null)
   const [grade, setGrade] = React.useState<QuizGradeResult | null>(null)
+  const [limit, setLimit] = React.useState<QuizAttemptLimitResult | null>(null)
   const [grading, setGrading] = React.useState(false)
 
   const submitted = grade !== null
@@ -2188,6 +2220,17 @@ function RealQAPageBody({
   ).length
   const allAnswered = answeredCount === questions.length
   const passed = grade?.passed ?? false
+  // The cap is enforced SERVER-side (N2 QA defect 5); this mirrors it so the
+  // learner is told before wasting a submit, and reflects the server's
+  // refusal if a stale tab tries anyway.
+  const exhausted = limit !== null || attemptsUsed >= maxAttempts
+  // After a graded run, the persisted row says whether any attempt remains.
+  const retryBlocked = (grade?.progress?.quizAttempts ?? 0) >= maxAttempts
+  // A learner whose persisted best score already passes keeps FINISH
+  // reachable WITHOUT resubmitting: with the cap enforced, forcing a
+  // resubmission to reach FINISH would burn (or be refused) an attempt.
+  const showFinish = submitted ? passed : alreadyPassed
+  const locked = submitted || grading || exhausted || showFinish
 
   /** The graded verdict for a question id, once the server has answered. */
   function verdictFor(questionId: string) {
@@ -2195,12 +2238,12 @@ function RealQAPageBody({
   }
 
   function handleSelect(questionIndex: number, optionIndex: number) {
-    if (submitted || grading) return
+    if (locked) return
     setSelected((prev) => ({ ...prev, [questionIndex]: optionIndex }))
   }
 
   async function handleSubmit() {
-    if (!allAnswered || submitted || grading) return
+    if (!allAnswered || locked) return
     const answers: Record<string, number> = {}
     questions.forEach((q, i) => {
       const chosen = selected[i]
@@ -2209,6 +2252,11 @@ function RealQAPageBody({
     setGrading(true)
     try {
       const result = await onSubmit(answers)
+      if ("attemptLimitReached" in result) {
+        // Server refusal: no grade, no reveal, nothing written.
+        setLimit(result)
+        return
+      }
       setSubmittedAnswers(selected)
       setGrade(result)
     } catch {
@@ -2230,7 +2278,7 @@ function RealQAPageBody({
         {questions.length} short question{questions.length === 1 ? "" : "s"}{" "}
         before this counts toward Month 1.{" "}
         <span className={styles.accent}>
-          No clock, no streak, no penalty for retrying.
+          No clock, no streak, {maxAttempts} tries at your own pace.
         </span>
       </p>
 
@@ -2261,7 +2309,7 @@ function RealQAPageBody({
                     : ("idle" as const),
             }))}
             onSelect={(oi) => handleSelect(i, oi)}
-            disabled={submitted || grading}
+            disabled={locked}
             feedback={
               submitted && verdict?.explanation
                 ? verdict.explanation
@@ -2273,23 +2321,19 @@ function RealQAPageBody({
 
       <div className="mt-8 flex items-center justify-between gap-4 border-t border-border pt-[22px]">
         <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
-          {submitted
-            ? `SCORE ${score}% · ${passed ? "PASSED" : `${grade?.passMark ?? QUIZ_PASS_SCORE}% NEEDED`}`
-            : grading
-              ? "CHECKING YOUR ANSWERS"
-              : `${answeredCount} OF ${questions.length} ANSWERED`}
+          {limit
+            ? `ALL ${limit.maxAttempts} ATTEMPTS USED · BEST ${limit.bestQuizScore}%`
+            : submitted
+              ? `SCORE ${score}% · ${passed ? "PASSED" : `${grade?.passMark ?? QUIZ_PASS_SCORE}% NEEDED`}`
+              : grading
+                ? "CHECKING YOUR ANSWERS"
+                : exhausted
+                  ? `ALL ${maxAttempts} ATTEMPTS USED · BEST ${bestScore}%`
+                  : alreadyPassed
+                    ? `PASSED · BEST ${bestScore}%`
+                    : `${answeredCount} OF ${questions.length} ANSWERED`}
         </div>
-        {!submitted ? (
-          <SharpButton
-            variant="primary"
-            className="min-w-[240px]"
-            onClick={handleSubmit}
-            disabled={!allAnswered || grading}
-          >
-            {grading ? "CHECKING" : "SUBMIT Q&A"}{" "}
-            <span aria-hidden="true">→</span>
-          </SharpButton>
-        ) : passed ? (
+        {showFinish ? (
           <div className="flex flex-col items-end gap-1.5">
             <SharpButton
               variant="primary"
@@ -2304,7 +2348,17 @@ function RealQAPageBody({
               </span>
             )}
           </div>
-        ) : (
+        ) : exhausted ? null : !submitted ? (
+          <SharpButton
+            variant="primary"
+            className="min-w-[240px]"
+            onClick={handleSubmit}
+            disabled={!allAnswered || grading}
+          >
+            {grading ? "CHECKING" : "SUBMIT Q&A"}{" "}
+            <span aria-hidden="true">→</span>
+          </SharpButton>
+        ) : retryBlocked ? null : (
           <SharpButton
             variant="ghost"
             className="min-w-[240px]"

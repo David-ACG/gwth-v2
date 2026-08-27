@@ -52,7 +52,8 @@ vi.mock("@/lib/actions/progress", () => ({
 }))
 
 // next/dynamic is only used for the VideoPlayer in this module; replace it
-// with a stub exposing a button that reports an 85% watched fraction.
+// with a stub exposing buttons that report watched fractions (the decile
+// tests need intermediate marks, not just the 85% one).
 vi.mock("next/dynamic", () => ({
   default: () =>
     function MockVideoPlayer({
@@ -64,12 +65,15 @@ vi.mock("next/dynamic", () => ({
     }) {
       return (
         <div data-testid="video-player" data-src={src}>
-          <button
-            type="button"
-            onClick={() => onProgressChange?.(0.85)}
-          >
-            simulate-watch-85
-          </button>
+          {[0.25, 0.55, 0.85].map((fraction) => (
+            <button
+              key={fraction}
+              type="button"
+              onClick={() => onProgressChange?.(fraction)}
+            >
+              simulate-watch-{Math.round(fraction * 100)}
+            </button>
+          ))}
         </div>
       )
     },
@@ -306,6 +310,36 @@ describe("EditorialLessonViewer intro video", () => {
     expect(updateAction).toHaveBeenCalledTimes(1)
   })
 
+  /**
+   * N2 QA defect 3: the server CREDITS the watch fraction against elapsed
+   * wall-clock time, so the client reports at every 10% of playback (one
+   * report per new decile) rather than once at the 80% mark - otherwise an
+   * honest watcher could never accrue the credit.
+   */
+  it("reports each new decile of playback exactly once", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="video" />
+    )
+    await user.click(screen.getByText("simulate-watch-25"))
+    await user.click(screen.getByText("simulate-watch-55"))
+    await user.click(screen.getByText("simulate-watch-55")) // same decile: no-op
+    await user.click(screen.getByText("simulate-watch-85"))
+
+    await waitFor(() => {
+      expect(updateAction).toHaveBeenCalledTimes(3)
+    })
+    expect(updateAction).toHaveBeenNthCalledWith(1, LESSON_ID, {
+      introVideoProgress: 0.25,
+    })
+    expect(updateAction).toHaveBeenNthCalledWith(2, LESSON_ID, {
+      introVideoProgress: 0.55,
+    })
+    expect(updateAction).toHaveBeenNthCalledWith(3, LESSON_ID, {
+      introVideoProgress: 0.85,
+    })
+  })
+
   it("signals the 80% mark with the wordless ticks, not gate copy", async () => {
     const user = userEvent.setup()
     render(
@@ -437,6 +471,104 @@ describe("EditorialLessonViewer Q&A", () => {
     await waitFor(() => {
       // Only the whitelisted fraction goes over the wire; the server
       // recomputes isCompleted from the merged gates (gwth-launch-va6).
+      expect(updateAction).toHaveBeenCalledWith(LESSON_ID, { progress: 1 })
+    })
+  })
+})
+
+// ── Attempt cap (N2 QA defect 5) ─────────────────────────────────────────────
+
+/** A full persisted progress row for the cap/passed scenarios. */
+function makeProgressRow(
+  overrides: Partial<import("@/lib/types").LessonProgress> = {}
+): import("@/lib/types").LessonProgress {
+  return {
+    lessonId: LESSON_ID,
+    isCompleted: false,
+    progress: 0,
+    quizScore: null,
+    bestQuizScore: null,
+    quizAttempts: 0,
+    timeSpent: 0,
+    lastAccessedAt: new Date(),
+    completedAt: null,
+    introVideoProgress: 0.9,
+    quizPassed: false,
+    ...overrides,
+  }
+}
+
+describe("EditorialLessonViewer quiz attempt cap", () => {
+  it("renders the server's attempt-limit refusal and offers no retry", async () => {
+    gradeAction.mockResolvedValueOnce({
+      attemptLimitReached: true,
+      attemptsUsed: 3,
+      maxAttempts: 3,
+      bestQuizScore: 33,
+      passMark: 67,
+      message: "All 3 attempts are used. Your best score stays at 33%.",
+    })
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
+    )
+    await answerAll(user, ["A pocket knife", "A place you already look"])
+    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+
+    expect(
+      await screen.findByText(/ALL 3 ATTEMPTS USED · BEST 33%/)
+    ).toBeInTheDocument()
+    // A refusal carries no reveal and no way onward: no retry, no resubmit.
+    expect(
+      screen.queryByRole("button", { name: /RETRY Q&A/ })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /SUBMIT Q&A/ })
+    ).not.toBeInTheDocument()
+  })
+
+  it("shows the exhausted state from the persisted row before any submit", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="qa"
+        initialProgress={makeProgressRow({
+          quizAttempts: 3,
+          quizScore: 33,
+          bestQuizScore: 33,
+        })}
+      />
+    )
+    expect(
+      screen.getByText(/ALL 3 ATTEMPTS USED · BEST 33%/)
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /SUBMIT Q&A/ })
+    ).not.toBeInTheDocument()
+    expect(gradeAction).not.toHaveBeenCalled()
+  })
+
+  it("keeps FINISH reachable for a learner who already passed, WITHOUT resubmitting", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="qa"
+        initialProgress={makeProgressRow({
+          quizAttempts: 3,
+          quizScore: 100,
+          bestQuizScore: 100,
+          quizPassed: true,
+        })}
+      />
+    )
+    // With the cap enforced server-side, forcing a resubmission to reach
+    // FINISH would be refused - so FINISH must be reachable directly.
+    const finish = screen.getByRole("button", { name: /FINISH LESSON/ })
+    await user.click(finish)
+    expect(await screen.findByText("Lesson complete.")).toBeInTheDocument()
+    expect(gradeAction).not.toHaveBeenCalled()
+    await waitFor(() => {
       expect(updateAction).toHaveBeenCalledWith(LESSON_ID, { progress: 1 })
     })
   })

@@ -2,6 +2,11 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getSessionCookie } from "better-auth/cookies"
 import { isPrivateContentMode } from "@/lib/content-mode"
+// The protected + dev/review prefix lists live in src/lib/protected-routes.ts
+// (N2 QA style note 1): the gate-coverage scan in
+// src/app/protected-page-gates.test.ts derives its directory list from the
+// same constants, so the two can no longer drift apart silently.
+import { PROTECTED_PATHS, DEV_REVIEW_PATHS } from "@/lib/protected-routes"
 
 /**
  * Security headers applied to all responses.
@@ -93,25 +98,6 @@ function isPasswordExempt(pathname: string): boolean {
 }
 
 /**
- * Dashboard routes that require authentication (W11 route guard).
- * `/admin` is here for the optimistic no-cookie bounce only — the REAL admin
- * gate (session + ADMIN_EMAILS allowlist) lives in src/app/admin/layout.tsx
- * and in requireAdminForApi for /api/admin/*; per W11 there is no middleware.
- */
-const PROTECTED_PATHS = [
-  "/admin",
-  "/dashboard",
-  "/courses",
-  "/course",
-  "/progress",
-  "/settings",
-  "/profile",
-  "/bookmarks",
-  "/notifications",
-  "/guide",
-]
-
-/**
  * Auth routes that should redirect to dashboard if already logged in.
  * `/reset-password` is here (NOT in PROTECTED_PATHS) so the emailed reset link
  * is reachable WITHOUT a session — otherwise the logged-out user is bounced to
@@ -127,32 +113,6 @@ const AUTH_PATHS = [
 
 /** Paths that never need an auth check */
 const PUBLIC_ONLY_PATHS = ["/api/health"]
-
-/**
- * Internal dev/review leftovers (W15): auth-gated in EVERY production build
- * (including the ENABLE_DEV_MOCK_USER staging env) so none of them answers 200
- * to anonymous traffic on a public deploy. A logged-in session still reaches
- * them for review.
- *
- * W12 has closed, so W25 took the other option this list's original comment
- * offered and DELETED the leftovers outright rather than gating them:
- * /w12-review (+ /script, /scripts, /motion, /takes), /explainer-preview,
- * /w12-embed-demo, the unauthenticated POST /api/w12-take-review, and the
- * /demo/lesson-v1..v11 viewers (client components that shipped real lesson
- * prose into a public /_next/static chunk). Deletion is the only closure that
- * survives a forged session cookie — see guardDevReviewRoute.
- *
- * `/demo` stays listed: the route tree is gone, but keeping the prefix means a
- * future scratch page under it is gated by default rather than by memory.
- */
-const DEV_REVIEW_PATHS = [
-  "/demo",
-  "/logo_picker",
-  "/redesign",
-  "/redesign_v2",
-  "/old-design",
-  "/score-card-variants",
-]
 
 /**
  * Product-content prefixes that are NOT already covered by PROTECTED_PATHS.

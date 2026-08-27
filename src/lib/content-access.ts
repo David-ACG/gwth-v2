@@ -110,19 +110,35 @@ export async function requireContentAccessOrRedirect(): Promise<void> {
  * validated session passes. Use both on allowlist-gated content pages; use
  * this alone on pages that just require being logged in.
  *
- * Two deliberate skips, mirroring `resolveDataMode()` in
- * src/lib/data/mode.ts:
+ * The two mock environments (mirroring `resolveDataMode()` in
+ * src/lib/data/mode.ts) may browse WITHOUT a session - but they never fail
+ * open to a forged one (N2 QA defect 8: the earlier unconditional skips let
+ * `better-auth.session_token=anything` reach protected pages on any
+ * deployment with `ENABLE_DEV_MOCK_USER=true`):
  *  - no `DATABASE_URL`: pure local mock mode, no real session is possible;
  *  - `ENABLE_DEV_MOCK_USER=true`: the staging review env browses account
  *    pages as the mock learner without a session. The flag is never set on
- *    the public production deploy (W6/W15), so production always validates.
+ *    the public production deploy (W6/W15).
+ * In BOTH cases the skip applies only to a request carrying no session
+ * cookie at all (the mock learner's sessionless browsing). A request that
+ * PRESENTS a session cookie is claiming a real identity, so it must
+ * validate server-side exactly like production: a forged token resolves to
+ * no email and bounces to /login. Fail closed, never open.
  */
 export async function requireSessionOrRedirect(): Promise<void> {
   // FIRST, and unconditionally — see canViewPrivateContent().
-  await headers()
+  const requestHeaders = await headers()
 
-  if (!process.env.DATABASE_URL) return
-  if (process.env.ENABLE_DEV_MOCK_USER === "true") return
+  const mockEnv =
+    !process.env.DATABASE_URL ||
+    process.env.ENABLE_DEV_MOCK_USER === "true"
+  if (mockEnv) {
+    // Better Auth's cookie is `better-auth.session_token` (or the
+    // `__Secure-` prefixed variant); matching on the token name covers both.
+    const cookieHeader = requestHeaders.get("cookie") ?? ""
+    if (!cookieHeader.includes("session_token")) return
+    // A session cookie was presented - validate it for real below.
+  }
 
   const email = await getSessionEmail()
   if (!email) redirect("/login")

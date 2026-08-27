@@ -39,6 +39,7 @@ import {
   mockDynamicScore,
 } from "./mock-data"
 import {
+  INTRO_VIDEO_COMPLETION_THRESHOLD,
   createEmptyLessonProgress,
   hasPassedQuiz,
   isLessonComplete,
@@ -53,7 +54,7 @@ import { resolveDataMode } from "./mode"
 import { getCourses } from "./courses"
 import { getDb } from "@/db"
 import { lessonProgress } from "@/db/schema"
-import { and, eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
 
 // ─── Mode detection ───────────────────────────────────────────────────────────
@@ -217,6 +218,124 @@ export async function updateLessonProgress(
   // `returning()` always yields the upserted row here; fall back to the merged
   // shape if the driver ever returns an empty set (keeps the type non-optional).
   return row ? mapLessonRow(row) : merged
+}
+
+/** What `recordQuizSubmission` did with the graded score. */
+export type QuizSubmissionOutcome =
+  /** The attempt was counted and the row updated (or a no-op for callers
+   *  without a persistable identity - mirrored from `updateLessonProgress`). */
+  | { outcome: "recorded"; progress: LessonProgress }
+  /** The persisted attempt count had already reached the cap: NOTHING was
+   *  written. `progress` is the standing row, for the refusal payload. */
+  | { outcome: "attempt-limit"; progress: LessonProgress }
+
+/**
+ * Records a server-graded quiz submission ATOMICALLY (N2 QA defects 5 + 6).
+ *
+ * The previous read-modify-write sequence (`getLessonProgress` then
+ * `updateLessonProgress` in separate awaits) let two concurrent submissions
+ * read the same prior row, lose an attempt increment, and let a slower
+ * low-scoring write overwrite a concurrent passing one. This is now ONE
+ * upsert in which the database itself computes every derived field from the
+ * row it is updating:
+ *   - `quiz_attempts` increments in SQL (`+ 1`), so no increment is lost;
+ *   - `best_quiz_score` is `GREATEST(existing, score)`, so a passing score
+ *     can never be replaced by a lower concurrent one;
+ *   - `quiz_passed` / `is_completed` / `completed_at` re-derive from that
+ *     same GREATEST expression plus the stored video fraction, mirroring
+ *     `mergeLessonProgress` + `isLessonComplete()`;
+ *   - the MAX_QUIZ_ATTEMPTS cap is a `WHERE quiz_attempts < cap` on the
+ *     conflict update, so attempt N+1 past the cap writes NOTHING even under
+ *     a double-click race - the empty RETURNING set is the refusal signal.
+ */
+export async function recordQuizSubmission(
+  lessonId: string,
+  score: number,
+  opts: { passMark: number; maxAttempts: number }
+): Promise<QuizSubmissionOutcome> {
+  if (!isDbConfigured()) {
+    // Mock mode is single-threaded in-memory; enforce the same cap, then
+    // reuse the shared merge so completion semantics stay identical.
+    const existing = mockLessonProgress.find((p) => p.lessonId === lessonId)
+    const attemptsUsed = existing?.quizAttempts ?? 0
+    if (existing && attemptsUsed >= opts.maxAttempts) {
+      return { outcome: "attempt-limit", progress: existing }
+    }
+    const best = Math.max(score, existing?.bestQuizScore ?? 0)
+    const progress = updateLessonProgressMock(lessonId, {
+      quizScore: score,
+      bestQuizScore: best,
+      quizPassed: best >= opts.passMark,
+      quizAttempts: attemptsUsed + 1,
+    })
+    return { outcome: "recorded", progress }
+  }
+
+  const userId = await currentUserId()
+  if (!userId) {
+    // Same safe no-op contract as updateLessonProgress: nothing persists.
+    // (The grading action refuses unauthenticated callers before this -
+    // this branch only serves the staging mock-learner path.)
+    const best = Math.max(score, 0)
+    return {
+      outcome: "recorded",
+      progress: mergeLessonProgress(createEmptyLessonProgress(lessonId), {
+        quizScore: score,
+        bestQuizScore: best,
+        quizPassed: best >= opts.passMark,
+        quizAttempts: 1,
+      }),
+    }
+  }
+
+  const db = getDb()
+  const nowIso = new Date().toISOString()
+  const bestExpr = sql`greatest(coalesce(${lessonProgress.bestQuizScore}, 0), ${score})`
+  const passedExpr = sql`${bestExpr} >= ${opts.passMark}`
+  const completeExpr = sql`(coalesce(${lessonProgress.introVideoProgress}, 0) >= ${INTRO_VIDEO_COMPLETION_THRESHOLD} and ${passedExpr})`
+
+  const rows = await db
+    .insert(lessonProgress)
+    .values({
+      userId,
+      lessonId,
+      isCompleted: false,
+      progress: 0,
+      quizScore: score,
+      bestQuizScore: score,
+      quizPassed: score >= opts.passMark,
+      quizAttempts: 1,
+      timeSpent: 0,
+      introVideoProgress: 0,
+      lastAccessedAt: nowIso,
+      completedAt: null,
+    })
+    .onConflictDoUpdate({
+      target: [lessonProgress.userId, lessonProgress.lessonId],
+      set: {
+        quizScore: score,
+        bestQuizScore: bestExpr,
+        quizPassed: passedExpr,
+        quizAttempts: sql`${lessonProgress.quizAttempts} + 1`,
+        isCompleted: completeExpr,
+        completedAt: sql`case when ${completeExpr} then coalesce(${lessonProgress.completedAt}, now()) else null end`,
+        lastAccessedAt: nowIso,
+      },
+      // The server-side attempt cap (N2 QA defect 5). When it excludes the
+      // row, RETURNING yields nothing and nothing was written.
+      setWhere: sql`${lessonProgress.quizAttempts} < ${opts.maxAttempts}`,
+    })
+    .returning()
+
+  const row = rows[0]
+  if (!row) {
+    const standing = await getLessonProgress(lessonId)
+    return {
+      outcome: "attempt-limit",
+      progress: standing ?? createEmptyLessonProgress(lessonId),
+    }
+  }
+  return { outcome: "recorded", progress: mapLessonRow(row) }
 }
 
 /**

@@ -154,9 +154,13 @@ export function toPublicQuizQuestions(
  * lesson id, for server-side grading only (gwth-launch-va6). Never pass the
  * result to a client component — use `toPublicQuizQuestions` for props.
  *
- * Reads Postgres when configured; falls back to the mock set when the DB is
- * absent or holds no questions for the lesson (same fallback pattern as
- * `getLesson`).
+ * Reads Postgres when configured. The mock fallback applies ONLY when no DB
+ * is configured, or when the LESSON itself is not in the DB (the dev
+ * "not imported yet" case, matching `getLesson`). A DB lesson whose
+ * `quiz_questions` rows are missing or unseeded returns an EMPTY array so
+ * grading fails loudly upstream - before this guard the bundled mock answer
+ * key silently graded (and persisted) real submissions against the wrong
+ * questions (N2 QA defect 7).
  */
 export async function getQuizQuestionsByLessonId(
   lessonId: string
@@ -178,9 +182,49 @@ export async function getQuizQuestionsByLessonId(
         explanation: q.explanation,
       }))
     }
+
+    // Zero quiz rows: distinguish "lesson not imported into the DB" (mock
+    // fallback keeps dev working) from "imported lesson with missing quiz
+    // rows" (return [] and let the caller refuse to grade).
+    const lessonRows = await db
+      .select({ id: lessons.id })
+      .from(lessons)
+      .where(eq(lessons.id, lessonId))
+      .limit(1)
+    if (lessonRows.length > 0) return []
   }
 
   return mockLessons.find((l) => l.id === lessonId)?.questions ?? []
+}
+
+/**
+ * Resolves the month (1-3) a lesson belongs to, by lesson id, for the
+ * server-side quiz-grading access check (N2 QA defect 4): the grading action
+ * must verify the caller's subscription actually covers this lesson's month
+ * before it grades anything. Returns null when the lesson is unknown.
+ *
+ * Reads Postgres when configured; falls back to the mock set when the DB is
+ * absent or does not hold the lesson (same pattern as `getLesson`).
+ */
+export async function getLessonMonthById(
+  lessonId: string
+): Promise<1 | 2 | 3 | null> {
+  if (isDbConfigured()) {
+    const db = getDb()
+    const rows = await db
+      .select({ month: lessons.month })
+      .from(lessons)
+      .where(eq(lessons.id, lessonId))
+      .limit(1)
+    const month = rows[0]?.month
+    if (month === 1 || month === 2 || month === 3) return month
+    if (rows.length > 0) return null
+  }
+
+  const mockMonth = mockLessons.find((l) => l.id === lessonId)?.month
+  return mockMonth === 1 || mockMonth === 2 || mockMonth === 3
+    ? mockMonth
+    : null
 }
 
 /**
