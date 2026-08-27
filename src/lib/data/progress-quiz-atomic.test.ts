@@ -14,7 +14,7 @@
  * The mock-mode path shares the cap and GREATEST semantics in TS, tested
  * below against the in-memory store.
  */
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { afterAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { SQL } from "drizzle-orm"
 
 const fakeDb = vi.hoisted(() => {
@@ -22,6 +22,7 @@ const fakeDb = vi.hoisted(() => {
     insertCalls: [] as { values: Record<string, unknown>; config: any }[],
     returningRows: [] as Record<string, unknown>[],
     selectRows: [] as Record<string, unknown>[],
+    executed: [] as unknown[],
   }
   const db = {
     insert: () => ({
@@ -41,6 +42,14 @@ const fakeDb = vi.hoisted(() => {
         }),
       }),
     }),
+    // recordIntroVideoProgress wraps its upsert in a transaction that first
+    // takes the per-user advisory lock; the fake records the lock call.
+    execute: (query: unknown) => {
+      state.executed.push(query)
+      return Promise.resolve([])
+    },
+    transaction: async <T,>(fn: (tx: unknown) => Promise<T>): Promise<T> =>
+      fn(db),
   }
   return { state, db }
 })
@@ -51,6 +60,7 @@ vi.mock("@/lib/auth", () => ({
 }))
 
 import { recordIntroVideoProgress, recordQuizSubmission } from "./progress"
+import { mockLessonProgress } from "./mock-data"
 
 const LESSON_ID = "atomic_test_lesson"
 const OPTS = { passMark: 67, maxAttempts: 3 }
@@ -73,11 +83,21 @@ function dbRow(overrides: Record<string, unknown> = {}) {
   }
 }
 
+const ORIGINAL_DATABASE_URL = process.env.DATABASE_URL
+
 beforeEach(() => {
   process.env.DATABASE_URL = "postgresql://gwth:x@localhost:5443/gwth_v2"
   fakeDb.state.insertCalls = []
   fakeDb.state.returningRows = [dbRow()]
   fakeDb.state.selectRows = []
+  fakeDb.state.executed = []
+})
+
+afterAll(() => {
+  // Never leak the fake DATABASE_URL into later test files (QA round-3
+  // style note 4).
+  if (ORIGINAL_DATABASE_URL === undefined) delete process.env.DATABASE_URL
+  else process.env.DATABASE_URL = ORIGINAL_DATABASE_URL
 })
 
 describe("recordQuizSubmission is one atomic SQL statement (QA defect 6)", () => {
@@ -102,7 +122,7 @@ describe("recordQuizSubmission is one atomic SQL statement (QA defect 6)", () =>
     expect(config.set.progress).toBeInstanceOf(SQL)
   })
 
-  it("enforces the attempt cap inside the same statement (setWhere)", async () => {
+  it("enforces the quiz-closure rule (cap + passed) inside the same statement", async () => {
     await recordQuizSubmission(LESSON_ID, 50, OPTS)
     const { config } = fakeDb.state.insertCalls[0]!
     expect(config.setWhere).toBeInstanceOf(SQL)
@@ -153,10 +173,25 @@ describe("recordIntroVideoProgress is one atomic SQL statement (QA round-2 defec
     // No cap-refusal clause here: video reports are never refused, only
     // credit-limited.
     expect(config.setWhere).toBeUndefined()
+    // The per-user advisory lock ran first, inside the same transaction, so
+    // concurrent reports cannot double-spend one wall-clock window
+    // (round-3 defect 3).
+    expect(fakeDb.state.executed.length).toBeGreaterThanOrEqual(1)
   })
 })
 
 describe("recordIntroVideoProgress mock-mode crediting", () => {
+  /** Backdates every row in the store: the credit clock is USER-wide
+   *  (round-3 defect 3), so one recent row anywhere zeroes the window. */
+  function backdateStore(seconds: number) {
+    const then = new Date(Date.now() - seconds * 1000)
+    for (const row of mockLessonProgress) {
+      if (new Date(row.lastAccessedAt).getTime() > then.getTime()) {
+        row.lastAccessedAt = then
+      }
+    }
+  }
+
   it("banks wall-clock time and credits monotonically", async () => {
     delete process.env.DATABASE_URL
     const lessonId = `mock_video_${Date.now()}`
@@ -165,17 +200,58 @@ describe("recordIntroVideoProgress mock-mode crediting", () => {
     const first = await recordIntroVideoProgress(lessonId, 1)
     expect(first.introVideoProgress).toBeCloseTo(0.15, 5)
 
-    // Backdate the mock row's last write by 30s: the next report may bank
+    // Backdate the user's last write by 30s: the next report may bank
     // 30s, allowing 30 * 2 / 180 = 1/3 of the video.
-    first.lastAccessedAt = new Date(Date.now() - 30_000)
+    backdateStore(30)
     const second = await recordIntroVideoProgress(lessonId, 1)
     expect(second.timeSpent).toBe(30)
     expect(second.introVideoProgress).toBeCloseTo(1 / 3, 2)
 
     // A lower report never regresses the stored fraction.
-    second.lastAccessedAt = new Date(Date.now() - 30_000)
+    backdateStore(30)
     const third = await recordIntroVideoProgress(lessonId, 0.1)
     expect(third.introVideoProgress).toBeCloseTo(1 / 3, 2)
+  })
+
+  it("the credit clock is USER-wide: a recent write on ANOTHER lesson zeroes the window (round-3 defect 3)", async () => {
+    delete process.env.DATABASE_URL
+    const lessonA = `mock_video_a_${Date.now()}`
+    const lessonB = `mock_video_b_${Date.now()}`
+
+    await recordIntroVideoProgress(lessonA, 1) // bootstrap A
+    await recordIntroVideoProgress(lessonB, 1) // bootstrap B
+    backdateStore(45)
+
+    // A banks the 45-second window and stamps the user-wide clock...
+    const a = await recordIntroVideoProgress(lessonA, 1)
+    expect(a.introVideoProgress).toBeCloseTo(0.5, 2)
+
+    // ...so B, reporting immediately after, may NOT bank those same
+    // seconds again: its fraction stays at the bootstrap.
+    const b = await recordIntroVideoProgress(lessonB, 1)
+    expect(b.introVideoProgress).toBeCloseTo(0.15, 2)
+  })
+
+  it("ignores a legacy row's time_spent that this path never credited (round-3 defect 5)", async () => {
+    delete process.env.DATABASE_URL
+    const lessonId = `mock_video_legacy_${Date.now()}`
+    // A legacy row: junk time_spent, but NO credited watch fraction.
+    mockLessonProgress.push({
+      lessonId,
+      isCompleted: false,
+      progress: 0,
+      quizScore: null,
+      bestQuizScore: null,
+      quizAttempts: 0,
+      timeSpent: 300,
+      lastAccessedAt: new Date(),
+      completedAt: null,
+      introVideoProgress: 0,
+      quizPassed: false,
+    })
+    const result = await recordIntroVideoProgress(lessonId, 1)
+    // 300 junk seconds grant nothing: bootstrap only.
+    expect(result.introVideoProgress).toBeCloseTo(0.15, 2)
   })
 })
 
@@ -184,19 +260,18 @@ describe("recordQuizSubmission mock-mode semantics (cap + best score)", () => {
     delete process.env.DATABASE_URL
     const lessonId = `mock_cap_${Date.now()}`
 
-    const first = await recordQuizSubmission(lessonId, 80, OPTS)
+    const first = await recordQuizSubmission(lessonId, 50, OPTS)
     expect(first.outcome).toBe("recorded")
     expect(first.progress.quizAttempts).toBe(1)
-    expect(first.progress.quizPassed).toBe(true)
+    expect(first.progress.quizPassed).toBe(false)
 
     const second = await recordQuizSubmission(lessonId, 30, OPTS)
     expect(second.outcome).toBe("recorded")
     // GREATEST semantics: a later low score never lowers the best.
-    expect(second.progress.bestQuizScore).toBe(80)
-    expect(second.progress.quizPassed).toBe(true)
+    expect(second.progress.bestQuizScore).toBe(50)
     expect(second.progress.quizAttempts).toBe(2)
 
-    const third = await recordQuizSubmission(lessonId, 30, OPTS)
+    const third = await recordQuizSubmission(lessonId, 40, OPTS)
     expect(third.outcome).toBe("recorded")
     expect(third.progress.quizAttempts).toBe(3)
 
@@ -204,6 +279,22 @@ describe("recordQuizSubmission mock-mode semantics (cap + best score)", () => {
     expect(fourth.outcome).toBe("attempt-limit")
     // The refused submission wrote nothing.
     expect(fourth.progress.quizAttempts).toBe(3)
-    expect(fourth.progress.bestQuizScore).toBe(80)
+    expect(fourth.progress.bestQuizScore).toBe(50)
+  })
+
+  it("a PASS closes the quiz: no further grading, whatever attempts remain (round-3 defect 8)", async () => {
+    delete process.env.DATABASE_URL
+    const lessonId = `mock_pass_${Date.now()}`
+
+    const passRun = await recordQuizSubmission(lessonId, 80, OPTS)
+    expect(passRun.outcome).toBe("recorded")
+    expect(passRun.progress.quizPassed).toBe(true)
+    expect(passRun.progress.quizAttempts).toBe(1)
+
+    // The post-pass reveal can never be resubmitted to inflate the record.
+    const after = await recordQuizSubmission(lessonId, 100, OPTS)
+    expect(after.outcome).toBe("attempt-limit")
+    expect(after.progress.bestQuizScore).toBe(80)
+    expect(after.progress.quizAttempts).toBe(1)
   })
 })

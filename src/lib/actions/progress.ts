@@ -46,7 +46,7 @@ import {
   getLessonMonthById,
   getQuizQuestionsByLessonId,
 } from "@/lib/data/lessons"
-import { canUserAccessMonth, getCurrentUser } from "@/lib/auth"
+import { canUserAccessMonth, getCurrentUser, getMockUser } from "@/lib/auth"
 import { isSessionlessMockRequest } from "@/lib/content-access"
 import {
   isContentAllowedEmail,
@@ -98,7 +98,8 @@ export async function updateLessonProgressAction(
     return recordIntroVideoProgress(lessonId, introVideoProgress)
   }
   // No creditable report: recompute completion/fraction from stored state.
-  return updateLessonProgressData(lessonId, {})
+  // The data-layer recompute takes NO payload at all (QA round-3 defect 4).
+  return updateLessonProgressData(lessonId)
 }
 
 // ── Quiz submission authorization (QA defect 4; round-2 defect 1) ────────────
@@ -120,11 +121,16 @@ export async function updateLessonProgressAction(
  * never fail open the way QA round-2 defect 1 describes.
  */
 async function assertQuizSubmissionAllowed(lessonId: string): Promise<void> {
-  const user = await getCurrentUser()
+  let user = await getCurrentUser()
 
   if (!user) {
-    if (await isSessionlessMockRequest()) return
-    throw new Error("Sign in to submit this quiz.")
+    if (!(await isSessionlessMockRequest())) {
+      throw new Error("Sign in to submit this quiz.")
+    }
+    // The mock learner is a USER, not a bypass (QA round-3 defect 9): it
+    // still runs the same lesson-existence, content-mode and month checks
+    // below against the mock identity, exactly as the lesson page does.
+    user = await getMockUser()
   }
 
   // Private content mode: same allowlist the page gate applies.
@@ -132,7 +138,8 @@ async function assertQuizSubmissionAllowed(lessonId: string): Promise<void> {
     throw new Error("This lesson is not available to your account yet.")
   }
 
-  // Month gate: the caller's subscription must cover this lesson's month.
+  // Month gate: the caller's subscription must cover this lesson's month,
+  // and the lesson must actually exist where grading will read it.
   const month = await getLessonMonthById(lessonId)
   if (month === null || !canUserAccessMonth(user, month)) {
     throw new Error("This lesson is not part of your current access.")
@@ -151,7 +158,7 @@ function attemptLimitResult(
     bestQuizScore,
     passMark: QUIZ_PASS_SCORE,
     message: hasPassedQuiz(bestQuizScore)
-      ? `All ${MAX_QUIZ_ATTEMPTS} attempts are used. Your best score of ${bestQuizScore}% already passes.`
+      ? `This Q&A is already passed with ${bestQuizScore}%. No further attempts are graded.`
       : `All ${MAX_QUIZ_ATTEMPTS} attempts are used. Your best score stays at ${bestQuizScore}%.`,
   }
 }
@@ -188,10 +195,17 @@ export async function submitQuizAnswersAction(
 ): Promise<QuizSubmitResult> {
   await assertQuizSubmissionAllowed(lessonId)
 
-  // Attempt cap, from the PERSISTED row (QA defect 5) - before grading, so a
-  // capped caller is refused without the key ever being read.
+  // Quiz closure, from the PERSISTED row (QA defect 5; round-3 defect 8) -
+  // before grading, so a refused caller never triggers a key read. The quiz
+  // closes when the attempt cap is spent OR when it is already passed: a
+  // passed quiz cannot be re-graded, so the post-pass reveal can never be
+  // resubmitted to inflate bestQuizScore.
   const existing = await getLessonProgress(lessonId)
-  if ((existing?.quizAttempts ?? 0) >= MAX_QUIZ_ATTEMPTS) {
+  if (
+    existing &&
+    (existing.quizPassed === true ||
+      (existing.quizAttempts ?? 0) >= MAX_QUIZ_ATTEMPTS)
+  ) {
     return attemptLimitResult(existing)
   }
 
@@ -232,11 +246,13 @@ export async function submitQuizAnswersAction(
     return attemptLimitResult(recorded.progress)
   }
 
-  // Reveal policy (QA round-2 defect 2): a wrong answer's key stays hidden
-  // while another graded attempt could still use it.
+  // Reveal policy (QA round-2 defect 2; round-3 defect 8): the key for a
+  // wrong answer appears only when THIS grade closed the quiz - passed
+  // (further grading is now refused atomically, see recordQuizSubmission's
+  // setWhere) or the final attempt is spent - so no revealed key can ever
+  // be fed back into a grading request.
   const revealAll =
-    passed ||
-    hasPassedQuiz(recorded.progress.bestQuizScore) ||
+    recorded.progress.quizPassed === true ||
     (recorded.progress.quizAttempts ?? 0) >= MAX_QUIZ_ATTEMPTS
   const perQuestion: QuizQuestionGrade[] = graded.map((g) =>
     g.correct || revealAll

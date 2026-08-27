@@ -27,6 +27,10 @@ const QUIZ_KEY = vi.hoisted(
     }) as Record<string, { correctOptionIndex: number; explanation: string }>
 )
 
+// The REAL pass mark (QA round-3 style note 2): the mock grades with the
+// same constant the server applies, so a drifted pass mark fails here.
+const PASS_MARK = vi.hoisted(() => 67)
+
 vi.mock("@/lib/actions/progress", () => ({
   updateLessonProgressAction: vi.fn(() => Promise.resolve({})),
   submitQuizAnswersAction: vi.fn(
@@ -40,7 +44,7 @@ vi.mock("@/lib/actions/progress", () => ({
       const score = Math.round(
         (graded.filter((p) => p.correct).length / graded.length) * 100
       )
-      const passed = score >= 67
+      const passed = score >= PASS_MARK
       // Mirror the real action's reveal policy (QA round-2 defect 2): a
       // wrong answer's key/explanation is withheld while a retry remains.
       const perQuestion = graded.map((g) =>
@@ -51,9 +55,16 @@ vi.mock("@/lib/actions/progress", () => ({
       return {
         score,
         passed,
-        passMark: 67,
+        passMark: PASS_MARK,
         perQuestion,
-        progress: { lessonId, quizScore: score, bestQuizScore: score },
+        // A realistic persisted row, attempts included (style note 2).
+        progress: {
+          lessonId,
+          quizScore: score,
+          bestQuizScore: score,
+          quizPassed: passed,
+          quizAttempts: 1,
+        },
       }
     }
   ),
@@ -91,6 +102,16 @@ import {
   submitQuizAnswersAction,
   updateLessonProgressAction,
 } from "@/lib/actions/progress"
+import { QUIZ_PASS_SCORE } from "@/lib/progress/completion"
+import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
+
+// If the real pass mark moves, the mock must move with it - fail loudly
+// instead of testing against a stale mark (QA round-3 style note 2).
+if (PASS_MARK !== QUIZ_PASS_SCORE) {
+  throw new Error(
+    `viewer test PASS_MARK (${PASS_MARK}) is out of sync with QUIZ_PASS_SCORE (${QUIZ_PASS_SCORE})`
+  )
+}
 
 const updateAction = vi.mocked(updateLessonProgressAction)
 const gradeAction = vi.mocked(submitQuizAnswersAction)
@@ -324,6 +345,39 @@ describe("EditorialLessonViewer intro video", () => {
    * report per new decile) rather than once at the 80% mark - otherwise an
    * honest watcher could never accrue the credit.
    */
+  /**
+   * QA round-3 defect 10: a learner who scrubs to the end early burns every
+   * decile at near-zero banked credit. While playback continues and the
+   * server's credited fraction still trails, a keep-alive re-report fires
+   * (at most every 20s) so an honest watch afterwards keeps banking.
+   */
+  it("re-reports while credit trails the watched fraction (keep-alive)", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    try {
+      const user = userEvent.setup({
+        advanceTimers: vi.advanceTimersByTime,
+      })
+      render(
+        <EditorialLessonViewer lesson={makeLesson()} initialSurface="video" />
+      )
+      // Seek-ahead: one report at decile 8, credited far below 0.85 by the
+      // server (the mock returns {}, so persisted credit stays 0).
+      await user.click(screen.getByText("simulate-watch-85"))
+      await waitFor(() => expect(updateAction).toHaveBeenCalledTimes(1))
+
+      // Same decile immediately: no keep-alive yet.
+      await user.click(screen.getByText("simulate-watch-85"))
+      expect(updateAction).toHaveBeenCalledTimes(1)
+
+      // 25 seconds of playback later, credit still trails: re-report fires.
+      vi.setSystemTime(Date.now() + 25_000)
+      await user.click(screen.getByText("simulate-watch-85"))
+      await waitFor(() => expect(updateAction).toHaveBeenCalledTimes(2))
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it("reports each new decile of playback exactly once", async () => {
     const user = userEvent.setup()
     render(
@@ -549,6 +603,40 @@ describe("EditorialLessonViewer quiz attempt cap", () => {
     ).not.toBeInTheDocument()
     expect(
       screen.queryByRole("button", { name: /SUBMIT Q&A/ })
+    ).not.toBeInTheDocument()
+  })
+
+  it("explains the cap when the FINAL attempt fails in-session (round-3 defect 11)", async () => {
+    gradeAction.mockResolvedValueOnce({
+      score: 33,
+      passed: false,
+      passMark: QUIZ_PASS_SCORE,
+      perQuestion: [
+        { questionId: "q1", correct: false },
+        { questionId: "q2", correct: true, correctOptionIndex: 1, explanation: "" },
+      ],
+      progress: makeProgressRow({
+        quizScore: 33,
+        bestQuizScore: 33,
+        quizAttempts: MAX_QUIZ_ATTEMPTS, // this grade spent the last one
+      }),
+    })
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
+    )
+    await answerAll(user, ["A portfolio piece", "A place you already look"])
+    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+
+    // The learner is told WHY nothing more can be submitted, not just shown
+    // a score with the buttons silently gone.
+    expect(
+      await screen.findByText(
+        new RegExp(`SCORE 33% · ALL ${MAX_QUIZ_ATTEMPTS} ATTEMPTS USED`)
+      )
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /RETRY Q&A/ })
     ).not.toBeInTheDocument()
   })
 

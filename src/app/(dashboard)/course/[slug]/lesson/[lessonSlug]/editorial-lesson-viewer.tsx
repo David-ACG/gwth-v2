@@ -509,18 +509,32 @@ export function EditorialLessonViewer({
   const [liveWatched, setLiveWatched] = React.useState(persistedWatched)
   const watchedFraction = Math.max(persistedWatched, liveWatched)
   // Persist at every 10% of playback, not once at the 80% mark: the server
-  // CREDITS the fraction against elapsed wall-clock time (N2 QA defect 3 -
+  // CREDITS the fraction against banked wall-clock time (N2 QA defect 3 -
   // a single forged write can no longer claim a full watch), so honest
-  // progress has to arrive in steps for the credit to accrue.
+  // progress has to arrive in steps for the credit to accrue. On top of the
+  // decile trigger, a keep-alive re-report fires while playback continues
+  // and the SERVER's credited fraction still trails what has been watched -
+  // otherwise a learner who scrubbed ahead early burned every decile at
+  // near-zero credit and an honest watch afterwards banked nothing (QA
+  // round-3 defect 10).
   const lastReportedDecile = React.useRef(
     Math.floor(Math.min(persistedWatched, 1) * 10)
   )
+  const lastReportAt = React.useRef(0)
+  const WATCH_KEEPALIVE_MS = 20_000
 
   function handleIntroVideoProgress(fraction: number) {
     setLiveWatched((prev) => Math.max(prev, fraction))
     const decile = Math.floor(Math.min(fraction, 1) * 10)
-    if (decile > lastReportedDecile.current) {
-      lastReportedDecile.current = decile
+    const creditTrailing =
+      fraction > persistedWatched &&
+      Date.now() - lastReportAt.current >= WATCH_KEEPALIVE_MS
+    if (decile > lastReportedDecile.current || creditTrailing) {
+      lastReportedDecile.current = Math.max(
+        lastReportedDecile.current,
+        decile
+      )
+      lastReportAt.current = Date.now()
       updateIntroVideoProgress(lesson.id, fraction)
     }
   }
@@ -2324,7 +2338,14 @@ function RealQAPageBody({
           {limit
             ? `ALL ${limit.maxAttempts} ATTEMPTS USED · BEST ${limit.bestQuizScore}%`
             : submitted
-              ? `SCORE ${score}% · ${passed ? "PASSED" : `${grade?.passMark ?? QUIZ_PASS_SCORE}% NEEDED`}`
+              ? passed
+                ? `SCORE ${score}% · PASSED`
+                : retryBlocked
+                  ? // The final attempt just failed: say WHY nothing can be
+                    // submitted any more instead of a bare score with the
+                    // buttons silently gone (QA round-3 defect 11).
+                    `SCORE ${score}% · ALL ${maxAttempts} ATTEMPTS USED · BEST ${Math.max(bestScore, score ?? 0)}%`
+                  : `SCORE ${score}% · ${grade?.passMark ?? QUIZ_PASS_SCORE}% NEEDED`
               : grading
                 ? "CHECKING YOUR ANSWERS"
                 : alreadyPassed

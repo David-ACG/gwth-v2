@@ -53,6 +53,12 @@ vi.mock("@/lib/data/lessons", () => ({
 
 vi.mock("@/lib/auth", () => ({
   getCurrentUser: authLayer.getCurrentUser,
+  // The real staging/dev mock learner identity (month-3 access).
+  getMockUser: async () => ({
+    id: "user_mock_001",
+    email: "david@agilecommercegroup.com",
+    subscriptionMonth: 3,
+  }),
   // Mirrors the real month gate closely enough for refusal tests: access up
   // to the user's subscription month.
   canUserAccessMonth: (
@@ -126,10 +132,7 @@ beforeEach(() => {
   lessonsLayer.getQuizQuestionsByLessonId.mockResolvedValue(QUESTIONS)
 
   dataLayer.updateLessonProgress.mockImplementation(
-    async (lessonId: string, update: Record<string, unknown>) => ({
-      lessonId,
-      ...update,
-    })
+    async (lessonId: string) => ({ lessonId })
   )
   dataLayer.recordIntroVideoProgress.mockImplementation(
     async (lessonId: string, fraction: number) => ({
@@ -179,9 +182,10 @@ describe("updateLessonProgressAction: no stored fraction is client-writable", ()
       timeSpent: 123456,
     } as never)
 
-    // Nothing creditable in the payload: an empty recompute ping only.
+    // Nothing creditable in the payload: the payload-FREE recompute ping
+    // only (QA round-3 defect 4 - the data layer accepts no fields at all).
     expect(dataLayer.updateLessonProgress).toHaveBeenCalledTimes(1)
-    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {})
+    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID)
     expect(dataLayer.recordIntroVideoProgress).not.toHaveBeenCalled()
   })
 
@@ -199,12 +203,12 @@ describe("updateLessonProgressAction: no stored fraction is client-writable", ()
       introVideoProgress: "0.9",
     } as never)
     expect(dataLayer.recordIntroVideoProgress).not.toHaveBeenCalled()
-    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {})
+    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID)
   })
 
   it("sends the FINISH ping as an empty update (completion derives server-side)", async () => {
     await updateLessonProgressAction(LESSON_ID, {})
-    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID, {})
+    expect(dataLayer.updateLessonProgress).toHaveBeenCalledWith(LESSON_ID)
   })
 })
 
@@ -229,6 +233,18 @@ describe("submitQuizAnswersAction authorization (QA defect 4; round-2 defect 1)"
     )
     expect(result.score).toBe(100)
     expect(accessLayer.isSessionlessMockRequest).toHaveBeenCalledTimes(1)
+    // The month gate still ran for the mock learner (round-3 defect 9).
+    expect(lessonsLayer.getLessonMonthById).toHaveBeenCalledWith(LESSON_ID)
+  })
+
+  it("still refuses the mock learner an unknown or inaccessible lesson (round-3 defect 9)", async () => {
+    authLayer.getCurrentUser.mockResolvedValue(null)
+    accessLayer.isSessionlessMockRequest.mockResolvedValue(true)
+    lessonsLayer.getLessonMonthById.mockResolvedValue(null)
+    await expect(
+      submitQuizAnswersAction("no_such_lesson", { q1: 1 })
+    ).rejects.toThrow(/not part of your current access/i)
+    expect(lessonsLayer.getQuizQuestionsByLessonId).not.toHaveBeenCalled()
   })
 
   it("refuses a forged cookie in a mock env (the shared check says no)", async () => {
@@ -324,18 +340,23 @@ describe("MAX_QUIZ_ATTEMPTS server enforcement (QA defect 5)", () => {
     expect(result).not.toHaveProperty("perQuestion")
   })
 
-  it("counts attempts even for a caller who already passed", async () => {
+  it("refuses further grading once PASSED, even with attempts left (round-3 defect 8)", async () => {
+    // A pass CLOSES the quiz: the post-pass reveal can never be resubmitted
+    // to inflate bestQuizScore from 67 to 100.
     dataLayer.getLessonProgress.mockResolvedValue({
       lessonId: LESSON_ID,
-      quizAttempts: MAX_QUIZ_ATTEMPTS,
-      bestQuizScore: 100,
+      quizAttempts: 1,
+      bestQuizScore: 67,
       quizPassed: true,
     })
-    const result = await submitQuizAnswersAction(LESSON_ID, { q1: 1 })
+    const result = await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
     expect(result).toMatchObject({
       attemptLimitReached: true,
-      bestQuizScore: 100,
+      bestQuizScore: 67,
     })
+    expect(result).not.toHaveProperty("perQuestion")
+    expect(lessonsLayer.getQuizQuestionsByLessonId).not.toHaveBeenCalled()
+    expect(dataLayer.recordQuizSubmission).not.toHaveBeenCalled()
   })
 })
 
@@ -410,7 +431,7 @@ describe("answer-reveal policy (QA round-2 defect 2)", () => {
     ])
   })
 
-  it("reveals everything on a pass", async () => {
+  it("reveals everything on a pass (safe: a pass closes the quiz to grading)", async () => {
     const result = asGrade(
       await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
     )

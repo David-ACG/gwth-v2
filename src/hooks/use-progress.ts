@@ -22,10 +22,25 @@ import type { LessonProgress, QuizSubmitResult } from "@/lib/types"
  * note: the old submitQuizAnswers pass-through never reconciled).
  */
 export function useProgress(initialProgress: LessonProgress | null) {
-  const [isPending, startTransition] = useTransition()
+  const [isTransitionPending, startTransition] = useTransition()
+  // Quiz grading returns its result to the caller, so it cannot ride the
+  // transition; it keeps its own pending flag and the hook exposes the
+  // union, so submit UIs get a pending signal for every mutation (QA
+  // round-3 style note 3).
+  const [isQuizPending, setIsQuizPending] = useState(false)
 
   // The last row the SERVER returned; the optimistic layer sits on top.
   const [serverProgress, setServerProgress] = useState(initialProgress)
+
+  // Re-sync when the server component supplies a NEWER authoritative row
+  // (router.refresh with this client component preserved) - without this,
+  // serverProgress pinned the row from first mount forever (QA round-3
+  // defect 12). Render-phase adjustment per the React derived-state pattern.
+  const [lastInitial, setLastInitial] = useState(initialProgress)
+  if (initialProgress !== lastInitial) {
+    setLastInitial(initialProgress)
+    setServerProgress(initialProgress)
+  }
 
   const [optimisticProgress, setOptimisticProgress] = useOptimistic(
     serverProgress,
@@ -66,11 +81,16 @@ export function useProgress(initialProgress: LessonProgress | null) {
     lessonId: string,
     answers: Record<string, number>
   ): Promise<QuizSubmitResult> {
-    const result = await submitQuizAnswersAction(lessonId, answers)
-    if (!("attemptLimitReached" in result)) {
-      setServerProgress(result.progress)
+    setIsQuizPending(true)
+    try {
+      const result = await submitQuizAnswersAction(lessonId, answers)
+      if (!("attemptLimitReached" in result)) {
+        setServerProgress(result.progress)
+      }
+      return result
+    } finally {
+      setIsQuizPending(false)
     }
-    return result
   }
 
   /**
@@ -91,7 +111,7 @@ export function useProgress(initialProgress: LessonProgress | null) {
 
   return {
     progress: optimisticProgress,
-    isPending,
+    isPending: isTransitionPending || isQuizPending,
     markComplete,
     submitQuizAnswers,
     updateIntroVideoProgress,

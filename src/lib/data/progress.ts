@@ -55,7 +55,7 @@ import { resolveDataMode } from "./mode"
 import { getCourses } from "./courses"
 import { getDb } from "@/db"
 import { lessonProgress } from "@/db/schema"
-import { and, eq, sql } from "drizzle-orm"
+import { and, eq, sql, type SQL } from "drizzle-orm"
 import { getCurrentUser } from "@/lib/auth"
 
 // ─── Mode detection ───────────────────────────────────────────────────────────
@@ -137,88 +137,94 @@ export async function getAllLessonProgress(): Promise<LessonProgress[]> {
   return rows
 }
 
+// ── Shared SQL derivations (QA round-3 style note 1) ─────────────────────────
+// One builder per security-relevant formula, so the quiz upsert, the video
+// upsert and the recompute ping cannot drift apart (they mirror
+// isLessonComplete() / deriveLessonFraction() in TypeScript). Each takes the
+// sub-expressions that differ per path (what the new video fraction is, what
+// "quiz passed" means mid-statement) and returns the composed expression.
+
+/** `is_completed` from a video-fraction expr and a quiz-passed expr. */
+function completionSql(introExpr: SQL, passedExpr: SQL): SQL {
+  return sql`(${introExpr} >= ${INTRO_VIDEO_COMPLETION_THRESHOLD} and ${passedExpr})`
+}
+
+/** `completed_at`: stamped on first completion, cleared when incomplete. */
+function completedAtSql(completeExpr: SQL): SQL {
+  return sql`case when ${completeExpr} then coalesce(${lessonProgress.completedAt}, now()) else null end`
+}
+
+/** `progress`, the DERIVED overall fraction - mirrors deriveLessonFraction(). */
+function fractionSql(
+  completeExpr: SQL,
+  introExpr: SQL,
+  passedExpr: SQL
+): SQL {
+  return sql`greatest(coalesce(${lessonProgress.progress}, 0), case when ${completeExpr} then 1 else least(0.99, least(${introExpr} / ${INTRO_VIDEO_COMPLETION_THRESHOLD}, 1) * 0.5 + case when ${passedExpr} then 0.5 else 0 end) end)`
+}
+
 /**
- * Updates the user's progress on a lesson, upserting on (user_id, lesson_id).
+ * Recomputes a lesson's derived state (isCompleted / completedAt / the
+ * overall `progress` fraction) from the STORED verified gates, touching
+ * lastAccessedAt. This is the FINISH button's whole server contract.
  *
- * The completion gate is recomputed from the merged state via
- * `isLessonComplete()` so partial updates round-trip correctly (e.g. video
- * 80% but quiz failed stays incomplete). Unauthenticated calls are a no-op:
- * they return the optimistic shape without persisting (and never throw).
+ * It accepts NO update payload at all (QA round-3 defect 4): the earlier
+ * Partial<LessonProgress> parameter meant any exposed caller that whitelisted
+ * a field - introVideoProgress included - bypassed the credited write paths
+ * entirely. The credited/derived fields now have exactly one writer each:
+ * `recordIntroVideoProgress`, `recordQuizSubmission`, and this recompute.
+ * The DB path is a single SQL upsert over the stored row, so it cannot
+ * clobber a concurrent credited write with stale values either.
+ *
+ * Unauthenticated calls are a safe no-op: they return the optimistic empty
+ * shape without persisting (and never throw).
  */
 export async function updateLessonProgress(
-  lessonId: string,
-  update: Partial<LessonProgress>
+  lessonId: string
 ): Promise<LessonProgress> {
   if (!isDbConfigured()) {
-    return updateLessonProgressMock(lessonId, update)
+    return updateLessonProgressMock(lessonId, {})
   }
 
   const userId = await currentUserId()
-  // Unauthenticated → safe no-op: return the merged optimistic shape, persist
-  // nothing. Callers (optimistic UI) keep working; the DB is untouched.
   if (!userId) {
-    return mergeLessonProgress(createEmptyLessonProgress(lessonId), update)
+    return mergeLessonProgress(createEmptyLessonProgress(lessonId), {})
   }
 
   const db = getDb()
-
-  const existingRows = await db
-    .select()
-    .from(lessonProgress)
-    .where(
-      and(
-        eq(lessonProgress.userId, userId),
-        eq(lessonProgress.lessonId, lessonId)
-      )
-    )
-    .limit(1)
-
-  const base: LessonProgress = existingRows[0]
-    ? mapLessonRow(existingRows[0])
-    : createEmptyLessonProgress(lessonId)
-
-  const merged = mergeLessonProgress(base, update)
-
-  const values = {
-    userId,
-    lessonId,
-    isCompleted: merged.isCompleted,
-    progress: merged.progress,
-    quizScore: merged.quizScore,
-    bestQuizScore: merged.bestQuizScore,
-    quizAttempts: merged.quizAttempts,
-    timeSpent: merged.timeSpent,
-    introVideoProgress: merged.introVideoProgress ?? 0,
-    quizPassed: merged.quizPassed ?? false,
-    lastAccessedAt: (merged.lastAccessedAt ?? new Date()).toISOString(),
-    completedAt: merged.completedAt
-      ? new Date(merged.completedAt).toISOString()
-      : null,
-  }
+  const nowIso = new Date().toISOString()
+  const introExpr = sql`coalesce(${lessonProgress.introVideoProgress}, 0)`
+  const passedExpr = sql`coalesce(${lessonProgress.quizPassed}, false)`
+  const completeExpr = completionSql(introExpr, passedExpr)
 
   const [row] = await db
     .insert(lessonProgress)
-    .values(values)
+    .values({
+      userId,
+      lessonId,
+      isCompleted: false,
+      progress: 0,
+      quizScore: null,
+      bestQuizScore: null,
+      quizPassed: false,
+      quizAttempts: 0,
+      timeSpent: 0,
+      introVideoProgress: 0,
+      lastAccessedAt: nowIso,
+      completedAt: null,
+    })
     .onConflictDoUpdate({
       target: [lessonProgress.userId, lessonProgress.lessonId],
       set: {
-        isCompleted: values.isCompleted,
-        progress: values.progress,
-        quizScore: values.quizScore,
-        bestQuizScore: values.bestQuizScore,
-        quizAttempts: values.quizAttempts,
-        timeSpent: values.timeSpent,
-        introVideoProgress: values.introVideoProgress,
-        quizPassed: values.quizPassed,
-        lastAccessedAt: values.lastAccessedAt,
-        completedAt: values.completedAt,
+        isCompleted: completeExpr,
+        completedAt: completedAtSql(completeExpr),
+        progress: fractionSql(completeExpr, introExpr, passedExpr),
+        lastAccessedAt: nowIso,
       },
     })
     .returning()
 
-  // `returning()` always yields the upserted row here; fall back to the merged
-  // shape if the driver ever returns an empty set (keeps the type non-optional).
-  return row ? mapLessonRow(row) : merged
+  return row ? mapLessonRow(row) : createEmptyLessonProgress(lessonId)
 }
 
 /** What `recordQuizSubmission` did with the graded score. */
@@ -226,28 +232,39 @@ export type QuizSubmissionOutcome =
   /** The attempt was counted and the row updated (or a no-op for callers
    *  without a persistable identity - mirrored from `updateLessonProgress`). */
   | { outcome: "recorded"; progress: LessonProgress }
-  /** The persisted attempt count had already reached the cap: NOTHING was
-   *  written. `progress` is the standing row, for the refusal payload. */
+  /** The quiz is CLOSED for this row - the attempt cap is spent, or the quiz
+   *  is already passed - so NOTHING was written. `progress` is the standing
+   *  row, for the refusal payload. */
   | { outcome: "attempt-limit"; progress: LessonProgress }
 
+/** True when no further grading may change this row's quiz record. */
+function quizClosed(
+  row: { quizAttempts?: number | null; quizPassed?: boolean | null } | null,
+  maxAttempts: number
+): boolean {
+  if (!row) return false
+  return (row.quizAttempts ?? 0) >= maxAttempts || row.quizPassed === true
+}
+
 /**
- * Records a server-graded quiz submission ATOMICALLY (N2 QA defects 5 + 6).
+ * Records a server-graded quiz submission ATOMICALLY (N2 QA defects 5 + 6;
+ * round-2 defect 1; round-3 defect 8).
  *
- * The previous read-modify-write sequence (`getLessonProgress` then
- * `updateLessonProgress` in separate awaits) let two concurrent submissions
+ * The previous read-modify-write sequence let two concurrent submissions
  * read the same prior row, lose an attempt increment, and let a slower
- * low-scoring write overwrite a concurrent passing one. This is now ONE
- * upsert in which the database itself computes every derived field from the
- * row it is updating:
+ * low-scoring write overwrite a concurrent passing one. This is ONE upsert
+ * in which the database itself computes every derived field from the row it
+ * is updating:
  *   - `quiz_attempts` increments in SQL (`+ 1`), so no increment is lost;
  *   - `best_quiz_score` is `GREATEST(existing, score)`, so a passing score
  *     can never be replaced by a lower concurrent one;
- *   - `quiz_passed` / `is_completed` / `completed_at` re-derive from that
- *     same GREATEST expression plus the stored video fraction, mirroring
- *     `mergeLessonProgress` + `isLessonComplete()`;
- *   - the MAX_QUIZ_ATTEMPTS cap is a `WHERE quiz_attempts < cap` on the
- *     conflict update, so attempt N+1 past the cap writes NOTHING even under
- *     a double-click race - the empty RETURNING set is the refusal signal.
+ *   - `quiz_passed` / `is_completed` / `completed_at` / `progress` re-derive
+ *     via the shared SQL builders;
+ *   - the quiz CLOSES atomically once the cap is spent OR the quiz is passed
+ *     (`setWhere`): a passed quiz cannot be re-graded, so the post-pass
+ *     answer reveal can never be resubmitted to inflate the record (QA
+ *     round-3 defect 8), and attempt N+1 past the cap writes NOTHING even
+ *     under a double-click race. The empty RETURNING set is the refusal.
  */
 export async function recordQuizSubmission(
   lessonId: string,
@@ -257,19 +274,17 @@ export async function recordQuizSubmission(
   // Mode via resolveDataMode, like every other user-scoped path (N2 QA
   // round-2 defect 1): the staging mock learner (DB configured,
   // ENABLE_DEV_MOCK_USER, no session) lands in the MOCK store, where the
-  // attempt cap is enforced and attempts accumulate - the old
-  // userId-less no-op branch never counted attempts, so a sessionless
-  // staging caller could grade without limit.
+  // same closure rules apply and attempts accumulate.
   const mode = await resolveDataMode()
 
   if (mode.kind === "mock") {
-    // Mock mode is single-threaded in-memory; enforce the same cap, then
-    // reuse the shared merge so completion semantics stay identical.
+    // Mock mode is single-threaded in-memory; enforce the same closure,
+    // then reuse the shared merge so completion semantics stay identical.
     const existing = mockLessonProgress.find((p) => p.lessonId === lessonId)
-    const attemptsUsed = existing?.quizAttempts ?? 0
-    if (existing && attemptsUsed >= opts.maxAttempts) {
+    if (existing && quizClosed(existing, opts.maxAttempts)) {
       return { outcome: "attempt-limit", progress: existing }
     }
+    const attemptsUsed = existing?.quizAttempts ?? 0
     const best = Math.max(score, existing?.bestQuizScore ?? 0)
     const progress = updateLessonProgressMock(lessonId, {
       quizScore: score,
@@ -302,9 +317,8 @@ export async function recordQuizSubmission(
   const nowIso = new Date().toISOString()
   const bestExpr = sql`greatest(coalesce(${lessonProgress.bestQuizScore}, 0), ${score})`
   const passedExpr = sql`${bestExpr} >= ${opts.passMark}`
-  const completeExpr = sql`(coalesce(${lessonProgress.introVideoProgress}, 0) >= ${INTRO_VIDEO_COMPLETION_THRESHOLD} and ${passedExpr})`
-  // Overall fraction, derived like deriveLessonFraction(): never client data.
-  const fractionExpr = sql`greatest(coalesce(${lessonProgress.progress}, 0), case when ${completeExpr} then 1 else least(0.99, least(coalesce(${lessonProgress.introVideoProgress}, 0) / ${INTRO_VIDEO_COMPLETION_THRESHOLD}, 1) * 0.5 + case when ${passedExpr} then 0.5 else 0 end) end)`
+  const introExpr = sql`coalesce(${lessonProgress.introVideoProgress}, 0)`
+  const completeExpr = completionSql(introExpr, passedExpr)
 
   const rows = await db
     .insert(lessonProgress)
@@ -334,13 +348,14 @@ export async function recordQuizSubmission(
         quizPassed: passedExpr,
         quizAttempts: sql`${lessonProgress.quizAttempts} + 1`,
         isCompleted: completeExpr,
-        completedAt: sql`case when ${completeExpr} then coalesce(${lessonProgress.completedAt}, now()) else null end`,
-        progress: fractionExpr,
+        completedAt: completedAtSql(completeExpr),
+        progress: fractionSql(completeExpr, introExpr, passedExpr),
         lastAccessedAt: nowIso,
       },
-      // The server-side attempt cap (N2 QA defect 5). When it excludes the
-      // row, RETURNING yields nothing and nothing was written.
-      setWhere: sql`${lessonProgress.quizAttempts} < ${opts.maxAttempts}`,
+      // The quiz-closure rule, enforced ATOMICALLY (QA defect 5; round-3
+      // defect 8): no write past the cap, and no write once passed. When it
+      // excludes the row, RETURNING yields nothing and nothing was written.
+      setWhere: sql`${lessonProgress.quizAttempts} < ${opts.maxAttempts} and not coalesce(${lessonProgress.quizPassed}, false)`,
     })
     .returning()
 
@@ -355,30 +370,40 @@ export async function recordQuizSubmission(
   return { outcome: "recorded", progress: mapLessonRow(row) }
 }
 
-// ── Intro-video watch crediting (N2 QA defect 3; round-2 defects 6/7/8) ─────
+// ── Intro-video watch crediting (N2 QA defect 3; rounds 2-3) ────────────────
 //
 // The watch fraction is the video half of the completion gate and the server
 // cannot see the player, so the only server-verifiable quantity is
-// WALL-CLOCK TIME between reports. Each video report banks the elapsed time
-// since the row's last write into `time_spent` (capped per report, so a
-// stale row does not hand over a huge window), and the stored fraction may
-// rise only as far as that banked time allows at a generous playback speed.
-// Banking (rather than crediting each report independently) means an honest
-// viewer's unused credit carries over instead of being truncated per report.
+// WALL-CLOCK TIME. Each video report banks, into `time_spent`, the elapsed
+// time since the USER's most recent progress write on ANY lesson - not the
+// row's own - so the same real-world seconds can never bank in parallel
+// across lessons (round-3 defect 3: per-lesson clocks let one 90-second
+// window credit every lesson at once). Reports for one user are serialised
+// with a per-user transaction advisory lock so concurrent reports cannot
+// double-spend the same window either. The stored fraction may then rise
+// only as far as the banked time allows at a generous playback speed.
 //
-// All of it happens in ONE upsert: elapsed time, the bank, the fraction, and
-// the completion recompute are SQL expressions over the row being updated,
-// so concurrent reports cannot regress the fraction (GREATEST) or lose bank
-// deposits - the same atomicity treatment the quiz write got.
+// Hardening details from the QA rounds:
+//  - elapsed is clamped at zero (round-3 defect 6: clock skew / write
+//    ordering must never SHRINK the bank) and capped per report (a stale
+//    row's idle time is not a windfall);
+//  - the bank is trusted only on rows this path has written before
+//    (intro_video_progress > 0): a legacy row's time_spent - which older
+//    clients could write directly - grants nothing (round-3 defect 5);
+//  - `quiz_passed` is coalesced like every neighbouring expression
+//    (round-3 defect 13);
+//  - everything happens in ONE upsert over the old row, so concurrent
+//    reports cannot regress the fraction (GREATEST) or lose deposits.
 //
-// Honest limits, documented (round-2 defects 6 + 7): the server holds no
-// per-video duration (no such column exists this side of the N6 migration
-// lane), so fraction-per-second is calibrated to the catalogue's shortest
-// real intro at the fastest supported playback. A scripted caller can still
-// earn the gate by WAITING the same wall-clock a 2x watcher would spend -
-// with no trusted duration that is the enforceable floor - and a 2x watcher
-// of an intro much shorter than the calibration clears the gate only near
-// the video's end.
+// Honest limits, documented (round-2/3): the server holds no per-video
+// duration (no such column exists this side of the N6 migration lane), so
+// fraction-per-second is calibrated to the catalogue's real ~4-minute
+// intros at the fastest supported playback. A scripted caller can still
+// earn ONE lesson's gate by waiting the wall-clock a 2x watcher would
+// spend - with no trusted duration that is the enforceable floor - but no
+// faster, and never for several lessons in the same window. The per-report
+// cap is calibrated to the shipping client, which reports at least every
+// decile of playback plus a keep-alive while playing.
 
 /** Calibration: the shortest real intro the fraction model assumes (s). */
 const INTRO_VIDEO_ASSUMED_MIN_SECONDS = 180
@@ -418,14 +443,22 @@ export async function recordIntroVideoProgress(
         ),
       })
     }
+    // Same user-wide clock as the SQL path: the reference is the newest
+    // write across the WHOLE store, so parallel lessons cannot each bank
+    // the same window (single-threaded here, but the semantics match).
+    const reference = Math.max(
+      ...mockLessonProgress.map((p) =>
+        new Date(p.lastAccessedAt).getTime()
+      )
+    )
     const elapsed = Math.min(
-      Math.max(
-        0,
-        (Date.now() - new Date(existing.lastAccessedAt).getTime()) / 1000
-      ),
+      Math.max(0, (Date.now() - reference) / 1000),
       INTRO_VIDEO_PER_REPORT_ELAPSED_CAP_SECONDS
     )
-    const banked = (existing.timeSpent ?? 0) + Math.floor(elapsed)
+    // Bank guard: trust time_spent only on rows this path has credited.
+    const priorBank =
+      (existing.introVideoProgress ?? 0) > 0 ? (existing.timeSpent ?? 0) : 0
+    const banked = priorBank + Math.floor(elapsed)
     const fraction = Math.max(
       existing.introVideoProgress ?? 0,
       Math.min(requested, allowedFractionForBank(banked))
@@ -444,49 +477,65 @@ export async function recordIntroVideoProgress(
   }
 
   const db = getDb()
+  const userId = mode.userId
   const nowIso = new Date().toISOString()
-  // Every expression reads the OLD row (SQL update semantics), so the whole
-  // credit computation is one atomic step.
-  const elapsedExpr = sql`least(extract(epoch from (now() - coalesce(${lessonProgress.lastAccessedAt}, now()))), ${INTRO_VIDEO_PER_REPORT_ELAPSED_CAP_SECONDS})`
-  const bankExpr = sql`(coalesce(${lessonProgress.timeSpent}, 0) + ${elapsedExpr})`
+
+  // The user-wide credit clock: newest write on ANY of this user's rows.
+  // Evaluated inside the statement so it sees the latest committed state
+  // once the advisory lock serialises this user's reports.
+  const referenceExpr = sql`(select max(lp2.last_accessed_at) from ${lessonProgress} lp2 where lp2.user_id = ${userId})`
+  // Clamped at zero (defect 6) and capped per report.
+  const elapsedExpr = sql`least(greatest(0, extract(epoch from (now() - coalesce(${referenceExpr}, now())))), ${INTRO_VIDEO_PER_REPORT_ELAPSED_CAP_SECONDS})`
+  // Bank guard (defect 5): a row this path never credited contributes no
+  // stored time_spent, whatever a legacy client once wrote there.
+  const priorBankExpr = sql`(case when coalesce(${lessonProgress.introVideoProgress}, 0) > 0 then coalesce(${lessonProgress.timeSpent}, 0) else 0 end)`
+  const bankExpr = sql`(${priorBankExpr} + ${elapsedExpr})`
   const allowedExpr = sql`greatest(${INTRO_VIDEO_BOOTSTRAP_FRACTION}, ${bankExpr} * ${INTRO_VIDEO_MAX_PLAYBACK_SPEED} / ${INTRO_VIDEO_ASSUMED_MIN_SECONDS})`
   const newFracExpr = sql`greatest(coalesce(${lessonProgress.introVideoProgress}, 0), least(${requested}, ${allowedExpr}))`
-  const completeExpr = sql`(${newFracExpr} >= ${INTRO_VIDEO_COMPLETION_THRESHOLD} and ${lessonProgress.quizPassed})`
-  const fractionExpr = sql`greatest(coalesce(${lessonProgress.progress}, 0), case when ${completeExpr} then 1 else least(0.99, least(${newFracExpr} / ${INTRO_VIDEO_COMPLETION_THRESHOLD}, 1) * 0.5 + case when ${lessonProgress.quizPassed} then 0.5 else 0 end) end)`
+  const passedExpr = sql`coalesce(${lessonProgress.quizPassed}, false)`
+  const completeExpr = completionSql(newFracExpr, passedExpr)
 
   const initialFraction = Math.min(requested, INTRO_VIDEO_BOOTSTRAP_FRACTION)
-  const rows = await db
-    .insert(lessonProgress)
-    .values({
-      userId: mode.userId,
-      lessonId,
-      isCompleted: false,
-      progress: deriveLessonFraction({
-        introVideoProgress: initialFraction,
-        quizPassed: false,
+  const rows = await db.transaction(async (tx) => {
+    // Serialise this user's reports so the same wall-clock window cannot be
+    // banked twice by concurrent requests (round-3 defect 3). Transaction
+    // scoped: released automatically on commit/rollback.
+    await tx.execute(
+      sql`select pg_advisory_xact_lock(hashtext(${userId}))`
+    )
+    return tx
+      .insert(lessonProgress)
+      .values({
+        userId,
+        lessonId,
+        isCompleted: false,
+        progress: deriveLessonFraction({
+          introVideoProgress: initialFraction,
+          quizPassed: false,
+          bestQuizScore: null,
+        }),
+        quizScore: null,
         bestQuizScore: null,
-      }),
-      quizScore: null,
-      bestQuizScore: null,
-      quizPassed: false,
-      quizAttempts: 0,
-      timeSpent: 0,
-      introVideoProgress: initialFraction,
-      lastAccessedAt: nowIso,
-      completedAt: null,
-    })
-    .onConflictDoUpdate({
-      target: [lessonProgress.userId, lessonProgress.lessonId],
-      set: {
-        introVideoProgress: newFracExpr,
-        timeSpent: sql`(coalesce(${lessonProgress.timeSpent}, 0) + floor(${elapsedExpr}))::int`,
-        isCompleted: completeExpr,
-        completedAt: sql`case when ${completeExpr} then coalesce(${lessonProgress.completedAt}, now()) else null end`,
-        progress: fractionExpr,
+        quizPassed: false,
+        quizAttempts: 0,
+        timeSpent: 0,
+        introVideoProgress: initialFraction,
         lastAccessedAt: nowIso,
-      },
-    })
-    .returning()
+        completedAt: null,
+      })
+      .onConflictDoUpdate({
+        target: [lessonProgress.userId, lessonProgress.lessonId],
+        set: {
+          introVideoProgress: newFracExpr,
+          timeSpent: sql`floor(${bankExpr})::int`,
+          isCompleted: completeExpr,
+          completedAt: completedAtSql(completeExpr),
+          progress: fractionSql(completeExpr, newFracExpr, passedExpr),
+          lastAccessedAt: nowIso,
+        },
+      })
+      .returning()
+  })
 
   const row = rows[0]
   return row
