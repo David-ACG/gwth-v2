@@ -22,6 +22,7 @@
  * - PLUNK_API_KEY (transactional email)
  */
 import { betterAuth } from "better-auth"
+import { APIError } from "better-auth/api"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { nextCookies } from "better-auth/next-js"
 import { organization } from "better-auth/plugins/organization"
@@ -40,6 +41,7 @@ import {
   isEmailGrantedBetaAccess,
 } from "@/lib/billing/access"
 import { isPrivateContentMode } from "@/lib/content-mode"
+import { assertSingleOrgRole, OrgRoleError } from "@/lib/org-roles"
 
 // ── N5: organization plugin roles (design 05 section 9, decisions 2026-08-28)
 // owner  = the plugin's creator role. GWTH holds it for the institution orgs
@@ -66,6 +68,27 @@ const orgRoles = {
  * the cycle better-auth.ts -> admin.ts -> auth.ts -> better-auth.ts. Unset or
  * empty allowlist means NOBODY can create organisations (fail closed).
  */
+/**
+ * Runs the single-role guard and converts its refusal into a clean
+ * BAD_REQUEST APIError (N6, N5 QA defect 4). Without this, Better Auth's
+ * comma-separated multi-role values ("tutor,admin") reach Postgres, fail the
+ * 013 role CHECK, and surface as an unhandled 500 — see src/lib/org-roles.ts
+ * for why single roles is the deliberate policy rather than a widened CHECK.
+ */
+function requireSingleOrgRole(
+  role: string | string[] | null | undefined,
+  opts: { invitation?: boolean } = {}
+): void {
+  try {
+    assertSingleOrgRole(role, opts)
+  } catch (error) {
+    if (error instanceof OrgRoleError) {
+      throw new APIError("BAD_REQUEST", { message: error.message })
+    }
+    throw error
+  }
+}
+
 function isPlatformAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false
   return (process.env.ADMIN_EMAILS ?? "")
@@ -310,6 +333,22 @@ function buildAuth() {
           organization: { modelName: "organisation" },
           member: { modelName: "orgMembership" },
           invitation: { modelName: "orgInvitation" },
+        },
+        // N6 (N5 QA defect 4): constrain the plugin to SINGLE roles before
+        // anything reaches Postgres, so a multi-role assignment ("tutor,admin")
+        // is a clean 400 with a message instead of a 23514 CHECK-violation 500.
+        // The 013 single-role CHECKs stay as the DB backstop. Invitation-role
+        // validation also refuses `owner` cleanly (invitations cannot grant it).
+        organizationHooks: {
+          beforeAddMember: async ({ member }) => {
+            requireSingleOrgRole(member.role)
+          },
+          beforeUpdateMemberRole: async ({ newRole }) => {
+            requireSingleOrgRole(newRole)
+          },
+          beforeCreateInvitation: async ({ invitation }) => {
+            requireSingleOrgRole(invitation.role, { invitation: true })
+          },
         },
         sendInvitationEmail: async (data) => {
           // The accept page is N7's build; this link shape is the Better Auth

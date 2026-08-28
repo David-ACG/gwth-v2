@@ -20,6 +20,12 @@
 //      — those live in ../src/db/auth-schema.ts (Better Auth organization
 //      plugin tables); DELETE them from the pulled output or the barrel
 //      export in src/db/schema.ts double-exports and breaks the build.
+//   6. N6 (server grading + edition integrity, canonical DDL: 016/017):
+//      lessonProgress.gradedBy + lessonProgress.quizAnswers (+ the graded_by
+//      CHECK); the "Public can read quiz questions" policy is DROPPED (016) —
+//      delete it from the pulled output; syllabusEdition gains the two
+//      default-scope CHECKs and ux_edition_org_default is scoped to
+//      (organisation_id, course_id) per 017.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -145,7 +151,8 @@ export const quizQuestions = pgTable("quiz_questions", {
 			name: "quiz_questions_lesson_id_fkey"
 		}).onDelete("cascade"),
 	pgPolicy("Service role manages quiz questions", { as: "permissive", for: "all", to: ["public"], using: sql`true`, withCheck: sql`true`  }),
-	pgPolicy("Public can read quiz questions", { as: "permissive", for: "select", to: ["public"] }),
+	// N6 (016): the "Public can read quiz questions" policy is DROPPED — the
+	// fossil layer must not promise public reads of the answer key.
 ]);
 
 export const courses = pgTable("courses", {
@@ -387,6 +394,12 @@ export const lessonProgress = pgTable("lesson_progress", {
 	completedAt: timestamp("completed_at", { withTimezone: true, mode: 'string' }),
 	introVideoProgress: real("intro_video_progress").default(0).notNull(),
 	quizPassed: boolean("quiz_passed").default(false).notNull(),
+	// N6 (016): which side computed the stored quiz outcome. Existing rows are
+	// grandfathered 'client' (decision 6); recordQuizSubmission stamps 'server'.
+	gradedBy: text("graded_by").default('client').notNull(),
+	// N6 (016): last submitted answer set {question_id: option_index} — audit
+	// trail for server-graded outcomes.
+	quizAnswers: jsonb("quiz_answers"),
 }, (table) => [
 	index("idx_lesson_progress_lesson").using("btree", table.lessonId.asc().nullsLast().op("text_ops")),
 	index("idx_lesson_progress_user").using("btree", table.userId.asc().nullsLast().op("text_ops")),
@@ -406,6 +419,7 @@ export const lessonProgress = pgTable("lesson_progress", {
 	pgPolicy("Users read own progress", { as: "permissive", for: "select", to: ["public"] }),
 	check("lesson_progress_progress_check", sql`(progress >= (0)::double precision) AND (progress <= (1)::double precision)`),
 	check("lesson_progress_intro_video_progress_check", sql`(intro_video_progress >= (0)::double precision) AND (intro_video_progress <= (1)::double precision)`),
+	check("lesson_progress_graded_by_check", sql`graded_by = ANY (ARRAY['client'::text, 'server'::text])`),
 ]);
 
 export const credentialVerifications = pgTable("credential_verifications", {
@@ -555,10 +569,15 @@ export const syllabusEdition = pgTable("syllabus_edition", {
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull().$onUpdate(() => new Date().toISOString()),
 }, (table) => [
 	unique("syllabus_edition_slug_key").on(table.slug),
-	// Exactly one global default edition per course, one default per org (no
-	// circular default_edition_id FK on organisation).
+	// Exactly one global default edition per course, one default per org PER
+	// COURSE (no circular default_edition_id FK on organisation). N6 (017):
+	// the two scope CHECKs couple each default flag to the right ownership —
+	// an org-owned edition can never become the course's global default, and
+	// is_org_default can never ride an org-NULL row.
 	uniqueIndex("ux_edition_global_default").on(table.courseId).where(sql`is_default`),
-	uniqueIndex("ux_edition_org_default").on(table.organisationId).where(sql`is_org_default`),
+	uniqueIndex("ux_edition_org_default").on(table.organisationId, table.courseId).where(sql`is_org_default`),
+	check("syllabus_edition_global_default_scope_check", sql`NOT is_default OR organisation_id IS NULL`),
+	check("syllabus_edition_org_default_scope_check", sql`NOT is_org_default OR organisation_id IS NOT NULL`),
 	foreignKey({
 			columns: [table.organisationId],
 			foreignColumns: [organisation.id],
