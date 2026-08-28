@@ -10,11 +10,23 @@
 //      betaAccessGrants.userId, newsVotes.userId, newsComments.userId,
 //      credentialVerifications.userId) are `text` and reference `user.id`. The
 //      hand-declared `usersInAuth`/`users` (auth.users) table has been removed.
-import { pgTable, index, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
+//   3. W3: the hand-written `labs` table (see its comment below).
+//   4. W4: `feedback.readAt` (canonical DDL: 012_feedback_read.sql).
+//   5. N5 (org tenancy + syllabus editions, canonical DDL: 013/014/015):
+//      the hand-written `syllabusEdition` + `editionLessons` tables below;
+//      userAccess CHECK twins widened (access_source + 'org_seat',
+//      subscription_state + 'org' per 015). A re-pull will ALSO try to emit
+//      organisation/org_membership/org_invitation and session.active_organisation_id
+//      — those live in ../src/db/auth-schema.ts (Better Auth organization
+//      plugin tables); DELETE them from the pulled output or the barrel
+//      export in src/db/schema.ts double-exports and breaks the build.
+import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
 // target for every user-scoped column below.
-import { user } from "../src/db/auth-schema"
+// N5: `organisation` (org tenancy, src/db/auth-schema.ts) is the FK target
+// for syllabusEdition.organisationId.
+import { user, organisation } from "../src/db/auth-schema"
 
 export const lessonResources = pgTable("lesson_resources", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
@@ -354,8 +366,10 @@ export const userAccess = pgTable("user_access", {
 	unique("user_access_stripe_customer_id_key").on(table.stripeCustomerId),
 	unique("user_access_stripe_subscription_id_key").on(table.stripeSubscriptionId),
 	pgPolicy("Users can read own access", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(( SELECT auth.uid() AS uid) = user_id)` }),
-	check("user_access_access_source_check", sql`access_source = ANY (ARRAY['registered'::text, 'manual_beta'::text, 'stripe_course'::text, 'stripe_ongoing'::text])`),
-	check("user_access_subscription_state_check", sql`subscription_state = ANY (ARRAY['registered'::text, 'month1'::text, 'month2'::text, 'month3'::text, 'ongoing'::text, 'lapsed'::text])`),
+	// N5 hand-patch (canonical DDL: 015_lift_constraints.sql): org_seat + org
+	// widen the two CHECKs for org tenancy. Re-apply after any re-pull.
+	check("user_access_access_source_check", sql`access_source = ANY (ARRAY['registered'::text, 'manual_beta'::text, 'stripe_course'::text, 'stripe_ongoing'::text, 'org_seat'::text])`),
+	check("user_access_subscription_state_check", sql`subscription_state = ANY (ARRAY['registered'::text, 'month1'::text, 'month2'::text, 'month3'::text, 'ongoing'::text, 'lapsed'::text, 'org'::text])`),
 	check("user_access_subscription_month_check", sql`(subscription_month >= 0) AND (subscription_month <= 3)`),
 ]);
 
@@ -514,6 +528,83 @@ export const feedback = pgTable("feedback", {
 			name: "feedback_user_id_fkey"
 		}).onDelete("cascade"),
 	check("feedback_category_check", sql`category = ANY (ARRAY['bug'::text, 'content'::text, 'idea'::text, 'general'::text])`),
+]);
+
+// N5 — syllabus editions (canonical DDL: 014_syllabus_editions.sql). One core
+// content body, many wrappers; the GWTH default edition has organisationId
+// NULL. Hand-written (not pulled), so RE-DECLARE after any future
+// `drizzle-kit pull` (same convention as `labs` above). No RLS by design (D2:
+// the app connects as service role; isolation is application code).
+export const syllabusEdition = pgTable("syllabus_edition", {
+	id: text().primaryKey().notNull(),
+	organisationId: text("organisation_id"),
+	courseId: text("course_id").notNull(),
+	name: text().notNull(),
+	slug: text().notNull(),
+	isDefault: boolean("is_default").default(false).notNull(),
+	isOrgDefault: boolean("is_org_default").default(false).notNull(),
+	// Per-edition pass mark (decision 4: one pass mark per edition). Replaces
+	// the hardcoded QUIZ_PASS_SCORE for edition-aware callers (N6).
+	passMark: integer("pass_mark").default(67).notNull(),
+	coBrandLabel: text("co_brand_label"),
+	settings: jsonb().default({}).notNull(),
+	status: text().default('draft').notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	unique("syllabus_edition_slug_key").on(table.slug),
+	// Exactly one global default edition per course, one default per org (no
+	// circular default_edition_id FK on organisation).
+	uniqueIndex("ux_edition_global_default").on(table.courseId).where(sql`is_default`),
+	uniqueIndex("ux_edition_org_default").on(table.organisationId).where(sql`is_org_default`),
+	foreignKey({
+			columns: [table.organisationId],
+			foreignColumns: [organisation.id],
+			name: "syllabus_edition_organisation_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.courseId],
+			foreignColumns: [courses.id],
+			name: "syllabus_edition_course_id_fkey"
+		}).onDelete("cascade"),
+	check("syllabus_edition_pass_mark_check", sql`(pass_mark >= 0) AND (pass_mark <= 100)`),
+	check("syllabus_edition_status_check", sql`status = ANY (ARRAY['draft'::text, 'live'::text, 'archived'::text])`),
+]);
+
+// N5 — per-edition lesson selection (canonical DDL: 014). tier answers "who
+// sees it"; isMandatory answers "does it count toward the baseline and the
+// score denominator" (decision 2: the institution admin sets it per lesson).
+// tier='exclusive' + state='draft' is the C4 ratification workflow. Hand-
+// written — RE-DECLARE after any future `drizzle-kit pull`.
+export const editionLessons = pgTable("edition_lessons", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	editionId: text("edition_id").notNull(),
+	lessonId: text("lesson_id").notNull(),
+	tier: text().default('core').notNull(),
+	state: text().default('ratified').notNull(),
+	isMandatory: boolean("is_mandatory").default(true).notNull(),
+	// A hint, not access control: rendered as labels in the admin picker and
+	// learner catalogue (no per-role syllabi in v1).
+	roleHints: text("role_hints").array().default([]).notNull(),
+	sortOrder: integer("sort_order").default(0).notNull(),
+	notes: text(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_edition_lessons_edition").using("btree", table.editionId.asc().nullsLast().op("text_ops")),
+	index("idx_edition_lessons_lesson").using("btree", table.lessonId.asc().nullsLast().op("text_ops")),
+	unique("edition_lessons_edition_id_lesson_id_key").on(table.editionId, table.lessonId),
+	foreignKey({
+			columns: [table.editionId],
+			foreignColumns: [syllabusEdition.id],
+			name: "edition_lessons_edition_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.lessonId],
+			foreignColumns: [lessons.id],
+			name: "edition_lessons_lesson_id_fkey"
+		}).onDelete("cascade"),
+	check("edition_lessons_tier_check", sql`tier = ANY (ARRAY['core'::text, 'optional'::text, 'exclusive'::text])`),
+	check("edition_lessons_state_check", sql`state = ANY (ARRAY['draft'::text, 'ratified'::text])`),
 ]);
 
 export const newsArticlesRanked = pgView("news_articles_ranked", {	id: uuid(),
