@@ -635,3 +635,35 @@ describe("edition membership gate + answer sanitization (QA round-1 defects 1 + 
     )
   })
 })
+
+describe("refusal messages honour the PERSISTED verdict (QA round-2 defect 1)", () => {
+  it("a stored pass stays 'already passed' even when the mark has since risen", async () => {
+    editionsLayer.getEffectiveEdition.mockResolvedValue(openEdition(90))
+    dataLayer.getLessonProgress.mockResolvedValue({
+      lessonId: LESSON_ID,
+      quizAttempts: 1,
+      bestQuizScore: 70, // below the CURRENT mark, but the row says passed
+      quizPassed: true,
+    })
+    const result = await submitQuizAnswersAction(LESSON_ID, { q1: 1 })
+    expect(result).toMatchObject({ attemptLimitReached: true })
+    expect(("message" in result && result.message) || "").toMatch(
+      /already passed/i
+    )
+  })
+
+  it("a stored non-pass stays 'attempts used' even when the mark has since dropped below the best", async () => {
+    editionsLayer.getEffectiveEdition.mockResolvedValue(openEdition(50))
+    dataLayer.getLessonProgress.mockResolvedValue({
+      lessonId: LESSON_ID,
+      quizAttempts: MAX_QUIZ_ATTEMPTS,
+      bestQuizScore: 70, // clears the CURRENT mark, but the row says not passed
+      quizPassed: false,
+    })
+    const result = await submitQuizAnswersAction(LESSON_ID, { q1: 1 })
+    expect(result).toMatchObject({ attemptLimitReached: true })
+    expect(("message" in result && result.message) || "").toMatch(
+      /attempts are used/i
+    )
+  })
+})

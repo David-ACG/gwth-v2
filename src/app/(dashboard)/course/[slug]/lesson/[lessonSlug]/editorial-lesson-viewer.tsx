@@ -556,6 +556,11 @@ export function EditorialLessonViewer({
     progress?.bestQuizScore ?? 0,
     lastQuizScore ?? 0
   )
+  // A pass earned THIS session (server-graded; lastQuizScore is the score
+  // the grading action returned). It must never be vetoed by a stale
+  // persisted quizPassed=false while reconciliation is in flight (QA
+  // round-2 defect 5) - the optimistic quiz UI stays optimistic.
+  const sessionPassed = lastQuizScore !== null && lastQuizScore >= passMark
   const completionStatus = getLessonCompletionStatus({
     hasIntroVideo: Boolean(lesson.introVideoUrl),
     questionCount: lesson.questions?.length ?? 0,
@@ -564,8 +569,9 @@ export function EditorialLessonViewer({
     passMark,
     // The persisted server verdict wins over any local recompute (QA
     // round-1 defect 2): a pass survives a later pass-mark rise, because
-    // the server refuses to re-grade a passed quiz.
-    quizPassed: progress?.quizPassed ?? null,
+    // the server refuses to re-grade a passed quiz. A fresh in-session
+    // pass counts immediately (round-2 defect 5).
+    quizPassed: sessionPassed ? true : (progress?.quizPassed ?? null),
   })
 
   /**
@@ -675,8 +681,10 @@ export function EditorialLessonViewer({
   // The persisted server verdict first (QA round-1 defect 2): the server
   // never re-grades a passed quiz, so the row's quizPassed must win over a
   // local score-vs-passMark comparison after a pass-mark rise or edition
-  // reassignment. The comparison only seeds the state before any row exists.
-  const quizPassed = progress?.quizPassed ?? bestQuizScore >= passMark
+  // reassignment. A pass earned THIS session counts immediately (round-2
+  // defect 5); the raw comparison only seeds state before any row exists.
+  const quizPassed =
+    sessionPassed || (progress?.quizPassed ?? bestQuizScore >= passMark)
 
   return (
     <div

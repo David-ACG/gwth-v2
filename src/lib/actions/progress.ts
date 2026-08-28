@@ -31,7 +31,6 @@
  *    record - passed, or final attempt spent (round-2 defect 2) - so
  *    read-key-then-resubmit no longer yields a forged pass.
  */
-import { hasPassedQuiz } from "@/lib/progress/completion"
 import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
 import {
   getLessonProgress,
@@ -162,6 +161,13 @@ async function assertQuizSubmissionAllowed(
 /**
  * Builds the structured refusal for a capped submission (QA defect 5).
  * `passMark` is the caller's effective-edition pass mark (N6).
+ *
+ * The message honours the PERSISTED quiz_passed verdict, never a recompute
+ * of best-score-vs-current-pass-mark (QA round-2 defect 1): the server does
+ * not re-grade closed quizzes, so after an edition pass-mark change the
+ * stored verdict is the only claim the refusal may make. A 70% best under a
+ * since-lowered mark is still honestly "attempts used" (the row says not
+ * passed), and a persisted pass stays "already passed" under a raised mark.
  */
 function attemptLimitResult(
   progress: LessonProgress | null,
@@ -174,9 +180,10 @@ function attemptLimitResult(
     maxAttempts: MAX_QUIZ_ATTEMPTS,
     bestQuizScore,
     passMark,
-    message: hasPassedQuiz(bestQuizScore, passMark)
-      ? `This Q&A is already passed with ${bestQuizScore}%. No further attempts are graded.`
-      : `All ${MAX_QUIZ_ATTEMPTS} attempts are used. Your best score stays at ${bestQuizScore}%.`,
+    message:
+      progress?.quizPassed === true
+        ? `This Q&A is already passed with ${bestQuizScore}%. No further attempts are graded.`
+        : `All ${MAX_QUIZ_ATTEMPTS} attempts are used. Your best score stays at ${bestQuizScore}%.`,
   }
 }
 

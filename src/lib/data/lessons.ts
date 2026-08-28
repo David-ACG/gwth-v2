@@ -105,9 +105,8 @@ export async function getLesson(slug: string): Promise<Lesson | null> {
     if (lessonRow) {
       // N6 edition gate: a deep link to a lesson OUTSIDE the caller's
       // effective edition resolves to null (the page 404s), mirroring how
-      // unknown slugs already do. Only DB rows are gated — the mock
-      // fallthrough below serves lessons not yet imported, which no edition
-      // governs.
+      // unknown slugs do. In DB mode the DB is the only source (no mock
+      // fallthrough - see below), so every served lesson passed this gate.
       const edition = await getEffectiveEdition(lessonRow.courseSlug)
       if (!isLessonInEdition(edition, lessonRow.id)) return null
       const [questionRows, resourceRows] = await Promise.all([
@@ -287,21 +286,21 @@ export async function getLessons(courseSlug: string): Promise<LessonSummary[]> {
     ])
     const rows = filterLessonsByEdition(rawRows, edition)
 
-    // Real DB rows exist: the (possibly empty) edition-filtered set is the
-    // honest answer — never fall through to the mock catalogue and leak
-    // lessons the caller's edition excludes.
-    if (rawRows.length > 0) {
-      return rows.map((row) => ({
-        id: row.id,
-        slug: row.slug,
-        title: row.title,
-        order: row.order,
-        duration: row.duration,
-        status: (row.status as LessonSummary["status"]) || "available",
-        isOptional: row.isOptional || false,
-        optionalTrack: row.optionalTrack || undefined,
-      }))
-    }
+    // With a database configured, the DB is the ONLY catalogue source (QA
+    // round-2 defect 4, matching getLesson): the (possibly empty)
+    // edition-filtered set is the honest answer. Falling through to the
+    // bundled mock set on an empty course served an unfiltered catalogue
+    // whose lesson links then all 404 - worse than an honest empty state.
+    return rows.map((row) => ({
+      id: row.id,
+      slug: row.slug,
+      title: row.title,
+      order: row.order,
+      duration: row.duration,
+      status: (row.status as LessonSummary["status"]) || "available",
+      isOptional: row.isOptional || false,
+      optionalTrack: row.optionalTrack || undefined,
+    }))
   }
 
   // Fallback to mock data

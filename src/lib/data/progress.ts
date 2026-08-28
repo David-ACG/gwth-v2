@@ -327,6 +327,19 @@ export async function recordQuizSubmission(
   const db = getDb()
   const nowIso = new Date().toISOString()
   const bestExpr = sql`greatest(coalesce(${lessonProgress.bestQuizScore}, 0), ${score})`
+  // The audit columns follow the BEST outcome, not the latest attempt (QA
+  // round-2 defect 3): quiz_answers exists to substantiate the stored
+  // best_quiz_score, so a worse retry must not replace the answers that
+  // earned the standing best (a 60-then-40 sequence keeps attempt 1's
+  // answers). graded_by moves in lockstep, so a grandfathered client row
+  // flips to 'server' only when a server-graded submission actually becomes
+  // the outcome of record. The whole SET remains closure-guarded (setWhere),
+  // so a REFUSED submission writes none of this.
+  const answersJson =
+    opts.answers === undefined ? null : JSON.stringify(opts.answers)
+  const bestOutcomeExpr = sql`${score} >= coalesce(${lessonProgress.bestQuizScore}, 0)`
+  const auditAnswersExpr = sql`case when ${bestOutcomeExpr} then ${answersJson}::jsonb else ${lessonProgress.quizAnswers} end`
+  const auditGradedByExpr = sql`case when ${bestOutcomeExpr} then 'server' else ${lessonProgress.gradedBy} end`
   const passedExpr = sql`${bestExpr} >= ${opts.passMark}`
   const introExpr = sql`coalesce(${lessonProgress.introVideoProgress}, 0)`
   const completeExpr = completionSql(introExpr, passedExpr)
@@ -367,8 +380,8 @@ export async function recordQuizSubmission(
         completedAt: completedAtSql(completeExpr),
         progress: fractionSql(completeExpr, introExpr, passedExpr),
         lastAccessedAt: nowIso,
-        gradedBy: "server",
-        quizAnswers: opts.answers ?? null,
+        gradedBy: auditGradedByExpr,
+        quizAnswers: auditAnswersExpr,
       },
       // The quiz-closure rule, enforced ATOMICALLY (QA defect 5; round-3
       // defect 8): no write past the cap, and no write once passed. When it
@@ -745,12 +758,13 @@ export async function getDynamicScore(): Promise<DynamicScore> {
   if (mode.kind === "mock") return { ...mockDynamicScore }
   if (mode.kind === "anonymous") return emptyDynamicScore()
 
-  const { rows } = await lessonRowsForMode()
-  if (rows.length === 0) return emptyDynamicScore()
-
-  const mandatoryIds = await getMandatoryLessonIds()
-  if (mandatoryIds.size === 0) return emptyDynamicScore()
-
+  // No early-out on empty progress (QA round-2 defect 6): a brand-new
+  // learner still gets THEIR edition's maxPossibleScore (the per-learner
+  // ceiling is the acceptance criterion), with an honest zero overallScore.
+  const [{ rows }, mandatoryIds] = await Promise.all([
+    lessonRowsForMode(),
+    getMandatoryLessonIds(),
+  ])
   const summary = calculateGwthScore(
     rows.filter((row) => mandatoryIds.has(row.lessonId)),
     mandatoryIds.size

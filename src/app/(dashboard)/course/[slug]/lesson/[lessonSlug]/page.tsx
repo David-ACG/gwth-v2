@@ -128,11 +128,14 @@ export default async function LessonPage({
     getDashboardUser(),
   ])
   if (!lesson || !course) notFound()
+  // A lesson rendered under the WRONG course URL is a 404, not a hybrid
+  // page: every course-derived affordance on this page (breadcrumbs,
+  // adjacency, pass mark) must come from one consistent course.
+  if (lesson.courseSlug !== course.slug) notFound()
 
-  // The edition pass mark for the viewer's display state, resolved from the
-  // lesson's OWN course slug - the same source the grading action uses - so
-  // a mismatched course URL cannot show a different mark than the one the
-  // submission is graded against. (Resolution is cache()d per request.)
+  // The edition pass mark for the viewer's display state - the same source
+  // (the lesson's own course, verified above) the grading action resolves
+  // against, cache()d per request.
   const passMark = await getEffectivePassMark(lesson.courseSlug)
 
   // Lesson content is members-only. The proxy's optimistic cookie check

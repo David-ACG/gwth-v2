@@ -156,6 +156,13 @@ describeDb("effective-syllabus resolution (live DB)", () => {
         ('n6r_mem_override', ${ORG_A}, ${USER_OVERRIDE}, 'learner', ${ED_OVERRIDE}),
         ('n6r_mem_empty', ${ORG_C}, ${USER_EMPTY}, 'learner', NULL)
     `
+    // QA round-2 defect 7: USER_EMPTY is ALSO a tutor in org A, with an
+    // EARLIER created_at. Resolution must still follow the LEARNER
+    // membership (org C), never the older staff membership.
+    await sql`
+      INSERT INTO org_membership (id, organisation_id, user_id, role, created_at) VALUES
+        ('n6r_mem_empty_tutor', ${ORG_A}, ${USER_EMPTY}, 'tutor', NOW() - INTERVAL '30 days')
+    `
   })
 
   afterAll(async () => {
@@ -239,11 +246,15 @@ describeDb("effective-syllabus resolution (live DB)", () => {
     expect(await lessonsData.getLesson(L.a4)).toBeNull()
   })
 
-  it("an EMPTY live org edition fails CLOSED: empty catalogue, never the raw fallback (QA round-1 defect 3)", async () => {
+  it("an EMPTY live org edition fails CLOSED, and the LEARNER membership outranks an older staff one", async () => {
+    // USER_EMPTY: tutor in org A (older row) + learner in org C. The
+    // learner seat governs the syllabus (QA round-2 defect 7), and org C's
+    // empty live edition fails closed (QA round-1 defect 3).
     setUser(USER_EMPTY)
     const edition = await editions.getEffectiveEdition(COURSE_A)
     expect(edition.source).toBe("org-default")
     expect(edition.editionId).toBe(ED_EMPTY)
+    expect(edition.organisationId).toBe(ORG_C)
     expect(edition.lessons).not.toBeNull()
     expect(edition.lessons!.size).toBe(0)
 

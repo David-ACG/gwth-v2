@@ -115,6 +115,25 @@ function assembleCourse(
     // Drop sections the edition curated down to nothing (edition mode only).
     .filter((s) => !edition.lessons || s.lessons.length > 0)
 
+  /**
+   * Section ordering follows the edition too (QA round-2 defect 2): each
+   * section takes the smallest sort_order among its lessons, so the grouped
+   * catalogue flattens to the same sequence getLessons/getAdjacentLessons
+   * navigate - as long as the edition keeps each section's lessons
+   * contiguous, which is the only order a section-grouped page can render.
+   * An edition that interleaves sections orders them by first appearance.
+   */
+  const sectionSort = (a: CourseSection, b: CourseSection): number => {
+    if (!edition.lessons) return a.order - b.order
+    const firstSort = (s: CourseSection) =>
+      Math.min(
+        ...s.lessons.map(
+          (l) => edition.lessons!.get(l.id)?.sortOrder ?? Number.MAX_SAFE_INTEGER
+        )
+      )
+    return firstSort(a) - firstSort(b)
+  }
+
   return {
     id: courseRow.id,
     slug: courseRow.slug,
@@ -126,7 +145,7 @@ function assembleCourse(
     category: courseRow.category || "Applied AI",
     difficulty: (courseRow.difficulty as Course["difficulty"]) || "beginner",
     estimatedDuration: courseRow.estimatedDuration || 0,
-    sections: courseSections.sort((a, b) => a.order - b.order),
+    sections: courseSections.sort(sectionSort),
     createdAt: courseRow.createdAt ? new Date(courseRow.createdAt) : new Date(),
     updatedAt: courseRow.updatedAt ? new Date(courseRow.updatedAt) : new Date(),
   }

@@ -177,18 +177,24 @@ export const getEffectiveEdition = cache(async function getEffectiveEdition(
   if (!courseId) return FALLBACK_EDITION
 
   if (mode.kind === "user") {
-    // Decision 1: one org per learner; earliest membership wins for the
-    // roles that may span orgs.
+    // Which membership governs the user's syllabus (QA round-2 defect 7):
+    // their LEARNER membership when one exists - decision 1's partial
+    // unique index guarantees at most one platform-wide, and learning is
+    // what an edition curates. Only a user with NO learner seat anywhere
+    // (staff: owner/admin/tutor, who may span orgs) falls back to the
+    // earliest membership, so a tutor-in-A who later becomes a learner in
+    // B is served B's edition, pass mark and denominator - never A's.
     const memberships = await db
       .select({
         organisationId: orgMembership.organizationId,
         editionId: orgMembership.editionId,
+        role: orgMembership.role,
       })
       .from(orgMembership)
       .where(eq(orgMembership.userId, mode.userId))
       .orderBy(asc(orgMembership.createdAt))
-      .limit(1)
-    const membership = memberships[0]
+    const membership =
+      memberships.find((m) => m.role === "learner") ?? memberships[0]
 
     if (membership) {
       // Rung 1: per-member override, if live and on this course. Migration
