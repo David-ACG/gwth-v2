@@ -24,6 +24,13 @@
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { nextCookies } from "better-auth/next-js"
+import { organization } from "better-auth/plugins/organization"
+import { createAccessControl } from "better-auth/plugins/access"
+import {
+  defaultStatements,
+  adminAc,
+  ownerAc,
+} from "better-auth/plugins/organization/access"
 import { getDb, schema } from "@/db"
 import { sendPlunkEmail } from "@/lib/email/plunk"
 import { renderFdeEmail } from "@/lib/email/fde-layout"
@@ -33,6 +40,40 @@ import {
   isEmailGrantedBetaAccess,
 } from "@/lib/billing/access"
 import { isPrivateContentMode } from "@/lib/content-mode"
+
+// ── N5: organization plugin roles (design 05 section 9, decisions 2026-08-28)
+// owner  = the plugin's creator role. GWTH holds it for the institution orgs
+//          we provision (org creation is gated to platform admins below).
+// admin  = the institution/Teams admin (can invite, manage members, update
+//          the org — Ben's "could we set a pass mark" persona).
+// tutor  = read-only roster visibility (Steve's "send that to your tutor"
+//          flow). No mutating permissions; the roster queries land in N7.
+// learner= everyone else. No org permissions at all.
+// The custom access controller replays the plugin's default statements so
+// owner/admin keep their stock capabilities while tutor/learner exist as
+// first-class (invitable, role-checkable) roles.
+const orgAccessControl = createAccessControl(defaultStatements)
+const orgRoles = {
+  owner: orgAccessControl.newRole(ownerAc.statements),
+  admin: orgAccessControl.newRole(adminAc.statements),
+  tutor: orgAccessControl.newRole({}),
+  learner: orgAccessControl.newRole({}),
+}
+
+/**
+ * Whether an email is on the platform-admin allowlist (ADMIN_EMAILS).
+ * Duplicated from src/lib/admin.ts on purpose: importing it here would create
+ * the cycle better-auth.ts -> admin.ts -> auth.ts -> better-auth.ts. Unset or
+ * empty allowlist means NOBODY can create organisations (fail closed).
+ */
+function isPlatformAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false
+  return (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+    .includes(email.trim().toLowerCase())
+}
 
 // Construct the instance. Kept as a standalone builder so its concrete return
 // type (carrying the exact options shape) drives `Auth` — using the generic
@@ -250,7 +291,55 @@ function buildAuth() {
     },
     // nextCookies() MUST be the LAST plugin: it flushes Set-Cookie headers from
     // Server Actions so server-side auth ops set the session cookie correctly.
-    plugins: [nextCookies()],
+    plugins: [
+      // N5: org tenancy (institution pivot). The plugin's three models map
+      // onto the UK-named tables from migration 013 via modelName; the field
+      // names stay the plugin defaults because the Drizzle declarations in
+      // src/db/auth-schema.ts carry the UK snake_case column names (the
+      // adapter resolves `schema[modelName]`, so the modelName values MUST
+      // equal the export names there: organisation/orgMembership/orgInvitation).
+      organization({
+        ac: orgAccessControl,
+        roles: orgRoles,
+        creatorRole: "owner",
+        // GWTH provisions orgs (design: owner is held by GWTH); rank-and-file
+        // users can never create one. Fail closed on an empty allowlist.
+        allowUserToCreateOrganization: (user) =>
+          isPlatformAdminEmail(user.email),
+        schema: {
+          organization: { modelName: "organisation" },
+          member: { modelName: "orgMembership" },
+          invitation: { modelName: "orgInvitation" },
+        },
+        sendInvitationEmail: async (data) => {
+          // The accept page is N7's build; this link shape is the Better Auth
+          // convention the page will implement (invitation id in the path).
+          const inviteUrl = `${process.env.BETTER_AUTH_URL ?? ""}/accept-invitation/${data.id}`
+          const parts = renderFdeEmail({
+            kicker: "You're invited",
+            heading: `Join ${data.organization.name} on GWTH.ai`,
+            blocks: [
+              {
+                type: "p",
+                text: `${data.inviter.user.name || "A team admin"} has invited you to join ${data.organization.name} on GWTH.ai.`,
+              },
+              {
+                type: "p",
+                text: "If you weren't expecting this invitation, you can safely ignore this email.",
+              },
+            ],
+            cta: { label: "Accept invitation", href: toPublicEmailLink(inviteUrl) },
+          })
+          await sendPlunkEmail({
+            to: data.email,
+            subject: `You're invited to join ${data.organization.name} on GWTH.ai`,
+            body: parts.html,
+            text: parts.text,
+          })
+        },
+      }),
+      nextCookies(),
+    ],
   })
 }
 
