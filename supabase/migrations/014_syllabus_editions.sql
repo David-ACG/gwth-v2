@@ -88,15 +88,17 @@ SELECT 'gwth-default', NULL, c.id, 'GWTH standard syllabus', 'gwth-default', TRU
 FROM courses c WHERE c.slug = 'applied-ai-skills'
 ON CONFLICT (id) DO NOTHING;
 
+-- Scoped to the edition's OWN course: a database that also holds lessons for
+-- a second course must not leak them into the applied-ai-skills default
+-- syllabus. The join also guards the fresh-DB case (no course yet -> no
+-- edition row above -> zero rows here; the import route creates both once
+-- real lessons arrive).
 INSERT INTO edition_lessons (edition_id, lesson_id, tier, state, is_mandatory, sort_order)
-SELECT 'gwth-default', l.id,
+SELECT e.id, l.id,
        CASE WHEN l.is_optional THEN 'optional' ELSE 'core' END,
        'ratified',
        NOT l.is_optional,
        (l.month * 1000) + l."order"
 FROM lessons l
--- Guard: on a fresh DB with no applied-ai-skills course the edition row above
--- does not exist yet; skip rather than violate the FK (the import route
--- creates the rows once real lessons arrive).
-WHERE EXISTS (SELECT 1 FROM syllabus_edition WHERE id = 'gwth-default')
+JOIN syllabus_edition e ON e.id = 'gwth-default' AND e.course_id = l.course_id
 ON CONFLICT (edition_id, lesson_id) DO NOTHING;

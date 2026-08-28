@@ -143,33 +143,79 @@ async function importLesson(
       // 3b. Keep the GWTH default edition in sync (N5, design 05 §2.2.4): the
       // pipeline stays the single writer of the default syllabus, and
       // lessons.is_optional keeps meaning "optional in the GWTH default
-      // edition". Guarded so a DB without migration 014 (or without the
-      // backfilled edition row) still imports cleanly.
-      const defaultEdition = await tx
-        .select({ id: syllabusEdition.id })
-        .from(syllabusEdition)
-        .where(eq(syllabusEdition.id, "gwth-default"))
-        .limit(1)
-      if (defaultEdition.length > 0) {
-        const editionRow = {
-          editionId: "gwth-default",
-          lessonId: lesson.id,
-          tier: lesson.isOptional ? "optional" : "core",
-          state: "ratified",
-          isMandatory: !(lesson.isOptional ?? false),
-          sortOrder: lesson.month * 1000 + (lesson.order ?? 0),
+      // edition". Runs in a nested transaction (savepoint) so a database
+      // where migration 014 has not run yet still imports cleanly (only the
+      // undefined-table error is swallowed; anything else propagates).
+      try {
+        await tx.transaction(async (etx) => {
+          const lessonCourseId = lesson.courseId || "course_gwth"
+
+          // Fresh-DB bootstrap: 014's backfill inserts nothing when the
+          // applied-ai-skills course does not exist yet at migration time, so
+          // the FIRST import of that course creates the gwth-default edition
+          // (idempotent; mirrors the 014 backfill row exactly).
+          if ((lesson.courseSlug || "applied-ai-skills") === "applied-ai-skills") {
+            await etx
+              .insert(syllabusEdition)
+              .values({
+                id: "gwth-default",
+                organisationId: null,
+                courseId: lessonCourseId,
+                name: "GWTH standard syllabus",
+                slug: "gwth-default",
+                isDefault: true,
+                status: "live",
+              })
+              .onConflictDoNothing()
+          }
+
+          // Course scoping: only lessons of the edition's OWN course belong
+          // in gwth-default — a second course's lessons must never leak into
+          // the applied-ai-skills default syllabus.
+          const defaultEdition = await etx
+            .select({
+              id: syllabusEdition.id,
+              courseId: syllabusEdition.courseId,
+            })
+            .from(syllabusEdition)
+            .where(eq(syllabusEdition.id, "gwth-default"))
+            .limit(1)
+          if (
+            defaultEdition.length > 0 &&
+            defaultEdition[0]!.courseId === lessonCourseId
+          ) {
+            const editionRow = {
+              editionId: "gwth-default",
+              lessonId: lesson.id,
+              tier: lesson.isOptional ? "optional" : "core",
+              state: "ratified",
+              isMandatory: !(lesson.isOptional ?? false),
+              sortOrder: lesson.month * 1000 + (lesson.order ?? 0),
+            }
+            await etx
+              .insert(editionLessons)
+              .values(editionRow)
+              .onConflictDoUpdate({
+                target: [editionLessons.editionId, editionLessons.lessonId],
+                set: {
+                  tier: editionRow.tier,
+                  // state included so the single writer can restore a
+                  // drifted row to ratified (gwth-default is always ratified)
+                  state: editionRow.state,
+                  isMandatory: editionRow.isMandatory,
+                  sortOrder: editionRow.sortOrder,
+                },
+              })
+          }
+        })
+      } catch (editionError) {
+        // 42P01 undefined_table = migration 014 not applied yet: the lesson
+        // import itself must still succeed. Everything else is a real error.
+        if (
+          (editionError as { code?: string } | null)?.code !== "42P01"
+        ) {
+          throw editionError
         }
-        await tx
-          .insert(editionLessons)
-          .values(editionRow)
-          .onConflictDoUpdate({
-            target: [editionLessons.editionId, editionLessons.lessonId],
-            set: {
-              tier: editionRow.tier,
-              isMandatory: editionRow.isMandatory,
-              sortOrder: editionRow.sortOrder,
-            },
-          })
       }
 
       // 4. Replace quiz questions (delete-then-insert keeps re-imports clean).

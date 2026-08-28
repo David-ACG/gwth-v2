@@ -26,20 +26,35 @@ function makeInsertBuilder() {
 
 const txInsert = vi.fn(() => makeInsertBuilder())
 const txDelete = vi.fn(() => ({ where: vi.fn(() => Promise.resolve([])) }))
-// N5: the route checks for the gwth-default syllabus edition inside the
-// transaction (tx.select().from().where().limit()). Default: the edition
-// exists, so the edition_lessons sync upsert runs; tests can override
-// txSelectRows to simulate a DB without migration 014.
-let txSelectRows: Array<Record<string, unknown>> = [{ id: "gwth-default" }]
-const txSelectLimit = vi.fn(() => Promise.resolve(txSelectRows))
+// N5: the route reads the gwth-default syllabus edition inside a NESTED
+// transaction (savepoint) — tx.transaction(etx => etx.select()...limit()).
+// Default: the edition exists for the imported course, so the edition_lessons
+// sync upsert runs; tests override txSelectRows (or make the select throw)
+// to simulate a missing edition / cross-course import / pre-014 database.
+let txSelectRows: Array<Record<string, unknown>> = [
+  { id: "gwth-default", courseId: "course_gwth" },
+]
+let txSelectError: Error | null = null
+const txSelectLimit = vi.fn(() =>
+  txSelectError ? Promise.reject(txSelectError) : Promise.resolve(txSelectRows)
+)
 const txSelect = vi.fn(() => ({
   from: vi.fn(() => ({
     where: vi.fn(() => ({ limit: txSelectLimit })),
   })),
 }))
+// Self-referential tx mock: the nested tx.transaction(cb) hands cb the same
+// builder set, matching how a Drizzle savepoint exposes the same API.
+const txObject: Record<string, unknown> = {
+  insert: txInsert,
+  delete: txDelete,
+  select: txSelect,
+}
+txObject.transaction = vi.fn(
+  async (cb: (tx: unknown) => Promise<unknown>) => cb(txObject)
+)
 const transaction = vi.fn(
-  async (cb: (tx: unknown) => Promise<unknown>) =>
-    cb({ insert: txInsert, delete: txDelete, select: txSelect })
+  async (cb: (tx: unknown) => Promise<unknown>) => cb(txObject)
 )
 
 // GET path: db.select({...}).from(lessons) resolves to an array of rows.
@@ -252,13 +267,18 @@ describe("/api/admin/import-lessons", () => {
     expect(txInsert).toHaveBeenCalled()
     // quiz + resources are replaced via delete-then-insert
     expect(txDelete).toHaveBeenCalled()
-    // N5: the gwth-default edition row is kept in sync on import
-    // (course + section + lesson + edition_lessons + quiz + resources = 6)
+    // N5: the gwth-default edition row is kept in sync on import (course +
+    // section + lesson + edition ensure + edition_lessons + quiz + resources)
     expect(txSelect).toHaveBeenCalled()
-    expect(txInsert).toHaveBeenCalledTimes(6)
+    expect(txInsert).toHaveBeenCalledTimes(7)
   })
 
-  it("still imports cleanly when the gwth-default edition does not exist (N5 guard)", async () => {
+  it("bootstraps the gwth-default edition on a fresh DB, skipping the lesson upsert until it exists", async () => {
+    // QA round-1 defect 1: 014's backfill inserts nothing when the course
+    // does not exist at migration time, so the IMPORT must create the
+    // edition. The mock's select still reports it absent, so the
+    // edition_lessons upsert is skipped this pass — the ensure-insert is the
+    // bootstrap under test.
     txSelectRows = []
     try {
       const res = await POST(
@@ -270,10 +290,72 @@ describe("/api/admin/import-lessons", () => {
       expect(res.status).toBe(200)
       const data = await res.json()
       expect(data.successful).toBe(1)
-      // course + section + lesson + quiz + resources — no edition_lessons upsert
-      expect(txInsert).toHaveBeenCalledTimes(5)
+      // course + section + lesson + edition ensure + quiz + resources,
+      // WITHOUT the edition_lessons upsert
+      expect(txInsert).toHaveBeenCalledTimes(6)
     } finally {
-      txSelectRows = [{ id: "gwth-default" }]
+      txSelectRows = [{ id: "gwth-default", courseId: "course_gwth" }]
+    }
+  })
+
+  it("never adds a second course's lesson to gwth-default (cross-course scoping)", async () => {
+    // QA round-1 defect 3: the edition belongs to applied-ai-skills; a
+    // lesson imported for another course must not leak into it.
+    const res = await POST(
+      createPostRequest({
+        lessons: [
+          makeLesson({
+            id: "other_l01",
+            courseId: "course_other",
+            courseSlug: "other-course",
+          }),
+        ],
+        apiKey: "test-key-123",
+      })
+    )
+    expect(res.status).toBe(200)
+    const data = await res.json()
+    expect(data.successful).toBe(1)
+    // course + section + lesson + quiz + resources — no edition ensure (not
+    // the applied-ai-skills slug) and no edition_lessons upsert (course
+    // mismatch against the edition's course_id)
+    expect(txInsert).toHaveBeenCalledTimes(5)
+  })
+
+  it("imports cleanly on a pre-014 database (undefined_table swallowed)", async () => {
+    txSelectError = Object.assign(new Error('relation "syllabus_edition" does not exist'), {
+      code: "42P01",
+    })
+    try {
+      const res = await POST(
+        createPostRequest({
+          lessons: [makeLesson()],
+          apiKey: "test-key-123",
+        })
+      )
+      expect(res.status).toBe(200)
+      const data = await res.json()
+      expect(data.successful).toBe(1)
+    } finally {
+      txSelectError = null
+    }
+  })
+
+  it("propagates a real edition-sync failure instead of swallowing it", async () => {
+    txSelectError = Object.assign(new Error("connection reset"), {
+      code: "08006",
+    })
+    try {
+      const res = await POST(
+        createPostRequest({
+          lessons: [makeLesson()],
+          apiKey: "test-key-123",
+        })
+      )
+      const data = await res.json()
+      expect(data.failed).toBe(1)
+    } finally {
+      txSelectError = null
     }
   })
 

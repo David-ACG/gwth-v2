@@ -550,7 +550,9 @@ export const syllabusEdition = pgTable("syllabus_edition", {
 	settings: jsonb().default({}).notNull(),
 	status: text().default('draft').notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	// $onUpdate keeps updated_at honest for every Drizzle-side UPDATE (there
+	// is no DB trigger; without this it would silently equal created_at).
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull().$onUpdate(() => new Date().toISOString()),
 }, (table) => [
 	unique("syllabus_edition_slug_key").on(table.slug),
 	// Exactly one global default edition per course, one default per org (no

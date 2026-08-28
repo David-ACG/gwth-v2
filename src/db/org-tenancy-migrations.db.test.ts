@@ -135,6 +135,17 @@ describeDb("013-015 org tenancy migrations (live DB)", () => {
     `
     expect(counts!.edition_rows).toBe(counts!.lessons)
     expect(counts!.core_rows).toBe(counts!.core_lessons)
+
+    // QA round-1 defect 2: the backfill is scoped to the edition's OWN
+    // course — no lesson of another course may appear in gwth-default.
+    const [leak] = await sql`
+      SELECT COUNT(*)::int AS n
+      FROM edition_lessons el
+      JOIN syllabus_edition e ON e.id = el.edition_id
+      JOIN lessons l ON l.id = el.lesson_id
+      WHERE el.edition_id = 'gwth-default' AND l.course_id <> e.course_id
+    `
+    expect(leak!.n).toBe(0)
   })
 
   it("rejects a duplicate (organisation, user) membership", async () => {
