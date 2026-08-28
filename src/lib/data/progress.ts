@@ -51,6 +51,8 @@ import {
   emptyDynamicScore,
   emptyStreak,
 } from "@/lib/progress/derive"
+import { calculateGwthScore } from "@/lib/progress/gwth-score"
+import { getMandatoryLessonIds } from "./editions"
 import { resolveDataMode } from "./mode"
 import { getCourses } from "./courses"
 import { getDb } from "@/db"
@@ -269,7 +271,16 @@ function quizClosed(
 export async function recordQuizSubmission(
   lessonId: string,
   score: number,
-  opts: { passMark: number; maxAttempts: number }
+  opts: {
+    passMark: number
+    maxAttempts: number
+    /**
+     * The raw submitted answer set {questionId: optionIndex}, persisted to
+     * `lesson_progress.quiz_answers` as the audit trail for the server-graded
+     * outcome (N6, migration 016). Optional so no-DB callers stay simple.
+     */
+    answers?: Record<string, number>
+  }
 ): Promise<QuizSubmissionOutcome> {
   // Mode via resolveDataMode, like every other user-scoped path (N2 QA
   // round-2 defect 1): the staging mock learner (DB configured,
@@ -339,6 +350,11 @@ export async function recordQuizSubmission(
       introVideoProgress: 0,
       lastAccessedAt: nowIso,
       completedAt: null,
+      // N6 (016): this outcome was computed server-side; keep the submitted
+      // answers as the audit trail. Rows that predate 016 stay 'client'
+      // (decision 6: grandfathered silently).
+      gradedBy: "server",
+      quizAnswers: opts.answers ?? null,
     })
     .onConflictDoUpdate({
       target: [lessonProgress.userId, lessonProgress.lessonId],
@@ -351,6 +367,8 @@ export async function recordQuizSubmission(
         completedAt: completedAtSql(completeExpr),
         progress: fractionSql(completeExpr, introExpr, passedExpr),
         lastAccessedAt: nowIso,
+        gradedBy: "server",
+        quizAnswers: opts.answers ?? null,
       },
       // The quiz-closure rule, enforced ATOMICALLY (QA defect 5; round-3
       // defect 8): no write past the cap, and no write once passed. When it
@@ -708,12 +726,42 @@ export async function getStreak(): Promise<StudyStreak> {
 }
 
 /**
- * Fetches the user's GWTH Score data. Real score computation is post-beta
- * (the panel is behind ENABLE_GWTH_SCORE), so real sessions get an honest
- * zero score; the fixture score is mock/dev-path only (W14).
+ * Fetches the user's GWTH Score, computed PER LEARNER (N6):
+ *
+ *  - the denominator is the mandatory-lesson count of the user's effective
+ *    syllabus edition (`getMandatoryLessonIds`), not a global constant — an
+ *    org learner's score is honest against THEIR syllabus;
+ *  - the numerator only counts progress rows on those same mandatory
+ *    lessons, so optional/exclusive extras never inflate the score past its
+ *    ceiling.
+ *
+ * Fresh accounts still read an honest zero (`emptyDynamicScore`), fixtures
+ * stay mock/dev-path only (W14), and the panel remains behind
+ * ENABLE_GWTH_SCORE. `scoreHistory` stays empty until an activity-log table
+ * exists (post-beta follow-up).
  */
 export async function getDynamicScore(): Promise<DynamicScore> {
   const mode = await resolveDataMode()
   if (mode.kind === "mock") return { ...mockDynamicScore }
-  return emptyDynamicScore()
+  if (mode.kind === "anonymous") return emptyDynamicScore()
+
+  const { rows } = await lessonRowsForMode()
+  if (rows.length === 0) return emptyDynamicScore()
+
+  const mandatoryIds = await getMandatoryLessonIds()
+  if (mandatoryIds.size === 0) return emptyDynamicScore()
+
+  const summary = calculateGwthScore(
+    rows.filter((row) => mandatoryIds.has(row.lessonId)),
+    mandatoryIds.size
+  )
+  return {
+    overallScore: summary.overallScore,
+    maxPossibleScore: summary.maxPossibleScore,
+    percentile: summary.percentile,
+    curiosityIndex: summary.curiosityIndex,
+    consistencyScore: summary.consistencyScore,
+    improvementRate: summary.improvementRate,
+    scoreHistory: [],
+  }
 }

@@ -23,6 +23,11 @@ import { getDb } from "@/db"
 import { lessons, quizQuestions, lessonResources } from "@/db/schema"
 import { asc, eq } from "drizzle-orm"
 import { mediaUrl } from "@/lib/media/url"
+import {
+  filterLessonsByEdition,
+  getEffectiveEdition,
+  isLessonInEdition,
+} from "./editions"
 
 /**
  * True when a real database is configured. When false the layer falls back to
@@ -98,6 +103,13 @@ export async function getLesson(slug: string): Promise<Lesson | null> {
 
     const lessonRow = lessonRows[0]
     if (lessonRow) {
+      // N6 edition gate: a deep link to a lesson OUTSIDE the caller's
+      // effective edition resolves to null (the page 404s), mirroring how
+      // unknown slugs already do. Only DB rows are gated — the mock
+      // fallthrough below serves lessons not yet imported, which no edition
+      // governs.
+      const edition = await getEffectiveEdition(lessonRow.courseSlug)
+      if (!isLessonInEdition(edition, lessonRow.id)) return null
       const [questionRows, resourceRows] = await Promise.all([
         db
           .select()
@@ -219,30 +231,74 @@ export async function getLessonMonthById(
 }
 
 /**
+ * Resolves the month AND course slug of a lesson by id, for the server-side
+ * quiz-grading path (N6): the month feeds the same access gate as
+ * `getLessonMonthById`, and the course slug lets the grading action resolve
+ * the caller's effective-edition pass mark without a second lesson lookup.
+ * Same trust rules as `getLessonMonthById`: with a database configured the
+ * DB is the ONLY source and an unknown id resolves to null (the gate
+ * refuses); the mock set serves pure mock mode only.
+ */
+export async function getLessonGradingMetaById(
+  lessonId: string
+): Promise<{ month: 1 | 2 | 3; courseSlug: string } | null> {
+  if (isDbConfigured()) {
+    const db = getDb()
+    const rows = await db
+      .select({ month: lessons.month, courseSlug: lessons.courseSlug })
+      .from(lessons)
+      .where(eq(lessons.id, lessonId))
+      .limit(1)
+    const row = rows[0]
+    if (!row) return null
+    const month = row.month
+    return month === 1 || month === 2 || month === 3
+      ? { month, courseSlug: row.courseSlug }
+      : null
+  }
+
+  const mock = mockLessons.find((l) => l.id === lessonId)
+  if (!mock) return null
+  return mock.month === 1 || mock.month === 2 || mock.month === 3
+    ? { month: mock.month, courseSlug: mock.courseSlug }
+    : null
+}
+
+/**
  * Fetches all lessons for a course (summaries only, not full content).
- * Returns them in month/order sequence.
+ * Returns them in month/order sequence, filtered to the caller's effective
+ * syllabus edition (N6): lessons absent from the edition disappear, draft
+ * rows are excluded, and the edition's `sort_order` governs ordering (for
+ * the gwth-default backfill that is exactly the historic month/order).
  *
  * Reads Postgres when configured; falls back to mock data otherwise.
  */
 export async function getLessons(courseSlug: string): Promise<LessonSummary[]> {
   if (isDbConfigured()) {
     const db = getDb()
-    const rows = await db
-      .select({
-        id: lessons.id,
-        slug: lessons.slug,
-        title: lessons.title,
-        order: lessons.order,
-        duration: lessons.duration,
-        status: lessons.status,
-        isOptional: lessons.isOptional,
-        optionalTrack: lessons.optionalTrack,
-      })
-      .from(lessons)
-      .where(eq(lessons.courseSlug, courseSlug))
-      .orderBy(asc(lessons.month), asc(lessons.order))
+    const [rawRows, edition] = await Promise.all([
+      db
+        .select({
+          id: lessons.id,
+          slug: lessons.slug,
+          title: lessons.title,
+          order: lessons.order,
+          duration: lessons.duration,
+          status: lessons.status,
+          isOptional: lessons.isOptional,
+          optionalTrack: lessons.optionalTrack,
+        })
+        .from(lessons)
+        .where(eq(lessons.courseSlug, courseSlug))
+        .orderBy(asc(lessons.month), asc(lessons.order)),
+      getEffectiveEdition(courseSlug),
+    ])
+    const rows = filterLessonsByEdition(rawRows, edition)
 
-    if (rows.length > 0) {
+    // Real DB rows exist: the (possibly empty) edition-filtered set is the
+    // honest answer — never fall through to the mock catalogue and leak
+    // lessons the caller's edition excludes.
+    if (rawRows.length > 0) {
       return rows.map((row) => ({
         id: row.id,
         slug: row.slug,

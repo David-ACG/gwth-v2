@@ -200,6 +200,14 @@ interface EditorialLessonViewerProps {
    * after which the winner becomes the default and this prop goes away.
    */
   chrome?: "a" | "b" | "c"
+  /**
+   * The pass mark this lesson's Q&A is graded against — the user's effective
+   * syllabus edition's `pass_mark` (N6, decision 4: one pass mark per
+   * edition), threaded from the server page. Display-only on the client: the
+   * server grades against the same value in `submitQuizAnswersAction`.
+   * Defaults to the historic QUIZ_PASS_SCORE (67).
+   */
+  passMark?: number
 }
 
 const ADVANCING_PING_LABEL = "ADVANCING IN 2S"
@@ -245,6 +253,7 @@ export function EditorialLessonViewer({
   nextLesson = null,
   courseHref,
   chrome,
+  passMark = QUIZ_PASS_SCORE,
 }: EditorialLessonViewerProps) {
   const [surface, setSurface] = React.useState<EditorialLessonSurface>(
     initialSurface
@@ -552,6 +561,7 @@ export function EditorialLessonViewer({
     questionCount: lesson.questions?.length ?? 0,
     introVideoProgress: watchedFraction,
     bestQuizScore: lastQuizScore === null && !progress ? null : bestQuizScore,
+    passMark,
   })
 
   /**
@@ -658,7 +668,9 @@ export function EditorialLessonViewer({
   const currentPageData = lesson.pages[currentPage - 1]
   const isProject = !isVideo && !isQa && currentPageData?.kind === "project"
   const videoCleared = watchedFraction >= INTRO_VIDEO_COMPLETION_THRESHOLD
-  const quizPassed = bestQuizScore >= QUIZ_PASS_SCORE
+  // Against the effective edition's pass mark (N6) — display state only; the
+  // server holds the persisted verdict.
+  const quizPassed = bestQuizScore >= passMark
 
   return (
     <div
@@ -768,6 +780,7 @@ export function EditorialLessonViewer({
                     onFinish={handleFinishLesson}
                     canFinish={completionStatus.canComplete}
                     missingReason={completionStatus.missingReasons[0] ?? null}
+                    passMark={passMark}
                     attemptsUsed={progress?.quizAttempts ?? 0}
                     maxAttempts={MAX_QUIZ_ATTEMPTS}
                     alreadyPassed={quizPassed}
@@ -2198,6 +2211,7 @@ function RealQAPageBody({
   maxAttempts,
   alreadyPassed,
   bestScore,
+  passMark,
 }: {
   questions: EditorialLessonQuestion[]
   /** Grades the answers (question id → option index) on the server, or
@@ -2217,6 +2231,8 @@ function RealQAPageBody({
   alreadyPassed: boolean
   /** Persisted best score, for the exhausted/passed status lines. */
   bestScore: number
+  /** The effective edition's pass mark (N6), for the status line fallback. */
+  passMark: number
 }) {
   const [selected, setSelected] = React.useState<Record<number, number>>({})
   const [submittedAnswers, setSubmittedAnswers] = React.useState<Record<
@@ -2345,7 +2361,7 @@ function RealQAPageBody({
                     // submitted any more instead of a bare score with the
                     // buttons silently gone (QA round-3 defect 11).
                     `SCORE ${score}% · ALL ${maxAttempts} ATTEMPTS USED · BEST ${Math.max(bestScore, score ?? 0)}%`
-                  : `SCORE ${score}% · ${grade?.passMark ?? QUIZ_PASS_SCORE}% NEEDED`
+                  : `SCORE ${score}% · ${grade?.passMark ?? passMark}% NEEDED`
               : grading
                 ? "CHECKING YOUR ANSWERS"
                 : alreadyPassed

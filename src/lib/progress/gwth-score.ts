@@ -25,9 +25,19 @@ export function getTrajectoryLabel(score: number): string {
   return "Getting started"
 }
 
+/**
+ * Computes the GWTH Score summary from a learner's progress rows.
+ *
+ * `totalMandatoryLessons` is REQUIRED (N6): the denominator is per learner,
+ * derived from their effective syllabus edition via
+ * `getMandatoryLessonCount()` in `@/lib/data/editions` — never a global
+ * constant (the old `= 64` default is deliberately gone). Callers should
+ * also pre-filter `lessonProgress` to the same mandatory lesson set so
+ * optional/exclusive extras never inflate the numerator past the ceiling.
+ */
 export function calculateGwthScore(
   lessonProgress: LessonProgress[],
-  totalMandatoryLessons = 64
+  totalMandatoryLessons: number
 ): GwthScoreSummary {
   const completedLessons = lessonProgress.filter((lesson) => lesson.isCompleted)
   const completedScore = completedLessons.length * POINTS_PER_LESSON
@@ -41,10 +51,15 @@ export function calculateGwthScore(
   const quizMultiplier = quizAverage > 0 ? Math.max(0.8, quizAverage / 100) : 1
   const overallScore = Math.round(completedScore * quizMultiplier)
   const maxPossibleScore = Math.round(totalMandatoryLessons * POINTS_PER_LESSON)
-  const percentile = Math.min(
-    99,
-    Math.max(1, Math.round((overallScore / maxPossibleScore) * 100))
-  )
+  // Guard the zero-denominator case (an edition with no mandatory lessons):
+  // an honest floor, never an Infinity-driven 99.
+  const percentile =
+    maxPossibleScore <= 0
+      ? 1
+      : Math.min(
+          99,
+          Math.max(1, Math.round((overallScore / maxPossibleScore) * 100))
+        )
 
   return {
     overallScore,

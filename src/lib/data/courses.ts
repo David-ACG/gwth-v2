@@ -13,6 +13,11 @@ import { mockCourses } from "./mock-data"
 import { getDb } from "@/db"
 import { courses, sections, lessons } from "@/db/schema"
 import { asc, eq, inArray } from "drizzle-orm"
+import {
+  getEffectiveEdition,
+  isLessonInEdition,
+  type EffectiveEdition,
+} from "./editions"
 
 /**
  * True when a real database is configured. When false the layer falls back to
@@ -54,12 +59,21 @@ const lessonSummaryColumns = {
 /**
  * Assembles a Course object from Drizzle rows.
  * Joins course → sections → lessons into the nested Course structure.
+ *
+ * N6: `edition` filters the lesson rows to the caller's effective syllabus
+ * (absent lessons disappear, draft rows are excluded), and sections left
+ * empty by that curation are dropped rather than rendered as bare headers.
+ * On the raw fallback (edition.lessons === null) nothing changes.
  */
 function assembleCourse(
   courseRow: CourseRow,
   sectionRows: SectionRow[],
-  lessonRows: LessonSummaryRow[]
+  allLessonRows: LessonSummaryRow[],
+  edition: EffectiveEdition
 ): Course {
+  const lessonRows = edition.lessons
+    ? allLessonRows.filter((row) => isLessonInEdition(edition, row.id))
+    : allLessonRows
   const lessonsBySection = new Map<string, LessonSummary[]>()
   for (const row of lessonRows) {
     if (!lessonsBySection.has(row.sectionId)) {
@@ -77,17 +91,20 @@ function assembleCourse(
     })
   }
 
-  const courseSections: CourseSection[] = sectionRows.map((s) => ({
-    id: s.id,
-    title: s.title,
-    order: s.order,
-    month: s.month as 1 | 2 | 3,
-    isOptional: s.isOptional || false,
-    optionalTrack: s.optionalTrack || undefined,
-    lessons: (lessonsBySection.get(s.id) || []).sort(
-      (a, b) => a.order - b.order
-    ),
-  }))
+  const courseSections: CourseSection[] = sectionRows
+    .map((s) => ({
+      id: s.id,
+      title: s.title,
+      order: s.order,
+      month: s.month as 1 | 2 | 3,
+      isOptional: s.isOptional || false,
+      optionalTrack: s.optionalTrack || undefined,
+      lessons: (lessonsBySection.get(s.id) || []).sort(
+        (a, b) => a.order - b.order
+      ),
+    }))
+    // Drop sections the edition curated down to nothing (edition mode only).
+    .filter((s) => !edition.lessons || s.lessons.length > 0)
 
   return {
     id: courseRow.id,
@@ -130,12 +147,18 @@ export async function getCourses(): Promise<Course[]> {
           .orderBy(asc(lessons.order)),
       ])
 
+      // N6: resolve the caller's effective edition per course (cache()d per
+      // request, so repeated slugs cost one lookup).
+      const editions = await Promise.all(
+        courseRows.map((courseRow) => getEffectiveEdition(courseRow.slug))
+      )
       return courseRows
-        .map((courseRow) =>
+        .map((courseRow, index) =>
           assembleCourse(
             courseRow,
             sectionRows.filter((s) => s.courseId === courseRow.id),
-            lessonRows.filter((l) => l.courseId === courseRow.id)
+            lessonRows.filter((l) => l.courseId === courseRow.id),
+            editions[index]!
           )
         )
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -162,7 +185,7 @@ export async function getCourse(slug: string): Promise<Course | null> {
 
     const courseRow = courseRows[0]
     if (courseRow) {
-      const [sectionRows, lessonRows] = await Promise.all([
+      const [sectionRows, lessonRows, edition] = await Promise.all([
         db
           .select()
           .from(sections)
@@ -173,9 +196,10 @@ export async function getCourse(slug: string): Promise<Course | null> {
           .from(lessons)
           .where(eq(lessons.courseId, courseRow.id))
           .orderBy(asc(lessons.month), asc(lessons.order)),
+        getEffectiveEdition(courseRow.slug),
       ])
 
-      return assembleCourse(courseRow, sectionRows, lessonRows)
+      return assembleCourse(courseRow, sectionRows, lessonRows, edition)
     }
     // Not found in the DB — fall through to the mock set.
   }

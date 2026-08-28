@@ -318,7 +318,7 @@ export interface QuizGradeResult {
   score: number
   /** Whether `score` clears the pass mark */
   passed: boolean
-  /** The pass mark applied (QUIZ_PASS_SCORE) */
+  /** The pass mark applied (the effective edition's pass_mark, N6) */
   passMark: number
   /** Per-question verdicts with the post-submission answer reveal */
   perQuestion: QuizQuestionGrade[]
@@ -341,7 +341,7 @@ export interface QuizAttemptLimitResult {
   maxAttempts: number
   /** Best score already on record, for the UI to show */
   bestQuizScore: number
-  /** The pass mark applied (QUIZ_PASS_SCORE) */
+  /** The pass mark applied (the effective edition's pass_mark, N6) */
   passMark: number
   /** Human-readable refusal the UI can render directly */
   message: string

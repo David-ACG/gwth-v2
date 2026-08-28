@@ -1,6 +1,14 @@
 import type { LessonProgress } from "@/lib/types"
 
 export const INTRO_VIDEO_COMPLETION_THRESHOLD = 0.8
+
+/**
+ * The historic default pass mark. Since N6 the REAL pass mark is per
+ * syllabus edition (`syllabus_edition.pass_mark`, decision 4 2026-08-28) and
+ * is threaded by callers via the `passMark` parameters below; this constant
+ * is the fallback that keeps the pre-edition behaviour (and the gwth-default
+ * edition's seeded value) at 67.
+ */
 export const QUIZ_PASS_SCORE = 67
 
 export type LessonCompletionInput = {
@@ -8,6 +16,8 @@ export type LessonCompletionInput = {
   questionCount: number
   introVideoProgress?: number | null
   bestQuizScore?: number | null
+  /** Edition pass mark; defaults to QUIZ_PASS_SCORE when not threaded */
+  passMark?: number
 }
 
 export type LessonCompletionStatus = {
@@ -17,8 +27,16 @@ export type LessonCompletionStatus = {
   missingReasons: string[]
 }
 
-export function hasPassedQuiz(score: number | null | undefined): boolean {
-  return typeof score === "number" && score >= QUIZ_PASS_SCORE
+/**
+ * Whether a score clears the pass mark. `passMark` is the effective
+ * edition's value where the caller has it (N6); the default keeps every
+ * legacy call site on the historic 67.
+ */
+export function hasPassedQuiz(
+  score: number | null | undefined,
+  passMark: number = QUIZ_PASS_SCORE
+): boolean {
+  return typeof score === "number" && score >= passMark
 }
 
 export function getLessonCompletionStatus(
@@ -28,7 +46,8 @@ export function getLessonCompletionStatus(
     !input.hasIntroVideo ||
     (input.introVideoProgress ?? 0) >= INTRO_VIDEO_COMPLETION_THRESHOLD
   const quizPassed =
-    input.questionCount === 0 || hasPassedQuiz(input.bestQuizScore)
+    input.questionCount === 0 ||
+    hasPassedQuiz(input.bestQuizScore, input.passMark)
 
   const missingReasons: string[] = []
   if (!videoComplete) missingReasons.push("Watch at least 80% of the intro video")

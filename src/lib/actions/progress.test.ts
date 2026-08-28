@@ -28,7 +28,11 @@ const dataLayer = vi.hoisted(() => ({
 
 const lessonsLayer = vi.hoisted(() => ({
   getQuizQuestionsByLessonId: vi.fn(),
-  getLessonMonthById: vi.fn(),
+  getLessonGradingMetaById: vi.fn(),
+}))
+
+const editionsLayer = vi.hoisted(() => ({
+  getEffectivePassMark: vi.fn(),
 }))
 
 const authLayer = vi.hoisted(() => ({
@@ -48,7 +52,14 @@ vi.mock("@/lib/data/progress", () => ({
 
 vi.mock("@/lib/data/lessons", () => ({
   getQuizQuestionsByLessonId: lessonsLayer.getQuizQuestionsByLessonId,
-  getLessonMonthById: lessonsLayer.getLessonMonthById,
+  getLessonGradingMetaById: lessonsLayer.getLessonGradingMetaById,
+}))
+
+// N6: the pass mark now resolves from the caller's effective syllabus
+// edition; the default mock keeps the historic 67 so every pre-edition
+// property stays under test unchanged.
+vi.mock("@/lib/data/editions", () => ({
+  getEffectivePassMark: editionsLayer.getEffectivePassMark,
 }))
 
 vi.mock("@/lib/auth", () => ({
@@ -133,8 +144,12 @@ beforeEach(() => {
 
   authLayer.getCurrentUser.mockResolvedValue(STUDENT)
   accessLayer.isSessionlessMockRequest.mockResolvedValue(false)
-  lessonsLayer.getLessonMonthById.mockResolvedValue(1)
+  lessonsLayer.getLessonGradingMetaById.mockResolvedValue({
+    month: 1,
+    courseSlug: "applied-ai-skills",
+  })
   lessonsLayer.getQuizQuestionsByLessonId.mockResolvedValue(QUESTIONS)
+  editionsLayer.getEffectivePassMark.mockResolvedValue(QUIZ_PASS_SCORE)
 
   dataLayer.updateLessonProgress.mockImplementation(
     async (lessonId: string) => ({ lessonId })
@@ -239,13 +254,15 @@ describe("submitQuizAnswersAction authorization (QA defect 4; round-2 defect 1)"
     expect(result.score).toBe(100)
     expect(accessLayer.isSessionlessMockRequest).toHaveBeenCalledTimes(1)
     // The month gate still ran for the mock learner (round-3 defect 9).
-    expect(lessonsLayer.getLessonMonthById).toHaveBeenCalledWith(LESSON_ID)
+    expect(lessonsLayer.getLessonGradingMetaById).toHaveBeenCalledWith(
+      LESSON_ID
+    )
   })
 
   it("still refuses the mock learner an unknown or inaccessible lesson (round-3 defect 9)", async () => {
     authLayer.getCurrentUser.mockResolvedValue(null)
     accessLayer.isSessionlessMockRequest.mockResolvedValue(true)
-    lessonsLayer.getLessonMonthById.mockResolvedValue(null)
+    lessonsLayer.getLessonGradingMetaById.mockResolvedValue(null)
     await expect(
       submitQuizAnswersAction("no_such_lesson", { q1: 1 })
     ).rejects.toThrow(/not part of your current access/i)
@@ -269,7 +286,10 @@ describe("submitQuizAnswersAction authorization (QA defect 4; round-2 defect 1)"
       ...STUDENT,
       subscriptionMonth: 1,
     })
-    lessonsLayer.getLessonMonthById.mockResolvedValue(3)
+    lessonsLayer.getLessonGradingMetaById.mockResolvedValue({
+      month: 3,
+      courseSlug: "applied-ai-skills",
+    })
     await expect(
       submitQuizAnswersAction(LESSON_ID, { q1: 1 })
     ).rejects.toThrow(/not part of your current access/i)
@@ -278,7 +298,7 @@ describe("submitQuizAnswersAction authorization (QA defect 4; round-2 defect 1)"
   })
 
   it("refuses an unknown lesson id before grading", async () => {
-    lessonsLayer.getLessonMonthById.mockResolvedValue(null)
+    lessonsLayer.getLessonGradingMetaById.mockResolvedValue(null)
     await expect(submitQuizAnswersAction("nope", { q1: 1 })).rejects.toThrow()
     expect(lessonsLayer.getQuizQuestionsByLessonId).not.toHaveBeenCalled()
   })
@@ -391,7 +411,12 @@ describe("submitQuizAnswersAction server grading", () => {
     expect(dataLayer.recordQuizSubmission).toHaveBeenCalledWith(
       LESSON_ID,
       50,
-      { passMark: QUIZ_PASS_SCORE, maxAttempts: MAX_QUIZ_ATTEMPTS }
+      {
+        passMark: QUIZ_PASS_SCORE,
+        maxAttempts: MAX_QUIZ_ATTEMPTS,
+        // N6 (016): the raw submission rides along as the audit trail.
+        answers: { q1: 1, q2: 0 },
+      }
     )
     expect(dataLayer.updateLessonProgress).not.toHaveBeenCalled()
   })
@@ -479,5 +504,63 @@ describe("answer-reveal policy (QA round-2 defect 2)", () => {
       expect(grade.correctOptionIndex).toBe(1)
       expect(grade.explanation).toBeTruthy()
     }
+  })
+})
+
+describe("edition pass mark threading (N6)", () => {
+  it("grades against the effective edition's pass mark, not the constant", async () => {
+    // A stricter institution edition: 100 to pass. The same 50% run that
+    // fails at 67 fails here too, but a 100% run must clear it.
+    editionsLayer.getEffectivePassMark.mockResolvedValue(100)
+
+    const half = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
+    expect(half.score).toBe(50)
+    expect(half.passed).toBe(false)
+    expect(half.passMark).toBe(100)
+
+    const perfect = asGrade(
+      await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
+    )
+    expect(perfect.passed).toBe(true)
+    expect(perfect.passMark).toBe(100)
+
+    // The persistence layer received the edition's mark, so quiz_passed and
+    // completion derive from the same number the learner was told.
+    expect(dataLayer.recordQuizSubmission).toHaveBeenLastCalledWith(
+      LESSON_ID,
+      100,
+      expect.objectContaining({ passMark: 100 })
+    )
+  })
+
+  it("a laxer edition pass mark admits a score the default would fail", async () => {
+    editionsLayer.getEffectivePassMark.mockResolvedValue(50)
+    const result = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
+    expect(result.score).toBe(50)
+    expect(result.passed).toBe(true)
+    expect(result.passMark).toBe(50)
+  })
+
+  it("never resolves the edition for an unauthorized caller", async () => {
+    authLayer.getCurrentUser.mockResolvedValue(null)
+    accessLayer.isSessionlessMockRequest.mockResolvedValue(false)
+    await expect(
+      submitQuizAnswersAction(LESSON_ID, { q1: 1 })
+    ).rejects.toThrow(/sign in/i)
+    expect(editionsLayer.getEffectivePassMark).not.toHaveBeenCalled()
+  })
+
+  it("carries the edition pass mark on the attempt-limit refusal", async () => {
+    editionsLayer.getEffectivePassMark.mockResolvedValue(80)
+    dataLayer.getLessonProgress.mockResolvedValue({
+      lessonId: LESSON_ID,
+      quizAttempts: MAX_QUIZ_ATTEMPTS,
+      bestQuizScore: 70,
+    })
+    const result = await submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
+    expect(result).toMatchObject({
+      attemptLimitReached: true,
+      passMark: 80,
+    })
   })
 })

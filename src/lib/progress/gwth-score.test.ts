@@ -27,6 +27,28 @@ describe("GWTH Score", () => {
       bestQuizScore: 100,
     }))
 
-    expect(calculateGwthScore(lessons).overallScore).toBe(6)
+    // N6: the denominator is REQUIRED and per learner (the effective
+    // edition's mandatory-lesson count) — 64 was the old global default.
+    expect(calculateGwthScore(lessons, 64).overallScore).toBe(6)
+  })
+
+  it("scales the ceiling to the learner's own mandatory-lesson count", () => {
+    const lessons = [0, 1, 2, 3].map((index) => ({
+      ...createEmptyLessonProgress(`lesson_${index}`),
+      isCompleted: true,
+      bestQuizScore: 100,
+    }))
+
+    // Same work, smaller curated syllabus: same points, higher percentile.
+    const curated = calculateGwthScore(lessons, 8)
+    const full = calculateGwthScore(lessons, 64)
+    expect(curated.overallScore).toBe(full.overallScore)
+    expect(curated.maxPossibleScore).toBeLessThan(full.maxPossibleScore)
+    expect(curated.percentile).toBeGreaterThan(full.percentile)
+  })
+
+  it("floors the percentile honestly when an edition has no mandatory lessons", () => {
+    expect(calculateGwthScore([], 0).percentile).toBe(1)
+    expect(calculateGwthScore([], 0).maxPossibleScore).toBe(0)
   })
 })

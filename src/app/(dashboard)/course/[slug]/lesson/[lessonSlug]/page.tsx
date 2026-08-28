@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getLesson, toPublicQuizQuestions } from "@/lib/data/lessons"
 import { getCourse } from "@/lib/data/courses"
+import { getEffectivePassMark } from "@/lib/data/editions"
 import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
 import { getAllCourseProgress, getLessonProgress } from "@/lib/data/progress"
 import { cn } from "@/lib/utils"
@@ -116,11 +117,15 @@ export default async function LessonPage({
 
   const { slug, lessonSlug } = await params
   const sp = await searchParams
-  const [lesson, course, allProgress, user] = await Promise.all([
+  // N6: getLesson also 404s lessons OUTSIDE the caller's effective syllabus
+  // edition (a deep link cannot bypass the catalogue filter), and the
+  // edition's pass mark is threaded into the viewer for its display state.
+  const [lesson, course, allProgress, user, passMark] = await Promise.all([
     getLesson(lessonSlug),
     getCourse(slug),
     getAllCourseProgress(),
     getDashboardUser(),
+    getEffectivePassMark(slug),
   ])
   if (!lesson || !course) notFound()
 
@@ -218,6 +223,7 @@ export default async function LessonPage({
         nextLesson={findNextLesson(course, lessonSlug)}
         courseHref={`/course/${course.slug}`}
         chrome={chrome}
+        passMark={passMark}
       />
     </div>
   )

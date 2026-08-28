@@ -31,10 +31,7 @@
  *    record - passed, or final attempt spent (round-2 defect 2) - so
  *    read-key-then-resubmit no longer yields a forged pass.
  */
-import {
-  QUIZ_PASS_SCORE,
-  hasPassedQuiz,
-} from "@/lib/progress/completion"
+import { hasPassedQuiz } from "@/lib/progress/completion"
 import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
 import {
   getLessonProgress,
@@ -43,9 +40,10 @@ import {
   updateLessonProgress as updateLessonProgressData,
 } from "@/lib/data/progress"
 import {
-  getLessonMonthById,
+  getLessonGradingMetaById,
   getQuizQuestionsByLessonId,
 } from "@/lib/data/lessons"
+import { getEffectivePassMark } from "@/lib/data/editions"
 import { canUserAccessMonth, getCurrentUser, getMockUser } from "@/lib/auth"
 import { isAdminEmail } from "@/lib/admin"
 import { isSessionlessMockRequest } from "@/lib/content-access"
@@ -120,8 +118,13 @@ export async function updateLessonProgressAction(
  * no session cookie at all in a mock env is the mock learner; a PRESENTED
  * cookie - forged or real - must validate as a real session, so this can
  * never fail open the way QA round-2 defect 1 describes.
+ *
+ * Returns the lesson's course slug so the caller can resolve the effective
+ * edition's pass mark (N6) without a second lesson lookup.
  */
-async function assertQuizSubmissionAllowed(lessonId: string): Promise<void> {
+async function assertQuizSubmissionAllowed(
+  lessonId: string
+): Promise<{ courseSlug: string }> {
   let user = await getCurrentUser()
 
   if (!user) {
@@ -149,15 +152,20 @@ async function assertQuizSubmissionAllowed(lessonId: string): Promise<void> {
 
   // Month gate: the caller's subscription must cover this lesson's month,
   // and the lesson must actually exist where grading will read it.
-  const month = await getLessonMonthById(lessonId)
-  if (month === null || !canUserAccessMonth(user, month)) {
+  const meta = await getLessonGradingMetaById(lessonId)
+  if (meta === null || !canUserAccessMonth(user, meta.month)) {
     throw new Error("This lesson is not part of your current access.")
   }
+  return { courseSlug: meta.courseSlug }
 }
 
-/** Builds the structured refusal for a capped submission (QA defect 5). */
+/**
+ * Builds the structured refusal for a capped submission (QA defect 5).
+ * `passMark` is the caller's effective-edition pass mark (N6).
+ */
 function attemptLimitResult(
-  progress: LessonProgress | null
+  progress: LessonProgress | null,
+  passMark: number
 ): QuizAttemptLimitResult {
   const bestQuizScore = progress?.bestQuizScore ?? 0
   return {
@@ -165,8 +173,8 @@ function attemptLimitResult(
     attemptsUsed: progress?.quizAttempts ?? MAX_QUIZ_ATTEMPTS,
     maxAttempts: MAX_QUIZ_ATTEMPTS,
     bestQuizScore,
-    passMark: QUIZ_PASS_SCORE,
-    message: hasPassedQuiz(bestQuizScore)
+    passMark,
+    message: hasPassedQuiz(bestQuizScore, passMark)
       ? `This Q&A is already passed with ${bestQuizScore}%. No further attempts are graded.`
       : `All ${MAX_QUIZ_ATTEMPTS} attempts are used. Your best score stays at ${bestQuizScore}%.`,
   }
@@ -202,7 +210,12 @@ export async function submitQuizAnswersAction(
   lessonId: string,
   answers: Record<string, number>
 ): Promise<QuizSubmitResult> {
-  await assertQuizSubmissionAllowed(lessonId)
+  const { courseSlug } = await assertQuizSubmissionAllowed(lessonId)
+
+  // N6: the pass mark comes from the caller's effective syllabus edition
+  // (decision 4: one pass mark per edition; 67 on the fallback), resolved
+  // AFTER authorization so an unauthorized caller learns nothing.
+  const passMark = await getEffectivePassMark(courseSlug)
 
   // Quiz closure, from the PERSISTED row (QA defect 5; round-3 defect 8) -
   // before grading, so a refused caller never triggers a key read. The quiz
@@ -215,7 +228,7 @@ export async function submitQuizAnswersAction(
     (existing.quizPassed === true ||
       (existing.quizAttempts ?? 0) >= MAX_QUIZ_ATTEMPTS)
   ) {
-    return attemptLimitResult(existing)
+    return attemptLimitResult(existing, passMark)
   }
 
   const questions = await getQuizQuestionsByLessonId(lessonId)
@@ -241,18 +254,20 @@ export async function submitQuizAnswersAction(
 
   const correctCount = graded.filter((p) => p.correct).length
   const score = Math.round((correctCount / questions.length) * 100)
-  const passed = score >= QUIZ_PASS_SCORE
+  const passed = score >= passMark
 
   // One atomic write: increment, GREATEST, cap and completion all in SQL
-  // (QA defect 6).
+  // (QA defect 6). Stamps graded_by='server' and keeps the submitted
+  // answers as the audit trail (N6, migration 016).
   const recorded = await recordQuizSubmission(lessonId, score, {
-    passMark: QUIZ_PASS_SCORE,
+    passMark,
     maxAttempts: MAX_QUIZ_ATTEMPTS,
+    answers,
   })
   if (recorded.outcome === "attempt-limit") {
     // Lost the race against a concurrent capped submission: nothing was
     // written, and the reveal is deliberately discarded.
-    return attemptLimitResult(recorded.progress)
+    return attemptLimitResult(recorded.progress, passMark)
   }
 
   // Reveal policy (QA round-2 defect 2; round-3 defect 8): the key for a
@@ -272,7 +287,7 @@ export async function submitQuizAnswersAction(
   return {
     score,
     passed,
-    passMark: QUIZ_PASS_SCORE,
+    passMark,
     perQuestion,
     progress: recorded.progress,
   }
