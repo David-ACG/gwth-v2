@@ -34,10 +34,11 @@ const txDelete = vi.fn(() => ({ where: vi.fn(() => Promise.resolve([])) }))
 let txSelectRows: Array<Record<string, unknown>> = [
   { id: "gwth-default", courseId: "course_gwth" },
 ]
-let txSelectError: Error | null = null
-const txSelectLimit = vi.fn(() =>
-  txSelectError ? Promise.reject(txSelectError) : Promise.resolve(txSelectRows)
-)
+// When set, the NESTED transaction rejects with this error — matching how a
+// failed statement inside a Drizzle savepoint surfaces to the caller (the
+// awaited tx.transaction() rejects with the wrapped DrizzleQueryError).
+let nestedTxError: Error | null = null
+const txSelectLimit = vi.fn(() => Promise.resolve(txSelectRows))
 const txSelect = vi.fn(() => ({
   from: vi.fn(() => ({
     where: vi.fn(() => ({ limit: txSelectLimit })),
@@ -51,11 +52,28 @@ const txObject: Record<string, unknown> = {
   select: txSelect,
 }
 txObject.transaction = vi.fn(
-  async (cb: (tx: unknown) => Promise<unknown>) => cb(txObject)
+  async (cb: (tx: unknown) => Promise<unknown>) => {
+    if (nestedTxError) throw nestedTxError
+    return cb(txObject)
+  }
 )
 const transaction = vi.fn(
   async (cb: (tx: unknown) => Promise<unknown>) => cb(txObject)
 )
+
+/**
+ * Builds the error shape Drizzle >=0.44 actually throws: a wrapper whose
+ * top-level code is undefined and whose `.cause` carries the postgres.js
+ * error with the real code (QA round-2 defect 1 was checking only the top).
+ */
+function makeDrizzleWrappedError(pgCode: string, message: string): Error {
+  const wrapped = new Error(`Failed query: ${message}`)
+  ;(wrapped as Error & { cause?: unknown }).cause = Object.assign(
+    new Error(message),
+    { code: pgCode }
+  )
+  return wrapped
+}
 
 // GET path: db.select({...}).from(lessons) resolves to an array of rows.
 const selectFrom = vi.fn(() => Promise.resolve([{ id: "m1_l01" }]))
@@ -322,10 +340,12 @@ describe("/api/admin/import-lessons", () => {
     expect(txInsert).toHaveBeenCalledTimes(5)
   })
 
-  it("imports cleanly on a pre-014 database (undefined_table swallowed)", async () => {
-    txSelectError = Object.assign(new Error('relation "syllabus_edition" does not exist'), {
-      code: "42P01",
-    })
+  it("imports cleanly on a pre-014 database (wrapped undefined_table swallowed)", async () => {
+    // The realistic shape: DrizzleQueryError wrapper, pg code on .cause only.
+    nestedTxError = makeDrizzleWrappedError(
+      "42P01",
+      'relation "syllabus_edition" does not exist'
+    )
     try {
       const res = await POST(
         createPostRequest({
@@ -337,14 +357,12 @@ describe("/api/admin/import-lessons", () => {
       const data = await res.json()
       expect(data.successful).toBe(1)
     } finally {
-      txSelectError = null
+      nestedTxError = null
     }
   })
 
   it("propagates a real edition-sync failure instead of swallowing it", async () => {
-    txSelectError = Object.assign(new Error("connection reset"), {
-      code: "08006",
-    })
+    nestedTxError = makeDrizzleWrappedError("08006", "connection reset")
     try {
       const res = await POST(
         createPostRequest({
@@ -355,8 +373,29 @@ describe("/api/admin/import-lessons", () => {
       const data = await res.json()
       expect(data.failed).toBe(1)
     } finally {
-      txSelectError = null
+      nestedTxError = null
     }
+  })
+
+  it("removes a stale gwth-default mapping when a lesson moves to another course", async () => {
+    // QA round-2 defect 2: same lesson id re-imported under a different
+    // course must not keep its old row in the default syllabus. The edition
+    // exists (courseId course_gwth) and the incoming lesson now belongs to
+    // course_other, so the sync deletes the stale edition_lessons row:
+    // quiz + resources + stale edition row = 3 deletes.
+    const res = await POST(
+      createPostRequest({
+        lessons: [
+          makeLesson({
+            courseId: "course_other",
+            courseSlug: "other-course",
+          }),
+        ],
+        apiKey: "test-key-123",
+      })
+    )
+    expect(res.status).toBe(200)
+    expect(txDelete).toHaveBeenCalledTimes(3)
   })
 
   it("drops resources with an unsupported type", async () => {

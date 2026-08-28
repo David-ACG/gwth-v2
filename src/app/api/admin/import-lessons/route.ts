@@ -23,7 +23,7 @@ import {
   syllabusEdition,
   editionLessons,
 } from "@/db/schema"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import type {
   PipelineLessonPayload,
   PipelineImportResponse,
@@ -61,6 +61,22 @@ function validateLesson(lesson: PipelineLessonPayload): string | null {
  * lesson is upserted on its primary key, and quiz/resources are fully
  * replaced (delete-then-insert) so re-imports stay idempotent.
  */
+/**
+ * Extracts the Postgres error code from an error, walking the `cause` chain:
+ * Drizzle >=0.44 wraps driver errors in DrizzleQueryError with the postgres.js
+ * error on `.cause`, so the top-level `.code` alone is not enough. Bounded
+ * depth guards against pathological cause cycles.
+ */
+function extractPgErrorCode(error: unknown): string | undefined {
+  let current: unknown = error
+  for (let depth = 0; depth < 5 && current; depth++) {
+    const candidate = current as { code?: unknown; cause?: unknown }
+    if (typeof candidate.code === "string") return candidate.code
+    current = candidate.cause
+  }
+  return undefined
+}
+
 async function importLesson(
   db: ReturnType<typeof getDb>,
   lesson: PipelineLessonPayload
@@ -153,8 +169,14 @@ async function importLesson(
           // Fresh-DB bootstrap: 014's backfill inserts nothing when the
           // applied-ai-skills course does not exist yet at migration time, so
           // the FIRST import of that course creates the gwth-default edition
-          // (idempotent; mirrors the 014 backfill row exactly).
-          if ((lesson.courseSlug || "applied-ai-skills") === "applied-ai-skills") {
+          // (idempotent; mirrors the 014 backfill row exactly). An explicit
+          // slug wins; an ABSENT slug counts as the default course only when
+          // the courseId is also the default — a foreign courseId without a
+          // slug must never bind gwth-default to the wrong course forever.
+          const isDefaultCourse = lesson.courseSlug
+            ? lesson.courseSlug === "applied-ai-skills"
+            : lessonCourseId === "course_gwth"
+          if (isDefaultCourse) {
             await etx
               .insert(syllabusEdition)
               .values({
@@ -180,6 +202,19 @@ async function importLesson(
             .from(syllabusEdition)
             .where(eq(syllabusEdition.id, "gwth-default"))
             .limit(1)
+          if (defaultEdition.length > 0 && defaultEdition[0]!.courseId !== lessonCourseId) {
+            // A lesson that moved to another course must not keep its old
+            // gwth-default mapping — remove any stale row so the other
+            // course's content never lingers in the default syllabus.
+            await etx
+              .delete(editionLessons)
+              .where(
+                and(
+                  eq(editionLessons.editionId, "gwth-default"),
+                  eq(editionLessons.lessonId, lesson.id)
+                )
+              )
+          }
           if (
             defaultEdition.length > 0 &&
             defaultEdition[0]!.courseId === lessonCourseId
@@ -211,9 +246,9 @@ async function importLesson(
       } catch (editionError) {
         // 42P01 undefined_table = migration 014 not applied yet: the lesson
         // import itself must still succeed. Everything else is a real error.
-        if (
-          (editionError as { code?: string } | null)?.code !== "42P01"
-        ) {
+        // Drizzle >=0.44 wraps driver errors in DrizzleQueryError with the
+        // Postgres error on .cause, so walk the cause chain for the code.
+        if (extractPgErrorCode(editionError) !== "42P01") {
           throw editionError
         }
       }

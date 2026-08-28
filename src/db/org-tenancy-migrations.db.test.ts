@@ -106,8 +106,10 @@ describeDb("013-015 org tenancy migrations (live DB)", () => {
     expect(edition!.is_default).toBe(true)
     expect(edition!.pass_mark).toBe(67)
 
-    // Row-by-row: every lesson appears once, tier and is_mandatory derive
-    // from is_optional, and there are no edition rows without a lesson.
+    // Row-by-row over the EDITION'S OWN course (a second course's lessons
+    // are deliberately outside gwth-default, so they must not be counted as
+    // missing): every course lesson appears once, tier and is_mandatory
+    // derive from is_optional, no edition rows drift.
     const [mismatch] = await sql`
       SELECT
         COUNT(*) FILTER (WHERE el.lesson_id IS NULL)::int AS missing,
@@ -119,6 +121,7 @@ describeDb("013-015 org tenancy migrations (live DB)", () => {
           )
         )::int AS wrong
       FROM lessons l
+      JOIN syllabus_edition e ON e.id = 'gwth-default' AND e.course_id = l.course_id
       LEFT JOIN edition_lessons el
         ON el.edition_id = 'gwth-default' AND el.lesson_id = l.id
     `
@@ -127,9 +130,14 @@ describeDb("013-015 org tenancy migrations (live DB)", () => {
 
     const [counts] = await sql`
       SELECT
-        (SELECT COUNT(*)::int FROM lessons) AS lessons,
+        (SELECT COUNT(*)::int FROM lessons l
+          JOIN syllabus_edition e ON e.id = 'gwth-default' AND e.course_id = l.course_id
+        ) AS lessons,
         (SELECT COUNT(*)::int FROM edition_lessons WHERE edition_id = 'gwth-default') AS edition_rows,
-        (SELECT COUNT(*)::int FROM lessons WHERE NOT is_optional) AS core_lessons,
+        (SELECT COUNT(*)::int FROM lessons l
+          JOIN syllabus_edition e ON e.id = 'gwth-default' AND e.course_id = l.course_id
+          WHERE NOT l.is_optional
+        ) AS core_lessons,
         (SELECT COUNT(*)::int FROM edition_lessons
           WHERE edition_id = 'gwth-default' AND tier = 'core') AS core_rows
     `
@@ -162,7 +170,13 @@ describeDb("013-015 org tenancy migrations (live DB)", () => {
   })
 
   it("rejects a learner joining a SECOND org (decision 1) but lets an admin span orgs", async () => {
-    // USER_L is already a learner in ORG_A from the previous test.
+    // Self-contained: ensure the ORG_A learner row exists regardless of
+    // which other tests ran (idempotent under the composite unique).
+    await sql`
+      INSERT INTO org_membership (id, organisation_id, user_id, role)
+      VALUES ('n5_mem_l_a', ${ORG_A}, ${USER_L}, 'learner')
+      ON CONFLICT (organisation_id, user_id) DO NOTHING
+    `
     await expect(
       sql`
         INSERT INTO org_membership (id, organisation_id, user_id, role)
