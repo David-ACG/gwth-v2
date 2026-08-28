@@ -14,7 +14,15 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { getDb } from "@/db"
-import { courses, sections, lessons, quizQuestions, lessonResources } from "@/db/schema"
+import {
+  courses,
+  sections,
+  lessons,
+  quizQuestions,
+  lessonResources,
+  syllabusEdition,
+  editionLessons,
+} from "@/db/schema"
 import { eq } from "drizzle-orm"
 import type {
   PipelineLessonPayload,
@@ -131,6 +139,38 @@ async function importLesson(
         .insert(lessons)
         .values(lessonValues)
         .onConflictDoUpdate({ target: lessons.id, set: lessonValues })
+
+      // 3b. Keep the GWTH default edition in sync (N5, design 05 §2.2.4): the
+      // pipeline stays the single writer of the default syllabus, and
+      // lessons.is_optional keeps meaning "optional in the GWTH default
+      // edition". Guarded so a DB without migration 014 (or without the
+      // backfilled edition row) still imports cleanly.
+      const defaultEdition = await tx
+        .select({ id: syllabusEdition.id })
+        .from(syllabusEdition)
+        .where(eq(syllabusEdition.id, "gwth-default"))
+        .limit(1)
+      if (defaultEdition.length > 0) {
+        const editionRow = {
+          editionId: "gwth-default",
+          lessonId: lesson.id,
+          tier: lesson.isOptional ? "optional" : "core",
+          state: "ratified",
+          isMandatory: !(lesson.isOptional ?? false),
+          sortOrder: lesson.month * 1000 + (lesson.order ?? 0),
+        }
+        await tx
+          .insert(editionLessons)
+          .values(editionRow)
+          .onConflictDoUpdate({
+            target: [editionLessons.editionId, editionLessons.lessonId],
+            set: {
+              tier: editionRow.tier,
+              isMandatory: editionRow.isMandatory,
+              sortOrder: editionRow.sortOrder,
+            },
+          })
+      }
 
       // 4. Replace quiz questions (delete-then-insert keeps re-imports clean).
       await tx.delete(quizQuestions).where(eq(quizQuestions.lessonId, lesson.id))

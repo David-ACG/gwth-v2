@@ -26,9 +26,20 @@ function makeInsertBuilder() {
 
 const txInsert = vi.fn(() => makeInsertBuilder())
 const txDelete = vi.fn(() => ({ where: vi.fn(() => Promise.resolve([])) }))
+// N5: the route checks for the gwth-default syllabus edition inside the
+// transaction (tx.select().from().where().limit()). Default: the edition
+// exists, so the edition_lessons sync upsert runs; tests can override
+// txSelectRows to simulate a DB without migration 014.
+let txSelectRows: Array<Record<string, unknown>> = [{ id: "gwth-default" }]
+const txSelectLimit = vi.fn(() => Promise.resolve(txSelectRows))
+const txSelect = vi.fn(() => ({
+  from: vi.fn(() => ({
+    where: vi.fn(() => ({ limit: txSelectLimit })),
+  })),
+}))
 const transaction = vi.fn(
   async (cb: (tx: unknown) => Promise<unknown>) =>
-    cb({ insert: txInsert, delete: txDelete })
+    cb({ insert: txInsert, delete: txDelete, select: txSelect })
 )
 
 // GET path: db.select({...}).from(lessons) resolves to an array of rows.
@@ -241,6 +252,29 @@ describe("/api/admin/import-lessons", () => {
     expect(txInsert).toHaveBeenCalled()
     // quiz + resources are replaced via delete-then-insert
     expect(txDelete).toHaveBeenCalled()
+    // N5: the gwth-default edition row is kept in sync on import
+    // (course + section + lesson + edition_lessons + quiz + resources = 6)
+    expect(txSelect).toHaveBeenCalled()
+    expect(txInsert).toHaveBeenCalledTimes(6)
+  })
+
+  it("still imports cleanly when the gwth-default edition does not exist (N5 guard)", async () => {
+    txSelectRows = []
+    try {
+      const res = await POST(
+        createPostRequest({
+          lessons: [makeLesson()],
+          apiKey: "test-key-123",
+        })
+      )
+      expect(res.status).toBe(200)
+      const data = await res.json()
+      expect(data.successful).toBe(1)
+      // course + section + lesson + quiz + resources — no edition_lessons upsert
+      expect(txInsert).toHaveBeenCalledTimes(5)
+    } finally {
+      txSelectRows = [{ id: "gwth-default" }]
+    }
   })
 
   it("drops resources with an unsupported type", async () => {
