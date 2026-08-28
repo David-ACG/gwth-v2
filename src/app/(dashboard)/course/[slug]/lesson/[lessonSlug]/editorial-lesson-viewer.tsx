@@ -562,6 +562,10 @@ export function EditorialLessonViewer({
     introVideoProgress: watchedFraction,
     bestQuizScore: lastQuizScore === null && !progress ? null : bestQuizScore,
     passMark,
+    // The persisted server verdict wins over any local recompute (QA
+    // round-1 defect 2): a pass survives a later pass-mark rise, because
+    // the server refuses to re-grade a passed quiz.
+    quizPassed: progress?.quizPassed ?? null,
   })
 
   /**
@@ -668,9 +672,11 @@ export function EditorialLessonViewer({
   const currentPageData = lesson.pages[currentPage - 1]
   const isProject = !isVideo && !isQa && currentPageData?.kind === "project"
   const videoCleared = watchedFraction >= INTRO_VIDEO_COMPLETION_THRESHOLD
-  // Against the effective edition's pass mark (N6) — display state only; the
-  // server holds the persisted verdict.
-  const quizPassed = bestQuizScore >= passMark
+  // The persisted server verdict first (QA round-1 defect 2): the server
+  // never re-grades a passed quiz, so the row's quizPassed must win over a
+  // local score-vs-passMark comparison after a pass-mark rise or edition
+  // reassignment. The comparison only seeds the state before any row exists.
+  const quizPassed = progress?.quizPassed ?? bestQuizScore >= passMark
 
   return (
     <div

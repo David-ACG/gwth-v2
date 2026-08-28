@@ -139,8 +139,12 @@ export async function getLesson(slug: string): Promise<Lesson | null> {
 
       return rowToLesson(lessonRow, questions, resources)
     }
-    // Not found in the DB — fall through to the mock set so dev still resolves
-    // lessons that haven't been imported yet.
+    // With a database configured, the DB is the ONLY lesson source (QA
+    // round-1 defect 5): an unknown slug is null, never a bundled mock
+    // lesson. The old fallthrough let a deep link serve mock content the
+    // edition gate had never authorized - including lessons deliberately
+    // removed from the DB. The mock set serves pure mock mode only.
+    return null
   }
 
   return mockLessons.find((l) => l.slug === slug) ?? null
@@ -213,31 +217,19 @@ export async function getQuizQuestionsByLessonId(
 export async function getLessonMonthById(
   lessonId: string
 ): Promise<1 | 2 | 3 | null> {
-  if (isDbConfigured()) {
-    const db = getDb()
-    const rows = await db
-      .select({ month: lessons.month })
-      .from(lessons)
-      .where(eq(lessons.id, lessonId))
-      .limit(1)
-    const month = rows[0]?.month
-    return month === 1 || month === 2 || month === 3 ? month : null
-  }
-
-  const mockMonth = mockLessons.find((l) => l.id === lessonId)?.month
-  return mockMonth === 1 || mockMonth === 2 || mockMonth === 3
-    ? mockMonth
-    : null
+  // Single implementation of the trust rules - see getLessonGradingMetaById.
+  return (await getLessonGradingMetaById(lessonId))?.month ?? null
 }
 
 /**
  * Resolves the month AND course slug of a lesson by id, for the server-side
- * quiz-grading path (N6): the month feeds the same access gate as
- * `getLessonMonthById`, and the course slug lets the grading action resolve
- * the caller's effective-edition pass mark without a second lesson lookup.
- * Same trust rules as `getLessonMonthById`: with a database configured the
- * DB is the ONLY source and an unknown id resolves to null (the gate
- * refuses); the mock set serves pure mock mode only.
+ * quiz-grading path (N6): the month feeds the subscription access gate, and
+ * the course slug lets the grading action resolve the caller's effective
+ * edition (membership + pass mark) without a second lesson lookup. This is
+ * the ONE implementation of the trust rules (`getLessonMonthById` delegates
+ * here): with a database configured the DB is the ONLY source and an
+ * unknown id resolves to null (the gate refuses); the mock set serves pure
+ * mock mode only.
  */
 export async function getLessonGradingMetaById(
   lessonId: string

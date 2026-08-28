@@ -63,12 +63,6 @@ const orgRoles = {
 }
 
 /**
- * Whether an email is on the platform-admin allowlist (ADMIN_EMAILS).
- * Duplicated from src/lib/admin.ts on purpose: importing it here would create
- * the cycle better-auth.ts -> admin.ts -> auth.ts -> better-auth.ts. Unset or
- * empty allowlist means NOBODY can create organisations (fail closed).
- */
-/**
  * Runs the single-role guard and converts its refusal into a clean
  * BAD_REQUEST APIError (N6, N5 QA defect 4). Without this, Better Auth's
  * comma-separated multi-role values ("tutor,admin") reach Postgres, fail the
@@ -89,6 +83,12 @@ function requireSingleOrgRole(
   }
 }
 
+/**
+ * Whether an email is on the platform-admin allowlist (ADMIN_EMAILS).
+ * Duplicated from src/lib/admin.ts on purpose: importing it here would create
+ * the cycle better-auth.ts -> admin.ts -> auth.ts -> better-auth.ts. Unset or
+ * empty allowlist means NOBODY can create organisations (fail closed).
+ */
 function isPlatformAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false
   return (process.env.ADMIN_EMAILS ?? "")

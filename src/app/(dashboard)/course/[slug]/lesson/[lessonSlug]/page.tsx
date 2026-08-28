@@ -1,6 +1,10 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
-import { getLesson, toPublicQuizQuestions } from "@/lib/data/lessons"
+import {
+  getAdjacentLessons,
+  getLesson,
+  toPublicQuizQuestions,
+} from "@/lib/data/lessons"
 import { getCourse } from "@/lib/data/courses"
 import { getEffectivePassMark } from "@/lib/data/editions"
 import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
@@ -77,20 +81,18 @@ const VALID_WIDGET_SURFACES: ReadonlySet<string> = new Set([
  * default surface is `prose`.
  */
 /**
- * Finds the lesson that follows the given slug in course order (sections by
- * order, lessons by order within each section). Returns null on the last
- * lesson.
+ * Finds the lesson that follows the given slug, in the SAME order the
+ * edition-aware catalogue serves (`getLessons` via `getAdjacentLessons`) -
+ * never a locally re-derived section flatten, which disagreed with an
+ * edition's custom sort_order (QA round-1 defect 4). Returns null on the
+ * last lesson.
  */
-function findNextLesson(
+async function findNextLesson(
   course: Course,
   lessonSlug: string
-): EditorialNextLesson | null {
-  const ordered = [...course.sections]
-    .sort((a, b) => a.order - b.order)
-    .flatMap((s) => [...s.lessons].sort((a, b) => a.order - b.order))
-  const idx = ordered.findIndex((l) => l.slug === lessonSlug)
-  if (idx === -1 || idx + 1 >= ordered.length) return null
-  const next = ordered[idx + 1]!
+): Promise<EditorialNextLesson | null> {
+  const { next } = await getAdjacentLessons(course.slug, lessonSlug)
+  if (!next) return null
   return {
     title: next.title,
     href: `/course/${course.slug}/lesson/${next.slug}`,
@@ -118,16 +120,20 @@ export default async function LessonPage({
   const { slug, lessonSlug } = await params
   const sp = await searchParams
   // N6: getLesson also 404s lessons OUTSIDE the caller's effective syllabus
-  // edition (a deep link cannot bypass the catalogue filter), and the
-  // edition's pass mark is threaded into the viewer for its display state.
-  const [lesson, course, allProgress, user, passMark] = await Promise.all([
+  // edition (a deep link cannot bypass the catalogue filter).
+  const [lesson, course, allProgress, user] = await Promise.all([
     getLesson(lessonSlug),
     getCourse(slug),
     getAllCourseProgress(),
     getDashboardUser(),
-    getEffectivePassMark(slug),
   ])
   if (!lesson || !course) notFound()
+
+  // The edition pass mark for the viewer's display state, resolved from the
+  // lesson's OWN course slug - the same source the grading action uses - so
+  // a mismatched course URL cannot show a different mark than the one the
+  // submission is graded against. (Resolution is cache()d per request.)
+  const passMark = await getEffectivePassMark(lesson.courseSlug)
 
   // Lesson content is members-only. The proxy's optimistic cookie check
   // lets any session through (including free registered accounts), so the
@@ -220,7 +226,7 @@ export default async function LessonPage({
         initialPage={Number.isFinite(initialPage) ? initialPage : 1}
         initialWidgetSurface={initialWidgetSurface}
         initialProgress={lessonProgress}
-        nextLesson={findNextLesson(course, lessonSlug)}
+        nextLesson={await findNextLesson(course, lessonSlug)}
         courseHref={`/course/${course.slug}`}
         chrome={chrome}
         passMark={passMark}

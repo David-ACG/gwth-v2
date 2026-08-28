@@ -18,6 +18,14 @@ export type LessonCompletionInput = {
   bestQuizScore?: number | null
   /** Edition pass mark; defaults to QUIZ_PASS_SCORE when not threaded */
   passMark?: number
+  /**
+   * The PERSISTED server verdict, when the caller has a progress row. It
+   * wins over any local score-vs-passMark comparison (QA round-1 defect 2):
+   * the server never re-grades a passed quiz, so a later pass-mark rise or
+   * edition reassignment must not flip the UI back to "not passed" and
+   * invite retries the server will refuse. Absent/null = derive from score.
+   */
+  quizPassed?: boolean | null
 }
 
 export type LessonCompletionStatus = {
@@ -47,7 +55,8 @@ export function getLessonCompletionStatus(
     (input.introVideoProgress ?? 0) >= INTRO_VIDEO_COMPLETION_THRESHOLD
   const quizPassed =
     input.questionCount === 0 ||
-    hasPassedQuiz(input.bestQuizScore, input.passMark)
+    (input.quizPassed ??
+      hasPassedQuiz(input.bestQuizScore, input.passMark))
 
   const missingReasons: string[] = []
   if (!videoComplete) missingReasons.push("Watch at least 80% of the intro video")

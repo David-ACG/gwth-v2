@@ -74,6 +74,17 @@ function assembleCourse(
   const lessonRows = edition.lessons
     ? allLessonRows.filter((row) => isLessonInEdition(edition, row.id))
     : allLessonRows
+
+  /**
+   * Within-section ordering: the edition's sort_order where an edition is
+   * active (QA round-1 defect 4 - the catalogue must not disagree with
+   * getLessons), the lesson's own order otherwise.
+   */
+  const lessonSort = (a: LessonSummary, b: LessonSummary): number =>
+    edition.lessons
+      ? (edition.lessons.get(a.id)?.sortOrder ?? 0) -
+        (edition.lessons.get(b.id)?.sortOrder ?? 0)
+      : a.order - b.order
   const lessonsBySection = new Map<string, LessonSummary[]>()
   for (const row of lessonRows) {
     if (!lessonsBySection.has(row.sectionId)) {
@@ -99,9 +110,7 @@ function assembleCourse(
       month: s.month as 1 | 2 | 3,
       isOptional: s.isOptional || false,
       optionalTrack: s.optionalTrack || undefined,
-      lessons: (lessonsBySection.get(s.id) || []).sort(
-        (a, b) => a.order - b.order
-      ),
+      lessons: (lessonsBySection.get(s.id) || []).sort(lessonSort),
     }))
     // Drop sections the edition curated down to nothing (edition mode only).
     .filter((s) => !edition.lessons || s.lessons.length > 0)

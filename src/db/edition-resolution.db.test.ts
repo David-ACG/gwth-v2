@@ -47,14 +47,17 @@ const L = {
 }
 const ORG_A = "n6r_org_a"
 const ORG_B = "n6r_org_b"
+const ORG_C = "n6r_org_c" // its default edition is live but EMPTY
 const ED_GLOBAL = "n6r_ed_global"
 const ED_ORG = "n6r_ed_org"
 const ED_OVERRIDE = "n6r_ed_override"
 const ED_DRAFT = "n6r_ed_draft" // status draft: never resolvable
 const ED_OTHER = "n6r_ed_other" // org B's edition
+const ED_EMPTY = "n6r_ed_empty" // org C's default: live, zero lessons
 const USER_B2C = "n6r-user-b2c"
 const USER_MEMBER = "n6r-user-member"
 const USER_OVERRIDE = "n6r-user-override"
+const USER_EMPTY = "n6r-user-empty"
 
 describeDb("effective-syllabus resolution (live DB)", () => {
   let sql: ReturnType<typeof postgres>
@@ -68,13 +71,13 @@ describeDb("effective-syllabus resolution (live DB)", () => {
 
   async function cleanup() {
     await sql`DELETE FROM lesson_progress WHERE lesson_id IN ${sql(Object.values(L))}`
-    await sql`DELETE FROM org_membership WHERE organisation_id IN (${ORG_A}, ${ORG_B})`
-    await sql`DELETE FROM syllabus_edition WHERE id IN (${ED_GLOBAL}, ${ED_ORG}, ${ED_OVERRIDE}, ${ED_DRAFT}, ${ED_OTHER})`
+    await sql`DELETE FROM org_membership WHERE organisation_id IN (${ORG_A}, ${ORG_B}, ${ORG_C})`
+    await sql`DELETE FROM syllabus_edition WHERE id IN (${ED_GLOBAL}, ${ED_ORG}, ${ED_OVERRIDE}, ${ED_DRAFT}, ${ED_OTHER}, ${ED_EMPTY})`
     await sql`DELETE FROM lessons WHERE id IN ${sql(Object.values(L))}`
     await sql`DELETE FROM sections WHERE id IN (${SECTION_A}, ${SECTION_B})`
     await sql`DELETE FROM courses WHERE id IN (${COURSE_A}, ${COURSE_B})`
-    await sql`DELETE FROM organisation WHERE id IN (${ORG_A}, ${ORG_B})`
-    await sql`DELETE FROM "user" WHERE id IN (${USER_B2C}, ${USER_MEMBER}, ${USER_OVERRIDE})`
+    await sql`DELETE FROM organisation WHERE id IN (${ORG_A}, ${ORG_B}, ${ORG_C})`
+    await sql`DELETE FROM "user" WHERE id IN (${USER_B2C}, ${USER_MEMBER}, ${USER_OVERRIDE}, ${USER_EMPTY})`
   }
 
   beforeAll(async () => {
@@ -88,12 +91,14 @@ describeDb("effective-syllabus resolution (live DB)", () => {
       INSERT INTO "user" (id, name, email, created_at, updated_at) VALUES
         (${USER_B2C}, 'N6R B2C', 'n6r-b2c@example.com', NOW(), NOW()),
         (${USER_MEMBER}, 'N6R Member', 'n6r-member@example.com', NOW(), NOW()),
-        (${USER_OVERRIDE}, 'N6R Override', 'n6r-override@example.com', NOW(), NOW())
+        (${USER_OVERRIDE}, 'N6R Override', 'n6r-override@example.com', NOW(), NOW()),
+        (${USER_EMPTY}, 'N6R Empty', 'n6r-empty@example.com', NOW(), NOW())
     `
     await sql`
       INSERT INTO organisation (id, name, slug, type) VALUES
         (${ORG_A}, 'N6R Org A', 'n6r-org-a', 'institution'),
-        (${ORG_B}, 'N6R Org B', 'n6r-org-b', 'company')
+        (${ORG_B}, 'N6R Org B', 'n6r-org-b', 'company'),
+        (${ORG_C}, 'N6R Org C', 'n6r-org-c', 'institution')
     `
     await sql`
       INSERT INTO courses (id, slug, title) VALUES
@@ -120,7 +125,8 @@ describeDb("effective-syllabus resolution (live DB)", () => {
         (${ED_ORG}, ${ORG_A}, ${COURSE_A}, 'Org A default', ${ED_ORG}, 'live', FALSE, TRUE, 80),
         (${ED_OVERRIDE}, ${ORG_A}, ${COURSE_A}, 'Org A override', ${ED_OVERRIDE}, 'live', FALSE, FALSE, 90),
         (${ED_DRAFT}, ${ORG_A}, ${COURSE_A}, 'Org A draft ed', ${ED_DRAFT}, 'draft', FALSE, FALSE, 95),
-        (${ED_OTHER}, ${ORG_B}, ${COURSE_A}, 'Org B edition', ${ED_OTHER}, 'live', FALSE, FALSE, 50)
+        (${ED_OTHER}, ${ORG_B}, ${COURSE_A}, 'Org B edition', ${ED_OTHER}, 'live', FALSE, FALSE, 50),
+        (${ED_EMPTY}, ${ORG_C}, ${COURSE_A}, 'Org C empty', ${ED_EMPTY}, 'live', FALSE, TRUE, 75)
     `
     // Global default: a1 core mandatory, a2 core mandatory, a3 optional
     // non-mandatory. a4 deliberately absent (proves filtering).
@@ -147,7 +153,8 @@ describeDb("effective-syllabus resolution (live DB)", () => {
     await sql`
       INSERT INTO org_membership (id, organisation_id, user_id, role, edition_id) VALUES
         ('n6r_mem_member', ${ORG_A}, ${USER_MEMBER}, 'learner', NULL),
-        ('n6r_mem_override', ${ORG_A}, ${USER_OVERRIDE}, 'learner', ${ED_OVERRIDE})
+        ('n6r_mem_override', ${ORG_A}, ${USER_OVERRIDE}, 'learner', ${ED_OVERRIDE}),
+        ('n6r_mem_empty', ${ORG_C}, ${USER_EMPTY}, 'learner', NULL)
     `
   })
 
@@ -230,6 +237,20 @@ describeDb("effective-syllabus resolution (live DB)", () => {
     // ...but a B2C user on the global default cannot reach it.
     setUser(USER_B2C)
     expect(await lessonsData.getLesson(L.a4)).toBeNull()
+  })
+
+  it("an EMPTY live org edition fails CLOSED: empty catalogue, never the raw fallback (QA round-1 defect 3)", async () => {
+    setUser(USER_EMPTY)
+    const edition = await editions.getEffectiveEdition(COURSE_A)
+    expect(edition.source).toBe("org-default")
+    expect(edition.editionId).toBe(ED_EMPTY)
+    expect(edition.lessons).not.toBeNull()
+    expect(edition.lessons!.size).toBe(0)
+
+    // Nothing leaks: no lessons, no deep links, empty mandatory set.
+    expect(await lessonsData.getLessons(COURSE_A)).toEqual([])
+    expect(await lessonsData.getLesson(L.a1)).toBeNull()
+    expect((await editions.getMandatoryLessonIds(COURSE_A)).size).toBe(0)
   })
 
   it("a server-graded submission stamps graded_by='server' with the answer audit trail (016)", async () => {

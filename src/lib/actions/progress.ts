@@ -43,7 +43,7 @@ import {
   getLessonGradingMetaById,
   getQuizQuestionsByLessonId,
 } from "@/lib/data/lessons"
-import { getEffectivePassMark } from "@/lib/data/editions"
+import { getEffectiveEdition, isLessonInEdition } from "@/lib/data/editions"
 import { canUserAccessMonth, getCurrentUser, getMockUser } from "@/lib/auth"
 import { isAdminEmail } from "@/lib/admin"
 import { isSessionlessMockRequest } from "@/lib/content-access"
@@ -212,10 +212,20 @@ export async function submitQuizAnswersAction(
 ): Promise<QuizSubmitResult> {
   const { courseSlug } = await assertQuizSubmissionAllowed(lessonId)
 
-  // N6: the pass mark comes from the caller's effective syllabus edition
-  // (decision 4: one pass mark per edition; 67 on the fallback), resolved
-  // AFTER authorization so an unauthorized caller learns nothing.
-  const passMark = await getEffectivePassMark(courseSlug)
+  // N6: the caller's effective syllabus edition, resolved AFTER the session/
+  // month authorization so an unauthorized caller learns nothing. It gates
+  // TWO things here (QA round-1 defect 1):
+  //  - membership: a lesson the edition excludes (or holds as an unratified
+  //    draft) cannot be graded, cannot write progress, and never reveals its
+  //    key - the same rule that 404s the lesson page. Without this, an org
+  //    learner could grade themselves through content their institution
+  //    removed, via a replayed request the catalogue never offers.
+  //  - the pass mark (decision 4: one per edition; 67 on the fallback).
+  const edition = await getEffectiveEdition(courseSlug)
+  if (!isLessonInEdition(edition, lessonId)) {
+    throw new Error("This lesson is not part of your current access.")
+  }
+  const passMark = edition.passMark
 
   // Quiz closure, from the PERSISTED row (QA defect 5; round-3 defect 8) -
   // before grading, so a refused caller never triggers a key read. The quiz
@@ -238,12 +248,23 @@ export async function submitQuizAnswersAction(
     throw new Error(`Lesson ${lessonId} has no quiz to grade`)
   }
 
-  const graded = questions.map((q) => {
+  // QA round-1 defect 6: the answers payload is attacker-controlled and used
+  // to be persisted verbatim. Keep ONLY integer choices for KNOWN question
+  // ids - grading semantics are unchanged (unknown keys always graded as
+  // absent) and the stored quiz_answers audit trail is now bounded by the
+  // lesson's real question count instead of the caller's imagination.
+  const sanitizedAnswers: Record<string, number> = {}
+  for (const q of questions) {
     const chosen = answers?.[q.id]
+    if (typeof chosen === "number" && Number.isInteger(chosen)) {
+      sanitizedAnswers[q.id] = chosen
+    }
+  }
+
+  const graded = questions.map((q) => {
+    const chosen = sanitizedAnswers[q.id]
     const correct =
-      typeof chosen === "number" &&
-      Number.isInteger(chosen) &&
-      chosen === q.correctOptionIndex
+      typeof chosen === "number" && chosen === q.correctOptionIndex
     return {
       questionId: q.id,
       correct,
@@ -262,7 +283,7 @@ export async function submitQuizAnswersAction(
   const recorded = await recordQuizSubmission(lessonId, score, {
     passMark,
     maxAttempts: MAX_QUIZ_ATTEMPTS,
-    answers,
+    answers: sanitizedAnswers,
   })
   if (recorded.outcome === "attempt-limit") {
     // Lost the race against a concurrent capped submission: nothing was

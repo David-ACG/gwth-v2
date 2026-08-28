@@ -17,7 +17,12 @@
 -- could be pointed at ANOTHER organisation's edition (cross-tenant leak of
 -- exclusive lessons + co-brand label). A composite FK cannot express
 -- "member's own org OR global (organisation_id IS NULL)", so the invariant
--- is enforced with constraint triggers on BOTH sides of the relationship.
+-- is enforced with plain BEFORE row triggers on BOTH sides of the
+-- relationship (not deferrable CONSTRAINT triggers - those are AFTER-only,
+-- and rejecting BEFORE the write is what we want here). Known, accepted
+-- residual: two concurrent READ COMMITTED transactions could in theory
+-- race an edition re-home against a membership assignment; at this
+-- admin-provisioned scale that window is not worth SERIALIZABLE machinery.
 -- ============================================================================
 
 -- ── Defect 2: default flags coupled to ownership ────────────────────────────

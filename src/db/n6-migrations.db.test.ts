@@ -57,7 +57,9 @@ describeDb("016/017 server grading + edition integrity (live DB)", () => {
   async function cleanup() {
     await sql`DELETE FROM lesson_progress WHERE lesson_id = ${LESSON}`
     await sql`DELETE FROM org_membership WHERE organisation_id IN (${ORG_A}, ${ORG_B})`
-    await sql`DELETE FROM syllabus_edition WHERE id IN (${ED_A}, ${ED_B}, ${ED_G})`
+    // 'n6m_ed_a2' is a mid-test fixture; clean it here too so a failure
+    // between its INSERT and DELETE can never poison later runs.
+    await sql`DELETE FROM syllabus_edition WHERE id IN (${ED_A}, ${ED_B}, ${ED_G}, 'n6m_ed_a2')`
     await sql`DELETE FROM lessons WHERE id = ${LESSON}`
     await sql`DELETE FROM sections WHERE id = ${SECTION}`
     await sql`DELETE FROM courses WHERE id = ${COURSE}`

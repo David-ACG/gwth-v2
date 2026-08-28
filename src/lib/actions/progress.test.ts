@@ -32,7 +32,7 @@ const lessonsLayer = vi.hoisted(() => ({
 }))
 
 const editionsLayer = vi.hoisted(() => ({
-  getEffectivePassMark: vi.fn(),
+  getEffectiveEdition: vi.fn(),
 }))
 
 const authLayer = vi.hoisted(() => ({
@@ -55,12 +55,20 @@ vi.mock("@/lib/data/lessons", () => ({
   getLessonGradingMetaById: lessonsLayer.getLessonGradingMetaById,
 }))
 
-// N6: the pass mark now resolves from the caller's effective syllabus
-// edition; the default mock keeps the historic 67 so every pre-edition
-// property stays under test unchanged.
-vi.mock("@/lib/data/editions", () => ({
-  getEffectivePassMark: editionsLayer.getEffectivePassMark,
-}))
+// N6: the caller's effective syllabus edition now gates quiz submission
+// (membership) and supplies the pass mark. Only the resolver is mocked;
+// `isLessonInEdition` stays the real implementation so the gate under test
+// is the production one. The default mock is the open fallback edition
+// (no filtering, historic 67) so every pre-edition property stays under
+// test unchanged.
+vi.mock("@/lib/data/editions", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("@/lib/data/editions")>()
+  return {
+    ...actual,
+    getEffectiveEdition: editionsLayer.getEffectiveEdition,
+  }
+})
 
 vi.mock("@/lib/auth", () => ({
   getCurrentUser: authLayer.getCurrentUser,
@@ -116,6 +124,38 @@ const STUDENT = {
   subscriptionMonth: 3,
 }
 
+/** The open fallback edition: no lesson filtering, historic pass mark. */
+function openEdition(passMark = QUIZ_PASS_SCORE) {
+  return {
+    editionId: null,
+    organisationId: null,
+    passMark,
+    coBrandLabel: null,
+    source: "fallback" as const,
+    lessons: null,
+  }
+}
+
+/** An edition whose lesson map EXCLUDES the fixture lesson. */
+function excludingEdition() {
+  return {
+    ...openEdition(80),
+    editionId: "test-edition",
+    source: "org-default" as const,
+    lessons: new Map([
+      [
+        "some_other_lesson",
+        {
+          tier: "core" as const,
+          state: "ratified" as const,
+          isMandatory: true,
+          sortOrder: 1,
+        },
+      ],
+    ]),
+  }
+}
+
 /** Narrows a submit result to the graded shape, failing the test otherwise. */
 function asGrade(result: QuizSubmitResult): QuizGradeResult {
   if ("attemptLimitReached" in result) {
@@ -149,7 +189,7 @@ beforeEach(() => {
     courseSlug: "applied-ai-skills",
   })
   lessonsLayer.getQuizQuestionsByLessonId.mockResolvedValue(QUESTIONS)
-  editionsLayer.getEffectivePassMark.mockResolvedValue(QUIZ_PASS_SCORE)
+  editionsLayer.getEffectiveEdition.mockResolvedValue(openEdition())
 
   dataLayer.updateLessonProgress.mockImplementation(
     async (lessonId: string) => ({ lessonId })
@@ -511,7 +551,7 @@ describe("edition pass mark threading (N6)", () => {
   it("grades against the effective edition's pass mark, not the constant", async () => {
     // A stricter institution edition: 100 to pass. The same 50% run that
     // fails at 67 fails here too, but a 100% run must clear it.
-    editionsLayer.getEffectivePassMark.mockResolvedValue(100)
+    editionsLayer.getEffectiveEdition.mockResolvedValue(openEdition(100))
 
     const half = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
     expect(half.score).toBe(50)
@@ -534,7 +574,7 @@ describe("edition pass mark threading (N6)", () => {
   })
 
   it("a laxer edition pass mark admits a score the default would fail", async () => {
-    editionsLayer.getEffectivePassMark.mockResolvedValue(50)
+    editionsLayer.getEffectiveEdition.mockResolvedValue(openEdition(50))
     const result = asGrade(await submitQuizAnswersAction(LESSON_ID, { q1: 1 }))
     expect(result.score).toBe(50)
     expect(result.passed).toBe(true)
@@ -547,11 +587,11 @@ describe("edition pass mark threading (N6)", () => {
     await expect(
       submitQuizAnswersAction(LESSON_ID, { q1: 1 })
     ).rejects.toThrow(/sign in/i)
-    expect(editionsLayer.getEffectivePassMark).not.toHaveBeenCalled()
+    expect(editionsLayer.getEffectiveEdition).not.toHaveBeenCalled()
   })
 
   it("carries the edition pass mark on the attempt-limit refusal", async () => {
-    editionsLayer.getEffectivePassMark.mockResolvedValue(80)
+    editionsLayer.getEffectiveEdition.mockResolvedValue(openEdition(80))
     dataLayer.getLessonProgress.mockResolvedValue({
       lessonId: LESSON_ID,
       quizAttempts: MAX_QUIZ_ATTEMPTS,
@@ -562,5 +602,36 @@ describe("edition pass mark threading (N6)", () => {
       attemptLimitReached: true,
       passMark: 80,
     })
+  })
+})
+
+describe("edition membership gate + answer sanitization (QA round-1 defects 1 + 6)", () => {
+  it("refuses to grade a lesson the caller's edition EXCLUDES, before any key read", async () => {
+    editionsLayer.getEffectiveEdition.mockResolvedValue(excludingEdition())
+    await expect(
+      submitQuizAnswersAction(LESSON_ID, { q1: 1, q2: 1 })
+    ).rejects.toThrow(/not part of your current access/i)
+    // Nothing read, nothing written, nothing revealed - the same posture as
+    // the month gate.
+    expect(lessonsLayer.getQuizQuestionsByLessonId).not.toHaveBeenCalled()
+    expect(dataLayer.recordQuizSubmission).not.toHaveBeenCalled()
+    expect(dataLayer.getLessonProgress).not.toHaveBeenCalled()
+  })
+
+  it("persists ONLY sanitized answers: known question ids, integer choices", async () => {
+    const result = asGrade(
+      await submitQuizAnswersAction(LESSON_ID, {
+        q1: 1,
+        q2: 2.5, // non-integer: graded wrong AND not persisted
+        injected: 1, // unknown id: ignored and not persisted
+        payload: "x".repeat(64) as never, // junk value: dropped
+      } as never)
+    )
+    expect(result.score).toBe(50)
+    expect(dataLayer.recordQuizSubmission).toHaveBeenCalledWith(
+      LESSON_ID,
+      50,
+      expect.objectContaining({ answers: { q1: 1 } })
+    )
   })
 })

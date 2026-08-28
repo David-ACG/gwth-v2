@@ -104,9 +104,17 @@ type EditionRow = {
 }
 
 /**
- * Loads the chosen edition's lesson map and assembles the result. An edition
- * with ZERO lesson rows resolves to the fallback instead (defensive rung 4:
- * an empty or broken seed must never blank the catalogue).
+ * Loads the chosen edition's lesson map and assembles the result.
+ *
+ * Empty-edition policy (QA round-1 defect 3): a live ORG-scoped edition
+ * (member override or org default) with zero lesson rows resolves to an
+ * EMPTY catalogue - failing closed, because falling back to the raw lessons
+ * table would hand that org's learners the entire catalogue, other
+ * institutions' exclusive and draft content included, the moment an admin
+ * creates an edition before attaching lessons. Only the GLOBAL default
+ * degrades to the raw fallback when empty: for B2C the raw table IS the
+ * intended full syllabus (gwth-default mirrors it), so a broken seed there
+ * must keep the product alive rather than blank it.
  */
 async function assembleEdition(
   row: EditionRow,
@@ -124,7 +132,7 @@ async function assembleEdition(
     .from(editionLessons)
     .where(eq(editionLessons.editionId, row.id))
 
-  if (rows.length === 0) return FALLBACK_EDITION
+  if (rows.length === 0 && source === "global-default") return FALLBACK_EDITION
 
   const map = new Map<string, EditionLessonEntry>()
   for (const r of rows) {
