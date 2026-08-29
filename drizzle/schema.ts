@@ -153,8 +153,12 @@ export const quizQuestions = pgTable("quiz_questions", {
 	// N6 (016 + 018): ALL quiz_questions policies are DROPPED — with RLS
 	// enabled and zero policies the table is default-deny for every
 	// non-owner role. The answer key is server-only; the app reads it as the
-	// owning role (D2), which RLS does not constrain.
-]);
+	// owning role (D2), which RLS does not constrain. The explicit
+	// .enableRLS() keeps the declaration honest now that no pgPolicy() entry
+	// implies it (QA round-4 defect 2): canonical DDL is the SQL migrations
+	// and drizzle-kit push is never run here, but the schema must not
+	// describe the table as RLS-off.
+]).enableRLS();
 
 export const courses = pgTable("courses", {
 	id: text().primaryKey().notNull(),
