@@ -31,7 +31,11 @@ import postgres from "postgres"
 const DATABASE_URL = process.env.DATABASE_URL
 const describeDb = DATABASE_URL ? describe : describe.skip
 
-const MIGRATIONS = ["016_server_grading.sql", "017_edition_integrity.sql"] as const
+const MIGRATIONS = [
+  "016_server_grading.sql",
+  "017_edition_integrity.sql",
+  "018_quiz_key_rls.sql",
+] as const
 
 function migrationSql(name: string): string {
   return readFileSync(
@@ -137,11 +141,9 @@ describeDb("016/017 server grading + edition integrity (live DB)", () => {
     expect(updated!.quiz_answers).toEqual({ q1: 2 })
   })
 
-  it("016: the public quiz-question read policy is gone", async () => {
+  it("016+018: NO quiz_questions policy remains (default-deny under RLS)", async () => {
     const rows = await sql`
-      SELECT policyname FROM pg_policies
-      WHERE tablename = 'quiz_questions'
-        AND policyname = 'Public can read quiz questions'
+      SELECT policyname FROM pg_policies WHERE tablename = 'quiz_questions'
     `
     expect(rows.length).toBe(0)
   })

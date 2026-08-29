@@ -14,8 +14,8 @@ import { getDb } from "@/db"
 import { courses, sections, lessons } from "@/db/schema"
 import { asc, eq, inArray } from "drizzle-orm"
 import {
+  filterLessonsByEdition,
   getEffectiveEdition,
-  isLessonInEdition,
   type EffectiveEdition,
 } from "./editions"
 
@@ -68,23 +68,9 @@ const lessonSummaryColumns = {
 function assembleCourse(
   courseRow: CourseRow,
   sectionRows: SectionRow[],
-  allLessonRows: LessonSummaryRow[],
+  lessonRows: LessonSummaryRow[],
   edition: EffectiveEdition
 ): Course {
-  const lessonRows = edition.lessons
-    ? allLessonRows.filter((row) => isLessonInEdition(edition, row.id))
-    : allLessonRows
-
-  /**
-   * Within-section ordering: the edition's sort_order where an edition is
-   * active (QA round-1 defect 4 - the catalogue must not disagree with
-   * getLessons), the lesson's own order otherwise.
-   */
-  const lessonSort = (a: LessonSummary, b: LessonSummary): number =>
-    edition.lessons
-      ? (edition.lessons.get(a.id)?.sortOrder ?? 0) -
-        (edition.lessons.get(b.id)?.sortOrder ?? 0)
-      : a.order - b.order
   const lessonsBySection = new Map<string, LessonSummary[]>()
   for (const row of lessonRows) {
     if (!lessonsBySection.has(row.sectionId)) {
@@ -110,7 +96,13 @@ function assembleCourse(
       month: s.month as 1 | 2 | 3,
       isOptional: s.isOptional || false,
       optionalTrack: s.optionalTrack || undefined,
-      lessons: (lessonsBySection.get(s.id) || []).sort(lessonSort),
+      // ONE implementation of the edition filter + ordering rules (QA
+      // round-1 defect 4 / round-3 style 4): filterLessonsByEdition applies
+      // the ratified-membership filter and the edition's sort_order; the
+      // fallback keeps the lesson's own order, exactly as before editions.
+      lessons: edition.lessons
+        ? filterLessonsByEdition(lessonsBySection.get(s.id) || [], edition)
+        : (lessonsBySection.get(s.id) || []).sort((a, b) => a.order - b.order),
     }))
     // Drop sections the edition curated down to nothing (edition mode only).
     .filter((s) => !edition.lessons || s.lessons.length > 0)
@@ -157,10 +149,15 @@ function assembleCourse(
  */
 export async function getCourses(): Promise<Course[]> {
   if (isDbConfigured()) {
+    // With a database configured, the DB is the ONLY course source (QA
+    // round-3 defect 5, matching getLesson/getLessons): an empty courses
+    // table is an honest empty catalogue, never the unfiltered mock set
+    // whose lesson links all 404.
     const db = getDb()
     const courseRows = await db.select().from(courses)
+    if (courseRows.length === 0) return []
 
-    if (courseRows.length > 0) {
+    {
       const courseIds = courseRows.map((c) => c.id)
       const [sectionRows, lessonRows] = await Promise.all([
         db
@@ -229,7 +226,10 @@ export async function getCourse(slug: string): Promise<Course | null> {
 
       return assembleCourse(courseRow, sectionRows, lessonRows, edition)
     }
-    // Not found in the DB — fall through to the mock set.
+    // With a database configured, the DB is the ONLY course source (QA
+    // round-3 defect 5): an unknown slug is null, never a bundled mock
+    // course whose unfiltered lesson list would bypass the edition gate.
+    return null
   }
 
   return mockCourses.find((c) => c.slug === slug) ?? null

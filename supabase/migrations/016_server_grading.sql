@@ -9,8 +9,9 @@
 --     allowlist, and the original answers were never stored so re-grading is
 --     impossible by construction). New submissions through
 --     recordQuizSubmission stamp 'server'.
---   - quiz_answers: the last submitted answer set {question_id: option_index},
---     so a graded outcome can be audited against the key later.
+--   - quiz_answers: the answer set {question_id: option_index} behind the
+--     STANDING best_quiz_score (a worse retry does not replace it), so the
+--     stored outcome of record can be audited against the key later.
 --
 -- A row that has only video progress (no quiz submission yet) keeps the
 -- 'client' default; the first server-graded submission flips it. graded_by is

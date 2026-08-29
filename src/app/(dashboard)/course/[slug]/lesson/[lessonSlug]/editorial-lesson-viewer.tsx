@@ -552,15 +552,23 @@ export function EditorialLessonViewer({
   const [lastQuizScore, setLastQuizScore] = React.useState<number | null>(
     null
   )
+  // The SERVER's pass verdict for this session's latest graded run. Kept
+  // verbatim from the action result (QA round-3 defect 1): re-grading the
+  // score against the page's passMark prop could disagree with the server
+  // when the edition's mark changed after the page loaded.
+  const [lastQuizPassed, setLastQuizPassed] = React.useState<boolean | null>(
+    null
+  )
   const bestQuizScore = Math.max(
     progress?.bestQuizScore ?? 0,
     lastQuizScore ?? 0
   )
-  // A pass earned THIS session (server-graded; lastQuizScore is the score
-  // the grading action returned). It must never be vetoed by a stale
-  // persisted quizPassed=false while reconciliation is in flight (QA
-  // round-2 defect 5) - the optimistic quiz UI stays optimistic.
-  const sessionPassed = lastQuizScore !== null && lastQuizScore >= passMark
+  // A pass earned THIS session. This is the SERVER's own verdict from the
+  // grading action - never a local score-vs-passMark recompute, which could
+  // disagree with the server under a mid-session pass-mark change (QA
+  // round-3 defect 1). It must never be vetoed by a stale persisted
+  // quizPassed=false while reconciliation is in flight (round-2 defect 5).
+  const sessionPassed = lastQuizPassed === true
   const completionStatus = getLessonCompletionStatus({
     hasIntroVideo: Boolean(lesson.introVideoUrl),
     questionCount: lesson.questions?.length ?? 0,
@@ -590,6 +598,7 @@ export function EditorialLessonViewer({
       return result
     }
     setLastQuizScore(result.score)
+    setLastQuizPassed(result.passed)
     if (result.passed) {
       toast.success(`Q&A passed at ${result.score}%. Saved to your progress.`)
     } else {

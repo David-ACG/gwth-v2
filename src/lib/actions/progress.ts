@@ -255,15 +255,21 @@ export async function submitQuizAnswersAction(
     throw new Error(`Lesson ${lessonId} has no quiz to grade`)
   }
 
-  // QA round-1 defect 6: the answers payload is attacker-controlled and used
-  // to be persisted verbatim. Keep ONLY integer choices for KNOWN question
-  // ids - grading semantics are unchanged (unknown keys always graded as
-  // absent) and the stored quiz_answers audit trail is now bounded by the
-  // lesson's real question count instead of the caller's imagination.
+  // QA round-1 defect 6 (+ round-3 style 1): the answers payload is
+  // attacker-controlled and used to be persisted verbatim. Keep ONLY
+  // integer choices WITHIN each KNOWN question's option range - grading
+  // semantics are unchanged (an unknown key or out-of-range choice was
+  // never a correct answer) and the stored quiz_answers audit trail is
+  // bounded in both key count and value range.
   const sanitizedAnswers: Record<string, number> = {}
   for (const q of questions) {
     const chosen = answers?.[q.id]
-    if (typeof chosen === "number" && Number.isInteger(chosen)) {
+    if (
+      typeof chosen === "number" &&
+      Number.isInteger(chosen) &&
+      chosen >= 0 &&
+      chosen < q.options.length
+    ) {
       sanitizedAnswers[q.id] = chosen
     }
   }

@@ -20,10 +20,10 @@
 //      — those live in ../src/db/auth-schema.ts (Better Auth organization
 //      plugin tables); DELETE them from the pulled output or the barrel
 //      export in src/db/schema.ts double-exports and breaks the build.
-//   6. N6 (server grading + edition integrity, canonical DDL: 016/017):
+//   6. N6 (server grading + edition integrity, canonical DDL: 016/017/018):
 //      lessonProgress.gradedBy + lessonProgress.quizAnswers (+ the graded_by
-//      CHECK); the "Public can read quiz questions" policy is DROPPED (016) —
-//      delete it from the pulled output; syllabusEdition gains the two
+//      CHECK); BOTH quiz_questions policies are DROPPED (016 + 018) —
+//      delete them from the pulled output; syllabusEdition gains the two
 //      default-scope CHECKs and ux_edition_org_default is scoped to
 //      (organisation_id, course_id) per 017.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
@@ -150,9 +150,10 @@ export const quizQuestions = pgTable("quiz_questions", {
 			foreignColumns: [lessons.id],
 			name: "quiz_questions_lesson_id_fkey"
 		}).onDelete("cascade"),
-	pgPolicy("Service role manages quiz questions", { as: "permissive", for: "all", to: ["public"], using: sql`true`, withCheck: sql`true`  }),
-	// N6 (016): the "Public can read quiz questions" policy is DROPPED — the
-	// fossil layer must not promise public reads of the answer key.
+	// N6 (016 + 018): ALL quiz_questions policies are DROPPED — with RLS
+	// enabled and zero policies the table is default-deny for every
+	// non-owner role. The answer key is server-only; the app reads it as the
+	// owning role (D2), which RLS does not constrain.
 ]);
 
 export const courses = pgTable("courses", {
