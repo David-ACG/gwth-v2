@@ -113,3 +113,15 @@ export function clamp(value: number, min: number, max: number): number {
 export function formatProgress(progress: number): string {
   return `${Math.round(clamp(progress, 0, 1) * 100)}%`
 }
+
+/**
+ * Truncates text to a maximum length, appending an ellipsis when trimmed.
+ * The ellipsis is counted toward the max length so the result never exceeds it.
+ * @example truncate("AI Fundamentals", 10) → "AI Fundam…"
+ * @example truncate("Short", 10) → "Short"
+ */
+export function truncate(text: string, max: number): string {
+  if (max <= 0) return ""
+  if (text.length <= max) return text
+  return `${text.slice(0, max - 1).trimEnd()}…`
+}
