@@ -108,8 +108,11 @@ export function clamp(value: number, min: number, max: number): number {
 
 /**
  * Formats a progress value (0-1) as a percentage string.
+ * Non-finite input (NaN, Infinity) is treated as no progress.
  * @example formatProgress(0.756) → "76%"
+ * @example formatProgress(NaN) → "0%"
  */
 export function formatProgress(progress: number): string {
+  if (!Number.isFinite(progress)) return "0%"
   return `${Math.round(clamp(progress, 0, 1) * 100)}%`
 }
