@@ -6,7 +6,7 @@ export type StripePlan = "course" | "stay-current"
 
 export const BILLING_DISABLED_FOR_BETA_MESSAGE = "Billing disabled for beta"
 
-export function billingDisabledForBetaBody() {
+export function billingDisabledForBetaBody(): { error: string; code: string } {
   return {
     error: BILLING_DISABLED_FOR_BETA_MESSAGE,
     code: "billing_disabled_for_beta",
