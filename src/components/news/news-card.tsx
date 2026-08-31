@@ -64,7 +64,11 @@ export function NewsCard({ article, hasVoted, isAuthenticated }: NewsCardProps) 
             <h3 className="text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
               {article.title}
               {article.url && (
-                <ExternalLink className="ml-1.5 inline size-3.5 text-muted-foreground" />
+                <ExternalLink
+                  className="ml-1.5 inline size-3.5 text-muted-foreground"
+                  role="img"
+                  aria-label="(has external source)"
+                />
               )}
             </h3>
           </Link>
