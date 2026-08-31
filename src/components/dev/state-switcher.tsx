@@ -55,7 +55,10 @@ export function DevStateSwitcher() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 z-[9999]">
+    // data-section makes this dev-only overlay targetable so visual specs can
+    // exclude it (N7): it never ships to a real deployment, and leaving it in
+    // a baseline would make screenshots depend on which mode the server is in.
+    <div className="fixed bottom-4 left-4 z-[9999]" data-section="dev-state-switcher">
       {isOpen && (
         <div className="mb-2 rounded-lg border bg-card p-2 shadow-xl">
           <p className="mb-2 px-2 text-xs font-medium text-muted-foreground">

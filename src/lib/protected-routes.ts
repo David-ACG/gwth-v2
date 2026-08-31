@@ -17,6 +17,11 @@
  */
 export const PROTECTED_PATHS = [
   "/admin",
+  // N7: the institution admin surface. Same shape as /admin - the prefix is
+  // here for the optimistic no-cookie bounce only; the REAL gate (session +
+  // org_membership role) is requireOrgStaffOrRedirect() in every /org page
+  // and in src/app/org/layout.tsx.
+  "/org",
   "/dashboard",
   "/courses",
   "/course",

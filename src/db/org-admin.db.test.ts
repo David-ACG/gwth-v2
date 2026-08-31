@@ -1,0 +1,353 @@
+/**
+ * N7 — institution admin against a live Postgres.
+ *
+ * Three things only a real database can prove:
+ *  1. migration 019 landed the ratification audit trail and is idempotent;
+ *  2. the /org read queries (design 05 Q1/Q2/Q4 + the tiered picker) return
+ *     what the screens claim, scoped to ONE organisation;
+ *  3. the tenancy property that matters: a second organisation's learners,
+ *     progress and lessons never appear in the first organisation's numbers.
+ *
+ * SKIPPED unless DATABASE_URL is set (progress.db.test.ts convention). Run:
+ *   DATABASE_URL=postgresql://gwth:devpass@127.0.0.1:5443/gwth_v2 \
+ *     npx vitest run src/db/org-admin.db.test.ts
+ */
+import { afterAll, beforeAll, describe, expect, it } from "vitest"
+import postgres from "postgres"
+import { readFileSync } from "node:fs"
+import { join } from "node:path"
+
+const DATABASE_URL = process.env.DATABASE_URL
+const describeDb = DATABASE_URL ? describe : describe.skip
+
+const P = "n7" // id prefix for everything this suite creates
+const COURSE_ID = `${P}_course`
+const SECTION_ID = `${P}_section`
+const ORG_A = `${P}_org_a`
+const ORG_B = `${P}_org_b`
+const EDITION_A = `${P}_edition_a`
+const EDITION_B = `${P}_edition_b`
+
+/** The staff context the read functions take — org A's admin. */
+const CONTEXT_A = {
+  userId: `${P}_admin_a`,
+  userName: "Org A admin",
+  role: "admin" as const,
+  organisationId: ORG_A,
+  organisationName: "Org A",
+  organisationType: "institution",
+  editionId: EDITION_A,
+  editionName: "Org A edition",
+  editionStatus: "live" as const,
+  coBrandLabel: "Curated by Org A",
+  passMark: 80,
+  courseId: COURSE_ID,
+  courseTitle: "N7 course",
+  isPreview: false,
+}
+
+describeDb("N7 institution admin (live DB)", () => {
+  let sql: ReturnType<typeof postgres>
+  let orgAdmin: typeof import("@/lib/data/org-admin")
+
+  async function cleanup() {
+    await sql`DELETE FROM lesson_progress WHERE user_id LIKE ${P + "%"}`
+    await sql`DELETE FROM edition_lessons WHERE edition_id IN (${EDITION_A}, ${EDITION_B})`
+    await sql`DELETE FROM syllabus_edition WHERE id IN (${EDITION_A}, ${EDITION_B})`
+    await sql`DELETE FROM org_membership WHERE organisation_id IN (${ORG_A}, ${ORG_B})`
+    await sql`DELETE FROM organisation WHERE id IN (${ORG_A}, ${ORG_B})`
+    await sql`DELETE FROM lessons WHERE course_id = ${COURSE_ID}`
+    await sql`DELETE FROM sections WHERE id = ${SECTION_ID}`
+    await sql`DELETE FROM courses WHERE id = ${COURSE_ID}`
+    await sql`DELETE FROM "user" WHERE id LIKE ${P + "%"}`
+  }
+
+  /** Adds a lesson to the shared N7 course. */
+  async function seedLesson(
+    id: string,
+    order: number,
+    isOptional: boolean,
+    month = 1
+  ) {
+    await sql`
+      INSERT INTO lessons (id, slug, title, "order", section_id, course_id, course_slug, month, is_optional)
+      VALUES (${id}, ${id}, ${`Lesson ${id}`}, ${order}, ${SECTION_ID}, ${COURSE_ID},
+              ${`${P}-course`}, ${month}, ${isOptional})
+    `
+  }
+
+  /** Attaches a lesson to an edition with the given tier/state/mandatory. */
+  async function attach(
+    editionId: string,
+    lessonId: string,
+    tier: string,
+    state: string,
+    isMandatory: boolean,
+    sortOrder: number
+  ) {
+    await sql`
+      INSERT INTO edition_lessons (edition_id, lesson_id, tier, state, is_mandatory, sort_order)
+      VALUES (${editionId}, ${lessonId}, ${tier}, ${state}, ${isMandatory}, ${sortOrder})
+    `
+  }
+
+  /** Creates a user and their membership row. */
+  async function seedMember(id: string, orgId: string, role: string) {
+    await sql`
+      INSERT INTO "user" (id, name, email, email_verified)
+      VALUES (${id}, ${`User ${id}`}, ${`${id}@example.test`}, TRUE)
+    `
+    await sql`
+      INSERT INTO org_membership (id, organisation_id, user_id, role)
+      VALUES (${`mem_${id}`}, ${orgId}, ${id}, ${role})
+    `
+  }
+
+  beforeAll(async () => {
+    sql = postgres(DATABASE_URL!)
+    await cleanup()
+
+    // Migration 019 is applied by the suite itself so a fresh database is
+    // covered too (N5 QA style note 5: a suite that only ever re-runs a
+    // migration never tests its initial application).
+    const migration = readFileSync(
+      join(process.cwd(), "supabase/migrations/019_edition_ratification.sql"),
+      "utf8"
+    )
+    await sql.unsafe(migration)
+
+    await sql`
+      INSERT INTO courses (id, slug, title, description)
+      VALUES (${COURSE_ID}, ${`${P}-course`}, 'N7 course', 'fixture')
+    `
+    await sql`
+      INSERT INTO sections (id, title, "order", course_id, month)
+      VALUES (${SECTION_ID}, 'N7 section', 1, ${COURSE_ID}, 1)
+    `
+    for (const [orgId, name] of [
+      [ORG_A, "Org A"],
+      [ORG_B, "Org B"],
+    ] as const) {
+      await sql`
+        INSERT INTO organisation (id, name, slug, type)
+        VALUES (${orgId}, ${name}, ${`${orgId}-slug`}, 'institution')
+      `
+    }
+    for (const [editionId, orgId] of [
+      [EDITION_A, ORG_A],
+      [EDITION_B, ORG_B],
+    ] as const) {
+      await sql`
+        INSERT INTO syllabus_edition
+          (id, organisation_id, course_id, name, slug, is_org_default, pass_mark, status, co_brand_label)
+        VALUES (${editionId}, ${orgId}, ${COURSE_ID}, ${`${editionId} edition`},
+                ${`${editionId}-slug`}, TRUE, 80, 'live', ${`Curated by ${orgId}`})
+      `
+    }
+
+    // Course lessons: 2 core, 1 optional (switched OFF in edition A), 1
+    // exclusive draft awaiting ratification.
+    await seedLesson(`${P}_l1`, 1, false)
+    await seedLesson(`${P}_l2`, 2, false)
+    await seedLesson(`${P}_l3`, 3, true)
+    await seedLesson(`${P}_l4`, 4, true, 2)
+
+    await attach(EDITION_A, `${P}_l1`, "core", "ratified", true, 1001)
+    await attach(EDITION_A, `${P}_l2`, "core", "ratified", true, 1002)
+    // l3 deliberately NOT attached to A — the "switched off" case.
+    await attach(EDITION_A, `${P}_l4`, "exclusive", "draft", true, 2004)
+    // Org B curates a different edition of the SAME course.
+    await attach(EDITION_B, `${P}_l1`, "core", "ratified", true, 1001)
+    await attach(EDITION_B, `${P}_l3`, "optional", "ratified", true, 1003)
+
+    // Org A: one learner who has met the baseline, one who has not, plus a
+    // tutor (staff must never be counted as a learner).
+    await seedMember(`${P}_learner_done`, ORG_A, "learner")
+    await seedMember(`${P}_learner_part`, ORG_A, "learner")
+    await seedMember(`${P}_tutor_a`, ORG_A, "tutor")
+    // Org B: a learner whose progress must never appear in org A's numbers.
+    await seedMember(`${P}_learner_b`, ORG_B, "learner")
+
+    for (const lessonId of [`${P}_l1`, `${P}_l2`]) {
+      await sql`
+        INSERT INTO lesson_progress
+          (user_id, lesson_id, is_completed, quiz_passed, best_quiz_score, last_accessed_at)
+        VALUES (${`${P}_learner_done`}, ${lessonId}, TRUE, TRUE, 90, NOW())
+      `
+    }
+    await sql`
+      INSERT INTO lesson_progress
+        (user_id, lesson_id, is_completed, quiz_passed, best_quiz_score, last_accessed_at)
+      VALUES (${`${P}_learner_part`}, ${`${P}_l1`}, TRUE, TRUE, 70, NOW() - INTERVAL '30 days')
+    `
+    await sql`
+      INSERT INTO lesson_progress
+        (user_id, lesson_id, is_completed, quiz_passed, best_quiz_score, last_accessed_at)
+      VALUES (${`${P}_learner_b`}, ${`${P}_l1`}, TRUE, TRUE, 100, NOW())
+    `
+
+    orgAdmin = await import("@/lib/data/org-admin")
+  })
+
+  afterAll(async () => {
+    await cleanup()
+    await sql.end()
+  })
+
+  describe("migration 019", () => {
+    it("added the ratification audit trail with a NOT NULL updated_at", async () => {
+      const cols = await sql<{ column_name: string; is_nullable: string }[]>`
+        SELECT column_name, is_nullable FROM information_schema.columns
+        WHERE table_name = 'edition_lessons'
+          AND column_name IN ('updated_at', 'decided_at', 'decided_by', 'review_note')
+      `
+      expect(cols.map((c) => c.column_name).sort()).toEqual([
+        "decided_at",
+        "decided_by",
+        "review_note",
+        "updated_at",
+      ])
+      expect(
+        cols.find((c) => c.column_name === "updated_at")?.is_nullable
+      ).toBe("NO")
+    })
+
+    it("kept the two-state CHECK (D-N7-2: send-back is draft + a note)", async () => {
+      await expect(
+        sql`
+          UPDATE edition_lessons SET state = 'changes_requested'
+          WHERE edition_id = ${EDITION_A} AND lesson_id = ${`${P}_l4`}
+        `
+      ).rejects.toMatchObject({ code: "23514" })
+    })
+
+    it("re-runs as a no-op (idempotent)", async () => {
+      const migration = readFileSync(
+        join(process.cwd(), "supabase/migrations/019_edition_ratification.sql"),
+        "utf8"
+      )
+      await expect(sql.unsafe(migration)).resolves.toBeDefined()
+    })
+
+    it("nulls decided_by rather than losing the row when the decider leaves", async () => {
+      await sql`
+        UPDATE edition_lessons SET decided_by = ${`${P}_tutor_a`}
+        WHERE edition_id = ${EDITION_A} AND lesson_id = ${`${P}_l4`}
+      `
+      await sql`DELETE FROM org_membership WHERE user_id = ${`${P}_tutor_a`}`
+      await sql`DELETE FROM "user" WHERE id = ${`${P}_tutor_a`}`
+      const rows = await sql<{ decided_by: string | null }[]>`
+        SELECT decided_by FROM edition_lessons
+        WHERE edition_id = ${EDITION_A} AND lesson_id = ${`${P}_l4`}
+      `
+      expect(rows).toHaveLength(1)
+      expect(rows[0]!.decided_by).toBeNull()
+      // Put the tutor back for the remaining assertions.
+      await seedMember(`${P}_tutor_a`, ORG_A, "tutor")
+    })
+  })
+
+  describe("the tiered picker", () => {
+    it("shows every course lesson, marking the ones outside the edition", async () => {
+      const syllabus = await orgAdmin.getEditionSyllabus(CONTEXT_A)
+      const byId = new Map(syllabus.map((entry) => [entry.lessonId, entry]))
+      expect(syllabus).toHaveLength(4)
+      expect(byId.get(`${P}_l1`)).toMatchObject({
+        included: true,
+        tier: "core",
+        locked: true,
+      })
+      // Switched off: present in the picker, absent from the edition, and
+      // offered at the tier the catalogue implies.
+      expect(byId.get(`${P}_l3`)).toMatchObject({
+        included: false,
+        tier: "optional",
+        locked: false,
+      })
+      expect(byId.get(`${P}_l4`)).toMatchObject({
+        included: true,
+        tier: "exclusive",
+        state: "draft",
+      })
+    })
+
+    it("orders by the edition's sort_order", async () => {
+      const orders = (await orgAdmin.getEditionSyllabus(CONTEXT_A)).map(
+        (entry) => entry.sortOrder
+      )
+      expect([...orders].sort((a, b) => a - b)).toEqual(orders)
+    })
+
+    it("does not leak the other organisation's edition rows", async () => {
+      // l3 is ratified+optional in edition B; in A's picker it must read as
+      // switched off, not as B's row.
+      const syllabus = await orgAdmin.getEditionSyllabus(CONTEXT_A)
+      expect(
+        syllabus.find((entry) => entry.lessonId === `${P}_l3`)?.included
+      ).toBe(false)
+    })
+  })
+
+  describe("the ratification queue (Q4)", () => {
+    it("lists only this edition's draft lessons", async () => {
+      const queue = await orgAdmin.getRatificationQueue(CONTEXT_A)
+      expect(queue.map((entry) => entry.lessonId)).toEqual([`${P}_l4`])
+    })
+  })
+
+  describe("the roster (Q1)", () => {
+    it("counts learners only — staff are not on the roster", async () => {
+      const roster = await orgAdmin.getOrgRoster(CONTEXT_A)
+      expect(roster.map((row) => row.userId).sort()).toEqual([
+        `${P}_learner_done`,
+        `${P}_learner_part`,
+      ])
+    })
+
+    it("measures the baseline against the edition's mandatory RATIFIED lessons", async () => {
+      const roster = await orgAdmin.getOrgRoster(CONTEXT_A)
+      const done = roster.find((row) => row.userId === `${P}_learner_done`)!
+      const part = roster.find((row) => row.userId === `${P}_learner_part`)!
+      // l4 is mandatory but DRAFT, so it is not part of the baseline yet.
+      expect(done.mandatoryTotal).toBe(2)
+      expect(done.mandatoryDone).toBe(2)
+      expect(done.baselineMet).toBe(true)
+      expect(done.avgBestQuiz).toBe(90)
+      expect(part.mandatoryDone).toBe(1)
+      expect(part.baselineMet).toBe(false)
+    })
+
+    it("sorts baseline-met learners first", async () => {
+      const roster = await orgAdmin.getOrgRoster(CONTEXT_A)
+      expect(roster[0]!.userId).toBe(`${P}_learner_done`)
+    })
+
+    it("summarises honestly, including the 7-day activity window", async () => {
+      const roster = await orgAdmin.getOrgRoster(CONTEXT_A)
+      const summary = orgAdmin.summariseRoster(roster, 1)
+      expect(summary).toMatchObject({
+        learners: 2,
+        started: 2,
+        baselineMet: 1,
+        active7d: 1,
+        pendingRatification: 1,
+      })
+    })
+  })
+
+  describe("per-lesson completion (Q2)", () => {
+    it("covers the edition's ratified lessons only", async () => {
+      const rows = await orgAdmin.getOrgLessonCompletion(CONTEXT_A)
+      expect(rows.map((row) => row.lessonId)).toEqual([`${P}_l1`, `${P}_l2`])
+    })
+
+    it("counts this organisation's learners only", async () => {
+      const rows = await orgAdmin.getOrgLessonCompletion(CONTEXT_A)
+      const l1 = rows.find((row) => row.lessonId === `${P}_l1`)!
+      // Org B's learner also completed l1 with 100; org A must not see them.
+      expect(l1.started).toBe(2)
+      expect(l1.completed).toBe(2)
+      expect(l1.avgBestQuiz).toBe(80)
+    })
+  })
+})

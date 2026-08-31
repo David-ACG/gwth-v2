@@ -26,6 +26,9 @@
 //      delete them from the pulled output; syllabusEdition gains the two
 //      default-scope CHECKs and ux_edition_org_default is scoped to
 //      (organisation_id, course_id) per 017.
+//   7. N7 (institution admin, canonical DDL: 019): editionLessons gains
+//      updatedAt/decidedAt/decidedBy/reviewNote + the decided_by FK to
+//      `user` and the idx_edition_lessons_pending partial index.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -615,8 +618,16 @@ export const editionLessons = pgTable("edition_lessons", {
 	sortOrder: integer("sort_order").default(0).notNull(),
 	notes: text(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	// N7 (019): the ratification audit trail. $onUpdate keeps updated_at
+	// honest for every Drizzle-side UPDATE (there is no DB trigger), mirroring
+	// syllabusEdition above.
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull().$onUpdate(() => new Date().toISOString()),
+	decidedAt: timestamp("decided_at", { withTimezone: true, mode: 'string' }),
+	decidedBy: text("decided_by"),
+	reviewNote: text("review_note"),
 }, (table) => [
 	index("idx_edition_lessons_edition").using("btree", table.editionId.asc().nullsLast().op("text_ops")),
+	index("idx_edition_lessons_pending").using("btree", table.editionId.asc().nullsLast().op("text_ops"), table.createdAt.asc().nullsLast()).where(sql`state = 'draft'`),
 	index("idx_edition_lessons_lesson").using("btree", table.lessonId.asc().nullsLast().op("text_ops")),
 	unique("edition_lessons_edition_id_lesson_id_key").on(table.editionId, table.lessonId),
 	foreignKey({
@@ -629,6 +640,11 @@ export const editionLessons = pgTable("edition_lessons", {
 			foreignColumns: [lessons.id],
 			name: "edition_lessons_lesson_id_fkey"
 		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.decidedBy],
+			foreignColumns: [user.id],
+			name: "edition_lessons_decided_by_fkey"
+		}).onDelete("set null"),
 	check("edition_lessons_tier_check", sql`tier = ANY (ARRAY['core'::text, 'optional'::text, 'exclusive'::text])`),
 	check("edition_lessons_state_check", sql`state = ANY (ARRAY['draft'::text, 'ratified'::text])`),
 ]);

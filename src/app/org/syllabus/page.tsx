@@ -1,0 +1,182 @@
+import { redirect } from "next/navigation"
+import {
+  canEditEdition,
+  getEditionSyllabus,
+  requireOrgStaffOrRedirect,
+  type EditionSyllabusEntry,
+} from "@/lib/data/org-admin"
+import { LessonToggle, MandatoryToggle } from "@/components/org/lesson-toggle"
+import { PassMarkForm } from "@/components/org/pass-mark-form"
+import { AdminEmptyState, safe } from "../../admin/admin-shared"
+import {
+  LessonMeta,
+  MandatoryLabel,
+  PreviewBanner,
+  StateLabel,
+  TierLabel,
+} from "../org-shared"
+import adminStyles from "../../admin/admin-fde.module.css"
+import styles from "../org-fde.module.css"
+
+/** The three tiers, in the order the institution reads them. */
+const TIERS = [
+  {
+    tier: "core" as const,
+    title: "Core",
+    lead:
+      "The spine of the course. Every edition carries these, so a GWTH credential means the same thing whoever issued it — they cannot be switched off.",
+  },
+  {
+    tier: "optional" as const,
+    title: "Optional",
+    lead:
+      "Yours to choose. Switch a lesson on to put it in front of your learners, off to leave it out. You also decide whether it counts toward your baseline.",
+  },
+  {
+    tier: "exclusive" as const,
+    title: "Exclusive to you",
+    lead:
+      "Lessons written for your edition. They stay hidden from your learners until you ratify them.",
+  },
+]
+
+/**
+ * /org/syllabus — the lesson picker by tier, plus the edition pass mark.
+ *
+ * This is the screen Ben's two asks land on: pick the optional lessons, set a
+ * pass mark. Tutors are redirected to the overview (read-only role), and the
+ * server actions refuse them independently — a hidden nav link is signposting,
+ * not a gate.
+ */
+export default async function OrgSyllabusPage() {
+  const context = await requireOrgStaffOrRedirect()
+  if (!canEditEdition(context.role)) redirect("/org")
+
+  const syllabus = await safe(() => getEditionSyllabus(context))
+
+  return (
+    <section className={adminStyles.section} data-section="org-syllabus">
+      {context.isPreview ? <PreviewBanner /> : null}
+
+      <div className={adminStyles.sectionHead}>
+        <h1 className={adminStyles.sectionTitle}>Syllabus.</h1>
+        <p className={adminStyles.mono}>
+          {syllabus
+            ? `${syllabus.filter((entry) => entry.included).length} of ${syllabus.length} lessons in your edition`
+            : "Database unavailable"}
+        </p>
+      </div>
+      <p className={adminStyles.sectionLead}>
+        Your edition of {context.courseTitle}. Changes take effect for your
+        learners immediately; nobody loses progress on a lesson you switch off,
+        it simply stops appearing in their course.
+      </p>
+
+      <PassMarkForm editionId={context.editionId} passMark={context.passMark} />
+
+      {syllabus === null ? (
+        <AdminEmptyState
+          kicker="Database unavailable"
+          title="The syllabus cannot be read right now"
+          body="Nothing has been changed. It returns as soon as the database is reachable."
+        />
+      ) : syllabus.length === 0 ? (
+        <AdminEmptyState
+          kicker="No lessons yet"
+          title="This course has no lessons to curate"
+          body="Lessons appear here as GWTH publishes them. Your edition updates automatically as the core course grows."
+        />
+      ) : (
+        TIERS.map((group) => {
+          const entries = syllabus.filter((entry) => entry.tier === group.tier)
+          if (entries.length === 0) return null
+          return (
+            <div
+              key={group.tier}
+              className={styles.tierGroup}
+              data-section={`tier-${group.tier}`}
+            >
+              <div className={styles.tierHead}>
+                <h2 className={styles.tierTitle}>{group.title}</h2>
+                <p className={adminStyles.mono}>
+                  {entries.filter((entry) => entry.included).length} of{" "}
+                  {entries.length} on
+                </p>
+              </div>
+              <p className={styles.tierLead}>{group.lead}</p>
+              <div className={styles.lessonList}>
+                {entries.map((entry) => (
+                  <LessonRow
+                    key={entry.lessonId}
+                    entry={entry}
+                    editionId={context.editionId}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        })
+      )}
+    </section>
+  )
+}
+
+/** One lesson in the picker: what it is, and the switches that govern it. */
+function LessonRow({
+  entry,
+  editionId,
+}: {
+  entry: EditionSyllabusEntry
+  editionId: string
+}) {
+  const titleId = `lesson-title-${entry.lessonId}`
+  return (
+    <div
+      className={styles.lessonRow}
+      data-included={entry.included ? "true" : "false"}
+    >
+      <div className={styles.lessonMain}>
+        <p className={styles.lessonTitle} id={titleId}>
+          {entry.title}
+        </p>
+        <div className={styles.lessonMeta}>
+          <LessonMeta>Month {entry.month}</LessonMeta>
+          <TierLabel tier={entry.tier} />
+          {entry.tier === "exclusive" ? (
+            <StateLabel
+              state={entry.state}
+              hasReviewNote={Boolean(entry.reviewNote)}
+            />
+          ) : null}
+          {entry.included ? (
+            <MandatoryLabel isMandatory={entry.isMandatory} />
+          ) : null}
+        </div>
+      </div>
+      <div className={styles.lessonActions}>
+        {entry.locked ? (
+          <p className={styles.lockedReason}>
+            Core — in every edition of this course.
+          </p>
+        ) : (
+          <>
+            <LessonToggle
+              editionId={editionId}
+              lessonId={entry.lessonId}
+              lessonTitleId={titleId}
+              included={entry.included}
+            />
+            {entry.included ? (
+              <MandatoryToggle
+                editionId={editionId}
+                lessonId={entry.lessonId}
+                lessonTitleId={titleId}
+                isMandatory={entry.isMandatory}
+              />
+            ) : null}
+          </>
+        )}
+      </div>
+    </div>
+  )
+}

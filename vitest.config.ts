@@ -31,6 +31,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
+      // `server-only` throws on import outside an RSC, which would make every
+      // server module untestable. Next resolves the real package at build
+      // time; only vitest sees this no-op stub. See src/test-stubs/.
+      "server-only": resolve(__dirname, "./src/test-stubs/server-only.ts"),
     },
   },
 })

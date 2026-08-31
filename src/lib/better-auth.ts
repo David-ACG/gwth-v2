@@ -22,8 +22,9 @@
  * - PLUNK_API_KEY (transactional email)
  */
 import { betterAuth } from "better-auth"
-import { APIError } from "better-auth/api"
+import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { and, eq } from "drizzle-orm"
 import { nextCookies } from "better-auth/next-js"
 import { organization } from "better-auth/plugins/organization"
 import { createAccessControl } from "better-auth/plugins/access"
@@ -42,6 +43,11 @@ import {
 } from "@/lib/billing/access"
 import { isPrivateContentMode } from "@/lib/content-mode"
 import { assertSingleOrgRole, OrgRoleError } from "@/lib/org-roles"
+import {
+  decideRosterAccess,
+  ROSTER_BEARING_PATHS,
+  ROSTER_FORBIDDEN_MESSAGE,
+} from "@/lib/org-roster-privacy"
 
 // ── N5: organization plugin roles (design 05 section 9, decisions 2026-08-28)
 // owner  = the plugin's creator role. GWTH holds it for the institution orgs
@@ -82,6 +88,94 @@ function requireSingleOrgRole(
     throw error
   }
 }
+
+/**
+ * The organisation a roster-bearing request targets, using the SAME
+ * precedence the plugin's own handlers use (query id → query slug → the
+ * session's active organisation). Returns null when it cannot be determined,
+ * which the policy treats as "defer": the handler itself answers 400.
+ */
+async function resolveTargetOrganisationId(
+  query: Record<string, unknown> | undefined,
+  activeOrganizationId: string | null | undefined
+): Promise<string | null> {
+  const id = typeof query?.organizationId === "string" ? query.organizationId : null
+  if (id) return id
+
+  const slug =
+    typeof query?.organizationSlug === "string" ? query.organizationSlug : null
+  if (slug) {
+    const rows = await getDb()
+      .select({ id: schema.organisation.id })
+      .from(schema.organisation)
+      .where(eq(schema.organisation.slug, slug))
+      .limit(1)
+    return rows[0]?.id ?? null
+  }
+
+  return activeOrganizationId ?? null
+}
+
+/**
+ * The caller's role in one organisation, read straight from `org_membership`
+ * (indexed by user id). Deliberately NOT routed through the plugin adapter:
+ * this check guards the plugin, so it must not depend on the plugin's own
+ * authorisation surface.
+ */
+async function findOrgRole(
+  userId: string,
+  organisationId: string
+): Promise<string | null> {
+  const rows = await getDb()
+    .select({ role: schema.orgMembership.role })
+    .from(schema.orgMembership)
+    .where(
+      and(
+        eq(schema.orgMembership.userId, userId),
+        eq(schema.orgMembership.organizationId, organisationId)
+      )
+    )
+    .limit(1)
+  return rows[0]?.role ?? null
+}
+
+/**
+ * Roster-privacy gate (N7, closes N5 QA defect 3). Runs before EVERY Better
+ * Auth endpoint — including `auth.api.*` server-side dispatch — and is a
+ * cheap Set lookup for the ~99% of paths that are not roster-bearing.
+ *
+ * See src/lib/org-roster-privacy.ts for why the plugin's access controller
+ * cannot express this and which endpoints are covered.
+ */
+const rosterPrivacyHook = createAuthMiddleware(async (ctx) => {
+  if (!ROSTER_BEARING_PATHS.has(ctx.path)) return
+
+  const session = await getSessionFromCtx(ctx).catch(() => null)
+  const query = ctx.query as Record<string, unknown> | undefined
+  const targetsAnotherUser =
+    typeof query?.userId === "string" && query.userId !== session?.user?.id
+
+  const organisationId = session
+    ? await resolveTargetOrganisationId(
+        query,
+        session.session.activeOrganizationId as string | null | undefined
+      )
+    : null
+
+  const decision = decideRosterAccess(ctx.path, {
+    hasSession: Boolean(session),
+    organisationId,
+    role:
+      session && organisationId
+        ? await findOrgRole(session.user.id, organisationId)
+        : null,
+    targetsAnotherUser,
+  })
+
+  if (decision.kind === "refuse") {
+    throw new APIError("FORBIDDEN", { message: ROSTER_FORBIDDEN_MESSAGE })
+  }
+})
 
 /**
  * Whether an email is on the platform-admin allowlist (ADMIN_EMAILS).
@@ -285,6 +379,13 @@ function buildAuth() {
             },
           }
         : {}),
+    },
+    // N7: the roster-privacy gate. `hooks` (singular before/after) is the
+    // instance-level pipeline better-auth runs with `matcher: () => true`
+    // for every endpoint, so this cannot be bypassed by reaching a plugin
+    // route directly — see runBeforeHooks in better-auth/dist/api/dispatch.
+    hooks: {
+      before: rosterPrivacyHook,
     },
     databaseHooks: {
       user: {

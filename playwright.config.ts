@@ -9,7 +9,10 @@ export default defineConfig({
   reporter: "html",
   timeout: 60000,
   use: {
-    baseURL: "http://localhost:3000",
+    // N7: overridable so a spec suite can run against a dev server started on
+    // a free port (the shared :3000 is often serving a stale production build
+    // on the P520 box). Unset, the behaviour is exactly as before.
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000",
     trace: "on-first-retry",
     navigationTimeout: 45000,
   },
@@ -30,10 +33,13 @@ export default defineConfig({
       use: { ...devices["Pixel 5"] },
     },
   ],
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 60000,
-  },
+  // Skipped when PLAYWRIGHT_BASE_URL points at a server that is already up.
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : {
+        command: "npm run dev",
+        url: "http://localhost:3000",
+        reuseExistingServer: !process.env.CI,
+        timeout: 60000,
+      },
 })

@@ -187,6 +187,53 @@ export const adminGrantSchema = z.object({
   sendInvite: z.boolean(),
 })
 
+// ─── Institution admin (N7) ──────────────────────────────────────────────────
+
+/** An edition id and a lesson id are opaque strings; bound the length. */
+const editionRefSchema = {
+  editionId: z.string().min(1).max(128),
+  lessonId: z.string().min(1).max(128),
+}
+
+/** Switching a lesson in/out of an edition, or in/out of the baseline. */
+export const editionLessonToggleSchema = z.object({
+  ...editionRefSchema,
+  included: z.boolean(),
+})
+
+/**
+ * Ratifying a draft lesson, or sending it back with a reason. The note is
+ * REQUIRED for a send-back: "changes requested" with no note is not feedback
+ * GWTH can act on, and it is what the lesson author reads.
+ */
+export const editionLessonDecisionSchema = z
+  .object({
+    ...editionRefSchema,
+    decision: z.enum(["ratify", "send-back"]),
+    note: z
+      .string()
+      .max(1000, "Keep the note under 1000 characters")
+      .optional(),
+  })
+  .refine(
+    (value) =>
+      value.decision !== "send-back" || (value.note?.trim().length ?? 0) > 0,
+    {
+      message: "Say what needs to change before sending the lesson back.",
+      path: ["note"],
+    }
+  )
+
+/** The per-edition pass mark (decision 4, 2026-08-28: one per edition). */
+export const editionPassMarkSchema = z.object({
+  editionId: z.string().min(1).max(128),
+  passMark: z
+    .number({ message: "Enter a pass mark between 0 and 100" })
+    .int("The pass mark must be a whole number")
+    .min(0, "The pass mark cannot be below 0")
+    .max(100, "The pass mark cannot be above 100"),
+})
+
 // ─── Inferred Types ───────────────────────────────────────────────────────────
 
 export type LoginFormData = z.infer<typeof loginSchema>
@@ -203,3 +250,4 @@ export type FeedbackCategory = (typeof FEEDBACK_CATEGORIES)[number]
 export type WaitlistFormData = z.infer<typeof waitlistSchema>
 export type NewsCommentFormData = z.infer<typeof newsCommentSchema>
 export type AdminGrantFormData = z.infer<typeof adminGrantSchema>
+export type EditionPassMarkFormData = z.infer<typeof editionPassMarkSchema>

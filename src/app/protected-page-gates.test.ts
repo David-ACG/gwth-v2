@@ -46,6 +46,7 @@ const APP_DIR = join(process.cwd(), "src", "app")
  */
 const ROUTE_DIR_MAP: Record<string, string[]> = {
   "/admin": ["admin"],
+  "/org": ["org"],
   "/dashboard": ["(dashboard)/dashboard"],
   "/courses": ["(dashboard)/courses"],
   "/course": ["(dashboard)/course"],
@@ -87,6 +88,12 @@ const EXEMPT_PAGES: Record<string, string> = {
 const GATE_NAMES = new Set([
   "requireSessionOrRedirect",
   "requireAdminOrRedirect",
+  // N7: the institution-staff gate. Mode-independent in the same way as the
+  // other two - it resolves the session through getCurrentUser() and
+  // redirects anonymous traffic to /login, and the ONE place it renders
+  // without a session is the shared isSessionlessMockRequest() seam, which
+  // never admits a presented (forged) cookie.
+  "requireOrgStaffOrRedirect",
 ])
 
 // ── AST classifier ───────────────────────────────────────────────────────────
