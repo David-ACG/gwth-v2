@@ -56,13 +56,13 @@ export default async function OrgLayout({
           <a href="/org" className={adminStyles.brand}>
             <span className={styles.coBrand}>
               <span className={adminStyles.brandTitle}>GWTH</span>
-              {context.coBrandLabel ? (
+              {context.edition?.coBrandLabel ? (
                 <>
                   <span className={styles.coBrandDivider} aria-hidden="true">
                     /
                   </span>
                   <span className={styles.coBrandLabel}>
-                    {context.coBrandLabel}
+                    {context.edition.coBrandLabel}
                   </span>
                 </>
               ) : null}

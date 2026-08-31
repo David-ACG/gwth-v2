@@ -4,8 +4,8 @@
  * Server Actions for the institution admin screens (N7).
  *
  * The three things design 05 and the CIPD calls asked for, in one place:
- *   1. switch an OPTIONAL or EXCLUSIVE lesson in or out of the edition
- *      (Ben's "employer picks optional lessons"),
+ *   1. switch an OPTIONAL lesson in or out of the edition (Ben's "employer
+ *      picks optional lessons"),
  *   2. ratify a draft exclusive lesson, or send it back for changes,
  *   3. set the edition's pass mark (Ben: "could we set like a pass mark for
  *      students?"), which N6's grading already reads.
@@ -27,7 +27,11 @@ import { revalidatePath } from "next/cache"
 import { and, eq } from "drizzle-orm"
 import { getDb } from "@/db"
 import { editionLessons, lessons, syllabusEdition } from "@/db/schema"
-import { resolveEditionEditor, type OrgStaffContext } from "@/lib/data/org-admin"
+import {
+  resolveEditionEditor,
+  type OrgEdition,
+  type OrgStaffContext,
+} from "@/lib/data/org-admin"
 import {
   editionLessonDecisionSchema,
   editionLessonToggleSchema,
@@ -53,11 +57,12 @@ const NOT_YOURS =
 async function authoriseEdition(
   editionId: string
 ): Promise<
-  { ok: true; context: OrgStaffContext } | { ok: false; message: string }
+  | { ok: true; context: OrgStaffContext; edition: OrgEdition }
+  | { ok: false; message: string }
 > {
   const editor = await resolveEditionEditor()
   if (!editor.ok) return editor
-  if (editor.context.editionId !== editionId) {
+  if (editor.edition.id !== editionId) {
     return { ok: false, message: NOT_YOURS }
   }
   return editor
@@ -66,16 +71,17 @@ async function authoriseEdition(
 /**
  * Switches a lesson in or out of the institution's edition.
  *
- * D-N7-3: CORE lessons cannot be switched off. They are the GWTH course
- * itself — an edition without them is not the course the credential attests
- * to — so the picker renders them locked and this action refuses them even if
- * the form is forged. Optional and exclusive lessons are the institution's to
- * curate, which is exactly the "one core content body, many wrappers" shape.
+ * ONLY OPTIONAL lessons are switchable here (QA round-1 defects 7 + 8).
  *
- * Switching ON re-creates the row with the tier the GWTH catalogue implies
- * (`is_optional`), state `ratified` for optional lessons; an EXCLUSIVE lesson
- * is never silently ratified by a toggle — it returns as a draft and goes
- * through the ratification queue.
+ * - CORE is the GWTH course itself (D-N7-3): an edition without the spine is
+ *   not the course the credential attests to, so the picker renders it locked
+ *   and this action refuses it even if the form is forged.
+ * - EXCLUSIVE is governed by the ratification queue, not by a checkbox.
+ *   Removing an exclusive row would delete its tier, its decision audit and
+ *   the institution's review note with no way back, and re-adding it would
+ *   reclassify it as an ordinary optional lesson and publish it to learners
+ *   without the sign-off it exists to require. Refused outright; the queue is
+ *   where an institution accepts or rejects that content.
  *
  * @param editionId The edition being edited (must be the caller's own).
  * @param lessonId The lesson to switch.
@@ -122,7 +128,7 @@ export async function setEditionLessonIncludedAction(
     .from(editionLessons)
     .where(
       and(
-        eq(editionLessons.editionId, context.editionId),
+        eq(editionLessons.editionId, auth.edition.id),
         eq(editionLessons.lessonId, lesson.id)
       )
     )
@@ -136,13 +142,20 @@ export async function setEditionLessonIncludedAction(
         "Core lessons are part of every edition of this course and cannot be switched off.",
     }
   }
+  if (currentTier === "exclusive") {
+    return {
+      ok: false,
+      message:
+        "Lessons written for your edition are managed on the ratification screen, so their sign-off history is never lost.",
+    }
+  }
 
   if (!parsed.data.included) {
     await db
       .delete(editionLessons)
       .where(
         and(
-          eq(editionLessons.editionId, context.editionId),
+          eq(editionLessons.editionId, auth.edition.id),
           eq(editionLessons.lessonId, lesson.id)
         )
       )
@@ -153,12 +166,10 @@ export async function setEditionLessonIncludedAction(
   await db
     .insert(editionLessons)
     .values({
-      editionId: context.editionId,
+      editionId: auth.edition.id,
       lessonId: lesson.id,
-      tier: currentTier,
-      // An exclusive lesson re-enters as a DRAFT: adding it back is not the
-      // same act as signing it off.
-      state: currentTier === "exclusive" ? "draft" : "ratified",
+      tier: "optional",
+      state: "ratified",
       isMandatory: false,
       sortOrder: lesson.month * 1000 + lesson.order,
     })
@@ -195,7 +206,7 @@ export async function setEditionLessonMandatoryAction(
     .set({ isMandatory: parsed.data.included })
     .where(
       and(
-        eq(editionLessons.editionId, auth.context.editionId),
+        eq(editionLessons.editionId, auth.edition.id),
         eq(editionLessons.lessonId, parsed.data.lessonId)
       )
     )
@@ -248,6 +259,11 @@ export async function decideEditionLessonAction(
   const { context } = auth
 
   const ratifying = parsed.data.decision === "ratify"
+  // The tier predicate is the load-bearing part (QA round-1 defect 6):
+  // without it a forged send-back against a CORE lesson would set
+  // state='draft', and since learners see ratified rows only, a core lesson
+  // of the credentialed course would vanish from every learner's syllabus.
+  // Ratification decisions exist for institution-exclusive content alone.
   const updated = await getDb()
     .update(editionLessons)
     .set({
@@ -258,12 +274,19 @@ export async function decideEditionLessonAction(
     })
     .where(
       and(
-        eq(editionLessons.editionId, context.editionId),
-        eq(editionLessons.lessonId, parsed.data.lessonId)
+        eq(editionLessons.editionId, auth.edition.id),
+        eq(editionLessons.lessonId, parsed.data.lessonId),
+        eq(editionLessons.tier, "exclusive")
       )
     )
     .returning({ lessonId: editionLessons.lessonId })
-  if (updated.length === 0) return { ok: false, message: NOT_YOURS }
+  if (updated.length === 0) {
+    return {
+      ok: false,
+      message:
+        "Only lessons written for your edition go through ratification.",
+    }
+  }
 
   revalidateOrg()
   return {
@@ -304,7 +327,7 @@ export async function setEditionPassMarkAction(
   await getDb()
     .update(syllabusEdition)
     .set({ passMark: parsed.data.passMark })
-    .where(eq(syllabusEdition.id, auth.context.editionId))
+    .where(eq(syllabusEdition.id, auth.edition.id))
 
   revalidateOrg()
   return {

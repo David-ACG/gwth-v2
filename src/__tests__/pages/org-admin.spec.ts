@@ -17,6 +17,48 @@ import AxeBuilder from "@axe-core/playwright"
  *   PLAYWRIGHT_BASE_URL=http://localhost:3005 npx playwright test org-admin
  */
 
+/**
+ * next-themes runs with attribute="class" and defaultTheme="light", so
+ * `emulateMedia({ colorScheme: 'dark' })` does NOT flip the app's theme —
+ * every "dark" baseline written that way is a light render mislabelled (QA
+ * round-1 defect 1). The theme is stored in localStorage under "theme", so
+ * seeding it BEFORE navigation is what actually produces a dark render.
+ */
+async function open(
+  page: import("@playwright/test").Page,
+  path: string,
+  theme: "light" | "dark" = "light",
+  /** Wait for hydration too — required before clicking a client control. */
+  interactive = false
+) {
+  await page.addInitScript(
+    (value) => window.localStorage.setItem("theme", value),
+    theme
+  )
+  await page.emulateMedia({
+    reducedMotion: "reduce",
+    colorScheme: theme,
+  })
+  await page.goto(path, { waitUntil: "domcontentloaded" })
+  // Hide the dev-only overlays (Next's build indicator and the month-state
+  // switcher). They are absent from any real deployment, so leaving them in
+  // would make both the baselines and the axe scan depend on which mode the
+  // server happens to be running in.
+  await page.addStyleTag({
+    content:
+      "nextjs-portal, [data-section='dev-state-switcher'] { display: none !important; }",
+  })
+  // Condition-based, not a fixed sleep (QA round-1 style note 5).
+  await expect(page.locator("h1").first()).toBeVisible()
+  await expect(page.locator("html")).toHaveClass(
+    theme === "dark" ? /dark/ : /light/
+  )
+  // A server-rendered control looks identical to a hydrated one, so a click
+  // before hydration is silently dropped. Waiting for the network to settle
+  // is the available proxy for "the client bundle has attached its handlers".
+  if (interactive) await page.waitForLoadState("networkidle")
+}
+
 const SCREENS = [
   { path: "/org", name: "overview", heading: /CIPD/i },
   { path: "/org/syllabus", name: "syllabus", heading: /Syllabus/i },
@@ -27,57 +69,37 @@ const SCREENS = [
 test.describe("Institution admin (/org)", () => {
   for (const screen of SCREENS) {
     test.describe(screen.name, () => {
-      test.beforeEach(async ({ page }) => {
-        await page.goto(screen.path, { waitUntil: "domcontentloaded" })
-        // Hide the dev-only overlays (Next's build indicator and the
-        // month-state switcher). They are absent from any real deployment, so
-        // leaving them in would make both the baselines and the axe scan
-        // depend on which mode the server happens to be running in.
-        await page.addStyleTag({
-          content:
-            "nextjs-portal, [data-section='dev-state-switcher'] { display: none !important; }",
-        })
-        await page.waitForTimeout(500)
-      })
-
       test("renders its heading", async ({ page }) => {
+        await open(page, screen.path)
         await expect(page.locator("h1").first()).toHaveText(screen.heading)
       })
 
       test("shows the co-branded masthead, GWTH first", async ({ page }) => {
+        await open(page, screen.path)
         const header = page.locator("header").first()
         await expect(header).toContainText("GWTH")
         await expect(header).toContainText("Curated by CIPD")
       })
 
       test("says on its face that it is a preview", async ({ page }) => {
+        await open(page, screen.path)
         await expect(
           page.locator('[data-section="org-preview-banner"]')
         ).toBeVisible()
       })
 
-      test("screenshot - light mode", async ({ page }) => {
-        await page.emulateMedia({ reducedMotion: "reduce" })
-        await page.waitForTimeout(300)
-        await expect(page).toHaveScreenshot(`org-${screen.name}-light.png`, {
-          fullPage: true,
-          maxDiffPixelRatio: 0.05,
+      for (const theme of ["light", "dark"] as const) {
+        test(`screenshot - ${theme} mode`, async ({ page }) => {
+          await open(page, screen.path, theme)
+          await expect(page).toHaveScreenshot(
+            `org-${screen.name}-${theme}.png`,
+            { fullPage: true, maxDiffPixelRatio: 0.05 }
+          )
         })
-      })
-
-      test("screenshot - dark mode", async ({ page }) => {
-        await page.emulateMedia({
-          colorScheme: "dark",
-          reducedMotion: "reduce",
-        })
-        await page.waitForTimeout(300)
-        await expect(page).toHaveScreenshot(`org-${screen.name}-dark.png`, {
-          fullPage: true,
-          maxDiffPixelRatio: 0.05,
-        })
-      })
+      }
 
       test("has no critical accessibility violations", async ({ page }) => {
+        await open(page, screen.path)
         const results = await new AxeBuilder({ page })
           .withTags(["wcag2a", "wcag2aa"])
           .disableRules(["color-contrast"])
@@ -90,16 +112,70 @@ test.describe("Institution admin (/org)", () => {
   }
 
   test("the syllabus picker groups lessons by tier", async ({ page }) => {
-    await page.goto("/org/syllabus", { waitUntil: "domcontentloaded" })
+    await open(page, "/org/syllabus")
     for (const tier of ["core", "optional", "exclusive"]) {
       await expect(page.locator(`[data-section="tier-${tier}"]`)).toBeVisible()
     }
   })
 
+  // End-to-end through the real server action (QA round-1 style note 1). In
+  // preview mode the server's honest refusal IS the observable outcome, and
+  // it proves the whole chain — client control, action, authority check,
+  // toast — is wired, which a unit test on the action cannot show.
+  test("switching a lesson round-trips to the server and reports the refusal", async ({
+    page,
+  }) => {
+    await open(page, "/org/syllabus", "light", true)
+    const toggle = page
+      .locator('[data-section="tier-optional"] input[type="checkbox"]')
+      .first()
+    await toggle.click()
+    await expect(page.getByText(/changes are not saved/i)).toBeVisible({
+      timeout: 15000,
+    })
+  })
+
+  test("ratifying round-trips to the server and reports the refusal", async ({
+    page,
+  }) => {
+    await open(page, "/org/ratification", "light", true)
+    await page
+      .locator('[data-section="ratification-item"]')
+      .first()
+      .getByRole("button", { name: "Ratify" })
+      .click()
+    await expect(page.getByText(/changes are not saved/i)).toBeVisible({
+      timeout: 15000,
+    })
+  })
+
+  test("sending back with no note is refused before it reaches the server", async ({
+    page,
+  }) => {
+    await open(page, "/org/ratification", "light", true)
+    await page
+      .locator('[data-section="ratification-item"]')
+      .first()
+      .getByRole("button", { name: "Send back" })
+      .click()
+    await expect(page.getByText(/say what needs to change/i)).toBeVisible({
+      timeout: 15000,
+    })
+  })
+
+  test("exclusive lessons are not switchable in the picker", async ({
+    page,
+  }) => {
+    await open(page, "/org/syllabus")
+    const exclusive = page.locator('[data-section="tier-exclusive"]')
+    await expect(exclusive.locator('input[type="checkbox"]')).toHaveCount(0)
+    await expect(exclusive).toContainText("ratification screen")
+  })
+
   test("core lessons are locked, with the reason on screen", async ({
     page,
   }) => {
-    await page.goto("/org/syllabus", { waitUntil: "domcontentloaded" })
+    await open(page, "/org/syllabus")
     const core = page.locator('[data-section="tier-core"]')
     // No switch at all on a core lesson — the reason is stated instead.
     await expect(core.locator('input[type="checkbox"]')).toHaveCount(0)
@@ -109,7 +185,7 @@ test.describe("Institution admin (/org)", () => {
   test("optional lessons carry a real, keyboard-operable switch", async ({
     page,
   }) => {
-    await page.goto("/org/syllabus", { waitUntil: "domcontentloaded" })
+    await open(page, "/org/syllabus")
     const toggles = page
       .locator('[data-section="tier-optional"]')
       .locator('input[type="checkbox"]')
@@ -129,7 +205,7 @@ test.describe("Institution admin (/org)", () => {
   test("the pass mark is settable and states its consequences", async ({
     page,
   }) => {
-    await page.goto("/org/syllabus", { waitUntil: "domcontentloaded" })
+    await open(page, "/org/syllabus")
     const panel = page.locator('[data-section="pass-mark"]')
     await expect(panel).toBeVisible()
     await expect(panel).toContainText("75%")
@@ -140,7 +216,7 @@ test.describe("Institution admin (/org)", () => {
   test("the ratification queue offers ratify and send-back per lesson", async ({
     page,
   }) => {
-    await page.goto("/org/ratification", { waitUntil: "domcontentloaded" })
+    await open(page, "/org/ratification")
     const items = page.locator('[data-section="ratification-item"]')
     expect(await items.count()).toBeGreaterThan(0)
     const first = items.first()
@@ -149,7 +225,7 @@ test.describe("Institution admin (/org)", () => {
   })
 
   test("a lesson sent back shows why", async ({ page }) => {
-    await page.goto("/org/ratification", { waitUntil: "domcontentloaded" })
+    await open(page, "/org/ratification")
     await expect(page.getByText(/You sent this back:/)).toBeVisible()
     await expect(page.getByText(/changes requested/i).first()).toBeVisible()
   })
@@ -157,7 +233,7 @@ test.describe("Institution admin (/org)", () => {
   test("the roster reports the baseline, never a quiz transcript", async ({
     page,
   }) => {
-    await page.goto("/org/learners", { waitUntil: "domcontentloaded" })
+    await open(page, "/org/learners")
     await expect(page.getByText(/baseline met/i).first()).toBeVisible()
     // v1 deliberately has no per-learner drill-down (design 05 section 4).
     await expect(page.getByRole("link", { name: /view answers/i })).toHaveCount(

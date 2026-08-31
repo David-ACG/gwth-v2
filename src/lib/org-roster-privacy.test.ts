@@ -12,10 +12,17 @@ import {
   decideRosterAccess,
   ROSTER_BEARING_PATHS,
 } from "./org-roster-privacy"
+import { ORG_STAFF_ROLES } from "@/lib/org-admin-policy"
 
 /** A member of the org in question, with a session. */
 function member(role: string | null, extra: Record<string, unknown> = {}) {
-  return { hasSession: true, organisationId: "org_a", role, ...extra }
+  return {
+    hasSession: true,
+    organisationId: "org_a",
+    role,
+    targetsAnotherUser: false,
+    ...extra,
+  }
 }
 
 describe("canReadOrgRoster", () => {
@@ -102,6 +109,7 @@ describe("decideRosterAccess", () => {
       hasSession: false,
       organisationId: null,
       role: null,
+      targetsAnotherUser: true,
     })
     expect(decision.kind).toBe("defer")
   })
@@ -111,6 +119,7 @@ describe("decideRosterAccess", () => {
       hasSession: true,
       organisationId: null,
       role: null,
+      targetsAnotherUser: true,
     })
     expect(decision.kind).toBe("defer")
   })
@@ -118,9 +127,19 @@ describe("decideRosterAccess", () => {
   it("defers for a non-member (the endpoint returns 403 itself)", () => {
     const decision = decideRosterAccess(
       "/organization/get-full-organization",
-      member(null)
+      member(null, { targetsAnotherUser: true })
     )
     expect(decision.kind).toBe("defer")
+  })
+
+  it("keeps the roster-visible roles in step with the staff-role policy", () => {
+    // One list, not two (QA round-1 style note 4): every staff role reads the
+    // roster and no other role does, so a future role added to the staff
+    // policy cannot silently gain or lose roster access here.
+    for (const role of ORG_STAFF_ROLES) {
+      expect(canReadOrgRoster(role), role).toBe(true)
+    }
+    expect(canReadOrgRoster("learner")).toBe(false)
   })
 
   it("covers the endpoints that actually carry the roster", () => {

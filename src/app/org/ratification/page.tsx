@@ -21,7 +21,9 @@ import styles from "../org-fde.module.css"
 export default async function OrgRatificationPage() {
   const context = await requireOrgStaffOrRedirect()
   if (!canEditEdition(context.role)) redirect("/org")
+  if (!context.edition) redirect("/org")
 
+  const edition = context.edition
   const queue = await safe(() => getRatificationQueue(context))
 
   return (
@@ -60,7 +62,12 @@ export default async function OrgRatificationPage() {
             data-section="ratification-item"
           >
             <div className={styles.queueHead}>
-              <h2 className={styles.queueTitle}>{entry.title}</h2>
+              <h2
+                className={styles.queueTitle}
+                id={`queue-title-${entry.lessonId}`}
+              >
+                {entry.title}
+              </h2>
               <LessonMeta>Month {entry.month}</LessonMeta>
             </div>
             <div className={styles.lessonMeta}>
@@ -81,9 +88,8 @@ export default async function OrgRatificationPage() {
               </p>
             ) : null}
             <RatificationControls
-              editionId={context.editionId}
+              editionId={edition.id}
               lessonId={entry.lessonId}
-              lessonTitle={entry.title}
             />
           </article>
         ))

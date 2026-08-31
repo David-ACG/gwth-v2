@@ -50,19 +50,30 @@ export type OrgStaffContext = {
   organisationName: string
   /** 'institution' (CIPD-shaped) or 'company' (Teams-shaped). */
   organisationType: string
-  /** The org's default edition for the course — what /org curates. */
-  editionId: string
-  editionName: string
-  editionStatus: "draft" | "live" | "archived"
-  /** Co-brand label rendered in the /org masthead and the learner viewer. */
-  coBrandLabel: string | null
-  /** The edition's pass mark (decision 4: one per edition). */
-  passMark: number
+  /**
+   * The org's default edition for this course — what /org curates — or NULL
+   * when GWTH has provisioned the organisation but not yet created its
+   * edition (QA round-1 defect 11). Staff still reach /org in that state and
+   * every screen says the edition is missing, rather than being bounced to
+   * the learner dashboard as if they had no admin access at all.
+   */
+  edition: OrgEdition | null
   /** The course this edition wraps. */
   courseId: string
   courseTitle: string
   /** True when the screens are rendering fixtures, not this org's real rows. */
   isPreview: boolean
+}
+
+/** The edition an institution curates, once GWTH has created it. */
+export type OrgEdition = {
+  id: string
+  name: string
+  status: "draft" | "live" | "archived"
+  /** Co-brand label rendered in the /org masthead and the learner viewer. */
+  coBrandLabel: string | null
+  /** The pass mark quizzes are graded against (decision 4: one per edition). */
+  passMark: number
 }
 
 /** One lesson as the institution's picker sees it. */

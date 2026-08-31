@@ -46,8 +46,8 @@ export default async function OrgLearnersPage() {
       </div>
       <p className={adminStyles.sectionLead}>
         Where each of your people is against your baseline: every mandatory
-        lesson of your edition completed, with a quiz at or above your{" "}
-        {context.passMark}% pass mark.
+        lesson of your edition completed, with a quiz at or above your
+        {context.edition ? ` ${context.edition.passMark}% ` : " "}pass mark.
       </p>
 
       {roster === null ? (

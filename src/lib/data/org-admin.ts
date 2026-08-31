@@ -49,6 +49,7 @@ import { getCurrentUser } from "@/lib/auth"
 import {
   canEditEdition,
   isOrgStaffRole,
+  type OrgEdition,
   type EditionSyllabusEntry,
   type OrgLessonCompletionRow,
   type OrgRosterRow,
@@ -68,7 +69,11 @@ import {
 // otherwise be untestable without a database). Re-exported here so pages and
 // actions have ONE import for the institution admin layer.
 export { canEditEdition, summariseRoster } from "@/lib/org-admin-policy"
-export type { EditionSyllabusEntry, OrgStaffContext } from "@/lib/org-admin-policy"
+export type {
+  EditionSyllabusEntry,
+  OrgEdition,
+  OrgStaffContext,
+} from "@/lib/org-admin-policy"
 
 /**
  * Resolves the caller's staff context, or null when they are not org staff.
@@ -113,8 +118,10 @@ export const resolveOrgStaffContext = cache(
     if (!course) return null
 
     // The org's own default edition for the course. An org with no edition
-    // yet has nothing to curate: /org says so rather than silently editing
-    // the GLOBAL default, which would change every B2C learner's syllabus.
+    // yet has nothing to curate: /org SAYS SO (QA round-1 defect 11) rather
+    // than bouncing a real admin to the learner dashboard — and it never
+    // falls back to the GLOBAL default, which would change every B2C
+    // learner's syllabus.
     const editionRows = await db
       .select({
         id: syllabusEdition.id,
@@ -133,7 +140,6 @@ export const resolveOrgStaffContext = cache(
       )
       .limit(1)
     const edition = editionRows[0]
-    if (!edition) return null
 
     return {
       userId: currentUser.id,
@@ -142,11 +148,17 @@ export const resolveOrgStaffContext = cache(
       organisationId: staff.organisationId,
       organisationName: staff.organisationName,
       organisationType: staff.organisationType,
-      editionId: edition.id,
-      editionName: edition.name,
-      editionStatus: edition.status as OrgStaffContext["editionStatus"],
-      coBrandLabel: edition.coBrandLabel,
-      passMark: edition.passMark,
+      edition: edition
+        ? {
+            id: edition.id,
+            name: edition.name,
+            status: edition.status as NonNullable<
+              OrgStaffContext["edition"]
+            >["status"],
+            coBrandLabel: edition.coBrandLabel,
+            passMark: edition.passMark,
+          }
+        : null,
       courseId: course.id,
       courseTitle: course.title,
       isPreview: false,
@@ -178,7 +190,8 @@ export async function requireOrgStaffOrRedirect(): Promise<OrgStaffContext> {
  * throwing so server actions can hand the caller an honest message.
  */
 export async function resolveEditionEditor(): Promise<
-  { ok: true; context: OrgStaffContext } | { ok: false; message: string }
+  | { ok: true; context: OrgStaffContext; edition: OrgEdition }
+  | { ok: false; message: string }
 > {
   const context = await resolveOrgStaffContext()
   if (!context) {
@@ -197,7 +210,14 @@ export async function resolveEditionEditor(): Promise<
       message: "Tutors have read-only access. Ask an organisation admin to change this.",
     }
   }
-  return { ok: true, context }
+  if (!context.edition) {
+    return {
+      ok: false,
+      message:
+        "Your organisation does not have an edition yet. GWTH creates it before you can curate a syllabus.",
+    }
+  }
+  return { ok: true, context, edition: context.edition }
 }
 
 /**
@@ -213,6 +233,7 @@ export async function getEditionSyllabus(
   context: OrgStaffContext
 ): Promise<EditionSyllabusEntry[]> {
   if (context.isPreview) return mockEditionSyllabus()
+  if (!context.edition) return []
 
   const db = getDb()
   const rows = await db
@@ -235,7 +256,7 @@ export async function getEditionSyllabus(
       editionLessons,
       and(
         eq(editionLessons.lessonId, lessons.id),
-        eq(editionLessons.editionId, context.editionId)
+        eq(editionLessons.editionId, context.edition.id)
       )
     )
     .where(eq(lessons.courseId, context.courseId))
@@ -292,6 +313,7 @@ export async function getOrgRoster(
   context: OrgStaffContext
 ): Promise<OrgRosterRow[]> {
   if (context.isPreview) return mockOrgRoster()
+  if (!context.edition) return []
 
   const db = getDb()
   const mandatory = await db
@@ -299,7 +321,7 @@ export async function getOrgRoster(
     .from(editionLessons)
     .where(
       and(
-        eq(editionLessons.editionId, context.editionId),
+        eq(editionLessons.editionId, context.edition.id),
         eq(editionLessons.isMandatory, true),
         eq(editionLessons.state, "ratified")
       )
@@ -322,6 +344,8 @@ export async function getOrgRoster(
     )
   if (members.length === 0) return []
 
+  const memberIds = members.map((m) => m.userId)
+
   // One aggregate over the learners' progress rows, restricted to the
   // edition's mandatory lessons. Empty mandatory set => no progress rows,
   // and every learner reads 0 of 0 with baselineMet false (a baseline nobody
@@ -333,42 +357,44 @@ export async function getOrgRoster(
           isCompleted: lessonProgress.isCompleted,
           quizPassed: lessonProgress.quizPassed,
           bestQuizScore: lessonProgress.bestQuizScore,
-          lastAccessedAt: lessonProgress.lastAccessedAt,
         })
         .from(lessonProgress)
         .where(
           and(
-            inArray(
-              lessonProgress.userId,
-              members.map((m) => m.userId)
-            ),
+            inArray(lessonProgress.userId, memberIds),
             inArray(lessonProgress.lessonId, mandatoryIds)
           )
         )
     : []
 
+  // Activity is ALL activity (QA round-1 defect 13). Scoping "last active" to
+  // the mandatory set reported a learner who spent today on an optional
+  // lesson as weeks idle, which is exactly the wrong signal for a tutor.
+  const activityRows = await db
+    .select({
+      userId: lessonProgress.userId,
+      lastActive: sql<string | null>`max(${lessonProgress.lastAccessedAt})`,
+    })
+    .from(lessonProgress)
+    .where(inArray(lessonProgress.userId, memberIds))
+    .groupBy(lessonProgress.userId)
+  const lastActiveByUser = new Map(
+    activityRows.map((row) => [row.userId, row.lastActive])
+  )
+
   const byUser = new Map<
     string,
-    { done: number; passed: number; scores: number[]; lastActive: string | null }
+    { done: number; baseline: number; scores: number[] }
   >()
   for (const row of progressRows) {
-    const acc = byUser.get(row.userId) ?? {
-      done: 0,
-      passed: 0,
-      scores: [],
-      lastActive: null,
-    }
-    if (row.isCompleted) {
-      acc.done += 1
-      if (row.bestQuizScore !== null) acc.scores.push(row.bestQuizScore)
-      if (row.quizPassed) acc.passed += 1
-    }
-    if (
-      row.lastAccessedAt &&
-      (!acc.lastActive || row.lastAccessedAt > acc.lastActive)
-    ) {
-      acc.lastActive = row.lastAccessedAt
-    }
+    const acc = byUser.get(row.userId) ?? { done: 0, baseline: 0, scores: [] }
+    if (row.isCompleted) acc.done += 1
+    // Baseline is design 05 Q1's definition verbatim: completed AND passed.
+    if (row.isCompleted && row.quizPassed) acc.baseline += 1
+    // The average is NOT gated on completion (QA round-1 defect 12): a
+    // recorded quiz score is a real score whether or not the learner has
+    // ticked the lesson off.
+    if (row.bestQuizScore !== null) acc.scores.push(row.bestQuizScore)
     byUser.set(row.userId, acc)
   }
 
@@ -385,9 +411,10 @@ export async function getOrgRoster(
         avgBestQuiz: scores.length
           ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
           : null,
-        lastActive: acc?.lastActive ?? null,
+        lastActive: lastActiveByUser.get(member.userId) ?? null,
         baselineMet:
-          mandatoryIds.length > 0 && (acc?.passed ?? 0) === mandatoryIds.length,
+          mandatoryIds.length > 0 &&
+          (acc?.baseline ?? 0) === mandatoryIds.length,
       }
     })
     .sort(
@@ -407,6 +434,7 @@ export async function getOrgLessonCompletion(
   context: OrgStaffContext
 ): Promise<OrgLessonCompletionRow[]> {
   if (context.isPreview) return mockOrgLessonCompletion()
+  if (!context.edition) return []
 
   const db = getDb()
   const rows = await db
@@ -432,7 +460,7 @@ export async function getOrgLessonCompletion(
     )
     .where(
       and(
-        eq(editionLessons.editionId, context.editionId),
+        eq(editionLessons.editionId, context.edition.id),
         eq(editionLessons.state, "ratified")
       )
     )

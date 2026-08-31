@@ -18,12 +18,15 @@ const orgLayer = vi.hoisted(() => ({
 }))
 
 const dbLayer = vi.hoisted(() => ({
-  lessonRows: [] as unknown[],
-  editionLessonRows: [] as unknown[],
+  /** Rows keyed by the table each select reads, so adding or reordering a
+   *  query cannot silently feed the wrong fixture (QA round-1 style note 10:
+   *  the earlier double routed by call parity). */
+  rows: {} as Record<string, unknown[]>,
   returningRows: [] as unknown[],
   deletes: [] as unknown[],
   inserts: [] as unknown[],
   updates: [] as unknown[],
+  selectedTables: [] as string[],
 }))
 
 vi.mock("@/lib/data/org-admin", () => ({
@@ -34,32 +37,35 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
 
 vi.mock("@/db", () => {
   /**
-   * A minimal thenable query double. `select()` chains resolve to whichever
-   * fixture the test set; `update()/delete()/insert()` record their calls.
+   * A minimal thenable query double. `.from(table)` decides which fixture the
+   * chain resolves to — keyed by the drizzle table's own name, so a query
+   * added, removed or reordered inside an action still reads the right rows
+   * (or loudly resolves to none) instead of silently shifting every later
+   * select onto the wrong fixture.
    */
-  function selectChain(rows: unknown[]) {
+  function selectChain() {
+    let table = "?"
+    const resolve = () => dbLayer.rows[table] ?? []
     const chain = {
-      from: () => chain,
+      from: (t: Record<symbol, string>) => {
+        // Drizzle stores the SQL table name under this symbol at runtime.
+        table = t?.[Symbol.for("drizzle:Name")] ?? "?"
+        dbLayer.selectedTables.push(table)
+        return chain
+      },
       leftJoin: () => chain,
       innerJoin: () => chain,
       where: () => chain,
-      limit: () => Promise.resolve(rows),
-      orderBy: () => Promise.resolve(rows),
+      limit: () => Promise.resolve(resolve()),
+      orderBy: () => Promise.resolve(resolve()),
       groupBy: () => chain,
-      then: (resolve: (value: unknown[]) => unknown) => resolve(rows),
+      then: (done: (value: unknown[]) => unknown) => done(resolve()),
     }
     return chain
   }
-  let selectCall = 0
   return {
     getDb: () => ({
-      select: () => {
-        // First select in each action reads the lesson; the second reads the
-        // existing edition_lessons row.
-        const rows =
-          selectCall++ % 2 === 0 ? dbLayer.lessonRows : dbLayer.editionLessonRows
-        return selectChain(rows)
-      },
+      select: () => selectChain(),
       delete: () => ({
         where: (predicate: unknown) => {
           dbLayer.deletes.push(predicate)
@@ -83,17 +89,14 @@ vi.mock("@/db", () => {
           }
         },
       }),
-      __resetSelectCall: () => {
-        selectCall = 0
-      },
     }),
   }
 })
 
-const { getDb } = await import("@/db")
 const {
   decideEditionLessonAction,
   setEditionLessonIncludedAction,
+  setEditionLessonMandatoryAction,
   setEditionPassMarkAction,
 } = await import("./org-admin")
 
@@ -105,33 +108,57 @@ const ADMIN_CONTEXT = {
   organisationId: "org_cipd",
   organisationName: "CIPD",
   organisationType: "institution",
-  editionId: "edition_cipd",
-  editionName: "CIPD edition 2026",
-  editionStatus: "live" as const,
-  coBrandLabel: "Curated by CIPD",
-  passMark: 75,
+  edition: {
+    id: "edition_cipd",
+    name: "CIPD edition 2026",
+    status: "live" as const,
+    coBrandLabel: "Curated by CIPD",
+    passMark: 75,
+  },
   courseId: "course_gwth",
   courseTitle: "Applied AI Skills",
   isPreview: false,
 }
 
+/** Shorthand for the lessons-table fixture one action call will read. */
+function seedLesson(overrides: Record<string, unknown> = {}) {
+  dbLayer.rows.lessons = [
+    {
+      id: "m2_l09",
+      title: "Meeting notes",
+      isOptional: true,
+      month: 2,
+      order: 9,
+      courseId: "course_gwth",
+      ...overrides,
+    },
+  ]
+}
+
+/** Shorthand for the edition_lessons row the action will find (or not). */
+function seedEditionRow(tier: string | null) {
+  dbLayer.rows.edition_lessons = tier === null ? [] : [{ tier }]
+}
+
 beforeEach(() => {
   vi.clearAllMocks()
-  dbLayer.lessonRows = []
-  dbLayer.editionLessonRows = []
+  dbLayer.rows = {}
   dbLayer.returningRows = []
   dbLayer.deletes = []
   dbLayer.inserts = []
   dbLayer.updates = []
-  ;(getDb() as unknown as { __resetSelectCall: () => void }).__resetSelectCall()
+  dbLayer.selectedTables = []
   orgLayer.resolveEditionEditor.mockResolvedValue({
     ok: true,
     context: ADMIN_CONTEXT,
+    edition: ADMIN_CONTEXT.edition,
   })
 })
 
 describe("authority is re-derived from the session, never the arguments", () => {
   it("refuses an edition id that is not the caller's own", async () => {
+    seedLesson()
+    seedEditionRow("optional")
     const result = await setEditionLessonIncludedAction(
       "edition_someone_else",
       "m2_l11",
@@ -178,16 +205,7 @@ describe("authority is re-derived from the session, never the arguments", () => 
 
 describe("setEditionLessonIncludedAction", () => {
   it("refuses a lesson from another course", async () => {
-    dbLayer.lessonRows = [
-      {
-        id: "other_l01",
-        title: "Another course's lesson",
-        isOptional: true,
-        month: 1,
-        order: 1,
-        courseId: "course_other",
-      },
-    ]
+    seedLesson({ id: "other_l01", courseId: "course_other" })
     const result = await setEditionLessonIncludedAction(
       "edition_cipd",
       "other_l01",
@@ -198,17 +216,8 @@ describe("setEditionLessonIncludedAction", () => {
   })
 
   it("refuses to switch a CORE lesson off (D-N7-3)", async () => {
-    dbLayer.lessonRows = [
-      {
-        id: "m1_l01",
-        title: "Welcome to GWTH",
-        isOptional: false,
-        month: 1,
-        order: 1,
-        courseId: "course_gwth",
-      },
-    ]
-    dbLayer.editionLessonRows = [{ tier: "core" }]
+    seedLesson({ id: "m1_l01", title: "Welcome to GWTH", isOptional: false })
+    seedEditionRow("core")
     const result = await setEditionLessonIncludedAction(
       "edition_cipd",
       "m1_l01",
@@ -220,17 +229,8 @@ describe("setEditionLessonIncludedAction", () => {
   })
 
   it("removes an optional lesson from the edition", async () => {
-    dbLayer.lessonRows = [
-      {
-        id: "m2_l09",
-        title: "Meeting notes",
-        isOptional: true,
-        month: 2,
-        order: 9,
-        courseId: "course_gwth",
-      },
-    ]
-    dbLayer.editionLessonRows = [{ tier: "optional" }]
+    seedLesson()
+    seedEditionRow("optional")
     const result = await setEditionLessonIncludedAction(
       "edition_cipd",
       "m2_l09",
@@ -240,30 +240,41 @@ describe("setEditionLessonIncludedAction", () => {
     expect(dbLayer.deletes).toHaveLength(1)
   })
 
-  it("re-adds an EXCLUSIVE lesson as a draft, never silently ratified", async () => {
-    dbLayer.lessonRows = [
-      {
-        id: "m2_x01",
-        title: "Recruitment screening",
-        isOptional: true,
-        month: 2,
-        order: 20,
-        courseId: "course_gwth",
-      },
-    ]
-    dbLayer.editionLessonRows = [{ tier: "exclusive" }]
+  it("adds an optional lesson back as an ordinary ratified row", async () => {
+    seedLesson()
+    seedEditionRow(null)
     const result = await setEditionLessonIncludedAction(
       "edition_cipd",
-      "m2_x01",
+      "m2_l09",
       true
     )
     expect(result.ok).toBe(true)
     expect(dbLayer.inserts[0]).toMatchObject({
       editionId: "edition_cipd",
-      lessonId: "m2_x01",
-      tier: "exclusive",
-      state: "draft",
+      lessonId: "m2_l09",
+      tier: "optional",
+      state: "ratified",
+      isMandatory: false,
     })
+  })
+
+  it("refuses to switch an EXCLUSIVE lesson at all (QA round-1 defects 7+8)", async () => {
+    // Removing one would destroy its tier, its decision audit and the
+    // institution's review note; re-adding would publish it as an ordinary
+    // optional lesson with no sign-off. The ratification screen owns it.
+    seedLesson({ id: "m2_x01", title: "Recruitment screening" })
+    seedEditionRow("exclusive")
+    for (const included of [true, false]) {
+      const result = await setEditionLessonIncludedAction(
+        "edition_cipd",
+        "m2_x01",
+        included
+      )
+      expect(result.ok).toBe(false)
+      expect(result.message).toMatch(/ratification screen/i)
+    }
+    expect(dbLayer.deletes).toHaveLength(0)
+    expect(dbLayer.inserts).toHaveLength(0)
   })
 })
 
@@ -317,6 +328,45 @@ describe("decideEditionLessonAction", () => {
       "ratify"
     )
     expect(result.ok).toBe(false)
+  })
+
+  it("scopes the UPDATE to exclusive rows (QA round-1 defect 6)", async () => {
+    // A forged send-back against a CORE lesson would otherwise set
+    // state='draft', and since learners see ratified rows only, a core lesson
+    // of the credentialed course would vanish from every learner's syllabus.
+    // The predicate carries the guard, so a non-exclusive row matches nothing.
+    dbLayer.returningRows = []
+    const result = await decideEditionLessonAction(
+      "edition_cipd",
+      "m1_l01",
+      "send-back",
+      "please hide this"
+    )
+    expect(result.ok).toBe(false)
+    expect(result.message).toMatch(/written for your edition/i)
+  })
+})
+
+describe("setEditionLessonMandatoryAction", () => {
+  it("sets the baseline flag on a row of the caller's own edition", async () => {
+    dbLayer.returningRows = [{ lessonId: "m2_l09" }]
+    const result = await setEditionLessonMandatoryAction(
+      "edition_cipd",
+      "m2_l09",
+      true
+    )
+    expect(result.ok).toBe(true)
+    expect(dbLayer.updates[0]).toMatchObject({ isMandatory: true })
+  })
+
+  it("refuses an edition that is not the caller's own", async () => {
+    const result = await setEditionLessonMandatoryAction(
+      "edition_someone_else",
+      "m2_l09",
+      true
+    )
+    expect(result.ok).toBe(false)
+    expect(dbLayer.updates).toHaveLength(0)
   })
 })
 

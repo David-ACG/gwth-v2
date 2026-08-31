@@ -22,6 +22,7 @@
  * without the auth stack or a database; `better-auth.ts` supplies the
  * request-shaped inputs and performs the (single, indexed) role lookup.
  */
+import { ORG_STAFF_ROLES } from "@/lib/org-admin-policy"
 
 /**
  * Endpoints that return OTHER members' or invitees' identities. Each was
@@ -45,12 +46,14 @@ export const ROSTER_BEARING_PATHS = new Set([
 ])
 
 /**
- * Roles allowed to see who else is in the organisation: the institution
- * admin, the org owner GWTH holds, and the tutor whose whole purpose is
- * roster visibility (design 05 section 4, Steve's "send that to your tutor").
- * `learner` is deliberately absent.
+ * Roles allowed to see who else is in the organisation. Derived from the ONE
+ * staff-role list in `org-admin-policy.ts` rather than restated (QA round-1
+ * style note 4): two security-sensitive role lists would drift, and "may open
+ * /org" and "may see the roster" are the same question — the tutor role
+ * exists precisely for roster visibility (design 05 section 4, Steve's "send
+ * that to your tutor"). `learner` is absent from both by construction.
  */
-const ROSTER_VISIBLE_ROLES = new Set(["owner", "admin", "tutor"])
+const ROSTER_VISIBLE_ROLES: ReadonlySet<string> = new Set(ORG_STAFF_ROLES)
 
 /** The refusal message a learner sees instead of the roster. */
 export const ROSTER_FORBIDDEN_MESSAGE =
@@ -91,6 +94,9 @@ export type RosterAccessDecision =
  * @param ctx.targetsAnotherUser Only meaningful for `get-active-member-role`:
  *   true when the request asks for someone ELSE's role. Reading your own role
  *   is always allowed — the /org screens and the learner UI both need it.
+ *   REQUIRED, not optional (QA round-1 style note 2): an optional flag
+ *   defaults to false, so a better-auth upgrade that moved the field it is
+ *   derived from would silently reopen that endpoint instead of failing.
  *
  * Deferring (rather than refusing) when the org or the session is unknown is
  * safe: those requests never reach a roster, because the plugin's own
@@ -104,7 +110,7 @@ export function decideRosterAccess(
     hasSession: boolean
     organisationId: string | null
     role: string | null
-    targetsAnotherUser?: boolean
+    targetsAnotherUser: boolean
   }
 ): RosterAccessDecision {
   if (!ROSTER_BEARING_PATHS.has(path)) return { kind: "not-applicable" }

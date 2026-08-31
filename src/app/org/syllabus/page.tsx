@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import {
   canEditEdition,
@@ -36,7 +37,7 @@ const TIERS = [
     tier: "exclusive" as const,
     title: "Exclusive to you",
     lead:
-      "Lessons written for your edition. They stay hidden from your learners until you ratify them.",
+      "Lessons written for your edition. They stay hidden from your learners until you ratify them, and they are accepted or sent back on the ratification screen rather than switched off here — so their sign-off history is never lost.",
   },
 ]
 
@@ -51,7 +52,10 @@ const TIERS = [
 export default async function OrgSyllabusPage() {
   const context = await requireOrgStaffOrRedirect()
   if (!canEditEdition(context.role)) redirect("/org")
+  // Nothing to curate until GWTH creates the edition; /org explains that.
+  if (!context.edition) redirect("/org")
 
+  const edition = context.edition
   const syllabus = await safe(() => getEditionSyllabus(context))
 
   return (
@@ -72,7 +76,7 @@ export default async function OrgSyllabusPage() {
         it simply stops appearing in their course.
       </p>
 
-      <PassMarkForm editionId={context.editionId} passMark={context.passMark} />
+      <PassMarkForm editionId={edition.id} passMark={edition.passMark} />
 
       {syllabus === null ? (
         <AdminEmptyState
@@ -109,7 +113,7 @@ export default async function OrgSyllabusPage() {
                   <LessonRow
                     key={entry.lessonId}
                     entry={entry}
-                    editionId={context.editionId}
+                    editionId={edition.id}
                   />
                 ))}
               </div>
@@ -154,13 +158,29 @@ function LessonRow({
         </div>
       </div>
       <div className={styles.lessonActions}>
-        {entry.locked ? (
+        {entry.tier === "core" ? (
           <p className={styles.lockedReason}>
             Core — in every edition of this course.
           </p>
+        ) : entry.tier === "exclusive" ? (
+          // QA round-1 defects 7 + 8: an exclusive lesson is accepted or sent
+          // back on the ratification screen, never switched off here — a
+          // removal would delete its tier, its sign-off history and your
+          // review note with no way back.
+          <p className={styles.lockedReason}>
+            Written for you — accepted or sent back on the{" "}
+            <Link href="/org/ratification">ratification screen</Link>.
+          </p>
         ) : (
           <>
+            {/*
+              key: the checkbox holds local state for its optimistic flip, so
+              it must remount when the SERVER value changes (QA round-1
+              defect 10) — otherwise a router.refresh() updates the counts
+              around it while the box keeps showing the stale value.
+            */}
             <LessonToggle
+              key={`include-${entry.lessonId}-${entry.included}`}
               editionId={editionId}
               lessonId={entry.lessonId}
               lessonTitleId={titleId}
@@ -168,6 +188,7 @@ function LessonRow({
             />
             {entry.included ? (
               <MandatoryToggle
+                key={`mandatory-${entry.lessonId}-${entry.isMandatory}`}
                 editionId={editionId}
                 lessonId={entry.lessonId}
                 lessonTitleId={titleId}

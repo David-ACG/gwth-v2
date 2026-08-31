@@ -103,7 +103,7 @@ describe("preview fixtures", () => {
   })
 
   it("carry a co-brand label, since that is what the header renders", () => {
-    expect(MOCK_ORG_ADMIN_CONTEXT.coBrandLabel).toBe("Curated by CIPD")
+    expect(MOCK_ORG_ADMIN_CONTEXT.edition?.coBrandLabel).toBe("Curated by CIPD")
   })
 
   it("cover all three tiers and both ratification states", () => {

@@ -20,7 +20,10 @@ import { join } from "node:path"
 const DATABASE_URL = process.env.DATABASE_URL
 const describeDb = DATABASE_URL ? describe : describe.skip
 
-const P = "n7" // id prefix for everything this suite creates
+// Distinct from the sibling privacy suite's "n7priv" prefix (QA round-1
+// defect 14): a LIKE 'n7%' cleanup would otherwise delete that suite's users
+// mid-sign-in when both run in one vitest invocation.
+const P = "n7adm"
 const COURSE_ID = `${P}_course`
 const SECTION_ID = `${P}_section`
 const ORG_A = `${P}_org_a`
@@ -36,11 +39,13 @@ const CONTEXT_A = {
   organisationId: ORG_A,
   organisationName: "Org A",
   organisationType: "institution",
-  editionId: EDITION_A,
-  editionName: "Org A edition",
-  editionStatus: "live" as const,
-  coBrandLabel: "Curated by Org A",
-  passMark: 80,
+  edition: {
+    id: EDITION_A,
+    name: "Org A edition",
+    status: "live" as const,
+    coBrandLabel: "Curated by Org A",
+    passMark: 80,
+  },
   courseId: COURSE_ID,
   courseTitle: "N7 course",
   isPreview: false,
@@ -105,16 +110,17 @@ describeDb("N7 institution admin (live DB)", () => {
 
   beforeAll(async () => {
     sql = postgres(DATABASE_URL!)
-    await cleanup()
 
-    // Migration 019 is applied by the suite itself so a fresh database is
-    // covered too (N5 QA style note 5: a suite that only ever re-runs a
-    // migration never tests its initial application).
+    // Migration 019 runs FIRST, before cleanup touches edition_lessons, so a
+    // database that has never seen 019 is covered too (N5 QA style note 5 /
+    // N7 QA style note 6: a suite that only ever re-runs a migration never
+    // tests its initial application).
     const migration = readFileSync(
       join(process.cwd(), "supabase/migrations/019_edition_ratification.sql"),
       "utf8"
     )
     await sql.unsafe(migration)
+    await cleanup()
 
     await sql`
       INSERT INTO courses (id, slug, title, description)
@@ -332,6 +338,55 @@ describeDb("N7 institution admin (live DB)", () => {
         active7d: 1,
         pendingRatification: 1,
       })
+    })
+  })
+
+  describe("QA round-1 regressions", () => {
+    it("reports last activity from ALL lessons, not just mandatory ones", async () => {
+      // The partial learner's only MANDATORY progress is 30 days old; give
+      // them fresh activity on the lesson that is outside the edition.
+      await sql`
+        INSERT INTO lesson_progress (user_id, lesson_id, last_accessed_at)
+        VALUES (${`${P}_learner_part`}, ${`${P}_l3`}, NOW())
+      `
+      const roster = await orgAdmin.getOrgRoster(CONTEXT_A)
+      const part = roster.find((row) => row.userId === `${P}_learner_part`)!
+      expect(
+        Date.now() - new Date(part.lastActive!).getTime()
+      ).toBeLessThan(86_400_000)
+      await sql`
+        DELETE FROM lesson_progress
+        WHERE user_id = ${`${P}_learner_part`} AND lesson_id = ${`${P}_l3`}
+      `
+    })
+
+    it("counts a recorded quiz score even when the lesson is not completed", async () => {
+      await sql`
+        INSERT INTO lesson_progress
+          (user_id, lesson_id, is_completed, quiz_passed, best_quiz_score)
+        VALUES (${`${P}_learner_part`}, ${`${P}_l2`}, FALSE, TRUE, 100)
+      `
+      const roster = await orgAdmin.getOrgRoster(CONTEXT_A)
+      const part = roster.find((row) => row.userId === `${P}_learner_part`)!
+      // 70 (completed) and 100 (not completed) both count toward the average…
+      expect(part.avgBestQuiz).toBe(85)
+      // …but the baseline still needs the lesson COMPLETED (design 05 Q1).
+      expect(part.baselineMet).toBe(false)
+      await sql`
+        DELETE FROM lesson_progress
+        WHERE user_id = ${`${P}_learner_part`} AND lesson_id = ${`${P}_l2`}
+      `
+    })
+
+    it("serves staff whose organisation has no edition yet", async () => {
+      // resolveOrgStaffContext returns edition: null rather than null, so the
+      // admin reaches /org and is told why it is empty.
+      const noEdition = { ...CONTEXT_A, edition: null }
+      await expect(orgAdmin.getEditionSyllabus(noEdition)).resolves.toEqual([])
+      await expect(orgAdmin.getOrgRoster(noEdition)).resolves.toEqual([])
+      await expect(
+        orgAdmin.getOrgLessonCompletion(noEdition)
+      ).resolves.toEqual([])
     })
   })
 

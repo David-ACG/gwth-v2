@@ -25,8 +25,11 @@ export default async function OrgOverviewPage() {
   const context = await requireOrgStaffOrRedirect()
   const canEdit = canEditEdition(context.role)
 
-  const roster = await safe(() => getOrgRoster(context))
-  const queue = await safe(() => getRatificationQueue(context))
+  // Independent reads, so run them together (QA round-1 style note 7).
+  const [roster, queue] = await Promise.all([
+    safe(() => getOrgRoster(context)),
+    safe(() => getRatificationQueue(context)),
+  ])
   const summary =
     roster === null ? null : summariseRoster(roster, queue?.length ?? 0)
 
@@ -37,7 +40,9 @@ export default async function OrgOverviewPage() {
       <div className={adminStyles.sectionHead}>
         <h1 className={adminStyles.sectionTitle}>{context.organisationName}.</h1>
         <p className={adminStyles.mono}>
-          {context.editionName} · {context.editionStatus}
+          {context.edition
+            ? `${context.edition.name} · ${context.edition.status}`
+            : "No edition yet"}
         </p>
       </div>
       <p className={adminStyles.sectionLead}>
@@ -47,7 +52,13 @@ export default async function OrgOverviewPage() {
         measured against.
       </p>
 
-      {summary === null ? (
+      {context.edition === null ? (
+        <AdminEmptyState
+          kicker="Edition not set up"
+          title="GWTH has not created your edition yet"
+          body="Your organisation is set up and your access works, but there is no syllabus edition to curate. GWTH creates it; ask your GWTH contact and this screen fills in."
+        />
+      ) : summary === null ? (
         <AdminEmptyState
           kicker="Database unavailable"
           title="Your organisation's numbers cannot be read right now"
@@ -72,10 +83,16 @@ export default async function OrgOverviewPage() {
           />
           {canEdit ? (
             <Metric
-              value={summary.pendingRatification}
-              caption="Lessons awaiting your ratification"
+              // A failed queue read must never render as a healthy zero
+              // (QA round-1 defect 9): say it is unreadable instead.
+              value={queue === null ? null : summary.pendingRatification}
+              caption={
+                queue === null
+                  ? "Ratification queue unavailable — retry shortly"
+                  : "Lessons awaiting your ratification"
+              }
               href="/org/ratification"
-              alert={summary.pendingRatification > 0}
+              alert={queue === null || summary.pendingRatification > 0}
             />
           ) : (
             <Metric
@@ -87,10 +104,12 @@ export default async function OrgOverviewPage() {
         </div>
       )}
 
-      {canEdit ? (
+      {canEdit && context.edition ? (
         <div className={adminStyles.panel} style={{ marginTop: "2rem" }}>
           <div className={adminStyles.panelHead}>
-            <h2 className={adminStyles.panelTitle}>Pass mark: {context.passMark}%</h2>
+            <h2 className={adminStyles.panelTitle}>
+              Pass mark: {context.edition.passMark}%
+            </h2>
             <p className={adminStyles.mono}>One per edition</p>
           </div>
           <p className={adminStyles.panelLead}>
@@ -101,13 +120,13 @@ export default async function OrgOverviewPage() {
             Change the pass mark
           </Link>
         </div>
-      ) : (
+      ) : context.edition ? (
         <p className={adminStyles.sectionLead} style={{ marginTop: "2rem" }}>
           You have tutor access: you can see how your learners are getting on,
           and the edition itself is curated by your organisation&rsquo;s admin.
-          The pass mark is currently {context.passMark}%.
+          The pass mark is currently {context.edition.passMark}%.
         </p>
-      )}
+      ) : null}
     </section>
   )
 }
@@ -119,7 +138,8 @@ function Metric({
   href,
   alert = false,
 }: {
-  value: number
+  /** null = the read failed; rendered as a dash, never as a zero. */
+  value: number | null
   caption: string
   href: string
   alert?: boolean
@@ -129,7 +149,7 @@ function Metric({
       href={href}
       className={`${adminStyles.metricCard} ${alert ? adminStyles.metricAlert : ""}`}
     >
-      <span className={adminStyles.metricValue}>{value}</span>
+      <span className={adminStyles.metricValue}>{value ?? "—"}</span>
       <span className={adminStyles.metricCaption}>{caption}</span>
     </Link>
   )

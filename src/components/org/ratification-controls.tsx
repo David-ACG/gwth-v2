@@ -13,11 +13,10 @@ import orgStyles from "@/app/org/org-fde.module.css"
  * lesson, and it stays invisible to learners until the institution signs it
  * off.
  *
- * Ratifying is the destructive-ish direction here (it PUBLISHES the lesson to
- * every learner on the edition), so it is the solid button and it names the
- * consequence in its confirmation copy rather than in a dialog — the action
- * is one click to reverse (send it back), so an AlertDialog would be friction
- * without a matching risk.
+ * Ratifying PUBLISHES the lesson to every learner on the edition, so it is
+ * the solid button; there is no confirmation dialog because the act is one
+ * click to reverse (send it back), and the page's own lead copy states the
+ * consequence. The success toast names it again.
  *
  * "Send back" requires a note (validated server-side too): "changes
  * requested" with no reason is not something a lesson author can act on.
@@ -25,14 +24,12 @@ import orgStyles from "@/app/org/org-fde.module.css"
 export function RatificationControls({
   editionId,
   lessonId,
-  lessonTitle,
 }: {
   /** The edition being decided. */
   editionId: string
-  /** The draft lesson. */
+  /** The draft lesson. Also keys the note field's aria-describedby onto the
+   *  card's own heading, so a screen reader hears which lesson it belongs to. */
   lessonId: string
-  /** Used in the note field's accessible name, so multiple cards differ. */
-  lessonTitle: string
 }) {
   const router = useRouter()
   const [note, setNote] = useState("")
@@ -73,7 +70,11 @@ export function RatificationControls({
           placeholder="Required when sending back"
           value={note}
           disabled={pending}
-          aria-label={`What needs to change in “${lessonTitle}”?`}
+          // No aria-label: the visible <label htmlFor> IS the accessible name
+          // (QA round-1 style note 9). aria-describedby adds the lesson title
+          // so a screen reader hears WHICH lesson without the visible label
+          // text being replaced.
+          aria-describedby={`queue-title-${lessonId}`}
           onChange={(event) => setNote(event.target.value)}
         />
       </div>

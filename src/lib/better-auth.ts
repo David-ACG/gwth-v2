@@ -96,14 +96,14 @@ function requireSingleOrgRole(
  * which the policy treats as "defer": the handler itself answers 400.
  */
 async function resolveTargetOrganisationId(
-  query: Record<string, unknown> | undefined,
+  input: Record<string, unknown>,
   activeOrganizationId: string | null | undefined
 ): Promise<string | null> {
-  const id = typeof query?.organizationId === "string" ? query.organizationId : null
+  const id = typeof input.organizationId === "string" ? input.organizationId : null
   if (id) return id
 
   const slug =
-    typeof query?.organizationSlug === "string" ? query.organizationSlug : null
+    typeof input.organizationSlug === "string" ? input.organizationSlug : null
   if (slug) {
     const rows = await getDb()
       .select({ id: schema.organisation.id })
@@ -151,13 +151,20 @@ const rosterPrivacyHook = createAuthMiddleware(async (ctx) => {
   if (!ROSTER_BEARING_PATHS.has(ctx.path)) return
 
   const session = await getSessionFromCtx(ctx).catch(() => null)
-  const query = ctx.query as Record<string, unknown> | undefined
+  // Query AND body (QA round-1 style note 3): the roster endpoints are GETs
+  // today, but reading only `ctx.query` would evaluate a future body-borne
+  // organizationId against the session's ACTIVE org instead of the real
+  // target — i.e. it would gate the wrong organisation.
+  const input: Record<string, unknown> = {
+    ...((ctx.body as Record<string, unknown> | undefined) ?? {}),
+    ...((ctx.query as Record<string, unknown> | undefined) ?? {}),
+  }
   const targetsAnotherUser =
-    typeof query?.userId === "string" && query.userId !== session?.user?.id
+    typeof input.userId === "string" && input.userId !== session?.user?.id
 
   const organisationId = session
     ? await resolveTargetOrganisationId(
-        query,
+        input,
         session.session.activeOrganizationId as string | null | undefined
       )
     : null
