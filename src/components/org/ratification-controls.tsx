@@ -24,12 +24,21 @@ import orgStyles from "@/app/org/org-fde.module.css"
 export function RatificationControls({
   editionId,
   lessonId,
+  sawReviewNote,
 }: {
   /** The edition being decided. */
   editionId: string
   /** The draft lesson. Also keys the note field's aria-describedby onto the
    *  card's own heading, so a screen reader hears which lesson it belongs to. */
   lessonId: string
+  /**
+   * Whether the card this control sits on showed a review note, i.e. whether
+   * the lesson was rendered as "back with GWTH". Sent with the decision as an
+   * optimistic-concurrency check: if another admin has changed which half of
+   * the queue the lesson is in since this page rendered, the decision is
+   * refused rather than silently overwriting theirs.
+   */
+  sawReviewNote: boolean
 }) {
   const router = useRouter()
   const [note, setNote] = useState("")
@@ -45,7 +54,8 @@ export function RatificationControls({
         editionId,
         lessonId,
         decision,
-        decision === "send-back" ? note.trim() : undefined
+        decision === "send-back" ? note.trim() : undefined,
+        sawReviewNote
       )
       if (!result.ok) {
         toast.error(result.message)

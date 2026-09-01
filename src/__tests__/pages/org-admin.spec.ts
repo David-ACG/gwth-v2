@@ -66,7 +66,17 @@ const SCREENS = [
   { path: "/org/learners", name: "learners", heading: /Learners/i },
 ] as const
 
+// The theme is seeded per test via localStorage, so the desktop-dark PROJECT
+// (which only sets prefers-color-scheme) would re-run every assertion a third
+// time for nothing (QA round-3 style note 1). One desktop pass, one mobile.
 test.describe("Institution admin (/org)", () => {
+  test.beforeEach(({}, testInfo) => {
+    test.skip(
+      testInfo.project.name === "desktop-dark",
+      "theme is seeded per test; the dark project adds no coverage for /org"
+    )
+  })
+
   for (const screen of SCREENS) {
     test.describe(screen.name, () => {
       test("renders its heading", async ({ page }) => {
@@ -77,8 +87,16 @@ test.describe("Institution admin (/org)", () => {
       test("shows the co-branded masthead, GWTH first", async ({ page }) => {
         await open(page, screen.path)
         const header = page.locator("header").first()
-        await expect(header).toContainText("GWTH")
-        await expect(header).toContainText("Curated by CIPD")
+        // ORDER matters, not just presence (QA round-3 style note 2): the
+        // deck promise is "visibly GWTH, co-branded", not white-labelled, so
+        // a swap would break it while a contains-both assertion still passed.
+        const text = (await header.innerText()).replace(/\s+/g, " ")
+        expect(text.indexOf("GWTH")).toBeGreaterThanOrEqual(0)
+        expect(text.indexOf("GWTH")).toBeLessThan(
+          text.indexOf("CURATED BY CIPD") === -1
+            ? text.indexOf("Curated by CIPD")
+            : text.indexOf("CURATED BY CIPD")
+        )
       })
 
       test("says on its face that it is a preview", async ({ page }) => {
@@ -89,15 +107,7 @@ test.describe("Institution admin (/org)", () => {
       })
 
       for (const theme of ["light", "dark"] as const) {
-        test(`screenshot - ${theme} mode`, async ({ page }, testInfo) => {
-          // The theme is seeded explicitly, so the desktop-dark PROJECT (which
-          // only sets colorScheme) would render byte-identically to
-          // desktop-chromium and double the committed baselines for nothing
-          // (QA round-2 style notes 4 + 5). One desktop project, one mobile.
-          test.skip(
-            testInfo.project.name === "desktop-dark",
-            "theme is seeded per test, so the dark PROJECT adds no coverage"
-          )
+        test(`screenshot - ${theme} mode`, async ({ page }) => {
           await open(page, screen.path, theme)
           await expect(page).toHaveScreenshot(
             `org-${screen.name}-${theme}.png`,
@@ -202,6 +212,20 @@ test.describe("Institution admin (/org)", () => {
     await open(page, "/org/ratification")
     const first = page.locator('[data-section="ratification-item"]').first()
     await expect(first.locator("p").first()).not.toBeEmpty()
+  })
+
+  test("the full draft can be read before deciding", async ({ page }) => {
+    await open(page, "/org/ratification")
+    await page
+      .getByRole("link", { name: /read the full lesson before deciding/i })
+      .first()
+      .click()
+    await expect(page.locator('[data-section="draft-body"]')).toBeVisible()
+    // The decision controls travel with the read-through, so an admin never
+    // has to go back to act on what they just read.
+    await expect(
+      page.getByRole("button", { name: "Ratify" }).first()
+    ).toBeVisible()
   })
 
   test("a ratified exclusive lesson can still be set mandatory", async ({

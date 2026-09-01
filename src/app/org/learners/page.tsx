@@ -31,8 +31,10 @@ import adminStyles from "../../admin/admin-fde.module.css"
 export default async function OrgLearnersPage() {
   const context = await requireOrgStaffOrRedirect()
 
-  const roster = await safe(() => getOrgRoster(context))
-  const lessonRows = await safe(() => getOrgLessonCompletion(context))
+  const [roster, lessonRows] = await Promise.all([
+    safe(() => getOrgRoster(context)),
+    safe(() => getOrgLessonCompletion(context)),
+  ])
 
   return (
     <section className={adminStyles.section} data-section="org-learners">
@@ -50,7 +52,13 @@ export default async function OrgLearnersPage() {
         {context.edition ? ` ${context.edition.passMark}% ` : " "}pass mark.
       </p>
 
-      {roster === null ? (
+      {context.edition === null ? (
+        <AdminEmptyState
+          kicker="Edition not set up"
+          title="GWTH has not created your edition yet"
+          body="There is no syllabus for your people to be measured against yet, so there is nothing to report. Ask your GWTH contact; this screen fills in as soon as the edition exists."
+        />
+      ) : roster === null ? (
         <AdminEmptyState
           kicker="Database unavailable"
           title="Your roster cannot be read right now"
@@ -110,6 +118,8 @@ export default async function OrgLearnersPage() {
         </div>
       )}
 
+      {context.edition === null ? null : (
+        <>
       <div className={adminStyles.sectionHead} style={{ marginTop: "3rem" }}>
         <h2 className={adminStyles.sectionTitle}>Where the cohort sticks.</h2>
         <p className={adminStyles.mono}>
@@ -163,6 +173,8 @@ export default async function OrgLearnersPage() {
             </tbody>
           </table>
         </div>
+      )}
+        </>
       )}
     </section>
   )

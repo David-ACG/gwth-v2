@@ -32,8 +32,9 @@
  */
 import "server-only"
 import { cache } from "react"
-import { and, asc, eq, inArray, sql } from "drizzle-orm"
+import { and, asc, eq, inArray, ne, notExists, sql } from "drizzle-orm"
 import { redirect } from "next/navigation"
+import { alias } from "drizzle-orm/pg-core"
 import { getDb } from "@/db"
 import {
   courses,
@@ -240,6 +241,9 @@ export async function getEditionSyllabus(
   if (!context.edition) return []
 
   const db = getDb()
+  // A second alias of edition_lessons for the exclusivity guard below; the
+  // main query already joins the table for THIS edition's rows.
+  const otherEditionLessons = alias(editionLessons, "other_edition_lessons")
   const rows = await db
     .select({
       lessonId: lessons.id,
@@ -264,7 +268,30 @@ export async function getEditionSyllabus(
         eq(editionLessons.editionId, context.edition.id)
       )
     )
-    .where(eq(lessons.courseId, context.courseId))
+    .where(
+      and(
+        eq(lessons.courseId, context.courseId),
+        // Another institution's EXCLUSIVE content is not ours to show (QA
+        // round-3 defect 6). Without this the picker listed a rival
+        // institution's exclusive lesson as an ordinary switched-off
+        // optional, leaking its title and synopsis — and switching it on
+        // would have published it to the wrong learners as ratified content.
+        // Scoped to exclusive rows in OTHER editions, so a lesson this
+        // edition already carries is unaffected.
+        notExists(
+          db
+            .select({ one: sql`1` })
+            .from(otherEditionLessons)
+            .where(
+              and(
+                eq(otherEditionLessons.lessonId, lessons.id),
+                eq(otherEditionLessons.tier, "exclusive"),
+                ne(otherEditionLessons.editionId, context.edition.id)
+              )
+            )
+        )
+      )
+    )
 
   return rows
     .map((row) => {
@@ -287,7 +314,11 @@ export async function getEditionSyllabus(
         sortOrder: row.sortOrder ?? row.month * 1000 + row.lessonOrder,
         reviewNote: row.reviewNote,
         decidedAt: row.decidedAt,
-        locked: tier === "core",
+        // Locked only while it IS in the edition (QA round-3 defect 7): a
+        // core lesson GWTH published after this edition was provisioned is
+        // missing, and locking it would make the repair path the include
+        // action deliberately supports unreachable from the screen.
+        locked: tier === "core" && included,
       }
     })
     .sort((a, b) => a.sortOrder - b.sortOrder)
@@ -326,6 +357,78 @@ export function splitRatificationQueue(queue: EditionSyllabusEntry[]): {
     awaitingYou: queue.filter((entry) => !entry.reviewNote),
     withGwth: queue.filter((entry) => Boolean(entry.reviewNote)),
   }
+}
+
+/** A draft lesson as its own institution's staff may read it before signing off. */
+export type EditionLessonPreview = {
+  title: string
+  description: string
+  month: number
+  duration: number
+  /** The lesson body, exactly as a learner would eventually read it. */
+  learnContent: string
+  tier: string
+  state: string
+  reviewNote: string | null
+}
+
+/**
+ * The full text of ONE lesson of the caller's own edition, for the
+ * ratification screen (QA round-3 defect 10: an institution was being asked
+ * to sign off content it could only see the title and synopsis of).
+ *
+ * This deliberately does NOT go through the learner catalogue. N6's
+ * `isLessonInEdition` admits ratified rows only — correctly, because a draft
+ * must stay invisible to learners — so a draft can never be read there. This
+ * is a separate, narrower read: the lesson row itself, joined to the caller's
+ * OWN edition, so the only content it can ever return is content that
+ * institution's own edition carries. Another institution's exclusive lesson
+ * has no row in this edition and therefore returns null.
+ *
+ * Returns null when the lesson is not in the caller's edition, which the page
+ * turns into a 404.
+ */
+export async function getEditionLessonPreview(
+  context: OrgStaffContext,
+  lessonId: string
+): Promise<EditionLessonPreview | null> {
+  if (context.isPreview) {
+    const entry = mockEditionSyllabus().find((l) => l.lessonId === lessonId)
+    if (!entry) return null
+    return {
+      title: entry.title,
+      description: entry.description,
+      month: entry.month,
+      duration: 45,
+      learnContent: `## ${entry.title}\n\nThis is preview text standing in for the lesson body. On a real edition this screen shows exactly what GWTH wrote, so an institution can read a draft in full before ratifying it.`,
+      tier: entry.tier,
+      state: entry.state,
+      reviewNote: entry.reviewNote,
+    }
+  }
+  if (!context.edition) return null
+
+  const rows = await getDb()
+    .select({
+      title: lessons.title,
+      description: lessons.description,
+      month: lessons.month,
+      duration: lessons.duration,
+      learnContent: lessons.learnContent,
+      tier: editionLessons.tier,
+      state: editionLessons.state,
+      reviewNote: editionLessons.reviewNote,
+    })
+    .from(editionLessons)
+    .innerJoin(lessons, eq(lessons.id, editionLessons.lessonId))
+    .where(
+      and(
+        eq(editionLessons.editionId, context.edition.id),
+        eq(editionLessons.lessonId, lessonId)
+      )
+    )
+    .limit(1)
+  return rows[0] ?? null
 }
 
 /**

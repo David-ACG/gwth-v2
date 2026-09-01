@@ -51,10 +51,9 @@ export default async function OrgOverviewPage() {
         </p>
       </div>
       <p className={adminStyles.sectionLead}>
-        Your edition of {context.courseTitle}. One core body of content,
-        curated for your people: you choose the optional lessons, sign off the
-        lessons written for you, and set the pass mark your learners are
-        measured against.
+        {canEdit
+          ? `Your edition of ${context.courseTitle}. One core body of content, curated for your people: you choose the optional lessons, sign off the lessons written for you, and set the pass mark your learners are measured against.`
+          : `Your organisation's edition of ${context.courseTitle}. Your admin chooses the optional lessons, signs off the lessons written for you, and sets the pass mark. You can see how your people are getting on against it.`}
       </p>
 
       {context.edition === null ? (

@@ -24,7 +24,7 @@
  * graded against the new number.
  */
 import { revalidatePath } from "next/cache"
-import { and, eq } from "drizzle-orm"
+import { and, eq, isNotNull, isNull, ne } from "drizzle-orm"
 import { getDb } from "@/db"
 import { editionLessons, lessons, syllabusEdition } from "@/db/schema"
 import {
@@ -192,6 +192,12 @@ export async function setEditionLessonIncludedAction(
  * Score denominator (decision 2, 2026-08-28: the institution admin decides
  * `is_mandatory` per lesson, and may raise their students' mandatory count
  * above the GWTH default's).
+ *
+ * CORE lessons are excluded from that discretion (QA round-3 defect 8). This
+ * is the same rule D-N7-3 enforces on the include action, arriving by the
+ * other door: an admin who could set every core lesson to "does not count"
+ * would leave a baseline — and therefore a GWTH credential — that attests
+ * only to their own optional picks.
  */
 export async function setEditionLessonMandatoryAction(
   editionId: string,
@@ -214,11 +220,18 @@ export async function setEditionLessonMandatoryAction(
     .where(
       and(
         eq(editionLessons.editionId, auth.edition.id),
-        eq(editionLessons.lessonId, parsed.data.lessonId)
+        eq(editionLessons.lessonId, parsed.data.lessonId),
+        ne(editionLessons.tier, "core")
       )
     )
     .returning({ lessonId: editionLessons.lessonId })
-  if (updated.length === 0) return { ok: false, message: NOT_YOURS }
+  if (updated.length === 0) {
+    return {
+      ok: false,
+      message:
+        "Core lessons always count toward the baseline, so that a GWTH credential means the same thing on every edition.",
+    }
+  }
 
   revalidateOrg()
   return {
@@ -240,12 +253,20 @@ export async function setEditionLessonMandatoryAction(
  * @param lessonId The draft lesson being decided.
  * @param decision "ratify" or "send-back".
  * @param note Why it is being sent back (required for "send-back").
+ * @param sawReviewNote What the screen showed when the button was pressed:
+ *   true if the card carried a review note ("back with GWTH"), false if it
+ *   did not ("waiting on you"). This is an optimistic-concurrency check (QA
+ *   round-3 defect 9): two admins on the same draft could otherwise have one
+ *   request changes and the other's stale ratify silently clear that note and
+ *   publish the unchanged lesson. A decision taken against a view of the row
+ *   that no longer holds matches nothing and is reported, not applied.
  */
 export async function decideEditionLessonAction(
   editionId: string,
   lessonId: string,
   decision: "ratify" | "send-back",
-  note?: string
+  note?: string,
+  sawReviewNote = false
 ): Promise<OrgAdminActionResult> {
   const parsed = editionLessonDecisionSchema.safeParse({
     editionId,
@@ -275,9 +296,13 @@ export async function decideEditionLessonAction(
   //
   // state='draft' (QA round-2 defect 2): a decision only ever moves a lesson
   // OUT of the queue. Without it, a stale tab could send back a lesson a
-  // colleague ratified minutes ago and silently unpublish live content. A
-  // decision on a row that has already left the queue matches nothing and is
-  // reported as such rather than applied.
+  // colleague ratified minutes ago and silently unpublish live content.
+  //
+  // review-note match (QA round-3 defect 9): the row must still be in the
+  // half of the queue the caller was looking at, so a stale ratify cannot
+  // wipe out a colleague's just-recorded request for changes.
+  //
+  // A decision that no longer matches is reported, never applied.
   const updated = await getDb()
     .update(editionLessons)
     .set({
@@ -291,7 +316,11 @@ export async function decideEditionLessonAction(
         eq(editionLessons.editionId, auth.edition.id),
         eq(editionLessons.lessonId, parsed.data.lessonId),
         eq(editionLessons.tier, "exclusive"),
-        eq(editionLessons.state, "draft")
+        eq(editionLessons.state, "draft"),
+        // The row must still look the way the screen showed it.
+        sawReviewNote
+          ? isNotNull(editionLessons.reviewNote)
+          : isNull(editionLessons.reviewNote)
       )
     )
     .returning({ lessonId: editionLessons.lessonId })

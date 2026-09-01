@@ -5,6 +5,7 @@
  */
 import { assertMockUserFlagAllowed } from "@/lib/mock-user-guard"
 import { assertContentGateConfigured } from "@/lib/content-mode"
+import { assertSchemaMigrated } from "@/lib/schema-guard"
 
 /**
  * Boot-time environment assertions. Throwing here aborts server startup, so
@@ -22,6 +23,12 @@ export async function register(): Promise<void> {
     // let an operator discover a misspelt CONTENT_ALLOWED_EMAILS by failing to
     // sign in.
     assertContentGateConfigured()
+    // N7: a build that selects columns its database does not have would fail
+    // on EVERY learner request (N6's edition resolution reads
+    // edition_lessons). Migrations are additive and idempotent, so the safe
+    // order is migrate-then-deploy; this makes the wrong order crash loudly
+    // at boot instead of quietly serving a broken product.
+    await assertSchemaMigrated()
   } catch (error) {
     console.error(error)
     if (process.env.NEXT_RUNTIME === "nodejs") {

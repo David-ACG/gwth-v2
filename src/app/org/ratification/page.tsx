@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import {
   canEditEdition,
@@ -21,11 +22,10 @@ import styles from "../org-fde.module.css"
  * screen nag about work the admin had already done, and made the overview
  * count it as outstanding.
  *
- * Each card carries the lesson's synopsis (QA round-2 defect 6) so a decision
- * is never made on a title alone. Reading the full draft is a known v1 gap:
- * a draft is invisible in the learner viewer by design (N6's
- * `isLessonInEdition` admits ratified rows only), and a staff preview route is
- * beyond N7 — see the known limitations in the completion packet.
+ * Each card carries the lesson's synopsis (QA round-2 defect 6) and a link to
+ * read the full draft (QA round-3 defect 10), so a decision is never made on a
+ * title alone. The read-through lives at ./[lessonId] and is joined to the
+ * caller's own edition, so it never relaxes N6's learner rule.
  */
 export default async function OrgRatificationPage() {
   const context = await requireOrgStaffOrRedirect()
@@ -143,12 +143,24 @@ function QueueCard({
       {entry.description ? (
         <p className={styles.querySynopsis}>{entry.description}</p>
       ) : null}
+      <p className={adminStyles.mono}>
+        <Link
+          href={`/org/ratification/${entry.lessonId}`}
+          className={adminStyles.sortLink}
+        >
+          Read the full lesson before deciding
+        </Link>
+      </p>
       {entry.reviewNote ? (
         <p className={styles.reviewNote}>
           You sent this back: {entry.reviewNote}
         </p>
       ) : null}
-      <RatificationControls editionId={editionId} lessonId={entry.lessonId} />
+      <RatificationControls
+        editionId={editionId}
+        lessonId={entry.lessonId}
+        sawReviewNote={Boolean(entry.reviewNote)}
+      />
     </article>
   )
 }

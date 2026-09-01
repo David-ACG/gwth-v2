@@ -157,6 +157,9 @@ describeDb("N7 institution admin (live DB)", () => {
     await seedLesson(`${P}_l2`, 2, false)
     await seedLesson(`${P}_l3`, 3, true)
     await seedLesson(`${P}_l4`, 4, true, 2)
+    // A CORE lesson published after edition A was provisioned: it is missing
+    // from A, which is the repair case (round-3 defect 7).
+    await seedLesson(`${P}_l5`, 5, false, 2)
 
     await attach(EDITION_A, `${P}_l1`, "core", "ratified", true, 1001)
     await attach(EDITION_A, `${P}_l2`, "core", "ratified", true, 1002)
@@ -257,7 +260,7 @@ describeDb("N7 institution admin (live DB)", () => {
     it("shows every course lesson, marking the ones outside the edition", async () => {
       const syllabus = await orgAdmin.getEditionSyllabus(CONTEXT_A)
       const byId = new Map(syllabus.map((entry) => [entry.lessonId, entry]))
-      expect(syllabus).toHaveLength(4)
+      expect(syllabus).toHaveLength(5)
       expect(byId.get(`${P}_l1`)).toMatchObject({
         included: true,
         tier: "core",
@@ -291,6 +294,40 @@ describeDb("N7 institution admin (live DB)", () => {
       expect(
         syllabus.find((entry) => entry.lessonId === `${P}_l3`)?.included
       ).toBe(false)
+    })
+
+    it("hides another institution's EXCLUSIVE lesson entirely (round-3 defect 6)", async () => {
+      // Org B commissions an exclusive lesson. Org A must not see its title
+      // or synopsis at all, let alone be able to switch it on: it would have
+      // rendered as an ordinary off optional and published to A's learners.
+      await sql`
+        INSERT INTO edition_lessons (edition_id, lesson_id, tier, state, is_mandatory, sort_order)
+        VALUES (${EDITION_B}, ${`${P}_l5`}, 'exclusive', 'draft', TRUE, 3005)
+      `
+      const syllabus = await orgAdmin.getEditionSyllabus(CONTEXT_A)
+      expect(syllabus.map((entry) => entry.lessonId)).not.toContain(`${P}_l5`)
+      // Org B's own picker still shows it.
+      const bSyllabus = await orgAdmin.getEditionSyllabus({
+        ...CONTEXT_A,
+        organisationId: ORG_B,
+        edition: { ...CONTEXT_A.edition, id: EDITION_B },
+      })
+      expect(bSyllabus.map((entry) => entry.lessonId)).toContain(`${P}_l5`)
+      await sql`DELETE FROM edition_lessons WHERE edition_id = ${EDITION_B} AND lesson_id = ${`${P}_l5`}`
+    })
+
+    it("leaves a MISSING core lesson unlocked so it can be added (round-3 defect 7)", async () => {
+      const syllabus = await orgAdmin.getEditionSyllabus(CONTEXT_A)
+      const missingCore = syllabus.find((entry) => entry.lessonId === `${P}_l5`)!
+      expect(missingCore).toMatchObject({
+        tier: "core",
+        included: false,
+        locked: false,
+      })
+      // A core lesson the edition DOES carry stays locked.
+      expect(
+        syllabus.find((entry) => entry.lessonId === `${P}_l1`)
+      ).toMatchObject({ tier: "core", included: true, locked: true })
     })
   })
 

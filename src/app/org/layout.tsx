@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
-import { getCurrentUser } from "@/lib/auth"
+import { getSessionIdentity } from "@/lib/auth"
 import { canEditEdition, resolveOrgStaffContext } from "@/lib/data/org-admin"
 import { OrgNav } from "@/components/org/org-nav"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
@@ -45,7 +45,12 @@ export default async function OrgLayout({
 }) {
   const context = await resolveOrgStaffContext()
   if (!context) {
-    if (await getCurrentUser()) redirect("/dashboard")
+    // getSessionIdentity, not getCurrentUser (QA round-3 defect 5): the
+    // latter applies the invite-only BETA gate, so a signed-in org member
+    // without a grant looked anonymous and was sent to /login as though their
+    // session had failed. They have a valid session; they are simply not
+    // staff, which is a /dashboard bounce.
+    if (await getSessionIdentity()) redirect("/dashboard")
     redirect("/login")
   }
 

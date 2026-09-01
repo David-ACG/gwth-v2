@@ -98,11 +98,12 @@ export type RosterAccessDecision =
  *   defaults to false, so a better-auth upgrade that moved the field it is
  *   derived from would silently reopen that endpoint instead of failing.
  *
- * Deferring (rather than refusing) when the org or the session is unknown is
- * safe: those requests never reach a roster, because the plugin's own
- * handlers reject them first (401 UNAUTHORIZED / BAD_REQUEST
- * ORGANIZATION_NOT_FOUND / FORBIDDEN not-a-member). Refusing them here would
- * only change which error a non-member sees.
+ * Deferring when there is no session, or when the caller holds no membership
+ * in the resolved organisation, is safe: those requests never reach a roster
+ * because the plugin's own handlers reject them first (401 UNAUTHORIZED /
+ * FORBIDDEN not-a-member), and refusing here would only change which error a
+ * non-member sees. An UNRESOLVED organisation is different and fails closed —
+ * see the branch below.
  */
 export function decideRosterAccess(
   path: string,
@@ -111,6 +112,11 @@ export function decideRosterAccess(
     organisationId: string | null
     role: string | null
     targetsAnotherUser: boolean
+    /**
+     * Whether the caller holds a roster-visible role in ANY organisation.
+     * Only consulted when the target organisation could not be resolved.
+     */
+    isStaffAnywhere: boolean
   }
 ): RosterAccessDecision {
   if (!ROSTER_BEARING_PATHS.has(path)) return { kind: "not-applicable" }
@@ -126,10 +132,22 @@ export function decideRosterAccess(
     return { kind: "defer", reason: "no session — the endpoint returns 401" }
   }
   if (!ctx.organisationId) {
-    return {
-      kind: "defer",
-      reason: "no target organisation — the endpoint returns 400",
-    }
+    // Fail CLOSED (QA round-3 defect 11). Deferring here assumed the hook's
+    // resolver understands every identifier shape better-auth does; if a
+    // future version accepts one it does not, an unresolved target would
+    // fall through to the plugin's membership-only check and hand a learner
+    // the roster. A caller who holds NO roster-visible role anywhere can
+    // never legitimately read one, so refuse; staff fall through to the
+    // plugin's own checks, which are correct for them.
+    return ctx.isStaffAnywhere
+      ? {
+          kind: "defer",
+          reason: "target organisation unknown; caller is staff somewhere",
+        }
+      : {
+          kind: "refuse",
+          reason: "target organisation unknown and caller is not staff anywhere",
+        }
   }
   if (!ctx.role) {
     return {

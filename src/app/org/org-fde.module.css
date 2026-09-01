@@ -231,6 +231,24 @@
   min-width: 0;
 }
 
+/* ── Draft body (the ratification read-through) ───────────────────────── */
+
+.draftBody {
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.25rem;
+  margin-bottom: 2rem;
+  max-width: 62ch;
+}
+
+.draftBody p {
+  font-size: var(--fde-body);
+  line-height: 1.75;
+  color: var(--v-soft);
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* ── Pass mark panel ──────────────────────────────────────────────────── */
 
 .passMarkField {

@@ -224,6 +224,48 @@ describeDb("N7 institution admin writes (live DB)", () => {
       expect(await row(`${P}_core`)).toEqual(before)
     })
 
+    it("a stale ratify cannot wipe a colleague's request for changes (round-3 defect 9)", async () => {
+      // Admin A sends the lesson back...
+      expect(
+        (
+          await actions.decideEditionLessonAction(
+            EDITION_ID,
+            `${P}_excl`,
+            "send-back",
+            "Needs a UK example."
+          )
+        ).ok
+      ).toBe(true)
+      // ...admin B's tab still shows it as "waiting on you" (no note) and
+      // ratifies. The review-note predicate refuses it.
+      const stale = await actions.decideEditionLessonAction(
+        EDITION_ID,
+        `${P}_excl`,
+        "ratify",
+        undefined,
+        /* sawReviewNote */ false
+      )
+      expect(stale.ok).toBe(false)
+      expect(await row(`${P}_excl`)).toMatchObject({
+        state: "draft",
+        review_note: "Needs a UK example.",
+      })
+      // Ratifying from a view that DOES show the note is allowed: the admin
+      // has seen it and is accepting the lesson as it stands.
+      const informed = await actions.decideEditionLessonAction(
+        EDITION_ID,
+        `${P}_excl`,
+        "ratify",
+        undefined,
+        /* sawReviewNote */ true
+      )
+      expect(informed.ok).toBe(true)
+      expect(await row(`${P}_excl`)).toMatchObject({
+        state: "ratified",
+        review_note: null,
+      })
+    })
+
     it("cannot reach another edition's rows", async () => {
       const before = await row(`${P}_excl`)
       const result = await actions.decideEditionLessonAction(
@@ -294,6 +336,20 @@ describeDb("N7 institution admin writes (live DB)", () => {
       )
       expect(result.ok).toBe(true)
       expect(await row(`${P}_excl_live`)).toMatchObject({ is_mandatory: false })
+    })
+
+    it("cannot drop a CORE lesson out of the baseline (round-3 defect 8)", async () => {
+      // The parallel write path must not undo D-N7-3 by the other door: an
+      // admin who could zero every core lesson would leave a credential that
+      // attests only to their own optional picks.
+      const result = await actions.setEditionLessonMandatoryAction(
+        EDITION_ID,
+        `${P}_core`,
+        false
+      )
+      expect(result.ok).toBe(false)
+      expect(result.message).toMatch(/always count toward the baseline/i)
+      expect(await row(`${P}_core`)).toMatchObject({ is_mandatory: true })
     })
   })
 
