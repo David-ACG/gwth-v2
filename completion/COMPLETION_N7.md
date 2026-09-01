@@ -1,9 +1,12 @@
 # Completion: N7 — institution admin v1 + the roster-privacy fix
 
-**Date:** 2026-08-31 · **Repo:** GWTH_V2 (worker lane) · **Base:** `7623d88` · **Commits:** `89e2814`, `65a0aeb`, `cde866c`
+**Date:** 2026-08-31 · **Repo:** GWTH_V2 (worker lane) · **Base:** `7623d88` · **Commits:** `89e2814` → `d9d1beb`
 **Test URL (one click, HTTPS, tailnet):** **https://hlab.taila51191.ts.net:9458/org**
 **Status:** built, tested, live on the hlab review server. NOT deployed and NOT published — gwth.ai still runs `b97a1b9` with unpublished commits awaiting David, and no prod migration has been run. Ship ledger: `n7-institution-admin`, state *waiting for your verdict* on https://hlab.taila51191.ts.net:8101/ship.
-**Design:** GWTH-launch-plan / "Institution - Fable Plan" / [05-syllabus-editions-design.md](../../GWTH-launch-plan/Institution%20-%20Fable%20Plan/05-syllabus-editions-design.md) sections 1.2, 4, 6 (M7/M8) + the §7b decisions of 2026-08-28; [01-cipd-meetings-digest.md](../../GWTH-launch-plan/Institution%20-%20Fable%20Plan/01-cipd-meetings-digest.md) section 7.
+**Design (other repo, so paths not links):**
+`GWTH-launch-plan/Institution - Fable Plan/05-syllabus-editions-design.md`
+sections 1.2, 4 and 6 (M7/M8), plus the section 7b decisions of 2026-08-28;
+`GWTH-launch-plan/Institution - Fable Plan/01-cipd-meetings-digest.md` section 7.
 **Session log + plan:** [N7/session-log.md](N7/session-log.md)
 
 ## What changed
@@ -74,7 +77,7 @@ carries the "Preview — example data" banner.
 ![learners mobile](N7/org-learners-390.png)
 
 **Click it:** https://hlab.taila51191.ts.net:9458/org — the hlab review server
-on the tailnet, serving commit `cde866c`. This is a *preview*, not a
+on the tailnet, serving commit `d9d1beb`. This is a *preview*, not a
 deployment: gwth.ai is untouched and still on `b97a1b9`.
 
 ```
@@ -198,24 +201,27 @@ npx tsc --noEmit                                        → clean
 npx eslint src                                          → 1 error, PRE-EXISTING
                                                           (src/lib/data/progress-quiz-atomic.test.ts:22
                                                            no-explicit-any, from commit e44fb52 / N2)
-npm test                                                → 77 files passed, 8 skipped
-                                                          766 tests passed, 77 skipped (DB suites)
-                                                          — 49 of those tests are new in N7
+npm test                                                → 77 files passed, 9 skipped
+                                                          766 tests passed, 89 skipped (DB suites)
 DATABASE_URL=…5443/gwth_v2 npx vitest run src/db/ \
   src/lib/data/progress.db.test.ts \
-  src/lib/billing/access.db.test.ts                     → 9 files, 75 tests passed
-    of which src/db/org-admin.db.test.ts                → 17 passed
+  src/lib/billing/access.db.test.ts                     → 10 files, 90 tests passed
+    of which src/db/org-admin.db.test.ts       (reads)  → 17 passed
+             src/db/org-admin-actions.db.test.ts (writes) → 12 passed
              src/db/org-roster-privacy.db.test.ts       → 12 passed
 PLAYWRIGHT_BASE_URL=http://localhost:3000 \
   npx playwright test org-admin \
   --project=desktop-chromium --project=desktop-dark \
-  --project=mobile-chromium                             → 111 passed
+  --project=mobile-chromium                             → 115 passed, 8 skipped
 npm run build                                           → Compiled successfully;
                                                           ƒ /org, /org/learners,
                                                           /org/ratification, /org/syllabus
 migration 019 applied twice to staging                  → second run all NOTICE …skipping
-NEGATIVE CONTROL: hooks.before removed, DB suite re-run → 4 failed / 8 passed
-  (exactly the learner-refusal tests — proof the hook is what closes defect 3)
+NEGATIVE CONTROLS (each guard proved to be load-bearing):
+  hooks.before removed, roster DB suite re-run          → 4 failed / 8 passed
+    (exactly the learner-refusal tests: the hook is what closes N5 defect 3)
+  state='draft' predicate removed, actions DB suite     → 1 failed / 11 passed
+    (exactly the "cannot unpublish a ratified lesson" test)
 ```
 
 Not run, deliberately: any deploy, any publish, any prod migration. The ship
@@ -226,8 +232,11 @@ it will not publish until you say so and the freeze lifts.
 
 `qa_chain.py N7 --repo /home/david/projects/GWTH_V2 --range 7623d88..HEAD`,
 run **before** this hand-over. Round 1 raised **14 defects and 10 style
-notes**; the full report is
-[`GWTH-launch-plan/completion/N7/qa-report.md`](../../GWTH-launch-plan/completion/N7/qa-report.md).
+notes**; the full report is regenerated in place at
+
+```
+/home/david/projects/GWTH-launch-plan/completion/N7/qa-report.md
+```
 
 **Fixed (commit `cde866c`) — 11 defects, 6 style notes.** The four that
 mattered most, because they were real and would have bitten:
@@ -272,5 +281,65 @@ note) instead of only rendering the screens.
   the board RECORD call is this task's final action, by the brief's own
   instruction.
 
-**Round 2 was run after the fixes above and is recorded in the same report
-file.**
+### Round 2
+
+Re-run against the same base range. **10 defects, 10 style notes.** Eight
+defects and eight style notes fixed in `d9d1beb`; the four that mattered:
+
+1. **A provisioned institution admin could not get in.** The gate used
+   `getCurrentUser()`, which applies the invite-only *beta* gate, so a CIPD
+   administrator with no `manual_beta` grant was sent to /login. Their
+   authority comes from `org_membership`; identity now resolves through a new
+   `getSessionIdentity()` beside the existing `getSessionEmail()` seam.
+2. **A stale tab could unpublish live content.** The decision UPDATE was
+   scoped to `tier='exclusive'` but not `state='draft'`, so a send-back
+   submitted after a colleague had ratified would revert the lesson and remove
+   it from every learner's syllabus. Both predicates now apply.
+3. **A core lesson published after an edition was provisioned could never be
+   added to it** — the action refused both directions. Adding is now the
+   repair path; removing is still refused.
+4. **Em dashes in displayed copy**, against the binding bible rule
+   (`emdash-policy`, 2026-07-06). Swept from every user-facing string on the
+   /org surfaces, including the empty-cell glyph (now `n/a`).
+
+Plus: ratified exclusive lessons regained the `is_mandatory` control that
+decision 2 requires; the queue no longer counts lessons already sent back as
+"awaiting you" (split into *Waiting on you* / *Back with GWTH*); each card
+carries the lesson synopsis so a decision is not made on a title alone; the
+queue filters tier as well as state, which is also what makes 019's partial
+index the query it serves; the preview fixtures stopped contradicting each
+other; the duplicate dark Playwright project is gone (24 baselines → 16) and
+the screenshot tolerance tightened from 0.05 to 0.002; the pass-mark write
+path gained the same round-trip coverage as the other two.
+
+**The most useful thing round 2 said** was style note 1: the unit test
+claiming to pin the exclusive-tier guard could not actually see a `where()`
+predicate, so it would have passed with the guard deleted. That produced
+`src/db/org-admin-actions.db.test.ts` — every write path against real Postgres
+rows, with only the cookie-reading authority seam stubbed. Negative control:
+deleting the `state='draft'` predicate fails exactly the unpublish test.
+
+**Rebutted — 2 defects:**
+
+- *"The brief requires the website shipped live."* It requires the opposite,
+  verbatim: "**DO NOT DEPLOY AND DO NOT PUBLISH** … Build and test locally
+  only", and "Do not run prod database migrations." Nothing was deployed by
+  design.
+- *"No walkthrough page exists."* The brief asks for a packet per
+  `docs/COMPLETION_CHECKS.md`, which this is, plus the QA chain. A walkthrough
+  is the ship ledger's hand-over device for published work; with publishing
+  frozen, the ship is open and waiting for a verdict with a clickable preview,
+  which is the same job done under the constraint the brief imposed.
+
+## Known limitations (v1, deliberate)
+
+- **A draft lesson cannot be read in full before ratifying it.** The card
+  shows the synopsis; the learner viewer refuses drafts by design (N6's
+  `isLessonInEdition` admits ratified rows only), and a staff preview route is
+  a change to N6's resolution layer that N7 should not make blind. Filed for
+  the next institution slice.
+- **Per-learner drill-down of individual quiz answers is absent**, per design
+  05 section 4 — a privacy posture to settle with CIPD, not an oversight.
+- **No invitation UI.** Provisioning an institution (org, edition, first
+  admin) is still a GWTH-side step; the plugin's invitation flow exists but
+  has no screen. That is design 05's M8, shaped by CIPD's reaction.
