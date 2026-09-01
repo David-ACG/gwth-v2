@@ -132,6 +132,49 @@ export const getSessionEmail = cache(async function getSessionEmail(): Promise<
 })
 
 /**
+ * Identity on the current validated Better Auth session (id, name, email), or
+ * null. The N7 twin of `getSessionEmail()`, and deliberately NOT built on
+ * `getCurrentUser()` for the same reason: that accessor applies the
+ * invite-only BETA gate and returns null for any account without a live
+ * `manual_beta` grant.
+ *
+ * That gate answers "may this person STUDY the course". It is the wrong
+ * question for `/org`, where the caller is an institution's admin or tutor
+ * whose authority comes from `org_membership`, not from a GWTH beta grant
+ * (N7 QA round-2 defect 1: a provisioned CIPD administrator with no grant row
+ * was bounced to /login instead of reaching their own admin surface).
+ *
+ * It is not a weaker check: `getAuth().api.getSession` validates the session
+ * cookie's signature against the database, so a forged token resolves to null.
+ *
+ * `cache()`-wrapped so the /org layout, the page gate and the nav collapse to
+ * one session validation per request.
+ */
+export const getSessionIdentity = cache(async function getSessionIdentity(): Promise<{
+  id: string
+  name: string
+  email: string
+} | null> {
+  if (!process.env.DATABASE_URL) return null
+
+  const { getAuth } = await import("@/lib/better-auth")
+
+  try {
+    const session = await getAuth().api.getSession({ headers: await headers() })
+    const sessionUser = session?.user
+    if (!sessionUser) return null
+    return {
+      id: sessionUser.id,
+      name:
+        sessionUser.name?.trim() || sessionUser.email?.split("@")[0] || "User",
+      email: sessionUser.email ?? "",
+    }
+  } catch {
+    return null
+  }
+})
+
+/**
  * Returns the mock user for dashboard UI development.
  * Use this only in dashboard pages that need a fake logged-in state.
  */

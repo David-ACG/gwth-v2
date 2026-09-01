@@ -89,11 +89,21 @@ test.describe("Institution admin (/org)", () => {
       })
 
       for (const theme of ["light", "dark"] as const) {
-        test(`screenshot - ${theme} mode`, async ({ page }) => {
+        test(`screenshot - ${theme} mode`, async ({ page }, testInfo) => {
+          // The theme is seeded explicitly, so the desktop-dark PROJECT (which
+          // only sets colorScheme) would render byte-identically to
+          // desktop-chromium and double the committed baselines for nothing
+          // (QA round-2 style notes 4 + 5). One desktop project, one mobile.
+          test.skip(
+            testInfo.project.name === "desktop-dark",
+            "theme is seeded per test, so the dark PROJECT adds no coverage"
+          )
           await open(page, screen.path, theme)
           await expect(page).toHaveScreenshot(
             `org-${screen.name}-${theme}.png`,
-            { fullPage: true, maxDiffPixelRatio: 0.05 }
+            // Tight (QA round-2 style note 6): 0.05 on a full page is loose
+            // enough for a whole component to change unnoticed.
+            { fullPage: true, maxDiffPixelRatio: 0.002 }
           )
         })
       }
@@ -163,12 +173,56 @@ test.describe("Institution admin (/org)", () => {
     })
   })
 
+  test("saving the pass mark round-trips to the server and reports the refusal", async ({
+    page,
+  }) => {
+    await open(page, "/org/syllabus", "light", true)
+    const panel = page.locator('[data-section="pass-mark"]')
+    await panel.locator("#pass-mark-input").fill("82")
+    await panel.getByRole("button", { name: /save pass mark/i }).click()
+    await expect(page.getByText(/changes are not saved/i)).toBeVisible({
+      timeout: 15000,
+    })
+  })
+
+  test("the ratification queue separates what waits on you from what is with GWTH", async ({
+    page,
+  }) => {
+    await open(page, "/org/ratification")
+    await expect(page.locator('[data-section="awaiting-you"]')).toBeVisible()
+    await expect(page.locator('[data-section="with-gwth"]')).toBeVisible()
+    // The count in the header is the "waiting on you" number only, so an
+    // admin is not nagged about lessons they have already sent back.
+    await expect(page.getByText(/1 awaiting you/i)).toBeVisible()
+  })
+
+  test("a ratification card shows what is being signed off, not just a title", async ({
+    page,
+  }) => {
+    await open(page, "/org/ratification")
+    const first = page.locator('[data-section="ratification-item"]').first()
+    await expect(first.locator("p").first()).not.toBeEmpty()
+  })
+
+  test("a ratified exclusive lesson can still be set mandatory", async ({
+    page,
+  }) => {
+    await open(page, "/org/syllabus")
+    // Decision 2 of 2026-08-28: the institution decides is_mandatory per
+    // exclusive lesson, so the control must exist even though the INCLUDE
+    // switch does not.
+    const exclusive = page.locator('[data-section="tier-exclusive"]')
+    await expect(
+      exclusive.locator('input[id^="mandatory-"]')
+    ).not.toHaveCount(0)
+  })
+
   test("exclusive lessons are not switchable in the picker", async ({
     page,
   }) => {
     await open(page, "/org/syllabus")
     const exclusive = page.locator('[data-section="tier-exclusive"]')
-    await expect(exclusive.locator('input[type="checkbox"]')).toHaveCount(0)
+    await expect(exclusive.locator('input[id^="include-"]')).toHaveCount(0)
     await expect(exclusive).toContainText("ratification screen")
   })
 

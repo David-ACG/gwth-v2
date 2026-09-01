@@ -135,7 +135,11 @@ export async function setEditionLessonIncludedAction(
     .limit(1)
   const currentTier = existing[0]?.tier ?? (lesson.isOptional ? "optional" : "core")
 
-  if (currentTier === "core") {
+  // Core belongs in every edition, so REMOVING it is refused (D-N7-3) but
+  // ADDING a missing one is the repair path (QA round-2 defect 5): a core
+  // lesson GWTH publishes after an edition was provisioned lands only in
+  // gwth-default, and without this the institution could never take it.
+  if (currentTier === "core" && !parsed.data.included) {
     return {
       ok: false,
       message:
@@ -160,7 +164,7 @@ export async function setEditionLessonIncludedAction(
         )
       )
     revalidateOrg()
-    return { ok: true, message: `Removed “${lesson.title}” from your edition.` }
+    return { ok: true, message: `Removed "${lesson.title}" from your edition.` }
   }
 
   await db
@@ -168,16 +172,19 @@ export async function setEditionLessonIncludedAction(
     .values({
       editionId: auth.edition.id,
       lessonId: lesson.id,
-      tier: "optional",
+      tier: currentTier,
       state: "ratified",
-      isMandatory: false,
+      // Core lessons count toward the baseline by default, exactly as the
+      // gwth-default backfill has them; an optional one starts as extra and
+      // the institution opts it in.
+      isMandatory: currentTier === "core",
       sortOrder: lesson.month * 1000 + lesson.order,
     })
     .onConflictDoNothing({
       target: [editionLessons.editionId, editionLessons.lessonId],
     })
   revalidateOrg()
-  return { ok: true, message: `Added “${lesson.title}” to your edition.` }
+  return { ok: true, message: `Added "${lesson.title}" to your edition.` }
 }
 
 /**
@@ -259,11 +266,18 @@ export async function decideEditionLessonAction(
   const { context } = auth
 
   const ratifying = parsed.data.decision === "ratify"
-  // The tier predicate is the load-bearing part (QA round-1 defect 6):
-  // without it a forged send-back against a CORE lesson would set
-  // state='draft', and since learners see ratified rows only, a core lesson
-  // of the credentialed course would vanish from every learner's syllabus.
-  // Ratification decisions exist for institution-exclusive content alone.
+  // Two predicates carry the safety here, and neither is optional.
+  //
+  // tier='exclusive' (QA round-1 defect 6): without it a forged send-back
+  // against a CORE lesson would set state='draft', and since learners see
+  // ratified rows only, a core lesson of the credentialed course would
+  // vanish from every learner's syllabus.
+  //
+  // state='draft' (QA round-2 defect 2): a decision only ever moves a lesson
+  // OUT of the queue. Without it, a stale tab could send back a lesson a
+  // colleague ratified minutes ago and silently unpublish live content. A
+  // decision on a row that has already left the queue matches nothing and is
+  // reported as such rather than applied.
   const updated = await getDb()
     .update(editionLessons)
     .set({
@@ -276,7 +290,8 @@ export async function decideEditionLessonAction(
       and(
         eq(editionLessons.editionId, auth.edition.id),
         eq(editionLessons.lessonId, parsed.data.lessonId),
-        eq(editionLessons.tier, "exclusive")
+        eq(editionLessons.tier, "exclusive"),
+        eq(editionLessons.state, "draft")
       )
     )
     .returning({ lessonId: editionLessons.lessonId })
@@ -284,7 +299,7 @@ export async function decideEditionLessonAction(
     return {
       ok: false,
       message:
-        "Only lessons written for your edition go through ratification.",
+        "That lesson is no longer waiting for a decision. Reload the page to see where it got to.",
     }
   }
 
@@ -292,7 +307,7 @@ export async function decideEditionLessonAction(
   return {
     ok: true,
     message: ratifying
-      ? "Ratified — your learners can see this lesson now."
+      ? "Ratified. Your learners can see this lesson now."
       : "Sent back to GWTH with your note. It stays hidden from learners.",
   }
 }

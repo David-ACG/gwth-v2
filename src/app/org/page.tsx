@@ -4,6 +4,7 @@ import {
   getOrgRoster,
   getRatificationQueue,
   requireOrgStaffOrRedirect,
+  splitRatificationQueue,
   summariseRoster,
 } from "@/lib/data/org-admin"
 import { AdminEmptyState, safe } from "../admin/admin-shared"
@@ -30,8 +31,12 @@ export default async function OrgOverviewPage() {
     safe(() => getOrgRoster(context)),
     safe(() => getRatificationQueue(context)),
   ])
+  // Only lessons waiting on the INSTITUTION count as outstanding (QA round-2
+  // defect 4): a lesson they have already sent back is with GWTH, and
+  // counting it here nagged them about work they had done.
+  const awaitingYou = queue ? splitRatificationQueue(queue).awaitingYou : null
   const summary =
-    roster === null ? null : summariseRoster(roster, queue?.length ?? 0)
+    roster === null ? null : summariseRoster(roster, awaitingYou?.length ?? 0)
 
   return (
     <section className={adminStyles.section} data-section="org-overview">
@@ -88,7 +93,7 @@ export default async function OrgOverviewPage() {
               value={queue === null ? null : summary.pendingRatification}
               caption={
                 queue === null
-                  ? "Ratification queue unavailable — retry shortly"
+                  ? "Ratification queue unavailable. Retry shortly."
                   : "Lessons awaiting your ratification"
               }
               href="/org/ratification"
@@ -149,7 +154,7 @@ function Metric({
       href={href}
       className={`${adminStyles.metricCard} ${alert ? adminStyles.metricAlert : ""}`}
     >
-      <span className={adminStyles.metricValue}>{value ?? "—"}</span>
+      <span className={adminStyles.metricValue}>{value ?? "n/a"}</span>
       <span className={adminStyles.metricCaption}>{caption}</span>
     </Link>
   )

@@ -81,6 +81,8 @@ export type EditionSyllabusEntry = {
   lessonId: string
   title: string
   slug: string
+  /** The lesson synopsis, so an admin can see what they are ratifying. */
+  description: string
   month: number
   /** Absent from the edition entirely (an optional lesson switched off). */
   included: boolean

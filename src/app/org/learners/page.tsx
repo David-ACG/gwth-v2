@@ -98,7 +98,7 @@ export default async function OrgLearnersPage() {
                     />
                   </td>
                   <td className={adminStyles.cellMuted}>
-                    {row.avgBestQuiz === null ? "—" : `${row.avgBestQuiz}%`}
+                    {row.avgBestQuiz === null ? "n/a" : `${row.avgBestQuiz}%`}
                   </td>
                   <td className={adminStyles.cellMuted}>
                     {formatAgo(row.lastActive)}
@@ -156,7 +156,7 @@ export default async function OrgLearnersPage() {
                   <td className={adminStyles.cellMuted}>{row.completed}</td>
                   <td className={adminStyles.cellMuted}>{row.quizPassed}</td>
                   <td className={adminStyles.cellMuted}>
-                    {row.avgBestQuiz === null ? "—" : `${row.avgBestQuiz}%`}
+                    {row.avgBestQuiz === null ? "n/a" : `${row.avgBestQuiz}%`}
                   </td>
                 </tr>
               ))}

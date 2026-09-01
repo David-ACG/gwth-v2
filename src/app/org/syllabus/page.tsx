@@ -25,7 +25,7 @@ const TIERS = [
     tier: "core" as const,
     title: "Core",
     lead:
-      "The spine of the course. Every edition carries these, so a GWTH credential means the same thing whoever issued it — they cannot be switched off.",
+      "The spine of the course. Every edition carries these, so a GWTH credential means the same thing whoever issued it, so they cannot be switched off.",
   },
   {
     tier: "optional" as const,
@@ -37,7 +37,7 @@ const TIERS = [
     tier: "exclusive" as const,
     title: "Exclusive to you",
     lead:
-      "Lessons written for your edition. They stay hidden from your learners until you ratify them, and they are accepted or sent back on the ratification screen rather than switched off here — so their sign-off history is never lost.",
+      "Lessons written for your edition. They stay hidden from your learners until you ratify them. They are accepted or sent back on the ratification screen rather than switched off here, so their sign-off history is never lost.",
   },
 ]
 
@@ -160,17 +160,30 @@ function LessonRow({
       <div className={styles.lessonActions}>
         {entry.tier === "core" ? (
           <p className={styles.lockedReason}>
-            Core — in every edition of this course.
+            Core: in every edition of this course.
           </p>
         ) : entry.tier === "exclusive" ? (
           // QA round-1 defects 7 + 8: an exclusive lesson is accepted or sent
-          // back on the ratification screen, never switched off here — a
-          // removal would delete its tier, its sign-off history and your
-          // review note with no way back.
-          <p className={styles.lockedReason}>
-            Written for you — accepted or sent back on the{" "}
-            <Link href="/org/ratification">ratification screen</Link>.
-          </p>
+          // back on the ratification screen, never switched off here (a
+          // removal would delete its tier, its sign-off history and the
+          // review note with no way back) — but decision 2 of 2026-08-28 says
+          // the institution decides is_mandatory per exclusive lesson, so a
+          // RATIFIED one still gets that control (QA round-2 defect 3).
+          <>
+            {entry.state === "ratified" ? (
+              <MandatoryToggle
+                key={`mandatory-${entry.lessonId}-${entry.isMandatory}`}
+                editionId={editionId}
+                lessonId={entry.lessonId}
+                lessonTitleId={titleId}
+                isMandatory={entry.isMandatory}
+              />
+            ) : null}
+            <p className={styles.lockedReason}>
+              Written for you. Accepted or sent back on the{" "}
+              <Link href="/org/ratification">ratification screen</Link>.
+            </p>
+          </>
         ) : (
           <>
             {/*

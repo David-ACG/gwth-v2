@@ -47,21 +47,21 @@ export const MOCK_ORG_ADMIN_CONTEXT: OrgStaffContext = {
 const FIXTURE_LESSONS: Array<
   [string, number, EditionSyllabusEntry["tier"], boolean, EditionSyllabusEntry["state"], boolean, string | null]
 > = [
-  ["Welcome to GWTH — what AI can actually do for you", 1, "core", true, "ratified", true, null],
-  ["Talking to AI — prompts that get real answers", 1, "core", true, "ratified", true, null],
-  ["Checking the answer — how to spot a confident mistake", 1, "core", true, "ratified", true, null],
-  ["Your first automation — one job you never do again", 1, "core", true, "ratified", true, null],
-  ["Build your first app — the moment everything changes", 1, "core", true, "ratified", true, null],
-  ["Working with documents — summarise, extract, compare", 2, "core", true, "ratified", true, null],
-  ["Research that holds up — sourcing and citation", 2, "core", true, "ratified", true, null],
+  ["Welcome to GWTH: what AI can actually do for you", 1, "core", true, "ratified", true, null],
+  ["Talking to AI: prompts that get real answers", 1, "core", true, "ratified", true, null],
+  ["Checking the answer: how to spot a confident mistake", 1, "core", true, "ratified", true, null],
+  ["Your first automation: one job you never do again", 1, "core", true, "ratified", true, null],
+  ["Build your first app: the moment everything changes", 1, "core", true, "ratified", true, null],
+  ["Working with documents: summarise, extract, compare", 2, "core", true, "ratified", true, null],
+  ["Research that holds up: sourcing and citation", 2, "core", true, "ratified", true, null],
   ["Data without a spreadsheet headache", 2, "optional", true, "ratified", true, null],
   ["Meeting notes and follow-ups, handled", 2, "optional", true, "ratified", false, null],
-  ["Images and slides — making the visual bit fast", 2, "optional", false, "ratified", false, null],
-  ["AI and the employment relationship — a CIPD view", 2, "exclusive", true, "ratified", true, null],
+  ["Images and slides: making the visual bit fast", 2, "optional", false, "ratified", false, null],
+  ["AI and the employment relationship: a CIPD view", 2, "exclusive", true, "ratified", true, null],
   ["Recruitment screening: what the law expects of you", 2, "exclusive", true, "draft", true, null],
   ["Agents that do the work, not just the writing", 3, "core", true, "ratified", true, null],
-  ["Connecting your own data — RAG explained", 3, "core", true, "ratified", true, null],
-  ["Putting it together — your capstone", 3, "core", true, "ratified", true, null],
+  ["Connecting your own data: RAG explained", 3, "core", true, "ratified", true, null],
+  ["Putting it together: your capstone", 3, "core", true, "ratified", true, null],
   ["Automating a hiring pipeline end to end", 3, "optional", true, "ratified", false, null],
   ["Voice, video and the things you can now make", 3, "optional", false, "ratified", false, null],
   [
@@ -82,6 +82,7 @@ export function mockEditionSyllabus(): EditionSyllabusEntry[] {
       lessonId: `preview-l${String(index + 1).padStart(2, "0")}`,
       title,
       slug: `preview-lesson-${index + 1}`,
+      description: `An illustrative synopsis for "${title}", so the ratification screen has something to show. A real lesson carries the synopsis GWTH wrote for it.`,
       month,
       included,
       tier,
@@ -129,16 +130,36 @@ export function mockOrgRoster(): OrgRosterRow[] {
   )
 }
 
-/** Per-lesson completion for the preview cohort, in edition order. */
+/**
+ * Per-lesson completion for the preview cohort, in edition order.
+ *
+ * Derived from the SAME roster fixture as `mockOrgRoster()` rather than from
+ * an independent decay curve (QA round-2 style note 9): the two preview
+ * screens were telling different stories, with the roster showing learners who
+ * had finished every mandatory lesson while this table reported nobody past
+ * lesson six.
+ */
 export function mockOrgLessonCompletion(): OrgLessonCompletionRow[] {
-  const roster = FIXTURE_LEARNERS.length
+  const mandatory = mockEditionSyllabus().filter(
+    (entry) => entry.included && entry.state === "ratified" && entry.isMandatory
+  )
   return mockEditionSyllabus()
     .filter((entry) => entry.included && entry.state === "ratified")
-    .map((entry, index) => {
-      // A plain decay down the syllabus: the further in, the fewer learners
-      // have reached it. Deterministic, so screenshots do not churn.
-      const started = Math.max(0, roster - index)
-      const completed = Math.max(0, started - 1)
+    .map((entry) => {
+      // Position of this lesson within the mandatory run; a learner who has
+      // done N mandatory lessons has reached the first N of them.
+      const rank = mandatory.findIndex((m) => m.lessonId === entry.lessonId)
+      const reached = FIXTURE_LEARNERS.filter(([, , done]) =>
+        rank === -1 ? done > 0 : done > rank
+      )
+      const completed = reached.length
+      const started = Math.min(
+        FIXTURE_LEARNERS.length,
+        completed + (completed < FIXTURE_LEARNERS.length ? 1 : 0)
+      )
+      const scores = reached
+        .map(([, , , score]) => score)
+        .filter((score): score is number => score !== null)
       return {
         lessonId: entry.lessonId,
         title: entry.title,
@@ -146,8 +167,10 @@ export function mockOrgLessonCompletion(): OrgLessonCompletionRow[] {
         isMandatory: entry.isMandatory,
         started,
         completed,
-        quizPassed: Math.max(0, completed - (index % 3 === 0 ? 1 : 0)),
-        avgBestQuiz: completed ? 92 - index * 2 : null,
+        quizPassed: completed,
+        avgBestQuiz: scores.length
+          ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+          : null,
       }
     })
 }

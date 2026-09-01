@@ -194,6 +194,16 @@
   letter-spacing: -0.01em;
 }
 
+/* The lesson synopsis on a ratification card: an admin must be able to see
+   what they are signing off, not only its title (QA round-2 defect 6). */
+.querySynopsis {
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+  max-width: 62ch;
+  margin: 0.75rem 0 0;
+}
+
 .reviewNote {
   border-left: 3px solid var(--v-ochre);
   padding: 0.5rem 0 0.5rem 0.85rem;

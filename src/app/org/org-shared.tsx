@@ -68,7 +68,7 @@ export function BaselineLabel({ met }: { met: boolean }) {
     </span>
   ) : (
     <span className={`${adminStyles.status} ${adminStyles.stRegistered}`}>
-      — in progress
+      · in progress
     </span>
   )
 }
@@ -81,7 +81,7 @@ export function MandatoryLabel({ isMandatory }: { isMandatory: boolean }) {
     </span>
   ) : (
     <span className={`${adminStyles.status} ${adminStyles.stRegistered}`}>
-      — extra
+      · extra
     </span>
   )
 }
@@ -99,7 +99,7 @@ export function LessonMeta({ children }: { children: React.ReactNode }) {
 export function PreviewBanner() {
   return (
     <div className={styles.previewBanner} data-section="org-preview-banner">
-      <strong>Preview — example data.</strong> No organisation is signed in, so
+      <strong>Preview: example data.</strong> No organisation is signed in, so
       these screens are showing an illustrative CIPD edition. Changes are not
       saved. Sign in as an organisation admin to curate a real edition.
     </div>

@@ -45,7 +45,7 @@ import {
   syllabusEdition,
   user as userTable,
 } from "@/db/schema"
-import { getCurrentUser } from "@/lib/auth"
+import { getSessionIdentity } from "@/lib/auth"
 import {
   canEditEdition,
   isOrgStaffRole,
@@ -90,7 +90,11 @@ export const resolveOrgStaffContext = cache(
   async function resolveOrgStaffContext(): Promise<OrgStaffContext | null> {
     if (await isSessionlessMockRequest()) return MOCK_ORG_ADMIN_CONTEXT
 
-    const currentUser = await getCurrentUser()
+    // Session identity, NOT getCurrentUser(): that applies the invite-only
+    // beta gate, so a provisioned institution admin with no manual_beta grant
+    // would be bounced to /login (QA round-2 defect 1). Their authority comes
+    // from org_membership; a GWTH beta grant is a different question.
+    const currentUser = await getSessionIdentity()
     if (!currentUser) return null
 
     const db = getDb()
@@ -180,7 +184,7 @@ export const resolveOrgStaffContext = cache(
 export async function requireOrgStaffOrRedirect(): Promise<OrgStaffContext> {
   const context = await resolveOrgStaffContext()
   if (context) return context
-  if (await getCurrentUser()) redirect("/dashboard")
+  if (await getSessionIdentity()) redirect("/dashboard")
   redirect("/login")
 }
 
@@ -241,6 +245,7 @@ export async function getEditionSyllabus(
       lessonId: lessons.id,
       title: lessons.title,
       slug: lessons.slug,
+      description: lessons.description,
       month: lessons.month,
       isOptional: lessons.isOptional,
       lessonOrder: lessons.order,
@@ -273,6 +278,7 @@ export async function getEditionSyllabus(
         lessonId: row.lessonId,
         title: row.title,
         slug: row.slug,
+        description: row.description,
         month: row.month,
         included,
         tier,
@@ -296,7 +302,30 @@ export async function getRatificationQueue(
   context: OrgStaffContext
 ): Promise<EditionSyllabusEntry[]> {
   const syllabus = await getEditionSyllabus(context)
-  return syllabus.filter((entry) => entry.included && entry.state === "draft")
+  // tier === "exclusive" as well as state === "draft" (QA round-2 style note
+  // 3): the queue is for institution-exclusive content, and the decision
+  // action refuses anything else, so listing a stray non-exclusive draft here
+  // would offer a button that cannot work.
+  return syllabus.filter(
+    (entry) =>
+      entry.included && entry.state === "draft" && entry.tier === "exclusive"
+  )
+}
+
+/**
+ * Splits the queue into who actually holds the ball (QA round-2 defect 4).
+ * A lesson the institution has SENT BACK is waiting on GWTH, not on them —
+ * counting it as "awaiting your ratification" makes the overview nag about
+ * work they have already done.
+ */
+export function splitRatificationQueue(queue: EditionSyllabusEntry[]): {
+  awaitingYou: EditionSyllabusEntry[]
+  withGwth: EditionSyllabusEntry[]
+} {
+  return {
+    awaitingYou: queue.filter((entry) => !entry.reviewNote),
+    withGwth: queue.filter((entry) => Boolean(entry.reviewNote)),
+  }
 }
 
 /**

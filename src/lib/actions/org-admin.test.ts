@@ -1,15 +1,18 @@
 /**
  * Authority tests for the institution admin actions (N7).
  *
- * The property under test is the one that matters: authority is re-derived
- * from the SESSION on every call and never taken from the arguments. An org
- * admin's own edition id is the only edition they can write, a tutor cannot
- * write at all, the preview mode cannot write at all, and a core lesson
- * cannot be switched off even when the form says so.
+ * The property under test is the one that matters HERE: authority is
+ * re-derived from the SESSION on every call and never taken from the
+ * arguments. An org admin's own edition id is the only edition they can
+ * write, a tutor cannot write at all, and preview mode cannot write at all.
  *
- * The DB is mocked at the `getDb()` seam with a small fluent double; the
- * real query shapes are exercised against Postgres in
- * src/db/org-admin.db.test.ts.
+ * The DB is mocked at the `getDb()` seam with a small fluent double, so this
+ * suite deliberately does NOT claim to prove anything about SQL predicates —
+ * a mock that ignores `where()` would pass whether or not a guard exists (QA
+ * round-2 style note 1). The guard clauses that keep a stale send-back from
+ * unpublishing live content, and a core lesson from being dropped, are proved
+ * against real rows in src/db/org-admin-actions.db.test.ts; the read shapes
+ * in src/db/org-admin.db.test.ts.
  */
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -330,11 +333,13 @@ describe("decideEditionLessonAction", () => {
     expect(result.ok).toBe(false)
   })
 
-  it("scopes the UPDATE to exclusive rows (QA round-1 defect 6)", async () => {
-    // A forged send-back against a CORE lesson would otherwise set
-    // state='draft', and since learners see ratified rows only, a core lesson
-    // of the credentialed course would vanish from every learner's syllabus.
-    // The predicate carries the guard, so a non-exclusive row matches nothing.
+  it("reports a decision that matched nothing without claiming success", async () => {
+    // The UPDATE carries two guards — tier='exclusive' (round-1 defect 6) and
+    // state='draft' (round-2 defect 2) — and a row failing either matches
+    // nothing. This mock cannot evaluate a predicate, so the guards
+    // themselves are proved against real rows in
+    // src/db/org-admin-actions.db.test.ts; what is pinned here is that a
+    // zero-row result is reported honestly rather than as a success.
     dbLayer.returningRows = []
     const result = await decideEditionLessonAction(
       "edition_cipd",
@@ -343,7 +348,7 @@ describe("decideEditionLessonAction", () => {
       "please hide this"
     )
     expect(result.ok).toBe(false)
-    expect(result.message).toMatch(/written for your edition/i)
+    expect(result.message).toMatch(/no longer waiting for a decision/i)
   })
 })
 
