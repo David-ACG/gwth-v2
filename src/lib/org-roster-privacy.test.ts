@@ -21,7 +21,6 @@ function member(role: string | null, extra: Record<string, unknown> = {}) {
     organisationId: "org_a",
     role,
     targetsAnotherUser: false,
-    isStaffAnywhere: false,
     ...extra,
   }
 }
@@ -111,35 +110,25 @@ describe("decideRosterAccess", () => {
       organisationId: null,
       role: null,
       targetsAnotherUser: true,
-      isStaffAnywhere: false,
     })
     expect(decision.kind).toBe("defer")
   })
 
-  it("REFUSES an unresolved organisation for a non-staff caller", () => {
-    // Fail closed (QA round-3 defect 11): if better-auth ever accepts an
-    // organisation identifier shape this hook's resolver does not, an
-    // unresolved target must not fall through to the plugin's
-    // membership-only check and hand a learner the roster.
-    const decision = decideRosterAccess("/organization/list-members", {
-      hasSession: true,
-      organisationId: null,
-      role: null,
-      targetsAnotherUser: true,
-      isStaffAnywhere: false,
-    })
-    expect(decision.kind).toBe("refuse")
-  })
-
-  it("defers an unresolved organisation for a caller who is staff somewhere", () => {
-    const decision = decideRosterAccess("/organization/list-members", {
-      hasSession: true,
-      organisationId: null,
-      role: null,
-      targetsAnotherUser: true,
-      isStaffAnywhere: true,
-    })
-    expect(decision.kind).toBe("defer")
+  it("REFUSES an unresolved organisation, with no exemption", () => {
+    // Fail closed (QA round-3 defect 11, tightened at round 4): if
+    // better-auth ever accepts an organisation identifier shape this hook's
+    // resolver does not, an unresolved target must not fall through to the
+    // plugin's membership-only check. "Staff somewhere" is NOT an exemption —
+    // an admin of org A who is a learner in org B is not staff in B.
+    for (const role of [null, "learner", "admin", "owner"]) {
+      const decision = decideRosterAccess("/organization/list-members", {
+        hasSession: true,
+        organisationId: null,
+        role,
+        targetsAnotherUser: true,
+      })
+      expect(decision.kind, `role ${role}`).toBe("refuse")
+    }
   })
 
   it("defers for a non-member (the endpoint returns 403 itself)", () => {

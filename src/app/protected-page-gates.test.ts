@@ -89,10 +89,13 @@ const GATE_NAMES = new Set([
   "requireSessionOrRedirect",
   "requireAdminOrRedirect",
   // N7: the institution-staff gate. Mode-independent in the same way as the
-  // other two - it resolves the session through getCurrentUser() and
-  // redirects anonymous traffic to /login, and the ONE place it renders
-  // without a session is the shared isSessionlessMockRequest() seam, which
-  // never admits a presented (forged) cookie.
+  // other two - it validates the session server-side through
+  // getSessionIdentity() (NOT getCurrentUser(), which additionally applies
+  // the invite-only beta gate and would bounce a provisioned institution
+  // admin who holds no GWTH grant) and redirects anonymous traffic to
+  // /login. The ONE place it renders without a session is the shared
+  // isSessionlessMockRequest() seam, which never admits a presented
+  // (forged) cookie.
   "requireOrgStaffOrRedirect",
 ])
 

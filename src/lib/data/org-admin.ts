@@ -32,7 +32,7 @@
  */
 import "server-only"
 import { cache } from "react"
-import { and, asc, eq, inArray, ne, notExists, sql } from "drizzle-orm"
+import { and, asc, eq, inArray, isNotNull, notExists, or, sql } from "drizzle-orm"
 import { redirect } from "next/navigation"
 import { alias } from "drizzle-orm/pg-core"
 import { getDb } from "@/db"
@@ -244,6 +244,7 @@ export async function getEditionSyllabus(
   // A second alias of edition_lessons for the exclusivity guard below; the
   // main query already joins the table for THIS edition's rows.
   const otherEditionLessons = alias(editionLessons, "other_edition_lessons")
+  const otherEdition = alias(syllabusEdition, "other_edition")
   const rows = await db
     .select({
       lessonId: lessons.id,
@@ -259,6 +260,7 @@ export async function getEditionSyllabus(
       sortOrder: editionLessons.sortOrder,
       reviewNote: editionLessons.reviewNote,
       decidedAt: editionLessons.decidedAt,
+      lessonUpdatedAt: lessons.updatedAt,
     })
     .from(lessons)
     .leftJoin(
@@ -271,24 +273,38 @@ export async function getEditionSyllabus(
     .where(
       and(
         eq(lessons.courseId, context.courseId),
-        // Another institution's EXCLUSIVE content is not ours to show (QA
+        // Another ORGANISATION's exclusive content is not ours to show (QA
         // round-3 defect 6). Without this the picker listed a rival
         // institution's exclusive lesson as an ordinary switched-off
-        // optional, leaking its title and synopsis — and switching it on
+        // optional, leaking its title and synopsis, and switching it on
         // would have published it to the wrong learners as ratified content.
-        // Scoped to exclusive rows in OTHER editions, so a lesson this
-        // edition already carries is unaffected.
-        notExists(
-          db
-            .select({ one: sql`1` })
-            .from(otherEditionLessons)
-            .where(
-              and(
-                eq(otherEditionLessons.lessonId, lessons.id),
-                eq(otherEditionLessons.tier, "exclusive"),
-                ne(otherEditionLessons.editionId, context.edition.id)
+        //
+        // Two things this must NOT do (QA round-4 defect 7, a regression in
+        // the first version of this filter):
+        //   - a lesson THIS edition already carries always shows, whatever
+        //     any other edition says about it, so a draft can never become
+        //     unratifiable;
+        //   - the exclusion is by ORGANISATION, not by edition, so an org
+        //     with a second edition of its own does not hide its own content
+        //     from itself.
+        or(
+          isNotNull(editionLessons.tier),
+          notExists(
+            db
+              .select({ one: sql`1` })
+              .from(otherEditionLessons)
+              .innerJoin(
+                otherEdition,
+                eq(otherEdition.id, otherEditionLessons.editionId)
               )
-            )
+              .where(
+                and(
+                  eq(otherEditionLessons.lessonId, lessons.id),
+                  eq(otherEditionLessons.tier, "exclusive"),
+                  sql`${otherEdition.organisationId} IS DISTINCT FROM ${context.organisationId}`
+                )
+              )
+          )
         )
       )
     )
@@ -314,6 +330,11 @@ export async function getEditionSyllabus(
         sortOrder: row.sortOrder ?? row.month * 1000 + row.lessonOrder,
         reviewNote: row.reviewNote,
         decidedAt: row.decidedAt,
+        revisedSinceDecision: Boolean(
+          row.decidedAt &&
+            row.lessonUpdatedAt &&
+            row.lessonUpdatedAt > row.decidedAt
+        ),
         // Locked only while it IS in the edition (QA round-3 defect 7): a
         // core lesson GWTH published after this edition was provisioned is
         // missing, and locking it would make the repair path the include
@@ -353,9 +374,19 @@ export function splitRatificationQueue(queue: EditionSyllabusEntry[]): {
   awaitingYou: EditionSyllabusEntry[]
   withGwth: EditionSyllabusEntry[]
 } {
+  // `review_note` records why the lesson was LAST sent back and is never
+  // cleared by GWTH editing the lesson, so note-presence alone would strand a
+  // revised draft in "with GWTH" forever and both sides would wait for the
+  // other (QA round-4 defect 12). A lesson edited SINCE the institution's
+  // decision is GWTH answering, so the ball is back with the institution.
+  // `lessons` carries a BEFORE UPDATE trigger stamping updated_at = NOW()
+  // (003_lesson_tables.sql), so any real edit bumps it — the signal cannot be
+  // forgotten by whoever edits the lesson.
+  const withGwth = (entry: EditionSyllabusEntry) =>
+    Boolean(entry.reviewNote) && !entry.revisedSinceDecision
   return {
-    awaitingYou: queue.filter((entry) => !entry.reviewNote),
-    withGwth: queue.filter((entry) => Boolean(entry.reviewNote)),
+    awaitingYou: queue.filter((entry) => !withGwth(entry)),
+    withGwth: queue.filter(withGwth),
   }
 }
 

@@ -152,13 +152,19 @@ function LessonRow({
               hasReviewNote={Boolean(entry.reviewNote)}
             />
           ) : null}
-          {entry.included ? (
+          {entry.included && entry.state === "ratified" ? (
+            // Only a RATIFIED lesson counts (QA round-4 defect 9): the
+            // learner baseline excludes drafts, so labelling a draft "counts"
+            // would put the picker and the score denominator at odds.
             <MandatoryLabel isMandatory={entry.isMandatory} />
           ) : null}
         </div>
       </div>
       <div className={styles.lessonActions}>
-        {entry.tier === "core" ? (
+        {entry.locked ? (
+          // entry.locked, not tier === "core" (QA round-4 defect 3): a core
+          // lesson MISSING from this edition is switchable back on, and
+          // re-deriving the rule here made that repair path unreachable.
           <p className={styles.lockedReason}>
             Core: in every edition of this course.
           </p>

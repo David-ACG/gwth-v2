@@ -94,6 +94,13 @@ export type EditionSyllabusEntry = {
   reviewNote: string | null
   decidedAt: string | null
   /**
+   * True when the lesson itself has been edited since the institution's last
+   * ratification decision, i.e. GWTH has answered a send-back. `review_note`
+   * is never cleared by an edit, so without this a revised draft would sit in
+   * "back with GWTH" forever while both sides waited for the other.
+   */
+  revisedSinceDecision: boolean
+  /**
    * Core lessons are the GWTH course itself and cannot be switched off
    * (D-N7-3) — the picker renders them locked with the reason on screen.
    */

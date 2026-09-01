@@ -44,7 +44,6 @@ import {
 import { isPrivateContentMode } from "@/lib/content-mode"
 import { assertSingleOrgRole, OrgRoleError } from "@/lib/org-roles"
 import {
-  canReadOrgRoster,
   decideRosterAccess,
   ROSTER_BEARING_PATHS,
   ROSTER_FORBIDDEN_MESSAGE,
@@ -118,19 +117,6 @@ async function resolveTargetOrganisationId(
 }
 
 /**
- * Whether the caller holds a roster-visible role in ANY organisation. Used
- * only when the request's target organisation could not be resolved, so the
- * policy can fail closed without breaking legitimate staff calls.
- */
-async function holdsStaffRoleAnywhere(userId: string): Promise<boolean> {
-  const rows = await getDb()
-    .select({ role: schema.orgMembership.role })
-    .from(schema.orgMembership)
-    .where(eq(schema.orgMembership.userId, userId))
-  return rows.some((row) => canReadOrgRoster(row.role))
-}
-
-/**
  * The caller's role in one organisation, read straight from `org_membership`
  * (indexed by user id). Deliberately NOT routed through the plugin adapter:
  * this check guards the plugin, so it must not depend on the plugin's own
@@ -191,10 +177,6 @@ const rosterPrivacyHook = createAuthMiddleware(async (ctx) => {
         ? await findOrgRole(session.user.id, organisationId)
         : null,
     targetsAnotherUser,
-    isStaffAnywhere:
-      session && !organisationId
-        ? await holdsStaffRoleAnywhere(session.user.id)
-        : false,
   })
 
   if (decision.kind === "refuse") {

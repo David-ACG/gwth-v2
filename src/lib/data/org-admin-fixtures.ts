@@ -91,6 +91,7 @@ export function mockEditionSyllabus(): EditionSyllabusEntry[] {
       sortOrder: month * 1000 + index,
       reviewNote,
       decidedAt: reviewNote ? "2026-08-24T09:12:00.000Z" : null,
+      revisedSinceDecision: false,
       locked: tier === "core",
     })
   )

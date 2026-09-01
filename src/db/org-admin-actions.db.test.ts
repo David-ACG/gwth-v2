@@ -304,6 +304,40 @@ describeDb("N7 institution admin writes (live DB)", () => {
       })
     })
 
+    it("refuses another ORGANISATION's exclusive lesson (round-4 defect 6)", async () => {
+      // The lesson passes the course check and has no row in this edition, so
+      // the tier fell back to lessons.is_optional and it was inserted
+      // RATIFIED — publishing another institution's exclusive content.
+      const otherOrg = `${P}_other_org`
+      const otherEdition = `${P}_other_org_edition`
+      await sql`
+        INSERT INTO organisation (id, name, slug, type)
+        VALUES (${otherOrg}, 'Rival institution', ${`${otherOrg}-slug`}, 'institution')
+      `
+      await sql`
+        INSERT INTO syllabus_edition
+          (id, organisation_id, course_id, name, slug, is_org_default, pass_mark, status)
+        VALUES (${otherEdition}, ${otherOrg}, ${COURSE_ID}, 'Rival edition',
+                ${`${otherEdition}-slug`}, TRUE, 70, 'live')
+      `
+      await sql`
+        INSERT INTO edition_lessons (edition_id, lesson_id, tier, state, is_mandatory, sort_order)
+        VALUES (${otherEdition}, ${`${P}_core_missing`}, 'exclusive', 'ratified', TRUE, 2002)
+      `
+
+      const result = await actions.setEditionLessonIncludedAction(
+        EDITION_ID,
+        `${P}_core_missing`,
+        true
+      )
+      expect(result.ok).toBe(false)
+      expect(await row(`${P}_core_missing`)).toBeNull()
+
+      await sql`DELETE FROM edition_lessons WHERE edition_id = ${otherEdition}`
+      await sql`DELETE FROM syllabus_edition WHERE id = ${otherEdition}`
+      await sql`DELETE FROM organisation WHERE id = ${otherOrg}`
+    })
+
     it("still refuses to REMOVE a core lesson (D-N7-3)", async () => {
       const result = await actions.setEditionLessonIncludedAction(
         EDITION_ID,

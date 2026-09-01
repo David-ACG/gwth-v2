@@ -316,6 +316,22 @@ describeDb("N7 institution admin (live DB)", () => {
       await sql`DELETE FROM edition_lessons WHERE edition_id = ${EDITION_B} AND lesson_id = ${`${P}_l5`}`
     })
 
+    it("still shows a lesson THIS edition carries, whatever another edition says (round-4 defect 7)", async () => {
+      // The first version of the exclusivity filter hid a lesson whenever ANY
+      // other edition marked it exclusive, so an org's own draft could vanish
+      // from its own picker and become unratifiable.
+      await sql`
+        INSERT INTO edition_lessons (edition_id, lesson_id, tier, state, is_mandatory, sort_order)
+        VALUES (${EDITION_B}, ${`${P}_l4`}, 'exclusive', 'ratified', TRUE, 3004)
+      `
+      const syllabus = await orgAdmin.getEditionSyllabus(CONTEXT_A)
+      // l4 is edition A's OWN exclusive draft; B claiming it must not hide it.
+      expect(syllabus.map((entry) => entry.lessonId)).toContain(`${P}_l4`)
+      const queue = await orgAdmin.getRatificationQueue(CONTEXT_A)
+      expect(queue.map((entry) => entry.lessonId)).toContain(`${P}_l4`)
+      await sql`DELETE FROM edition_lessons WHERE edition_id = ${EDITION_B} AND lesson_id = ${`${P}_l4`}`
+    })
+
     it("leaves a MISSING core lesson unlocked so it can be added (round-3 defect 7)", async () => {
       const syllabus = await orgAdmin.getEditionSyllabus(CONTEXT_A)
       const missingCore = syllabus.find((entry) => entry.lessonId === `${P}_l5`)!
@@ -375,6 +391,40 @@ describeDb("N7 institution admin (live DB)", () => {
         active7d: 1,
         pendingRatification: 1,
       })
+    })
+  })
+
+  describe("the ratification queue's ball-ownership", () => {
+    it("returns a REVISED draft to 'waiting on you' (round-4 defect 12)", async () => {
+      // review_note records why it was LAST sent back and is never cleared by
+      // GWTH editing the lesson, so note-presence alone stranded a revised
+      // draft in "with GWTH" forever.
+      // The institution sends it back NOW, i.e. after the lesson's current
+      // updated_at. (lessons carries a BEFORE UPDATE trigger that stamps
+      // updated_at = NOW(), which is exactly what makes this signal reliable:
+      // any real edit to the lesson bumps it.)
+      await sql`
+        UPDATE edition_lessons
+        SET review_note = 'needs a UK example', decided_at = NOW()
+        WHERE edition_id = ${EDITION_A} AND lesson_id = ${`${P}_l4`}
+      `
+      let split = orgAdmin.splitRatificationQueue(
+        await orgAdmin.getRatificationQueue(CONTEXT_A)
+      )
+      expect(split.withGwth.map((e) => e.lessonId)).toContain(`${P}_l4`)
+
+      // GWTH then edits the lesson: the trigger bumps updated_at past
+      // decided_at, and the ball comes back to the institution.
+      await sql`UPDATE lessons SET title = 'Lesson n7adm_l4 (revised)' WHERE id = ${`${P}_l4`}`
+      split = orgAdmin.splitRatificationQueue(
+        await orgAdmin.getRatificationQueue(CONTEXT_A)
+      )
+      expect(split.awaitingYou.map((e) => e.lessonId)).toContain(`${P}_l4`)
+
+      await sql`
+        UPDATE edition_lessons SET review_note = NULL, decided_at = NULL
+        WHERE edition_id = ${EDITION_A} AND lesson_id = ${`${P}_l4`}
+      `
     })
   })
 

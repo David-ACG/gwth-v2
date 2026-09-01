@@ -112,11 +112,6 @@ export function decideRosterAccess(
     organisationId: string | null
     role: string | null
     targetsAnotherUser: boolean
-    /**
-     * Whether the caller holds a roster-visible role in ANY organisation.
-     * Only consulted when the target organisation could not be resolved.
-     */
-    isStaffAnywhere: boolean
   }
 ): RosterAccessDecision {
   if (!ROSTER_BEARING_PATHS.has(path)) return { kind: "not-applicable" }
@@ -132,22 +127,23 @@ export function decideRosterAccess(
     return { kind: "defer", reason: "no session — the endpoint returns 401" }
   }
   if (!ctx.organisationId) {
-    // Fail CLOSED (QA round-3 defect 11). Deferring here assumed the hook's
-    // resolver understands every identifier shape better-auth does; if a
-    // future version accepts one it does not, an unresolved target would
-    // fall through to the plugin's membership-only check and hand a learner
-    // the roster. A caller who holds NO roster-visible role anywhere can
-    // never legitimately read one, so refuse; staff fall through to the
-    // plugin's own checks, which are correct for them.
-    return ctx.isStaffAnywhere
-      ? {
-          kind: "defer",
-          reason: "target organisation unknown; caller is staff somewhere",
-        }
-      : {
-          kind: "refuse",
-          reason: "target organisation unknown and caller is not staff anywhere",
-        }
+    // Fail CLOSED, with no exemption (QA round-3 defect 11, tightened at
+    // round 4). Deferring here assumed the hook's resolver understands every
+    // identifier shape better-auth does; if a future version accepts one it
+    // does not, an unresolved target would fall through to the plugin's
+    // membership-only check and hand a learner the roster.
+    //
+    // The first attempt exempted callers who are staff SOMEWHERE, which does
+    // not prove they are staff in the organisation being asked about: an
+    // admin of org A who is a learner in org B would have been let through to
+    // B's roster. Every identifier shape the four gated endpoints accept is
+    // resolved here today, so this branch is unreachable in practice; if a
+    // future version adds one, staff get a clear 403 and the resolver is
+    // fixed. That is the correct direction for a security control to fail.
+    return {
+      kind: "refuse",
+      reason: "target organisation could not be resolved",
+    }
   }
   if (!ctx.role) {
     return {

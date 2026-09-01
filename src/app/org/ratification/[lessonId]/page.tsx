@@ -82,7 +82,15 @@ export default async function OrgLessonPreviewPage({
         )}
       </div>
 
-      {lesson.state === "draft" ? (
+      {lesson.state === "draft" && !lesson.learnContent ? (
+        // No body, no decision (QA round-4 defect 8): offering Ratify beside
+        // "GWTH has not written this yet" invites publishing an empty lesson
+        // to the whole cohort. Send-back is still available from the queue.
+        <p className={adminStyles.sectionLead}>
+          There is nothing to sign off yet. When GWTH has written the lesson it
+          will appear here and you can decide it.
+        </p>
+      ) : lesson.state === "draft" ? (
         <div className={styles.queueItem} data-section="ratification-item">
           <p className={adminStyles.panelLead}>
             Decide it here, having read it. Ratifying makes it visible to every

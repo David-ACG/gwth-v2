@@ -24,9 +24,10 @@
  * graded against the new number.
  */
 import { revalidatePath } from "next/cache"
-import { and, eq, isNotNull, isNull, ne } from "drizzle-orm"
+import { and, eq, isNotNull, isNull, ne, sql } from "drizzle-orm"
 import { getDb } from "@/db"
 import { editionLessons, lessons, syllabusEdition } from "@/db/schema"
+import { alias } from "drizzle-orm/pg-core"
 import {
   resolveEditionEditor,
   type OrgEdition,
@@ -133,6 +134,33 @@ export async function setEditionLessonIncludedAction(
       )
     )
     .limit(1)
+
+  // A lesson with no row in this edition is only addable if it is actually
+  // OFFERED to this organisation (QA round-4 defect 6). Without this the
+  // tier fell back to lessons.is_optional, so a forged post carrying another
+  // institution's exclusive lesson id resolved to "optional" and was inserted
+  // ratified — publishing their content to the wrong learners. The picker
+  // applies the same rule, so this closes the API door the UI already closes.
+  if (!existing[0]) {
+    const otherOrgEdition = alias(syllabusEdition, "other_org_edition")
+    const claimed = await db
+      .select({ one: editionLessons.id })
+      .from(editionLessons)
+      .innerJoin(
+        otherOrgEdition,
+        eq(otherOrgEdition.id, editionLessons.editionId)
+      )
+      .where(
+        and(
+          eq(editionLessons.lessonId, lesson.id),
+          eq(editionLessons.tier, "exclusive"),
+          sql`${otherOrgEdition.organisationId} IS DISTINCT FROM ${context.organisationId}`
+        )
+      )
+      .limit(1)
+    if (claimed[0]) return { ok: false, message: NOT_YOURS }
+  }
+
   const currentTier = existing[0]?.tier ?? (lesson.isOptional ? "optional" : "core")
 
   // Core belongs in every edition, so REMOVING it is refused (D-N7-3) but
