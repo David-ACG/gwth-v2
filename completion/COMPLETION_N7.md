@@ -1,7 +1,8 @@
 # Completion: N7 — institution admin v1 + the roster-privacy fix
 
-**Date:** 2026-08-31 · **Repo:** GWTH_V2 (worker lane) · **Base:** `7623d88` · **Commits:** `89e2814` → `d9d1beb`
-**Test URL (one click, HTTPS, tailnet):** **https://hlab.taila51191.ts.net:9458/org**
+**Date:** 2026-08-31 · **Repo:** GWTH_V2 (worker lane) · **Base:** `7623d88` · **Commits:** `89e2814` → `ba2e3f5`
+**Walk it (6 steps, screenshots, verdict buttons):** **https://hlab.taila51191.ts.net:8101/walkthrough/n7-org-admin**
+**Or go straight to the screens:** https://hlab.taila51191.ts.net:9458/org
 **Status:** built, tested, live on the hlab review server. NOT deployed and NOT published — gwth.ai still runs `b97a1b9` with unpublished commits awaiting David, and no prod migration has been run. Ship ledger: `n7-institution-admin`, state *waiting for your verdict* on https://hlab.taila51191.ts.net:8101/ship.
 **Design (other repo, so paths not links):**
 `GWTH-launch-plan/Institution - Fable Plan/05-syllabus-editions-design.md`
@@ -77,7 +78,7 @@ carries the "Preview — example data" banner.
 ![learners mobile](N7/org-learners-390.png)
 
 **Click it:** https://hlab.taila51191.ts.net:9458/org — the hlab review server
-on the tailnet, serving commit `d9d1beb`. This is a *preview*, not a
+on the tailnet, serving commit `ba2e3f5`. This is a *preview*, not a
 deployment: gwth.ai is untouched and still on `b97a1b9`.
 
 ```
@@ -193,6 +194,10 @@ a two-org DB test.
       currently answers one way: (a) a tutor is read-only and sees the roster
       but never a learner's individual answers; (b) the org's mandatory count
       may exceed the GWTH default's, which is what decision 2 chose.
+- [ ] Decide the freeze: gwth.ai still runs `b97a1b9`. When you clear it,
+      migrations **016-019 must run on prod BEFORE the deploy** — the app now
+      refuses to boot otherwise, naming the outstanding file, rather than
+      failing every learner page.
 
 ## Verification run
 
@@ -201,18 +206,20 @@ npx tsc --noEmit                                        → clean
 npx eslint src                                          → 1 error, PRE-EXISTING
                                                           (src/lib/data/progress-quiz-atomic.test.ts:22
                                                            no-explicit-any, from commit e44fb52 / N2)
-npm test                                                → 77 files passed, 9 skipped
-                                                          766 tests passed, 89 skipped (DB suites)
+npm test                                                → 78 files passed, 9 skipped
+                                                          773 tests passed, 93 skipped (DB suites)
 DATABASE_URL=…5443/gwth_v2 npx vitest run src/db/ \
   src/lib/data/progress.db.test.ts \
-  src/lib/billing/access.db.test.ts                     → 10 files, 90 tests passed
-    of which src/db/org-admin.db.test.ts       (reads)  → 17 passed
-             src/db/org-admin-actions.db.test.ts (writes) → 12 passed
+  src/lib/billing/access.db.test.ts                     → 10 files, 94 tests passed
+    of which src/db/org-admin.db.test.ts       (reads)  → 19 passed
+             src/db/org-admin-actions.db.test.ts (writes) → 14 passed
              src/db/org-roster-privacy.db.test.ts       → 12 passed
 PLAYWRIGHT_BASE_URL=http://localhost:3000 \
   npx playwright test org-admin \
   --project=desktop-chromium --project=desktop-dark \
-  --project=mobile-chromium                             → 115 passed, 8 skipped
+  --project=mobile-chromium                             → 84 passed, 42 skipped
+                                                          (desktop-dark skipped for this spec:
+                                                           the theme is seeded per test)
 npm run build                                           → Compiled successfully;
                                                           ƒ /org, /org/learners,
                                                           /org/ratification, /org/syllabus
@@ -331,13 +338,74 @@ deleting the `state='draft'` predicate fails exactly the unpublish test.
   frozen, the ship is open and waiting for a verdict with a clickable preview,
   which is the same job done under the constraint the brief imposed.
 
+### Round 3
+
+**12 defects, 11 style notes.** Nine defects and four style notes fixed in
+`ba2e3f5`. The four worth naming:
+
+1. **A tenancy leak.** `getEditionSyllabus` filtered by course alone, so
+   another institution's EXCLUSIVE lesson appeared in this org's picker as an
+   ordinary switched-off optional — leaking its title and synopsis, and
+   switching it on would have published it to the wrong learners as ratified
+   content. Excluded with a `NOT EXISTS` over exclusive rows in other editions,
+   and pinned by a two-org DB test.
+2. **The baseline could be hollowed out by the other door.**
+   `setEditionLessonMandatoryAction` had no tier guard, so an admin could set
+   every core lesson to "does not count" and leave a credential attesting only
+   to their own optional picks. D-N7-3 now holds on both write paths.
+3. **A stale ratify could wipe a colleague's send-back.** The decision now
+   carries what the screen showed and is refused if the row has moved — a real
+   optimistic-concurrency check, not a narrower predicate.
+4. **The roster hook failed OPEN on an unresolved organisation.** It now
+   refuses unless the caller holds a roster-visible role somewhere, so an
+   identifier shape better-auth accepts and this resolver does not can never
+   fall through to membership-only authorisation.
+
+Also: `/org`'s layout fallback still used the beta-gated accessor (the round-2
+fix had missed one call site); a missing core lesson rendered *locked* as well
+as off, making round 2's repair path unreachable from the screen; and
+`/org/learners` had no no-edition state.
+
+**Two things round 3 produced that are worth more than the defects:**
+
+- **`/org/ratification/[lessonId]` — read the full draft, then decide.** Twice
+  now a reviewer said an institution was being asked to sign off content it
+  could only see the title and synopsis of, and twice I had documented it as a
+  limitation. It was right and I was wrong: it is now built, and it does not
+  relax N6's learner rule (`getEditionLessonPreview` joins to the caller's OWN
+  edition, so another institution's exclusive lesson 404s and drafts stay
+  invisible to learners).
+- **`src/lib/schema-guard.ts`, wired into `instrumentation.register()`.** The
+  migration-before-deploy hazard had been answered with a paragraph in this
+  packet, which is not a control. A build that selects columns its database
+  lacks now aborts startup naming the outstanding migration, instead of failing
+  every learner request with `column does not exist`. A database that is merely
+  unreachable at boot is logged, not fatal, so a transient blip cannot
+  crash-loop a healthy deploy.
+
+**Rebutted — the deploy and the "brief" text.** Round 3 said the quoted
+"do not deploy" instruction "does not appear anywhere in the brief". It does
+appear in the brief this session was given, verbatim under HARD RULES:
+
+> DO NOT DEPLOY AND DO NOT PUBLISH. gwth.ai currently runs b97a1b9 with 6
+> unpublished commits on master that David has not cleared; publishing is
+> frozen until he answers. Build and test locally only.
+
+The QA chain reads the generic task definition from `launch_tracks.yaml`, not
+the night-run prompt, which is why it could not see it. The freeze also shows
+independently in `ship.py brief` as a DRIFT warning. Nothing was deployed, by
+instruction. **The walkthrough gap it also raised is now closed** rather than
+argued: `walkthrough/n7-org-admin.yaml`, 6 steps with screenshots and verdict
+buttons, attached to the ship.
+
+### Round 4 (verification only)
+
+Run after `ba2e3f5` to confirm the round-3 fixes, at the briefed 3-round fix
+cap. Outcome is recorded in the QA report file; anything still open is a
+survivor, listed there rather than fixed, per the cap.
+
 ## Known limitations (v1, deliberate)
 
-- **A draft lesson cannot be read in full before ratifying it.** The card
-  shows the synopsis; the learner viewer refuses drafts by design (N6's
-  `isLessonInEdition` admits ratified rows only), and a staff preview route is
-  a change to N6's resolution layer that N7 should not make blind. Filed for
-  the next institution slice.
 - **Per-learner drill-down of individual quiz answers is absent**, per design
   05 section 4 — a privacy posture to settle with CIPD, not an oversight.
 - **No invitation UI.** Provisioning an institution (org, edition, first
