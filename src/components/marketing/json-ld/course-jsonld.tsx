@@ -15,7 +15,7 @@ const COURSE_JSON_LD_PAYLOAD = {
   "@type": "Course",
   name: "GWTH.ai Applied AI Course",
   description:
-    "A UK-focused beginner-to-advanced applied AI course covering ChatGPT basics, research, automation, AI-assisted coding, projects, capstones, and portfolio evidence.",
+    "A three-month applied AI foundation for UK professionals and the institutions that serve them: research, content, thinking, building, data and automation, taught in plain English, assessed throughout, with a project in every lesson and a verified record at the end.",
   provider: {
     "@type": "Organization",
     name: "GWTH.ai",

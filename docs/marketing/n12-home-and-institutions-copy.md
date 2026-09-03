@@ -73,11 +73,11 @@ Figure 01. Two thirds and one third. More than two thirds of HR professionals pu
 
 Figure 02. 3.5 times. The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times as much AI per worker as typical firms, up from twice as much a year earlier. Only 36% of that gap is volume. OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026.
 
-Figure 03. 16%. Only 16% of people using AI at work get the most from it, the group Microsoft calls frontier professionals, and what their organisation does drives twice the impact of what they do alone. Microsoft Work Trend Index, 2026.
+Figure 03. 16%. Only 16% of people using AI at work are what Microsoft calls frontier professionals, and its data ties twice as much of the difference to the organisation as to the individual. Microsoft Work Trend Index, 2026.
 
-Figure 04. 59 in 100. Fifty-nine of every hundred workers need reskilling or upskilling by 2030, and eleven of them will not get it. World Economic Forum, Future of Jobs Report 2025.
+Figure 04. 59 in 100. Fifty-nine of every hundred workers need reskilling or upskilling by 2030, and eleven of them are unlikely to get it. World Economic Forum, Future of Jobs Report 2025.
 
-Two more things make a baseline hard to postpone. Article 4 of the EU AI Act has, since February 2025, required providers and deployers of AI to take measures to ensure, as far as they can, a sufficient level of AI literacy among their staff. And the UK government's skills partnership, announced in January 2026, aims to give ten million workers AI skills by 2030. Professional bodies are the obvious delivery rail for both.
+Two more things make a baseline hard to postpone. Article 4 of the EU AI Act has, since February 2025, required providers and deployers of AI to take measures to ensure, as far as they can, a sufficient level of AI literacy among their staff. And the UK government's skills partnership, announced in January 2026, aims to give ten million workers AI skills by 2030 (gov.uk, 28 January 2026). Professional bodies are the obvious delivery rail for both.
 
 ### Your edition (What an institution gets)
 

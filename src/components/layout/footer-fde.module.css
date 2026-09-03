@@ -22,6 +22,7 @@
 }
 
 .colHeader {
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
   color: var(--v-ink);

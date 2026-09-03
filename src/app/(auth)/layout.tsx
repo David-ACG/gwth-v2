@@ -23,12 +23,11 @@ export default function AuthLayout({
       <header className={styles.masthead} data-section="masthead">
         <div className={`${styles.page} ${styles.mastheadInner}`}>
           <Link href="/" aria-label="GWTH.ai home" className={styles.wordmarkLink}>
-            {/* Cream wordmark + mustard accent on the teal band. David compared
-                mustard vs the terracotta brand accent on the green ground and
-                picked mustard (2026-07-03). The `onDark` variant carries that
-                treatment from the canonical component (W23) so the masthead is
-                no longer a per-page colour hardcode. */}
-            <LogoGwth width={150} onDark />
+            {/* The masthead is the quiet paper fill in the paper-first register
+                (N12), so the wordmark takes the site inks. The `onDark` variant
+                (cream + mint, W23) is for a genuinely dark ground, and this is
+                no longer one. */}
+            <LogoGwth width={150} />
           </Link>
         </div>
       </header>

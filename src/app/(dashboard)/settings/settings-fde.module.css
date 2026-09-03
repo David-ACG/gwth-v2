@@ -217,8 +217,9 @@
 }
 
 .buttonDanger:hover {
-  background: var(--v-rust);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
+  border-color: var(--v-ink);
 }
 
 .buttonSolid:focus-visible,

@@ -31,14 +31,14 @@ export const EVIDENCE = [
   {
     kicker: "Figure 03",
     value: "16%",
-    body: "Only 16% of people using AI at work get the most from it, the group Microsoft calls frontier professionals, and what their organisation does drives twice the impact of what they do alone.",
+    body: "Only 16% of people using AI at work are what Microsoft calls frontier professionals, and its data ties twice as much of the difference to the organisation as to the individual.",
     source: "Microsoft Work Trend Index, 2026",
     href: "https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization",
   },
   {
     kicker: "Figure 04",
     value: "59 in 100",
-    body: "Fifty-nine of every hundred workers need reskilling or upskilling by 2030, and eleven of them will not get it.",
+    body: "Fifty-nine of every hundred workers need reskilling or upskilling by 2030, and eleven of them are unlikely to get it.",
     source: "World Economic Forum, Future of Jobs Report 2025",
     href: "https://www.weforum.org/publications/the-future-of-jobs-report-2025/",
   },

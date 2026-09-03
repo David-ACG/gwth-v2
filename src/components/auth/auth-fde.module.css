@@ -391,6 +391,14 @@
   margin-top: 1.75rem;
 }
 
+/* Paired action buttons share the row (layout only; colour comes from the
+   base recipes). Restored after the N12 pass removed it by mistake. */
+.actions .buttonSolid,
+.actions .buttonOutline {
+  flex: 1;
+  min-width: 9rem;
+}
+
 /* ---------------- Success state (post-beta signup confirmation) ---------- */
 
 .success {

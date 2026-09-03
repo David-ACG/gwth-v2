@@ -121,7 +121,7 @@
      closes the live 1.38:1 boundary and 1.04:1 tint through --v-line and the
      M2 menu). */
   --v-teal: var(--v-quiet);
-  --v-teal-deep: var(--v-quiet);
+  --v-teal-deep: var(--v-btn); /* legacy button hover fill: stays the button, so the near-black label reads in both modes */
   --v-moss: var(--v-quiet);
   --v-cream: var(--v-ink);
   --v-cream-muted: var(--v-soft);

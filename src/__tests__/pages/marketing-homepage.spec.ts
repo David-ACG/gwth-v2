@@ -86,11 +86,15 @@ test.describe("Marketing homepage, full-page smoke", () => {
     await expect(key).toBeVisible()
     const spans = key.locator("span")
     await expect(spans).toHaveCount(6)
-    const tops = await spans.evaluateAll((els) =>
-      els.map((el) => Math.round(el.getBoundingClientRect().top))
+    const boxes = await spans.evaluateAll((els) =>
+      els.map((el) => {
+        const r = el.getBoundingClientRect()
+        return { top: Math.round(r.top), left: Math.round(r.left) }
+      })
     )
-    // Two rows of three: exactly two distinct top offsets.
-    expect(new Set(tops).size).toBe(2)
+    // Two rows of three: two distinct top offsets, three distinct left offsets.
+    expect(new Set(boxes.map((b) => b.top)).size).toBe(2)
+    expect(new Set(boxes.map((b) => b.left)).size).toBe(3)
   })
 
   test("every internal link the page carries answers", async ({ page, request }) => {

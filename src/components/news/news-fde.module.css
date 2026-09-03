@@ -193,6 +193,10 @@
   flex: 1;
 }
 
+.newsletterForm .buttonSolid {
+  padding: 0.65rem 1.1rem;
+}
+
 /* ---------------- Filter bar ---------------- */
 
 .filters {

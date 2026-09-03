@@ -51,7 +51,7 @@ interface FooterProps {
    * `(public)/layout.tsx` exactly as for the nav: `/lessons` for a visitor,
    * the learner's course for someone who has one (QA finding, N12).
    */
-  lessonsHref?: string
+  lessonsHref: string
 }
 
 /**
@@ -59,7 +59,7 @@ interface FooterProps {
  * band with a load-bearing top boundary, Public Sans column headers and links.
  * Shows logo, tagline, organised link columns, and copyright.
  */
-export function Footer({ showLabs, lessonsHref = "/lessons" }: FooterProps) {
+export function Footer({ showLabs, lessonsHref }: FooterProps) {
   const groups = (
     showLabs
       ? footerLinks
