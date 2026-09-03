@@ -46,6 +46,12 @@ interface FooterProps {
    * that a static render cannot bake a stale answer into.
    */
   showLabs: boolean
+  /**
+   * Where "The course" points for THIS viewer, resolved in
+   * `(public)/layout.tsx` exactly as for the nav: `/lessons` for a visitor,
+   * the learner's course for someone who has one (QA finding, N12).
+   */
+  lessonsHref?: string
 }
 
 /**
@@ -53,13 +59,20 @@ interface FooterProps {
  * band with a load-bearing top boundary, Public Sans column headers and links.
  * Shows logo, tagline, organised link columns, and copyright.
  */
-export function Footer({ showLabs }: FooterProps) {
-  const groups = showLabs
-    ? footerLinks
-    : footerLinks.map((col) => ({
-        ...col,
-        links: col.links.filter((link) => link.href !== "/labs"),
-      }))
+export function Footer({ showLabs, lessonsHref = "/lessons" }: FooterProps) {
+  const groups = (
+    showLabs
+      ? footerLinks
+      : footerLinks.map((col) => ({
+          ...col,
+          links: col.links.filter((link) => link.href !== "/labs"),
+        }))
+  ).map((col) => ({
+    ...col,
+    links: col.links.map((link) =>
+      link.href === "/lessons" ? { ...link, href: lessonsHref } : link
+    ),
+  }))
 
   return (
     <footer

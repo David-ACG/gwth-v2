@@ -209,10 +209,10 @@
   --sidebar-ring: var(--v-accent);
 
   --chart-1: var(--v-accent);
-  --chart-2: var(--v-btn);
+  --chart-2: var(--v-ink);
   --chart-3: var(--v-muted);
   --chart-4: var(--v-ink);
-  --chart-5: var(--v-line);
+  --chart-5: var(--v-soft);
 
   --status-completed: oklch(0.6 0.18 145);
   --status-in-progress: var(--v-accent);
@@ -293,10 +293,10 @@
   --sidebar-ring: var(--v-accent);
 
   --chart-1: var(--v-accent);
-  --chart-2: var(--v-btn);
+  --chart-2: var(--v-ink);
   --chart-3: var(--v-muted);
   --chart-4: var(--v-ink);
-  --chart-5: var(--v-line);
+  --chart-5: var(--v-soft);
 
   --status-completed: oklch(0.7 0.16 145);
   --status-in-progress: var(--v-accent);

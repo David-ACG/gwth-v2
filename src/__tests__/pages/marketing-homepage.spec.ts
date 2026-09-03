@@ -100,7 +100,13 @@ test.describe("Marketing homepage, full-page smoke", () => {
     for (const expected of EXPECTED_INTERNAL_HREFS) {
       expect(hrefs, `link to ${expected}`).toContain(expected)
     }
-    const unique = [...new Set(hrefs)].filter((h) => !h.startsWith("/#") && !h.includes("#"))
+    // In-page anchors are skipped; a cross-page link keeps its path and is
+    // checked without its fragment.
+    const unique = [
+      ...new Set(
+        hrefs.filter((h) => !h.startsWith("/#")).map((h) => h.split("#")[0] ?? h)
+      ),
+    ].filter(Boolean)
     for (const href of unique) {
       const res = await request.head(href)
       expect(res.status(), `HEAD ${href}`).toBeLessThan(400)

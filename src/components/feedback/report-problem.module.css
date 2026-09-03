@@ -13,7 +13,7 @@
 .shell {
 
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
@@ -35,6 +35,7 @@
    register's hard teal offset shadow at rest — this is the page's always-in-view
    artefact on /guide, so it sits proud rather than waiting for hover (§5.7). */
 .panel {
+  border-radius: var(--radius-lg);
   background: var(--v-surface);
   border: 1px solid var(--v-ink);
   padding: 1.75rem 1.6rem;
@@ -44,6 +45,7 @@
 /* When the panel is the inner content of the launcher overlay the offset shadow
    would clip against the dialog edge, so the modal variant drops it. */
 .panelFlat {
+  border-radius: var(--radius-lg);
   box-shadow: none;
 }
 
@@ -98,7 +100,7 @@
   border-radius: 8px;
   background: var(--v-bg);
   padding: 0.7rem 0.85rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 0.98rem;
   line-height: 1.5;
   color: var(--v-ink);

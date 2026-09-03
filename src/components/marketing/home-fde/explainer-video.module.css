@@ -1,13 +1,12 @@
 /*
- * FDE explainer-video embed. Scoped FDE palette block copied whole from the
- * register (DESIGN_FDE §2 / §8 duplication rule) so the embed follows light/dark
- * with the page. No raw hex outside this block; square corners; hairline border.
+ * Explainer-video embed. Tokens come from globals.css (paper-first register,
+ * N12); the embed follows light/dark with the page. No raw hex; hairline border.
  */
 .shell {
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
   padding: clamp(3rem, 6vw, 5rem) 0;
 }

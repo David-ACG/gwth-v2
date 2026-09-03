@@ -34,13 +34,10 @@
   --variant-warm: var(--v-ochre);
   --radius: 0px;
 
-  /* The viewer's internal register loaded Public Sans / Inter /
-     Vollkorn via font-sans / font-serif utilities. Remap all three to
-     Source Serif 4 inside the shell: serif-first (§3). */
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
@@ -138,7 +135,7 @@
    marker, drawn inside the row so it cannot shift the rail's layout. */
 .railCurrent {
   background: var(--v-current-bg);
-  box-shadow: none;
+  box-shadow: inset 3px 0 0 0 var(--v-current-marker); /* M2 bar: the tint is never the only signal */
 }
 
 /* ── Sticky-header breadcrumb containment (mobile) ────────────────────

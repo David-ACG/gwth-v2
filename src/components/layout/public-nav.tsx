@@ -114,7 +114,9 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden items-center gap-1 md:flex">
+        {/* Desktop row from lg: with seven links plus the controls, 768 to 1024px
+            cannot hold it, so tablets get the sheet (QA finding, N12). */}
+        <div className="hidden items-center gap-1 lg:flex">
           {links.map((link) => {
             const current = isCurrent(pathname, link.href)
             return (
@@ -195,7 +197,7 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
 
           {/* Mobile hamburger */}
           <Sheet>
-            <SheetTrigger asChild className="md:hidden">
+            <SheetTrigger asChild className="lg:hidden">
               <Button
                 variant="ghost"
                 size="icon"

@@ -18,8 +18,10 @@ describe("ForInstitutionsPage", () => {
     const cards = screen.getAllByTestId("evidence-card")
     expect(cards).toHaveLength(EVIDENCE.length)
     for (const item of EVIDENCE) {
-      const link = screen.getByRole("link", { name: item.source })
-      expect(link).toHaveAttribute("href", item.href)
+      expect(screen.getByText(item.value)).toBeInTheDocument()
+      const links = screen.getAllByRole("link", { name: item.source })
+      expect(links.length).toBeGreaterThanOrEqual(1)
+      expect(links.some((l) => l.getAttribute("href") === item.href)).toBe(true)
     }
   })
 

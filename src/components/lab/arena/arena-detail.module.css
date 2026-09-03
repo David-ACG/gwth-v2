@@ -11,7 +11,7 @@
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
@@ -263,7 +263,7 @@
 .outputBody {
   margin: 0;
   padding: 1.1rem 1.2rem 1.3rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   line-height: 1.65;
   color: var(--v-ink);

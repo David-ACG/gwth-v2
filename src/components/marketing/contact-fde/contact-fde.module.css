@@ -14,7 +14,7 @@
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
@@ -120,7 +120,7 @@
   border-radius: 8px;
   background: var(--v-bg);
   padding: 0.7rem 0.85rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--fde-body);
   line-height: 1.5;
   color: var(--v-ink);

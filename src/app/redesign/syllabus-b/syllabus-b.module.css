@@ -41,7 +41,7 @@
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
@@ -219,7 +219,7 @@
   background: var(--band);
   color: var(--band-ink);
   padding: 0.85rem 1.1rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1.24rem;
   font-weight: 600;
   letter-spacing: -0.008em;

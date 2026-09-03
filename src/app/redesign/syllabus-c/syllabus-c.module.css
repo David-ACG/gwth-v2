@@ -42,7 +42,7 @@
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
@@ -217,7 +217,7 @@
 .accTrigger {
   border-radius: 8px;
   padding: 0.9rem 0 0.75rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1.28rem;
   font-weight: 600;
   letter-spacing: -0.012em;

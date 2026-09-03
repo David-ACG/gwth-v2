@@ -13,7 +13,7 @@
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
@@ -36,7 +36,7 @@
   background: transparent;
   color: var(--v-ink);
   border-radius: 8px;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
 }
 
 /* ---------------- Input row ---------------- */
@@ -79,7 +79,7 @@
 
 .palette :global([data-slot="command-item"]) {
   border-radius: 8px;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--fde-body);
   color: var(--v-ink);
 }
@@ -94,7 +94,7 @@
 }
 
 .palette :global([data-slot="command-empty"]) {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--fde-body);
   color: var(--v-soft);
 }

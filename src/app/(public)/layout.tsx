@@ -59,7 +59,7 @@ export default async function PublicLayout({
         lessonsHref={lessonsHref}
       />
       <main className="flex-1">{children}</main>
-      <Footer showLabs={showLabs} />
+      <Footer showLabs={showLabs} lessonsHref={lessonsHref} />
     </div>
   )
 }

@@ -13,8 +13,9 @@ import { render, within } from "@testing-library/react"
 import { PublicNav } from "./public-nav"
 import { COURSE_PATH } from "@/lib/config"
 
+let pathname = "/"
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/",
+  usePathname: () => pathname,
 }))
 
 vi.mock("@/lib/actions/auth", () => ({
@@ -80,13 +81,27 @@ describe("PublicNav lessons link", () => {
 })
 
 describe("PublicNav selected item (M2, N12)", () => {
-  it("marks the current page with aria-current and the active class", () => {
+  it("marks nothing current on the home page", () => {
+    pathname = "/"
     const view = renderNav({ lessonsHref: "/lessons" })
-    // usePathname is mocked to "/", so no nav link is current on the home page
-    // and every link carries the transparent bar, never the ink one.
     for (const link of view.getAllByRole("link")) {
       expect(link.getAttribute("aria-current")).toBeNull()
     }
+  })
+
+  it("marks the current section, including nested routes, and nothing else", () => {
+    pathname = "/for-institutions/anything"
+    const view = renderNav({ lessonsHref: "/lessons" })
+    const current = view
+      .getAllByRole("link")
+      .filter((el) => el.getAttribute("aria-current") === "page")
+    // the desktop row renders; the mobile sheet is a closed portal in jsdom
+    expect(current.length).toBeGreaterThanOrEqual(1)
+    for (const el of current) {
+      expect(el).toHaveTextContent("For institutions")
+      expect(el.className).toMatch(/Active/)
+    }
+    pathname = "/"
   })
 })
 

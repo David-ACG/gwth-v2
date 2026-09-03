@@ -16,17 +16,17 @@ import styles from "./for-institutions-fde.module.css"
 export const EVIDENCE = [
   {
     kicker: "Figure 01",
-    value: "67% and 33%",
-    body: "Two thirds of HR professionals put AI at the top of their development priorities. One third of organisations offer any AI training.",
-    source: "CIPD, 2026 survey of 1,300 leaders and HR professionals",
-    href: "https://www.cipd.org/en/about/news/icymi-navigate-ai-adoption-support-youth-employment-build-inclusive-workplace/",
+    value: "Two thirds and one third",
+    body: "More than two thirds of HR professionals put AI skills at the top of their development priorities. One third of organisations have given their staff any AI training.",
+    source: "CIPD Ireland with the University of Limerick, HR Practices survey of 330 HR professionals, May 2026",
+    href: "https://www.rte.ie/news/business/2026/0520/1574248-cipd-survey-on-ai/",
   },
   {
     kicker: "Figure 02",
     value: "3.5 times",
     body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times more of it per worker than typical firms, up from twice a year earlier. Only 36% of that gap is volume.",
-    source: "OpenAI Enterprise Signals, 2026",
-    href: "https://openai.com/signals/enterprise-data/",
+    source: "OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026",
+    href: "https://openai.com/index/introducing-b2b-signals/",
   },
   {
     kicker: "Figure 03",
@@ -67,7 +67,7 @@ const EDITION = [
   },
   {
     title: "CPD ready",
-    body: "Completions and scores arrive shaped as CPD records, so most of a member's three a year are written for them.",
+    body: "Completions and scores arrive shaped as CPD records, ready for whatever your scheme asks members to log.",
   },
 ] as const
 
@@ -203,9 +203,9 @@ export function ForInstitutionsFde() {
             <a href={LAW.euAiAct} rel="noopener noreferrer" target="_blank">
               Article 4 of the EU AI Act
             </a>{" "}
-            has required employers who deploy AI to ensure a sufficient level
-            of AI literacy among their staff since February 2025, enforceable
-            from August 2026. And the{" "}
+            has, since February 2025, required providers and deployers of AI
+            to take measures to ensure, as far as they can, a sufficient level
+            of AI literacy among their staff. And the{" "}
             <a href={LAW.ukSkills} rel="noopener noreferrer" target="_blank">
               UK government&apos;s skills partnership
             </a>{" "}
@@ -269,8 +269,7 @@ export function ForInstitutionsFde() {
                 <h3 className={p.cardTitle}>{month.t}</h3>
                 <p className={p.cardBody}>{month.d}</p>
                 <p className={p.cardSource}>
-                  {month.capstone}
-                  {month.capstoneSub}
+                  {month.capstone}: {month.capstoneSub}
                 </p>
               </article>
             ))}

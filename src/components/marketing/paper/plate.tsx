@@ -7,8 +7,12 @@ import styles from "./paper.module.css"
  * the stripped-image-register decision of 2026-09-02). Files live under
  * `public/home/paper/<name>.png` and `<name>-dark.png`, both 1376x768.
  *
- * The page shows one per mode via `.plateLight` / `.plateDark`; the hidden
- * one is lazy so it is not fetched until the mode needs it. Every plate
+ * The page shows one per mode via `.plateLight` / `.plateDark`. Off the hero
+ * the hidden one is lazy so it is not fetched until the mode needs it; on the
+ * hero (`priority`) BOTH are preloaded, because the mode is a class set by the
+ * theme provider, not a media query, so the browser cannot pick the right one
+ * itself and a dark-mode visitor's largest paint must not wait on a lazy
+ * image (QA finding, N12). next/image serves the optimised size. Every plate
  * carries `sizes` for the width its column renders at (W26: without it a
  * phone pulls the widest candidate into a 348px slot).
  */
@@ -40,7 +44,8 @@ export function Plate({
         width={1376}
         height={768}
         sizes={sizes}
-        loading="lazy"
+        priority={priority}
+        loading={priority ? undefined : "lazy"}
         className={styles.plateDark}
       />
     </>

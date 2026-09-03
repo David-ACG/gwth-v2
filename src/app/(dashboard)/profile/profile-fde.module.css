@@ -12,7 +12,7 @@
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color-scheme: light;
   margin: -1rem;
   padding: 1.5rem 2rem 2.5rem;

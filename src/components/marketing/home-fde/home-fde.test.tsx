@@ -21,12 +21,14 @@ describe("HomeFde (paper-first, N12)", () => {
     expect(names).toEqual(SIX_BLOCKS.map((b) => b.name))
   })
 
-  it("shows both renders of every plate so dark mode gets its own ground", () => {
+  it("carries a light and a dark render for each of the two plates", () => {
     render(<HomeFde />)
     const imgs = screen.getAllByRole("img") as HTMLImageElement[]
     const srcs = imgs.map((img) => img.getAttribute("src") ?? "")
-    expect(srcs.some((s) => s.includes("six-blocks.png"))).toBe(true)
-    expect(srcs.some((s) => s.includes("six-blocks-dark.png"))).toBe(true)
+    for (const name of ["six-blocks", "the-gap"]) {
+      expect(srcs.some((s) => s.includes(`${name}.png`))).toBe(true)
+      expect(srcs.some((s) => s.includes(`${name}-dark.png`))).toBe(true)
+    }
   })
 
   it("cites a source on every figure", () => {

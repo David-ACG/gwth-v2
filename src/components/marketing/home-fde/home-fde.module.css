@@ -63,10 +63,22 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0.75rem 23% 0 22.5%;
   text-align: center;
-  font-size: clamp(0.72rem, 2.6vw, 0.95rem);
+  font-size: clamp(0.66rem, 2.5vw, 0.95rem);
   font-weight: 600;
   color: var(--v-ink);
   white-space: nowrap;
+}
+
+/* Under 360px the inset leaves about 50px per column and "Automation" at the
+   floor size is wider than that, so the key spans nearly the full width. The
+   middle column still sits under the middle tile; the outer names sit a few
+   pixels outside theirs rather than on top of each other. Three columns,
+   always. */
+@media (max-width: 22.5rem) {
+  .plateKey {
+    margin-left: 8%;
+    margin-right: 8%;
+  }
 }
 
 /* ---------------- Institution band ---------------- */

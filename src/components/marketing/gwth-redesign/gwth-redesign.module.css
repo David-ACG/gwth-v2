@@ -18,7 +18,7 @@
   --gwth-rust: #a94c2e;
   --gwth-teal: #2a5d69;
   --gwth-teal-soft: #c2d5d9;
-  --gwth-display: var(--font-serif), "Source Serif 4", Georgia,
+  --gwth-display: var(--font-sans), "Source Serif 4", Georgia,
     "Times New Roman", serif;
   --gwth-body: var(--font-sans), -apple-system,
     BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
