@@ -12,48 +12,14 @@
  */
 
 .shell {
-  --v-bg: #e8e9de;
-  --v-surface: #f1ecdc;
-  --v-ink: #1a1c18;
-  --v-soft: #3a3c34;
-  --v-muted: #5a5c52;
-  --v-line: #c8c8b8;
-  --v-line-soft: #d8d4c4;
-  --v-teal: #2c4a47;
-  --v-teal-deep: #1f3a37;
-  --v-cream: #ece8d2;
-  --v-cream-muted: rgba(236, 232, 210, 0.85);
-  --v-hero-line: rgba(236, 232, 210, 0.25);
-  --v-ochre: #c08a36;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #2a4530;
-  --v-rust: #a87528;
-  --v-action: #2c4a47;
-  --v-action-text: #ffffff;
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   color-scheme: light;
 }
 
 :global(.dark) .shell {
-  --v-bg: #14160f;
-  --v-surface: #1f211a;
-  --v-ink: #ece8d2;
-  --v-soft: #b8b5a3;
-  --v-muted: #8a8b7d;
-  --v-line: #2e3128;
-  --v-line-soft: #2a2c24;
-  --v-teal: #1f3a37;
-  --v-teal-deep: #162927;
-  --v-hero-line: rgba(236, 232, 210, 0.18);
-  --v-ochre: #d4a062;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #3a5a3f;
-  --v-rust: #c08a36;
-  --v-action: #4d7a55;
-  --v-action-text: #ece8d2;
 
   color-scheme: dark;
 }
@@ -64,11 +30,9 @@
 }
 
 .mono {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-muted);
 }
 
@@ -81,11 +45,9 @@
 }
 
 .mastheadKicker {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-cream-muted);
 }
 
@@ -119,13 +81,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-md);
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   padding: 0.8rem 1.5rem;
-  border-radius: 0;
+  border-radius: 8px;
   transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
     color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -148,8 +108,8 @@
 }
 
 .buttonOutline:hover {
-  background: var(--v-ink);
-  color: var(--v-bg);
+  background: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 .buttonSolid:focus-visible,
@@ -233,10 +193,6 @@
   flex: 1;
 }
 
-.newsletterForm .buttonSolid {
-  padding: 0.65rem 1.1rem;
-}
-
 /* ---------------- Filter bar ---------------- */
 
 .filters {
@@ -250,11 +206,9 @@
 }
 
 .sortButton {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   padding: 0.5rem 1rem;
   border: 1px solid transparent;
   color: var(--v-muted);
@@ -293,9 +247,9 @@
   appearance: none;
   background: var(--v-surface);
   border: 1px solid var(--v-line);
-  border-radius: 0;
+  border-radius: 8px;
   color: var(--v-ink);
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   font-size: var(--fde-body);
   line-height: 1.4;
   padding: 0.65rem 0.9rem;
@@ -371,29 +325,23 @@
 }
 
 .categoryLabel {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-ochre);
 }
 
 .featuredLabel {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-muted);
 }
 
 .labLink {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-action);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -433,11 +381,10 @@
 
 .cardTags {
   margin-top: 0.6rem;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--v-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -495,7 +442,7 @@
 }
 
 .upvoteCount {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-md);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
@@ -544,11 +491,9 @@
 }
 
 .pageLabel {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--v-muted);
 }
 
@@ -559,11 +504,9 @@
 }
 
 .backLink {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--v-muted);
   transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -609,11 +552,9 @@
 }
 
 .tagLink {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: var(--v-muted);
   text-decoration: underline;
   text-underline-offset: 3px;

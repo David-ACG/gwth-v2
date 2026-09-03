@@ -35,10 +35,10 @@ function renderNav(props: Partial<React.ComponentProps<typeof PublicNav>> = {}) 
   return within(container)
 }
 
-/** Every "Lessons" link in the nav (desktop row and mobile sheet). */
+/** Every "The course" link in the nav (desktop row and mobile sheet). */
 function lessonsHrefs(view: ReturnType<typeof renderNav>) {
   return view
-    .getAllByRole("link", { name: "Lessons" })
+    .getAllByRole("link", { name: "The course" })
     .map((el) => el.getAttribute("href"))
 }
 
@@ -64,12 +64,29 @@ describe("PublicNav lessons link", () => {
       view.getAllByRole("link", { name: "Pricing" })[0]?.getAttribute("href")
     ).toBe("/pricing")
     expect(
-      view.getAllByRole("link", { name: "For Teams" })[0]?.getAttribute("href")
+      view.getAllByRole("link", { name: "For teams" })[0]?.getAttribute("href")
     ).toBe("/for-teams")
+    expect(
+      view
+        .getAllByRole("link", { name: "For institutions" })[0]
+        ?.getAttribute("href")
+    ).toBe("/for-institutions")
   })
 
   it("still hides Labs when the viewer cannot open them (W25)", () => {
     const view = renderNav({ showLabs: false, lessonsHref: "/lessons" })
-    expect(view.queryByRole("link", { name: "Free Labs" })).toBeNull()
+    expect(view.queryByRole("link", { name: "Labs" })).toBeNull()
   })
 })
+
+describe("PublicNav selected item (M2, N12)", () => {
+  it("marks the current page with aria-current and the active class", () => {
+    const view = renderNav({ lessonsHref: "/lessons" })
+    // usePathname is mocked to "/", so no nav link is current on the home page
+    // and every link carries the transparent bar, never the ink one.
+    for (const link of view.getAllByRole("link")) {
+      expect(link.getAttribute("aria-current")).toBeNull()
+    }
+  })
+})
+

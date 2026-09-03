@@ -14,21 +14,6 @@
  */
 
 .shell {
-  --v-bg: #e8e9de;
-  --v-surface: #f1ecdc;
-  --v-ink: #1a1c18;
-  --v-soft: #3a3c34;
-  --v-muted: #5a5c52;
-  --v-line: #c8c8b8;
-  --v-line-soft: #d8d4c4;
-  --v-teal: #2c4a47;
-  --v-teal-deep: #1f3a37;
-  --v-cream: #ece8d2;
-  --v-ochre: #c08a36;
-  --v-moss: #2a4530;
-  --v-rust: #a87528;
-  --v-dash: rgba(26, 28, 24, 0.18);
-  --v-dash-active: #2c4a47;
 
   /* Week hue + its field wash, ordered teal, rust, moss, ochre so no two
      adjacent fields sit in the same colour family. The two greens carry a
@@ -57,25 +42,11 @@
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   color-scheme: light;
 }
 
 :global(.dark) .shell {
-  --v-bg: #14160f;
-  --v-surface: #1f211a;
-  --v-ink: #ece8d2;
-  --v-soft: #b8b5a3;
-  --v-muted: #8a8b7d;
-  --v-line: #2e3128;
-  --v-line-soft: #2a2c24;
-  --v-teal: #1f3a37;
-  --v-teal-deep: #162927;
-  --v-ochre: #d4a062;
-  --v-moss: #3a5a3f;
-  --v-rust: #c08a36;
-  --v-dash: rgba(236, 232, 210, 0.18);
-  --v-dash-active: #6ea877;
 
   --hue-1: #3f6f6a;
   --hue-2: #c08a36;
@@ -92,11 +63,9 @@
 }
 
 .mono {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-muted);
 }
 
@@ -246,9 +215,9 @@
 }
 
 .accTrigger {
-  border-radius: 0;
+  border-radius: 8px;
   padding: 0.9rem 0 0.75rem;
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 1.28rem;
   font-weight: 600;
   letter-spacing: -0.012em;
@@ -267,7 +236,7 @@
 
 .accTrigger::after {
   content: "+";
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-body-sm);
   font-weight: 500;
   color: var(--v-muted);
@@ -331,11 +300,9 @@ a.lessonRow:hover .lessonTitle {
 }
 
 .lessonTrackTag {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--v-muted);
   margin-left: 0.6rem;
 }
@@ -350,11 +317,10 @@ a.lessonRow:hover .lessonTitle {
 }
 
 .status {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 500;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;

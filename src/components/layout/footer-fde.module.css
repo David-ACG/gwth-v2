@@ -1,82 +1,34 @@
 /*
- * FDE journal register skin for the public footer (DESIGN_FDE.md §5.9, W10).
- * Palette block copied WHOLE from home-fde.module.css per §8 (partial
- * palettes drift), with color-scheme added per the labs-fde convention.
+ * Public footer in the paper-first register (N12, 2026-09-03). Tokens come
+ * from globals.css. A surface band on the ground with a load-bearing top
+ * boundary; Public Sans throughout (the mono column headers and the
+ * uppercase legal line went out with JetBrains Mono).
  */
 
 .shell {
-  --v-bg: #e8e9de;
-  --v-surface: #f1ecdc;
-  --v-ink: #1a1c18;
-  --v-soft: #3a3c34;
-  --v-muted: #5a5c52;
-  --v-line: #c8c8b8;
-  --v-line-soft: #d8d4c4;
-  --v-teal: #2c4a47;
-  --v-teal-deep: #1f3a37;
-  --v-cream: #ece8d2;
-  --v-cream-muted: rgba(236, 232, 210, 0.85);
-  --v-hero-line: rgba(236, 232, 210, 0.25);
-  --v-ochre: #c08a36;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #2a4530;
-  --v-rust: #a87528;
-  --v-action: #2c4a47;
-  --v-action-text: #ffffff;
-  --v-dash: rgba(26, 28, 24, 0.18);
-  --v-dash-active: #2c4a47;
-
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-sans);
   color-scheme: light;
 }
 
 :global(.dark) .shell {
-  --v-bg: #14160f;
-  --v-surface: #1f211a;
-  --v-ink: #ece8d2;
-  --v-soft: #b8b5a3;
-  --v-muted: #8a8b7d;
-  --v-line: #2e3128;
-  --v-line-soft: #2a2c24;
-  --v-teal: #1f3a37;
-  --v-teal-deep: #162927;
-  --v-hero-line: rgba(236, 232, 210, 0.18);
-  --v-ochre: #d4a062;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #3a5a3f;
-  --v-rust: #c08a36;
-  --v-action: #4d7a55;
-  --v-action-text: #ece8d2;
-  --v-dash: rgba(236, 232, 210, 0.18);
-  --v-dash-active: #6ea877;
-
   color-scheme: dark;
 }
 
-/* ---------------- Footer band ---------------- */
-
-/* Paper band on the page: surface ground, strong ink top rule. */
 .footer {
   background: var(--v-surface);
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line);
 }
 
-/* Mono uppercase column headers (the .mono recipe). */
 .colHeader {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
   font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--v-muted);
+  font-weight: 600;
+  color: var(--v-ink);
 }
 
-/* Serif link voice. */
 .link {
-  font-family: var(--font-source-serif), Georgia, serif;
-  font-size: var(--fde-body);
+  font-size: var(--fde-body-sm);
   color: var(--v-soft);
   text-decoration: none;
   transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -84,29 +36,22 @@
 
 .link:hover {
   color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .tagline {
-  font-size: var(--fde-body);
+  font-size: var(--fde-body-sm);
   line-height: 1.6;
   color: var(--v-soft);
 }
 
-/* Bottom legal row, separated by a hairline. */
 .legalRow {
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
-.copyright {
-  font-size: var(--fde-body-sm);
-  color: var(--v-muted);
-}
-
-.monoLine {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: var(--fde-mono-xs);
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.copyright,
+.metaLine {
+  font-size: var(--fde-mono-sm);
   color: var(--v-muted);
 }

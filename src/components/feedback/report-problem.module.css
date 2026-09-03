@@ -11,57 +11,21 @@
  */
 
 .shell {
-  --v-bg: #e8e9de;
-  --v-surface: #f1ecdc;
-  --v-ink: #1a1c18;
-  --v-soft: #3a3c34;
-  --v-muted: #5a5c52;
-  --v-line: #c8c8b8;
-  --v-line-soft: #d8d4c4;
-  --v-teal: #2c4a47;
-  --v-teal-deep: #1f3a37;
-  --v-cream: #ece8d2;
-  --v-cream-muted: rgba(236, 232, 210, 0.85);
-  --v-hero-line: rgba(236, 232, 210, 0.25);
-  --v-ochre: #c08a36;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #2a4530;
-  --v-rust: #a87528;
-  --v-action: #2c4a47;
-  --v-action-text: #ffffff;
 
   color: var(--v-ink);
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   color-scheme: light;
 }
 
 :global(.dark) .shell {
-  --v-bg: #14160f;
-  --v-surface: #1f211a;
-  --v-ink: #ece8d2;
-  --v-soft: #b8b5a3;
-  --v-muted: #8a8b7d;
-  --v-line: #2e3128;
-  --v-line-soft: #2a2c24;
-  --v-teal: #1f3a37;
-  --v-teal-deep: #162927;
-  --v-hero-line: rgba(236, 232, 210, 0.18);
-  --v-ochre: #d4a062;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #3a5a3f;
-  --v-rust: #c08a36;
-  --v-action: #4d7a55;
-  --v-action-text: #ece8d2;
 
   color-scheme: dark;
 }
 
 .mono {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-muted);
 }
 
@@ -74,7 +38,7 @@
   background: var(--v-surface);
   border: 1px solid var(--v-ink);
   padding: 1.75rem 1.6rem;
-  box-shadow: 0.4rem 0.4rem 0 0 var(--v-teal);
+  box-shadow: none;
 }
 
 /* When the panel is the inner content of the launcher overlay the offset shadow
@@ -121,11 +85,9 @@
 }
 
 .label {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-muted);
 }
 
@@ -133,10 +95,10 @@
 .textarea {
   width: 100%;
   border: 1px solid var(--v-line);
-  border-radius: 0;
+  border-radius: 8px;
   background: var(--v-bg);
   padding: 0.7rem 0.85rem;
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 0.98rem;
   line-height: 1.5;
   color: var(--v-ink);
@@ -177,10 +139,8 @@
 
 /* The captured source page, shown as a functional mono line (no clutter). */
 .sourceLine {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--v-muted);
   word-break: break-all;
 }
@@ -193,13 +153,11 @@
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: 0.74rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   padding: 0.8rem 1.5rem;
-  border-radius: 0;
+  border-radius: 8px;
   cursor: pointer;
   background: var(--v-action);
   color: var(--v-action-text);
@@ -223,13 +181,11 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: 0.74rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   padding: 0.8rem 1.5rem;
-  border-radius: 0;
+  border-radius: 8px;
   cursor: pointer;
   background: transparent;
   color: var(--v-ink);
@@ -239,8 +195,8 @@
 }
 
 .buttonOutline:hover {
-  background: var(--v-ink);
-  color: var(--v-bg);
+  background: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 .buttonSolid:focus-visible,
@@ -291,19 +247,17 @@
   align-items: center;
   gap: 0.5rem;
   writing-mode: vertical-rl;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   padding: 0.9rem 0.35rem;
-  border-radius: 0;
+  border-radius: 8px;
   cursor: pointer;
   background: var(--v-action);
   color: var(--v-action-text);
   border: 1px solid var(--v-action);
   border-right: 0;
-  box-shadow: -0.25rem 0.25rem 0 0 var(--v-teal-deep);
+  box-shadow: none;
   transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -363,11 +317,9 @@
 }
 
 .closeButton {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   background: transparent;
   border: none;
   color: var(--v-muted);

@@ -71,7 +71,12 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Paper-first register (annex 15 / bible paper-first-register, 2026-09-03):
+     Bitter for headlines and the italic accent, Public Sans for body copy,
+     labels, metadata and every control. JetBrains Mono survives ONLY for
+     monospaced CONTENT (code, terminal output), never as a label face. */
+  --font-sans: var(--font-public-sans), "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-bitter), "Bitter", Georgia, serif;
   --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -86,23 +91,63 @@
    ================================================================= */
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.625rem; /* 10px panels; -md 8px controls/images; -sm 6px chips (R2) */
 
-  /* Locked GWTH.ai logo colours (decision 2026-04-29 via /logo_picker;
-     dark-ground rule added by David 2026-07-03): ink wordmark + terracotta
-     arrow on LIGHT grounds; cream wordmark + mustard arrow on DARK grounds
-     (see the .dark override — matches the auth masthead and the favicon).
-     LogoGwth / LogoGwthMark default to these vars; the public nav on every
-     page inherits them. */
-  --logo-wordmark: #22301f;
-  --logo-accent: #a94c2e;
+  /* ---------------------------------------------------------------
+     PAPER-FIRST TOKENS (N9 decision, annex 15; bible paper-first-tokens).
+     The ONE declaration of the --v-* set. Every .shell inherits these;
+     no module re-declares them. Every hex below is MEASURED against the
+     contrast table in the bible item: do not re-derive, round or improve.
+     Light: N2. Dark: N3 (see .dark).
+     --------------------------------------------------------------- */
+  --v-bg: #f2f4f3;         /* page ground */
+  --v-surface: #ffffff;    /* card / panel */
+  --v-quiet: #e6efeb;      /* quiet fill, bands, selected-row tint */
+  --v-ink: #17211d;        /* ink */
+  --v-soft: #414b46;       /* body copy, 8.20:1 on the ground */
+  --v-muted: #67716b;      /* metadata, 4.58:1 on the ground */
+  --v-line: #898e8a;       /* load-bearing boundary: 3.33:1 card, 3.02:1 ground */
+  --v-line-soft: #dde2df;  /* decorative divider only, never a boundary */
+  --v-btn: #b5dbd0;        /* primary button fill, IDENTICAL in dark */
+  --v-btn-text: #17211d;   /* 11.02:1 on the button */
+  --v-accent: #3f7d6d;     /* jade: italic accent, active marks, 4.35:1 */
 
-  /* On-dark logo inks (mode-independent): a teal masthead band is always a
-     dark ground, so the auth masthead and any on-band lockup use cream +
-     mustard regardless of light/dark. Consumed by the LogoGwth `onDark`
-     variant so the treatment is named, not hand-hardcoded per page (W23). */
-  --logo-wordmark-on-dark: #edeae6;
-  --logo-accent-on-dark: #d4a062;
+  /* Aliases for the RETIRED FDE names, so the surfaces N12 did not rebuild
+     (dashboard, lesson viewer, admin, org, auth, the inner marketing pages)
+     render in the new family instead of going undefined. Teal bands become
+     quiet paper bands, ochre/rust accents become the jade accent, the solid
+     teal action becomes the mint button. Rebuilt surfaces use the real
+     tokens above; these aliases are a migration bridge (bead gwth-launch-vay
+     closes the live 1.38:1 boundary and 1.04:1 tint through --v-line and the
+     M2 menu). */
+  --v-teal: var(--v-quiet);
+  --v-teal-deep: var(--v-quiet);
+  --v-moss: var(--v-quiet);
+  --v-cream: var(--v-ink);
+  --v-cream-muted: var(--v-soft);
+  --v-hero-line: var(--v-line-soft);
+  --v-ochre: var(--v-accent);
+  --v-ochre-bright: var(--v-accent);
+  --v-rust: var(--v-accent);
+  --v-action: var(--v-btn);
+  --v-action-text: var(--v-btn-text);
+  --v-dash: var(--v-line-soft);
+  --v-dash-active: var(--v-accent);
+
+  /* GWTH.ai logo inks. The SHAPE is the April 2026 lock (/logo_picker);
+     LogoGwth / LogoGwthMark default to these vars and the public nav on
+     every page inherits them. */
+  /* paper-first-logo (David 2026-09-02, "re-cut in the green family"):
+     wordmark = the site ink, accent = the site accent. Terracotta #a94c2e
+     and mustard #d4a062 are retired with the rest of the palette. */
+  --logo-wordmark: var(--v-ink);
+  --logo-accent: var(--v-accent);
+
+  /* On-dark logo inks (mode-independent) for any lockup on a dark ground:
+     the dark-mode ink and accent. Consumed by the LogoGwth `onDark` variant
+     so the treatment is named, not hand-hardcoded per page (W23). */
+  --logo-wordmark-on-dark: #f2efe9;
+  --logo-accent-on-dark: #b5dbd0;
 
   /* ---------------------------------------------------------------
      FDE shared type scale (W23). One ramp for every *-fde surface so
@@ -118,26 +163,26 @@
   --fde-body: 1.06rem;     /* was 0.93-0.98: standard body copy */
   --fde-body-lg: 1.12rem;  /* was 1.02-1.05: lesson prose, section leads */
 
-  --background: oklch(0.98 0 0);
-  --foreground: oklch(0.18 0.04 175);
+  --background: var(--v-bg);
+  --foreground: var(--v-ink);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 175);
+  --card: var(--v-surface);
+  --card-foreground: var(--v-ink);
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 175);
+  --popover: var(--v-surface);
+  --popover-foreground: var(--v-ink);
 
-  --primary: oklch(0.7 0.18 220);
-  --primary-foreground: oklch(0.98 0 0);
+  --primary: var(--v-btn);
+  --primary-foreground: var(--v-btn-text);
 
-  --secondary: oklch(0.95 0.01 220);
-  --secondary-foreground: oklch(0.18 0.04 175);
+  --secondary: var(--v-quiet);
+  --secondary-foreground: var(--v-ink);
 
-  --muted: oklch(0.95 0.01 220);
-  --muted-foreground: oklch(0.5 0.02 220);
+  --muted: var(--v-quiet);
+  --muted-foreground: var(--v-muted);
 
-  --accent: oklch(0.65 0.16 165);
-  --accent-foreground: oklch(0.98 0 0);
+  --accent: var(--v-quiet);
+  --accent-foreground: var(--v-ink);
 
   --destructive: oklch(0.577 0.245 27.325);
 
@@ -147,32 +192,32 @@
   --warning: oklch(0.75 0.15 75);
   --warning-foreground: oklch(0.18 0.04 175);
 
-  --info: oklch(0.7 0.18 220);
-  --info-foreground: oklch(0.98 0 0);
+  --info: var(--v-accent);
+  --info-foreground: var(--v-bg);
 
-  --border: oklch(0.9 0.02 220);
-  --input: oklch(0.9 0.02 220);
-  --ring: oklch(0.7 0.18 220);
+  --border: var(--v-line);
+  --input: var(--v-line);
+  --ring: var(--v-accent);
 
-  --sidebar: oklch(0.97 0.005 175);
-  --sidebar-foreground: oklch(0.18 0.04 175);
-  --sidebar-primary: oklch(0.7 0.18 220);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.93 0.02 165);
-  --sidebar-accent-foreground: oklch(0.18 0.04 175);
-  --sidebar-border: oklch(0.9 0.01 220);
-  --sidebar-ring: oklch(0.7 0.18 220);
+  --sidebar: var(--v-bg);
+  --sidebar-foreground: var(--v-ink);
+  --sidebar-primary: var(--v-btn);
+  --sidebar-primary-foreground: var(--v-btn-text);
+  --sidebar-accent: var(--v-quiet);
+  --sidebar-accent-foreground: var(--v-ink);
+  --sidebar-border: var(--v-line-soft);
+  --sidebar-ring: var(--v-accent);
 
-  --chart-1: oklch(0.7 0.18 220);
-  --chart-2: oklch(0.65 0.16 165);
-  --chart-3: oklch(0.6 0.118 184.704);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.627 0.265 303.9);
+  --chart-1: var(--v-accent);
+  --chart-2: var(--v-btn);
+  --chart-3: var(--v-muted);
+  --chart-4: var(--v-ink);
+  --chart-5: var(--v-line);
 
   --status-completed: oklch(0.6 0.18 145);
-  --status-in-progress: oklch(0.7 0.18 220);
-  --status-not-started: oklch(0.6 0.02 220);
-  --status-locked: oklch(0.45 0.02 220);
+  --status-in-progress: var(--v-accent);
+  --status-not-started: var(--v-muted);
+  --status-locked: var(--v-line);
 
   --grade-a: oklch(0.6 0.18 145);
   --grade-b: oklch(0.65 0.16 165);
@@ -186,32 +231,42 @@
    ================================================================= */
 
 .dark {
-  /* Graphite Warm — bg: #191817, card: #232221 */
-  --logo-wordmark: #edeae6;
-  /* Mustard on dark grounds (David 2026-07-03): terracotta sinks into dark
-     backgrounds; matches the auth masthead accent and the V1 favicon. */
-  --logo-accent: #d4a062;
+  /* Paper-first dark set (N3): one green family, one ink, the same button. */
+  --v-bg: #161d1a;
+  --v-surface: #202a26;
+  --v-quiet: #222d28;
+  --v-ink: #f2efe9;
+  --v-soft: #c8ccc6;
+  --v-muted: #949a95;
+  --v-line: #6a7570;       /* 3.59:1 ground, 3.09:1 card */
+  --v-line-soft: #2c3833;
+  --v-btn: #b5dbd0;
+  --v-btn-text: #161d1a;   /* near-black in both modes but NOT the same hex */
+  --v-accent: #b5dbd0;     /* mint on the night ground, 11.44:1 */
 
-  --background: oklch(0.17 0.005 60);
-  --foreground: oklch(0.93 0.008 60);
+  --logo-wordmark: var(--v-ink);
+  --logo-accent: var(--v-accent);
 
-  --card: oklch(0.21 0.005 60);
-  --card-foreground: oklch(0.93 0.008 60);
+  --background: var(--v-bg);
+  --foreground: var(--v-ink);
 
-  --popover: oklch(0.21 0.005 60);
-  --popover-foreground: oklch(0.93 0.008 60);
+  --card: var(--v-surface);
+  --card-foreground: var(--v-ink);
 
-  --primary: oklch(0.75 0.16 220);
-  --primary-foreground: oklch(0.17 0.005 60);
+  --popover: var(--v-surface);
+  --popover-foreground: var(--v-ink);
 
-  --secondary: oklch(0.24 0.006 60);
-  --secondary-foreground: oklch(0.93 0.008 60);
+  --primary: var(--v-btn);
+  --primary-foreground: var(--v-btn-text);
 
-  --muted: oklch(0.24 0.006 60);
-  --muted-foreground: oklch(0.65 0.015 60);
+  --secondary: var(--v-quiet);
+  --secondary-foreground: var(--v-ink);
 
-  --accent: oklch(0.75 0.14 165);
-  --accent-foreground: oklch(0.17 0.005 60);
+  --muted: var(--v-quiet);
+  --muted-foreground: var(--v-muted);
+
+  --accent: var(--v-quiet);
+  --accent-foreground: var(--v-ink);
 
   --destructive: oklch(0.704 0.191 22.216);
 
@@ -221,32 +276,32 @@
   --warning: oklch(0.8 0.14 75);
   --warning-foreground: oklch(0.17 0.005 60);
 
-  --info: oklch(0.75 0.16 220);
-  --info-foreground: oklch(0.17 0.005 60);
+  --info: var(--v-accent);
+  --info-foreground: var(--v-bg);
 
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.75 0.16 220);
+  --border: var(--v-line);
+  --input: var(--v-line);
+  --ring: var(--v-accent);
 
-  --sidebar: oklch(0.15 0.005 60);
-  --sidebar-foreground: oklch(0.93 0.008 60);
-  --sidebar-primary: oklch(0.75 0.16 220);
-  --sidebar-primary-foreground: oklch(0.93 0.008 60);
-  --sidebar-accent: oklch(0.24 0.006 60);
-  --sidebar-accent-foreground: oklch(0.93 0.008 60);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.75 0.16 220);
+  --sidebar: var(--v-bg);
+  --sidebar-foreground: var(--v-ink);
+  --sidebar-primary: var(--v-btn);
+  --sidebar-primary-foreground: var(--v-btn-text);
+  --sidebar-accent: var(--v-quiet);
+  --sidebar-accent-foreground: var(--v-ink);
+  --sidebar-border: var(--v-line-soft);
+  --sidebar-ring: var(--v-accent);
 
-  --chart-1: oklch(0.75 0.16 220);
-  --chart-2: oklch(0.75 0.14 165);
-  --chart-3: oklch(0.696 0.17 162.48);
-  --chart-4: oklch(0.769 0.188 70.08);
-  --chart-5: oklch(0.627 0.265 303.9);
+  --chart-1: var(--v-accent);
+  --chart-2: var(--v-btn);
+  --chart-3: var(--v-muted);
+  --chart-4: var(--v-ink);
+  --chart-5: var(--v-line);
 
   --status-completed: oklch(0.7 0.16 145);
-  --status-in-progress: oklch(0.75 0.16 220);
-  --status-not-started: oklch(0.5 0.01 60);
-  --status-locked: oklch(0.35 0.01 60);
+  --status-in-progress: var(--v-accent);
+  --status-not-started: var(--v-muted);
+  --status-locked: var(--v-line);
 
   --grade-a: oklch(0.7 0.16 145);
   --grade-b: oklch(0.75 0.14 165);
@@ -260,6 +315,22 @@
 /* =================================================================
    BASE LAYER
    ================================================================= */
+
+/* Paper-first type defaults (bible paper-first-register): the body face is
+   Public Sans; headlines and pull quotes are Bitter. Modules that set an
+   explicit face on a title still win (they are unlayered). */
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  blockquote {
+    font-family: var(--font-serif);
+  }
+}
 
 @layer base {
   * {
@@ -379,7 +450,7 @@
    ================================================================= */
 
 .lesson-prose {
-  font-family: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
   /* Raised for the CIPD demo audience (W23): the lesson body is the core
      reading surface, so it sits at the top of the shared FDE body ramp. */
   font-size: var(--fde-body-lg);

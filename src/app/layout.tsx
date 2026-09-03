@@ -1,10 +1,5 @@
 import type { Metadata } from "next"
-import {
-  Inter,
-  JetBrains_Mono,
-  Source_Serif_4,
-  Source_Sans_3,
-} from "next/font/google"
+import { Bitter, JetBrains_Mono, Public_Sans } from "next/font/google"
 import Script from "next/script"
 import { RootProvider } from "@/providers/root-provider"
 import { RouteProgress } from "@/components/shared/route-progress"
@@ -12,29 +7,32 @@ import { WebVitals } from "@/components/shared/web-vitals"
 import { Toaster } from "sonner"
 import "./globals.css"
 
-const inter = Inter({
+// Paper-first register (N9 decision, annex 15; bible paper-first-register,
+// 2026-09-03). Exactly two web faces: Bitter for headlines and the italic
+// accent, Public Sans for body copy, labels, metadata and every control.
+// Source Serif 4, Source Sans 3, Inter and the JetBrains Mono LABEL face are
+// retired. globals.css maps these into --font-serif / --font-sans; every
+// .shell inherits them, so removing a loader here silently drops the face
+// on every page.
+const bitter = Bitter({
   subsets: ["latin"],
-  variable: "--font-inter",
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
-})
-
-// FDE journal register fonts (DESIGN_FDE.md §3). Every *-fde module and the
-// auth surfaces set `font-family: var(--font-source-serif), Georgia, serif`
-// on their .shell — without these loaders the var is undefined, the whole
-// declaration is dropped, and FDE pages silently fall back to Inter.
-const sourceSerif = Source_Serif_4({
-  subsets: ["latin"],
-  variable: "--font-source-serif",
+  style: ["normal", "italic"],
+  variable: "--font-bitter",
   display: "swap",
 })
 
-const sourceSans = Source_Sans_3({
+const publicSans = Public_Sans({
   subsets: ["latin"],
-  variable: "--font-source-sans",
+  style: ["normal", "italic"],
+  variable: "--font-public-sans",
+  display: "swap",
+})
+
+// Monospaced CONTENT only (code blocks, terminal output): the bible keeps a
+// monospace face for that and bans it as a label or metadata face.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
   display: "swap",
 })
 
@@ -83,7 +81,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${sourceSerif.variable} ${sourceSans.variable}`}
+      className={`${bitter.variable} ${publicSans.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>

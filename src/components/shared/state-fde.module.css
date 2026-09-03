@@ -13,40 +13,13 @@
  */
 
 .shell {
-  --v-bg: #e8e9de;
-  --v-surface: #f1ecdc;
-  --v-ink: #1a1c18;
-  --v-soft: #3a3c34;
-  --v-muted: #5a5c52;
-  --v-line: #c8c8b8;
-  --v-line-soft: #d8d4c4;
-  --v-teal: #2c4a47;
-  --v-teal-deep: #1f3a37;
-  --v-cream: #ece8d2;
-  --v-ochre: #c08a36;
-  --v-rust: #a87528;
-  --v-action: #2c4a47;
-  --v-action-text: #ffffff;
 
   color-scheme: light;
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   color: var(--v-ink);
 }
 
 :global(.dark) .shell {
-  --v-bg: #14160f;
-  --v-surface: #1f211a;
-  --v-ink: #ece8d2;
-  --v-soft: #b8b5a3;
-  --v-muted: #8a8b7d;
-  --v-line: #2e3128;
-  --v-line-soft: #2a2c24;
-  --v-teal: #1f3a37;
-  --v-teal-deep: #162927;
-  --v-ochre: #d4a062;
-  --v-rust: #c08a36;
-  --v-action: #4d7a55;
-  --v-action-text: #ece8d2;
 
   color-scheme: dark;
 }
@@ -91,11 +64,9 @@
 /* ── Mono kicker (the state, §3 mono convention) ─────────────────────── */
 
 .kicker {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-muted);
   margin: 0;
 }
@@ -126,7 +97,7 @@
 
 /* Dev-only digest / message, mono, quiet. Never shown in production. */
 .digest {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-md);
   line-height: 1.5;
   letter-spacing: 0.02em;
@@ -153,13 +124,11 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-md);
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   padding: 0.8rem 1.5rem;
-  border-radius: 0;
+  border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
   background: var(--v-action);

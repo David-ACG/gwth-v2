@@ -8,17 +8,18 @@ const footerLinks = [
   {
     title: "Product",
     links: [
+      { href: "/for-institutions", label: "For institutions" },
+      { href: "/for-teams", label: "For teams" },
       { href: "/pricing", label: "Pricing" },
       { href: "/why-gwth", label: "Why GWTH" },
-      { href: "/for-teams", label: "For Teams" },
       { href: "/contact", label: "Contact" },
     ],
   },
   {
     title: "Learn",
     links: [
-      { href: "/labs", label: "Free Labs" },
-      { href: "/lessons", label: "Lessons" },
+      { href: "/lessons", label: "The course" },
+      { href: "/labs", label: "Labs" },
       { href: "/news", label: "News" },
       { href: "/newsletter", label: "Newsletter" },
       { href: "/about", label: "About GWTH" },
@@ -48,9 +49,8 @@ interface FooterProps {
 }
 
 /**
- * Site footer for public pages, in the FDE journal register
- * (DESIGN_FDE.md §5.9): paper surface band, 1px ink top rule, mono
- * uppercase column headers, serif links.
+ * Site footer for public pages in the paper-first register (N12): a surface
+ * band with a load-bearing top boundary, Public Sans column headers and links.
  * Shows logo, tagline, organised link columns, and copyright.
  */
 export function Footer({ showLabs }: FooterProps) {
@@ -73,8 +73,8 @@ export function Footer({ showLabs }: FooterProps) {
               <LogoGwth width={150} className="h-7 w-auto" />
             </Link>
             <p className={cn("mt-4 max-w-xs", styles.tagline)}>
-              UK-focused applied AI training. Learn to build apps, automate
-              workflows, research faster, analyse data, and prove your progress.
+              A UK applied AI foundation. Build, automate, research and analyse
+              in plain English, and finish with work you can show.
             </p>
           </div>
           {groups.map((group) => (
@@ -97,10 +97,9 @@ export function Footer({ showLabs }: FooterProps) {
             <p className={styles.copyright}>
               &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
             </p>
-            <p className={styles.monoLine}>
-              Independent. UK-based. No sponsors. No ads. No vendor partnerships.
+            <p className={styles.metaLine}>
+              Independent. UK based. No sponsors. No ads. No vendor partnerships.
             </p>
-            <p className={styles.monoLine}>Based in the United Kingdom.</p>
           </div>
         </div>
       </div>

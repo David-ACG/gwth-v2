@@ -10,52 +10,14 @@
  */
 
 .shell {
-  --v-bg: #e8e9de;
-  --v-surface: #f1ecdc;
-  --v-ink: #1a1c18;
-  --v-soft: #3a3c34;
-  --v-muted: #5a5c52;
-  --v-line: #c8c8b8;
-  --v-line-soft: #d8d4c4;
-  --v-teal: #2c4a47;
-  --v-teal-deep: #1f3a37;
-  --v-cream: #ece8d2;
-  --v-cream-muted: rgba(236, 232, 210, 0.85);
-  --v-hero-line: rgba(236, 232, 210, 0.25);
-  --v-ochre: #c08a36;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #2a4530;
-  --v-rust: #a87528;
-  --v-action: #2c4a47;
-  --v-action-text: #ffffff;
-  --v-dash: rgba(26, 28, 24, 0.18);
-  --v-dash-active: #2c4a47;
 
   background: var(--v-bg);
   color: var(--v-ink);
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   color-scheme: light;
 }
 
 :global(.dark) .shell {
-  --v-bg: #14160f;
-  --v-surface: #1f211a;
-  --v-ink: #ece8d2;
-  --v-soft: #b8b5a3;
-  --v-muted: #8a8b7d;
-  --v-line: #2e3128;
-  --v-line-soft: #2a2c24;
-  --v-teal: #1f3a37;
-  --v-teal-deep: #162927;
-  --v-hero-line: rgba(236, 232, 210, 0.18);
-  --v-ochre: #d4a062;
-  --v-ochre-bright: #d4a062;
-  --v-moss: #3a5a3f;
-  --v-rust: #c08a36;
-  --v-action: #4d7a55;
-  --v-action-text: #ece8d2;
-  --v-dash: rgba(236, 232, 210, 0.18);
-  --v-dash-active: #6ea877;
 
   color-scheme: dark;
 }
@@ -66,15 +28,15 @@
   background: var(--v-surface);
   color: var(--v-ink);
   border: 1px solid var(--v-ink);
-  border-radius: 0;
+  border-radius: 8px;
   box-shadow: none;
 }
 
 .palette :global([data-slot="command"]) {
   background: transparent;
   color: var(--v-ink);
-  border-radius: 0;
-  font-family: var(--font-source-serif), Georgia, serif;
+  border-radius: 8px;
+  font-family: var(--font-serif);
 }
 
 /* ---------------- Input row ---------------- */
@@ -85,10 +47,9 @@
 }
 
 .palette :global([data-slot="command-input"]) {
-  border-radius: 0;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  border-radius: 8px;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-md);
-  letter-spacing: 0.06em;
   color: var(--v-ink);
 }
 
@@ -110,17 +71,15 @@
 /* ---------------- Groups and items ---------------- */
 
 .palette :global([cmdk-group-heading]) {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--v-muted);
 }
 
 .palette :global([data-slot="command-item"]) {
-  border-radius: 0;
-  font-family: var(--font-source-serif), Georgia, serif;
+  border-radius: 8px;
+  font-family: var(--font-serif);
   font-size: var(--fde-body);
   color: var(--v-ink);
 }
@@ -135,7 +94,7 @@
 }
 
 .palette :global([data-slot="command-empty"]) {
-  font-family: var(--font-source-serif), Georgia, serif;
+  font-family: var(--font-serif);
   font-size: var(--fde-body);
   color: var(--v-soft);
 }

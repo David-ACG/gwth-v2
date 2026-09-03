@@ -26,11 +26,18 @@ import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { ENABLE_NEWS } from "@/lib/config"
 import styles from "./public-nav-fde.module.css"
 
+/**
+ * Nav order and labels are the N9 artboard David approved (annex 15,
+ * FinalHome / HN2L): institutions first, sentence case throughout (the bible
+ * bans title-case labels). "The course" is the lessons link; it resolves per
+ * viewer (see `lessonsHref`).
+ */
 const navLinks = [
-  { href: "/labs", label: "Free Labs" },
-  { href: "/lessons", label: "Lessons" },
+  { href: "/for-institutions", label: "For institutions" },
+  { href: "/for-teams", label: "For teams" },
+  { href: "/lessons", label: "The course" },
+  { href: "/labs", label: "Labs" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/for-teams", label: "For Teams" },
   { href: "/about", label: "About" },
   { href: "/news", label: "News" },
 ].filter((link) => ENABLE_NEWS || link.href !== "/news")
@@ -47,23 +54,32 @@ interface PublicNavProps {
    */
   showLabs: boolean
   /**
-   * Where the "Lessons" link should point for THIS viewer. Anonymous visitors
-   * get `/lessons`, the public marketing page. A signed-in learner with course
-   * access gets their actual course instead: clicking "Lessons" while logged in
-   * and landing on an advert for the thing you already bought is the defect
-   * David reported on 2026-07-26. Resolved on the server in
-   * `(public)/layout.tsx` for the same reason as `showLabs` — this is a client
-   * component and cannot read the session itself.
+   * Where the "The course" link should point for THIS viewer. Anonymous
+   * visitors get `/lessons`, the public marketing page. A signed-in learner
+   * with course access gets their actual course instead: clicking the lessons
+   * link while logged in and landing on an advert for the thing you already
+   * bought is the defect David reported on 2026-07-26. Resolved on the server
+   * in `(public)/layout.tsx` for the same reason as `showLabs`.
    */
   lessonsHref: string
 }
 
 /**
- * Navigation bar for public-facing pages, in the FDE journal register
- * (DESIGN_FDE.md §5.9): solid sage bar, hairline bottom rule, mono links,
- * square §5.3 buttons. Shows logo, nav links, theme toggle, and
- * login/signup CTAs. When authenticated, shows user avatar with dropdown
- * instead of login buttons. Responsive: hamburger menu on mobile.
+ * A link is "current" for its own path and anything beneath it, so
+ * /for-institutions/anything still marks "For institutions". The old exact
+ * match never highlighted nested routes.
+ */
+function isCurrent(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/"
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
+/**
+ * Navigation bar for public-facing pages in the paper-first register (N12):
+ * paper ground, a load-bearing hairline boundary, Public Sans links, the M2
+ * selected treatment, the one mint button. Shows logo, nav links, theme
+ * toggle, and log-in / primary CTA. When authenticated, shows the user avatar
+ * with a dropdown instead. Responsive: hamburger sheet on mobile.
  */
 export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
   const pathname = usePathname()
@@ -99,18 +115,19 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-1 md:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                styles.navLink,
-                pathname === link.href && styles.navLinkActive
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const current = isCurrent(pathname, link.href)
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={current ? "page" : undefined}
+                className={cn(styles.navLink, current && styles.navLinkActive)}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </div>
 
         <div className="flex items-center gap-2">
@@ -157,16 +174,16 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            /* Not authenticated: show login + signup buttons */
+            /* Not authenticated: log in as a text link, one primary button */
             <>
               <Link
                 href="/login"
-                className={cn(styles.buttonOutline, styles.ctaDesktopOnly)}
+                className={cn(styles.buttonText, styles.ctaDesktopOnly)}
               >
                 Log in
               </Link>
-              <Link href="/signup" className={styles.buttonSolid}>
-                Sign up
+              <Link href="/contact" className={styles.buttonSolid}>
+                Book a walkthrough
               </Link>
             </>
           )}
@@ -190,18 +207,22 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
             >
               <SheetTitle className="sr-only">Menu</SheetTitle>
               <nav className={cn("mt-8", styles.sheetNav)}>
-                {links.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      styles.sheetLink,
-                      pathname === link.href && styles.sheetLinkActive
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {links.map((link) => {
+                  const current = isCurrent(pathname, link.href)
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      aria-current={current ? "page" : undefined}
+                      className={cn(
+                        styles.sheetLink,
+                        current && styles.sheetLinkActive
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  )
+                })}
                 <div className={styles.sheetActions}>
                   {user ? (
                     <>
@@ -221,8 +242,8 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
                       <Link href="/login" className={styles.buttonOutline}>
                         Log in
                       </Link>
-                      <Link href="/signup" className={styles.buttonSolid}>
-                        Sign up
+                      <Link href="/contact" className={styles.buttonSolid}>
+                        Book a walkthrough
                       </Link>
                     </>
                   )}
@@ -238,10 +259,9 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
 
 /**
  * GWTH.ai wordmark for the public nav. Renders the inline `<LogoGwth />`
- * SVG component which auto-flips between light- and dark-mode wordmark
- * colours via the locked `--logo-wordmark` / `--logo-accent` CSS vars
- * defined in `globals.css`. No theme-detection JS / hydration dance
- * required, and no bitmap fetch.
+ * SVG component which flips between light- and dark-mode inks via the
+ * `--logo-wordmark` / `--logo-accent` CSS vars in `globals.css` (site ink
+ * and site accent since the 2026-09-02 re-cut, bible paper-first-logo).
  */
 function BrandWordmark() {
   return <LogoGwth width={160} className="h-7 w-auto sm:h-8" />

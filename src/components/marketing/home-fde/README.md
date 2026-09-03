@@ -1,15 +1,22 @@
 # home-fde
 
-The production GWTH homepage (`/`), in the FDE journal register David chose
-on 2026-06-12 (design basis: the FDE.build journal mockup at
-http://192.168.178.50:3010/). Drenched dark-teal hero with a stacked Source
-Serif 4 headline and ochre accents, paper-cream surfaces, colour-block card
-tops, mono metadata, pull quote, curriculum as journal issues, and a teal
-dispatch band for pricing. Palette is scoped to the page via custom
-properties with a `.dark` override block.
+The production GWTH home page (`/`), in the paper-first register David chose
+in the N9 design round (2026-09-01/02, annex 15 of the institution plan) and
+built by N12 on 2026-09-03 to the approved artboard: "The gap is not access.
+It is depth." Institution-first, every figure sourced, the six-blocks plate
+labelled by the page (X6 key, three across at every width).
 
-This module is the register's source of truth: the inner public pages
-(`/labs`, `/lessons`, `/pricing`, `/for-teams`, `/about`, `/news`) copy its
-`.shell` palette and idioms via their own `*-fde` modules. It started as
-homepage comparison variant B at `/home-fde`; that review route and the
-`/home-claude` variant were deleted when this design went live at `/`.
+- `home-fde.tsx` composes the page; `ARGUMENT` and `SIX_BLOCKS` are exported
+  for the tests.
+- `home-fde.module.css` holds only what is specific to this page. Shared
+  recipes live in `../paper/paper.module.css`; tokens live in
+  `src/app/globals.css`. There is no palette block here any more.
+- Plates are `public/home/paper/six-blocks*.png` and `the-gap*.png`, light
+  plus dark-ground twins, rendered through `../paper/plate.tsx`.
+- `explainer-video.tsx` is the 90-second tour embed David placed after the
+  hero in W12. It is not on the approved artboard and is not rendered; the
+  component is kept for reuse (its audio defect is bead gwth-launch-ps5).
+
+The module name keeps its `-fde` suffix so the other `*-fde` pages and their
+tests keep resolving. See `DESIGN_PAPER_FIRST.md` for what state each of
+those pages is in.

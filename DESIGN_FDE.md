@@ -1,5 +1,13 @@
 # Design System: GWTH.ai — FDE Journal Register
 
+> **SUPERSEDED for new and rebuilt surfaces (2026-09-03, N12).** Sections 1 and
+> 2 (register and tokens) are replaced by the paper-first register: see
+> `DESIGN_PAPER_FIRST.md` and the `paper-first-*` bible items. The `--v-*`
+> palette is no longer declared per module; it lives once in `globals.css`
+> with aliases for the names below. Read this file for the layout recipes the
+> bridged pages still use, not for colour, type or corners.
+
+
 > **This guide supersedes [DESIGN.md](DESIGN.md) (Stone & Sage) for every
 > student-facing surface.** Chosen by David on 2026-06-12. Stone & Sage remains
 > documented for surfaces that have not flipped yet (see §8 Migration Notes),

@@ -1,5 +1,14 @@
 # marketing/
 
+> **Superseded twice (2026-09-03).** The token-mapping rules below describe the
+> Phase 1b Tailwind/OKLCH build and were already dead under the FDE modules.
+> The live register is the paper-first one: read `DESIGN_PAPER_FIRST.md` at the
+> repo root. New marketing pages compose `paper/paper.module.css` and
+> `paper/plate.tsx` next to a small page-specific module, as `home-fde/` and
+> `for-institutions-fde/` do. The legacy section components in this directory
+> (`hero/`, `research-stats/`, `pricing-cards/`, ...) are used only by the
+> `/old-design` review route.
+
 Public-facing marketing components for the homepage rebuild (Phase 1b, 2026-04-27).
 
 ## Purpose
