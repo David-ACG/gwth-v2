@@ -147,7 +147,7 @@
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: var(--v-quiet);
+  color: var(--v-accent);
 }
 
 :global(.dark) .shell .credentialNumber {
@@ -193,7 +193,7 @@
 
 .qrFrame {
   border: 1px solid var(--v-line);
-  background: var(--v-ink);
+  background: var(--v-surface);
   padding: 0.5rem;
   border-radius: 8px;
 }
@@ -227,7 +227,7 @@
 
 .buttonSolid:hover {
   background: var(--v-btn);
-  border-color: var(--v-btn);
+  border-color: var(--v-accent);
 }
 
 .buttonOutline {

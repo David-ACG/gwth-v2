@@ -98,7 +98,7 @@
 
 .buttonSolid:hover {
   background: var(--v-btn);
-  border-color: var(--v-btn);
+  border-color: var(--v-accent);
 }
 
 .buttonOutline {
@@ -346,7 +346,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 600;
-  color: var(--v-btn);
+  color: var(--v-accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }

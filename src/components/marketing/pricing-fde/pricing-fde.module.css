@@ -176,7 +176,7 @@
 
 .buttonSolid:hover {
   background: var(--v-btn);
-  border-color: var(--v-btn);
+  border-color: var(--v-accent);
 }
 
 .buttonOutline {
@@ -284,7 +284,7 @@
 }
 
 .flvRust {
-  background: var(--v-accent);
+  background: var(--v-quiet);
 }
 
 .tierBody {

@@ -152,7 +152,7 @@
 }
 
 .tierOptional {
-  color: var(--v-btn);
+  color: var(--v-accent);
 }
 
 .tierExclusive {

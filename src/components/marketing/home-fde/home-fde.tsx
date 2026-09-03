@@ -32,7 +32,7 @@ export const ARGUMENT = [
   {
     kicker: "Figure 02",
     value: "3.5 times",
-    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, get three and a half times as much out of AI per worker as typical firms, on OpenAI's own measure, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use.",
+    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times as much AI per worker as typical firms on OpenAI's measure of intelligence per worker, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use.",
     source: "OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026",
     href: "https://openai.com/index/introducing-b2b-signals/",
   },

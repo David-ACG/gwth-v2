@@ -250,7 +250,7 @@
 
 .buttonSolid:hover {
   background: var(--v-btn);
-  border-color: var(--v-btn);
+  border-color: var(--v-accent);
 }
 
 .buttonOutline {
@@ -483,7 +483,7 @@
 }
 
 .flvRust {
-  background: var(--v-accent);
+  background: var(--v-quiet);
 }
 
 .cardBody {
@@ -601,7 +601,7 @@
   line-height: 0.95;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
-  color: var(--v-quiet);
+  color: var(--v-accent);
 }
 
 :global(.dark) .shell .hugeNum {
@@ -762,7 +762,7 @@
   composes: tick;
   background: var(--v-ink);
   border-color: var(--v-ink);
-  color: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 .tickBrief {

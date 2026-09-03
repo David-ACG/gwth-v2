@@ -30,8 +30,8 @@
   --primary: var(--v-btn);
   --primary-foreground: var(--v-btn-text);
   --success: var(--v-accent);
-  --destructive: var(--v-accent);
-  --variant-warm: var(--v-accent);
+  --destructive: var(--v-ink);
+  --variant-warm: var(--v-muted);
   background: var(--v-bg);
   color: var(--v-ink);
   font-family: var(--font-sans);
@@ -77,8 +77,8 @@
   --v-tool-line: var(--v-line);
   --v-tool-strong: var(--v-quiet);
   --v-tool-strong-text: var(--v-ink);
-  --v-current-bg: var(--v-ink);
-  --v-current-marker: var(--v-quiet);
+  --v-current-bg: var(--v-quiet);
+  --v-current-marker: var(--v-ink);
 }
 
 /* B — Sand tray. The tools sit together on a warm sand surface, clearly a
@@ -90,7 +90,7 @@
   --v-tool-strong: var(--v-quiet);
   --v-tool-strong-text: var(--v-ink);
   --v-current-bg: #f1ecdc;
-  --v-current-marker: var(--v-accent);
+  --v-current-marker: var(--v-ink);
 }
 
 /* C — Teal wash. Chrome is quiet paper, and a 10% teal wash is spent ONLY on
@@ -102,7 +102,7 @@
   --v-tool-strong: var(--v-quiet);
   --v-tool-strong-text: var(--v-ink);
   --v-current-bg: rgba(44, 74, 71, 0.1);
-  --v-current-marker: var(--v-quiet);
+  --v-current-marker: var(--v-ink);
 }
 
 :global(.dark) .shell[data-chrome="b"] {

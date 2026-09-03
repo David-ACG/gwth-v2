@@ -103,7 +103,7 @@
 }
 
 .typeLesson {
-  color: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 :global(.dark) .typeLesson {
@@ -111,7 +111,7 @@
 }
 
 .typeLab {
-  color: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 :global(.dark) .typeLab {

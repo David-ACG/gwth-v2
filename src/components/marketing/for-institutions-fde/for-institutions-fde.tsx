@@ -29,7 +29,7 @@ export const EVIDENCE = [
   {
     kicker: "Figure 02",
     value: "3.5 times",
-    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, get three and a half times as much out of AI per worker as typical firms, on OpenAI's own measure, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use.",
+    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times as much AI per worker as typical firms on OpenAI's measure of intelligence per worker, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use.",
     source: "OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026",
     href: "https://openai.com/index/introducing-b2b-signals/",
   },
@@ -312,15 +312,14 @@ export function ForInstitutionsFde() {
       <section className={p.section} data-section="commercials">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>An annual licence, priced on active learners</h2>
+            <h2 className={p.sectionTitle}>Priced on active learners, not seats</h2>
             <p className={p.sectionMeta}>Commercials</p>
           </div>
           <p className={p.lead}>
-            One annual fee covers your edition, the admin screen, tutor views
-            and records for a band of active learners, with a per learner rate
-            above it. No per seat surprises and no vendor deals behind the
-            price. Ask for a proposal and we will build it around your
-            membership.
+            One agreement covers your edition, the admin screen, tutor views
+            and records. We price on the number of members actually learning,
+            not on seats, and there are no vendor deals behind the price. Ask
+            for a proposal and we will build it around your membership.
           </p>
         </div>
       </section>

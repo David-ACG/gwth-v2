@@ -351,7 +351,7 @@ a.lessonRow:hover .lessonTitle {
 
 .buttonSolid:hover {
   background: var(--v-btn);
-  border-color: var(--v-btn);
+  border-color: var(--v-accent);
 }
 
 .buttonOutline {
