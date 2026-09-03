@@ -287,16 +287,17 @@
 }
 
 /* One render per mode: the same photograph, only its ground swapped
-   (stripped-image-register, David 2026-09-02). */
-.plateDark {
+   (stripped-image-register, David 2026-09-02). Written as descendants of
+   .plate so they outrank the `.plate img` display rule above. */
+.plate .plateDark {
   display: none;
 }
 
-:global(.dark) .plateLight {
+:global(.dark) .plate .plateLight {
   display: none;
 }
 
-:global(.dark) .plateDark {
+:global(.dark) .plate .plateDark {
   display: block;
 }
 

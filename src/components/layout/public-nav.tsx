@@ -182,7 +182,12 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
               >
                 Log in
               </Link>
-              <Link href="/contact" className={styles.buttonSolid}>
+              {/* Below 640px the sheet carries both CTAs; the bar keeps only
+                  the toggle and the hamburger so nothing scrolls sideways. */}
+              <Link
+                href="/contact"
+                className={cn(styles.buttonSolid, styles.ctaDesktopOnly)}
+              >
                 Book a walkthrough
               </Link>
             </>

@@ -54,6 +54,23 @@ test.describe("Marketing homepage, full-page smoke", () => {
     }
   })
 
+  test("shows one plate per mode: the dark render stays hidden in light", async ({ page }) => {
+    await expect(page.locator('img[src*="six-blocks.png"]').first()).toBeVisible()
+    await expect(page.locator('img[src*="six-blocks-dark"]').first()).toBeHidden()
+    await page.evaluate(() => document.documentElement.classList.add("dark"))
+    await expect(page.locator('img[src*="six-blocks-dark"]').first()).toBeVisible()
+    await expect(page.locator('img[src*="six-blocks.png"]').first()).toBeHidden()
+  })
+
+  test("nothing scrolls sideways at phone width", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await gotoHome(page)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth
+    )
+    expect(overflow).toBe(false)
+  })
+
   test("renders the Course JSON-LD schema", async ({ page }) => {
     const script = page.locator('script[type="application/ld+json"]').first()
     await expect(script).toBeAttached()
