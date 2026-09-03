@@ -8,7 +8,7 @@
  * page (W25 needs /lessons anonymously readable), and an entitled learner is
  * sent to their course instead.
  */
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect, vi, afterEach } from "vitest"
 import { render, within } from "@testing-library/react"
 import { PublicNav } from "./public-nav"
 import { COURSE_PATH } from "@/lib/config"
@@ -17,6 +17,9 @@ let pathname = "/"
 vi.mock("next/navigation", () => ({
   usePathname: () => pathname,
 }))
+afterEach(() => {
+  pathname = "/"
+})
 
 vi.mock("@/lib/actions/auth", () => ({
   signOut: vi.fn(),
@@ -101,7 +104,6 @@ describe("PublicNav selected item (M2, N12)", () => {
       expect(el).toHaveTextContent("For institutions")
       expect(el.className).toMatch(/Active/)
     }
-    pathname = "/"
   })
 })
 

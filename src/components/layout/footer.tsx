@@ -111,7 +111,7 @@ export function Footer({ showLabs, lessonsHref = "/lessons" }: FooterProps) {
               &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
             </p>
             <p className={styles.metaLine}>
-              Independent. UK based. No sponsors. No ads. No vendor partnerships.
+              Independent. UK-based. No sponsors. No ads. No vendor partnerships.
             </p>
           </div>
         </div>

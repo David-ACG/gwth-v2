@@ -17,14 +17,14 @@ export const EVIDENCE = [
   {
     kicker: "Figure 01",
     value: "Two thirds and one third",
-    body: "More than two thirds of HR professionals put AI skills at the top of their development priorities. One third of organisations have given their staff any AI training.",
+    body: "More than two thirds of HR professionals put AI skills at the top of their development priorities. Only one third of organisations have given their staff AI training.",
     source: "CIPD Ireland with the University of Limerick, HR Practices survey of 330 HR professionals, May 2026",
     href: "https://www.rte.ie/news/business/2026/0520/1574248-cipd-survey-on-ai/",
   },
   {
     kicker: "Figure 02",
     value: "3.5 times",
-    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times more of it per worker than typical firms, up from twice a year earlier. Only 36% of that gap is volume.",
+    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times as much AI per worker as typical firms, up from twice as much a year earlier. Only 36% of that gap is volume.",
     source: "OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026",
     href: "https://openai.com/index/introducing-b2b-signals/",
   },
@@ -38,7 +38,7 @@ export const EVIDENCE = [
   {
     kicker: "Figure 04",
     value: "59 in 100",
-    body: "Fifty nine of every hundred workers need reskilling or upskilling by 2030, and eleven of them will not get it.",
+    body: "Fifty-nine of every hundred workers need reskilling or upskilling by 2030, and eleven of them will not get it.",
     source: "World Economic Forum, Future of Jobs Report 2025",
     href: "https://www.weforum.org/publications/the-future-of-jobs-report-2025/",
   },
@@ -147,7 +147,7 @@ export function ForInstitutionsFde() {
             </h1>
             <div>
               <p className={p.standfirst}>
-                GWTH is a three month applied AI foundation that a
+                GWTH is a three-month applied AI foundation that a
                 professional body runs as its own edition: your choice of
                 lessons, your pass mark, your tutors watching the baseline,
                 and a verified record each member can show. Independent,
@@ -207,7 +207,7 @@ export function ForInstitutionsFde() {
             to take measures to ensure, as far as they can, a sufficient level
             of AI literacy among their staff. And the{" "}
             <a href={LAW.ukSkills} rel="noopener noreferrer" target="_blank">
-              UK government&apos;s skills partnership
+              UK government&apos;s skills partnership, announced in January 2026,
             </a>{" "}
             aims to give ten million workers AI skills by 2030. Professional
             bodies are the obvious delivery rail for both.

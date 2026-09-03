@@ -27,7 +27,15 @@ describe("ForInstitutionsPage", () => {
 
   it("names the six edition features and the walkthrough call to action", () => {
     render(<ForInstitutionsPage />)
-    expect(screen.getAllByTestId("edition-feature")).toHaveLength(6)
+    const features = screen.getAllByTestId("edition-feature")
+    expect(features.map((el) => el.querySelector("h3")?.textContent)).toEqual([
+      "Core, optional and exclusive tiers",
+      "Exclusive lessons you ratify",
+      "A pass mark you set",
+      "A tutor baseline view",
+      "A verified record",
+      "CPD ready",
+    ])
     const ctas = screen.getAllByRole("link", { name: "Book a walkthrough" })
     expect(ctas.length).toBeGreaterThanOrEqual(2)
     for (const cta of ctas) expect(cta).toHaveAttribute("href", "/contact")

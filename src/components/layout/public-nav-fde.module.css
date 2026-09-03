@@ -286,6 +286,11 @@
   background: var(--v-quiet);
 }
 
+.sheetLink:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: -2px;
+}
+
 .sheetLinkActive,
 .sheetLinkActive:hover {
   color: var(--v-ink);

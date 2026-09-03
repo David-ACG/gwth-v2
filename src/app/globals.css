@@ -192,8 +192,8 @@
   --warning: oklch(0.75 0.15 75);
   --warning-foreground: oklch(0.18 0.04 175);
 
-  --info: var(--v-accent);
-  --info-foreground: var(--v-bg);
+  --info: var(--v-quiet);
+  --info-foreground: var(--v-ink);
 
   --border: var(--v-line);
   --input: var(--v-line);
@@ -211,13 +211,13 @@
   --chart-1: var(--v-accent);
   --chart-2: var(--v-ink);
   --chart-3: var(--v-muted);
-  --chart-4: var(--v-ink);
+  --chart-4: var(--v-line);
   --chart-5: var(--v-soft);
 
   --status-completed: oklch(0.6 0.18 145);
   --status-in-progress: var(--v-accent);
-  --status-not-started: var(--v-muted);
-  --status-locked: var(--v-line);
+  --status-not-started: var(--v-soft);
+  --status-locked: var(--v-muted);
 
   --grade-a: oklch(0.6 0.18 145);
   --grade-b: oklch(0.65 0.16 165);
@@ -276,8 +276,8 @@
   --warning: oklch(0.8 0.14 75);
   --warning-foreground: oklch(0.17 0.005 60);
 
-  --info: var(--v-accent);
-  --info-foreground: var(--v-bg);
+  --info: var(--v-quiet);
+  --info-foreground: var(--v-ink);
 
   --border: var(--v-line);
   --input: var(--v-line);
@@ -295,13 +295,13 @@
   --chart-1: var(--v-accent);
   --chart-2: var(--v-ink);
   --chart-3: var(--v-muted);
-  --chart-4: var(--v-ink);
+  --chart-4: var(--v-line);
   --chart-5: var(--v-soft);
 
   --status-completed: oklch(0.7 0.16 145);
   --status-in-progress: var(--v-accent);
-  --status-not-started: var(--v-muted);
-  --status-locked: var(--v-line);
+  --status-not-started: var(--v-soft);
+  --status-locked: var(--v-muted);
 
   --grade-a: oklch(0.7 0.16 145);
   --grade-b: oklch(0.75 0.14 165);

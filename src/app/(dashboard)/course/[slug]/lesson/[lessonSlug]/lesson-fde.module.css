@@ -32,9 +32,6 @@
   --success: var(--v-dash-active);
   --destructive: var(--v-rust);
   --variant-warm: var(--v-ochre);
-  --radius: 0px;
-
-
   background: var(--v-bg);
   color: var(--v-ink);
   font-family: var(--font-sans);

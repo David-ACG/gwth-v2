@@ -56,6 +56,9 @@ for (const mode of ["light", "dark"]) {
     if (width === 390) {
       for (const url of ["/", "/for-institutions"]) {
         await page.goto(base + url, { waitUntil: "networkidle" })
+        await page.evaluate((m) => {
+          document.documentElement.classList.toggle("dark", m === "dark")
+        }, mode)
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth > document.documentElement.clientWidth
         )
@@ -63,16 +66,18 @@ for (const mode of ["light", "dark"]) {
       }
       // The X6 key at phone width: two rows of three, never collapsed.
       await page.goto(base + "/", { waitUntil: "networkidle" })
+      await page.evaluate((m) => {
+        document.documentElement.classList.toggle("dark", m === "dark")
+      }, mode)
+      await page.waitForTimeout(300)
       const tops = await page
         .getByTestId("six-blocks-key")
         .locator("span")
         .evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top)))
       console.log(`${mode}/390 key rows: ${new Set(tops).size} (want 2)`)
-      const key = page.getByTestId("six-blocks-key")
       await page.locator("#six-building-blocks").screenshot({
         path: path.join(out, `key-${mode}-390.png`),
       })
-      void key
     }
     await ctx.close()
   }

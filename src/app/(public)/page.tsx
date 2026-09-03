@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   // one (W26).
   title: { absolute: "GWTH.ai | The applied AI foundation for UK professions" },
   description:
-    "A three month applied AI foundation for UK professionals and the institutions that serve them: build, automate, research and analyse in plain English, assessed throughout, with a verified record at the end.",
+    "A three-month applied AI foundation for UK professionals and the institutions that serve them: build, automate, research and analyse in plain English, assessed throughout, with a verified record at the end.",
   alternates: {
     canonical: "/",
   },
