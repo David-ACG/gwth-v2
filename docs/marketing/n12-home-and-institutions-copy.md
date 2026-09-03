@@ -19,7 +19,7 @@ Three months · Five hours a week · Assessed throughout. Independent. No sponso
 
 Figure 01. Two thirds and one third. More than two thirds of HR professionals put AI skills at the top of their development priorities. Only one third of organisations have given their staff AI training. CIPD Ireland with the University of Limerick, HR Practices survey of 330 HR professionals, May 2026.
 
-Figure 02. 3.5 times. The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times as much AI per worker as typical firms, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use. OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026.
+Figure 02. 3.5 times. The firms using AI most deeply, the ones OpenAI calls frontier firms, get three and a half times as much out of AI per worker as typical firms, on OpenAI's own measure, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use. OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026.
 
 Figure 03. The missing floor. Short targeted courses assume a baseline that is not there, and the trainer spends the day building it instead. Our argument, in one line.
 
@@ -71,7 +71,7 @@ Book a walkthrough. See the course.
 
 Figure 01. Two thirds and one third. More than two thirds of HR professionals put AI skills at the top of their development priorities. Only one third of organisations have given their staff AI training. CIPD Ireland with the University of Limerick, HR Practices survey of 330 HR professionals, May 2026.
 
-Figure 02. 3.5 times. The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times as much AI per worker as typical firms, up from twice as much a year earlier. Only 36% of that gap is volume. OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026.
+Figure 02. 3.5 times. The firms using AI most deeply, the ones OpenAI calls frontier firms, get three and a half times as much out of AI per worker as typical firms, on OpenAI's own measure, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use. OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026.
 
 Figure 03. 16%. Only 16% of people using AI at work are what Microsoft calls frontier professionals, and its data ties twice as much of the difference to the organisation as to the individual. Microsoft Work Trend Index, 2026.
 

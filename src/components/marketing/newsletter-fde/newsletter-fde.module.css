@@ -38,8 +38,8 @@
 /* ---------------- Masthead (drenched teal band) ---------------- */
 
 .masthead {
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
 }
 
@@ -47,7 +47,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .mastheadTitle {
@@ -64,7 +64,7 @@
   max-width: 38rem;
   font-size: 1.15rem;
   line-height: 1.65;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 /* ---------------- Signup + lists layout ---------------- */
@@ -133,7 +133,7 @@
 }
 
 .input:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -221,14 +221,14 @@
 }
 
 .buttonSolid {
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonOutline {
@@ -244,7 +244,7 @@
 
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 

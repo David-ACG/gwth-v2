@@ -1055,7 +1055,7 @@ function OutlineSheet({
                 }}
                 aria-current={state === "current" ? "page" : undefined}
                 className={cn(
-                  "grid w-full cursor-pointer grid-cols-[20px_1fr_auto] items-start gap-2.5 border-x-0 border-b border-t-0 border-solid border-border bg-transparent py-3 pl-1 pr-1 text-left transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--v-ochre)]",
+                  "grid w-full cursor-pointer grid-cols-[20px_1fr_auto] items-start gap-2.5 border-x-0 border-b border-t-0 border-solid border-border bg-transparent py-3 pl-1 pr-1 text-left transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--v-accent)]",
                   i === 0 && "border-t",
                   n === cursor && "bg-muted",
                   state === "pending" && "opacity-60"
@@ -1240,14 +1240,14 @@ function SegmentedBar({
   /** Segment indices that carry a gate tick (video watched, Q&A passed). */
   ticks?: number[]
 }) {
-  const fillClass = frozen ? "bg-[var(--v-muted)]" : "bg-[var(--v-dash-active)]"
+  const fillClass = frozen ? "bg-[var(--v-muted)]" : "bg-[var(--v-accent)]"
   return (
     <div
       className="grid gap-[3px]"
       style={{ gridTemplateColumns: `repeat(${total}, 1fr)` }}
     >
       {Array.from({ length: total }).map((_, i) => (
-        <div key={i} className="relative h-[3px] bg-[var(--v-dash)]">
+        <div key={i} className="relative h-[3px] bg-[var(--v-line-soft)]">
           {(i < value || (i === value && partial > 0)) && (
             <div
               className={cn("absolute inset-y-0 left-0", fillClass)}
@@ -1267,7 +1267,7 @@ function GateTick() {
     <span
       data-testid="gate-tick"
       className={cn(
-        "absolute -top-[5px] right-0 z-10 flex size-[13px] items-center justify-center bg-[var(--v-dash-active)] text-background",
+        "absolute -top-[5px] right-0 z-10 flex size-[13px] items-center justify-center bg-[var(--v-accent)] text-background",
         styles.tickPop
       )}
     >
@@ -1298,11 +1298,11 @@ function ProgressBar({
 }) {
   const pct = Math.max(0, Math.min(100, total === 0 ? 0 : (value / total) * 100))
   return (
-    <div className="relative h-[3px] bg-[var(--v-dash)]">
+    <div className="relative h-[3px] bg-[var(--v-line-soft)]">
       <div
         className={cn(
           "absolute inset-y-0 left-0",
-          frozen ? "bg-[var(--v-muted)]" : "bg-[var(--v-dash-active)]"
+          frozen ? "bg-[var(--v-muted)]" : "bg-[var(--v-accent)]"
         )}
         style={{ width: `${pct}%` }}
       />
@@ -1643,7 +1643,7 @@ function SeekableTrack({
       aria-valuenow={Math.round(progress)}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      className="cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-ochre)]"
+      className="cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-accent)]"
     >
       {playing ? (
         <Waveform progress={progress} />
@@ -1780,9 +1780,9 @@ function SharpButton({
   disabled?: boolean
 }) {
   const classes = cn(
-    "inline-flex items-center justify-center gap-2 border px-4.5 py-3 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-ochre)]",
+    "inline-flex items-center justify-center gap-2 border px-4.5 py-3 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-accent)]",
     variant === "primary"
-      ? "border-primary bg-primary text-primary-foreground hover:border-[var(--v-teal-deep)] hover:bg-[var(--v-teal-deep)]"
+      ? "border-primary bg-primary text-primary-foreground hover:border-[var(--v-btn)] hover:bg-[var(--v-btn)]"
       : "border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background",
     disabled && "pointer-events-none opacity-45",
     className
@@ -2012,8 +2012,8 @@ function Callout({
       <span
         className="whitespace-nowrap border px-2 py-1 font-mono text-[10.5px] font-bold uppercase tracking-[0.18em]"
         style={{
-          color: "var(--v-dash-active)",
-          borderColor: "var(--v-dash-active)",
+          color: "var(--v-accent)",
+          borderColor: "var(--v-accent)",
         }}
       >
         {tag}

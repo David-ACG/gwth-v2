@@ -49,8 +49,8 @@
 
 /* Journal masthead: full-bleed teal rule holding the wordmark only. */
 .masthead {
-  background: var(--v-teal);
-  border-bottom: 1px solid var(--v-teal-deep);
+  background: var(--v-quiet);
+  border-bottom: 1px solid var(--v-btn);
   padding: 1.4rem 0;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .wordmarkLink:focus-visible {
-  outline: 2px solid var(--v-ochre-bright);
+  outline: 2px solid var(--v-accent);
   outline-offset: 4px;
 }
 
@@ -124,7 +124,7 @@
 .title em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .subtitle {
@@ -184,12 +184,12 @@
 }
 
 .input:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
 .input[aria-invalid="true"] {
-  border-color: var(--v-rust);
+  border-color: var(--v-ink);
 }
 
 /* Field validation message (colour + weight; paired with the invalid border). */
@@ -206,7 +206,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
-  border: 1px solid var(--v-rust);
+  border: 1px solid var(--v-accent);
   background: transparent;
   padding: 0.75rem 0.85rem;
   font-size: var(--fde-body-sm);
@@ -220,7 +220,7 @@
   width: 1.05rem;
   height: 1.05rem;
   margin-top: 0.05rem;
-  color: var(--v-rust);
+  color: var(--v-ink);
 }
 
 /* ---------------- Buttons (DESIGN_FDE.md §5.3) ---------------- */
@@ -244,14 +244,14 @@
 }
 
 .buttonSolid {
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonSolid:disabled {
@@ -277,7 +277,7 @@
 
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -348,12 +348,12 @@
 }
 
 .link:hover {
-  color: var(--v-ochre);
-  text-decoration-color: var(--v-ochre);
+  color: var(--v-ink);
+  text-decoration-color: var(--v-ink);
 }
 
 .link:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -368,11 +368,11 @@
 }
 
 .inlineLink:hover {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .inlineLink:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 

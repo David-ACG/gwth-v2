@@ -37,14 +37,14 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-md);
   font-weight: 600;
-  color: var(--v-ochre);
+  color: var(--v-ink);
   white-space: nowrap;
 }
 
 /* ── Preview banner (fixture mode only) ───────────────────────────────── */
 
 .previewBanner {
-  border: 1px solid var(--v-ochre);
+  border: 1px solid var(--v-accent);
   border-left-width: 3px;
   background: var(--v-surface);
   padding: 0.85rem 1.1rem;
@@ -152,19 +152,19 @@
 }
 
 .tierOptional {
-  color: var(--v-action);
+  color: var(--v-btn);
 }
 
 .tierExclusive {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .stateDraft {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .stateRatified {
-  color: var(--v-dash-active);
+  color: var(--v-ink);
 }
 
 /* ── Ratification queue ───────────────────────────────────────────────── */
@@ -203,7 +203,7 @@
 }
 
 .reviewNote {
-  border-left: 3px solid var(--v-ochre);
+  border-left: 3px solid var(--v-accent);
   padding: 0.5rem 0 0.5rem 0.85rem;
   margin: 0.9rem 0 0;
   font-size: var(--fde-body-sm);

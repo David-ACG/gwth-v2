@@ -124,12 +124,12 @@
 
 .select:focus-visible,
 .textarea:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
 .textarea[aria-invalid="true"] {
-  border-color: var(--v-rust);
+  border-color: var(--v-ink);
 }
 
 .error {
@@ -161,16 +161,16 @@
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
   transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
     color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonSolid:disabled {
@@ -203,7 +203,7 @@
 
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -255,9 +255,9 @@
   padding: 0.9rem 0.35rem;
   border-radius: 8px;
   cursor: pointer;
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
   border-right: 0;
   box-shadow: none;
   transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -266,20 +266,20 @@
 
 .launchButton:hover,
 .launchButton:focus-visible {
-  background: var(--v-teal-deep);
+  background: var(--v-btn);
   /* Reveal now slides inwards (negative X) rather than out over the edge. */
   transform: translate(-0.3rem, -50%);
 }
 
 .launchButton:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
 .launchDot {
   width: 7px;
   height: 7px;
-  background: var(--v-ochre-bright);
+  background: var(--v-accent);
 }
 
 .overlay {
@@ -334,6 +334,6 @@
 }
 
 .closeButton:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }

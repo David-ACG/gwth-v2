@@ -24,14 +24,14 @@
   --popover-foreground: var(--v-ink);
   --border: var(--v-line);
   --input: var(--v-line);
-  --ring: var(--v-ochre);
+  --ring: var(--v-accent);
   --muted: var(--v-line-soft);
   --muted-foreground: var(--v-muted);
-  --primary: var(--v-action);
-  --primary-foreground: var(--v-action-text);
-  --success: var(--v-dash-active);
-  --destructive: var(--v-rust);
-  --variant-warm: var(--v-ochre);
+  --primary: var(--v-btn);
+  --primary-foreground: var(--v-btn-text);
+  --success: var(--v-accent);
+  --destructive: var(--v-accent);
+  --variant-warm: var(--v-accent);
   background: var(--v-bg);
   color: var(--v-ink);
   font-family: var(--font-sans);
@@ -75,10 +75,10 @@
 .shell[data-chrome="a"] {
   --v-tool-bg: var(--v-bg);
   --v-tool-line: var(--v-line);
-  --v-tool-strong: var(--v-teal);
-  --v-tool-strong-text: var(--v-cream);
-  --v-current-bg: var(--v-cream);
-  --v-current-marker: var(--v-teal);
+  --v-tool-strong: var(--v-quiet);
+  --v-tool-strong-text: var(--v-ink);
+  --v-current-bg: var(--v-ink);
+  --v-current-marker: var(--v-quiet);
 }
 
 /* B — Sand tray. The tools sit together on a warm sand surface, clearly a
@@ -87,10 +87,10 @@
 .shell[data-chrome="b"] {
   --v-tool-bg: #e3e1d1;
   --v-tool-line: #cfcdba;
-  --v-tool-strong: var(--v-teal);
-  --v-tool-strong-text: var(--v-cream);
+  --v-tool-strong: var(--v-quiet);
+  --v-tool-strong-text: var(--v-ink);
   --v-current-bg: #f1ecdc;
-  --v-current-marker: var(--v-ochre);
+  --v-current-marker: var(--v-accent);
 }
 
 /* C — Teal wash. Chrome is quiet paper, and a 10% teal wash is spent ONLY on
@@ -99,10 +99,10 @@
 .shell[data-chrome="c"] {
   --v-tool-bg: var(--v-surface);
   --v-tool-line: var(--v-line);
-  --v-tool-strong: var(--v-teal);
-  --v-tool-strong-text: var(--v-cream);
+  --v-tool-strong: var(--v-quiet);
+  --v-tool-strong-text: var(--v-ink);
   --v-current-bg: rgba(44, 74, 71, 0.1);
-  --v-current-marker: var(--v-teal);
+  --v-current-marker: var(--v-quiet);
 }
 
 :global(.dark) .shell[data-chrome="b"] {
@@ -226,7 +226,7 @@
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 /* Serif reading measure. David picked option C in the 2026-07-26 demo-path
@@ -264,7 +264,7 @@
 
 /* Status text rendered as colour + glyph + text (§5.5). */
 .statusActive {
-  color: var(--v-dash-active);
+  color: var(--v-ink);
 }
 
 /* Gate ticks: the wordless completion signal (video corner, CONTINUE button,

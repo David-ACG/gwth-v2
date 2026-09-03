@@ -46,7 +46,7 @@
 }
 
 .monoLink:hover {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .monoLinkMuted {
@@ -107,7 +107,7 @@
 .bandTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .bandLead {
@@ -174,7 +174,7 @@
 .sectionTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .splitGrid {
@@ -243,14 +243,14 @@
 }
 
 .buttonSolid {
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonOutline {
@@ -266,7 +266,7 @@
 
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -285,11 +285,11 @@
 .dashes span {
   height: 3px;
   flex: 1;
-  background: var(--v-dash);
+  background: var(--v-line-soft);
 }
 
 .dashes span[data-active="true"] {
-  background: var(--v-dash-active);
+  background: var(--v-accent);
 }
 
 .dashes[data-frozen="true"] span[data-active="true"] {
@@ -315,12 +315,12 @@
 
 .statusGood {
   composes: status;
-  color: var(--v-dash-active);
+  color: var(--v-ink);
 }
 
 .statusWarm {
   composes: status;
-  color: var(--v-rust);
+  color: var(--v-ink);
 }
 
 .statusMuted {
@@ -337,12 +337,12 @@
 
 .glyphDone {
   composes: glyph;
-  color: var(--v-dash-active);
+  color: var(--v-ink);
 }
 
 .glyphCurrent {
   composes: glyph;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .glyphMuted {
@@ -468,22 +468,22 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.55rem 1.25rem;
-  color: var(--v-cream);
+  color: var(--v-ink);
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
 }
 
 .flvTeal {
-  background: var(--v-teal);
+  background: var(--v-quiet);
 }
 
 .flvMoss {
-  background: var(--v-moss);
+  background: var(--v-quiet);
 }
 
 .flvRust {
-  background: var(--v-rust);
+  background: var(--v-accent);
 }
 
 .cardBody {
@@ -522,7 +522,7 @@
   font-size: 1.15rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 /* ---------------- Paper panel ---------------- */
@@ -541,7 +541,7 @@
 
 .panelRust {
   composes: panel;
-  border-color: var(--v-rust);
+  border-color: var(--v-ink);
 }
 
 .bigStat {
@@ -581,8 +581,8 @@
 }
 
 .activityCellTeal {
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: 1.6rem 1.5rem 1.75rem;
 }
 
@@ -591,7 +591,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .hugeNum {
@@ -601,11 +601,11 @@
   line-height: 0.95;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
-  color: var(--v-teal);
+  color: var(--v-quiet);
 }
 
 :global(.dark) .shell .hugeNum {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .hugeNumCream {
@@ -615,14 +615,14 @@
   line-height: 0.95;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
-  color: var(--v-cream);
+  color: var(--v-ink);
 }
 
 .hugeNumUnit {
   font-size: 1.1rem;
   font-weight: 400;
   letter-spacing: 0;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
   margin-left: 0.4rem;
 }
 
@@ -639,13 +639,13 @@
   font-style: italic;
   font-size: var(--fde-body-sm);
   line-height: 1.5;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .tealDivider {
   margin-top: 1.1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--v-hero-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .factPair {
@@ -682,34 +682,34 @@
 .heatCell {
   height: 0.75rem;
   width: 100%;
-  background: var(--v-dash);
+  background: var(--v-line-soft);
 }
 
 .heatCell[data-heat="1"] {
-  background: var(--v-dash-active);
+  background: var(--v-accent);
   opacity: 0.35;
 }
 
 .heatCell[data-heat="2"] {
-  background: var(--v-dash-active);
+  background: var(--v-accent);
   opacity: 0.55;
 }
 
 .heatCell[data-heat="3"] {
-  background: var(--v-dash-active);
+  background: var(--v-accent);
   opacity: 0.78;
 }
 
 .heatCell[data-heat="4"] {
-  background: var(--v-dash-active);
+  background: var(--v-accent);
 }
 
 /* ---------------- Portfolio ---------------- */
 
 .capstoneStrip {
   margin-top: 1.25rem;
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: 0.9rem 1.4rem;
   display: grid;
   gap: 1rem;
@@ -727,20 +727,20 @@
   font-style: italic;
   font-size: var(--fde-body-sm);
   line-height: 1.45;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .creamLink {
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
-  color: var(--v-cream);
+  color: var(--v-ink);
   text-decoration: none;
   transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .creamLink:hover {
-  color: var(--v-ochre-bright);
+  color: var(--v-ink);
 }
 
 .tick {
@@ -754,21 +754,21 @@
   min-width: 2.9rem;
   height: 1.4rem;
   padding: 0 0.5rem;
-  border: 1px solid var(--v-hero-line);
-  color: var(--v-cream-muted);
+  border: 1px solid var(--v-line-soft);
+  color: var(--v-soft);
 }
 
 .tickApproved {
   composes: tick;
-  background: var(--v-cream);
-  border-color: var(--v-cream);
-  color: var(--v-teal);
+  background: var(--v-ink);
+  border-color: var(--v-ink);
+  color: var(--v-quiet);
 }
 
 .tickBrief {
   composes: tick;
-  border-color: var(--v-ochre-bright);
-  color: var(--v-ochre-bright);
+  border-color: var(--v-ink);
+  color: var(--v-ink);
 }
 
 .portfolioGrid {
@@ -821,8 +821,8 @@
 
 .listTagCapstone {
   composes: listTag;
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 .listTagLesson {
@@ -873,7 +873,7 @@
 
 .filterChipActive {
   color: var(--v-ink);
-  border-bottom-color: var(--v-ochre);
+  border-bottom-color: var(--v-ink);
 }
 
 .savedRow {
@@ -920,8 +920,8 @@
   min-width: 2.9rem;
   height: 1.5rem;
   padding: 0 0.45rem;
-  background: var(--v-moss);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 .updatedChange {
@@ -1038,8 +1038,8 @@
 /* ---------------- Postscript band ---------------- */
 
 .postscript {
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: 3rem 2rem 3.25rem;
 }
 
@@ -1054,13 +1054,13 @@
 .postscriptTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre-bright);
+  color: var(--v-accent);
 }
 
 .postscriptBody {
   font-size: var(--fde-body);
   line-height: 1.65;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
   max-width: 30rem;
 }
 

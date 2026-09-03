@@ -10,10 +10,10 @@ interface StudyStreakCalendarProps {
 
 /** Cell colour for an activity count, using the FDE dash tokens. */
 function heatStyle(count: number): React.CSSProperties {
-  if (count === 0) return { background: "var(--v-dash)" }
-  if (count === 1) return { background: "var(--v-dash-active)", opacity: 0.4 }
-  if (count === 2) return { background: "var(--v-dash-active)", opacity: 0.65 }
-  return { background: "var(--v-dash-active)" }
+  if (count === 0) return { background: "var(--v-line-soft)" }
+  if (count === 1) return { background: "var(--v-accent)", opacity: 0.4 }
+  if (count === 2) return { background: "var(--v-accent)", opacity: 0.65 }
+  return { background: "var(--v-accent)" }
 }
 
 const MONO_LABEL: React.CSSProperties = {

@@ -13,7 +13,7 @@ does not restate the rules; read the bible items.
 | What | Where |
 |---|---|
 | The `--v-*` tokens, light and dark, ONCE | `src/app/globals.css` (`:root` and `.dark`). No module re-declares them. |
-| Aliases for the retired FDE names (`--v-teal`, `--v-ochre`, `--v-action`, ...) | Same block, marked as a migration bridge. They map old references into the green family so nothing goes undefined. Do not write new code against them. |
+| The retired FDE names (`--v-teal`, `--v-ochre`, `--v-cream`, `--v-action`, ...) | Gone. Every reference in `src` was renamed to the token it stood for (`--v-teal` to `--v-quiet`, `--v-teal-deep` and `--v-action` to `--v-btn`, `--v-ochre` / `--v-rust` / `--v-dash-active` to `--v-accent`, `--v-cream` to `--v-ink`, `--v-cream-muted` to `--v-soft`, `--v-hero-line` / `--v-dash` to `--v-line-soft`). A `--v-*` name that is not in `globals.css` or declared locally by the module using it is a bug. |
 | shadcn tokens (`--background`, `--primary`, `--border`, ...) | Remapped in the same file into the green family, so dashboard, admin, org and auth pick up the palette through Tailwind. |
 | Fonts | `src/app/layout.tsx` loads Bitter (`--font-bitter`), Public Sans (`--font-public-sans`) and JetBrains Mono (`--font-jetbrains`, monospaced CONTENT only). `globals.css` maps them to `--font-serif`, `--font-sans`, `--font-mono` and sets `body` to sans and `h1..h4, blockquote` to serif by default. |
 | Corners | `--radius` is 10px: `var(--radius-lg)` panels, `var(--radius-md)` 8px controls and images, `var(--radius-sm)` 6px chips. |
@@ -35,7 +35,7 @@ does not restate the rules; read the bible items.
 | Surface | State |
 |---|---|
 | Public nav, footer, home page, `/for-institutions` | **Rebuilt** to the register and the N9 artboards. |
-| `/for-teams`, `/pricing`, `/lessons`, `/labs`, `/about`, `/contact`, `/newsletter`, `/why-gwth`, legal, news, tech radar, verify, waitlist | **Bridged**: their `*-fde` modules lost the duplicated palette blocks, the retired faces and the mono kicker treatment mechanically (see the N12 packet); layout unchanged. They read in the new family but keep FDE composition (quiet bands where teal bands were). Rebuild per page as each is touched. |
+| `/for-teams`, `/pricing`, `/lessons`, `/labs`, `/about`, `/contact`, `/newsletter`, `/why-gwth`, legal, news, tech radar, verify, waitlist | **Bridged**: their `*-fde` modules lost the duplicated palette blocks, the retired faces and the mono kicker treatment mechanically (see the N12 packet); layout unchanged. They read in the new family but keep FDE composition: where a module says `.masthead { background: var(--v-quiet) }` there used to be a teal band, and its comments may still say so. Rebuild per page as each is touched, and rename `.mono` classes and `--fde-mono-*` sizes when you do. |
 | Dashboard, lesson viewer, course, progress, profile, settings, bookmarks, notifications, guide, admin, org, auth, search palette, state pages | **Bridged** the same way. The lesson viewer's OutlineRail still needs the M2 treatment (bible `paper-first-lesson-viewer`); admin density recipe per `paper-first-admin-density`. |
 | Email | Untouched. `paper-first-email` is the recipe when the templates are next edited. |
 | Rendered video | Out of scope by the bible until David rules on `video-format`. |

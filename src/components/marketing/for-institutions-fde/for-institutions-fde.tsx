@@ -15,6 +15,11 @@ import styles from "./for-institutions-fde.module.css"
 
 export const EVIDENCE = [
   {
+    // The board brief calls this "CIPD's 67/33 stat" and the research file
+    // cites a cipd.org news page. That page does not carry the figures; the
+    // survey that does is CIPD Ireland's HR Practices study with the University
+    // of Limerick (330 HR professionals, 20 May 2026), which says "more than two
+    // thirds" and "one third". The page quotes the source, not the brief.
     kicker: "Figure 01",
     value: "Two thirds and one third",
     body: "More than two thirds of HR professionals put AI skills at the top of their development priorities. Only one third of organisations have given their staff AI training.",
@@ -24,7 +29,7 @@ export const EVIDENCE = [
   {
     kicker: "Figure 02",
     value: "3.5 times",
-    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, use three and a half times as much AI per worker as typical firms, up from twice as much a year earlier. Only 36% of that gap is volume.",
+    body: "The firms using AI most deeply, the ones OpenAI calls frontier firms, get three and a half times as much out of AI per worker as typical firms, on OpenAI's own measure, up from twice as much a year earlier. Only 36% of that gap is volume. The rest is deeper, more capable use.",
     source: "OpenAI, How frontier firms are pulling ahead (B2B Signals), May 2026",
     href: "https://openai.com/index/introducing-b2b-signals/",
   },

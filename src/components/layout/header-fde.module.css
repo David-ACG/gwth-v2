@@ -46,7 +46,7 @@
 }
 
 .shell .iconButton:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
   box-shadow: none;
 }
@@ -80,7 +80,7 @@
 }
 
 .searchTrigger:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
   box-shadow: none;
 }
@@ -120,7 +120,7 @@
 }
 
 .shell .avatarButton:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
   box-shadow: none;
 }
@@ -135,8 +135,8 @@
 
 .shell .avatarFallback {
   border-radius: 8px;
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 600;
@@ -183,5 +183,5 @@
 
 .shell .menuDanger,
 .menu :global([data-slot="dropdown-menu-item"][data-highlighted]).menuDanger {
-  color: var(--v-rust);
+  color: var(--v-accent);
 }

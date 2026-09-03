@@ -62,20 +62,20 @@
 }
 
 .navLink:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: -2px;
   box-shadow: none;
 }
 
 .wordmark:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
   box-shadow: none;
 }
 
 .navLinkActive {
   color: var(--v-ink);
-  border-left-color: var(--v-dash-active);
+  border-left-color: var(--v-ink);
 }
 
 /* ---------------- Collapse toggle (square hairline icon button) ---------------- */
@@ -96,7 +96,7 @@
 }
 
 .shell .iconButton:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
   box-shadow: none;
 }

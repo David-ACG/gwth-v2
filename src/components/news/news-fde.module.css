@@ -39,8 +39,8 @@
 /* ---------------- Masthead (drenched teal band) ---------------- */
 
 .masthead {
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
 }
 
@@ -48,7 +48,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .mastheadTitle {
@@ -63,7 +63,7 @@
 .mastheadTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre-bright);
+  color: var(--v-accent);
 }
 
 .standfirst {
@@ -71,7 +71,7 @@
   max-width: 38rem;
   font-size: 1.15rem;
   line-height: 1.65;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 /* ---------------- Buttons ---------------- */
@@ -91,14 +91,14 @@
 }
 
 .buttonSolid {
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonOutline {
@@ -114,7 +114,7 @@
 
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -225,7 +225,7 @@
 }
 
 .sortButton:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 1px;
 }
 
@@ -267,7 +267,7 @@
 
 .input:focus-visible,
 .select:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 1px;
 }
 
@@ -332,7 +332,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 600;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .featuredLabel {
@@ -346,13 +346,13 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 600;
-  color: var(--v-action);
+  color: var(--v-btn);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .labLink:hover {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .cardTitle {
@@ -369,7 +369,7 @@
 }
 
 .card:hover .cardTitle h3 {
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .cardExcerpt {
@@ -422,12 +422,12 @@
 }
 
 .upvote:hover {
-  border-color: var(--v-ochre);
-  color: var(--v-ochre);
+  border-color: var(--v-ink);
+  color: var(--v-ink);
 }
 
 .upvote:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 1px;
 }
 
@@ -436,9 +436,9 @@
 }
 
 .upvoteActive {
-  border-color: var(--v-ochre);
+  border-color: var(--v-ink);
   background: transparent;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .upvotePending {
@@ -516,7 +516,7 @@
 }
 
 .backLink:hover {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .articleHeader {
@@ -565,7 +565,7 @@
 }
 
 .tagLink:hover {
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .desktopVote {

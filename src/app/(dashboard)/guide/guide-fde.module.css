@@ -36,8 +36,8 @@
 /* ---------------- Masthead ---------------- */
 
 .masthead {
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
 }
 
@@ -45,7 +45,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .mastheadTitle {
@@ -60,7 +60,7 @@
 .mastheadTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre-bright);
+  color: var(--v-accent);
 }
 
 .standfirst {
@@ -68,7 +68,7 @@
   max-width: 40rem;
   font-size: 1.1rem;
   line-height: 1.65;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 /* ---------------- Two-column body ---------------- */
@@ -136,7 +136,7 @@
 .blockTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .lead {
@@ -211,7 +211,7 @@
   width: 0.5rem;
   height: 0.5rem;
   margin-top: 0.45rem;
-  background: var(--v-ochre);
+  background: var(--v-accent);
 }
 
 .listItem strong {

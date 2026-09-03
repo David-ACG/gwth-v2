@@ -112,27 +112,9 @@
   --v-btn-text: #17211d;   /* 11.02:1 on the button */
   --v-accent: #3f7d6d;     /* jade: italic accent, active marks, 4.35:1 */
 
-  /* Aliases for the RETIRED FDE names, so the surfaces N12 did not rebuild
-     (dashboard, lesson viewer, admin, org, auth, the inner marketing pages)
-     render in the new family instead of going undefined. Teal bands become
-     quiet paper bands, ochre/rust accents become the jade accent, the solid
-     teal action becomes the mint button. Rebuilt surfaces use the real
-     tokens above; these aliases are a migration bridge (bead gwth-launch-vay
-     closes the live 1.38:1 boundary and 1.04:1 tint through --v-line and the
-     M2 menu). */
-  --v-teal: var(--v-quiet);
-  --v-teal-deep: var(--v-btn); /* legacy button hover fill: stays the button, so the near-black label reads in both modes */
-  --v-moss: var(--v-quiet);
-  --v-cream: var(--v-ink);
-  --v-cream-muted: var(--v-soft);
-  --v-hero-line: var(--v-line-soft);
-  --v-ochre: var(--v-accent);
-  --v-ochre-bright: var(--v-accent);
-  --v-rust: var(--v-accent);
-  --v-action: var(--v-btn);
-  --v-action-text: var(--v-btn-text);
-  --v-dash: var(--v-line-soft);
-  --v-dash-active: var(--v-accent);
+  /* The retired FDE names (--v-teal, --v-ochre, --v-cream, --v-action, ...)
+     no longer exist: every reference was renamed to the token above that it
+     stood for (N12, QA round 4). A --v-* name not in this block is a bug. */
 
   /* GWTH.ai logo inks. The SHAPE is the April 2026 lock (/logo_picker);
      LogoGwth / LogoGwthMark default to these vars and the public nav on
@@ -205,7 +187,7 @@
   --sidebar-primary-foreground: var(--v-btn-text);
   --sidebar-accent: var(--v-quiet);
   --sidebar-accent-foreground: var(--v-ink);
-  --sidebar-border: var(--v-line-soft);
+  --sidebar-border: var(--v-line);
   --sidebar-ring: var(--v-accent);
 
   --chart-1: var(--v-accent);
@@ -289,7 +271,7 @@
   --sidebar-primary-foreground: var(--v-btn-text);
   --sidebar-accent: var(--v-quiet);
   --sidebar-accent-foreground: var(--v-ink);
-  --sidebar-border: var(--v-line-soft);
+  --sidebar-border: var(--v-line);
   --sidebar-ring: var(--v-accent);
 
   --chart-1: var(--v-accent);

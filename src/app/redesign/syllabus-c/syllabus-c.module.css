@@ -35,7 +35,7 @@
   --card-foreground: var(--v-ink);
   --border: var(--v-line);
   --input: var(--v-line);
-  --ring: var(--v-ochre);
+  --ring: var(--v-accent);
   --muted: var(--v-line-soft);
   --muted-foreground: var(--v-muted);
   --radius: 0px;
@@ -115,11 +115,11 @@
 .dashes span {
   height: 3px;
   flex: 1;
-  background: var(--v-dash);
+  background: var(--v-line-soft);
 }
 
 .dashes span[data-active="true"] {
-  background: var(--v-dash-active);
+  background: var(--v-accent);
 }
 
 .progressText {
@@ -227,7 +227,7 @@
 
 .accTrigger:hover {
   text-decoration: none;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .accTrigger > :global(svg) {
@@ -278,7 +278,7 @@ a.lessonRow:hover {
 }
 
 a.lessonRow:hover .lessonTitle {
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .lessonRow[data-locked="true"] .lessonTitle {
@@ -335,13 +335,13 @@ a.lessonRow:hover .lessonTitle {
 
 .statusDone,
 .statusDone .glyph {
-  color: var(--v-dash-active);
+  color: var(--v-ink);
   font-weight: 600;
 }
 
 .statusActive,
 .statusActive .glyph {
-  color: var(--v-ochre);
+  color: var(--v-ink);
   font-weight: 600;
 }
 
@@ -356,7 +356,7 @@ a.lessonRow:hover .lessonTitle {
 
 .capstone {
   margin-top: 2rem;
-  border-top: 4px solid var(--v-ochre);
+  border-top: 4px solid var(--v-accent);
   background: var(--tint-4);
   padding: 1rem 1.25rem 1.15rem;
 }

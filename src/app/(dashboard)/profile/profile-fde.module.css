@@ -95,8 +95,8 @@
   width: 4.5rem;
   height: 4.5rem;
   flex-shrink: 0;
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   font-size: 2rem;
   font-weight: 600;
 }
@@ -136,14 +136,14 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
-  color: var(--v-dash-active);
+  color: var(--v-ink);
 }
 
 .statusWarm {
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
-  color: var(--v-rust);
+  color: var(--v-ink);
 }
 
 .statusMuted {

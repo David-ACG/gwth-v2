@@ -91,7 +91,7 @@
 .sectionTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .section {
@@ -118,7 +118,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: var(--v-ochre);
+  color: var(--v-accent);
   font-variant-numeric: tabular-nums;
 }
 
@@ -159,12 +159,12 @@
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
-  color: var(--v-teal);
+  color: var(--v-quiet);
   font-variant-numeric: tabular-nums;
 }
 
 :global(.dark) .shell .scoreValue {
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .scoreFacts {
@@ -197,11 +197,11 @@
 .dashes span {
   height: 3px;
   flex: 1;
-  background: var(--v-dash);
+  background: var(--v-line-soft);
 }
 
 .dashes span[data-active="true"] {
-  background: var(--v-dash-active);
+  background: var(--v-accent);
 }
 
 /* ---------------- Course progress rows ---------------- */
@@ -237,7 +237,7 @@
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: var(--v-ochre);
+  color: var(--v-ink);
   font-variant-numeric: tabular-nums;
 }
 
@@ -294,7 +294,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--v-ochre);
+  color: var(--v-ink);
   font-variant-numeric: tabular-nums;
 }
 
@@ -342,6 +342,6 @@
 }
 
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }

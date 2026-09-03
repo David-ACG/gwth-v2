@@ -36,8 +36,8 @@
 /* ---------------- Masthead (drenched teal band) ---------------- */
 
 .masthead {
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
 }
 
@@ -45,7 +45,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .mastheadTitle {
@@ -60,7 +60,7 @@
 .mastheadTitle em {
   font-style: italic;
   font-weight: 500;
-  color: var(--v-ochre-bright);
+  color: var(--v-accent);
 }
 
 .standfirst {
@@ -68,7 +68,7 @@
   max-width: 38rem;
   font-size: 1.15rem;
   line-height: 1.65;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .mastheadActions {
@@ -80,7 +80,7 @@
 
 .mastheadFoot {
   margin-top: clamp(2.25rem, 5vw, 3.5rem);
-  border-top: 1px solid var(--v-hero-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
@@ -92,7 +92,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 /* Two-column masthead (David picked option B, 2026-07-26 demo-path audit).
@@ -127,7 +127,7 @@
     grid-row: 2;
     align-self: start;
     margin-top: 1rem;
-    border-top: 1px solid var(--v-hero-line);
+    border-top: 1px solid var(--v-line-soft);
     padding-top: 1.6rem;
     max-width: 46ch;
   }
@@ -161,14 +161,14 @@
 }
 
 .buttonSolid {
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonOutline {
@@ -184,7 +184,7 @@
 
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -220,7 +220,7 @@
 
 .sectionTitle em {
   font-style: italic;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 /* ---------------- Month cards (journal card grid) ---------------- */
@@ -249,22 +249,22 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.6rem 1.25rem;
-  color: var(--v-cream);
+  color: var(--v-ink);
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
 }
 
 .flvTeal {
-  background: var(--v-teal);
+  background: var(--v-quiet);
 }
 
 .flvMoss {
-  background: var(--v-moss);
+  background: var(--v-quiet);
 }
 
 .flvRust {
-  background: var(--v-rust);
+  background: var(--v-accent);
 }
 
 .monthBody {
@@ -315,7 +315,7 @@
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .capstone em {
@@ -369,7 +369,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .featureIndex p + p {
@@ -421,7 +421,7 @@
 
 .essay h2 em {
   font-style: italic;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .essayBody {
@@ -454,7 +454,7 @@
 
 .closing h2 em {
   font-style: italic;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .closing p {

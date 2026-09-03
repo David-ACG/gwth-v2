@@ -143,7 +143,7 @@
 
 .controls :global([data-slot="select-trigger"]):focus-visible,
 .controls button[role="combobox"]:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
   box-shadow: none;
   border-color: var(--v-line);
@@ -156,13 +156,13 @@
 }
 
 .controls button[role="checkbox"][data-state="checked"] {
-  background: var(--v-action);
-  border-color: var(--v-action);
-  color: var(--v-action-text);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
+  color: var(--v-btn-text);
 }
 
 .controls button[role="checkbox"]:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
   box-shadow: none;
 }
@@ -188,14 +188,14 @@
 }
 
 .buttonSolid {
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonOutline {
@@ -212,8 +212,8 @@
 /* Destructive: rust text + border, never a solid red slab */
 .buttonDanger {
   background: transparent;
-  color: var(--v-rust);
-  border: 1px solid var(--v-rust);
+  color: var(--v-ink);
+  border: 1px solid var(--v-accent);
 }
 
 .buttonDanger:hover {
@@ -225,7 +225,7 @@
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible,
 .buttonDanger:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -242,7 +242,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
-  color: var(--v-dash-active);
+  color: var(--v-ink);
   white-space: nowrap;
 }
 
@@ -250,7 +250,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 600;
-  color: var(--v-rust);
+  color: var(--v-ink);
   white-space: nowrap;
 }
 
@@ -264,7 +264,7 @@
 
 .noticeRust {
   margin-top: 1rem;
-  border: 1px solid var(--v-rust);
+  border: 1px solid var(--v-accent);
   background: var(--v-bg);
   padding: 1rem 1.1rem;
 }
@@ -289,7 +289,7 @@
 }
 
 .rustText {
-  color: var(--v-rust);
+  color: var(--v-ink);
 }
 
 .metaValue {

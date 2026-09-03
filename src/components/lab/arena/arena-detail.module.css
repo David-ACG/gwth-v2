@@ -35,8 +35,8 @@
 /* ---------------- Matchup header (teal band) ---------------- */
 
 .matchup {
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
   padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
 }
 
@@ -44,7 +44,7 @@
   font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .matchupTitle {
@@ -72,7 +72,7 @@
 }
 
 .contestant {
-  border-top: 1px solid var(--v-hero-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 0.9rem;
 }
 
@@ -87,14 +87,14 @@
   font-family: var(--font-sans);
   font-size: 0.68rem;
   font-weight: 500;
-  color: var(--v-ochre-bright);
+  color: var(--v-ink);
 }
 
 .contestantRun {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 .versus {
@@ -102,13 +102,13 @@
   font-family: var(--font-sans);
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
   text-align: center;
 }
 
 .matchupFoot {
   margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  border-top: 1px solid var(--v-hero-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 1.1rem;
   display: flex;
   flex-wrap: wrap;
@@ -120,7 +120,7 @@
   font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
 }
 
 /* ---------------- Archived banner ---------------- */
@@ -140,7 +140,7 @@
   font-family: var(--font-sans);
   font-size: 0.66rem;
   font-weight: 600;
-  color: var(--v-rust);
+  color: var(--v-ink);
   border: 1px solid var(--v-line);
   padding: 0.25rem 0.55rem;
 }
@@ -242,8 +242,8 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.7rem 1.1rem;
-  background: var(--v-teal);
-  color: var(--v-cream);
+  background: var(--v-quiet);
+  color: var(--v-ink);
 }
 
 .outputName {
@@ -256,7 +256,7 @@
   font-family: var(--font-sans);
   font-size: 0.64rem;
   font-weight: 500;
-  color: var(--v-cream-muted);
+  color: var(--v-soft);
   text-align: right;
 }
 
@@ -293,7 +293,7 @@
   font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 .rubricQ {
@@ -331,7 +331,7 @@
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.2;
-  color: var(--v-ochre);
+  color: var(--v-ink);
 }
 
 .verdictCall {
@@ -385,7 +385,7 @@
   font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--v-ochre);
+  color: var(--v-accent);
 }
 
 /* ---------------- Buttons + back row ---------------- */
@@ -405,14 +405,14 @@
 }
 
 .buttonSolid {
-  background: var(--v-action);
-  color: var(--v-action-text);
-  border: 1px solid var(--v-action);
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border: 1px solid var(--v-btn);
 }
 
 .buttonSolid:hover {
-  background: var(--v-teal-deep);
-  border-color: var(--v-teal-deep);
+  background: var(--v-btn);
+  border-color: var(--v-btn);
 }
 
 .buttonOutline {
@@ -428,7 +428,7 @@
 
 .buttonSolid:focus-visible,
 .buttonOutline:focus-visible {
-  outline: 2px solid var(--v-ochre);
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
 
@@ -466,7 +466,7 @@
 }
 
 .outcomeGlyph {
-  color: var(--v-ochre);
+  color: var(--v-ink);
   flex-shrink: 0;
 }
 
