@@ -762,7 +762,7 @@
   composes: tick;
   background: var(--v-ink);
   border-color: var(--v-ink);
-  color: var(--v-ink);
+  color: var(--v-bg);
 }
 
 .tickBrief {

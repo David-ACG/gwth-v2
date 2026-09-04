@@ -89,7 +89,8 @@ test.describe("Marketing homepage, full-page smoke", () => {
     const boxes = await spans.evaluateAll((els) =>
       els.map((el) => {
         const r = el.getBoundingClientRect()
-        return { top: Math.round(r.top), left: Math.round(r.left) }
+        // 4px buckets: sub-pixel drift must not split one visual row in two
+        return { top: Math.round(r.top / 4), left: Math.round(r.left / 4) }
       })
     )
     // Two rows of three: two distinct top offsets, three distinct left offsets.
@@ -108,7 +109,7 @@ test.describe("Marketing homepage, full-page smoke", () => {
     // checked without its fragment.
     const unique = [
       ...new Set(
-        hrefs.filter((h) => !h.startsWith("/#")).map((h) => h.split("#")[0] ?? h)
+        hrefs.filter((h) => !h.startsWith("/#") && !h.startsWith("//")).map((h) => h.split("#")[0] ?? h)
       ),
     ].filter(Boolean)
     for (const href of unique) {

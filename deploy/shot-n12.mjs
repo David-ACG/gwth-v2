@@ -59,6 +59,7 @@ for (const mode of ["light", "dark"]) {
         await page.evaluate((m) => {
           document.documentElement.classList.toggle("dark", m === "dark")
         }, mode)
+        await page.waitForTimeout(400)
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth > document.documentElement.clientWidth
         )

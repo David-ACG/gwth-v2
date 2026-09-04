@@ -21,13 +21,13 @@ export const ARGUMENT = [
     // The board brief calls this "CIPD's 67/33 stat" and the research file
     // cites a cipd.org news page. That page does not carry the figures; the
     // survey that does is CIPD Ireland's HR Practices study with the University
-    // of Limerick (330 HR professionals, 20 May 2026), which says "more than two
-    // thirds" and "one third". The page quotes the source, not the brief.
+    // of Limerick (330 HR professionals, published May 2026). The page links the
+    // survey report itself and quotes its figures.
     kicker: "Figure 01",
-    value: "Two thirds and one third",
-    body: "More than two thirds of HR professionals put AI skills at the top of their development priorities. Only one third of organisations have given their staff AI training.",
-    source: "CIPD Ireland with the University of Limerick, HR Practices survey of 330 HR professionals, May 2026",
-    href: "https://www.rte.ie/news/business/2026/0520/1574248-cipd-survey-on-ai/",
+    value: "67% and one third",
+    body: "67% of HR professionals name AI for HR as their top development priority. Only one third of organisations have given their staff AI training.",
+    source: "CIPD Ireland with the University of Limerick, HR Practices in Ireland 2025 to 2026",
+    href: "https://www.cipd.org/ie/knowledge/reports/hr-practices-ireland-survey/",
   },
   {
     kicker: "Figure 02",
@@ -98,9 +98,9 @@ export function HomeFde() {
               <p className={p.standfirst}>
                 Your members have already used AI. Very few have the
                 foundation to use it well, and the gap between the people who
-                do and the rest is widening, not closing. GWTH is the three
-                month applied foundation your people complete before your own
-                training lands.
+                do and the rest is widening, not closing. GWTH is the
+                three-month applied foundation your people complete before your
+                own training lands.
               </p>
               <div className={p.actions}>
                 <Link href="/contact" className={p.buttonSolid}>
