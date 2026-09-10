@@ -13,6 +13,10 @@ test.describe("Lesson Viewer Page", () => {
     await expect(heading).toContainText("Artificial Intelligence")
   })
 
+  test("has exactly one main landmark", async ({ page }) => {
+    await expect(page.locator("main")).toHaveCount(1)
+  })
+
   test("renders Learn tab", async ({ page }) => {
     await expect(page.getByRole("tab", { name: /learn/i })).toBeVisible()
   })

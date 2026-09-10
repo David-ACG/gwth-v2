@@ -203,6 +203,18 @@ function getAudioElement(): HTMLAudioElement {
   return audio as HTMLAudioElement
 }
 
+describe("EditorialLessonViewer landmark hierarchy", () => {
+  it("keeps the dashboard layout as the lesson document's only main landmark", () => {
+    const { container } = render(
+      <main>
+        <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />
+      </main>
+    )
+
+    expect(container.querySelectorAll("main")).toHaveLength(1)
+  })
+})
+
 // ── Audio bar ────────────────────────────────────────────────────────────────
 
 /**

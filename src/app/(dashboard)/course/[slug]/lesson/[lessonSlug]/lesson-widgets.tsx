@@ -371,7 +371,7 @@ function EdgePill({
  * Right-edge slide-out side panel. Sharp single left border, fixed full
  * height minus the audio bar (`bottom: 64px`). The panel sits at z-30 so
  * the audio bar (z-[5] but rooted in a higher stacking context as a
- * sticky child of `<main>`) still wins on hit-testing inside the lesson
+ * sticky child of the reading container) still wins on hit-testing inside the lesson
  * viewer — but we belt-and-brace by reserving the bottom 64px for the
  * audio bar.
  */
@@ -811,7 +811,7 @@ function MobileDesktopOnlyBanner() {
 
 /**
  * Bottom sheet for the feedback widget on mobile. Sits above the audio
- * bar (audio bar is a sticky child of the lesson viewer's `<main>`, this
+ * bar (audio bar is a sticky child of the lesson viewer's reading container, this
  * sheet is fixed-positioned at `bottom: 76` to clear the bar plus a
  * small gap).
  */

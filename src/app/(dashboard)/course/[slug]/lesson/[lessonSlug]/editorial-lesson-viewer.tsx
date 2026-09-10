@@ -722,7 +722,7 @@ export function EditorialLessonViewer({
           onSelectPage={goToPage}
         />
 
-        <main className="flex flex-1 min-w-0 flex-col">
+        <div className="flex flex-1 min-w-0 flex-col">
           <MastRow
             section={
               isQa
@@ -875,7 +875,7 @@ export function EditorialLessonViewer({
             )}
           </div>
 
-        </main>
+        </div>
       </div>
 
       {widgetEligible && (
