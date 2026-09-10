@@ -1,7 +1,8 @@
 "use client"
 
-import { useOptimistic, useTransition } from "react"
-import { toggleBookmark } from "@/lib/data/bookmarks"
+import { useState, useTransition } from "react"
+import { toggleBookmarkAction } from "@/lib/actions/bookmarks"
+import type { BookmarkTarget } from "@/lib/types"
 import { toast } from "sonner"
 
 /**
@@ -10,29 +11,33 @@ import { toast } from "sonner"
  */
 export function useBookmark(initialBookmarked: boolean) {
   const [isPending, startTransition] = useTransition()
-
-  const [optimisticBookmarked, setOptimisticBookmarked] = useOptimistic(
-    initialBookmarked,
-    (_current, newValue: boolean) => newValue
-  )
+  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked)
 
   /** Toggles bookmark state with optimistic update and toast notification */
-  function toggle(params: { lessonId?: string; labId?: string }) {
-    const newState = !optimisticBookmarked
-    setOptimisticBookmarked(newState)
+  function toggle(params: BookmarkTarget) {
+    const previousState = isBookmarked
+    setIsBookmarked(!previousState)
 
     startTransition(async () => {
-      const result = await toggleBookmark(params)
-      if (result) {
-        toast.success("Bookmarked", { description: "Added to your saved items" })
-      } else {
-        toast.info("Removed bookmark")
+      try {
+        const result = await toggleBookmarkAction(params)
+        setIsBookmarked(result)
+        if (result) {
+          toast.success("Bookmarked", {
+            description: "Added to your saved items",
+          })
+        } else {
+          toast.info("Removed bookmark")
+        }
+      } catch {
+        setIsBookmarked(previousState)
+        toast.error("Bookmark not saved", { description: "Please try again." })
       }
     })
   }
 
   return {
-    isBookmarked: optimisticBookmarked,
+    isBookmarked,
     isPending,
     toggle,
   }

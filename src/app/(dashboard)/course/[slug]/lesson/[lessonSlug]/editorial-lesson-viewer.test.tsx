@@ -243,6 +243,20 @@ describe("EditorialLessonViewer narration control placement", () => {
     expect(precedes(play, body as Element)).toBe(true)
   })
 
+  it("exposes the lesson bookmark control in the current viewer chrome", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="prose"
+        initialBookmarked
+      />
+    )
+
+    expect(
+      screen.getByRole("button", { name: "Remove bookmark" })
+    ).toHaveAttribute("aria-pressed", "true")
+  })
+
   it("sticks to the top of the reading column, not the bottom", () => {
     render(
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />

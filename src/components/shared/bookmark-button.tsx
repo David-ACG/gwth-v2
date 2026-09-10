@@ -5,16 +5,23 @@ import { Button } from "@/components/ui/button"
 import { useBookmark } from "@/hooks/use-bookmark"
 import { cn } from "@/lib/utils"
 
-interface BookmarkButtonProps {
+type BookmarkButtonProps = {
   /** Whether the item is initially bookmarked */
   initialBookmarked: boolean
-  /** Lesson ID (mutually exclusive with labId) */
-  lessonId?: string
-  /** Lab ID (mutually exclusive with lessonId) */
-  labId?: string
   /** Additional CSS classes */
   className?: string
-}
+} & (
+  | {
+      /** Lesson ID (mutually exclusive with labId) */
+      lessonId: string
+      labId?: never
+    }
+  | {
+      /** Lab ID (mutually exclusive with lessonId) */
+      lessonId?: never
+      labId: string
+    }
+)
 
 /**
  * Toggle button for bookmarking lessons and labs.
@@ -26,14 +33,17 @@ export function BookmarkButton({
   labId,
   className,
 }: BookmarkButtonProps) {
-  const { isBookmarked, toggle } = useBookmark(initialBookmarked)
+  const { isBookmarked, isPending, toggle } = useBookmark(initialBookmarked)
+  const target = lessonId ? { lessonId } : { labId: labId! }
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => toggle({ lessonId, labId })}
+      onClick={() => toggle(target)}
       aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+      aria-pressed={isBookmarked}
+      disabled={isPending}
       className={cn("size-8", className)}
     >
       <Bookmark

@@ -595,6 +595,11 @@ export interface Bookmark {
   createdAt: Date
 }
 
+/** Exactly one piece of content addressed by a bookmark mutation. */
+export type BookmarkTarget =
+  | { lessonId: string; labId?: never }
+  | { lessonId?: never; labId: string }
+
 // ─── Note ─────────────────────────────────────────────────────────────────────
 
 /** A personal annotation on a lesson */

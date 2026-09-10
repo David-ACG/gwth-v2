@@ -29,6 +29,7 @@
 //   7. N7 (institution admin, canonical DDL: 019): editionLessons gains
 //      updatedAt/decidedAt/decidedBy/reviewNote + the decided_by FK to
 //      `user` and the idx_edition_lessons_pending partial index.
+//   8. Bookmark persistence (canonical DDL: 020): the bookmarks table below.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -428,6 +429,37 @@ export const lessonProgress = pgTable("lesson_progress", {
 	check("lesson_progress_progress_check", sql`(progress >= (0)::double precision) AND (progress <= (1)::double precision)`),
 	check("lesson_progress_intro_video_progress_check", sql`(intro_video_progress >= (0)::double precision) AND (intro_video_progress <= (1)::double precision)`),
 	check("lesson_progress_graded_by_check", sql`graded_by = ANY (ARRAY['client'::text, 'server'::text])`),
+]);
+
+// 020_bookmarks.sql — learner-owned saved lessons/labs. This declaration is
+// hand-patched because the generated snapshot cannot be refreshed until the
+// migration has been applied to the development database.
+export const bookmarks = pgTable("bookmarks", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	lessonId: text("lesson_id"),
+	labId: text("lab_id"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_bookmarks_user_created").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.createdAt.desc().nullsFirst().op("timestamptz_ops")),
+	uniqueIndex("idx_bookmarks_unique_lesson").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.lessonId.asc().nullsLast().op("text_ops")).where(sql`(lesson_id IS NOT NULL)`),
+	uniqueIndex("idx_bookmarks_unique_lab").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.labId.asc().nullsLast().op("text_ops")).where(sql`(lab_id IS NOT NULL)`),
+	foreignKey({
+		columns: [table.userId],
+		foreignColumns: [user.id],
+		name: "bookmarks_user_id_fkey"
+	}).onDelete("cascade"),
+	foreignKey({
+		columns: [table.lessonId],
+		foreignColumns: [lessons.id],
+		name: "bookmarks_lesson_id_fkey"
+	}).onDelete("cascade"),
+	foreignKey({
+		columns: [table.labId],
+		foreignColumns: [labs.id],
+		name: "bookmarks_lab_id_fkey"
+	}).onDelete("cascade"),
+	check("bookmarks_exactly_one_target_check", sql`((lesson_id IS NOT NULL)::integer + (lab_id IS NOT NULL)::integer) = 1`),
 ]);
 
 export const credentialVerifications = pgTable("credential_verifications", {

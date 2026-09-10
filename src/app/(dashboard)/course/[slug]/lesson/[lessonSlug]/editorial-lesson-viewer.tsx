@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sheet"
 import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
+import { BookmarkButton } from "@/components/shared/bookmark-button"
 import {
   alignPagesToAudio,
   estimatePageStarts,
@@ -188,6 +189,8 @@ interface EditorialLessonViewerProps {
    * video gate and Q&A pick up where the user left off.
    */
   initialProgress?: LessonProgress | null
+  /** Whether this lesson is already saved by the current learner. */
+  initialBookmarked?: boolean
   /** Next lesson in course order, for the lesson-complete surface. */
   nextLesson?: EditorialNextLesson | null
   /** Href back to the parent course page. */
@@ -250,6 +253,7 @@ export function EditorialLessonViewer({
   initialPage = 1,
   initialWidgetSurface = "none",
   initialProgress = null,
+  initialBookmarked = false,
   nextLesson = null,
   courseHref,
   chrome,
@@ -640,6 +644,7 @@ export function EditorialLessonViewer({
         {audioElement}
         <MobileSurface
           lesson={lesson}
+          initialBookmarked={initialBookmarked}
           pageNum={pageNum}
           playing={playing}
           audioAvailable={Boolean(audioSrc)}
@@ -755,6 +760,8 @@ export function EditorialLessonViewer({
               videoFraction={watchedFraction}
               videoCleared={videoCleared}
               quizPassed={quizPassed}
+              initialBookmarked={initialBookmarked}
+              lessonId={lesson.id}
             />
 
             {/* The narration control sits directly under the lesson title and
@@ -1157,6 +1164,8 @@ function LessonChrome({
   videoFraction = 0,
   videoCleared = false,
   quizPassed = false,
+  initialBookmarked,
+  lessonId,
 }: {
   monthLabel: string
   lessonNumber: number
@@ -1169,6 +1178,8 @@ function LessonChrome({
   videoFraction?: number
   videoCleared?: boolean
   quizPassed?: boolean
+  initialBookmarked: boolean
+  lessonId: string
 }) {
   // The lesson bar is the single progress channel: segment 1 fills as the
   // intro video is watched (tick at the 80% gate), middle segments fill by
@@ -1194,9 +1205,16 @@ function LessonChrome({
           PAGE {pageNum} OF {pageTotal}
         </div>
       </div>
-      <h1 className="mt-3 max-w-[720px] text-[32px] font-semibold leading-[1.12] tracking-[-0.02em]">
-        {title}
-      </h1>
+      <div className="mt-3 flex items-start justify-between gap-4">
+        <h1 className="max-w-[720px] text-[32px] font-semibold leading-[1.12] tracking-[-0.02em]">
+          {title}
+        </h1>
+        <BookmarkButton
+          initialBookmarked={initialBookmarked}
+          lessonId={lessonId}
+          className="shrink-0 border border-border"
+        />
+      </div>
 
       <div className="mt-[18px] grid grid-cols-2 gap-[18px]">
         <div>
@@ -2753,6 +2771,7 @@ function LessonCompleteSurface({
 
 function MobileSurface({
   lesson,
+  initialBookmarked,
   pageNum,
   playing,
   audioAvailable,
@@ -2767,6 +2786,7 @@ function MobileSurface({
   onSelectPage,
 }: {
   lesson: EditorialLessonMeta
+  initialBookmarked: boolean
   pageNum: number
   playing: boolean
   audioAvailable: boolean
@@ -2848,9 +2868,16 @@ function MobileSurface({
             P{pageNum} / {lesson.pages.length}
           </div>
         </div>
-        <h1 className="my-2 mb-3.5 text-[22px] font-semibold leading-[1.2] tracking-[-0.02em]">
-          {lesson.title}
-        </h1>
+        <div className="my-2 mb-3.5 flex items-start justify-between gap-3">
+          <h1 className="text-[22px] font-semibold leading-[1.2] tracking-[-0.02em]">
+            {lesson.title}
+          </h1>
+          <BookmarkButton
+            initialBookmarked={initialBookmarked}
+            lessonId={lesson.id}
+            className="shrink-0 border border-border"
+          />
+        </div>
         <SegmentedBar value={pageNum - 1} total={lesson.pages.length} />
       </div>
 

@@ -9,6 +9,7 @@ import { getCourse } from "@/lib/data/courses"
 import { getEffectivePassMark } from "@/lib/data/editions"
 import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
 import { getAllCourseProgress, getLessonProgress } from "@/lib/data/progress"
+import { isBookmarked } from "@/lib/data/bookmarks"
 import { cn } from "@/lib/utils"
 import {
   EditorialLessonViewer,
@@ -150,7 +151,10 @@ export default async function LessonPage({
   // Per-user persisted progress for this lesson (null when never started, or
   // when unauthenticated — the viewer then starts from a clean slate and
   // writes are safe no-ops server-side).
-  const lessonProgress = await getLessonProgress(lesson.id)
+  const [lessonProgress, lessonBookmarked] = await Promise.all([
+    getLessonProgress(lesson.id),
+    isBookmarked({ lessonId: lesson.id }),
+  ])
 
   const courseProgress = allProgress.find((p) => p.courseId === course.id)
   const monthLessonCount = course.sections
@@ -229,6 +233,7 @@ export default async function LessonPage({
         initialPage={Number.isFinite(initialPage) ? initialPage : 1}
         initialWidgetSurface={initialWidgetSurface}
         initialProgress={lessonProgress}
+        initialBookmarked={lessonBookmarked}
         nextLesson={await findNextLesson(course, lessonSlug)}
         courseHref={`/course/${course.slug}`}
         chrome={chrome}
