@@ -287,7 +287,9 @@ export function EditorialLessonViewer({
   const audioSrc = mediaUrl(lesson.audioFileUrl) || null
   const audioRef = React.useRef<HTMLAudioElement>(null)
   const [audioTime, setAudioTime] = React.useState(0)
-  const [audioDur, setAudioDur] = React.useState(lesson.audioDuration ?? 0)
+  const [durationState, setDurationState] = React.useState({source: audioSrc, value: lesson.audioDuration ?? 0})
+  const audioDur = durationState.source === audioSrc ? durationState.value : lesson.audioDuration ?? 0
+  const setAudioDur = (value: number) => setDurationState({source: audioSrc, value})
   const advanceTimer = React.useRef<ReturnType<typeof setTimeout> | null>(
     null
   )
@@ -319,7 +321,8 @@ export function EditorialLessonViewer({
   )
   // Recompute estimates when metadata supplies the duration, but always
   // prefer word-timing alignment once it arrives.
-  const [alignedPageStarts, setAlignedPageStarts] = React.useState<(number | null)[] | null>(null)
+  const [alignment, setAlignment] = React.useState<{source: string | null; pages: typeof lesson.pages; starts: (number | null)[]} | null>(null)
+  const alignedPageStarts = alignment?.source === audioSrc && alignment.pages === lesson.pages ? alignment.starts : null
   const pageStarts = React.useMemo(
     () => {
       const estimates = estimatePageStarts(narratedPages, audioDur)
@@ -345,14 +348,14 @@ export function EditorialLessonViewer({
       .then((r) => (r.ok ? r.json() : null))
       .then((words: AudioWord[] | null) => {
         if (cancelled || !Array.isArray(words) || words.length === 0) return
-        setAlignedPageStarts(alignPagesToAudio(narratedPages, words))
+        setAlignment({source: audioSrc, pages: lesson.pages, starts: alignPagesToAudio(narratedPages, words)})
       })
       // No sidecar (or it failed to load): keep the proportional estimate.
       .catch(() => {})
     return () => {
       cancelled = true
     }
-  }, [audioSrc, narratedPages])
+  }, [audioSrc, narratedPages, lesson.pages])
 
   /**
    * Moves the playhead to the top of a page's narration. Called on every page
@@ -509,7 +512,7 @@ export function EditorialLessonViewer({
     if (!audio || !audioSrc) return
     if (surface === "advancing") cancelAdvance()
     if (audio.paused) {
-      if (narratedPages[pageNum - 1]?.narrated && pageStarts[pageNum - 1] == null) {
+      if (narratedPages[pageNum - 1]?.narrated && pageStarts[pageNum - 1] == null && pageNum !== narratedPages.findIndex((page) => page.narrated) + 1) {
         toast.info("Audio is loading. Please press Play again in a moment.")
         return
       }

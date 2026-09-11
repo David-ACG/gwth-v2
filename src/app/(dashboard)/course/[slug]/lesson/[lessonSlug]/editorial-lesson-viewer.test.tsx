@@ -820,11 +820,11 @@ describe("EditorialLessonViewer narration start position", () => {
       const audio = getAudioElement()
       await user.click(screen.getByRole("button", { name: /Play narration/ }))
       if (timing === "late") {
-        expect(audio.paused).toBe(true)
+        expect(audio.paused).toBe(initialPage !== 1)
         expect(audio.currentTime).toBe(0)
         Object.defineProperty(audio, "duration", { configurable: true, value: 300 })
         fireEvent.loadedMetadata(audio)
-        await user.click(screen.getByRole("button", { name: /Play narration/ }))
+        if (initialPage !== 1) await user.click(screen.getByRole("button", { name: /Play narration/ }))
       }
       expect(audio.currentTime).toBe((initialPage - 1) * 100)
       expect(audio.paused).toBe(false)
@@ -874,6 +874,27 @@ describe("EditorialLessonViewer narration start position", () => {
       }
     }
   )
+
+  it("discards aligned timing when the audio source changes", async () => {
+    const user = userEvent.setup()
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify([
+      {word: "one", start: 0}, {word: "alpha", start: 1}, {word: "two", start: 75},
+      {word: "echo", start: 76}, {word: "three", start: 180},
+    ])))
+    try {
+      const view = renderNarrated(2)
+      await act(async () => { await Promise.resolve() })
+      await user.click(screen.getByRole("button", {name: /Play narration/}))
+      expect(getAudioElement().currentTime).toBe(75)
+      await user.click(screen.getByRole("button", {name: /Pause narration/}))
+      fetchSpy.mockRejectedValue(new Error("new sidecar missing"))
+      view.rerender(<EditorialLessonViewer lesson={makeLesson({pages: NARRATED_PAGES, introVideoUrl: null,
+        audioFileUrl: "https://media.test/new.wav", audioDuration: 600})} initialSurface="prose" initialPage={2} />)
+      getAudioElement().currentTime = 0
+      await user.click(screen.getByRole("button", {name: /Play narration/}))
+      expect(getAudioElement().currentTime).toBe(200)
+    } finally { fetchSpy.mockRestore() }
+  })
 
   it("moves the playhead to the page opened from the outline rail", async () => {
     const user = userEvent.setup()
