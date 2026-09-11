@@ -896,6 +896,37 @@ describe("EditorialLessonViewer narration start position", () => {
     } finally { fetchSpy.mockRestore() }
   })
 
+  it("pauses when navigating to a page without timing", async () => {
+    const user = userEvent.setup()
+    render(<EditorialLessonViewer lesson={makeLesson({pages: NARRATED_PAGES,
+      introVideoUrl: null, audioDuration: undefined})} initialSurface="prose" initialPage={1} />)
+    await user.click(screen.getByRole("button", {name: /Play narration/}))
+    expect(getAudioElement().paused).toBe(false)
+    await user.click(screen.getAllByRole("button", {name: /Two/})[0]!)
+    expect(getAudioElement().paused).toBe(true)
+    Object.defineProperty(getAudioElement(), "duration", {configurable: true, value: 300})
+    fireEvent.loadedMetadata(getAudioElement())
+    await user.click(screen.getByRole("button", {name: /Play narration/}))
+    expect(getAudioElement().currentTime).toBe(100)
+  })
+
+  it("keeps alignment across an identical lesson refresh", async () => {
+    const user = userEvent.setup()
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify([
+      {word: "one", start: 0}, {word: "alpha", start: 1}, {word: "two", start: 75},
+      {word: "echo", start: 76}, {word: "three", start: 180},
+    ])))
+    try {
+      const view = renderNarrated(2)
+      await act(async () => { await Promise.resolve() })
+      fetchSpy.mockRejectedValue(new Error("offline"))
+      view.rerender(<EditorialLessonViewer lesson={makeLesson({pages: NARRATED_PAGES.map(p => ({...p})),
+        introVideoUrl: null, audioDuration: 300})} initialSurface="prose" initialPage={2} />)
+      await user.click(screen.getByRole("button", {name: /Play narration/}))
+      expect(getAudioElement().currentTime).toBe(75)
+    } finally { fetchSpy.mockRestore() }
+  })
+
   it("moves the playhead to the page opened from the outline rail", async () => {
     const user = userEvent.setup()
     renderNarrated()

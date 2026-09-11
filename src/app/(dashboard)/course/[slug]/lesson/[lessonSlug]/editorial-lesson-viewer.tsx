@@ -321,8 +321,9 @@ export function EditorialLessonViewer({
   )
   // Recompute estimates when metadata supplies the duration, but always
   // prefer word-timing alignment once it arrives.
-  const [alignment, setAlignment] = React.useState<{source: string | null; pages: typeof lesson.pages; starts: (number | null)[]} | null>(null)
-  const alignedPageStarts = alignment?.source === audioSrc && alignment.pages === lesson.pages ? alignment.starts : null
+  const narrationKey = JSON.stringify(narratedPages)
+  const [alignment, setAlignment] = React.useState<{source: string | null; pages: string; starts: (number | null)[]} | null>(null)
+  const alignedPageStarts = alignment?.source === audioSrc && alignment.pages === narrationKey ? alignment.starts : null
   const pageStarts = React.useMemo(
     () => {
       const estimates = estimatePageStarts(narratedPages, audioDur)
@@ -348,14 +349,14 @@ export function EditorialLessonViewer({
       .then((r) => (r.ok ? r.json() : null))
       .then((words: AudioWord[] | null) => {
         if (cancelled || !Array.isArray(words) || words.length === 0) return
-        setAlignment({source: audioSrc, pages: lesson.pages, starts: alignPagesToAudio(narratedPages, words)})
+        setAlignment({source: audioSrc, pages: narrationKey, starts: alignPagesToAudio(narratedPages, words)})
       })
       // No sidecar (or it failed to load): keep the proportional estimate.
       .catch(() => {})
     return () => {
       cancelled = true
     }
-  }, [audioSrc, narratedPages, lesson.pages])
+  }, [audioSrc, narratedPages, narrationKey])
 
   /**
    * Moves the playhead to the top of a page's narration. Called on every page
@@ -417,7 +418,11 @@ export function EditorialLessonViewer({
       // just opened, whether they got there by CONTINUE or by clicking the
       // outline rail. Playback state is left as it was, so this cues a paused
       // reader and carries a listening one straight into the new section.
-      seekToPageStart(clamped)
+      if (pageStarts[clamped - 1] == null) {
+        audioRef.current?.pause()
+      } else {
+        seekToPageStart(clamped)
+      }
       setSurface(
         audioRef.current && !audioRef.current.paused ? "prose-playing" : "prose"
       )
