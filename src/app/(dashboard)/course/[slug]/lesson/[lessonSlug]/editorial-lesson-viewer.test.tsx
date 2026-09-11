@@ -824,6 +824,7 @@ describe("EditorialLessonViewer narration start position", () => {
         expect(audio.currentTime).toBe(0)
         Object.defineProperty(audio, "duration", { configurable: true, value: 300 })
         fireEvent.loadedMetadata(audio)
+        await user.click(screen.getByRole("button", { name: /Play narration/ }))
       }
       expect(audio.currentTime).toBe(100)
       expect(audio.paused).toBe(false)

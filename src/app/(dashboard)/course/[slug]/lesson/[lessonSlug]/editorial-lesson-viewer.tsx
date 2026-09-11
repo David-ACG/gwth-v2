@@ -320,7 +320,10 @@ export function EditorialLessonViewer({
   // prefer word-timing alignment once it arrives.
   const [alignedPageStarts, setAlignedPageStarts] = React.useState<(number | null)[] | null>(null)
   const pageStarts = React.useMemo(
-    () => alignedPageStarts ?? estimatePageStarts(narratedPages, audioDur),
+    () => {
+      const estimates = estimatePageStarts(narratedPages, audioDur)
+      return estimates.map((estimate, index) => alignedPageStarts?.[index] ?? estimate)
+    },
     [alignedPageStarts, narratedPages, audioDur]
   )
   // The timeupdate listener is attached once per audio source, so it closes
@@ -329,22 +332,6 @@ export function EditorialLessonViewer({
   // way the listener already reads the live page number.
   const pageStartsRef = React.useRef(pageStarts)
   pageStartsRef.current = pageStarts
-  const pendingSeekPage = React.useRef<number | null>(null)
-  const pendingPlay = React.useRef(false)
-
-  React.useEffect(() => {
-    const page = pendingSeekPage.current
-    if (page === null) return
-    const start = pageStarts[page - 1]
-    if (start == null || !audioRef.current) return
-    audioRef.current.currentTime = start
-    setAudioTime(start)
-    pendingSeekPage.current = null
-    if (pendingPlay.current) {
-      pendingPlay.current = false
-      void audioRef.current.play().catch(() => toast.error("The narration audio could not be played."))
-    }
-  }, [pageStarts])
 
   React.useEffect(() => {
     // Through the site's own proxy: the media CDN sends no CORS header, so a
@@ -374,12 +361,7 @@ export function EditorialLessonViewer({
   function seekToPageStart(page: number) {
     const audio = audioRef.current
     const start = pageStarts[page - 1]
-    if (!audio) return
-    if (start == null) {
-      pendingSeekPage.current = page
-      return
-    }
-    pendingSeekPage.current = null
+    if (!audio || start == null) return
     audio.currentTime = start
     setAudioTime(start)
   }
@@ -423,8 +405,6 @@ export function EditorialLessonViewer({
     const kind = lesson.pages[clamped - 1]?.kind
     setPageNum(clamped)
     if (kind === "video" || kind === "qa") {
-      pendingSeekPage.current = null
-      pendingPlay.current = false
       // Narration mutes for the video page and stops for the Q&A.
       audioRef.current?.pause()
       setSurface(kind === "video" ? "video" : "qa")
@@ -528,14 +508,8 @@ export function EditorialLessonViewer({
     if (!audio || !audioSrc) return
     if (surface === "advancing") cancelAdvance()
     if (audio.paused) {
-      if (pendingPlay.current) {
-        pendingPlay.current = false
-        pendingSeekPage.current = null
-        return
-      }
       if (narratedPages[pageNum - 1]?.narrated && pageStarts[pageNum - 1] == null) {
-        pendingPlay.current = true
-        seekToPageStart(pageNum)
+        toast.info("Audio is loading. Please press Play again in a moment.")
         return
       }
       if (!playheadIsOnPage(pageNum)) seekToPageStart(pageNum)
