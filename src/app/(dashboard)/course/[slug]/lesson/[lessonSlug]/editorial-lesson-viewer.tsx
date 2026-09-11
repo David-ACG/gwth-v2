@@ -316,10 +316,12 @@ export function EditorialLessonViewer({
       })),
     [lesson.pages]
   )
-  // Seed with the proportional estimate so the very first play is already on
-  // the right page; the word-timing alignment replaces it when it arrives.
-  const [pageStarts, setPageStarts] = React.useState<(number | null)[]>(() =>
-    estimatePageStarts(narratedPages, lesson.audioDuration ?? 0)
+  // Recompute estimates when metadata supplies the duration, but always
+  // prefer word-timing alignment once it arrives.
+  const [alignedPageStarts, setAlignedPageStarts] = React.useState<(number | null)[] | null>(null)
+  const pageStarts = React.useMemo(
+    () => alignedPageStarts ?? estimatePageStarts(narratedPages, audioDur),
+    [alignedPageStarts, narratedPages, audioDur]
   )
   // The timeupdate listener is attached once per audio source, so it closes
   // over the FIRST render's offsets — which are the estimates, replaced a
@@ -339,7 +341,7 @@ export function EditorialLessonViewer({
       .then((r) => (r.ok ? r.json() : null))
       .then((words: AudioWord[] | null) => {
         if (cancelled || !Array.isArray(words) || words.length === 0) return
-        setPageStarts(alignPagesToAudio(narratedPages, words))
+        setAlignedPageStarts(alignPagesToAudio(narratedPages, words))
       })
       // No sidecar (or it failed to load): keep the proportional estimate.
       .catch(() => {})

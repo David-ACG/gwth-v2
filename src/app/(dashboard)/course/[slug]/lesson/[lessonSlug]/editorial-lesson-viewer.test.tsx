@@ -4,7 +4,7 @@
  * grading, and every progress write going through the single W7-tested
  * server action (`updateLessonProgressAction`).
  */
-import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react"
+import { render, screen, cleanup, fireEvent, waitFor, act } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, it, expect, vi, beforeAll, afterEach } from "vitest"
 import {
@@ -783,6 +783,71 @@ describe("EditorialLessonViewer narration start position", () => {
       />
     )
   }
+
+  it("starts page 2 at its estimated offset after missing duration loads", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson({
+          pages: NARRATED_PAGES,
+          introVideoUrl: null,
+          audioDuration: undefined,
+        })}
+        initialSurface="prose"
+        initialPage={2}
+      />
+    )
+    const audio = getAudioElement()
+    expect(audio.currentTime).toBe(0)
+    Object.defineProperty(audio, "duration", { configurable: true, value: 300 })
+    fireEvent.loadedMetadata(audio)
+
+    await user.click(screen.getByRole("button", { name: /Play narration/ }))
+    expect(audio.currentTime).toBe(100)
+    expect(audio.paused).toBe(false)
+    expect(screen.getAllByText("PAGE 2 OF 3").length).toBeGreaterThan(0)
+  })
+
+  it.each(["before", "after"])(
+    "keeps timestamp alignment when metadata loads %s the timestamps",
+    async (order) => {
+      const user = userEvent.setup()
+      let resolveTimings!: (response: Response) => void
+      const fetchSpy = vi.spyOn(globalThis, "fetch").mockReturnValue(
+        new Promise<Response>((resolve) => { resolveTimings = resolve })
+      )
+      try {
+        renderNarrated(2)
+        const audio = getAudioElement()
+        Object.defineProperty(audio, "duration", { configurable: true, value: 600 })
+        if (order === "before") fireEvent.loadedMetadata(audio)
+        await act(async () => {
+          resolveTimings(new Response(JSON.stringify([
+            { word: "one", start: 0 },
+            { word: "alpha", start: 1 },
+            { word: "bravo", start: 2 },
+            { word: "charlie", start: 3 },
+            { word: "delta", start: 4 },
+            { word: "two", start: 75 },
+            { word: "echo", start: 76 },
+            { word: "foxtrot", start: 77 },
+            { word: "golf", start: 78 },
+            { word: "hotel", start: 79 },
+            { word: "three", start: 180 },
+          ])))
+        })
+        if (order === "after") fireEvent.loadedMetadata(audio)
+
+        await user.click(screen.getByRole("button", { name: /Play narration/ }))
+        expect(audio.currentTime).toBe(75)
+        audio.currentTime = 181
+        fireEvent.timeUpdate(audio)
+        expect(screen.getAllByText("PAGE 3 OF 3").length).toBeGreaterThan(0)
+      } finally {
+        fetchSpy.mockRestore()
+      }
+    }
+  )
 
   it("moves the playhead to the page opened from the outline rail", async () => {
     const user = userEvent.setup()
