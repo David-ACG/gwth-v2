@@ -267,3 +267,26 @@ export function estimatePageStarts(
   }
   return starts
 }
+
+/** Fill unmatched page boundaries between their known neighbours. */
+export function fillPageStarts(
+  estimates: (number | null)[],
+  aligned: (number | null)[] | null,
+  duration: number,
+): (number | null)[] {
+  if (!aligned) return estimates
+  return estimates.map((estimate, index) => {
+    if (aligned[index] != null) return aligned[index]!
+    if (estimate == null) return null
+    let left = index - 1
+    while (left >= 0 && aligned[left] == null) left--
+    let right = index + 1
+    while (right < estimates.length && aligned[right] == null) right++
+    const low = left >= 0 ? aligned[left]! : 0
+    const high = right < estimates.length ? aligned[right]! : duration
+    const from = left >= 0 ? (estimates[left] ?? 0) : 0
+    const to = right < estimates.length ? (estimates[right] ?? duration) : duration
+    if (to <= from || high < low) return low
+    return low + (high - low) * Math.max(0, Math.min(1, (estimate - from) / (to - from)))
+  })
+}

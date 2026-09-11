@@ -3,6 +3,7 @@ import {
   alignPagesToAudio,
   alignWords,
   estimatePageStarts,
+  fillPageStarts,
   spokenWords,
   timestampsUrlFor,
   type AudioWord,
@@ -199,5 +200,17 @@ describe("estimatePageStarts", () => {
     expect(
       estimatePageStarts([{ content: "a b c", narrated: true }], 0)
     ).toEqual([null])
+  })
+})
+
+describe("fillPageStarts", () => {
+  it("keeps missing boundaries between known aligned neighbours", () => {
+    expect(fillPageStarts([0, 200, 400], [0, null, 180], 600)).toEqual([0, 90, 180])
+  })
+  it("fills a trailing gap using the remaining duration", () => {
+    expect(fillPageStarts([0, 200, 400], [0, 100, null], 600)).toEqual([0, 100, 350])
+  })
+  it("preserves non-narrated gaps and complete precise timings", () => {
+    expect(fillPageStarts([null, 0, 200], [null, 5, 190], 400)).toEqual([null, 5, 190])
   })
 })

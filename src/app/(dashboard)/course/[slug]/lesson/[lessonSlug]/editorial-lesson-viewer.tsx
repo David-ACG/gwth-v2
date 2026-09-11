@@ -26,6 +26,7 @@ import { BookmarkButton } from "@/components/shared/bookmark-button"
 import {
   alignPagesToAudio,
   estimatePageStarts,
+  fillPageStarts,
   timestampsFetchUrl,
   type AudioWord,
 } from "@/lib/lessons/audio-alignment"
@@ -322,7 +323,7 @@ export function EditorialLessonViewer({
   const pageStarts = React.useMemo(
     () => {
       const estimates = estimatePageStarts(narratedPages, audioDur)
-      return estimates.map((estimate, index) => alignedPageStarts?.[index] ?? estimate)
+      return fillPageStarts(estimates, alignedPageStarts, audioDur)
     },
     [alignedPageStarts, narratedPages, audioDur]
   )
