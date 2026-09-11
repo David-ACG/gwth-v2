@@ -329,6 +329,17 @@ export function EditorialLessonViewer({
   // way the listener already reads the live page number.
   const pageStartsRef = React.useRef(pageStarts)
   pageStartsRef.current = pageStarts
+  const pendingSeekPage = React.useRef<number | null>(null)
+
+  React.useEffect(() => {
+    const page = pendingSeekPage.current
+    if (page === null) return
+    const start = pageStarts[page - 1]
+    if (start == null || !audioRef.current) return
+    audioRef.current.currentTime = start
+    setAudioTime(start)
+    pendingSeekPage.current = null
+  }, [pageStarts])
 
   React.useEffect(() => {
     // Through the site's own proxy: the media CDN sends no CORS header, so a
@@ -358,7 +369,12 @@ export function EditorialLessonViewer({
   function seekToPageStart(page: number) {
     const audio = audioRef.current
     const start = pageStarts[page - 1]
-    if (!audio || start === null || start === undefined) return
+    if (!audio) return
+    if (start == null) {
+      pendingSeekPage.current = page
+      return
+    }
+    pendingSeekPage.current = null
     audio.currentTime = start
     setAudioTime(start)
   }
@@ -402,6 +418,7 @@ export function EditorialLessonViewer({
     const kind = lesson.pages[clamped - 1]?.kind
     setPageNum(clamped)
     if (kind === "video" || kind === "qa") {
+      pendingSeekPage.current = null
       // Narration mutes for the video page and stops for the Q&A.
       audioRef.current?.pause()
       setSurface(kind === "video" ? "video" : "qa")
@@ -452,6 +469,7 @@ export function EditorialLessonViewer({
     audio.addEventListener("play", handlePlay)
     audio.addEventListener("pause", handlePause)
     audio.addEventListener("ended", handleEnded)
+    if (audio.readyState >= 1) handleLoadedMetadata()
     return () => {
       audio.removeEventListener("timeupdate", handleTimeUpdate)
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata)
@@ -504,7 +522,7 @@ export function EditorialLessonViewer({
     if (!audio || !audioSrc) return
     if (surface === "advancing") cancelAdvance()
     if (audio.paused) {
-      if (!playheadIsOnPage(pageNum)) seekToPageStart(pageNum)
+      if (pageStarts[pageNum - 1] == null || !playheadIsOnPage(pageNum)) seekToPageStart(pageNum)
       void audio.play().catch(() => {
         toast.error("The narration audio could not be played.")
       })

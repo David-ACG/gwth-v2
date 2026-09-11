@@ -808,6 +808,26 @@ describe("EditorialLessonViewer narration start position", () => {
     expect(screen.getAllByText("PAGE 2 OF 3").length).toBeGreaterThan(0)
   })
 
+  it.each(["cached", "late"])("seeks page 2 with %s metadata", async (timing) => {
+    const user = userEvent.setup()
+    if (timing === "cached") {
+      vi.spyOn(HTMLMediaElement.prototype, "readyState", "get").mockReturnValue(1)
+      vi.spyOn(HTMLMediaElement.prototype, "duration", "get").mockReturnValue(300)
+    }
+    render(<EditorialLessonViewer
+      lesson={makeLesson({ pages: NARRATED_PAGES, introVideoUrl: null, audioDuration: undefined })}
+      initialSurface="prose" initialPage={2}
+    />)
+    const audio = getAudioElement()
+    await user.click(screen.getByRole("button", { name: /Play narration/ }))
+    if (timing === "late") {
+      Object.defineProperty(audio, "duration", { configurable: true, value: 300 })
+      fireEvent.loadedMetadata(audio)
+    }
+    expect(audio.currentTime).toBe(100)
+    expect(audio.paused).toBe(false)
+  })
+
   it.each(["before", "after"])(
     "keeps timestamp alignment when metadata loads %s the timestamps",
     async (order) => {
