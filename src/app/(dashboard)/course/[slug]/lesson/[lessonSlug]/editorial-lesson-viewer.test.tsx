@@ -810,22 +810,27 @@ describe("EditorialLessonViewer narration start position", () => {
 
   it.each(["cached", "late"])("seeks page 2 with %s metadata", async (timing) => {
     const user = userEvent.setup()
-    if (timing === "cached") {
-      vi.spyOn(HTMLMediaElement.prototype, "readyState", "get").mockReturnValue(1)
-      vi.spyOn(HTMLMediaElement.prototype, "duration", "get").mockReturnValue(300)
+    const readySpy = vi.spyOn(HTMLMediaElement.prototype, "readyState", "get").mockReturnValue(timing === "cached" ? 1 : 0)
+    const durationSpy = vi.spyOn(HTMLMediaElement.prototype, "duration", "get").mockReturnValue(timing === "cached" ? 300 : NaN)
+    try {
+      render(<EditorialLessonViewer
+        lesson={makeLesson({ pages: NARRATED_PAGES, introVideoUrl: null, audioDuration: undefined })}
+        initialSurface="prose" initialPage={2}
+      />)
+      const audio = getAudioElement()
+      await user.click(screen.getByRole("button", { name: /Play narration/ }))
+      if (timing === "late") {
+        expect(audio.paused).toBe(true)
+        expect(audio.currentTime).toBe(0)
+        Object.defineProperty(audio, "duration", { configurable: true, value: 300 })
+        fireEvent.loadedMetadata(audio)
+      }
+      expect(audio.currentTime).toBe(100)
+      expect(audio.paused).toBe(false)
+    } finally {
+      readySpy.mockRestore()
+      durationSpy.mockRestore()
     }
-    render(<EditorialLessonViewer
-      lesson={makeLesson({ pages: NARRATED_PAGES, introVideoUrl: null, audioDuration: undefined })}
-      initialSurface="prose" initialPage={2}
-    />)
-    const audio = getAudioElement()
-    await user.click(screen.getByRole("button", { name: /Play narration/ }))
-    if (timing === "late") {
-      Object.defineProperty(audio, "duration", { configurable: true, value: 300 })
-      fireEvent.loadedMetadata(audio)
-    }
-    expect(audio.currentTime).toBe(100)
-    expect(audio.paused).toBe(false)
   })
 
   it.each(["before", "after"])(

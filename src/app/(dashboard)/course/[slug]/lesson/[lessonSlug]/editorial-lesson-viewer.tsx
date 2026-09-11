@@ -330,6 +330,7 @@ export function EditorialLessonViewer({
   const pageStartsRef = React.useRef(pageStarts)
   pageStartsRef.current = pageStarts
   const pendingSeekPage = React.useRef<number | null>(null)
+  const pendingPlay = React.useRef(false)
 
   React.useEffect(() => {
     const page = pendingSeekPage.current
@@ -339,6 +340,10 @@ export function EditorialLessonViewer({
     audioRef.current.currentTime = start
     setAudioTime(start)
     pendingSeekPage.current = null
+    if (pendingPlay.current) {
+      pendingPlay.current = false
+      void audioRef.current.play().catch(() => toast.error("The narration audio could not be played."))
+    }
   }, [pageStarts])
 
   React.useEffect(() => {
@@ -419,6 +424,7 @@ export function EditorialLessonViewer({
     setPageNum(clamped)
     if (kind === "video" || kind === "qa") {
       pendingSeekPage.current = null
+      pendingPlay.current = false
       // Narration mutes for the video page and stops for the Q&A.
       audioRef.current?.pause()
       setSurface(kind === "video" ? "video" : "qa")
@@ -522,7 +528,17 @@ export function EditorialLessonViewer({
     if (!audio || !audioSrc) return
     if (surface === "advancing") cancelAdvance()
     if (audio.paused) {
-      if (pageStarts[pageNum - 1] == null || !playheadIsOnPage(pageNum)) seekToPageStart(pageNum)
+      if (pendingPlay.current) {
+        pendingPlay.current = false
+        pendingSeekPage.current = null
+        return
+      }
+      if (narratedPages[pageNum - 1]?.narrated && pageStarts[pageNum - 1] == null) {
+        pendingPlay.current = true
+        seekToPageStart(pageNum)
+        return
+      }
+      if (!playheadIsOnPage(pageNum)) seekToPageStart(pageNum)
       void audio.play().catch(() => {
         toast.error("The narration audio could not be played.")
       })
