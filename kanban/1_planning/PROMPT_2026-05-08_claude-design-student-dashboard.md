@@ -1,3 +1,4 @@
+<!-- design-authority: historical. Marked 2026-09-13 (bead gwth-launch-88z.8.1): this brief predates the current design register and names a retired design authority (Stone & Sage). It is kept as a record and is REFUSED for replay by scripts/design_preflight.py and the kanban runner. Write a new brief against the current Style Bible items (scripts/bible_authority.py brief) instead. -->
 # Prompt: Claude Design — Student Dashboard
 
 > **Refreshed 2026-05-08.** The original aqua/mint/Inter brief was written before the E2-E "Stone & Sage" lock-in (2026-04-29) and the home-page port (2026-05-08). The full brief and reference assets now live as a single drag-drop bundle at:

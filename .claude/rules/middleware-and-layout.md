@@ -44,17 +44,17 @@ export const config = {
 The root layout wires up fonts, providers, and global UI:
 
 ```tsx
-// app/layout.tsx
-import { Inter, JetBrains_Mono } from "next/font/google";
+// app/layout.tsx (fonts per the paper-first register: Bitter + Public Sans,
+// JetBrains Mono for monospaced CONTENT only; see DESIGN_PAPER_FIRST.md)
+import { Bitter, JetBrains_Mono, Public_Sans } from "next/font/google";
 import { RootProvider } from "@/providers/root-provider";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
-});
+const bitter = Bitter({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-bitter", display: "swap" });
+const publicSans = Public_Sans({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-public-sans", display: "swap" });
+// Monospaced CONTENT only (code blocks, terminal output), never a label face.
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -85,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${bitter.variable} ${publicSans.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased">

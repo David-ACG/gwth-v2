@@ -1,3 +1,4 @@
+<!-- design-authority: historical. FDE journal register, superseded 2026-09-02 by bible paper-first-register (annex 15). Kept because gwth.ai production still ships this register until N12 is approved and published, and because bridged pages keep FDE layout recipes. Never a source for colour, type, corners or new composition. Current: DESIGN_PAPER_FIRST.md. -->
 # Design System: GWTH.ai — FDE Journal Register
 
 > **SUPERSEDED for new and rebuilt surfaces (2026-09-03, N12).** Sections 1 and

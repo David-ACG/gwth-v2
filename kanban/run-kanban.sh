@@ -60,6 +60,22 @@ for FILE in "${PROMPTS[@]}"; do
     NAME=$(basename "$FILE")
     CONTENT=$(cat "$FILE")
 
+    # Design-authority preflight (GWTH-launch-plan bead gwth-launch-88z.8.1): a visual
+    # brief naming a retired register, a superseded Style Bible item, a historical
+    # marker or no design surface is refused and left in 1_planning; a passing
+    # visual brief gets the generated design brief appended.
+    DESIGN_GATE=/home/david/projects/GWTH-launch-plan/scripts/design_preflight.py
+    if GATED=$(python3 "$DESIGN_GATE" check-prompt "$FILE" --emit-prompt --repo "$PROJECT_ROOT" 2>/tmp/design-preflight-$$.txt); then
+        CONTENT="$GATED"
+    else
+        echo "DESIGN PREFLIGHT REFUSED $NAME (left in 1_planning):"
+        cat /tmp/design-preflight-$$.txt
+        rm -f /tmp/design-preflight-$$.txt
+        FAILED=$((FAILED + 1))
+        continue
+    fi
+    rm -f /tmp/design-preflight-$$.txt
+
     echo ""
     echo "========================================"
     echo "RUNNING: $NAME"

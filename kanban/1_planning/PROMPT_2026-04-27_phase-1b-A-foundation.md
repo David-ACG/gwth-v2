@@ -1,3 +1,4 @@
+<!-- design-authority: historical. Marked 2026-09-13 (bead gwth-launch-88z.8.1): this brief predates the current design register and names a retired design authority (Stone & Sage era OKLCH tokens). It is kept as a record and is REFUSED for replay by scripts/design_preflight.py and the kanban runner. Write a new brief against the current Style Bible items (scripts/bible_authority.py brief) instead. -->
 # PROMPT-A — Phase 1b Foundation + Hero stack
 
 > **Beads:** `beads_GWTH-2yl` (depends on: nothing — first in chain). Claim with `bd update beads_GWTH-2yl --status=in_progress`.

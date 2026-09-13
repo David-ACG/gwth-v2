@@ -1,3 +1,4 @@
+<!-- design-authority: historical. Marked 2026-09-13 (bead gwth-launch-88z.8.1): this brief predates the current design register and names a retired design authority (Stone & Sage DESIGN.md). It is kept as a record and is REFUSED for replay by scripts/design_preflight.py and the kanban runner. Write a new brief against the current Style Bible items (scripts/bible_authority.py brief) instead. -->
 # Prompt: Claude Dashboard Implementation Review
 
 You are reviewing the GWTH.ai student dashboard implementation for the May 23 beta launch.
