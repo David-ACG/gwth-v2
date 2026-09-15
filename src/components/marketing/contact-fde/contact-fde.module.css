@@ -1,13 +1,23 @@
 /*
- * Contact page in the FDE journal register (the chosen homepage direction,
- * see home-fde/). Same palette and idioms as labs-fde/ and about-fde/:
- * cream/sage paper surfaces, ink text, a drenched dark-teal masthead, ochre
- * accents, Source Serif 4 display + body, mono metadata. The form is a
- * paper panel with an ink border (the highlight-panel anatomy) and square
- * hairline inputs.
+ * Contact page, also used by /waitlist, in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow, the rule under every section head and the right-hand
+ * section labels that restated the heading beside them, and softened the
+ * remaining single-side hairlines from the boundary token to the divider token.
+ * The load-bearing boundary on a panel stays `--v-line`, which is the measured
+ * one (boundary-contrast-check).
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -35,28 +45,30 @@
   color: var(--v-muted);
 }
 
-/* ---------------- Masthead (drenched teal band) ---------------- */
+/* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
   background: var(--v-quiet);
   color: var(--v-ink);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
-}
-
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.25rem, 4.5vw, 3.25rem);
 }
 
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.02em;
   max-width: 18ch;
+}
+
+/* Consistent headline treatment: dark Bitter with the emphasis carried by a
+   jade italic (paper-first-register, the italic accent). David: "all the other
+   titles have a dark bold colour and then a green colour on non-bolded text".
+   Batch 1. */
+.mastheadTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
 }
 
 .standfirst {
@@ -85,15 +97,20 @@
   padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
 }
 
+/* The form is the only thing in this section, so it sits on the page's centre
+   line rather than hanging off the left with an empty right half (batch 1).
+   The masthead above it is the two-column shape the rest of the site uses. */
 .panelColumn {
-  max-width: 36rem;
+  max-width: 38rem;
+  margin-inline: auto;
 }
 
 /* Paper panel: highlight-panel anatomy (surface + ink border). */
 .panel {
   background: var(--v-surface);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   padding: 2rem 1.75rem;
+  border-radius: var(--radius-lg);
 }
 
 .form {
@@ -198,7 +215,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -235,4 +252,39 @@
   line-height: 1.7;
   color: var(--v-soft);
   max-width: 38ch;
+}
+
+/*
+ * Two-column masthead (batch 1). This page used a single left column, so the
+ * right half of the first screen was empty colour: David, on /why-gwth, "There's
+ * a massive space to the right on this page, and all of the text is bunched to
+ * the left". Same shape as /lessons and /pricing, and no eyebrow row.
+ */
+@media (min-width: 64rem) {
+  .masthead .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+    column-gap: 4.5rem;
+    align-items: start;
+  }
+
+  .mastheadTitle {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    max-width: 20ch;
+  }
+
+  .standfirst {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    margin-top: 0.6rem;
+    max-width: 44ch;
+  }
+
+
+  .mastheadFoot {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
 }

@@ -7,6 +7,52 @@
   "category": "Data",
   "testedOn": "2026-07-26",
   "brief": "You are the office manager at a small community centre in Leeds. Once a month you export the volunteer sign-in log, and this month's export is a mess: three different date formats, one volunteer's name spelled two ways, hours logged as \"7:30\", \"half day\" and \"N/A\", a row that says 40 hours and appears twice, and a total at the bottom that does not add up. The trustees meet next week and they want two numbers. You give the same export to two AI tools and see which one gets you to a figure you could defend.",
+  "summary": "A month of volunteer sign-ins with duplicate rows, three date formats and hours written three different ways. Both tools get the same export, and you decide whose total you would put in front of the trustees.",
+  "preview": {
+    "taskCue": "Spreadsheet clean-up",
+    "outcome": "Which tool gets you a volunteer-hours figure you could defend, and which rows neither of them should trust.",
+    "specimen": {
+      "kind": "grid",
+      "caption": "Four rows from the April export this lab uses",
+      "columns": [
+        "Date",
+        "Volunteer",
+        "Hours"
+      ],
+      "rows": [
+        {
+          "cells": [
+            "01/04/2026",
+            "Jane Smith",
+            "3.5"
+          ]
+        },
+        {
+          "cells": [
+            "2026-04-02",
+            "J. Smith",
+            "3.5"
+          ],
+          "note": "same volunteer, spelled two ways"
+        },
+        {
+          "cells": [
+            "3 Apr 26",
+            "Marta Nowak",
+            "7:30"
+          ]
+        },
+        {
+          "cells": [
+            "09/04/2026",
+            "Ahmed Khan",
+            "40"
+          ],
+          "note": "40 hours, and the row appears twice"
+        }
+      ]
+    }
+  },
   "matchup": [
     {
       "name": "Claude",

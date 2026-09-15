@@ -7,7 +7,11 @@ afterEach(cleanup)
 describe("ContactPage", () => {
   it("renders the page heading", () => {
     render(<ContactPage />)
-    expect(screen.getByText("Get in Touch")).toBeInTheDocument()
+    // Queried by accessible name, not by a single text node: the emphasis in
+    // the headline is an <em>, so the words span two nodes (batch 1).
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Get in Touch" })
+    ).toBeInTheDocument()
   })
 
   it("renders the contact form fields", () => {

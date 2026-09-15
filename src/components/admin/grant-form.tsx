@@ -95,8 +95,8 @@ export function GrantForm() {
             {...form.register("months", { valueAsNumber: true })}
           >
             <option value={1}>Month 1</option>
-            <option value={2}>Months 1–2</option>
-            <option value={3}>Months 1–3</option>
+            <option value={2}>Months 1 to 2</option>
+            <option value={3}>Months 1 to 3</option>
           </select>
         </div>
         <div className={`${styles.field} ${styles.fieldGrow}`}>

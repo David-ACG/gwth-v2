@@ -94,7 +94,7 @@
 .panel {
   border-radius: var(--radius-lg);
   background: var(--v-surface);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   box-shadow: none;
   padding: clamp(1.75rem, 4vw, 2.25rem) clamp(1.5rem, 4vw, 2rem);
 }
@@ -213,6 +213,7 @@
   line-height: 1.5;
   font-weight: 600;
   color: var(--v-ink);
+  border-radius: var(--radius-md);
 }
 
 .serverError svg {
@@ -262,7 +263,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -330,7 +331,7 @@
 .altPrompt {
   margin-top: 1.5rem;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   font-size: var(--fde-body-sm);
   line-height: 1.6;
   color: var(--v-soft);

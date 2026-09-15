@@ -41,15 +41,7 @@
   padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
 }
 
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
-}
-
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.4rem, 6vw, 4rem);
   font-weight: 600;
   line-height: 1.05;
@@ -106,7 +98,7 @@
 .block {
   padding-bottom: clamp(2.25rem, 4vw, 3rem);
   margin-bottom: clamp(2.25rem, 4vw, 3rem);
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
 .block:last-child {
@@ -121,7 +113,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem 1.5rem;
-  border-bottom: 1px solid var(--v-ink);
+  border-bottom: 1px solid var(--v-line-soft);
   padding-bottom: 0.85rem;
   margin-bottom: 1.4rem;
 }
@@ -153,14 +145,14 @@
 /* Hairline-separated list rows (FAQ-row anatomy without the toggle). */
 .rows {
   margin-top: 1.5rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .row {
   display: grid;
   grid-template-columns: 8.5rem minmax(0, 1fr);
   gap: 0.5rem 1.5rem;
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: 0.95rem 0;
 }
 

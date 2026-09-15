@@ -50,7 +50,7 @@ const ALL_STATUSES: TechRadarTool["status"][] = [
 ]
 
 /**
- * Tech Radar page in the FDE journal register: drenched teal masthead with
+ * Tech radar page, PAPER-FIRST register: a two-column quiet masthead with
  * mono facts row, square filter controls, and a hairline editorial table
  * (mono headers, serif cells, glyph-coded status). Client component so the
  * search and filter behaviour from the previous skin is preserved.
@@ -102,7 +102,6 @@ export function TechRadarFde({
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>Tech radar · Tracked daily</p>
           <h1 className={styles.mastheadTitle}>
             GWTH <em>Tech Radar</em>
           </h1>
@@ -111,7 +110,6 @@ export function TechRadarFde({
             partnerships.
           </p>
           <div className={styles.mastheadFoot}>
-            <p>{toolCount} tools tracked</p>
             <p>{categories.length} categories</p>
             <p>Last updated {formattedDate}</p>
           </div>

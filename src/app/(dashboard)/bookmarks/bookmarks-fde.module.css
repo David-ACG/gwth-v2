@@ -1,8 +1,12 @@
 /*
- * Bookmarks page in the FDE journal register (DESIGN_FDE.md).
- * Hairline list rows (§5.8 anatomy without the toggle): serif title,
- * mono meta, flavour-coloured mono type label as text, never a pill.
- * Full scoped --v-* palette per §8; never raw hex outside this block.
+ * Bookmarks page, in the PAPER-FIRST register. The `-fde` name is kept so
+ * imports stay put; the FDE journal register the old header described is
+ * RETIRED (bible paper-first-register). Two type families, Bitter and Public
+ * Sans; colour from the `--v-*` tokens only; R2 corners.
+ *
+ * This page was NOT one of the twenty surfaces in redesign batch 1; it only
+ * inherits the shared changes (softened hairlines, no ink borders). Look at it
+ * in both themes before calling it converted.
  */
 
 .shell {
@@ -48,7 +52,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
+  border-bottom: 1px solid var(--v-line-soft);
   padding-bottom: 1rem;
 }
 
@@ -79,14 +83,14 @@
   grid-template-columns: 4.5rem minmax(0, 1fr);
   align-items: baseline;
   gap: 0.4rem 1.25rem;
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: 1.1rem 0;
   text-decoration: none;
   color: inherit;
 }
 
 .row:first-child {
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .row:hover .rowTitle {

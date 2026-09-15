@@ -231,10 +231,10 @@ describe("ActiveDashboard month + ordering (gwth-launch-26b)", () => {
       ).container
     )
 
-    // Only Month 1 content is live, so a Month-1 student reads "MONTH 1 OF 3"
+    // Only Month 1 content is live, so a Month-1 student reads "Month 1 of 3"
     // even though their grant defaulted to subscriptionMonth=3.
-    expect(view.getByText("MONTH 1 OF 3")).toBeInTheDocument()
-    expect(view.queryByText("MONTH 3 OF 3")).not.toBeInTheDocument()
+    expect(view.getByText("Month 1 of 3")).toBeInTheDocument()
+    expect(view.queryByText("Month 3 of 3")).not.toBeInTheDocument()
   })
 })
 

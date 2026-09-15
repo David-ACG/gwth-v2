@@ -1,11 +1,23 @@
 /*
- * Free Labs page in the FDE journal register (the chosen homepage
- * direction, see home-fde/). Same palette and idioms: cream/sage paper
- * surfaces, ink text, a drenched dark-teal masthead, ochre accents,
- * Source Serif 4 display + body, mono metadata, colour-block card tops.
+ * Labs index page, in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow, the rule under every section head and the right-hand
+ * section labels that restated the heading beside them, and softened the
+ * remaining single-side hairlines from the boundary token to the divider token.
+ * The load-bearing boundary on a panel stays `--v-line`, which is the measured
+ * one (boundary-contrast-check).
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -33,23 +45,15 @@
   color: var(--v-muted);
 }
 
-/* ---------------- Masthead (drenched teal band) ---------------- */
+/* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
   background: var(--v-quiet);
   color: var(--v-ink);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
-}
-
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.25rem, 4.5vw, 3.25rem);
 }
 
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.05;
@@ -78,14 +82,25 @@
   margin-top: 2rem;
 }
 
+/* Metadata row, grouped left (batch 1). It used to be a ruled band spread
+   edge to edge, which left each fact stranded in its own third of the screen:
+   David, on /tech-radar, "it just looks like it's been thrown in the middle of
+   nowhere". Facts now sit together as one line under the standfirst, separated
+   by a middot rather than by a rule. paper-first-components, metadata rows. */
 .mastheadFoot {
-  margin-top: clamp(2.25rem, 5vw, 3.5rem);
-  border-top: 1px solid var(--v-line-soft);
-  padding-top: 1.25rem;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 2rem;
+  align-items: baseline;
+  gap: 0.35rem 0;
+}
+
+/* The separator trails the item it follows, so when the row wraps on a phone a
+   middot never starts a line (batch 1). */
+.mastheadFoot p:not(:last-child)::after {
+  content: "\00b7";
+  margin-inline: 0.85rem;
+  color: var(--v-line);
 }
 
 .mastheadFoot p {
@@ -95,52 +110,52 @@
   color: var(--v-soft);
 }
 
-/* Two-column masthead (David picked option B, 2026-07-26 demo-path audit).
-   Every inner page used a single left column and left the right half of the
-   first screen as empty colour, while the home hero - the strongest surface on
-   the site - is a two-column composition. This applies the home shape: headline
-   left on a wider measure, standfirst and buttons right, the rule under the
-   kicker carried through, and the foot spanning both. Below 64rem it stays a
-   single stacked column, unchanged. */
+/*
+ * Two-column masthead, batch 1 revision. Three things changed against the
+ * 2026-07-26 version:
+ *   1. The kicker row is gone, so the headline is row 1 (David: "Please don't
+ *      have these eyebrows, especially when they repeat what's in the main
+ *      message or title").
+ *   2. The headline SPANS the standfirst and the actions instead of sitting
+ *      beside the standfirst alone. On /for-teams a three-line headline made
+ *      row 2 tall and stranded the buttons a long way below the sentence they
+ *      belong to ("There are gaps in strange places").
+ *   3. The rule above the standfirst is gone; the column gap already separates
+ *      the two halves, so the line was furniture.
+ */
 @media (min-width: 64rem) {
   .masthead .page {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
     column-gap: 4.5rem;
     align-items: start;
   }
 
-  .mastheadKicker {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
   .mastheadTitle {
     grid-column: 1;
-    grid-row: 2;
-    margin-top: 1rem;
-    max-width: 22ch;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+    max-width: 20ch;
   }
 
   .standfirst {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
     align-self: start;
-    margin-top: 1rem;
-    border-top: 1px solid var(--v-line-soft);
-    padding-top: 1.6rem;
-    max-width: 46ch;
+    margin-top: 0.6rem;
+    max-width: 44ch;
   }
 
   .mastheadActions {
     grid-column: 2;
-    grid-row: 3;
-    margin-top: 1.6rem;
+    grid-row: 2;
+    align-self: start;
+    margin-top: 1.4rem;
   }
 
   .mastheadFoot {
     grid-column: 1 / -1;
-    grid-row: 4;
+    grid-row: 3;
   }
 }
 
@@ -174,7 +189,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -194,15 +209,18 @@
   padding: clamp(3rem, 6vw, 4.5rem) 0;
 }
 
+/* The section head no longer draws a rule across the page. One line under
+   every heading was the most repeated piece of furniture on the site, and it
+   is what "too many lines in other places" was describing; the gap below the
+   heading now does the separating (paper-first-register, hierarchy from
+   spacing and type). Batch 1. */
 .sectionHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 1rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
@@ -223,7 +241,7 @@
 /* ---------------- How-it-works explainer ---------------- */
 
 .explainer {
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: clamp(2.5rem, 5vw, 3.5rem) 0;
 }
 
@@ -241,7 +259,7 @@
 }
 
 .explainerItem {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 1rem;
 }
 
@@ -289,52 +307,31 @@
   background: var(--v-surface);
   border: 1px solid var(--v-line);
   transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .card:hover {
   border-color: var(--v-ink);
 }
 
-.cardTop {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 1.25rem;
-  color: var(--v-ink);
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-}
-
-.flvTeal {
-  background: var(--v-quiet);
-}
-
-.flvMoss {
-  background: var(--v-quiet);
-}
-
-.flvRust {
-  background: var(--v-quiet);
-}
-
-.cardImage {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  border-bottom: 1px solid var(--v-line);
-}
-
-.cardImage img {
-  object-fit: cover;
-}
-
 .cardBody {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 0.65rem;
-  padding: 1.25rem 1.25rem 1.4rem;
+  gap: 0.5rem;
+  padding: 1.15rem 1.25rem 1.3rem;
+}
+
+/* The task in a visitor's own words, e.g. "Spreadsheet clean-up · Data". It is
+   the first line of the card because it is the line that answers "what is this
+   about" before the title has been read. Public Sans, muted, sentence case: no
+   mono kicker and no chip (paper-first-components, metadata rows). */
+.cardCue {
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--v-muted);
 }
 
 .cardBody h3 {
@@ -356,42 +353,61 @@
   color: var(--v-ink);
 }
 
-.cardBrief {
+/* One outcome line replaces the four clamped lines of brief that made four
+   different labs look like the same paragraph four times (David: the cards
+   "need to look very different to this"). */
+.cardOutcome {
+  margin-top: 0.15rem;
   font-size: var(--fde-body);
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--v-soft);
   flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
-.cardStatLine {
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-top: 0.35rem;
   border-top: 1px solid var(--v-line-soft);
-  padding-top: 0.85rem;
-  font-size: var(--fde-body-sm);
+  padding-top: 0.8rem;
+  font-size: var(--fde-mono-sm);
   line-height: 1.5;
   color: var(--v-muted);
-  text-transform: capitalize;
 }
 
-.cardStatLine strong {
-  font-size: var(--fde-body-lg);
+/* The separator trails the item it follows, so a middot never starts a line
+   when the row wraps on a phone (the masthead does the same). */
+.cardMeta > span:not(:last-child)::after {
+  content: "\00b7";
+  margin-inline: 0.6rem;
+  color: var(--v-line);
+}
+
+/* Live is a status, so it is a word plus a glyph in the ink, never a colour or
+   a tint on its own (paper-first-lab-page; tint-is-never-the-only-signal).
+   There is no measured status colour in the token set to reach for. */
+.cardLive {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
   color: var(--v-ink);
-  margin-right: 0.25rem;
+}
+
+.cardLive span {
+  font-size: 0.6em;
+  line-height: 1;
 }
 
 /* ---------------- Archive list (dated hairline rows) ---------------- */
 
 .archiveList {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .archiveItem {
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
 .archiveLink {
@@ -444,6 +460,7 @@
   color: var(--v-muted);
   border: 1px solid var(--v-line);
   padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-sm);
 }
 
 .archiveDate {
@@ -461,6 +478,7 @@
   background: var(--v-surface);
   padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
   text-align: center;
+  border-radius: var(--radius-lg);
 }
 
 .empty h3 {
@@ -484,7 +502,7 @@
 /* ---------------- Closing band ---------------- */
 
 .closing {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding: clamp(3rem, 6vw, 4.5rem) 0;
   text-align: center;
 }

@@ -157,7 +157,7 @@ function makeLesson(
 ): EditorialLessonMeta {
   return {
     id: LESSON_ID,
-    monthLabel: "MONTH 1 · LESSON 01",
+    monthLabel: "Month 1 · Lesson 01",
     lessonNumber: 1,
     title: "Welcome to GWTH",
     monthCompleted: 0,
@@ -165,15 +165,15 @@ function makeLesson(
     pages: [
       {
         title: "Why this lesson exists",
-        kindLabel: "VIDEO · 4 MIN",
+        kindLabel: "Video · 4 min",
         kind: "video",
       },
       {
         title: "Picking the right problem",
-        kindLabel: "PROSE · 3 MIN",
+        kindLabel: "Prose · 3 min",
         kind: "prose",
       },
-      { title: "End-of-lesson Q&A", kindLabel: "Q&A · 4 MIN", kind: "qa" },
+      { title: "End-of-lesson Q&A", kindLabel: "Q&A · 4 min", kind: "qa" },
     ],
     // PUBLIC question shape only (gwth-launch-va6): the viewer's props carry
     // no correctOptionIndex and no explanation. The key lives in QUIZ_KEY,
@@ -328,7 +328,7 @@ describe("EditorialLessonViewer audio bar", () => {
     // W26 reframed this state: still honest, no longer worded as though
     // something behind the scenes were broken.
     expect(
-      screen.getByText("NO READ-ALONG ON THIS LESSON")
+      screen.getByText("No read-along on this lesson")
     ).toBeInTheDocument()
     expect(
       screen.queryByRole("button", { name: "Play narration" })
@@ -461,7 +461,7 @@ describe("EditorialLessonViewer intro video", () => {
       />
     )
     expect(
-      screen.getByText("INTRO VIDEO NOT AVAILABLE YET")
+      screen.getByText("Intro video not available yet")
     ).toBeInTheDocument()
     expect(screen.queryByTestId("video-player")).not.toBeInTheDocument()
   })
@@ -485,14 +485,14 @@ describe("EditorialLessonViewer Q&A", () => {
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
     )
 
-    const submit = screen.getByRole("button", { name: /SUBMIT Q&A/ })
+    const submit = screen.getByRole("button", { name: /Submit Q&A/ })
     expect(submit).toBeDisabled()
 
     await answerAll(user, ["A pocket knife", "A place you already look"])
-    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
 
     expect(
-      await screen.findByText(/SCORE 100% · PASSED/)
+      await screen.findByText(/Score 100% · passed/)
     ).toBeInTheDocument()
     // The client sends answers keyed by question id and computes NOTHING:
     // no score, no pass verdict (gwth-launch-va6).
@@ -508,13 +508,13 @@ describe("EditorialLessonViewer Q&A", () => {
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
     )
     await answerAll(user, ["A portfolio piece", "A new tab"])
-    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
 
     expect(
-      await screen.findByText(/SCORE 0% · 67% NEEDED/)
+      await screen.findByText(/Score 0% · 67% needed/)
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /RETRY Q&A/ })
+      screen.getByRole("button", { name: /Retry Q&A/ })
     ).toBeInTheDocument()
     expect(gradeAction).toHaveBeenCalledWith(LESSON_ID, { q1: 0, q2: 0 })
     // Reveal policy (QA round-2 defect 2): while a retry remains, a wrong
@@ -531,9 +531,9 @@ describe("EditorialLessonViewer Q&A", () => {
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
     )
     await answerAll(user, ["A pocket knife", "A place you already look"])
-    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
 
-    expect(await screen.findByText(/SCORE 100% · PASSED/)).toBeInTheDocument()
+    expect(await screen.findByText(/Score 100% · passed/)).toBeInTheDocument()
     // Passed: no further grading can use the reveal, so feedback shows.
     expect(
       screen.getByText("Small and specific to your own week.")
@@ -563,9 +563,9 @@ describe("EditorialLessonViewer Q&A", () => {
     )
 
     await answerAll(user, ["A pocket knife", "A place you already look"])
-    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
     await user.click(
-      await screen.findByRole("button", { name: /FINISH LESSON/ })
+      await screen.findByRole("button", { name: /Finish lesson/ })
     )
 
     expect(await screen.findByText("Lesson complete.")).toBeInTheDocument()
@@ -618,17 +618,17 @@ describe("EditorialLessonViewer quiz attempt cap", () => {
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
     )
     await answerAll(user, ["A pocket knife", "A place you already look"])
-    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
 
     expect(
-      await screen.findByText(/ALL 3 ATTEMPTS USED · BEST 33%/)
+      await screen.findByText(/All 3 attempts used · best 33%/)
     ).toBeInTheDocument()
     // A refusal carries no reveal and no way onward: no retry, no resubmit.
     expect(
-      screen.queryByRole("button", { name: /RETRY Q&A/ })
+      screen.queryByRole("button", { name: /Retry Q&A/ })
     ).not.toBeInTheDocument()
     expect(
-      screen.queryByRole("button", { name: /SUBMIT Q&A/ })
+      screen.queryByRole("button", { name: /Submit Q&A/ })
     ).not.toBeInTheDocument()
   })
 
@@ -652,17 +652,17 @@ describe("EditorialLessonViewer quiz attempt cap", () => {
       <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
     )
     await answerAll(user, ["A portfolio piece", "A place you already look"])
-    await user.click(screen.getByRole("button", { name: /SUBMIT Q&A/ }))
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
 
     // The learner is told WHY nothing more can be submitted, not just shown
     // a score with the buttons silently gone.
     expect(
       await screen.findByText(
-        new RegExp(`SCORE 33% · ALL ${MAX_QUIZ_ATTEMPTS} ATTEMPTS USED`)
+        new RegExp(`Score 33% · all ${MAX_QUIZ_ATTEMPTS} attempts used`)
       )
     ).toBeInTheDocument()
     expect(
-      screen.queryByRole("button", { name: /RETRY Q&A/ })
+      screen.queryByRole("button", { name: /Retry Q&A/ })
     ).not.toBeInTheDocument()
   })
 
@@ -679,10 +679,10 @@ describe("EditorialLessonViewer quiz attempt cap", () => {
       />
     )
     expect(
-      screen.getByText(/ALL 3 ATTEMPTS USED · BEST 33%/)
+      screen.getByText(/All 3 attempts used · best 33%/)
     ).toBeInTheDocument()
     expect(
-      screen.queryByRole("button", { name: /SUBMIT Q&A/ })
+      screen.queryByRole("button", { name: /Submit Q&A/ })
     ).not.toBeInTheDocument()
     expect(gradeAction).not.toHaveBeenCalled()
   })
@@ -703,7 +703,7 @@ describe("EditorialLessonViewer quiz attempt cap", () => {
     )
     // With the cap enforced server-side, forcing a resubmission to reach
     // FINISH would be refused - so FINISH must be reachable directly.
-    const finish = screen.getByRole("button", { name: /FINISH LESSON/ })
+    const finish = screen.getByRole("button", { name: /Finish lesson/ })
     await user.click(finish)
     expect(await screen.findByText("Lesson complete.")).toBeInTheDocument()
     expect(gradeAction).not.toHaveBeenCalled()
@@ -725,10 +725,10 @@ describe("EditorialLessonViewer navigation", () => {
         initialPage={1}
       />
     )
-    await user.click(screen.getByRole("button", { name: /CONTINUE/ }))
-    expect(screen.getAllByText("PAGE 2 OF 3").length).toBeGreaterThan(0)
+    await user.click(screen.getByRole("button", { name: /Continue/ }))
+    expect(screen.getAllByText("Page 2 of 3").length).toBeGreaterThan(0)
 
-    await user.click(screen.getByRole("button", { name: /CONTINUE/ }))
+    await user.click(screen.getByRole("button", { name: /Continue/ }))
     expect(
       screen.getByText(/before this counts toward Month 1/)
     ).toBeInTheDocument()
@@ -751,19 +751,19 @@ describe("EditorialLessonViewer navigation", () => {
 const NARRATED_PAGES: EditorialLessonMeta["pages"] = [
   {
     title: "One",
-    kindLabel: "PROSE · 1 MIN",
+    kindLabel: "Prose · 1 min",
     kind: "prose",
     content: "alpha bravo charlie delta",
   },
   {
     title: "Two",
-    kindLabel: "PROSE · 1 MIN",
+    kindLabel: "Prose · 1 min",
     kind: "prose",
     content: "echo foxtrot golf hotel",
   },
   {
     title: "Three",
-    kindLabel: "PROSE · 1 MIN",
+    kindLabel: "Prose · 1 min",
     kind: "prose",
     content: "india juliett kilo lima",
   },
@@ -805,7 +805,7 @@ describe("EditorialLessonViewer narration start position", () => {
     await user.click(screen.getByRole("button", { name: /Play narration/ }))
     expect(audio.currentTime).toBe(100)
     expect(audio.paused).toBe(false)
-    expect(screen.getAllByText("PAGE 2 OF 3").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Page 2 of 3").length).toBeGreaterThan(0)
   })
 
   it.each([["cached", 1], ["cached", 2], ["late", 1], ["late", 2]] as const)("seeks with %s metadata on page %s", async (timing, initialPage) => {
@@ -868,7 +868,7 @@ describe("EditorialLessonViewer narration start position", () => {
         expect(audio.currentTime).toBe(75)
         audio.currentTime = 181
         fireEvent.timeUpdate(audio)
-        expect(screen.getAllByText("PAGE 3 OF 3").length).toBeGreaterThan(0)
+        expect(screen.getAllByText("Page 3 of 3").length).toBeGreaterThan(0)
       } finally {
         fetchSpy.mockRestore()
       }
@@ -945,7 +945,7 @@ describe("EditorialLessonViewer narration start position", () => {
     const user = userEvent.setup()
     renderNarrated()
     const audio = getAudioElement()
-    await user.click(screen.getByRole("button", { name: /CONTINUE/ }))
+    await user.click(screen.getByRole("button", { name: /Continue/ }))
     expect(Math.round(audio.currentTime)).toBe(100)
   })
 
@@ -965,12 +965,12 @@ describe("EditorialLessonViewer narration start position", () => {
     renderNarrated(1)
     const audio = getAudioElement()
     await user.click(screen.getByRole("button", { name: /Play narration/ }))
-    expect(screen.getAllByText("PAGE 1 OF 3").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Page 1 of 3").length).toBeGreaterThan(0)
 
     // The narrator crosses into page two (which starts at 100s).
     audio.currentTime = 104
     fireEvent(audio, new Event("timeupdate"))
-    expect(screen.getAllByText("PAGE 2 OF 3").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Page 2 of 3").length).toBeGreaterThan(0)
     // No seek: the playhead is already in the right place.
     expect(Math.round(audio.currentTime)).toBe(104)
   })
@@ -984,7 +984,7 @@ describe("EditorialLessonViewer narration start position", () => {
     )
     audio.currentTime = 104
     fireEvent(audio, new Event("timeupdate"))
-    expect(screen.getAllByText("PAGE 1 OF 3").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Page 1 of 3").length).toBeGreaterThan(0)
   })
 
   it("resumes where it paused when the reader has not left the page", async () => {
@@ -1009,16 +1009,16 @@ describe("EditorialLessonViewer narration start position", () => {
  * viewer had no page kind for it, so the project was imported and never shown.
  */
 const PROJECT_PAGES: EditorialLessonMeta["pages"] = [
-  { title: "Overview", kindLabel: "PROSE · 3 MIN", kind: "prose", content: "Read this." },
+  { title: "Overview", kindLabel: "Prose · 3 min", kind: "prose", content: "Read this." },
   {
     title: "Your project: My AI Superpowers Wishlist",
-    kindLabel: "PROJECT · 5 MIN",
+    kindLabel: "Project · 5 min",
     kind: "project",
     projectHeading: "My AI Superpowers Wishlist",
     content:
       "## What you are making\n\nA list of real things you want AI to help with.",
   },
-  { title: "End-of-lesson Q&A", kindLabel: "Q&A · 2 QUESTIONS", kind: "qa" },
+  { title: "End-of-lesson Q&A", kindLabel: "Q&A · 2 questions", kind: "qa" },
 ]
 
 describe("EditorialLessonViewer student project page", () => {
@@ -1030,7 +1030,7 @@ describe("EditorialLessonViewer student project page", () => {
         initialPage={2}
       />
     )
-    expect(screen.getByText("MAKE THIS")).toBeInTheDocument()
+    expect(screen.getByText("Make this")).toBeInTheDocument()
     expect(
       screen.getByRole("heading", { name: "My AI Superpowers Wishlist" })
     ).toBeInTheDocument()
@@ -1052,13 +1052,13 @@ describe("EditorialLessonViewer student project page", () => {
     const duplicate: EditorialLessonMeta["pages"] = [
       {
         title: "Your project: My AI Toolkit Map",
-        kindLabel: "PROSE · 2 MIN",
+        kindLabel: "Prose · 2 min",
         kind: "prose",
         content: "The lesson introduces the project.",
       },
       {
         title: "Your project: My AI Toolkit Map",
-        kindLabel: "PROJECT · 9 MIN",
+        kindLabel: "Project · 9 min",
         kind: "project",
         projectHeading: "My AI Toolkit Map",
         content: "## What you are making\n\nThe map.",
@@ -1084,7 +1084,7 @@ describe("EditorialLessonViewer student project page", () => {
     await user.click(rows[1]!)
     expect(rows[1]).toHaveAttribute("aria-current", "page")
     expect(rows[0]).not.toHaveAttribute("aria-current")
-    expect(screen.getByText("MAKE THIS")).toBeInTheDocument()
+    expect(screen.getByText("Make this")).toBeInTheDocument()
   })
 
   it("shows the project in the outline rail and reaches it via CONTINUE", async () => {
@@ -1096,14 +1096,14 @@ describe("EditorialLessonViewer student project page", () => {
         initialPage={1}
       />
     )
-    expect(screen.getAllByText("PROJECT · 5 MIN").length).toBeGreaterThan(0)
-    expect(screen.queryByText("MAKE THIS")).not.toBeInTheDocument()
+    expect(screen.getAllByText("Project · 5 min").length).toBeGreaterThan(0)
+    expect(screen.queryByText("Make this")).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole("button", { name: /CONTINUE/ }))
-    expect(screen.getByText("MAKE THIS")).toBeInTheDocument()
+    await user.click(screen.getByRole("button", { name: /Continue/ }))
+    expect(screen.getByText("Make this")).toBeInTheDocument()
     // The mast row names the page kind so the student knows this is the doing.
     expect(
-      screen.getAllByText(/COURSE · LESSON 1 · PROJECT/).length
+      screen.getAllByText(/Lesson 1 · project/).length
     ).toBeGreaterThan(0)
   })
 })
@@ -1131,14 +1131,14 @@ describe("EditorialLessonViewer mobile layout", () => {
         initialPage={2}
       />
     )
-    const next = screen.getByRole("button", { name: /CONTINUE/ })
+    const next = screen.getByRole("button", { name: /Continue/ })
     // The 220px floor must only apply from `sm` up; unprefixed it re-creates
     // the clipped-off-screen button at 390px.
     expect(next.className).toContain("sm:min-w-[220px]")
     expect(next.className).toContain("min-w-0")
     expect(next.className).not.toMatch(/(^|\s)min-w-\[220px\]/)
 
-    const prev = screen.getByRole("button", { name: /PREVIOUS PAGE/ })
+    const prev = screen.getByRole("button", { name: /Previous page/ })
     expect(prev.className).toContain("sm:min-w-[160px]")
     expect(prev.className).not.toMatch(/(^|\s)min-w-\[160px\]/)
   })

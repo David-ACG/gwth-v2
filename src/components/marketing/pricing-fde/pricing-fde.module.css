@@ -1,12 +1,23 @@
 /*
- * Pricing page in the FDE journal register (the chosen homepage direction,
- * see home-fde/). Same palette and idioms as labs-fde/ and lessons-fde/:
- * cream/sage paper surfaces, ink text, a drenched dark-teal masthead, ochre
- * accents, Source Serif 4 display + body, mono metadata, colour-block card
- * tops.
+ * Pricing page, in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow, the rule under every section head and the right-hand
+ * section labels that restated the heading beside them, and softened the
+ * remaining single-side hairlines from the boundary token to the divider token.
+ * The load-bearing boundary on a panel stays `--v-line`, which is the measured
+ * one (boundary-contrast-check).
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -34,23 +45,29 @@
   color: var(--v-muted);
 }
 
-/* ---------------- Masthead (drenched teal band) ---------------- */
+/* Named for assistive technology only. The tier grid had no heading at all,
+   so the document jumped from the h1 straight to the card h3s. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
   background: var(--v-quiet);
   color: var(--v-ink);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
-}
-
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.25rem, 4.5vw, 3.25rem);
 }
 
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.05;
@@ -73,27 +90,48 @@
 }
 
 /* Both numbers, in the masthead, at headline weight. The pricing page's whole
-   argument is the drop, so it should be readable before any card is. */
+   argument is the drop, so it should be readable before any card is.
+
+   The floor moved from 1.15rem to 1.2rem and the accent half is now 700
+   (a-20260914-203605-149911, and a measured contrast fix). The jade accent is
+   4.10 : 1 on the quiet masthead band, which clears the 3 : 1 large-text bar
+   but not the 4.5 : 1 small-text one, and at 18.4px regular it was failing
+   that check on a phone. At 19.2px and 700 it is large text in both senses,
+   so the colour is legible rather than merely present, and the weight carries
+   the emphasis on its own for anyone who cannot see the hue
+   (tint-is-never-the-only-signal). */
 .priceLine {
   margin-top: 1rem;
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
   line-height: 1.35;
   color: var(--v-ink);
 }
 
 .priceLine em {
   font-style: italic;
+  font-weight: 700;
   color: var(--v-accent);
 }
 
+/* Metadata row, grouped left (batch 1). It used to be a ruled band spread
+   edge to edge, which left each fact stranded in its own third of the screen:
+   David, on /tech-radar, "it just looks like it's been thrown in the middle of
+   nowhere". Facts now sit together as one line under the standfirst, separated
+   by a middot rather than by a rule. paper-first-components, metadata rows. */
 .mastheadFoot {
-  margin-top: clamp(2.25rem, 5vw, 3.5rem);
-  border-top: 1px solid var(--v-line-soft);
-  padding-top: 1.25rem;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 2rem;
+  align-items: baseline;
+  gap: 0.35rem 0;
+}
+
+/* The separator trails the item it follows, so when the row wraps on a phone a
+   middot never starts a line (batch 1). */
+.mastheadFoot p:not(:last-child)::after {
+  content: "\00b7";
+  margin-inline: 0.85rem;
+  color: var(--v-line);
 }
 
 .mastheadFoot p {
@@ -103,52 +141,65 @@
   color: var(--v-soft);
 }
 
-/* Two-column masthead (David picked option B, 2026-07-26 demo-path audit).
-   Every inner page used a single left column and left the right half of the
-   first screen as empty colour, while the home hero - the strongest surface on
-   the site - is a two-column composition. This applies the home shape: headline
-   left on a wider measure, standfirst and buttons right, the rule under the
-   kicker carried through, and the foot spanning both. Below 64rem it stays a
-   single stacked column, unchanged. */
+/*
+ * Two-column masthead, batch 1 revision. Three things changed against the
+ * 2026-07-26 version:
+ *   1. The kicker row is gone, so the headline is row 1 (David: "Please don't
+ *      have these eyebrows, especially when they repeat what's in the main
+ *      message or title").
+ *   2. The headline SPANS the standfirst and the actions instead of sitting
+ *      beside the standfirst alone. On /for-teams a three-line headline made
+ *      row 2 tall and stranded the buttons a long way below the sentence they
+ *      belong to ("There are gaps in strange places").
+ *   3. The rule above the standfirst is gone; the column gap already separates
+ *      the two halves, so the line was furniture.
+ */
 @media (min-width: 64rem) {
   .masthead .page {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
     column-gap: 4.5rem;
     align-items: start;
   }
 
-  .mastheadKicker {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
   .mastheadTitle {
     grid-column: 1;
-    grid-row: 2;
-    margin-top: 1rem;
-    max-width: 22ch;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+    max-width: 20ch;
+  }
+
+  /* The price line leads the right-hand column and the standfirst explains it
+     underneath. Until 2026-09-14 the price line had no placement at all, so
+     auto-flow dropped it into row 2 and the page argued the price in prose
+     BEFORE it had said what the price was (a-20260914-203605-149911: the
+     hierarchy is the complaint). Both are placed explicitly now. */
+  .priceLine {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    margin-top: 0.5rem;
+    max-width: 26ch;
   }
 
   .standfirst {
     grid-column: 2;
     grid-row: 2;
     align-self: start;
-    margin-top: 1rem;
-    border-top: 1px solid var(--v-line-soft);
-    padding-top: 1.6rem;
-    max-width: 46ch;
+    margin-top: 1.1rem;
+    max-width: 44ch;
   }
 
   .mastheadActions {
     grid-column: 2;
-    grid-row: 3;
-    margin-top: 1.6rem;
+    grid-row: 2;
+    align-self: start;
+    margin-top: 1.4rem;
   }
 
   .mastheadFoot {
     grid-column: 1 / -1;
-    grid-row: 4;
+    grid-row: 3;
   }
 }
 
@@ -182,7 +233,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -204,19 +255,22 @@
 
 .sectionAlt {
   background: var(--v-surface);
-  border-top: 1px solid var(--v-line);
-  border-bottom: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
+/* The section head no longer draws a rule across the page. One line under
+   every heading was the most repeated piece of furniture on the site, and it
+   is what "too many lines in other places" was describing; the gap below the
+   heading now does the separating (paper-first-register, hierarchy from
+   spacing and type). Batch 1. */
 .sectionHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 1rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
@@ -257,6 +311,8 @@
   flex-direction: column;
   background: var(--v-surface);
   border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .tierFeatured {
@@ -313,11 +369,11 @@
   color: var(--v-muted);
 }
 
-/* The price AFTER the course, sat directly under the headline price.
+/* The continuing price, sat directly under the headline price.
    David had to hunt for the £7.50 (it was a fineprint line under the cards),
-   and it is the strongest trust point on the page: you stop paying course
-   prices the moment the course stops teaching you. So it reads at the top of
-   the card, in the accent colour, not in the small print. */
+   and it is the strongest trust point on the page: the price falls once the
+   first three months are behind you. So it reads at the top of the card, in
+   the accent colour, not in the small print. */
 .tierAfter {
   margin: 0.7rem 0 0;
   /* Block, not inline-flex: the copy wraps to two or three lines in these
@@ -328,16 +384,26 @@
   border-left: 3px solid var(--v-accent);
   padding-left: 0.7rem;
   font-size: var(--fde-body);
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--v-ink);
 }
 
-.tierAfter strong {
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+/* a-20260914-203605-149911: "it looks slightly jarring going from a large bold
+   £29 to normal text to larger text again to normal text again". It was
+   literally 38.4px, 14px, 20.8px, 17px down one card. The £7.50 keeps every
+   bit of its prominence WITHOUT a second display size: it sits at body size
+   inside its own sentence, and is marked by weight, by the jade accent (4.81 :
+   1 on the card in light, 11.44 : 1 in dark) and by the 3px accent bar down
+   the left of the whole line. Three signals, so the colour is never the only
+   one (tint-is-never-the-only-signal), and the card now steps down once,
+   38.4px to 14px to 17px, instead of stepping back up in the middle. */
+.tierAfter strong,
+.tierAfterPrice {
+  font-size: inherit;
+  font-weight: 700;
+  letter-spacing: 0;
   white-space: nowrap;
-  color: var(--v-ink);
+  color: var(--v-accent);
 }
 
 .tierFeatures {
@@ -386,37 +452,76 @@
 
 /* ---------------- Compare table (journal rules) ---------------- */
 
+/* The header row is a filled band now, so it needs air under the section lead;
+   flush against the paragraph above it, the two read as one block. */
 .tableWrap {
   overflow-x: auto;
+  margin-top: 2rem;
+}
+
+/* The wrapper is keyboard focusable because it scrolls sideways on a phone,
+   so it needs a focus ring of its own. */
+.tableWrap:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 4px;
+  border-radius: 8px;
 }
 
 .compareTable {
   width: 100%;
-  min-width: 36rem;
+  /* 40rem, not 36: the headings are body size now and one of them reads
+     "Teams or institutions", so the old floor squeezed them to three lines
+     each on a phone. The wrapper still scrolls; the PAGE never does. */
+  min-width: 40rem;
   border-collapse: collapse;
   font-size: var(--fde-body);
   line-height: 1.5;
 }
 
-.compareTable th {
+/* a-20260914-203852-55e4f6: "I don't really like the heading text being
+   smaller than the text in the table. Can it have a different background
+   colour and be the same size, or can it be bigger or bold". It was 13.1px
+   muted over 17px cells. All four of his options are taken: the same size as
+   the cells, bold, full ink instead of muted, and the quiet band behind the
+   row. The band cannot be the signal on its own, since --v-quiet on
+   --v-surface is a 1.2 : 1 tint in light and near-invisible in dark, so the
+   row is anchored by a 2px --v-line rule under it, which is the measured
+   load-bearing boundary (tint-is-never-the-only-signal,
+   boundary-contrast-check). */
+.compareTable thead th {
   font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 600;
-  color: var(--v-muted);
+  font-size: var(--fde-body);
+  font-weight: 700;
+  color: var(--v-ink);
   text-align: left;
-  border-bottom: 1px solid var(--v-ink);
-  padding: 0.7rem 1rem 0.7rem 0;
+  background: var(--v-quiet);
+  border-bottom: 2px solid var(--v-line);
+  padding: 0.75rem 1rem 0.75rem 0.75rem;
+  vertical-align: bottom;
 }
 
-.compareTable td {
+.compareTable td,
+.compareTable tbody th {
   border-bottom: 1px solid var(--v-line-soft);
-  padding: 0.8rem 1rem 0.8rem 0;
+  padding: 0.8rem 1rem 0.8rem 0.75rem;
   color: var(--v-soft);
+  text-align: left;
+  font-weight: 400;
 }
 
-.compareTable td:first-child {
+/* The feature column is a row header, so it is a th in the markup; it keeps
+   reading as the row's label rather than as a second heading band. */
+.compareTable tbody th {
   font-weight: 600;
   color: var(--v-ink);
+}
+
+/* First column flush with the section's left edge, header band included, so
+   the headings sit exactly over the cells they describe. */
+.compareTable thead th:first-child,
+.compareTable tbody th:first-child,
+.compareTable td:first-child {
+  padding-left: 0;
 }
 
 /* ---------------- Teams split ---------------- */
@@ -462,7 +567,7 @@
 /* ---------------- Closing band ---------------- */
 
 .closing {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding: clamp(3rem, 6vw, 4.5rem) 0;
   text-align: center;
 }

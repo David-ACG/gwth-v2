@@ -47,8 +47,6 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 1rem;
 }
 
 .title {
@@ -144,11 +142,11 @@
 
 .accordion {
   margin-top: 1.25rem;
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .accItem {
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
 .accTrigger {
@@ -201,11 +199,17 @@
   grid-template-columns: 3.6rem minmax(0, 1fr) auto auto;
   align-items: baseline;
   gap: 0.4rem 1rem;
-  padding: 0.65rem 0;
-  border-top: 1px solid var(--v-line-soft);
+  padding: 0.7rem 0.75rem;
+  margin-inline: -0.75rem;
+  border-radius: var(--radius-md);
   text-decoration: none;
   color: inherit;
-  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a.lessonRow:hover {
+  background: var(--v-quiet);
 }
 
 a.lessonRow:hover .lessonTitle {
@@ -308,7 +312,7 @@ a.lessonRow:hover .lessonTitle {
 
 .teaser {
   margin-top: 3rem;
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 1.5rem;
 }
 
@@ -357,7 +361,7 @@ a.lessonRow:hover .lessonTitle {
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {

@@ -1,11 +1,30 @@
 /*
- * About page in the FDE journal register (the chosen homepage direction,
- * see home-fde/). Same palette and idioms as labs-fde/ and lessons-fde/:
- * cream/sage paper surfaces, ink text, a drenched dark-teal masthead, ochre
- * accents, Source Serif 4 display + body, mono metadata.
+ * About page, in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow and softened the single-side hairlines from the boundary
+ * token to the divider token. The load-bearing boundary on a panel stays
+ * `--v-line`, the measured one (boundary-contrast-check). This page was NOT one
+ * of the twenty surfaces reviewed in that batch: it only inherits the shared
+ * changes, so look at it in both themes before calling it converted.
+ *
+ * 2026-09-14 (bead gwth-launch-88z.32.24) rebuilt the page around David's three
+ * /about annotations: the promise line is set up a step in ink rather than
+ * boxed, the founder note moved out of the narrow aside into its own section
+ * because it is now three paragraphs, and the intro aside carries the British
+ * worked-example panel. The UK context section uses ruled TEXT columns, not a
+ * second row of big numbers, so the page keeps one stat row.
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -33,23 +52,15 @@
   color: var(--v-muted);
 }
 
-/* ---------------- Masthead (drenched teal band) ---------------- */
+/* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
   background: var(--v-quiet);
   color: var(--v-ink);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
-}
-
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.25rem, 4.5vw, 3.25rem);
 }
 
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.05;
@@ -93,7 +104,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -115,19 +126,22 @@
 
 .sectionAlt {
   background: var(--v-surface);
-  border-top: 1px solid var(--v-line);
-  border-bottom: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
+/* The section head no longer draws a rule across the page. One line under
+   every heading was the most repeated piece of furniture on the site, and it
+   is what "too many lines in other places" was describing; the gap below the
+   heading now does the separating (paper-first-register, hierarchy from
+   spacing and type). Batch 1. */
 .sectionHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 1rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
@@ -151,7 +165,7 @@
   color: var(--v-soft);
 }
 
-/* ---------------- Intro split (prose + founder note) ---------------- */
+/* ---------------- Intro split (prose + UK example panel) ---------------- */
 
 .splitGrid {
   display: grid;
@@ -182,19 +196,91 @@
   color: var(--v-ink);
 }
 
-.founderNote {
+/* The promise closes the intro, so it is set a step up from the body around
+   it and in full ink. No box, no tint: hierarchy from type, which is what the
+   paper-first register asks for. */
+.promise {
+  margin-top: 0.5rem;
+  font-size: clamp(1.25rem, 2.2vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.prose p.promise {
+  color: var(--v-ink);
+  max-width: 34ch;
+}
+
+@media (min-width: 40rem) {
+  .prose p.promise {
+    max-width: 44ch;
+  }
+}
+
+/* ---------------- UK example panel (intro aside) ---------------- */
+
+.ukPanel {
   align-self: start;
   border: 1px solid var(--v-line);
   background: var(--v-surface);
   padding: 1.5rem;
+  border-radius: var(--radius-lg);
+}
+
+.ukList {
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.ukItem {
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 0.85rem;
+}
+
+.ukItem + .ukItem {
+  margin-top: 0.85rem;
+}
+
+.ukItem dt {
+  font-size: var(--fde-body);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.ukItem dd {
+  margin: 0.3rem 0 0;
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+/* ---------------- Founder note (its own section) ---------------- */
+
+/* Long enough now to need reading room, so it sits in the wide column of the
+   list grid rather than in a narrow aside, and it is set upright: three
+   italic paragraphs were a wall. */
+.founderNote {
+  align-self: start;
+  border: 1px solid var(--v-line);
+  background: var(--v-surface);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: var(--radius-lg);
+  max-width: 62ch;
 }
 
 .founderNote p + p {
-  margin-top: 0.85rem;
+  margin-top: 0.95rem;
   font-size: var(--fde-body);
-  font-style: italic;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--v-soft);
+}
+
+.founderNote .mono + p {
+  margin-top: 1rem;
+  font-size: var(--fde-body-lg);
+  color: var(--v-ink);
 }
 
 /* ---------------- Numbered journal lists ---------------- */
@@ -208,12 +294,8 @@
 .numberedItem {
   display: grid;
   gap: 0.75rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   padding: 1.4rem 0;
-}
-
-.numberedItem:last-child {
-  border-bottom: 1px solid var(--v-line);
 }
 
 @media (min-width: 40rem) {
@@ -256,6 +338,76 @@
   }
 }
 
+/* ---------------- UK context (ruled text columns) ---------------- */
+
+/* Deliberately not a second row of big numbers: the course figures below are
+   the page's only stat row, and repeating that shape here would read as one
+   long table of boasts. Ruled text columns instead, same hairline furniture. */
+.ukGrid {
+  display: grid;
+  gap: 1.75rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 52rem) {
+  .ukGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+.ukNote {
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 0.9rem;
+}
+
+.ukNote h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.ukNote p {
+  margin-top: 0.55rem;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.ukClosing {
+  margin-top: 2rem;
+  max-width: 60ch;
+  font-size: var(--fde-body-lg);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
+.sourceNote {
+  margin-top: 1.25rem;
+  max-width: 60ch;
+  font-size: var(--fde-mono-xs);
+  line-height: 1.6;
+  color: var(--v-muted);
+}
+
+.sourceNote a {
+  color: var(--v-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sourceNote a:hover {
+  color: var(--v-ink);
+}
+
+.sourceNote a:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* ---------------- Numbers (ruled stat columns) ---------------- */
 
 .statsRow {
@@ -271,7 +423,7 @@
 }
 
 .stat {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 0.9rem;
 }
 
@@ -297,7 +449,7 @@
 /* ---------------- Closing band ---------------- */
 
 .closing {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding: clamp(3rem, 6vw, 4.5rem) 0;
   text-align: center;
 }

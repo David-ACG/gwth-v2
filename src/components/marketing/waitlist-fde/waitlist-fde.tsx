@@ -3,7 +3,7 @@ import { WaitlistFdeForm } from "./waitlist-fde-form"
 import styles from "@/components/marketing/contact-fde/contact-fde.module.css"
 
 /**
- * Waitlist page in the FDE journal register: drenched teal masthead, then
+ * Waitlist page, PAPER-FIRST register: a two-column quiet masthead, then
  * the email-capture form as a paper panel. Every "Join waitlist" CTA lands
  * here so un-invited visitors can actually leave their email (previously
  * those CTAs dead-ended on the invite-only /signup page). Reuses the
@@ -15,8 +15,9 @@ export function WaitlistFde() {
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>Waitlist</p>
-          <h1 className={styles.mastheadTitle}>Join the Waitlist</h1>
+          <h1 className={styles.mastheadTitle}>
+            Join the <em>Waitlist</em>
+          </h1>
           <p className={styles.standfirst}>
             Access is invite-only while we work closely with a small group
             of testers. Leave your name and email and we will contact you

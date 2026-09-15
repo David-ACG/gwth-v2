@@ -75,6 +75,36 @@ function isCurrent(pathname: string, href: string): boolean {
 }
 
 /**
+ * The routes where the reader is buying for an ORGANISATION. Everywhere else
+ * the reader is one person deciding for themselves.
+ */
+const INSTITUTION_ROUTES = ["/for-institutions", "/for-teams", "/contact"]
+
+/**
+ * The header's one button, resolved per route.
+ *
+ * David, 2026-09-14, on the home page carrying "Book a walkthrough": *"I would
+ * only do a walkthrough if it was a large organisation like CIPD, I wouldn't
+ * do it for a small company or a single person, as it wouldn't be worth it, it
+ * would take an hour of my time."* A single global walkthrough CTA offered an
+ * hour of his time to every visitor, including the one who wants to pay £29
+ * and start on their own. So the institution-facing routes keep the
+ * walkthrough, and every other public page offers the self-service route
+ * instead. The waitlist is that route today: `/signup` is invite-only while
+ * PRIVATE_CONTENT_MODE is on (its fail-closed default) and there is no live
+ * checkout, so the waitlist is the only self-service step that does what its
+ * label says.
+ */
+export function primaryCta(pathname: string): { href: string; label: string } {
+  const institutional = INSTITUTION_ROUTES.some((route) =>
+    isCurrent(pathname, route)
+  )
+  return institutional
+    ? { href: "/contact", label: "Book a walkthrough" }
+    : { href: "/waitlist", label: "Join the waitlist" }
+}
+
+/**
  * Navigation bar for public-facing pages in the paper-first register (N12):
  * paper ground, a load-bearing hairline boundary, Public Sans links, the M2
  * selected treatment, the one mint button. Shows logo, nav links, theme
@@ -83,6 +113,7 @@ function isCurrent(pathname: string, href: string): boolean {
  */
 export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
   const pathname = usePathname()
+  const cta = primaryCta(pathname)
 
   // Hiding a link is presentation, not protection: /labs is gated in the proxy
   // and again inside the page. This only keeps a visitor who cannot open Labs
@@ -188,10 +219,10 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
               {/* Below 640px the sheet carries both CTAs; the bar keeps only
                   the toggle and the hamburger so nothing scrolls sideways. */}
               <Link
-                href="/contact"
+                href={cta.href}
                 className={cn(styles.buttonSolid, styles.ctaDesktopOnly)}
               >
-                Book a walkthrough
+                {cta.label}
               </Link>
             </>
           )}
@@ -250,8 +281,8 @@ export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
                       <Link href="/login" className={styles.buttonOutline}>
                         Log in
                       </Link>
-                      <Link href="/contact" className={styles.buttonSolid}>
-                        Book a walkthrough
+                      <Link href={cta.href} className={styles.buttonSolid}>
+                        {cta.label}
                       </Link>
                     </>
                   )}

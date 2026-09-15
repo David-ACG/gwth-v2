@@ -1,11 +1,23 @@
 /*
- * Legal pages (/privacy, /terms) in the FDE journal register (the chosen
- * homepage direction, see home-fde/). Same palette and idioms as labs-fde/
- * and about-fde/: cream/sage paper surfaces, ink text, a drenched dark-teal
- * masthead, ochre accents, Source Serif 4 display + body, mono metadata.
+ * Legal pages (/privacy, /terms), in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow and softened the single-side hairlines from the boundary
+ * token to the divider token. The load-bearing boundary on a panel stays
+ * `--v-line`, the measured one (boundary-contrast-check). This page was NOT one
+ * of the twenty surfaces reviewed in that batch: it only inherits the shared
+ * changes, so look at it in both themes before calling it converted.
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -26,28 +38,30 @@
   width: min(1100px, calc(100% - 2.5rem));
 }
 
-/* ---------------- Masthead (drenched teal band) ---------------- */
+/* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
   background: var(--v-quiet);
   color: var(--v-ink);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
-}
-
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.25rem, 4.5vw, 3.25rem);
 }
 
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.02em;
   max-width: 18ch;
+}
+
+/* Functional metadata, below the title rather than as an eyebrow above it
+   (paper-first-components, metadata rows; batch 1). */
+.mastheadMeta {
+  margin-top: 1rem;
+  font-family: var(--font-sans);
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  color: var(--v-muted);
 }
 
 /* ---------------- Legal prose ---------------- */
@@ -78,7 +92,7 @@
 
 .prose h2 {
   margin-top: 2.5rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 2rem;
   font-size: 1.3rem;
   font-weight: 600;
@@ -159,7 +173,7 @@
 /* Table-of-contents nav (terms): hairline-bounded mono-flavoured block. */
 .prose nav {
   margin-top: 2.5rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 2rem;
 }
 

@@ -1,13 +1,23 @@
 /*
- * Newsletter page in the FDE journal register (the chosen homepage
- * direction, see home-fde/). Same palette and idioms as labs-fde/ and
- * about-fde/: cream/sage paper surfaces, ink text, a drenched dark-teal
- * masthead, ochre accents, Source Serif 4 display + body, mono metadata.
- * The signup form is a paper panel with an ink border and square inputs;
- * the feature bullets are hairline lists.
+ * Newsletter page, in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow, the rule under every section head and the right-hand
+ * section labels that restated the heading beside them, and softened the
+ * remaining single-side hairlines from the boundary token to the divider token.
+ * The load-bearing boundary on a panel stays `--v-line`, which is the measured
+ * one (boundary-contrast-check).
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -35,28 +45,30 @@
   color: var(--v-muted);
 }
 
-/* ---------------- Masthead (drenched teal band) ---------------- */
+/* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
   background: var(--v-quiet);
   color: var(--v-ink);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
-}
-
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.25rem, 4.5vw, 3.25rem);
 }
 
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.02em;
   max-width: 18ch;
+}
+
+/* Consistent headline treatment: dark Bitter with the emphasis carried by a
+   jade italic (paper-first-register, the italic accent). David: "all the other
+   titles have a dark bold colour and then a green colour on non-bolded text".
+   Batch 1. */
+.mastheadTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
 }
 
 .standfirst {
@@ -89,8 +101,9 @@
 .panel {
   align-self: start;
   background: var(--v-surface);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   padding: 2rem 1.75rem;
+  border-radius: var(--radius-lg);
 }
 
 .form {
@@ -149,17 +162,21 @@
 /* ---------------- Hairline feature lists ---------------- */
 
 .listBlock + .listBlock {
-  margin-top: 2.5rem;
+  margin-top: 2.75rem;
 }
 
+/* No rule under the list head and none between the rows. David, on this page:
+   "The right side of this image has too many straight lines. It just looks
+   jarring" - the head rule plus a rule per row stacked five hairlines down the
+   right column. The glyph column and the row rhythm carry the list now, and
+   the two blocks are separated by space (batch 1). */
 .listHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 0.85rem;
+  margin-bottom: 0.35rem;
 }
 
 .listTitle {
@@ -180,8 +197,7 @@
   grid-template-columns: 2rem minmax(0, 1fr);
   gap: 1rem;
   align-items: baseline;
-  border-bottom: 1px solid var(--v-line);
-  padding: 0.9rem 0;
+  padding: 0.55rem 0;
   font-size: var(--fde-body);
   line-height: 1.65;
   color: var(--v-soft);
@@ -234,7 +250,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -257,4 +273,39 @@
   flex-wrap: wrap;
   gap: 0.875rem;
   margin-top: 2.5rem;
+}
+
+/*
+ * Two-column masthead (batch 1). This page used a single left column, so the
+ * right half of the first screen was empty colour: David, on /why-gwth, "There's
+ * a massive space to the right on this page, and all of the text is bunched to
+ * the left". Same shape as /lessons and /pricing, and no eyebrow row.
+ */
+@media (min-width: 64rem) {
+  .masthead .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+    column-gap: 4.5rem;
+    align-items: start;
+  }
+
+  .mastheadTitle {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    max-width: 20ch;
+  }
+
+  .standfirst {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    margin-top: 0.6rem;
+    max-width: 44ch;
+  }
+
+
+  .mastheadFoot {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
 }

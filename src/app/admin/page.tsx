@@ -36,7 +36,6 @@ export default async function AdminOverviewPage() {
       <section className={styles.section} data-section="cohort-health">
         <div className={styles.sectionHead}>
           <h1 className={styles.sectionTitle}>Cohort health.</h1>
-          <p className={styles.mono}>Overview</p>
         </div>
         {metrics ? (
           <MetricCards metrics={metrics} />

@@ -1,10 +1,19 @@
 /*
- * Lesson viewer in the FDE journal register (DESIGN_FDE.md).
- * The viewer keeps its full state machine (surfaces, audio bar,
- * auto-advance, widgets); this module carries the scoped --v-* palette
- * and remaps the Stone & Sage semantic layer the component classes
- * reference, so the re-skin is a token flip plus surgical class edits.
- * Full scoped --v-* palette per §8; never raw hex outside this block.
+ * Lesson viewer, in the PAPER-FIRST register (bible paper-first-lesson-viewer).
+ * The `-fde` name is kept so imports stay put; the FDE journal register the old
+ * header described is RETIRED, and DESIGN_FDE.md must not be used as guidance
+ * for this file.
+ *
+ * The viewer keeps its full state machine (surfaces, audio bar, auto-advance,
+ * widgets). This module remaps the shared semantic layer the component classes
+ * reference onto the `--v-*` tokens, so the register is a token flip plus
+ * surgical class edits. Never raw hex outside the block below.
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10): the three-up
+ * `?chrome=` variants are gone and their calm option is the default, so the
+ * outline rail's current row carries the M2 treatment (quiet fill AND a 3px ink
+ * bar AND a muted-to-ink label) instead of the transparent markers the old
+ * defaults left it with.
  */
 
 .shell {
@@ -43,76 +52,34 @@
   color-scheme: dark;
 }
 
-/* ── Tool chrome palette (three-up for David's pick) ──────────────────
+/* ── Tool chrome ─────────────────────────────────────────────────────
  *
  * David, 2026-07-26: "Please can we use a bit more subtle colour as
  * backgrounds of tools e.g. play bar, current lesson etc. It currently does
  * not highlight the most important parts of the page."
  *
- * The chrome (narration bar, outline rail, edge tabs, controls) is currently
- * drawn in near-black ink at full strength: 1px --v-ink borders and solid
- * --v-ink fills on the play button and the selected speed. That is the same
- * weight as the reading text, so nothing tells the eye where it should go.
+ * The three-up variants that answered that question (a/b/c behind
+ * `?chrome=`) are gone. Two of them were drawn in retired palette (the sand
+ * tray's #e3e1d1 / #cfcdba, the teal wash's rgba(44,74,71,...)) and the
+ * DEFAULT block reproduced the pre-N9 look: full-strength ink boundaries on
+ * the chrome, and a current rail row marked by nothing but a transparent
+ * fill and a transparent bar. That default is what David was looking at when
+ * he said of the rail "The left side all looks the same. It just looks like
+ * a list of text that I don't want to read" (2026-09-13).
  *
- * These six tokens are the only thing the variants change. Every chrome
- * element below reads them, so a variant is a token block and nothing else --
- * no component churn when David picks one, and the loser blocks just get
- * deleted. Defaults reproduce today's look exactly, so no `data-chrome`
- * attribute means no visual change.
+ * What the tokens carry now is option A, which is also the recipe the Bible
+ * settled on independently: chrome recedes onto the page's own paper with a
+ * measured --v-line boundary, and the current row is M2 hardened, the quiet
+ * fill AND a 3px ink bar AND a label that goes muted to ink and bolder
+ * (paper-first-components, tint-is-never-the-only-signal). Batch 1.
  */
 .shell {
-  --v-tool-bg: var(--v-surface);
-  --v-tool-line: var(--v-ink);
-  --v-tool-strong: var(--v-ink);
-  --v-tool-strong-text: var(--v-bg);
-  --v-current-bg: transparent;
-  --v-current-marker: transparent;
-}
-
-/* A — Recede. Chrome drops to the page's own paper with hairline rules, and
-   the only saturated thing left on the page is the control you can press.
-   Where you are is a soft cream block with a teal edge. */
-.shell[data-chrome="a"] {
   --v-tool-bg: var(--v-bg);
   --v-tool-line: var(--v-line);
-  --v-tool-strong: var(--v-quiet);
-  --v-tool-strong-text: var(--v-ink);
+  --v-tool-strong: var(--v-btn);
+  --v-tool-strong-text: var(--v-btn-text);
   --v-current-bg: var(--v-quiet);
   --v-current-marker: var(--v-ink);
-}
-
-/* B — Sand tray. The tools sit together on a warm sand surface, clearly a
-   toolbar and clearly not the page, but low contrast against it. Ochre marks
-   the current thing. */
-.shell[data-chrome="b"] {
-  --v-tool-bg: #e3e1d1;
-  --v-tool-line: #cfcdba;
-  --v-tool-strong: var(--v-quiet);
-  --v-tool-strong-text: var(--v-ink);
-  --v-current-bg: #f1ecdc;
-  --v-current-marker: var(--v-ink);
-}
-
-/* C — Teal wash. Chrome is quiet paper, and a 10% teal wash is spent ONLY on
-   the active thing: the page you are reading, the control that is running.
-   The strongest colour on the page marks your position in it. */
-.shell[data-chrome="c"] {
-  --v-tool-bg: var(--v-surface);
-  --v-tool-line: var(--v-line);
-  --v-tool-strong: var(--v-quiet);
-  --v-tool-strong-text: var(--v-ink);
-  --v-current-bg: rgba(44, 74, 71, 0.1);
-  --v-current-marker: var(--v-ink);
-}
-
-:global(.dark) .shell[data-chrome="b"] {
-  --v-tool-bg: #23251d;
-  --v-tool-line: #333629;
-  --v-current-bg: #2a2c24;
-}
-
-:global(.dark) .shell[data-chrome="c"] {
-  --v-current-bg: rgba(110, 168, 119, 0.16);
 }
 
 /* A tool surface: the narration bar, the outline rail, an edge tab. */
@@ -121,18 +88,20 @@
   border-color: var(--v-tool-line);
 }
 
-/* A solid control: the play button, the selected speed chip. */
+/* A solid control: the play button, the selected speed chip. The one button
+   is the mint fill with a near-black label, identical in both modes. */
 .toolControl {
   background: var(--v-tool-strong);
   border-color: var(--v-tool-strong);
   color: var(--v-tool-strong-text);
 }
 
-/* The row you are on in the outline rail. The inset shadow is the edge
-   marker, drawn inside the row so it cannot shift the rail's layout. */
+/* The row you are on in the outline rail. The bar is a real left border on
+   the button (set in the component) so it cannot shift the rail's layout;
+   this fills it in. */
 .railCurrent {
   background: var(--v-current-bg);
-  box-shadow: inset 3px 0 0 0 var(--v-current-marker); /* M2 bar: the tint is never the only signal */
+  border-left-color: var(--v-current-marker);
 }
 
 /* ── Sticky-header breadcrumb containment (mobile) ────────────────────
@@ -207,9 +176,9 @@
   color: var(--v-muted);
 }
 
-/* §4.6 pull quote: bounded by ink rules top and bottom, italic serif. */
+/* Pull quote: bounded by hairline dividers top and bottom, Bitter italic. */
 .pullQuote {
-  border-block: 1px solid var(--v-ink);
+  border-block: 1px solid var(--v-line-soft);
   padding: 1.4rem 0;
   margin: 2rem 0;
   font-family: var(--font-serif);
@@ -261,11 +230,6 @@
   line-height: 1.72;
 }
 
-
-/* Status text rendered as colour + glyph + text (§5.5). */
-.statusActive {
-  color: var(--v-ink);
-}
 
 /* Gate ticks: the wordless completion signal (video corner, CONTINUE button,
    progress-bar segments). Pop in, then the check strokes itself on. */

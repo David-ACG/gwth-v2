@@ -36,6 +36,84 @@
       "type": "string",
       "description": "One paragraph: who the student pretends to be, the realistic task, why it matters. Plain English."
     },
+    "summary": {
+      "type": "string",
+      "description": "The brief in a sentence or two, for the opening of the lab page and the read-aloud control. Never replaces brief."
+    },
+    "preview": {
+      "type": "object",
+      "description": "The glanceable preview shown on the labs index: a plain task cue, an outcome line, and a specimen composed from the lab's OWN material. Never an illustration, never an invented screenshot.",
+      "required": ["taskCue", "outcome", "specimen"],
+      "additionalProperties": false,
+      "properties": {
+        "taskCue": { "type": "string", "description": "Plain task cue in a visitor's own words, e.g. Spreadsheet clean-up." },
+        "outcome": { "type": "string", "description": "One outcome-led line: what the visitor walks away knowing." },
+        "specimen": {
+          "description": "A few lines of the lab's real material, drawn in CSS on the card.",
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["kind", "caption", "columns", "rows"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": { "const": "grid" },
+                "caption": { "type": "string", "description": "Where the rows come from." },
+                "columns": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "type": "string" } },
+                "rows": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 4,
+                  "items": {
+                    "type": "object",
+                    "required": ["cells"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "cells": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "type": "string" } },
+                      "note": { "type": "string", "description": "Why this row is interesting, in a few words. Omit for a clean row." }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": ["kind", "caption", "items"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": { "const": "pairs" },
+                "caption": { "type": "string", "description": "Where the pairs come from." },
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 3,
+                  "items": {
+                    "type": "object",
+                    "required": ["label", "value"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "label": { "type": "string" },
+                      "value": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "description": "A REAL, playable video guide. Present ONLY when the media exists and plays. Absence is the honest default and is what makes the planned state truthful; never add this to imply a video that has not been made.",
+      "required": ["src"],
+      "additionalProperties": false,
+      "properties": {
+        "src": { "type": "string", "description": "Playable source URL. Must resolve to real media." },
+        "poster": { "type": "string", "description": "Poster frame shown before play." },
+        "captions": { "type": "string", "description": "WebVTT captions track." },
+        "durationLabel": { "type": "string", "description": "Human running time as authored, e.g. 4 min. Never estimated." }
+      }
+    },
     "matchup": {
       "type": "array",
       "description": "Exactly two contestants.",

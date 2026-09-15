@@ -7,6 +7,29 @@
   "category": "HR",
   "testedOn": "2026-07-23",
   "brief": "You are an HR advisor at a small charity that runs a care home in rural Shropshire. A Registered Nurse post has sat open for four months, and the current advert is dry and forgettable. You give the same tired advert to two AI tools and ask each to rewrite it. Then you decide which rewrite you would actually be happy to post, and why. The skill you are practising is not writing the advert yourself. It is judging which tool did the better job, on a task you understand.",
+  "summary": "A Registered Nurse advert that has not worked for four months, rewritten by both tools from the same brief. You decide which rewrite you would be happy to post, and why.",
+  "preview": {
+    "taskCue": "Job advert rewrite",
+    "outcome": "Which rewrite sounds like a real person wrote it, and which one is honest about the nights and weekends.",
+    "specimen": {
+      "kind": "pairs",
+      "caption": "The advert this lab rewrites",
+      "items": [
+        {
+          "label": "Registered Nurse, care home",
+          "value": "rural Shropshire"
+        },
+        {
+          "label": "Vacancy open for",
+          "value": "four months"
+        },
+        {
+          "label": "The brief to both tools",
+          "value": "about 250 words, British English"
+        }
+      ]
+    }
+  },
   "matchup": [
     {
       "name": "Claude",

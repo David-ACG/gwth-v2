@@ -7,6 +7,29 @@
   "category": "Research",
   "testedOn": "2026-07-26",
   "brief": "You look after payroll and HR admin for a small company in England. You need three current figures, and your finance director will want to see where each one comes from. This is the task AI tools are most likely to quietly get wrong, because a confident wrong number with a broken link looks exactly like a confident right one. You give the same request to two tools, then you click every link they give you.",
+  "summary": "Three payroll figures that have to be right, each with a link your finance director can check. You click every link and see which tool sends you somewhere that proves the number.",
+  "preview": {
+    "taskCue": "Official figures, with sources",
+    "outcome": "Whether a confident answer comes with links that actually open and actually show the figure.",
+    "specimen": {
+      "kind": "pairs",
+      "caption": "The three figures this lab asks for",
+      "items": [
+        {
+          "label": "National Living Wage, 21 and over",
+          "value": "asked for with a GOV.UK link"
+        },
+        {
+          "label": "Statutory Sick Pay, weekly rate",
+          "value": "asked for with a GOV.UK link"
+        },
+        {
+          "label": "Redundancy pay, weekly cap",
+          "value": "asked for with a GOV.UK link"
+        }
+      ]
+    }
+  },
   "matchup": [
     {
       "name": "Claude",

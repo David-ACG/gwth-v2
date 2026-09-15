@@ -19,7 +19,7 @@ export type LessonPageKind = "video" | "prose" | "code" | "qa" | "project"
 export interface LessonOutlinePage {
   /** Page heading shown in the outline rail (derived from the `##` heading). */
   title: string
-  /** Outline-rail tag, e.g. `"PROSE · 4 MIN"` / `"CODE · 2 MIN"`. */
+  /** Outline-rail tag, e.g. `"Prose · 4 min"` / `"Code · 2 min"`. */
   kindLabel: string
   /** Page kind, drives body rendering (video/qa switch surface). */
   kind: LessonPageKind
@@ -204,7 +204,7 @@ export function buildLessonOutline({
   learnContent,
   hasIntroVideo,
   questionCount,
-  videoKindLabel = "VIDEO · 4 MIN",
+  videoKindLabel = "Video · 4 min",
   buildInstructions,
 }: BuildLessonOutlineInput): LessonOutlinePage[] {
   const pages: LessonOutlinePage[] = []
@@ -224,7 +224,7 @@ export function buildLessonOutline({
       // Non-empty body with no detectable sections - one prose page.
       pages.push({
         title: "Lesson",
-        kindLabel: `PROSE · ${readingMinutes(body)} MIN`,
+        kindLabel: `Prose · ${readingMinutes(body)} min`,
         kind: "prose",
         content: body,
       })
@@ -235,7 +235,7 @@ export function buildLessonOutline({
           // The rail renders plain text, so markdown emphasis in a `##`
           // heading has to come off or the marks show up literally.
           title: plainHeading(section.title) || LEAD_IN_TITLE,
-          kindLabel: `${isCode ? "CODE" : "PROSE"} · ${readingMinutes(section.body)} MIN`,
+          kindLabel: `${isCode ? "Code" : "Prose"} · ${readingMinutes(section.body)} min`,
           kind: isCode ? "code" : "prose",
           content: section.body,
         })
@@ -251,7 +251,7 @@ export function buildLessonOutline({
     const artefact = heading ? projectArtefactName(heading) : ""
     pages.push({
       title: projectPageTitle(artefact || null),
-      kindLabel: `PROJECT · ${readingMinutes(body)} MIN`,
+      kindLabel: `Project · ${readingMinutes(body)} min`,
       kind: "project",
       content: body,
       ...(artefact ? { projectHeading: artefact } : {}),
@@ -261,7 +261,7 @@ export function buildLessonOutline({
   if (questionCount > 0) {
     pages.push({
       title: "End-of-lesson Q&A",
-      kindLabel: `Q&A · ${questionCount} QUESTION${questionCount === 1 ? "" : "S"}`,
+      kindLabel: `Q&A · ${questionCount} question${questionCount === 1 ? "" : "s"}`,
       kind: "qa",
     })
   }

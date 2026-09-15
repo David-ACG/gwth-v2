@@ -13,7 +13,7 @@ interface VerifyFdeProps {
 }
 
 /**
- * Public credential verification page in the FDE journal register. The
+ * Public credential verification page, PAPER-FIRST register. The
  * credential is presented as the §5.7 highlight panel: paper surface, ink
  * border, the register's only shadow (hard teal offset on hover), a mono
  * credential-ID line, serif learner name, and a hairline row pairing the
@@ -31,7 +31,6 @@ export function VerifyFde({ credential, qrCode, verifyUrl }: VerifyFdeProps) {
     <div className={styles.shell}>
       <main className={styles.stage} data-section="verify">
         <div className={styles.stageInner}>
-          <p className={styles.kicker}>Public GWTH credential verification</p>
           <h1 className={styles.stageTitle}>
             This credential is <em>verified.</em>
           </h1>

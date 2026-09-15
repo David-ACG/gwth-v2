@@ -250,12 +250,10 @@ export function ActiveDashboard({
 
   return (
     <div className={styles.shell} data-section="dashboard-active">
-      <MastRow section={`DASHBOARD · TODAY`} date={formatToday()} />
 
       {/* TOP TASK BAND */}
       <section className={styles.band}>
         <div>
-          <p className={styles.mono}>TODAY · {formatTimeBst()}</p>
           <h1 className={styles.bandTitle}>
             Welcome{completed > 0 ? " back" : ""}, {firstName(user.name)}.
             <br />
@@ -277,13 +275,13 @@ export function ActiveDashboard({
         <div className={styles.bandAside}>
           <p className={styles.mono}>
             {next
-              ? `NEXT, IF YOU HAVE ${next.lesson.duration} MINUTES`
-              : "MONTH COMPLETE"}
+              ? `Next, if you have ${next.lesson.duration} minutes`
+              : "Month complete"}
           </p>
           <p className={cn(styles.mono, "mt-3")}>
             {next
-              ? `LESSON ${nextLessonNumber} · MONTH ${monthNumber}`
-              : `MONTH ${monthNumber} · ALL LESSONS DONE`}
+              ? `Lesson ${nextLessonNumber} · Month ${monthNumber}`
+              : `Month ${monthNumber} · all lessons done`}
           </p>
           <div className={styles.asideTitle}>
             {next ? next.lesson.title : "Every lesson is complete."}
@@ -321,7 +319,6 @@ export function ActiveDashboard({
           <h2 className={styles.sectionTitle}>
             Month {monthNumber} of 3. <em>Plain English.</em>
           </h2>
-          <p className={styles.mono}>SECTION 01 · YOUR COURSE</p>
         </div>
         <div className="flex items-baseline justify-between">
           <span className={styles.mono}>
@@ -332,9 +329,9 @@ export function ActiveDashboard({
           <Dashes value={completed} total={total} />
         </div>
         <div className={styles.dashMeta}>
-          <span className={styles.mono}>MONTH {monthNumber} OF 3</span>
+          <span className={styles.mono}>Month {monthNumber} of 3</span>
           <span className={styles.mono}>
-            {completed} DONE · {Math.max(0, total - completed)} TO GO
+            {completed} done · {Math.max(0, total - completed)} to go
           </span>
         </div>
 
@@ -342,16 +339,16 @@ export function ActiveDashboard({
         <div className={styles.table}>
           <div className={styles.tableHead}>
             <span />
-            <span className={styles.mono}>NO.</span>
-            <span className={styles.mono}>LESSON</span>
-            <span className={styles.mono}>LENGTH</span>
+            <span className={styles.mono}>No.</span>
+            <span className={styles.mono}>Lesson</span>
+            <span className={styles.mono}>Length</span>
           </div>
           {completed > 0 && (
             <div className={styles.tableRow}>
               <span className={styles.glyphDone} aria-hidden="true">
                 ✓
               </span>
-              <span className={styles.mono}>DONE</span>
+              <span className={styles.mono}>Done</span>
               <span className={styles.rowTitle}>
                 {completed} lesson{completed === 1 ? "" : "s"} complete.{" "}
                 <span className={styles.rowNote}>
@@ -359,7 +356,7 @@ export function ActiveDashboard({
                 </span>
               </span>
               <Link href={`/course/${course.slug}`} className={styles.monoLinkMuted}>
-                REVIEW →
+                Review
               </Link>
             </div>
           )}
@@ -368,7 +365,7 @@ export function ActiveDashboard({
               key={planned.lesson.id}
               num={planned.number}
               title={planned.lesson.title}
-              length={`${planned.lesson.duration} MIN`}
+              length={`${planned.lesson.duration} min`}
               state={
                 index === 0
                   ? nextLessonStarted
@@ -376,7 +373,7 @@ export function ActiveDashboard({
                     : "next"
                   : "pending"
               }
-              tag={planned.lesson.isOptional ? "OPTIONAL" : undefined}
+              tag={planned.lesson.isOptional ? "Optional" : undefined}
               href={`/course/${course.slug}/lesson/${planned.lesson.slug}`}
             />
           ))}
@@ -385,7 +382,7 @@ export function ActiveDashboard({
               <span className={styles.glyphDone} aria-hidden="true">
                 ✓
               </span>
-              <span className={styles.mono}>ALL</span>
+              <span className={styles.mono}>All</span>
               <span className={styles.rowTitle}>
                 Every lesson this month is complete.
               </span>
@@ -394,10 +391,10 @@ export function ActiveDashboard({
           )}
           <div className={styles.tableFoot}>
             <span className={styles.mono}>
-              + {Math.max(0, upcoming.length - 6)} MORE LESSONS THIS MONTH
+              + {Math.max(0, upcoming.length - 6)} more lessons this month
             </span>
             <Link href={`/course/${course.slug}`} className={styles.monoLink}>
-              VIEW ALL {total} →
+              View all {total}
             </Link>
           </div>
         </div>
@@ -406,7 +403,7 @@ export function ActiveDashboard({
         <div className={styles.cardsRow}>
           <div className={styles.card}>
             <div className={cn(styles.cardTop, styles.flvMoss)}>
-              <span>MONTH 02 · LOCKED</span>
+              <span>Month 02 · Locked</span>
               <span>No. 02</span>
             </div>
             <div className={styles.cardBody}>
@@ -415,14 +412,14 @@ export function ActiveDashboard({
                 20 mandatory plus 15 optional. Build towards app fluency.
               </p>
               <div className={styles.cardFoot}>
-                <span className={styles.monoStrong}>UNLOCKS AFTER MONTH 01</span>
+                <span className={styles.monoStrong}>Unlocks after month 01</span>
                 <span className={styles.mono}>35 lessons</span>
               </div>
             </div>
           </div>
           <div className={styles.card}>
             <div className={cn(styles.cardTop, styles.flvTeal)}>
-              <span>MONTH 03 · LOCKED</span>
+              <span>Month 03 · Locked</span>
               <span>No. 03</span>
             </div>
             <div className={styles.cardBody}>
@@ -431,7 +428,7 @@ export function ActiveDashboard({
                 20 mandatory plus 15 optional. Build towards enterprise fluency.
               </p>
               <div className={styles.cardFoot}>
-                <span className={styles.monoStrong}>UNLOCKS AFTER MONTH 02</span>
+                <span className={styles.monoStrong}>Unlocks after month 02</span>
                 <span className={styles.mono}>35 lessons</span>
               </div>
             </div>
@@ -442,10 +439,7 @@ export function ActiveDashboard({
       {/* PROGRESS + CURRENTNESS */}
       <div className={styles.splitGrid}>
         <div className={styles.splitCell}>
-          <p className={styles.mono}>
-            {ENABLE_GWTH_SCORE ? "SECTION 02 · YOUR GWTH SCORE" : "SECTION 02 · YOUR PROGRESS"}
-          </p>
-          <h2 className={cn(styles.sectionTitle, "mt-3")}>
+          <h2 className={styles.sectionTitle}>
             {ENABLE_GWTH_SCORE ? (
               <>
                 <em>Your score.</em> It grows with verified work.
@@ -495,10 +489,7 @@ export function ActiveDashboard({
         </div>
 
         <div className={styles.splitCell}>
-          <p className={styles.mono}>
-            {ENABLE_GWTH_SCORE ? "SECTION 03 · CREDENTIAL CURRENTNESS" : "SECTION 03 · COURSE CURRENTNESS"}
-          </p>
-          <h2 className={cn(styles.sectionTitle, "mt-3")}>
+          <h2 className={styles.sectionTitle}>
             Course is current.{" "}
             <em>It updates as the tools change.</em>
           </h2>
@@ -541,7 +532,6 @@ export function ActiveDashboard({
                 : "It starts with your first session."}
             </em>
           </h2>
-          <p className={styles.mono}>SECTION 04 · ACTIVITY</p>
         </div>
         <div className={styles.activityGrid}>
           <div className={styles.activityCell}>
@@ -579,11 +569,11 @@ export function ActiveDashboard({
           </div>
 
           <div className={styles.activityCellTeal}>
-            <p className={styles.tealMono}>CURRENT STREAK</p>
+            <p className={styles.tealMono}>Current streak</p>
             <div className={styles.hugeNumCream}>
               {streak.currentStreak}
               <span className={styles.hugeNumUnit}>
-                {streak.currentStreak === 1 ? "DAY" : "DAYS"}
+                {streak.currentStreak === 1 ? "day" : "days"}
               </span>
             </div>
             <p className={styles.activityNoteCream}>
@@ -592,7 +582,7 @@ export function ActiveDashboard({
                 : "Complete a lesson to start your streak."}
             </p>
             <div className={styles.tealDivider}>
-              <p className={styles.tealMono}>DAYS ACTIVE</p>
+              <p className={styles.tealMono}>Days active</p>
               <div className={styles.hugeNumCream} style={{ fontSize: "2.6rem" }}>
                 {daysActive}
               </div>
@@ -610,7 +600,6 @@ export function ActiveDashboard({
           <h2 className={styles.sectionTitle}>
             Every lesson ships a project. <em>They all live here.</em>
           </h2>
-          <p className={styles.mono}>SECTION 05 · PORTFOLIO</p>
         </div>
 
         {/* capstone strip — no capstone store yet, honest zero (W14) */}
@@ -643,7 +632,7 @@ export function ActiveDashboard({
             </p>
             <div className="mt-4 flex justify-between items-center gap-3 flex-wrap">
               <span className={styles.mono}>
-                LESSON PROJECTS ARE REVIEWED SEPARATELY · LABS ARE PRACTICE
+                Lesson projects are reviewed separately · labs are practice
               </span>
             </div>
           </div>
@@ -669,7 +658,6 @@ export function ActiveDashboard({
       {/* NOTIFICATIONS */}
       <section className={styles.section}>
         <div className="flex justify-between items-baseline gap-4">
-          <p className={styles.mono}>SECTION 06 · NOTIFICATIONS</p>
           <Link href="/notifications" className={styles.monoLinkMuted}>
             MARK ALL READ
           </Link>
@@ -686,7 +674,10 @@ export function ActiveDashboard({
                 <NotifRow
                   key={n.id}
                   time={formatNotificationTime(n.createdAt)}
-                  tag={n.type.toUpperCase()}
+                  // The type is a lowercase enum in the database; it is a
+                  // LABEL here, so it renders in sentence case rather than
+                  // shouted (paper-first-components, metadata rows).
+                  tag={n.type.charAt(0).toUpperCase() + n.type.slice(1)}
                   body={n.title}
                 />
               ))
@@ -705,11 +696,10 @@ export function FreeDashboard({ user }: { user: User | null }) {
   const name = user ? firstName(user.name) : "there"
   return (
     <div className={styles.shell} data-section="dashboard-free">
-      <MastRow section="DASHBOARD · LABS" date={formatToday()} />
 
       <section className={styles.band}>
         <div>
-          <p className={styles.mono}>FREE LABS · INVITE REQUIRED FOR COURSE</p>
+          <p className={styles.mono}>Free labs · invite required for the course</p>
           <h1 className={styles.bandTitle}>
             Welcome, {name}.
             <br />
@@ -723,7 +713,7 @@ export function FreeDashboard({ user }: { user: User | null }) {
           </p>
         </div>
         <div className={styles.bandAside}>
-          <p className={styles.mono}>BETA · INVITE ONLY</p>
+          <p className={styles.mono}>Beta · invite only</p>
           <div className={styles.asideTitle}>
             Month 1 unlocks Building with Claude, Codex and the consultant&rsquo;s
             prompt patterns.
@@ -752,7 +742,6 @@ export function FreeDashboard({ user }: { user: User | null }) {
           <h2 className={styles.sectionTitle}>
             24 lessons. <em>Plain English.</em>
           </h2>
-          <p className={styles.mono}>SECTION 01 · WHAT MONTH 1 ACTUALLY CONTAINS</p>
         </div>
         <div className={styles.teaserGrid}>
           <TeaserCol
@@ -779,27 +768,25 @@ export function FreeDashboard({ user }: { user: User | null }) {
             <h2 className={styles.sectionTitle}>
               18 public labs. <em>Use them tonight.</em>
             </h2>
-            <p className={styles.mono}>SECTION 02 · FREE LABS · PRACTICE</p>
           </div>
-          <p className={styles.mono}>NO CARD REQUIRED</p>
+          <p className={styles.mono}>No card required</p>
           <div className={styles.labList}>
-            <LabFullRow title="Resume rewriter for non-tech roles" tag="JOB SEARCH" duration="40 MIN" />
-            <LabFullRow title="Email triage with three rules" tag="OPS" duration="25 MIN" />
-            <LabFullRow title="Spreadsheet QA in plain English" tag="OPS" duration="35 MIN" />
-            <LabFullRow title="Brief generator for marketing teams" tag="MARKETING" duration="50 MIN" />
-            <LabFullRow title="Reading dense PDFs without reading them" tag="RESEARCH" duration="30 MIN" />
+            <LabFullRow title="Resume rewriter for non-tech roles" tag="Job search" duration="40 min" />
+            <LabFullRow title="Email triage with three rules" tag="Ops" duration="25 min" />
+            <LabFullRow title="Spreadsheet QA in plain English" tag="Ops" duration="35 min" />
+            <LabFullRow title="Brief generator for marketing teams" tag="Marketing" duration="50 min" />
+            <LabFullRow title="Reading dense PDFs without reading them" tag="Research" duration="30 min" />
             <div className={styles.tableFoot}>
-              <span className={styles.mono}>+ 13 MORE</span>
+              <span className={styles.mono}>+ 13 more</span>
               <Link href="/labs" className={styles.monoLink}>
-                BROWSE ALL 18 →
+                Browse all 18
               </Link>
             </div>
           </div>
         </div>
 
         <div className={styles.splitCell}>
-          <p className={styles.mono}>SECTION 03 · BETA ACCESS</p>
-          <h2 className={cn(styles.sectionTitle, "mt-3")}>
+          <h2 className={styles.sectionTitle}>
             <em>Invite-only.</em> Public signup and billing are closed for beta.
           </h2>
           <div className={styles.panel}>
@@ -855,17 +842,15 @@ export function LapsedDashboard({
   const graceEndsLabel = user.gracePeriodEnds
     ? user.gracePeriodEnds
         .toLocaleDateString("en-GB", { day: "numeric", month: "short" })
-        .toUpperCase()
     : null
   return (
     <div className={styles.shell} data-section="dashboard-lapsed">
-      <MastRow section="DASHBOARD · TODAY" date={formatToday()} />
 
       {/* GRACE BANNER */}
       <div className={styles.graceBanner}>
         <div className="flex items-center gap-5 flex-wrap">
           <span className={styles.statusWarm}>
-            ▲ {ENABLE_BILLING ? "PAYMENT FAILED · 4 MAY" : "ACCOUNT REVIEW · BETA"}
+            ▲ {ENABLE_BILLING ? "Payment failed · 4 May" : "Account review · beta"}
           </span>
           <div className={styles.graceText}>
             {ENABLE_BILLING
@@ -886,7 +871,6 @@ export function LapsedDashboard({
       {/* TOP TASK BAND */}
       <section className={styles.band}>
         <div>
-          <p className={styles.mono}>TODAY · {formatTimeBst()}</p>
           <h1 className={styles.bandTitle}>
             You&rsquo;re still on track,
             <br />
@@ -904,11 +888,11 @@ export function LapsedDashboard({
         <div className={styles.bandAside}>
           <p className={styles.mono}>
             {next
-              ? `NEXT, IF YOU HAVE ${next.lesson.duration} MINUTES`
-              : "YOUR COURSE"}
+              ? `Next, if you have ${next.lesson.duration} minutes`
+              : "Your course"}
           </p>
           <p className={cn(styles.mono, "mt-3")}>
-            LESSON {nextLessonNumber} · MONTH {monthNumber} · STILL OPEN
+            Lesson {nextLessonNumber} · Month {monthNumber} · still open
           </p>
           <div className={styles.asideTitle}>
             {next ? next.lesson.title : "Your lessons are still open."}
@@ -943,7 +927,6 @@ export function LapsedDashboard({
             <h2 className={styles.sectionTitle}>
               Month {monthNumber} of 3.
             </h2>
-            <p className={styles.mono}>SECTION 01 · YOUR COURSE · STILL OPEN</p>
           </div>
           <div className="flex items-baseline justify-between">
             <span className={styles.mono}>
@@ -956,11 +939,11 @@ export function LapsedDashboard({
           <div className={styles.dashMeta}>
             <span className={styles.mono}>
               {graceEndsLabel
-                ? `OPEN UNTIL ${graceEndsLabel}`
-                : "OPEN THROUGH YOUR GRACE WINDOW"}
+                ? `Open until ${graceEndsLabel}`
+                : "Open through your grace window"}
             </span>
             <span className={styles.statusWarm}>
-              ▲ {ENABLE_BILLING ? "UPDATE PAYMENT TO CONTINUE" : "MANUAL REVIEW REQUIRED"}
+              ▲ {ENABLE_BILLING ? "Update payment to continue" : "Manual review required"}
             </span>
           </div>
 
@@ -970,7 +953,7 @@ export function LapsedDashboard({
                 key={planned.lesson.id}
                 num={planned.number}
                 title={planned.lesson.title}
-                length={`${planned.lesson.duration} MIN`}
+                length={`${planned.lesson.duration} min`}
                 state={
                   index === 0
                     ? nextLessonStarted
@@ -978,7 +961,7 @@ export function LapsedDashboard({
                       : "next"
                     : "pending"
                 }
-                tag={planned.lesson.isOptional ? "OPTIONAL" : undefined}
+                tag={planned.lesson.isOptional ? "Optional" : undefined}
                 href={
                   course
                     ? `/course/${course.slug}/lesson/${planned.lesson.slug}`
@@ -988,10 +971,10 @@ export function LapsedDashboard({
             ))}
             <div className={styles.tableFoot}>
               <span className={styles.statusWarm}>
-                ▲ LESSONS LOCK IF GRACE LAPSES
+                ▲ Lessons lock if grace lapses
               </span>
               <Link href="/settings" className={styles.monoLink}>
-                {ENABLE_BILLING ? "UPDATE CARD →" : "CONTACT SUPPORT →"}
+                {ENABLE_BILLING ? "Update card" : "Contact support"}
               </Link>
             </div>
           </div>
@@ -1002,9 +985,9 @@ export function LapsedDashboard({
               <p className={styles.mono}>
                 {ENABLE_BILLING
                   ? graceEndsLabel
-                    ? `IF YOU UPDATE BY ${graceEndsLabel}`
-                    : "IF YOU UPDATE IN TIME"
-                  : "IF ACCESS IS RESTORED"}
+                    ? `If you update by ${graceEndsLabel}`
+                    : "If you update in time"
+                  : "If access is restored"}
               </p>
               <p className={styles.impactNote}>
                 Nothing changes. Lessons stay open and your Capstone project keeps
@@ -1012,7 +995,7 @@ export function LapsedDashboard({
               </p>
             </div>
             <div className={styles.impactCell}>
-              <p className={styles.statusWarm}>▲ IF YOU DON&rsquo;T</p>
+              <p className={styles.statusWarm}>▲ If you don&rsquo;t</p>
               <p className={styles.impactNote}>
                 Lessons close when your grace window ends. Your progress is
                 retained, and you can resume at any time with no re-enrolment.
@@ -1022,12 +1005,7 @@ export function LapsedDashboard({
         </div>
 
         <div className={styles.splitCell}>
-          <p className={styles.mono}>
-            {ENABLE_GWTH_SCORE
-              ? "SECTION 02 · YOUR GWTH SCORE · FROZEN"
-              : "SECTION 02 · PROGRESS PAUSED"}
-          </p>
-          <h2 className={cn(styles.sectionTitle, "mt-3")}>
+          <h2 className={styles.sectionTitle}>
             <em>Holding.</em>{" "}
             {ENABLE_GWTH_SCORE ? "No new verification." : "No new course progress."}
           </h2>
@@ -1050,7 +1028,7 @@ export function LapsedDashboard({
 
           <div className={styles.panelRust}>
             <p className={styles.statusWarm}>
-              ▲ {ENABLE_GWTH_SCORE ? "WHAT EMPLOYERS SEE NOW" : "WHAT HAPPENS NOW"}
+              ▲ {ENABLE_GWTH_SCORE ? "What employers see now" : "What happens now"}
             </p>
             <p className={cn(styles.bodyText, "mt-2")}>
               {ENABLE_GWTH_SCORE
@@ -1060,11 +1038,10 @@ export function LapsedDashboard({
           </div>
 
           <div className="mt-5 pt-5" style={{ borderTop: "1px solid var(--v-line)" }}>
-            <p className={styles.mono}>SECTION 03 · ACCOUNT</p>
             {ENABLE_BILLING ? (
               <div className={styles.panel}>
                 <div className="flex justify-between items-center mb-2 gap-3">
-                  <span className={styles.monoStrong}>PAYMENT METHOD</span>
+                  <span className={styles.monoStrong}>Payment method</span>
                   <span className={styles.statusWarm}>▲ Payment failed</span>
                 </div>
                 <div className={styles.note}>
@@ -1101,7 +1078,6 @@ export function LapsedDashboard({
 
       {/* postscript */}
       <section className={styles.postscript}>
-        <p className={styles.tealMono}>SECTION 04 · POSTSCRIPT</p>
         <h3 className={styles.postscriptTitle}>
           Progress pauses
           <br />
@@ -1119,16 +1095,6 @@ export function LapsedDashboard({
 }
 
 // ─── Inline subcomponents ─────────────────────────────────────────────────────
-
-function MastRow({ section, date }: { section: string; date: string }) {
-  return (
-    <div className={styles.mastRow}>
-      <span className={styles.mono}>{section}</span>
-      <span className={styles.mono}>{date}</span>
-      <span className={styles.mono}>BETA</span>
-    </div>
-  )
-}
 
 /**
  * §4.5 dash-progress strip. aria-hidden; every usage sits next to text that
@@ -1214,11 +1180,11 @@ function LessonRow({
 }) {
   const highlighted = state === "current" || state === "next"
   const stateLabel = {
-    done: "DONE",
-    current: "IN PROGRESS",
-    next: "NEXT UP",
+    done: "Done",
+    current: "In progress",
+    next: "Next up",
     pending: "",
-    locked: "NEXT MONTH",
+    locked: "Next month",
   }[state]
   // A locked row has nothing to open, so it stays inert even if a href is
   // passed. Branching on the element rather than using a dynamic tag keeps
@@ -1401,44 +1367,13 @@ function firstName(full: string): string {
   return full.split(" ")[0] ?? full
 }
 
-function formatToday(): string {
-  const now = new Date()
-  const day = now.toLocaleDateString("en-GB", {
-    weekday: "short",
-  })
-  const date = now.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  })
-  const time = now.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "Europe/London",
-  })
-  return `${day.toUpperCase()} ${date.toUpperCase()} · ${time} BST`
-}
-
-function formatTimeBst(): string {
-  const time = new Date().toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "Europe/London",
-  })
-  return `${time} BST`
-}
-
 function formatNotificationTime(date: Date): string {
   const diffMs = Date.now() - date.getTime()
   const diffH = Math.floor(diffMs / (1000 * 60 * 60))
-  if (diffH < 1) return "JUST NOW"
-  if (diffH < 24) return `${diffH}H AGO`
+  if (diffH < 1) return "Just now"
+  if (diffH < 24) return `${diffH}h ago`
   const diffD = Math.floor(diffH / 24)
-  if (diffD === 1) return "YESTERDAY"
-  if (diffD < 7) return `${diffD} DAYS AGO`
-  return date
-    .toLocaleDateString("en-GB", { day: "numeric", month: "short" })
-    .toUpperCase()
+  if (diffD === 1) return "Yesterday"
+  if (diffD < 7) return `${diffD} days ago`
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })
 }

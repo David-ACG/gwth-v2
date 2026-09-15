@@ -84,6 +84,53 @@ describe("model-arena data", () => {
     }
   })
 
+  /**
+   * The index preview (bead gwth-launch-88z.32.22). David asked for a video
+   * thumbnail per lab; no lab video has been recorded, so each card previews
+   * the lab's OWN material instead. That is only honest while the quoted
+   * material really is the lab's, which is what this checks: a specimen value
+   * that does not appear in the lab's prompt or brief is a fabrication, and a
+   * fabricated preview is worse than no preview.
+   */
+  it("previews every live lab with material quoted from that lab", () => {
+    for (const lab of getLiveArenaLabs()) {
+      expect(lab.summary, `${lab.slug} needs a summary`).toBeTruthy()
+      const preview = lab.preview
+      expect(preview, `${lab.slug} needs a preview`).toBeDefined()
+      expect(preview!.taskCue.length).toBeGreaterThan(3)
+      expect(preview!.outcome.length).toBeGreaterThan(20)
+
+      const specimen = preview!.specimen
+      if (specimen.kind === "grid") {
+        const source = `${lab.prompt}\n${lab.brief}`
+        for (const row of specimen.rows) {
+          for (const cell of row.cells) {
+            expect(source, `${lab.slug}: "${cell}" is not in the lab`).toContain(
+              cell
+            )
+          }
+        }
+        expect(specimen.rows.length).toBeGreaterThanOrEqual(2)
+      } else {
+        expect(specimen.items.length).toBeGreaterThanOrEqual(2)
+        expect(specimen.items.length).toBeLessThanOrEqual(3)
+      }
+    }
+  })
+
+  /**
+   * `video` is the ONLY evidence any surface accepts that a lab has playable
+   * media. A src that is present must be a real path, never a placeholder, so
+   * "coming soon" can never reach a page as a play button.
+   */
+  it("never carries a placeholder video source", () => {
+    for (const lab of getArenaLabs()) {
+      if (!lab.video) continue
+      expect(lab.video.src).toMatch(/^(https?:)?\/\S+/)
+      expect(lab.video.src).not.toMatch(/example\.(com|mp4)$|placeholder|tbc/i)
+    }
+  })
+
   it("returns null for an unknown slug", () => {
     expect(getArenaLab("does-not-exist")).toBeNull()
   })

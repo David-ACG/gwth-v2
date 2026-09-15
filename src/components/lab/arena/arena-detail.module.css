@@ -1,10 +1,19 @@
 /*
  * Model Arena lab detail (head-to-head) and the read-only archive view, in the
- * FDE journal register. Same palette and idioms as home-fde/ and labs-fde:
- * cream/sage paper, ink text, a drenched teal matchup band, ochre accents,
- * Source Serif 4 display + body, JetBrains Mono metadata, hairline rules,
- * square corners. The full --v-* palette is scoped on .shell with a .dark
- * override so the site-wide theme toggle flips the whole page (DESIGN_FDE §8).
+ * PAPER-FIRST register (bible paper-first-lab-page, paper-first-tokens,
+ * paper-first-components). The cream and sage grounds, the drenched teal
+ * matchup band, the ochre accents, Source Serif 4 and the JetBrains Mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; every colour comes
+ * from the --v-* tokens in globals.css and there is no raw hex here; R2
+ * corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * The opening was rebuilt for bead gwth-launch-88z.32.22 (David's annotation
+ * on this page: "too complicated and too much text ... and there's not even a
+ * voice reader"). The two model-provenance columns that used to fill the first
+ * screen now live inside a disclosure further down; the first screen carries
+ * the title, two sentences, the outcome line, the video-guide state and the
+ * read-aloud control.
  */
 
 .shell {
@@ -40,15 +49,7 @@
   padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
 }
 
-.matchupKicker {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--v-soft);
-}
-
 .matchupTitle {
-  margin-top: 1rem;
   font-size: clamp(2.1rem, 5vw, 3.4rem);
   font-weight: 600;
   line-height: 1.08;
@@ -56,24 +57,227 @@
   max-width: 20ch;
 }
 
-.contestants {
+/* Public Sans, muted, sentence case. The mono small-caps kicker went out with
+   JetBrains Mono (paper-first-lab-page). */
+/* --v-soft rather than the usual metadata --v-muted: this line sits on the
+   --v-quiet band, where --v-muted measures 4.31 : 1 against a 4.5 : 1 text bar
+   (boundary-contrast-check). */
+.kicker {
+  margin-bottom: 0.7rem;
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  color: var(--v-soft);
+}
+
+.standfirst {
+  margin-top: 1.25rem;
+  max-width: 54ch;
+  font-size: var(--fde-body-lg);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+/* What the reader walks away having decided, said once, near the top. The
+   label is a word, not a chip: metadata rows are never pills
+   (paper-first-components). */
+.outcome {
+  margin-top: 1rem;
+  max-width: 54ch;
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-ink);
+}
+
+.outcome span {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: var(--fde-mono-sm);
+  font-weight: 600;
+  color: var(--v-soft);
+}
+
+/*
+ * Two-column masthead at desktop, the same shape as the marketing mastheads.
+ * In one column the standfirst ran out at 54ch and left the right half of the
+ * band empty, which pushed the video and listen panels off the first screen:
+ * the annotation was about the first screen, so that is the thing to fix.
+ *
+ * Scoped to the head-to-head lab by its data-section. The retired-format
+ * ARCHIVE view shares this stylesheet and this band, but it has no kicker,
+ * standfirst or outcome to put in the second column, so it keeps the single
+ * column it was built with.
+ */
+@media (min-width: 64rem) {
+  .matchup[data-section="intro"] .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+    column-gap: 4.5rem;
+    align-items: start;
+  }
+
+  .matchup[data-section="intro"] .kicker {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .matchup[data-section="intro"] .matchupTitle {
+    grid-column: 1;
+    grid-row: 2;
+    max-width: 16ch;
+  }
+
+  .matchup[data-section="intro"] .standfirst {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0.5rem;
+  }
+
+  .matchup[data-section="intro"] .outcome {
+    grid-column: 2;
+    grid-row: 3;
+    margin-top: 1.5rem;
+  }
+
+  .matchup[data-section="intro"] .matchupFoot {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: end;
+  }
+}
+
+/* The two routes through the lab, side by side once there is room: the video
+   guide (or its honest ready state) and the read-aloud control. */
+.introMedia {
   margin-top: clamp(1.75rem, 4vw, 2.5rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 52rem) {
+  .introMedia {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.videoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.25rem 1.25rem;
+}
+
+/* A real player, when there is real media. 8px, like every other image and
+   control in the register. */
+.video {
+  width: 100%;
+  border-radius: var(--radius-md);
+  background: var(--v-quiet);
+}
+
+.videoTitle {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.videoNote {
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+/* Jump list. Underlined links in the ink, not chips and not buttons: they
+   navigate within the page and should read as text that goes somewhere. */
+.jump {
+  margin-top: clamp(1.5rem, 3.5vw, 2rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.jumpLink {
+  font-size: var(--fde-mono-md);
+  font-weight: 600;
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--v-accent);
+  border-radius: var(--radius-sm);
+}
+
+.jumpLink:hover {
+  color: var(--v-accent);
+  text-decoration-color: var(--v-accent);
+}
+
+.jumpLink:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 3px;
+}
+
+/* ---------------- Disclosures (provenance and the raw prompt) ------------- */
+
+.disclosure {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 0.9rem;
+}
+
+.disclosureSummary {
+  cursor: pointer;
+  font-size: var(--fde-body);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--v-ink);
+  border-radius: var(--radius-sm);
+}
+
+.disclosureSummary:hover {
+  color: var(--v-accent);
+}
+
+.disclosureSummary:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 3px;
+}
+
+.disclosureNote {
+  margin-top: 1rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
+  max-width: 62ch;
+}
+
+.contestants {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
   align-items: stretch;
 }
 
 @media (min-width: 40rem) {
   .contestants {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
   }
 }
 
 .contestant {
   border-top: 1px solid var(--v-line-soft);
   padding-top: 0.9rem;
+  min-width: 0;
 }
 
 .contestantName {
@@ -85,7 +289,7 @@
 .contestantModel {
   margin-top: 0.35rem;
   font-family: var(--font-sans);
-  font-size: 0.68rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   color: var(--v-ink);
 }
@@ -97,28 +301,27 @@
   color: var(--v-soft);
 }
 
-.versus {
-  align-self: center;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--v-soft);
-  text-align: center;
-}
-
+/* Metadata row, grouped left rather than a ruled band spread edge to edge
+   (batch 1; same change as the marketing mastheads). */
 .matchupFoot {
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  border-top: 1px solid var(--v-line-soft);
-  padding-top: 1.1rem;
+  margin-top: clamp(1.5rem, 3.5vw, 2rem);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 2rem;
+  align-items: baseline;
+  gap: 0.35rem 0;
+}
+
+/* The separator trails the item it follows, so when the row wraps on a phone a
+   middot never starts a line (batch 1). */
+.matchupFoot p:not(:last-child)::after {
+  content: "\00b7";
+  margin-inline: 0.85rem;
+  color: var(--v-line);
 }
 
 .matchupFoot p {
   font-family: var(--font-sans);
-  font-size: 0.7rem;
+  font-size: var(--fde-mono-sm);
   font-weight: 500;
   color: var(--v-soft);
 }
@@ -127,13 +330,14 @@
 
 .archivedBanner {
   margin: clamp(2rem, 4vw, 2.75rem) 0 0;
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   background: var(--v-surface);
   padding: 1.1rem 1.25rem;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.5rem 1rem;
+  border-radius: var(--radius-lg);
 }
 
 .archivedBanner .badge {
@@ -165,8 +369,6 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 0.9rem;
   margin-bottom: 1.5rem;
 }
 
@@ -202,12 +404,13 @@
 /* ---------------- Shared prompt (mono code block on paper) ---------------- */
 
 .promptBlock {
+  margin-top: 1rem;
   font-family: var(--font-jetbrains), ui-monospace, monospace;
   font-size: 0.85rem;
   line-height: 1.6;
   color: var(--v-ink);
   background: var(--v-surface);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   border-radius: 8px;
   padding: 1.1rem 1.2rem;
   white-space: pre-wrap;
@@ -234,6 +437,7 @@
   border: 1px solid var(--v-line);
   background: var(--v-surface);
   min-width: 0;
+  border-radius: var(--radius-lg);
 }
 
 .outputHead {
@@ -274,12 +478,12 @@
 /* ---------------- Rubric ---------------- */
 
 .rubricList {
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   counter-reset: rubric;
 }
 
 .rubricItem {
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: 1rem 0 1rem 2.4rem;
   position: relative;
   counter-increment: rubric;
@@ -321,9 +525,10 @@
 /* ---------------- Verdict ---------------- */
 
 .verdictPanel {
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   background: var(--v-surface);
   padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-radius: var(--radius-lg);
 }
 
 .verdictWinner {
@@ -363,12 +568,12 @@
 /* ---------------- Try it yourself ---------------- */
 
 .tryList {
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   counter-reset: tryit;
 }
 
 .tryItem {
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: 0.9rem 0 0.9rem 2.4rem;
   position: relative;
   counter-increment: tryit;
@@ -418,7 +623,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -437,7 +642,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.875rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 1.75rem;
 }
 
@@ -451,14 +656,14 @@
 }
 
 .outcomeList {
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .outcomeRow {
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: 0.75rem 0;
   font-size: 0.98rem;
   line-height: 1.55;

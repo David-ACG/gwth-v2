@@ -1,12 +1,23 @@
 /*
- * For Teams page in the FDE journal register (the chosen homepage
- * direction, see home-fde/). Same palette and idioms as labs-fde/ and
- * lessons-fde/: cream/sage paper surfaces, ink text, a drenched dark-teal
- * masthead, ochre accents, Source Serif 4 display + body, mono metadata,
- * colour-block card tops.
+ * For teams page, in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow, the rule under every section head and the right-hand
+ * section labels that restated the heading beside them, and softened the
+ * remaining single-side hairlines from the boundary token to the divider token.
+ * The load-bearing boundary on a panel stays `--v-line`, which is the measured
+ * one (boundary-contrast-check).
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -34,23 +45,15 @@
   color: var(--v-muted);
 }
 
-/* ---------------- Masthead (drenched teal band) ---------------- */
+/* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
   background: var(--v-quiet);
   color: var(--v-ink);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
-}
-
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.25rem, 4.5vw, 3.25rem);
 }
 
 .mastheadTitle {
-  margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
   font-weight: 600;
   line-height: 1.05;
@@ -79,14 +82,25 @@
   margin-top: 2rem;
 }
 
+/* Metadata row, grouped left (batch 1). It used to be a ruled band spread
+   edge to edge, which left each fact stranded in its own third of the screen:
+   David, on /tech-radar, "it just looks like it's been thrown in the middle of
+   nowhere". Facts now sit together as one line under the standfirst, separated
+   by a middot rather than by a rule. paper-first-components, metadata rows. */
 .mastheadFoot {
-  margin-top: clamp(2.25rem, 5vw, 3.5rem);
-  border-top: 1px solid var(--v-line-soft);
-  padding-top: 1.25rem;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 2rem;
+  align-items: baseline;
+  gap: 0.35rem 0;
+}
+
+/* The separator trails the item it follows, so when the row wraps on a phone a
+   middot never starts a line (batch 1). */
+.mastheadFoot p:not(:last-child)::after {
+  content: "\00b7";
+  margin-inline: 0.85rem;
+  color: var(--v-line);
 }
 
 .mastheadFoot p {
@@ -96,52 +110,52 @@
   color: var(--v-soft);
 }
 
-/* Two-column masthead (David picked option B, 2026-07-26 demo-path audit).
-   Every inner page used a single left column and left the right half of the
-   first screen as empty colour, while the home hero - the strongest surface on
-   the site - is a two-column composition. This applies the home shape: headline
-   left on a wider measure, standfirst and buttons right, the rule under the
-   kicker carried through, and the foot spanning both. Below 64rem it stays a
-   single stacked column, unchanged. */
+/*
+ * Two-column masthead, batch 1 revision. Three things changed against the
+ * 2026-07-26 version:
+ *   1. The kicker row is gone, so the headline is row 1 (David: "Please don't
+ *      have these eyebrows, especially when they repeat what's in the main
+ *      message or title").
+ *   2. The headline SPANS the standfirst and the actions instead of sitting
+ *      beside the standfirst alone. On /for-teams a three-line headline made
+ *      row 2 tall and stranded the buttons a long way below the sentence they
+ *      belong to ("There are gaps in strange places").
+ *   3. The rule above the standfirst is gone; the column gap already separates
+ *      the two halves, so the line was furniture.
+ */
 @media (min-width: 64rem) {
   .masthead .page {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
     column-gap: 4.5rem;
     align-items: start;
   }
 
-  .mastheadKicker {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
   .mastheadTitle {
     grid-column: 1;
-    grid-row: 2;
-    margin-top: 1rem;
-    max-width: 22ch;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+    max-width: 20ch;
   }
 
   .standfirst {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
     align-self: start;
-    margin-top: 1rem;
-    border-top: 1px solid var(--v-line-soft);
-    padding-top: 1.6rem;
-    max-width: 46ch;
+    margin-top: 0.6rem;
+    max-width: 44ch;
   }
 
   .mastheadActions {
     grid-column: 2;
-    grid-row: 3;
-    margin-top: 1.6rem;
+    grid-row: 2;
+    align-self: start;
+    margin-top: 1.4rem;
   }
 
   .mastheadFoot {
     grid-column: 1 / -1;
-    grid-row: 4;
+    grid-row: 3;
   }
 }
 
@@ -175,7 +189,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -197,19 +211,22 @@
 
 .sectionAlt {
   background: var(--v-surface);
-  border-top: 1px solid var(--v-line);
-  border-bottom: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
+/* The section head no longer draws a rule across the page. One line under
+   every heading was the most repeated piece of furniture on the site, and it
+   is what "too many lines in other places" was describing; the gap below the
+   heading now does the separating (paper-first-register, hierarchy from
+   spacing and type). Batch 1. */
 .sectionHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 1rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
@@ -248,8 +265,7 @@
 }
 
 .stat {
-  border-top: 1px solid var(--v-ink);
-  padding-top: 1rem;
+  padding-top: 0.25rem;
 }
 
 .stat strong {
@@ -269,13 +285,37 @@
   color: var(--v-soft);
 }
 
-/* Citation for a single stat, sitting inside its own tile. */
+/*
+ * Citation for a single stat (a-20260914-195842-52169b). David: "These source
+ * notes should be a different shade background as they are lost in the text
+ * above them". They were --v-muted body text set straight under a --v-soft
+ * label at almost the same size, with nothing but a margin between them, so on
+ * a bright screen the citation read as a third line of the label.
+ *
+ * It is now a chip: shrink-wrapped to its own text, R2 chip radius (6px), the
+ * quiet fill behind it, and one clear step down in size. Two accessibility
+ * notes, both measured rather than eyeballed (boundary-contrast-check):
+ *
+ *  - the text is --v-soft, NOT --v-muted. --v-muted on --v-quiet is 4.31:1 in
+ *    light mode, under the 4.5:1 text bar; --v-soft gives 7.72:1 light and
+ *    8.76:1 dark. Subordinate is a matter of size and width here, not of
+ *    dropping the contrast under the bar.
+ *  - no boundary. --v-line against --v-quiet is 2.84:1 light and 2.98:1 dark,
+ *    both under the 3:1 non-text bar, so a hairline round this chip would be a
+ *    line you cannot see. The fill does not have to carry anything on its own
+ *    (tint-is-never-the-only-signal) because the word "Source:" is the signal.
+ */
 .statSource {
+  display: inline-block;
   margin-top: 0.9rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--v-quiet);
   font-family: var(--font-sans);
   font-size: var(--fde-mono-xs);
   font-weight: 500;
-  color: var(--v-muted);
+  line-height: 1.4;
+  color: var(--v-soft);
 }
 
 .statsFoot {
@@ -308,53 +348,99 @@
   }
 }
 
+/*
+ * The comparison panel, rebuilt for a-20260914-200101-e34e36. The retired
+ * coloured card top is gone from this card entirely (bible
+ * paper-first-components: "No coloured card tops"), and with it all four of
+ * the faults David listed: the square band inside the 10px corner, the
+ * --v-muted fill carrying --v-ink text at 1.85:1, the --v-quiet fill
+ * disappearing into the white section at 1.17:1, and the tiny type on what he
+ * reasonably read as the title.
+ *
+ * What replaces it is hierarchy: name, then what it is, then the figure, then
+ * the argument. Both sides wear the SAME panel so the eye compares the content
+ * rather than the decoration, and which side is which is told by the words
+ * "Elsewhere" and "This course" plus the names themselves, never by a fill
+ * (tint-is-never-the-only-signal).
+ *
+ * The boundary is --v-line on a --v-bg panel: 3.02:1 against the page ground
+ * and 3.33:1 against the white band it sits on in light mode, 3.59 and 3.09 in
+ * dark, so the worst of the four clears the 3:1 bar (boundary-contrast-check).
+ */
 .compareCard {
   display: flex;
   flex-direction: column;
   background: var(--v-bg);
   border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.4rem 1.5rem;
 }
 
+/* The name IS the title, at heading size. David: "the font is really small and
+   it's meant to be a kind of title, so it should be much bigger". */
+.compareWho {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--v-ink);
+}
+
+/* What that name refers to: a functional label, Public Sans, sentence case,
+   one step below the title (paper-first-components, metadata rows). */
+.compareWhat {
+  margin-top: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: var(--fde-body-sm);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--v-muted);
+}
+
+/* The claim, as a figure: the stat-list recipe, Bitter at display size. */
+.compareFigure {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--v-line-soft);
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3vw, 2.15rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The one piece of colour in the panel, and it is the register's own emphasis
+   device rather than a repainted band: Bitter italic in the jade accent, which
+   measures 4.35:1 on the light ground and 11.44:1 on the dark one. */
+.compareFigureOurs {
+  font-style: italic;
+  color: var(--v-accent);
+}
+
+.compareBody {
+  margin-top: 0.85rem;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+/* Still worn by the month and investment cards: a quiet metadata strip, never
+   a coloured one. `overflow: hidden` on the parent is what keeps its square
+   corners inside the panel radius; see .monthCard and .investCard. */
 .cardTop {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.6rem 1.25rem;
+  background: var(--v-quiet);
   color: var(--v-ink);
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-}
-
-.flvTeal {
-  background: var(--v-quiet);
-}
-
-.flvMoss {
-  background: var(--v-quiet);
-}
-
-.flvRust {
-  background: var(--v-quiet);
-}
-
-.flvMuted {
-  background: var(--v-muted);
-}
-
-.compareCard h3 {
-  padding: 1.1rem 1.25rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.compareCard p {
-  padding: 0.6rem 1.25rem 1.25rem;
-  font-size: var(--fde-body);
-  line-height: 1.65;
-  color: var(--v-soft);
 }
 
 .compareNote {
@@ -388,12 +474,8 @@
 .whyItem {
   display: grid;
   gap: 0.75rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   padding: 1.4rem 0;
-}
-
-.whyItem:last-child {
-  border-bottom: 1px solid var(--v-line);
 }
 
 @media (min-width: 40rem) {
@@ -441,6 +523,8 @@
   flex-direction: column;
   background: var(--v-bg);
   border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .monthBody {
@@ -485,6 +569,7 @@
   border: 1px solid var(--v-line);
   background: var(--v-bg);
   padding: 1.5rem 1.5rem 1.25rem;
+  border-radius: var(--radius-lg);
 }
 
 .controlBox h3 {
@@ -509,7 +594,7 @@
 }
 
 .miniStat {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 0.8rem;
 }
 
@@ -529,10 +614,17 @@
 
 /* ---------------- Investment card ---------------- */
 
+/* `overflow: hidden` for the same reason .monthCard carries it: .cardTop is a
+   square-cornered child, and without the clip its top corners hang outside the
+   panel radius. That is the "square shading box at the top inside a curved box"
+   David marked on the comparison cards (a-20260914-200101-e34e36); it was the
+   same defect here, on the same page. */
 .investCard {
   margin-top: 0.5rem;
   border: 1px solid var(--v-accent);
   background: var(--v-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .investBody {
@@ -589,11 +681,7 @@
 }
 
 .faqItem {
-  border-top: 1px solid var(--v-line);
-}
-
-.faqItem:last-child {
-  border-bottom: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .faqItem summary {
@@ -646,7 +734,7 @@
 /* ---------------- Closing band ---------------- */
 
 .closing {
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding: clamp(3rem, 6vw, 4.5rem) 0;
   text-align: center;
 }

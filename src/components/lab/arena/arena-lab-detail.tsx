@@ -1,6 +1,8 @@
 import Link from "next/link"
 import type { ModelArenaLab } from "@/lib/types"
 import { formatTestedOn } from "@/lib/data/model-arena"
+import { LabListen } from "./lab-listen"
+import { labVideoState } from "./lab-preview"
 import styles from "./arena-detail.module.css"
 
 /**
@@ -11,61 +13,172 @@ interface ArenaLabDetailProps {
   lab: ModelArenaLab
 }
 
+/** The sections a reader can jump to, in the order they appear. */
+const JUMP: ReadonlyArray<{ id: string; label: string }> = [
+  { id: "the-task", label: "The task" },
+  { id: "the-answers", label: "The answers" },
+  { id: "score-it", label: "Score it yourself" },
+  { id: "the-verdict", label: "The verdict" },
+]
+
 /**
- * Head-to-head lab detail in the FDE journal register.
+ * Head-to-head lab detail, PAPER-FIRST register (bible paper-first-lab-page).
  *
- * Renders one Model Arena lab: a teal matchup header (both tools with exact
- * model ids and how they were run, plus the tested-on date), the task brief,
- * the shared prompt, the two outputs verbatim side by side (stacked on mobile,
- * never a horizontal scroll), a beginner rubric, the dated verdict with its
- * freshness note, and try-it-yourself steps. Archived labs carry a clear
- * archived banner but are otherwise identical (their content is not rewritten).
+ * Rebuilt for bead gwth-launch-88z.32.22 from David's annotation
+ * a-20260914-205206-82935a, which was boxed around this page's opening: "I
+ * think all these labs need a really easy to follow video, and then maybe this
+ * text can be below it. Currently, it looks too complicated and too much text,
+ * which is difficult to read, and there's not even a voice reader."
  *
- * Outputs are shown exactly as generated, including each tool's own markdown
- * markers and punctuation, because judging that raw text is part of the lab.
+ * What the opening now does, in order: names the task area, the title, and the
+ * lab in two sentences; says in one line what the reader will decide; offers
+ * the two ways through it, a video guide and a read-aloud control; then a jump
+ * list. What it no longer does: open with two paragraphs of model provenance
+ * before the reader has been told what the lab is. That provenance is not
+ * deleted, it is one disclosure below ("How each tool was run"), and the
+ * shared prompt, which is a screenful of raw CSV, is behind its own disclosure
+ * rather than being the third thing on the page.
+ *
+ * NO LAB VIDEO HAS BEEN RECORDED. The video panel therefore renders a plainly
+ * labelled ready state with no play control at all; it becomes a real player
+ * the moment a lab carries a `video` object, and never before. Both states are
+ * driven by `labVideoState`, so no surface can disagree with another about
+ * whether a video exists.
+ *
+ * Everything below the opening is unchanged in substance: the brief, the
+ * shared prompt, both outputs verbatim, the rubric, the dated verdict and the
+ * try-it steps. Outputs are still shown exactly as generated, including each
+ * tool's own markdown markers, because judging that raw text is the lab.
  */
 export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
   const isArchived = lab.status === "archived"
   const [first, second] = lab.matchup
+  const videoState = labVideoState(lab)
+
+  /*
+   * What the read-aloud control reads: the lab's own walkthrough. The shared
+   * prompt and the two raw outputs are excluded on purpose. They are pages of
+   * CSV and markdown markers, and a voice reading "hash hash Registered Nurse
+   * en dash" for six minutes would be an accessibility box ticked and a
+   * listener lost.
+   */
+  const listenSegments = [
+    lab.title,
+    lab.summary ?? "",
+    `The task. ${lab.brief}`,
+    `Score it yourself. ${lab.rubric.map((item) => item.criterion).join(" ")}`,
+    `The verdict. ${lab.verdict.winner ? `${lab.verdict.winner}. ` : ""}${
+      lab.verdict.callText
+    }`,
+    lab.verdict.freshnessNote,
+  ].filter(Boolean)
 
   return (
     <div className={styles.shell} data-section="arena-lab-detail">
-      <header className={styles.matchup}>
+      <header className={styles.matchup} data-section="intro">
         <div className={styles.page}>
-          <p className={styles.matchupKicker}>
-            Model Arena{lab.category ? ` · ${lab.category}` : ""} ·{" "}
-            {isArchived ? "Archived" : "Live"}
+          <p className={styles.kicker}>
+            Lab{lab.category ? `, ${lab.category.toLowerCase()}` : ""}
           </p>
           <h1 className={styles.matchupTitle}>{lab.title}</h1>
 
-          <div className={styles.contestants}>
-            <div className={styles.contestant}>
-              <p className={styles.contestantName}>{first.name}</p>
-              <p className={styles.contestantModel}>
-                {first.modelLabel ?? first.modelId}
-              </p>
-              <p className={styles.contestantRun}>{first.howRun}</p>
-            </div>
-            <p className={styles.versus} aria-hidden="true">
-              versus
+          {lab.summary ? (
+            <p className={styles.standfirst}>{lab.summary}</p>
+          ) : null}
+
+          {lab.preview?.outcome ? (
+            <p className={styles.outcome} data-testid="lab-outcome">
+              <span>What you decide</span>
+              {lab.preview.outcome}
             </p>
-            <div className={styles.contestant}>
-              <p className={styles.contestantName}>{second.name}</p>
-              <p className={styles.contestantModel}>
-                {second.modelLabel ?? second.modelId}
-              </p>
-              <p className={styles.contestantRun}>{second.howRun}</p>
-            </div>
-          </div>
+          ) : null}
 
           <div className={styles.matchupFoot}>
+            <p>
+              {first.modelLabel ?? first.modelId} versus{" "}
+              {second.modelLabel ?? second.modelId}
+            </p>
             <p>Tested on {formatTestedOn(lab.testedOn)}</p>
-            <p>Same prompt to both · Outputs unedited</p>
+            <p>{isArchived ? "Archived" : "Live now"}</p>
           </div>
         </div>
       </header>
 
       <div className={styles.page}>
+        {/*
+          The two ways through the lab sit on the page ground rather than
+          inside the quiet band above: a --v-line panel boundary measures
+          2.84 : 1 against --v-quiet and 3.02 : 1 against --v-bg, and the bar
+          is 3 : 1 (bible boundary-contrast-check).
+        */}
+        <div className={styles.introMedia}>
+          {videoState === "available" && lab.video ? (
+            <div
+              className={styles.videoPanel}
+              data-testid="lab-video-guide"
+              data-video-state="available"
+            >
+              {/* A captions track is rendered whenever the lab carries one,
+                  and a lab that ships a video without captions is a content
+                  defect to fix in the JSON, not to paper over here. */}
+              <video
+                className={styles.video}
+                controls
+                preload="metadata"
+                poster={lab.video.poster}
+              >
+                <source src={lab.video.src} />
+                {lab.video.captions ? (
+                  <track
+                    kind="captions"
+                    src={lab.video.captions}
+                    srcLang="en"
+                    label="English"
+                    default
+                  />
+                ) : null}
+                Your browser cannot play this video. The written walkthrough
+                below covers the same ground.
+              </video>
+              <p className={styles.videoNote}>
+                Video guide
+                {lab.video.durationLabel ? `, ${lab.video.durationLabel}` : ""}
+                . The written walkthrough below covers the same ground.
+              </p>
+            </div>
+          ) : (
+            <div
+              className={styles.videoPanel}
+              data-testid="lab-video-guide"
+              data-video-state="planned"
+            >
+              {/* Deliberately not a player and deliberately not a black
+                  rectangle with a triangle on it. A play control that cannot
+                  play is the thing this panel exists to avoid. */}
+              <h2 className={styles.videoTitle}>Video guide planned</h2>
+              <p className={styles.videoNote}>
+                Every lab is getting a short video of the task and both
+                answers. This one has not been recorded yet. The written
+                walkthrough below is the whole lab, and you can have it read
+                aloud.
+              </p>
+            </div>
+          )}
+
+          <LabListen
+            segments={listenSegments}
+            covers="Reads the task, the questions to score by and the verdict."
+          />
+        </div>
+
+        <nav className={styles.jump} aria-label="Sections of this lab">
+          {JUMP.map((item) => (
+            <a key={item.id} href={`#${item.id}`} className={styles.jumpLink}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
         {isArchived ? (
           <div className={styles.archivedBanner} data-testid="archived-banner">
             <span className={styles.badge}>Archived</span>
@@ -77,26 +190,59 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
           </div>
         ) : null}
 
-        <section className={styles.section} data-section="brief">
+        <section className={styles.section} data-section="brief" id="the-task">
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>The task</h2>
-            <p className={styles.mono}>The brief</p>
           </div>
           <p className={styles.brief}>{lab.brief}</p>
+
+          {/*
+            The provenance David was shown first is now one click below the
+            thing it is provenance FOR. Nothing is lost: both exact model ids
+            and exactly how each was run are still here, verbatim, and the
+            disclosure is open to a keyboard and to find-in-page.
+          */}
+          <details className={styles.disclosure} data-testid="how-run">
+            <summary className={styles.disclosureSummary}>
+              How each tool was run
+            </summary>
+            <div className={styles.contestants}>
+              <div className={styles.contestant}>
+                <p className={styles.contestantName}>{first.name}</p>
+                <p className={styles.contestantModel}>
+                  {first.modelLabel ?? first.modelId}
+                </p>
+                <p className={styles.contestantRun}>{first.howRun}</p>
+              </div>
+              <div className={styles.contestant}>
+                <p className={styles.contestantName}>{second.name}</p>
+                <p className={styles.contestantModel}>
+                  {second.modelLabel ?? second.modelId}
+                </p>
+                <p className={styles.contestantRun}>{second.howRun}</p>
+              </div>
+            </div>
+            <p className={styles.disclosureNote}>
+              The same prompt went to both, word for word, on{" "}
+              {formatTestedOn(lab.testedOn)}. Neither answer has been edited.
+            </p>
+          </details>
+
+          <details className={styles.disclosure} data-testid="shared-prompt">
+            <summary className={styles.disclosureSummary}>
+              The shared prompt, word for word
+            </summary>
+            <pre className={styles.promptBlock}>{lab.prompt}</pre>
+          </details>
         </section>
 
-        <section className={styles.section} data-section="prompt">
-          <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>The shared prompt</h2>
-            <p className={styles.mono}>Identical to both</p>
-          </div>
-          <pre className={styles.promptBlock}>{lab.prompt}</pre>
-        </section>
-
-        <section className={styles.section} data-section="outputs">
+        <section
+          className={styles.section}
+          data-section="outputs"
+          id="the-answers"
+        >
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>The answers</h2>
-            <p className={styles.mono}>Verbatim · Side by side</p>
           </div>
           {/*
             The outputs are printed exactly as returned, so ChatGPT's markdown
@@ -131,10 +277,9 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
           </div>
         </section>
 
-        <section className={styles.section} data-section="rubric">
+        <section className={styles.section} data-section="rubric" id="score-it">
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>Score it yourself</h2>
-            <p className={styles.mono}>The rubric</p>
           </div>
           <ol className={styles.rubricList}>
             {lab.rubric.map((item) => (
@@ -149,10 +294,13 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
           </ol>
         </section>
 
-        <section className={styles.section} data-section="verdict">
+        <section
+          className={styles.section}
+          data-section="verdict"
+          id="the-verdict"
+        >
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>The verdict</h2>
-            <p className={styles.mono}>Dated · Honest</p>
           </div>
           <div className={styles.verdictPanel}>
             {lab.verdict.winner ? (
@@ -166,10 +314,9 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
           </div>
         </section>
 
-        <section className={styles.section} data-section="try-it">
+        <section className={styles.section} data-section="try-it" id="try-it">
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>Try it yourself</h2>
-            <p className={styles.mono}>Free · 15 minutes</p>
           </div>
           <ol className={styles.tryList}>
             {lab.tryItYourself.map((step, index) => (

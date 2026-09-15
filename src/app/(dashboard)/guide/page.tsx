@@ -60,7 +60,6 @@ export default async function GuidePage() {
       <div className={styles.shell}>
         <header className={styles.masthead}>
           <div className={styles.page}>
-            <p className={styles.mastheadKicker}>Beta tester guide</p>
             <h1 className={styles.mastheadTitle}>
               Welcome to the <em>beta.</em>
             </h1>

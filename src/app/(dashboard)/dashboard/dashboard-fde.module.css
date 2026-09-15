@@ -1,11 +1,14 @@
 /*
- * Student dashboard in the FDE journal register (see DESIGN_FDE.md and the
- * exemplar at src/components/marketing/home-fde/). Paper-cream surfaces on a
- * sage ground, ink hairlines, Source Serif 4 display + body, JetBrains Mono
- * metadata, dash-progress strips, square corners, flat.
+ * Student dashboard, in the PAPER-FIRST register. The `-fde` name is kept so
+ * imports stay put; the FDE journal register the old header described is
+ * RETIRED (bible paper-first-register). Two type families, Bitter and Public
+ * Sans; colour from the `--v-*` tokens only; R2 corners (10px panels, 8px
+ * controls and images, 6px chips).
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * decorative metadata strip, the ink rules and the rule-per-row, and gave the
+ * row you are on the M2 treatment: the quiet fill AND a 3px ink bar AND a
+ * heavier ink label (tint-is-never-the-only-signal).
  */
 
 .shell {
@@ -59,22 +62,10 @@
   color: var(--v-ink);
 }
 
-/* ---------------- Mast row ---------------- */
-
-.mastRow {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--v-line);
-  padding: 0.7rem 2rem;
-}
-
 /* ---------------- Top task band ---------------- */
 
 .band {
-  border-bottom: 1px solid var(--v-ink);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: 2.75rem 2rem 3rem;
   display: grid;
   gap: 2.5rem;
@@ -119,8 +110,13 @@
 }
 
 .bandAside {
-  border-left: 1px solid var(--v-ink);
-  padding-left: 2rem;
+  padding-left: 0;
+}
+
+@media (min-width: 64rem) {
+  .bandAside {
+    padding-left: 1rem;
+  }
 }
 
 .asideTitle {
@@ -149,19 +145,22 @@
 /* ---------------- Sections ---------------- */
 
 .section {
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
   padding: 2.5rem 2rem 2.75rem;
 }
 
+/* The section head no longer draws a rule across the page. One line under
+   every heading was the most repeated piece of furniture on the site, and it
+   is what "too many lines in other places" was describing; the gap below the
+   heading now does the separating (paper-first-register, hierarchy from
+   spacing and type). Batch 1. */
 .sectionHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 0.9rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
@@ -179,7 +178,7 @@
 
 .splitGrid {
   display: grid;
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
 @media (min-width: 48rem) {
@@ -188,13 +187,13 @@
   }
 
   .splitGrid > * + * {
-    border-left: 1px solid var(--v-line);
+    border-left: 1px solid var(--v-line-soft);
   }
 }
 
 @media (max-width: 47.99rem) {
   .splitGrid > * + * {
-    border-top: 1px solid var(--v-line);
+    border-top: 1px solid var(--v-line-soft);
   }
 }
 
@@ -204,7 +203,7 @@
 
 .splitGridWide {
   display: grid;
-  border-bottom: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
 @media (min-width: 64rem) {
@@ -213,13 +212,13 @@
   }
 
   .splitGridWide > * + * {
-    border-left: 1px solid var(--v-line);
+    border-left: 1px solid var(--v-line-soft);
   }
 }
 
 @media (max-width: 63.99rem) {
   .splitGridWide > * + * {
-    border-top: 1px solid var(--v-line);
+    border-top: 1px solid var(--v-line-soft);
   }
 }
 
@@ -256,7 +255,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -356,6 +355,8 @@
   margin-top: 1.75rem;
   background: var(--v-surface);
   border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .tableHead {
@@ -363,7 +364,7 @@
   grid-template-columns: 28px 56px minmax(0, 1fr) auto;
   gap: 1rem;
   padding: 0.7rem 1.1rem;
-  border-bottom: 1px solid var(--v-ink);
+  border-bottom: 1px solid var(--v-line-soft);
 }
 
 .tableRow {
@@ -371,17 +372,17 @@
   grid-template-columns: 28px 56px minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: center;
-  padding: 0.85rem 1.1rem;
-  border-top: 1px solid var(--v-line-soft);
+  padding: 0.95rem 1.1rem 0.95rem calc(1.1rem - 3px);
+  border-left: 3px solid transparent;
   transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.tableRow:first-of-type {
-  border-top: 0;
-}
-
+/* M2 hardened: the fill decorates, the bar and the heavier ink label carry the
+   state (tint-is-never-the-only-signal). The transparent bar above keeps the
+   unselected rows from shifting. */
 .tableRowCurrent {
-  background: var(--v-bg);
+  background: var(--v-quiet);
+  border-left-color: var(--v-ink);
 }
 
 .tableRowLocked {
@@ -402,7 +403,7 @@
 }
 
 .tableRowLink:hover {
-  background: var(--v-bg);
+  background: var(--v-quiet);
 }
 
 .tableRowLink:focus-visible {
@@ -433,7 +434,7 @@
   gap: 1rem;
   flex-wrap: wrap;
   padding: 0.75rem 1.1rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 /* ---------------- Cards (§5.4 + §4.3) ---------------- */
@@ -456,6 +457,7 @@
   background: var(--v-surface);
   border: 1px solid var(--v-line);
   transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-lg);
 }
 
 .card:hover {
@@ -532,6 +534,7 @@
   background: var(--v-surface);
   border: 1px solid var(--v-line);
   padding: 1.25rem 1.4rem;
+  border-radius: var(--radius-lg);
 }
 
 .panelInk {
@@ -557,21 +560,25 @@
   margin-top: 1.75rem;
   display: grid;
   border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 @media (min-width: 48rem) {
   .activityGrid {
     grid-template-columns: 1.05fr 1.6fr 1fr;
-  }
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
 
   .activityGrid > * + * {
-    border-left: 1px solid var(--v-line);
+    border-left: 1px solid var(--v-line-soft);
   }
 }
 
 @media (max-width: 47.99rem) {
   .activityGrid > * + * {
-    border-top: 1px solid var(--v-line);
+    border-top: 1px solid var(--v-line-soft);
   }
 }
 
@@ -756,6 +763,7 @@
   padding: 0 0.5rem;
   border: 1px solid var(--v-line-soft);
   color: var(--v-soft);
+  border-radius: var(--radius-sm);
 }
 
 .tickApproved {
@@ -773,24 +781,28 @@
 
 .portfolioGrid {
   margin-top: 1.25rem;
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   background: var(--v-surface);
   display: grid;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 @media (min-width: 48rem) {
   .portfolioGrid {
     grid-template-columns: 1.7fr 1fr;
-  }
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
 
   .portfolioGrid > * + * {
-    border-left: 1px solid var(--v-line);
+    border-left: 1px solid var(--v-line-soft);
   }
 }
 
 @media (max-width: 47.99rem) {
   .portfolioGrid > * + * {
-    border-top: 1px solid var(--v-line);
+    border-top: 1px solid var(--v-line-soft);
   }
 }
 
@@ -804,7 +816,7 @@
   gap: 0.9rem;
   align-items: center;
   padding: 0.8rem 0;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .listTag {
@@ -829,12 +841,14 @@
   composes: listTag;
   border: 1px solid var(--v-line);
   color: var(--v-ink);
+  border-radius: var(--radius-sm);
 }
 
 .listTagLab {
   composes: listTag;
   border: 1px dashed var(--v-line);
   color: var(--v-muted);
+  border-radius: var(--radius-sm);
 }
 
 .listTitle {
@@ -882,7 +896,7 @@
   gap: 0.7rem;
   align-items: baseline;
   padding: 0.65rem 0;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .savedTitle {
@@ -896,6 +910,8 @@
   margin-top: 1rem;
   background: var(--v-surface);
   border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .updatedRow {
@@ -940,7 +956,7 @@
   gap: 1rem;
   align-items: baseline;
   padding: 0.75rem 0;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .notifBody {
@@ -952,7 +968,7 @@
 /* ---------------- Grace banner (lapsed) ---------------- */
 
 .graceBanner {
-  border-bottom: 1px solid var(--v-ink);
+  border-bottom: 1px solid var(--v-line-soft);
   background: var(--v-surface);
   padding: 1.1rem 2rem;
   display: flex;
@@ -973,23 +989,27 @@
 
 .teaserGrid {
   display: grid;
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   background: var(--v-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 @media (min-width: 48rem) {
   .teaserGrid {
     grid-template-columns: repeat(3, 1fr);
-  }
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
 
   .teaserGrid > * + * {
-    border-left: 1px solid var(--v-line);
+    border-left: 1px solid var(--v-line-soft);
   }
 }
 
 @media (max-width: 47.99rem) {
   .teaserGrid > * + * {
-    border-top: 1px solid var(--v-line);
+    border-top: 1px solid var(--v-line-soft);
   }
 }
 
@@ -1015,6 +1035,8 @@
   margin-top: 1.5rem;
   background: var(--v-surface);
   border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .labRow {
@@ -1106,23 +1128,27 @@
 .impactGrid {
   margin-top: 1.75rem;
   display: grid;
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   background: var(--v-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 @media (min-width: 48rem) {
   .impactGrid {
     grid-template-columns: 1fr 1fr;
-  }
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
 
   .impactGrid > * + * {
-    border-left: 1px solid var(--v-line);
+    border-left: 1px solid var(--v-line-soft);
   }
 }
 
 @media (max-width: 47.99rem) {
   .impactGrid > * + * {
-    border-top: 1px solid var(--v-line);
+    border-top: 1px solid var(--v-line-soft);
   }
 }
 
@@ -1140,7 +1166,6 @@
 /* ---------------- Narrow screens ---------------- */
 
 @media (max-width: 40rem) {
-  .mastRow,
   .band,
   .section,
   .splitCell,
@@ -1152,10 +1177,8 @@
   }
 
   .bandAside {
-    border-left: 0;
     padding-left: 0;
-    border-top: 1px solid var(--v-ink);
-    padding-top: 1.5rem;
+    padding-top: 0.5rem;
   }
 
   .tableHead,
@@ -1164,6 +1187,10 @@
     gap: 0.35rem 0.6rem;
     padding-left: 0.8rem;
     padding-right: 0.8rem;
+  }
+
+  .tableRow {
+    padding-left: calc(0.8rem - 3px);
   }
 
   /* Holding a fixed LENGTH column on a 390px screen squeezed lesson titles

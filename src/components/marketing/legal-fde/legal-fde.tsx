@@ -20,8 +20,8 @@ export function LegalFde({
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>Legal · Updated {updated}</p>
           <h1 className={styles.mastheadTitle}>{title}</h1>
+          <p className={styles.mastheadMeta}>Updated {updated}</p>
         </div>
       </section>
 

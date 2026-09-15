@@ -71,7 +71,8 @@ export const revalidate = 0
 /**
  * Course detail page showing sections accordion with lesson list,
  * month indicators, optional lesson badges, and access gating.
- * FDE journal register: issue framing per month, hairline lesson rows,
+ * Paper-first register: month framing (the invented "Issue 01" is retired),
+ * unruled lesson rows,
  * dash-progress for course completion (DESIGN_FDE.md §4.4, §4.5, §5.8).
  *
  * Unlike the other content routes this page does NOT redirect when the caller
@@ -143,7 +144,6 @@ export default async function CourseDetailPage({ params }: PageProps) {
           <header>
             <div className={styles.head}>
               <h1 className={styles.title}>{course.title}</h1>
-              <p className={styles.mono}>Course</p>
             </div>
             <p className={styles.lead}>{course.description}</p>
             {/*
@@ -163,9 +163,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
           {MONTH_CONFIGS.map((config) => (
             <section key={config.month} className={styles.issue}>
               <div className={styles.issueHead}>
-                <p className={styles.issueKicker}>
-                  Issue 0{config.month} · Month {config.month}
-                </p>
+                <p className={styles.issueKicker}>Month {config.month}</p>
                 <p className={styles.lockedTag}>
                   <Lock className="size-3" aria-hidden="true" />
                   Members only
@@ -228,7 +226,6 @@ export default async function CourseDetailPage({ params }: PageProps) {
         <header>
           <div className={styles.head}>
             <h1 className={styles.title}>{course.title}</h1>
-            <p className={styles.mono}>Course</p>
           </div>
           <p className={styles.lead}>{course.description}</p>
           {/* Same two-scope trap as the teaser header above (W26): the lesson
@@ -266,9 +263,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
         {sectionsByMonth.map(({ month, config, sections, canAccess }) => (
           <section key={month} className={styles.issue}>
             <div className={styles.issueHead}>
-              <p className={styles.issueKicker}>
-                Issue 0{month} · Month {month}
-              </p>
+              <p className={styles.issueKicker}>Month {month}</p>
               {!canAccess && (
                 <p className={styles.lockedTag}>
                   <Lock className="size-3" aria-hidden="true" />

@@ -444,6 +444,75 @@ export interface ArenaOutput {
   verbatim: string
 }
 
+/**
+ * A REAL, playable video guide for a lab.
+ *
+ * This field exists ONLY when the media genuinely exists and can be played.
+ * Absence is the honest default and is what every surface reads to decide
+ * between a real play control and a "video guide planned" state; nothing may
+ * infer a video from a slug, a poster or a naming convention. Adding this
+ * object to a lab's JSON is the single switch that turns the planned state
+ * into a player (bead gwth-launch-88z.32.22, David's Labs annotations).
+ */
+export interface ArenaVideo {
+  /** Playable source URL. Must resolve to real media. */
+  src: string
+  /** Poster frame shown before play. */
+  poster?: string
+  /** WebVTT captions track. */
+  captions?: string
+  /** Human running time as authored, e.g. "4 min". Never estimated. */
+  durationLabel?: string
+}
+
+/** One cell-flagged row of a spreadsheet specimen. */
+export interface ArenaSpecimenRow {
+  /** The row's cells, in `columns` order. Quoted from the lab's own material. */
+  cells: string[]
+  /** Why this row is interesting, in a few words. Omitted for a clean row. */
+  note?: string
+}
+
+/**
+ * A small composition of the lab's OWN material, drawn in CSS rather than
+ * shipped as an image, so a visitor can tell at a glance what the lab is about
+ * (David: "so people understand just by glancing what it's going to be about.
+ * For example, spreadsheets"). Every value is quoted from the lab's prompt or
+ * brief: this is a preview of real content, never an illustration of it.
+ */
+export type ArenaSpecimen =
+  | {
+      /** A few rows of tabular data, for labs whose input is a spreadsheet. */
+      kind: "grid"
+      /** Where the rows come from, e.g. "From the April export in this lab". */
+      caption: string
+      /** Column headers, in order. */
+      columns: string[]
+      /** The quoted rows. Keep to four or fewer so the panel stays scannable. */
+      rows: ArenaSpecimenRow[]
+    }
+  | {
+      /** Label and value pairs, for labs whose input is not tabular. */
+      kind: "pairs"
+      /** Where the pairs come from. */
+      caption: string
+      /** Three or fewer pairs, quoted from the lab. */
+      items: { label: string; value: string }[]
+    }
+
+/**
+ * The glanceable preview a lab shows on the index, and the outcome line it
+ * leads with on its own page.
+ */
+export interface ArenaPreview {
+  /** Plain task cue in a visitor's own words, e.g. "Spreadsheet clean-up". */
+  taskCue: string
+  /** One outcome-led line: what the visitor walks away knowing. */
+  outcome: string
+  /** The specimen drawn in the preview panel. */
+  specimen: ArenaSpecimen
+}
+
 /** A single rubric criterion a beginner scores each output against. */
 export interface ArenaRubricItem {
   /** A plain question the student answers for each output. */
@@ -485,6 +554,20 @@ export interface ModelArenaLab {
   testedOn: string
   /** One paragraph: who the student pretends to be, the task, why it matters. */
   brief: string
+  /**
+   * The brief in a sentence or two, for the opening of the lab page and for
+   * the read-aloud control. The full `brief` stays below it; this is
+   * progressive disclosure, never a replacement.
+   */
+  summary?: string
+  /** The glanceable preview used on the labs index. */
+  preview?: ArenaPreview
+  /**
+   * A real, playable video guide. ABSENT until the media exists, which is
+   * what makes "video guide planned" an honest state rather than a broken
+   * promise.
+   */
+  video?: ArenaVideo
   /** Exactly two contestants. */
   matchup: [ArenaContestant, ArenaContestant]
   /** The single prompt given to BOTH models, verbatim and identical. */

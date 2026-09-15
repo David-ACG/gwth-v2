@@ -1,12 +1,23 @@
 /*
- * Public credential verification page in the FDE journal register (see
- * DESIGN_FDE.md §5.7). The page is the register's highlight-panel showcase:
- * a paper panel with an ink border centred on the sage ground, mono
- * credential metadata, a huge serif score, and the system's only shadow,
- * the hard teal offset on hover.
+ * Public credential verification page, in the PAPER-FIRST register.
  *
- * All colours are scoped custom properties on .shell with a .dark override
- * block, so the site-wide theme toggle flips the whole page.
+ * The file keeps its `-fde` name so every import stays put, but the register it
+ * is drawn in is the current one (bible paper-first-register and its siblings),
+ * not the FDE journal the old header described. Cream and sage grounds, the
+ * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
+ * metadata face are all RETIRED; do not restore any of them from this file's
+ * history. Two type families only, Bitter and Public Sans; all colour from the
+ * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ *
+ * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
+ * masthead eyebrow and softened the single-side hairlines from the boundary
+ * token to the divider token. The load-bearing boundary on a panel stays
+ * `--v-line`, the measured one (boundary-contrast-check). This page was NOT one
+ * of the twenty surfaces reviewed in that batch: it only inherits the shared
+ * changes, so look at it in both themes before calling it converted.
+ *
+ * Colours are inherited from globals.css; nothing is re-declared here and there
+ * is no raw hex in this file.
  */
 
 .shell {
@@ -49,13 +60,8 @@
   width: min(52rem, calc(100% - 2.5rem));
 }
 
-.kicker {
-  composes: mono;
-  text-align: center;
-}
-
 .stageTitle {
-  margin: 0.9rem auto 2.25rem;
+  margin: 0 auto 2.25rem;
   max-width: 24ch;
   text-align: center;
   font-size: clamp(1.8rem, 3.4vw, 2.5rem);
@@ -75,9 +81,10 @@
 
 .credentialPanel {
   background: var(--v-surface);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   padding: 2rem 1.75rem;
   transition: box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-lg);
 }
 
 .credentialPanel:hover {
@@ -128,7 +135,7 @@
 
 .credentialRow {
   margin-top: 1.75rem;
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
@@ -233,7 +240,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -251,10 +258,11 @@
 
 .disabledPanel {
   background: var(--v-surface);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   padding: clamp(2.5rem, 6vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
   text-align: center;
   transition: box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-lg);
 }
 
 .disabledPanel:hover {

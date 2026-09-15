@@ -68,7 +68,7 @@ const comparisonRows = [
   },
   {
     dimension: "Depth",
-    boost: "Foundation (20 min – 9 hrs each)",
+    boost: "Foundation (20 min to 9 hrs each)",
     marketplace: "Mixed: some foundation, some advanced",
     gwth: "Comprehensive (120+ hrs over 3 months)",
     gwthAdvantage: true,
@@ -105,7 +105,7 @@ const comparisonRows = [
   },
   {
     dimension: "Content freshness",
-    boost: "Static, some courses from 2023–2024",
+    boost: "Static, some courses from 2023 to 2024",
     marketplace: "Some courses 10+ years old",
     gwth: "Updated when practical skill or currentness changes",
     gwthAdvantage: true,
@@ -172,17 +172,49 @@ const stats = [
 ]
 
 /**
- * Why GWTH comparison page in the FDE journal register: drenched teal
- * masthead, ruled section heads, one pull-quote band plus bordered quote
- * panels, a hairline editorial comparison table, stat-list rows, and a
- * closing band. Evidence-based copy is unchanged from the previous skin.
+ * Why GWTH comparison page, in the PAPER-FIRST register: a two-column quiet
+ * masthead, unruled section heads, one pull-quote band plus bordered quote
+ * panels, a hairline editorial comparison table, stat-list rows, and a closing
+ * band. The evidence-based copy is unchanged, and batch 1 changed no wording
+ * here: it moved the headings of the long prose sections into a left column so
+ * the reading measure stops leaving half the screen empty.
+ *
+ * ## Recovered copy, 2026-09-14 (bead gwth-launch-88z.32.26)
+ *
+ * Two additions, both from the pre-paper-first archive, neither carrying a
+ * figure:
+ *
+ * - **C07**, the self-teaching paragraph in "GWTH Fills the Gap", from
+ *   `docs/marketing/why-ai-skills-matter-now.md`. It answers the question a
+ *   reader of this page asks next: why pay for a course when the free badge
+ *   plus a chatbot is right there. The archive's "skip in five minutes" was
+ *   dropped as an invented figure.
+ * - **C08**, the first line of the closing band, from
+ *   `docs/marketing/email-nurture-sequence.md`. An argument, not a statistic,
+ *   so it needs no source and cannot go stale.
+ *
+ * The same edit aligned the closing band with David's annotation
+ * a-20260914-204053-7fd060 ("I'm not sure we should say the course has
+ * finished because it never really finishes because it's always up to date").
+ * That annotation was applied to /pricing on 2026-09-14; this page still said
+ * the price drops "once you have finished", and now says "after the first
+ * three months", the same wording /pricing uses.
+ *
+ * NOT recovered, and recorded so it is not proposed again: the archive's four
+ * business-case figures (5% BCG, 70%, 34% retention, 1.5x revenue), which
+ * carry house-name attributions and no link, publication or date, where every
+ * figure on this page carries a named source. Ledger C32, C33. The ledger also
+ * records one claim already on THIS page that nothing implements: "Peer
+ * support, forums, office hours" in the comparison table (C50). It is left
+ * untouched, because removing a live product claim is David's call, not an
+ * agent's. Full ledger:
+ * `GWTH-launch-plan/completion/evergreen-copy-recovery/`.
  */
 export function WhyGwthFde() {
   return (
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>Why GWTH · UK applied AI</p>
           <h1 className={styles.mastheadTitle}>
             Completed the AI Skills Boost?{" "}
             <em>Here is what comes next.</em>
@@ -203,13 +235,15 @@ export function WhyGwthFde() {
         </div>
       </section>
 
-      <section className={styles.section} data-section="programme">
+      <section
+        className={`${styles.section} ${styles.sectionSplit}`}
+        data-section="programme"
+      >
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
               What the Government Programme Covers
             </h2>
-            <p className={styles.mono}>The programme</p>
           </div>
           <div className={styles.prose}>
             <p>
@@ -261,7 +295,6 @@ export function WhyGwthFde() {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>What the Press Says</h2>
-            <p className={styles.mono}>Published sources</p>
           </div>
           <p className={styles.sectionLead}>
             The AI Skills Hub has received significant scrutiny since launch.
@@ -284,7 +317,6 @@ export function WhyGwthFde() {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>Side-by-Side Comparison</h2>
-            <p className={styles.mono}>13 dimensions</p>
           </div>
           <p className={styles.sectionLead}>
             The government offers two things: 14 free badged foundation
@@ -377,7 +409,6 @@ export function WhyGwthFde() {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>The Numbers</h2>
-            <p className={styles.mono}>Evidence</p>
           </div>
           <div className={styles.statList}>
             {stats.map((stat) => (
@@ -395,13 +426,15 @@ export function WhyGwthFde() {
         </div>
       </section>
 
-      <section className={styles.section} data-section="gap">
+      <section
+        className={`${styles.section} ${styles.sectionSplit}`}
+        data-section="gap"
+      >
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
               GWTH Fills <em>the Gap</em>
             </h2>
-            <p className={styles.mono}>The next step</p>
           </div>
           <div className={styles.prose}>
             <p>
@@ -415,6 +448,16 @@ export function WhyGwthFde() {
               1, Month 2, and Month 3: from advanced prompting and
               vendor-neutral tool evaluation to building real applications,
               automating workflows, and analysing data with AI.
+            </p>
+            <p>
+              The other option is to carry on alone, with AI as your teacher.
+              That works less well than it sounds, for two reasons. You do not
+              know what you do not know, so you will not think to ask about the
+              techniques you have never heard of. And when you ask a model to
+              teach you about AI, it answers from training data drawn largely
+              from courses and articles written before the tools changed. You
+              end up learning yesterday&rsquo;s AI from yesterday&rsquo;s
+              curriculum.
             </p>
             <p>
               Months 2 and 3 have zero government equivalent. Enterprise-scale
@@ -437,11 +480,13 @@ export function WhyGwthFde() {
             Start Where the Government <em>Stops</em>
           </h2>
           <p>
-            The foundation is free. The transformation starts at
-            &pound;{COURSE_MONTHLY_PRICE.toFixed(2)}/month, and drops to
-            &pound;{ONGOING_MONTHLY_PRICE.toFixed(2)}/month once you have
-            finished. Structured lessons, a practical project in every lesson,
-            vendor-neutral, built for the UK.
+            AI literacy is heading the same direction as computer literacy,
+            from competitive advantage to baseline expectation. The government
+            foundation is free. The rest starts at
+            &pound;{COURSE_MONTHLY_PRICE.toFixed(2)}/month and drops to
+            &pound;{ONGOING_MONTHLY_PRICE.toFixed(2)}/month after the first
+            three months. Structured lessons, a practical project in every
+            lesson, vendor-neutral, built for the UK.
           </p>
           <div className={styles.closingActions}>
             <Link href="/waitlist" className={styles.buttonSolid}>

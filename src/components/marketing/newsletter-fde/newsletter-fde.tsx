@@ -3,7 +3,10 @@ import styles from "./newsletter-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 
 const INCLUDES = [
-  "A practical AI tip you can use that day",
+  // Recovered (ledger C15) from docs/marketing/free-labs-and-newsletter.md.
+  // "A practical AI tip you can use that day" names a category; the archive's
+  // fuller line names the promise, which is the part a reader decides on.
+  "A practical tip you can try in the next ten minutes, not theory and not hype",
   "Useful tool notes when something materially changes",
   "Course updates and new content previews",
 ]
@@ -15,8 +18,8 @@ const NOT_INCLUDES = [
 ]
 
 /**
- * Newsletter signup page in the FDE journal register: drenched teal
- * masthead, paper-panel signup form (stubbed, as before), and hairline
+ * Newsletter signup page, PAPER-FIRST register: a two-column quiet
+ * masthead, a rounded paper-panel signup form (stubbed, as before), and unruled
  * feature lists for what the GWTH Weekly does and does not include.
  */
 export function NewsletterFde() {
@@ -24,8 +27,9 @@ export function NewsletterFde() {
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>Newsletter</p>
-          <h1 className={styles.mastheadTitle}>The GWTH Weekly</h1>
+          <h1 className={styles.mastheadTitle}>
+            The GWTH <em>Weekly</em>
+          </h1>
           <p className={styles.standfirst}>
             One email per week. No spam. No sales pressure.
           </p>
@@ -66,7 +70,6 @@ export function NewsletterFde() {
             <div className={styles.listBlock}>
               <div className={styles.listHead}>
                 <h2 className={styles.listTitle}>What you get every week</h2>
-                <p className={styles.mono}>Included</p>
               </div>
               <ul className={styles.hairlineList}>
                 {INCLUDES.map((item) => (
@@ -83,7 +86,6 @@ export function NewsletterFde() {
             <div className={styles.listBlock}>
               <div className={styles.listHead}>
                 <h2 className={styles.listTitle}>What we don&apos;t do</h2>
-                <p className={styles.mono}>Never</p>
               </div>
               <ul className={styles.hairlineList}>
                 {NOT_INCLUDES.map((item) => (

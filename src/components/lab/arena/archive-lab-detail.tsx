@@ -27,13 +27,13 @@ export function ArchiveLabDetail({ lab }: ArchiveLabDetailProps) {
     <div className={styles.shell} data-section="archive-lab-detail">
       <header className={styles.matchup}>
         <div className={styles.page}>
-          <p className={styles.matchupKicker}>
-            Archive{lab.category ? ` · ${lab.category}` : ""} · Retired format
-          </p>
           <h1 className={styles.matchupTitle}>{lab.title}</h1>
           <div className={styles.matchupFoot}>
+            <p>
+              Archive{lab.category ? ` · ${lab.category}` : ""} · retired format
+            </p>
             <p>Archived {formatDate(lab.updatedAt)}</p>
-            <p>{formatDuration(lab.duration)} · Kept for reference</p>
+            <p>{formatDuration(lab.duration)} · kept for reference</p>
           </div>
         </div>
       </header>
@@ -51,7 +51,6 @@ export function ArchiveLabDetail({ lab }: ArchiveLabDetailProps) {
         <section className={styles.section} data-section="about">
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>About this lab</h2>
-            <p className={styles.mono}>Overview</p>
           </div>
           <p className={styles.archiveLead}>{lab.description}</p>
           {lab.technologies.length > 0 ? (
@@ -63,7 +62,6 @@ export function ArchiveLabDetail({ lab }: ArchiveLabDetailProps) {
           <section className={styles.section} data-section="outcomes">
             <div className={styles.sectionHead}>
               <h2 className={styles.sectionTitle}>What it covered</h2>
-              <p className={styles.mono}>Outcomes</p>
             </div>
             <ul className={styles.outcomeList}>
               {lab.learningOutcomes.map((outcome) => (

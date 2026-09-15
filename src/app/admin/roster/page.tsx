@@ -173,7 +173,7 @@ function RosterTable({
                 ) : null}
               </td>
               <td className={styles.cellMuted}>
-                {entry.subscriptionMonth > 0 ? `1–${entry.subscriptionMonth}` : "—"}
+                {entry.subscriptionMonth > 0 ? `1 to ${entry.subscriptionMonth}` : "none"}
               </td>
               <td className={styles.cellMuted}>{formatDate(entry.signedUpAt)}</td>
               <td className={styles.cellMuted}>{formatAgo(entry.lastActiveAt)}</td>

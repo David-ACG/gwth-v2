@@ -1,6 +1,11 @@
 import Link from "next/link"
 import type { Lab, ModelArenaLab } from "@/lib/types"
 import { formatTestedOn } from "@/lib/data/model-arena"
+import {
+  LabPreview,
+  labVideoState,
+  shortLabTitle,
+} from "@/components/lab/arena/lab-preview"
 import { formatDate } from "@/lib/utils"
 import styles from "./labs-fde.module.css"
 
@@ -49,7 +54,7 @@ interface ArchiveRow {
 }
 
 /**
- * Free labs landing in the Model Arena format (FDE journal register).
+ * Free labs landing in the Model Arena format, PAPER-FIRST register.
  *
  * A lab is a head-to-head test: two AI tools run the same realistic task, their
  * outputs shown verbatim side by side, with a beginner rubric and a dated
@@ -57,11 +62,23 @@ interface ArchiveRow {
  * HOW, labs show you WHICH TOOL WHEN. Only a handful are live at once because
  * models keep changing, and superseded ones move to a dated archive.
  *
- * Structure: drenched teal masthead, a "how it works" explainer, a LIVE NOW
+ * Structure: a two-column quiet masthead, a "how it works" explainer, a live
  * card row, a dated ARCHIVE list (arena first, then retired tiered labs), and a
  * closing band pointing at the course. Labs are included free with a beta
  * place; during the private pre-launch period (W25) the route itself is behind
  * the content gate, so the copy must not promise anonymous reading.
+ *
+ * The live cards were rebuilt for bead gwth-launch-88z.32.22 from David's
+ * annotation a-20260914-205407-b3dbb2: "They need a video for each lab and the
+ * menu here on the labs page should show a thumbnail from the video (like
+ * youtube) so people understand just by glancing what it's going to be about.
+ * For example, spreadsheets." No lab video has been recorded yet, so each card
+ * opens with a preview panel built from that lab's OWN material (see
+ * `LabPreview`), then a plain task cue, the matchup, one outcome line in place
+ * of the four-line brief that made every card look identical, and a metadata
+ * row that says "Video guide planned" as a fact rather than a promise. The day
+ * a lab gains a real `video` object, the same card shows its poster frame and
+ * its running time with no further change here.
  */
 export function LabsFde({
   liveLabs,
@@ -91,9 +108,6 @@ export function LabsFde({
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>
-            The Model Arena · Dated head-to-head tests
-          </p>
           <h1 className={styles.mastheadTitle}>
             Two tools, one task. <em>You judge.</em>
           </h1>
@@ -117,6 +131,7 @@ export function LabsFde({
             </Link>
           </div>
           <div className={styles.mastheadFoot}>
+            <p>Dated head-to-head tests</p>
             <p>Included free with your beta place</p>
             <p>New matchups as the models change</p>
           </div>
@@ -145,6 +160,13 @@ export function LabsFde({
             </p>
           </div>
 
+          <p className={styles.sectionLead}>
+            Each card previews the real material its lab starts from, so you
+            can tell at a glance what the task is. Video guides are planned for
+            every lab and none has been recorded yet, which is why no card
+            offers one to play.
+          </p>
+
           {liveLabs.length === 0 ? (
             <div className={styles.empty}>
               <h3>No live labs right now.</h3>
@@ -155,30 +177,58 @@ export function LabsFde({
             </div>
           ) : (
             <div className={styles.cardsRow}>
-              {liveLabs.map((lab) => (
-                <Link
-                  href={`/labs/${lab.slug}`}
-                  className={styles.card}
-                  data-testid="arena-lab-card"
-                  key={lab.id}
-                >
-                  <div className={`${styles.cardTop} ${styles.flvTeal}`}>
-                    <span>{lab.category || "Lab"}</span>
-                    <span>Live</span>
-                  </div>
-                  <div className={styles.cardBody}>
-                    <p className={styles.cardMatchup}>
-                      {lab.matchup[0].name} vs {lab.matchup[1].name}
-                    </p>
-                    <h3>{lab.title}</h3>
-                    <p className={styles.cardBrief}>{lab.brief}</p>
-                    <p className={styles.cardStatLine}>
-                      <strong>Tested</strong>
-                      {formatTestedOn(lab.testedOn)}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+              {liveLabs.map((lab) => {
+                const video = labVideoState(lab) === "available" ? lab.video : null
+                return (
+                  <Link
+                    href={`/labs/${lab.slug}`}
+                    className={styles.card}
+                    data-testid="arena-lab-card"
+                    data-video-state={labVideoState(lab)}
+                    key={lab.id}
+                  >
+                    <LabPreview lab={lab} />
+                    <div className={styles.cardBody}>
+                      <p className={styles.cardCue} data-testid="lab-task-cue">
+                        {lab.preview?.taskCue ?? lab.category ?? "Lab"}
+                        {lab.category && lab.preview?.taskCue
+                          ? ` · ${lab.category}`
+                          : ""}
+                      </p>
+                      <h3>{shortLabTitle(lab)}</h3>
+                      <p className={styles.cardMatchup}>
+                        {lab.matchup[0].name} vs {lab.matchup[1].name}
+                      </p>
+                      <p className={styles.cardOutcome}>
+                        {lab.preview?.outcome ?? lab.brief}
+                      </p>
+                      {/*
+                        One metadata row, and the video fact lives in it as
+                        metadata rather than as the card's promise. A play
+                        control appears only where media genuinely plays, which
+                        for now is nowhere: `labVideoState` reads the authored
+                        `video` object and nothing else.
+                      */}
+                      <p className={styles.cardMeta}>
+                        <span className={styles.cardLive}>
+                          <span aria-hidden="true">{"●"}</span>
+                          Live now
+                        </span>
+                        <span>Tested {formatTestedOn(lab.testedOn)}</span>
+                        <span data-testid="lab-video-state">
+                          {video
+                            ? `Video guide${
+                                video.durationLabel
+                                  ? `, ${video.durationLabel}`
+                                  : ""
+                              }`
+                            : "Video guide planned"}
+                        </span>
+                      </p>
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           )}
         </div>

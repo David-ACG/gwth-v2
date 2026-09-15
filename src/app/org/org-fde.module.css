@@ -52,6 +52,7 @@
   font-size: var(--fde-body-sm);
   line-height: 1.6;
   color: var(--v-soft);
+  border-radius: var(--radius-lg);
 }
 
 .previewBanner strong {
@@ -71,7 +72,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 0.4rem 1.5rem;
-  border-bottom: 1px solid var(--v-ink);
+  border-bottom: 1px solid var(--v-line-soft);
   padding-bottom: 0.6rem;
   margin-bottom: 0.25rem;
 }
@@ -174,6 +175,7 @@
   background: var(--v-surface);
   padding: 1.25rem 1.35rem 1.35rem;
   margin-bottom: 1.25rem;
+  border-radius: var(--radius-lg);
 }
 
 .queueHead {
@@ -232,7 +234,7 @@
 /* ── Draft body (the ratification read-through) ───────────────────────── */
 
 .draftBody {
-  border-top: 1px solid var(--v-line);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 1.25rem;
   margin-bottom: 2rem;
   max-width: 62ch;

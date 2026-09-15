@@ -49,8 +49,6 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 1rem;
 }
 
 .pageTitle {
@@ -70,14 +68,17 @@
 
 /* ---------------- Section heads (§5.2) ---------------- */
 
+/* The section head no longer draws a rule across the page. One line under
+   every heading was the most repeated piece of furniture on the site, and it
+   is what "too many lines in other places" was describing; the gap below the
+   heading now does the separating (paper-first-register, hierarchy from
+   spacing and type). Batch 1. */
 .sectionHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 0.85rem;
   margin-bottom: 1.5rem;
 }
 
@@ -102,7 +103,6 @@
 
 .statList {
   margin-top: 1.75rem;
-  border-top: 1px solid var(--v-line);
 }
 
 .statListRow {
@@ -110,8 +110,11 @@
   grid-template-columns: 7rem minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 1.25rem;
-  border-bottom: 1px solid var(--v-line);
   padding: 0.9rem 0;
+}
+
+.statListRow + .statListRow {
+  border-top: 1px solid var(--v-line-soft);
 }
 
 .statListValue {
@@ -150,8 +153,9 @@
 .scorePanel {
   margin-top: 2rem;
   background: var(--v-surface);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   padding: 1.5rem 1.6rem;
+  border-radius: var(--radius-lg);
 }
 
 .scoreValue {
@@ -211,6 +215,7 @@
   border: 1px solid var(--v-line);
   padding: 1.25rem 1.4rem;
   transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-lg);
 }
 
 .courseRow:hover {
@@ -248,6 +253,7 @@
   background: var(--v-surface);
   border: 1px solid var(--v-line);
   padding: 1.25rem 1.4rem 1.4rem;
+  border-radius: var(--radius-lg);
 }
 
 /* ---------------- Quiz rows ---------------- */
@@ -277,6 +283,7 @@
   background: var(--v-surface);
   border: 1px solid var(--v-line);
   padding: 0.9rem 1.1rem;
+  border-radius: var(--radius-lg);
 }
 
 .quizTitle {
@@ -305,6 +312,7 @@
   background: var(--v-surface);
   padding: 2.25rem 1.5rem;
   text-align: center;
+  border-radius: var(--radius-lg);
 }
 
 .emptyTitle {
@@ -331,7 +339,7 @@
   text-decoration: none;
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
     color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }

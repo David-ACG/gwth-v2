@@ -29,7 +29,7 @@ export type LessonWidgetSurface =
 
 /** A single feedback comment, scoped by section anchor. */
 interface FeedbackComment {
-  /** Mono uppercase chip label, e.g. `"PAGE 3 · PARAGRAPH 2"`. */
+  /** Mono uppercase chip label, e.g. `"Page 3 · paragraph 2"`. */
   anchor: string
   /** Mono timestamp (no real time wiring yet). */
   time: string
@@ -53,7 +53,7 @@ interface HighlightNote {
 
 /** Page-group ahead of a list of notes in the aggregated notes panel. */
 interface NotesPageGroup {
-  /** Page label, e.g. `"PAGE 3 · 4 NOTES"`. */
+  /** Page label, e.g. `"Page 3 · 4 notes"`. */
   label: string
   /** Ordered list of highlight + note rows on this page. */
   rows: HighlightNote[]
@@ -61,8 +61,8 @@ interface NotesPageGroup {
 
 const MOCK_COMMENTS: FeedbackComment[] = [
   {
-    anchor: "PAGE 3 · PARAGRAPH 2",
-    time: "22 APR · 14:08",
+    anchor: "Page 3 · paragraph 2",
+    time: "22 Apr · 14:08",
     body: "The line about ‘who carries the work’ is the one I’d quote, but it’s buried halfway through the paragraph. Could it move up so it lands first?",
     staffReply: {
       author: "AMY (CONTENT)",
@@ -70,64 +70,64 @@ const MOCK_COMMENTS: FeedbackComment[] = [
     },
   },
   {
-    anchor: "PAGE 5 · CODE BLOCK",
-    time: "22 APR · 14:14",
+    anchor: "Page 5 · code block",
+    time: "22 Apr · 14:14",
     body: "The TypeScript snippet uses a generic that hasn’t been introduced yet. Maybe a one-line gloss above it?",
   },
   {
-    anchor: "PAGE 7 · IMAGE",
-    time: "22 APR · 14:21",
+    anchor: "Page 7 · image",
+    time: "22 Apr · 14:21",
     body: "Diagram caption says ‘figure 4’ but it’s the third image on the page.",
   },
 ]
 
 const MOCK_NOTE_GROUPS: NotesPageGroup[] = [
   {
-    label: "PAGE 3 · 4 NOTES",
+    label: "Page 3 · 4 notes",
     rows: [
       {
         quote: "who carries the work",
         note: "Probably my best line. Bring this to the kickoff template.",
-        time: "22 APR · 14:02",
+        time: "22 Apr · 14:02",
       },
       {
         quote:
           "arrives at the right moment, in language the room is already speaking",
-        time: "22 APR · 14:03",
+        time: "22 Apr · 14:03",
       },
       {
         quote: "cleanest slides",
         note: "Counterexample: the BD deck last quarter, gorgeous, missed the room entirely.",
-        time: "22 APR · 14:05",
+        time: "22 Apr · 14:05",
       },
       {
         quote: "rarely the work",
-        time: "22 APR · 14:06",
+        time: "22 Apr · 14:06",
       },
     ],
   },
   {
-    label: "PAGE 4 · 2 NOTES",
+    label: "Page 4 · 2 notes",
     rows: [
       {
         quote: "Pace is information.",
         note: "Use this as the kickoff slide tagline. Italic in the deck.",
-        time: "22 APR · 14:18",
+        time: "22 Apr · 14:18",
         focused: true,
       },
       {
         quote: "A small pause where a senior leader is catching up.",
-        time: "22 APR · 14:19",
+        time: "22 Apr · 14:19",
       },
     ],
   },
   {
-    label: "PAGE 7 · 1 NOTE",
+    label: "Page 7 · 1 note",
     rows: [
       {
         quote: "noticing what the room needs before it asks",
         note: "Worth a whole separate session on this with the team.",
-        time: "22 APR · 14:24",
+        time: "22 Apr · 14:24",
       },
     ],
   },
@@ -175,6 +175,7 @@ export function LessonWidgets({
       const target = e.target as HTMLElement | null
       if (
         target &&
+        // DOM tagName is always uppercase; this is a comparison, not a label.
         (target.tagName === "INPUT" ||
           target.tagName === "TEXTAREA" ||
           target.isContentEditable)
@@ -212,7 +213,7 @@ export function LessonWidgets({
           />
         ) : (
           <EdgePill
-            label="FEEDBACK"
+            label="Feedback"
             count={FEEDBACK_COUNT}
             position={{ right: 0, top: "40%" }}
             dot
@@ -236,7 +237,7 @@ export function LessonWidgets({
       {/* Right-edge pill column. When a panel is open, both pills dock to
           the panel's left edge as quick-switch tabs. */}
       <EdgePill
-        label="FEEDBACK"
+        label="Feedback"
         count={FEEDBACK_COUNT}
         dot
         active={isFeedback}
@@ -248,7 +249,7 @@ export function LessonWidgets({
         onClick={() => setSurface(isFeedback ? "none" : "feedback")}
       />
       <EdgePill
-        label="NOTES"
+        label="Notes"
         count={NOTES_COUNT}
         active={isNotes}
         position={
@@ -315,7 +316,7 @@ function EdgePill({
         // the inline axis runs vertically, so text-center centres the label
         // along its length and leaves it flush against one side.
         "fixed z-30 grid w-9 cursor-pointer select-none place-items-center",
-        "border-y border-l",
+        "rounded-l-md border-y border-l",
         active
           ? "border-primary bg-primary text-primary-foreground"
           : cn(styles.toolSurface, "text-foreground hover:bg-muted")
@@ -326,7 +327,7 @@ function EdgePill({
       }}
     >
       <span
-        className="block font-mono text-[11px] font-semibold uppercase tracking-[0.16em]"
+        className="block text-[13px] font-semibold "
         style={{
           writingMode: "vertical-rl",
           textOrientation: "mixed",
@@ -384,7 +385,7 @@ function SidePanel({
 }) {
   return (
     <aside
-      className="fixed right-0 top-16 z-30 flex flex-col border-l border-foreground bg-card"
+      className="fixed right-0 top-16 z-30 flex flex-col rounded-l-lg border-l border-border bg-card"
       style={{
         width,
         bottom: 76,
@@ -412,8 +413,8 @@ function PanelHeader({
   scopePicker?: React.ReactNode
 }) {
   return (
-    <div className="shrink-0 border-b border-foreground px-5 pb-3.5 pt-[18px]">
-      <div className="font-mono text-[12px] font-semibold uppercase tracking-[0.18em] text-foreground">
+    <div className="shrink-0 border-b border-border px-5 pb-3.5 pt-[18px]">
+      <div className="text-[12px] font-semibold text-foreground">
         {title}
         {accent && <span className="text-primary"> · {accent}</span>}
       </div>
@@ -421,9 +422,9 @@ function PanelHeader({
       {scopePicker}
 
       <div className="mt-3.5 flex border border-border">
-        <KeyChip k="F" label="FEEDBACK" active={activeKey === "F"} />
-        <KeyChip k="N" label="NOTES" active={activeKey === "N"} />
-        <KeyChip k="ESC" label="CLOSE" active={false} />
+        <KeyChip k="F" label="Feedback" active={activeKey === "F"} />
+        <KeyChip k="N" label="Notes" active={activeKey === "N"} />
+        <KeyChip k="ESC" label="Close" active={false} />
       </div>
     </div>
   )
@@ -441,13 +442,13 @@ function KeyChip({
   return (
     <div
       className={cn(
-        "flex flex-1 items-center gap-1.5 px-2.5 py-[7px] font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground",
+        "flex flex-1 items-center gap-1.5 px-2.5 py-[7px] text-[12.5px] text-muted-foreground",
         "border-l border-border first:border-l-0",
         active && "bg-muted"
       )}
     >
       <span
-        className="min-w-[18px] border border-foreground px-[5px] py-px text-center font-semibold text-foreground"
+        className="min-w-[18px] rounded-sm border border-border px-[5px] py-px text-center font-semibold text-foreground"
         style={{ fontSize: 9.5, letterSpacing: "0.06em" }}
       >
         {k}
@@ -468,14 +469,14 @@ function ScopePicker({
     { k: "all", label: "All pages" },
   ]
   return (
-    <div className="mt-3 flex border border-foreground">
+    <div className="mt-3 flex overflow-hidden rounded-md border border-border">
       {opts.map((o, i) => (
         <button
           key={o.k}
           type="button"
           className={cn(
             "flex-1 px-2.5 py-[7px] text-center text-[12px] tracking-[0.02em]",
-            i > 0 && "border-l border-foreground",
+            i > 0 && "border-l border-border",
             value === o.k
               ? "bg-foreground font-bold text-background"
               : "bg-transparent font-medium text-foreground"
@@ -499,10 +500,10 @@ function SectionAnchorChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center border px-[7px] py-[3px] font-mono text-[10px] font-medium uppercase tracking-[0.14em]",
+        "inline-flex items-center rounded-sm border px-[7px] py-[3px] text-[12.5px] font-medium",
         dim
           ? "border-border text-muted-foreground"
-          : "border-foreground text-foreground"
+          : "border-border text-foreground"
       )}
     >
       {children}
@@ -524,7 +525,7 @@ function FeedbackPanel({
   return (
     <SidePanel width={width}>
       <PanelHeader
-        title="FEEDBACK"
+        title="Feedback"
         accent={`LESSON ${lessonNumber}`}
         activeKey="F"
         scopePicker={<ScopePicker value="page" />}
@@ -534,7 +535,7 @@ function FeedbackPanel({
           <CommentRow key={i} {...c} />
         ))}
       </div>
-      <Composer anchor="PAGE 4 · PARAGRAPH 1" onPost={onClose} />
+      <Composer anchor="Page 4 · paragraph 1" onPost={onClose} />
     </SidePanel>
   )
 }
@@ -545,15 +546,15 @@ function CommentRow({ anchor, time, body, staffReply }: FeedbackComment) {
     <div className="border-b border-border px-5 py-4">
       <div className="mb-2 flex items-center justify-between">
         <SectionAnchorChip>{anchor}</SectionAnchorChip>
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] tabular-nums text-muted-foreground">
+        <span className="text-[12.5px] tabular-nums text-muted-foreground">
           {time}
         </span>
       </div>
       <p className="m-0 text-[14px] leading-[1.5] text-foreground">{body}</p>
       {staffReply && (
         <div className="mt-3 border-l-2 border-primary pl-3">
-          <div className="mb-1 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-primary">
-            STAFF · {staffReply.author}
+          <div className="mb-1 text-[13px] font-medium text-primary">
+            Staff · {staffReply.author}
           </div>
           <p className="m-0 text-[13px] leading-[1.5] text-muted-foreground">
             {staffReply.body}
@@ -573,15 +574,15 @@ function Composer({
   onPost?: () => void
 }) {
   return (
-    <div className="shrink-0 border-t border-foreground bg-card p-4">
+    <div className="shrink-0 border-t border-border bg-card p-4">
       <textarea
         placeholder="What would you change about this section?"
-        className="block w-full resize-none border border-border bg-background p-2.5 text-[14px] leading-[1.5] text-foreground outline-none focus:border-foreground"
+        className="block w-full resize-none rounded-md border border-border bg-background p-2.5 text-[14px] leading-[1.5] text-foreground outline-none focus:border-[var(--v-accent)]"
         rows={3}
       />
       <div className="mt-2.5 flex items-center justify-between gap-2.5">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="text-[12.5px] text-muted-foreground">
             ATTACH
           </span>
           <SectionAnchorChip>{anchor}</SectionAnchorChip>
@@ -589,7 +590,7 @@ function Composer({
         <button
           type="button"
           onClick={onPost}
-          className="shrink-0 border border-primary bg-primary px-3 py-2 font-mono text-[10.5px] font-bold uppercase tracking-[0.12em] text-primary-foreground hover:border-[var(--v-btn)] hover:bg-[var(--v-btn)]"
+          className="shrink-0 border border-primary bg-primary px-3 py-2 text-[12.5px] font-bold text-primary-foreground hover:border-[var(--v-btn)] hover:bg-[var(--v-btn)]"
         >
           POST
         </button>
@@ -610,7 +611,7 @@ function NotesPanel({
   return (
     <SidePanel width={width}>
       <PanelHeader
-        title="NOTES"
+        title="Notes"
         accent={`LESSON ${lessonNumber}`}
         activeKey="N"
       />
@@ -631,7 +632,7 @@ function NotesPanel({
 function PageGroupHeader({ children }: { children: React.ReactNode }) {
   return (
     <div className="sticky top-0 border-b border-border bg-background px-5 py-2 pt-3.5">
-      <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">
+      <div className="text-[13px] font-semibold text-foreground">
         {children}
       </div>
     </div>
@@ -657,13 +658,13 @@ function NoteRow({ quote, note, time, focused }: HighlightNote) {
         </p>
       )}
       <div className="mt-2.5 flex items-center justify-between gap-2">
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] tabular-nums text-muted-foreground">
+        <span className="text-[12.5px] tabular-nums text-muted-foreground">
           {time}
         </span>
         <div className="flex items-center gap-3.5">
           <button
             type="button"
-            className="border-b-[1.5px] border-foreground p-0 font-mono text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground"
+            className="border-b-[1.5px] border-border p-0 text-[12.5px] font-semibold text-foreground"
           >
             JUMP TO
           </button>
@@ -706,7 +707,7 @@ function TrashIcon() {
 function SelectionPopoverDemo() {
   return (
     <div
-      className="fixed z-[60] flex border border-foreground bg-card font-mono text-[11px] font-semibold uppercase tracking-[0.14em] shadow-none"
+      className="fixed z-[60] flex overflow-hidden rounded-md border border-border bg-card text-[13px] font-semibold shadow-none"
       style={{
         left: "50%",
         top: "42%",
@@ -721,13 +722,13 @@ function SelectionPopoverDemo() {
       </button>
       <button
         type="button"
-        className="border-l border-foreground bg-primary px-3.5 py-2.5 text-primary-foreground"
+        className="border-l border-border bg-primary px-3.5 py-2.5 text-primary-foreground"
       >
         HIGHLIGHT + NOTE
       </button>
       <button
         type="button"
-        className="border-l border-foreground bg-transparent px-3.5 py-2.5 text-muted-foreground"
+        className="border-l border-border bg-transparent px-3.5 py-2.5 text-muted-foreground"
       >
         CANCEL
       </button>
@@ -751,27 +752,27 @@ function SelectionPopoverDemo() {
 function NoteComposePopoverDemo() {
   return (
     <div
-      className="fixed z-[60] w-[280px] border border-foreground bg-card p-3"
+      className="fixed z-[60] w-[280px] rounded-lg border border-border bg-card p-3"
       style={{ left: "60%", top: "38%" }}
     >
-      <div className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">
+      <div className="mb-2 text-[13px] font-semibold text-foreground">
         NOTE TO SELF · P4
       </div>
       <textarea
         defaultValue="Pace is information, bring this back to the kickoff slide."
-        className="block w-full resize-none border border-border bg-background p-2 text-[13px] leading-[1.5] text-foreground outline-none focus:border-foreground"
+        className="block w-full resize-none rounded-md border border-border bg-background p-2 text-[13px] leading-[1.5] text-foreground outline-none focus:border-[var(--v-accent)]"
         rows={3}
       />
       <div className="mt-2.5 flex justify-end gap-2">
         <button
           type="button"
-          className="border border-foreground bg-transparent px-3 py-2 font-mono text-[10.5px] font-bold uppercase tracking-[0.12em] text-foreground hover:bg-foreground hover:text-background"
+          className="rounded-md border border-border bg-transparent px-3 py-2 text-[12.5px] font-bold text-foreground hover:bg-foreground hover:text-background"
         >
           DELETE
         </button>
         <button
           type="button"
-          className="border border-primary bg-primary px-3 py-2 font-mono text-[10.5px] font-bold uppercase tracking-[0.12em] text-primary-foreground hover:border-[var(--v-btn)] hover:bg-[var(--v-btn)]"
+          className="border border-primary bg-primary px-3 py-2 text-[12.5px] font-bold text-primary-foreground hover:border-[var(--v-btn)] hover:bg-[var(--v-btn)]"
         >
           SAVE
         </button>
@@ -824,7 +825,7 @@ function MobileFeedbackSheet({
 }) {
   return (
     <div
-      className="fixed left-0 right-0 z-30 flex flex-col border-t border-foreground bg-card"
+      className="fixed left-0 right-0 z-30 flex flex-col rounded-t-lg border-t border-border bg-card"
       style={{ bottom: 76, maxHeight: "70vh" }}
     >
       <div className="flex justify-center pb-1.5 pt-2.5">
@@ -836,27 +837,27 @@ function MobileFeedbackSheet({
         />
       </div>
       <PanelHeader
-        title="FEEDBACK"
+        title="Feedback"
         accent={`L${lessonNumber}`}
         activeKey="F"
       />
       <div className="flex-1 overflow-y-auto">
         <CommentRow
-          anchor="P3 · PARA 2"
-          time="22 APR · 14:08"
+          anchor="P3 · para 2"
+          time="22 Apr · 14:08"
           body="‘Who carries the work’ is the line I’d quote, could it move up?"
           staffReply={{
-            author: "AMY",
+            author: "Amy",
             body: "Moving it to the lede next pass.",
           }}
         />
         <CommentRow
-          anchor="P5 · CODE"
-          time="22 APR · 14:14"
+          anchor="P5 · code"
+          time="22 Apr · 14:14"
           body="Generic isn’t introduced yet, one-line gloss above?"
         />
       </div>
-      <Composer anchor="P4 · PARA 1" onPost={onClose} />
+      <Composer anchor="P4 · para 1" onPost={onClose} />
     </div>
   )
 }

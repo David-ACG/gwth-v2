@@ -27,7 +27,7 @@
 .shell.palette {
   background: var(--v-surface);
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
   border-radius: 8px;
   box-shadow: none;
 }

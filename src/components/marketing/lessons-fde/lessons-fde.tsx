@@ -30,8 +30,13 @@ const FEATURES = [
   {
     label: "Volume",
     title: `${TOTAL_MANDATORY_LESSONS + TOTAL_OPTIONAL_LESSONS} lessons`,
+    // Recovered (C02): docs/marketing/landing-page-hero-copy.md, "What You'll
+    // Build". The old line said "not toy exercises", which names the thing it
+    // is not; this names the thing it is. The projects count that travelled
+    // with it in the original is deliberately NOT recovered (ledger C30: no
+    // register agrees on it).
     description:
-      "Build real apps, automations, and tools, not toy exercises. Every month moves towards practical proof.",
+      "Not quizzes about transformer architecture. Not slide decks about large language models. Real things you build, use and show to people.",
   },
   {
     label: "Proof",
@@ -48,28 +53,45 @@ const FEATURES = [
 ]
 
 /**
- * Lessons page in the FDE journal register, matching the chosen homepage
- * direction (home-fde/): drenched teal masthead with a serif headline,
- * month cards with colour-block tops (teal/moss/rust by month), a numbered
- * how-it-works list, the 5-Hour Rule essay, and a closing band. Scoped
- * palette variables give full light/dark parity.
+ * The course page, in the PAPER-FIRST register: a two-column quiet masthead with
+ * a Bitter headline, rounded month cards with a quiet header strip (the
+ * teal/moss/rust rotation is retired), a numbered how-it-works list, the
+ * 5-Hour Rule essay and a closing band. The shared tokens give light/dark
+ * parity.
+ *
+ * ## Copy sources (bead gwth-launch-88z.32.26, 2026-09-14)
+ *
+ * Four lines here are RECOVERED from the pre-paper-first archive, because
+ * David asked for the wording he had already spent hours refining rather than
+ * new wording. Only the words come across; the FDE and Civic Press layouts
+ * that carried them are history. Each is marked at the place it applies, with
+ * its ledger id:
+ *
+ * - C01 the standfirst, from `docs/marketing/why-ai-skills-matter-now.md`
+ * - C02 the "Volume" feature, from `docs/marketing/landing-page-hero-copy.md`
+ * - C03 "around the day job", from the orphaned `PRODUCT_PILLARS` in
+ *   `components/marketing/data.ts`
+ * - C04 the closing line, from `docs/marketing/landing-page-hero-copy.md`
+ *
+ * No lesson or project COUNT was recovered. The archive says 94 projects split
+ * 24/35/35; this config computes 66 mandatory and 30 optional, /about prints
+ * 64 and 30, and /why-gwth prints 94. Until one register owns the split, the
+ * only numbers on this page are the two read from config. Full reasoning and
+ * every rejected line: `GWTH-launch-plan/completion/evergreen-copy-recovery/`.
  */
 export function LessonsFde() {
   return (
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>
-            The course · 3 months · 5 hours a week
-          </p>
           <h1 className={styles.mastheadTitle}>
             Real projects, <em>not toy exercises.</em>
           </h1>
           <p className={styles.standfirst}>
             {TOTAL_MANDATORY_LESSONS} mandatory lessons plus{" "}
-            {TOTAL_OPTIONAL_LESSONS} optional deep-dives across 3 months.
-            Start with ChatGPT basics, then build towards AI-assisted coding,
-            practical projects, and enterprise transformation.
+            {TOTAL_OPTIONAL_LESSONS} optional deep-dives across 3 months. We do
+            not teach you what AI is. We teach you what AI does, for you, on
+            your own work.
           </p>
           <div className={styles.mastheadActions}>
             <Link href="/waitlist" className={styles.buttonSolid}>
@@ -86,6 +108,7 @@ export function LessonsFde() {
             )}
           </div>
           <div className={styles.mastheadFoot}>
+            <p>3 months · 5 hours a week, around the day job</p>
             <p>Video in every lesson</p>
             <p>One Capstone project per month</p>
             <p>Plain progress tracking</p>
@@ -144,7 +167,6 @@ export function LessonsFde() {
         <div className={styles.page}>
           <div className={styles.featuresGrid}>
             <div>
-              <p className={styles.mono}>How it works</p>
               <h2 className={styles.sectionTitle}>
                 Built for <em>practical proof.</em>
               </h2>
@@ -178,7 +200,6 @@ export function LessonsFde() {
                 height={450}
               />
             </div>
-            <p className={styles.mono}>The 5-Hour Rule</p>
             <h2>
               Why <em>one hour a day?</em>
             </h2>
@@ -219,7 +240,8 @@ export function LessonsFde() {
             Ready to start <em>building?</em>
           </h2>
           <p>
-            Join the waitlist for the course and we will write to you when
+            Three months from now you will have built things most people assume
+            need a developer. Join the waitlist and we will write to you when
             places open.
           </p>
           <div className={styles.closingActions}>

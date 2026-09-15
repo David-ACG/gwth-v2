@@ -16,7 +16,7 @@ import {
 import styles from "@/components/marketing/contact-fde/contact-fde.module.css"
 
 /**
- * Waitlist form (name + email) styled to the FDE journal register (paper
+ * Waitlist form (name + email) in the PAPER-FIRST register (rounded paper
  * panel, square hairline inputs, mono labels). Posts to /api/waitlist,
  * which persists the signup and sends the confirmation email.
  */

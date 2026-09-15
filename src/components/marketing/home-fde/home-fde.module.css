@@ -45,15 +45,19 @@
   color: var(--v-accent);
 }
 
-/* ---------------- The plate and its key ---------------- */
+/* ---------------- The plate, its key and its caption ---------------- */
 
 .heroPlate {
   margin-top: clamp(2.25rem, 4.5vw, 3.5rem);
   scroll-margin-top: 5rem;
 }
 
+.plateCaption {
+  display: block;
+}
+
 /*
- * X6 key. The tiles occupy the middle 22.5% to 77% of the photograph, three
+ * The key. The tiles occupy the middle 22.5% to 77% of the photograph, three
  * across, and the PHOTOGRAPH DOES NOT REFLOW, so neither does this: three
  * columns at every width, inset to sit under the tiles. Collapsing it to two
  * columns on a phone would point the names at nothing (image-text-rules).
@@ -61,36 +65,189 @@
 .plateKey {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 0.75rem 23% 0 22.5%;
+  gap: 0.6rem 0.5rem;
+  margin: 0.85rem 23% 0 22.5%;
   text-align: center;
+}
+
+.plateKey > span {
+  display: block;
+  min-width: 0;
+}
+
+.keyName {
+  display: block;
   font-size: clamp(0.66rem, 2.5vw, 0.95rem);
   font-weight: 600;
+  line-height: 1.2;
   color: var(--v-ink);
   white-space: nowrap;
 }
 
-/* Under 360px the inset leaves about 50px per column. The names stay under
-   their tiles (the inset never moves); the type shrinks instead, and the
-   two longest names spill a pixel or two into a neighbouring cell that holds
-   a shorter word. Three columns, always. */
-@media (max-width: 22.5rem) {
-  .plateKey {
-    font-size: 0.6rem;
+/*
+ * David, 2026-09-14: six bare category words under the flagship image were
+ * "totally uninspiring". The clause says what the block leaves you able to
+ * do. It sits under its own tile, so it wraps inside its column and never
+ * widens it.
+ */
+.keyClause {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: clamp(0.62rem, 2.1vw, 0.82rem);
+  line-height: 1.3;
+  color: var(--v-muted);
+  text-wrap: balance;
+}
+
+/*
+ * Under 30rem the inset leaves too little room for a two-line cell under each
+ * tile, so the clauses stand down and the names hold their alignment. The
+ * caption sentence below carries the point at every width.
+ */
+@media (max-width: 30rem) {
+  .keyClause {
+    display: none;
+  }
+
+  .keyName {
+    font-size: 0.62rem;
     letter-spacing: -0.01em;
   }
 }
 
-/* ---------------- Institution band ---------------- */
-
-.institutionGrid {
-  display: grid;
-  gap: 2.5rem;
+/* The flagship line: what the picture is arguing, not what it contains. */
+.plateLine {
+  display: block;
+  max-width: 44rem;
+  margin: 1.1rem auto 0;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--v-ink);
+  text-wrap: balance;
 }
 
-@media (min-width: 64rem) {
-  .institutionGrid {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 4rem;
+/*
+ * Italic, but in ink, not the jade accent. The accent is the DISPLAY italic
+ * (paper-first-components); at this line's 21.6px it measures 4.35 : 1 on the
+ * page ground against the 4.5 : 1 bar for normal-weight body text, which axe
+ * fails and a bright screen would lose (boundary-contrast-check).
+ */
+.plateLine em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+/* ---------------- What you do for three months ---------------- */
+
+/*
+ * The learner offer (David, 2026-09-15). The page is now written for one
+ * person, so this is the widest single column on it: the prose is what they
+ * came to read, and the price and the waitlist sit beside it rather than under
+ * it, where the reader has to scroll past the argument to find the step.
+ */
+.offer {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 60rem) {
+  .offer {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 3.5rem;
     align-items: start;
   }
+}
+
+.offerBody {
+  font-size: var(--fde-body);
+  line-height: 1.75;
+  color: var(--v-soft);
+}
+
+.offerBody + .offerBody {
+  margin-top: 1rem;
+}
+
+/*
+ * The aside is separated by a rule, not a filled panel. A tinted box around a
+ * price reads as a pricing table and invites a comparison there is nothing to
+ * compare with, and tint is never the only signal (bible).
+ */
+.offerAside {
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.2rem;
+}
+
+@media (min-width: 60rem) {
+  .offerAside {
+    border-top: 0;
+    border-left: 1px solid var(--v-line);
+    padding: 0 0 0 2.25rem;
+  }
+}
+
+.offerPrice {
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-ink);
+  font-weight: 500;
+}
+
+.offerNote {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.offerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 1.4rem;
+}
+
+/* ---------------- Six blocks: the building lead ---------------- */
+
+/*
+ * One paragraph between the section rule and the cards, saying which of the
+ * six carries the rest (David, 2026-09-15). Set at reading width and in ink,
+ * so it is read as the argument for the grid rather than as a caption on it.
+ */
+.blocksLead {
+  max-width: 46rem;
+  margin: -0.5rem 0 1.75rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
+/* ---------------- Organisations signpost ---------------- */
+
+/*
+ * A signpost, not a second /for-institutions page (David, 2026-09-15,
+ * a-20260915-085703-483d98). It gets a hairline and reading width and nothing
+ * else: no band, no plate, no feature grid. If it ever grows a fourth
+ * paragraph it has stopped being a signpost.
+ */
+.signpost {
+  max-width: 46rem;
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.4rem;
+}
+
+.signpostBody {
+  margin-top: 0.75rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.signpost .signpostBody + div {
+  margin-top: 1.4rem;
 }

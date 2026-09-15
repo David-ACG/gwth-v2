@@ -197,14 +197,6 @@ interface EditorialLessonViewerProps {
   /** Href back to the parent course page. */
   courseHref?: string
   /**
-   * Tool-chrome palette under review (`?chrome=a|b|c`). Undefined renders the
-   * current look. Only the six `--v-tool-*` / `--v-current-*` tokens change;
-   * see the variant blocks in lesson-fde.module.css. Temporary: this exists so
-   * David can compare the three side by side on the real page and pick one,
-   * after which the winner becomes the default and this prop goes away.
-   */
-  chrome?: "a" | "b" | "c"
-  /**
    * The pass mark this lesson's Q&A is graded against — the user's effective
    * syllabus edition's `pass_mark` (N6, decision 4: one pass mark per
    * edition), threaded from the server page. Display-only on the client: the
@@ -214,7 +206,7 @@ interface EditorialLessonViewerProps {
   passMark?: number
 }
 
-const ADVANCING_PING_LABEL = "ADVANCING IN 2S"
+const ADVANCING_PING_LABEL = "Advancing in 2s"
 
 /** Milliseconds the tap-to-stay overlay shows before auto-advancing. */
 const AUTO_ADVANCE_DELAY_MS = 2000
@@ -257,7 +249,6 @@ export function EditorialLessonViewer({
   initialBookmarked = false,
   nextLesson = null,
   courseHref,
-  chrome,
   passMark = QUIZ_PASS_SCORE,
 }: EditorialLessonViewerProps) {
   const [surface, setSurface] = React.useState<EditorialLessonSurface>(
@@ -726,7 +717,6 @@ export function EditorialLessonViewer({
         "flex min-h-[calc(100vh-4rem)] flex-col"
       )}
       data-section="lesson-viewer"
-      data-chrome={chrome}
     >
       {audioElement}
       <div className="flex flex-1 min-h-0">
@@ -750,10 +740,10 @@ export function EditorialLessonViewer({
           <MastRow
             section={
               isQa
-                ? `COURSE · LESSON ${lesson.lessonNumber} · Q&A`
+                ? `Lesson ${lesson.lessonNumber} · Q&A`
                 : isProject
-                  ? `COURSE · LESSON ${lesson.lessonNumber} · PROJECT`
-                  : `COURSE · LESSON ${lesson.lessonNumber}`
+                  ? `Lesson ${lesson.lessonNumber} · project`
+                  : `Lesson ${lesson.lessonNumber}`
             }
             currentPage={currentPage}
             pageTotal={lesson.pages.length}
@@ -764,7 +754,7 @@ export function EditorialLessonViewer({
           <div className="flex min-w-0 flex-1 flex-col px-5 sm:px-8 lg:px-14">
             <LessonChrome
               monthLabel={
-                isQa ? `${lesson.monthLabel} · END-OF-LESSON` : lesson.monthLabel
+                isQa ? `${lesson.monthLabel} · end of lesson` : lesson.monthLabel
               }
               lessonNumber={lesson.lessonNumber}
               title={
@@ -879,8 +869,8 @@ export function EditorialLessonViewer({
                     prevDisabled={currentPage <= 1}
                     nextLabel={
                       currentPage >= lesson.pages.length
-                        ? "FINISH LESSON"
-                        : "CONTINUE"
+                        ? "Finish lesson"
+                        : "Continue"
                     }
                   />
                 </div>
@@ -935,8 +925,8 @@ function OutlineRail({
         styles.toolSurface
       )}
     >
-      <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-        LESSON {String(lessonNumber).padStart(2, "0")} · OUTLINE
+      <div className="text-[13px] font-medium text-muted-foreground">
+        Lesson {String(lessonNumber).padStart(2, "0")} outline
       </div>
       <div className="mt-4 flex flex-col">
         {pages.map((page, i) => {
@@ -954,12 +944,15 @@ function OutlineRail({
               onClick={() => onSelectPage?.(n)}
               aria-current={state === "current" ? "page" : undefined}
               className={cn(
-                "grid w-full cursor-pointer grid-cols-[20px_1fr_auto] items-start gap-2.5 border-x-0 border-b border-t-0 border-solid border-border bg-transparent py-2.5 pl-1 pr-1 text-left transition-colors hover:bg-muted",
-                i === 0 && "border-t",
-                state === "pending" && "opacity-60",
-                // "Where I am" is the one thing the rail should shout. Weight
-                // alone was doing that job.
-                state === "current" && cn(styles.railCurrent, "pl-2.5")
+                // No rule per row. David, on this rail: "The left side all
+                // looks the same. It just looks like a list of text that I
+                // don't want to read" - fourteen identical ruled rows. The
+                // rows are separated by their own rhythm now, and the M2
+                // treatment on the current one is what the eye lands on
+                // (paper-first-lesson-viewer, tint-is-never-the-only-signal).
+                "grid w-full cursor-pointer grid-cols-[20px_1fr_auto] items-start gap-2.5 rounded-md border-0 border-l-[3px] border-solid border-transparent bg-transparent py-2 pl-2 pr-1.5 text-left transition-colors hover:bg-[var(--v-quiet)]",
+                state === "pending" && "opacity-70",
+                state === "current" && styles.railCurrent
               )}
             >
               <StatusIcon state={state} small />
@@ -972,11 +965,11 @@ function OutlineRail({
                 >
                   {page.title}
                 </div>
-                <div className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                <div className="mt-0.5 text-[12px] text-muted-foreground">
                   {page.kindLabel}
                 </div>
               </div>
-              <span className="font-mono text-[10.5px] tabular-nums text-muted-foreground">
+              <span className="text-[12.5px] tabular-nums text-muted-foreground">
                 P{String(n).padStart(2, "0")}
               </span>
             </button>
@@ -998,7 +991,7 @@ function OutlineRail({
  * live on their own focused `role="slider"` element and are untouched.
  *
  * The sheet renders in a portal outside the viewer's `.shell`, so it re-applies
- * `styles.shell` to keep the FDE `--v-*` token remap (background, border,
+ * `styles.shell` to keep the `--v-*` token remap (background, border,
  * primary, ring, serif) on-register.
  */
 function OutlineSheet({
@@ -1053,12 +1046,12 @@ function OutlineSheet({
         onKeyDown={handleKeyDown}
         className={cn(
           styles.shell,
-          "max-h-[80vh] gap-0 overflow-y-auto border-t border-border bg-card p-0"
+          "max-h-[80vh] gap-0 overflow-y-auto rounded-t-lg border-t border-border bg-card p-0"
         )}
       >
         <SheetHeader className="border-b border-border px-[22px] py-4">
-          <SheetTitle className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            LESSON {String(lessonNumber).padStart(2, "0")} · OUTLINE
+          <SheetTitle className="text-[13px] font-medium text-muted-foreground">
+            Lesson {String(lessonNumber).padStart(2, "0")} outline
           </SheetTitle>
         </SheetHeader>
         <div className="flex flex-col px-[22px] pb-[max(2rem,env(safe-area-inset-bottom))]">
@@ -1097,11 +1090,11 @@ function OutlineSheet({
                   >
                     {page.title}
                   </div>
-                  <div className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <div className="mt-0.5 text-[12px] text-muted-foreground">
                     {page.kindLabel}
                   </div>
                 </div>
-                <span className="font-mono text-[10.5px] tabular-nums text-muted-foreground">
+                <span className="text-[12.5px] tabular-nums text-muted-foreground">
                   P{String(n).padStart(2, "0")}
                 </span>
               </button>
@@ -1131,7 +1124,7 @@ function MastRow({
   outlineOpen?: boolean
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground lg:px-10">
+    <div className="flex items-center gap-3 border-b border-border px-4 py-2.5 text-[12.5px] text-muted-foreground lg:px-10">
       {onOpenOutline && (
         <button
           type="button"
@@ -1139,7 +1132,7 @@ function MastRow({
           aria-label="Open lesson outline"
           aria-haspopup="dialog"
           aria-expanded={outlineOpen ?? false}
-          className="inline-flex shrink-0 items-center gap-2 border border-border bg-transparent px-2 py-1.5 text-foreground lg:hidden"
+          className="inline-flex shrink-0 items-center gap-2 rounded-md border border-border bg-transparent px-2 py-1.5 text-foreground lg:hidden"
         >
           <svg
             width="13"
@@ -1158,16 +1151,17 @@ function MastRow({
           </span>
         </button>
       )}
+      {/*
+        The section label and its "Active" chip are gone. Neither was
+        actionable: the lesson title is the next thing on the page, the
+        breadcrumb above already names the course and lesson, and "Active"
+        told a reader nothing they could act on. It was the decorative
+        metadata line the register bans (paper-first-components), and on
+        desktop it was the whole reason this strip existed. What is left is
+        the mobile outline button, so below `lg` the row still opens the
+        outline and above `lg` there is nothing to draw. Batch 1.
+      */}
       <span className="truncate">{section}</span>
-      <span
-        className={cn(
-          styles.statusActive,
-          "inline-flex shrink-0 items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
-        )}
-      >
-        <span aria-hidden="true">▸</span>
-        Active
-      </span>
     </div>
   )
 }
@@ -1217,11 +1211,11 @@ function LessonChrome({
   return (
     <div className="border-b border-border pb-[18px] pt-[22px]">
       <div className="flex items-center justify-between gap-4">
-        <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="text-[13px] font-medium text-muted-foreground">
           {monthLabel}
         </div>
-        <div className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-          PAGE {pageNum} OF {pageTotal}
+        <div className="text-[13px] font-medium text-muted-foreground">
+          Page {pageNum} of {pageTotal}
         </div>
       </div>
       <div className="mt-3 flex items-start justify-between gap-4">
@@ -1231,14 +1225,14 @@ function LessonChrome({
         <BookmarkButton
           initialBookmarked={initialBookmarked}
           lessonId={lessonId}
-          className="shrink-0 border border-border"
+          className="shrink-0 rounded-md border border-border"
         />
       </div>
 
       <div className="mt-[18px] grid grid-cols-2 gap-[18px]">
         <div>
-          <div className="mb-1 flex justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            <span>LESSON {String(lessonNumber).padStart(2, "0")} PROGRESS</span>
+          <div className="mb-1 flex justify-between text-[12.5px] text-muted-foreground">
+            <span>Lesson {String(lessonNumber).padStart(2, "0")} progress</span>
             <span>{Math.round(lessonPct)}%</span>
           </div>
           <SegmentedBar
@@ -1249,8 +1243,8 @@ function LessonChrome({
           />
         </div>
         <div>
-          <div className="mb-1 flex justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            <span>MONTH 1 PROGRESS</span>
+          <div className="mb-1 flex justify-between text-[12.5px] text-muted-foreground">
+            <span>Month 1 progress</span>
             <span>
               {monthCompleted} / {monthTotal}
             </span>
@@ -1284,10 +1278,10 @@ function SegmentedBar({
       style={{ gridTemplateColumns: `repeat(${total}, 1fr)` }}
     >
       {Array.from({ length: total }).map((_, i) => (
-        <div key={i} className="relative h-[3px] bg-[var(--v-line-soft)]">
+        <div key={i} className="relative h-[3px] rounded-full bg-[var(--v-line-soft)]">
           {(i < value || (i === value && partial > 0)) && (
             <div
-              className={cn("absolute inset-y-0 left-0", fillClass)}
+              className={cn("absolute inset-y-0 left-0 rounded-full", fillClass)}
               style={{ width: i < value ? "100%" : `${partial * 100}%` }}
             />
           )}
@@ -1357,7 +1351,7 @@ function PageFooter({
   onNext,
   onCancelAdvance,
   prevDisabled,
-  nextLabel = "CONTINUE",
+  nextLabel = "Continue",
   nextVariant = "primary",
   nextTick,
 }: {
@@ -1394,10 +1388,10 @@ function PageFooter({
         onClick={onPrev}
         disabled={prevDisabled}
       >
-        <span aria-hidden="true">←</span> PREVIOUS PAGE
+        <span aria-hidden="true">←</span> Previous page
       </SharpButton>
-      <div className="order-last col-span-2 text-center font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground sm:order-none sm:col-span-1 sm:text-left">
-        PAGE {pageNum} OF {pageTotal}
+      <div className="order-last col-span-2 text-center text-[12.5px] text-muted-foreground sm:order-none sm:col-span-1 sm:text-left">
+        Page {pageNum} of {pageTotal}
       </div>
       <div className="relative flex min-w-0 justify-end sm:min-w-[220px]">
         {advancing && <AdvancingPing onCancel={onCancelAdvance} />}
@@ -1435,10 +1429,10 @@ function AdvancingPing({ onCancel }: { onCancel?: () => void }) {
     <button
       type="button"
       onClick={onCancel}
-      className="absolute bottom-[calc(100%+10px)] right-0 flex cursor-pointer items-center gap-2.5 whitespace-nowrap border border-primary bg-card px-3 py-2"
+      className="absolute bottom-[calc(100%+10px)] right-0 flex cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-md border border-primary bg-card px-3 py-2"
     >
       <span className="size-2 animate-pulse bg-primary motion-reduce:animate-none" />
-      <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-primary">
+      <span className="text-[12.5px] font-semibold text-primary">
         {ADVANCING_PING_LABEL}
       </span>
       <span className="text-[12px] text-muted-foreground">·</span>
@@ -1469,7 +1463,7 @@ function AudioBar({
   variant: AudioBarVariant
   autoAdvance: boolean
   speed: "1x" | "1.25x" | "1.5x"
-  /** Title shown after the NOW READING label. */
+  /** Title shown after the "Now reading" label. */
   nowReading: string
   currentTime: string
   totalTime: string
@@ -1482,10 +1476,10 @@ function AudioBar({
 }) {
   if (variant === "muted" || variant === "unavailable") {
     return (
-      <div className="sticky bottom-0 z-[5] border-t border-foreground bg-card px-7 py-3.5">
+      <div className="sticky bottom-0 z-[5] border-t border-border bg-card px-7 py-3.5">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="inline-flex size-8 items-center justify-center border border-border text-muted-foreground">
+            <span className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground">
               <SpeakerOffIcon />
             </span>
             <div>
@@ -1497,10 +1491,10 @@ function AudioBar({
                 honest state is unchanged, the framing is not: read-along audio
                 is being added lesson by lesson through the beta (W26).
               */}
-              <div className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              <div className="text-[12.5px] font-semibold text-muted-foreground">
                 {variant === "muted"
-                  ? "NARRATION MUTED FOR VIDEO"
-                  : "NO READ-ALONG ON THIS LESSON"}
+                  ? "Narration muted for video"
+                  : "No read-along on this lesson"}
               </div>
               <div className="mt-0.5 font-serif text-[13px] italic text-muted-foreground">
                 {variant === "muted"
@@ -1509,8 +1503,8 @@ function AudioBar({
               </div>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 border border-border bg-transparent px-2.5 py-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            AUTO-ADVANCE {autoAdvance ? "ON" : "OFF"}
+          <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-transparent px-2.5 py-1 text-[12.5px] font-semibold text-muted-foreground">
+            Auto-advance {autoAdvance ? "on" : "off"}
           </span>
         </div>
       </div>
@@ -1569,14 +1563,14 @@ function AudioBar({
               title (verified 390px to 2200px). */}
           <div className="mb-2 flex items-baseline gap-4">
             <div className="flex min-w-0 flex-1 items-baseline gap-3 overflow-hidden">
-              <span className="hidden whitespace-nowrap font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground 2xl:inline">
-                NOW READING
+              <span className="hidden whitespace-nowrap text-[13px] font-medium text-muted-foreground 2xl:inline">
+                Now reading
               </span>
               <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[13px] font-semibold">
                 {nowReading}
               </span>
             </div>
-            <span className="shrink-0 whitespace-nowrap font-mono text-[11.5px] tabular-nums text-muted-foreground">
+            <span className="shrink-0 whitespace-nowrap text-[13px] tabular-nums text-muted-foreground">
               {currentTime} / {totalTime}
             </span>
           </div>
@@ -1587,14 +1581,14 @@ function AudioBar({
             under the scrubber, spanning both columns, so neither can force the
             grid wider than the viewport. */}
         <div className="col-span-2 flex flex-wrap items-center gap-x-[22px] gap-y-3 xl:col-span-1 xl:contents">
-          <div className="flex shrink-0 border border-border">
+          <div className="flex shrink-0 overflow-hidden rounded-md border border-border">
             {(["1x", "1.25x", "1.5x"] as const).map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => onChangeSpeed(s)}
                 className={cn(
-                  "min-w-[44px] cursor-pointer border-none px-2.5 py-1.5 font-mono text-[11px] font-bold tracking-[0.04em]",
+                  "min-w-[44px] cursor-pointer border-none px-2.5 py-1.5 text-[13px] font-bold",
                   s === speed
                     ? styles.toolControl
                     : "bg-transparent text-muted-foreground"
@@ -1693,7 +1687,7 @@ function SeekableTrack({
 
 function Scrubber({ progress }: { progress: number }) {
   return (
-    <div className="relative h-1.5 border border-border bg-muted">
+    <div className="relative h-1.5 rounded-full border border-border bg-muted">
       <div
         className="absolute -left-px -top-px -bottom-px bg-foreground"
         style={{ width: `calc(${progress}% + 2px)` }}
@@ -1755,30 +1749,30 @@ function AutoAdvanceToggle({
     <div className={cn("flex items-center", compact ? "gap-2" : "gap-2.5")}>
       <span
         className={cn(
-          "font-mono font-bold uppercase tracking-[0.16em]",
-          compact ? "text-[9.5px]" : "text-[10.5px]",
-          on ? "text-primary" : "text-muted-foreground"
+          "font-semibold",
+          compact ? "text-[12px]" : "text-[12.5px]",
+          on ? "text-[var(--v-accent)]" : "text-muted-foreground"
         )}
       >
-        AUTO-ADVANCE
+        Auto-advance
       </span>
       <button
         type="button"
         role="switch"
         aria-checked={on}
         // A switch with no accessible name reads as just "switch" to a screen
-        // reader; the visible AUTO-ADVANCE text is a sibling, not a label.
+        // reader; the visible "Auto-advance" text is a sibling, not a label.
         aria-label="Auto-advance pages with the narration"
         onClick={onToggle}
         className={cn(
-          "relative cursor-pointer border p-0",
+          "relative cursor-pointer rounded-full border p-0",
           compact ? "h-5 w-[38px]" : "h-6 w-11",
-          on ? "border-primary bg-primary" : "border-foreground bg-transparent"
+          on ? "border-[var(--v-btn)] bg-primary" : "border-border bg-transparent"
         )}
       >
         <span
           className={cn(
-            "absolute top-px bottom-px block",
+            "absolute top-px bottom-px block rounded-full",
             compact ? "w-3" : "w-3.5",
             on ? "right-px bg-primary-foreground" : "left-px bg-foreground"
           )}
@@ -1786,18 +1780,25 @@ function AutoAdvanceToggle({
       </button>
       <span
         className={cn(
-          "font-mono font-bold uppercase tracking-[0.16em]",
-          compact ? "text-[9.5px]" : "text-[10.5px]",
-          on ? "text-primary" : "text-muted-foreground"
+          "font-semibold",
+          compact ? "text-[12px]" : "text-[12.5px]",
+          on ? "text-[var(--v-accent)]" : "text-muted-foreground"
         )}
       >
-        {on ? "ON" : "OFF"}
+        {on ? "On" : "Off"}
       </span>
     </div>
   )
 }
 
-// ─── Sharp buttons + status ──────────────────────────────────────────────────
+// ─── Buttons + status ────────────────────────────────────────────────────────
+
+/*
+ * SharpButton keeps its name for the call sites, but the square corner it was
+ * named for is gone: R2 makes 8px the control radius and a square corner on a
+ * new surface the defect (paper-first-banned-patterns, reversed). David: "all
+ * the sharp corners make me feel uneasy". Batch 1.
+ */
 
 function SharpButton({
   href,
@@ -1817,10 +1818,10 @@ function SharpButton({
   disabled?: boolean
 }) {
   const classes = cn(
-    "inline-flex items-center justify-center gap-2 border px-4.5 py-3 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-accent)]",
+    "inline-flex items-center justify-center gap-2 rounded-md border px-4.5 py-3 text-[0.82rem] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--v-accent)]",
     variant === "primary"
       ? "border-primary bg-primary text-primary-foreground hover:border-[var(--v-btn)] hover:bg-[var(--v-btn)]"
-      : "border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background",
+      : "border-border bg-transparent text-foreground hover:bg-foreground hover:text-background",
     disabled && "pointer-events-none opacity-45",
     className
   )
@@ -1848,7 +1849,7 @@ function StatusIcon({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center justify-center border",
+        "inline-flex shrink-0 items-center justify-center rounded-sm border",
         small ? "size-4" : "size-[18px]",
         // Done ticks are solid ink today. There is one per finished page, so
         // on a 14-page lesson they are the heaviest thing in the rail: the
@@ -1918,7 +1919,7 @@ function ProjectPageBody({
         className="mb-6 border-b border-border pb-4"
         data-section="lesson-project-header"
       >
-        <div className={styles.mono}>MAKE THIS</div>
+        <div className={styles.mono}>Make this</div>
         {heading && (
           <h2 className="mt-2 font-serif text-[1.6rem] font-semibold leading-[1.2] tracking-[-0.01em] text-foreground">
             {heading}
@@ -1971,7 +1972,7 @@ function DefaultProseContent() {
       </p>
 
       <Figure
-        label="FIG. 03 · A USEFUL TOOL, ANATOMY"
+        label="Fig. 03 · a useful tool, anatomy"
         caption="Input from somewhere you already are, one model call, output back to where you already are. No new app to open."
       />
 
@@ -1984,7 +1985,7 @@ function DefaultProseContent() {
         use it on Wednesday afternoon when you are tired.
       </p>
 
-      <Callout tag="WORKED EXAMPLE">
+      <Callout tag="Worked example">
         Last cohort, the most-shipped lesson-13 build was a five-line script
         that read the latest message in a Gmail label called{" "}
         <span className="bg-muted px-1 font-mono">triage</span>, asked Claude
@@ -2019,18 +2020,18 @@ function Figure({
   return (
     <figure className="my-7">
       <div
-        className="relative flex items-center justify-center border border-foreground"
+        className="relative flex items-center justify-center overflow-hidden rounded-md border border-border"
         style={{
           height,
           background:
             "repeating-linear-gradient(135deg, var(--v-line-soft) 0 12px, var(--v-surface) 12px 24px)",
         }}
       >
-        <div className="border border-border bg-card px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="rounded-md border border-border bg-card px-3 py-1.5 text-[13px] text-muted-foreground">
           {label}
         </div>
       </div>
-      <figcaption className="mt-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+      <figcaption className="mt-2.5 text-[13px] text-muted-foreground">
         {caption}
       </figcaption>
     </figure>
@@ -2045,9 +2046,9 @@ function Callout({
   children: React.ReactNode
 }) {
   return (
-    <aside className="my-[22px] grid grid-cols-[auto_1fr] items-start gap-4 border border-foreground bg-card px-[18px] py-3.5">
+    <aside className="my-[22px] grid grid-cols-[auto_1fr] items-start gap-4 rounded-lg border border-border bg-card px-[18px] py-3.5">
       <span
-        className="whitespace-nowrap border px-2 py-1 font-mono text-[10.5px] font-bold uppercase tracking-[0.18em]"
+        className="whitespace-nowrap border px-2 py-1 text-[12.5px] font-bold "
         style={{
           color: "var(--v-accent)",
           borderColor: "var(--v-accent)",
@@ -2083,15 +2084,15 @@ function VideoPageBody({
 }) {
   return (
     <div className="w-full max-w-[880px]">
-      <div className="mb-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-        PAGE 1 OF {pageTotal} · INTRO VIDEO
+      <div className="mb-2.5 text-[13px] font-medium text-muted-foreground">
+        Page 1 of {pageTotal} · intro video
       </div>
       <h2 className="mb-[18px] max-w-[720px] text-[22px] font-semibold leading-[1.15] tracking-[-0.015em]">
         {pageTitle}
       </h2>
 
       {videoUrl ? (
-        <div className="relative border border-foreground">
+        <div className="relative overflow-hidden rounded-md border border-border">
           <VideoPlayer
             src={videoUrl}
             title={`${lessonTitle} intro video`}
@@ -2127,11 +2128,11 @@ function VideoPageBody({
         </div>
       ) : (
         <div
-          className="relative flex items-center justify-center border border-foreground"
+          className="relative flex items-center justify-center overflow-hidden rounded-md border border-border"
           style={{ aspectRatio: "16 / 9", background: "var(--v-video-bg)" }}
         >
-          <div className="border border-border bg-card px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            INTRO VIDEO NOT AVAILABLE YET
+          <div className="rounded-md border border-border bg-card px-3 py-1.5 text-[13px] text-muted-foreground">
+            Intro video not available yet
           </div>
         </div>
       )}
@@ -2241,11 +2242,11 @@ function QAPageBody() {
       />
 
       <div className="mt-8 flex items-center justify-between border-t border-border pt-[22px]">
-        <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
-          1 PASSED · 1 SELECTED · 2 PENDING
+        <div className="text-[12.5px] text-muted-foreground">
+          1 passed · 1 selected · 2 pending
         </div>
         <SharpButton variant="primary" className="min-w-[240px]">
-          SUBMIT Q&amp;A <span aria-hidden="true">→</span>
+          Submit Q&amp;A
         </SharpButton>
       </div>
     </div>
@@ -2259,7 +2260,7 @@ function QAPageBody() {
  * graded SERVER-SIDE via the viewer's `onSubmit` (gwth-launch-va6), and the
  * per-question feedback (correct option + explanation) is rendered from the
  * grading response — the answer key is never in this component's props.
- * A passing score unlocks the FINISH LESSON action.
+ * A passing score unlocks the "Finish lesson" action.
  */
 function RealQAPageBody({
   questions,
@@ -2410,25 +2411,25 @@ function RealQAPageBody({
       })}
 
       <div className="mt-8 flex items-center justify-between gap-4 border-t border-border pt-[22px]">
-        <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="text-[12.5px] text-muted-foreground">
           {limit
-            ? `ALL ${limit.maxAttempts} ATTEMPTS USED · BEST ${limit.bestQuizScore}%`
+            ? `All ${limit.maxAttempts} attempts used · best ${limit.bestQuizScore}%`
             : submitted
               ? passed
-                ? `SCORE ${score}% · PASSED`
+                ? `Score ${score}% · passed`
                 : retryBlocked
                   ? // The final attempt just failed: say WHY nothing can be
                     // submitted any more instead of a bare score with the
                     // buttons silently gone (QA round-3 defect 11).
-                    `SCORE ${score}% · ALL ${maxAttempts} ATTEMPTS USED · BEST ${Math.max(bestScore, score ?? 0)}%`
-                  : `SCORE ${score}% · ${grade?.passMark ?? passMark}% NEEDED`
+                    `Score ${score}% · all ${maxAttempts} attempts used · best ${Math.max(bestScore, score ?? 0)}%`
+                  : `Score ${score}% · ${grade?.passMark ?? passMark}% needed`
               : grading
-                ? "CHECKING YOUR ANSWERS"
+                ? "Checking your answers"
                 : alreadyPassed
-                  ? `PASSED · BEST ${bestScore}%`
+                  ? `Passed · best ${bestScore}%`
                   : exhausted
-                    ? `ALL ${maxAttempts} ATTEMPTS USED · BEST ${bestScore}%`
-                    : `${answeredCount} OF ${questions.length} ANSWERED`}
+                    ? `All ${maxAttempts} attempts used · best ${bestScore}%`
+                    : `${answeredCount} of ${questions.length} answered`}
         </div>
         {showFinish ? (
           <div className="flex flex-col items-end gap-1.5">
@@ -2437,7 +2438,7 @@ function RealQAPageBody({
               className="min-w-[240px]"
               onClick={onFinish}
             >
-              FINISH LESSON <span aria-hidden="true">→</span>
+              Finish lesson <span aria-hidden="true">→</span>
             </SharpButton>
             {!canFinish && missingReason && (
               <span className="text-[12.5px] italic text-muted-foreground">
@@ -2452,7 +2453,7 @@ function RealQAPageBody({
             onClick={handleSubmit}
             disabled={!allAnswered || grading}
           >
-            {grading ? "CHECKING" : "SUBMIT Q&A"}{" "}
+            {grading ? "Checking" : "Submit Q&A"}{" "}
             <span aria-hidden="true">→</span>
           </SharpButton>
         ) : retryBlocked ? null : (
@@ -2461,7 +2462,7 @@ function RealQAPageBody({
             className="min-w-[240px]"
             onClick={handleRetry}
           >
-            RETRY Q&amp;A <span aria-hidden="true">→</span>
+            Retry Q&amp;A <span aria-hidden="true">→</span>
           </SharpButton>
         )}
       </div>
@@ -2520,18 +2521,18 @@ function QAItem({
   return (
     <div
       className={cn(
-        "mb-[22px] border bg-card px-[22px] py-5",
-        isPassed ? "border-[var(--success)]" : "border-foreground",
+        "mb-[22px] rounded-lg border bg-card px-[22px] py-5",
+        isPassed ? "border-[var(--success)]" : "border-border",
         isLocked && "opacity-55"
       )}
     >
       <div className="mb-2.5 flex items-center justify-between">
-        <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
-          QUESTION {num} OF {total}
+        <div className="text-[12.5px] text-muted-foreground">
+          Question {num} of {total}
         </div>
         {isPassed && (
           <span
-            className="inline-flex items-center gap-1.5 font-mono text-[10.5px] font-bold uppercase tracking-[0.14em]"
+            className="inline-flex items-center gap-1.5 text-[12.5px] font-bold "
             style={{ color: "var(--success)" }}
           >
             <svg
@@ -2598,12 +2599,12 @@ function QAOption({
   // the exception.
   const optionStyles = {
     idle: {
-      border: "border-foreground",
+      border: "border-border",
       background: "transparent",
       borderWidth: 1,
     },
     selected: {
-      border: "border-foreground",
+      border: "border-border",
       background: "var(--muted)",
       borderWidth: 2,
     },
@@ -2636,7 +2637,7 @@ function QAOption({
         optionStyles.border
       )}
     >
-      <span className="inline-flex size-[26px] items-center justify-center border border-foreground font-mono text-[11px] font-bold tracking-[0.06em]">
+      <span className="inline-flex size-[26px] items-center justify-center rounded-sm border border-border text-[13px] font-bold ">
         {letter}
       </span>
       <div className="text-[14.5px] leading-[1.45] text-foreground">
@@ -2656,12 +2657,12 @@ function QAOption({
         </svg>
       )}
       {state === "wrong" && (
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--destructive)]">
+        <span className="text-[12.5px] font-bold text-[var(--destructive)]">
           YOUR ANSWER
         </span>
       )}
       {state === "selected" && (
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+        <span className="text-[12.5px] font-bold text-muted-foreground">
           SELECTED
         </span>
       )}
@@ -2695,12 +2696,12 @@ function LessonCompleteSurface({
       )}
     >
       <MastRow
-        section={`COURSE · LESSON ${lesson.lessonNumber} · COMPLETE`}
+        section={`Lesson ${lesson.lessonNumber} · complete`}
       />
       <div className="flex min-w-0 flex-1 items-center justify-center px-5 py-10 sm:px-8 lg:px-14">
         <div className="w-full max-w-[920px]">
-          <div className="mb-6 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            {lesson.monthLabel} · COMPLETE
+          <div className="mb-6 text-[13px] font-medium text-muted-foreground">
+            {lesson.monthLabel} · complete
           </div>
 
           <h1 className="m-0 text-[clamp(3rem,8vw,5.5rem)] font-medium italic leading-[1.05] tracking-[-0.02em]">
@@ -2723,12 +2724,12 @@ function LessonCompleteSurface({
             This counts toward Month 1.
           </p>
 
-          <div className="mt-9 grid grid-cols-[1.4fr_1fr] border border-foreground">
+          <div className="mt-9 grid grid-cols-[1.4fr_1fr] overflow-hidden rounded-lg border border-border">
             <div className="px-7 py-7">
-              <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="text-[13px] font-medium text-muted-foreground">
                 {nextLesson
-                  ? `UP NEXT · LESSON ${nextLesson.lessonNumber}`
-                  : "UP NEXT"}
+                  ? `Up next · lesson ${nextLesson.lessonNumber}`
+                  : "Up next"}
               </div>
               <div className="mt-2 text-[26px] font-semibold leading-[1.15] tracking-[-0.015em]">
                 {nextLesson
@@ -2756,8 +2757,8 @@ function LessonCompleteSurface({
                 </SharpButton>
               </div>
             </div>
-            <div className="border-l border-foreground bg-card px-7 py-7">
-              <div className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            <div className="border-l border-border bg-card px-7 py-7">
+              <div className="text-[13px] font-medium text-muted-foreground">
                 MONTH 1 PROGRESS
               </div>
               <div className="mt-1.5 text-[56px] font-semibold tabular-nums tracking-[-0.03em]">
@@ -2828,7 +2829,7 @@ function MobileSurface({
         <button
           type="button"
           aria-label="Previous page"
-          className="inline-flex size-8 items-center justify-center border border-border bg-transparent text-muted-foreground"
+          className="inline-flex size-8 items-center justify-center rounded-md border border-border bg-transparent text-muted-foreground"
         >
           <svg
             width="14"
@@ -2850,7 +2851,7 @@ function MobileSurface({
           aria-haspopup="dialog"
           aria-expanded={outlineOpen}
           onClick={() => setOutlineOpen(true)}
-          className="relative inline-flex size-8 items-center justify-center border border-border bg-transparent text-foreground"
+          className="relative inline-flex size-8 items-center justify-center rounded-md border border-border bg-transparent text-foreground"
         >
           <svg
             width="14"
@@ -2863,7 +2864,7 @@ function MobileSurface({
           >
             <path d="M2 4h10M2 7h10M2 10h7" />
           </svg>
-          <span className="absolute -right-1 -top-1 bg-primary px-1 font-mono text-[8.5px] font-bold tracking-[0.06em] text-primary-foreground">
+          <span className="absolute -right-1 -top-1 rounded-sm bg-primary px-1 text-[11px] font-bold text-primary-foreground">
             {pageNum}/{lesson.pages.length}
           </span>
         </button>
@@ -2880,10 +2881,10 @@ function MobileSurface({
 
       <div className="border-b border-border px-[22px] py-4">
         <div className="flex items-center justify-between">
-          <div className="font-mono text-[9.5px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          <div className="text-[12px] font-medium text-muted-foreground">
             {lesson.monthLabel}
           </div>
-          <div className="font-mono text-[9.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <div className="text-[12px] font-medium text-muted-foreground">
             P{pageNum} / {lesson.pages.length}
           </div>
         </div>
@@ -2894,7 +2895,7 @@ function MobileSurface({
           <BookmarkButton
             initialBookmarked={initialBookmarked}
             lessonId={lesson.id}
-            className="shrink-0 border border-border"
+            className="shrink-0 rounded-md border border-border"
           />
         </div>
         <SegmentedBar value={pageNum - 1} total={lesson.pages.length} />
@@ -2929,12 +2930,12 @@ function MobileSurface({
 
         <div className="mt-7 border-t border-border pt-[22px]">
           <SharpButton variant="primary" className="w-full justify-center">
-            CONTINUE <span aria-hidden="true">→</span>
+            Continue
           </SharpButton>
         </div>
       </div>
 
-      <div className="sticky bottom-0 z-[5] border-t border-foreground bg-card px-4 py-3">
+      <div className="sticky bottom-0 z-[5] border-t border-border bg-card px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -2945,7 +2946,7 @@ function MobileSurface({
               "inline-flex size-10 shrink-0 items-center justify-center border",
               playing
                 ? "border-primary bg-primary text-primary-foreground"
-                : "border-foreground bg-foreground text-background",
+                : "border-border bg-foreground text-background",
               !audioAvailable && "pointer-events-none opacity-45"
             )}
           >
@@ -2956,22 +2957,22 @@ function MobileSurface({
               <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[12px] font-semibold">
                 P{pageNum} · {pageTitle}
               </span>
-              <span className="whitespace-nowrap font-mono text-[10.5px] tabular-nums text-muted-foreground">
-                {audioAvailable ? `${currentTime} / ${totalTime}` : "NO AUDIO"}
+              <span className="whitespace-nowrap text-[12.5px] tabular-nums text-muted-foreground">
+                {audioAvailable ? `${currentTime} / ${totalTime}` : "No audio"}
               </span>
             </div>
             <Waveform progress={progressPct} />
           </div>
         </div>
         <div className="mt-2.5 flex items-center justify-between">
-          <div className="flex border border-border">
+          <div className="flex overflow-hidden rounded-md border border-border">
             {(["1x", "1.25x", "1.5x"] as const).map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => onChangeSpeed(s)}
                 className={cn(
-                  "min-w-[38px] cursor-pointer border-none px-2 py-1 font-mono text-[10.5px] font-bold",
+                  "min-w-[38px] cursor-pointer border-none px-2 py-1 text-[12.5px] font-bold",
                   s === speed
                     ? "bg-foreground text-background"
                     : "bg-transparent text-muted-foreground"

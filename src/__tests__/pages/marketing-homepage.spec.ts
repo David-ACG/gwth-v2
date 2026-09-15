@@ -3,21 +3,37 @@ import AxeBuilder from "@axe-core/playwright"
 
 /**
  * Full-page smoke for the paper-first home page (N12, 2026-09-03). Sections
- * are the N9 artboard's: hero (with the six-blocks plate and its key),
- * argument, blocks, institution, individuals, plus the shared nav and footer.
+ * are the N9 artboard's, re-ordered on 2026-09-15 for David's individual-first
+ * pass (annotation a-20260915-085703-483d98): hero (with the six-blocks plate
+ * and its key), course, months, blocks, organisations (a signpost, not the
+ * old institution pitch), individuals, plus the shared nav and footer.
+ *
+ * `argument`, the three institution evidence figures, was removed the same day
+ * (a-20260915-101631-6649fd) and `months`, the three-month progression, took
+ * its slot (a-20260915-101324-6aa90f).
  */
 const SECTIONS = [
   "nav",
   "hero",
-  "argument",
+  "course",
+  "months",
   "blocks",
-  "institution",
+  "organisations",
   "individuals",
   "footer",
 ] as const
 
+/** The home page's own body, in the order a visitor scrolls through it. */
+const BODY_SECTIONS = [
+  "hero",
+  "course",
+  "months",
+  "blocks",
+  "organisations",
+  "individuals",
+] as const
+
 const EXPECTED_INTERNAL_HREFS = [
-  "/contact",
   "/for-institutions",
   "/for-teams",
   "/pricing",
@@ -40,11 +56,14 @@ test.describe("Marketing homepage, full-page smoke", () => {
     await gotoHome(page)
   })
 
-  test("renders the approved N9 headline", async ({ page }) => {
+  // The N9 artboard LAYOUT is unchanged; the words moved on 2026-09-15 for
+  // a-20260915-101927-9ec6a5, which asked the whole page to stop making a
+  // beginner decode anything.
+  test("renders the headline in the N9 artboard's two-line shape", async ({ page }) => {
     const h1 = page.locator("h1").first()
     await expect(h1).toBeVisible()
-    await expect(h1).toContainText("The gap is not")
-    await expect(h1).toContainText("It is depth.")
+    await expect(h1).toContainText("Learn to use AI at work")
+    await expect(h1).toContainText("by making things.")
   })
 
   test("every data-section resolves exactly once", async ({ page }) => {
@@ -84,7 +103,7 @@ test.describe("Marketing homepage, full-page smoke", () => {
     await gotoHome(page)
     const key = page.getByTestId("six-blocks-key")
     await expect(key).toBeVisible()
-    const spans = key.locator("span")
+    const spans = page.getByTestId("six-blocks-key-cell")
     await expect(spans).toHaveCount(6)
     const boxes = await spans.evaluateAll((els) =>
       els.map((el) => {
@@ -116,6 +135,111 @@ test.describe("Marketing homepage, full-page smoke", () => {
       const res = await request.head(href)
       expect(res.status(), `HEAD ${href}`).toBeLessThan(400)
     }
+  })
+
+  test("the plate carries a clause per tile and the flagship line", async ({ page }) => {
+    // David, 2026-09-14: six bare category words were "totally uninspiring for
+    // the most important page on GWTH".
+    const cells = page.getByTestId("six-blocks-key-cell")
+    await expect(cells.first()).toContainText("Research")
+    await expect(cells.first()).toContainText("find facts and check the source")
+    await expect(
+      page.getByText(/Six ways of working, not six subjects/)
+    ).toBeVisible()
+  })
+
+  test("the page is individual-first: the learner comes before the buyer", async ({
+    page,
+  }) => {
+    // David, 2026-09-15 (a-20260915-085703-483d98): the home page is aimed at
+    // individuals, and institutions and teams get a link to their own page.
+    const tops: number[] = []
+    for (const section of BODY_SECTIONS) {
+      tops.push(
+        await page
+          .locator(`[data-section="${section}"]`)
+          .evaluate((el) => el.getBoundingClientRect().top + window.scrollY)
+      )
+    }
+    const sorted = [...tops].sort((a, b) => a - b)
+    expect(tops, `rendered order ${BODY_SECTIONS.join(" -> ")}`).toEqual(sorted)
+
+    // The first viewport is about the course, not about who is buying it.
+    const hero = page.locator('[data-section="hero"]')
+    await expect(hero).toContainText("by making things")
+    await expect(hero).not.toContainText(/institution|professional body/i)
+  })
+
+  test("the organisation route is a signpost with two links off the page", async ({
+    page,
+  }) => {
+    const signpost = page.getByTestId("organisations-signpost")
+    await expect(signpost).toBeVisible()
+    await expect(signpost).toContainText("large company")
+    await expect(signpost.locator("p")).toHaveCount(1)
+    const hrefs = await signpost
+      .locator("a")
+      .evaluateAll((els) => els.map((el) => el.getAttribute("href")))
+    expect(hrefs).toEqual(["/for-institutions", "/for-teams"])
+    // And the institution feature list is not rebuilt here.
+    const body = page.locator("main")
+    await expect(body).not.toContainText("What an institution gets")
+    await expect(body).not.toContainText("A curated edition")
+  })
+
+  test("no walkthrough is offered on the home page, and the header serves the waitlist", async ({
+    page,
+  }) => {
+    // The walkthrough costs David an hour and now lives only where a large
+    // buyer arrives (/for-institutions). Nothing on this page offers it.
+    await expect(page.locator("main")).not.toContainText(/walkthrough/i)
+    await expect(
+      page.locator('[data-section="nav"] a', { hasText: "Join the waitlist" }).first()
+    ).toHaveAttribute("href", "/waitlist")
+  })
+
+  test("the jargon and the pricing claim David struck are gone", async ({ page }) => {
+    const body = page.locator("body")
+    for (const phrase of [
+      /before the room starts/i,          // a-20260915-084911-63447a
+      /active learners/i,                 // a-20260915-085041-eaa513
+      /worth an hour/i,                   // a-20260915-085127-ee0db0
+      /missing floor/i,                   // a-20260915-085153-468599
+      /Nothing here needs a meeting/i,    // a-20260915-085746-3e7631
+      /Two ways in/i,                     // a-20260915-084728-90d41b
+      /worked through on your own tasks/i, // a-20260915-084515-b9ff47
+    ]) {
+      await expect(body, `still on the page: ${phrase}`).not.toContainText(phrase)
+    }
+  })
+
+  test("building is named as the foundation, without an unverified percentage", async ({
+    page,
+  }) => {
+    // David, 2026-09-15 (a-20260915-085439-6c8134). The emphasis is his; the
+    // "maybe 50%" is not supported by the syllabus and is not published. See
+    // completion/home-annotations-round2/curriculum-check.md in the launch-plan.
+    const lead = page.getByTestId("blocks-lead")
+    await expect(lead).toBeVisible()
+    await expect(lead).toContainText("Every month here is built around making something")
+    await expect(lead).toContainText("each project brings several of the six blocks together")
+    await expect(page.locator('[data-section="course"]')).toContainText(
+      "Every lesson is built around a project"
+    )
+    await expect(page.locator("body")).not.toContainText(/50%|half the course/i)
+  })
+
+  test("phone width keeps the offer readable and the names under the tiles", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await gotoHome(page)
+    await expect(page.locator('[data-section="course"]')).toBeVisible()
+    await expect(page.getByTestId("organisations-signpost")).toBeVisible()
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth
+    )
+    expect(overflow).toBe(false)
   })
 
   test("has no serious or critical accessibility violations", async ({ page }) => {

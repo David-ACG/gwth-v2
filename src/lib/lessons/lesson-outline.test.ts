@@ -103,10 +103,10 @@ describe("buildLessonOutline (gwth-launch-qar)", () => {
     })
     expect(pages[0]!.kind).toBe("video")
     expect(pages[pages.length - 1]!.kind).toBe("qa")
-    expect(pages[pages.length - 1]!.kindLabel).toContain("5 QUESTIONS")
+    expect(pages[pages.length - 1]!.kindLabel).toContain("5 questions")
   })
 
-  it("labels a section containing a code fence as CODE", () => {
+  it("labels a section containing a code fence as Code", () => {
     const pages = buildLessonOutline({
       learnContent: EFFICIENCY,
       hasIntroVideo: false,
@@ -114,7 +114,7 @@ describe("buildLessonOutline (gwth-launch-qar)", () => {
     })
     const core = pages.find((p) => p.title === "Core concepts in plain English")
     expect(core?.kind).toBe("code")
-    expect(core?.kindLabel).toContain("CODE")
+    expect(core?.kindLabel).toContain("Code")
   })
 
   /**
@@ -198,7 +198,7 @@ describe("buildLessonOutline - student project page", () => {
     })
     expect(page!.title).toBe("Your project: My AI Superpowers Wishlist")
     expect(page!.projectHeading).toBe("My AI Superpowers Wishlist")
-    expect(page!.kindLabel).toMatch(/^PROJECT · \d+ MIN$/)
+    expect(page!.kindLabel).toMatch(/^Project · \d+ min$/)
   })
 
   it("lifts the `#` heading out of the body so it is not rendered twice", () => {

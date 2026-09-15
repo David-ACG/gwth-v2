@@ -75,7 +75,6 @@ export default async function NewsPage({
 
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          <p className={styles.mastheadKicker}>The GWTH feed</p>
           <h1 className={styles.mastheadTitle}>
             AI news, <em>ranked by builders.</em>
           </h1>

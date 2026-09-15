@@ -54,3 +54,25 @@
 .months {
   margin-top: 1.5rem;
 }
+
+/*
+ * The two prerequisite panels (a-20260914-202954-1ef966) carry the main
+ * proposition of the page, so they sit a step above an ordinary card: more
+ * room, a larger title, and body copy at reading size rather than card size.
+ * The pair is told apart by its written kickers, never by tint alone
+ * (bible tint-is-never-the-only-signal).
+ */
+.baselineCard {
+  padding: clamp(1.4rem, 2.4vw, 1.75rem) clamp(1.4rem, 2.4vw, 1.75rem)
+    clamp(1.5rem, 2.6vw, 1.9rem);
+}
+
+.baselineCard h3 {
+  font-size: clamp(1.2rem, 2.1vw, 1.45rem);
+  margin-top: 0.35rem;
+}
+
+.baselineCard p:last-child {
+  font-size: var(--fde-body);
+  line-height: 1.62;
+}

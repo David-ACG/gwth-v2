@@ -16,19 +16,23 @@ function heatStyle(count: number): React.CSSProperties {
   return { background: "var(--v-accent)" }
 }
 
-const MONO_LABEL: React.CSSProperties = {
-  fontFamily: "var(--font-jetbrains), ui-monospace, monospace",
-  fontSize: "0.7rem",
+/*
+ * Metadata label. JetBrains Mono, small caps and letter-spaced tracking are
+ * all retired as LABEL treatments (paper-first-register,
+ * paper-first-banned-patterns): metadata is Public Sans, small, --v-muted.
+ * Batch 1.
+ */
+const META_LABEL: React.CSSProperties = {
+  fontFamily: "var(--font-sans)",
+  fontSize: "var(--fde-mono-sm)",
   fontWeight: 500,
-  letterSpacing: "0.16em",
-  textTransform: "uppercase",
   color: "var(--v-muted)",
 }
 
 /**
  * Activity heatmap showing daily study activity over the last 365 days.
- * Styled to the FDE journal register (DESIGN_FDE.md): square cells coloured
- * by the --v-dash / --v-dash-active tokens, mono metadata, hairline rule.
+ * Drawn in the paper-first register: softened cells coloured by the --v-*
+ * tokens and Public Sans metadata, with no rule under the head.
  * Must be rendered inside an FDE token scope (a `.shell` palette block).
  * Used only by the /progress page.
  */
@@ -53,10 +57,7 @@ export function StudyStreakCalendar({
 
   return (
     <div className={cn("space-y-4", className)}>
-      <div
-        className="flex items-baseline justify-between gap-4 flex-wrap pb-3"
-        style={{ borderBottom: "1px solid var(--v-line-soft)" }}
-      >
+      <div className="flex items-baseline justify-between gap-4 flex-wrap">
         <div>
           <h3
             style={{
@@ -67,16 +68,16 @@ export function StudyStreakCalendar({
           >
             Study Streak
           </h3>
-          <p style={MONO_LABEL} className="mt-1">
+          <p style={META_LABEL} className="mt-1">
             {streak.currentStreak} day streak · {streak.longestStreak} day best
           </p>
         </div>
-        <div className="flex items-center gap-1.5" style={MONO_LABEL}>
+        <div className="flex items-center gap-1.5" style={META_LABEL}>
           <span>Less</span>
           {[0, 1, 2, 3].map((level) => (
             <span
               key={level}
-              className="inline-block size-2.5"
+              className="inline-block size-2.5 rounded-[2px]"
               style={heatStyle(level)}
             />
           ))}
@@ -90,7 +91,7 @@ export function StudyStreakCalendar({
             {week.map((day, dayIndex) => (
               <div
                 key={dayIndex}
-                className="size-2.5"
+                className="size-2.5 rounded-[2px]"
                 style={heatStyle(day.count)}
                 title={`${day.date.toLocaleDateString()}: ${day.count} items`}
               />

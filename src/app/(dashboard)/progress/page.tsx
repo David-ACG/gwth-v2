@@ -83,7 +83,6 @@ export default async function ProgressPage() {
     <div className={styles.shell} data-section="progress">
       <div className={styles.pageHead}>
         <h1 className={styles.pageTitle}>Progress</h1>
-        <p className={styles.mono}>Your record</p>
       </div>
       <p className={styles.pageLead}>
         {ENABLE_GWTH_SCORE
@@ -184,7 +183,6 @@ export default async function ProgressPage() {
           <h2 className={styles.sectionTitle}>
             Your course <em>progress.</em>
           </h2>
-          <p className={styles.mono}>Issue by issue</p>
         </div>
         {courseProgress.length === 0 ? (
           <div className={styles.empty}>
@@ -236,7 +234,6 @@ export default async function ProgressPage() {
           <h2 className={styles.sectionTitle}>
             Your <em>certificates.</em>
           </h2>
-          <p className={styles.mono}>Credential</p>
         </div>
         <div className={styles.empty}>
           <p className={styles.emptyTitle}>No certificates yet</p>
@@ -262,7 +259,6 @@ export default async function ProgressPage() {
             <h2 className={styles.sectionTitle}>
               Your quiz <em>scores.</em>
             </h2>
-            <p className={styles.mono}>Best attempts</p>
           </div>
           <div className={styles.quizGrid}>
             {lessonProgress

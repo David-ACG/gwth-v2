@@ -7,6 +7,29 @@
   "category": "Automation",
   "testedOn": "2026-07-26",
   "brief": "You manage a team of twelve at a housing association. Every Friday you open the timesheet spreadsheet, work out who has not filled theirs in, and email each of them a reminder. It takes half an hour and you dread it. You have never written a line of code, and nobody at work is going to help you. Two AI tools are asked to automate it. One gives you something you could finish this afternoon. The other gives you something that will still be working next year. You decide which you would actually attempt.",
+  "summary": "A Friday chore that eats half an hour every week. Both tools are asked to automate it for somebody who has never written a line of code, and you decide which set of instructions you would actually attempt.",
+  "preview": {
+    "taskCue": "Weekly admin, automated",
+    "outcome": "Which answer you could finish on a Friday afternoon with nobody around to ask.",
+    "specimen": {
+      "kind": "pairs",
+      "caption": "The chore this lab hands to both tools",
+      "items": [
+        {
+          "label": "Every Friday at 4pm",
+          "value": "chase the timesheets"
+        },
+        {
+          "label": "Team size",
+          "value": "twelve people"
+        },
+        {
+          "label": "Time it takes by hand",
+          "value": "about half an hour"
+        }
+      ]
+    }
+  },
   "matchup": [
     {
       "name": "Claude",

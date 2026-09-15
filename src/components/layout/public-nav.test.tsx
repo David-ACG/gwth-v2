@@ -10,7 +10,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import { render, within } from "@testing-library/react"
-import { PublicNav } from "./public-nav"
+import { PublicNav, primaryCta } from "./public-nav"
 import { COURSE_PATH } from "@/lib/config"
 
 let pathname = "/"
@@ -107,3 +107,78 @@ describe("PublicNav selected item (M2, N12)", () => {
   })
 })
 
+
+/**
+ * David, 2026-09-14, annotation a-20260914-193923-87ad97, anchored on the
+ * header's "Book a walkthrough" button: *"I would only do a walkthrough if it
+ * was a large organisation like CIPD, I wouldn't do it for a small company or
+ * a single person, as it wouldn't be worth it, it would take an hour of my
+ * time."* The header button is the one CTA every public page carries, so a
+ * single global walkthrough offered his hour to everybody.
+ */
+describe("PublicNav primary CTA follows the audience", () => {
+  const SELF_SERVE_ROUTES = [
+    "/",
+    "/pricing",
+    "/lessons",
+    "/labs",
+    "/about",
+    "/news",
+    "/waitlist",
+    "/why-gwth",
+    "/newsletter",
+    "/privacy",
+    "/terms",
+    "/verify",
+    "/tech-radar",
+  ]
+  const INSTITUTION_ROUTES = [
+    "/for-institutions",
+    "/for-teams",
+    "/contact",
+    "/for-institutions/anything",
+  ]
+
+  it("offers the walkthrough on the institution-facing routes only", () => {
+    for (const route of INSTITUTION_ROUTES) {
+      expect(primaryCta(route)).toEqual({
+        href: "/contact",
+        label: "Book a walkthrough",
+      })
+    }
+  })
+
+  it("offers the self-service route everywhere else", () => {
+    for (const route of SELF_SERVE_ROUTES) {
+      expect(primaryCta(route)).toEqual({
+        href: "/waitlist",
+        label: "Join the waitlist",
+      })
+    }
+  })
+
+  it("renders the self-service CTA in the header on the home page", () => {
+    pathname = "/"
+    const view = renderNav({ lessonsHref: "/lessons" })
+    expect(
+      view.getAllByRole("link", { name: "Join the waitlist" })[0]
+    ).toHaveAttribute("href", "/waitlist")
+    expect(view.queryByRole("link", { name: "Book a walkthrough" })).toBeNull()
+  })
+
+  it("renders the walkthrough CTA in the header on /for-institutions", () => {
+    pathname = "/for-institutions"
+    const view = renderNav({ lessonsHref: "/lessons" })
+    expect(
+      view.getAllByRole("link", { name: "Book a walkthrough" })[0]
+    ).toHaveAttribute("href", "/contact")
+    expect(view.queryByRole("link", { name: "Join the waitlist" })).toBeNull()
+  })
+
+  it("shows no CTA at all to a signed-in viewer, on either kind of route", () => {
+    pathname = "/for-institutions"
+    const view = renderNav({ user: USER, lessonsHref: COURSE_PATH })
+    expect(view.queryByRole("link", { name: "Book a walkthrough" })).toBeNull()
+    expect(view.queryByRole("link", { name: "Join the waitlist" })).toBeNull()
+  })
+})

@@ -104,7 +104,7 @@ export function CodeBlock({
       {/* Header bar with filename and copy button */}
       {(filename || true) && (
         <div className="flex items-center justify-between border-b border-border/50 px-4 py-1.5">
-          <span className="font-mono text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground">
             {filename ?? language}
           </span>
           <Button

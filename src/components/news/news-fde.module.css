@@ -44,13 +44,6 @@
   padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem);
 }
 
-.mastheadKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
-}
-
 .mastheadTitle {
   margin-top: 1rem;
   font-size: clamp(2.6rem, 6.5vw, 4.5rem);
@@ -104,7 +97,7 @@
 .buttonOutline {
   background: transparent;
   color: var(--v-ink);
-  border: 1px solid var(--v-ink);
+  border: 1px solid var(--v-line);
 }
 
 .buttonOutline:hover {
@@ -128,14 +121,17 @@
   margin-top: 2.5rem;
 }
 
+/* The section head no longer draws a rule across the page. One line under
+   every heading was the most repeated piece of furniture on the site, and it
+   is what "too many lines in other places" was describing; the gap below the
+   heading now does the separating (paper-first-register, hierarchy from
+   spacing and type). Batch 1. */
 .sectionHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  border-bottom: 1px solid var(--v-ink);
-  padding-bottom: 1rem;
   margin-bottom: 1.5rem;
 }
 
@@ -155,6 +151,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  border-radius: var(--radius-lg);
 }
 
 @media (min-width: 48rem) {
@@ -162,7 +159,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-  }
+  border-radius: var(--radius-lg);
+}
 }
 
 .newsletterCopy p:first-child {
@@ -218,6 +216,7 @@
   color: var(--v-muted);
   transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1),
     border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-md);
 }
 
 .sortButton:hover {
@@ -310,6 +309,7 @@
   border: 1px solid var(--v-line);
   padding: 1.25rem;
   transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-lg);
 }
 
 .card:hover {
@@ -388,7 +388,6 @@
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-  letter-spacing: 0.1em;
   color: var(--v-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -419,6 +418,7 @@
   padding: 0.55rem 0.7rem;
   transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
     color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-md);
 }
 
 .upvote:hover {
@@ -464,6 +464,7 @@
   background: var(--v-surface);
   padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
   text-align: center;
+  border-radius: var(--radius-lg);
 }
 
 .empty h3 {
@@ -597,6 +598,6 @@
 
 .commentsBlock {
   margin-top: 3rem;
-  border-top: 1px solid var(--v-ink);
+  border-top: 1px solid var(--v-line-soft);
   padding-top: 2rem;
 }
