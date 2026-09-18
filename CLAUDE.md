@@ -13,10 +13,18 @@ Build GWTH v2, a student-facing learning platform where users can browse courses
 
 ## Sibling repos
 
-- **Curriculum content** (lesson ideas, research, syllabus, future lesson/lab/project files): `C:\Projects\GWTH_curriculum` ([David-ACG/gwth-curriculum](https://github.com/David-ACG/gwth-curriculum)). Moved out of `GWTH_V2/gwth_lesson_ideas/` on 2026-04-23 so curriculum editing and platform engineering live in separate kanban/beads scopes. The platform will import content from `../GWTH_curriculum/content/` at build time (sync script not yet wired — Phase 5 of the VIP-asset plan).
-- **Pipeline** (Docling → Qdrant ingestion, NiceGUI dashboard): `C:\Projects\1_gwthpipeline520` ([David-ACG/gwthpipeline520](https://github.com/David-ACG/gwthpipeline520)). Keeps Qdrant running with source material; GWTH_curriculum's `/vip-intake` skill queries it directly.
+- **Pipeline** (Docling → Qdrant ingestion, NiceGUI dashboard): `/home/david/projects/1_gwthpipeline520` ([David-ACG/gwthpipeline520](https://github.com/David-ACG/gwthpipeline520)). Keeps Qdrant running with source material.
+- **Launch coordination** (board task defs, bible/, wiki/, night prompts, Remotion canvas toolkit): `/home/david/projects/GWTH-launch-plan`.
 
-**Do not edit lesson-ideas or research files from this repo** — they live in `GWTH_curriculum`. Switch sessions.
+**Lesson ideas, research and syllabus live in THIS repo**, in `gwth_lesson_ideas/`. Edit them here.
+
+> Changed 2026-09-18. From 2026-04-23 a separate `GWTH_curriculum` repo owned this material and
+> this file said "do not edit lesson-ideas from this repo". In practice the opposite happened —
+> the copies here were revised on 2026-07-03 while the separate repo went untouched after
+> 2026-04-23 — so the rule was sending agents to stale files. `GWTH_curriculum` is now retired;
+> the material that existed only there (the wider April ideation set, including cut lessons,
+> optional lessons and lab ideas) is preserved read-only in
+> `gwth_lesson_ideas/_ideation-archive-2026-04/`. The retired `/vip-intake` skill is archived there too.
 
 ## Tech Stack
 
