@@ -109,9 +109,17 @@ const WHY_GWTH = [
     // (completed lessons x POINTS_PER_LESSON, weighted by quiz average, against
     // the learner's own edition), and the org learner table, which shows who
     // has reached and passed each lesson at the edition's pass mark.
+    //
+    // 2026-09-17 (bead gwth-launch-88z.32.36): the two gaps are now NAMED on
+    // the page rather than only kept out of it. There is no stored score
+    // history anywhere in the product, so movement over time cannot be shown,
+    // and nothing re-opens a lesson that has been rewritten. Saying so in the
+    // item is what lets the item claim the rest in the present tense. The two
+    // banned words stay banned: "currentness" and "score decays" are enforced
+    // by for-teams.test.tsx.
     title: "Achievement you can assess and reward",
     description:
-      "Every learner carries a dynamic GWTH Score rather than a one-time certificate. It is calculated from the lessons they have finished on the syllabus you assigned them and how they did on the check questions, so it moves as they work. Admins see who has reached and passed each lesson against the pass mark they set, which is enough to recognise real progress without running a survey.",
+      "No score is switched on while the course is in beta. After it, each learner will have a dynamic GWTH Score rather than a one-time certificate: calculated from the lessons they have finished on the syllabus you assigned them and how they did on the check questions, so it moves as they work. Admins will see who has reached and passed each lesson against the pass mark they set, which is enough to recognise real progress without running a survey. Two things it will not do at first: show which way a learner is going over time, and fall when a lesson they passed has been rewritten. Both are being built.",
   },
   {
     title: "Built for the enterprise conversation",
@@ -179,9 +187,14 @@ const FAQS = [
     answer: `Yes. The ${TOTAL_MANDATORY_LESSONS} mandatory lessons cover essential AI skills that everyone needs. Beyond that, optional lessons cover industry-specific applications, advanced topics and specialisations, and more are added as they are published. Team admins can assign relevant optional lessons per role: your marketing team does not need the same modules as your engineering team. Individual learners can also pick their own path from the optional lessons.`,
   },
   {
+    // REWRITTEN 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate).
+    // The old answer began "No.", which promises an outcome GWTH does not
+    // control, and supported it with "retain 34% more staff", a figure with no
+    // source on the page and no source in the archive that is safe to publish.
+    // What the course can honestly say is what it teaches and who decides.
     question: "Will this displace our employees?",
     answer:
-      "No. This course makes your existing team more productive. People who can use AI effectively are more valuable, not less. UK employment law provides strong protections, and the government's own AI strategy emphasises augmentation over replacement. Companies investing in AI training retain 34% more staff because employees feel invested in rather than threatened.",
+      "That is not something a course decides. GWTH teaches the people you already have to use AI in the work they already do, so the skill sits with your team rather than only with the tools. Decisions about roles and staffing stay with your organisation.",
   },
   {
     question: "Is our data safe?",
@@ -190,7 +203,12 @@ const FAQS = [
   },
   {
     question: "What is the ROI?",
-    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE}/mo for each person, with monthly access rather than an annual lock-in, and £${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo per person after the course to stay current. By Month 1, your team should be automating tasks that currently take hours. By Month 3, they will be building internal tools and leading AI transformation initiatives.`,
+    // REWRITTEN 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate).
+    // "By Month 1, your team should be automating tasks that currently take
+    // hours" turned a lesson into a guaranteed result at work, and Month 3 did
+    // the same with an organisation-wide initiative. The answer now states the
+    // price and what the months actually ask a learner to do.
+    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE}/mo for each person, with monthly access rather than an annual lock-in, and £${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo per person after the course to stay current. In Month 1 each person designs an automation for a routine job they do now. By Month 3 they have built an internal tool and worked through how an organisation-wide AI change is planned and costed.`,
   },
   {
     question: "Our team is not technical. Is this appropriate?",
@@ -284,6 +302,54 @@ const SYLLABUS_BULLETS = [
   "Individual learners (non-team) pick their own path from optional lessons",
   "Progress tracking shows completion rates per person and per department",
 ]
+
+/**
+ * What the optional lessons are actually FOR, written for somebody choosing on
+ * behalf of other people.
+ *
+ * David, 2026-09-17 (a-20260917-145147-bfd191): *"people will want to do
+ * specific lessons and not others ... We want to show that you can go deep into
+ * one area, or you can do optional lessons by industry. This should attract
+ * both individuals and institutions and big companies or teams"*.
+ *
+ * This page already had the control ("Complete control over what your team
+ * learns") and the no-count rule. What it did not have was any sense of WHAT
+ * the optional set contains, which is the half a buyer needs to picture their
+ * own people in it. So this is a consolidation, added under the existing
+ * syllabus control box rather than as a competing section.
+ *
+ * Every subject named is an authored lesson on disk, not a title from a plan:
+ * `m2_l34` UK healthcare, `m2_l35` UK legal, `m2_l36` UK finance, `m2_l38`
+ * creative industries, `m3_l23` public sector procurement, `m3_l24` financial
+ * services, `m3_l26` professional services for consulting, legal and
+ * accountancy firms, `m3_l27` manufacturing and supply chain; the building
+ * lessons are `m2_l27` to `m2_l32` and `m3_l28` to `m3_l32`; the leadership
+ * lessons are `m3_l21`, `m3_l22` and `m3_l35`.
+ *
+ * NOT named, deliberately: HR. There is no HR lesson in the course; the only
+ * one in the syllabus register sits in the retired `old_backlog` module.
+ * /for-institutions is where commissioning a subject is explained, and the
+ * pointer at the end of this block sends a company that needs one there.
+ *
+ * Still no count, per a-20260914-201426-ae7f0e. See SYLLABUS_BULLETS.
+ */
+const ROLE_PATHS = [
+  {
+    label: "Client-facing and regulated work",
+    detail:
+      "Lessons on UK legal practice, finance, healthcare, manufacturing and supply chain, buying AI in the public sector, and professional services for consulting, legal and accountancy firms. Each works to the rules that field is held to, so nobody has to translate a general course into their own job.",
+  },
+  {
+    label: "The people who build",
+    detail:
+      "Retrieval that answers from your own documents and shows where each answer came from, testing and evaluating what has been built, security, running models on your own hardware, and several AI assistants working together on one job.",
+  },
+  {
+    label: "The people who lead it",
+    detail:
+      "What a board needs to be told and how often, how AI suppliers are checked, and how to run the change itself rather than only the tools.",
+  },
+] as const
 
 /**
  * For teams page, in the PAPER-FIRST register: a two-column quiet masthead with
@@ -482,11 +548,12 @@ export function ForTeamsFde() {
           <div className={styles.compareRow}>
             <article className={styles.compareCard}>
               <h3 className={styles.compareWho}>Elsewhere</h3>
-              <p className={styles.compareWhat}>Typical AI training</p>
-              <p className={styles.compareFigure}>40 hours</p>
+              <p className={styles.compareWhat}>When you compare courses</p>
+              <p className={styles.compareFigure}>Count the hours</p>
               <p className={styles.compareBody}>
-                Padded with filler. Repetitive. Outdated within weeks. Your
-                team spends 40 hours on content that could be covered in 10.
+                Ask how many of the hours are spent practising on the work your
+                team actually does, when the material was last rewritten, and
+                how much of it repeats what came before.
               </p>
             </article>
             {/* Same panel as the card beside it, deliberately: the difference is
@@ -498,17 +565,17 @@ export function ForTeamsFde() {
                 Zero filler
               </p>
               <p className={styles.compareBody}>
-                No repetition. No filler. Only the newest, most relevant
-                applied AI topics. Every minute of your team&apos;s time
-                produces a practical skill they use immediately.
+                Every lesson ends with something your team has made: a tool, a
+                document or a plan they can take straight into the work they
+                were already doing.
               </p>
             </article>
           </div>
           <p className={styles.compareNote}>
-            When your employees complete lessons during working hours, as
-            many companies encourage, the quality and efficiency of every
-            lesson matters even more. You want zero wasted time. That is
-            exactly what we deliver.
+            When your employees complete lessons during working hours, as many
+            companies encourage, every hour is paid for twice. That is why each
+            lesson is built around a piece of work rather than around a video
+            to sit through.
           </p>
         </div>
       </section>
@@ -576,6 +643,27 @@ export function ForTeamsFde() {
                 <li key={item}>{item}</li>
               ))}
             </ul>
+          </div>
+          {/* What the optional set contains, so a buyer can picture their own
+              people in it (a-20260917-145147-bfd191). See ROLE_PATHS above for
+              which lessons each line is drawn from, and why HR is not here. */}
+          <div className={styles.rolePaths} data-testid="role-paths">
+            <h3>What your team can choose from</h3>
+            <dl>
+              {ROLE_PATHS.map((path) => (
+                <div key={path.label}>
+                  <dt>{path.label}</dt>
+                  <dd>{path.detail}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className={styles.rolePathsNote}>
+              Nobody has to take all of it. If the subject your people need is
+              not there, a professional body, or a company or team of 100 or
+              more learners, can have lessons written for it and approved by its
+              own experts before anyone sees them. That is on the{" "}
+              <Link href="/for-institutions">institutions page</Link>.
+            </p>
           </div>
         </div>
       </section>

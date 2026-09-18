@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,7 +24,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "include": [
@@ -29,7 +35,23 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    ".next-candidate-1823522/types/**/*.ts",
+    ".next-candidate-1823522/dev/types/**/*.ts",
+    ".next-candidate-1831768/types/**/*.ts",
+    ".next-candidate-1831768/dev/types/**/*.ts",
+    ".next-candidate-1842810/types/**/*.ts",
+    ".next-candidate-1842810/dev/types/**/*.ts",
+    ".next-candidate-1985052/types/**/*.ts",
+    ".next-candidate-1985052/dev/types/**/*.ts",
+    ".next-candidate-2046814/types/**/*.ts",
+    ".next-candidate-2046814/dev/types/**/*.ts",
+    ".next-candidate-2075146/types/**/*.ts",
+    ".next-candidate-2075146/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "docs/old-site", "remotion"]
+  "exclude": [
+    "node_modules",
+    "docs/old-site",
+    "remotion"
+  ]
 }

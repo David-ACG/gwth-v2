@@ -203,7 +203,8 @@
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "supabase"
+    "supabase",
+    "graft"
   ],
   "hooks": {
     "PostToolUse": [

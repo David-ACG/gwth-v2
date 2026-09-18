@@ -578,6 +578,71 @@
   letter-spacing: -0.01em;
 }
 
+/* ---------------- What the optional set contains (a-20260917-145147) ------ */
+
+/*
+ * A sibling of the control box, not a second panel: the box above says what an
+ * admin CAN do, this says what there is to choose from. It is set on the page
+ * ground with a hairline rather than in a filled card, so the two do not look
+ * like a pair of equal options, and the label plus gloss pattern is the page's
+ * own (miniStat, ruledList). No tint carries meaning here.
+ */
+.rolePaths {
+  margin-top: 2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--v-line);
+}
+
+.rolePaths h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.rolePaths dl {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 56rem) {
+  .rolePaths dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+.rolePaths dt {
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.rolePaths dd {
+  margin: 0.35rem 0 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.rolePathsNote {
+  margin-top: 1.4rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.rolePathsNote a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.rolePathsNote a:hover {
+  color: var(--v-accent);
+}
+
 /* ---------------- How it works (mono mini stats) ---------------- */
 
 .miniStats {

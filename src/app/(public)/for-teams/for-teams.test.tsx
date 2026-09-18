@@ -155,7 +155,7 @@ describe("ForTeamsPage", () => {
 
   it("renders the efficiency comparison cards", () => {
     render(<ForTeamsPage />)
-    expect(screen.getByText("Typical AI training")).toBeInTheDocument()
+    expect(screen.getByText("When you compare courses")).toBeInTheDocument()
     expect(screen.getByText("This course")).toBeInTheDocument()
   })
 
@@ -284,9 +284,9 @@ describe("a-20260914-200101-e34e36: the comparison panel is professional and rea
     expect(card).toBeTruthy()
     const texts = Array.from(card!.children).map((n) => n.textContent?.trim())
     expect(texts[0]).toBe("Elsewhere")
-    expect(texts[1]).toBe("Typical AI training")
-    expect(texts[2]).toBe("40 hours")
-    expect(texts[3]).toMatch(/^Padded with filler/)
+    expect(texts[1]).toBe("When you compare courses")
+    expect(texts[2]).toBe("Count the hours")
+    expect(texts[3]).toMatch(/^Ask how many of the hours/)
   })
 
   it("draws the panel boundary with the measured token, clearing 3:1 on the worst of four", () => {
@@ -322,11 +322,21 @@ describe("a-20260914-200101-e34e36: the comparison panel is professional and rea
     expect(contrast(T.accentDark, T.bgDark)).toBeGreaterThanOrEqual(3)
   })
 
-  it("keeps every word of the comparison copy", () => {
+  it("compares without asserting figures about other providers", () => {
+    // The panel used to read "Typical AI training / 40 hours / Padded with
+    // filler. Repetitive. Outdated within weeks. Your team spends 40 hours on
+    // content that could be covered in 10." Nothing on the page supported any
+    // of it, and the marketing copy gate blocked promotion on it (bead
+    // gwth-launch-88z.32.36). The design is unchanged: same two panels, same
+    // name-label-figure-argument order, same single italic accent. What
+    // changed is that the left panel now tells a buyer what to count instead
+    // of telling them what a competitor sells.
     render(<ForTeamsPage />)
-    expect(screen.getByText("40 hours")).toBeInTheDocument()
+    expect(screen.getByText("Count the hours")).toBeInTheDocument()
     expect(screen.getByText("Zero filler")).toBeInTheDocument()
-    expect(screen.getByText(/Padded with filler/)).toBeInTheDocument()
+    const body = document.body.textContent ?? ""
+    expect(body).not.toMatch(/Padded with filler/)
+    expect(body).not.toMatch(/could be covered in 10/)
   })
 })
 

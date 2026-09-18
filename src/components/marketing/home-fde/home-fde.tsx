@@ -3,6 +3,7 @@ import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import { CURRICULUM } from "@/components/marketing/data"
 import { canPromoteLabs } from "@/lib/labs-cta"
 import { Plate } from "@/components/marketing/paper/plate"
+import { ScoreCard, type ScoreState } from "./score-card"
 import p from "@/components/marketing/paper/paper.module.css"
 import styles from "./home-fde.module.css"
 
@@ -211,12 +212,12 @@ export const MONTHS = [
   {
     kicker: "Month 2",
     title: "A small business",
-    body: "You take the same skills into the work of a small business. You build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. Then you plan a second one, FractionalBuddy, an assistant for a small consulting firm, and build it over ten days. You also learn to test what you have made, and to look after other people's data, before anyone else uses it.",
+    body: "You take the same skills into the work of a small business. Before anything you make is used by other people, you learn how to secure their data: where keys are kept, who can see what, and how to test that one customer cannot see another's records. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you specify a second assistant, FractionalBuddy, for a small consulting firm, and plan the ten days of work that would build it.",
   },
   {
     kicker: "Month 3",
     title: "A whole organisation",
-    body: "Month 3 is about how an organisation works as a whole, not one more tool for it. You pick a real one: your employer, a charity you help run, or your own business. You interview people in different teams to find where AI would genuinely help. You score the organisation on twelve areas of its work, such as its skills, its data and the rules it has to follow. Each score has your evidence beside it, so you can show where an AI project would work today and where it would not. From that you write a plan: what to change first, and what it will cost. The last thing you build is a tool that runs those interviews itself, by voice. It rates the answers the same way you did. The report it produces is written for the people who decide which changes get funded.",
+    body: "Month 3 is about how an organisation works as a whole, not one more tool for it. You pick a real one: your employer, a charity you help run, or your own business. You interview people in different teams to find where AI would genuinely help. You score the organisation on twelve areas of its work, such as its skills, its data and the rules it has to follow. Then you build a working AI consultant that does all of that for you. It interviews people by voice, and every score it gives names the answers it came from. It sorts the work into what to change now, what comes next and what can wait, then writes the report and the slide deck. The people who run the organisation decide what changes, and when.",
   },
 ] as const
 
@@ -233,46 +234,178 @@ export const MONTHS = [
  * totally uninspiring for the most important page on GWTH"*. A category word
  * names a subject; the clause says what you walk away able to do, which is
  * the thing the picture is actually about. Keep them to four or five words:
- * the key is inset under the tiles and cannot grow sideways.
+ * the key is inset under the tiles and cannot grow sideways. The six clauses
+ * passed the copy gate in the third pass and are deliberately NOT reopened
+ * here (skill rule: rewording passed copy puts it back under review for no
+ * gain).
+ *
+ * `months` is David's fourth-pass ask, a-20260915-211445-2274ea: *"For all of
+ * these blocks, I'd like to explain how the student progresses from month one
+ * to two to three. That's much more powerful than just saying the first step
+ * or what the block is"*. It replaces the single `body` line. Three clauses
+ * crammed into one paragraph would have made six unreadable cards, so each
+ * card carries a three-row track instead (`.blockTrack`).
+ *
+ * **Every cell below is checked against the authored lesson, not against
+ * `lessons.metadata.project_title`, which is stale** (the round-2 curriculum
+ * check records why). Read from
+ * `1_gwthpipeline520/data/generated_lessons/<id>/content/project.md` and
+ * `content/lesson.md`:
+ *
+ * - Research: m1_l06 one-page comparison · m2_l10 knowledge audit ·
+ *   m3_l07, whose project is explicitly an architecture decision record and
+ *   NOT code, so the cell says "design", built later in m3_l17.
+ * - Content: m1_l07 four-piece package with a commercially safe image ·
+ *   m2_l17 brand-asset system map · m3_l18 twelve-page PDF and ten-slide deck.
+ * - Thinking: m1_l08 personal goal plan · m2_l02 builder's spec with
+ *   acceptance criteria · m3_l03 twelve-theme scoring, m3_l10 now/next/later
+ *   roadmap, m3_l11 the AI profit-and-loss one-pager.
+ * - Building: m1_l09 *"build one small working tool today"*, the eighth
+ *   lesson in author order, which at five lessons a week lands in the second
+ *   week, so the page says "your first couple of weeks" and never "day one" ·
+ *   m2_l08 real logins, m2_l13 cited multi-tenant Q&A, m2_l14 Streamlit
+ *   dashboard, m2_l09 test-first · m3_l16 to m3_l18.
+ * - Data: m1_l10 messy-data workflow and m1_l17 the decision note ·
+ *   m2_l14 three-panel dashboard plus the evaluation tiles · m3_l08 and
+ *   m3_l09 themes and evidence-anchored scores.
+ * - Automation: **no month builds one**, in any of the three. m1_l11 is a
+ *   written "Safe First Automation"; m2_l15 says in terms *"This project does
+ *   not require you to build the automation. It asks you to design it"*; and
+ *   m3_l29 says *"You will not write code. You will design the system on
+ *   paper."* All three cells therefore say "design", which is what the
+ *   curriculum actually teaches. Do not let this one drift into "you
+ *   automate": it is the weakest-evidenced block on the page.
  */
 export const SIX_BLOCKS = [
   {
     n: "01",
     name: "Research",
     clause: "find facts and check the source",
-    body: "Find and compare information, then check it and say where it came from.",
+    months: [
+      "You build a one-page comparison to settle a real decision you are facing, and you say where every fact came from.",
+      "You audit what one organisation actually knows, and where that knowledge is kept.",
+      "You design the search system that reads a whole organisation's interviews and finds the evidence behind an answer.",
+    ],
   },
   {
     n: "02",
     name: "Content",
     clause: "create work in your own voice",
-    body: "Write, design and communicate in your own voice, not the machine's.",
+    months: [
+      "You write a short post and a longer piece in your own voice, with one image you are allowed to use commercially.",
+      "You write your brand down once, in a form your AI tools can read, so everything you make after that is consistent.",
+      "Your own tool produces a twelve-page report and a ten-slide deck from the interviews it collected.",
+    ],
   },
   {
     n: "03",
     name: "Thinking",
-    clause: "plan with AI, then decide yourself",
-    body: "Use AI to help you plan and learn, while you make the decisions.",
+    clause: "plan with AI, then decide for yourself",
+    months: [
+      "You make a one-page plan for a real decision in your life, using a seven-step routine you can use again.",
+      "You write a builder's brief: what to make, what good looks like, and how you will check it.",
+      "You score an organisation's readiness, sort the work into now, next and later, and put a cost against it.",
+    ],
   },
   {
     n: "04",
     name: "Building",
     clause: "make useful tools without code",
-    body: "Make your first small working tool without writing code.",
+    months: [
+      "In your first couple of weeks you build one small working tool, without writing any code.",
+      "You start building real software: a database with real logins, a chatbot that shows where its answers came from, a dashboard, and tests that check each part works.",
+      "You build the AI consultant itself, from the voice interview at the front to the report that comes out of the back.",
+    ],
   },
   {
     n: "05",
     name: "Data",
     clause: "check that the numbers add up",
-    body: "Ask questions of a spreadsheet, and check whether the answers are right.",
+    months: [
+      "You take one messy real spreadsheet and get a chart, two checked numbers and a decision out of it.",
+      "You build a dashboard with three panels, and a way of measuring whether the answers it gives are any good.",
+      "You turn dozens of interviews into themes, and into scores that each name the answers they came from.",
+    ],
   },
   {
     n: "06",
     name: "Automation",
     clause: "hand routine jobs to AI",
-    body: "Hand a repetitive job over to AI, and check it is doing it properly.",
+    months: [
+      "You design your first safe automation on paper: the steps, the permissions, four test cases and how to undo it if it goes wrong.",
+      "You design a workflow where AI does the repetitive part and a person still signs it off.",
+      "You design how one job can be split between several AI assistants working together, and where a person has to be able to stop them.",
+    ],
   },
 ] as const
+
+/**
+ * The three states of the score, as David asked for them
+ * (a-20260915-211845-237ea3): *"It needs to show the score and the trajectory
+ * that the student is on whether they're improving their score or it's
+ * flatlining or it's not being kept up to date"*.
+ *
+ * ## What is real here, and what is not. Read this before touching the copy.
+ *
+ * The score ITSELF is implemented: `calculateGwthScore()` in
+ * `lib/progress/gwth-score.ts` is mandatory lessons completed times 1.5,
+ * multiplied by the average best quiz mark, against a denominator taken from
+ * the learner's own syllabus edition. The band beside each number below is the
+ * product's own `getTrajectoryLabel()`, copied from that file.
+ *
+ * The MOVEMENT is not. There is no decay, no staleness, no recency weighting
+ * and no stored history anywhere in the product: `SCORE_DECAY_DAYS` is a
+ * config constant that nothing reads, `scoreHistory` is returned empty
+ * unconditionally, and the whole feature sits behind `GWTH_SCORE_ENABLED`,
+ * which is set in no environment. Copy ledger C35 bans asserting the four
+ * named metrics and score decay as present facts, and the /for-teams tests
+ * enforce the same thing on that page.
+ *
+ * So the section does NOT assert the mechanic in the present tense. It says on
+ * the page, in body copy rather than in a footnote, that this part is still
+ * being built and that no score is switched on during the beta, and the note
+ * under the cards says the numbers are examples. That is the only honest way
+ * to publish what David asked for. If the mechanic ships, delete the
+ * still-being-built sentence and nothing else needs to move.
+ *
+ * Values are kept under 99 on purpose: 66 mandatory lessons at 1.5 points is a
+ * ceiling of 99, so a marketing "104" or "reaching 100" would be a number the
+ * product cannot produce.
+ *
+ * Deliberately absent: any percentile or rarity claim ("top 1%"), any claim
+ * about what an employer thinks, the word certificate as something GWTH
+ * issues, and any social network's name, mark or template.
+ */
+export const SCORE_STATES: readonly ScoreState[] = [
+  {
+    id: "rising",
+    value: 71,
+    band: "Confident builder",
+    history: [8, 14, 21, 27, 33, 38, 45, 52, 57, 62, 67, 71],
+    state: "Going up",
+    marker: "filled",
+    said: "You are finishing lessons and doing well on the questions, so the number has risen every month since you started.",
+  },
+  {
+    id: "level",
+    value: 44,
+    band: "Month 1 foundations",
+    history: [8, 15, 22, 29, 36, 43, 44, 44, 44, 44, 44, 44],
+    state: "No change",
+    marker: "square",
+    said: "You finished Month 1 and have not started Month 2. Nothing you earned is taken away, and nothing new is being added either.",
+  },
+  {
+    id: "stale",
+    value: 58,
+    band: "Confident builder",
+    history: [10, 19, 28, 37, 46, 55, 62, 62, 61, 60, 59, 58],
+    recordedUpTo: 7,
+    state: "Needs updating",
+    marker: "ring",
+    said: "Lessons you passed have been rewritten since, because the tools moved on. Working through the new versions will bring your score back up.",
+  },
+]
 
 export const PRIMITIVES_URL =
   "https://openai.com/business/guides-and-resources/identifying-and-scaling-ai-use-cases/"
@@ -305,14 +438,21 @@ export function HomeFde() {
                 by <em>making things</em>.
               </span>
             </h1>
-            <div>
+            <div className={styles.heroCopy}>
               <p className={p.standfirst}>
-                GWTH is a three-month course in using AI well at work. You are
-                taught how to check what AI gives you, and how to spot when it
-                has got something wrong. You start on your own work, and the
-                projects get bigger every month. You keep what you make: a
-                rewritten CV, a spreadsheet turned into a chart you can act on,
-                an AI assistant of your own.
+                GWTH is a three-month course in using AI well at work and in
+                life. You are taught how to check what AI gives you and how to
+                spot when it has got something wrong. The course is practical
+                because we have found that making things is the best way to
+                learn. You start with simple, fun projects based on your own
+                work, and the projects get bigger and more useful every month.
+                You keep what you make. That includes a rewritten CV, a
+                spreadsheet turned into a chart you can act on, and a retrieval
+                system called RAG. RAG lets AI work with your company&apos;s
+                information. By Month 3, you build your own AI consultant. It
+                interviews people across an organisation by voice and uses
+                their answers to score the organisation. It produces a report
+                and a plan for what to change first.
               </p>
               <div className={p.actions}>
                 <Link href="/waitlist" className={p.buttonSolid}>
@@ -348,7 +488,8 @@ export function HomeFde() {
               </span>
               <span className={styles.plateLine}>
                 Six ways of working, not six subjects. The three months take
-                you through <em>every one of them</em>, on your own work.
+                you through <em>every one of them</em>, using your own work as
+                an example.
               </span>
             </figcaption>
           </figure>
@@ -389,10 +530,10 @@ export function HomeFde() {
                 at any time.
               </p>
               <p className={styles.offerNote}>
-                Places are invite-only while we finish the course with a small
-                group of testers. Leave a name and an email and we will write to
-                you when the next intake opens. No call, no demo, no sales
-                conversation.
+                Places are invite-only. A small group of beta testers is
+                working through the course now. Leave a name and an email and
+                we will write to you when the next intake opens. No call, no
+                demo, no sales conversation.
               </p>
               <div className={styles.offerActions}>
                 <Link href="/waitlist" className={p.buttonSolid}>
@@ -436,6 +577,37 @@ export function HomeFde() {
               </article>
             ))}
           </div>
+          {/*
+            The optional lessons, as a signpost and nothing more (David,
+            2026-09-17, a-20260917-145147-bfd191, left on /lessons: *"people
+            will want to do specific lessons and not others ... you can go deep
+            into one area, or you can do optional lessons by industry"*). The
+            full explanation belongs on the course page, and this paragraph
+            exists so a reader of the home page knows there is one.
+
+            Two rules it is written under. The STRUCTURE is safe: MONTH_CONFIGS,
+            the canonical syllabus register and the authored lessons on disk all
+            agree that Months 2 and 3 run twenty core lessons and then optional
+            ones. The CHOICE is not a live control: the pipeline importer marks
+            every lesson core, so nothing in the product lets a learner select
+            an optional lesson yet. Hence "you are not expected to take all of
+            them", which is true of the syllabus, rather than "you choose",
+            which would describe a picker that does not exist. No count appears
+            here for the reason /for-teams prints none (a-20260914-201426-ae7f0e).
+          */}
+          <p className={styles.monthsNote} data-testid="months-optional-note">
+            Months 2 and 3 each open with twenty core lessons that everybody
+            does. The lessons after those are optional. There are lessons on
+            using AI inside UK legal work, finance, healthcare, manufacturing
+            and the public sector, and others that go further into building
+            things or into leading the change at work. You are not expected to
+            take all of them.
+          </p>
+          <div className={p.actions}>
+            <Link href="/lessons" className={p.buttonOutline}>
+              See the optional lessons
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -457,33 +629,99 @@ export function HomeFde() {
               something. */}
           <p className={styles.blocksLead} data-testid="blocks-lead">
             Every month here is built around making something, and each
-            project brings several of the six blocks together. Take the Family
-            AI Bot in Month 1. To make it you research what your family
-            actually needs. You write the instructions, then judge what the AI
-            gives back. You check the tasks and dates it has pulled out of the
-            recording. You decide how much of the job it should do without you.
-            That is five of the six blocks below, used on one small tool:
-            research, content, thinking, data and automation. Some projects are
-            the working tool itself. Others are the plan or the test that has
-            to come before anyone else uses the tool.
+            project brings several of the six building blocks together. Take
+            the Family AI Bot in Month 1. To make it you research what your
+            family actually needs. You write the instructions, then judge what
+            the AI gives back. You check the tasks and dates it has pulled out
+            of the recording. You decide how much of the job it should do
+            without you. That is all six building blocks below, used in one
+            small tool: research, content, thinking, building, data and
+            automation.
+            Some projects are the working tool itself. Others are the plan or
+            the test that has to come before anyone else uses it.
           </p>
           <div className={p.cards3}>
             {SIX_BLOCKS.map((block) => (
               <article className={p.card} key={block.n} data-testid="block-card">
-                <p className={p.cardKicker}>{block.n} · Block</p>
+                <p className={p.cardKicker}>{block.n} · Building block</p>
                 <h3 className={p.cardTitle}>{block.name}</h3>
-                <p className={p.cardBody}>{block.body}</p>
+                {/* One row per month, so the reader can see where the block
+                    takes them rather than only where it starts
+                    (a-20260915-211445-2274ea). */}
+                <div className={styles.blockTrack} data-testid="block-track">
+                  {block.months.map((line, i) => (
+                    <p className={styles.blockStep} key={i} data-testid="block-step">
+                      <span className={styles.blockStepMonth}>Month {i + 1}</span>
+                      <span className={styles.blockStepBody}>{line}</span>
+                    </p>
+                  ))}
+                </div>
               </article>
             ))}
           </div>
           <p className={p.attribution}>
-            The six blocks follow the{" "}
+            The six building blocks follow the{" "}
             <a href={PRIMITIVES_URL} rel="noopener noreferrer" target="_blank">
               six common ways of using AI at work
             </a>{" "}
             that OpenAI found across its customers: research, content
             creation, ideation and strategy, coding, data analysis and
             automation. The names above are ours.
+          </p>
+        </div>
+      </section>
+
+      {/*
+        The score (David, 2026-09-15, a-20260915-211845-237ea3). It sits here
+        because it is the answer to "and what do I have at the end of it",
+        which only makes sense once the reader knows what the work is. The
+        closing section keeps the FILES a learner walks away with; this one is
+        about the number and which way it is moving, so the two do not repeat.
+
+        What may and may not be claimed is in the SCORE_STATES comment above.
+      */}
+      <section className={p.section} data-section="score">
+        <div className={p.page}>
+          <div className={p.sectionHead}>
+            <h2 className={p.sectionTitle}>Your score, and which way it is going</h2>
+          </div>
+          {/* The gate caught two things here on the first run and both were
+              right. The opening claimed everything marked feeds the score,
+              which contradicted the sentence after it and is not what
+              `calculateGwthScore()` does: marked projects are feedback, and
+              the number comes from finished lessons and the end-of-lesson
+              questions. And a rising score was said to show somebody had kept
+              up, which it cannot show until the update tracking exists. */}
+          <p className={styles.scoreLead} data-testid="score-lead">
+            Your GWTH score is one number, worked out from the lessons you have
+            finished and how you did on the questions at the end of each one.
+            It is a record of work you have actually done rather than a note
+            saying you attended. No score is switched on while the course is in
+            beta.
+          </p>
+          {/* The copy says only what the planned update tracking can establish:
+              whether a completed lesson has since changed. It does not claim
+              to measure whether the learner's knowledge or work is current. */}
+          <p className={styles.scoreLead} data-testid="score-honesty">
+            Once scores are switched on, yours will show more than what you
+            have finished. It will show whether any lesson you passed has since
+            been rewritten and needs completing again. AI tools move quickly,
+            and a completion date on its own does not show whether somebody has
+            kept up with them. We are still building this update tracking. The
+            three cards below show what that will look like.
+          </p>
+          <div className={p.cards3} data-testid="score-cards">
+            {SCORE_STATES.map((state) => (
+              <ScoreCard key={state.id} state={state} cardClassName={p.card} />
+            ))}
+          </div>
+          <p className={styles.scoreNote}>
+            {/* NOT YET GATED, same run. "On a different scale" did not say
+                which comparison is unsafe, which matters on a page that
+                presents the score as something to show somebody. */}
+            The numbers here are examples rather than real learners. Your score
+            is based on the lessons you were given, so two scores mean the same
+            thing only when they come from the same set of lessons.
           </p>
         </div>
       </section>

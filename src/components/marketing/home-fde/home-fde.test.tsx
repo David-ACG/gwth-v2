@@ -1,6 +1,7 @@
 import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach, beforeEach, vi } from "vitest"
-import { HomeFde, MONTHS, SIX_BLOCKS } from "./home-fde"
+import { HomeFde, MONTHS, SIX_BLOCKS, SCORE_STATES } from "./home-fde"
+import { getTrajectoryLabel } from "@/lib/progress/gwth-score"
 import { CURRICULUM } from "@/components/marketing/data"
 
 afterEach(cleanup)
@@ -103,11 +104,15 @@ describe("HomeFde is individual-first", () => {
   it("puts what a learner does before anything addressed to a buyer", () => {
     const { container } = render(<HomeFde />)
     const order = sectionOrder(container)
+    // `score` joined on 2026-09-15 (a-20260915-211845-237ea3). It sits after
+    // `blocks` because it answers "and what do I have at the end of it",
+    // which only lands once the reader knows what the work is.
     expect(order).toEqual([
       "hero",
       "course",
       "months",
       "blocks",
+      "score",
       "organisations",
       "individuals",
     ])
@@ -282,7 +287,13 @@ describe("HomeFde building emphasis", () => {
     const { container } = render(<HomeFde />)
     const lead = screen.getByTestId("blocks-lead")
     expect(lead.textContent).toMatch(/^Every month here is built around making something/)
-    expect(lead.textContent).toMatch(/each project brings several of the six blocks together/i)
+    // David, a-20260915-211138-69b27f: *"instead of saying blocks, say
+    // building blocks"*. The prose says the full phrase; the picture's key
+    // keeps its six short clauses.
+    expect(lead.textContent).toMatch(
+      /each project brings several of the six building blocks together/i
+    )
+    expect(lead.textContent).not.toMatch(/the six blocks together/i)
     const cards = container.querySelectorAll('[data-testid="block-card"]')
     expect(
       lead.compareDocumentPosition(cards[0]!) &
@@ -352,7 +363,11 @@ describe("HomeFde six-blocks plate: the key says something", () => {
     render(<HomeFde />)
     const caption = screen.getByText(/Six ways of working, not six subjects/)
     expect(caption.textContent).toMatch(/every one of them/)
-    expect(caption.textContent).toMatch(/on your own work/)
+    // David, a-20260915-210202-691323: *"The phrase on your own work is not
+    // really used commonly in the UK. Maybe you could say using your own work
+    // as an example."*
+    expect(caption.textContent).toMatch(/using your own work as an example/)
+    expect(caption.textContent).not.toMatch(/them, on your own work/)
   })
 })
 
@@ -486,14 +501,32 @@ describe("HomeFde standfirst", () => {
     expect(text).not.toMatch(/large employer/i)
   })
 
-  it("ends on the most concrete sentence in the paragraph", () => {
-    const last = standfirst().split(/(?<=\.)\s+/).filter(Boolean).pop() ?? ""
-    expect(last).toMatch(/CV/)
-    expect(last).toMatch(/spreadsheet/)
-    expect(last).toMatch(/assistant/)
+  /**
+   * The paragraph used to end on the three things a learner keeps. David,
+   * 2026-09-15 (a-20260915-210111-aaf2c4): *"This is better but we need to
+   * talk about month three and how advanced a student who started as a
+   * beginner can get by month three with examples that sound good and
+   * interesting"*. So the Month 1 examples stay, in the middle where they say
+   * where you start, and the paragraph now ENDS on where you get to. The
+   * Month 3 example is the authored capstone, m3_l16 to m3_l18.
+   */
+  it("ends on how far a beginner gets, not on where they start", () => {
+    const text = standfirst()
+    expect(text).toMatch(/CV/)
+    expect(text).toMatch(/spreadsheet/)
+    expect(text).toMatch(/retrieval system called RAG/i)
+    expect(text).toMatch(/your own AI consultant/i)
+    const last = text.split(/(?<=\.)\s+/).filter(Boolean).pop() ?? ""
+    expect(text).toMatch(/By Month 3, you build your own AI consultant/)
+    expect(text).toMatch(/interviews people across an organisation by voice/)
+    expect(text).toMatch(/uses their answers to score the organisation/)
+    expect(last).toMatch(/report and a plan for what to change first/)
     // m1_l17 produces a decision note holding a chart, not a dashboard, so the
     // page no longer promises one. GPT-5.6 Sol caught this independently.
-    expect(last).not.toMatch(/dashboard/)
+    expect(text).not.toMatch(/dashboard/)
+    // The learner's own work, in his phrasing (a-20260915-210202-691323).
+    expect(text).toMatch(/based on your own work/)
+    expect(text).not.toMatch(/You start on your own work/)
   })
 
   it("keeps every sentence short enough to read once", () => {
@@ -522,12 +555,20 @@ describe("HomeFde standfirst", () => {
  * none of it comes from the stale `lessons.metadata.project_title`.
  */
 describe("HomeFde three-month progression", () => {
-  it("says in the hero that the work grows, without listing three months there", () => {
+  /**
+   * The hero used to name no month at all, to keep three months of examples
+   * out of it (a-20260915-101324-6aa90f). a-20260915-210111-aaf2c4 supersedes
+   * that in ONE direction only: the destination is named, because David asked
+   * to see how far a beginner gets. The three-month walk-through is still the
+   * `months` section's job, so Month 1 and Month 2 stay out of the hero.
+   */
+  it("names where the work ends up without listing all three months", () => {
     render(<HomeFde />)
     const hero = sectionText("hero")
-    expect(hero).toMatch(/projects get bigger every month/i)
+    expect(hero).toMatch(/projects get bigger and more useful every month/i)
+    expect(hero).toMatch(/By Month 3/)
+    expect(hero).not.toMatch(/Month 1/i)
     expect(hero).not.toMatch(/Month 2/i)
-    expect(hero).not.toMatch(/Month 3/i)
   })
 
   it("moves from one person in Month 1 to an organisation in Month 3", () => {
@@ -554,5 +595,233 @@ describe("HomeFde three-month progression", () => {
   it("makes no Month 3 claim the authored lessons do not carry", () => {
     const { container } = render(<HomeFde />)
     expect(container.textContent).not.toMatch(/on a company's own computers/i)
+  })
+})
+
+/**
+ * David's fourth Home pass, 2026-09-15. Each block below names the annotation
+ * it answers, so a later reader can tell what is a decision and what is taste.
+ */
+describe("HomeFde: the six building blocks carry a month by month progression", () => {
+  /** a-20260915-211138-69b27f: *"instead of saying blocks, say building blocks"*. */
+  it("says building blocks, not blocks, in the prose around the cards", () => {
+    const { container } = render(<HomeFde />)
+    const section = container.querySelector('[data-section="blocks"]') as HTMLElement
+    const text = (section.textContent ?? "").replace(/\s+/g, " ")
+    expect(text).toContain("six building blocks")
+    // The bare noun survives only inside "building blocks" and nowhere else.
+    expect(text.replace(/building blocks/g, "")).not.toMatch(/\bblocks\b/i)
+    for (const card of container.querySelectorAll('[data-testid="block-card"]')) {
+      expect(card.textContent).toMatch(/· Building block/)
+    }
+  })
+
+  /**
+   * a-20260915-211445-2274ea: *"For all of these blocks, I'd like to explain
+   * how the student progresses from month one to two to three. That's much
+   * more powerful than just saying the first step or what the block is"*.
+   * ALL six, not the interesting ones.
+   */
+  it("gives every one of the six a Month 1, Month 2 and Month 3 line", () => {
+    const { container } = render(<HomeFde />)
+    const cards = Array.from(
+      container.querySelectorAll('[data-testid="block-card"]')
+    )
+    expect(cards).toHaveLength(6)
+    for (const card of cards) {
+      const steps = Array.from(card.querySelectorAll('[data-testid="block-step"]'))
+      expect(steps, card.querySelector("h3")?.textContent ?? "").toHaveLength(3)
+      steps.forEach((step, i) => {
+        expect(step.textContent).toMatch(new RegExp(`^Month ${i + 1}`))
+        // Each month says what the learner DOES, not what the block is.
+        const body = (step.textContent ?? "").replace(/^Month \d/, "").trim()
+        expect(body.split(/\s+/).length).toBeGreaterThan(8)
+        expect(body).toMatch(/^You(r)? |^In your /)
+      })
+    }
+  })
+
+  it("no longer defines a block instead of showing where it takes you", () => {
+    render(<HomeFde />)
+    for (const block of SIX_BLOCKS) {
+      expect(block).not.toHaveProperty("body")
+      expect(block.months).toHaveLength(3)
+    }
+  })
+
+  /**
+   * a-20260915-211342-5ac9fa: *"This is the weakest explanation of all six,
+   * and it's probably the most important building block. Could we say
+   * something like you build something small in the first two weeks and then
+   * by the second month, you're building something every week, and by the
+   * third month, you're building really complex systems"*.
+   *
+   * The shape is his; two of the quantities are not what the syllabus says, so
+   * the page does not print them. m1_l09 ("build one small working tool
+   * today") is the eighth lesson in author order, which at five lessons a week
+   * is the second week, so "your first couple of weeks" is right and "day one"
+   * would not be. Month 2 ships real software in roughly eight of its
+   * thirty-nine lessons, and its own capstone m2_l19 produces a written sprint
+   * plan, so "building something every week" is not published.
+   */
+  it("makes Building concrete in all three months without overstating it", () => {
+    const building = SIX_BLOCKS.find((b) => b.name === "Building")!
+    const [one, two, three] = building.months
+    expect(one).toMatch(/first couple of weeks/i)
+    expect(one).toMatch(/without writing any code/i)
+    expect(one).not.toMatch(/day one|first day|first week\b/i)
+    expect(two).toMatch(/real software/i)
+    expect(two).not.toMatch(/every week/i)
+    // A test checks software; it does not prove it works.
+    expect(two).not.toMatch(/prove/i)
+    expect(three).toMatch(/AI consultant/i)
+  })
+
+  /**
+   * Automation is the one block where NO month contains a hands-on build:
+   * m1_l11 is a written plan, m2_l15 says *"This project does not require you
+   * to build the automation. It asks you to design it"*, and m3_l29 says *"You
+   * will not write code."* The page therefore says design, in all three.
+   */
+  it("says Automation is designed, because no month builds one", () => {
+    const automation = SIX_BLOCKS.find((b) => b.name === "Automation")!
+    for (const line of automation.months) {
+      expect(line).toMatch(/^You design /)
+    }
+  })
+})
+
+/**
+ * a-20260915-211845-237ea3, on the score: *"This is a key part of the course
+ * and needs to be on the home page otherwise people will think that they're
+ * not actually getting any benefit to their reputation without it ... It needs
+ * to show the score and the trajectory that the student is on whether they're
+ * improving their score or it's flatlining or it's not being kept up to
+ * date"*.
+ */
+describe("HomeFde score section", () => {
+  it("gives the three states David named, once each", () => {
+    render(<HomeFde />)
+    const cards = screen.getAllByTestId("score-card")
+    expect(cards).toHaveLength(3)
+    expect(cards.map((c) => c.getAttribute("data-state"))).toEqual([
+      "rising",
+      "level",
+      "stale",
+    ])
+    const text = sectionText("score")
+    expect(text).toContain("Going up")
+    expect(text).toContain("No change")
+    expect(text).toContain("Needs updating")
+    // "Level" reads as an attainment level and "Out of date" as a judgement on
+    // the learner rather than on the lessons (Sol, this pass).
+    expect(text).not.toMatch(/\bLevel\b/)
+    expect(text).not.toMatch(/Out of date/)
+  })
+
+  /**
+   * The bible bans a state carried by colour alone (`paper-first-banned-
+   * patterns`, `tint-is-never-the-only-signal`), and a card meant to be
+   * screenshotted will be seen in greyscale. So each state differs in its line
+   * pattern, its end-marker SHAPE and its words, and the figure declares an
+   * accessible name.
+   */
+  it("tells the three trajectories apart without using colour", () => {
+    render(<HomeFde />)
+    const charts = screen.getAllByTestId("score-chart")
+    expect(charts).toHaveLength(3)
+    for (const chart of charts) {
+      expect(chart.getAttribute("role")).toBe("img")
+      expect(chart.getAttribute("aria-label")).toBeTruthy()
+      // No chart paints itself a colour: the strokes are ink or a hairline.
+      expect(chart.innerHTML).not.toMatch(/#[0-9a-f]{3,8}|rgb\(|hsl\(/i)
+    }
+    const markers = SCORE_STATES.map((s) => s.marker)
+    expect(new Set(markers).size).toBe(3)
+    // Only the out-of-date card stops recording, and only it is drawn dashed.
+    const cards2 = () => screen.getAllByTestId("score-card")
+    const dashed = screen.getAllByTestId("score-line-dashed")
+    expect(dashed).toHaveLength(1)
+    const staleCard = cards2().find((c) => c.getAttribute("data-state") === "stale")!
+    expect(staleCard.querySelector('[data-testid="score-line-dashed"]')).toBeTruthy()
+  })
+
+  /**
+   * What the product actually implements: `calculateGwthScore()` is completed
+   * mandatory lessons times 1.5, scaled by the average best quiz mark, over a
+   * denominator from the learner's own edition. 66 mandatory lessons at 1.5 is
+   * a ceiling of 99, so any example at or above 100 would be a number the
+   * product cannot produce.
+   */
+  it("shows only scores the implemented formula can reach", () => {
+    for (const state of SCORE_STATES) {
+      expect(state.value).toBeGreaterThan(0)
+      expect(state.value).toBeLessThan(100)
+      expect(state.history[state.history.length - 1]).toBe(state.value)
+    }
+    render(<HomeFde />)
+    expect(sectionText("score")).not.toMatch(/\b1[0-9]{2}\b/)
+  })
+
+  /**
+   * The bands beside each number are the product's own `getTrajectoryLabel()`
+   * from `lib/progress/gwth-score.ts`, so the page cannot invent a tier.
+   */
+  it("uses the product's own band names, at the product's own thresholds", () => {
+    for (const state of SCORE_STATES) {
+      expect(state.band).toBe(getTrajectoryLabel(state.value))
+    }
+  })
+
+  /**
+   * SCORE_DECAY_DAYS is a config constant nothing reads; `scoreHistory` comes
+   * back empty unconditionally; the whole feature is behind
+   * GWTH_SCORE_ENABLED, which is set in no environment. Copy ledger C35 bans
+   * asserting decay as a present fact. So the page says, in body copy rather
+   * than a footnote, that this part is still being built.
+   */
+  it("does not claim a mechanic the product has not implemented", () => {
+    render(<HomeFde />)
+    const honesty = screen.getByTestId("score-honesty").textContent ?? ""
+    expect(honesty).toMatch(/still building/i)
+    // The qualification reaches the reader in the FIRST paragraph, not the
+    // third: Sol read the section as claiming a live feature until then.
+    expect(screen.getByTestId("score-lead").textContent).toMatch(
+      /no score is switched on while the course is in beta/i
+    )
+    const text = sectionText("score")
+    expect(text).toMatch(/examples rather than real learners/i)
+    // Ledger C35: four metrics that do not exist. Ledger C36: "credential".
+    expect(text).not.toMatch(
+      /curiosity index|consistency score|improvement rate|ai skill percentile|currentness/i
+    )
+    expect(text).not.toMatch(/credential/i)
+  })
+
+  /**
+   * "Do not claim rarity or reputation benefits unless supported."
+   * getPercentileLabel() is a band on the learner's own point total, measured
+   * against nothing external, so no percentile of any real population may be
+   * published. Nor may a belief held by employers who have not been asked
+   * (ledger C35), nor a social network GWTH has no integration with: the
+   * "Add to LinkedIn" control in the product is disabled and marked SOON.
+   */
+  it("claims no rarity, no employer belief and no social network", () => {
+    const { container } = render(<HomeFde />)
+    const text = container.textContent ?? ""
+    expect(text).not.toMatch(/top \d+(\.\d+)?%/i)
+    expect(text).not.toMatch(/percentile|rare|rarest/i)
+    expect(text).not.toMatch(/employers (trust|recognise|ask|value)/i)
+    expect(text).not.toMatch(/linkedin profile and practise/i)
+    const scoreText = sectionText("score")
+    expect(scoreText).not.toMatch(/linkedin/i)
+  })
+
+  /** The score is about the number; the close is about the files. Neither
+   *  borrows the other's line, or the page repeats itself at the end. */
+  it("does not repeat the closing section's promise", () => {
+    render(<HomeFde />)
+    expect(sectionText("score")).not.toMatch(/work you can show/i)
+    expect(sectionText("individuals")).not.toMatch(/GWTH score/i)
   })
 })

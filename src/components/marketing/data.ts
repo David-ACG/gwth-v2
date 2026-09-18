@@ -339,16 +339,24 @@ export const CURRICULUM: readonly CurriculumModule[] = [
     capstoneSub: "Transcription · task extraction · meal planning · shopping lists",
   },
   {
+    // The per-month OPTIONAL figure was removed on 2026-09-17 (bead
+    // gwth-launch-88z.32.36), for the reason /for-teams removed the same split
+    // on 2026-09-14 (a-20260914-201426-ae7f0e): config says 15 optional a month,
+    // the canonical syllabus register says 19 and 15, and no register owns the
+    // split. This string renders on /for-institutions, which now describes the
+    // optional set two sections above it, so a number here contradicted the
+    // page. "Industry tracks" also went: there is no track mechanism in the
+    // product, only optional lessons on industry subjects.
     m: "Month 2",
     t: "Apps, Workflows & Consulting",
-    d: `${monthAt(1).mandatoryLessons} mandatory + ${monthAt(1).optionalLessons} optional · industry tracks`,
+    d: `${monthAt(1).mandatoryLessons} core lessons · optional industry and advanced ones`,
     capstone: `${monthAt(1).capstoneName} + FractionalBuddy`,
     capstoneSub: "Customer support · consulting toolkit · real business data",
   },
   {
     m: "Month 3",
     t: "Enterprise Transformation",
-    d: `${monthAt(2).mandatoryLessons} mandatory + ${monthAt(2).optionalLessons} optional · multi-agent + governance`,
+    d: `${monthAt(2).mandatoryLessons} core lessons · optional depth in multi-agent and governance`,
     capstone: monthAt(2).capstoneName,
     capstoneSub: "Maturity evaluation · roadmap generation",
   },

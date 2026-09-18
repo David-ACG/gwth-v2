@@ -18,6 +18,7 @@ const SECTIONS = [
   "course",
   "months",
   "blocks",
+  "score",
   "organisations",
   "individuals",
   "footer",
@@ -29,6 +30,7 @@ const BODY_SECTIONS = [
   "course",
   "months",
   "blocks",
+  "score",
   "organisations",
   "individuals",
 ] as const
@@ -64,6 +66,22 @@ test.describe("Marketing homepage, full-page smoke", () => {
     await expect(h1).toBeVisible()
     await expect(h1).toContainText("Learn to use AI at work")
     await expect(h1).toContainText("by making things.")
+  })
+
+  test("the longer introduction starts beside the headline instead of pushing it down", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    const positions = await page.locator('[data-section="hero"] > div > div').first().evaluate(
+      (grid) => Array.from(grid.children).slice(0, 2).map((child) => {
+        const box = child.getBoundingClientRect()
+        return { top: box.top, bottom: box.bottom, width: box.width }
+      }),
+    )
+    expect(positions).toHaveLength(2)
+    expect(Math.abs(positions[0]!.top - positions[1]!.top)).toBeLessThan(16)
+    expect(positions[1]!.width / positions[0]!.width).toBeGreaterThan(1.3)
+    expect(Math.abs(positions[0]!.bottom - positions[1]!.bottom)).toBeLessThan(100)
   })
 
   test("every data-section resolves exactly once", async ({ page }) => {
@@ -222,11 +240,61 @@ test.describe("Marketing homepage, full-page smoke", () => {
     const lead = page.getByTestId("blocks-lead")
     await expect(lead).toBeVisible()
     await expect(lead).toContainText("Every month here is built around making something")
-    await expect(lead).toContainText("each project brings several of the six blocks together")
+    await expect(lead).toContainText(
+      "each project brings several of the six building blocks together"
+    )
     await expect(page.locator('[data-section="course"]')).toContainText(
       "Every lesson is built around a project"
     )
     await expect(page.locator("body")).not.toContainText(/50%|half the course/i)
+  })
+
+  /**
+   * David, 2026-09-15 (a-20260915-211845-237ea3). The three states must be
+   * separable with no colour at all, because the card is meant to be
+   * screenshotted, and bible `paper-first-banned-patterns` forbids a state
+   * carried by colour alone. Rendered here rather than in jsdom so the check
+   * is on the real computed strokes.
+   */
+  test("the three score trajectories are told apart without colour", async ({ page }) => {
+    const cards = page.locator('[data-testid="score-card"]')
+    await expect(cards).toHaveCount(3)
+    for (const state of ["rising", "level", "stale"]) {
+      await expect(page.locator(`[data-testid="score-card"][data-state="${state}"]`)).toHaveCount(1)
+    }
+    // Every trajectory line is drawn in the same ink, so colour carries nothing.
+    const strokes = await page
+      .locator('[data-testid="score-card"] path[class*="scoreLine"]')
+      .evaluateAll((nodes) =>
+        nodes.map((n) => getComputedStyle(n as SVGElement).stroke)
+      )
+    expect(strokes.length).toBeGreaterThanOrEqual(3)
+    expect(new Set(strokes).size).toBe(1)
+    // Only the out-of-date card carries the dashed run.
+    const dashed = await page
+      .locator('[data-testid="score-card"] path[class*="scoreLine"]')
+      .evaluateAll((nodes) =>
+        nodes
+          .map((n) => getComputedStyle(n as SVGElement).strokeDasharray)
+          .filter((d) => d && d !== "none")
+      )
+    expect(dashed).toHaveLength(1)
+    const staleDashed = page.locator(
+      '[data-testid="score-card"][data-state="stale"] [data-testid="score-line-dashed"]'
+    )
+    await expect(staleDashed).toHaveCount(1)
+    // And each state says which it is, in words.
+    await expect(page.locator('[data-section="score"]')).toContainText("Going up")
+    await expect(page.locator('[data-section="score"]')).toContainText("Level")
+    await expect(page.locator('[data-section="score"]')).toContainText("Out of date")
+  })
+
+  test("every building block shows all three months", async ({ page }) => {
+    const cards = page.locator('[data-testid="block-card"]')
+    await expect(cards).toHaveCount(6)
+    for (let i = 0; i < 6; i++) {
+      await expect(cards.nth(i).locator('[data-testid="block-step"]')).toHaveCount(3)
+    }
   })
 
   test("phone width keeps the offer readable and the names under the tiles", async ({
@@ -236,6 +304,10 @@ test.describe("Marketing homepage, full-page smoke", () => {
     await gotoHome(page)
     await expect(page.locator('[data-section="course"]')).toBeVisible()
     await expect(page.getByTestId("organisations-signpost")).toBeVisible()
+    // The score cards and the six month-by-month tracks stack rather than
+    // spill: this is the widest new content on the page.
+    await expect(page.locator('[data-testid="score-card"]').first()).toBeVisible()
+    await expect(page.locator('[data-testid="block-step"]').first()).toBeVisible()
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth
     )

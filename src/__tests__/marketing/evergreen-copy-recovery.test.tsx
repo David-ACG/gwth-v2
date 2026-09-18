@@ -191,14 +191,34 @@ describe("recovered ideas did not displace what was already decided", () => {
    * same gate blocked "Month 3 takes them to organisation scale" twice, as
    * abstraction a beginner cannot picture, so Month 3 now names what a learner
    * makes. All three months must still be on the page, in order.
+   *
+   * The order is checked WHERE THE ARC IS TOLD, not by first mention across
+   * the whole document. David, 2026-09-15 (a-20260915-210111-aaf2c4), asked
+   * the hero to say how advanced a beginner can get: *"we need to talk about
+   * month three and how advanced a student who started as a beginner can get
+   * by month three with examples that sound good and interesting"*. So the
+   * hero now names the destination before the walk-through names the first
+   * step, and a whole-page first-mention sort reads that as the arc being out
+   * of order when it is not.
    */
   it("C05 leaves the Month 1 outputs and the three-month arc intact", () => {
-    render(<HomeFde />)
+    const { container } = render(<HomeFde />)
     const body = text()
     expect(body).toMatch(/rewrite your CV and your LinkedIn profile/i)
-    const months = ["Month 1", "Month 2", "Month 3"].map((m) => body.indexOf(m))
-    expect(months.every((i) => i >= 0), "every month is named").toBe(true)
-    expect(months).toEqual([...months].sort((a, b) => a - b))
+    expect(["Month 1", "Month 2", "Month 3"].every((m) => body.includes(m)),
+      "every month is named").toBe(true)
+
+    // The arc itself: the three cards, in order.
+    const cards = Array.from(
+      container.querySelectorAll('[data-testid="month-card"]')
+    ).map((c) => (c.textContent ?? "").replace(/\s+/g, " "))
+    expect(cards).toHaveLength(3)
+    cards.forEach((card, i) => expect(card).toMatch(new RegExp(`^Month ${i + 1}`)))
+
+    // And the hero names where it ends up, which is why the arc is no longer
+    // the first place the page says "Month 3".
+    const hero = container.querySelector('[data-section="hero"]')
+    expect(hero?.textContent).toMatch(/By Month 3/)
   })
 
   it("C13 and C14 leave the a-20260914-203753-b9d050 closing intact", () => {

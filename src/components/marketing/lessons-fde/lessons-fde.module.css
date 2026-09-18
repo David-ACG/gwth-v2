@@ -489,3 +489,189 @@
   gap: 0.875rem;
   margin-top: 2.25rem;
 }
+
+/* ---------------- Optional lessons (a-20260917-145147-bfd191) ------------- */
+
+/*
+ * The section that says the course opens out after the core. Its furniture is
+ * the page's own: a reading-width lead, three panels on the same card recipe as
+ * the month cards, then two quieter blocks under them. No new colour, no tint
+ * carrying meaning, no rule under the heading (paper-first-register; batch 1
+ * retired those). The kicker is a label in the mono metadata face, which the
+ * page already uses for month numbers and the capstone label.
+ */
+
+.sectionLead {
+  max-width: 46rem;
+  margin: -0.25rem 0 2rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
+.pathsRow {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 56rem) {
+  .pathsRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.pathCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.35rem 1.5rem;
+}
+
+.pathKicker {
+  font-family: var(--font-sans);
+  font-size: var(--fde-mono-xs);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+.pathCard h3 {
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.pathCard p:last-child {
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+/* The beta boundary. Set at reading width in ink rather than in a tinted
+   panel: it is part of the argument, not a disclaimer to be skipped. */
+.optionalNote {
+  max-width: 46rem;
+  margin-top: 2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--v-line);
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
+.optionalBuyers {
+  max-width: 46rem;
+  margin-top: 1.75rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.optionalBuyers h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.optionalBuyers p {
+  margin-top: 0.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.optionalBuyers .mastheadActions {
+  margin-top: 1.2rem;
+}
+
+/* ---------------- The score and the record (a-20260914-204708-9f6b63) ----- */
+
+.scoreGrid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 60rem) {
+  .scoreGrid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 3.5rem;
+    align-items: start;
+  }
+}
+
+.scoreBody p {
+  max-width: 44rem;
+  font-size: var(--fde-body);
+  line-height: 1.75;
+  color: var(--v-ink);
+}
+
+.scoreBody p + p {
+  margin-top: 1rem;
+}
+
+/* The last paragraph is the beta boundary; it is quieter than the argument
+   above it but still body copy, not a footnote. */
+.scoreBody p:last-child {
+  color: var(--v-soft);
+}
+
+/* A hairline aside, not a filled panel: a tinted box around three inputs reads
+   as a scoring widget and invites a reader to look for a number in it. */
+.scoreAside {
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.2rem;
+}
+
+@media (min-width: 60rem) {
+  .scoreAside {
+    border-top: 0;
+    border-left: 1px solid var(--v-line);
+    padding: 0 0 0 2.25rem;
+  }
+}
+
+.scoreAside h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.scoreInputs {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.scoreInputs li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.scoreInputs li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.scoreInputs strong {
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.scoreInputs span {
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}

@@ -18,9 +18,9 @@
 
 @media (min-width: 64rem) {
   .heroGrid {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: 3rem;
-    align-items: end;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: start;
   }
 }
 
@@ -43,6 +43,16 @@
   font-style: italic;
   font-weight: 500;
   color: var(--v-accent);
+}
+
+/*
+ * A longer introduction should not push the headline down and leave a blank
+ * shelf above it. The two equal, top-aligned columns keep the headline and the
+ * explanation together; this small optical offset aligns the first text
+ * baselines rather than their boxes.
+ */
+.heroCopy {
+  padding-top: 0.45rem;
 }
 
 /* ---------------- The plate, its key and its caption ---------------- */
@@ -212,6 +222,22 @@
   margin-top: 1.4rem;
 }
 
+/* ---------------- Months: the optional-lessons signpost ---------------- */
+
+/*
+ * One paragraph under the three month cards, at reading width and in ink, with
+ * the link to the course page under it. It is a signpost, not a section: the
+ * full account of how the core and the optional lessons fit together lives on
+ * /lessons, and duplicating it here would give the home page a second syllabus.
+ */
+.monthsNote {
+  max-width: 46rem;
+  margin: 1.75rem 0 0;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
 /* ---------------- Six blocks: the building lead ---------------- */
 
 /*
@@ -250,4 +276,172 @@
 
 .signpost .signpostBody + div {
   margin-top: 1.4rem;
+}
+
+/* ---------------- Six building blocks: the month by month track ---------- */
+
+/*
+ * David, 2026-09-15 (a-20260915-211445-2274ea): *"For all of these blocks, I'd
+ * like to explain how the student progresses from month one to two to three.
+ * That's much more powerful than just saying the first step or what the block
+ * is"*. Three clauses inside one paragraph would have made the card unreadable,
+ * so each card carries a small three-row track instead: the month on the left,
+ * what the learner does that month on the right, separated by decorative
+ * hairlines. The rows are `--v-line-soft` because they divide a list inside a
+ * panel that already has its own `--v-line` boundary; they are not telling
+ * anybody where the panel ends (boundary-contrast-check).
+ */
+.blockTrack {
+  margin-top: 0.9rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.blockStep {
+  display: grid;
+  grid-template-columns: 4.1rem minmax(0, 1fr);
+  gap: 0 0.75rem;
+  align-items: baseline;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--v-line-soft);
+}
+
+.blockStep:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.blockStepMonth {
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.blockStepBody {
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+/* ---------------- The score, and the way it moves ---------------- */
+
+.scoreLead {
+  max-width: 46rem;
+  margin: -0.5rem 0 1.75rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
+.scoreLead + .scoreLead {
+  margin-top: -1.25rem;
+}
+
+/*
+ * The three cards are one artefact shown in three states, so they are the
+ * paper card recipe (`--v-surface`, 1px `--v-line`, 10px) and nothing else.
+ * No tint, no coloured top, no shadow.
+ */
+.scoreCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.scoreName {
+  font-size: var(--fde-body-sm);
+  color: var(--v-muted);
+}
+
+.scoreFigure {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  margin-top: 0.15rem;
+}
+
+.scoreValue {
+  font-family: var(--font-serif);
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.scoreOf {
+  font-size: var(--fde-body-sm);
+  color: var(--v-muted);
+}
+
+/* The chart itself. It carries no colour of its own: every stroke is ink or a
+   hairline, and the three trajectories are told apart by their line pattern,
+   their end marker and their words (tint-is-never-the-only-signal). */
+.scoreChart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  color: var(--v-ink);
+}
+
+.scoreLine {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The stale card's line stops being drawn solid at the point the learner
+   stopped: a dashed run is the shape of "nothing recorded since". */
+.scoreLineStale {
+  stroke-dasharray: 5 5;
+}
+
+.scoreMarker {
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.scoreMarkerFilled {
+  fill: currentColor;
+}
+
+.scoreMarkerHollow {
+  fill: var(--v-surface);
+}
+
+.scoreState {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.95rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+/* The glyph is a SHAPE, not a colour: an arrow, a bar and a broken ring, so
+   the three states are still three states in greyscale or to a colour-blind
+   reader (paper-first-banned-patterns: never status by colour alone). */
+.scoreGlyph {
+  flex: none;
+  color: var(--v-ink);
+}
+
+.scoreSaid {
+  margin-top: 0.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.scoreNote {
+  margin-top: 1.25rem;
+  max-width: 62ch;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
 }

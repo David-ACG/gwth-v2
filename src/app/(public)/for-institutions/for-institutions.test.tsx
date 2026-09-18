@@ -54,7 +54,10 @@ describe("ForInstitutionsPage", () => {
     // sets, and tutors who can see who has met it.
     expect(answer).toMatch(/shared applied AI foundation/i)
     expect(answer).toMatch(/you choose which lessons count and what score passes/i)
-    expect(answer).toMatch(/tutors see who has met the baseline/i)
+    // Future tense since 2026-09-17 (bead gwth-launch-88z.32.36): the tutor
+    // view is built but no institution edition is switched on during the beta,
+    // and the copy gate blocked the page for claiming otherwise.
+    expect(answer).toMatch(/tutors will see who has met the baseline/i)
   })
 
   it("promises evidence a tutor can check, not an assurance", () => {
@@ -102,7 +105,10 @@ describe("ForInstitutionsPage", () => {
     const answer = question.parentElement?.textContent ?? ""
     expect(answer).toMatch(/pass mark/i)
     expect(answer).toMatch(/before the room starts/i)
-    expect(answer).toMatch(/verification page/i)
+    // "its public verification page" became "the page anyone can open to check
+    // it": nothing in the product has ever written a credential row, so no
+    // member has a verification page yet (bead gwth-launch-88z.32.36).
+    expect(answer).toMatch(/anyone can open to check it/i)
   })
 
   /**

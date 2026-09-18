@@ -153,8 +153,15 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     optionalLessons: 15,
     capstoneName: "AI Customer-Support Chatbot",
     capstoneDomain: "askmyco.com",
+    // 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate): this said
+    // "A production-grade chatbot trained on real business data. The kind of
+    // thing companies pay consultants thousands to build." Neither half was
+    // supportable: nothing establishes what a company would pay a consultant,
+    // and "production-grade" contradicts what the course pages say the project
+    // is. The line now says what the project does, in the same words the
+    // lesson and marketing copy use for it.
     capstoneDescription:
-      "A production-grade chatbot trained on real business data. The kind of thing companies pay consultants thousands to build.",
+      "A working chatbot that answers from a company's own documents and shows where each answer came from.",
   },
   {
     month: 3,

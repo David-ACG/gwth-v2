@@ -2,6 +2,10 @@ import type { NextConfig } from "next"
 import bundleAnalyzer from "@next/bundle-analyzer"
 
 const nextConfig: NextConfig = {
+  // Marketing candidates are built beside the live preview, then promoted
+  // only after their copy gate passes. A failed candidate must never replace
+  // the hashed CSS and JS files used by the running preview.
+  distDir: process.env.GWTH_NEXT_DIST_DIR || ".next",
   output: "standalone",
   compress: true,
   // Dev-only: David reviews the dev server from his P53 over the LAN and

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 import { CURRICULUM } from "@/components/marketing/data"
 import { Plate } from "@/components/marketing/paper/plate"
 import p from "@/components/marketing/paper/paper.module.css"
@@ -108,7 +109,7 @@ export const BASELINE = [
   {
     kicker: "With GWTH in front of it",
     title: "Everyone arrives at the level you set",
-    body: "GWTH is the shared applied AI foundation your learners complete first. You choose which lessons count and what score passes, quizzes are graded on our server, and your tutors see who has met the baseline before the room starts. Your specialist teaching begins where it was written to begin.",
+    body: "GWTH is the shared applied AI foundation your learners complete first. You choose which lessons count and what score passes, quizzes are graded on our server, and your tutors will see who has met the baseline before the room starts. Your specialist teaching begins where it was written to begin.",
   },
 ] as const
 
@@ -119,11 +120,19 @@ const EDITION = [
   },
   {
     title: "A tutor baseline view",
-    body: "Before a room starts, your tutors open one screen and see who has met the baseline and who has not, so an advanced course is taught at the level it says.",
+    body: "Before a room starts, your tutors will open one screen and see who has met the baseline and who has not, so an advanced course is taught at the level it says. The screen is built; it opens with your edition, after the beta.",
   },
   {
+    // CORRECTED 2026-09-17 (bead gwth-launch-88z.32.36). This said "It decays
+    // if they stop, so it says what they can do now". Decay is not implemented
+    // anywhere in the product: SCORE_DECAY_DAYS is a config constant that no
+    // runtime code reads, there is no stored score history, and nothing has
+    // ever written a row to credential_verifications. The /for-teams suite
+    // already forbids the same claim on that page. What the record really
+    // carries is stated here instead, and the plan is stated as a plan in the
+    // score section below.
     title: "A verified record",
-    body: "Each member gets a record they can add to LinkedIn and a verification page anyone can open: the lessons completed, the project from each, and the quiz results against your pass mark. It decays if they stop, so it says what they can do now.",
+    body: "After the beta, each member will get a record with its own web address, which they can link to and anyone can open: the lessons completed, the project from each, and the quiz results against your pass mark.",
   },
   {
     title: "Core, optional and exclusive tiers",
@@ -137,7 +146,78 @@ const EDITION = [
     // a-20260914-202509-f3143d: was "CPD ready". Titled by the benefit now,
     // and the abbreviation is expanded the first time the page uses it.
     title: "Records your members can log",
-    body: "Completions and scores arrive shaped for continuing professional development, the CPD record your scheme asks members to keep each year, so nobody has to retype what they did.",
+    body: "A member's record is designed to be logged for continuing professional development, the CPD record your scheme asks members to keep each year. What each member completed, and how they did on the questions, is on one page they can copy from rather than reconstruct.",
+  },
+] as const
+
+/**
+ * The subject depth an institution chooses, and the depth only it has.
+ *
+ * David, 2026-09-17 (a-20260917-145147-bfd191): *"people will want to do
+ * specific lessons and not others. For example, CIPD will want to do lessons on
+ * HR and accountants will want to do lessons specifically for accounts and
+ * maybe law. We want to show that you can go deep into one area, or you can do
+ * optional lessons by industry. This should attract both individuals and
+ * institutions and big companies or teams"*.
+ *
+ * The subjects named in DEPTH[0] are authored lessons on disk, not titles from
+ * a plan: `m2_l34` UK healthcare, `m2_l35` UK legal, `m2_l36` UK finance,
+ * `m3_l23` public sector procurement, `m3_l24` financial services, `m3_l26`
+ * professional services for consulting, legal and accountancy firms, `m3_l27`
+ * manufacturing and supply chain. `m3_l26` is the one that teaches accountancy,
+ * against the ICAEW, ACCA and CIMA codes and the audit sign-off rule.
+ *
+ * DEPTH[1] is where David's HR example is answered, and it is answered
+ * honestly: there is NO HR lesson in the course. The only HR title in the whole
+ * syllabus register sits in the retired `old_backlog` module. A body for people
+ * professionals would commission one, which is exactly what the exclusive tier
+ * and the ratification queue are for (`src/app/org/syllabus`,
+ * `src/app/org/ratification`, `edition_lessons.tier`). So HR appears here as an
+ * example of a commission, never as something already on the shelf.
+ *
+ * CIPD is not named. Nothing on this page may imply that CIPD has bought,
+ * approved, endorsed or selected GWTH, and an example written as "a body for
+ * people professionals" carries his point without making that implication.
+ */
+export const DEPTH = [
+  {
+    kicker: "Choose from what exists",
+    title: "The subjects the course already teaches",
+    body: "Months 2 and 3 each open with twenty core lessons, and the lessons after those are optional. They include UK legal practice, finance, healthcare, manufacturing and supply chain, buying AI in the public sector, and professional services for consulting, legal and accountancy firms. Each is written against the rules that profession is held to rather than as a general introduction. You decide which of them belong in your edition and leave out the ones that do not.",
+  },
+  {
+    kicker: "Commission what does not",
+    title: "The subjects only your members get",
+    body: "Where the course does not cover your field, you name the titles and we write them. A body for people professionals, for instance, would not find an HR lesson in the standard course; it would commission one. Drafts wait in your admin screen until one of your own tutors has read the lesson and ratified it, and an exclusive lesson stays behind your edition rather than joining the standard course.",
+  },
+] as const
+
+/**
+ * What the score is, for an institution, and the two things it does not do yet.
+ *
+ * Implemented and therefore stated plainly: `calculateGwthScore()` is mandatory
+ * lessons completed times `POINTS_PER_LESSON`, multiplied by the average best
+ * quiz mark, against a denominator taken from the edition
+ * (`lib/data/editions.ts`); quizzes are graded server side; and
+ * `src/app/org/learners` really shows staff who has met the baseline and their
+ * average best quiz mark.
+ *
+ * NOT implemented, and therefore written as a plan on the page rather than
+ * omitted: there is no stored score history of any kind (`scoreHistory` is
+ * returned empty unconditionally and no migration creates a history table), and
+ * there is no decay (`SCORE_DECAY_DAYS` is read by no runtime code). The whole
+ * feature also sits behind `GWTH_SCORE_ENABLED`, which is set in no
+ * environment, which is why the last line says no score is switched on during
+ * the beta. Copy ledger C35 bans naming the four sub-metrics; do not add them.
+ */
+const SCORE_NOT_YET = [
+  {
+    title: "Which way a member is going",
+    body: "The score does not yet show movement over time, because nothing keeps a history of it. That is the next piece of work.",
+  },
+  {
+    title: "Whether it has gone out of date",
+    body: "When a lesson is rewritten because the tools moved on, a member who passed the old one still counts as having passed. We are building the part that asks them to complete it again.",
   },
 ] as const
 
@@ -155,7 +235,7 @@ const STEPS = [
   {
     n: "03",
     title: "Put it in front of your courses",
-    body: "Members join under your edition. Tutors check the baseline before each specialist course, members keep a record they can show, and the foundation keeps changing as the tools do.",
+    body: "Members join under your edition. Tutors will check the baseline before each specialist course, members will keep a record they can show, and the foundation keeps changing as the tools do.",
   },
 ] as const
 
@@ -184,11 +264,20 @@ const PATTERN = [
 const FAQS = [
   {
     q: "Can we require it before our own courses?",
-    a: "Yes. You choose the lessons that count and the pass mark, and your tutors see who has met the baseline before the room starts. The record each member carries, and its public verification page, are the evidence that they did.",
+    a: "Yes. You choose the lessons that count and the pass mark, and your tutors will see who has met the baseline before the room starts. The record each member will carry, and the page anyone can open to check it, are the evidence that they did.",
   },
   {
+    // Refined 2026-09-17 (a-20260917-145147-bfd191). The page now says members
+    // can go deep in their own field, so this answer has to draw the line the
+    // subject lessons actually sit on: they teach AI use INSIDE a profession's
+    // rules, not the profession. m2_l35 teaches a solicitor how to use AI
+    // without breaching the SRA code; it does not teach law.
     q: "Does it teach our profession?",
-    a: "No, and it is not meant to. GWTH teaches the applied AI foundation underneath your specialism and keeps it current as the tools change. Your courses keep the professional depth, and start at the level they were written for.",
+    a: "No, and it is not meant to. The subject lessons teach people how to use AI inside the rules their profession already works to, which is not the same as teaching the profession. Your courses keep the professional depth, and start at the level they were written for.",
+  },
+  {
+    q: "Can our members skip the parts that are not for them?",
+    a: "That is what the tiers are for. The core is what everybody in your edition completes, and the optional lessons are the ones you open to them, so a member spends the time on the work they actually do rather than on a subject they will never touch.",
   },
   {
     q: "Is it tied to one AI vendor?",
@@ -200,7 +289,7 @@ const FAQS = [
   },
   {
     q: "What does a member's record show?",
-    a: "Completed lessons, the project from each, quiz results against your pass mark, and how recently they refreshed. It has a public verification page.",
+    a: "After the beta, it will show the lessons completed, the project from each, and the quiz results against your pass mark, on a page anyone the member sends the link to can open. Showing when a lesson was last refreshed comes with the update tracking we are still building.",
   },
   {
     q: "How much of the content is yours?",
@@ -234,9 +323,10 @@ export function ForInstitutionsFde() {
                 applied AI understanding, so tutors spend the first hours
                 levelling the room instead of teaching the subject. GWTH is the
                 three-month applied AI foundation that runs before it. You
-                choose the lessons and set the pass mark, and your tutors see
-                verified evidence that a learner met it before the course
-                begins.
+                choose the lessons and set the pass mark, and your tutors
+                will see verified evidence that a learner met it before the
+                course begins. The course is in beta now, and editions open to
+                institutions as that beta ends.
               </p>
               <div className={p.actions}>
                 <Link href="/contact" className={p.buttonSolid}>
@@ -287,9 +377,9 @@ export function ForInstitutionsFde() {
           <p className={`${p.lead} ${styles.leadAfter}`}>
             It is a precursor, not a replacement. Nothing here teaches your
             profession; GWTH teaches the applied AI foundation underneath it,
-            and keeps that foundation current as the tools change. What reaches
-            your tutor is evidence rather than an assurance: the lessons a
-            member completed, the project from each, and the quiz results
+            and keeps that foundation current as the tools change. What will
+            reach your tutor is evidence rather than an assurance: the lessons
+            a member completed, the project from each, and the quiz results
             against the pass mark you chose, on a record anyone you send it to
             can verify.
           </p>
@@ -328,7 +418,8 @@ export function ForInstitutionsFde() {
               UK government&apos;s skills partnership, announced in January 2026,
             </a>{" "}
             aims to give ten million workers AI skills by 2030. Professional
-            bodies are the obvious delivery rail for both.
+            bodies could help their members meet both through training tied to
+            the work those professions already do.
           </p>
         </div>
       </section>
@@ -347,6 +438,99 @@ export function ForInstitutionsFde() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/*
+        The depth an institution chooses (David, 2026-09-17,
+        a-20260917-145147-bfd191). It follows "Your edition", which lists the
+        controls, because this is the one control a buyer cares about most: what
+        their own members will actually study. What may be named is on the DEPTH
+        comment above; HR is an example of a commission, never of stock.
+      */}
+      <section className={p.section} data-section="depth">
+        <div className={p.page}>
+          <div className={p.sectionHead}>
+            <h2 className={p.sectionTitle}>
+              Go deep in <em>the subjects your members work in</em>
+            </h2>
+            <p className={p.sectionMeta}>Optional and exclusive lessons</p>
+          </div>
+          <p className={p.lead}>
+            The standard course has a fixed core of {TOTAL_MANDATORY_LESSONS}{" "}
+            lessons that everyone on it completes. In your edition you choose
+            which lessons make up that core instead, and every one of your
+            members completes the same ones, because a baseline only works if
+            everyone reached it the same way. What sits on top of it is yours.
+            Your members can go deep in the field they actually work in instead
+            of taking a general course and translating it afterwards.
+          </p>
+          <div className={p.cards2}>
+            {DEPTH.map((item) => (
+              <article className={p.card} key={item.title} data-testid="depth-card">
+                <p className={p.cardKicker}>{item.kicker}</p>
+                <h3 className={p.cardTitle}>{item.title}</h3>
+                <p className={p.cardBody}>{item.body}</p>
+              </article>
+            ))}
+          </div>
+          {/* Honest about how this starts. The admin screens exist and are in
+              review; an edition is not something a buyer self-serves today. */}
+          <p className={`${p.lead} ${styles.leadAfter}`}>
+            You do not set an edition up on your own in an afternoon. A pilot
+            starts on the standard course, and we build your edition alongside
+            it, which is also how you find out which optional lessons your
+            members go to first.
+          </p>
+        </div>
+      </section>
+
+      {/*
+        What the score tells a tutor (David, 2026-09-15, a-20260915-211845-237ea3
+        on the home page, carried onto the page where an institution decides).
+        The two things it cannot do yet are on the page in body copy, not in a
+        footnote: see the SCORE_NOT_YET comment above for why each is listed.
+      */}
+      <section className={p.section} data-section="score">
+        <div className={p.page}>
+          <div className={p.sectionHead}>
+            <h2 className={p.sectionTitle}>What the score tells a tutor</h2>
+            <p className={p.sectionMeta}>The baseline</p>
+          </div>
+          <p className={p.lead} data-testid="institutions-score-lead">
+            No score is switched on while the course is in beta. After it, each
+            member will have a GWTH score, worked out from the lessons they
+            have finished on the syllabus you chose and how they did on the
+            questions at the end of each one. Those questions are already
+            marked on our server, with the answer key never sent to the
+            browser. Because the score is measured against the lessons you
+            chose, the number will mean the same thing for every member of your
+            edition, which is what makes it usable as a threshold.
+          </p>
+          <p className={`${p.lead} ${styles.leadAfter}`}>
+            Your tutors will not have to read it as a number. Before a course
+            starts they will open one screen and see who has met your pass mark
+            and who has not.
+          </p>
+          <div className={p.cards2}>
+            {SCORE_NOT_YET.map((item) => (
+              <article
+                className={p.card}
+                key={item.title}
+                data-testid="score-not-yet-card"
+              >
+                <p className={p.cardKicker}>Being built</p>
+                <h3 className={p.cardTitle}>{item.title}</h3>
+                <p className={p.cardBody}>{item.body}</p>
+              </article>
+            ))}
+          </div>
+          <p className={`${p.lead} ${styles.leadAfter}`}>
+            Both matter more to you than to a single learner. A foundation in
+            applied AI that was passed two years ago is not the same as one
+            passed this term, and a body that puts its name on a baseline needs
+            that baseline to keep meaning something.
+          </p>
         </div>
       </section>
 
