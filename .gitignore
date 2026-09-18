@@ -18,6 +18,8 @@
 
 # next.js
 /.next/
+/.next-candidate-*/
+/.next-live-backup-*/
 /out/
 
 # production
@@ -67,3 +69,6 @@ next-env.d.ts
 # Beads / Dolt files (added by bd init)
 .beads-credential-key
 .beads/proxieddb/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
