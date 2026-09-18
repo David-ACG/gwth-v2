@@ -1,5 +1,15 @@
 # Agent Instructions
 
+## What this repo owns
+
+The Next.js website: UI, pages and components, auth, the admin CRM, the student
+dashboard, the lesson **viewer**, quizzes, and the gwth.ai deploy. Lesson ideas,
+research and syllabus source also live here, in `gwth_lesson_ideas/`.
+
+Work on the lesson **factory** (Docling ingest, Qdrant, media regeneration), on board
+progress or verdicts, or on the Remotion video toolkit belongs in a sibling repo — the
+routing table is in `~/.codex/AGENTS.md`.
+
 This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
 
 ## Quick Reference
