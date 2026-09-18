@@ -6,19 +6,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash 'C:\\Projects\\GWTH_V2\\.codex\\hooks\\lint-on-edit.sh'",
+            "command": "bash \"${CODEX_PROJECT_DIR:-$PWD}/.codex/hooks/lint-on-edit.sh\"",
             "timeout": 30
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bd prime"
           }
         ]
       }
