@@ -23,12 +23,22 @@ describe("ResearchStats", () => {
   // Refreshed 2026-07-26: the ONS figures moved to the June 2026 BICS wave
   // ("1 in 6" -> 29%), and the micro-business stat now publishes the raw ONS
   // pair instead of a derived ratio ("45% less likely" -> "28% vs 49%").
-  it("renders the canonical 21% / 29% / 28% vs 49% values", () => {
+  //
+  // Refreshed again 2026-09-19 (bead gwth-launch-88z.32.25): the values are
+  // no longer written here at all. Every UK figure on the site now comes from
+  // `src/lib/data/uk-ai-context.ts`, so this asserts that the tiles render
+  // what that module says rather than pinning three strings that then have to
+  // be edited in two places whenever a source publishes again. The 29% BICS
+  // figure went with that change: the ONS headline it was standing in for is
+  // 35% of businesses with ten or more staff, from the 20 July 2026 release.
+  it("renders whatever the shared UK module currently says", () => {
     const { container } = render(<ResearchStats />)
     const text = container.textContent ?? ""
-    expect(text).toMatch(/21%/)
-    expect(text).toMatch(/29%/)
-    expect(text).toMatch(/28% vs 49%/)
+    expect(UK_STATS.length).toBe(3)
+    for (const stat of UK_STATS) {
+      expect(text).toContain(stat.value)
+      expect(text).toContain(stat.label)
+    }
   })
 
   // Deliberately updated: the blanket "Source: UK Government / DSIT (Jan

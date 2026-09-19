@@ -20,7 +20,10 @@ export function WaitlistFde() {
           </h1>
           <p className={styles.standfirst}>
             Access is invite-only while we work closely with a small group
-            of testers. Leave your name and email and we will contact you
+            of testers. This is the UK beta, and the course is written for
+            the United Kingdom, so the projects you will be asked to do use
+            the forms, the rules and the money you already deal with here.
+            Leave your name and email and we will contact you
             when more places open. Already invited?{" "}
             <Link href="/signup" className={styles.standfirstLink}>
               Create your account

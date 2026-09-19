@@ -362,6 +362,23 @@ export function LessonsFde() {
               ))}
             </ol>
           </div>
+          {/* The UK thread on this page (bead gwth-launch-88z.32.25). Every
+              code named here is one an authored lesson actually works to, and
+              they are listed in the PATHS comment above with their lesson
+              ids: `m2_l35` against the SRA code and the Ayinde judgment,
+              `m3_l26` against the ICAEW, ACCA and CIMA codes and the audit
+              sign-off rule in ISA (UK) 700. Do not add a profession here that
+              has no written lesson behind it. */}
+          <p className={styles.sectionLead} data-testid="lessons-uk-note">
+            The rules in the lessons are the ones that bind you. The lesson on
+            legal practice works to the Solicitors Regulation Authority code
+            and to the Ayinde judgment on citing cases a model invented. The
+            lesson on accountancy works to the ICAEW, ACCA and CIMA codes and
+            to the audit sign-off rule in ISA (UK) 700. Where a lesson handles
+            personal data it works to UK data protection law. You are never
+            asked to translate an American example into your own practice and
+            hope the answer survives the trip.
+          </p>
         </div>
       </section>
 

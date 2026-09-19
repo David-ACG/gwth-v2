@@ -430,6 +430,19 @@ export function ForInstitutionsFde() {
             bodies could help their members meet both through training tied to
             the work those professions already do.
           </p>
+          {/* The UK thread on this page (bead gwth-launch-88z.32.25). Its
+              angle is the TUTOR's, because that is who this page is written
+              for, and it is deliberately not the list of named regulators
+              that /lessons carries for the learner. */}
+          <p className={`${p.lead} ${styles.leadAfter}`} data-testid="institutions-uk-note">
+            The foundation is written in the United Kingdom, for people working
+            to UK rules. Where a lesson touches regulated work it is written
+            against the regulator your members actually answer to, and where it
+            touches personal data it is written to UK data protection law. Your
+            tutors do not start the specialist course by unpicking an American
+            example that does not apply here, and your members do not arrive
+            having learned a compliance answer they will have to unlearn.
+          </p>
         </div>
       </section>
 

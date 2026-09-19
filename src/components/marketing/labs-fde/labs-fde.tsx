@@ -117,6 +117,19 @@ export function LabsFde({
             you call the winner. Lessons teach you how; labs show you which tool
             when.
           </p>
+          {/* The UK thread on this page (bead gwth-launch-88z.32.25), and it
+              is a description of the labs that exist rather than a promise:
+              lab 01 is a Registered Nurse vacancy at a Shropshire care home
+              with an NMC pin in the advert, and lab 03 asks for the National
+              Living Wage, Statutory Sick Pay and the redundancy pay cap with
+              a GOV.UK link for each. Check the lab JSON before changing this
+              sentence. */}
+          <p className={styles.standfirst} data-testid="labs-uk-note">
+            The tasks are British ones, because that is the test that tells you
+            anything. A care home in Shropshire that cannot fill a nursing
+            vacancy, or a payroll administrator who needs this year&apos;s
+            Statutory Sick Pay rate with the GOV.UK page to prove it.
+          </p>
           <div className={styles.mastheadActions}>
             {liveLabs[0] ? (
               <Link

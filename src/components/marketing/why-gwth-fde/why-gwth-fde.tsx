@@ -2,6 +2,11 @@ import Link from "next/link"
 import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import styles from "./why-gwth-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
+import {
+  ukFigure,
+  ukFigureCitation,
+  ukFigureSource,
+} from "@/lib/data/uk-ai-context"
 
 /**
  * Press quotes with source attribution, all sourced from research files.
@@ -147,29 +152,58 @@ const comparisonRows = [
   },
 ]
 
-/** Key UK statistics for the stat list, with mono source column. */
+/**
+ * Key UK statistics for the stat list, with a mono source column.
+ *
+ * Reconciled on 2026-09-19 (bead gwth-launch-88z.32.25). Every figure now
+ * comes from `src/lib/data/uk-ai-context.ts`, and three of them changed:
+ *
+ * - "1 in 6 UK businesses were using AI as of mid-2025" was a year and a
+ *   half out of date and attributed to the wrong publisher. The ONS measured
+ *   35% of businesses with ten or more staff in June 2026.
+ * - The £400 billion figure was labelled "DSIT, Jan 2026". It is the
+ *   government's own estimate in the AI Opportunities Action Plan, published
+ *   13 January 2025, and it is a projection, so the label now says so.
+ * - The worker-confidence figure was right but uncited. It is the Ipsos
+ *   survey for DSIT published 28 January 2026, and it measures adults rather
+ *   than workers, so the wording follows the source.
+ *
+ * The lesson count is GWTH's own data and stays here, outside the shared
+ * module, which only carries published UK research.
+ */
+const RESEARCH_STAT_IDS = [
+  "worker-confidence",
+  "business-adoption",
+  "economy-2030",
+] as const
+
 const stats = [
+  ...RESEARCH_STAT_IDS.map((id) => {
+    const figure = ukFigure(id)
+    return {
+      id,
+      value: figure.value,
+      label: figure.label,
+      source: ukFigureCitation(id),
+    }
+  }),
   {
-    value: "21%",
-    label: "of UK workers feel confident using AI",
-    source: "DSIT, Jan 2026",
-  },
-  {
-    value: "1 in 6",
-    label: "UK businesses were using AI as of mid-2025",
-    source: "DSIT, Jan 2026",
-  },
-  {
-    value: "£400bn",
-    label: "potential AI contribution to UK economy by 2030",
-    source: "DSIT, Jan 2026",
-  },
-  {
+    id: "gwth-lessons",
     value: "94",
     label: "core and go-deeper lessons in the current structure",
     source: "GWTH.ai",
   },
 ]
+
+/** The published documents behind the three research figures above. */
+const RESEARCH_SOURCE_LIST = Array.from(
+  new Map(
+    RESEARCH_STAT_IDS.map((id) => {
+      const source = ukFigureSource(id)
+      return [source.id, source]
+    })
+  ).values()
+)
 
 /**
  * Why GWTH comparison page, in the PAPER-FIRST register: a two-column quiet
@@ -226,10 +260,24 @@ export function WhyGwthFde() {
             businesses.
           </p>
           <p className={styles.mastheadClaim}>
-            Only 21% of UK workers feel confident using AI at work.
+            Only{" "}
+            <span data-uk-figure="worker-confidence">
+              {ukFigure("worker-confidence").value}
+            </span>{" "}
+            of UK adults say they feel confident using AI at work.
           </p>
           <div className={styles.mastheadFoot}>
-            <p>Source: UK Government / DSIT research, January 2026</p>
+            <p>
+              Source:{" "}
+              <a
+                href={ukFigureSource("worker-confidence").url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {ukFigureSource("worker-confidence").title}
+              </a>
+              , {ukFigureSource("worker-confidence").releasedLabel}
+            </p>
             <p>Vendor-neutral · Built in the UK</p>
           </div>
         </div>
@@ -412,16 +460,34 @@ export function WhyGwthFde() {
           </div>
           <div className={styles.statList}>
             {stats.map((stat) => (
-              <div key={stat.label} className={styles.statListRow}>
-                <strong className={styles.statListValue}>{stat.value}</strong>
+              <div key={stat.id} className={styles.statListRow}>
+                <strong
+                  className={styles.statListValue}
+                  data-uk-figure={stat.id === "gwth-lessons" ? undefined : stat.id}
+                >
+                  {stat.value}
+                </strong>
                 <p>{stat.label}</p>
                 <p className={styles.statListSource}>{stat.source}</p>
               </div>
             ))}
           </div>
-          <p className={styles.statsFoot}>
-            Statistics from UK Government / DSIT research (January 2026) and
-            GWTH.ai course data.
+          <p className={styles.statsFoot} data-testid="why-gwth-sources">
+            Research figures from{" "}
+            {RESEARCH_SOURCE_LIST.map((source, i) => (
+              <span key={source.id}>
+                {i > 0
+                  ? i === RESEARCH_SOURCE_LIST.length - 1
+                    ? " and "
+                    : ", "
+                  : ""}
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.title}
+                </a>{" "}
+                ({source.releasedLabel})
+              </span>
+            ))}
+            . The lesson count is GWTH.ai course data.
           </p>
         </div>
       </section>
@@ -463,8 +529,12 @@ export function WhyGwthFde() {
               Months 2 and 3 have zero government equivalent. Enterprise-scale
               AI transformation, multi-agent systems, governance frameworks,
               ROI measurement, and change management: none of this exists in
-              the government programme, yet it is precisely what UK businesses
-              need to capture the &pound;400&nbsp;billion AI opportunity.
+              the government programme. The government&apos;s own Action Plan
+              estimates that AI adoption could add up to{" "}
+              <span data-uk-figure="economy-2030">
+                {ukFigure("economy-2030").value}
+              </span>{" "}
+              to the UK economy by 2030.
             </p>
             <p className={styles.proseStrong}>
               GWTH is the natural next step after the government badge. Not a

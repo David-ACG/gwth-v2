@@ -4,7 +4,7 @@ import { NewsletterFde } from "@/components/marketing/newsletter-fde/newsletter-
 export const metadata: Metadata = {
   title: "Newsletter",
   description:
-    "The GWTH Weekly: one email per week with a practical AI tip, useful tool notes, and course previews. No spam. No sales pressure.",
+    "The GWTH Weekly: one email per week with a practical AI tip, useful tool notes, what a change means in the UK, and course previews. No spam. No sales pressure.",
 }
 
 /**

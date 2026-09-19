@@ -5,7 +5,12 @@ import {
   ONGOING_MONTHLY_PRICE,
   TOTAL_MANDATORY_LESSONS,
 } from "@/lib/config"
-import { UK_STATS } from "@/components/marketing/data"
+import { UK_STAT_IDS } from "@/components/marketing/data"
+import {
+  ukFigure,
+  ukFigureCitation,
+  ukFigureSource,
+} from "@/lib/data/uk-ai-context"
 import styles from "./for-teams-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 
@@ -412,6 +417,11 @@ const ROLE_PATHS = [
  * it rather than acting on it. Ledger:
  * `GWTH-launch-plan/completion/evergreen-copy-recovery/`.
  */
+/** The published documents behind the three UK stat tiles, deduplicated. */
+const STAT_SOURCES = Array.from(
+  new Map(UK_STAT_IDS.map((id) => [ukFigureSource(id).id, ukFigureSource(id)])).values()
+)
+
 export function ForTeamsFde() {
   return (
     <div className={styles.shell}>
@@ -463,17 +473,39 @@ export function ForTeamsFde() {
             </h2>
           </div>
           <div className={styles.statsRow}>
-            {UK_STATS.map((stat) => (
-              <div key={stat.value} className={styles.stat} data-testid="for-teams-stat">
-                <strong>{stat.value}</strong>
-                <p>{stat.label}</p>
+            {UK_STAT_IDS.map((id) => (
+              <div key={id} className={styles.stat} data-testid="for-teams-stat">
+                <strong data-uk-figure={id}>{ukFigure(id).value}</strong>
+                <p>{ukFigure(id).label}</p>
                 {/* Per-stat, because one blanket "DSIT" line over a list of six
                     organisations told the reader nothing about which number
-                    came from where. */}
-                <p className={styles.statSource}>Source: {stat.source}</p>
+                    came from where. The figure, its wording and its citation
+                    all come from src/lib/data/uk-ai-context.ts. */}
+                <p className={styles.statSource}>
+                  Source: {ukFigureCitation(id)}
+                </p>
               </div>
             ))}
           </div>
+          {/* The documents themselves, linked once for the section rather than
+              once per tile: the tile line has to stay short enough to sit
+              under a number, and a reader checking a figure wants the paper,
+              not a second copy of the citation. Resolved from
+              src/lib/data/uk-ai-context.ts so a link can never point at a
+              document the figure did not come from. */}
+          <p className={styles.statSource} data-testid="for-teams-stat-sources">
+            Read them:{" "}
+            {STAT_SOURCES.map((source, i) => (
+              <span key={source.id}>
+                {i > 0 ? (i === STAT_SOURCES.length - 1 ? " and " : ", ") : ""}
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.title}
+                </a>{" "}
+                ({source.releasedLabel})
+              </span>
+            ))}
+            .
+          </p>
           {/* Recovered (ledger C10) from the "real risk is inaction" section of
               docs/marketing/for-employers-and-teams.md. It replaces "Most AI
               training fails because it teaches tools, not skills", which is

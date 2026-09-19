@@ -107,11 +107,18 @@ describe("HomeFde is individual-first", () => {
     // `score` joined on 2026-09-15 (a-20260915-211845-237ea3). It sits after
     // `blocks` because it answers "and what do I have at the end of it",
     // which only lands once the reader knows what the work is.
+    //
+    // `uk` joined on 2026-09-19 (bead gwth-launch-88z.32.25, from David's
+    // a-20260914-210609-f7fdc8: "we should be mentioning it on all pages").
+    // It sits between `blocks` and `score` because "and it is set here" only
+    // means something once the reader knows what the work is, and it must
+    // stay ahead of anything addressed to a buyer.
     expect(order).toEqual([
       "hero",
       "course",
       "months",
       "blocks",
+      "uk",
       "score",
       "organisations",
       "individuals",

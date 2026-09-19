@@ -17,6 +17,7 @@ import {
   TOTAL_MANDATORY_LESSONS,
   TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
+import { ukFigure, ukFigureCitation } from "@/lib/data/uk-ai-context"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -136,16 +137,16 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Reskilling",
     title: "You have been made redundant and need to reskill",
     body:
-      "Five hours a week for three months. Every project you build goes in your portfolio. Your course progress stays visible and practical. UK employers are hiring for exactly these skills, and only 21% of UK workers feel confident using AI. That gap is your opportunity.",
+      `Five hours a week for three months. Every project you build goes in your portfolio. Your course progress stays visible and practical. UK employers are hiring for exactly these skills, and only ${ukFigure("worker-confidence").value} of UK adults feel confident using AI at work. That gap is your opportunity.`,
     accent: "aqua",
+    // Figure, wording and citation all come from the shared UK module
+    // (src/lib/data/uk-ai-context.ts), which records the fieldwork caveat:
+    // published 28 January 2026 from fieldwork in early 2024, because no
+    // like-for-like later survey of AI confidence at work exists.
     stat: {
-      value: "21%",
-      label: "of UK workers feel confident using AI",
-      // Ipsos for DSIT, "AI Skills for Life and Work: General public survey
-      // findings", published 28 January 2026 from fieldwork 29 February to
-      // 7 March 2024. Labelled with both dates because neither alone is
-      // honest. No like-for-like 2026 survey of worker AI confidence exists.
-      source: "DSIT, published 2026",
+      value: ukFigure("worker-confidence").value,
+      label: ukFigure("worker-confidence").label,
+      source: ukFigureCitation("worker-confidence"),
     },
     cta: "See pricing",
     href: "/pricing",
@@ -155,16 +156,16 @@ export const JOURNEYS: readonly Journey[] = [
     tag: "Small business",
     title: "You run a small business",
     body:
-      "Only 28% of the smallest UK businesses use AI, against 49% of large firms. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant. You will be able to do it all yourself.",
+      `Only ${ukFigure("smallest-vs-largest").value.split(" vs ")[0]} of the smallest UK businesses use AI, against ${ukFigure("smallest-vs-largest").value.split(" vs ")[1]} of the largest firms. That is about to change. Five hours a week for three months, and you will not need to hire a developer or pay a consultant. You will be able to do it all yourself.`,
     accent: "mint",
     // Raw ONS pair rather than a derived ratio: a ratio invites "how did you
     // calculate that", and the 2026 data computes to 43%, not the 45% this
-    // card used to carry. ONS, "Artificial intelligence in UK businesses:
-    // 2023 to 2026", published 20 July 2026, fieldwork 15 to 28 June 2026.
+    // card used to carry. The pair and its citation live in the shared UK
+    // module.
     stat: {
-      value: "28% vs 49%",
-      label: "of the smallest UK businesses use AI, against half of large firms",
-      source: "ONS, 2026",
+      value: ukFigure("smallest-vs-largest").value,
+      label: ukFigure("smallest-vs-largest").label,
+      source: ukFigureCitation("smallest-vs-largest"),
     },
     cta: "See pricing",
     href: "/pricing",
@@ -287,33 +288,30 @@ export const RESEARCH_SOURCES: readonly string[] = [
   "Innovate UK",
 ]
 
-// ─── UK research stats (DSIT and ONS; see STAT_SOURCES for the per-stat
-// citation, which is index-matched to this array in home-fde.tsx) ──────────
+// ─── UK research stats ──────────────────────────────────────────────────────
 //
-// [0] Ipsos for DSIT, "AI Skills for Life and Work", published 28 January
-//     2026, fieldwork 29 February to 7 March 2024.
-// [1] ONS, "Business insights and impact on the UK economy", published
-//     2 July 2026, BICS wave 159, fieldwork 15 to 28 June 2026.
-// [2] ONS, "Artificial intelligence in UK businesses: 2023 to 2026",
-//     published 20 July 2026, same June 2026 fieldwork.
+// These used to be declared here with their citations in a comment block, and
+// /about and /why-gwth each held a different set of their own. From
+// 2026-09-19 (bead gwth-launch-88z.32.25) every UK research figure on the
+// site comes from `src/lib/data/uk-ai-context.ts`, which carries the
+// publisher, the release date and the URL for each one. This array now just
+// chooses which three of those figures the tiles show, in which order.
 
-export const UK_STATS: readonly UkStat[] = [
-  {
-    value: "21%",
-    label: "of UK workers feel confident using AI at work",
-    source: "DSIT, published 2026",
-  },
-  {
-    value: "29%",
-    label: "of UK businesses were using at least one AI technology in June 2026",
-    source: "ONS, 2026",
-  },
-  {
-    value: "28% vs 49%",
-    label: "of the smallest UK businesses use AI, against half of large firms",
-    source: "ONS, 2026",
-  },
-]
+/** The three figures the UK research tiles carry, in reading order. */
+export const UK_STAT_IDS = [
+  "worker-confidence",
+  "business-adoption",
+  "smallest-vs-largest",
+] as const
+
+export const UK_STATS: readonly UkStat[] = UK_STAT_IDS.map((id) => {
+  const figure = ukFigure(id)
+  return {
+    value: figure.value,
+    label: figure.label,
+    source: ukFigureCitation(id),
+  }
+})
 
 // ─── Curriculum (sourced from MONTH_CONFIGS in src/lib/config.ts) ───────────
 

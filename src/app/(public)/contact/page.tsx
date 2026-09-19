@@ -4,7 +4,7 @@ import { ContactFde } from "@/components/marketing/contact-fde/contact-fde"
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Have a question about the course, team pricing, or anything else? Send us a message and we will get back to you.",
+    "Have a question about the course, team pricing, or anything else? Send a message to the GWTH team in the United Kingdom and we will get back to you.",
 }
 
 /**

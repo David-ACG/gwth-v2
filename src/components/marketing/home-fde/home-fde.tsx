@@ -407,6 +407,29 @@ export const SCORE_STATES: readonly ScoreState[] = [
   },
 ]
 
+/**
+ * The three ways this page carries the UK thread. Each is a different KIND of
+ * claim, not the same sentence three times: what you practise on, what you
+ * are held to, and how you are taught to check an answer. None of them
+ * carries a statistic; the sourced figures live on /about, /why-gwth and
+ * /for-teams, and every one of them comes from
+ * `src/lib/data/uk-ai-context.ts`.
+ */
+const UK_THREAD = [
+  {
+    title: "The documents you actually get",
+    body: "A letter from the NHS, a council or benefits form, a Self Assessment return, a workplace pension statement, the household spreadsheet behind all of it. You practise on the paperwork that lands in your own house, so the skill is ready the first time you need it.",
+  },
+  {
+    title: "The rules you are actually held to",
+    body: "Tax, pensions, employment and data protection all work differently here. Where a lesson touches any of them it teaches the version that applies to you, because an answer that is right somewhere else and wrong in the United Kingdom is worse than no answer at all.",
+  },
+  {
+    title: "Proof you can point at",
+    body: "Most of what an AI model has read was written about somewhere else, so it will answer confidently about the wrong country. You are taught to ask for the source and to check it against the GOV.UK page, the regulator's own words or your employer's policy before you act on it.",
+  },
+]
+
 export const PRIMITIVES_URL =
   "https://openai.com/business/guides-and-resources/identifying-and-scaling-ai-use-cases/"
 
@@ -668,6 +691,42 @@ export function HomeFde() {
             creation, ideation and strategy, coding, data analysis and
             automation. The names above are ours.
           </p>
+        </div>
+      </section>
+
+      {/*
+        The UK thread on the flagship page (bead gwth-launch-88z.32.25, from
+        David's annotation a-20260914-210609-f7fdc8: "This is about the only
+        page that mentions that it's UK focused, we should be mentioning it on
+        all pages").
+
+        It sits after the building blocks because this is the first moment the
+        reader knows what the work IS, so "and it is set here" has something to
+        attach to. It carries no statistic on purpose: /about, /why-gwth and
+        /for-teams each carry sourced UK figures, and this page is written for
+        somebody deciding whether AI is for them at all. A percentage is one
+        more thing for them to decode (beginner-first-public-writing).
+      */}
+      <section className={p.section} data-section="uk">
+        <div className={p.page}>
+          <div className={p.sectionHead}>
+            <h2 className={p.sectionTitle}>
+              Written for work and life <em>in the United Kingdom</em>
+            </h2>
+          </div>
+          <p className={styles.blocksLead} data-testid="uk-lead">
+            The skills travel anywhere. The paperwork does not, and neither do
+            the rules or the money, so the work you do in this course uses the
+            things you already have to deal with in the United Kingdom.
+          </p>
+          <div className={p.cards3}>
+            {UK_THREAD.map((item) => (
+              <article className={p.card} key={item.title} data-testid="uk-card">
+                <h3 className={p.cardTitle}>{item.title}</h3>
+                <p className={p.cardBody}>{item.body}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

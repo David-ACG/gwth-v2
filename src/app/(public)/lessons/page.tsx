@@ -11,8 +11,9 @@ export const metadata: Metadata = {
   // syllabus register says 44 over the three live months, and no register owns
   // the split (bead gwth-launch-88z.32.35).
   description:
-    `A three-month applied AI syllabus with ${TOTAL_MANDATORY_LESSONS} core lessons, ` +
-    `optional lessons for going deeper by profession, practical projects, and a score you can show.`,
+    `A three-month applied AI syllabus written for the UK, with ${TOTAL_MANDATORY_LESSONS} core lessons, ` +
+    `optional lessons for going deeper by profession against the codes UK regulators set, ` +
+    `practical projects, and a score you can show.`,
 }
 
 /**

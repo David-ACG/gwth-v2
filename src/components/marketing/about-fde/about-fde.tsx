@@ -1,6 +1,7 @@
 import Link from "next/link"
 import styles from "./about-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
+import { ukFigure, ukSource } from "@/lib/data/uk-ai-context"
 
 /** Course principles for the numbered journal list. */
 const PRINCIPLES = [
@@ -59,45 +60,84 @@ const UK_EXAMPLES = [
 ]
 
 /**
- * Where the UK actually stands, from primary sources. Checked 2026-09-14
- * against:
- *   - AI Opportunities Action Plan (DSIT, published January 2025)
- *     https://www.gov.uk/government/publications/ai-opportunities-action-plan/ai-opportunities-action-plan
- *     "Britain is the third largest AI market in the world"; names Google
- *     DeepMind, ARM and Wayve; warns the UK "risks falling behind the advances
- *     in Artificial Intelligence made in the USA and China"; and says "we need
- *     companies at the frontier that will be our UK national champions".
- *   - Artificial Intelligence sector study 2024 (DSIT)
- *     https://www.gov.uk/government/publications/artificial-intelligence-sector-study-2024/artificial-intelligence-sector-study-2024
- *     5,862 AI companies identified; 95% of them SMEs; 86,139 FTE employees.
- *   - ONS, Artificial intelligence in UK businesses: 2023 to 2026
- *     (published 20 July 2026)
- *     https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/articles/artificialintelligenceinukbusinesses/2023to2026
- *     Around 35% of businesses with 10 or more employees reported using AI in
- *     June 2026, up from around 12% in late 2023; the average number of AI
- *     technologies used per business rose only from about 1.4 to 1.6.
+ * Where the UK actually stands. Every number comes from
+ * `src/lib/data/uk-ai-context.ts`, which carries the publisher, the release
+ * date and the URL for each one; this page supplies only the argument around
+ * them. Before 2026-09-19 the figures lived in this file and the sources in
+ * this folder's README, which is how /why-gwth came to print a different and
+ * older set of numbers about the same country.
  *
- * What these sources do NOT support, and what this page therefore must never
- * say: that the UK has no large AI companies, that it has no model providers,
- * or that education is the cheapest way for the country to catch up. The first
- * two are contradicted by the Action Plan itself; the third is a superlative
- * nobody has measured. Refresh the figures here when a newer release lands,
- * and keep every number attributable to one of the links above.
+ * What the sources do NOT support, and what no page may therefore say: that
+ * the UK has no large AI companies, that it has no model providers, or that
+ * education is the cheapest way for the country to catch up. The first two
+ * are contradicted by the Action Plan itself; the third is a superlative
+ * nobody has measured. `UNSUPPORTED_UK_CLAIMS` in the shared module holds
+ * that list and the site-wide test enforces it.
  */
 const UK_CONTEXT = [
   {
+    id: "ai-companies",
     title: "A large market, still building its own frontier.",
-    body: "The government's AI Opportunities Action Plan calls Britain the third largest AI market in the world, with DeepMind, Arm and Wayve among the companies based here. The same plan warns that the country risks falling behind the United States and China, and sets out to grow national champions at the frontier.",
+    body: (
+      <>
+        The government&apos;s AI Opportunities Action Plan calls Britain the
+        third largest AI market in the world, with DeepMind, Arm and Wayve
+        among the companies based here. The 2024 sector study counted{" "}
+        <strong data-uk-figure="ai-companies">
+          {ukFigure("ai-companies").value}
+        </strong>{" "}
+        AI companies in the country. The same plan warns that Britain risks
+        falling behind the United States and China, and sets out to grow
+        national champions at the frontier.
+      </>
+    ),
   },
   {
-    title: "Thousands of AI companies, and most of them are small.",
-    body: "The 2024 sector study counted 5,862 AI companies in the UK, and 95 in every 100 of them are small or medium sized. Most of the AI built here comes from firms about the size of the one you work in, not from a laboratory you have heard of.",
+    id: "ai-company-sme-share",
+    title: "Most of those companies are small.",
+    body: (
+      <>
+        <strong data-uk-figure="ai-company-sme-share">
+          {ukFigure("ai-company-sme-share").value}
+        </strong>{" "}
+        of them are small or medium sized. Most of the AI built here comes
+        from firms about the size of the one you work in, not from a
+        laboratory you have heard of, and the people doing that work learned
+        it recently.
+      </>
+    ),
   },
   {
+    id: "adoption-depth",
     title: "Adoption is spreading, but it is thin.",
-    body: "Around 35% of UK businesses with ten or more staff reported using AI in June 2026, against around 12% in late 2023. The typical adopter still uses fewer than two AI technologies. Breadth arrived first, and depth is the part that is missing.",
+    body: (
+      <>
+        <strong data-uk-figure="business-adoption">
+          {ukFigure("business-adoption").value}
+        </strong>{" "}
+        of UK businesses with ten or more staff reported using AI in June
+        2026, against around{" "}
+        <strong data-uk-figure="business-adoption-2023">
+          {ukFigure("business-adoption-2023").value}
+        </strong>{" "}
+        in late 2023. The typical adopter still uses only about{" "}
+        <strong data-uk-figure="adoption-depth">
+          {ukFigure("adoption-depth").value}
+        </strong>{" "}
+        AI technologies. Breadth arrived first, and depth is the part that is
+        missing.
+      </>
+    ),
   },
 ]
+
+/**
+ * The sources behind the figures above, resolved from the shared module so a
+ * page can never cite a document it did not take a number from.
+ */
+const ABOUT_SOURCES = ["dsit-action-plan", "dsit-sector-study-2024", "ons-ai-in-business"].map(
+  (id) => ukSource(id)
+)
 
 /** Headline numbers for the ruled stat columns. */
 const STATS = [
@@ -264,7 +304,7 @@ export function AboutFde() {
           </p>
           <div className={styles.ukGrid}>
             {UK_CONTEXT.map((note) => (
-              <div key={note.title} className={styles.ukNote} data-testid="uk-note">
+              <div key={note.id} className={styles.ukNote} data-testid="uk-note">
                 <h3>{note.title}</h3>
                 <p>{note.body}</p>
               </div>
@@ -278,30 +318,17 @@ export function AboutFde() {
             to stop.
           </p>
           <p className={styles.sourceNote} data-testid="uk-sources">
-            Figures from the{" "}
-            <a
-              href="https://www.gov.uk/government/publications/ai-opportunities-action-plan/ai-opportunities-action-plan"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              AI Opportunities Action Plan
-            </a>
-            , the{" "}
-            <a
-              href="https://www.gov.uk/government/publications/artificial-intelligence-sector-study-2024/artificial-intelligence-sector-study-2024"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Artificial Intelligence sector study 2024
-            </a>{" "}
-            and the{" "}
-            <a
-              href="https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/articles/artificialintelligenceinukbusinesses/2023to2026"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ONS survey of AI in UK businesses
-            </a>
+            Figures from{" "}
+            {ABOUT_SOURCES.map((source, i) => (
+              <span key={source.id}>
+                {i > 0 ? (i === ABOUT_SOURCES.length - 1 ? " and " : ", ") : ""}
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.title}
+                </a>{" "}
+                ({source.publisher.startsWith("Office") ? "ONS" : "DSIT"},{" "}
+                {source.releasedLabel})
+              </span>
+            ))}
             .
           </p>
         </div>

@@ -164,6 +164,18 @@ export function PricingFde() {
             months the lower price keeps your lessons current as they change,
             and you can stop whenever you like.
           </p>
+          {/* The UK thread on this page (bead gwth-launch-88z.32.25). Money
+              is the only thing this page is about, so this is where it earns
+              its place. It states what the page can prove: one price, in
+              pounds, the same for an institution as for one person. It does
+              NOT claim anything about VAT treatment, which is a Stripe
+              configuration question and not settled here. */}
+          <p className={styles.standfirst} data-testid="pricing-uk-note">
+            The price is in pounds because the course is written for the
+            United Kingdom. There is no dollar price converted at the till,
+            and a British institution buying for its members pays the same per
+            person as somebody joining on their own.
+          </p>
           <div className={styles.mastheadFoot}>
             <p>Prices in GBP</p>
             <p>Unlock one month at a time</p>

@@ -8,6 +8,11 @@ const INCLUDES = [
   // fuller line names the promise, which is the part a reader decides on.
   "A practical tip you can try in the next ten minutes, not theory and not hype",
   "Useful tool notes when something materially changes",
+  // The UK thread on this page (bead gwth-launch-88z.32.25). The newsletter's
+  // own version of it is the only one that can be about NEWS: a change in the
+  // tools often lands differently here because the rule or the regulator is
+  // different, and that difference is what a UK reader needs told.
+  "When a change to the tools or the rules lands differently in the United Kingdom, what it means here",
   "Course updates and new content previews",
 ]
 
@@ -100,6 +105,9 @@ export function NewsletterFde() {
               <p className={styles.listNote}>
                 We write about what works. If a tool is good, we say so. If it
                 is not, we say that too. Nobody pays us to recommend anything.
+                It is written from the United Kingdom, for people working here,
+                so a rule or a price that applies somewhere else is labelled as
+                such rather than passed on as though it were yours.
               </p>
             </div>
 

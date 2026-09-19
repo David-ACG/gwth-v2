@@ -17,7 +17,7 @@ export const revalidate = 43200
 export const metadata: Metadata = {
   title: "News",
   description:
-    "AI news, tools, and insights — voted on by the GWTH community. Top stories become hands-on labs.",
+    "AI news, tools and insights for people working in the UK, voted on by the GWTH community. Top stories become hands-on labs.",
 }
 
 /**
