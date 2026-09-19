@@ -158,4 +158,35 @@ describe("ForInstitutionsPage", () => {
     const { container } = render(<ForInstitutionsPage />)
     expect(container.textContent).not.toMatch(/\$/)
   })
+
+  /**
+   * a-20260915-085041-eaa513, carried from Home (gwth-launch-88z.32.31) onto
+   * the page where an institution actually decides. David struck the claim
+   * because a body with 150,000 members may well buy a fixed annual figure, so
+   * the page must not name a pricing basis at all until a deal shape exists.
+   * The matching Home guard is in home-fde.test.tsx.
+   */
+  it("makes no claim about how an institution edition is priced (a-20260915-085041-eaa513)", () => {
+    const { container } = render(<ForInstitutionsPage />)
+    const text = container.textContent ?? ""
+    expect(text).not.toMatch(/active learners/i)
+    expect(text).not.toMatch(/rather than seats|not seats|per seat|on seats/i)
+    expect(text).not.toMatch(/we price on/i)
+  })
+
+  /**
+   * The section still has to do its job: say what one agreement covers and how
+   * a conversation starts. Removing the claim must not leave a stub.
+   */
+  it("still says what an agreement covers and how to get a proposal", () => {
+    const { container } = render(<ForInstitutionsPage />)
+    const lead = container.querySelector(
+      '[data-testid="institutions-commercials-lead"]',
+    )
+    expect(lead).not.toBeNull()
+    const text = lead!.textContent ?? ""
+    expect(text).toMatch(/one agreement/i)
+    expect(text).toMatch(/admin screen/i)
+    expect(text).toMatch(/proposal/i)
+  })
 })

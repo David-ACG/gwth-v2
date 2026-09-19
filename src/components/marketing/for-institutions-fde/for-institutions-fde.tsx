@@ -52,6 +52,15 @@ import styles from "./for-institutions-fde.module.css"
  *   actually implement (src/app/org/learners, src/components/org/pass-mark-form,
  *   src/app/(public)/verify/[code]).
  *
+ * - **a-20260915-085041-eaa513**, on the pricing claim: "We don't want to make
+ *   this statement saying that active learners are priced rather than seats
+ *   because that may not be the case, for example, with CIPD, they have
+ *   150,000 members, but they only want to pay £150,000 per year." The page
+ *   therefore names no pricing basis, unit, figure or range anywhere. The
+ *   commercials section says what an agreement covers and how to get a
+ *   proposal, and nothing about how the proposal is worked out. See the
+ *   comment above that section.
+ *
  * - **a-20260914-202509-f3143d**, on the old "CPD ready" heading: "I don't
  *   know what CPD means, so I don't think others will either." The abbreviation
  *   is now expanded on first use in the body it appears in, and the feature is
@@ -606,17 +615,33 @@ export function ForInstitutionsFde() {
         </div>
       </section>
 
+      {/*
+        Commercials, with no pricing basis claimed (David, 2026-09-15,
+        a-20260915-085041-eaa513): *"We don't want to make this statement saying
+        that active learners are priced rather than seats because that may not
+        be the case, for example, with CIPD, they have 150,000 members, but they
+        only want to pay £150,000 per year"*. The claim was struck from Home
+        under gwth-launch-88z.32.31 and is struck here for the same reason.
+
+        Nothing has been invented in its place: no basis, no unit, no figure and
+        no range. The section now says only what an agreement covers, that there
+        is no public institution price, and how to get a proposal. The vendor
+        independence line that used to sit here was a duplicate of the "Is it
+        tied to one AI vendor?" answer in FAQS and has gone with it. When a deal
+        shape is settled, the basis belongs here and nowhere else on the page.
+      */}
       <section className={p.section} data-section="commercials">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>Priced on active learners, not seats</h2>
+            <h2 className={p.sectionTitle}>One agreement covers the edition</h2>
             <p className={p.sectionMeta}>Commercials</p>
           </div>
-          <p className={p.lead}>
-            One agreement covers your edition, the admin screen, tutor views
-            and records. We price on the number of members actually learning,
-            not on seats, and there are no vendor deals behind the price. Ask
-            for a proposal and we will build it around your membership.
+          <p className={p.lead} data-testid="institutions-commercials-lead">
+            One agreement covers your edition, the admin screen, the tutor views
+            and the records your members carry. There is no published price for
+            an institution edition, because what we build is shaped by your
+            curation and by how you want a pilot to start. Tell us what you want
+            it to cover and we will put a proposal in front of you.
           </p>
         </div>
       </section>
