@@ -47,7 +47,11 @@
     ".next-candidate-2046814/types/**/*.ts",
     ".next-candidate-2046814/dev/types/**/*.ts",
     ".next-candidate-2075146/types/**/*.ts",
-    ".next-candidate-2075146/dev/types/**/*.ts"
+    ".next-candidate-2075146/dev/types/**/*.ts",
+    ".next-candidate-3150122/types/**/*.ts",
+    ".next-candidate-3150122/dev/types/**/*.ts",
+    ".next-candidate-3183536/types/**/*.ts",
+    ".next-candidate-3183536/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
