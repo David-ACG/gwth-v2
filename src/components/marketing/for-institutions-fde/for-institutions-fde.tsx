@@ -630,7 +630,11 @@ export function ForInstitutionsFde() {
         tied to one AI vendor?" answer in FAQS and has gone with it. When a deal
         shape is settled, the basis belongs here and nowhere else on the page.
       */}
-      <section className={p.section} data-section="commercials">
+      <section
+        className={`${p.section} ${styles.anchor}`}
+        data-section="commercials"
+        id="commercials"
+      >
         <div className={p.page}>
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>One agreement covers the edition</h2>

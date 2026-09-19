@@ -76,3 +76,14 @@
   font-size: var(--fde-body);
   line-height: 1.62;
 }
+
+/*
+ * An anchorable section. The public nav is sticky at the top of the viewport,
+ * so a section arrived at by its URL fragment lands with its heading hidden
+ * underneath the header unless it reserves the space. Carried by the
+ * commercials section because a handback links straight to it, and available
+ * to any other section that has to be addressable on its own.
+ */
+.anchor {
+  scroll-margin-top: 6rem;
+}
