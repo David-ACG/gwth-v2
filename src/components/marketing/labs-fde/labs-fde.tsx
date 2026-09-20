@@ -191,7 +191,7 @@ export function LabsFde({
               ? "Video guides are planned for every lab and none has been recorded yet, which is why no card offers one to play."
               : withVideo === liveLabs.length
                 ? "Every lab has a video guide, and each card shows a still from its own."
-                : `${withVideo} of these ${liveLabs.length} has a video guide, and its card shows a still from it. The rest say so plainly rather than offering something to play.`}
+                : `${withVideo} of these ${liveLabs.length} has a video guide, and its card shows a still from it. The other cards say that their video guides are planned, and they show no play button.`}
           </p>
 
           {liveLabs.length === 0 ? (
