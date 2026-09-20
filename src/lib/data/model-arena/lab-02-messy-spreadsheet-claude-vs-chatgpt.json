@@ -53,6 +53,12 @@
       ]
     }
   },
+  "video": {
+    "src": "/labs/video/messy-spreadsheet-guide.mp4",
+    "poster": "/labs/video/messy-spreadsheet-guide.webp",
+    "captions": "/labs/video/messy-spreadsheet-guide.vtt",
+    "durationLabel": "3 min 30"
+  },
   "matchup": [
     {
       "name": "Claude",

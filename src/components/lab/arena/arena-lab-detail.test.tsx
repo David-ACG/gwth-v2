@@ -87,8 +87,11 @@ describe("ArenaLabDetail opening", () => {
     expect(block!.textContent).toBe(spreadsheet.prompt)
   })
 
-  it("states that the video guide is planned, and renders no player", () => {
-    const { container } = render(<ArenaLabDetail lab={spreadsheet} />)
+  it("states that the video guide is planned where no media exists", () => {
+    // The pilot lab is the one that has a video; every other lab must still
+    // say "planned" rather than draw a control over nothing.
+    expect(pilot.video).toBeUndefined()
+    const { container } = render(<ArenaLabDetail lab={pilot} />)
 
     const panel = screen.getByTestId("lab-video-guide")
     expect(panel).toHaveAttribute("data-video-state", "planned")
@@ -96,6 +99,29 @@ describe("ArenaLabDetail opening", () => {
     // No media element and no play control: nothing to press that cannot work.
     expect(container.querySelector("video")).toBeNull()
     expect(screen.queryByRole("button", { name: /play/i })).toBeNull()
+  })
+
+  it("plays the real guide on the lab that has one, with its captions", () => {
+    // bead gwth-launch-88z.32.23. The seam was built empty; this is the lab
+    // that now carries real media, so the panel must be the player and the
+    // captions track must be wired from the lab's own data.
+    const { container } = render(<ArenaLabDetail lab={spreadsheet} />)
+
+    const panel = screen.getByTestId("lab-video-guide")
+    expect(panel).toHaveAttribute("data-video-state", "available")
+    const video = container.querySelector("video")
+    expect(video).not.toBeNull()
+    expect(video).toHaveAttribute("controls")
+    expect(video).toHaveAttribute("poster", spreadsheet.video!.poster)
+    expect(video!.querySelector("source")).toHaveAttribute(
+      "src",
+      spreadsheet.video!.src
+    )
+    const track = video!.querySelector("track[kind='captions']")
+    expect(track).not.toBeNull()
+    expect(track).toHaveAttribute("src", spreadsheet.video!.captions)
+    // The running time is authored, never computed from the file.
+    expect(panel).toHaveTextContent(spreadsheet.video!.durationLabel!)
   })
 
   it("plays a real video, with captions, once the lab carries one", () => {
@@ -159,6 +185,8 @@ describe("ArenaLabDetail opening", () => {
     const bare: ModelArenaLab = { ...spreadsheet }
     delete bare.summary
     delete bare.preview
+    // A lab authored before these fields existed had no video either.
+    delete bare.video
     render(<ArenaLabDetail lab={bare} />)
 
     expect(screen.queryByTestId("lab-outcome")).toBeNull()

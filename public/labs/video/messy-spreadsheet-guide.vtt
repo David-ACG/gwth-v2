@@ -1,0 +1,57 @@
+WEBVTT
+
+1
+00:00:00.600 --> 00:00:13.170
+This is a head to head. The same messy spreadsheet, the same question, given to two different AI tools, so you can see for yourself where each one helps and where it does not.
+
+2
+00:00:14.370 --> 00:00:28.720
+You are the office manager at a small community centre in Leeds. The trustees meet next week and they want two things from you: how many volunteer hours April came to, and who your top three volunteers were.
+
+3
+00:00:29.920 --> 00:00:44.050
+The export you have to work from is not tidy. Dates arrive in three different shapes. One volunteer is spelled two ways. Hours are written as a number, as a time, and as the words half day.
+
+4
+00:00:45.250 --> 00:01:00.040
+There is also a row saying 40 hours that appears twice, and a total at the bottom that does not agree with the rows above it. Read that total out at the meeting and you have given the trustees the wrong number.
+
+5
+00:01:01.240 --> 00:01:17.590
+Both tools get exactly the same words. You paste the export as it came out, you say who you are and what the figure is for, and you ask for the numbers and for what you should not trust. Asking for the doubts is the part most people leave out.
+
+6
+00:01:18.790 --> 00:01:32.220
+Claude begins by telling you what it cannot do. It gives you a range rather than one confident figure, names the five rows it could not read, and hands you a sentence you could say out loud at the meeting.
+
+7
+00:01:33.420 --> 00:01:46.970
+ChatGPT commits. It opens with a ranked table, settles on 56 hours, and sets out the six assumptions behind that number plainly enough that you could argue with any one of them.
+
+8
+00:01:48.170 --> 00:02:01.300
+Scoring them is not about which one sounds cleverer. Five questions do the work, and the first one carries the most weight. Could you put this number in front of the trustees and defend it?
+
+9
+00:02:02.500 --> 00:02:17.710
+Then the other four. Did it spot the rows that cannot be trusted. Did it warn you off the total at the bottom. Could you follow it without being confident with spreadsheets. And did it tell you what to go and check before the meeting.
+
+10
+00:02:18.910 --> 00:02:35.130
+On the day we ran this, the edge went to ChatGPT, and only just, for getting you to a number you could use. Claude caught more. It flagged the three date formats and a stray March row that ChatGPT never mentioned at all.
+
+11
+00:02:36.330 --> 00:02:47.860
+That verdict belongs to the versions we tested in July and to this one task. These tools change every few weeks, so treat it as a worked example rather than a league table.
+
+12
+00:02:49.060 --> 00:03:02.850
+Now do it with something of your own. Take an export you have to make sense of every month, and take out anything private first. Real names, email addresses, anything you would not put on a postcard.
+
+13
+00:03:04.050 --> 00:03:16.720
+Paste the same data and the same question into both, word for word, so the test is fair. Then check one of their totals by hand. That last habit is the one that keeps you out of trouble.
+
+14
+00:03:17.920 --> 00:03:27.970
+The point of a lab like this is not to crown a winner. It is to give you a way of testing any tool against a job you actually have to do.

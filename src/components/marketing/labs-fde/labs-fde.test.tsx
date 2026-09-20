@@ -49,45 +49,91 @@ describe("LabsFde live cards", () => {
     }
   })
 
-  it("previews the spreadsheet lab with rows from its own export", () => {
+  it("previews the spreadsheet lab with the poster from its own video", () => {
+    // The CSS specimen was the honest stand-in while no lab had media. The
+    // spreadsheet lab now has a real guide, so its card shows a real still
+    // from that guide, which is the "like youtube" thumbnail David asked for.
     renderIndex()
     const card = screen
       .getAllByTestId("arena-lab-card")
       .find((c) => c.getAttribute("href")?.includes("messy-spreadsheet"))
     expect(card).toBeDefined()
+    expect(within(card!).getByTestId("lab-preview")).toHaveAttribute(
+      "data-preview",
+      "video"
+    )
+    expect(within(card!).queryByTestId("lab-specimen-grid")).toBeNull()
+  })
 
-    // The specimen is a grid because the lab's input is a spreadsheet: that is
-    // what makes "spreadsheets" legible at a glance.
-    const grid = within(card!).getByTestId("lab-specimen-grid")
-    const lab = liveLabs.find((l) => l.slug === "messy-spreadsheet-claude-vs-chatgpt")!
-    const specimen = lab.preview!.specimen
-    expect(specimen.kind).toBe("grid")
-
-    // Every quoted cell really appears in the lab's own shared prompt: the
-    // preview is a quotation from the lab, never an illustration of it.
-    if (specimen.kind === "grid") {
-      for (const row of specimen.rows) {
-        for (const cell of row.cells) {
-          expect(lab.prompt).toContain(cell)
+  it("quotes the lab's own material on every card that has no video yet", () => {
+    renderIndex()
+    for (const lab of liveLabs) {
+      if (lab.video || !lab.preview) continue
+      const card = screen
+        .getAllByTestId("arena-lab-card")
+        .find((c) => c.getAttribute("href")?.endsWith(`/labs/${lab.slug}`))!
+      expect(within(card).getByTestId("lab-preview")).toHaveAttribute(
+        "data-preview",
+        "specimen"
+      )
+      const specimen = lab.preview.specimen
+      // Every quoted cell really appears in the lab's own shared prompt: the
+      // preview is a quotation from the lab, never an illustration of it.
+      if (specimen.kind === "grid") {
+        for (const row of specimen.rows) {
+          for (const cell of row.cells) {
+            expect(lab.prompt).toContain(cell)
+          }
         }
       }
     }
-    expect(grid.textContent).toContain("Jane Smith")
   })
 
-  it("never claims playable video, and says plainly that one is planned", () => {
+  it("claims a video only where one exists, and says planned everywhere else", () => {
     const { container } = renderIndex()
 
-    // No lab has a video yet, so no card may render a player or a play control.
+    // The index never plays anything: a card links to the lab page, so a play
+    // control here would navigate rather than play. That stays true even now
+    // that one lab has real media.
     expect(container.querySelector("video")).toBeNull()
     expect(screen.queryByRole("button", { name: /play/i })).toBeNull()
 
     for (const card of screen.getAllByTestId("arena-lab-card")) {
-      expect(card).toHaveAttribute("data-video-state", "planned")
-      expect(within(card).getByTestId("lab-video-state")).toHaveTextContent(
-        /planned/i
-      )
+      const lab = liveLabs.find((l) =>
+        card.getAttribute("href")?.endsWith(`/labs/${l.slug}`)
+      )!
+      const state = card.getAttribute("data-video-state")
+      const label = within(card).getByTestId("lab-video-state")
+      if (lab.video) {
+        // Real media, so the card shows its own poster frame and the running
+        // time the lab AUTHORED. Nothing here estimates a duration.
+        expect(state).toBe("available")
+        expect(within(card).getByTestId("lab-preview")).toHaveAttribute(
+          "data-preview",
+          "video"
+        )
+        expect(label).toHaveTextContent(
+          `Video guide, ${lab.video.durationLabel}`
+        )
+      } else {
+        expect(state).toBe("planned")
+        expect(label).toHaveTextContent(/planned/i)
+      }
     }
+  })
+
+  it("gives the messy-spreadsheet lab a real, complete video guide", () => {
+    // The pilot (bead gwth-launch-88z.32.23). A lab video ships as a set or it
+    // does not ship: a playable source, a poster frame taken from that video,
+    // a captions track, and a running time written by a person.
+    const lab = liveLabs.find(
+      (l) => l.slug === "messy-spreadsheet-claude-vs-chatgpt"
+    )!
+    expect(lab.video).toBeDefined()
+    expect(lab.video!.src).toMatch(/\.mp4$/)
+    expect(lab.video!.poster).toMatch(/\.(png|jpg|webp)$/)
+    expect(lab.video!.captions).toMatch(/\.vtt$/)
+    expect(lab.video!.durationLabel).toBeTruthy()
   })
 
   it("shows a real poster and running time once a lab has real media", () => {
