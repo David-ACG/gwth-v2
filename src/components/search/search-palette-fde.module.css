@@ -53,8 +53,11 @@
   color: var(--v-ink);
 }
 
+/* Placeholder ink is --v-soft, not --v-muted, the same as every other field
+   on the site (bead gwth-launch-88z.32.15): the words you type over should
+   read at the same weight wherever a field appears. */
 .palette :global([data-slot="command-input"])::placeholder {
-  color: var(--v-muted);
+  color: var(--v-soft);
 }
 
 /* Kill the global Stone & Sage rust focus ring (globals.css :focus-visible);
@@ -84,8 +87,12 @@
   color: var(--v-ink);
 }
 
+/* The selected row steps UP off the card, on the quiet fill, rather than down
+   to the page ground: a ground-filled row inside a card reads as a hole in
+   dark mode (bead gwth-launch-88z.32.15). Selection is not tint alone, the
+   row also carries the ink colour and the keyboard cursor. */
 .palette :global([data-slot="command-item"][data-selected="true"]) {
-  background: var(--v-bg);
+  background: var(--v-quiet);
   color: var(--v-ink);
 }
 

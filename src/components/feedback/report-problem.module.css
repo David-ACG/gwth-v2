@@ -93,12 +93,17 @@
   color: var(--v-muted);
 }
 
+/* The field well is the QUIET fill, never the page ground and never the card
+   (bead gwth-launch-88z.32.15). A box that is darker than the panel around it
+   reads as a hole in dark mode; the quiet fill makes it the lightest surface
+   instead. --v-line clears 3:1 on the quiet fill in both modes, so the
+   boundary is still load-bearing. */
 .select,
 .textarea {
   width: 100%;
   border: 1px solid var(--v-line);
   border-radius: 8px;
-  background: var(--v-bg);
+  background: var(--v-quiet);
   padding: 0.7rem 0.85rem;
   font-family: var(--font-sans);
   font-size: 0.98rem;
@@ -112,8 +117,11 @@
   min-height: 7rem;
 }
 
+/* Placeholder ink is --v-soft, not --v-muted: the field well is the quiet
+   fill, and --v-muted on it measures 4.31:1 light and 4.05:1 dark, under the
+   4.5:1 text bar (bead gwth-launch-88z.32.15). */
 .textarea::placeholder {
-  color: var(--v-muted);
+  color: var(--v-soft);
   opacity: 1;
 }
 
