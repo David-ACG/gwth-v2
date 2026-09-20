@@ -65,6 +65,20 @@ import styles from "./for-institutions-fde.module.css"
  *   know what CPD means, so I don't think others will either." The abbreviation
  *   is now expanded on first use in the body it appears in, and the feature is
  *   titled by its benefit rather than by the acronym.
+ *
+ * - **2026-09-13, on the masthead picture** (bead gwth-launch-88z.32.13): "The
+ *   general style looks fine, but the image does not convey any message. I'm
+ *   not sure what an arrow pointing at a tear in the page means." The defect
+ *   was meaning, not style, so the treatment is unchanged and only the scene
+ *   was replaced. The `the-gap-arrow` plate is gone; the masthead now carries
+ *   `curated-by-you`, a hand placing the last square onto a board of twelve
+ *   beside a slider, with the two claims lettered into the picture itself:
+ *   "You choose the lessons" and "You set the pass mark". Those are the same
+ *   two words the standfirst directly above uses, so an institution reader can
+ *   say what the picture claims in one sentence. Both renders stay landscape
+ *   1376x768 light plus dark twin, paper-craft, per Bible
+ *   `landscape-labelled-images` and `paper-first-register`. The old plate
+ *   files stay in `public/home/paper/` unreferenced rather than being deleted.
  */
 
 export const EVIDENCE = [
@@ -349,8 +363,8 @@ export function ForInstitutionsFde() {
           </div>
           <figure className={`${p.plate} ${styles.mastheadPlate}`}>
             <Plate
-              name="the-gap-arrow"
-              alt="Two torn sheets of cream paper with a gap between them, and a hand placing a small jade paper arrow that points across the gap."
+              name="curated-by-you"
+              alt="A hand placing the last mint paper square onto a board of twelve, labelled 'You choose the lessons', beside a paper slider labelled 'You set the pass mark'."
               priority
               sizes="(max-width: 1180px) 100vw, 1140px"
             />

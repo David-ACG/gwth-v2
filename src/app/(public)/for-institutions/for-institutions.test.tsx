@@ -34,6 +34,32 @@ describe("ForInstitutionsPage", () => {
     expect(text).toMatch(/verified evidence/i)
   })
 
+  /**
+   * Bead gwth-launch-88z.32.13. David, 2026-09-13, on the old masthead plate:
+   * "the image does not convey any message. I'm not sure what an arrow
+   * pointing at a tear in the page means." The replacement has to be the
+   * curated-by-you scene, it has to keep both renders (the mode is a class,
+   * not a media query, so a dark visitor needs its own file), and its
+   * description has to name the two claims the picture makes rather than
+   * describing shapes.
+   */
+  it("shows the curated-by-you masthead plate in both modes, not the arrow", () => {
+    const { container } = render(<ForInstitutionsPage />)
+    const masthead = container.querySelector('[data-section="masthead"]')
+    const imgs = Array.from(
+      masthead!.querySelectorAll<HTMLImageElement>("img")
+    )
+    const srcs = imgs.map((img) => img.getAttribute("src") ?? "")
+    expect(srcs.some((s) => s.includes("curated-by-you.png"))).toBe(true)
+    expect(srcs.some((s) => s.includes("curated-by-you-dark.png"))).toBe(true)
+    expect(srcs.some((s) => s.includes("the-gap-arrow"))).toBe(false)
+    for (const img of imgs) {
+      const alt = img.getAttribute("alt") ?? ""
+      expect(alt).toMatch(/choose the lessons/i)
+      expect(alt).toMatch(/set the pass mark/i)
+    }
+  })
+
   it("puts the prerequisite section above every supporting section", () => {
     const { container } = render(<ForInstitutionsPage />)
     const order = Array.from(
