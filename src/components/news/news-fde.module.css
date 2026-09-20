@@ -248,7 +248,7 @@
 .select {
   width: 100%;
   appearance: none;
-  background: var(--v-surface);
+  background: var(--v-quiet);
   border: 1px solid var(--v-line);
   border-radius: 8px;
   color: var(--v-ink);
@@ -270,8 +270,11 @@
   outline-offset: 1px;
 }
 
+/* Placeholder ink is --v-soft, not --v-muted: the field well is the quiet
+   fill, and --v-muted on it measures 4.31:1 light and 4.05:1 dark, under the
+   4.5:1 text bar (bead gwth-launch-88z.32.15). */
 .input::placeholder {
-  color: var(--v-muted);
+  color: var(--v-soft);
 }
 
 .selectWrap {

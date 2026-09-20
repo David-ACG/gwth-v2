@@ -106,7 +106,7 @@
   --v-ink: #17211d;        /* ink */
   --v-soft: #414b46;       /* body copy, 8.20:1 on the ground */
   --v-muted: #67716b;      /* metadata, 4.58:1 on the ground */
-  --v-line: #898e8a;       /* load-bearing boundary: 3.33:1 card, 3.02:1 ground */
+  --v-line: #838884;       /* boundary: 3.61:1 card, 3.27:1 ground, 3.08:1 quiet */
   --v-line-soft: #dde2df;  /* decorative divider only, never a boundary */
   --v-btn: #b5dbd0;        /* primary button fill, IDENTICAL in dark */
   --v-btn-text: #17211d;   /* 11.02:1 on the button */
@@ -213,15 +213,27 @@
    ================================================================= */
 
 .dark {
-  /* Paper-first dark set (N3): one green family, one ink, the same button. */
+  /* Paper-first dark set (N3): one green family, one ink, the same button.
+     STEPPED 2026-09-19 (bead gwth-launch-88z.32.15, David on /contact in dark
+     mode: "it needs some light colour as well, like maybe a lighter background
+     to the boxes"). The card was 1.16:1 above the ground, so a dark panel was
+     told apart by its boundary alone and a ground-filled form field read as a
+     hole. Four dark values move together so every relationship is preserved:
+     card up one step (the largest step that keeps metadata on the card above
+     4.5:1, measured 4.56:1), quiet fill up to sit above the card, boundary up
+     to clear 3:1 on the WORST of the three surfaces it now touches, decorative
+     divider up to stay visible while staying far below the 3:1 bar. Light mode
+     moves only --v-line, and only to close an existing 2.84:1 boundary on the
+     light quiet fill. Every ratio is re-measured in the paper-first token test
+     (src/app/(public)/for-teams/for-teams.test.tsx), which reads THIS file. */
   --v-bg: #161d1a;
-  --v-surface: #202a26;
-  --v-quiet: #222d28;
+  --v-surface: #28332e;   /* card: 1.31:1 above the ground (was #202a26, 1.16:1) */
+  --v-quiet: #303b36;     /* quiet fill / field well: 1.47:1 ground, 1.13:1 card */
   --v-ink: #f2efe9;
   --v-soft: #c8ccc6;
   --v-muted: #949a95;
-  --v-line: #6a7570;       /* 3.59:1 ground, 3.09:1 card */
-  --v-line-soft: #2c3833;
+  --v-line: #7c8782;       /* 4.61:1 ground, 3.52:1 card, 3.13:1 quiet */
+  --v-line-soft: #3c4742;
   --v-btn: #b5dbd0;
   --v-btn-text: #161d1a;   /* near-black in both modes but NOT the same hex */
   --v-accent: #b5dbd0;     /* mint on the night ground, 11.44:1 */

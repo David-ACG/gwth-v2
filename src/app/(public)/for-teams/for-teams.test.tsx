@@ -56,22 +56,55 @@ function contrast(a: string, b: string): number {
   return (hi! + 0.05) / (lo! + 0.05)
 }
 
-/** The measured paper-first values (bible paper-first-tokens). */
+/**
+ * The measured paper-first values, READ OUT OF globals.css rather than copied
+ * into this file (bead gwth-launch-88z.32.15). A hardcoded copy goes stale the
+ * moment a token moves, which is the one moment these ratios have to be
+ * re-measured. Everything below therefore measures what the site actually
+ * ships. bible paper-first-tokens, boundary-contrast-check.
+ */
+const GLOBALS = readFileSync(join(__dirname, "../../globals.css"), "utf8")
+
+function tokens(scope: "light" | "dark"): Record<string, string> {
+  const stripped = GLOBALS.replace(/\/\*[\s\S]*?\*\//g, "")
+  const opener = scope === "dark" ? ".dark {" : ":root {"
+  const from = stripped.indexOf(opener)
+  if (from < 0) throw new Error(`no ${opener} block in globals.css`)
+  const to = stripped.indexOf("\n}", from)
+  const body = stripped.slice(from, to)
+  const out: Record<string, string> = {}
+  for (const m of body.matchAll(/(--v-[a-z-]+):\s*(#[0-9a-fA-F]{6})/g)) {
+    out[m[1]!] = m[2]!.toLowerCase()
+  }
+  return out
+}
+
+const LIGHT = tokens("light")
+const DARK = tokens("dark")
+
+function tok(scope: "light" | "dark", name: string): string {
+  const value = (scope === "dark" ? DARK : LIGHT)[name]
+  if (!value) throw new Error(`globals.css ${scope} declares no ${name}`)
+  return value
+}
+
 const T = {
-  bgLight: "#f2f4f3",
-  bgDark: "#161d1a",
-  surfaceLight: "#ffffff",
-  surfaceDark: "#202a26",
-  quietLight: "#e6efeb",
-  quietDark: "#222d28",
-  softLight: "#414b46",
-  softDark: "#c8ccc6",
-  mutedLight: "#67716b",
-  mutedDark: "#949a95",
-  lineLight: "#898e8a",
-  lineDark: "#6a7570",
-  accentLight: "#3f7d6d",
-  accentDark: "#b5dbd0",
+  bgLight: tok("light", "--v-bg"),
+  bgDark: tok("dark", "--v-bg"),
+  surfaceLight: tok("light", "--v-surface"),
+  surfaceDark: tok("dark", "--v-surface"),
+  quietLight: tok("light", "--v-quiet"),
+  quietDark: tok("dark", "--v-quiet"),
+  inkLight: tok("light", "--v-ink"),
+  inkDark: tok("dark", "--v-ink"),
+  softLight: tok("light", "--v-soft"),
+  softDark: tok("dark", "--v-soft"),
+  mutedLight: tok("light", "--v-muted"),
+  mutedDark: tok("dark", "--v-muted"),
+  lineLight: tok("light", "--v-line"),
+  lineDark: tok("dark", "--v-line"),
+  accentLight: tok("light", "--v-accent"),
+  accentDark: tok("dark", "--v-accent"),
 }
 
 describe("ForTeamsPage", () => {

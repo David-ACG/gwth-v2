@@ -130,12 +130,19 @@
   gap: 0.55rem;
 }
 
+/* The field well is the QUIET fill, never the page ground (bead
+   gwth-launch-88z.32.15, David on /contact in dark mode: "it needs some light
+   colour as well, like maybe a lighter background to the boxes"). A
+   ground-filled box inside a panel reads as a hole in dark mode, where the
+   panel sits 1.31:1 above the ground; the quiet fill makes the box the
+   LIGHTEST surface on the page. --v-line clears 3:1 on it in both modes
+   (3.08 light, 3.13 dark), so the boundary is still load-bearing. */
 .input,
 .textarea {
   width: 100%;
   border: 1px solid var(--v-line);
   border-radius: 8px;
-  background: var(--v-bg);
+  background: var(--v-quiet);
   padding: 0.7rem 0.85rem;
   font-family: var(--font-sans);
   font-size: var(--fde-body);
@@ -149,9 +156,12 @@
   min-height: 8rem;
 }
 
+/* Placeholder ink is --v-soft, not --v-muted: the field well is the quiet
+   fill, and --v-muted on it measures 4.31:1 light and 4.05:1 dark, under the
+   4.5:1 text bar (bead gwth-launch-88z.32.15). */
 .input::placeholder,
 .textarea::placeholder {
-  color: var(--v-muted);
+  color: var(--v-soft);
   opacity: 1;
 }
 

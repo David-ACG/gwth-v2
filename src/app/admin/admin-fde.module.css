@@ -456,7 +456,7 @@
   font-family: var(--font-sans);
   font-size: var(--fde-body);
   color: var(--v-ink);
-  background: var(--v-bg);
+  background: var(--v-quiet);
   border: 1px solid var(--v-line);
   border-radius: 8px;
   padding: 0.55rem 0.7rem;
