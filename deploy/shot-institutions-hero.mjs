@@ -37,6 +37,21 @@ for (const mode of ["light", "dark"]) {
     })
     await setMode(page, mode)
 
+    // The masthead it sits in, so the picture is judged in its place. The
+    // header is sticky, so it has to be captured from the top of the page or
+    // the nav floats down into the middle of the shot.
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await page.waitForTimeout(400)
+    const masthead = page.locator('[data-section="masthead"]').first()
+    const mastheadFile = path.join(out, `masthead-${width}-${mode}.png`)
+    await masthead.screenshot({ path: mastheadFile })
+    console.log("wrote", mastheadFile)
+
+    // The top of the page as a visitor lands on it.
+    const pageFile = path.join(out, `for-institutions-${width}-${mode}.png`)
+    await page.screenshot({ path: pageFile })
+    console.log("wrote", pageFile)
+
     // The picture alone: whichever of the two renders this mode shows.
     const plate = page.locator("figure img:visible").first()
     await plate.scrollIntoViewIfNeeded()
@@ -44,19 +59,6 @@ for (const mode of ["light", "dark"]) {
     const plateFile = path.join(out, `plate-${width}-${mode}.png`)
     await plate.screenshot({ path: plateFile })
     console.log("wrote", plateFile)
-
-    // The masthead it sits in, so the picture is judged in its place.
-    const masthead = page.locator('[data-section="masthead"]').first()
-    const mastheadFile = path.join(out, `masthead-${width}-${mode}.png`)
-    await masthead.screenshot({ path: mastheadFile })
-    console.log("wrote", mastheadFile)
-
-    // The top of the page as a visitor lands on it.
-    await page.evaluate(() => window.scrollTo(0, 0))
-    await page.waitForTimeout(300)
-    const pageFile = path.join(out, `for-institutions-${width}-${mode}.png`)
-    await page.screenshot({ path: pageFile })
-    console.log("wrote", pageFile)
 
     await ctx.close()
   }
