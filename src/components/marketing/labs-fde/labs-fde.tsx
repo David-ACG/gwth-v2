@@ -85,6 +85,11 @@ export function LabsFde({
   archivedArenaLabs,
   legacyArchive,
 }: LabsFdeProps) {
+  // How many live labs genuinely have media. `labVideoState` is the only
+  // evidence any surface accepts, so the section lead cannot drift from the
+  // cards below it.
+  const withVideo = liveLabs.filter((l) => labVideoState(l) === "available")
+    .length
   const archiveRows: ArchiveRow[] = [
     ...archivedArenaLabs.map((lab) => ({
       key: lab.id,
@@ -173,11 +178,20 @@ export function LabsFde({
             </p>
           </div>
 
+          {/*
+            This line states the CURRENT video position, so it is derived from
+            the data rather than written once and left to go stale. It said "none
+            has been recorded yet" until the messy-spreadsheet guide landed
+            (bead gwth-launch-88z.32.23).
+          */}
           <p className={styles.sectionLead}>
-            Each card previews the real material its lab starts from, so you
-            can tell at a glance what the task is. Video guides are planned for
-            every lab and none has been recorded yet, which is why no card
-            offers one to play.
+            Each card previews the real material its lab starts from, so you can
+            tell at a glance what the task is.{" "}
+            {withVideo === 0
+              ? "Video guides are planned for every lab and none has been recorded yet, which is why no card offers one to play."
+              : withVideo === liveLabs.length
+                ? "Every lab has a video guide, and each card shows a still from its own."
+                : `${withVideo} of these ${liveLabs.length} has a video guide, and its card shows a still from it. The rest say so plainly rather than offering something to play.`}
           </p>
 
           {liveLabs.length === 0 ? (

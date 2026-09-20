@@ -122,6 +122,17 @@ describe("LabsFde live cards", () => {
     }
   })
 
+  it("states the video position from the data, not from a frozen sentence", () => {
+    // The lead said "none has been recorded yet" for as long as that was true,
+    // and would have gone on saying it after the first guide landed.
+    renderIndex()
+    const withVideo = liveLabs.filter((l) => l.video).length
+    expect(withVideo).toBeGreaterThan(0)
+    const lead = screen.getByText(/Each card previews the real material/)
+    expect(lead.textContent).not.toMatch(/none has been recorded/)
+    expect(lead.textContent).toContain(String(withVideo))
+  })
+
   it("gives the messy-spreadsheet lab a real, complete video guide", () => {
     // The pilot (bead gwth-launch-88z.32.23). A lab video ships as a set or it
     // does not ship: a playable source, a poster frame taken from that video,
