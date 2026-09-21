@@ -22,6 +22,7 @@ import {
   User,
 } from "lucide-react"
 import type { SearchIndex } from "@/lib/data/search-index"
+import { scoreSearchEntry } from "./search-score"
 import styles from "./search-palette-fde.module.css"
 
 const quickLinks = [
@@ -67,6 +68,7 @@ export function SearchPalette({ index }: SearchPaletteProps) {
       open={isOpen}
       onOpenChange={(open) => !open && dismiss()}
       className={`${styles.shell} ${styles.palette}`}
+      filter={scoreSearchEntry}
     >
       <CommandInput
         placeholder="Search lessons, labs, pages..."

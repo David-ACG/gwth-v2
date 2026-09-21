@@ -38,6 +38,16 @@ dashboard layout passes it down as a prop. Two reasons, both load-bearing:
 A caller who fails the W25 content gate gets `EMPTY_SEARCH_INDEX` instead, so
 layout-level rendering cannot leak the syllabus to an unauthenticated visitor.
 
+## Relevance
+
+`search-score.ts` replaces cmdk's default scorer, which matched a SUBSEQUENCE -
+the query's letters in order, anywhere. On this catalogue that put six
+unrelated lessons above the one real hit for "spread" (gwth-launch-4fg). Every
+word of the query must now appear in the title; a whole word beats the start of
+a word beats one buried mid-word, and position only breaks ties. The scorer
+reaches cmdk through a `filter` prop that `CommandDialog` forwards to
+`Command`.
+
 ## Open state
 
 `useSearch()` (`src/hooks/use-search.ts`) is a module-level store read through
