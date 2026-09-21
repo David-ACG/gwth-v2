@@ -31,6 +31,14 @@ async function settle(page, scheme) {
   await page.waitForTimeout(600)
 }
 
+async function shootLocator(page, name, locator) {
+  const file = path.join(out, name)
+  await locator.scrollIntoViewIfNeeded()
+  await page.waitForTimeout(300)
+  await locator.screenshot({ path: file })
+  console.log("wrote", file)
+}
+
 async function shoot(page, name, sel) {
   const file = path.join(out, name)
   if (sel) {
@@ -44,32 +52,24 @@ async function shoot(page, name, sel) {
   console.log("wrote", file)
 }
 
-// ---- public pages, both modes -------------------------------------------
+// ---- public pages that reach the primitives --------------------------
+// /news and /access are the other two routes that reach them. On the hlab
+// preview /news fails its own data fetch and /access has no gate to show, so
+// these are attempted and reported rather than quietly producing a shot of
+// something else.
 for (const scheme of ["dark", "light"]) {
   const ctx = await ctxFor(scheme)
   const page = await ctx.newPage()
-
-  // The home page email box: the site's front door, and a bare <Input>.
-  await page.goto(base + "/", { waitUntil: "networkidle", timeout: 90000 })
-  await settle(page, scheme)
-  await shoot(page, `home-waitlist-1440-${scheme}.png`)
-
-  // The news filters and the inline newsletter box.
-  const news = await page.goto(base + "/news", { waitUntil: "networkidle", timeout: 90000 })
-  if (news && news.ok()) {
+  for (const [route, name] of [["/news", "news-shared"], ["/access", "access"]]) {
+    await page.goto(base + route, { waitUntil: "networkidle", timeout: 90000 })
+    const landed = new URL(page.url()).pathname
+    const broke = await page.getByText("We couldn't load this page").count()
+    if (landed !== route || broke) {
+      console.log(`SKIP ${route} (${scheme}): landed on ${landed}${broke ? ", error boundary" : ""}`)
+      continue
+    }
     await settle(page, scheme)
-    await shoot(page, `news-shared-1440-${scheme}.png`)
-  } else {
-    console.log("SKIP /news:", news && news.status())
-  }
-
-  // The access gate: one Input on an otherwise empty card.
-  const acc = await page.goto(base + "/access", { waitUntil: "networkidle", timeout: 90000 })
-  if (acc && acc.ok()) {
-    await settle(page, scheme)
-    await shoot(page, `access-1440-${scheme}.png`)
-  } else {
-    console.log("SKIP /access:", acc && acc.status())
+    await shoot(page, `${name}-1440-${scheme}.png`)
   }
   await ctx.close()
 }
@@ -89,9 +89,32 @@ for (const scheme of ["dark", "light"]) {
   }
 
   // Settings: the select trigger that was filled with the card it sits on.
+  // This is the one surface in this pass that is visible on a page today.
   await page.goto(base + "/settings", { waitUntil: "networkidle", timeout: 90000 })
   await settle(page, scheme)
   await shoot(page, `settings-1440-${scheme}.png`)
+  // The Appearance card: climb from the select trigger to the group that
+  // carries it, so the crop shows the box AGAINST the card it sits on.
+  await page.locator('[data-slot="select-trigger"]').first().evaluate((el) => {
+    let node = el
+    while (node && !/group/i.test(String(node.className || ""))) node = node.parentElement
+    if (node) node.setAttribute("data-shot", "appearance-card")
+  })
+  const card = page.locator('[data-shot="appearance-card"]')
+  // BEFORE, rendered by putting the old fill back on the live page. Nothing is
+  // written to the site; the style is injected into this one browser tab.
+  await page.addStyleTag({
+    content: '[data-slot="select-trigger"]{background:var(--v-surface) !important;}',
+  })
+  await page.waitForTimeout(300)
+  await shootLocator(page, `settings-theme-before-${scheme}.png`, card)
+  await page.evaluate(() => {
+    document.querySelectorAll("style").forEach((s) => {
+      if (s.textContent?.includes("select-trigger")) s.remove()
+    })
+  })
+  await page.waitForTimeout(300)
+  await shootLocator(page, `settings-theme-select-${scheme}.png`, card)
 
   await ctx.close()
 }
