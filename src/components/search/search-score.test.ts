@@ -56,6 +56,33 @@ describe("scoreSearchEntry", () => {
     expect(opens).toBeGreaterThan(later)
   })
 
+  it("finds the singular when a plural was typed", () => {
+    // Measured against the real catalogue on the preview: "prompts" returned
+    // nothing at all while three lessons and two labs about prompts sat in
+    // the index, and so did "emails", "spreadsheets" and "hallucinations".
+    expect(scoreSearchEntry("The Prompt Ladder: Vague vs Five-Element", "prompts")).toBeGreaterThan(0)
+    expect(scoreSearchEntry("Three Chatbots, One Difficult Email", "emails")).toBeGreaterThan(0)
+    expect(scoreSearchEntry("The Spreadsheet Trust Test", "spreadsheets")).toBeGreaterThan(0)
+    expect(scoreSearchEntry("Catch the Hallucination: Fact-Check Face-Off", "hallucinations")).toBeGreaterThan(0)
+    expect(scoreSearchEntry("Minutes in Minutes: Meeting Transcript", "meetings")).toBeGreaterThan(0)
+  })
+
+  it("ranks the literal match above the inflected one", () => {
+    const literal = scoreSearchEntry("Prompts for Everyone", "prompts")
+    const inflected = scoreSearchEntry("Prompt for Everyone", "prompts")
+    expect(literal).toBeGreaterThan(inflected)
+    expect(inflected).toBeGreaterThan(0)
+  })
+
+  it("does not let a long word latch onto a short one it merely begins with", () => {
+    // "prompts" starts with "pro", but three letters of overlap and four of
+    // difference is not a match a learner would accept.
+    expect(scoreSearchEntry("Pro Tips for Everyone", "prompts")).toBe(0)
+    expect(scoreSearchEntry("A B C", "abcdef")).toBe(0)
+    // Still nothing for a word that simply is not there in any form.
+    expect(scoreSearchEntry("The Spreadsheet Trust Test", "kangaroos")).toBe(0)
+  })
+
   it("never returns more than 1 or a negative score", () => {
     for (const q of ["", "a", "prompt ladder", "zzzz"]) {
       const s = scoreSearchEntry("The Prompt Ladder: Vague vs Five-Element", q)

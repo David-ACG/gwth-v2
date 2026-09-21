@@ -9,9 +9,10 @@
  * four words. A search whose first answer is the wrong one is not much better
  * than the search that did nothing.
  *
- * So: every word of the query must appear IN the title, and a word that
- * matches a whole word beats one that matches the start of a word, which beats
- * one buried mid-word. Nothing else survives.
+ * So: every word of the query must be accounted for in the title, and a word
+ * that matches a whole word beats one that matches the start of a word, beats
+ * a plural or tense of a word that IS there, beats one buried mid-word.
+ * Nothing else survives.
  */
 
 /**
@@ -26,6 +27,66 @@ function normalise(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .trim()
+}
+
+/**
+ * The longest suffix an inflection may add. Covers the endings people
+ * actually type - "prompt" -> "prompts", "meeting" -> "meetings",
+ * "test" -> "testing" - while stopping a long word from latching onto a short
+ * one it merely begins with ("prompts" must not match a title word "pro").
+ */
+const MAX_INFLECTION = 3
+
+/** The shortest title word an inflected query may match back to. */
+const MIN_STEM = 3
+
+/** How well one typed word matches the title, and where. */
+interface TokenMatch {
+  /** Match quality: whole word, start of a word, inflection, or buried. */
+  tier: number
+  /** Where it landed, for the position tie-break. */
+  index: number
+}
+
+/**
+ * Finds the best way one typed word matches the title, or null for no match
+ * at all, which removes the entry.
+ *
+ * The inflection tier exists because the first version had none: every word
+ * had to appear literally, so a learner typing "prompts", "emails" or
+ * "hallucinations" was told nothing matched while three lessons and two labs
+ * about exactly that sat in the index. A search that answers "nothing" to a
+ * word printed on the page is the same complaint the learner started with
+ * (gwth-launch-4fg). It sits below the two literal tiers and above a buried
+ * match, because a singular the learner pluralised is a better answer than a
+ * fragment found mid-word.
+ */
+function matchToken(
+  words: string[],
+  haystack: string,
+  token: string
+): TokenMatch | null {
+  const index = haystack.indexOf(token)
+  if (index !== -1) {
+    if (words.includes(token)) return { tier: 1, index } // "test" in "Trust Test"
+    if (words.some((word) => word.startsWith(token))) {
+      return { tier: 0.7, index } // "spread" in "Spreadsheet"
+    }
+    return { tier: 0.4, index } // "heet" in "Spreadsheet"
+  }
+
+  // Nothing literal. The typed word may be a longer form of one in the title:
+  // take the longest such word, so "spreadsheets" prefers "spreadsheet".
+  const stem = words
+    .filter(
+      (word) =>
+        word.length >= MIN_STEM &&
+        token.startsWith(word) &&
+        token.length - word.length <= MAX_INFLECTION
+    )
+    .sort((a, b) => b.length - a.length)[0]
+
+  return stem ? { tier: 0.5, index: haystack.indexOf(stem) } : null
 }
 
 /**
@@ -46,23 +107,13 @@ export function scoreSearchEntry(title: string, query: string): number {
 
   let total = 0
   for (const token of tokens) {
-    const index = haystack.indexOf(token)
-    if (index === -1) return 0
-
-    let score: number
-    if (words.includes(token)) {
-      score = 1 // a whole word: "test" in "Trust Test"
-    } else if (words.some((word) => word.startsWith(token))) {
-      score = 0.7 // the start of a word: "spread" in "Spreadsheet"
-    } else {
-      score = 0.4 // buried inside one: "heet" in "Spreadsheet"
-    }
+    const match = matchToken(words, haystack, token)
+    if (!match) return 0
 
     // Earlier in the title is the better match, but only as a tie-break: the
     // tiers are spaced so position can never lift a weaker kind of match above
     // a stronger one.
-    score -= Math.min(index / haystack.length, 1) * POSITION_WEIGHT
-    total += score
+    total += match.tier - Math.min(match.index / haystack.length, 1) * POSITION_WEIGHT
   }
 
   const averaged = total / tokens.length
