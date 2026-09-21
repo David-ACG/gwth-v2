@@ -72,6 +72,13 @@ test.describe("Marketing homepage, full-page smoke", () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 1000 })
+    // The measurement is of the layout AFTER the resize, and under parallel
+    // workers this read can land before the reflow: the two columns then
+    // measure as the one-column phone stack and the test fails on a page that
+    // is correct. Wait for a frame rather than reading the old layout.
+    await page.evaluate(
+      () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+    )
     const positions = await page.locator('[data-section="hero"] > div > div').first().evaluate(
       (grid) => Array.from(grid.children).slice(0, 2).map((child) => {
         const box = child.getBoundingClientRect()
@@ -288,10 +295,14 @@ test.describe("Marketing homepage, full-page smoke", () => {
       '[data-testid="score-card"][data-state="stale"] [data-testid="score-line-dashed"]'
     )
     await expect(staleDashed).toHaveCount(1)
-    // And each state says which it is, in words.
+    // And each state says which it is, in words. The words are the ones the
+    // page settled on: "Level" reads as an attainment level and "Out of date"
+    // as a judgement on the learner, so they went, and this browser check was
+    // left behind asserting them (the unit test in home-fde.test.tsx has said
+    // "No change" and "Needs updating" since).
     await expect(page.locator('[data-section="score"]')).toContainText("Going up")
-    await expect(page.locator('[data-section="score"]')).toContainText("Level")
-    await expect(page.locator('[data-section="score"]')).toContainText("Out of date")
+    await expect(page.locator('[data-section="score"]')).toContainText("No change")
+    await expect(page.locator('[data-section="score"]')).toContainText("Needs updating")
   })
 
   test("every building block shows all three months", async ({ page }) => {
