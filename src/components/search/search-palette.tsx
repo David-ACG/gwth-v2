@@ -96,18 +96,25 @@ export function SearchPalette({ index }: SearchPaletteProps) {
           as Progress.
         </CommandEmpty>
 
-        <CommandGroup heading="Course">
-          {index.courses.map((entry) => (
-            <CommandItem
-              key={entry.id}
-              value={entry.title}
-              onSelect={() => navigateTo(entry.href)}
-            >
-              <BookOpen className="mr-2 size-4" />
-              {entry.title}
-            </CommandItem>
-          ))}
-        </CommandGroup>
+        {/* Every group is conditional on having something in it. The layout
+            hands this component EMPTY_SEARCH_INDEX whenever the W25 content
+            gate says no, and an unconditional group renders its heading over
+            nothing: that learner opened the palette onto "Course" and "Labs"
+            with no rows beneath either (gwth-launch-4fg). */}
+        {index.courses.length > 0 && (
+          <CommandGroup heading="Course">
+            {index.courses.map((entry) => (
+              <CommandItem
+                key={entry.id}
+                value={entry.title}
+                onSelect={() => navigateTo(entry.href)}
+              >
+                <BookOpen className="mr-2 size-4" />
+                {entry.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
 
         {index.lessons.length > 0 && (
           <CommandGroup heading="Lessons">
@@ -124,18 +131,20 @@ export function SearchPalette({ index }: SearchPaletteProps) {
           </CommandGroup>
         )}
 
-        <CommandGroup heading="Labs">
-          {index.labs.map((entry) => (
-            <CommandItem
-              key={entry.id}
-              value={entry.title}
-              onSelect={() => navigateTo(entry.href)}
-            >
-              <FlaskConical className="mr-2 size-4" />
-              {entry.title}
-            </CommandItem>
-          ))}
-        </CommandGroup>
+        {index.labs.length > 0 && (
+          <CommandGroup heading="Labs">
+            {index.labs.map((entry) => (
+              <CommandItem
+                key={entry.id}
+                value={entry.title}
+                onSelect={() => navigateTo(entry.href)}
+              >
+                <FlaskConical className="mr-2 size-4" />
+                {entry.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
 
         {index.news.length > 0 && (
           <CommandGroup heading="News">

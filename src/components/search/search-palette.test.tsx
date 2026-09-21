@@ -55,12 +55,16 @@ const index: SearchIndex = {
 const DESKTOP_TRIGGER = /^search⌘k$/i
 const MOBILE_TRIGGER = /^search$/i
 
-/** The dashboard frame as the layout assembles it: header above, palette below. */
-function renderFrame() {
+/**
+ * The dashboard frame as the layout assembles it: header above, palette below.
+ * Takes the index so a case can render the gated frame the layout builds for
+ * an account with no catalogue access (`EMPTY_SEARCH_INDEX`).
+ */
+function renderFrame(withIndex: SearchIndex = index) {
   return render(
     <>
       <DashboardHeader userName="David Uccelli" userEmail="david@example.com" />
-      <SearchPalette index={index} />
+      <SearchPalette index={withIndex} />
     </>
   )
 }
@@ -204,5 +208,28 @@ describe("the Cmd+K shortcut", () => {
     await waitFor(() =>
       expect(screen.queryByPlaceholderText(/Search lessons, labs, pages/i)).toBeNull()
     )
+  })
+})
+
+describe("an account the catalogue is gated from", () => {
+  it("heads no group it has nothing to put under it", async () => {
+    // The layout hands the palette `EMPTY_SEARCH_INDEX` when the W25 content
+    // gate says no - a signed-in learner whose subscription has lapsed, or a
+    // forged cookie. The lessons and news groups were already conditional;
+    // courses and labs were not, so that learner opened the palette onto two
+    // headings, "Course" and "Labs", with nothing beneath either. A heading
+    // over an empty list is the same promise-nothing-delivers that started
+    // this bug (gwth-launch-4fg).
+    const user = userEvent.setup()
+    renderFrame({ courses: [], lessons: [], labs: [], news: [] })
+
+    await user.click(screen.getByRole("button", { name: DESKTOP_TRIGGER }))
+    await screen.findByPlaceholderText(/Search lessons, labs, pages/i)
+
+    // The pages it can still reach are offered.
+    expect(await screen.findByRole("option", { name: /Progress/i })).toBeInTheDocument()
+
+    expect(screen.queryByText("Course")).toBeNull()
+    expect(screen.queryByText("Labs")).toBeNull()
   })
 })

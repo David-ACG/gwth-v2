@@ -40,6 +40,10 @@ dashboard layout passes it down as a prop. Two reasons, both load-bearing:
 
 A caller who fails the W25 content gate gets `EMPTY_SEARCH_INDEX` instead, so
 layout-level rendering cannot leak the syllabus to an unauthenticated visitor.
+Every group is therefore rendered only when it has rows: that caller used to
+open the palette onto a "Course" heading and a "Labs" heading with nothing
+underneath either, which is the same headline-over-nothing the whole bug was
+about.
 
 ## Relevance
 
