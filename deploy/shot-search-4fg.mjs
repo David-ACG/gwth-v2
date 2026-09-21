@@ -17,6 +17,13 @@ for (const theme of ["light", "dark"]) {
     colorScheme: theme,
     ignoreHTTPSErrors: true,
   })
+  // next-themes is class-based and reads localStorage, so colorScheme alone
+  // renders the light skin whatever Playwright claims the OS preference is.
+  await ctx.addInitScript((mode) => {
+    try {
+      window.localStorage.setItem("theme", mode)
+    } catch {}
+  }, theme)
   const page = await ctx.newPage()
 
   const res = await page.request.post(`${BASE}/api/auth/sign-in/email`, {
@@ -45,6 +52,13 @@ for (const theme of ["light", "dark"]) {
   await input.fill("lesson")
   await page.waitForTimeout(800)
   await page.screenshot({ path: `${OUT}/04-lessons-${theme}.png` })
+
+  // the empty state a learner meets when nothing matches
+  await input.fill("kangaroo")
+  await page.waitForTimeout(800)
+  await page.screenshot({ path: `${OUT}/07-nothing-matches-${theme}.png` })
+  await input.fill("")
+  await page.waitForTimeout(400)
 
   if (theme === "light") {
     // a real hit navigates
