@@ -53,6 +53,12 @@ for (const theme of ["light", "dark"]) {
   await page.waitForTimeout(800)
   await page.screenshot({ path: `${OUT}/04-lessons-${theme}.png` })
 
+  // a plural: "prompts" returned nothing at all until the scorer learned
+  // that a typed word can be a longer form of one in the title
+  await input.fill("prompts")
+  await page.waitForTimeout(800)
+  await page.screenshot({ path: `${OUT}/08-plural-${theme}.png` })
+
   // the empty state a learner meets when nothing matches
   await input.fill("kangaroo")
   await page.waitForTimeout(800)
