@@ -18,8 +18,11 @@ fuzzy matching. Four result groups:
 (A **News** group exists in the index and renders when `ENABLE_NEWS` is on. It
 is off.)
 
-Selecting an item navigates to its page, closes the dialog and clears the
-query, so reopening never starts on the last search.
+Selecting an item navigates to its page and closes the dialog. The query is
+cleared on the CLOSED transition, wherever the close came from: the dialog
+reports its own dismissals (Escape, the X, a click outside) but a close driven
+by the store - a second press of Cmd+K - does not, and clearing only on the
+first path left the palette reopening pre-filtered to a forgotten query.
 
 ## The index
 
@@ -43,10 +46,15 @@ layout-level rendering cannot leak the syllabus to an unauthenticated visitor.
 `search-score.ts` replaces cmdk's default scorer, which matched a SUBSEQUENCE -
 the query's letters in order, anywhere. On this catalogue that put six
 unrelated lessons above the one real hit for "spread" (gwth-launch-4fg). Every
-word of the query must now appear in the title; a whole word beats the start of
-a word beats one buried mid-word, and position only breaks ties. The scorer
-reaches cmdk through a `filter` prop that `CommandDialog` forwards to
-`Command`.
+word of the query must now be accounted for in the title, in one of four
+tiers: a whole word, the start of a word, an inflection of a word that is there
+("prompts" for "Prompt"), then one buried mid-word. Position only breaks ties.
+The inflection tier is not optional politeness - without it "prompts", "emails"
+and "hallucinations" all returned nothing against the real catalogue while
+lessons about each sat in the index - but it is deliberately narrow: at most
+three added letters onto a stem of at least three, so "prompts" cannot latch
+onto a title word "pro". The scorer reaches cmdk through a `filter` prop that
+`CommandDialog` forwards to `Command`.
 
 ## Open state
 
