@@ -4,8 +4,8 @@ import AxeBuilder from "@axe-core/playwright"
 /**
  * Full-page smoke for the paper-first home page (N12, 2026-09-03). Sections
  * are the N9 artboard's, re-ordered on 2026-09-15 for David's individual-first
- * pass (annotation a-20260915-085703-483d98): hero (with the six-blocks plate
- * and its key), course, months, blocks, organisations (a signpost, not the
+ * pass (annotation a-20260915-085703-483d98): hero (with the what-you-make
+ * plate), course, months, blocks, organisations (a signpost, not the
  * old institution pitch), individuals, plus the shared nav and footer.
  *
  * `argument`, the three institution evidence figures, was removed the same day
@@ -92,11 +92,11 @@ test.describe("Marketing homepage, full-page smoke", () => {
   })
 
   test("shows one plate per mode: the dark render stays hidden in light", async ({ page }) => {
-    await expect(page.locator('img[src*="six-blocks.png"]').first()).toBeVisible()
-    await expect(page.locator('img[src*="six-blocks-dark"]').first()).toBeHidden()
+    await expect(page.locator('img[src*="what-you-make.png"]').first()).toBeVisible()
+    await expect(page.locator('img[src*="what-you-make-dark"]').first()).toBeHidden()
     await page.evaluate(() => document.documentElement.classList.add("dark"))
-    await expect(page.locator('img[src*="six-blocks-dark"]').first()).toBeVisible()
-    await expect(page.locator('img[src*="six-blocks.png"]').first()).toBeHidden()
+    await expect(page.locator('img[src*="what-you-make-dark"]').first()).toBeVisible()
+    await expect(page.locator('img[src*="what-you-make.png"]').first()).toBeHidden()
   })
 
   test("nothing scrolls sideways at phone width", async ({ page }) => {
@@ -116,23 +116,20 @@ test.describe("Marketing homepage, full-page smoke", () => {
     expect(JSON.parse(content ?? "{}")["@type"]).toBe("Course")
   })
 
-  test("the six-blocks key stays three across at phone width", async ({ page }) => {
+  test("the hero picture is wide enough at phone width to read its own labels", async ({
+    page,
+  }) => {
+    // The Bible allows ONE landscape composition for laptop and phone only on
+    // condition that the reduced lettering is still readable
+    // (landscape-labelled-images). The page cannot measure legibility, but it
+    // can hold the picture to the full column: a plate that renders into a
+    // narrow slot is the way that condition gets broken quietly.
     await page.setViewportSize({ width: 390, height: 844 })
     await gotoHome(page)
-    const key = page.getByTestId("six-blocks-key")
-    await expect(key).toBeVisible()
-    const spans = page.getByTestId("six-blocks-key-cell")
-    await expect(spans).toHaveCount(6)
-    const boxes = await spans.evaluateAll((els) =>
-      els.map((el) => {
-        const r = el.getBoundingClientRect()
-        // 4px buckets: sub-pixel drift must not split one visual row in two
-        return { top: Math.round(r.top / 4), left: Math.round(r.left / 4) }
-      })
-    )
-    // Two rows of three: two distinct top offsets, three distinct left offsets.
-    expect(new Set(boxes.map((b) => b.top)).size).toBe(2)
-    expect(new Set(boxes.map((b) => b.left)).size).toBe(3)
+    const plate = page.locator('[data-section="hero"] figure img:visible').first()
+    await expect(plate).toBeVisible()
+    const box = await plate.boundingBox()
+    expect(box?.width ?? 0).toBeGreaterThan(330)
   })
 
   test("every internal link the page carries answers", async ({ page, request }) => {
@@ -155,15 +152,23 @@ test.describe("Marketing homepage, full-page smoke", () => {
     }
   })
 
-  test("the plate carries a clause per tile and the flagship line", async ({ page }) => {
-    // David, 2026-09-14: six bare category words were "totally uninspiring for
-    // the most important page on GWTH".
-    const cells = page.getByTestId("six-blocks-key-cell")
-    await expect(cells.first()).toContainText("Research")
-    await expect(cells.first()).toContainText("find facts and check the source")
+  test("the plate carries the flagship line, and no key of category words", async ({
+    page,
+  }) => {
+    // David, 2026-09-14: six bare category words under the picture were
+    // "totally uninspiring for the most important page on GWTH", and
+    // 2026-09-13: the picture itself read as a lesson figure. Both are fixed
+    // by one flagship picture that letters its own labels (bead
+    // gwth-launch-88z.32.12).
+    await expect(page.getByTestId("six-blocks-key")).toHaveCount(0)
     await expect(
-      page.getByText(/Six ways of working, not six subjects/)
+      page.getByText(/Three projects from the course, in the order you make them/)
     ).toBeVisible()
+    // The sentence it replaced kept its meaning, in the section that owns the
+    // six blocks.
+    await expect(page.getByTestId("blocks-lead")).toContainText(
+      "Six ways of working, not six subjects"
+    )
   })
 
   test("the page is individual-first: the learner comes before the buyer", async ({

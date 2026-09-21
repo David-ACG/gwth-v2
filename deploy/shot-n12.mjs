@@ -65,19 +65,22 @@ for (const mode of ["light", "dark"]) {
         )
         console.log(`${mode}/390 ${url} horizontal overflow: ${overflow}`)
       }
-      // The X6 key at phone width: two rows of three, never collapsed.
+      // The hero picture at phone width. The X6 key that used to be measured
+      // here went with the six-blocks plate (bead gwth-launch-88z.32.12): the
+      // flagship picture letters its own labels, so what matters now is how
+      // wide the picture renders and whether that lettering survives.
       await page.goto(base + "/", { waitUntil: "networkidle" })
       await page.evaluate((m) => {
         document.documentElement.classList.toggle("dark", m === "dark")
       }, mode)
       await page.waitForTimeout(300)
-      const tops = await page
-        .getByTestId("six-blocks-key")
-        .locator("span")
-        .evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top)))
-      console.log(`${mode}/390 key rows: ${new Set(tops).size} (want 2)`)
-      await page.locator("#six-building-blocks").screenshot({
-        path: path.join(out, `key-${mode}-390.png`),
+      const plateWidth = await page
+        .locator('[data-section="hero"] figure img:visible')
+        .first()
+        .evaluate((el) => Math.round(el.getBoundingClientRect().width))
+      console.log(`${mode}/390 hero plate width: ${plateWidth}px`)
+      await page.locator("#what-you-make").screenshot({
+        path: path.join(out, `plate-${mode}-390.png`),
       })
     }
     await ctx.close()

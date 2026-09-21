@@ -66,65 +66,6 @@
   display: block;
 }
 
-/*
- * The key. The tiles occupy the middle 22.5% to 77% of the photograph, three
- * across, and the PHOTOGRAPH DOES NOT REFLOW, so neither does this: three
- * columns at every width, inset to sit under the tiles. Collapsing it to two
- * columns on a phone would point the names at nothing (image-text-rules).
- */
-.plateKey {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem 0.5rem;
-  margin: 0.85rem 23% 0 22.5%;
-  text-align: center;
-}
-
-.plateKey > span {
-  display: block;
-  min-width: 0;
-}
-
-.keyName {
-  display: block;
-  font-size: clamp(0.66rem, 2.5vw, 0.95rem);
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--v-ink);
-  white-space: nowrap;
-}
-
-/*
- * David, 2026-09-14: six bare category words under the flagship image were
- * "totally uninspiring". The clause says what the block leaves you able to
- * do. It sits under its own tile, so it wraps inside its column and never
- * widens it.
- */
-.keyClause {
-  display: block;
-  margin-top: 0.2rem;
-  font-size: clamp(0.62rem, 2.1vw, 0.82rem);
-  line-height: 1.3;
-  color: var(--v-muted);
-  text-wrap: balance;
-}
-
-/*
- * Under 30rem the inset leaves too little room for a two-line cell under each
- * tile, so the clauses stand down and the names hold their alignment. The
- * caption sentence below carries the point at every width.
- */
-@media (max-width: 30rem) {
-  .keyClause {
-    display: none;
-  }
-
-  .keyName {
-    font-size: 0.62rem;
-    letter-spacing: -0.01em;
-  }
-}
-
 /* The flagship line: what the picture is arguing, not what it contains. */
 .plateLine {
   display: block;

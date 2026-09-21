@@ -10,8 +10,9 @@ import styles from "./home-fde.module.css"
 /**
  * The home page in the paper-first register (N12, 2026-09-03), on the artboard
  * David approved in the N9 design round (annex 15: HN2L light / HN3D dark).
- * The six-blocks plate is the I2 image with the key rendered by the PAGE
- * (image-text-rules).
+ * The hero plate is `what-you-make`, the flagship picture that replaced the
+ * six-blocks legend (bead gwth-launch-88z.32.12). Its labels are lettered into
+ * the photograph, so the page renders no key under it.
  *
  * ## Individual-first (David, 2026-09-15, annotation a-20260915-085703-483d98)
  *
@@ -488,31 +489,34 @@ export function HomeFde() {
             </div>
           </div>
 
-          {/* The one saturated thing on the page. No frame, no tint, 8px. */}
-          <figure className={`${p.plate} ${styles.heroPlate}`} id="six-building-blocks">
+          {/* The one saturated thing on the page. No frame, no tint, 8px.
+
+              David, 2026-09-13, on the picture that used to be here: *"the
+              image could be better for a home page as it just looks like a
+              kind of standard image that you get in a lesson rather than a
+              special image that goes on the home page"* (bead
+              gwth-launch-88z.32.12). Six equal cards in a three by two grid is
+              the form every lesson figure takes, it is the picture of breadth
+              rather than of depth, and the six blocks have a section of their
+              own further down that does the job properly. This picture makes
+              the headline's argument instead: three projects, each one bigger
+              than the last, the newest one in a hand. Its labels are lettered
+              into the photograph (landscape-labelled-images), so the page no
+              longer renders a key under it; David, 2026-09-14, had already
+              said the six bare category words there were "totally
+              uninspiring". */}
+          <figure className={`${p.plate} ${styles.heroPlate}`} id="what-you-make">
             <Plate
-              name="six-blocks"
-              alt="Six square paper tiles in two rows of three, each carrying one cut-paper symbol: a magnifying glass, a fountain pen nib, a lightbulb, a stack of bricks, a bar chart and a cog. A hand is placing the sixth tile."
+              name="what-you-make"
+              alt="Three paper-craft objects on a desk, each larger than the one before. A small card with a speech bubble and a cog, labelled Month 1, a tool that works. A propped screen showing a bar chart with a key beside it, labelled Month 2, real software. A bound booklet with a microphone on its mint cover, labelled Month 3, your AI consultant, being set down by a hand."
               priority
               sizes="(max-width: 1180px) 100vw, 1140px"
             />
             <figcaption className={styles.plateCaption}>
-              {/* The page labels the tiles in the picture's own pattern,
-                  three across at every width. Never collapse this grid: the
-                  photograph does not reflow, so a two-column key would point
-                  the names at nothing (image-text-rules). */}
-              <span className={styles.plateKey} data-testid="six-blocks-key">
-                {SIX_BLOCKS.map((block) => (
-                  <span key={block.n} data-testid="six-blocks-key-cell">
-                    <span className={styles.keyName}>{block.name}</span>
-                    <span className={styles.keyClause}>{block.clause}</span>
-                  </span>
-                ))}
-              </span>
               <span className={styles.plateLine}>
-                Six ways of working, not six subjects. The three months take
-                you through <em>every one of them</em>, using your own work as
-                an example.
+                Three projects from the course, in the order you make them. You
+                build <em>every one of them</em> yourself, using your own work
+                as an example, and you keep all three.
               </span>
             </figcaption>
           </figure>
@@ -661,7 +665,15 @@ export function HomeFde() {
             small tool: research, content, thinking, building, data and
             automation.
             Some projects are the working tool itself. Others are the plan or
-            the test that has to come before anyone else uses it.
+            the test that has to come before anyone else uses it.{" "}
+            {/* "Six ways of working, not six subjects" used to sit under the
+                hero picture, where it was explaining six tiles in that
+                photograph. The picture changed (bead gwth-launch-88z.32.12),
+                so the sentence moved to the section that owns the six blocks
+                rather than being dropped. It closes the paragraph rather than
+                opening it: the opening sentence is pinned by David's
+                building-emphasis annotation (a-20260915-085439-6c8134). */}
+            Six ways of working, not six subjects.
           </p>
           <div className={p.cards3}>
             {SIX_BLOCKS.map((block) => (

@@ -56,13 +56,16 @@ describe("HomeFde (paper-first, N12)", () => {
     expect(h1.textContent).not.toMatch(/gap is not access|It is depth/i)
   })
 
-  it("carries a light and a dark render for the six-blocks plate", () => {
+  it("carries a light and a dark render for the hero plate", () => {
     render(<HomeFde />)
     const srcs = (screen.getAllByRole("img") as HTMLImageElement[]).map(
       (img) => img.getAttribute("src") ?? ""
     )
-    expect(srcs.some((s) => s.includes("six-blocks.png"))).toBe(true)
-    expect(srcs.some((s) => s.includes("six-blocks-dark.png"))).toBe(true)
+    expect(srcs.some((s) => s.includes("what-you-make.png"))).toBe(true)
+    expect(srcs.some((s) => s.includes("what-you-make-dark.png"))).toBe(true)
+    // The six-cards legend was the lesson-figure picture David rejected for
+    // this page (bead gwth-launch-88z.32.12). It must not come back quietly.
+    expect(srcs.some((s) => s.includes("six-blocks"))).toBe(false)
   })
 
   it("gives one card per month, named and in order", () => {
@@ -346,35 +349,31 @@ describe("HomeFde building emphasis", () => {
   })
 })
 
-describe("HomeFde six-blocks plate: the key says something", () => {
-  it("labels the plate three across, in tile order, one cell per block", () => {
+describe("HomeFde hero plate: the flagship picture, not a lesson figure", () => {
+  it("renders no key under the picture, because the picture carries its own labels", () => {
     render(<HomeFde />)
-    const cells = screen.getAllByTestId("six-blocks-key-cell")
-    expect(cells).toHaveLength(SIX_BLOCKS.length)
-    SIX_BLOCKS.forEach((block, i) => {
-      expect(cells[i]!.textContent).toContain(block.name)
-    })
+    expect(screen.queryByTestId("six-blocks-key")).toBeNull()
+    expect(screen.queryAllByTestId("six-blocks-key-cell")).toHaveLength(0)
   })
 
-  it("gives every name a clause, so no cell is a bare category word", () => {
+  it("makes the flagship point under the plate, about the work rather than the categories", () => {
     render(<HomeFde />)
-    const cells = screen.getAllByTestId("six-blocks-key-cell")
-    SIX_BLOCKS.forEach((block, i) => {
-      expect(block.clause.length).toBeGreaterThan(0)
-      expect(block.clause).not.toBe(block.name)
-      expect(cells[i]!.textContent).toContain(block.clause)
-    })
-  })
-
-  it("makes the flagship point under the plate, not a list of categories", () => {
-    render(<HomeFde />)
-    const caption = screen.getByText(/Six ways of working, not six subjects/)
+    const caption = screen.getByText(/Three projects from the course/)
+    expect(caption.textContent).toMatch(/in the order you make them/)
+    expect(caption.textContent).toMatch(/you keep all three/)
     expect(caption.textContent).toMatch(/every one of them/)
     // David, a-20260915-210202-691323: *"The phrase on your own work is not
     // really used commonly in the UK. Maybe you could say using your own work
     // as an example."*
     expect(caption.textContent).toMatch(/using your own work as an example/)
     expect(caption.textContent).not.toMatch(/them, on your own work/)
+  })
+
+  it("keeps the ways-of-working sentence, in the section that owns the blocks", () => {
+    render(<HomeFde />)
+    const lead = screen.getByTestId("blocks-lead")
+    expect(lead.textContent).toMatch(/Six ways of working, not six subjects/)
+    expect(SIX_BLOCKS).toHaveLength(6)
   })
 })
 
