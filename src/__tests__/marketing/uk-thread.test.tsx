@@ -233,13 +233,73 @@ function ukSentences(text: string): string[] {
     .map((s) => s.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " "))
 }
 
+/**
+ * `/news` is a routed public page (it answers 200) whose body no unit test can
+ * render: it is an async server component that awaits the news store and the
+ * signed-in user before it returns any JSX. So it is read as source instead,
+ * and held to the same three rules as every rendered surface. This is weaker
+ * than a render and is deliberately labelled as such: it proves the copy is
+ * in the file, not that the file is on the page. The 200 on the route, and
+ * the description check further down, cover the other half.
+ */
+const SOURCE_ONLY_SURFACES: readonly { route: string; file: string }[] = [
+  { route: "/news", file: "app/(public)/news/page.tsx" },
+]
+
+/**
+ * The words a reader would see in a `.tsx` file: JSX comments removed first
+ * (so a note ABOUT the UK thread is never mistaken for the thread), then
+ * `{...}` expressions, then the tags, leaving the literal text between them.
+ */
+function jsxText(file: string): string {
+  return readFileSync(join(__dirname, "..", "..", file), "utf8")
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, " ")
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/\{[^{}]*\}/g, " ")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&apos;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+describe("the surfaces no unit test can render still carry the thread", () => {
+  for (const { route, file } of SOURCE_ONLY_SURFACES) {
+    it(`${route} says it is for the United Kingdom`, () => {
+      expect(jsxText(file)).toMatch(/\bUK\b|United Kingdom|Britain|British/)
+    })
+
+    it(`${route} makes no unsupported claim`, () => {
+      const text = jsxText(file)
+      for (const claim of UNSUPPORTED_UK_CLAIMS) {
+        const hit = text.match(claim.pattern)
+        expect(hit, hit ? `${route} says "${hit[0]}". ${claim.why}` : claim.id).toBeNull()
+      }
+    })
+
+    it(`${route} uses no em dash, en dash or section sign`, () => {
+      const hit = jsxText(file).match(/[\u2014\u2013\u00a7]/)
+      expect(hit, hit ? `${route} uses "${hit[0]}"` : "clean").toBeNull()
+    })
+  }
+})
+
 describe("the thread is repeated, not copy-pasted", () => {
   it("no UK sentence appears on two different surfaces", () => {
     const seen = new Map<string, string>()
     const collisions: string[] = []
-    for (const surface of SURFACES) {
-      const { text } = inspect(surface)
-      for (const sentence of new Set(ukSentences(text))) {
+    const everySurface: { route: string; text: () => string }[] = [
+      ...SURFACES.map((surface) => ({
+        route: surface.route,
+        text: () => inspect(surface).text,
+      })),
+      ...SOURCE_ONLY_SURFACES.map(({ route, file }) => ({
+        route,
+        text: () => jsxText(file),
+      })),
+    ]
+    for (const surface of everySurface) {
+      for (const sentence of new Set(ukSentences(surface.text()))) {
         const owner = seen.get(sentence)
         if (owner && owner !== surface.route) {
           collisions.push(`"${sentence}" on both ${owner} and ${surface.route}`)
@@ -341,11 +401,17 @@ describe("no live marketing file hard-codes a figure the module owns", () => {
  * names it alongside the footer, and it is the surface most likely to be
  * forgotten in a later copy pass, because no screenshot ever shows it.
  *
- * The routes below are the public pages a visitor can actually reach from
- * the nav, the footer or a call to action. `/news` is excluded because
- * `ENABLE_NEWS` is false and neither the nav nor the footer links it;
- * `/privacy`, `/terms`, `/verify` and `/tech-radar` are excluded because they
- * are not marketing copy.
+ * The routes below are the public pages a visitor can actually reach.
+ * `/news` is one of them: `ENABLE_NEWS` is false, so the nav and the footer
+ * filter its link out, but `src/app/(public)/news/page.tsx` is an ordinary
+ * routed segment that answers 200 and can be linked, shared or indexed. (The
+ * gated FDE rewrite lives at `app/(public)/_news/`, underscore-prefixed, which
+ * Next does not route at all.) An earlier pass on this bead called `/news` out
+ * of scope on the strength of the missing links; the route being unlinked is
+ * not the same as the route being unreachable, so it is in.
+ *
+ * `/privacy`, `/terms`, `/verify` and `/tech-radar` stay out because they are
+ * not marketing copy.
  */
 const DESCRIBED_ROUTES: readonly { route: string; file: string }[] = [
   { route: "/", file: "app/layout.tsx" },
@@ -358,6 +424,7 @@ const DESCRIBED_ROUTES: readonly { route: string; file: string }[] = [
   { route: "/for-teams", file: "app/(public)/for-teams/page.tsx" },
   { route: "/labs", file: "app/(public)/labs/page.tsx" },
   { route: "/lessons", file: "app/(public)/lessons/page.tsx" },
+  { route: "/news", file: "app/(public)/news/page.tsx" },
   { route: "/newsletter", file: "app/(public)/newsletter/page.tsx" },
   { route: "/pricing", file: "app/(public)/pricing/page.tsx" },
   { route: "/waitlist", file: "app/(public)/waitlist/page.tsx" },

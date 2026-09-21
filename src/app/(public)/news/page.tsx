@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { Newspaper } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getNews, getNewsFilters, getUserVotes } from "@/lib/data/news"
 import { getCurrentUser } from "@/lib/auth"
@@ -78,16 +77,31 @@ export default async function NewsPage({
       <section className="border-b bg-muted/30 py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              <Newspaper className="size-4" />
-              Community News
-            </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               AI News & Votes
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              The latest in AI — curated by GWTH, ranked by the community. Top-voted
-              stories become hands-on labs.
+              The latest in AI, curated by GWTH and ranked by the community.
+              Top-voted stories become hands-on labs.
+            </p>
+            {/*
+              The UK thread on this page (bead gwth-launch-88z.32.25). The
+              other marketing pages answer "why here" with the course, the
+              price or the rules a profession works to; a news feed can only
+              answer it with what gets PICKED, so that is what this says.
+              Keep it about selection, and do not reuse a sentence from
+              another surface: the suite fails a UK sentence that appears on
+              two of them.
+            */}
+            <p
+              className="mt-4 text-base text-muted-foreground"
+              data-testid="news-uk-note"
+            >
+              A story earns its place here by changing something for someone
+              working in the United Kingdom: a rule that now applies to your
+              trade, a tool that has finally opened to British users, a price
+              quoted in pounds. Announcements that land nowhere near this
+              country are left out, however loudly they are made.
             </p>
           </div>
         </div>
