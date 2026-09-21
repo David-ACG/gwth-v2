@@ -4,7 +4,7 @@ import { ForInstitutionsFde } from "@/components/marketing/for-institutions-fde/
 export const metadata: Metadata = {
   title: "The AI baseline before your specialist courses",
   description:
-    "Learners arrive at professional courses with very different applied AI understanding, so tutors level the room before the subject starts. GWTH is the three-month foundation that runs first: you choose the lessons and the pass mark, your tutors see verified evidence that a learner met it, and records arrive shaped for continuing professional development (CPD).",
+    "Learners arrive at UK professional courses with very different applied AI understanding, so tutors level the room before the subject starts. GWTH is the three-month foundation that runs first: you choose the lessons and the pass mark, your tutors see verified evidence that a learner met it, and records arrive shaped for continuing professional development (CPD).",
 }
 
 /**

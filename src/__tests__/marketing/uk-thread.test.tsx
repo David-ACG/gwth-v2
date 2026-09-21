@@ -331,3 +331,112 @@ describe("no live marketing file hard-codes a figure the module owns", () => {
     })
   }
 })
+
+// ─── The twelfth surface nobody can see: the page descriptions ─────────────
+
+/**
+ * A page's `description` is the sentence a visitor reads in a Google result,
+ * in a shared link preview and in a bookmark, so it is a marketing surface
+ * with its own copy even though nothing on the page renders it. The bead
+ * names it alongside the footer, and it is the surface most likely to be
+ * forgotten in a later copy pass, because no screenshot ever shows it.
+ *
+ * The routes below are the public pages a visitor can actually reach from
+ * the nav, the footer or a call to action. `/news` is excluded because
+ * `ENABLE_NEWS` is false and neither the nav nor the footer links it;
+ * `/privacy`, `/terms`, `/verify` and `/tech-radar` are excluded because they
+ * are not marketing copy.
+ */
+const DESCRIBED_ROUTES: readonly { route: string; file: string }[] = [
+  { route: "/", file: "app/layout.tsx" },
+  { route: "/about", file: "app/(public)/about/page.tsx" },
+  { route: "/contact", file: "app/(public)/contact/page.tsx" },
+  {
+    route: "/for-institutions",
+    file: "app/(public)/for-institutions/page.tsx",
+  },
+  { route: "/for-teams", file: "app/(public)/for-teams/page.tsx" },
+  { route: "/labs", file: "app/(public)/labs/page.tsx" },
+  { route: "/lessons", file: "app/(public)/lessons/page.tsx" },
+  { route: "/newsletter", file: "app/(public)/newsletter/page.tsx" },
+  { route: "/pricing", file: "app/(public)/pricing/page.tsx" },
+  { route: "/waitlist", file: "app/(public)/waitlist/page.tsx" },
+  { route: "/why-gwth", file: "app/(public)/why-gwth/page.tsx" },
+]
+
+/**
+ * The first `description:` value in a route's `metadata` export, as readable
+ * text. The value can be a plain string, several strings joined with `+`, or
+ * a template literal with an interpolation in it, so the punctuation of the
+ * expression is stripped rather than parsed: this is a copy check, not a
+ * compiler. `${...}` holes are replaced by a space so that a count spliced
+ * into a sentence cannot accidentally create or hide a word.
+ */
+function metadataDescription(file: string): string {
+  const source = readFileSync(join(ROOT, file), "utf8")
+  const start = source.indexOf("export const metadata")
+  expect(start, `${file} has no metadata export`).toBeGreaterThan(-1)
+  const afterKey = source.indexOf("description:", start)
+  expect(afterKey, `${file} metadata has no description`).toBeGreaterThan(-1)
+  const rest = source.slice(afterKey + "description:".length)
+  // The value ends at the next property at the same indent, or the end of
+  // the object literal.
+  const end = rest.search(/\n {2}[a-zA-Z]+:|\n\}/)
+  return rest
+    .slice(0, end === -1 ? undefined : end)
+    .replace(/\$\{[^}]*\}/g, " ")
+    .replace(/[`"']/g, "")
+    .replace(/\s*\+\s*/g, "")
+    .replace(/,\s*$/, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+describe("every marketing page description carries the UK thread", () => {
+  for (const { route, file } of DESCRIBED_ROUTES) {
+    it(`${route} says who it is for`, () => {
+      const description = metadataDescription(file)
+      expect(description.length, `${file} description looks empty`).toBeGreaterThan(40)
+      expect(
+        description,
+        `${route} (${file}) never says it is for the United Kingdom`
+      ).toMatch(/\bUK\b|United Kingdom|Britain|British|GBP|£/)
+    })
+  }
+
+  it("gives each route its own description", () => {
+    const seen = new Map<string, string>()
+    const collisions: string[] = []
+    for (const { route, file } of DESCRIBED_ROUTES) {
+      const description = metadataDescription(file).toLowerCase()
+      const owner = seen.get(description)
+      if (owner) collisions.push(`${owner} and ${route} share a description`)
+      else seen.set(description, route)
+    }
+    expect(collisions).toEqual([])
+  })
+
+  it("keeps em dashes, en dashes and section signs out of them", () => {
+    const offenders: string[] = []
+    for (const { route, file } of DESCRIBED_ROUTES) {
+      const hit = metadataDescription(file).match(/[—–§]/)
+      if (hit) offenders.push(`${route} uses "${hit[0]}"`)
+    }
+    expect(offenders).toEqual([])
+  })
+
+  it("states no UK figure the shared module owns", () => {
+    const offenders: string[] = []
+    for (const { route, file } of DESCRIBED_ROUTES) {
+      const description = metadataDescription(file)
+      for (const figure of UK_AI_FIGURES) {
+        if (description.includes(figure.value)) {
+          offenders.push(
+            `${route} prints "${figure.value}" where no source can be linked`
+          )
+        }
+      }
+    }
+    expect(offenders).toEqual([])
+  })
+})
