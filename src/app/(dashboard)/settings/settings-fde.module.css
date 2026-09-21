@@ -132,11 +132,15 @@
   border-radius: 8px;
 }
 
+/* --v-quiet, not --v-surface: a select trigger is a field well, and on this
+ * page it sits inside a card that is itself --v-surface, so the card fill left
+ * it with nothing but its boundary to tell it apart (bead
+ * gwth-launch-88z.32.15). */
 .controls :global([data-slot="select-trigger"]),
 .controls button[role="combobox"] {
   border: 1px solid var(--v-line);
   border-radius: var(--radius-md);
-  background: var(--v-surface);
+  background: var(--v-quiet);
   color: var(--v-ink);
   font-family: var(--font-sans);
   font-size: var(--fde-body-sm);

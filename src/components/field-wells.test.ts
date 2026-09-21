@@ -33,8 +33,14 @@ function cssModules(dir: string): string[] {
   return out
 }
 
-/** A selector that names a text field, a textarea or a select. */
-const FIELD = /(^|[.\s,])(input|textarea|select|searchInput|filterSelect|field)\b/i
+/**
+ * A selector that names a text field, a textarea or a select.
+ *
+ * The attribute forms are here because they are how the shadcn primitives are
+ * reached from a CSS module, and the settings page reached them and filled a
+ * select trigger with the card colour without this sweep noticing.
+ */
+const FIELD = /(^|[.\s,])(input|textarea|select|searchInput|filterSelect|field)\b|select-trigger|combobox/i
 
 /** Selectors that name a state or a wrapper, not the field's resting fill. */
 const NOT_A_RESTING_FILL = /:(hover|focus|focus-visible|focus-within|disabled|checked|active)|\[aria-invalid|Wrap|Row|Group|Label|Error|::placeholder/
@@ -93,6 +99,49 @@ describe("gwth-launch-88z.32.15: placeholder ink clears the reading bar", () => 
       // --v-muted is the metadata ink. On the quiet fill it measures under
       // 4.5:1, so a placeholder sitting in a field well uses --v-soft.
       expect(ink?.[1], `${rule.file} ${rule.selector}`).not.toBe("var(--v-muted)")
+    })
+  }
+})
+
+/**
+ * The shared primitives, which are what eleven other components render.
+ *
+ * These carry their fill as a Tailwind class rather than as a CSS module, so
+ * the sweep above cannot see them, and shadcn's defaults were wrong in both
+ * modes: `bg-transparent` gives a field on a card the card's own fill, and
+ * `dark:bg-input/30` invents a dark fill out of the boundary token that
+ * matches no field beside it.
+ */
+describe("gwth-launch-88z.32.15: the shared field primitives take the quiet fill", () => {
+  const PRIMITIVES = [
+    "components/ui/input.tsx",
+    "components/ui/textarea.tsx",
+    "components/ui/select.tsx",
+  ]
+
+  for (const file of PRIMITIVES) {
+    const raw = readFileSync(join(ROOT, file), "utf8")
+    // Comments explain what was removed and why, so they name the old values.
+    // Measure the code, not the explanation.
+    const source = raw.replace(/\/\*[\s\S]*?\*\//g, "")
+
+    it(`${file} is filled with --v-quiet`, () => {
+      expect(source).toContain("bg-[var(--v-quiet)]")
+    })
+
+    it(`${file} does not fall back to the card or to a fraction of the boundary`, () => {
+      // file:bg-transparent is the file-picker button inside the field, not
+      // the field's own fill.
+      expect(
+        source.replace(/file:bg-transparent/g, ""),
+        `${file} still carries bg-transparent`
+      ).not.toMatch(/\bbg-transparent\b/)
+      expect(source, `${file} still carries a bg-input fraction`).not.toMatch(/\bbg-input\//)
+    })
+
+    it(`${file} keeps its placeholder off the metadata ink`, () => {
+      expect(source).not.toMatch(/placeholder(?:\]?):text-muted-foreground/)
+      expect(source).not.toMatch(/data-\[placeholder\]:text-muted-foreground/)
     })
   }
 })
