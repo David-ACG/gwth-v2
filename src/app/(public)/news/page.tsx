@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
+import { notFound } from "next/navigation"
 import { getNews, getNewsFilters, getUserVotes } from "@/lib/data/news"
 import { getCurrentUser } from "@/lib/auth"
 import { NewsCard } from "@/components/news/news-card"
 import { NewsFilters } from "@/components/news/news-filters"
 import { EmptyState } from "@/components/shared/empty-state"
-import { NEWS_PAGE_SIZE } from "@/lib/config"
+import { ENABLE_NEWS, NEWS_PAGE_SIZE } from "@/lib/config"
 import type { NewsSortOption } from "@/lib/types"
 import { NewsletterInline } from "@/components/news/newsletter-inline"
 import Link from "next/link"
@@ -20,8 +21,24 @@ export const metadata: Metadata = {
 }
 
 /**
- * Public news feed page.
- * Displays curated AI/tech news articles with upvoting, filtering, and pagination.
+ * Public news feed page: curated AI/tech articles with upvoting, filtering and
+ * pagination.
+ *
+ * GATED, and the gate is the FIRST statement in the body, exactly as in the
+ * FDE rewrite at `../_news/page.tsx`. `ENABLE_NEWS` is false, and until it is
+ * true this route must 404 rather than render.
+ *
+ * It did neither, until bead gwth-launch-88z.32.25 went looking for every page
+ * that should carry the UK thread. `_news` is underscore-prefixed, so Next
+ * does not route it and its gate was doing nothing; THIS file is the one a
+ * visitor reaches, and it had no gate at all. It asked Supabase for articles,
+ * the call failed, and the route group's error boundary caught it. So
+ * https://gwth.ai/news was answering 200 with "An unexpected error occurred"
+ * to anyone who had the link, for as long as the two copies have existed.
+ *
+ * A 404 is the honest answer for a feature that is switched off. Turning the
+ * feed back on is bead gwth-launch-88z.32.41, which also has to decide which
+ * of the two implementations survives.
  */
 export default async function NewsPage({
   searchParams,
@@ -34,6 +51,8 @@ export default async function NewsPage({
     page?: string
   }>
 }) {
+  if (!ENABLE_NEWS) notFound()
+
   const params = await searchParams
   const user = await getCurrentUser()
   const currentPage = params.page ? parseInt(params.page) : 1

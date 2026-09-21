@@ -234,17 +234,55 @@ function ukSentences(text: string): string[] {
 }
 
 /**
- * `/news` is a routed public page (it answers 200) whose body no unit test can
- * render: it is an async server component that awaits the news store and the
- * signed-in user before it returns any JSX. So it is read as source instead,
- * and held to the same three rules as every rendered surface. This is weaker
- * than a render and is deliberately labelled as such: it proves the copy is
- * in the file, not that the file is on the page. The 200 on the route, and
- * the description check further down, cover the other half.
+ * Marketing copy that is written and held, on a route switched off behind a
+ * feature flag. It is checked as SOURCE rather than rendered, which is the
+ * weaker check and is labelled as such: it proves the words are in the file,
+ * not that anyone can read them today.
+ *
+ * `/news` is the only one. Chasing the thread onto it turned up something
+ * worse than a missing sentence: `ENABLE_NEWS` is false, the nav and the
+ * footer filter the link out, and the FDE rewrite at `app/(public)/_news/`
+ * refuses to render without the flag, but that directory is
+ * underscore-prefixed so Next never routed it. The copy a visitor actually
+ * reached was THIS one, ungated, and its Supabase call failed into the route
+ * group's error boundary. https://gwth.ai/news was serving "An unexpected
+ * error occurred" to anyone holding the link. It now 404s (see the gate check
+ * below), and the UK copy waits in the file for the day the feed comes back.
  */
 const SOURCE_ONLY_SURFACES: readonly { route: string; file: string }[] = [
   { route: "/news", file: "app/(public)/news/page.tsx" },
 ]
+
+/**
+ * Both news implementations, and the gate each one has to carry. A page that
+ * cannot render must say so with a 404, not with an error boundary.
+ */
+const NEWS_IMPLEMENTATIONS = [
+  "app/(public)/news/page.tsx",
+  "app/(public)/_news/page.tsx",
+  "app/(public)/_news/[slug]/page.tsx",
+]
+
+describe("a switched-off feed 404s rather than erroring", () => {
+  for (const file of NEWS_IMPLEMENTATIONS) {
+    it(`${file} refuses to render while ENABLE_NEWS is false`, () => {
+      const source = readFileSync(join(__dirname, "..", "..", file), "utf8")
+      expect(source, `${file} never imports the flag`).toContain("ENABLE_NEWS")
+      expect(source, `${file} never imports notFound`).toContain(
+        'from "next/navigation"'
+      )
+      expect(
+        source,
+        `${file} has no "if (!ENABLE_NEWS) notFound()" guard, so a failed data call reaches the error boundary instead of 404ing`
+      ).toMatch(/if\s*\(\s*!\s*ENABLE_NEWS\s*\)\s*notFound\(\)/)
+    })
+  }
+
+  it("the flag is still off, which is what makes the guard load-bearing", async () => {
+    const { ENABLE_NEWS } = await import("@/lib/config")
+    expect(ENABLE_NEWS).toBe(false)
+  })
+})
 
 /**
  * The words a reader would see in a `.tsx` file: JSX comments removed first
@@ -401,14 +439,13 @@ describe("no live marketing file hard-codes a figure the module owns", () => {
  * names it alongside the footer, and it is the surface most likely to be
  * forgotten in a later copy pass, because no screenshot ever shows it.
  *
- * The routes below are the public pages a visitor can actually reach.
- * `/news` is one of them: `ENABLE_NEWS` is false, so the nav and the footer
- * filter its link out, but `src/app/(public)/news/page.tsx` is an ordinary
- * routed segment that answers 200 and can be linked, shared or indexed. (The
- * gated FDE rewrite lives at `app/(public)/_news/`, underscore-prefixed, which
- * Next does not route at all.) An earlier pass on this bead called `/news` out
- * of scope on the strength of the missing links; the route being unlinked is
- * not the same as the route being unreachable, so it is in.
+ * The routes below are the public pages a visitor can reach and read.
+ *
+ * `/news` is not one of them, and working out why was the point: it is a real
+ * routed segment, so "nothing links it" was never a reason to leave it alone,
+ * but it now 404s behind `ENABLE_NEWS` (see the gate check above) and a 404
+ * never serves its description. Its copy is still written and still checked,
+ * as a held surface, so the day the feed returns the thread returns with it.
  *
  * `/privacy`, `/terms`, `/verify` and `/tech-radar` stay out because they are
  * not marketing copy.
@@ -424,7 +461,6 @@ const DESCRIBED_ROUTES: readonly { route: string; file: string }[] = [
   { route: "/for-teams", file: "app/(public)/for-teams/page.tsx" },
   { route: "/labs", file: "app/(public)/labs/page.tsx" },
   { route: "/lessons", file: "app/(public)/lessons/page.tsx" },
-  { route: "/news", file: "app/(public)/news/page.tsx" },
   { route: "/newsletter", file: "app/(public)/newsletter/page.tsx" },
   { route: "/pricing", file: "app/(public)/pricing/page.tsx" },
   { route: "/waitlist", file: "app/(public)/waitlist/page.tsx" },
