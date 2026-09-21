@@ -115,9 +115,23 @@ ACCA-X on edX. ACCA runs its own online courses on a platform it does not own. T
 
 CIPD's study centres. CIPD's own qualifications are delivered through a network of approved study centres, not by CIPD itself.
 
-### Priced on active learners, not seats (Commercials)
+### One agreement covers the edition (Commercials)
 
-One agreement covers your edition, the admin screen, tutor views and records. We price on the number of members actually learning, not on seats, and there are no vendor deals behind the price. Ask for a proposal and we will build it around your membership.
+One agreement covers your edition, the admin screen, the tutor views and the records your members carry. There is no published price for an institution edition, because what we build is shaped by your curation and by how you want a pilot to start. Tell us what you want it to cover and we will put a proposal in front of you.
+
+> Rewritten 2026-09-19, bead gwth-launch-88z.32.34. This section used to be headed
+> "Priced on active learners, not seats" and said we price on the number of members
+> actually learning. David struck that claim on 2026-09-15
+> (annotation a-20260915-085041-eaa513): *"We don't want to make this statement saying
+> that active learners are priced rather than seats because that may not be the case,
+> for example, with CIPD, they have 150,000 members, but they only want to pay
+> £150,000 per year."* It came off Home under gwth-launch-88z.32.31 and off
+> /for-institutions here. No replacement basis, unit, figure or range has been
+> invented; the page names none. When a deal shape is settled, the basis belongs in
+> this section and nowhere else on the page. Tests in
+> `src/app/(public)/for-institutions/for-institutions.test.tsx` and
+> `src/components/marketing/home-fde/home-fde.test.tsx` fail the build if either page
+> names a pricing basis again.
 
 ### Worth asking first (Common questions)
 
