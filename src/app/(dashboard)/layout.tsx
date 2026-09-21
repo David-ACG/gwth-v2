@@ -5,6 +5,7 @@ import { ReportProblemLauncher } from "@/components/feedback/report-problem-laun
 import { getCurrentUser } from "@/lib/auth"
 import { canViewPrivateContent } from "@/lib/content-access"
 import { EMPTY_SEARCH_INDEX, getSearchIndex } from "@/lib/data/search-index"
+import { ENABLE_SEARCH } from "@/lib/config"
 import styles from "./dashboard-fde.module.css"
 
 /**
@@ -42,7 +43,8 @@ export default async function DashboardLayout({
   // course and lab title — in the layout's RSC payload. Verified against a
   // running container before the fix: 30 lab titles for zero valid
   // credentials.
-  const searchIndex = contentAllowed ? getSearchIndex() : EMPTY_SEARCH_INDEX
+  const searchIndex =
+    ENABLE_SEARCH && contentAllowed ? await getSearchIndex() : EMPTY_SEARCH_INDEX
 
   return (
     <div className={`${styles.shell} flex min-h-screen`}>
@@ -63,7 +65,7 @@ export default async function DashboardLayout({
       {/* The index is built server-side and passed down: the palette used to
           import the content modules directly, which shipped real lab prose
           into a public /_next/static chunk (W25, see lib/data/search-index). */}
-      <SearchPalette index={searchIndex} />
+      {ENABLE_SEARCH && <SearchPalette index={searchIndex} />}
       <ReportProblemLauncher />
     </div>
   )

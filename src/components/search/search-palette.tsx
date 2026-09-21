@@ -11,12 +11,23 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { useSearch } from "@/hooks/use-search"
-import { BookOpen, FlaskConical, Newspaper, BarChart3, Settings, User } from "lucide-react"
+import {
+  BookOpen,
+  FlaskConical,
+  GraduationCap,
+  Newspaper,
+  BarChart3,
+  Bookmark,
+  Settings,
+  User,
+} from "lucide-react"
 import type { SearchIndex } from "@/lib/data/search-index"
 import styles from "./search-palette-fde.module.css"
 
 const quickLinks = [
   { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
+  { label: "Progress", href: "/progress", icon: BarChart3 },
+  { label: "Bookmarks", href: "/bookmarks", icon: Bookmark },
   { label: "Settings", href: "/settings", icon: Settings },
   { label: "Profile", href: "/profile", icon: User },
 ]
@@ -39,25 +50,34 @@ export interface SearchPaletteProps {
 export function SearchPalette({ index }: SearchPaletteProps) {
   const { isOpen, close } = useSearch()
   const router = useRouter()
-  const [, setQuery] = useState("")
+  const [query, setQuery] = useState("")
+
+  function dismiss() {
+    setQuery("")
+    close()
+  }
 
   function navigateTo(href: string) {
-    close()
+    dismiss()
     router.push(href)
   }
 
   return (
     <CommandDialog
       open={isOpen}
-      onOpenChange={(open) => !open && close()}
+      onOpenChange={(open) => !open && dismiss()}
       className={`${styles.shell} ${styles.palette}`}
     >
       <CommandInput
         placeholder="Search lessons, labs, pages..."
+        value={query}
         onValueChange={setQuery}
       />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>
+          Nothing matches that. Try a lesson title, a lab name, or a page such
+          as Progress.
+        </CommandEmpty>
 
         <CommandGroup heading="Course">
           {index.courses.map((entry) => (
@@ -71,6 +91,21 @@ export function SearchPalette({ index }: SearchPaletteProps) {
             </CommandItem>
           ))}
         </CommandGroup>
+
+        {index.lessons.length > 0 && (
+          <CommandGroup heading="Lessons">
+            {index.lessons.map((entry) => (
+              <CommandItem
+                key={entry.id}
+                value={entry.title}
+                onSelect={() => navigateTo(entry.href)}
+              >
+                <GraduationCap className="mr-2 size-4" />
+                {entry.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
 
         <CommandGroup heading="Labs">
           {index.labs.map((entry) => (

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useSidebar } from "@/hooks/use-sidebar"
 import { useSearch } from "@/hooks/use-search"
+import { ENABLE_SEARCH } from "@/lib/config"
 import { BreadcrumbNav } from "@/components/layout/breadcrumb-nav"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -68,25 +69,34 @@ export function DashboardHeader({ userName, userEmail, userAvatarUrl }: Dashboar
       <BreadcrumbNav />
 
       <div className="ml-auto flex items-center gap-2">
-        {/* Search trigger (desktop): square hairline field, mono label */}
-        <button
-          type="button"
-          onClick={openSearch}
-          className={styles.searchTrigger}
-        >
-          <Search className="size-4" aria-hidden="true" />
-          <span>Search</span>
-          <kbd className={styles.kbd}>⌘K</kbd>
-        </button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={openSearch}
-          className={cn("size-8 sm:hidden", styles.iconButton)}
-          aria-label="Search"
-        >
-          <Search className="size-4" />
-        </Button>
+        {/* Search triggers, desktop field and narrow-screen icon. Both are
+            gated on ENABLE_SEARCH, which used to be declared and read by
+            nothing: a flag that claims to turn the palette off but leaves a
+            button behind is the same defect as a button wired to nothing
+            (gwth-launch-4fg). */}
+        {ENABLE_SEARCH && (
+          <>
+            {/* Desktop: square hairline field, mono label */}
+            <button
+              type="button"
+              onClick={openSearch}
+              className={styles.searchTrigger}
+            >
+              <Search className="size-4" aria-hidden="true" />
+              <span>Search</span>
+              <kbd className={styles.kbd}>⌘K</kbd>
+            </button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={openSearch}
+              className={cn("size-8 sm:hidden", styles.iconButton)}
+              aria-label="Search"
+            >
+              <Search className="size-4" />
+            </Button>
+          </>
+        )}
 
         {/* Theme toggle */}
         <ThemeToggle className={styles.iconButton} />
