@@ -52,9 +52,24 @@ export function SearchPalette({ index }: SearchPaletteProps) {
   const { isOpen, close } = useSearch()
   const router = useRouter()
   const [query, setQuery] = useState("")
+  const [wasOpen, setWasOpen] = useState(isOpen)
+
+  // Clear the query on the CLOSED transition, wherever the close came from.
+  // The dialog reports its own dismissals (Escape, the X, a click outside)
+  // through `onOpenChange`, but a close driven by the shared store - a second
+  // press of Cmd+K, or any other caller of `close()` - never reaches it, and
+  // this state lives outside the dialog, which Radix unmounts. Clearing only
+  // in `dismiss()` therefore left the palette reopening pre-filtered to a
+  // query the learner had forgotten typing: one stale result and no obvious
+  // way back, which reads as the same broken search all over again
+  // (gwth-launch-4fg). Adjusting state during render is the documented React
+  // way to respond to a changed value without an effect.
+  if (wasOpen !== isOpen) {
+    setWasOpen(isOpen)
+    if (!isOpen && query !== "") setQuery("")
+  }
 
   function dismiss() {
-    setQuery("")
     close()
   }
 

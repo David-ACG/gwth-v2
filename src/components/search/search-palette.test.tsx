@@ -151,6 +151,31 @@ describe("the header Search button", () => {
     await user.click(screen.getByRole("button", { name: DESKTOP_TRIGGER }))
     expect(await screen.findByPlaceholderText(/Search lessons, labs, pages/i)).toHaveValue("")
   })
+
+  it("forgets it after a Cmd+K close too, not just an Escape", async () => {
+    // The Escape case above passes on the dialog's own onOpenChange. A close
+    // that comes from the store never calls it, so the query survived and the
+    // palette reopened showing one stale result. Same shape of defect as the
+    // original: one path worked and hid the one that did not.
+    const user = userEvent.setup()
+    renderFrame()
+
+    await user.click(screen.getByRole("button", { name: DESKTOP_TRIGGER }))
+    await user.type(
+      await screen.findByPlaceholderText(/Search lessons, labs, pages/i),
+      "spreadsheet"
+    )
+
+    await user.keyboard("{Meta>}k{/Meta}")
+    await waitFor(() =>
+      expect(screen.queryByPlaceholderText(/Search lessons, labs, pages/i)).toBeNull()
+    )
+
+    await user.keyboard("{Meta>}k{/Meta}")
+    const reopened = await screen.findByPlaceholderText(/Search lessons, labs, pages/i)
+    expect(reopened).toHaveValue("")
+    expect(await screen.findByRole("option", { name: /Welcome to GWTH/i })).toBeInTheDocument()
+  })
 })
 
 describe("the Cmd+K shortcut", () => {
