@@ -1,0 +1,8 @@
+Score-trend delta formatters — rendered card output (A11)
+=======================================================
+formatDeltaAbs(15)       -> "+15"
+formatDeltaAbs(-7)       -> "-7"
+formatDeltaAbs(0)        -> "0"
+formatDeltaPct(12.34)    -> "+12.3%"
+formatDeltaPct(-3.5)     -> "-3.5%"
+formatDeltaPct(0)        -> "0.0%"
