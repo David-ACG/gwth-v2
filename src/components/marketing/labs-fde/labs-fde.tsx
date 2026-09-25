@@ -160,8 +160,8 @@ export function LabsFde({
           <p className={styles.standfirst}>
             Each lab runs two AI tools head to head on a real job, with the same
             prompt, and shows you both answers side by side. A short rubric
-            helps you call the winner. Lessons teach you how; labs show you
-            which tool when.
+            helps you call the winner. Lessons teach you how to use AI; labs
+            help you choose which tool to use for a job.
           </p>
           {/* The UK thread on this page (bead gwth-launch-88z.32.25), and it
               is a description of the labs that exist rather than a promise:
@@ -171,8 +171,8 @@ export function LabsFde({
               a GOV.UK link for each. Check the lab JSON before changing this
               sentence. */}
           <p className={styles.standfirst} data-testid="labs-uk-note">
-            The tasks are British ones, because that is the test that tells you
-            anything. A care home in Shropshire that cannot fill a nursing
+            The tasks are set in UK workplaces, so you see how each tool
+            handles UK rules and sources. A care home in Shropshire that cannot fill a nursing
             vacancy, or a payroll administrator who needs this year&apos;s
             Statutory Sick Pay rate with the GOV.UK page to prove it.
           </p>
@@ -191,7 +191,7 @@ export function LabsFde({
           </div>
           <div className={styles.mastheadFoot}>
             <p>Dated head-to-head tests</p>
-            <p>Included free with your beta place</p>
+            <p>Free, no card required</p>
             <p>New matchups as the models change</p>
           </div>
         </div>
@@ -224,13 +224,14 @@ export function LabsFde({
             (bead gwth-launch-88z.32.23).
           */}
           <p className={styles.sectionLead}>
-            Each card previews the real material its lab starts from, so you can
-            tell at a glance what the task is.{" "}
+            Start with the task that is closest to your own work.{" "}
             {withVideo === 0
-              ? "Video guides are planned for every lab and none has been recorded yet, which is why no card offers one to play."
+              ? "Video guides are planned for these labs but none is ready yet."
               : withVideo === liveLabs.length
-                ? "Every lab has a video guide, and each card shows a still from its own."
-                : `${withVideo} of these ${liveLabs.length} has a video guide, and its card shows a still from it. The other cards say that their video guides are planned, and they show no play button.`}
+                ? "Each of these labs has a video guide."
+                : `${withVideo} of these ${liveLabs.length} labs ${
+                    withVideo === 1 ? "has" : "have"
+                  } a video guide so far, and guides for the others are planned.`}
           </p>
 
           {liveLabs.length === 0 ? (
@@ -355,9 +356,10 @@ export function LabsFde({
             Labs show you which tool. <em>The course shows you how.</em>
           </h2>
           <p>
-            The labs tell you which tool earns its keep this month. The course
-            is three months of building with AI: plain English, real projects,
-            and progress you can see.
+            Each lab shows which tool did better on one task, and the date it
+            was tested. Over three months, the course teaches you to build,
+            research and automate with AI in plain English, with a practical
+            project in every lesson.
           </p>
           <div className={styles.closingActions}>
             <Link href="/pricing" className={styles.buttonSolid}>

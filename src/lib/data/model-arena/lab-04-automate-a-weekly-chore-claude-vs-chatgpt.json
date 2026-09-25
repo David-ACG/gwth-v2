@@ -10,7 +10,7 @@
   "summary": "A Friday chore that eats half an hour every week. Both tools are asked to automate it for somebody who has never written a line of code, and you decide which set of instructions you would actually attempt.",
   "preview": {
     "taskCue": "Weekly admin, automated",
-    "outcome": "Which answer you could finish on a Friday afternoon with nobody around to ask.",
+    "outcome": "Which tool gives you steps you could follow on your own to automate a weekly reminder email.",
     "specimen": {
       "kind": "pairs",
       "caption": "The chore this lab hands to both tools",

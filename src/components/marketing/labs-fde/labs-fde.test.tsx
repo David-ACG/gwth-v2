@@ -128,7 +128,7 @@ describe("LabsFde live cards", () => {
     renderIndex()
     const withVideo = liveLabs.filter((l) => l.video).length
     expect(withVideo).toBeGreaterThan(0)
-    const lead = screen.getByText(/Each card previews the real material/)
+    const lead = screen.getByText(/Start with the task that is closest/)
     expect(lead.textContent).not.toMatch(/none has been recorded/)
     expect(lead.textContent).toContain(String(withVideo))
   })
