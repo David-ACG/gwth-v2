@@ -138,12 +138,19 @@
     max-width: 20ch;
   }
 
-  .standfirst {
+  /* Both standfirst paragraphs share one grid cell through this wrapper.
+     Placing .standfirst itself in row 1 put the second paragraph (the UK
+     note) on top of the first, so the two printed over each other. */
+  .standfirstBlock {
     grid-column: 2;
     grid-row: 1;
     align-self: start;
     margin-top: 0.6rem;
     max-width: 44ch;
+  }
+
+  .standfirstBlock .standfirst:first-child {
+    margin-top: 0;
   }
 
   .mastheadActions {
