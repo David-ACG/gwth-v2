@@ -133,15 +133,12 @@
 
   .mastheadTitle {
     grid-column: 1;
-    grid-row: 1 / span 2;
+    grid-row: 1 / span 3;
     margin-top: 0;
     max-width: 20ch;
   }
 
-  /* Both standfirst paragraphs share one grid cell through this wrapper.
-     Placing .standfirst itself in row 1 put the second paragraph (the UK
-     note) on top of the first, so the two printed over each other. */
-  .standfirstBlock {
+  .standfirst {
     grid-column: 2;
     grid-row: 1;
     align-self: start;
@@ -149,20 +146,23 @@
     max-width: 44ch;
   }
 
-  .standfirstBlock .standfirst:first-child {
-    margin-top: 0;
+  /* The UK note is a second .standfirst. Without its own row it took row 1
+     too and printed on top of the first paragraph. */
+  .standfirst + .standfirst {
+    grid-row: 2;
+    margin-top: 1rem;
   }
 
   .mastheadActions {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 3;
     align-self: start;
     margin-top: 1.4rem;
   }
 
   .mastheadFoot {
     grid-column: 1 / -1;
-    grid-row: 3;
+    grid-row: 4;
   }
 }
 
