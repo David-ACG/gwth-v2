@@ -30,6 +30,12 @@ import {
   timestampsFetchUrl,
   type AudioWord,
 } from "@/lib/lessons/audio-alignment"
+import {
+  readLessonPage,
+  readQuizDraft,
+  writeLessonPage,
+  writeQuizDraft,
+} from "@/lib/lessons/lesson-resume"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
@@ -38,6 +44,7 @@ import type {
   QuizAttemptLimitResult,
   QuizGradeResult,
   QuizSubmitResult,
+  SavedQuizAttempt,
 } from "@/lib/types"
 import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
 import { LESSON_DATA_ATTRS, type LessonVariant } from "@/lib/comments/types"
@@ -191,6 +198,19 @@ interface EditorialLessonViewerProps {
    * video gate and Q&A pick up where the user left off.
    */
   initialProgress?: LessonProgress | null
+  /**
+   * The learner's saved, graded Q&A attempt, rebuilt on the server from
+   * their progress row (bead gwth-launch-8ta). When present the Q&A opens
+   * with those answers shown as answered instead of a blank quiz.
+   */
+  initialQuizAttempt?: SavedQuizAttempt | null
+  /**
+   * Remember the learner's page and unsubmitted Q&A answers in this browser
+   * and restore them on return (bead gwth-launch-8ta). The lesson page turns
+   * this on unless a `?page=` / `?surface=` review override is in the URL.
+   * Default `false`.
+   */
+  rememberPlace?: boolean
   /** Whether this lesson is already saved by the current learner. */
   initialBookmarked?: boolean
   /** Next lesson in course order, for the lesson-complete surface. */
@@ -260,6 +280,8 @@ export function EditorialLessonViewer({
   initialPage = 1,
   initialWidgetSurface = "none",
   initialProgress = null,
+  initialQuizAttempt = null,
+  rememberPlace = false,
   initialBookmarked = false,
   nextLesson = null,
   courseHref,
@@ -398,6 +420,17 @@ export function EditorialLessonViewer({
       return
     }
     setPageNum(current + 1)
+    rememberPage(current + 1)
+  }
+
+  /**
+   * Notes the page the learner is on, so leaving the lesson and coming back
+   * reopens it (bead gwth-launch-8ta). Called from the navigation handlers
+   * rather than an effect, so a mount can never overwrite the saved page
+   * with page 1 before it has been restored.
+   */
+  function rememberPage(page: number) {
+    if (rememberPlace) writeLessonPage(lesson.id, page)
   }
 
   function cancelAdvance() {
@@ -416,6 +449,7 @@ export function EditorialLessonViewer({
     const clamped = Math.min(Math.max(n, 1), lesson.pages.length)
     const kind = lesson.pages[clamped - 1]?.kind
     setPageNum(clamped)
+    rememberPage(clamped)
     if (kind === "video" || kind === "qa") {
       // Narration mutes for the video page and stops for the Q&A.
       audioRef.current?.pause()
@@ -579,6 +613,60 @@ export function EditorialLessonViewer({
   }
 
   // ── Q&A + completion ──────────────────────────────────────────────────
+  // The Q&A's answers and grade live HERE, not in the Q&A page body: the
+  // body unmounts whenever the learner turns to another page (the intro
+  // video, to clear the 80% gate), and David lost every answer that way
+  // (bead gwth-launch-8ta). Seeded from the server's saved attempt, so a
+  // learner returning to the lesson sees what they already submitted.
+  const [quiz, setQuiz] = React.useState<QuizSessionState>(() =>
+    quizStateFromAttempt(lesson.questions, initialQuizAttempt)
+  )
+
+  /**
+   * Applies a Q&A state change and remembers unsubmitted answers in this
+   * browser. A graded or refused run clears that memory: the server holds
+   * submitted answers, and a retry starts from a clean slate.
+   */
+  function changeQuiz(next: QuizSessionState) {
+    setQuiz(next)
+    if (!rememberPlace) return
+    const draft: Record<string, number> = {}
+    if (!next.grade && !next.limit) {
+      lesson.questions?.forEach((q, i) => {
+        const chosen = next.selected[i]
+        if (chosen !== undefined) draft[q.id] = chosen
+      })
+    }
+    writeQuizDraft(lesson.id, draft)
+  }
+
+  // Return the learner to where they were: the page they last had open, and
+  // any answers they had picked but not yet submitted. Read after mount, not
+  // during render, because the browser store does not exist on the server
+  // and the first client render must match the server's HTML.
+  React.useEffect(() => {
+    if (!rememberPlace) return
+    const savedPage = readLessonPage(lesson.id, lesson.pages.length)
+    if (savedPage !== null && savedPage !== initialPage) goToPage(savedPage)
+
+    const questions = lesson.questions ?? []
+    const closed =
+      initialProgress?.quizPassed === true ||
+      (initialProgress?.quizAttempts ?? 0) >= MAX_QUIZ_ATTEMPTS
+    if (closed || questions.length === 0) return
+    const draft = readQuizDraft(lesson.id)
+    const selected: Record<number, number> = {}
+    questions.forEach((q, i) => {
+      const chosen = draft[q.id]
+      if (chosen !== undefined && chosen < q.options.length) selected[i] = chosen
+    })
+    if (Object.keys(selected).length > 0) {
+      setQuiz({ selected, submittedAnswers: null, grade: null, limit: null })
+    }
+    // Runs once per lesson mount (the page keys the viewer by lesson id).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const [lastQuizScore, setLastQuizScore] = React.useState<number | null>(
     null
   )
@@ -682,9 +770,11 @@ export function EditorialLessonViewer({
           onChangeSpeed={setSpeed}
           autoAdvance={autoAdvance}
           onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
-          onSelectPage={(n) =>
-            setPageNum(Math.min(Math.max(n, 1), lesson.pages.length))
-          }
+          onSelectPage={(n) => {
+            const clamped = Math.min(Math.max(n, 1), lesson.pages.length)
+            setPageNum(clamped)
+            rememberPage(clamped)
+          }}
         />
         <LessonWidgets
           lessonNumber={lesson.lessonNumber}
@@ -848,6 +938,8 @@ export function EditorialLessonViewer({
                 lesson.questions && lesson.questions.length > 0 ? (
                   <RealQAPageBody
                     questions={lesson.questions}
+                    quiz={quiz}
+                    onQuizChange={changeQuiz}
                     onSubmit={handleQuizSubmit}
                     onFinish={handleFinishLesson}
                     canFinish={completionStatus.canComplete}
@@ -2341,6 +2433,51 @@ function QAPageBody() {
 }
 
 /**
+ * The end-of-lesson Q&A's state for one visit to a lesson: the answers
+ * picked (by question index), the answers behind the latest grade, the
+ * server's grade and any attempt-limit refusal.
+ */
+interface QuizSessionState {
+  /** Answers picked so far, question index to option index. */
+  selected: Record<number, number>
+  /** The answers the current `grade` was computed from. */
+  submittedAnswers: Record<number, number> | null
+  /** The server's grade for the latest run, reveal policy applied. */
+  grade: QuizGradeResult | null
+  /** The server's refusal once the attempt cap is spent. */
+  limit: QuizAttemptLimitResult | null
+}
+
+/**
+ * Seeds the Q&A from the learner's saved attempt (answers by question id),
+ * or a blank quiz when there is none.
+ */
+function quizStateFromAttempt(
+  questions: EditorialLessonQuestion[] | undefined,
+  attempt: SavedQuizAttempt | null
+): QuizSessionState {
+  const blank: QuizSessionState = {
+    selected: {},
+    submittedAnswers: null,
+    grade: null,
+    limit: null,
+  }
+  if (!attempt || !questions?.length) return blank
+  const answers: Record<number, number> = {}
+  questions.forEach((q, i) => {
+    const chosen = attempt.answers[q.id]
+    if (chosen !== undefined) answers[i] = chosen
+  })
+  if (Object.keys(answers).length === 0) return blank
+  return {
+    selected: answers,
+    submittedAnswers: answers,
+    grade: attempt.grade,
+    limit: null,
+  }
+}
+
+/**
  * Renders the real, imported end-of-lesson Q&A (from Postgres) using the same
  * editorial QAItem chrome as the design placeholder. Fully interactive (W13):
  * the learner selects an answer per question and submits; the answers are
@@ -2351,6 +2488,8 @@ function QAPageBody() {
  */
 function RealQAPageBody({
   questions,
+  quiz,
+  onQuizChange,
   onSubmit,
   onFinish,
   canFinish,
@@ -2362,6 +2501,11 @@ function RealQAPageBody({
   passMark,
 }: {
   questions: EditorialLessonQuestion[]
+  /** The Q&A's answers and grade, owned by the viewer so they survive
+   *  turning to another page and back (bead gwth-launch-8ta). */
+  quiz: QuizSessionState
+  /** Replaces the Q&A state. */
+  onQuizChange: (next: QuizSessionState) => void
   /** Grades the answers (question id → option index) on the server, or
    *  refuses with a `QuizAttemptLimitResult` once the cap is used up. */
   onSubmit: (answers: Record<string, number>) => Promise<QuizSubmitResult>
@@ -2382,13 +2526,7 @@ function RealQAPageBody({
   /** The effective edition's pass mark (N6), for the status line fallback. */
   passMark: number
 }) {
-  const [selected, setSelected] = React.useState<Record<number, number>>({})
-  const [submittedAnswers, setSubmittedAnswers] = React.useState<Record<
-    number,
-    number
-  > | null>(null)
-  const [grade, setGrade] = React.useState<QuizGradeResult | null>(null)
-  const [limit, setLimit] = React.useState<QuizAttemptLimitResult | null>(null)
+  const { selected, submittedAnswers, grade, limit } = quiz
   const [grading, setGrading] = React.useState(false)
 
   const submitted = grade !== null
@@ -2417,7 +2555,10 @@ function RealQAPageBody({
 
   function handleSelect(questionIndex: number, optionIndex: number) {
     if (locked) return
-    setSelected((prev) => ({ ...prev, [questionIndex]: optionIndex }))
+    onQuizChange({
+      ...quiz,
+      selected: { ...selected, [questionIndex]: optionIndex },
+    })
   }
 
   async function handleSubmit() {
@@ -2432,11 +2573,10 @@ function RealQAPageBody({
       const result = await onSubmit(answers)
       if ("attemptLimitReached" in result) {
         // Server refusal: no grade, no reveal, nothing written.
-        setLimit(result)
+        onQuizChange({ ...quiz, limit: result })
         return
       }
-      setSubmittedAnswers(selected)
-      setGrade(result)
+      onQuizChange({ ...quiz, submittedAnswers: selected, grade: result })
     } catch {
       toast.error("Could not check your answers. Try submitting again.")
     } finally {
@@ -2445,9 +2585,7 @@ function RealQAPageBody({
   }
 
   function handleRetry() {
-    setSelected({})
-    setSubmittedAnswers(null)
-    setGrade(null)
+    onQuizChange({ ...quiz, selected: {}, submittedAnswers: null, grade: null })
   }
 
   return (

@@ -81,6 +81,23 @@ async function currentUserId(): Promise<string | null> {
 /** The shape of a `lesson_progress` row as returned by Drizzle. */
 type LessonProgressRow = typeof lessonProgress.$inferSelect
 
+/**
+ * Narrows the `quiz_answers` jsonb column to {questionId: optionIndex}.
+ * Anything else (null, a legacy shape) reads as "no saved answers".
+ */
+function toAnswerMap(value: unknown): Record<string, number> | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return undefined
+  }
+  const answers: Record<string, number> = {}
+  for (const [questionId, choice] of Object.entries(value)) {
+    if (typeof choice === "number" && Number.isInteger(choice)) {
+      answers[questionId] = choice
+    }
+  }
+  return Object.keys(answers).length > 0 ? answers : undefined
+}
+
 /** Maps a persisted `lesson_progress` row to the app's `LessonProgress` type. */
 function mapLessonRow(row: LessonProgressRow): LessonProgress {
   return {
@@ -93,6 +110,7 @@ function mapLessonRow(row: LessonProgressRow): LessonProgress {
     bestQuizScore: row.bestQuizScore,
     quizPassed: row.quizPassed,
     quizAttempts: row.quizAttempts,
+    quizAnswers: toAnswerMap(row.quizAnswers),
     timeSpent: row.timeSpent,
     lastAccessedAt: row.lastAccessedAt
       ? new Date(row.lastAccessedAt)
@@ -302,6 +320,11 @@ export async function recordQuizSubmission(
       bestQuizScore: best,
       quizPassed: best >= opts.passMark,
       quizAttempts: attemptsUsed + 1,
+      // Same rule as the DB path: the answers behind the BEST outcome.
+      quizAnswers:
+        score >= (existing?.bestQuizScore ?? 0)
+          ? (opts.answers ?? existing?.quizAnswers)
+          : existing?.quizAnswers,
     })
     return { outcome: "recorded", progress }
   }

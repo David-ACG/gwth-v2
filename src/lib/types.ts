@@ -347,6 +347,19 @@ export interface QuizAttemptLimitResult {
   message: string
 }
 
+/**
+ * A learner's saved, graded Q&A attempt, rebuilt on the server from their
+ * progress row when they return to a lesson (bead gwth-launch-8ta). The
+ * grade follows the same reveal policy as `submitQuizAnswersAction`, so it
+ * carries nothing the learner was not already shown.
+ */
+export interface SavedQuizAttempt {
+  /** The learner's answers, question id to option index */
+  answers: Record<string, number>
+  /** The verdicts for those answers, reveal policy applied */
+  grade: QuizGradeResult
+}
+
 /** Everything `submitQuizAnswersAction` can return */
 export type QuizSubmitResult = QuizGradeResult | QuizAttemptLimitResult
 
@@ -604,6 +617,13 @@ export interface LessonProgress {
   quizPassed?: boolean
   /** Number of quiz attempts */
   quizAttempts: number
+  /**
+   * The learner's own answer set {questionId: optionIndex} behind the best
+   * score (`lesson_progress.quiz_answers`), so a returning learner sees their
+   * answers instead of a blank quiz (bead gwth-launch-8ta). Null or absent
+   * when no server-graded submission exists.
+   */
+  quizAnswers?: Record<string, number> | null
   /** Total time spent on this lesson in seconds */
   timeSpent: number
   /** When the lesson was last accessed */

@@ -3,8 +3,11 @@ import { notFound, redirect } from "next/navigation"
 import {
   getAdjacentLessons,
   getLesson,
+  getQuizQuestionsByLessonId,
   toPublicQuizQuestions,
 } from "@/lib/data/lessons"
+import { rebuildSavedQuizAttempt } from "@/lib/progress/quiz-grading"
+import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
 import { getCourse } from "@/lib/data/courses"
 import { getEffectivePassMark } from "@/lib/data/editions"
 import {
@@ -163,6 +166,20 @@ export default async function LessonPage({
     isBookmarked({ lessonId: lesson.id }),
   ])
 
+  // A returning learner sees the answers they already submitted, graded
+  // exactly as the grading action graded them (bead gwth-launch-8ta: David
+  // left a lesson, came back and "had to redo all the answers"). The key is
+  // read server-side from the same rows the action grades against, and only
+  // what the reveal policy allows reaches the client.
+  const savedQuizAttempt = lessonProgress?.quizAnswers
+    ? rebuildSavedQuizAttempt({
+        questions: await getQuizQuestionsByLessonId(lesson.id),
+        progress: lessonProgress,
+        passMark,
+        maxAttempts: MAX_QUIZ_ATTEMPTS,
+      })
+    : null
+
   // Draft, not live (bead gwth-launch-8ksq): on the preview, an admin reads
   // the pipeline's rewrite in the real viewer by default, and ?variant=live
   // shows the published text. Gated on the REAL session email, never the
@@ -220,8 +237,12 @@ export default async function LessonPage({
     introVideoUrl: lesson.introVideoUrl,
   }
 
-  // Default entry: page 1 (the intro video when the lesson has one). The
-  // ?surface= / ?page= params remain as demo/review overrides.
+  // Default entry: page 1 (the intro video when the lesson has one), and the
+  // viewer then returns the learner to the page they were last on (bead
+  // gwth-launch-8ta). The ?surface= / ?page= params remain as demo/review
+  // overrides, and an override switches that memory off so a review link
+  // always opens the page it names.
+  const rememberPlace = !sp.surface && !sp.page
   const defaultSurface: EditorialLessonSurface = lesson.introVideoUrl
     ? "video"
     : "prose"
@@ -249,6 +270,8 @@ export default async function LessonPage({
         initialPage={Number.isFinite(initialPage) ? initialPage : 1}
         initialWidgetSurface={initialWidgetSurface}
         initialProgress={lessonProgress}
+        initialQuizAttempt={savedQuizAttempt}
+        rememberPlace={rememberPlace}
         initialBookmarked={lessonBookmarked}
         nextLesson={await findNextLesson(course, lessonSlug)}
         courseHref={`/course/${course.slug}`}

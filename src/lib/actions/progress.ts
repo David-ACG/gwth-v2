@@ -50,10 +50,15 @@ import {
   isContentAllowedEmail,
   isPrivateContentMode,
 } from "@/lib/content-mode"
+import {
+  applyRevealPolicy,
+  gradeQuizAnswers,
+  isQuizClosed,
+  sanitizeQuizAnswers,
+} from "@/lib/progress/quiz-grading"
 import type {
   LessonProgress,
   QuizAttemptLimitResult,
-  QuizQuestionGrade,
   QuizSubmitResult,
 } from "@/lib/types"
 
@@ -260,34 +265,11 @@ export async function submitQuizAnswersAction(
   // integer choices WITHIN each KNOWN question's option range - grading
   // semantics are unchanged (an unknown key or out-of-range choice was
   // never a correct answer) and the stored quiz_answers audit trail is
-  // bounded in both key count and value range.
-  const sanitizedAnswers: Record<string, number> = {}
-  for (const q of questions) {
-    const chosen = answers?.[q.id]
-    if (
-      typeof chosen === "number" &&
-      Number.isInteger(chosen) &&
-      chosen >= 0 &&
-      chosen < q.options.length
-    ) {
-      sanitizedAnswers[q.id] = chosen
-    }
-  }
-
-  const graded = questions.map((q) => {
-    const chosen = sanitizedAnswers[q.id]
-    const correct =
-      typeof chosen === "number" && chosen === q.correctOptionIndex
-    return {
-      questionId: q.id,
-      correct,
-      correctOptionIndex: q.correctOptionIndex,
-      explanation: q.explanation,
-    }
-  })
-
-  const correctCount = graded.filter((p) => p.correct).length
-  const score = Math.round((correctCount / questions.length) * 100)
+  // bounded in both key count and value range. Grading lives in
+  // @/lib/progress/quiz-grading so the lesson page rebuilds a returning
+  // learner's attempt with the exact same rules (bead gwth-launch-8ta).
+  const sanitizedAnswers = sanitizeQuizAnswers(questions, answers)
+  const { graded, score } = gradeQuizAnswers(questions, sanitizedAnswers)
   const passed = score >= passMark
 
   // One atomic write: increment, GREATEST, cap and completion all in SQL
@@ -309,13 +291,9 @@ export async function submitQuizAnswersAction(
   // (further grading is now refused atomically, see recordQuizSubmission's
   // setWhere) or the final attempt is spent - so no revealed key can ever
   // be fed back into a grading request.
-  const revealAll =
-    recorded.progress.quizPassed === true ||
-    (recorded.progress.quizAttempts ?? 0) >= MAX_QUIZ_ATTEMPTS
-  const perQuestion: QuizQuestionGrade[] = graded.map((g) =>
-    g.correct || revealAll
-      ? g
-      : { questionId: g.questionId, correct: false }
+  const perQuestion = applyRevealPolicy(
+    graded,
+    isQuizClosed(recorded.progress, MAX_QUIZ_ATTEMPTS)
   )
 
   return {

@@ -713,6 +713,167 @@ describe("EditorialLessonViewer quiz attempt cap", () => {
   })
 })
 
+// ── Leaving and coming back (bead gwth-launch-8ta) ──────────────────────────
+
+/**
+ * David, 2026-07-27, recording the live site: he turned back to the intro
+ * video to clear the 80% gate, returned to the Q&A and "I have to do the
+ * answers again"; leaving the lesson also sent him back to page 1. These pin
+ * the fix: answers survive a page turn, a saved attempt is shown as answered,
+ * and the lesson reopens on the page and with the draft answers he left.
+ */
+describe("EditorialLessonViewer keeps the learner's place", () => {
+  afterEach(() => {
+    window.localStorage.clear()
+  })
+
+  function optionButton(label: string): HTMLElement {
+    return screen.getByRole("button", { name: new RegExp(label) })
+  }
+
+  it("keeps picked answers when the learner turns to the video and back", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
+    )
+    await user.click(optionButton("A pocket knife"))
+    expect(optionButton("A pocket knife")).toHaveAttribute("aria-pressed", "true")
+
+    await user.click(
+      screen.getAllByRole("button", { name: /Why this lesson exists/ })[0]!
+    )
+    expect(screen.getByTestId("video-player")).toBeInTheDocument()
+    await user.click(
+      screen.getAllByRole("button", { name: /End-of-lesson Q&A/ })[0]!
+    )
+
+    expect(optionButton("A pocket knife")).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByText("1 of 2 answered")).toBeInTheDocument()
+  })
+
+  it("keeps a graded run when the learner turns to the video and back", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="qa" />
+    )
+    await answerAll(user, ["A pocket knife", "A place you already look"])
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
+    expect(await screen.findByText(/Score 100% · passed/)).toBeInTheDocument()
+
+    await user.click(
+      screen.getAllByRole("button", { name: /Why this lesson exists/ })[0]!
+    )
+    await user.click(
+      screen.getAllByRole("button", { name: /End-of-lesson Q&A/ })[0]!
+    )
+
+    expect(screen.getByText(/Score 100% · passed/)).toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /Submit Q&A/ })
+    ).not.toBeInTheDocument()
+    expect(gradeAction).toHaveBeenCalledTimes(1)
+  })
+
+  it("shows the saved attempt from the server as answered, without resubmitting", () => {
+    const progress = makeProgressRow({
+      quizAttempts: 1,
+      quizScore: 100,
+      bestQuizScore: 100,
+      quizPassed: true,
+      quizAnswers: { q1: 1, q2: 1 },
+    })
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="qa"
+        initialProgress={progress}
+        initialQuizAttempt={{
+          answers: { q1: 1, q2: 1 },
+          grade: {
+            score: 100,
+            passed: true,
+            passMark: PASS_MARK,
+            perQuestion: [
+              { questionId: "q1", correct: true, correctOptionIndex: 1, explanation: "Small and specific to your own week." },
+              { questionId: "q2", correct: true, correctOptionIndex: 1, explanation: "" },
+            ],
+            progress,
+          },
+        }}
+      />
+    )
+    expect(screen.getByText(/Score 100% · passed/)).toBeInTheDocument()
+    expect(screen.getByText("Small and specific to your own week.")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /Finish lesson/ })).toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /Submit Q&A/ })
+    ).not.toBeInTheDocument()
+    expect(gradeAction).not.toHaveBeenCalled()
+  })
+
+  it("reopens the lesson on the page the learner left", async () => {
+    const user = userEvent.setup()
+    const first = render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="video"
+        rememberPlace
+      />
+    )
+    await user.click(screen.getByRole("button", { name: /Continue/ }))
+    expect(screen.getAllByText("Page 2 of 3").length).toBeGreaterThan(0)
+    first.unmount()
+
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="video"
+        rememberPlace
+      />
+    )
+    expect(await screen.findAllByText("Page 2 of 3")).not.toHaveLength(0)
+    expect(screen.queryByTestId("video-player")).not.toBeInTheDocument()
+  })
+
+  it("brings back unsubmitted answers after leaving the lesson", async () => {
+    const user = userEvent.setup()
+    const first = render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="video" rememberPlace />
+    )
+    await user.click(
+      screen.getAllByRole("button", { name: /End-of-lesson Q&A/ })[0]!
+    )
+    await user.click(optionButton("A pocket knife"))
+    first.unmount()
+
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="video" rememberPlace />
+    )
+    // Back on the Q&A page, with the answer still picked.
+    await waitFor(() => {
+      expect(optionButton("A pocket knife")).toHaveAttribute("aria-pressed", "true")
+    })
+    await user.click(optionButton("A place you already look"))
+    await user.click(screen.getByRole("button", { name: /Submit Q&A/ }))
+    await screen.findByText(/Score 100% · passed/)
+    expect(gradeAction).toHaveBeenCalledWith(LESSON_ID, { q1: 1, q2: 1 })
+    // Submitted answers belong to the server now; the browser draft is gone.
+    expect(
+      window.localStorage.getItem(`gwth-lesson-quiz-draft:${LESSON_ID}`)
+    ).toBeNull()
+  })
+
+  it("remembers nothing when a review link names the page (rememberPlace off)", async () => {
+    const user = userEvent.setup()
+    const first = render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="video" />
+    )
+    await user.click(screen.getByRole("button", { name: /Continue/ }))
+    first.unmount()
+    expect(window.localStorage.length).toBe(0)
+  })
+})
+
 // ── Page navigation ──────────────────────────────────────────────────────────
 
 describe("EditorialLessonViewer navigation", () => {
