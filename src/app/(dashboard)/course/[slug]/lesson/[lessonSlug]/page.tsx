@@ -7,7 +7,14 @@ import {
 } from "@/lib/data/lessons"
 import { getCourse } from "@/lib/data/courses"
 import { getEffectivePassMark } from "@/lib/data/editions"
-import { getDashboardUser, canUserAccessMonth } from "@/lib/auth"
+import {
+  getDashboardUser,
+  getSessionIdentity,
+  canUserAccessMonth,
+} from "@/lib/auth"
+import { isAdminEmail } from "@/lib/admin"
+import { getLessonDraft } from "@/lib/lessons/draft"
+import type { LessonVariant } from "@/lib/comments/types"
 import { getAllCourseProgress, getLessonProgress } from "@/lib/data/progress"
 import { isBookmarked } from "@/lib/data/bookmarks"
 import { cn } from "@/lib/utils"
@@ -31,6 +38,7 @@ type PageProps = {
     surface?: string
     page?: string
     widget?: string
+    variant?: string
   }>
 }
 
@@ -155,6 +163,23 @@ export default async function LessonPage({
     isBookmarked({ lessonId: lesson.id }),
   ])
 
+  // Draft, not live (bead gwth-launch-8ksq): on the preview, an admin reads
+  // the pipeline's rewrite in the real viewer by default, and ?variant=live
+  // shows the published text. Gated on the REAL session email, never the
+  // dashboard user (a mock user on the preview). getLessonDraft is null
+  // wherever LESSON_DRAFTS_DIR is unset (production), so students and
+  // production never see a draft.
+  const sessionIdentity = await getSessionIdentity()
+  const viewerIsAdmin = isAdminEmail(sessionIdentity?.email)
+  const draft = viewerIsAdmin ? await getLessonDraft(lesson.id) : null
+  const draftAvailable = draft?.available === true
+  const variant: LessonVariant =
+    draft?.available && sp.variant !== "live" ? "draft" : "live"
+  const learnContent =
+    draft?.available && variant === "draft"
+      ? draft.learnContent
+      : lesson.learnContent
+
   const courseProgress = allProgress.find((p) => p.courseId === course.id)
   const monthLessonCount = course.sections
     .filter((s) => s.month === lesson.month)
@@ -169,7 +194,7 @@ export default async function LessonPage({
     // Outline + pagination derived from the lesson's real markdown headings
     // (one page per `##` section), not a hardcoded placeholder (gwth-launch-qar).
     pages: buildLessonOutline({
-      learnContent: lesson.learnContent,
+      learnContent,
       hasIntroVideo: Boolean(lesson.introVideoUrl),
       questionCount: lesson.questions.length,
       // Every GWTH lesson ships a student project (`content/project.md` →
@@ -179,7 +204,7 @@ export default async function LessonPage({
     // Real imported content (Postgres/Drizzle). The viewer renders these in
     // the prose + Q&A surfaces, falling back to the design placeholders only
     // when a lesson has no body / no questions.
-    learnContent: lesson.learnContent || undefined,
+    learnContent: learnContent || undefined,
     // PUBLIC shape only (gwth-launch-va6): no correctOptionIndex, no
     // explanation. These props serialise into the client payload, so the
     // answer key must never be here — grading happens server-side in
@@ -228,6 +253,8 @@ export default async function LessonPage({
         nextLesson={await findNextLesson(course, lessonSlug)}
         courseHref={`/course/${course.slug}`}
         passMark={passMark}
+        variant={variant}
+        draftAvailable={draftAvailable}
       />
     </div>
   )

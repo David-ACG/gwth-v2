@@ -16,6 +16,10 @@ const ALL_PRESENT = new Set([
   "edition_lessons.decided_at",
   "edition_lessons.decided_by",
   "edition_lessons.review_note",
+  "beta_testers.user_id",
+  "page_comments.status",
+  "page_comments.triage",
+  "page_comments.action",
 ])
 
 const ORIGINAL_URL = process.env.DATABASE_URL
@@ -41,6 +45,15 @@ describe("assertSchemaMigrated", () => {
     await expect(
       assertSchemaMigrated(async () => missing)
     ).rejects.toThrow(/019_edition_ratification\.sql/)
+  })
+
+  it("names 022 when the hybrid comment columns are missing", async () => {
+    process.env.DATABASE_URL = "postgresql://x/y"
+    const missing = new Set(ALL_PRESENT)
+    missing.delete("page_comments.action")
+    await expect(
+      assertSchemaMigrated(async () => missing)
+    ).rejects.toThrow(/022_page_comments_actions\.sql/)
   })
 
   it("groups everything outstanding into one message", async () => {

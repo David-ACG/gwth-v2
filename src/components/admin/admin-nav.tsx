@@ -4,12 +4,13 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import styles from "@/app/admin/admin-fde.module.css"
 
-/** The four admin panels, in the summary-first order David chose (2026-06-17). */
+/** The admin panels, in the summary-first order David chose (2026-06-17), plus the comments record. */
 const LINKS = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/roster", label: "Roster" },
   { href: "/admin/funnel", label: "Funnel" },
   { href: "/admin/feedback", label: "Feedback" },
+  { href: "/admin/comments", label: "Comments" },
 ] as const
 
 /**

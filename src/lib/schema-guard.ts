@@ -34,6 +34,15 @@ const REQUIRED_COLUMNS: Array<{
   { table: "edition_lessons", column: "decided_at", migration: "019_edition_ratification.sql" },
   { table: "edition_lessons", column: "decided_by", migration: "019_edition_ratification.sql" },
   { table: "edition_lessons", column: "review_note", migration: "019_edition_ratification.sql" },
+  // Comment on the real student view: beta_testers is read by the comment
+  // gate in the learner layouts and by /admin/roster; page_comments by the
+  // comment API and /admin/comments.
+  { table: "beta_testers", column: "user_id", migration: "021_page_comments.sql" },
+  { table: "page_comments", column: "status", migration: "021_page_comments.sql" },
+  { table: "page_comments", column: "triage", migration: "021_page_comments.sql" },
+  // The hybrid comment front end: toPageComment selects action, shape and
+  // text_edit on every comment read.
+  { table: "page_comments", column: "action", migration: "022_page_comments_actions.sql" },
 ]
 
 /**

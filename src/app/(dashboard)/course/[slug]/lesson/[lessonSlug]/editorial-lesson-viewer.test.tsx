@@ -1162,3 +1162,117 @@ describe("EditorialLessonViewer mobile layout", () => {
     expect(grid!.className).toContain("[grid-template-columns:52px_minmax(0,1fr)]")
   })
 })
+
+// ── Comment layer contract + draft switch (bead gwth-launch-8ksq) ────────────
+
+describe("EditorialLessonViewer comment-layer data attributes", () => {
+  it("exposes lesson id, page, page title, variant and draft flag on the root", async () => {
+    const user = userEvent.setup()
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="prose"
+        initialPage={2}
+        variant="draft"
+        draftAvailable
+      />
+    )
+    const root = document.querySelector('[data-section="lesson-viewer"]')
+    expect(root).not.toBeNull()
+    expect(root?.getAttribute("data-lesson-id")).toBe(LESSON_ID)
+    expect(root?.getAttribute("data-lesson-page")).toBe("2")
+    expect(root?.getAttribute("data-lesson-page-title")).toBe(
+      "Picking the right problem"
+    )
+    expect(root?.getAttribute("data-lesson-variant")).toBe("draft")
+    expect(root?.getAttribute("data-lesson-draft-available")).toBe("1")
+
+    // The page attribute follows navigation.
+    const continueButton = screen.getAllByRole("button", { name: /continue/i })[0]
+    expect(continueButton).toBeDefined()
+    await user.click(continueButton as HTMLElement)
+    await waitFor(() =>
+      expect(root?.getAttribute("data-lesson-page")).toBe("3")
+    )
+  })
+
+  it("defaults to the live variant with no draft", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="prose"
+        initialPage={2}
+      />
+    )
+    const root = document.querySelector('[data-section="lesson-viewer"]')
+    expect(root?.getAttribute("data-lesson-variant")).toBe("live")
+    expect(root?.getAttribute("data-lesson-draft-available")).toBe("0")
+  })
+})
+
+describe("EditorialLessonViewer draft chip", () => {
+  it("on the draft says so and links to the live text, keeping the page", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="prose"
+        initialPage={2}
+        variant="draft"
+        draftAvailable
+      />
+    )
+    const chip = document.querySelector('[data-section="lesson-variant-chip"]')
+    expect(chip).not.toBeNull()
+    expect(chip?.textContent).toContain("Draft, not live")
+    const link = screen.getByRole("link", { name: "Show live" })
+    const params = new URLSearchParams(link.getAttribute("href")?.slice(1))
+    expect(params.get("variant")).toBe("live")
+    expect(params.get("page")).toBe("2")
+    expect(params.get("surface")).toBe("prose")
+  })
+
+  it("on the live text with a draft waiting offers the draft", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="prose"
+        initialPage={2}
+        variant="live"
+        draftAvailable
+      />
+    )
+    const chip = document.querySelector('[data-section="lesson-variant-chip"]')
+    expect(chip?.textContent).toContain("Live")
+    expect(chip?.textContent).not.toContain("Draft, not live")
+    const link = screen.getByRole("link", { name: "Show draft" })
+    expect(link.getAttribute("href")).toContain("variant=draft")
+  })
+
+  it("shows nothing when there is no draft", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="prose"
+        initialPage={2}
+      />
+    )
+    expect(
+      document.querySelector('[data-section="lesson-variant-chip"]')
+    ).toBeNull()
+    expect(screen.queryByRole("link", { name: /Show (live|draft)/ })).toBeNull()
+  })
+
+  it("stays off the video page even when a draft exists", () => {
+    render(
+      <EditorialLessonViewer
+        lesson={makeLesson()}
+        initialSurface="video"
+        variant="draft"
+        draftAvailable
+      />
+    )
+    expect(
+      document.querySelector('[data-section="lesson-variant-chip"]')
+    ).toBeNull()
+  })
+})

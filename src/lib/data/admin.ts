@@ -16,6 +16,7 @@ import { asc, eq, isNull, sql as dsql } from "drizzle-orm"
 import { getDb } from "@/db"
 import {
   betaAccessGrants,
+  betaTesters,
   feedback,
   lessonProgress,
   lessons,
@@ -49,6 +50,8 @@ export interface RosterEntry {
   lastActiveAt: string | null
   /** Whether this email also sits on the waitlist. */
   onWaitlist: boolean
+  /** Ticked as a beta tester (may comment on the real student view; 021). */
+  betaTester: boolean
 }
 
 /** One per-student M1 funnel row (granted testers only). */
@@ -141,7 +144,7 @@ export async function getRoster(now = new Date()): Promise<RosterEntry[]> {
   const db = getDb()
   const nowMs = now.getTime()
 
-  const [users, accessRows, grantRows, waitlistRows, sessionAgg, progressAgg] =
+  const [users, accessRows, grantRows, waitlistRows, sessionAgg, progressAgg, betaRows] =
     await Promise.all([
       db
         .select({ id: user.id, name: user.name, email: user.email, createdAt: user.createdAt })
@@ -178,6 +181,7 @@ export async function getRoster(now = new Date()): Promise<RosterEntry[]> {
         })
         .from(lessonProgress)
         .groupBy(lessonProgress.userId),
+      db.select({ userId: betaTesters.userId }).from(betaTesters),
     ])
 
   const accessByUser = new Map(accessRows.map((row) => [row.userId, row]))
@@ -185,6 +189,7 @@ export async function getRoster(now = new Date()): Promise<RosterEntry[]> {
   const sessionByUser = new Map(sessionAgg.map((row) => [row.userId, row.lastSeen]))
   const progressByUser = new Map(progressAgg.map((row) => [row.userId, row.lastSeen]))
   const waitlistEmails = new Set(waitlistRows.map((row) => row.email.toLowerCase()))
+  const betaTesterIds = new Set(betaRows.map((row) => row.userId))
   const userEmails = new Set(users.map((row) => row.email.toLowerCase()))
 
   const entries: RosterEntry[] = users.map((row) => {
@@ -203,6 +208,7 @@ export async function getRoster(now = new Date()): Promise<RosterEntry[]> {
         progressSeen ? new Date(progressSeen).toISOString() : null
       ),
       onWaitlist: waitlistEmails.has(email),
+      betaTester: betaTesterIds.has(row.id),
     }
   })
 
@@ -220,6 +226,7 @@ export async function getRoster(now = new Date()): Promise<RosterEntry[]> {
       signedUpAt: new Date(row.createdAt).toISOString(),
       lastActiveAt: null,
       onWaitlist: true,
+      betaTester: false,
     })
   }
 

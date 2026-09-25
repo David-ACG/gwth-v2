@@ -30,6 +30,11 @@
 //      updatedAt/decidedAt/decidedBy/reviewNote + the decided_by FK to
 //      `user` and the idx_edition_lessons_pending partial index.
 //   8. Bookmark persistence (canonical DDL: 020): the bookmarks table below.
+//   9. Page comments (canonical DDL: 021): the betaTesters + pageComments
+//      tables below (hand-written, after `feedback`).
+//  10. Page comments hybrid (canonical DDL: 022): pageComments gains the
+//      action/shape/textEdit jsonb columns, target_type allows 'area', and
+//      the comment length CHECK allows '' (0..4000).
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -582,6 +587,78 @@ export const feedback = pgTable("feedback", {
 			name: "feedback_user_id_fkey"
 		}).onDelete("cascade"),
 	check("feedback_category_check", sql`category = ANY (ARRAY['bug'::text, 'content'::text, 'idea'::text, 'general'::text])`),
+]);
+
+// 021_page_comments.sql: comment on the real student view. Hand-written (not
+// pulled), so RE-DECLARE after any future `drizzle-kit pull`. beta_testers
+// marks who may comment besides the ADMIN_EMAILS allowlist; page_comments
+// holds each comment (contract: src/lib/comments/types.ts).
+export const betaTesters = pgTable("beta_testers", {
+	userId: text("user_id").primaryKey().notNull(),
+	addedBy: text("added_by"),
+	addedAt: timestamp("added_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "beta_testers_user_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.addedBy],
+			foreignColumns: [user.id],
+			name: "beta_testers_added_by_fkey"
+		}).onDelete("set null"),
+]);
+
+export const pageComments = pgTable("page_comments", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	authorEmail: text("author_email").notNull(),
+	authorRole: text("author_role").notNull(),
+	site: text().default('local').notNull(),
+	pagePath: text("page_path").notNull(),
+	pageTitle: text("page_title"),
+	lessonId: text("lesson_id"),
+	lessonPage: integer("lesson_page"),
+	lessonPageTitle: text("lesson_page_title"),
+	lessonVariant: text("lesson_variant"),
+	targetType: text("target_type").notNull(),
+	quote: text(),
+	quotePrefix: text("quote_prefix"),
+	quoteSuffix: text("quote_suffix"),
+	selector: text(),
+	selectorKind: text("selector_kind"),
+	heading: text(),
+	imageSrc: text("image_src"),
+	imageAlt: text("image_alt"),
+	context: text(),
+	comment: text().notNull(),
+	status: text().default('open').notNull(),
+	triage: jsonb(),
+	// 022: the canned action, the mark's shape and an in-place text edit.
+	action: jsonb(),
+	shape: jsonb(),
+	textEdit: jsonb("text_edit"),
+	viewport: text(),
+	userAgent: text("user_agent"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull().$onUpdate(() => new Date().toISOString()),
+}, (table) => [
+	index("idx_page_comments_page_path").using("btree", table.pagePath.asc().nullsLast().op("text_ops")),
+	index("idx_page_comments_open_lesson").using("btree", table.lessonId.asc().nullsLast().op("text_ops")).where(sql`(status = 'open'::text)`),
+	index("idx_page_comments_status").using("btree", table.status.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "page_comments_user_id_fkey"
+		}).onDelete("cascade"),
+	check("page_comments_author_role_check", sql`author_role = ANY (ARRAY['admin'::text, 'beta'::text])`),
+	check("page_comments_site_check", sql`site = ANY (ARRAY['preview'::text, 'production'::text, 'local'::text])`),
+	check("page_comments_target_type_check", sql`target_type = ANY (ARRAY['text'::text, 'image'::text, 'area'::text, 'page'::text])`),
+	check("page_comments_status_check", sql`status = ANY (ARRAY['open'::text, 'accepted'::text, 'fixed'::text, 'declined'::text, 'asked'::text, 'withdrawn'::text])`),
+	check("page_comments_lesson_variant_check", sql`(lesson_variant IS NULL) OR (lesson_variant = ANY (ARRAY['live'::text, 'draft'::text]))`),
+	check("page_comments_selector_kind_check", sql`(selector_kind IS NULL) OR (selector_kind = ANY (ARRAY['id'::text, 'testid'::text, 'path'::text, 'root'::text]))`),
+	check("page_comments_comment_length_check", sql`(char_length(comment) >= 0) AND (char_length(comment) <= 4000)`),
 ]);
 
 // N5 — syllabus editions (canonical DDL: 014_syllabus_editions.sql). One core

@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/footer"
 import { getCurrentUser, canUserAccessCourse } from "@/lib/auth"
 import { canViewPrivateContent } from "@/lib/content-access"
 import { COURSE_PATH } from "@/lib/config"
+import { CommentLayerGate } from "@/components/comments/comment-layer-gate"
 
 /**
  * Render per request, never statically.
@@ -60,6 +61,7 @@ export default async function PublicLayout({
       />
       <main className="flex-1">{children}</main>
       <Footer showLabs={showLabs} lessonsHref={lessonsHref} />
+      <CommentLayerGate />
     </div>
   )
 }

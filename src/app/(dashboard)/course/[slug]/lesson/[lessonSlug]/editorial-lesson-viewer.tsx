@@ -40,6 +40,7 @@ import type {
   QuizSubmitResult,
 } from "@/lib/types"
 import { MAX_QUIZ_ATTEMPTS } from "@/lib/config"
+import { LESSON_DATA_ATTRS, type LessonVariant } from "@/lib/comments/types"
 import styles from "./lesson-fde.module.css"
 
 // The video player is heavy (native <video> + controls chrome); load it only
@@ -204,6 +205,19 @@ interface EditorialLessonViewerProps {
    * Defaults to the historic QUIZ_PASS_SCORE (67).
    */
   passMark?: number
+  /**
+   * Which text the server rendered: the published lesson ("live") or the
+   * pipeline's rewrite waiting for approval ("draft", admin preview only).
+   * Default `"live"`. Exposed on the root as data-lesson-variant for the
+   * comment layer (bead gwth-launch-8ksq).
+   */
+  variant?: LessonVariant
+  /**
+   * Whether a pipeline draft exists for this lesson (admin preview only).
+   * When true, prose pages show a small chip to switch between the draft and
+   * the live text. Default `false`: students never see the chip.
+   */
+  draftAvailable?: boolean
 }
 
 const ADVANCING_PING_LABEL = "Advancing in 2s"
@@ -250,6 +264,8 @@ export function EditorialLessonViewer({
   nextLesson = null,
   courseHref,
   passMark = QUIZ_PASS_SCORE,
+  variant = "live",
+  draftAvailable = false,
 }: EditorialLessonViewerProps) {
   const [surface, setSurface] = React.useState<EditorialLessonSurface>(
     initialSurface
@@ -701,6 +717,15 @@ export function EditorialLessonViewer({
   const currentPage = isVideo ? 1 : isQa ? lesson.pages.length : pageNum
   const currentPageData = lesson.pages[currentPage - 1]
   const isProject = !isVideo && !isQa && currentPageData?.kind === "project"
+  // DOM contract with the comment layer (LESSON_DATA_ATTRS in
+  // src/lib/comments/types.ts): which lesson, page and text is on screen.
+  const lessonDataAttrs = {
+    [LESSON_DATA_ATTRS.id]: lesson.id,
+    [LESSON_DATA_ATTRS.page]: String(currentPage),
+    [LESSON_DATA_ATTRS.pageTitle]: currentPageData?.title ?? "",
+    [LESSON_DATA_ATTRS.variant]: variant,
+    [LESSON_DATA_ATTRS.draftAvailable]: draftAvailable ? "1" : "0",
+  }
   const videoCleared = watchedFraction >= INTRO_VIDEO_COMPLETION_THRESHOLD
   // The persisted server verdict first (QA round-1 defect 2): the server
   // never re-grades a passed quiz, so the row's quizPassed must win over a
@@ -717,6 +742,7 @@ export function EditorialLessonViewer({
         "flex min-h-[calc(100vh-4rem)] flex-col"
       )}
       data-section="lesson-viewer"
+      {...lessonDataAttrs}
     >
       {audioElement}
       <div className="flex flex-1 min-h-0">
@@ -800,6 +826,13 @@ export function EditorialLessonViewer({
               onToggleAutoAdvance={() => setAutoAdvance((v) => !v)}
               onChangeSpeed={setSpeed}
             />
+
+            {draftAvailable && !isVideo && !isQa && !isProject ? (
+              <DraftVariantChip
+                variant={variant}
+                pageNum={currentPage}
+              />
+            ) : null}
 
             <div className="flex min-w-0 flex-1 justify-center py-9">
               {isVideo ? (
@@ -1476,7 +1509,7 @@ function AudioBar({
 }) {
   if (variant === "muted" || variant === "unavailable") {
     return (
-      <div className="sticky bottom-0 z-[5] border-t border-border bg-card px-7 py-3.5">
+      <div data-comment-avoid className="sticky bottom-0 z-[5] border-t border-border bg-card px-7 py-3.5">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <span className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground">
@@ -1886,6 +1919,60 @@ function StatusIcon({
         </svg>
       )}
     </span>
+  )
+}
+
+// ─── Draft / live switch (admin preview only) ─────────────────────────────────
+
+function subscribeToLocation(onChange: () => void): () => void {
+  window.addEventListener("popstate", onChange)
+  return () => window.removeEventListener("popstate", onChange)
+}
+
+/**
+ * The small functional chip above a prose page when the pipeline has a draft
+ * of this lesson (bead gwth-launch-8ksq). It says which text is on screen and
+ * links to the other one, keeping the current query string and the page the
+ * reader is on. A plain link (full load) so the server re-reads the right text.
+ */
+function DraftVariantChip({
+  variant,
+  pageNum,
+}: {
+  variant: LessonVariant
+  pageNum: number
+}) {
+  const search = React.useSyncExternalStore(
+    subscribeToLocation,
+    () => window.location.search,
+    () => ""
+  )
+  const target: LessonVariant = variant === "draft" ? "live" : "draft"
+  const params = new URLSearchParams(search)
+  params.set("variant", target)
+  params.set("surface", "prose")
+  params.set("page", String(pageNum))
+  const href = `?${params.toString()}`
+  const isDraft = variant === "draft"
+
+  return (
+    <div className="mx-auto mt-6 flex w-full max-w-[68ch] justify-start">
+      <p
+        className="inline-flex items-center gap-3 rounded-[6px] border border-[var(--v-line)] bg-[var(--v-surface)] px-2.5 py-1 text-[12px] leading-5 text-[var(--v-soft)]"
+        data-section="lesson-variant-chip"
+        data-variant={variant}
+      >
+        <span className="font-medium text-[var(--v-ink)]">
+          {isDraft ? "Draft, not live" : "Live"}
+        </span>
+        <a
+          href={href}
+          className="text-[var(--v-ink)] underline underline-offset-2 hover:text-[var(--v-accent)]"
+        >
+          {isDraft ? "Show live" : "Show draft"}
+        </a>
+      </p>
+    </div>
   )
 }
 
@@ -2935,7 +3022,7 @@ function MobileSurface({
         </div>
       </div>
 
-      <div className="sticky bottom-0 z-[5] border-t border-border bg-card px-4 py-3">
+      <div data-comment-avoid className="sticky bottom-0 z-[5] border-t border-border bg-card px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             type="button"

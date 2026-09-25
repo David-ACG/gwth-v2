@@ -2,6 +2,7 @@ import Link from "next/link"
 import { requireAdminOrRedirect } from "@/lib/admin"
 import { getRoster, type RosterEntry } from "@/lib/data/admin"
 import { GrantForm } from "@/components/admin/grant-form"
+import { BetaTesterToggle } from "@/components/admin/beta-tester-toggle"
 import {
   AdminEmptyState,
   formatAgo,
@@ -157,6 +158,7 @@ function RosterTable({
                 dir={dir}
               />
             </th>
+            <th scope="col">Comments</th>
           </tr>
         </thead>
         <tbody>
@@ -177,6 +179,17 @@ function RosterTable({
               </td>
               <td className={styles.cellMuted}>{formatDate(entry.signedUpAt)}</td>
               <td className={styles.cellMuted}>{formatAgo(entry.lastActiveAt)}</td>
+              <td>
+                {entry.userId ? (
+                  <BetaTesterToggle
+                    userId={entry.userId}
+                    name={entry.name}
+                    betaTester={entry.betaTester}
+                  />
+                ) : (
+                  <span className={styles.cellMuted}>no account yet</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

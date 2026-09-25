@@ -2,6 +2,7 @@ import { Sidebar } from "@/components/layout/sidebar"
 import { DashboardHeader } from "@/components/layout/header"
 import { SearchPalette } from "@/components/search/search-palette"
 import { ReportProblemLauncher } from "@/components/feedback/report-problem-launcher"
+import { CommentLayerGate } from "@/components/comments/comment-layer-gate"
 import { getCurrentUser } from "@/lib/auth"
 import { canViewPrivateContent } from "@/lib/content-access"
 import { EMPTY_SEARCH_INDEX, getSearchIndex } from "@/lib/data/search-index"
@@ -67,6 +68,7 @@ export default async function DashboardLayout({
           into a public /_next/static chunk (W25, see lib/data/search-index). */}
       {ENABLE_SEARCH && <SearchPalette index={searchIndex} />}
       <ReportProblemLauncher />
+      <CommentLayerGate />
     </div>
   )
 }
