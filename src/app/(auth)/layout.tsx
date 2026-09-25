@@ -7,9 +7,10 @@ import styles from "@/components/auth/auth-fde.module.css"
  * reset-password, error) in the FDE journal register (DESIGN_FDE.md,
  * Direction C — "journal masthead + panel").
  *
- * A full-width dark-teal masthead band carries the GWTH.ai wordmark only
- * (linking home); each surface renders its own paper-cream panel — with the
- * register's one sanctioned hard-offset shadow — centred on the sage ground.
+ * A full-width masthead in the quiet paper fill carries the GWTH.ai wordmark
+ * only (linking home), in exactly the inks the home page nav uses (bead
+ * gwth-launch-awb, pinned by layout.test.tsx); each surface renders its own
+ * panel centred on the page ground.
  * The `--v-*` palette is scoped to `.shell`, so the site-wide theme toggle
  * (`.dark` on `<html>`) flips the whole surface.
  */
