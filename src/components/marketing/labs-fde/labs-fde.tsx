@@ -10,6 +10,19 @@ import { formatDate } from "@/lib/utils"
 import styles from "./labs-fde.module.css"
 
 /**
+ * Whether /labs lists the archive of superseded and retired labs.
+ *
+ * Off since bead gwth-launch-amb. David, 2026-07-25, on the CIPD walkthrough:
+ * "I'm not sure we should have all of the olds Labs archived because it just
+ * looks like we started them and didn't finish them let's just have one lab
+ * as a demo and then we can add more Labs later". The old labs are NOT
+ * deleted: they stay in the database and on disk, and their own pages still
+ * answer at /labs/<slug>. Only the listing hides them. Set this to `true` to
+ * bring the archive section back; nothing else needs to change.
+ */
+export const LABS_ARCHIVE_VISIBLE = false
+
+/**
  * Props for {@link LabsFde}.
  */
 interface LabsFdeProps {
@@ -19,10 +32,32 @@ interface LabsFdeProps {
   archivedArenaLabs: ModelArenaLab[]
   /** Retired tiered-format labs, kept read-only as part of the archive. */
   legacyArchive: Lab[]
+  /**
+   * Whether to render the archive section. Defaults to
+   * {@link LABS_ARCHIVE_VISIBLE}; tests pass it explicitly.
+   */
+  showArchive?: boolean
+}
+
+/** One item in the "how it works" explainer row. */
+interface HowItWorksItem {
+  /** Short heading. */
+  title: string
+  /** One or two sentences under it. */
+  body: string
+}
+
+/**
+ * The third explainer item while the archive is hidden. It must not point at
+ * an archive the page no longer shows.
+ */
+const FEW_AT_ONCE: HowItWorksItem = {
+  title: "Only a few at once.",
+  body: "Models change quickly, so we keep a small set of labs up to date rather than a long list that goes stale.",
 }
 
 /** A single reason the Model Arena format exists, shown in the explainer row. */
-const HOW_IT_WORKS: ReadonlyArray<{ title: string; body: string }> = [
+const HOW_IT_WORKS: ReadonlyArray<HowItWorksItem> = [
   {
     title: "One task, two tools.",
     body: "A real job you would actually give an AI, handed to two models with the exact same prompt.",
@@ -63,8 +98,9 @@ interface ArchiveRow {
  * models keep changing, and superseded ones move to a dated archive.
  *
  * Structure: a two-column quiet masthead, a "how it works" explainer, a live
- * card row, a dated ARCHIVE list (arena first, then retired tiered labs), and a
- * closing band pointing at the course. Labs are included free with a beta
+ * card row, a dated ARCHIVE list (arena first, then retired tiered labs; hidden
+ * while {@link LABS_ARCHIVE_VISIBLE} is false), and a closing band pointing at
+ * the course. Labs are included free with a beta
  * place; during the private pre-launch period (W25) the route itself is behind
  * the content gate, so the copy must not promise anonymous reading.
  *
@@ -84,12 +120,17 @@ export function LabsFde({
   liveLabs,
   archivedArenaLabs,
   legacyArchive,
+  showArchive = LABS_ARCHIVE_VISIBLE,
 }: LabsFdeProps) {
+  const howItWorks = showArchive
+    ? HOW_IT_WORKS
+    : [...HOW_IT_WORKS.slice(0, -1), FEW_AT_ONCE]
   // How many live labs genuinely have media. `labVideoState` is the only
   // evidence any surface accepts, so the section lead cannot drift from the
   // cards below it.
-  const withVideo = liveLabs.filter((l) => labVideoState(l) === "available")
-    .length
+  const withVideo = liveLabs.filter(
+    (l) => labVideoState(l) === "available",
+  ).length
   const archiveRows: ArchiveRow[] = [
     ...archivedArenaLabs.map((lab) => ({
       key: lab.id,
@@ -118,9 +159,9 @@ export function LabsFde({
           </h1>
           <p className={styles.standfirst}>
             Each lab runs two AI tools head to head on a real job, with the same
-            prompt, and shows you both answers side by side. A short rubric helps
-            you call the winner. Lessons teach you how; labs show you which tool
-            when.
+            prompt, and shows you both answers side by side. A short rubric
+            helps you call the winner. Lessons teach you how; labs show you
+            which tool when.
           </p>
           {/* The UK thread on this page (bead gwth-launch-88z.32.25), and it
               is a description of the labs that exist rather than a promise:
@@ -159,7 +200,7 @@ export function LabsFde({
       <section className={styles.explainer} data-section="how-it-works">
         <div className={styles.page}>
           <div className={styles.explainerRow}>
-            {HOW_IT_WORKS.map((item) => (
+            {howItWorks.map((item) => (
               <div key={item.title} className={styles.explainerItem}>
                 <h2 className={styles.explainerTitle}>{item.title}</h2>
                 <p>{item.body}</p>
@@ -173,9 +214,7 @@ export function LabsFde({
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>Live now.</h2>
-            <p className={styles.mono}>
-              {liveLabs.length} in the arena
-            </p>
+            <p className={styles.mono}>{liveLabs.length} in the arena</p>
           </div>
 
           {/*
@@ -198,14 +237,16 @@ export function LabsFde({
             <div className={styles.empty}>
               <h3>No live labs right now.</h3>
               <p>
-                The next matchups are being prepared. In the meantime, the
-                archive below shows how the tools compared last time.
+                {showArchive
+                  ? "The next matchups are being prepared. In the meantime, the archive below shows how the tools compared last time."
+                  : "The next matchups are being tested. They will appear here when they are ready."}
               </p>
             </div>
           ) : (
             <div className={styles.cardsRow}>
               {liveLabs.map((lab) => {
-                const video = labVideoState(lab) === "available" ? lab.video : null
+                const video =
+                  labVideoState(lab) === "available" ? lab.video : null
                 return (
                   <Link
                     href={`/labs/${lab.slug}`}
@@ -261,49 +302,52 @@ export function LabsFde({
         </div>
       </section>
 
-      <section className={styles.section} data-section="archive">
-        <div className={styles.page}>
-          <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>The archive.</h2>
-            <p className={styles.mono}>
-              {archiveRows.length} older {archiveRows.length === 1 ? "lab" : "labs"}
-            </p>
-          </div>
-          <p className={styles.sectionLead}>
-            Nothing is deleted when a lab goes out of date. Kept here, the
-            archive shows how the tools compared at a point in time, which only
-            gets more useful as newer models arrive.
-          </p>
-
-          {archiveRows.length === 0 ? (
-            <div className={styles.empty}>
-              <h3>The archive is empty.</h3>
-              <p>Once a live lab is superseded it will appear here, dated.</p>
+      {showArchive ? (
+        <section className={styles.section} data-section="archive">
+          <div className={styles.page}>
+            <div className={styles.sectionHead}>
+              <h2 className={styles.sectionTitle}>The archive.</h2>
+              <p className={styles.mono}>
+                {archiveRows.length} older{" "}
+                {archiveRows.length === 1 ? "lab" : "labs"}
+              </p>
             </div>
-          ) : (
-            <ul className={styles.archiveList}>
-              {archiveRows.map((row) => (
-                <li key={row.key} className={styles.archiveItem}>
-                  <Link
-                    href={row.href}
-                    className={styles.archiveLink}
-                    data-testid="archive-lab-row"
-                  >
-                    <span className={styles.archiveMain}>
-                      <span className={styles.archiveTitle}>{row.title}</span>
-                      <span className={styles.archiveMeta}>{row.meta}</span>
-                    </span>
-                    <span className={styles.archiveTail}>
-                      <span className={styles.archiveBadge}>Archived</span>
-                      <span className={styles.archiveDate}>{row.date}</span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
+            <p className={styles.sectionLead}>
+              Nothing is deleted when a lab goes out of date. Kept here, the
+              archive shows how the tools compared at a point in time, which
+              only gets more useful as newer models arrive.
+            </p>
+
+            {archiveRows.length === 0 ? (
+              <div className={styles.empty}>
+                <h3>The archive is empty.</h3>
+                <p>Once a live lab is superseded it will appear here, dated.</p>
+              </div>
+            ) : (
+              <ul className={styles.archiveList}>
+                {archiveRows.map((row) => (
+                  <li key={row.key} className={styles.archiveItem}>
+                    <Link
+                      href={row.href}
+                      className={styles.archiveLink}
+                      data-testid="archive-lab-row"
+                    >
+                      <span className={styles.archiveMain}>
+                        <span className={styles.archiveTitle}>{row.title}</span>
+                        <span className={styles.archiveMeta}>{row.meta}</span>
+                      </span>
+                      <span className={styles.archiveTail}>
+                        <span className={styles.archiveBadge}>Archived</span>
+                        <span className={styles.archiveDate}>{row.date}</span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      ) : null}
 
       <section className={styles.closing} data-section="closing">
         <div className={styles.page}>

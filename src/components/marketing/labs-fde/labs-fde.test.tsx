@@ -1,8 +1,8 @@
 import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
-import { LabsFde } from "./labs-fde"
+import { LabsFde, LABS_ARCHIVE_VISIBLE } from "./labs-fde"
 import { getLiveArenaLabs, getArchivedArenaLabs } from "@/lib/data/model-arena"
-import type { ModelArenaLab } from "@/lib/types"
+import type { Lab, ModelArenaLab } from "@/lib/types"
 
 afterEach(cleanup)
 
@@ -210,5 +210,69 @@ describe("LabsFde live cards", () => {
     expect(
       screen.getByRole("heading", { name: /no live labs/i })
     ).toBeInTheDocument()
+  })
+})
+
+/** A retired tiered-format lab, standing in for the old archive rows. */
+const RETIRED_LAB: Lab = {
+  id: "legacy-1",
+  slug: "legacy-chatbot",
+  title: "Build a customer service chatbot",
+  description: "A retired tiered lab.",
+  difficulty: "beginner",
+  duration: 30,
+  technologies: [],
+  learningOutcomes: [],
+  prerequisites: null,
+  content: "",
+  instructions: [],
+  category: "Building",
+  projectType: "app",
+  color: "",
+  icon: "",
+  isPremium: false,
+  createdAt: new Date("2026-05-01"),
+  updatedAt: new Date("2026-05-01"),
+}
+
+/**
+ * Bead gwth-launch-amb. David, 2026-07-25: "I'm not sure we should have all of
+ * the olds Labs archived because it just looks like we started them and didn't
+ * finish them". The old labs stay in the database; the listing hides them, and
+ * one flag brings them back.
+ */
+describe("LabsFde archive", () => {
+  it("is hidden by default", () => {
+    expect(LABS_ARCHIVE_VISIBLE).toBe(false)
+    const { container } = render(
+      <LabsFde
+        liveLabs={liveLabs}
+        archivedArenaLabs={getArchivedArenaLabs()}
+        legacyArchive={[RETIRED_LAB]}
+      />
+    )
+    expect(container.querySelector('[data-section="archive"]')).toBeNull()
+    expect(screen.queryAllByTestId("archive-lab-row")).toHaveLength(0)
+    expect(screen.queryByText(RETIRED_LAB.title)).toBeNull()
+    // No sentence on the page points at an archive it no longer shows.
+    expect(container.textContent).not.toMatch(/archive/i)
+    // The live labs are untouched.
+    expect(screen.getAllByTestId("arena-lab-card")).toHaveLength(liveLabs.length)
+  })
+
+  it("comes back, unchanged, when the flag is turned on", () => {
+    const { container } = render(
+      <LabsFde
+        liveLabs={liveLabs}
+        archivedArenaLabs={getArchivedArenaLabs()}
+        legacyArchive={[RETIRED_LAB]}
+        showArchive
+      />
+    )
+    expect(container.querySelector('[data-section="archive"]')).not.toBeNull()
+    const rows = screen.getAllByTestId("archive-lab-row")
+    expect(rows.map((r) => r.getAttribute("href"))).toContain(
+      `/labs/${RETIRED_LAB.slug}`
+    )
   })
 })

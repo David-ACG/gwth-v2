@@ -29,10 +29,11 @@ export const metadata: Metadata = {
 /**
  * Public labs landing in the Model Arena format (FDE journal register).
  *
- * Shows the labs currently in rotation (LIVE) and the dated ARCHIVE of
- * superseded matchups plus the retired tiered-format labs, which are kept
- * read-only. No progress data: labs are the free taster once the site is
- * public.
+ * Shows the labs currently in rotation (LIVE). The dated ARCHIVE of
+ * superseded matchups and retired tiered-format labs is still fetched and kept
+ * read-only at /labs/<slug>, but the listing hides it while
+ * `LABS_ARCHIVE_VISIBLE` is false (bead gwth-launch-amb). No progress data:
+ * labs are the free taster once the site is public.
  *
  * While `PRIVATE_CONTENT_MODE` is on the gate below restricts the page to the
  * content allowlist. It is the FIRST await, before any lab is fetched: App
