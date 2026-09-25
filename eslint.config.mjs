@@ -9,6 +9,9 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    // Candidate builds from the preview rebuild (marketing copy gate) are
+    // build output too, and a failed run can leave one behind.
+    ".next-candidate-*/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
@@ -18,6 +21,8 @@ const eslintConfig = defineConfig([
     "kanban/**",
     // Unrelated sub-project, has its own toolchain
     "gwth_projects/**",
+    // CIPD meeting material (a CommonJS pptxgenjs deck script), not shipped code
+    "CIPD/**",
     // Leftover agent worktrees (stale tree copies incl. their .next build
     // output) are not this tree's source
     ".claude/**",

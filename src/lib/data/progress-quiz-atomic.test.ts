@@ -19,7 +19,7 @@ import { SQL } from "drizzle-orm"
 
 const fakeDb = vi.hoisted(() => {
   const state = {
-    insertCalls: [] as { values: Record<string, unknown>; config: any }[],
+    insertCalls: [] as { values: Record<string, unknown>; config: { set: Record<string, unknown>; setWhere?: unknown } }[],
     returningRows: [] as Record<string, unknown>[],
     selectRows: [] as Record<string, unknown>[],
     executed: [] as unknown[],
@@ -29,7 +29,10 @@ const fakeDb = vi.hoisted(() => {
       values: (values: Record<string, unknown>) => ({
         onConflictDoUpdate: (config: unknown) => ({
           returning: () => {
-            state.insertCalls.push({ values, config })
+            state.insertCalls.push({
+              values,
+              config: config as { set: Record<string, unknown>; setWhere?: unknown },
+            })
             return Promise.resolve(state.returningRows)
           },
         }),
