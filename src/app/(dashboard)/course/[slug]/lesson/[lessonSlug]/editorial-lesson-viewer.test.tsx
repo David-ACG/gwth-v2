@@ -1437,3 +1437,42 @@ describe("EditorialLessonViewer draft chip", () => {
     ).toBeNull()
   })
 })
+
+// ── Mock Feedback / Notes tabs (bead gwth-launch-jser) ──────────────────────
+
+/**
+ * The right-edge "Feedback 3" and "Notes 7" tabs were W5 mocks with invented
+ * counts. Real comments live in the comment layer now, so a lesson page must
+ * not show either tab, on desktop or mobile, and the F / N shortcuts must not
+ * open a mock panel.
+ */
+describe("EditorialLessonViewer without the mock Feedback and Notes tabs", () => {
+  it("shows neither tab on a desktop prose page", () => {
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />
+    )
+    expect(
+      screen.queryByRole("button", { name: /toggle feedback panel/i })
+    ).toBeNull()
+    expect(
+      screen.queryByRole("button", { name: /toggle notes panel/i })
+    ).toBeNull()
+  })
+
+  it("opens no mock panel from the F or N keys", () => {
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="prose" />
+    )
+    fireEvent.keyDown(window, { key: "f" })
+    fireEvent.keyDown(window, { key: "n" })
+    expect(screen.queryByText(/Esc/)).toBeNull()
+    expect(screen.queryByRole("button", { name: /delete note/i })).toBeNull()
+  })
+
+  it("shows no feedback pill on the mobile surface", () => {
+    render(
+      <EditorialLessonViewer lesson={makeLesson()} initialSurface="mobile" />
+    )
+    expect(screen.queryByRole("button", { name: /feedback/i })).toBeNull()
+  })
+})

@@ -7,6 +7,20 @@ import { cn } from "@/lib/utils"
 import styles from "./lesson-fde.module.css"
 
 /**
+ * Whether the lesson viewer mounts these widgets at all.
+ *
+ * Off since bead gwth-launch-jser. Both tabs are mocks from W5: the "Feedback 3"
+ * and "Notes 7" counts and everything behind them are MOCK_COMMENTS and
+ * MOCK_NOTE_GROUPS, the composer's POST only closes the panel, and there is no
+ * notes table to wire Notes to. Real commenting now lives in the comment layer
+ * (src/components/comments/, bead gwth-launch-8ksq), so a fake Feedback tab
+ * told David and beta testers there were three comments that do not exist.
+ * The design port stays here for the day Notes has real storage; set this to
+ * `true` to mount it again (the F and N shortcuts come back with it).
+ */
+export const LESSON_WIDGETS_ENABLED = false
+
+/**
  * Public surface name for selecting the initial widget state on mount.
  * `none` (default) renders both pills collapsed; `feedback` opens the
  * feedback panel with mock comments; `notes` opens the aggregated notes

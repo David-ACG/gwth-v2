@@ -20,7 +20,11 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { LessonWidgets, type LessonWidgetSurface } from "./lesson-widgets"
+import {
+  LESSON_WIDGETS_ENABLED,
+  LessonWidgets,
+  type LessonWidgetSurface,
+} from "./lesson-widgets"
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer"
 import { BookmarkButton } from "@/components/shared/bookmark-button"
 import {
@@ -740,11 +744,14 @@ export function EditorialLessonViewer({
 
   // Lesson widgets show on prose / prose-playing / advancing only. They
   // don't make sense on the intro video, the Q&A, or the lesson-complete
-  // surface, and the mobile surface gets its own mobile-mode widgets.
+  // surface, and the mobile surface gets its own mobile-mode widgets. Both
+  // are off while LESSON_WIDGETS_ENABLED is false (bead gwth-launch-jser):
+  // the Feedback and Notes tabs are mocks with invented counts.
   const widgetEligible =
-    surface === "prose" ||
-    surface === "prose-playing" ||
-    surface === "advancing"
+    LESSON_WIDGETS_ENABLED &&
+    (surface === "prose" ||
+      surface === "prose-playing" ||
+      surface === "advancing")
 
   const playing = surface === "prose-playing" || surface === "advancing"
   const audioProgressPct = audioDur > 0 ? (audioTime / audioDur) * 100 : 0
@@ -776,15 +783,17 @@ export function EditorialLessonViewer({
             rememberPage(clamped)
           }}
         />
-        <LessonWidgets
-          lessonNumber={lesson.lessonNumber}
-          mobile
-          initialSurface={
-            initialWidgetSurface === "none"
-              ? "mobile-collapsed"
-              : initialWidgetSurface
-          }
-        />
+        {LESSON_WIDGETS_ENABLED && (
+          <LessonWidgets
+            lessonNumber={lesson.lessonNumber}
+            mobile
+            initialSurface={
+              initialWidgetSurface === "none"
+                ? "mobile-collapsed"
+                : initialWidgetSurface
+            }
+          />
+        )}
       </div>
     )
   }
