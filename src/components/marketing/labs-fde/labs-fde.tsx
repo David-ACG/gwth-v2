@@ -172,9 +172,10 @@ export function LabsFde({
               sentence. */}
           <p className={styles.standfirst} data-testid="labs-uk-note">
             The tasks are set in UK workplaces, so you see how each tool
-            handles UK rules and sources. A care home in Shropshire that cannot fill a nursing
-            vacancy, or a payroll administrator who needs this year&apos;s
-            Statutory Sick Pay rate with the GOV.UK page to prove it.
+            handles UK rules and sources. One lab asks each tool to rewrite
+            a job advert for a nursing vacancy at a Shropshire care home.
+            Another asks for this year&apos;s Statutory Sick Pay rate, with
+            the GOV.UK page that proves it.
           </p>
           <div className={styles.mastheadActions}>
             {liveLabs[0] ? (
@@ -357,9 +358,10 @@ export function LabsFde({
           </h2>
           <p>
             Each lab shows which tool did better on one task, and the date it
-            was tested. Over three months, the course teaches you to build,
-            research and automate with AI in plain English, with a practical
-            project in every lesson.
+            was tested. Over three months, the course shows you, in plain
+            English, how to build a household helper, a simple website and
+            an automation for a weekly chore. Every lesson ends with a short
+            project you do yourself.
           </p>
           <div className={styles.closingActions}>
             <Link href="/pricing" className={styles.buttonSolid}>
