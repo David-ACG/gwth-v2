@@ -329,6 +329,15 @@ describe("CommentLayer: capture and the card", () => {
     await waitFor(() => expect(layer()).not.toHaveAttribute("data-card-open"))
   })
 
+  it("on a touch screen the card takes focus, so the keyboard does not cover the actions", async () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({ matches: query === "(pointer: coarse)" }))
+    mountPage()
+    render(<CommentLayer role="beta" />)
+    const card = await openCardForWords()
+    await waitFor(() => expect(card).toHaveFocus())
+    expect(screen.getByPlaceholderText("In your own words (optional if you picked one above)")).not.toHaveFocus()
+  })
+
   it("does not offer the button for selections in the header", async () => {
     mountPage()
     render(<CommentLayer role="beta" />)

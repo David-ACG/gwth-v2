@@ -699,7 +699,12 @@ function CommentLayerInner({
   }, [readSpot])
 
   useEffect(() => {
-    if (pending) textareaRef.current?.focus({ preventScroll: true })
+    if (!pending) return
+    // On a touch screen, focusing the box pops the keyboard over the one-tap
+    // actions; focus the card instead and let a tap on the box bring it up.
+    const touch = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches
+    if (touch) cardRef.current?.focus({ preventScroll: true })
+    else textareaRef.current?.focus({ preventScroll: true })
   }, [pending])
 
   const startEdit = () => {
@@ -1021,6 +1026,7 @@ function CommentLayerInner({
             role="dialog"
             aria-modal="false"
             aria-labelledby={headingId}
+            tabIndex={-1}
             className={styles.card}
             onKeyDown={onCardKey}
           >

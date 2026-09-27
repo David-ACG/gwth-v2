@@ -409,6 +409,11 @@
   white-space: pre-wrap;
 }
 
+/* Focused on open for touch screens; a tap never needs the ring. */
+.card:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* ---------------- The bar ---------------- */
 
 .bar {
