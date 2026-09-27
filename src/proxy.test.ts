@@ -108,6 +108,30 @@ describe("proxy route guard (W11)", () => {
       expect(redirectPath(response)).toBe("/dashboard")
     })
 
+    it("keeps the page a signed-out visitor was going to as ?next", async () => {
+      setSessionCookie(null)
+      const response = await proxy(request("/course/applied-ai-skills/lesson/welcome?page=5"))
+      const location = new URL(response.headers.get("location") ?? "")
+      expect(location.pathname).toBe("/login")
+      expect(location.searchParams.get("next")).toBe(
+        "/course/applied-ai-skills/lesson/welcome?page=5"
+      )
+    })
+
+    it("sends a signed-in visitor on /login?next= straight to that page", async () => {
+      setSessionCookie("session-token")
+      const response = await proxy(request("/login?next=%2Fcourse%2Fx%2Flesson%2Fy%3Fpage%3D2"))
+      const location = new URL(response.headers.get("location") ?? "")
+      expect(location.pathname).toBe("/course/x/lesson/y")
+      expect(location.search).toBe("?page=2")
+    })
+
+    it("ignores an off-site next and falls back to /dashboard", async () => {
+      setSessionCookie("session-token")
+      const response = await proxy(request("/login?next=%2F%2Fevil.example"))
+      expect(redirectPath(response)).toBe("/dashboard")
+    })
+
     it("lets an authenticated visitor through to a protected route", async () => {
       setSessionCookie("session-token")
       const response = await proxy(request("/dashboard"))

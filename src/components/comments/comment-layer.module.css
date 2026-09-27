@@ -163,8 +163,25 @@
     max-width: none;
     max-height: 78vh;
     overflow-y: auto;
+    overscroll-behavior: contain;
     z-index: 61;
     border-radius: 8px 8px 0 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Save and Cancel stay in reach however long the list of actions is. */
+  .card .row {
+    position: sticky;
+    bottom: calc(-12px - env(safe-area-inset-bottom, 0px));
+    margin-bottom: calc(-12px - env(safe-area-inset-bottom, 0px));
+    padding: 10px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--v-surface);
+    border-top: 1px solid var(--v-line);
+  }
+
+  /* The sheet covers the bottom of the screen, where the bar sits. */
+  .layer[data-card-open] .bar {
+    display: none;
   }
 }
 
@@ -419,8 +436,8 @@
     right: 8px;
     bottom: calc(8px + var(--bar-lift, 0px));
     max-width: none;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    /* Wrap rather than scroll sideways: Approve and Send back were off-screen. */
+    flex-wrap: wrap;
   }
 }
 

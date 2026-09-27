@@ -77,6 +77,18 @@ describe("LoginForm", () => {
     expect(mockPush).toHaveBeenCalledWith("/dashboard")
   })
 
+  it("returns to the review page named by next after signing in", async () => {
+    const user = userEvent.setup()
+    const lesson = "/course/applied-ai-skills/lesson/welcome?page=5"
+    render(<LoginForm next={lesson} />)
+
+    await user.type(screen.getByLabelText(/email/i), "learner@example.com")
+    await user.type(screen.getByLabelText(/password/i), "hunter2pass")
+    await user.click(screen.getByRole("button", { name: /log in/i }))
+
+    await waitFor(() => expect(mockPush).toHaveBeenCalledWith(lesson))
+  })
+
   it("does not call signIn.email when validation fails (short password)", async () => {
     const user = userEvent.setup()
     render(<LoginForm />)

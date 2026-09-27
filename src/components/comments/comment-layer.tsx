@@ -948,7 +948,12 @@ function CommentLayerInner({
   const canSave = !saving && (!!action || !!text.trim() || !!textEdit || editing)
 
   return (
-    <div {...{ [LAYER_ATTR]: "" }} className={styles.layer}>
+    <div
+      {...{ [LAYER_ATTR]: "" }}
+      // On a phone the card is a bottom sheet; the bar steps aside while it is open.
+      data-card-open={on && (!!pending || !!read) ? "" : undefined}
+      className={styles.layer}
+    >
       <div {...{ [OVERLAY_ATTR]: "" }} className={styles.overlay}>
         {highlights.map((b, i) => (
           <div

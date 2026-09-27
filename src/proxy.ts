@@ -7,6 +7,7 @@ import { isPrivateContentMode } from "@/lib/content-mode"
 // src/app/protected-page-gates.test.ts derives its directory list from the
 // same constants, so the two can no longer drift apart silently.
 import { PROTECTED_PATHS, DEV_REVIEW_PATHS } from "@/lib/protected-routes"
+import { safeNextPath } from "@/lib/safe-next"
 
 /**
  * Security headers applied to all responses.
@@ -225,12 +226,18 @@ function guardRoute(request: NextRequest): NextResponse | null {
   const hasSession = Boolean(getSessionCookie(request))
 
   if (isProtected && !hasSession) {
+    // Keep where they were going, so a review link survives the sign-in.
     const url = request.nextUrl.clone()
     url.pathname = "/login"
+    url.search = ""
+    const next = safeNextPath(pathname + request.nextUrl.search)
+    if (next) url.searchParams.set("next", next)
     return NextResponse.redirect(url)
   }
 
   if (isAuthRoute && hasSession) {
+    const next = safeNextPath(request.nextUrl.searchParams.get("next"))
+    if (next) return NextResponse.redirect(new URL(next, request.nextUrl))
     const url = request.nextUrl.clone()
     url.pathname = "/dashboard"
     return NextResponse.redirect(url)

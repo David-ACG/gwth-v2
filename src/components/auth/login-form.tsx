@@ -29,14 +29,19 @@ interface LoginFormProps {
    * divider) is hidden while this is empty (W15 guard).
    */
   oauthProviders?: readonly OAuthProviderId[]
+  /**
+   * Same-site page to open after sign-in, already checked by the login page
+   * with `safeNextPath()`. Defaults to the dashboard.
+   */
+  next?: string
 }
 
 /**
  * Login form with OAuth social buttons and email/password validation, in the
  * FDE journal register (paper panel, square hairline inputs, mono labels).
- * Calls the authClient sign-in and redirects to dashboard on success.
+ * Calls the authClient sign-in and redirects to `next` (or the dashboard) on success.
  */
-export function LoginForm({ oauthProviders = [] }: LoginFormProps) {
+export function LoginForm({ oauthProviders = [], next }: LoginFormProps) {
   const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
   const form = useForm<LoginFormData>({
@@ -69,7 +74,7 @@ export function LoginForm({ oauthProviders = [] }: LoginFormProps) {
     // invite-required FreeDashboard view (no ?error param is emitted; the proxy
     // guard only bounces anonymous no-cookie traffic to the bare /login).
     toast.success("Welcome back!")
-    router.push("/dashboard")
+    router.push(next ?? "/dashboard")
     router.refresh()
   }
 

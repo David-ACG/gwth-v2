@@ -317,6 +317,18 @@ describe("CommentLayer: capture and the card", () => {
     expect(calls.some((c) => c.init?.method === "POST")).toBe(false)
   })
 
+  it("marks the layer while a card is open, so a phone hides the bar under the sheet", async () => {
+    mountPage()
+    render(<CommentLayer role="beta" />)
+    const layer = () => document.querySelector("[data-comment-layer]")
+    await screen.findByRole("group", { name: "Comments" })
+    expect(layer()).not.toHaveAttribute("data-card-open")
+    await openCardForWords()
+    expect(layer()).toHaveAttribute("data-card-open")
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
+    await waitFor(() => expect(layer()).not.toHaveAttribute("data-card-open"))
+  })
+
   it("does not offer the button for selections in the header", async () => {
     mountPage()
     render(<CommentLayer role="beta" />)
