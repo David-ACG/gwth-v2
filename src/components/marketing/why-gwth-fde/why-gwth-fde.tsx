@@ -530,9 +530,6 @@ export function WhyGwthFde() {
             Start building <em>with AI.</em>
           </h2>
           <p>
-            {isPrivateContentMode()
-              ? "Places are opening in small groups. Join the waitlist and we'll contact you when yours is ready."
-              : "Sign up here to start with the first lesson."}{" "}
             If you&apos;re buying
             places for colleagues, the{" "}
             <Link href="/for-teams" className={styles.inlineLink}>
