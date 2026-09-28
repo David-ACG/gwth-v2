@@ -1,31 +1,34 @@
 import type { Metadata } from "next"
 import { WhyGwthFde } from "@/components/marketing/why-gwth-fde/why-gwth-fde"
 
+const TITLE = "Why GWTH"
+
 export const metadata: Metadata = {
-  title: "Why GWTH | Beyond the Government AI Skills Boost",
+  title: TITLE,
   description:
-    "The UK government's AI Skills Boost covers the basics. GWTH.ai goes further with structured applied AI lessons, practical projects, vendor-neutral training, and enterprise transformation.",
+    "Why UK adults learn AI with GWTH: plain English, independent advice, a course that is always up to date, hands-on projects, optional lessons for your field, and how it compares with the government's AI Skills Boost.",
 }
 
 /**
- * Why GWTH comparison page.
- * Provides a factual, evidence-based comparison between the UK government's
- * AI Skills Boost programme and GWTH.ai, using real press quotes and
- * statistics. Presentation lives in the FDE journal-register component.
+ * The one Why GWTH page. /about and /why-gwth were merged here on 2026-09-28
+ * (David: "merge them into one Why GWTH page"), and /about permanently
+ * redirects to this route from `next.config.ts`. Presentation lives in the
+ * paper-first component.
+ *
+ * The description stays a literal in `metadata` because
+ * `uk-thread.test.tsx` reads it from source.
  */
 export default function WhyGwthPage() {
   return (
     <>
-      {/* JSON-LD structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Why GWTH | Beyond the Government AI Skills Boost",
-            description:
-              "The UK government's AI Skills Boost covers the basics. GWTH.ai goes further with structured applied AI lessons, practical projects, vendor-neutral training, and enterprise transformation.",
+            name: TITLE,
+            description: metadata.description,
             url: "https://gwth.ai/why-gwth",
             provider: {
               "@type": "Organization",

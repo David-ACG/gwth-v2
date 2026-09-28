@@ -28,6 +28,15 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "motion", "motion/react"],
   },
+  // /about and /why-gwth were merged into one page at /why-gwth (David,
+  // 2026-09-28: "merge them into one Why GWTH page"). The redirect is
+  // permanent (308) so old links, bookmarks and search results keep working
+  // and carry their ranking to the page that replaced them.
+  async redirects() {
+    return [
+      { source: "/about", destination: "/why-gwth", permanent: true },
+    ]
+  },
 }
 
 const withBundleAnalyzer = bundleAnalyzer({

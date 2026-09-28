@@ -4,7 +4,6 @@ import { readFileSync, readdirSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 
 import { HomeFde } from "@/components/marketing/home-fde/home-fde"
-import { AboutFde } from "@/components/marketing/about-fde/about-fde"
 import { WhyGwthFde } from "@/components/marketing/why-gwth-fde/why-gwth-fde"
 import { ForInstitutionsFde } from "@/components/marketing/for-institutions-fde/for-institutions-fde"
 import { ForTeamsFde } from "@/components/marketing/for-teams-fde/for-teams-fde"
@@ -81,7 +80,6 @@ interface Surface {
 
 const SURFACES: readonly Surface[] = [
   { route: "/", render: () => void render(<HomeFde />) },
-  { route: "/about", render: () => void render(<AboutFde />) },
   { route: "/why-gwth", render: () => void render(<WhyGwthFde />) },
   {
     route: "/for-institutions",
@@ -212,11 +210,18 @@ describe("every rendered UK statistic comes from the shared module", () => {
     })
   }
 
-  it("at least three surfaces actually carry a sourced figure", () => {
+  /**
+   * Guards the loop above against going vacuous. It said three until
+   * 2026-09-28, when /about (one of the three) was merged into /why-gwth; the
+   * merged page carries the one sourced set, so two surfaces is the honest
+   * floor now, and /why-gwth must be one of them.
+   */
+  it("at least two surfaces, including /why-gwth, actually carry a sourced figure", () => {
     const withFigures = SURFACES.filter(
       (surface) => inspect(surface).figures.length > 0
     )
-    expect(withFigures.length).toBeGreaterThanOrEqual(3)
+    expect(withFigures.length).toBeGreaterThanOrEqual(2)
+    expect(withFigures.map((s) => s.route)).toContain("/why-gwth")
   })
 })
 
@@ -364,7 +369,6 @@ const ROOT = join(__dirname, "..", "..")
  * exempts them: they record what the site used to be.
  */
 const LIVE_MARKETING_DIRS = [
-  "components/marketing/about-fde",
   "components/marketing/contact-fde",
   "components/marketing/for-institutions-fde",
   "components/marketing/for-teams-fde",
@@ -452,7 +456,6 @@ describe("no live marketing file hard-codes a figure the module owns", () => {
  */
 const DESCRIBED_ROUTES: readonly { route: string; file: string }[] = [
   { route: "/", file: "app/layout.tsx" },
-  { route: "/about", file: "app/(public)/about/page.tsx" },
   { route: "/contact", file: "app/(public)/contact/page.tsx" },
   {
     route: "/for-institutions",

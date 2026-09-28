@@ -22,7 +22,6 @@ const footerLinks = [
       { href: "/labs", label: "Labs" },
       { href: "/news", label: "News" },
       { href: "/newsletter", label: "Newsletter" },
-      { href: "/about", label: "About GWTH" },
     ],
   },
   {

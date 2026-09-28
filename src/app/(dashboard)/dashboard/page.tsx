@@ -730,8 +730,8 @@ export function FreeDashboard({ user }: { user: User | null }) {
                 ? `Buy month 1 · £${COURSE_MONTHLY_PRICE.toFixed(0)}`
                 : "Request beta access"}
             </Link>
-            <Link href="/about" className={cn(styles.buttonOutline, styles.buttonSm)}>
-              Read the brief
+            <Link href="/why-gwth" className={cn(styles.buttonOutline, styles.buttonSm)}>
+              Why GWTH
             </Link>
           </div>
         </div>

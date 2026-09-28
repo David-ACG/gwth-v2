@@ -4,7 +4,6 @@ import { join } from "node:path"
 import { describe, it, expect, afterEach, beforeEach } from "vitest"
 
 import { HomeFde } from "@/components/marketing/home-fde/home-fde"
-import { AboutFde } from "@/components/marketing/about-fde/about-fde"
 import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
 import { PricingFde } from "@/components/marketing/pricing-fde/pricing-fde"
 import { WhyGwthFde } from "@/components/marketing/why-gwth-fde/why-gwth-fde"
@@ -109,28 +108,42 @@ describe("recovered ideas are on the page", () => {
     expect(monthOne.textContent).toMatch(/good fun to make/i)
   })
 
-  it("C06 /about gives the REASON a record has to decay, not just the mechanic", () => {
-    render(<AboutFde />)
+  /**
+   * C06 moved with the merge of /about into /why-gwth (2026-09-28). The idea
+   * is kept: a record has to show what somebody can do NOW, and the page says
+   * why. It sits beside the practical work every lesson leaves, which is what
+   * the old list it replaced was about.
+   */
+  it("C06 /why-gwth gives the REASON a record has to stay current, not just the mechanic", () => {
+    render(<WhyGwthFde />)
     const body = text()
     expect(body).toMatch(/certificate from six months ago/i)
     expect(body).toMatch(/what they can do today/i)
-    // The list it replaced the opener of must survive: this was a substitution.
-    expect(body).toMatch(/practical project attached to every lesson/i)
+    expect(body).toMatch(/every lesson leaves you with real work/i)
   })
 
+  /**
+   * C07 lost its second half on 2026-09-28. "Yesterday's AI from yesterday's
+   * curriculum" rested on the claim that a chatbot answers only from old
+   * training data; the GPT-6 Sol editorial pass noted that depends on the
+   * chatbot, and the writing rules ban the slogan shape anyway. The idea that
+   * carries the argument, that a beginner does not know what to ask, stays.
+   */
   it("C07 /why-gwth answers why a course beats teaching yourself with AI", () => {
     render(<WhyGwthFde />)
     const body = text()
-    expect(body).toMatch(/do not know what you do not know/i)
-    expect(body).toMatch(/yesterday.s AI from yesterday.s curriculum/i)
+    expect(body).toMatch(/teaching yourself with a chatbot/i)
+    expect(body).toMatch(/may not yet know what to ask/i)
   })
 
-  it("C08 /why-gwth frames AI literacy as a baseline, not an advantage", () => {
-    render(<WhyGwthFde />)
-    expect(text()).toMatch(
-      /computer literacy,? from competitive advantage to baseline expectation/i
-    )
-  })
+  /*
+   * C08 ("AI literacy is heading the same direction as computer literacy,
+   * from competitive advantage to baseline expectation") was retired on
+   * 2026-09-28 when /about and /why-gwth were merged. The marketing copy gate
+   * (GPT-6 Sol, high) blocked it as a prediction about employers that the
+   * page does not evidence. Evidence:
+   * GWTH-launch-plan/completion/marketing-copy-gate/20260928T151942Z-why-gwth-merge-r2.json
+   */
 
   it("C09 /for-teams leads on capability over tool spend", () => {
     render(<ForTeamsFde />)
@@ -244,7 +257,6 @@ describe("recovered ideas did not displace what was already decided", () => {
  */
 const MARKETING_SOURCES = [
   "home-fde/home-fde.tsx",
-  "about-fde/about-fde.tsx",
   "lessons-fde/lessons-fde.tsx",
   "pricing-fde/pricing-fde.tsx",
   "why-gwth-fde/why-gwth-fde.tsx",

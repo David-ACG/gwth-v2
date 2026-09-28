@@ -365,7 +365,7 @@ describe("proxy route guard (W11)", () => {
         "/",
         "/lessons",
         "/pricing",
-        "/about",
+        "/why-gwth",
         "/for-teams",
         "/waitlist",
         "/score/c67sg",

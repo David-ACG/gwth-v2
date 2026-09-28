@@ -428,7 +428,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: "Lessons", href: "/lessons" },
   { label: "Pricing", href: "/pricing" },
   { label: "For Teams", href: "/for-teams" },
-  { label: "About", href: "/about" },
+  { label: "Why GWTH", href: "/why-gwth" },
 ]
 
 // ─── Footer columns ─────────────────────────────────────────────────────────
@@ -446,7 +446,6 @@ export const FOOTER_COLS: readonly FooterCol[] = [
   {
     title: "Company",
     links: [
-      { label: "About GWTH", href: "/about" },
       { label: "Why GWTH", href: "/why-gwth" },
       { label: "Newsletter", href: "/newsletter" },
       { label: "Contact", href: "/contact" },

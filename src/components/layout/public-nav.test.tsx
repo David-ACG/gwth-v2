@@ -77,6 +77,19 @@ describe("PublicNav lessons link", () => {
     ).toBe("/for-institutions")
   })
 
+  it("links the merged Why GWTH page and no longer links /about (2026-09-28)", () => {
+    // David merged /about into /why-gwth: "merge them into one Why GWTH page".
+    // /about now 308s there (next.config.ts), so the nav points straight at
+    // the page rather than through the redirect.
+    const view = renderNav({ lessonsHref: "/lessons" })
+    const why = view.getAllByRole("link", { name: "Why GWTH" })
+    expect(why.length).toBeGreaterThan(0)
+    for (const link of why) expect(link.getAttribute("href")).toBe("/why-gwth")
+    const hrefs = view.getAllByRole("link").map((el) => el.getAttribute("href"))
+    expect(hrefs).not.toContain("/about")
+    expect(view.queryByRole("link", { name: /^about$/i })).toBeNull()
+  })
+
   it("still hides Labs when the viewer cannot open them (W25)", () => {
     const view = renderNav({ showLabs: false, lessonsHref: "/lessons" })
     expect(view.queryByRole("link", { name: "Labs" })).toBeNull()
@@ -122,7 +135,6 @@ describe("PublicNav primary CTA follows the audience", () => {
     "/pricing",
     "/lessons",
     "/labs",
-    "/about",
     "/news",
     "/waitlist",
     "/why-gwth",

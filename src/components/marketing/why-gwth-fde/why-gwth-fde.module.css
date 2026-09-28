@@ -1,27 +1,20 @@
 /*
- * Why GWTH page, in the PAPER-FIRST register.
+ * Why GWTH page (/why-gwth), in the PAPER-FIRST register.
  *
- * The file keeps its `-fde` name so every import stays put, but the register it
- * is drawn in is the current one (bible paper-first-register and its siblings),
- * not the FDE journal the old header described. Cream and sage grounds, the
- * drenched teal masthead, the ochre accents, Source Serif 4 and the mono
- * metadata face are all RETIRED; do not restore any of them from this file's
- * history. Two type families only, Bitter and Public Sans; all colour from the
- * `--v-*` tokens; R2 corners (10px panels, 8px controls and images, 6px chips).
+ * Rebuilt 2026-09-28 when /about and /why-gwth were merged into this one page.
+ * The file keeps its `-fde` name so every import stays put. Two type families
+ * only, Bitter (headings, inherited from globals.css) and Public Sans; all
+ * colour from the `--v-*` tokens, no raw hex; R2 corners (10px panels, 8px
+ * controls). Hairline dividers are `--v-line-soft`; a panel edge is `--v-line`,
+ * the measured boundary (boundary-contrast-check).
  *
- * Redesign batch 1 (2026-09-13, bead gwth-launch-88z.32.10) removed the
- * masthead eyebrow, the rule under every section head and the right-hand
- * section labels that restated the heading beside them, and softened the
- * remaining single-side hairlines from the boundary token to the divider token.
- * The load-bearing boundary on a panel stays `--v-line`, which is the measured
- * one (boundary-contrast-check).
- *
- * Colours are inherited from globals.css; nothing is re-declared here and there
- * is no raw hex in this file.
+ * Batch 1 decisions carried over from the old page: no eyebrow, no rule under
+ * every section head, and on wide screens the heading sits in a left column
+ * beside the prose so a reading measure does not leave half the screen empty
+ * (David, on /why-gwth: "There's a massive space to the right on this page").
  */
 
 .shell {
-
   background: var(--v-bg);
   color: var(--v-ink);
   font-family: var(--font-sans);
@@ -29,7 +22,6 @@
 }
 
 :global(.dark) .shell {
-
   color-scheme: dark;
 }
 
@@ -38,11 +30,13 @@
   width: min(1100px, calc(100% - 2.5rem));
 }
 
-.mono {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-muted);
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* ---------------- Masthead (quiet band) ---------------- */
@@ -69,59 +63,34 @@
 
 .standfirst {
   margin-top: 1.5rem;
-  max-width: 38rem;
+  max-width: 40rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.standfirst p {
   font-size: 1.15rem;
   line-height: 1.65;
   color: var(--v-soft);
 }
 
-.mastheadClaim {
-  margin-top: 1.5rem;
-  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-  max-width: 30ch;
-}
+@media (min-width: 64rem) {
+  .masthead .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 4.5rem;
+    align-items: start;
+  }
 
-.mastheadClaim em {
-  font-style: italic;
-  font-weight: 500;
-  color: var(--v-accent);
-}
-
-/* Metadata row, grouped left (batch 1). It used to be a ruled band spread
-   edge to edge, which left each fact stranded in its own third of the screen:
-   David, on /tech-radar, "it just looks like it's been thrown in the middle of
-   nowhere". Facts now sit together as one line under the standfirst, separated
-   by a middot rather than by a rule. paper-first-components, metadata rows. */
-.mastheadFoot {
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.35rem 0;
-}
-
-/* The separator trails the item it follows, so when the row wraps on a phone a
-   middot never starts a line (batch 1). */
-.mastheadFoot p:not(:last-child)::after {
-  content: "\00b7";
-  margin-inline: 0.85rem;
-  color: var(--v-line);
-}
-
-.mastheadFoot p {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+  .standfirst {
+    margin-top: 0.6rem;
+    max-width: 46ch;
+  }
 }
 
 /* ---------------- Buttons ---------------- */
 
-.buttonSolid,
-.buttonOutline {
+.buttonSolid {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -130,34 +99,17 @@
   font-weight: 600;
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
-  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
-    color 200ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.buttonSolid {
   background: var(--v-btn);
   color: var(--v-btn-text);
   border: 1px solid var(--v-btn);
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .buttonSolid:hover {
-  background: var(--v-btn);
   border-color: var(--v-accent);
 }
 
-.buttonOutline {
-  background: transparent;
-  color: var(--v-ink);
-  border: 1px solid var(--v-line);
-}
-
-.buttonOutline:hover {
-  background: var(--v-quiet);
-  color: var(--v-ink);
-}
-
-.buttonSolid:focus-visible,
-.buttonOutline:focus-visible {
+.buttonSolid:focus-visible {
   outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
@@ -165,70 +117,34 @@
 /* ---------------- Section scaffolding ---------------- */
 
 .section {
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  padding: clamp(3rem, 6vw, 5rem) 0;
 }
 
-/* The section head no longer draws a rule across the page. One line under
-   every heading was the most repeated piece of furniture on the site, and it
-   is what "too many lines in other places" was describing; the gap below the
-   heading now does the separating (paper-first-register, hierarchy from
-   spacing and type). Batch 1. */
-.sectionHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem 2rem;
-  margin-bottom: 1.5rem;
+.sectionAlt {
+  background: var(--v-surface);
+  border-block: 1px solid var(--v-line-soft);
 }
 
 .sectionTitle {
-  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
   font-weight: 600;
   letter-spacing: -0.015em;
-  line-height: 1.1;
+  line-height: 1.12;
+  text-wrap: balance;
 }
 
-.sectionLead {
-  max-width: 44rem;
-  font-size: var(--fde-body-lg);
-  line-height: 1.7;
-  color: var(--v-soft);
-  margin-bottom: 2.5rem;
+.subTitle {
+  margin: clamp(2.5rem, 5vw, 3.5rem) 0 1.25rem;
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
-/*
- * A reading measure on a 1100px page leaves half the screen empty. David, on
- * this page: "There's a massive space to the right on this page, and all of
- * the text is bunched to the left". The measure stays (62ch is what makes
- * long-form readable); what changes is that the heading moves into a left
- * column beside it on wide screens, so the width is used rather than padded
- * with nothing. Batch 1.
- */
 .prose {
   max-width: 62ch;
   display: grid;
-  gap: 1.25rem;
-}
-
-@media (min-width: 64rem) {
-  .sectionSplit .page {
-    display: grid;
-    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
-    column-gap: 4rem;
-    align-items: start;
-  }
-
-  .sectionSplit .sectionHead {
-    grid-column: 1;
-    margin-bottom: 0;
-    display: block;
-  }
-
-  .sectionSplit .prose,
-  .sectionSplit .sectionLead {
-    grid-column: 2;
-  }
+  gap: 1.1rem;
 }
 
 .prose p {
@@ -237,75 +153,125 @@
   color: var(--v-soft);
 }
 
-.prose .proseStrong {
-  color: var(--v-ink);
-  font-weight: 600;
-}
-
-/* ---------------- Pull quote + quote panels ---------------- */
-
-.pullQuote {
-  border-block: 1px solid var(--v-line-soft);
-  padding: clamp(2.5rem, 6vw, 4rem) 0;
-  text-align: center;
-}
-
-.pullQuote blockquote {
-  margin: 0 auto;
-  max-width: 46rem;
-  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
-  font-style: italic;
-  font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-
-.pullQuote blockquote em {
-  color: var(--v-accent);
-}
-
-.pullQuoteSource {
-  composes: mono;
-  margin-top: 1.5rem;
-}
-
-.quoteGrid {
+/* Heading above prose on a phone; heading in a left column on wide screens. */
+.split {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
-@media (min-width: 48rem) {
-  .quoteGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (min-width: 64rem) {
+  .split {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    column-gap: 4rem;
+    align-items: start;
   }
 }
 
-.quotePanel {
-  background: var(--v-surface);
-  border: 1px solid var(--v-line);
-  padding: 1.5rem 1.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  border-radius: var(--radius-lg);
+/* ---------------- The reasons ---------------- */
+
+/* One row per reason, separated by a divider rather than boxed: the page is a
+   sequence of short arguments, and nine panels would read as a grid of ads. */
+.reason {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.75rem, 3.5vw, 2.5rem) 0;
+  border-top: 1px solid var(--v-line-soft);
 }
 
-.quotePanel blockquote {
-  flex: 1;
-  font-size: var(--fde-body-lg);
-  font-style: italic;
-  line-height: 1.6;
-  letter-spacing: -0.005em;
+.reason:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.reason:last-child {
+  padding-bottom: 0;
+}
+
+.reasonTitle {
+  font-size: clamp(1.4rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+@media (min-width: 64rem) {
+  .reason {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    column-gap: 4rem;
+    align-items: start;
+  }
+}
+
+/* ---------------- Stat list (paper-first-components) ---------------- */
+
+.statList {
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.statListRow {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.35rem 1.25rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  padding: 1rem 0;
+}
+
+.statListValue {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--v-ink);
 }
 
-.quotePanelSource {
-  composes: mono;
-  border-top: 1px solid var(--v-line-soft);
-  padding-top: 0.85rem;
+.statListRow p {
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
 }
 
-/* ---------------- Editorial comparison table ---------------- */
+.statListSource {
+  grid-column: 2;
+  font-size: var(--fde-mono-sm);
+}
+
+.statListRow p.statListSource {
+  color: var(--v-muted);
+}
+
+@media (min-width: 48rem) {
+  .statListRow {
+    grid-template-columns: 6rem minmax(0, 1fr) auto;
+  }
+
+  .statListSource {
+    grid-column: 3;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+.sourcesLine {
+  margin-top: 1.1rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
+}
+
+.sourcesLine a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sourcesLine a:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+/* ---------------- Comparison table ---------------- */
 
 .tableWrap {
   border-top: 1px solid var(--v-line-soft);
@@ -317,36 +283,39 @@
   text-align: left;
 }
 
-.compTable th {
-  font-family: var(--font-sans);
+.compTable thead th {
   font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-muted);
+  font-weight: 600;
+  color: var(--v-ink);
   padding: 1rem 1rem 1rem 0;
   vertical-align: top;
   border-bottom: 1px solid var(--v-line-soft);
 }
 
-.compTable th span {
+.compTable thead th span {
   display: block;
-  margin-top: 0.35rem;
+  margin-top: 0.3rem;
   font-weight: 400;
-  text-transform: none;
+  color: var(--v-muted);
 }
 
+.compTable tbody th,
 .compTable td {
   padding: 0.95rem 1rem 0.95rem 0;
   vertical-align: top;
   font-size: var(--fde-body-sm);
   line-height: 1.55;
-  color: var(--v-soft);
   border-bottom: 1px solid var(--v-line-soft);
 }
 
-.compTable td:first-child {
+.compTable tbody th {
   font-weight: 600;
   color: var(--v-ink);
   white-space: nowrap;
+}
+
+.compTable td {
+  color: var(--v-soft);
 }
 
 .compTable td:last-child,
@@ -354,25 +323,12 @@
   padding-right: 0;
 }
 
-.cellGwth {
+.compTable td.cellGwth {
   color: var(--v-ink);
+  font-weight: 600;
 }
 
-.glyphYes,
-.glyphNo {
-  font-family: var(--font-sans);
-  margin-right: 0.45rem;
-}
-
-.glyphYes {
-  color: var(--v-ink);
-}
-
-.glyphNo {
-  color: var(--v-muted);
-}
-
-/* Stacked variant below 48rem */
+/* Stacked variant below 48rem: a four-column table cannot fit a phone. */
 
 .compStack {
   display: none;
@@ -385,7 +341,6 @@
 
   .compStack {
     display: block;
-    border-top: 1px solid var(--v-line-soft);
   }
 
   .compStackRow {
@@ -393,76 +348,113 @@
     padding: 1.25rem 0 1.4rem;
   }
 
-  .compStackRow h3 {
+  .compStackRow h4 {
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: -0.01em;
   }
 
-  .compStackEntry {
-    margin-top: 0.9rem;
+  .compStackRow dl {
+    margin: 0;
   }
 
-  .compStackEntry p {
-    margin-top: 0.25rem;
+  .compStackEntry {
+    margin-top: 0.8rem;
+  }
+
+  .compStackEntry dt {
+    font-size: var(--fde-mono-sm);
+    font-weight: 600;
+    color: var(--v-muted);
+  }
+
+  .compStackEntry dd {
+    margin: 0.2rem 0 0;
     font-size: var(--fde-body-sm);
     line-height: 1.55;
     color: var(--v-soft);
   }
 
-  .compStackEntry p.cellGwth {
+  .compStackEntry dd.cellGwth {
     color: var(--v-ink);
+    font-weight: 600;
   }
 }
 
-/* ---------------- Stat list (§5.6) ---------------- */
+/* ---------------- Press quotes ---------------- */
 
-.statList {
-  border-top: 1px solid var(--v-line-soft);
-  max-width: 52rem;
-}
-
-.statListRow {
+.quoteGrid {
   display: grid;
-  grid-template-columns: 6rem minmax(0, 1fr) auto;
-  align-items: baseline;
   gap: 1.25rem;
-  border-bottom: 1px solid var(--v-line-soft);
-  padding: 0.9rem 0;
 }
 
-.statListValue {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--v-accent);
+@media (min-width: 48rem) {
+  .quoteGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.statListRow p {
-  font-size: var(--fde-body-sm);
-  line-height: 1.5;
+.quotePanel {
+  margin: 0;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quotePanel blockquote {
+  flex: 1;
+  font-size: var(--fde-body-lg);
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--v-ink);
+}
+
+.quotePanelSource {
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 0.85rem;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+/* ---------------- Founder note ---------------- */
+
+.founderNote {
+  border: 1px solid var(--v-line);
+  background: var(--v-bg);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  max-width: 62ch;
+  display: grid;
+  gap: 0.95rem;
+}
+
+.founderNote p {
+  font-size: var(--fde-body);
+  line-height: 1.75;
   color: var(--v-soft);
 }
 
-.statListSource {
-  composes: mono;
-  text-align: right;
-}
-
-.statsFoot {
-  composes: mono;
-  margin-top: 1.25rem;
+.founderNote p.noteLabel {
+  font-size: var(--fde-mono-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--v-muted);
 }
 
 /* ---------------- Closing band ---------------- */
 
 .closing {
-  border-top: 1px solid var(--v-line-soft);
   padding: clamp(3.5rem, 7vw, 5.5rem) 0;
   text-align: center;
 }
 
 .closing h2 {
+  margin: 0 auto;
+  max-width: 22ch;
   font-size: clamp(2rem, 4.5vw, 3.2rem);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -472,6 +464,7 @@
 
 .closing h2 em {
   font-style: italic;
+  font-weight: 500;
   color: var(--v-accent);
 }
 
@@ -491,45 +484,13 @@
   margin-top: 2.25rem;
 }
 
-/*
- * Two-column masthead (batch 1). This page used a single left column, so the
- * right half of the first screen was empty colour: David, on /why-gwth, "There's
- * a massive space to the right on this page, and all of the text is bunched to
- * the left". Same shape as /lessons and /pricing, and no eyebrow row.
- */
-@media (min-width: 64rem) {
-  .masthead .page {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
-    column-gap: 4.5rem;
-    align-items: start;
-  }
+.inlineLink {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
-  .mastheadTitle {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    max-width: 20ch;
-  }
-
-  .standfirst {
-    grid-column: 2;
-    grid-row: 1;
-    align-self: start;
-    margin-top: 0.6rem;
-    max-width: 44ch;
-  }
-
-  .mastheadClaim {
-    grid-column: 2;
-    grid-row: 2;
-    align-self: start;
-    margin-top: 1.4rem;
-    max-width: 26ch;
-  }
-
-
-  .mastheadFoot {
-    grid-column: 1 / -1;
-    grid-row: 3;
-  }
+.inlineLink:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
 }

@@ -367,8 +367,8 @@ export function LabsFde({
             <Link href="/pricing" className={styles.buttonSolid}>
               See the course
             </Link>
-            <Link href="/about" className={styles.buttonOutline}>
-              About GWTH
+            <Link href="/why-gwth" className={styles.buttonOutline}>
+              Why GWTH
             </Link>
           </div>
         </div>

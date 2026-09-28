@@ -40,7 +40,6 @@ const EXPECTED_INTERNAL_HREFS = [
   "/for-teams",
   "/pricing",
   "/lessons",
-  "/about",
   "/why-gwth",
   "/waitlist",
   "/newsletter",

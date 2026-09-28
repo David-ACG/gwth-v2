@@ -38,7 +38,7 @@ const navLinks = [
   { href: "/lessons", label: "The course" },
   { href: "/labs", label: "Labs" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
+  { href: "/why-gwth", label: "Why GWTH" },
   { href: "/news", label: "News" },
 ].filter((link) => ENABLE_NEWS || link.href !== "/news")
 
