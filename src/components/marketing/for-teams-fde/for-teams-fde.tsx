@@ -237,7 +237,7 @@ const FAQS = [
   {
     question: "How does this compare to the government's AI Skills Boost?",
     answer:
-      "The government programme covers AI awareness basics in 20 minutes to 9 hours. GWTH goes further with structured lessons, practical projects, AI-assisted building, and enterprise transformation. Many teams complete the free government badge first, then use GWTH for the skills their people actually need.",
+      "The government programme covers AI awareness basics in 20 minutes to 9 hours. GWTH goes further with structured lessons, practical projects, AI-assisted building, and enterprise transformation. A team can take a free government course as a short introduction, then use GWTH for three months of teaching and practice on its own work.",
   },
   {
     question: "Can employees complete this during working hours?",
@@ -526,9 +526,9 @@ export function ForTeamsFde() {
             enthusiasts experimenting with no path from experiment to
             organisational capability, or enterprise AI tools bought and barely
             used because nobody was ever taught how to think with AI, only how
-            to click the buttons in one product. A 20-minute vendor course will
-            not change either of them. Three months of hands-on, vendor-neutral
-            training, at five hours a week, will.
+            to click the buttons in one product. A short vendor course can
+            introduce the basics. GWTH gives each person three months of guided
+            practice using AI on the work they already do.
           </p>
         </div>
       </section>
@@ -545,9 +545,10 @@ export function ForTeamsFde() {
             </h2>
           </div>
           <p className={styles.sectionLead}>
-            At £{COURSE_MONTHLY_PRICE}/mo for 3 months, the entire course
-            costs £{COURSE_MONTHLY_PRICE}/mo per person, dropping to £
-            {ONGOING_MONTHLY_PRICE.toFixed(2)}/mo once the teaching is done.
+            The course costs £{COURSE_MONTHLY_PRICE} per person each month for
+            three months. After that,
+            staying current is optional and costs £
+            {ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
             That is deliberately priced below even a short consultant call.
           </p>
           {/*

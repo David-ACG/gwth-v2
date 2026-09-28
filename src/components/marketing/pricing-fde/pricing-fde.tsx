@@ -58,9 +58,9 @@ const TEAM_FEATURES = [
 ]
 
 /** The audience of the third tier, in one place: card, column and split. */
-const GROUP_AUDIENCE = "Teams or institutions"
+const GROUP_AUDIENCE = "Teams"
 
-/** Feature comparison rows: [feature, Free, Member, Teams or institutions]. */
+/** Feature comparison rows: [feature, Free, Member, Teams]. */
 // Every "Free" cell here has to survive a signed-out visitor actually trying
 // it. There is no lesson preview and no progress tracking without an account,
 // so both used to promise something the product does not do.
@@ -316,6 +316,8 @@ export function PricingFde() {
               progress tracking, completion rates, and the ability to recommend
               optional lessons by role. For 100 or more people, GWTH can create
               bespoke lessons around your own workflows and tools.
+              Institutions that want their own edition get a proposal based
+              on what they need.
             </p>
             <div className={styles.buttonRow}>
               <Link href="/for-teams" className={styles.buttonSolid}>
