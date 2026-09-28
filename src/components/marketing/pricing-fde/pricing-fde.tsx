@@ -158,9 +158,10 @@ export function PricingFde() {
               buys. */}
           <p className={styles.standfirst}>
             All three months together come to £{TOTAL_COURSE_COST}, less than
-            the cost of one hour with an AI consultant. Join when you are
-            ready, and bring a team or an institution in at the same per-person
-            price, with no hidden enterprise games. After the first three
+            the cost of one hour with an AI consultant. Join when you&apos;re
+            ready. Teams pay the same per-person price, with no hidden
+            enterprise deals. Institutions that want their own edition get a
+            proposal based on what they need. After the first three
             months the lower price keeps your lessons current as they change,
             and you can stop whenever you like.
           </p>

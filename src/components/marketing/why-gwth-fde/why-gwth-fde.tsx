@@ -91,7 +91,7 @@ const REASONS: readonly Reason[] = [
     body: [
       // Every field is named: David, why-gwth round 1, D s3, "Add all the
       // fields as people will be looking for their own."
-      "Everyone wants something different from AI, so alongside the core course there are lots of optional lessons, especially in months two and three. You can focus on AI in your own field: HR, finance, medicine, law, logistics, marketing or sales. You can go further with local AI, which runs on your own computer, with advanced AI-assisted coding, or with hardware that uses AI. Or you can take the lessons for AI transformation experts, who help a business, your own or someone else's, choose AI tools and start using them well.",
+      "Everyone wants something different from AI, so alongside the core course there are lots of optional lessons, especially in months two and three. You can focus on AI in your own field: finance, medicine, law or logistics today, with lessons for HR, marketing and sales being written now. You can go further with local AI, which runs on your own computer, with advanced AI-assisted coding, or with hardware that uses AI. Or you can take the lessons for AI transformation experts, who help a business, your own or someone else's, choose AI tools and start using them well.",
       "Shaping a course around one person is usually what people pay for with bespoke training. With GWTH, you do that yourself by choosing the optional lessons that match your work.",
     ],
   },
@@ -511,9 +511,9 @@ export function WhyGwthFde() {
               children, friends and grandparents get started, including people
               who were sure this was not for them. I&apos;ve also sat with chief
               technology officers and chief executives of large companies
-              working out what to do about AI. This course is the answer
-              I&apos;d give any of them in person, written down and kept
-              current.
+              working out what to do about AI. Those conversations shaped a
+              course that begins with everyday tasks and builds towards
+              deciding how an organisation should use AI.
             </p>
           </div>
         </div>
