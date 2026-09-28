@@ -303,7 +303,9 @@ export function WhyGwthFde() {
             <p>
               GWTH is a practical AI course for adults in the UK. Over three
               months, at about five hours a week, you&apos;ll learn to use AI
-              on real tasks. You never need to know how to code.
+              on real tasks. You never need to know how to code. When you
+              build apps, AI writes the code, and we show you how to direct it
+              and check it.
             </p>
           </div>
         </div>

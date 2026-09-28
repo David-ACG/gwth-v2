@@ -141,6 +141,9 @@ describe("David's points from the writing rounds", () => {
   it("says you never need to code", () => {
     render(<WhyGwthFde />)
     expect(pageText()).toMatch(/never need to know how to code/i)
+    // David 2026-09-28 (option 1): the claim stays true next to the AI-assisted
+    // coding lessons because it says who writes the code.
+    expect(pageText()).toMatch(/AI writes the code, and we show you how to direct it and check it/i)
   })
 
   it("calls the savings tracker a fun tracker, not a reason to sign up", () => {
