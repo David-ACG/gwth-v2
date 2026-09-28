@@ -61,6 +61,11 @@ describe("Why GWTH page structure", () => {
     expect(h1s[0]).toHaveTextContent(/why learn ai with gwth/i)
   })
 
+  it("reads cleanly: no doubled article left over from an edit", () => {
+    render(<WhyGwthFde />)
+    expect(pageText()).not.toMatch(/\b(the|a|an) (the|a|an)\b/i)
+  })
+
   it("renders no video placeholder: the video is made later", () => {
     const { container } = render(<WhyGwthFde />)
     expect(container.querySelector("video, iframe, [data-video]")).toBeNull()

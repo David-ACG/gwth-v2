@@ -297,8 +297,8 @@ export function WhyGwthFde() {
             <p>
               There are lots of ways to learn AI. You can watch YouTube videos,
               take a free course from an AI company, or pay for expensive
-              training made just for you. Here&apos;s why we think GWTH is the
-              a better choice.
+              training made just for you. Here&apos;s why we think GWTH is a
+              better choice.
             </p>
             <p>
               GWTH is a practical AI course for adults in the UK. Over three
@@ -500,18 +500,18 @@ export function WhyGwthFde() {
               years, long before it could hold a conversation, and I&apos;ve
               used generative tools since the first public chat models arrived.
               I&apos;ve worked inside one of the largest AI providers in the
-              world. I try coding tools as they&apos;re released, and I run
-              open-source models on my own hardware, so what I tell you comes
-              from use rather than a launch post.
+              world. I try new coding tools as they&apos;re released and run AI
+              models on my own computers, so what I tell you comes from using
+              them myself.
             </p>
             <p>
               The other half of the job is people. I&apos;ve helped my
               children, friends and grandparents get started, including people
               who were sure this was not for them. I&apos;ve also sat with chief
               technology officers and chief executives of large companies
-              working out what to do about AI. Their questions are far more
-              alike than anyone expects. This course is the answer I&apos;d give
-              in person, written down and kept current.
+              working out what to do about AI. This course is the answer
+              I&apos;d give any of them in person, written down and kept
+              current.
             </p>
           </div>
         </div>
