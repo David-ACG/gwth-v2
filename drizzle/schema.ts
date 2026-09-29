@@ -35,7 +35,7 @@
 //  10. Page comments hybrid (canonical DDL: 022): pageComments gains the
 //      action/shape/textEdit jsonb columns, target_type allows 'area', and
 //      the comment length CHECK allows '' (0..4000).
-import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision } from "drizzle-orm/pg-core"
+import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
 // target for every user-scoped column below.
@@ -778,3 +778,83 @@ export const newsArticlesRanked = pgView("news_articles_ranked", {	id: uuid(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }),
 	hotnessScore: doublePrecision("hotness_score"),
 }).as(sql`SELECT id, slug, title, excerpt, content, url, category, tags, thumbnail_url, author, vote_count, comment_count, lab_slug, is_featured, status, published_at, created_at, updated_at, CASE WHEN vote_count <= 1 THEN 0::double precision ELSE (vote_count - 1)::double precision / power(EXTRACT(epoch FROM now() - published_at) / 3600::numeric + 2::numeric, 1.8)::double precision END AS hotness_score FROM news_articles WHERE status = 'published'::text`);
+
+// ── 024: lessons in parts, two formats, first-party tracking (gwth-launch-hqyp)
+// Hand-added (not pulled). Canonical DDL: supabase/migrations/024_lesson_parts.sql.
+// No existing table is altered, so a site without 024 falls back to the
+// page-flip viewer (getLessonParts returns null on a missing table).
+
+export const lessonParts = pgTable("lesson_parts", {
+	lessonId: text("lesson_id").primaryKey().notNull(),
+	version: text().default('1').notNull(),
+	content: jsonb().notNull(),
+	source: text(),
+	importedAt: timestamp("imported_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.lessonId],
+			foreignColumns: [lessons.id],
+			name: "lesson_parts_lesson_id_fkey"
+		}).onDelete("cascade"),
+]);
+
+export const lessonPartChecks = pgTable("lesson_part_checks", {
+	userId: text("user_id").notNull(),
+	lessonId: text("lesson_id").notNull(),
+	partId: text("part_id").notNull(),
+	tries: integer().default(0).notNull(),
+	wrongTries: integer("wrong_tries").default(0).notNull(),
+	correct: boolean().default(false).notNull(),
+	firstRight: boolean("first_right"),
+	answers: jsonb().default([]).notNull(),
+	resolvedAt: timestamp("resolved_at", { withTimezone: true, mode: 'string' }),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	primaryKey({ columns: [table.userId, table.lessonId, table.partId], name: "lesson_part_checks_pkey" }),
+	index("idx_lesson_part_checks_lesson").using("btree", table.lessonId.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "lesson_part_checks_user_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.lessonId],
+			foreignColumns: [lessons.id],
+			name: "lesson_part_checks_lesson_id_fkey"
+		}).onDelete("cascade"),
+]);
+
+export const learnerPreferences = pgTable("learner_preferences", {
+	userId: text("user_id").primaryKey().notNull(),
+	lessonFormat: text("lesson_format"),
+	readAlong: boolean("read_along").default(true).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "learner_preferences_user_id_fkey"
+		}).onDelete("cascade"),
+	check("learner_preferences_lesson_format_check", sql`lesson_format = ANY (ARRAY['read'::text, 'watch'::text])`),
+]);
+
+export const lessonEvents = pgTable("lesson_events", {
+	id: bigserial({ mode: "number" }).primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	lessonId: text("lesson_id").notNull(),
+	sessionId: text("session_id").notNull(),
+	event: text().notNull(),
+	partIndex: integer("part_index"),
+	format: text(),
+	detail: jsonb().default({}).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_lesson_events_lesson").using("btree", table.lessonId.asc().nullsLast().op("text_ops"), table.createdAt.asc().nullsLast().op("timestamptz_ops")),
+	index("idx_lesson_events_user").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.lessonId.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "lesson_events_user_id_fkey"
+		}).onDelete("cascade"),
+	check("lesson_events_format_check", sql`format = ANY (ARRAY['read'::text, 'watch'::text])`),
+]);

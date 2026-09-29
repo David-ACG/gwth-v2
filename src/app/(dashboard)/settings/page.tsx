@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { getDashboardUser } from "@/lib/auth"
 import { SettingsForm } from "@/components/settings/settings-form"
+import { LessonFormatSettings } from "@/components/settings/lesson-format-settings"
+import { getLearnerPrefs } from "@/lib/data/lesson-parts"
 import {
   COURSE_MONTHLY_PRICE,
   ONGOING_MONTHLY_PRICE,
@@ -67,7 +69,7 @@ export default async function SettingsPage() {
   await requireSessionOrRedirect()
   await requireContentAccessOrRedirect()
 
-  const user = await getDashboardUser()
+  const [user, lessonPrefs] = await Promise.all([getDashboardUser(), getLearnerPrefs()])
   const state = user?.subscriptionState ?? "visitor"
 
   return (
@@ -170,6 +172,8 @@ export default async function SettingsPage() {
           />
         )}
       </section>
+
+      <LessonFormatSettings initial={lessonPrefs} />
 
       <SettingsForm />
     </div>

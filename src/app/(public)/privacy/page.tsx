@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function PrivacyPage() {
   return (
-    <LegalFde title="Privacy Policy" updated="25 February 2026">
+    <LegalFde title="Privacy Policy" updated="29 September 2026">
       <p>
         This Privacy Policy describes how GWTH.ai (&quot;we&quot;, &quot;us&quot;, or
         &quot;our&quot;) collects, uses, and protects your personal information when
@@ -49,6 +49,16 @@ export default function PrivacyPage() {
         <li>
           <strong>Usage data:</strong> pages visited, features used, time
           spent on lessons, and general interaction patterns.
+        </li>
+        <li>
+          <strong>How you move through a lesson:</strong> which parts you
+          open, when you continue, your answers to the check questions,
+          whether you play the audio or video, when you switch between
+          watching and reading, and any feedback you give, such as saying a
+          part confused you or rating a lesson. We keep this in our own
+          database, linked to your account, to improve the lessons. We do not
+          share it with advertising or analytics companies, and it uses no
+          cookies beyond the one that keeps you signed in.
         </li>
         <li>
           <strong>Device information:</strong> browser type, operating

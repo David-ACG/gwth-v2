@@ -34,6 +34,11 @@ import {
   requireContentAccessOrRedirect,
   requireSessionOrRedirect,
 } from "@/lib/content-access"
+import { getLessonPartsContent, getPartsViewerState } from "@/lib/data/lesson-parts"
+import { toPublicParts, type LessonPartsContent, type PartCheckState } from "@/lib/lessons/parts"
+import { renderPartHtml } from "@/lib/lessons/parts-html"
+import { PartsLessonViewer } from "@/components/lesson-parts/parts-lesson-viewer"
+import type { ClientCheck } from "@/components/lesson-parts/check-card"
 
 type PageProps = {
   params: Promise<{ slug: string; lessonSlug: string }>
@@ -42,7 +47,51 @@ type PageProps = {
     page?: string
     widget?: string
     variant?: string
+    /** Lessons in parts: 0 intro, 1..n a part, "end" the end screen. */
+    part?: string
+    /** Lessons in parts: show the format choice again (review links). */
+    choose?: string
+    /** Admins: see the page-flip viewer for a lesson that has parts. */
+    viewer?: string
   }>
+}
+
+/**
+ * The learner's check standing as the parts viewer shows it. A resolved
+ * check carries the right answer and explanation (nothing left to protect);
+ * an open one carries only the wrong picks so far.
+ */
+function toClientChecks(
+  content: LessonPartsContent,
+  states: Record<string, PartCheckState>
+): Record<string, ClientCheck> {
+  const out: Record<string, ClientCheck> = {}
+  for (const part of content.parts) {
+    const s = states[part.id]
+    if (!s || s.tries === 0) continue
+    const last = s.answers[s.answers.length - 1] ?? null
+    const rightPick = s.correct && last !== null ? last : null
+    out[part.id] = {
+      tries: s.tries,
+      wrongTries: s.wrongTries,
+      resolved: s.resolved,
+      wrongPicks: s.answers.filter((a) => a !== part.check.answerIndex),
+      rightPick,
+      feedback: s.correct ? part.check.feedbackRight : part.check.feedbackWrong,
+      reveal: s.resolved
+        ? { answerIndex: part.check.answerIndex, explanation: part.check.explanation ?? part.check.feedbackRight }
+        : null,
+    }
+  }
+  return out
+}
+
+/** Which screen a ?part= value asks for (0 intro .. n+1 end), or null. */
+function screenFromParam(value: string | undefined, n: number): number | null {
+  if (!value) return null
+  if (value === "end") return n + 1
+  const k = Number.parseInt(value, 10)
+  return Number.isFinite(k) ? Math.max(0, Math.min(k, n + 1)) : null
 }
 
 export async function generateMetadata({
@@ -156,6 +205,46 @@ export default async function LessonPage({
   const lessonMonth = lesson.month as 1 | 2 | 3
   if (!user || !canUserAccessMonth(user, lessonMonth)) {
     redirect(`/course/${slug}`)
+  }
+
+  // Lessons in parts (bead gwth-launch-hqyp): a lesson with lesson_parts
+  // content is shown in the learner's chosen format, one part per screen,
+  // with a check question per part in place of the end-of-lesson quiz.
+  // Admins can still open the page-flip viewer with ?viewer=classic.
+  const partsSession = await getSessionIdentity()
+  const partsAdmin = isAdminEmail(partsSession?.email)
+  const partsContent =
+    sp.viewer === "classic" && partsAdmin ? null : await getLessonPartsContent(lesson.id)
+  if (partsContent) {
+    const [state, nextLesson] = await Promise.all([
+      getPartsViewerState(partsContent),
+      findNextLesson(course, lessonSlug),
+    ])
+    const n = partsContent.parts.length
+    const asked = screenFromParam(sp.part, n)
+    const project = lesson.buildInstructions?.trim()
+      ? (() => {
+          const h = renderPartHtml(lesson.buildInstructions ?? "")
+          return { html: h.lead + h.rest }
+        })()
+      : null
+    return (
+      <div className={cn(LESSON_BREAKOUT)} data-variant="parts">
+        <PartsLessonViewer
+          key={lesson.id}
+          lesson={{ id: lesson.id, number: lesson.order, title: lesson.title, courseHref: `/course/${course.slug}` }}
+          parts={toPublicParts(partsContent, renderPartHtml)}
+          initialChecks={toClientChecks(partsContent, state.checks)}
+          startScreen={asked ?? state.startAt}
+          returning={state.returning}
+          prefs={state.prefs}
+          forceChoice={sp.choose === "1"}
+          project={project}
+          nextLesson={nextLesson ? { title: nextLesson.title, href: nextLesson.href } : null}
+          trackingEnabled={state.userId !== null}
+        />
+      </div>
+    )
   }
 
   // Per-user persisted progress for this lesson (null when never started, or
