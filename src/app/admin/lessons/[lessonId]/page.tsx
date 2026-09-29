@@ -91,9 +91,13 @@ export default async function AdminLessonReportPage({
                     {p.index + 1}. {p.title}
                   </span>
                   {p.stall ? (
-                    <span className={`${styles.status} ${styles.stStalled}`}>⚑ Stall: {p.stallReasons.join("; ")}</span>
+                    <span className={`${styles.status} ${styles.stStalled}`} style={{ display: "block", marginTop: 4, whiteSpace: "normal" }}>
+                      ⚑ Stall: {p.stallReasons.join("; ")}
+                    </span>
                   ) : (
-                    <span className={`${styles.status} ${styles.stActive}`}>✓ No stall flag</span>
+                    <span className={`${styles.status} ${styles.stActive}`} style={{ display: "block", marginTop: 4 }}>
+                      ✓ No stall flag
+                    </span>
                   )}
                 </td>
                 <td>
