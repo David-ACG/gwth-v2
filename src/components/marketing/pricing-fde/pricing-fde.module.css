@@ -190,6 +190,13 @@
     max-width: 44ch;
   }
 
+  /* The UK note is a second standfirst. With the rule above it landed in the
+     same cell as the first and the two paragraphs were drawn on top of each
+     other (David, 2026-09-30, screenshot of /pricing). It gets its own row. */
+  .standfirst + .standfirst {
+    grid-row: 3;
+  }
+
   .mastheadActions {
     grid-column: 2;
     grid-row: 2;
@@ -199,7 +206,7 @@
 
   .mastheadFoot {
     grid-column: 1 / -1;
-    grid-row: 3;
+    grid-row: 4;
   }
 }
 
