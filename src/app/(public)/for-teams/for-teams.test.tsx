@@ -122,9 +122,14 @@ describe("ForTeamsPage", () => {
     expect(
       screen.getByText(/The real cost is not the course/)
     ).toBeInTheDocument()
-    // Deliberately updated (W26): the page now uses the "£29/mo" form that
-    // home and /pricing already use, instead of a third "£29.00/month" form.
-    expect(screen.getByText(/£29\/mo per person/)).toBeInTheDocument()
+    // Deliberately updated (copy gate, 2026-09-28, commit f3816ac): "the
+    // entire course costs £29/mo per person" hid that it runs for three
+    // months, so the line now says so in words. The W26 guard still holds: no
+    // third "£29.00/month" price form.
+    expect(
+      screen.getByText(/£29 per person each month for\s+three months/)
+    ).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/£29\.00/)
   })
 
   it("renders the syllabus flexibility section", () => {
@@ -749,8 +754,16 @@ describe("the stated duration and the stated total hours agree", () => {
   it("states the commitment the masthead shows, in words", () => {
     render(<ForTeamsPage />)
     expect(screen.getByText("3 months \u00b7 5 hours a week")).toBeInTheDocument()
+    // Deliberately updated (copy gate, 2026-09-28, commit f3816ac): the old
+    // "Three months of hands-on, vendor-neutral training, at five hours a
+    // week, will." promised organisational change the page cannot evidence.
+    // Its replacement still states the masthead's duration in words, and the
+    // weekly figure stays in the masthead and the stats.
     expect(document.body.textContent).toMatch(
-      /Three months of hands-on, vendor-neutral training, at five\s+hours a week/i
+      /GWTH gives each person three months of guided\s+practice/i
+    )
+    expect(document.body.textContent).not.toMatch(
+      /\b(?:one|two|four|five|six|\d+) months of guided/i
     )
   })
 })

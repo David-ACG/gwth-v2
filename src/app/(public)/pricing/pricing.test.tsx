@@ -30,8 +30,11 @@ describe("PricingPage", () => {
     expect(
       screen.getByRole("heading", { level: 3, name: "Member" })
     ).toBeInTheDocument()
+    // Deliberately updated (copy gate, 2026-09-28, commit f3816ac): David
+    // chose to separate teams from institutions, so the per-person tier is
+    // "Teams" and institutions get a proposal instead.
     expect(
-      screen.getByRole("heading", { level: 3, name: "Teams or institutions" })
+      screen.getByRole("heading", { level: 3, name: "Teams" })
     ).toBeInTheDocument()
   })
 
@@ -152,8 +155,9 @@ describe("PricingPage", () => {
     expect(screen.getByRole("columnheader", { name: "Feature" })).toBeInTheDocument()
     expect(screen.getByRole("columnheader", { name: "Free" })).toBeInTheDocument()
     expect(screen.getByRole("columnheader", { name: "Member" })).toBeInTheDocument()
+    // Deliberately updated (copy gate, 2026-09-28): see the tier test above.
     expect(
-      screen.getByRole("columnheader", { name: "Teams or institutions" })
+      screen.getByRole("columnheader", { name: "Teams" })
     ).toBeInTheDocument()
     expect(screen.getByText("Admin dashboard")).toBeInTheDocument()
     expect(screen.getByText("Included for 5 or more")).toBeInTheDocument()
@@ -172,23 +176,37 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     return (container.textContent ?? "").replace(/\s+/g, " ")
   }
 
-  /** a-20260914-203458-8004f0: "This should be for teams or institutions". */
+  /**
+   * a-20260914-203458-8004f0: "This should be for teams or institutions".
+   * Refined by David on 2026-09-28 (copy gate, option 1 of the pricing line):
+   * "Teams pay the same per-person price ... Institutions that want their own
+   * edition get a proposal based on what they need." Institutions no longer
+   * pay the per-person price, so they cannot share its tier; the tier is
+   * "Teams" and institutions are still named, with their own route, on the
+   * page. What still holds from 09-14: no column called only "Team", and the
+   * page speaks to institutions as well as teams.
+   */
   it("names teams AND institutions, and has no column called only Team", () => {
     render(<PricingPage />)
     const headers = screen
       .getAllByRole("columnheader")
       .map((el) => (el.textContent ?? "").trim())
-    expect(headers).toContain("Teams or institutions")
+    expect(headers).toContain("Teams")
     expect(headers).not.toContain("Team")
-    expect(headers).not.toContain("Teams")
-    // The card above the table and the split section below it agree with it.
+    // The card above the table agrees with it.
     expect(
-      screen.getByRole("heading", { level: 3, name: "Teams or institutions" })
+      screen.getByRole("heading", { level: 3, name: "Teams" })
     ).toBeInTheDocument()
+    // Institutions are told they get a proposal, not the per-person price...
     const split = screen
       .getByRole("heading", { level: 2, name: /More visibility for managers/i })
       .closest("section")
     expect(split?.textContent ?? "").toMatch(/institutions/i)
+    expect(split?.textContent ?? "").toMatch(/proposal/i)
+    // ...and have a way through to the page written for them.
+    expect(
+      screen.getByRole("link", { name: /Learn about institutions/i })
+    ).toHaveAttribute("href", "/for-institutions")
   })
 
   /**
