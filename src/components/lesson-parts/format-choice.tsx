@@ -22,7 +22,7 @@ type SampleState = "idle" | "playing" | "done"
  * The overlay that makes the whole preview a play button (David, 2026-09-30,
  * option A: "the picture is the play button"). No separate controls.
  */
-function SampleOverlay({ state }: { state: SampleState }) {
+function SampleOverlay({ state, low = false }: { state: SampleState; low?: boolean }) {
   if (state === "playing") {
     return (
       <span className={cn(styles.sampleBadge, styles.sampleBadgeQuiet)}>
@@ -31,7 +31,7 @@ function SampleOverlay({ state }: { state: SampleState }) {
     )
   }
   return (
-    <span className={styles.sampleCover}>
+    <span className={cn(styles.sampleCover, low && styles.sampleCoverLow)}>
       <span className={styles.samplePlay} aria-hidden="true">
         ▶
       </span>
@@ -175,7 +175,7 @@ function ReadSample({ part, name }: { part: PublicLessonPart; name: string }) {
         preload="none"
         onPause={() => setState((s) => (s === "playing" ? "done" : s))}
       />
-      <SampleOverlay state={state} />
+      <SampleOverlay state={state} low />
     </button>
   )
 }
