@@ -62,7 +62,7 @@ export function LessonFormatSettings({ initial }: { initial: { lessonFormat: Les
         <label htmlFor="read-along-setting" style={{ cursor: "pointer" }}>
           <span className={styles.fieldLabel}>Read along</span>
           <span className={styles.fieldHint} style={{ display: "block" }}>
-            When a part is read aloud, highlight each word as it is spoken.
+            When a part is read aloud, each word is highlighted as it is spoken.
           </span>
         </label>
         <input

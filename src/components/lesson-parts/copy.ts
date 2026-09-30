@@ -10,13 +10,13 @@ export const FORMAT_COPY: Record<LessonFormat, { name: string; short: string; bl
     name: "Watch short videos",
     short: "Watch",
     blurb: "A short video for each part, with captions. The same text is underneath if you'd rather read it.",
-    choose: "Choose Watch short videos",
+    choose: "Choose this format",
   },
   read: {
     name: "Read or listen",
     short: "Read",
     blurb: "One part at a time. Read it yourself, or press Play to hear it read aloud while each word is highlighted.",
-    choose: "Choose Read or listen",
+    choose: "Choose this format",
   },
 }
 
@@ -26,10 +26,9 @@ export const COPY = {
   choiceTitle: "How would you like to take your lessons?",
   choiceBody:
     "Try both below. You can change your mind at any time with the Watch and Read buttons at the top of every lesson, or in Settings.",
-  playPreview: "Play preview",
-  pausePreview: "Pause preview",
-  hearIt: "Hear it",
-  stopHearing: "Stop",
+  sampleTry: "Try 10 seconds, with sound",
+  sampleAgain: "Play the 10 seconds again",
+  sampleStop: "Stop",
   lessonLine: (n: number, parts: number, minutes: number) => `Lesson ${n}. ${parts} parts, about ${minutes} minutes.`,
   inThisLesson: "In this lesson",
   introVideo: "Introduction video",
@@ -70,10 +69,10 @@ export const COPY = {
   watchPartAgain: "Watch this part again",
   send: "Send",
   noteThanks: "Thanks, we have your note.",
-  confusedThanks: "Thanks, we have noted that this part was confusing.",
+  confusedThanks: "Thanks, we’ve noted this.",
   finishedTitle: "You have finished this lesson",
   finishedBody: "Every part is done.",
-  finishedNextProject: "Every part is done. The project below puts it into practice.",
+  finishedNextProject: "Every part is done. Use the project below to practise what you have learnt.",
   ratingTitle: "How was this lesson?",
   ratings: [
     { value: "bad", label: "Bad" },

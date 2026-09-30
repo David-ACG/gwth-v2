@@ -43,7 +43,7 @@ await page.waitForSelector("[data-testid=format-choice]")
 await page.waitForTimeout(2500)
 await shot("01-choice")
 
-await page.getByRole("button", { name: "Choose Read or listen" }).click()
+await page.getByTestId("choose-read").click()
 await page.waitForSelector("[data-testid=intro-screen]")
 await shot("02-intro", { fullPage: true })
 

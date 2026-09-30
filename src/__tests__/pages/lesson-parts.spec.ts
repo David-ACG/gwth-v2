@@ -96,7 +96,20 @@ for (const size of SIZES) {
       await expect(page.getByRole("heading", { name: "Read or listen" })).toBeVisible()
       await axe(page)
       await shot("01-choice")
-      await page.getByRole("button", { name: "Choose Read or listen" }).click()
+      // Each preview is the play button: one tap plays 10 seconds with sound, a second tap stops.
+      for (const id of ["sample-watch", "sample-read"]) {
+        const sample = page.getByTestId(id)
+        await expect(sample).toHaveAttribute("data-state", "idle")
+        await expect(sample).toContainText("Try 10 seconds, with sound")
+        await sample.click()
+        await expect(sample).toHaveAttribute("data-state", "playing", { timeout: 15_000 })
+        await page.waitForTimeout(1500)
+        if (id === "sample-read") await expect(sample.locator(".rw-on")).toHaveCount(1)
+        await shot(`01b-${id}-playing`)
+        await sample.click()
+        await expect(sample).toHaveAttribute("data-state", "done")
+      }
+      await page.getByTestId("choose-read").click()
 
       // Introduction, then part 1 in Read or listen.
       await expect(page.getByTestId("intro-screen")).toBeVisible()
