@@ -479,6 +479,7 @@ export function WhyGwthFde() {
       </section>
 
       <section
+        id="founder"
         className={`${styles.section} ${styles.sectionAlt}`}
         data-section="founder"
       >
