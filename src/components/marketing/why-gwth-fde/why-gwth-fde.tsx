@@ -508,8 +508,9 @@ export function WhyGwthFde() {
               it. I&apos;ve helped factories use it to run and check
               production, and helped companies sell to businesses and the
               public online. More and more, people ask an AI assistant to find a
-              product and buy it for them, and companies want to be ready
-              when they do.
+              product and buy it for them, so I&apos;ve helped companies make
+              sure those assistants can find what they sell and place the
+              order.
               I&apos;ve used AI in marketing and advertising, and to speed up
               everyday office work. I&apos;ve set up very large systems that let
               AI answer questions from a company&apos;s own documents, and AI
