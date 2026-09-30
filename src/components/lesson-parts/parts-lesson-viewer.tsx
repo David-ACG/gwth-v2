@@ -153,7 +153,15 @@ export function PartsLessonViewer(props: PartsLessonViewerProps) {
     setPending(partId)
     setAnswerError(null)
     try {
-      const res = await answerPartCheckAction({ lessonId: lesson.id, partId, optionIndex, format, sessionId })
+      const prev = checks[partId]
+      const res = await answerPartCheckAction({
+        lessonId: lesson.id,
+        partId,
+        optionIndex,
+        format,
+        sessionId,
+        previous: prev ? { tries: prev.tries, wrongTries: prev.wrongTries, answers: [...prev.wrongPicks] } : undefined,
+      })
       if (!res.ok) {
         setAnswerError(res.message ?? COPY.answerError)
         return

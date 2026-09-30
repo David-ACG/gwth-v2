@@ -381,6 +381,18 @@ button.mapRow:hover { background: var(--v-quiet); }
 .optWrong .optGlyph { background: var(--v-quiet); }
 .optTag { margin-left: auto; font-size: 0.82rem; font-weight: 600; color: var(--v-soft); white-space: nowrap; padding-left: 8px; }
 .feedback { margin-top: 12px; min-height: 1.5em; }
+/* An error: glyph AND words AND a heavy ink bar. The register has no error
+   colour yet (bible paper-first-tokens GAP), so it is drawn in ink. */
+.errorBox {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  box-shadow: inset 5px 0 0 var(--v-ink);
+  font-weight: 600;
+}
+.errorBox span { margin-right: 6px; }
 .feedbackBox { border-radius: 8px; padding: 12px 14px; background: var(--v-quiet); }
 .feedbackBox p { margin: 0; }
 .feedbackBox p + p { margin-top: 6px; }

@@ -32,6 +32,8 @@ export async function POST(request: Request) {
   }
   const access = await checkLessonAccess(lessonId)
   if (!access.ok) return NextResponse.json({ error: access.message }, { status: access.status })
+  // The preview's stand-in learner has no account row: accept and drop.
+  if (access.mock) return NextResponse.json({ stored: 0 })
   try {
     const stored = await recordLessonEvents(
       access.userId,

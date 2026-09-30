@@ -185,3 +185,21 @@ for (const size of SIZES) {
     })
   }
 }
+
+/**
+ * The preview's sessionless stand-in learner (ENABLE_DEV_MOCK_USER, no session
+ * cookie) must be able to answer a check: David hit "Sign in to continue this
+ * lesson." here on 2026-09-30 while the page itself showed him as signed in.
+ */
+test("stand-in learner can answer a check without signing in", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop-chromium", "one project is enough")
+  await page.goto(`${LESSON}?choose=1`, { waitUntil: "networkidle" })
+  test.skip(page.url().includes("/login"), "this site has no stand-in learner")
+  await page.getByTestId("choose-read").click()
+  await page.getByTestId("start-part-1").click()
+  const card = page.getByTestId("check-card")
+  await card.locator("button[data-option]").first().click()
+  await expect(card.getByTestId("check-feedback")).toBeVisible()
+  await expect(page.getByText("Sign in to continue this lesson.")).toHaveCount(0)
+  await expect(card.getByTestId("check-error")).toHaveCount(0)
+})

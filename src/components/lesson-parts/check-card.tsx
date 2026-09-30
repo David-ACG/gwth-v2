@@ -103,7 +103,11 @@ export function CheckCard({
       </ul>
       <div className={styles.feedback} aria-live="polite">
         {pending ? <p className={styles.muted}>{COPY.saving}</p> : null}
-        {error ? <p>{error}</p> : null}
+        {error ? (
+          <p className={styles.errorBox} role="alert" data-testid="check-error">
+            <span aria-hidden="true">⚠</span> {error}
+          </p>
+        ) : null}
         {!pending && state.feedback ? (
           <div className={styles.feedbackBox} data-testid="check-feedback">
             {state.resolved && !explained ? <p>{state.feedback}</p> : null}
