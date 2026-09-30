@@ -485,35 +485,52 @@ export function WhyGwthFde() {
         <div className={`${styles.page} ${styles.split}`}>
           <h2 className={styles.sectionTitle}>Who writes the course</h2>
           {/*
-            David's own biography (annotation a-20260914-210202-2fba31 on the
-            old /about), tidied by the GPT-6 Sol pass on 2026-09-28. Grounded
-            only in what he supplied: no employer, client or product is named.
+            David's own words, rewritten 2026-09-30 (bead gwth-launch-l7ch).
+            Six drafts (Opus 5.5 and GPT-6 Sol, alone and checking each other)
+            were compared blind; he picked paragraphs from three of them and
+            they were joined, with a GPT-6 Sol check of the joins. Study:
+            GWTH-launch-plan recording/produced/writing_levels/founder-note/.
+            No employer, client or product is named, on purpose.
           */}
           <div className={styles.founderNote} data-testid="founder-note">
             <p className={styles.noteLabel}>A note from the founder</p>
             <p>
-              I&apos;ve spent 25 years in consulting and solution architecture,
-              designing systems for organisations that then had to live with
-              the result. I write GWTH in the same way: work out what something
-              is really for, then build it so it works when people rely on it.
+              I&apos;ve spent 25 years as a consultant and solution architect.
+              The title means very little to most people, so in plain terms: I
+              helped companies work out how their computer systems should fit
+              together, then build them. I was lucky enough to work with some
+              of the world&apos;s largest companies, start-ups, and UK brands
+              you&apos;ll know, including most of the supermarkets.
             </p>
             <p>
-              I&apos;ve worked with this technology since the machine learning
-              years, long before it could hold a conversation, and I&apos;ve
-              used generative tools since the first public chat models arrived.
-              I&apos;ve worked inside one of the largest AI providers in the
-              world. I try new coding tools as they&apos;re released and run AI
-              models on my own computers, so what I tell you comes from using
-              them myself.
+              I&apos;ve worked with AI since long before you could chat with
+              it. I&apos;ve helped factories use it to run and check
+              production, and helped companies sell to businesses and the
+              public online, increasingly through systems where a
+              customer&apos;s software talks directly to the company&apos;s.
+              I&apos;ve used AI in marketing and advertising, and to speed up
+              everyday office work. I&apos;ve set up very large systems that let
+              AI answer questions from a company&apos;s own documents, and AI
+              agents that carry out tasks on their own. I still try new tools
+              as they come out, so what I teach comes from using them myself,
+              mistakes included.
             </p>
             <p>
-              The other half of the job is people. I&apos;ve helped my
-              children, friends and grandparents get started, including people
-              who were sure this was not for them. I&apos;ve also sat with chief
-              technology officers and chief executives of large companies
-              working out what to do about AI. Those conversations shaped a
-              course that begins with everyday tasks and builds towards
-              deciding how an organisation should use AI.
+              What I enjoy most, though, is teaching, and getting people
+              excited about what AI can do for them. I&apos;ve helped my
+              children, friends and grandparents get started, including some
+              who were quite sure this wasn&apos;t for them. I&apos;ve also sat
+              with the heads of large companies working out their plans for
+              AI. Both groups taught me the same thing: it&apos;s people who
+              make the difference, not the technology.
+            </p>
+            <p>
+              So GWTH starts with what people actually use AI for. I work out
+              the best way to use AI for each task, and keep updating the
+              course as new tools, models and ways of working arrive. AI has
+              made me far more productive, and if even a small share of people
+              in the UK learn to use it well, I think we&apos;ll all be better
+              off. I&apos;d like to help you be one of them.
             </p>
           </div>
         </div>

@@ -202,10 +202,14 @@ describe("What the old About page brought", () => {
     render(<WhyGwthFde />)
     const note = (screen.getByTestId("founder-note").textContent ?? "").replace(/\s+/g, " ")
     expect(note).toMatch(/25 years/)
-    expect(note).toMatch(/solution architecture/i)
-    expect(note).toMatch(/largest AI providers/i)
+    expect(note).toMatch(/solution architect/i)
+    expect(note).toMatch(/most of the supermarkets/i)
     expect(note).toMatch(/children, friends and grandparents/i)
-    expect(note).toMatch(/chief executives/i)
+    expect(note).toMatch(/heads of large companies/i)
+    expect(note).toMatch(/people who make the difference, not the technology/i)
+    // No product, vendor or client is named (David, 2026-09-30).
+    expect(note).not.toMatch(/Quick|Amazon|AWS|Tesco|Sainsbury/)
+    expect(note).not.toMatch(/[\u2013\u2014]/)
   })
 
   it("keeps the UK worked examples", () => {
