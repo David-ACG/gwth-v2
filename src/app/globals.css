@@ -111,6 +111,11 @@
   --v-btn: #b5dbd0;        /* primary button fill, IDENTICAL in dark */
   --v-btn-text: #17211d;   /* 11.02:1 on the button */
   --v-accent: #3f7d6d;     /* jade: italic accent, active marks, 4.35:1 */
+  /* The ONE error colour (bible paper-first-error-colour, David 2026-09-30).
+     Measured in src/app/paper-first-tokens.test.ts. */
+  --v-error-bg: #fbe9e7;   /* the error box tint */
+  --v-error-text: #8f1d1d; /* 7.58:1 on the tint, 8.05:1 ground, 8.89:1 card */
+  --v-error-line: #c0392b; /* 4.64:1 on the tint, 4.92:1 ground, 5.44:1 card */
 
   /* The retired FDE names (--v-teal, --v-ochre, --v-cream, --v-action, ...)
      no longer exist: every reference was renamed to the token above that it
@@ -166,7 +171,7 @@
   --accent: var(--v-quiet);
   --accent-foreground: var(--v-ink);
 
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: var(--v-error-line); /* no other red exists (paper-first-error-colour) */
 
   --success: oklch(0.6 0.18 145);
   --success-foreground: oklch(0.98 0 0);
@@ -237,6 +242,9 @@
   --v-btn: #b5dbd0;
   --v-btn-text: #161d1a;   /* near-black in both modes but NOT the same hex */
   --v-accent: #b5dbd0;     /* mint on the night ground, 11.44:1 */
+  --v-error-bg: #3a1f1c;
+  --v-error-text: #ffb4a9; /* 8.87:1 on the tint, 10.09:1 ground, 7.71:1 card */
+  --v-error-line: #d9776c; /* 4.89:1 on the tint, 5.56:1 ground, 4.25:1 card */
 
   --logo-wordmark: var(--v-ink);
   --logo-accent: var(--v-accent);
@@ -262,7 +270,7 @@
   --accent: var(--v-quiet);
   --accent-foreground: var(--v-ink);
 
-  --destructive: oklch(0.704 0.191 22.216);
+  --destructive: var(--v-error-line);
 
   --success: oklch(0.7 0.16 145);
   --success-foreground: oklch(0.17 0.005 60);
@@ -615,6 +623,50 @@
 /* Task lists (GFM) */
 .lesson-prose input[type="checkbox"] {
   margin-right: 0.5em;
+}
+
+/* =================================================================
+   ERRORS (bible paper-first-error-colour, David 2026-09-30)
+   One recipe everywhere. A message is a box: tint, a 1px error line on all
+   four sides, error-text words and a leading warning sign, never a stripe.
+   A message under one field is the error text and the sign, no box.
+   ================================================================= */
+
+.v-error-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  background: var(--v-error-bg);
+  border: 1px solid var(--v-error-line);
+  border-radius: var(--radius-md, 8px);
+  color: var(--v-error-text);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.v-error-box::before {
+  content: "⚠";
+  flex-shrink: 0;
+}
+
+/* shadcn FormMessage (a message under one field) and any class opting in */
+[data-slot="form-message"],
+.v-error-text {
+  color: var(--v-error-text);
+  font-weight: 600;
+}
+[data-slot="form-message"]::before,
+.v-error-text::before {
+  content: "⚠\00a0";
+}
+
+/* Error toasts (sonner, richColors): the same tint, line and words. The
+   html prefix outranks sonner's own injected [data-theme] defaults. */
+html [data-sonner-toaster][data-theme] {
+  --error-bg: var(--v-error-bg);
+  --error-border: var(--v-error-line);
+  --error-text: var(--v-error-text);
 }
 
 /* =================================================================

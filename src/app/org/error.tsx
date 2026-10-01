@@ -16,8 +16,8 @@ export default function OrgError({
 }) {
   return (
     <div className={styles.center}>
-      <div className={styles.empty} role="alert">
-        <p className={styles.mono}>
+      <div className={`${styles.empty} ${styles.emptyFault}`} role="alert">
+        <p className={`${styles.mono} ${styles.faultLabel}`}>
           Error{error.digest ? ` · ${error.digest}` : ""}
         </p>
         <p className={styles.emptyTitle}>This screen failed to render</p>

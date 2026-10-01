@@ -144,7 +144,10 @@
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.5;
-  color: var(--v-ink);
+  color: var(--v-error-text);
+}
+.error::before {
+  content: "⚠\00a0";
 }
 
 /* The captured source page, shown as a functional mono line (no clutter). */

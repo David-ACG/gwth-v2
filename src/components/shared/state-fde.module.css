@@ -72,9 +72,19 @@
   margin: 0;
 }
 
-/* Error kicker takes the rust ink to read as a fault, colour + text. */
+/* Error pages (bible paper-first-error-colour): the panel is the error box,
+   tint + error line on all four sides, and the kicker carries the warning
+   sign and the error text. Colour + glyph + text, never colour alone. */
 .kickerFault {
-  color: var(--v-accent);
+  color: var(--v-error-text);
+  font-weight: 600;
+}
+.kickerFault::before {
+  content: "⚠\00a0";
+}
+.panelFault {
+  background: var(--v-error-bg);
+  border-color: var(--v-error-line);
 }
 
 /* ── Serif explanation ────────────────────────────────────────────────── */

@@ -200,7 +200,7 @@
   font-size: var(--fde-body-sm);
   font-weight: 600;
   line-height: 1.5;
-  color: var(--v-ink);
+  color: var(--v-error-text);
 }
 
 /* ---------------- Server / status banner (colour + icon + text) ---------------- */
@@ -209,13 +209,13 @@
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
-  border: 1px solid var(--v-accent);
-  background: transparent;
+  border: 1px solid var(--v-error-line);
+  background: var(--v-error-bg);
   padding: 0.75rem 0.85rem;
   font-size: var(--fde-body-sm);
   line-height: 1.5;
   font-weight: 600;
-  color: var(--v-ink);
+  color: var(--v-error-text);
   border-radius: var(--radius-md);
 }
 

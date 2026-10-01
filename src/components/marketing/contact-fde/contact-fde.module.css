@@ -185,7 +185,7 @@
   font-size: var(--fde-body-sm);
   font-weight: 600;
   line-height: 1.5;
-  color: var(--v-ink);
+  color: var(--v-error-text);
 }
 
 /* ---------------- Buttons ---------------- */

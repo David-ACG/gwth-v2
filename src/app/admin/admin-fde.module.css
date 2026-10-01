@@ -490,8 +490,23 @@
 .formError {
   width: 100%;
   font-size: var(--fde-body-sm);
-  color: var(--v-ink);
+  color: var(--v-error-text);
   font-weight: 600;
+}
+.formError::before {
+  content: "⚠\00a0";
+}
+/* An admin error page: the empty-state card as the error box. */
+.emptyFault {
+  background: var(--v-error-bg);
+  border-color: var(--v-error-line);
+}
+.emptyFault .faultLabel {
+  color: var(--v-error-text);
+  font-weight: 600;
+}
+.emptyFault .faultLabel::before {
+  content: "⚠\00a0";
 }
 
 /* ── Feedback inbox rows ──────────────────────────────────────────────── */

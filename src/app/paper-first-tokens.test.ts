@@ -69,6 +69,9 @@ describe("paper-first tokens: every mode declares the whole set", () => {
         "--v-btn",
         "--v-btn-text",
         "--v-accent",
+        "--v-error-bg",
+        "--v-error-text",
+        "--v-error-line",
       ]) {
         expect(t[key], `${name} is missing ${key}`).toBeTruthy()
       }
@@ -167,5 +170,33 @@ describe("gwth-launch-88z.32.15: the dark surfaces step apart", () => {
       contrast(light["--v-surface"]!, light["--v-bg"]!),
     ]
     for (const r of ratios) expect(r).toBeGreaterThan(1.02)
+  })
+})
+
+describe("paper-first-error-colour: the one error colour clears its bars", () => {
+  // David 2026-09-30: one error red for the whole site, drawn as a tinted box
+  // with an error line on all four sides and the warning sign. The words
+  // must read as text (4.5:1) and the line as a boundary (3:1) on the tint
+  // and on every surface an error can sit on.
+  for (const { name, t } of MODES) {
+    for (const surface of ["--v-error-bg", ...SURFACES] as const) {
+      it(`${name}: error text clears 4.5:1 on ${surface}`, () => {
+        expect(contrast(t["--v-error-text"]!, t[surface]!)).toBeGreaterThanOrEqual(4.5)
+      })
+      it(`${name}: the error line clears 3:1 on ${surface}`, () => {
+        expect(contrast(t["--v-error-line"]!, t[surface]!)).toBeGreaterThanOrEqual(3)
+      })
+    }
+    it(`${name}: the error tint stays a quiet step off the page`, () => {
+      // A tint, not a flood: the line and the words carry the signal.
+      expect(contrast(t["--v-error-bg"]!, t["--v-bg"]!)).toBeLessThan(1.6)
+    })
+  }
+
+  it("shadcn's --destructive is the error line, so no other red exists", () => {
+    const stripped = GLOBALS.replace(/\/\*[\s\S]*?\*\//g, "")
+    const values = [...stripped.matchAll(/--destructive:\s*([^;]+);/g)].map((m) => m[1]!.trim())
+    expect(values.length).toBeGreaterThanOrEqual(2)
+    for (const v of values) expect(v).toBe("var(--v-error-line)")
   })
 })

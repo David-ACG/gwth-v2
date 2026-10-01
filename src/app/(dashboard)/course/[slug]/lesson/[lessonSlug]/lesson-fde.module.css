@@ -39,7 +39,7 @@
   --primary: var(--v-btn);
   --primary-foreground: var(--v-btn-text);
   --success: var(--v-accent);
-  --destructive: var(--v-ink);
+  --destructive: var(--v-error-line); /* paper-first-error-colour */
   --variant-warm: var(--v-muted);
   background: var(--v-bg);
   color: var(--v-ink);

@@ -18,7 +18,7 @@ export default function RootError({
   return (
     <div className={styles.shell}>
       <div className={`${styles.page} ${styles.pageTall}`}>
-        <div className={styles.panel} role="alert">
+        <div className={`${styles.panel} ${styles.panelFault}`} role="alert">
           <p className={`${styles.kicker} ${styles.kickerFault}`}>
             Something went wrong
           </p>
