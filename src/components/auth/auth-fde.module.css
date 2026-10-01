@@ -192,7 +192,7 @@
 }
 
 .input[aria-invalid="true"] {
-  border-color: var(--v-ink);
+  border-color: var(--v-error-line);
 }
 
 /* Field validation message (colour + weight; paired with the invalid border). */
@@ -224,7 +224,7 @@
   width: 1.05rem;
   height: 1.05rem;
   margin-top: 0.05rem;
-  color: var(--v-ink);
+  color: var(--v-error-text);
 }
 
 /* ---------------- Buttons (DESIGN_FDE.md §5.3) ---------------- */

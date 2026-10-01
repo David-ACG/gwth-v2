@@ -137,7 +137,7 @@
 }
 
 .textarea[aria-invalid="true"] {
-  border-color: var(--v-ink);
+  border-color: var(--v-error-line);
 }
 
 .error {
