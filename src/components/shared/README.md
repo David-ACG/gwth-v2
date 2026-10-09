@@ -1,6 +1,6 @@
 # Shared Components
 
-Cross-cutting components used across multiple feature areas -- empty states, bookmarks, content rendering, and notes.
+Cross-cutting components used across multiple feature areas -- empty states, bookmarks, content rendering, and learner notes.
 
 ## Components
 
@@ -19,8 +19,8 @@ Responsive HTML5 video player with play/pause overlay, progress bar, mute toggle
 ### `AudioPlayer` (`audio-player.tsx`)
 Inline audio player with playback speed control (0.5x to 2x), progress bar, time display, and mute toggle. Uses native HTML5 `<audio>` element. Shows an error state if the audio fails to load. Designed to be loaded via `next/dynamic` for code-splitting. Client component.
 
-### `NotesPanel` (`notes-panel.tsx`)
-Slide-out panel for lesson annotations. Fixed-positioned on the right side of the viewport. Supports creating new notes (validated with Zod via `react-hook-form`), viewing existing notes with timestamps, and deleting notes. Shows toast notifications on save/delete via Sonner. Client component.
+### Learner notes (`lesson-notes/`)
+The real notes a learner writes inside a lesson (bead gwth-launch-fag3): the desktop margin pencil and note cards (`notes-layer.tsx`), the per-part "Your notes" box (`part-notes-box.tsx`) and the shared state hook (`use-lesson-notes.ts`). Used by both lesson viewers; the My notes page lives at `/notes`. See `lesson-notes/README.md`.
 
 ### `Spinner` / `PageSpinner` (`spinner.tsx`)
 SVG dual-ring spinner with primary outer arc and accent inner counter-rotating arc. `Spinner` accepts a configurable size. `PageSpinner` wraps it in a full-page centered layout with "Loading..." text. Used in all `loading.tsx` files.
@@ -42,7 +42,7 @@ Light/dark mode toggle button using `next-themes`. Animates between Sun and Moon
 - `MarkdownRenderer` renders lesson/lab/news content — imported by the editorial lesson viewer, the labs page, and the news page.
 - `VideoPlayer` is dynamically imported by the editorial lesson viewer (and the demo lesson viewers) for the intro video.
 - `AudioPlayer` is a standalone audio player; the editorial lesson viewer renders its own native `<audio>` element instead, so this component is not currently wired into a page.
-- `NotesPanel` is the shared slide-out notes panel; the lesson viewer's notes surface is now provided by the local `NotesPanel` in `lesson-widgets.tsx`, so the shared component is not currently wired into a page.
+- Learner notes live in `lesson-notes/`; the mock `NotesPanel` inside the lesson viewer's `lesson-widgets.tsx` is still off behind `LESSON_WIDGETS_ENABLED`.
 - `Spinner` / `PageSpinner` are used in all `loading.tsx` files.
 - `RouteProgress` is mounted in the root layout for navigation transitions.
 - `ThemeToggle` is used in `PublicNav` and `DashboardHeader`.

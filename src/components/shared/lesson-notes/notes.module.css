@@ -1,0 +1,263 @@
+/*
+ * Learner notes inside a lesson (bead gwth-launch-fag3), paper-first
+ * register: every colour is a --v-* token, 10px panels, 8px controls, no
+ * shadows, no gradients. States carry a glyph and words, never tint alone.
+ * The highlight on pinned words is drawn by the CSS Custom Highlight API
+ * (::highlight rules live in globals.css, they cannot be scoped here).
+ */
+
+/* ── Text layer: the margin pencil, markers and the card at the mark ── */
+.layer {
+  position: relative;
+}
+.margin {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 0;
+  height: 100%;
+}
+.pencil,
+.marker {
+  position: absolute;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 7px;
+  border-radius: 8px;
+  border: 1px solid var(--v-line);
+  background: var(--v-surface);
+  color: var(--v-ink);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pencil {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.pencilShown,
+.pencil:focus-visible {
+  opacity: 1;
+}
+.pencilSelection {
+  background: var(--v-btn);
+  border-color: var(--v-btn);
+  color: var(--v-btn-text);
+}
+.marker {
+  background: var(--v-quiet);
+}
+.pencil:focus-visible,
+.marker:focus-visible,
+.btn:focus-visible,
+.ghost:focus-visible,
+.linkish:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+.pencil:hover,
+.marker:hover {
+  border-color: var(--v-ink);
+}
+
+.card {
+  position: absolute;
+  right: 0;
+  z-index: 25;
+  width: min(30rem, 100%);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: 10px;
+  padding: 14px 16px 16px;
+  color: var(--v-ink);
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+.cardTitle {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+/* ── Shared pieces ── */
+.quote {
+  margin: 0 0 10px;
+  padding: 2px 0 2px 10px;
+  border-left: 3px solid var(--v-line);
+  color: var(--v-soft);
+  font-size: 0.93rem;
+}
+.quote strong {
+  color: var(--v-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--v-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.noteBody {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.meta {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--v-muted);
+}
+.textarea {
+  display: block;
+  width: 100%;
+  min-height: 6.5rem;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--v-line);
+  border-radius: 8px;
+  background: var(--v-quiet);
+  color: var(--v-ink);
+  font: inherit;
+  line-height: 1.5;
+  resize: vertical;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.btn,
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn {
+  border: 0;
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+}
+.ghost {
+  border: 1px solid var(--v-line);
+  background: transparent;
+  color: var(--v-ink);
+}
+.btn:disabled,
+.ghost:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.linkish {
+  border: 0;
+  padding: 2px 0;
+  background: none;
+  color: var(--v-ink);
+  font: inherit;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.changed {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-size: 0.88rem;
+  color: var(--v-ink);
+}
+.changed svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+/* ── The per-part box ── */
+.box {
+  margin-top: 28px;
+  padding: 18px 20px;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: 10px;
+  color: var(--v-ink);
+  font-family: var(--font-sans);
+}
+.boxTitle {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  margin: 0 0 2px;
+}
+.help {
+  margin: 0 0 12px;
+  font-size: 0.92rem;
+  color: var(--v-soft);
+}
+.help a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.status {
+  min-height: 1.4em;
+  margin: 6px 0 0;
+  font-size: 0.88rem;
+  color: var(--v-muted);
+}
+.statusError {
+  color: var(--v-ink);
+}
+.subhead {
+  margin: 18px 0 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.item {
+  padding: 12px 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+.item:first-child {
+  border-top: 0;
+  padding-top: 4px;
+}
+.card .item {
+  padding: 10px 0;
+}
+.itemTarget {
+  scroll-margin-top: 140px;
+}
+.itemFocus {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 4px;
+  border-radius: 6px;
+}

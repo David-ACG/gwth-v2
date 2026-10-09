@@ -467,6 +467,35 @@ export const bookmarks = pgTable("bookmarks", {
 	check("bookmarks_exactly_one_target_check", sql`((lesson_id IS NOT NULL)::integer + (lab_id IS NOT NULL)::integer) = 1`),
 ]);
 
+// 025_learner_notes.sql — learner notes written inside a lesson (bead
+// gwth-launch-fag3). Hand-patched like bookmarks above. lesson_id has no
+// foreign key on purpose: a note must outlive a lesson re-import.
+export const learnerNotes = pgTable("learner_notes", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	lessonId: text("lesson_id").notNull(),
+	lessonTitle: text("lesson_title"),
+	partKey: text("part_key"),
+	partTitle: text("part_title"),
+	kind: text().notNull(),
+	body: text().notNull(),
+	anchor: jsonb(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_learner_notes_user_lesson").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.lessonId.asc().nullsLast().op("text_ops"), table.createdAt.asc().nullsLast().op("timestamptz_ops")),
+	uniqueIndex("idx_learner_notes_one_box_per_part").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.lessonId.asc().nullsLast().op("text_ops"), table.partKey.asc().nullsLast().op("text_ops")).where(sql`(kind = 'part'::text)`),
+	foreignKey({
+		columns: [table.userId],
+		foreignColumns: [user.id],
+		name: "learner_notes_user_id_fkey"
+	}).onDelete("cascade"),
+	check("learner_notes_kind_check", sql`kind = ANY (ARRAY['part'::text, 'paragraph'::text, 'words'::text])`),
+	check("learner_notes_body_check", sql`char_length(body) <= 10000`),
+	check("learner_notes_anchor_matches_kind_check", sql`((kind = 'part'::text) = (anchor IS NULL))`),
+	check("learner_notes_part_box_has_part_check", sql`((kind <> 'part'::text) OR (part_key IS NOT NULL))`),
+]);
+
 export const credentialVerifications = pgTable("credential_verifications", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	userId: text("user_id").notNull(),

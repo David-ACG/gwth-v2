@@ -705,22 +705,59 @@ export type BookmarkTarget =
 
 // ─── Note ─────────────────────────────────────────────────────────────────────
 
-/** A personal annotation on a lesson */
-export interface Note {
+/**
+ * What a learner note is pinned to (bead gwth-launch-fag3).
+ *  - `part`: the free "Your notes" box at the end of a lesson part.
+ *  - `paragraph`: one paragraph, from the desktop margin pencil.
+ *  - `words`: the exact words the learner selected.
+ */
+export type NoteKind = "part" | "paragraph" | "words"
+
+/**
+ * Where a paragraph or words note sits in the part's text. Offsets count
+ * characters of the block's text (the DOM `textContent`), so they survive
+ * read-along wrapping words in spans. `quote` is what was pinned; the other
+ * fields help find it again after the lesson text is rewritten.
+ */
+export interface NoteAnchor {
+  /** Index of the paragraph-level block within the part's text. */
+  block: number
+  /** Start offset of the quote within that block's text. */
+  start: number
+  /** End offset (exclusive). */
+  end: number
+  /** The pinned text: the selected words, or the whole paragraph. */
+  quote: string
+  /** The sentence (or paragraph opening) around the quote, for display. */
+  sentence: string
+  /** Up to 40 characters before the quote, to tell repeats apart. */
+  prefix: string
+  /** Up to 40 characters after the quote. */
+  suffix: string
+}
+
+/** A learner's note inside a lesson. Dates are ISO strings (client-safe). */
+export interface LessonNote {
   /** Unique note identifier */
   id: string
-  /** User who created the note */
-  userId: string
-  /** Lesson the note is attached to */
+  /** Lesson the note belongs to */
   lessonId: string
-  /** Note content (markdown) */
-  content: string
-  /** Video timestamp in seconds (if note is tied to a video position) */
-  timestamp: number | null
-  /** When the note was created */
-  createdAt: Date
-  /** When the note was last updated */
-  updatedAt: Date
+  /** Lesson title when the note was last saved (survives a removed lesson) */
+  lessonTitle: string | null
+  /** Part id (parts lessons) or section key (page-flip lessons); null = whole lesson */
+  partKey: string | null
+  /** Part title when the note was last saved */
+  partTitle: string | null
+  /** What the note is pinned to */
+  kind: NoteKind
+  /** The learner's text (plain text, may contain line breaks) */
+  body: string
+  /** Pinned text, for paragraph and words notes; null for a part note */
+  anchor: NoteAnchor | null
+  /** When the note was created (ISO) */
+  createdAt: string
+  /** When the note was last changed (ISO) */
+  updatedAt: string
 }
 
 // ─── Certificate ──────────────────────────────────────────────────────────────

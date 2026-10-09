@@ -97,14 +97,45 @@ export const quizSubmissionSchema = z.object({
 
 // ─── Notes ────────────────────────────────────────────────────────────────────
 
-/** Note creation/edit schema */
-export const noteSchema = z.object({
-  content: z
-    .string()
-    .min(1, "Note content is required")
-    .max(5000, "Note must be less than 5000 characters"),
-  timestamp: z.number().min(0).optional(),
-})
+/** Longest note a learner can save (the column check allows 10000). */
+export const MAX_NOTE_LENGTH = 10000
+
+/** A paragraph or words note's pinned text and offsets (see NoteAnchor). */
+export const noteAnchorSchema = z
+  .object({
+    block: z.number().int().min(0).max(10000),
+    start: z.number().int().min(0),
+    end: z.number().int().min(0),
+    quote: z.string().min(1).max(4000),
+    sentence: z.string().max(4000),
+    prefix: z.string().max(200),
+    suffix: z.string().max(200),
+  })
+  .refine((a) => a.end > a.start, { message: "end must be after start" })
+
+/**
+ * A note saved from inside a lesson. A part note has no anchor and must
+ * name its part; paragraph and words notes carry an anchor.
+ */
+export const noteInputSchema = z
+  .object({
+    id: z.string().min(1).max(100).optional(),
+    lessonId: z.string().min(1).max(100),
+    partKey: z.string().min(1).max(200).nullable(),
+    partTitle: z.string().max(300).nullable(),
+    kind: z.enum(["part", "paragraph", "words"]),
+    body: z.string().max(MAX_NOTE_LENGTH, "Notes can be up to 10,000 characters"),
+    anchor: noteAnchorSchema.nullable(),
+  })
+  .refine((n) => (n.kind === "part") === (n.anchor === null), {
+    message: "Only paragraph and words notes carry an anchor",
+  })
+  .refine((n) => n.kind !== "part" || n.partKey !== null, {
+    message: "A part note must name its part",
+  })
+
+/** Input accepted by the save-note action. */
+export type NoteInput = z.infer<typeof noteInputSchema>
 
 // ─── Contact Form ────────────────────────────────────────────────────────────
 
@@ -243,7 +274,6 @@ export type ProfileFormData = z.infer<typeof profileSchema>
 export type SettingsFormData = z.infer<typeof settingsSchema>
 export type QuizAnswerData = z.infer<typeof quizAnswerSchema>
 export type QuizSubmissionData = z.infer<typeof quizSubmissionSchema>
-export type NoteFormData = z.infer<typeof noteSchema>
 export type ContactFormData = z.infer<typeof contactSchema>
 export type FeedbackFormData = z.infer<typeof feedbackSchema>
 export type FeedbackCategory = (typeof FEEDBACK_CATEGORIES)[number]

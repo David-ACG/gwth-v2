@@ -1,0 +1,36 @@
+/**
+ * Every word a learner reads in the notes feature (bead gwth-launch-fag3).
+ * Plain, sentence case, no dashes.
+ */
+export const NOTES_COPY = {
+  boxTitle: "Your notes",
+  boxHelp: "Write anything you want to come back to. It saves as you type.",
+  boxHelpLink: "See all your notes",
+  boxLabel: (part: string) => `Your notes on ${part}`,
+  saving: "Saving…",
+  saved: "Saved.",
+  saveFailed: "Not saved yet. Check your connection; we will keep trying while you type.",
+  save: "Save note",
+  cancel: "Cancel",
+  edit: "Edit",
+  editLabel: "Edit this note",
+  delete: "Delete",
+  deleteTitle: "Delete this note?",
+  deleteBody: "A deleted note cannot be brought back.",
+  deleteConfirm: "Delete note",
+  keep: "Keep it",
+  pinnedHere: "Notes pinned to the text of this part",
+  changedHere: "Notes whose text has changed",
+  wholeLesson: "Notes on this lesson",
+  wholeLessonHelp: "These were written on a part of the lesson that has since been rewritten, so they now belong to the lesson as a whole.",
+  textChanged: "This text has changed since you wrote this note, so it now sits with this part.",
+  pencilParagraph: "Add a note to this paragraph",
+  pencilWords: (quote: string) => `Add a note to the words you selected: ${quote}`,
+  markerLabel: (count: number) => (count === 1 ? "Open your note here" : `Open your ${count} notes here`),
+  cardNewParagraph: "Note on this paragraph",
+  cardNewWords: "Note on the words you selected",
+  cardExisting: (count: number) => (count === 1 ? "Your note" : `Your ${count} notes`),
+  addAnother: "Add another note here",
+  newLabel: "Your note",
+  close: "Close",
+} as const

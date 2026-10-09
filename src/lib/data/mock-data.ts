@@ -18,7 +18,7 @@ import type {
   CourseProgress,
   StudyStreak,
   Bookmark,
-  Note,
+  LessonNote,
   Certificate,
   Notification,
   DynamicScore,
@@ -1453,36 +1453,18 @@ export const mockBookmarks: Bookmark[] = [
 
 // ─── Notes ────────────────────────────────────────────────────────────────────
 
-export const mockNotes: Note[] = [
+export const mockNotes: LessonNote[] = [
   {
     id: "note_001",
-    userId: "user_mock_001",
     lessonId: "m1_l01",
-    content:
-      "Key takeaway: the GWTH philosophy is about clear thinking first, tools second. If I can describe it in plain English, I can build it. This shifts the bottleneck from technical skill to clarity of thought.",
-    timestamp: 420,
-    createdAt: new Date("2026-01-20"),
-    updatedAt: new Date("2026-01-20"),
-  },
-  {
-    id: "note_002",
-    userId: "user_mock_001",
-    lessonId: "m1_l03",
-    content:
-      "Prompting framework to remember: Role + Context + Task + Format + Constraints. The more specific the prompt, the better the output. Tested this with Claude and the difference was huge.",
-    timestamp: null,
-    createdAt: new Date("2026-01-23"),
-    updatedAt: new Date("2026-01-23"),
-  },
-  {
-    id: "note_003",
-    userId: "user_mock_001",
-    lessonId: "m1_l08",
-    content:
-      "Built my first app with Lovable — an expense tracker. Took about 40 minutes including refinements. The key was being specific in the description. Vague prompts = generic apps.",
-    timestamp: 1800,
-    createdAt: new Date("2026-02-01"),
-    updatedAt: new Date("2026-02-01"),
+    lessonTitle: null,
+    partKey: null,
+    partTitle: null,
+    kind: "part",
+    body: "Key takeaway: clear thinking first, tools second. If I can describe it in plain English, I can build it.",
+    anchor: null,
+    createdAt: "2026-01-20T09:00:00.000Z",
+    updatedAt: "2026-01-20T09:00:00.000Z",
   },
 ]
 
