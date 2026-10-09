@@ -5,13 +5,13 @@
  *
  * Env vars:
  * - PLUNK_SECRET_KEY — required for real email delivery
- * - PLUNK_API_URL — send endpoint, shared with src/lib/email/plunk.ts
+ * - PLUNK_NEXT_SECRET_KEY — new Plunk key; wins when set (see src/lib/email/plunk.ts)
  */
 
 import { getDb } from "@/db"
 import { waitlist } from "@/db/schema"
 import { renderFdeEmail, type EmailParts } from "@/lib/email/fde-layout"
-import { plunkSendUrl } from "@/lib/email/plunk"
+import { resolvePlunk } from "@/lib/email/plunk"
 
 const FROM_EMAIL = "david@gwth.ai"
 const FROM_NAME = "GWTH.ai"
@@ -30,15 +30,15 @@ async function sendEmail(params: {
   text?: string
   name?: string
 }): Promise<boolean> {
-  const secretKey = process.env.PLUNK_SECRET_KEY
-  if (!secretKey) return false
+  const plunk = resolvePlunk()
+  if (!plunk) return false
 
   try {
-    const res = await fetch(plunkSendUrl(), {
+    const res = await fetch(plunk.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${secretKey}`,
+        Authorization: `Bearer ${plunk.key}`,
       },
       body: JSON.stringify({
         to: params.to,
@@ -153,11 +153,11 @@ export async function subscribeToWaitlist(params: {
   // Always persist to Supabase (non-blocking — errors are logged, not thrown)
   await persistWaitlistSignup(params.email, params.name)
 
-  const hasPlunk = !!process.env.PLUNK_SECRET_KEY
+  const hasPlunk = resolvePlunk() !== null
 
   if (!hasPlunk) {
     console.log(`[Stub] Waitlist signup: ${params.email} (${params.name})`)
-    console.log("[Stub] No PLUNK_SECRET_KEY — skipping real email delivery")
+    console.log("[Stub] No Plunk key — skipping real email delivery")
     return {
       success: true,
       message: "You've been added to the waitlist!",
@@ -226,7 +226,7 @@ export async function submitContactForm(params: {
   email: string
   message: string
 }): Promise<{ success: boolean; message: string }> {
-  const hasPlunk = !!process.env.PLUNK_SECRET_KEY
+  const hasPlunk = resolvePlunk() !== null
 
   if (!hasPlunk) {
     console.log(`[Stub] Contact form: ${params.name} <${params.email}> — ${params.message.slice(0, 50)}...`)

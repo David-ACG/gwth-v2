@@ -1,16 +1,22 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { LEGACY_PLUNK_SEND_URL, plunkSendUrl, sendPlunkEmail } from "./plunk"
+import { LEGACY_PLUNK_SEND_URL, NEXT_PLUNK_SEND_URL, resolvePlunk, sendPlunkEmail } from "./plunk"
 
-const NEXT_URL = "https://next-api.useplunk.com/v1/send"
-
-describe("plunkSendUrl", () => {
-  it("defaults to the legacy endpoint, so shipping the code alone changes nothing", () => {
-    expect(plunkSendUrl({})).toBe(LEGACY_PLUNK_SEND_URL)
-    expect(plunkSendUrl({ PLUNK_API_URL: "  " })).toBe(LEGACY_PLUNK_SEND_URL)
+describe("resolvePlunk", () => {
+  it("returns null when no key is set", () => {
+    expect(resolvePlunk({})).toBeNull()
+    expect(resolvePlunk({ PLUNK_NEXT_SECRET_KEY: "  " })).toBeNull()
   })
 
-  it("uses PLUNK_API_URL when set", () => {
-    expect(plunkSendUrl({ PLUNK_API_URL: ` ${NEXT_URL} ` })).toBe(NEXT_URL)
+  it("keeps the legacy key on the legacy API", () => {
+    expect(resolvePlunk({ PLUNK_SECRET_KEY: "sk_old" })).toEqual({ url: LEGACY_PLUNK_SEND_URL, key: "sk_old" })
+    expect(resolvePlunk({ PLUNK_API_KEY: "sk_alias" })).toEqual({ url: LEGACY_PLUNK_SEND_URL, key: "sk_alias" })
+  })
+
+  it("prefers the new-Plunk key, and always pairs it with the new API", () => {
+    expect(resolvePlunk({ PLUNK_SECRET_KEY: "sk_old", PLUNK_NEXT_SECRET_KEY: " sk_new " })).toEqual({
+      url: NEXT_PLUNK_SEND_URL,
+      key: "sk_new",
+    })
   })
 })
 
@@ -20,9 +26,9 @@ describe("sendPlunkEmail", () => {
     vi.unstubAllGlobals()
   })
 
-  it("posts to the configured endpoint with the gwth.ai sender", async () => {
-    vi.stubEnv("PLUNK_SECRET_KEY", "sk_test")
-    vi.stubEnv("PLUNK_API_URL", NEXT_URL)
+  it("posts to the resolved endpoint with its key and the gwth.ai sender", async () => {
+    vi.stubEnv("PLUNK_SECRET_KEY", "sk_old")
+    vi.stubEnv("PLUNK_NEXT_SECRET_KEY", "sk_new")
     const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }))
     vi.stubGlobal("fetch", fetchMock)
 
@@ -30,8 +36,8 @@ describe("sendPlunkEmail", () => {
 
     expect(ok).toBe(true)
     const [url, init] = fetchMock.mock.calls[0]!
-    expect(url).toBe(NEXT_URL)
-    const payload = JSON.parse(init.body)
-    expect(payload).toMatchObject({ to: "a@example.com", from: "david@gwth.ai", name: "GWTH.ai" })
+    expect(url).toBe(NEXT_PLUNK_SEND_URL)
+    expect(init.headers.Authorization).toBe("Bearer sk_new")
+    expect(JSON.parse(init.body)).toMatchObject({ to: "a@example.com", from: "david@gwth.ai", name: "GWTH.ai" })
   })
 })

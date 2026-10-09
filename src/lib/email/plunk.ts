@@ -9,25 +9,31 @@
  * imports and signup flows never crash without a key configured.
  *
  * Env vars (unified with the existing waitlist/contact helper):
- * - PLUNK_SECRET_KEY — the shared Plunk account key (same one
- *   `src/lib/data/email.ts` uses). Preferred.
+ * - PLUNK_NEXT_SECRET_KEY — a key for the new hosted Plunk (next-api.useplunk.com).
+ *   When set it wins, and mail goes to the new API. The two services are separate
+ *   accounts, so each key only works on its own host; giving the new key its own
+ *   name means an older build that only knows PLUNK_SECRET_KEY keeps working while
+ *   the new key sits in its environment.
+ * - PLUNK_SECRET_KEY — the legacy hosted Plunk key (api.useplunk.com).
  * - PLUNK_API_KEY — legacy alias, accepted as a fallback only.
- * - PLUNK_API_URL — the send endpoint. Defaults to the legacy hosted API. Set it to
- *   `https://next-api.useplunk.com/v1/send` together with a key from the new Plunk:
- *   the two services hold separate accounts, so a key only works on its own host.
  * Absent → console log + no-op.
  */
 
 /** Legacy hosted Plunk. It drops our text/plain part and its free-tier badge has no
- * alt text, which together cost 1.2 points on mail-tester (2026-10-09, 8.8/10). */
+ * alt text: 8.8/10 on mail-tester (2026-10-09), where the new API scores 10/10. */
 export const LEGACY_PLUNK_SEND_URL = "https://api.useplunk.com/v1/send"
+export const NEXT_PLUNK_SEND_URL = "https://next-api.useplunk.com/v1/send"
 
-/** The send endpoint this deployment talks to (see PLUNK_API_URL above). */
-export function plunkSendUrl(
+/** Which Plunk this deployment sends through, or null when no key is set. */
+export function resolvePlunk(
   env: Record<string, string | undefined> = process.env,
-): string {
-  return env.PLUNK_API_URL?.trim() || LEGACY_PLUNK_SEND_URL
+): { url: string; key: string } | null {
+  const next = env.PLUNK_NEXT_SECRET_KEY?.trim()
+  if (next) return { url: NEXT_PLUNK_SEND_URL, key: next }
+  const legacy = (env.PLUNK_SECRET_KEY ?? env.PLUNK_API_KEY)?.trim()
+  return legacy ? { url: LEGACY_PLUNK_SEND_URL, key: legacy } : null
 }
+
 const FROM_EMAIL = "david@gwth.ai"
 const FROM_NAME = "GWTH.ai"
 
@@ -43,8 +49,8 @@ export async function sendPlunkEmail(params: {
   /** Optional plain-text alternative shipped alongside the HTML (W17). */
   text?: string
 }): Promise<boolean> {
-  const apiKey = process.env.PLUNK_SECRET_KEY ?? process.env.PLUNK_API_KEY
-  if (!apiKey) {
+  const plunk = resolvePlunk()
+  if (!plunk) {
     console.log(
       `[Plunk] no Plunk key set (PLUNK_SECRET_KEY) — skipping email to ${params.to} (subject: ${params.subject})`,
     )
@@ -52,11 +58,11 @@ export async function sendPlunkEmail(params: {
   }
 
   try {
-    const res = await fetch(plunkSendUrl(), {
+    const res = await fetch(plunk.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${plunk.key}`,
       },
       body: JSON.stringify({
         to: params.to,
