@@ -5,13 +5,14 @@
  *
  * Env vars:
  * - PLUNK_SECRET_KEY — required for real email delivery
+ * - PLUNK_API_URL — send endpoint, shared with src/lib/email/plunk.ts
  */
 
 import { getDb } from "@/db"
 import { waitlist } from "@/db/schema"
 import { renderFdeEmail, type EmailParts } from "@/lib/email/fde-layout"
+import { plunkSendUrl } from "@/lib/email/plunk"
 
-const PLUNK_API_URL = "https://api.useplunk.com/v1/send"
 const FROM_EMAIL = "david@gwth.ai"
 const FROM_NAME = "GWTH.ai"
 const ADMIN_EMAIL = "david@agilecommercegroup.com"
@@ -33,7 +34,7 @@ async function sendEmail(params: {
   if (!secretKey) return false
 
   try {
-    const res = await fetch(PLUNK_API_URL, {
+    const res = await fetch(plunkSendUrl(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

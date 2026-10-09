@@ -12,10 +12,22 @@
  * - PLUNK_SECRET_KEY — the shared Plunk account key (same one
  *   `src/lib/data/email.ts` uses). Preferred.
  * - PLUNK_API_KEY — legacy alias, accepted as a fallback only.
+ * - PLUNK_API_URL — the send endpoint. Defaults to the legacy hosted API. Set it to
+ *   `https://next-api.useplunk.com/v1/send` together with a key from the new Plunk:
+ *   the two services hold separate accounts, so a key only works on its own host.
  * Absent → console log + no-op.
  */
 
-const PLUNK_API_URL = "https://api.useplunk.com/v1/send"
+/** Legacy hosted Plunk. It drops our text/plain part and its free-tier badge has no
+ * alt text, which together cost 1.2 points on mail-tester (2026-10-09, 8.8/10). */
+export const LEGACY_PLUNK_SEND_URL = "https://api.useplunk.com/v1/send"
+
+/** The send endpoint this deployment talks to (see PLUNK_API_URL above). */
+export function plunkSendUrl(
+  env: Record<string, string | undefined> = process.env,
+): string {
+  return env.PLUNK_API_URL?.trim() || LEGACY_PLUNK_SEND_URL
+}
 const FROM_EMAIL = "david@gwth.ai"
 const FROM_NAME = "GWTH.ai"
 
@@ -40,7 +52,7 @@ export async function sendPlunkEmail(params: {
   }
 
   try {
-    const res = await fetch(PLUNK_API_URL, {
+    const res = await fetch(plunkSendUrl(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
