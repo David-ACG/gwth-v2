@@ -1,0 +1,968 @@
+1. Amazon Quick belongs to a broad market of staff assistants, enterprise knowledge layers, app-native agents and automation builders, rather than one clean product category. [1][3]
+2. For a typical UK employer, start with its existing Microsoft, Google and business-app estate, then compare a genuinely cross-app workspace on the same tasks.
+3. Quick's strongest differentiator is the combination of company knowledge, research, business intelligence and automation; its strongest outcomes still depend on configured data and permissions. [9][11]
+4. Dust and Langdock deserve direct mid-market pilots; WRITER, Glean, Credal, Kore.ai and IBM deserve consideration where governance or integration needs justify more setup. [33][34][31][39][53][54]
+5. Mistral Vibe, Cohere North 2, Omnifact and nexos.ai broaden the European/private-deployment shortlist, but European ownership and European processing are different claims. [22][24][44][46]
+6. ServiceNow/Moveworks, Sana/Workday, Slack/Agentforce, Rovo and other embedded products can be excellent within an existing estate, with additional licences and configuration often required. [59][63][71][67]
+7. Manus, Genspark, Abacus.AI and SuperNinja are credible execution/research candidates, but company-wide knowledge permissions and UK/EU deployment require harder evidence than an impressive demonstration. [110][112][133][134]
+8. n8n, Make, Lindy, Relevance AI, Gumloop and StackAI primarily help build operational agents; they do not automatically deliver a governed staff knowledge workspace. [101][102][103][105][106][109]
+9. Buying decisions must use current packaging: Q Business is closed to new customers, Coda is Superhuman Docs, Zapier Agents is migrating, and OpenAI Agent Builder is being deprecated. [126][82][99][124]
+10. Pilot three candidates against identical knowledge, research and approval-controlled action tasks; measure verified outcomes, total cost and administrator time before expanding.
+
+# Task D: Competitor landscape and head-to-head comparison
+
+Research cut-off and retrieval date: **10 October 2026**. Audience: a UK employer with roughly 100 to 1,000 staff and a small IT team. This document is a research synthesis, not a hands-on benchmark.
+
+## 1. Discovery, boundaries and evidence quality
+
+There is no stable, closed list of “every” workspace: vendors add agents to search, meetings, documents and workflow tools monthly. The longlist below deliberately covers the serious buying routes, including less obvious European, search and employee-service and intranet vendors, including Leena, Resolve, Happeo, Simpplr and LumApps. It separates a broad staff workspace from a conditional shortlist candidate whose value depends on an existing application or a specific department.
+
+**Inclusion rule:** a credible commercial product or maintained deployable project with a staff-facing knowledge/chat experience, a way to perform research or substantive analysis, or an agent/workflow layer a company might procure as part of that experience. Conditional products need not satisfy all three out of the box. An automation platform is included because it is a buying alternative for the same transformation budget, not because its builder screen is equivalent to Quick.
+
+**Discovery channels actually used:** Gartner's April 2026 public market-guide abstract; Forrester's June adoption commentary and August AI-platform Wave commentary; IDC's August cost-governance article; G2's Glean alternatives; Product Hunt's Langdock listing; practitioner Reddit discussions; broad alternatives searches; and European sovereignty searches. Primary product, pricing, documentation and release pages then determined the comparison. The paid analyst reports were not accessed in full, so this document does not pretend to reproduce their vendor rankings. G2 categories mix employee knowledge, customer search and specialist research; Reddit and Product Hunt were used to generate questions and candidates, not to establish prices or security guarantees. [1][2][3][4][5][7][6][8]
+
+Forrester says only a small minority had meaningful agentic production beyond “agentish” chatbots in June. IDC reports much wider production of at least one agent-enabled workflow in its later survey. These are different dates, samples and definitions, not a reliable before/after adoption rate for UK medium-sized firms. [2][4]
+
+### How to read the facts and judgements
+
+- All prices are the **live displayed price retrieved on 10 October 2026**, unless explicitly labelled a dated launch price or unresolved legacy price. No currency conversion is attempted. USD and EUR figures are useful list-price comparisons, not UK quotes.
+- “Annual” means a monthly equivalent requiring annual billing or commitment. VAT, implementation, underlying suite subscriptions and consumption extras may be additional. “Quote” means no verified numeric enterprise price; “not found” means the relevant fact could not be established.
+- An undated pricing page is not evidence that a price was introduced on the retrieval date. Every source has its publication/update date, or **not found**, in Sources. Undated material has unknown freshness. Sources dated before **10 April 2026** are explicitly flagged **older than six months, potentially stale**.
+- **GA** is used only when a source explicitly establishes general availability. **Available** means offered/documented for purchase or deployment, with no verified formal GA date. **Beta/preview**, **announced** and **deprecated** are separate states. Availability of the base product does not make every connector, model, region or agent feature GA.
+- “UK/EU residency” is divided into storage, inference and customer-controlled deployment where evidence permits. GDPR compliance, no model training, a European office and encryption do not establish residency. Web research and connected third-party apps can introduce additional processing locations.
+- Customer-size statements are **fit judgements**, based on packaging and deployment burden, not measured customer medians. Actual typical customer headcount is **not found** unless a source explicitly reports it.
+- Strengths, weaknesses, governance ratings and vanilla setup effort are **researcher assessments**. No comparative accuracy, ROI or deployment-time trial was conducted.
+
+### Products retained under current names
+
+| Earlier name or assumption | Current treatment on 10 October 2026 |
+|---|---|
+| Amazon Quick Suite / QuickSight-only comparisons | Compare **Amazon Quick**, keeping BI author/reader entitlements distinct from workspace plans. [9][12] |
+| Le Chat Enterprise | Retain as **Mistral Vibe for work**, formerly Le Chat; Studio is its development layer, not another staff subscription. [22][23] |
+| Moveworks as independent vendor | Retain the employee assistant under **ServiceNow ownership**, alongside EmployeeWorks. Acquisition is completed; do not infer all SKUs or capabilities are identical. [58][59] |
+| Sana as independent vendor | Retain **Sana from Workday**; distinguish standalone historical packaging from Workday Flex Credits. [63][62] |
+| Coda | Retain its living successor **Superhuman Docs**, paired with Go when cross-app assistance is required. The rebrand took effect on 8 July 2026. [82] |
+| Zapier Agents as a stable separate workspace | Compare **AI by Zapier** as the migration destination. Source compatibility and the conversational interface change. [99][100] |
+| Manus as a Meta-owned agent | Retain **Manus**, operated independently by Butterfly Effect following the acquisition unwind, as confirmed by Reuters on 8 October. [111] |
+| Cohere and Aleph Alpha already merged | Retain both North and Pharia; a definitive combination agreement was signed on 16 September, but completion is **not found**. [127] |
+
+### Dropped, folded or adjacent candidates
+
+These are exclusions from a **fresh, general staff-workspace purchase**, not assertions that useful technology is dead.
+
+| Candidate | One-line disposition |
+|---|---|
+| Amazon Q Business / Q Apps as a new purchase | Drop: Q Business closed to new customers on 31 July 2026; AWS directs prospects to Quick; existing-customer support status is a separate question. [126] |
+| OpenAI AgentKit / Agent Builder as the long-term purchase | Drop the deprecated visual builder from a new pilot: official docs schedule shutdown on 30 November 2026; ChatKit continues and is an application component. [124] |
+| OpenAI Frontier | Adjacent enterprise agent platform, not a verified self-service staff workspace: sales/engineering-led deployment; price and UK/EU scope not found. See section 3. [122] |
+| Claude Managed Agents / Agent SDK / Claude Code | Developer infrastructure or technical execution, not a second general employee subscription; Managed Agents is currently beta. Cowork belongs in the Claude row. [123][20] |
+| Amazon Bedrock Agents / AgentCore, Nova, Kiro, Q Developer | Model/runtime/developer products rather than turnkey employee workspaces; AgentCore harness is GA, but the organisation still builds the application and knowledge/governance layer. [125] |
+| Gemini Enterprise Agent Platform / Vertex AI, Microsoft Foundry | Development/runtime route, not equivalent to licensing the staff-facing Gemini Enterprise or M365 assistant; do not count infrastructure as another ready-made workspace. [15][3] |
+| Dashworks as an independent supplier | Drop from core current independent shortlist: HubSpot announced acquisition and integration into Breeze in April 2025; current independent availability/closing date not verified here. Compare the current HubSpot route. [149][146] |
+| Espressive / BaristaGPT old pages | Do not procure from legacy name/pricing alone: current homepage redirects to Resolve; retain RITA/Employee Assistant and verify contract migration. Transaction date not found. [144][145] |
+| H Company Holo / H Platform | Adjacent engineering-led computer-use/API platform, not a verified ready-packaged general staff knowledge workspace; regional/private deployment can be scoped. [158] |
+| Unleash as an independent supplier | Drop independent listing: acquired by Zendesk; retain the Employee Service successor using its technology. [95][94] |
+| Flowise | Drop from new procurement: official notice lists code freeze on 29 July, repository archival on 10 August and end of life on 31 August 2026; remaining source code/forks are not a maintained vendor workspace. [138] |
+| Danswer | Folded name: compare the current **Onyx** product. [116] |
+| Team-GPT | Folded name: current **Juma** focuses on marketing workflows and credit pools; retained only as a departmental candidate. [131][132] |
+| You.com standalone Team/Enterprise workspace | Conditional watchlist, not a core current shortlist: primary current pricing is API-oriented; older Team pages exist, but current workspace packaging and availability are not found with enough confidence. This is not evidence of closure. [130] |
+| LobeHub / LobeChat | Maintained-looking chat/agent alternative, but sufficiently specific current enterprise connector, governance and deployment evidence was not found for this shortlist; do not interpret consumer pricing as an enterprise offer. [136] |
+| TypingMind, TeamAI, Straico and similar multi-model wrappers | Reserve for lightweight team chat: a sufficiently verified full permission-aware cross-company knowledge/automation package was not found in this research; not labelled dead. |
+| Poe / Meta AI consumer chat | Consumer/bot discovery is not evidence of company-wide permission-aware knowledge and enterprise administration; Meta's new enterprise announcement is treated separately. [137] |
+| Meta Workplace | Do not confuse the former collaboration brand with the newly announced Meta Enterprise Platform; a current agentic-workspace offer under Workplace was not found. |
+| AlphaSense, Hebbia, Elicit | Specialist financial/document/scientific research adjacencies, not a general cross-app staff-workspace default; investigate separately if the pilot is investment, legal-document or academic research. [5] |
+| Elastic, Algolia, Yext, CData, Qdrant | Search/data/integration infrastructure or customer-search products; useful components, but a comparable turnkey internal workspace was not established here. [5] |
+| LangChain/LangGraph, CrewAI, AutoGen, Semantic Kernel | Frameworks for building the system, rather than an employee workspace to roll out with a few administrators. [3] |
+| UiPath Maestro, Automation Anywhere platform, Uniphore Business AI Cloud, DataRobot | Primarily process/model/orchestration platforms; evaluate for an existing automation programme, not as an assumed low-setup staff chat purchase. Retain Aisera's employee-service product separately. [97][135] |
+| Faculty Frontier and similarly named “Frontier” products | Do not substitute a decision-intelligence or consulting platform for OpenAI Frontier; an equivalent general staff-workspace SKU was not found here. |
+
+No rumoured product is assigned a price or a capability in the comparison. No absence from search is used as proof that a company has shut down.
+
+## 2. Categories, in plain English
+
+| Category | What the buyer gets | When a medium-sized company should look |
+|---|---|---|
+| **A. Productivity-suite assistants** | AI already close to email, calendars, documents and meetings. | When most staff work in one suite and identity, permissions and procurement are already established. Cross-app and autonomous work may need paid agents or separate tools. |
+| **B. Model-maker and research workspaces** | Strong general reasoning, research and content generation in an AI-first interface, increasingly with connectors and execution. | When flexibility and knowledge-worker output matter more than one business application's workflow. Check company indexing and action controls rather than assuming consumer chat features transfer. |
+| **C. Cross-app knowledge and agent layers** | A front door over several repositories and systems, with search, grounded answers and, increasingly, agents. Some also provide BI or private model deployment. | When knowledge is scattered across Microsoft/Google, CRM, chat and other tools, or when the buyer needs a more neutral knowledge/governance layer. |
+| **D. App-embedded and employee-service agents** | AI inside a collaboration, content, CRM, ITSM, HR or ERP product. | When the company already uses that application heavily. Existing workflow and data are an advantage; universal cross-company coverage is not automatic. |
+| **E. Automation and execution builders** | Tools to construct recurring agents, integrate apps and run actions; some provide an execution-first chat workspace. | When a few operational processes have clear owners and measurable outcomes. Usually complement a staff assistant; builder usability does not remove production maintenance. |
+| **F. Self-hosted chat, knowledge and agent applications** | A deployable interface, retrieval or agent system under the company's infrastructure control. | When hosting control or customisation justifies operating the software. The infrastructure and model endpoints determine real residency and total cost. |
+
+Categories describe a product's centre of gravity, not hard boundaries. Quick is owned by a hyperscaler but behaves as a cross-app layer; North has a model-maker owner but offers private enterprise infrastructure; Onyx competes directly with search SaaS despite self-hosting options. Juma, Box, Dash and several service products are conditional alternatives, not complete replacements for every Quick feature.
+
+## 3. Product profiles
+
+**Common profile conventions:** prices were checked on 10 October 2026; “not found” applies where public enterprise numbers, region coverage or formal GA dates were not verified. Size and weakness statements are deployment-fit assessments. The products covered by the parallel research are deliberately summarised briefly.
+
+### 3.1 A. Productivity-suite assistants
+
+#### Microsoft 365 Copilot
+
+**Available; brief cross-reference.** Microsoft 365 Copilot adds company-grounded assistance, research and actions close to existing M365 work. The UK Business add-on displays **£16.10/user/month annually**, discounted to **£13.80 for the first year** under the 1 July to 31 December 2026 promotion; monthly is **£19.32**, excluding VAT and requiring an eligible base plan. Business packaging is limited to 300 users. E7 is separately listed at **$99/user/month annually** for the whole enterprise suite including Copilot, Agent 365 and E5 components, not a Copilot-only price. Studio provides agent building. Strength: existing work context and administration; weakness: content/permission sprawl and licensing complexity. Fit: 100 to 1,000 M365-based staff, selecting the appropriate enterprise plan above Business limits. Precise residency is deferred to the parallel research. [139][13][14][113]
+
+#### Google Gemini Enterprise
+
+**Available; brief cross-reference.** Google's staff-facing Gemini Enterprise is distinct from the Gemini features included in Google Workspace and from its developer agent platform. Business starts at $21/seat/month; higher editions bring different quotas and controls. It connects Google, Microsoft and other company sources and supports custom agents. Good fit for 100 to 1,000 staff wanting an AI-first front door; weakness is edition and feature complexity. A product-wide UK-only residency claim is not established here. [16][15]
+
+#### Zoho Zia Agents
+
+**Available in specified apps, not blanket GA across the suite.** Zoho owns Zia Agents and its studio, connecting the firm's app data, tools and APIs to operational agents; SalesIQ's June 2026 release provides a dated example of actual availability. Public all-company per-seat pricing and agent-specific UK/EU storage/inference commitments are not found. Its strength is native Zoho business context rather than another disconnected chat subscription; weakness is uneven app/feature coverage and a weaker fit for a Microsoft/Google company without Zoho systems. Fit: smaller and medium-sized firms, including this 100 to 1,000 range where Zoho is already the operating suite. [90][91]
+
+### 3.2 B. Model-maker and research workspaces
+
+#### ChatGPT Business / Enterprise, including Work
+
+**Available; brief cross-reference.** OpenAI's Business is $20/user/month annually or $25 monthly; Enterprise is quoted. Current documentation positions ChatGPT Work and Codex within the subscription with shared usage, and lets administrators control connections and actions. Enterprise adds provisioning/audit controls and eligible UK/EU storage; EU inference is separately supported, with feature and external-processing exclusions. UK-only inference is not listed, and these Enterprise/Edu terms must not be applied to Business. Fit: 100 to 1,000 staff seeking a versatile general workspace; weakness is plan, execution and connection boundaries requiring careful rollout. Dots are rolling out gradually and are off by default in Enterprise, not an assumed universally enabled feature. [17][18][19][140]
+
+#### Claude Team / Enterprise, including Cowork
+
+**Available; brief cross-reference.** Anthropic's current page lists Team standard seats at $20 annual/$25 monthly, premium seats at $100 annual/$125 monthly, and Enterprise at $20/seat/month annually plus API-rate usage. Cowork and enterprise search sit within the workspace proposition. Fit: 100 to 1,000 document-oriented staff; weakness is the distinction between seat cost and execution usage, plus beta features such as Dashboards. Managed Agents is a separate developer beta, not included enterprise governance by assumption; precise residency is left to the parallel research. [20][123]
+
+#### Mistral Vibe for work, formerly Le Chat
+
+**Available; current Vibe name verified, formal rebrand date not found.** Mistral AI owns the work assistant formerly sold as Le Chat and the separate Studio development layer. The live page lists Team at $24.99/user/month, excluding taxes; Enterprise pricing is not found numerically. Connectors include email, calendars, Slack, GitHub and Jira, with MCP and custom agents/workflows; Studio's May release documents connector access and human approvals. Enterprise offers private cloud, on-premises or Mistral Cloud deployment with residency options. Strength: a European supplier with a usable staff interface and private deployment choices. Weakness: a 2025 Le Chat connector-beta article does not establish current connector/region parity. Fit: medium-sized teams through regulated enterprises, with more implementation for private deployment. [21][22][23]
+
+#### Cohere North 2
+
+**North 2 released 5 October 2026; formal North 2 GA wording not found.** Cohere owns this enterprise search/agent workspace. North enterprise numeric pricing is not found; its model token prices cannot be substituted for the workspace quote. Current connectors cover Slack, Microsoft repositories and mail, Jira, Linear, Notion and GitHub; financial-provider connectors are explicitly planned. It includes visual workflows, reusable skills, applications and granular usage controls. Private/on-premises deployment can meet a chosen UK/EU architecture, but specific SaaS residency needs contractual confirmation. Strength: knowledge, actions and control in a private environment. Weakness: implementation/operations may overwhelm a small IT team. Fit: regulated upper mid-market and larger firms. Cohere/Aleph Alpha combination is signed, not verified completed. [24][25][127]
+
+#### Grok Business / Enterprise
+
+**Available.** The x.ai business site sells Grok Business at $30/user/month and Enterprise through sales, with enterprise vault, app knowledge, document/slides outputs and identity controls. It now contains SpaceXAI/SpaceXSI branding; the precise branding/legal restructuring date is not found, so this report identifies the actual supplying site rather than inferring an ownership transaction. Named first-party company connector coverage, custom-agent builder scope and UK/EU residency are not sufficiently verified. Strength: current team product, general reasoning and live research. Weakness: less public evidence here for the governed enterprise knowledge and action requirements than the established shortlist. Fit: mid-market departments and enterprises willing to conduct a full supplier/region review. [26]
+
+#### Perplexity Enterprise / Comet Enterprise
+
+**Available; individual formal GA dates not found here.** Perplexity owns the enterprise research workspace and Comet browser. Enterprise Pro is $40/seat/month or $400/year, equivalent to $33.33/month; this is the source's annual total, not an assumed exact 20% reduction. Company-file connectors include Google Drive, SharePoint, OneDrive, Box and Dropbox. Comet supports browser, email and calendar tasks with enterprise domain/approval restrictions; reusable process automation is less central than in dedicated builders. UK/EU storage plus inference residency is not found. Strength: cited external research alongside internal files. Weakness: a browser agent and file search do not automatically provide a full company permission graph or managed workflow platform. Fit: medium-sized professional/research teams; expand actions after a governed pilot. [27][28][29][30]
+
+### 3.3 C. Cross-app knowledge and agent layers
+
+#### Amazon Quick
+
+**Available; desktop explicitly GA on 9 September 2026.** AWS owns the combined staff knowledge, research, BI and automation workspace. Professional costs $20/user/month and Enterprise $40, each plus $250/account/month; Plus has a different small-team model. Sources include Microsoft/Google, Slack and AWS/company repositories. Agents, Flows and Automate support actions while BI needs connected datasets and trustworthy metrics. London, Frankfurt and Ireland are supported, with documented cross-region inference/web-search exceptions. Strength: unusually broad combination including dashboards. Weakness: a vanilla tenant has neither curated company context nor finished processes; administration, source permissions and analytics modelling still matter. Fit: this 100 to 1,000 range, especially with AWS/BI expertise. [9][10][11]
+
+#### Glean
+
+**Available; brief cross-reference.** Glean supplies the cross-app assistant and agent layer. A verified public numeric enterprise price is not found, so unofficial $50 seat estimates are excluded. Its current docs describe single-tenant hosted or customer-cloud deployment and model choice in Assistant/Agent Builder. Fit: mid-sized through large firms with knowledge across apps. Strength is the enterprise knowledge layer; weakness is connector/permissions rollout effort and quote-based procurement. UK/EU scope requires the deployment and model contract, not merely the customer's cloud region. [56][57]
+
+#### WRITER
+
+**Available; individual connector maturity varies.** WRITER owns an enterprise agent workspace combining knowledge, research/output creation, playbooks, routines and development tools. Current pricing shows a small Starter package up to five users and quoted Enterprise, with seats/credits and optional services; the older $18 writing-assistant price is not carried forward. July connector documentation covers managed MCP access, with examples such as Salesforce and BigQuery alongside productivity systems. Custom building and approvals are prominent. Public UK/EU storage/inference commitments are not found here. Strength: governed, repeatable departmental deliverables and enterprise controls. Weakness: knowledge graph, workflow design and brand/compliance configuration are substantial work; a small-team trial is not the full rollout. Fit: upper mid-market departments and larger enterprise programmes. [31][32]
+
+#### Dust
+
+**Available.** Dust owns a multi-model collaborative agent workspace. The fetched European page displays Pro €24 and Max €120/seat/month with 8,000/40,000 credits; a USD search rendering showed corresponding dollar figures. Billing-selector basis should be confirmed at checkout rather than treating the currencies as conversions. Business is positioned for up to 100 people, with up to three connected sources; a wider organisation should price Enterprise. Slack, Notion, GitHub, Drive and MCP feed custom agents, schedules and event-driven workflows. EU/US residency is offered; Enterprise adds single-tenant, SCIM, audit logs and retention controls. Strength: approachable company-specific agents and model choice. Weakness: agents still need scope, knowledge curation and owners; credit use and connector limits affect full-company cost. Fit: 100-person pilots through larger mid-market deployments. [33]
+
+#### Langdock
+
+**Available.** Langdock owns a multi-model company chat, knowledge and agent workspace, with current Business packaging explicitly up to 1,000 users. It displays €25 Standard and €99 Max per seat/month, excluding VAT; annual savings are shown separately. Starter workflow capacity includes 2,500 runs but model usage is billed via API rates; bigger workflow packages cost extra. SharePoint, Drive, Confluence, Slack, mail and Teams are documented knowledge sources. Governance is currently included promotionally until 1 January 2027, then charged separately. EU-hosted Azure SaaS and Enterprise private/on-premises options are documented. Strength: unusually direct fit for the target organisation and European requirements. Weakness: seat price is not complete workflow cost, and connector/agent permissions still need administration. [34][35][36]
+
+#### Guru
+
+**Available.** Guru owns a knowledge platform with enterprise search and cited AI answers, focused on keeping company information governed and trustworthy. Its current pricing page requires a scoped proposal; historical $15 seat examples are not used as today's price. Listed integrations include Slack, Teams, Salesforce, Zendesk, Confluence and SharePoint, with MCP exposing the governed layer to other AI tools. A general multi-app autonomous action builder comparable to Quick Automate is not found. Selectable UK/EU residency is not found; its privacy policy describes US transfers. Strength: knowledge verification and maintainability. Weakness: stronger as a knowledge source of truth than as BI/research/action orchestration. Fit: medium-sized support, sales and operational teams through enterprises. [37][38]
+
+#### Credal
+
+**Available.** Credal AI owns a secure agent/context platform whose current positioning emphasises curated MCP servers, tools and governance as well as staff agents. Pricing is quoted around builder seats, user seats, indexed volume and tokens, not a flat verified per-user amount. It connects indexed company knowledge, live actions and custom/third-party MCP, with human approvals. SSO/SCIM, audit/SIEM export and private single-tenant or on-premises deployments are documented; a named off-the-shelf UK/EU service commitment is not found. Strength: finely scoped business context and auditable actions across systems. Weakness: building the context, servers and workflows requires owners and technical involvement. Fit: upper mid-market regulated teams and enterprises rather than a casual all-staff self-service trial. [39][40]
+
+#### GoSearch
+
+**Available.** GoSearch, from the GoLinks/GoSearch product family, combines enterprise search, chat, agents and workflows. Pro is displayed at $20/user/month, but its personal connectors/private agents should not be mistaken for organisation-wide Enterprise connectors; Enterprise is quoted. Slack/Teams and repository integrations are part of the proposition, with workspace connector coverage to confirm during scoping. BYOC allows customer-controlled residency; a default UK/EU SaaS commitment is not found. Strength: a less obvious dedicated Glean/Quick-style contender with actions as well as answers. Weakness: the appealing public price is not the full enterprise procurement answer, and deployment evidence needs examination. Fit: medium-sized firms with scattered company knowledge and a willingness to pilot an independent supplier. [41][42]
+
+#### Omnifact
+
+**Available.** Omnifact owns a privacy-oriented business AI workspace. Pro is €25/user/month annually with premium usage credits and a 50-user limit, so company-wide 100 to 1,000 staff deployment requires an Enterprise quote. Document chat, knowledge spaces, web browsing, model choice and API/integration options are described; a full public connector-by-connector action builder equivalent is not found. EU hosting and self-hosted/on-premises options, privacy filtering, enterprise SSO and audit controls are central. Strength: deployment privacy and model choice for a European buyer. Weakness: validate live source permission inheritance and action depth, rather than inferring them from privacy positioning. Fit: departmental pilots and regulated medium-sized employers with a scoped implementation. [43][44]
+
+#### nexos.ai Workspace
+
+**Available.** nexos.ai owns a model gateway and a staff Chat/Agents workspace, which must be priced separately. The current Workspace is Enterprise/custom; the Gateway adds a platform fee to provider usage, not a free employee licence. Messaging integrations and agent/company connections are described, but a comprehensive native permission-aware knowledge connector list is not found here. EU platform hosting is documented, while the vendor says most, rather than all, available models are hosted in Europe; selected model routing therefore matters. Strength: central model access, controls and cost visibility. Weakness: gateway breadth is not the same as indexed company knowledge or finished automations. Fit: medium-sized teams wanting a governed multi-model service, with enterprise rollout scoping. [45][46]
+
+#### Ema
+
+**Available.** Ema Unlimited, Inc. sells a universal AI employee/front door covering enterprise service and cross-system workflows. Its current site promotes outcome-based pricing; a numeric per-user rate is not found. Teams, Slack and voice are supported employee surfaces, and the vendor claims a broad integration catalogue; source-level connector/permission parity should be proven rather than inferred from the count. Agent/workflow orchestration is central. A named UK/EU storage/inference commitment is not found. Strength: operational workflows with an employee-facing interface. Weakness: outcome definition, integration and exception handling require a carefully scoped implementation; 'live in days' is a vendor claim, not a vanilla benchmark. Fit: upper mid-market and enterprise service programmes. [47]
+
+#### Squirro Enterprise GenAI
+
+**Available.** Squirro owns an enterprise retrieval, insights and agent orchestration platform. Public numeric staff seat pricing is not found; expect a scoped enterprise proposal. Its platform connects business data and actions through an enterprise foundation, with auditable workflows and agents rather than only document Q&A. Exact connectors needed by this employer and named UK/EU service regions are not sufficiently verified here; a European supplier is not proof that every model call stays there. Strength: governed domain knowledge and actions in complex organisations. Weakness: implementation and procurement are closer to a platform project than a simple staff subscription. Fit: regulated upper mid-market and larger firms, particularly where retrieval quality and auditability dominate. [48]
+
+#### Mindbreeze InSpire / Insight Workplace
+
+**Available; 26.5 features documented, formal release date not found.** Mindbreeze supplies InSpire and Insight Workplace, combining enterprise retrieval, insight experiences and agent-oriented research. Public per-user pricing is not found; licensing/deployment must be scoped. Release 26.5 documents MCP availability so its indexed knowledge can serve other AI tools and describes additional Insight Touchpoints for deeper research. Repository connector availability and execution beyond retrieval need verification for the chosen deployment. Exact UK/EU storage and model-inference scope is not found. Strength: established search and complex enterprise information handling. Weakness: a full staff experience requires search/platform configuration, not merely a connector toggle. Fit: upper mid-market specialists and larger enterprises, particularly existing InSpire customers. [49]
+
+#### Sinequa by ChapsVision
+
+**Available.** ChapsVision owns Sinequa, now positioned as a sovereign enterprise search/assistant platform. Numeric staff pricing is not found. Company repositories plus embedded integrations in Teams, Salesforce and SAP support sourced answers and knowledge discovery; broader autonomous process building is a separate platform/integration question, not an assumed default. Sovereign and fine-grained governance claims are documented, but a specific vanilla UK/EU residency package is not found. Strength: deep enterprise search and regulated information access. Weakness: more solution engineering and enterprise procurement than a small IT team may want. Fit: the upper end of 100 to 1,000 staff where data complexity is high, and larger firms; not a generic low-effort pilot default. [50]
+
+#### Aiimi Workplace AI
+
+**Available.** UK supplier Aiimi owns Workplace AI, the current platform around its Insight Engine/data foundation. Numeric seat pricing is not found; this is a platform/implementation procurement. Its Virtual Data Layer discovers company sources across cloud/on-premises systems and underpins chat, search, analytics and actions. A complete turnkey no-code action catalogue and a product-wide UK-only storage/inference promise are not found; UK headquarters is not enough. Strength: data discovery, permissions and governance before attempting transformation, with a staff-facing assistant. Weakness: solution engineering and data remediation can dominate the project. Fit: medium-sized UK organisations with complex or regulated repositories and larger data-rich firms, rather than a minimal-setup generic chatbot rollout. [51]
+
+#### Coveo Search Agents / Workplace
+
+**Available.** Coveo owns a mature search/relevance platform with a workplace route and Search Agents. Conversational Search is explicitly a paid extension to the platform licence; a comparable staff seat price is not found. The agent uses existing indexes, relevance, personalisation and security to generate grounded conversational answers. That is an agentic search experience, not evidence of unrestricted multi-app workflow execution. Exact UK/EU scope and required source connectors must be confirmed against the specific licence. Strength: enterprise retrieval and reuse of an established search foundation. Weakness: integration and front-end configuration; limited equivalence to Quick's whole workspace unless combined with other systems. Fit: upper mid-market service/knowledge teams and existing Coveo customers. [52]
+
+#### Kore.ai AI for Work
+
+**Available.** Kore.ai owns AI for Work and its underlying agent platform. Numeric per-user workspace pricing is not found; use an enterprise scope/quote. Its documented proposition combines permissioned cross-company search, generated content, employee service and workflow/agent orchestration, delivered through Slack, Teams, voice or a dedicated interface. Connector counts are vendor claims; source-specific coverage and actions must be tested. A product-specific UK/EU storage/inference guarantee is not found here, and a European voice endpoint does not establish it. Strength: mature enterprise conversational service and operational actions. Weakness: configuration is a real integration project for a small IT team. Fit: upper mid-market service-heavy employers and larger enterprises. [53]
+
+#### IBM watsonx Orchestrate
+
+**Available.** IBM owns a staff conversational agent and orchestration platform with no-code/pro-code builders, prebuilt tools, APIs/MCP and Teams/Slack channels. Current Essentials starts at $530/month and Standard at $6,360/month, with capacity/user/message entitlements; these are platform prices, not a per-seat comparison, and documentation entitlements vary by deployment. IBM Cloud offers London, Paris and Frankfurt; AWS offers Frankfurt; on-premises is also supported. Strength: supported deployment choices and governed orchestration. Weakness: capacity selection, integrations and workflow ownership need technical procurement work; a tiny Essentials pilot is not the same as all-staff production. Fit: mid-sized firms with an integration owner and larger/regulated enterprises. [54][55]
+
+#### Aleph Alpha PhariaAI / PhariaAssistant
+
+**Available as a documented stack; assistant-specific formal GA date not found.** Aleph Alpha owns PhariaAI, including PhariaAssistant, PhariaData and PhariaStudio. Public per-user pricing is not found. This is a configurable sovereign AI stack with a staff assistant and development environment, not a verified ready-made Microsoft/Google connector suite equivalent to Quick. Connector breadth and action-building must be scoped. Customer-controlled deployment can support a UK/EU architecture, but named SaaS region/feature commitments are not found. Strength: sovereign control and organisation-specific solutions. Weakness: substantial engineering and operational responsibility for a small team. Fit: highly regulated upper mid-market, public-sector and large-enterprise deployments. September's Cohere combination agreement does not establish completed ownership integration. [129][127]
+
+### 3.4 D. App-embedded, employee-service and intranet agents
+
+#### Moveworks / ServiceNow EmployeeWorks
+
+**Available; owned by ServiceNow.** ServiceNow completed its Moveworks acquisition on 15 December 2025. Its EmployeeWorks offering combines conversational employee assistance with service execution, including world-knowledge chat and web search; it should not be assumed that a Moveworks licence and every EmployeeWorks entitlement are interchangeable. Numeric seat pricing is **not found**, so obtain a quote identifying assistant, workflow and connector licences. Teams/Slack and enterprise service systems provide the channels and actions. UK/EU residency for the whole combined experience is **not found**. Strength: resolving employee requests rather than merely answering them. Weakness: connector, service-catalogue and permission work makes this a substantial deployment. Fit: upper mid-market or 100 to 1,000-person organisations already invested in ServiceNow; actual median customer size not found. A September partner case reports six-week delivery, which is a supported implementation, not evidence of vanilla setup time. [58][59][60]
+
+#### ServiceNow AI Agents / Now Assist
+
+**Available; ServiceNow.** AI Agents, Now Assist and AI Agent Studio extend the Now platform's IT, HR and other workflows, rather than creating a simple independent all-staff subscription. Price/user/month is **not found**; editions, workflows and AI entitlements need a specific quote. Agents can use platform records, IntegrationHub and configured external APIs, with administrators designing orchestration and access. Regional ServiceNow tenancy does not establish regional processing for every AI feature: July documentation explicitly treats Google web-search grounding as a global service outside the data-residency commitment. Strength: established workflow, identity and service controls. Weakness: cost and specialist configuration for a company without an existing platform. Fit: mid-market with an established ServiceNow team and larger organisations. [61]
+
+#### Sana from Workday
+
+**Globally available from 17 March 2026; owned by Workday.** Sana supplies company search, assistance and agents, increasingly connected to Workday's employee workflows. Primary pricing still displays **Team $30/user/month** and enterprise custom pricing, while a dated 5 October independent pricing report says Team was removed. Consequently a reliable current self-service seat price is **not found**; ask Workday which Sana and Flex Credit terms apply. Sources include Google Drive, SharePoint, calendars and meeting content from Outlook, Zoom, Meet and Teams, with Workday context; June documentation describes workflow agents and approvals. Verified current UK/EU processing coverage is **not found**. Strength: an employee-friendly knowledge experience with HR context. Weakness: changing packaging and integration expectations. Fit: 100 to 1,000 staff where Workday or HR-led knowledge is central. The March availability source is older than six months. [63][62][65][64]
+
+#### Atlassian Rovo
+
+**Available; Atlassian.** Rovo offers search, chat and agents around Jira, Confluence and connected external knowledge. Current paid Standard, Premium and Enterprise plans include credits; this does not mean unlimited agent execution. Extra credits are listed at **$0.01 each**, with extra-usage billing scheduled for **3 December 2026**, after this research cut-off. Agent creation and actions extend familiar Atlassian workflows. A complete UK/EU storage-and-inference commitment for the exact selected plan is **not found** here. Strength: accessible adoption where project and engineering knowledge already lives in Atlassian. Weakness: external-source quality, permissions and credit budgeting still need work. Fit: any 100 to 1,000-person company with substantial Jira/Confluence usage, especially technical departments. [66][67]
+
+#### Slack AI / Slackbot / Agentforce in Slack
+
+**Available, with capability and tier distinctions; Salesforce owns Slack.** Current US pricing shows Business+ at **$15/user/month annually or $18 monthly**, and Enterprise+ at **$45/user/month annually**. Enterprise search and advanced AI differ by tier; Agentforce consumption is not included merely because Slack is licensed. Slackbot is gaining skills and MCP-based tools for work across apps, while Agentforce supplies Salesforce agents in the same interface. Paid regional storage options include London and EU locations, but these are not evidence that all external model processing and connected actions remain there. Strength: staff already inhabit the interface. Weakness: tier, search and agent charges can make the apparent bundle misleading; tools still require authorised configuration. Fit: Slack-heavy 100 to 1,000-person companies. [68][69][70][71]
+
+#### Salesforce Agentforce
+
+**Available; Salesforce.** Agentforce is an agent platform closely tied to CRM and enterprise data, with staff access through Salesforce and Slack. Current options include **$5/user/month access plus consumption**, a distinct **$125/user/month flat access option**, and Flex Credits at **$500 per 100,000 credits**; conversation-based pricing is another model, not a directly comparable employee seat. Confirm which actions and products each package covers. Builders use CRM, Data Cloud, flows, MuleSoft and external APIs to execute business actions. UK/EU residency must be established for the org, models and integrations; a universal claim is **not found**. Strength: action grounded in structured customer records. Weakness: licensing complexity and specialist configuration. Fit: 100 to 1,000 staff with a significant Salesforce estate, particularly sales, support and operations rather than a neutral company-wide search replacement. [71]
+
+#### Notion AI / Custom Agents
+
+**Base AI available; Custom Agents available from 24 February; Enterprise Search labelled beta on current pricing.** Notion combines document knowledge with connected enterprise search and recurring agents. Business pricing displays **$20/user/month**; agent credits cost **$10 per 1,000**, with enterprise pricing quoted. Validate billing commitment and base-plan inclusion separately. Connected sources include Slack, Google Drive, SharePoint, Teams and GitHub; MCP extends agents to tools. Enterprise residency documents Frankfurt storage with Ireland backup, but exclusions and beta-feature scope mean this is not a blanket promise covering Calendar, Mail or all AI inference. Strength: knowledge and resulting work stay near living documents. Weakness: fragmented connector permissions and consumption, with important search functionality still beta. Fit: Notion-heavy teams and medium-sized firms willing to organise knowledge there. [72][73][74]
+
+#### Box AI / AI Studio
+
+**Available core AI; regional AI enhancements include announced roadmap items.** Box AI answers questions and extracts information from Box content, while AI Studio enables custom agents under Enterprise Advanced packaging. Business is **$15/user/month annually or $20 monthly**, with narrower document use; Enterprise Plus is **$50/user/month annually** for expanded capabilities; Advanced numeric pricing is **not found**. Files, Hubs, Relay and APIs are the main content/action surfaces, rather than a default index of every external company app. Box Zones offers regional content hosting, but its in-region AI announcement must not be treated as universal GA inference residency. Strength: content permissions and document processes. Weakness: broad business-app knowledge and advanced agent creation need more than the low-price plan. Fit: 100 to 1,000 staff already storing important records in Box. [75][76][77]
+
+#### ZoomMate / AI Companion
+
+**ZoomMate launch GA in North America on 1 June; EMEA/APAC were announced for later rollout.** Zoom's current product page describes a broader AI teammate with knowledge bank, deep research, workflows and agents across systems including Salesforce, Jira, Slack and ServiceNow. Launch pricing started at **$20/user/month** in North America; current UK price and blanket UK GA are **not found**, so that launch number is not a UK quote. The current page references a 2,200-credit allowance, which needs checking against the selected plan. September release material expands deployment options, while Zoom on-premises transcription/captions do not establish that the entire ZoomMate experience runs on-premises. Strength: familiar meeting and communication context. Weakness: rollout, entitlements and residency vary across components. Fit: Zoom-heavy mid-market firms after country-specific procurement verification. [78][79][81][80]
+
+#### Superhuman Docs / Go (formerly Coda)
+
+**Available suite; Docs AI is labelled beta.** Coda became Superhuman Docs on 8 July 2026. Docs retains document-maker billing and collaborative tables, Packs, APIs and automations, while Superhuman Go provides contextual assistance across apps and browser work. Go Pro costs **$12/user/month annually or $15 monthly**, and Go Business **$33 annually or $40 monthly**. These are Go prices, not an instruction to charge every Docs collaborator as a document maker; obtain a quote for the intended combination. Enterprise controls include SSO, SCIM and audit capabilities; verified UK/EU storage and inference scope is **not found**. Strength: adaptable shared working documents with useful automations. Weakness: multiple billing units and contextual access are not equivalent to a governed company-wide search index. Fit: document-led departments and 100 to 1,000-person firms already using Coda/Superhuman. [82][83][84]
+
+#### Dropbox Dash
+
+**Available; Dropbox.** Dash supplies cross-app search and AI answers over connected work information. Teams costs **$15/user/month annually or $19 monthly**; Business displays **$35/user/month**, with its billing basis needing confirmation. Connectors reach beyond Dropbox into Microsoft/Google and collaboration sources, but a general-purpose approval-controlled action builder comparable to Quick's automation layer is **not found**. Dash's own security whitepaper says residency choice is not offered; an EU location for ordinary Dropbox files should therefore not be applied to Dash. The whitepaper's publication date is not found, so ask for current contractual confirmation. Strength: a simpler knowledge-finding experience. Weakness: limited evidence of general automation and a material residency question. Fit: mixed-app mid-market firms primarily seeking search rather than operational agents. [85][86]
+
+#### ClickUp Brain / Brain MAX / Super Agents
+
+**Available; ClickUp.** Brain, Brain MAX and Super Agents extend task, document and project work into enterprise search and execution. The current page displays **$9/user/month** for Brain AI and **$28** for the broader Everything AI package, against crossed-out higher prices; billing selector, base licence and duration should be checked rather than assuming a permanent offer. Super Agent credits are separately listed at **$0.01 each**. Knowledge reaches ClickUp and sources such as Drive, Slack, Notion and Gmail, with broad search gated by package. UK/EU residency for the exact AI/search configuration is **not found**. Strength: answers can become work in an existing task system. Weakness: tier and credit complexity, plus less justification where ClickUp is not central. Fit: project-led 100 to 1,000-person organisations using ClickUp extensively. [87][88]
+
+#### monday Sidekick / AI Agents
+
+**Available components; monday.com.** Sidekick, agents and AI workflow functions bring conversational help and actions to monday boards, CRM and connected processes. A single current all-staff price is **not found**: cost combines the chosen monday plan and AI credit usage, with different operations consuming different quantities. Existing boards, data and configured integrations are the practical knowledge base, rather than an automatic universal company index. Agent and workflow building is useful when processes already live in monday; verify human approvals and permissions for each action. Product-specific UK/EU processing coverage is **not found** in the consulted material. Strength: turning AI outputs into visible tracked work. Weakness: base-plan and consumption costs, and dependence on organised boards. Fit: medium-sized firms and operational departments already committed to monday. [89]
+
+#### SAP Joule / Joule Studio
+
+**Available platform and agents; SAP.** Joule is the conversational front door to SAP business processes, with Joule Studio for skills and agents. Base and premium AI use different entitlements; a general seat price is **not found**. SAP's 2026 material lists SAP-delivered autonomous agent actions at **0.02 AI units/action** and a **custom-agent runtime promotion through the end of 2026**. AI units are not pounds or dollars, and promotional runtime must not be assumed free in 2027. Agents use SAP records and configured external connections through the underlying platform. UK/EU deployment depends on the selected services; a complete blanket commitment is **not found**. Strength: meaningful actions with ERP/HR context. Weakness: architecture, commercial-unit complexity and implementation effort. Fit: SAP-invested upper mid-market companies rather than a clean standalone workspace purchase. [92]
+
+#### Oracle Fusion AI Agent Studio
+
+**Available; Oracle.** Fusion AI Agent Studio supplies templates, tools and orchestration around finance, HR and supply-chain work. Release 26B documentation distinguishes **included templates and minor modifications** from **separately licensed custom agent creation**; numeric custom pricing is **not found**. Agents use Fusion records and configured external tools/APIs, with administrators managing business-process access. Specific UK/EU availability and AI processing commitments need the selected Fusion deployment and contract; a universal promise is **not found**. Strength: actions can be grounded in established enterprise transactions. Weakness: separate custom licensing and implementation requirements undermine a simplistic 'free agents' comparison. Fit: 100 to 1,000 staff already using Fusion, especially the upper end with an application owner. [93]
+
+#### Zendesk Employee Service AI Agents
+
+**Available Employee Service release from 14 August 2026; Zendesk.** Zendesk acquired Unleash on 18 December 2025 and uses its permission-aware enterprise knowledge technology in employee assistance. Teams, Slack and Zendesk channels bring connected company knowledge and service actions to staff. Exact employee-agent seat/usage pricing is **not found**; do not substitute customer-support pricing or autonomous-resolution rates without confirming the SKU. Specific UK/EU residency for the combined agent and connected knowledge service is **not found**. Strength: a natural route from a question to an employee-service resolution. Weakness: a narrower operational focus than broad research and BI, with integration still required. Fit: mid-market employers with Zendesk-based internal support or an employee-service programme. The acquisition source is older than six months; the August product release is current. [95][94]
+
+#### Freshservice Freddy AI
+
+**Available; Freshworks.** Freddy AI extends Freshservice with service-agent assistance and employee-request automation. Annual base plans display **$19/$49/$99 per support agent/month**, with Freddy AI Copilot at **$29 per support agent/month**; these are support-worker licences, not a charge for every employee asking a question. Enterprise includes an allowance described as **1,200 classic AI-agent sessions per licence/year**; confirm the definition and current agent generation before modelling usage. Knowledge is strongest in service records, the catalogue and configured integrations, including collaboration channels such as Teams. Complete UK/EU AI processing scope is **not found** here. Strength: a practical helpdesk outcome for a small IT team. Weakness: general research and organisation-wide BI are not its central job. Fit: 100 to 1,000-person employers using or considering Freshservice. [96]
+
+#### Aisera / Automation Anywhere
+
+**Available product family under Automation Anywhere.** Aisera supplies AI service-desk and AiseraGPT employee assistance around connected enterprise systems, with agent workflows and access to Automation Anywhere's process capabilities. Public numeric all-staff pricing is **not found**; procure the actual service and integration scope. Teams, ServiceNow and other configured business systems are relevant knowledge and action surfaces. UK/EU deployment commitments for the full selected combination are **not found**. Strength: resolving IT/HR requests and executing processes beyond chat. Weakness: implementation and overlapping platform entitlements can be substantial; general research is secondary. Fit: upper mid-market service-heavy organisations or companies with an existing automation programme. Treat it as the current Aisera service product, not an independent startup subscription or a synonym for every Automation Anywhere tool. [97]
+
+#### Rezolve.ai
+
+**Available; Rezolve.ai.** Rezolve offers employee knowledge and service assistance through Teams, email, web, mobile and voice, with Creator, AI Flow and Agentic Studio in its quoted package. Pricing is scope-based; numeric per-employee pricing is **not found**, and frontline packaging differs from an office-worker rollout. Knowledge and service integrations must be configured; conversational dashboards are not automatically equivalent to Quick's BI layer. The consulted data-protection material does not establish a named UK/EU deployment, so residency is **not found**. Strength: employee help in familiar channels with workflow execution. Weakness: departmental service focus and the need to validate connector/approval depth. Fit: 100 to 1,000-person firms wanting IT/HR request automation, particularly where a small helpdesk needs leverage. [98]
+
+#### Leena AI Universal Assistant / AI Colleagues
+
+**Available; Leena AI.** Leena separates a Universal Assistant, triggered by an employee request, from autonomous AI Colleagues. The Assistant is a **flat annual per-employee licence**, while AI Colleagues use **platform fee plus auditable tokens**; numeric rates are **not found**, because proposals depend on workforce and scope. Workday, ServiceNow, SAP, Oracle, Salesforce and SharePoint are among the advertised integrations, with MCP/A2A and workflow/knowledge studios. Role-bound tools, audit and observability are central claims to validate in the pilot. Named UK/EU residency is **not found**. Strength: an unusually clear distinction between employee help and autonomous operating work. Weakness: integration and process ownership, with broad external research/BI less central. Fit: upper mid-market back-office programmes, or a bounded service pilot within 100 to 1,000 staff. [142][143]
+
+#### Resolve RITA / Employee Assistant (Espressive route)
+
+**Available current Resolve product; supplier Resolve Systems.** The live Espressive homepage redirects to Resolve, whose current Employee Assistant/RITA answers staff in Teams, Slack or a portal and triggers service workflows. The redirect is verified; its transaction/rebrand date and precise mapping of legacy BaristaGPT contracts are **not found**, so obtain the current SKU rather than an old Espressive quote. Public numeric staff pricing and UK/EU deployment scope are **not found**. Resolve lists M365/AD, ServiceNow, Jira and other system integrations, plus knowledge/automation agents and AgentLab. Strength: conversational help coupled to operational actions and deterministic workflows. Weakness: a service-automation project rather than broad staff research and BI. Fit: upper mid-market IT-heavy organisations or companies already operating the platform. [144][145]
+
+#### HubSpot Breeze Assistant / Agent Hub
+
+**Available base assistant and Agent Hub; HubSpot.** Breeze supplies CRM-grounded chat and go-to-market agents; the current management destination is **Agent Hub**, formerly Breeze Agents. Assistant has a free/bundled entry route, while production capabilities depend on seats and credits. A primary **limited-release** catalogue lists Professional/Enterprise Core seats from **€60/€90 per month**, with additional front-office/usage terms; it is not established as the universal UK tariff. Numeric universal staff-workspace pricing is therefore **not found**. Knowledge vaults, CRM and connected tools support custom agents and workflows; specific features remain beta. Complete UK/EU agent processing scope is **not found**. Strength: customer context and actions within an existing CRM. Weakness: changing package/credit economics and limited equivalence to universal internal search. Fit: 100 to 1,000-person HubSpot users, particularly customer-facing departments. [146][147]
+
+#### Simpplr One / AI Search
+
+**Available AI Search; supplier Simpplr.** Simpplr provides an intranet-led employee experience with permission-aware enterprise answers and recommended actions. Current numeric pricing and whole-AI UK/EU residency are **not found**; obtain a scoped platform/AI quote. The product page lists Google Drive, Dropbox, Slack, Teams and HR systems including Workday/UKG; an integration logo does not prove equivalent indexing or write coverage. A broad independent agent-builder scope is **not found**. Strength: official company information and employee context in an established destination. Weakness: intranet/content implementation rather than a neutral research/action workspace. Fit: medium-sized employers buying or already using an employee hub. Support currently warns that **Classic support ends 31 October 2026** and directs customers towards One; do not pilot the legacy edition. The naming article's original date is older than six months. [150][151]
+
+#### Happeo AI / Search / Assistants
+
+**Available AI Search and documented assistant surfaces; supplier Happeo.** Happeo connects the company intranet to Google Workspace, M365, Slack, Salesforce and Confluence, preserving source permissions in its search proposition. Starter/Growth/Enterprise pricing is quoted, with AI and MCP included; numeric current seat pricing is **not found**. Scoped assistants and page agents are described, but general action/workflow scope and formal GA dates need confirmation. Its Data Act page says platform data is hosted in the EU on Google Cloud, with some non-personal data/access tokens in the US and globally stored logs; full AI inference residency is **not found**. Strength: maintaining an official knowledge foundation and exposing it to other assistants through MCP. Weakness: intranet governance/content work and narrower research/BI coverage. Fit: 100 to 1,000 staff wanting a trusted company hub. [152][153][154][155]
+
+#### LumApps AI Employee Hub / Agent Hub
+
+**Available platform; feature-wide formal GA dates not found; supplier LumApps.** LumApps combines an employee intranet and frontline experience with Agent Hub, Agent Studio, governed company context and workflows. Numeric per-user pricing is **not found**, and the ultimate corporate ownership detail is not established in these product sources. Microsoft, Google, ServiceNow, Workday and app connectors support low-code micro-apps and operational workflows; its AI FAQ distinguishes Vertex/Azure model routes. A whole-product UK/EU storage-and-inference commitment is **not found**. Strength: an employee destination connecting communication, knowledge and actions rather than another isolated chat tab. Weakness: portal/content adoption and integration effort, with research/BI parity needing proof. Fit: medium-sized and larger employers, especially with a mix of office and frontline staff or an existing LumApps estate. [156][157]
+
+### 3.5 E. Automation and execution builders
+
+#### AI by Zapier (Agents migration)
+
+**Migration route available; Zapier.** Agents began moving towards AI by Zapier from 1 October 2026. This changes source handling and the conversational experience, so old Zapier Agents prices should not be used for a fresh long-term workspace comparison. A reliable comparable current staff-seat price is **not found**; budget the destination's task-based plan and AI usage. Zapier's broad app integrations connect Microsoft/Google tools, CRM and operational systems, but a collection of actions is not automatically a permission-aware all-staff knowledge index. Workflows and AI steps are the building surface; any required staff chat interface needs explicit validation. UK/EU scope is **not found**. Strength: breadth of practical integrations. Weakness: migration uncertainty and ongoing workflow maintenance. Fit: mid-market operations teams with clear process owners, usually alongside a staff assistant. [99][100]
+
+#### n8n
+
+**Established workflow product available; newer Agents/assistant surfaces include preview labels.** n8n prices workspaces by workflow executions rather than employee seats: **€20/month Starter and €50 Pro billed annually**, with Business displayed at **€667/month annually**, Enterprise quoted, and self-hosting options. Unlimited users does not mean unlimited runs. App nodes, APIs and databases provide knowledge/actions; agent nodes and MCP enable model-driven workflows, while the buyer still designs retrieval and the employee interface. Cloud hosting is in Frankfurt; self-hosting allows regional control, but model and tool endpoints can process elsewhere. Strength: flexible integration and execution-based costing. Weakness: production engineering and maintenance for a small IT team. Fit: 100 to 1,000-person organisations with a technical automation owner; not a vanilla shared knowledge workspace. [101]
+
+#### Make AI Agents
+
+**AI Agents beta; owned by Celonis.** Make combines visual automation scenarios with model-driven agents and app tools. Current pricing displays a **$9/month Make Plan with 5,000 credits**, while other plan/comparison labels coexist; confirm billing and entitlements rather than recycling the older '$9 for 10,000 operations' shorthand. Company pricing is quoted. Configured app modules, APIs and knowledge supply the context and actions, and EU or US hosting is available; external model and app processing is separate. Strength: visible, adaptable business workflows and a broad integration ecosystem. Weakness: beta agent behaviour, credit arithmetic and maintenance; a staff knowledge front door needs additional design. Fit: operational teams in medium-sized companies with a named automation owner. Formal GA for AI Agents is **not found**. [102]
+
+#### Lindy
+
+**Available; Lindy.** Lindy builds assistants for email, calendars and operational tasks, using connected apps and computer use where appropriate. Current Business pricing is **$49.99 per active user/month**, with **5,000 credits per user** in a pool; it is not a $49.99 licence for an entire organisation. Enterprise is custom-priced. Assistants and workflow steps can act on delegated systems, so tool permissions and approval boundaries need testing. Named UK/EU residency is **not found**. Strength: useful delegated actions without constructing a full enterprise-search platform. Weakness: active-user and credit costs, plus the risks of personal inbox/browser access and workflow upkeep. Fit: smaller departmental pilots inside 100 to 1,000-person firms, especially executive assistance and operations; company-wide deployment needs more governance work. [103]
+
+#### Relevance AI
+
+**Available; Relevance AI.** Relevance positions an agent workforce with reusable tools, coordination and enterprise operating controls. The current primary pricing material emphasises enterprise contact; a reliable current numeric production subscription is **not found**, so historical low-price tiers are not used. App tools, APIs and MCP can connect knowledge and actions, with enterprise documentation describing approvals, traces and management features. Residency options are advertised, but named UK/EU coverage for the chosen deployment is **not found**. Strength: a structured agent-building and operating layer rather than a single chatbot. Weakness: design effort, consumption modelling and process ownership make it a programme, not a switch-on staff workspace. Fit: upper mid-market organisations with repeatable operational work and a small dedicated automation team. [104][105]
+
+#### Gumloop
+
+**Available; Gumloop.** Gumloop provides visual AI flows and agent tools for knowledge processing and app actions. Pro starts at **$37/month with 20,000 credits**; Enterprise is quoted. An August update changed AI-token charging towards pass-through model costs, so old per-step comparisons need rechecking. Connected business apps and configured tools feed agents; verify the exact SharePoint/Drive/Slack/CRM permissions rather than assuming every connector has identical coverage. Enterprise bring-your-own-cloud can support controlled deployment, but a standard SaaS UK/EU residency promise is **not found**. Strength: approachable visual composition with room for more substantial workflows. Weakness: flows, tokens and external tools require cost and failure management; it is not automatically company-wide search. Fit: mid-market operations or data teams with someone accountable for the workflows. [106][107]
+
+#### Relay.app
+
+**Available; Relay.app.** Relay focuses on understandable workflows with AI steps and humans in the loop, rather than a one-stop enterprise research assistant. The official pricing route could not be retrieved reliably, so current price is **not found**, not estimated from older comparison sites. Primary templates demonstrate business-app operations including Gmail, Google Sheets and Xero; workflow building and explicit review/approval are its distinguishing capabilities. A named UK/EU residency commitment is **not found**. Strength: making human judgement part of the workflow rather than bolting it on afterwards. Weakness: all-staff search, permission-aware company indexing and general research are not established equivalents to Quick. Fit: a departmental automation shortlist within 100 to 1,000-person employers, especially processes that need an employee to approve intermediate results. [108]
+
+#### StackAI
+
+**Available; StackAI.** StackAI lets builders assemble retrieval, model and action components into deployed internal applications and agents. The Free plan lists **500 runs, two projects and one seat**; current Enterprise production pricing is custom, not a verified per-employee figure. Data loaders, documents, websites and configured business integrations form the knowledge base, with visual workflows and chat/API deployment. Enterprise administration is advertised, but the selected SSO, logging and named UK/EU deployment need confirmation; residency is **not found** in the retrieved pricing evidence. Strength: building a tailored knowledge/action application without starting from raw SDKs. Weakness: someone must design, test and maintain that application and its permissions. Fit: upper mid-market or a well-supported department with a concrete internal use case. [109]
+
+#### Manus
+
+**Available Team product; operated by Butterfly Effect.** Reuters on 8 October reports Manus operating independently after the Meta acquisition unwind. Team pricing uses seats and pooled credits, but a stable current numeric price is **not found** from the retrieved dynamic page. Manus executes research, browser and artifact/application tasks using files and connected services, including mail/Slack surfaces; do not infer a complete permission-aware index of the company's systems or a mature approval-controlled general builder. UK/EU residency is **not found**. Strength: producing completed work rather than only a textual answer. Weakness: autonomous execution, company permissions and hosting need more scrutiny than a demonstration. Fit: small to medium departmental research/operations pilots inside the target employer, with sensitive or consequential actions restricted pending validation. [110][111]
+
+#### Genspark for Business
+
+**Available; Genspark.** Updated 17 September pricing lists Team at **$30/seat/month billed monthly**, with **10,000 credits and 60 GB drive storage per seat**, for teams of two to 150. Enterprise has higher allowances and a quote; the vendor says contracts are typically six figures annually, not a public per-seat tariff. Agents undertake research, browser work and office-style deliverables including sheets and slides, using files/knowledge and connected tools whose exact enterprise catalogue needs verification. SSO, SCIM and audit are enterprise-tier capabilities; advertised residency options do not identify a verified UK/EU region here. Strength: one interface for research and finished artifacts. Weakness: team-size ceiling, consumption and enterprise economics, with permission-aware connector coverage needing proof. Fit: departmental pilots or smaller mid-market deployments; 151-plus users require enterprise procurement. [112]
+
+#### Microsoft Copilot Studio
+
+**Available; Microsoft.** Copilot Studio is the agent-building route, distinct from a staff Copilot licence. Current pricing lists **$200/month for 25,000 Copilot Credits**, with pay-as-you-go alternatives; some internal agent use is included for appropriately licensed Microsoft 365 Copilot users, subject to conditions, rather than all external or autonomous use being free. Agents use Dataverse, SharePoint, business connectors and APIs through Power Platform. Environment and DLP controls are a strength, but makers must configure permissions, publication and tool policies. UK/EU scope depends on the environment and features; verify model processing and connected services separately. Strength: fit with Microsoft identity, data and operations. Weakness: credit definitions and licensing combinations, plus builder/administrator effort. Fit: virtually any target employer with Microsoft expertise and a defined process pilot. [113]
+
+#### Juma (formerly Team-GPT)
+
+**Available; Juma, formerly Team-GPT.** The current product is a marketing-oriented workspace with Flows and connected tools, rather than simply shared general chat. Pro Starter displays **$49/workspace/month with unlimited seats** and pooled credits; conflicting descriptions of credit meaning make a simple token or output-cost conversion unsafe. Marketing MCP/tool connections include HubSpot and analytics workflows; enterprise/private deployment is quoted, with named UK/EU processing scope **not found**. Strength: aligning agents around repeatable marketing outcomes. Weakness: narrower departmental scope and ambiguous public usage arithmetic, so the low workspace fee should not be treated as unlimited company-wide execution. Fit: a marketing team within a 100 to 1,000-person employer; not the first choice for universal staff knowledge. [131][132]
+
+#### Abacus.AI ChatLLM Teams / DeepAgent
+
+**Available; Abacus.AI.** ChatLLM Teams combines multiple models with document/web work, while DeepAgent executes larger tasks and builds artifacts or applications. Regular ChatLLM pricing is **$10/user/month**; DeepAgent Pro displays **$20** with distinct terms, so do not collapse them into unlimited access for $10. Connected-work examples include Salesforce and Zendesk, but an exhaustive permission-aware enterprise connector catalogue is **not found**. Team administration is offered; current product-specific enterprise governance and UK/EU residency evidence are **not found** at the level required for a blanket claim. Strength: accessible multi-model and execution experiments. Weakness: the gap between impressive task completion and governed organisation-wide knowledge/action deployment. Fit: a controlled departmental pilot, particularly where cost sensitivity and flexible models matter. [133]
+
+#### NinjaTech SuperNinja
+
+**Available; NinjaTech AI.** SuperNinja executes work in dedicated virtual machines and connects to tools including GitHub, Salesforce, Jira and Slack. Business pricing displays **$50/month billed annually**, unlimited seats and **5,000 pooled credits**; Enterprise is quoted. This is a pooled workspace allowance, not proof that every staff member can run unlimited tasks. Agent execution and artifact creation are the attraction, while permission-aware enterprise knowledge coverage and approval behaviour should be tested. Dedicated VMs do not themselves establish UK/EU hosting; named residency is **not found**. Strength: practical completed tasks and applications. Weakness: shared consumption and uncertain all-staff governance for connected execution. Fit: a departmental pilot within the target employer, with enterprise procurement for broader controlled use. [134]
+
+### 3.6 F. Self-hosted applications
+
+#### Onyx (formerly Danswer)
+
+**Available; Onyx.** Formerly Danswer, Onyx provides company search, grounded chat and agents using more than 40 advertised connectors, including SharePoint, Drive, Slack, Confluence and GitHub, with permission-aware retrieval. Business costs **$20/seat/month annually**; Enterprise is quoted and adds options including SAML and region-specific/on-premises deployment. Self-hosted core avoids the SaaS seat tariff but not infrastructure, models or enterprise support costs. Agents can combine deep research and tools via MCP/OpenAPI. Strength: a credible direct knowledge-layer alternative with hosting choice. Weakness: connector operations, ACL synchronisation and model endpoint policies still require engineering; self-hosted does not mean finished governance. Fit: 100 to 1,000 staff seeking neutral search, particularly with an internal technical owner. [114][116]
+
+#### Open WebUI
+
+**Available; Open WebUI project.** This is a self-hostable multi-model chat and retrieval interface with tools, MCP/OpenAPI and execution extensions. The licence is **source-available with branding conditions**, not an unrestricted open-source label: the standard deployment retains branding, while some branding-removal rights above 50 users require an enterprise licence. This is not a 50-user usage cap. No universal per-seat cost is established; infrastructure and model calls remain payable. Uploaded documents and configured tools do not automatically provide the enterprise connector/permission graph found in search products. SSO/RBAC and execution isolation require configuration. UK/EU control depends on the host, model and tools. Strength: flexible owned interface. Weakness: operational/security responsibility and substantial company-knowledge engineering. Fit: technically supported mid-market deployment, not a novice small-IT rollout. [115][116][141]
+
+#### LibreChat
+
+**Available; LibreChat project, MIT-licensed.** LibreChat supplies self-hosted conversation, document retrieval and agents across providers such as OpenAI/Azure, Anthropic, Google and Bedrock, with MCP and configurable tools. Software is free; a per-user production cost is **not found**, because hosting, inference and support depend on deployment. It is not a default permission-aware index of every business repository: retrieval, connectors and access policies must be engineered. The company can select a UK/EU host and compliant model routes, but the application's deployment alone does not constrain third-party tools. Strength: broad provider choice and adaptable conversation experience. Weakness: DIY operational administration, upgrades and knowledge governance. Fit: 100 to 1,000-person organisations with an engineering owner or managed-service partner. [117]
+
+#### AnythingLLM
+
+**Available; Mintplex Labs.** AnythingLLM provides private document knowledge, chat and agent flows through self-hosted or managed deployments. Core self-hosted software is free; cloud displays **$50/month Basic and $99 Pro per private instance**, with bring-your-own-model keys, and Enterprise quoted. This is instance pricing, not a per-employee tariff or included unlimited inference. Knowledge comes from documents, websites and configured sources/tools; enterprise SSO and other controls must not be assumed present in the entry plan. Customer-controlled/on-premises deployments can support UK/EU hosting, with model routes checked separately; a blanket standard-cloud EU guarantee is **not found**. Strength: a relatively accessible private knowledge application. Weakness: advanced administration and broad permission-aware app indexing require more than document upload. Fit: departmental use or technically supported mid-market rollout. [118]
+
+#### Dify
+
+**Available; Dify/LangGenius.** Dify is a visual platform for knowledge retrieval, agents and deployed chat/API applications. Cloud Professional is displayed at **$590/year per workspace**, approximately **$49.17/month**, with three builder seats; current larger-tier numeric pricing is **not found** here, and Enterprise is quoted. Community deployment has licence conditions, including commercial/multi-workspace and branding constraints, so do not assume an unrestricted Apache licence. Datasets, plugins and APIs connect knowledge and actions; enterprise SAML and management differ from a basic installation. Self-hosting allows regional infrastructure selection, but model/tool calls still need policy. Strength: building a tailored owned application. Weakness: an application platform rather than a turnkey staff workspace, with maintenance and licence review. Fit: technically capable medium-sized organisations or a delivery partner. [119]
+
+#### OpenClaw
+
+**Available project; brief entry because another researcher covers it.** OpenClaw is a self-hosted, messaging-first agent route rather than a proven equivalent to a multi-user enterprise knowledge workspace. A paid enterprise per-seat tariff is **not found**; infrastructure and model costs remain. Configured messaging, files, skills and tools provide context and actions. Documentation requires deliberate sandbox/security configuration; self-hosting does not grant each user an inherited company-wide permission model. UK/EU hosting is selectable, but tool and model routes matter. Strength: adaptable agent execution. Weakness: operator responsibility and a large governance gap for broad staff access. Fit: technical experimentation or a tightly scoped operational agent, not a vanilla 1,000-seat default. [120]
+
+#### Hermes Agent
+
+**Available project; Nous Research.** Hermes Agent offers skills-based execution with gateway/API and profile options, including integration possibilities with chat front ends. Enterprise per-user pricing and a complete managed organisational governance package are **not found**; budget hosting and models. Configured tools/files/skills supply knowledge rather than an out-of-box ACL-synchronised company index. The operator chooses host and external endpoints, which determines residency. Strength: reusable technical skills and adaptable execution. Weakness: user isolation, updates, observability and business-system permission design still need specialist work. Fit: controlled technical or departmental experiments in a medium-sized employer, with the deeper treatment delegated to the parallel research. [121]
+
+### 3.7 Announced and developer platforms that affect the buying decision
+
+These do not add another ready-made staff workspace to the master table.
+
+**OpenAI Frontier:** the current official enterprise agent-platform name is **Frontier**. It connects business systems and shared context to agent identity, permissions, evaluation and auditable actions, with an engineering-led implementation and an Enterprise Frontier programme. A self-service per-user tariff, a universal UK GA date and a complete UK/EU deployment commitment are **not found**. Treat it as a potentially strategic platform procurement, not an alternative name for the $20 ChatGPT Business seat. Separately, current ChatGPT Work is a staff subscription capability, while Dots are staged and administrator-controlled. The deprecated **Agent Builder** is scheduled to shut down on **30 November 2026**, and ChatKit remains an application component. [122][18][19][124]
+
+**Anthropic:** **Cowork** is the staff-facing execution proposition within Claude. **Claude Managed Agents** is a distinct hosted developer **beta**, supported by the current managed-agents API documentation; some capabilities, including dreaming, are limited research previews. Its documentation says Managed Agents is not eligible for Zero Data Retention or HIPAA BAA coverage. That limitation must not be overwritten by broad claims about Claude Enterprise. Numeric current runtime charges were **not found** in the retrieved overview; obtain the current model-plus-runtime terms. SDKs, Claude Code and managed runtime can power a custom application, but the employer still has to supply the staff experience and permissions. [20][123]
+
+**AWS:** Bedrock AgentCore, Bedrock agents, models such as Nova and developer tools are enabling components. AgentCore **harness became GA on 18 June 2026**, superseding older preview descriptions of that component. It helps operate production agents; it does not supply an already curated, permission-aware staff knowledge workspace just by being enabled. Compare Quick for the packaged business experience, and AgentCore for a build route. [125][11]
+
+**Meta Enterprise Platform:** **announced on 28 September 2026**, with Muse and business-agent/API/code propositions. Verified UK general availability, numeric business pricing, company-knowledge connector coverage and UK/EU residency are **not found** in the announcement. It belongs on a watchlist, not a feature-complete scored procurement row. Do not confuse it with consumer Meta AI, the old Workplace brand or Manus, which Reuters now describes as independent after the unwind. [137][111]
+
+**Mistral AI Studio / PhariaStudio:** development and administration complement the Vibe and Pharia staff experiences. Count the employee product once; do not add a developer API's token price to the table as if it were another comparable user subscription. [23][129]
+
+### 3.8 Availability register: where the base product and feature status differ
+
+| Product or component | Verified status at the cut-off | Procurement consequence |
+|---|---|---|
+| Amazon Quick desktop | Explicitly GA, 9 September 2026. [11] | Still verify connector, region and plan coverage individually. |
+| Cohere North 2 | Released 5 October; formal GA wording not found. Financial-provider connectors planned. [24] | Do not include planned connectors in pilot acceptance. |
+| ChatGPT Dots | Staged rollout; Enterprise off by default. [19] | Confirm entitlement and administrator enablement before relying on it. |
+| Claude Managed Agents | Beta; selected subfeatures research preview. [123] | Separate runtime and data terms from the staff licence. |
+| Claude Dashboards | Beta on current pricing material. [20] | Do not score as established production BI. |
+| Notion Enterprise Search | Beta on current pricing. [72] | Test current connector behaviour; establish support and residency scope. |
+| Superhuman Docs AI | Beta on the help page. [84] | Buying the document product does not establish GA for all AI functions. |
+| Make AI Agents | Beta on current pricing. [102] | Limit production dependence until behaviour/support are acceptable. |
+| n8n new Agents/assistant surfaces | Preview labels; established AI workflow nodes are a different capability. [101] | Specify which surface and version the pilot uses. |
+| ZoomMate | June North American GA; later EMEA/APAC rollout announced. [78] | Current UK availability and terms must be confirmed. |
+| Box in-region AI enhancements | Roadmap/announced scope, rather than blanket regional GA. [77] | Content Zones are not an all-AI processing guarantee. |
+| Zoho Zia Agents | Dated availability in individual apps; blanket suite GA not found. [91] | Test the actual app and licence, not the suite slogan. |
+| Meta Enterprise Platform | Announced 28 September; UK GA not found. [137] | Watchlist pending verifiable purchase/deployment terms. |
+| AgentCore harness | Explicit GA, 18 June. [125] | GA infrastructure still requires a built staff application. |
+| Rovo extra-usage charging | Listed rate; billing scheduled 3 December. [66] | Future charging is not a current realised bill. |
+| OpenAI Agent Builder | Deprecated; shutdown scheduled 30 November. [124] | Avoid new dependency; evaluate the current migration route. |
+| Flowise | Official sunset schedule: August archive/EOL. [138] | Excluded from fresh vendor procurement; forks need their own maintenance owner. |
+
+Formal GA dates for other listed products are **not found** unless their profiles say otherwise. “Available” is deliberately less sweeping than “every advertised feature is GA”.
+
+## 4. Master comparison and head-to-head
+
+The master table contains **74 buying options**, including conditional and self-hosted routes. It is an inventory for filtering, not 68 equally good replacements. Prices inherit the profile's commitment, usage and scope caveats. Dollar and euro numbers are not converted to pounds. The sources beside each product apply to its factual cells; qualitative fit and setup cells are researcher assessments.
+
+**Governance:** “established” or “enterprise” means a documented administration/control proposition, not a comparative security certification. Permission synchronisation, approval control, retention and audit availability still need a plan-specific check. “Operator-dependent” means the buyer carries much of this work.
+
+**Vanilla setup effort:** **Low** means useful generic research/search after basic account provisioning; **Med** means identity plus several connectors, permissions and initial agent configuration; **High** means platform engineering, private hosting, data modelling or substantial workflow design. These are relative estimates, not vendor delivery-time promises. An existing configured application can reduce effort; purchasing a licence alone does not do so.
+
+| Product and sources | Category | Price/user/month or alternative billing unit | Ecosystem fit | Knowledge connectors | Agent/automation builder | Admin and governance maturity | UK/EU residency | Vanilla setup effort | Best for |
+|---|---|---|---|---|---|---|---|---|---|
+| Microsoft 365 Copilot [139][13][14][113] | A | Business £16.10 regular annual / £13.80 first-year promo; E7 $99 annual suite | Microsoft 365 | Graph: SharePoint, OneDrive, Outlook, Teams | Agent Builder / Copilot Studio | Established, configuration-dependent | Contract/feature-specific UK/EU scope; verify | Med | Microsoft-led workforce |
+| Google Gemini Enterprise [16][15] | A | Business from $21; higher editions quote/verify | Google + mixed apps | Workspace, M365, CRM and SaaS connectors | No-code Workflow Builder; custom agents | Established, edition-dependent | Edition/feature/region-dependent; verify | Med | Google-led or mixed workforce |
+| Zoho Zia Agents [90][91] | A | Suite/app entitlements + agent consumption; numeric price not found | Zoho suite | Zoho apps and APIs; external integration varies | Agent Studio and app-specific agents | Established suite; agent maturity varies | Agent-specific UK/EU scope not found | Med | Existing Zoho employer |
+| ChatGPT Business / Enterprise, including Work [17][18][19][140] | B | Business $20 annual/$25 monthly; Enterprise quote + usage | General AI + company apps | Admin-approved apps/plugins and authorised connections | Work tasks, plugins, scheduled execution | Business essentials; Enterprise advanced | Enterprise/Edu UK/EU storage; EU inference, exclusions; Business not included | Med | Broad knowledge-work adoption |
+| Claude Team / Enterprise, including Cowork [20][123] | B | Team $20 annual/$25 monthly; Enterprise $20 annual + API-rate usage | General AI + business apps | M365, Slack; enterprise search and connectors | Cowork/plugins; scheduled work | Enterprise advanced; individual features beta | UK/EU feature-wide scope not found here | Med | Document-heavy knowledge work |
+| Mistral Vibe for work, formerly Le Chat [21][22][23] | B | Team $24.99; Enterprise quote | Multi-app; Mistral model estate | Email/calendar, Slack, GitHub, Jira; MCP | Custom agents/workflows; Studio API | Team basic; Enterprise audit/SSO/private | Enterprise on-prem/private cloud; Mistral residency options | Med | European/private AI workspace |
+| Cohere North 2 [24][25][127] | B | Enterprise quote; model API rates are not workspace rates | Mixed enterprise; private infrastructure | Slack, SharePoint, OneDrive, Outlook/Exchange, Jira, Notion, GitHub | Visual workflows, automations, skills and apps | Enterprise-first, configuration-dependent | Private/on-prem deployment; location chosen in contract | High | Regulated private enterprise AI |
+| Grok Business / Enterprise [26] | B | Business $30 monthly; Enterprise quote | General AI + external apps | External apps, conversations/documents/email; exact catalogue not found | Task/output execution; custom builder scope not found | Business admin; Enterprise SSO/SCIM | UK/EU storage/inference not found | Med | General AI pilot with strong due diligence |
+| Perplexity Enterprise / Comet Enterprise [27][28][29][30] | B | Pro $40 monthly/$400 yearly; higher tiers vary | Research-first + files/browser | Drive, SharePoint, OneDrive, Box, Dropbox | Research/file creation; Comet browser actions | Enterprise controls; advanced controls tier-dependent | UK/EU option not found | Low for research; Med for actions | External research with company files |
+| Amazon Quick [9][10][11] | C | Professional $20 / Enterprise $40 + $250/account/month; usage extras | AWS + mixed M365/Google/SaaS | M365, Google, Slack, S3, Confluence; more plan-specific | Agents, Research, Flows, Automate; BI | Enterprise controls; identity/data setup required | London/Frankfurt/Ireland; inference/search caveats | Med; High for BI/actions | Knowledge + research + dashboards + automation |
+| Glean [56][57] | C | Enterprise quote; verified seat number not found | Mixed enterprise | Cross-app enterprise knowledge; exact catalogue defer | Agent Builder and actions | Established enterprise | Single-tenant SaaS/customer cloud; location verify | Med to High | Company-wide knowledge retrieval |
+| WRITER [31][32] | C | Starter seat/credits; numeric price not found; Enterprise quote | Mixed enterprise; governed content | M365/Google, Salesforce, BigQuery; MCP gateway | Agent, Playbooks, routines, AI Studio | Advanced Enterprise governance | UK/EU complete scope not found | Med to High | Governed repeatable deliverables |
+| Dust [33] | C | Displayed Pro €24 / Max €120; Enterprise quote; credits | Mixed Slack/Google/Notion and models | Slack, Notion, GitHub, Drive; MCP | Custom agents; scheduled/event workflows | Enterprise SCIM/audit/retention | EU or US; single-tenant Enterprise | Med | Mid-market custom staff agents |
+| Langdock [34][35][36] | C | €25 Standard / €99 Max displayed; workflows/API extra | M365/Google + multi-model | SharePoint, Drive, Confluence, Slack, mail, Teams | Custom agents and visual workflows | SSO/SCIM/SAML; governance add-on | EU Azure SaaS; private/on-prem Enterprise | Med | European mid-market company-wide AI |
+| Guru [37][38] | C | Current enterprise quote; historic seat rates not verified | Knowledge management + mixed apps | Slack, Teams, Salesforce, Zendesk, Confluence, SharePoint | Knowledge agents/MCP; broad action builder not found | Established knowledge governance | Selectable UK/EU option not found | Med | Verified company knowledge |
+| Credal [39][40] | C | Quote: builder/user seats + indexing + tokens | Regulated mixed enterprise | Slack, Confluence, Salesforce, Notion; indexed/live/MCP | Agent Builder; governed MCP servers; approvals | Advanced audit/SSO/SCIM | Cloud, single-tenant or on-prem; region contract | High | Governed context and sensitive workflows |
+| GoSearch [41][42] | C | Pro $20; Enterprise workspace quote | Mixed company knowledge | Personal vs workspace connectors; Slack/Teams surfaces | Agents, actions, tasks, workflows | Enterprise controls; Pro narrower | BYOC supports chosen region; SaaS UK/EU not found | Med | Alternative cross-app knowledge/agents |
+| Omnifact [43][44] | C | Pro €25 annual, ≤50 users; Enterprise quote | European multi-model workspace | Uploaded documents; company integrations/API | Knowledge spaces/web agent; custom action scope verify | Enterprise privacy filter/SSO/audit | EU hosting; customer/on-prem deployment | Med | Privacy-focused European teams |
+| nexos.ai Workspace [45][46] | C | Chat/Agents Enterprise quote; Gateway separately usage-priced | Multi-model + enterprise messaging | Messaging surfaces; company MCP/integrations verify | Custom agents; gateway/model routing | Enterprise SSO/RBAC/cost controls | EU-hosted platform; supported models only | Med | Governed multi-model access |
+| Ema [47] | C | Outcome-based enterprise quote; numeric price not found | Employee service + mixed systems | Teams/Slack/voice; broad enterprise integrations | Generative workflows and AI employees | Enterprise claims; verify controls in pilot | UK/EU named service scope not found | High | Cross-functional AI employee service |
+| Squirro Enterprise GenAI [48] | C | Enterprise project/licence quote; numeric price not found | Regulated enterprise search/actions | Enterprise data/app connections; exact shortlist validate | Agent orchestration and auditable workflows | Enterprise governance positioning | Private/sovereign scope must be contracted; UK/EU not found | High | Regulated knowledge-to-action deployment |
+| Mindbreeze InSpire / Insight Workplace [49] | C | Enterprise licence/appliance/service quote; numeric price not found | Complex enterprise knowledge | Enterprise repositories; MCP access to external AI | Insight Touchpoints/Journeys; integration required | Established enterprise search controls | Deployment-dependent; exact UK/EU package not found | High | Existing search estate and specialist data |
+| Sinequa by ChapsVision [50] | C | Enterprise deployment quote; numeric price not found | Complex regulated enterprise knowledge | Teams, Salesforce, SAP and enterprise repositories | RAG copilots; wider ChapsAgents integration | Established retrieval/governance | Sovereign/private positioning; specific UK/EU scope verify | High | Regulated enterprise search |
+| Aiimi Workplace AI [51] | C | Platform + implementation quote; numeric price not found | UK enterprise data and governance | Cloud/on-prem repositories; Virtual Data Layer | Assistant, analytics and actions; no-code breadth not found | Enterprise data-governance focus | UK vendor; actual hosting/inference location not found | High | UK employer with difficult data foundations |
+| Coveo Search Agents / Workplace [52] | C | Licence + paid Conversational Search extension; quote | Search-led workplace and service apps | Existing Coveo indexes/security; business-app connectors | Conversational search agent; general workflow builder not established | Established search permissions | Product/region contract; UK/EU scope not found | High | Existing Coveo knowledge infrastructure |
+| Kore.ai AI for Work [53] | C | Enterprise quote; numeric staff price not found | Mixed employee service and business apps | 100+ claimed source connectors; Slack/Teams/voice surfaces | AI Agent Platform; cross-system workflows | Enterprise orchestration/governance | Product-specific UK/EU region not found | High | Enterprise employee service + knowledge/actions |
+| IBM watsonx Orchestrate [54][55] | C | Essentials from $530/month; Standard $6,360/month; not per seat | Mixed apps + enterprise/private cloud | Tools/integrations catalogue, APIs/MCP; Teams/Slack | No-code/pro-code agents and orchestration | Enterprise controls; deployment-dependent | IBM Cloud London/Paris/Frankfurt; AWS Frankfurt; on-prem | High | Governed operational agents with IT support |
+| Aleph Alpha PhariaAI / PhariaAssistant [129][127] | C | Enterprise/private-platform quote; numeric price not found | Sovereign configured AI stack | PhariaData and application integrations; catalogue verify | PhariaStudio development; configured assistants | Enterprise/private-stack; implement controls | Customer-controlled sovereign deployment; region contract | High | Strict sovereignty with implementation capacity |
+| Moveworks / ServiceNow EmployeeWorks [58][59][60] | D | Quote; distinct SKUs | ServiceNow, employee service | Teams, Slack, enterprise systems | Conversational service actions; configured workflows | Enterprise; integration-dependent | Product-specific UK/EU scope not found | High; Med in existing estate | Employee help across IT/HR |
+| ServiceNow AI Agents / Now Assist [61] | D | Quote; platform/edition/add-ons | ServiceNow ITSM, HR, workflows | ServiceNow data, IntegrationHub and APIs | AI Agent Studio; orchestration | Enterprise platform; requires configuration | Tenancy-specific; web-search grounding global | High; Med if established | Service/process-heavy existing customers |
+| Sana from Workday [63][62][65][64] | D | Quote/confirm current packaging; $30 legacy page conflicts | Workday plus company knowledge | Drive, SharePoint, calendars, meeting systems | Plain-language workflow agents; approvals | Enterprise; Workday integration | Specific UK/EU processing scope not found | Med | HR-led knowledge and employee workflows |
+| Atlassian Rovo [66][67] | D | Included paid-plan credits; extra $0.01/credit billing scheduled | Jira, Confluence, service/teamwork collections | Atlassian and external connected sources | Rovo agents; actions/automation | Enterprise Atlassian controls; permissions matter | Product/feature scope not found here | Low-Med in Atlassian estate | Engineering and project knowledge |
+| Slack AI / Slackbot / Agentforce in Slack [68][69][70][71] | D | Business+ $15 annual/$18 monthly; Enterprise+ $45 annual | Slack / Salesforce | Slack; higher-tier enterprise search; external MCP tools | Slackbot skills/actions; Agentforce separate | Enterprise tier controls; feature-dependent | London/EU storage options; not blanket AI residency | Med | Slack-first collaboration and CRM action |
+| Salesforce Agentforce [71] | D | $5/user access + usage; $125/user flat option; other models | Salesforce CRM, Data Cloud, MuleSoft | CRM/data platform; external APIs; Slack | Low-code agents, flows and action tools | Enterprise platform; substantial configuration | Org/feature-specific; complete scope not found | High; Med with established Salesforce | Customer and CRM operations |
+| Notion AI / Custom Agents [72][73][74] | D | Business displayed $20/user; agents $10/1,000 credits | Notion documents and workspace | Slack, Drive, SharePoint, Teams, GitHub | Recurring Custom Agents; MCP | Enterprise controls; search remains beta | Enterprise Frankfurt storage/Ireland backup; AI scope limited | Med | Notion-centric knowledge and recurring work |
+| Box AI / AI Studio [75][76][77] | D | Business $15 annual/$20 monthly; Plus $50 annual; Advanced quote | Box content management | Box files/Hubs; workflows/API integrations | Custom AI Studio agents at higher tier | Mature content permissions; advanced-tier agents | Box Zones available; in-region AI roadmap not blanket GA | Med | Document-heavy regulated work |
+| ZoomMate / AI Companion [78][79][81][80] | D | UK current price not found; US launch from $20 | Zoom plus external business apps | Knowledge bank; Microsoft/Google; Slack, CRM/service apps | Research, workflows and agent tasks | Enterprise Zoom controls; scope varies | Regional model options; full UK deployment scope not found | Med | Meeting-led work extending to agents |
+| Superhuman Docs / Go (formerly Coda) [82][83][84] | D | Go Pro $12 annual/$15 monthly; Business $33 annual/$40 monthly; Docs maker model | Docs, mail and connected apps | Docs Packs/synced tables; Go app/tab context | Docs automations; Go assistants/agents | Enterprise SSO/SCIM/audit; feature-dependent | UK/EU scope not found | Med | Collaborative documents and contextual assistance |
+| Dropbox Dash [85][86] | D | Teams $15 annual/$19 monthly; Business displayed $35 | Mixed knowledge; Dropbox ecosystem | Microsoft/Google, Slack and other business sources | General action builder not found | Enterprise permission/search controls | Dash residency choice not offered in security paper | Low-Med | Finding scattered documents quickly |
+| ClickUp Brain / Brain MAX / Super Agents [87][88] | D | Displayed AI $9/$28/user; agent credits $0.01 | ClickUp tasks and work management | ClickUp; Drive, Slack, Notion, Gmail | Super Agents; work-management automations | Enterprise controls; tier-dependent search | Exact UK/EU AI scope not found | Med | ClickUp-centric execution |
+| monday Sidekick / AI Agents [89] | D | Base suite + AI credits; unified numeric price not found | monday work management and CRM | Boards, CRM and connected workflows | Sidekick; agent/workflow building | Established app administration; agent controls verify | Product-specific UK/EU AI scope not found | Med | monday-based operational processes |
+| SAP Joule / Joule Studio [92] | D | SAP base/premium AI units; custom agent runtime promotion in 2026 | SAP ERP, SuccessFactors, BTP | SAP business data; configured external connections | Joule Studio skills/agents; orchestration | Enterprise SAP governance; specialist setup | Selected services/regions; complete scope not found | High; Med in configured SAP estate | SAP-centric finance, HR and operations |
+| Oracle Fusion AI Agent Studio [93] | D | Templates included in Fusion; custom creation separately licensed | Oracle Fusion finance, HR, supply chain | Fusion records; configured APIs/tools | AI Agent Studio; multi-step agents | Enterprise Fusion controls; specialist setup | Deployment/service-specific; full scope not found | High; Med in existing Fusion estate | Oracle-centric business processes |
+| Zendesk Employee Service AI Agents [95][94] | D | Quote; employee-service AI pricing not found | Zendesk employee service | Cross-app knowledge; Teams/Slack; service records | Employee-service agents and actions | Enterprise service controls; connector setup | Employee-agent UK/EU scope not found | Med in existing estate | IT/HR employee assistance |
+| Freshservice Freddy AI [96] | D | Base $19/$49/$99/agent annual; Copilot +$29/support agent | Freshservice ITSM | Service records, catalogue and configured integrations | ITSM assistance, AI agents and workflows | Mature service administration; agent scope verify | Exact AI regional processing scope not found | Med | IT helpdesk and staff-service automation |
+| Aisera / Automation Anywhere [97] | D | Quote; numeric workforce pricing not found | Employee service; Automation Anywhere | Teams, ServiceNow and configured business systems | AI service agents, workflows and RPA integrations | Enterprise service/automation controls | Product-specific UK/EU residency not found | High; Med with existing programme | IT/HR service plus process execution |
+| Rezolve.ai [98] | D | Scope-based quote; numeric staff-seat price not found | Teams/email employee service | Company knowledge, service systems; multiple channels | Creator, AI Flow and Agentic Studio | Enterprise service administration; validate controls | UK/EU deployment scope not found | Med | Employee helpdesk with small IT team |
+| Leena AI Universal Assistant / AI Colleagues [142][143] | D | Assistant annual per-employee quote; platform fee + tokens for autonomous work | IT, HR, finance and procurement | Workday, ServiceNow, SAP, Oracle, Salesforce, SharePoint; MCP/A2A | Workflow/Knowledge Studios; scheduled/event agents | Enterprise permissions, audit and observability | Named UK/EU deployment scope not found | High; Med for bounded service pilot | Back-office employee requests and operations |
+| Resolve RITA / Employee Assistant (Espressive route) [144][145] | D | Scope-based quote; numeric staff price not found | IT service and operational automation | Teams, Slack, portal; M365/AD, ServiceNow, Jira and operational tools | Knowledge/Automation agents; AgentLab/workflows | Enterprise orchestration; validate identity and approvals | UK/EU product scope not found | High; Med with existing automation | Employee IT requests and deterministic actions |
+| HubSpot Breeze Assistant / Agent Hub [146][147] | D | Assistant bundled/free entry; paid seats + credits; limited-programme €60/€90 Core | HubSpot CRM and go-to-market | CRM, knowledge vaults, connected business tools | Agent Hub and configured agents/workflows | Mature CRM administration; AI entitlements vary | Specific agent UK/EU processing scope not found | Med in existing estate | Sales/marketing/service knowledge and execution |
+| Simpplr One / AI Search [150][151] | D | Enterprise quote; numeric price not found | Employee intranet and experience | Drive, Dropbox, Slack, Teams, Workday/UKG; permissions | Suggested actions/employee workflows; general builder scope not found | Established intranet controls; permissions-aware search | UK/EU whole-AI scope not found | Med-High | Intranet-led company knowledge |
+| Happeo AI / Search / Assistants [152][153][154][155] | D | Quoted Starter/Growth/Enterprise; AI/MCP included | Company intranet; Google/Microsoft estate | Workspace, M365, Slack, Salesforce, Confluence | Scoped assistants/page agents; workflow scope verify | Enterprise provisioning; access-aware knowledge | EU Google Cloud platform; US token/global-log exclusions; inference verify | Med | Trusted company hub with AI access |
+| LumApps AI Employee Hub / Agent Hub [156][157] | D | Enterprise quote; numeric staff price not found | Employee intranet, frontline and business apps | Microsoft, Google, ServiceNow, Workday; app connectors | Agent Hub/Studio; low-code micro-apps and workflows | Enterprise security/governance; configured content access | Whole-product UK/EU storage/inference scope not found | Med-High | Employee hub joining knowledge and actions |
+| AI by Zapier (Agents migration) [99][100] | E | Task-based destination; current comparable seat price not found | Zapier's business-app ecosystem | Connected app data; migrated source coverage varies | Zap workflows and AI steps; conversational UI changes | Mature Zapier platform; migrating agent product | Specific EU/UK scope not found | Med | Cross-app automation owned by operations |
+| n8n [101] | E | €20 Starter/€50 Pro monthly annual; Business €667 annual; quote/self-host | Technical, mixed-app workflows | App nodes, APIs, databases and custom retrieval | AI agent nodes, MCP and workflow builder; new Agents preview | Enterprise controls; operator-dependent self-hosting | Frankfurt cloud; self-host regional choice; model routes separate | Med for builders; High for whole workspace | Technical automation and hosting control |
+| Make AI Agents [102] | E | Displayed Make Plan $9/month/5,000 credits; Company quote | Mixed SaaS visual automation | App modules, APIs and configured knowledge | Visual scenarios and AI Agents beta | Established platform; beta agent layer | EU/US hosting; external models separate | Med-High | Visual cross-app operational workflows |
+| Lindy [103] | E | $49.99/active user/month; 5,000 credits/user; Enterprise quote | Email, calendars and operational apps | Connected inboxes/calendars; app and browser tools | AI assistants, workflows and computer use | Enterprise controls; workflow-specific permissions | Named UK/EU residency not found | Med | Delegated personal/departmental work |
+| Relevance AI [104][105] | E | Current enterprise quote; numeric production plan not found | Agent workforce across business apps | Configured app tools, APIs and MCP | Multi-agent workforce and reusable tools | Enterprise traceability, approvals and controls | Residency options claimed; named UK/EU scope not found | High | Structured agent operating programme |
+| Gumloop [106][107] | E | Pro from $37/month/20,000 credits; Enterprise quote | Mixed-app workflows and chat agents | Connected business apps; configurable tools | Visual flows and agent tools | Enterprise BYOC and controls; plan-dependent | BYOC can be regional; SaaS UK/EU scope not found | Med-High | Operational AI without extensive code |
+| Relay.app [108] | E | Current numeric price not found | Business SaaS and human-in-loop workflows | Configured apps; Gmail, Sheets, Xero examples | Workflow AI steps and explicit human approvals | Workflow controls; enterprise scope verify | UK/EU residency not found | Med | Approval-heavy departmental automation |
+| StackAI [109] | E | Free 500 runs/2 projects/1 seat; production Enterprise quote | Custom enterprise AI applications | Data loaders, documents, websites and business integrations | Visual agents/workflows; chat/API deployment | Enterprise controls; deployment-specific | Named UK/EU option not found | High | Custom internal knowledge/action applications |
+| Manus [110][111] | E | Team seat/credit pool; current numeric price not found | Autonomous web/browser and artifact work | Files, mail/Slack/browser; exact enterprise index not found | Execution agents; reusable governance depth verify | Team usage administration; enterprise knowledge controls verify | UK/EU residency not found | Med for pilot; High for governed rollout | Research and artifact-producing agents |
+| Genspark for Business [112] | E | Team $30/seat/month monthly; Enterprise quote | Research, browser, AI office artifacts | Drive/files/knowledge; connector catalogue verify | Task agents, sheets/slides and execution | Enterprise SSO/SCIM/audit; tier-dependent | Options claimed; named UK/EU scope not found | Med | Research and document/data deliverables |
+| Microsoft Copilot Studio [113] | E | $200/month/25,000-credit pack; pay-as-you-go; some licensed internal use | Power Platform and Microsoft 365 | Dataverse, SharePoint, connectors and APIs | Low-code agents; flows and tools | Mature environments/DLP; configuration-dependent | Environment/feature-specific; verify inference/tools | Med-High | Building governed M365/process agents |
+| Juma (formerly Team-GPT) [131][132] | E | Pro Starter $49/workspace/month; unlimited seats, pooled credits | Marketing teams and tools | Marketing MCP/tools; HubSpot, analytics | Marketing Flows and shared agents | Team/enterprise options; governance scope verify | Private deployment quote; UK/EU specifics not found | Med | Departmental marketing execution |
+| Abacus.AI ChatLLM Teams / DeepAgent [133] | E | ChatLLM $10/user/month; DeepAgent Pro displayed $20, scope confirm | Multi-model chat and autonomous artifacts | Documents/web; selected app examples including CRM/support | DeepAgent tasks, apps and execution | Team administration; enterprise controls need evidence | UK/EU residency not found | Med | Affordable multi-model/execution pilot |
+| NinjaTech SuperNinja [134] | E | Business $50/month billed annually; unlimited seats/5,000 pooled credits | Browser, coding and business-app execution | GitHub, Salesforce, Jira, Slack; browser/files | Autonomous VM tasks and artifact creation | Enterprise SSO; team controls, permission depth verify | Dedicated VMs; named UK/EU residency not found | Med | Task execution and finished deliverables |
+| Onyx (formerly Danswer) [114][116] | F | Business $20/seat/month annual; Enterprise quote; self-host core + infrastructure | Mixed enterprise knowledge | 40+ advertised connectors; ACL-aware company search | Agents, deep research, MCP/OpenAPI tools | Enterprise SSO/retention; self-host operator controls | Enterprise regional/on-prem options; model endpoints separate | Med managed; High self-hosted | Neutral search with hosting choice |
+| Open WebUI [115][116][141] | F | Source-available self-host; infrastructure/models; Enterprise licensing options | Self-hosted multi-model chat | Uploads/RAG; configured tools, not default enterprise index | Tools, MCP/OpenAPI and Python execution | Configurable RBAC/SSO; operator-dependent | Customer-selected host/model routes | High | Controlled multi-model chat front end |
+| LibreChat [117] | F | MIT software free; hosting/models/support extra | Self-hosted multi-provider chat | Document retrieval; MCP/custom tools | Agents and configured tools | Operator-configured authentication/access controls | Customer-selected host/model routes | High | Custom multi-model staff interface |
+| AnythingLLM [118] | F | Cloud $50 Basic/$99 Pro per instance/month; BYOK; enterprise quote | Private document/chat applications | Documents, websites and configured data/tools | Agent flows and tools | Enterprise extras; plan-dependent | Customer-controlled/on-prem options; model endpoints separate | Med cloud; High self-hosted | Private departmental knowledge assistants |
+| Dify [119] | F | Cloud Professional $590/year/workspace (~$49.17/month), 3 builder seats; enterprise quote | Custom AI apps and workflows | Knowledge datasets, plugins and APIs | Visual workflows/agents; chat/API apps | Enterprise SAML/multi-workspace; operator-dependent | Self-host regional control; cloud UK/EU scope not found | High | Building an owned knowledge/action application |
+| OpenClaw [120] | F | Self-hosted software; infrastructure/models extra | Messaging-first personal agents | Configured files, messaging and tools | Skills/tools and agent actions | DIY; sandbox/permissions require configuration | Self-host location; external model/tool routes separate | High | Controlled technical experiments |
+| Hermes Agent [121] | F | Core deployment + hosting/models; enterprise seat price not found | Nous Research agent/skills ecosystem | Configured gateway, tools, files and skills | Reusable skills and agent execution | DIY profiles/isolation; enterprise multi-user scope not found | Self-host/model routes determine residency | High | Technical skills-based agent experiments |
+
+### 4.1 Amazon Quick head-to-head: which alternative is actually comparable?
+
+This is a comparison of documented product shape and expected implementation work, **not a measured winner/loser ranking**. Cite the profiles and sources for the underlying product facts.
+
+| Alternative to Quick | Where it can be the better fit | Where Quick has the more direct combined proposition | Vanilla-rollout question that decides |
+|---|---|---|---|
+| M365 Copilot / Gemini Enterprise | Existing suite context, familiar identity and everyday documents/email; fewer new places for staff to visit. | A single packaged combination spanning business knowledge, research, BI and automation outside one productivity suite. | Are the critical answers already in the suite, with clean permissions, or spread across repositories and operational databases? |
+| ChatGPT / Claude | Versatile reasoning, writing, research and document/execution work in a familiar AI-first interface. | Governed dashboards and business-data workflows are a more explicit part of Quick's integrated proposition. | Does the pilot need a good knowledge worker assistant or a recurring operational data product? |
+| Glean | A company-wide knowledge layer is the central procurement problem; many established repositories and access rules matter. | BI/dashboards and automation are offered together rather than procured as separate analytics architecture. | Which product retrieves the correct permitted source and recognises freshness on this employer's actual repositories? |
+| Dust / Langdock | Multi-model choice, staff-built agents and, especially for Langdock, EU-oriented mid-market packaging. | More explicit integrated BI, metric/dataset and dashboard capabilities. | How much of the intended value is reusable team agents, and how much is maintained operational reporting? |
+| WRITER / Credal | Repeatable departmental outputs, scoped tools and governance/context engineering justify a more designed solution. | A broader ready-packaged staff destination including analytics, if those components are configured. | Who owns playbooks, source curation, tool approvals and ongoing changes in each proposal? |
+| North / Mistral Vibe / Pharia | Private deployment, European supplier/control or a specific model/hosting requirement dominates. | Managed breadth can reduce the need to assemble the staff, analytics and execution layers. | Is there enough implementation and operations capacity to realise the promised private architecture? |
+| Onyx / Guru / Dash | Finding and maintaining trusted knowledge is the primary job; action and BI can remain elsewhere. | A more complete combination when the company genuinely needs research, BI and action in one place. | Is a narrower knowledge product enough, and does its region/permission model meet the hard gates? |
+| ServiceNow / Moveworks / Sana / Agentforce | Employee or customer requests already live in a system with business rules and action history. | Broader cross-functional exploration and analytics without making a service/CRM application the universal front door. | Can the existing app complete the target workflow, or merely answer part of it? |
+| Zapier / n8n / Make / Lindy / Relevance | A few defined processes need reliable cross-app execution and a builder owns them. | A shared knowledge/research experience is packaged alongside workflows. | Is the desired purchase an employee workspace or a process automation capability? |
+| Perplexity / Manus / Genspark / SuperNinja | External research or finished artifacts are the pilot's main outcome. | Company-wide knowledge, analytics definitions and ongoing automations are a more explicit enterprise proposition. | Can the alternative preserve repository permissions and approvals while working with real internal data? |
+
+Underlying comparison sources: Quick, suite/model workspaces, knowledge layers and builders. [11][15][18][57][32][40][23][24][114][59][101][30]
+
+A spreadsheet, generated slide deck, one-off chart or project dashboard is not the same as maintained BI backed by governed datasets, agreed definitions and recurring refresh. Conversely, a powerful BI engine does not make a wrong or unpermissioned document answer acceptable. The pilot should score both functions separately.
+
+### 4.2 What “vanilla” changes for a medium-sized employer
+
+A well-prepared founder's Quick instance is evidence of what a prepared environment can do. It is not a baseline for a tenant with disconnected repositories, duplicated documents, broken access groups and no workflow owners. The same warning applies to every competitor.
+
+Expected implementation work, based on the documented product structures and not a timed trial:
+
+1. **Suite assistants:** identity may already exist; useful generic drafting appears early. Reliable company answers still depend on the right files, groups, connector scopes and licences.
+2. **Independent knowledge layers:** start with two or three repositories, then validate access inheritance, user matching, indexing, freshness and citations. The best search interface cannot repair missing or contradictory policy.
+3. **Action builders:** each action needs an owner, least-privilege connection, failure handling and a deliberate approval rule. A successful demo against the founder's personal credentials is not a company rollout.
+4. **Quick and other analytics-capable platforms:** connect datasets and define business metrics. Getting a polished chart from an uploaded CSV is easier than maintaining a trustworthy “revenue”, “headcount” or “case backlog” dashboard.
+5. **Private/self-hosted routes:** someone operates identity, software updates, retrieval, logs, backups and model endpoints. A UK server does not constrain an external US model or browser tool.
+
+This suggests **Med to High** for a full Quick rollout, **Med** for a curated first knowledge/agent pilot, and no honest universal “ready in an afternoon” promise. A company already paying for its suite should compare that baseline before adding another destination.
+
+### 4.3 A comparable cost view
+
+Use four lines in every vendor response: **base/suite subscriptions; staff licences; run/token/index/storage consumption; implementation and ongoing administration**. Keep builder seats, service-agent seats and end-user access separate.
+
+Quick's published account fee illustrates why a seat number alone misleads. The following are calculations from its live Pro/Enterprise list rates, not vendor quotes: [9]
+
+| Users and plan | Seat subtotal/month | Account fee/month | Total before extras | Effective per user/month |
+|---|---:|---:|---:|---:|
+| 100 Professional | $2,000 | $250 | $2,250 | $22.50 |
+| 500 Professional | $10,000 | $250 | $10,250 | $20.50 |
+| 100 Enterprise | $4,000 | $250 | $4,250 | $42.50 |
+| 500 Enterprise | $20,000 | $250 | $20,250 | $40.50 |
+
+These exclude separately metered usage, additional index/capacity, implementation and any distinct BI entitlements. Do not compare these production totals with a free builder trial, five-person Starter or discounted first-year bundle.
+
+## 5. Market dynamics in 2026 and likely relevance in 2028
+
+### 5.1 Consolidation is changing the procurement entity
+
+ServiceNow's completed Moveworks acquisition, Workday's Sana ownership and Zendesk's Unleash acquisition show enterprise application vendors buying the knowledge/agent front door. Superhuman's absorption/rebrand of Coda changes the name and suite buying route; Automation Anywhere's current Aisera product combines conversational employee service with process automation. These changes do not prove that integration is complete or all licences are interchangeable. [58][63][95][82][97]
+
+The contrasting recent events matter: Cohere and Aleph Alpha **signed** a combination agreement on 16 September, with completion **not found**; Reuters on 8 October reports Manus independent after the Meta deal unwind. Flowise's official sunset notice is direct evidence that a plausible old alternatives list can include a product no longer suitable for a fresh supported deployment. Ask for the legal supplier, roadmap, support owner and contractual migration rights, not just the familiar product name. [127][111][138]
+
+### 5.2 Bundling and price moves make “$30 a seat” an inadequate comparison
+
+Microsoft's live enterprise page lists **E7 at $99/user/month annually**; its March announcement describes the E5, Copilot and Agent 365 combination. This is not evidence that every E3/E5 customer receives the full paid Copilot capability. The UK page separately lists Business Standard/Premium bundles and a first-year Copilot Business discount: **£13.80 annually billed versus £16.10 regular displayed**, with the offer window ending 31 December. Business plans have a 300-user limit. A whole-company 700-person proposal must use the appropriate enterprise packaging. [13][14][139]
+
+Rovo embeds credits into paid application tiers, Slack puts deeper AI/search in higher plans, and SAP offers a time-limited 2026 custom-agent runtime promotion. The economic result is a stronger existing-estate baseline, rather than universally free agents. Budget future charging: Rovo's extra usage is scheduled to start billing in December and Langdock's governance inclusion ends on 1 January 2027. [66][68][92][34]
+
+Agent hours, model tokens, workflow executions, active users, credits and outcome-based contracts coexist. An apparently lower seat price may just move charges into usage or implementation. Gumloop's August pass-through token update is one concrete packaging change; Zapier's October migration changes both the product experience and the charging comparison. Pricing-page dates are often not found, so this research does **not** assert a quantified market-wide fall in prices or an unsupported historical percentage. [107][99][100]
+
+HubSpot's 13 April announcement moved two particular agents to outcome-based pricing from the next day; its current limited-release catalogue also shows seats plus credits. Those specific facts do not establish one universal new UK tariff or a firm global rollout date. They reinforce the need for a dated, programme-specific quote. [148][147]
+
+### 5.3 MCP reduces connector friction, not all lock-in
+
+The **28 July 2026 MCP specification** is a released connector-protocol revision, including authorisation hardening and extensions. Vendors now expose or consume MCP in staff agents, knowledge layers and builders. This can let one governed company tool serve several assistants, and reduce repeated integration code. It does not establish that every vendor supports the same protocol version or security controls. [128][23][40][49]
+
+For the transformation lead, ask: who authenticates the user, what scopes are granted, can the server enforce the original repository ACL, where are requests processed, how is tool output treated, which writes require approval, and can calls be audited? Those are implementation questions; a catalogue icon saying “MCP supported” is not the answer.
+
+Lock-in remains in indexed knowledge/identity mappings, company memory, workflow definitions, proprietary agent runtimes, usage contracts, dashboards, embeddings, evaluation history and staff habits. A standardised tool call makes switching one integration easier; it does not export an entire configured workspace. Keep core sources in the system of record, record workflow/approval specifications independently, and test whether agent configurations, logs and business outputs can be exported.
+
+### 5.4 Sovereignty is a stack decision
+
+European suppliers including Mistral, Langdock, Omnifact, nexos.ai, Cohere/Aleph Alpha's proposed combination and specialist knowledge vendors broaden the choice. UK-based Aiimi provides another buying route. Nationality alone does not settle storage, model inference, support access, external web research or subprocessors. Selected deployment and model routes matter more than the flag on the website. [22][44][46][127][51]
+
+A useful illustration is ChatGPT: current docs distinguish eligible UK storage from EU inference and explicitly exclude certain features/external processing. Quick's regional documentation also includes cross-region/search caveats. An organisation with a strict “everything stays in the UK” policy cannot sign off either from a pricing page's region label. This is a procurement-design observation, not legal advice or a conclusion that either vendor cannot meet a narrower defined requirement. [140][10]
+
+### 5.5 Which will still matter in 2028?
+
+The following are **reasoned forecasts as of 10 October 2026**, not verified future facts, analyst rankings or guarantees of independence. “Matter” can mean the capability survives inside a larger suite.
+
+| Likelihood/route | Products or patterns | Why they deserve attention now | What could change |
+|---|---|---|---|
+| **High confidence in continuing ecosystem relevance** | Microsoft, Google, AWS Quick/Bedrock, Salesforce/Slack, ServiceNow, Workday/Sana, SAP, Oracle, IBM; ChatGPT and Claude workspaces | Existing enterprise distribution, infrastructure or broad staff adoption gives a durable buying route. | Names, bundles, credits and product boundaries can change; individual features may be retired. |
+| **Strong strategic relevance, independence less predictable** | Glean, WRITER, Dust, Langdock, Cohere North, Mistral Vibe; governed context/search specialists | Cross-app retrieval, model choice and private/European deployment address needs the suites do not automatically solve. | Acquisition, narrower specialisation or pricing pressure; small-IT implementation burden remains decisive. |
+| **Durable operating pattern, choose platform carefully** | Zapier, n8n, Make, Relevance, Lindy, Gumloop, StackAI and Copilot Studio | Owned, repeatable business processes will still need tools, approvals and monitoring. | Conversational builders and coding agents may displace specific design interfaces; Flowise is a current warning. |
+| **Promising, require more procurement evidence** | Manus, Genspark, SuperNinja, Abacus.AI, Grok enterprise offerings, new Meta enterprise platform | Autonomous research/artifacts and broader model-maker distribution could become important. | Internal permissions, residency, support economics, ownership and model costs are less settled in this research. |
+| **Likely useful architecture, project/vendor continuity varies** | Onyx, LibreChat, Open WebUI, AnythingLLM, Dify; OpenClaw/Hermes skills-based agents | Owned interfaces and controllable hosting address durable customisation needs. | Licence changes, maintainers, security/upgrade burden and compatibility; hosting control does not remove external dependencies. |
+
+For a UK mid-market pilot, shortlist products for an evidenced need and a manageable operating model rather than attempting to predict which brand wins. Durable systems of record, exportable workflow definitions and a reusable evaluation set reduce the cost of changing suppliers.
+
+## 6. A shortlist recipe: from a market map to three pilot candidates
+
+This is a proposed method for the transformation lead, not a sourced claim about typical project timelines.
+
+1. **Define one primary job and two secondary jobs.** For example: “staff find the right policy and project answer” first; “research a market with citations” second; “draft a CRM update for approval” third. If governed recurring dashboards are essential, make that an explicit gate rather than assuming every AI tool provides BI.
+2. **Reduce the market to roughly 30 relevant names by estate.** For an M365/Google employer without SAP, Oracle, ServiceNow, Box or a large search platform, remove most application-dependent options. Remove departmental marketing/research products if this is an all-staff knowledge purchase. Remove hosted developer runtimes if there is no application delivery team.
+3. **Apply hard gates before scoring.** Require the exact must-have repositories, identity/permission behaviour, acceptable storage/inference/tool locations, audit and retention, approval-controlled writes, headcount entitlement and an affordable production model. “Not found” becomes a vendor question, not a pass. Exclude announced-only or sunset products for production pilots.
+4. **Choose three different buying hypotheses.** Candidate 1: the existing suite baseline. Candidate 2: a cross-app layer such as Quick, Dust, Langdock or Glean, selected for actual connectors and operating effort. Candidate 3: the specific challenger that answers the biggest remaining constraint, such as Mistral/North/Onyx for controlled deployment, or the existing employee-service product for operational resolution. Do not select three near-identical generic chats and learn nothing about the architecture.
+5. **Pilot the same bounded work in each.** Suggested design: 20 to 40 staff, two or three source systems, about four weeks, 25 real knowledge questions including deliberately inaccessible records, three research briefs and two write actions with approval. Include stale/conflicting documents, revoked access, a new file and a failed connector. Record provisioning/configuration hours separately from user task time.
+6. **Score outcomes and operating burden.** An example 100-point weighting: knowledge correctness/citations/permissions 35; safe useful actions 20; research quality 15; administration/governance 15; full production cost 10; staff usability 5. Any confidentiality or approval failure blocks expansion regardless of weighted score. Weights are adjustable to the primary job.
+7. **Ask for a 100-, 500- and 1,000-user production quote.** Include consumed capacity, builder licences, mandatory enterprise tiers, indexing, models, suite dependencies, implementation, support, renewal terms and 2027 charging changes. Dust's 100-person Business scope, Omnifact's 50-user Pro ceiling and Genspark's 150-user Team maximum illustrate why a successful departmental trial is not a full-company price. [33][43][112]
+8. **Choose on demonstrated fit, with a named owner.** Expand only when repository permissions, output usefulness, spend limits, logs and action approvals behave correctly with ordinary employee accounts. Keep the evaluation set and workflow requirements outside the vendor so they can be reused at renewal.
+
+Three example starting trios, **conditional recommendations rather than rankings**:
+
+| Employer situation | Three pilot hypotheses | Why these three |
+|---|---|---|
+| M365-centred, scattered knowledge, useful BI requirement | Copilot baseline; Amazon Quick; Langdock | Existing-suite value versus integrated analytics/knowledge versus EU-oriented multi-model staff agents. |
+| Google/Slack-centred, knowledge and recurring team work | Gemini Enterprise baseline; Dust; Quick or Glean | Existing context versus staff-configured agents versus broader knowledge/research or retrieval-first coverage. |
+| Strict regional/private deployment requirement with implementation capacity | Contract-compliant suite baseline; Mistral/North; Onyx/private knowledge alternative | Tests whether managed regional terms suffice, and what private operation actually costs. Replace any candidate that fails the written policy. |
+
+For a 100-person firm with only a few IT staff, a supported managed workspace plus two or three curated sources is usually the more practical initial hypothesis than assembling an enterprise agent stack. For a 1,000-person employer with sensitive repositories and many operational systems, permissions, service ownership and consumption controls deserve as much pilot attention as response quality. These are implementation judgements, not a promise of universal ROI.
+
+## Sources
+
+All sources were retrieved on **10 October 2026**. Dates below are publication/update dates where verified, not crawl dates. **Not found** is used when no reliable date was available. Sources with dates before 10 April 2026 are flagged as older than six months; official effective/announcement dates are labelled where page publication dates are missing. Live pricing was read at the cut-off, but an undated page does not establish a historical price-change date. The bibliography distinguishes primary pages, independent reports and discovery-only material through publisher and support notes.
+
+[1] **Market Guide for Enterprise AI Assistants**. Publisher: Gartner. Publication/update date: **2026-04-07**. **Older than six months, potentially stale.** URL: https://www.gartner.com/en/documents/7692325. Supports: Market definition; public abstract only, full report not accessed.
+
+[2] **The State Of Agentic AI In 2026: Companies Are Chasing, Few Are Catching**. Publisher: Forrester. Publication/update date: **2026-06-03**. URL: https://www.forrester.com/blogs/the-state-of-agentic-ai-in-2026-companies-are-chasing-few-are-catching/. Supports: Production adoption gap and platform confusion.
+
+[3] **The Forrester Wave: AI Platforms, Q3 2026 Is Live: Prepare To Recalibrate**. Publisher: Forrester. Publication/update date: **2026-08-10**. URL: https://www.forrester.com/blogs/the-forrester-wave-ai-platforms-q3-2026-is-live-prepare-to-recalibrate/. Supports: Heterogeneous AI platform market; not a workspace ranking.
+
+[4] **The Agent Economy Is Scaling Faster Than It Can Be Metered**. Publisher: IDC. Publication/update date: **2026-08-28**. URL: https://www.idc.com/resource-center/blog/the-agent-economy-is-scaling-faster-than-it-can-be-metered/. Supports: Agent cost governance and differently defined adoption measurements.
+
+[5] **Top 10 Glean Alternatives & Competitors**. Publisher: G2. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.g2.com/products/glean-technologies-glean/competitors/alternatives. Supports: Discovery of Guru, Notion, Kore.ai, Coveo and research/search adjacencies.
+
+[6] **Will enterprise search startups like Glean survive Claude Cowork/Copilot-style agents?**. Publisher: Reddit, r/ArtificialInteligence. Publication/update date: **2026-05-03**. URL: https://www.reddit.com/r/ArtificialInteligence/comments/1t2ihou/will_enterprise_search_startups_like_glean/. Supports: Practitioner questions about permissions, company context and competition; anecdotal.
+
+[7] **Langdock: GDPR-Compliant ChatGPT for teams**. Publisher: Product Hunt. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.producthunt.com/products/langdock. Supports: Discovery only; historical launch descriptions are unsuitable as current feature evidence.
+
+[8] **Enterprise AI hits the wall: NTT DATA research reveals growing privacy and sovereignty barriers**. Publisher: NTT DATA. Publication/update date: **2026-05-20 (page date); release text 2026-05-14**. URL: https://uk.nttdata.com/news/2026/ai-privacy-and-data-sovereignty-2026. Supports: Sovereignty as an architecture and procurement issue.
+
+[9] **Amazon Quick pricing**. Publisher: AWS. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://aws.amazon.com/quick/pricing/pricing/. Supports: Current tiers, account fee, agent-hour metering and index allowances.
+
+[10] **AWS Regions, websites, IP address ranges, and endpoints**. Publisher: AWS documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.aws.amazon.com/quick/latest/userguide/regions.html. Supports: London, Frankfurt and Ireland availability and cross-region processing caveats.
+
+[11] **Amazon Quick desktop app is now generally available on macOS and Windows**. Publisher: AWS. Publication/update date: **2026-09-09**. URL: https://aws.amazon.com/about-aws/whats-new/2026/09/amazon-quick-desktop-app-generally-available-macos-windows/. Supports: Desktop GA and regional availability.
+
+[12] **Start using Amazon Quick for free in minutes with Free and Plus pricing plans**. Publisher: AWS. Publication/update date: **2026-04-28**. URL: https://aws.amazon.com/about-aws/whats-new/2026/04/amazon-quick-free-plus/. Supports: Simplified sign-up and contemporary Quick naming.
+
+[13] **Microsoft 365 Enterprise: Compare Plans and Pricing**. Publisher: Microsoft. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-plans-and-pricing. Supports: Current E7 availability and US list price; E3/E5 are separate plans.
+
+[14] **Introducing the First Frontier Suite built on Intelligence + Trust**. Publisher: Microsoft. Publication/update date: **2026-03-09**. **Older than six months, potentially stale.** URL: https://blogs.microsoft.com/blog/2026/03/09/introducing-the-first-frontier-suite-built-on-intelligence-trust/. Supports: E7 composition and announced 1 May GA date.
+
+[15] **Compare editions of Gemini Enterprise**. Publisher: Google Cloud documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.cloud.google.com/gemini/enterprise/docs/editions. Supports: Edition differences, connectors and governance.
+
+[16] **Gemini Enterprise app: Best of Google AI for Business**. Publisher: Google Cloud. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://cloud.google.com/gemini-enterprise. Supports: Business starting price $21 and current product positioning.
+
+[17] **Pricing**. Publisher: OpenAI, ChatGPT Learn. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://learn.chatgpt.com/docs/pricing. Supports: Business $20 annual/$25 monthly, Enterprise quoted; Work/Codex shared allowances.
+
+[18] **ChatGPT Work Overview**. Publisher: OpenAI, ChatGPT Learn. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview. Supports: Current enterprise execution, app permissions and deployment boundaries.
+
+[19] **Meet dots**. Publisher: OpenAI, ChatGPT Learn. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://learn.chatgpt.com/docs/dots. Supports: Staged availability, Enterprise opt-in and geographic limitations.
+
+[20] **Plans & pricing**. Publisher: Anthropic. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://claude.com/pricing. Supports: Team and Enterprise prices; Cowork inclusion; explicitly beta features.
+
+[21] **Pricing**. Publisher: Mistral AI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://mistral.ai/pricing/. Supports: Vibe Team $24.99 and Enterprise controls.
+
+[22] **Mistral Vibe (formerly Le Chat)**. Publisher: Mistral AI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://mistral.ai/products/vibe/. Supports: Current name, connectors, agents and private deployment.
+
+[23] **Connect the dots: Build with built-in and custom MCPs in Studio**. Publisher: Mistral AI. Publication/update date: **2026-05-22**. URL: https://mistral.ai/news/connectors/. Supports: Studio connectors, API use and approval flows.
+
+[24] **North 2: Enterprise AI without compromises**. Publisher: Cohere. Publication/update date: **2026-10-05**. URL: https://cohere.com/blog/introducing-north-2. Supports: Current North version, connectors, builders, private deployment; financial connectors are planned.
+
+[25] **Pricing: Secure and Scalable Enterprise AI**. Publisher: Cohere. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://cohere.com/pricing. Supports: Custom enterprise and private deployment pricing, distinct from model token prices.
+
+[26] **SpaceXAI/SpaceXSI for Business**. Publisher: x.ai business site. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://x.ai/grok/business. Supports: Business $30; Enterprise controls and external applications. Branding differs between retrieved page elements.
+
+[27] **Enterprise Pricing and Billing: Frequently Asked Questions**. Publisher: Perplexity. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.perplexity.ai/help-center/en/articles/10352986-enterprise-pricing-and-billing-frequently-asked-questions. Supports: Enterprise Pro price and billing.
+
+[28] **Which Perplexity Subscription Plan is right for you?**. Publisher: Perplexity. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you. Supports: Enterprise plans, Comet and admin controls.
+
+[29] **Connecting your Data: How to ingest Google Drive, SharePoint, OneDrive, Box**. Publisher: Perplexity. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.perplexity.ai/enterprise/videos/connecting-your-data-how-to-ingest-google-drive-sp-onedrive-box. Supports: File knowledge connectors.
+
+[30] **Comet Enterprise**. Publisher: Perplexity. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.perplexity.ai/enterprise/comet. Supports: Browser actions and enterprise restrictions.
+
+[31] **WRITER plans**. Publisher: WRITER. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://writer.com/plans/. Supports: Current Starter/Enterprise packaging, agents, playbooks and governance.
+
+[32] **Setting up connectors**. Publisher: WRITER support. Publication/update date: **2026-07-31 (last updated)**. URL: https://support.writer.com/articles/4107166038-setting-up-connectors. Supports: MCP gateway, connector scopes, examples and current availability.
+
+[33] **Dust Pricing: Business and Enterprise Plans for AI Agents**. Publisher: Dust. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://dust.tt/home/pricing. Supports: Current credit-based tiers, connectors and EU residency; fetched page displayed euros.
+
+[34] **Pricing Plans**. Publisher: Langdock. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://langdock.com/pricing. Supports: Current seats, workflow/API extras and governance promotion ending 1 January 2027.
+
+[35] **Enterprise AI Platform**. Publisher: Langdock. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://langdock.com/enterprise. Supports: EU Azure SaaS, private/on-premises deployment and enterprise positioning.
+
+[36] **Company Knowledge / Unternehmenswissen**. Publisher: Langdock documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.langdock.com/de/product/chat/company-knowledge. Supports: Cross-app knowledge retrieval and supported source examples.
+
+[37] **Pricing for our AI-Powered Knowledge Management Platform**. Publisher: Guru. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.getguru.com/pricing. Supports: Current quoted pricing, governed knowledge, connectors and MCP.
+
+[38] **Our Privacy Policy at Guru**. Publisher: Guru. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.getguru.com/privacy. Supports: US transfers; does not establish a selectable EU deployment.
+
+[39] **Enterprise Pricing**. Publisher: Credal. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://credal.ai/pricing. Supports: Builder/user seats, indexing, tokens, audit controls and private/on-premises options.
+
+[40] **Connectors**. Publisher: Credal documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.credal.ai/user-guide/platform/agent-builder/configuration/add-connectors/overview. Supports: Indexed sources, live actions, human approvals and MCP.
+
+[41] **GoSearch: Enterprise Search Pricing and Plans**. Publisher: GoSearch. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.gosearch.ai/product/pricing. Supports: $20 Pro, Enterprise quote, distinction between personal and workspace connectors.
+
+[42] **Bringing Your Own Cloud (BYOC)**. Publisher: GoSearch. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.gosearch.ai/help/bringing-your-own-cloud-byoc/. Supports: Customer-controlled cloud residency.
+
+[43] **Pricing for Pro and Enterprise from €25 per user**. Publisher: Omnifact. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://omnifact.ai/pricing. Supports: €25 annual Pro, 50-user limit, Enterprise and EU hosting.
+
+[44] **AI Platform for Business with Privacy Filter**. Publisher: Omnifact. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://omnifact.ai/. Supports: EU/on-premises deployment, privacy filter, models and integration positioning.
+
+[45] **Pricing plans: Get your subscription**. Publisher: nexos.ai. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://nexos.ai/pricing/. Supports: Quoted Workspace; separately billed Gateway; EU residency.
+
+[46] **All-in-one AI platform**. Publisher: nexos.ai. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://nexos.ai/. Supports: Chat/Agents and supported EU model routing; not every model is European-hosted.
+
+[47] **Ema: Universal AI Employee**. Publisher: Ema Unlimited, Inc.. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.ema.co/. Supports: Employee front door, integrations, outcome-based pricing and enterprise focus.
+
+[48] **Agentic AI That Orchestrates Actions, Not Just Answers**. Publisher: Squirro. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://squirro.com/agentic-ai. Supports: Governed search-to-action platform, workflow orchestration and scale positioning.
+
+[49] **New features of Mindbreeze InSpire 26.5 Release**. Publisher: Mindbreeze. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.mindbreeze.com/blog/new-features-of-mindbreeze-inspire-265-release. Supports: Insight Workplace, research and MCP integration.
+
+[50] **Sinequa by ChapsVision: Sovereign AI-Powered Search Platform**. Publisher: ChapsVision. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.chapsvision.com/platform/sinequa/. Supports: Current ownership, assistants, business integrations and sovereign positioning.
+
+[51] **The Aiimi Workplace AI Platform**. Publisher: Aiimi. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://aiimi.com/platform. Supports: Current name; cross-system discovery, assistant, analytics and actions.
+
+[52] **About Coveo Search Agents**. Publisher: Coveo documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.coveo.com/en/q2pe0294. Supports: Paid conversational-search extension; search agent is not unrestricted task automation.
+
+[53] **AI for Work**. Publisher: Kore.ai. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.kore.ai/ai-for-work. Supports: Enterprise search, channels, orchestration and connector claims.
+
+[54] **IBM watsonx Orchestrate Pricing**. Publisher: IBM. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.ibm.com/products/watsonx-orchestrate/pricing. Supports: $530 Essentials, $6,360 Standard, agent builder and capacity model.
+
+[55] **Regional availability and outbound IP addresses**. Publisher: IBM documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=notes-regional-availability-outbound-ip-addresses. Supports: London, Paris and Frankfurt deployment options.
+
+[56] **Glean Deployment Models**. Publisher: Glean documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.glean.com/get-started/build/about-self-hosted. Supports: Single-tenant hosted/customer-cloud deployments; support-access caveat.
+
+[57] **Model choice**. Publisher: Glean documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.glean.com/get-started/golive/model-choice. Supports: Assistant/Agent Builder model choices and enterprise retention commitments.
+
+[58] **ServiceNow completes acquisition of Moveworks**. Publisher: ServiceNow. Publication/update date: **2025-12-15**. **Older than six months, potentially stale.** URL: https://newsroom.servicenow.com/press-releases/details/2025/ServiceNow-completes-acquisition-of-Moveworks/default.aspx. Supports: Completed ownership change; not evidence that the product ceased operating.
+
+[59] **EmployeeWorks Web App Product FAQ**. Publisher: ServiceNow Community, vendor-authored. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.servicenow.com/community/sn-employeeworks-articles/employeeworks-web-app-product-faq/ta-p/3543081. Supports: Employee front door, world knowledge and multiple required licence entitlements.
+
+[60] **INRY deploys ServiceNow EmployeeWorks in six weeks**. Publisher: ServiceNow / INRY. Publication/update date: **2026-09-23**. URL: https://investor.servicenow.com/news/news-details/2026/INRY-deploys-ServiceNow-EmployeeWorks-in-six-weeks-replacing-its-legacy-portal-with-an-AI-front-door-to-work/default.aspx. Supports: Dated implementation example; skilled partner, not a vanilla benchmark.
+
+[61] **Add a web search to an AI agent**. Publisher: ServiceNow documentation. Publication/update date: **2026-07-21 (updated)**. URL: https://www.servicenow.com/docs/r/intelligent-experiences/add-web-search-ai-agent.html. Supports: AI Agent Studio and explicitly non-resident Google web-search grounding.
+
+[62] **Simple pricing for powerful AI agents**. Publisher: Sana. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://sanalabs.com/products/sana/pricing. Supports: Retrieved official page shows Team $30, Enterprise custom; packaging inconsistency noted.
+
+[63] **Introducing Sana from Workday**. Publisher: Workday. Publication/update date: **2026-03-17**. **Older than six months, potentially stale.** URL: https://investor.workday.com/news-and-events/press-releases/news-details/2026/Introducing-Sana-from-Workday-Superintelligence-for-Work-That-Finds-Answers-Takes-Action-and-Automates-Workflows/default.aspx. Supports: Worldwide availability and Workday Flex Credits.
+
+[64] **Agents**. Publisher: Sana from Workday Help Center. Publication/update date: **2026-06-10**. URL: https://intercom-help.eu/workday-sana/en/articles/696338-agents. Supports: Plain-language multistep agent building and approvals.
+
+[65] **Sana AI packaging: Sana Agents drops Free and $30 Team plans**. Publisher: UsagePricing. Publication/update date: **2026-10-05**. URL: https://www.usagepricing.com/blueprint/activity/sana-ai-2026-10-05-agents-free-team-plans-removed. Supports: Independent monitored packaging change conflicting with fetched vendor page.
+
+[66] **How Rovo credits work**. Publisher: Atlassian documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://support.atlassian.com/rovo/docs/rovo-usage-limits/. Supports: Included credits; $0.01 extra credit; billing scheduled 3 December 2026.
+
+[67] **Rovo: Unlock organisational knowledge with GenAI**. Publisher: Atlassian. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.atlassian.com/software/rovo. Supports: Search/chat/agents and included paid-cloud editions.
+
+[68] **Slack Pricing Plans**. Publisher: Slack / Salesforce. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://slack.com/pricing. Supports: Current US prices, Business+ and Enterprise+ capabilities.
+
+[69] **Slackbot limits and credit usage**. Publisher: Slack. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://slack.com/help/articles/53579676130195-Slackbot-limits-and-credit-usage. Supports: Current personal-agent capabilities and possible future billing changes.
+
+[70] **Data residency for Slack**. Publisher: Slack. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://slack.com/help/articles/360035633934-Data-residency-for-Slack. Supports: Storage residency scope and paid-tier requirement.
+
+[71] **Salesforce Agentforce Pricing**. Publisher: Salesforce. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.salesforce.com/agentforce/pricing/. Supports: $5 access, Flex Credits, $125 flat access and $2 conversations are different models.
+
+[72] **Notion Pricing Plans**. Publisher: Notion. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.notion.com/pricing. Supports: Business $20, credits and Enterprise Search beta designation.
+
+[73] **Introducing Custom Agents**. Publisher: Notion. Publication/update date: **2026-02-24**. **Older than six months, potentially stale.** URL: https://www.notion.com/blog/introducing-custom-agents. Supports: Custom Agents release; recurring tasks and MCP.
+
+[74] **Data residency for Notion**. Publisher: Notion. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.notion.com/en-gb/help/data-residency. Supports: Enterprise EU storage; excludes Calendar/Mail/beta services.
+
+[75] **Box Plans & Pricing**. Publisher: Box. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.box.com/pricing. Supports: Business, Enterprise Plus and quoted Advanced pricing.
+
+[76] **Box AI Features in Business Plans**. Publisher: Box support. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://support.box.com/hc/en-us/articles/43797379758739-Box-AI-Features-in-Business-Plans. Supports: AI capabilities and custom-agent tier gating.
+
+[77] **Box Zones expands to 10 regions: Greater choice, deeper processing, and a path to in-region AI**. Publisher: Box. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://blog.box.com/box-zones-expands-10-regions-greater-choice-deeper-processing-and-path-region-ai. Supports: Distinguishes content Zones from future in-region AI processing.
+
+[78] **Zoom launches ZoomMate**. Publisher: Zoom. Publication/update date: **2026-06-01**. URL: https://news.zoom.com/zoom-launches-zoommate/. Supports: GA in North America; $20 launch starting price; EMEA/APAC announced expansion.
+
+[79] **Meet ZoomMate, your AI teammate**. Publisher: Zoom. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.zoom.com/en/products/ai-assistant/. Supports: Current agents, knowledge bank, workflows, research and AI credits.
+
+[80] **Zoom introduces AI agents as part of ZoomMate and Zoom AI On-Prem**. Publisher: Zoom. Publication/update date: **2026-06-22**. URL: https://news.zoom.com/zoom-introduces-ai-agents-as-part-of-zoommate-and-zoom-ai-on-prem-for-regulated-enterprises/. Supports: On-premises transcription/caption processing; not blanket ZoomMate residency.
+
+[81] **Release notes for ZoomMate**. Publisher: Zoom support. Publication/update date: **2026-09-21 (cited release)**. URL: https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0083515. Supports: Further deployment expansion and limitations; not proof of all UK entitlements.
+
+[82] **Superhuman Docs billing and pricing basics**. Publisher: Superhuman. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://help.superhuman.com/hc/en-us/articles/46210161369741-Superhuman-Docs-billing-and-pricing-basics. Supports: 8 July Coda rebrand, maker billing and legacy pricing.
+
+[83] **Superhuman Go: Pricing & Plans**. Publisher: Superhuman. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://superhuman.com/plans/go. Supports: $12 Pro/$33 Business annual, contextual assistant and enterprise controls.
+
+[84] **Superhuman Docs: Pricing & Plans**. Publisher: Superhuman. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://superhuman.com/plans/docs. Supports: Docs AI beta, Packs/automations and separate maker billing.
+
+[85] **Get Dropbox Dash: Pricing**. Publisher: Dropbox. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://dash.dropbox.com/plans. Supports: $15 annual/$19 monthly Teams; $35 Business displayed.
+
+[86] **Dropbox Dash Security Whitepaper**. Publisher: Dropbox. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.dropbox.com/cms/content/dam/dropbox/warp/en-us/dash/Dash-Security-Architecture-Overview_Whitepaper.pdf. Supports: Dash-specific architecture and absence of a residency selection in retrieved whitepaper.
+
+[87] **ClickUp Brain: AI Pricing**. Publisher: ClickUp. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://clickup.com/brain/pricing. Supports: $9/$28 displayed AI prices, feature gating and agent credits.
+
+[88] **Enterprise AI Search Software**. Publisher: ClickUp. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://clickup.com/brain/enterprise-search. Supports: Cross-app knowledge and task/agent workflow fit.
+
+[89] **The pricing model for monday AI portfolio**. Publisher: monday.com support. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://support.monday.com/hc/en-us/articles/35277848309394-The-pricing-model-for-monday-AI-portfolio. Supports: Sidekick, agents and credits in addition to paid accounts.
+
+[90] **Zia Agents: Zoho's Unified AI For Your Entire Business**. Publisher: Zoho. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.zoho.com/agents/. Supports: Native agents, studio and ecosystem fit.
+
+[91] **Meet Zia Agents: Zoho SalesIQ's autonomous AI workforce**. Publisher: Zoho. Publication/update date: **2026-06-30**. URL: https://www.zoho.com/blog/salesiq/meet-zia-agents-autonomous-ai-workforce.html. Supports: Actual SalesIQ availability; not universal availability across Zoho.
+
+[92] **Software Packages and Pricing: SAP Business AI**. Publisher: SAP. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.sap.com/mena/products/artificial-intelligence/pricing.html. Supports: Base/premium AI, action units and custom-agent runtime promotion.
+
+[93] **Oracle AI for Fusion Applications: How do I use AI Agent Studio?**. Publisher: Oracle documentation. Publication/update date: **not found (release 26B)**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.oracle.com/en/cloud/saas/fusion-ai/26b/aiaas/how-do-i-use-ai-agent-studio.pdf. Supports: Included templates versus separately licensed custom agents.
+
+[94] **Introducing Zendesk Employee Service AI Agents**. Publisher: Zendesk. Publication/update date: **2026-08-14 (updated)**. URL: https://www.zendesk.com/blog/zendesk-insights/innovation/employee-service-ai-agents-announcement/. Supports: Unleash-based employee knowledge agents.
+
+[95] **Zendesk Acquires Unleash**. Publisher: Zendesk. Publication/update date: **2025-12-18**. **Older than six months, potentially stale.** URL: https://www.zendesk.com/newsroom/press-releases/zendesk-acquires-unleash-to-enhance-ai-first-employee-service-business/. Supports: Acquisition, permissions and channel integration.
+
+[96] **Freshservice ITSM Software Pricing & Plans**. Publisher: Freshworks. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.freshworks.com/freshservice/pricing/. Supports: Agent-based base subscriptions, $29 Copilot add-on and Enterprise session allowances.
+
+[97] **Agentic AI for Businesses**. Publisher: Aisera / Automation Anywhere. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://aisera.com/products/. Supports: Current Aisera product continuity and ownership.
+
+[98] **Pricing: Plans for IT & HR Service Desk**. Publisher: Rezolve.ai. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.rezolve.ai/pricing. Supports: Quoted employee/service model, channels, studios and knowledge.
+
+[99] **Migrating from Agents to AI by Zapier**. Publisher: Zapier. Publication/update date: **2026-10-01 (updated)**. URL: https://help.zapier.com/hc/en-us/articles/47402591569805-Migrating-from-Agents-to-AI-by-Zapier. Supports: Migration to Zap editor; chat replaced by webhook integration.
+
+[100] **Best practices for migrating from Agents to AI by Zapier**. Publisher: Zapier. Publication/update date: **2026-10-01 (updated)**. URL: https://help.zapier.com/hc/en-us/articles/49098615354765-Best-practices-for-migrating-from-Agents-to-AI-by-Zapier. Supports: Knowledge-source parity is not automatic.
+
+[101] **n8n Plans and Pricing**. Publisher: n8n. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://n8n.io/pricing/. Supports: Execution pricing, EU cloud, self-hosting and preview labels.
+
+[102] **Pricing & Subscription Packages**. Publisher: Make / Celonis. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.make.com/en/pricing. Supports: Current $9 displayed base, credits, EU/US hosting, AI Agents beta.
+
+[103] **Pricing**. Publisher: Lindy. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.lindy.ai/pricing. Supports: $49.99 per active user, pooled credits, Enterprise controls.
+
+[104] **Pricing**. Publisher: Relevance AI / OnSearch Pty Ltd. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://relevanceai.com/pricing. Supports: Current Enterprise sales model; old self-service numbers not carried forward.
+
+[105] **Enterprise AI Agents**. Publisher: Relevance AI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://relevanceai.com/enterprise. Supports: Orchestration, human approvals, tracing and residency claims without named regions.
+
+[106] **Pricing**. Publisher: Gumloop / AgentHub Inc.. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.gumloop.com/pricing. Supports: $37 Pro start, credits and quoted Enterprise.
+
+[107] **A simple, transparent pricing model**. Publisher: Gumloop. Publication/update date: **2026-08-05**. URL: https://squarespace.gumloop.com/blog/transparent-pricing. Supports: Token-cost pass-through and enterprise customer-cloud deployments; official vendor subdomain.
+
+[108] **Who is Relay.app for?**. Publisher: Relay.app documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.relay.app/getting-started/readme. Supports: Workflow product rather than one-off research/chat substitute.
+
+[109] **StackAI Pricing**. Publisher: StackAI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.stackai.com/pricing. Supports: Free 500-run pilot and quoted production.
+
+[110] **Team Plan**. Publisher: Manus. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://manus.im/team. Supports: Team controls, pooled credits and connectors/features; numeric dynamic price not resolved.
+
+[111] **Manus raises more than $500 million after Meta exit**. Publisher: Reuters via Investing.com. Publication/update date: **2026-10-08**. URL: https://www.investing.com/news/stock-market-news/manus-raises-more-than-500-million-after-meta-exit-4938004. Supports: Current Butterfly Effect ownership and independent operation after unwind.
+
+[112] **Pricing: Genspark for Business**. Publisher: Genspark. Publication/update date: **2026-09-17 (updated)**. URL: https://www.genspark.ai/business/pricing. Supports: $30 Team, credit allowances, six-figure enterprise indication and governance gating.
+
+[113] **Microsoft 365 Copilot Pricing: AI Agents / Copilot Studio**. Publisher: Microsoft. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.microsoft.com/en-us/microsoft-365/copilot/pricing/copilot-studio. Supports: $200/25,000 credits and internal licensed-use versus external-use distinction.
+
+[114] **Pricing: Onyx AI**. Publisher: Onyx. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://onyx.app/pricing. Supports: $20 annual Business, knowledge connectors, actions and region-specific Enterprise.
+
+[115] **Open WebUI for Enterprise**. Publisher: Open WebUI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.openwebui.com/enterprise/. Supports: Free standard internal use, enterprise licensing and operational boundary.
+
+[116] **Open WebUI & Onyx**. Publisher: Open WebUI documentation. Publication/update date: **2026-08 (last updated; day not found)**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.openwebui.com/alternatives/onyx/. Supports: Source-available licence/branding constraint and difference in knowledge connectors.
+
+[117] **About LibreChat**. Publisher: LibreChat project. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.librechat.ai/about. Supports: MIT licence, model providers, agents and self-hosting.
+
+[118] **AnythingLLM Cloud**. Publisher: Mintplex Labs / AnythingLLM. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://anythingllm.com/cloud. Supports: $50/$99 instance pricing, BYOK and self-hosting.
+
+[119] **Dify Pricing**. Publisher: Dify. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.dify.ai/pricing. Supports: Annual workspace plan, enterprise/self-hosting and commercial licensing.
+
+[120] **Why OpenClaw**. Publisher: OpenClaw documentation. Publication/update date: **2026-08-27 (source review refreshed)**. URL: https://docs.openclaw.ai/start/why-openclaw. Supports: Self-hosting, no separate enterprise licence and default sandbox caveat.
+
+[121] **API Server**. Publisher: Nous Research, Hermes Agent documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server. Supports: Multi-user profiles and integration with chat front ends.
+
+[122] **OpenAI Frontier: Enterprise platform for AI agents**. Publisher: OpenAI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://openai.com/business/frontier/. Supports: Current enterprise agent platform, context/IAM and engineering-led implementation.
+
+[123] **Claude Managed Agents overview**. Publisher: Anthropic documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://platform.claude.com/docs/en/managed-agents/overview. Supports: Current beta status, research-preview subfeatures and no ZDR/BAA coverage.
+
+[124] **Agent Builder**. Publisher: OpenAI documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://developers.openai.com/api/docs/guides/agent-builder. Supports: Deprecation and scheduled 30 November 2026 shutdown; ChatKit continues.
+
+[125] **Amazon Bedrock AgentCore harness is now generally available**. Publisher: AWS. Publication/update date: **2026-06-18**. URL: https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-harness-is-now-generally-available-go-from-idea-to-production-grade-agent-in-minutes/. Supports: Current harness GA; infrastructure rather than staff workspace.
+
+[126] **Document history: Amazon Q Business**. Publisher: AWS documentation. Publication/update date: **2026-07-31 (cited change entry)**. URL: https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/doc-history.html. Supports: Closed to new customers, directed to Quick.
+
+[127] **Cohere and Aleph Alpha Sign Agreement to Become the First Transatlantic Sovereign AI Solution**. Publisher: Aleph Alpha. Publication/update date: **2026-09-16**. URL: https://aleph-alpha.com/en/news/cohere-agreement-transatlantic-sovereign-ai/. Supports: Definitive combination agreement, not proof of completed merger.
+
+[128] **The 2026-07-28 Specification**. Publisher: Model Context Protocol maintainers. Publication/update date: **2026-07-28**. URL: https://blog.modelcontextprotocol.io/posts/2026-07-28/. Supports: Released protocol revision, authorisation hardening and extensions.
+
+[129] **PhariaAI HOME**. Publisher: Aleph Alpha documentation. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.aleph-alpha.com/. Supports: Sovereign stack, PhariaAssistant and PhariaStudio; a configured platform.
+
+[130] **Pricing: Web Search APIs**. Publisher: You.com. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://you.com/pricing. Supports: Current primary pricing is API-oriented; old Team page insufficient for fresh workspace procurement.
+
+[131] **Juma Pricing Plans: Teams, Agencies & Enterprise**. Publisher: Juma. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://juma.ai/pricing. Supports: $49 workspace Pro start, unlimited seats, marketing focus and private Enterprise.
+
+[132] **Annual plans now available at Juma (formerly Team-GPT)**. Publisher: Juma. Publication/update date: **2024-05-08 (original); 2026-07-01 (displayed update)**. URL: https://juma.ai/blog/annual-plans-now-available-at-team-gpt. Supports: Current rebrand stated on old content; obsolete price examples should not be reused.
+
+[133] **Abacus.AI: ChatLLM Teams**. Publisher: Abacus.AI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://chatllm.abacus.ai/enterprise. Supports: $10 monthly, general agent, research, document chat and team capabilities.
+
+[134] **SuperNinja: The AI Agent That Actually Does the Work**. Publisher: NinjaTech AI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.ninjatech.ai/product/super-ninja. Supports: Business $50 annual display, unlimited seats, pooled credits and app integrations.
+
+[135] **One Platform for the Agentic Enterprise: Business AI Cloud**. Publisher: Uniphore. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.uniphore.com/platform/business-ai-cloud/. Supports: Enterprise infrastructure adjacency, rather than established turnkey staff workspace.
+
+[136] **LobeHub Pricing**. Publisher: LobeHub. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://lobehub.com/pricing. Supports: Consumer tiers and Enterprise Edition; enterprise deployment details need verification.
+
+[137] **Launching Meta Enterprise Platform**. Publisher: Meta. Publication/update date: **2026-09-28**. URL: https://about.fb.com/news/2026/09/launching-meta-enterprise-platform/. Supports: Announced enterprise platform, Muse, Business Agent, API and Code; does not establish UK GA, price or residency.
+
+[138] **The Future of Flowise**. Publisher: FlowiseAI. Publication/update date: **2026-07-29 (announcement date stated; page publication date not found)**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://flowiseai.com/sunset. Supports: Official winding-down notice, code freeze 29 July, scheduled archive 10 August and EOL 31 August; code/forks remain.
+
+[139] **Microsoft 365 Copilot plans and pricing: UK business**. Publisher: Microsoft. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.microsoft.com/en-gb/microsoft-365-copilot/pricing. Supports: £13.80 first-year annual promotion versus £16.10 regular display, £19.32 monthly, business bundles and 300-user limit.
+
+[140] **Data residency and inference residency for ChatGPT**. Publisher: OpenAI Help Centre. Publication/update date: **not found (relative update labels vary across retrievals)**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://help.openai.com/en/articles/9903489-data-residency-and-inference-residency-for-chatgpt. Supports: Enterprise/Edu UK storage, EU inference and feature/external-processing exclusions; not Business eligibility.
+
+[141] **Open WebUI License**. Publisher: Open WebUI. Publication/update date: **2025-04-19 (licence effective date; page publication date not found)**. **Older than six months, potentially stale.** Date/freshness uncertainty: page publication or latest revision not established. URL: https://docs.openwebui.com/license/. Supports: Branding conditions and 50-user exception, not a usage cap.
+
+[142] **Leena AI pricing**. Publisher: Leena AI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://leena.ai/pricing. Supports: Per-employee annual Universal Assistant versus platform-plus-token AI Colleagues; no public numeric tariff.
+
+[143] **Workbench: Schedules & Triggers for AI Colleagues**. Publisher: Leena AI. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://leena.ai/platform/workbench. Supports: Workflow/knowledge studios, role-bound actions, app connectors, MCP/A2A and audit positioning.
+
+[144] **Workflow Automation for IT Teams**. Publisher: Resolve Systems. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://resolve.io/. Supports: Current destination of Espressive homepage, knowledge/action platform and named app integrations.
+
+[145] **RITA: Agentic AI for IT Service Desk Support**. Publisher: Resolve Systems. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://resolve.io/capabilities/agentic-service-desk-automation. Supports: Employee chat through Teams/Slack/portal and service workflows; not broad research.
+
+[146] **Free AI Assistant for Every Team: Breeze Assistant**. Publisher: HubSpot. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.hubspot.com/products/artificial-intelligence/breeze-ai-assistant. Supports: Current Breeze Assistant and Agent Hub, CRM-grounded chat and agent management.
+
+[147] **HubSpot Limited Release Pricing Product and Services Catalog Supplement**. Publisher: HubSpot. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.hubspot.com/hubspot-limited-release-pricing. Supports: Limited-programme euro seats plus credits; not universal UK tariff; beta agent/data features.
+
+[148] **HubSpot's Customer Agent and Prospecting Agent: Now you pay when the task is complete**. Publisher: HubSpot. Publication/update date: **2026-04-13 (updated)**. URL: https://www.hubspot.com/company-news/hubspots-customer-agent-and-prospecting-agent-now-you-pay-when-the-task-is-complete. Supports: Dated outcome-based price change for two specific agents, not today's universal seat terms.
+
+[149] **HubSpot to acquire Dashworks to accelerate vision of giving every GTM team member an AI assistant**. Publisher: HubSpot. Publication/update date: **2025-04-16 (updated)**. **Older than six months, potentially stale.** URL: https://www.hubspot.com/company-news/hubspot-to-acquire-dashworks. Supports: Acquisition agreement and plan to fold Dashworks team/knowledge capability into Breeze; announcement is not closing proof.
+
+[150] **The AI enterprise search across all your systems**. Publisher: Simpplr. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.simpplr.com/enterprise-search/. Supports: Permission-aware intranet/enterprise search, sources and suggested actions.
+
+[151] **Simpplr AI Search**. Publisher: Simpplr support. Publication/update date: **2025-12-08 (published; notice references 15 December rename)**. **Older than six months, potentially stale.** URL: https://support.simpplr.com/hc/en-us/articles/47206650267667-Simpplr-AI-Search. Supports: AI Search naming and current Classic-support sunset warning.
+
+[152] **AI Search & Knowledge Discovery**. Publisher: Happeo. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.happeo.com/ai-search. Supports: Live company integrations and permission-aware answers.
+
+[153] **Happeo AI**. Publisher: Happeo. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.happeo.com/ai. Supports: Scoped assistants, page agents, MCP knowledge access; scope requires verification.
+
+[154] **Happeo Pricing**. Publisher: Happeo. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.happeo.com/pricing. Supports: Quoted plans, included AI/MCP, higher-tier provisioning/governance.
+
+[155] **Information on the Data Act**. Publisher: Happeo. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.happeo.com/data-act. Supports: EU Google Cloud hosting with US token/non-personal and global-log exclusions.
+
+[156] **The leading AI Employee Hub**. Publisher: LumApps. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.lumapps.com/. Supports: Microsoft/Google/ServiceNow/Workday integrations and no-code workflows.
+
+[157] **AI-Powered Intranet With Enterprise Agents & Search**. Publisher: LumApps. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://www.lumapps.com/platform/ai-powered-platform. Supports: Agent Hub/Studio, company knowledge and workflows; exact GA/residency not specified.
+
+[158] **Enterprise**. Publisher: H Company. Publication/update date: **not found**. Date/freshness uncertainty: page publication or latest revision not established. URL: https://hcompany.ai/enterprise. Supports: Engineering-led computer-use platform, selected private/on-prem deployment; not a verified packaged staff workspace.
+
+
