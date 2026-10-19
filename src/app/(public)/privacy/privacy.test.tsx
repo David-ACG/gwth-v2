@@ -13,7 +13,7 @@ describe("PrivacyPage", () => {
   it("renders the last updated date", () => {
     render(<PrivacyPage />)
     expect(
-      screen.getByText(/29 September 2026/)
+      screen.getByText(/1 December 2026/)
     ).toBeInTheDocument()
   })
 

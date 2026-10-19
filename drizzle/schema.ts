@@ -35,6 +35,10 @@
 //  10. Page comments hybrid (canonical DDL: 022): pageComments gains the
 //      action/shape/textEdit jsonb columns, target_type allows 'area', and
 //      the comment length CHECK allows '' (0..4000).
+//  11. Prepaid passes (canonical DDL: 026): userAccess gains prepaidPassId,
+//      courseMonthsPaid, renewalReminderFor and the access_source CHECK twin
+//      widens to + 'prepaid'; the prepaidPasses, courseMonthRelease and
+//      stripePayments tables are hand-written at the end of this file.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -376,6 +380,10 @@ export const userAccess = pgTable("user_access", {
 	notes: text(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	// 026 hand-patch (prepaid passes + monthly hold-the-clock).
+	prepaidPassId: uuid("prepaid_pass_id"),
+	courseMonthsPaid: integer("course_months_paid").default(0).notNull(),
+	renewalReminderFor: timestamp("renewal_reminder_for", { withTimezone: true, mode: 'string' }),
 }, (table) => [
 	index("idx_user_access_stripe_customer_id").using("btree", table.stripeCustomerId.asc().nullsLast().op("text_ops")).where(sql`(stripe_customer_id IS NOT NULL)`),
 	index("idx_user_access_stripe_subscription_id").using("btree", table.stripeSubscriptionId.asc().nullsLast().op("text_ops")).where(sql`(stripe_subscription_id IS NOT NULL)`),
@@ -389,7 +397,9 @@ export const userAccess = pgTable("user_access", {
 	pgPolicy("Users can read own access", { as: "permissive", for: "select", to: ["authenticated"], using: sql`(( SELECT auth.uid() AS uid) = user_id)` }),
 	// N5 hand-patch (canonical DDL: 015_lift_constraints.sql): org_seat + org
 	// widen the two CHECKs for org tenancy. Re-apply after any re-pull.
-	check("user_access_access_source_check", sql`access_source = ANY (ARRAY['registered'::text, 'manual_beta'::text, 'stripe_course'::text, 'stripe_ongoing'::text, 'org_seat'::text])`),
+	// 026 hand-patch: + 'prepaid' (gift and self-purchase passes).
+	check("user_access_access_source_check", sql`access_source = ANY (ARRAY['registered'::text, 'manual_beta'::text, 'stripe_course'::text, 'stripe_ongoing'::text, 'org_seat'::text, 'prepaid'::text])`),
+	check("user_access_course_months_paid_check", sql`(course_months_paid >= 0) AND (course_months_paid <= 3)`),
 	check("user_access_subscription_state_check", sql`subscription_state = ANY (ARRAY['registered'::text, 'month1'::text, 'month2'::text, 'month3'::text, 'ongoing'::text, 'lapsed'::text, 'org'::text])`),
 	check("user_access_subscription_month_check", sql`(subscription_month >= 0) AND (subscription_month <= 3)`),
 ]);
@@ -886,4 +896,95 @@ export const lessonEvents = pgTable("lesson_events", {
 			name: "lesson_events_user_id_fkey"
 		}).onDelete("cascade"),
 	check("lesson_events_format_check", sql`format = ANY (ARRAY['read'::text, 'watch'::text])`),
+]);
+
+// 026 hand-written (canonical DDL: supabase/migrations/026_prepaid_passes.sql).
+// A prepaid pass: a one-off payment for the whole course or the first month,
+// for the buyer or as a gift. Opening it writes user_access.access_source =
+// 'prepaid' with prepaid_pass_id pointing here.
+export const prepaidPasses = pgTable("prepaid_passes", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	code: text().notNull(),
+	product: text().notNull(),
+	months: integer().notNull(),
+	pricePaid: integer("price_paid").notNull(),
+	currency: text().default('gbp').notNull(),
+	buyerEmail: text("buyer_email").notNull(),
+	buyerName: text("buyer_name"),
+	buyerUserId: text("buyer_user_id"),
+	isGift: boolean("is_gift").notNull(),
+	recipientName: text("recipient_name"),
+	recipientEmail: text("recipient_email"),
+	message: text(),
+	deliverAt: timestamp("deliver_at", { withTimezone: true, mode: 'string' }),
+	deliveredAt: timestamp("delivered_at", { withTimezone: true, mode: 'string' }),
+	receiptSentAt: timestamp("receipt_sent_at", { withTimezone: true, mode: 'string' }),
+	openedEmailSentAt: timestamp("opened_email_sent_at", { withTimezone: true, mode: 'string' }),
+	redeemBy: timestamp("redeem_by", { withTimezone: true, mode: 'string' }).notNull(),
+	redeemedBy: text("redeemed_by"),
+	redeemedAt: timestamp("redeemed_at", { withTimezone: true, mode: 'string' }),
+	extraMonths: integer("extra_months").default(0).notNull(),
+	stripeCheckoutSession: text("stripe_checkout_session"),
+	stripePaymentIntent: text("stripe_payment_intent"),
+	refundedAt: timestamp("refunded_at", { withTimezone: true, mode: 'string' }),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	unique("prepaid_passes_code_key").on(table.code),
+	unique("prepaid_passes_stripe_checkout_session_key").on(table.stripeCheckoutSession),
+	index("idx_prepaid_passes_due_delivery").using("btree", table.deliverAt.asc().nullsLast().op("timestamptz_ops")).where(sql`(is_gift AND (delivered_at IS NULL) AND (refunded_at IS NULL))`),
+	index("idx_prepaid_passes_redeemed_by").using("btree", table.redeemedBy.asc().nullsLast().op("text_ops")).where(sql`(redeemed_by IS NOT NULL)`),
+	index("idx_prepaid_passes_buyer_email").using("btree", table.buyerEmail.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.buyerUserId],
+			foreignColumns: [user.id],
+			name: "prepaid_passes_buyer_user_id_fkey"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.redeemedBy],
+			foreignColumns: [user.id],
+			name: "prepaid_passes_redeemed_by_fkey"
+		}).onDelete("set null"),
+	check("prepaid_passes_product_check", sql`product = ANY (ARRAY['course'::text, 'month1'::text])`),
+	check("prepaid_passes_months_check", sql`months = ANY (ARRAY[1, 3])`),
+	check("prepaid_passes_months_match_product_check", sql`((product = 'course'::text) AND (months = 3)) OR ((product = 'month1'::text) AND (months = 1))`),
+	check("prepaid_passes_gift_has_recipient_check", sql`(NOT is_gift) OR ((recipient_email IS NOT NULL) AND (deliver_at IS NOT NULL))`),
+	check("prepaid_passes_redeemed_pair_check", sql`(redeemed_by IS NULL) OR (redeemed_at IS NOT NULL)`),
+]);
+
+// Month 2 and Month 3 open dates (NULL = not open yet). Month 1 has no row.
+export const courseMonthRelease = pgTable("course_month_release", {
+	month: integer().primaryKey().notNull(),
+	opensAt: timestamp("opens_at", { withTimezone: true, mode: 'string' }),
+	updatedBy: text("updated_by"),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, () => [
+	check("course_month_release_month_check", sql`month = ANY (ARRAY[2, 3])`),
+]);
+
+// Takings ledger: one row per successful charge, for the VAT threshold watch.
+export const stripePayments = pgTable("stripe_payments", {
+	id: text().primaryKey().notNull(),
+	kind: text().notNull(),
+	amount: integer().notNull(),
+	currency: text().default('gbp').notNull(),
+	email: text(),
+	userId: text("user_id"),
+	passId: uuid("pass_id"),
+	refundedAmount: integer("refunded_amount").default(0).notNull(),
+	paidAt: timestamp("paid_at", { withTimezone: true, mode: 'string' }).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_stripe_payments_paid_at").using("btree", table.paidAt.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "stripe_payments_user_id_fkey"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.passId],
+			foreignColumns: [prepaidPasses.id],
+			name: "stripe_payments_pass_id_fkey"
+		}).onDelete("set null"),
+	check("stripe_payments_kind_check", sql`kind = ANY (ARRAY['pass'::text, 'subscription'::text])`),
 ]);

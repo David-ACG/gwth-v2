@@ -63,6 +63,20 @@ function SubscriptionStatus({ state }: { state: string }) {
   return <span className={styles.statusMuted}>○ {label}</span>
 }
 
+/** A prepaid pass (gift or self-purchase): paid in full, no renewals. */
+function prepaidPlanHint(endsAt: Date | null): string {
+  if (!endsAt) {
+    return "Paid in full. No renewals. We'll set your end date once Months 2 and 3 open."
+  }
+  const on = endsAt.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Europe/London",
+  })
+  return `Paid in full. No renewals. Your course ends on ${on}.`
+}
+
 export default async function SettingsPage() {
   // Session first (server-validated; a forged cookie bounces here even
   // with PRIVATE_CONTENT_MODE=off), then the content allowlist.
@@ -93,7 +107,9 @@ export default async function SettingsPage() {
           <div>
             <p className={styles.fieldLabel}>Current Plan</p>
             <p className={styles.fieldHint}>
-              {state === "registered"
+              {user?.accessSource === "prepaid"
+                ? prepaidPlanHint(user.accessEndsAt ?? null)
+                : state === "registered"
                 ? "Free labs access only"
                 : state === "ongoing"
                   ? `Full course access · £${ONGOING_MONTHLY_PRICE.toFixed(2)}/month`
@@ -114,9 +130,12 @@ export default async function SettingsPage() {
               losing access.
             </p>
             {ENABLE_BILLING ? (
-              <button type="button" className={`${styles.buttonDanger} mt-3`}>
-                Update Payment Method
-              </button>
+              <BillingActions
+                state={state}
+                className="mt-3"
+                checkoutUrl="/api/stripe/checkout"
+                portalUrl="/api/stripe/portal"
+              />
             ) : (
               <p className={`${styles.bodyText} ${styles.rustText} mt-3`}>
                 Billing is disabled for beta; access is handled manually.
@@ -163,7 +182,11 @@ export default async function SettingsPage() {
           </div>
         )}
 
-        {ENABLE_BILLING && ["month1", "month2", "month3", "ongoing"].includes(state) && (
+        {/* Only a Stripe payer has payments to manage (card, cancel online).
+            A prepaid pass or a beta grant has no Stripe customer. */}
+        {ENABLE_BILLING &&
+          user?.accessSource?.startsWith("stripe_") &&
+          ["month1", "month2", "month3", "ongoing"].includes(state) && (
           <BillingActions
             state={state}
             className="mt-4"

@@ -200,3 +200,16 @@ describe("paper-first-error-colour: the one error colour clears its bars", () =>
     for (const v of values) expect(v).toBe("var(--v-error-line)")
   })
 })
+
+describe("paper-first tokens: printing always uses the light set", () => {
+  it("the print override of .dark repeats the :root light values exactly", () => {
+    const stripped = GLOBALS.replace(/\/\*[\s\S]*?\*\//g, "")
+    const print = stripped.slice(stripped.indexOf("@media print"))
+    const dark = print.slice(print.indexOf(".dark {"), print.indexOf("}", print.indexOf(".dark {")))
+    const printed: Record<string, string> = {}
+    for (const m of dark.matchAll(/(--v-[a-z-]+):\s*(#[0-9a-fA-F]{6})/g)) {
+      printed[m[1]!] = m[2]!.toLowerCase()
+    }
+    expect(printed).toEqual(tokens("light"))
+  })
+})

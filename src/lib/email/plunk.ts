@@ -49,6 +49,10 @@ export async function sendPlunkEmail(params: {
   /** Optional plain-text alternative shipped alongside the HTML (W17). */
   text?: string
 }): Promise<boolean> {
+  // EMAIL_OUTBOX_DIR (hlab preview and tests only, never production): keep a
+  // copy of every email as JSON so an end-to-end run can read what was sent.
+  await writeToOutbox(params)
+
   const plunk = resolvePlunk()
   if (!plunk) {
     console.log(
@@ -84,5 +88,29 @@ export async function sendPlunkEmail(params: {
   } catch (err) {
     console.error("[Plunk] Unexpected error:", err)
     return false
+  }
+}
+
+async function writeToOutbox(params: {
+  to: string
+  subject: string
+  body: string
+  text?: string
+}): Promise<void> {
+  const dir = process.env.EMAIL_OUTBOX_DIR?.trim()
+  if (!dir) return
+  try {
+    const { mkdir, writeFile } = await import("node:fs/promises")
+    const { join } = await import("node:path")
+    await mkdir(dir, { recursive: true })
+    const at = new Date().toISOString()
+    const safe = params.to.replace(/[^a-z0-9@._-]/gi, "_")
+    const name = `${at.replace(/[:.]/g, "-")}-${safe}-${Math.random().toString(36).slice(2, 8)}.json`
+    await writeFile(
+      join(dir, name),
+      JSON.stringify({ at, to: params.to, subject: params.subject, html: params.body, text: params.text ?? "" }, null, 2)
+    )
+  } catch (err) {
+    console.error("[Plunk] could not write to EMAIL_OUTBOX_DIR:", err)
   }
 }

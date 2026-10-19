@@ -29,6 +29,8 @@ import type {
   LessonSummary,
 } from "@/lib/types"
 import styles from "./dashboard-fde.module.css"
+import { CourseHoldNotice } from "@/components/billing/course-hold-notice"
+import { isSalesOpen } from "@/lib/billing/passes"
 import {
   requireContentAccessOrRedirect,
   requireSessionOrRedirect,
@@ -250,6 +252,9 @@ export function ActiveDashboard({
 
   return (
     <div className={styles.shell} data-section="dashboard-active">
+
+      {/* Hold the clock (gift sale, decision 5): waiting for the next month. */}
+      <CourseHoldNotice onHoldFor={user.courseOnHoldFor} accessSource={user.accessSource} />
 
       {/* TOP TASK BAND */}
       <section className={styles.band}>
@@ -694,12 +699,17 @@ export function ActiveDashboard({
 
 export function FreeDashboard({ user }: { user: User | null }) {
   const name = user ? firstName(user.name) : "there"
+  // From 1 December the course is on sale (gift sale, decision 6), so the
+  // invite-only wording below no longer applies.
+  const selling = ENABLE_BILLING && isSalesOpen(new Date())
   return (
     <div className={styles.shell} data-section="dashboard-free">
 
       <section className={styles.band}>
         <div>
-          <p className={styles.mono}>Free labs · invite required for the course</p>
+          <p className={styles.mono}>
+            {selling ? "Free labs" : "Free labs · invite required for the course"}
+          </p>
           <h1 className={styles.bandTitle}>
             Welcome, {name}.
             <br />
@@ -708,12 +718,22 @@ export function FreeDashboard({ user }: { user: User | null }) {
           <p className={styles.bandLead}>
             You have access to all 18 free labs. The course is £
             {COURSE_MONTHLY_PRICE.toFixed(0)}/month, one month at a time, and £
-            {ONGOING_MONTHLY_PRICE.toFixed(2)}/month to stay current after it;
-            access is currently invite-only and manually granted.
+            {ONGOING_MONTHLY_PRICE.toFixed(2)}/month to stay current after it
+            {selling ? (
+              <>
+                . Have a gift code?{" "}
+                <Link href="/gift/open" className={styles.inlineLink}>
+                  Open your gift
+                </Link>
+                .
+              </>
+            ) : (
+              "; access is currently invite-only and manually granted."
+            )}
           </p>
         </div>
         <div className={styles.bandAside}>
-          <p className={styles.mono}>Beta · invite only</p>
+          {!selling && <p className={styles.mono}>Beta · invite only</p>}
           <div className={styles.asideTitle}>
             Month 1 unlocks Building with Claude, Codex and the consultant&rsquo;s
             prompt patterns.

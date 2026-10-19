@@ -8,6 +8,7 @@ import styles from "@/app/admin/admin-fde.module.css"
 const LINKS = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/roster", label: "Roster" },
+  { href: "/admin/passes", label: "Gifts" },
   { href: "/admin/funnel", label: "Funnel" },
   { href: "/admin/lessons", label: "Lessons" },
   { href: "/admin/feedback", label: "Feedback" },

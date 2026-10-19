@@ -10,7 +10,7 @@
 import { cache } from "react"
 import { headers } from "next/headers"
 import type { User, SubscriptionState } from "@/lib/types"
-import { getAccessForUser } from "@/lib/billing/access"
+import { COURSE_ACCESS_SOURCES, getAccessForUser } from "@/lib/billing/access"
 
 /** Mock user for development — subscription state is controlled by the dev toolbar */
 const MOCK_USER: User = {
@@ -31,8 +31,8 @@ const MOCK_USER: User = {
  * Returns the currently authenticated user, or null if not logged in.
  *
  * Reads the Better Auth session (`getAuth().api.getSession`) and maps it onto
- * the app's `User` type, then applies the invite-only beta gate: a session
- * without a live `manual_beta` grant resolves to null. Such users keep a valid
+ * the app's `User` type, then applies the course access gate: a session
+ * without a live beta grant, opened pass or paid subscription resolves to null. Such users keep a valid
  * session but land on the invite-required FreeDashboard view; only anonymous
  * (no-cookie) traffic is bounced by the proxy guard to the bare /login.
  *
@@ -74,7 +74,13 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<
     "User"
 
   const access = await getAccessForUser(sessionUser.id)
-  if (access.source !== "manual_beta" || access.subscriptionMonth <= 0) {
+  // Course access: a beta grant, an opened prepaid pass (gift or
+  // self-purchase, 026) or a paid subscription. Everyone else keeps a valid
+  // session but sees the free dashboard.
+  if (
+    !COURSE_ACCESS_SOURCES.includes(access.source) ||
+    access.subscriptionMonth <= 0
+  ) {
     return null
   }
 
@@ -88,6 +94,9 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<
     subscriptionMonth: access.subscriptionMonth,
     gracePeriodEnds: access.gracePeriodEnds,
     lastPaymentDate: access.lastPaymentDate,
+    accessSource: access.source,
+    accessEndsAt: access.validUntil,
+    courseOnHoldFor: access.onHoldFor,
     createdAt: new Date(sessionUser.createdAt),
     updatedAt: new Date(sessionUser.updatedAt ?? sessionUser.createdAt),
   }

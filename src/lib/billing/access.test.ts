@@ -4,6 +4,8 @@ import {
   clampCourseMonth,
   normaliseAccessRow,
   stateForCourseMonth,
+  type PassForAccess,
+  type UserAccessRow,
 } from "./access"
 
 describe("billing access helpers", () => {
@@ -51,6 +53,93 @@ describe("billing access helpers", () => {
     expect(access.subscriptionMonth).toBe(0)
   })
 })
+
+describe("prepaid passes and held payers (026)", () => {
+  const ROW: UserAccessRow = {
+    user_id: "user_1",
+    access_source: "prepaid",
+    subscription_state: "month1",
+    subscription_month: 1,
+    valid_until: null,
+    grace_period_ends: null,
+    last_payment_at: null,
+    stripe_customer_id: null,
+    stripe_subscription_id: null,
+    stripe_price_id: null,
+    stripe_subscription_status: null,
+    notes: null,
+    prepaid_pass_id: "pass_1",
+  }
+  const PASS: PassForAccess = {
+    id: "pass_1",
+    product: "course",
+    redeemed_at: "2026-12-25T09:00:00.000Z",
+    extra_months: 0,
+    refunded_at: null,
+  }
+  const OPEN = {
+    month2: new Date("2026-11-01T00:00:00Z"),
+    month3: new Date("2026-11-01T00:00:00Z"),
+  }
+
+  it("computes the month from the opened pass, not the stored snapshot", () => {
+    const access = normaliseAccessRow(ROW, new Date("2027-02-26T00:00:00Z"), { pass: PASS, release: OPEN })
+    expect(access.subscriptionState).toBe("month3")
+    expect(access.subscriptionMonth).toBe(3)
+    expect(access.validUntil).toEqual(new Date("2027-03-25T09:00:00Z"))
+    expect(access.onHoldFor).toBeNull()
+  })
+
+  it("holds the learner in Month 1 while Month 2 is unfinished", () => {
+    const access = normaliseAccessRow(ROW, new Date("2027-02-26T00:00:00Z"), { pass: PASS })
+    expect(access.subscriptionState).toBe("month1")
+    expect(access.onHoldFor).toBe(2)
+    expect(access.validUntil).toBeNull()
+  })
+
+  it("falls back to registered once the pass has ended or been refunded", () => {
+    expect(normaliseAccessRow(ROW, new Date("2027-03-25T09:00:00Z"), { pass: PASS, release: OPEN }).source).toBe("registered")
+    expect(
+      normaliseAccessRow(ROW, new Date("2027-01-02T00:00:00Z"), {
+        pass: { ...PASS, refunded_at: "2027-01-01T00:00:00.000Z" },
+        release: OPEN,
+      }).subscriptionState
+    ).toBe("registered")
+  })
+
+  it("admits nothing for a prepaid row whose pass is missing or not opened", () => {
+    expect(normaliseAccessRow(ROW, new Date("2027-01-02T00:00:00Z")).source).toBe("registered")
+    expect(
+      normaliseAccessRow(ROW, new Date("2027-01-02T00:00:00Z"), { pass: { ...PASS, redeemed_at: null } }).source
+    ).toBe("registered")
+    expect(
+      normaliseAccessRow(ROW, new Date("2027-01-02T00:00:00Z"), { pass: { ...PASS, id: "someone_else" } }).source
+    ).toBe("registered")
+  })
+
+  it("puts a payer in the month they have paid for, and on hold while the next charge is held", () => {
+    const payer: UserAccessRow = {
+      ...ROW,
+      access_source: "stripe_course",
+      prepaid_pass_id: null,
+      subscription_state: "month2",
+      subscription_month: 2,
+      course_months_paid: 1,
+      stripe_subscription_status: "trialing",
+    }
+    const held = normaliseAccessRow(payer)
+    expect(held.subscriptionState).toBe("month1")
+    expect(held.onHoldFor).toBe(2)
+
+    const active = normaliseAccessRow({ ...payer, course_months_paid: 2, stripe_subscription_status: "active" })
+    expect(active.subscriptionState).toBe("month2")
+    expect(active.onHoldFor).toBeNull()
+
+    const lapsed = normaliseAccessRow({ ...payer, subscription_state: "lapsed", stripe_subscription_status: "past_due" })
+    expect(lapsed.subscriptionState).toBe("lapsed")
+  })
+})
+
 describe("Stripe routes during beta", () => {
   beforeEach(() => {
     vi.resetModules()

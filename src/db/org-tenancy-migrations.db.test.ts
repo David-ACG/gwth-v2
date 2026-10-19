@@ -78,6 +78,11 @@ describeDb("013-015 org tenancy migrations (live DB)", () => {
 
   afterAll(async () => {
     await cleanup()
+    // Re-running 015 re-creates the user_access CHECKs as 015 wrote them,
+    // which drops later widenings ('prepaid', 026). Put the later migration
+    // back so this suite never leaves the shared dev database (which the hlab
+    // preview reads) behind the schema. 026 is idempotent.
+    await sql.unsafe(migrationSql("026_prepaid_passes.sql"))
     await sql.end()
   })
 

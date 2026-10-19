@@ -1,0 +1,28 @@
+/* Hold-the-clock notice (bead gwth-launch-v1uj.4). A panel with its boundary
+   and an accent bar, so it is never told apart by tint alone
+   (tint-is-never-the-only-signal). */
+.notice {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-left: 3px solid var(--v-accent);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin: 0 0 1.5rem;
+  display: grid;
+  gap: 0.35rem;
+  font-family: var(--font-sans);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.body {
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-soft);
+  max-width: 60ch;
+}

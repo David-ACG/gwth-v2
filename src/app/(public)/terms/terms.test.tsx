@@ -13,7 +13,7 @@ describe("TermsPage", () => {
   it("renders the last updated date", () => {
     render(<TermsPage />)
     expect(
-      screen.getByText(/25 February 2026/)
+      screen.getByText(/1 December 2026/)
     ).toBeInTheDocument()
   })
 
@@ -50,7 +50,18 @@ describe("TermsPage", () => {
     expect(screen.getByText("1. Our Services")).toBeInTheDocument()
     expect(screen.getByText("2. Intellectual Property")).toBeInTheDocument()
     expect(screen.getByText("6. Subscriptions")).toBeInTheDocument()
-    expect(screen.getByText("7. Prohibited Activities")).toBeInTheDocument()
-    expect(screen.getByText("15. Contact Us")).toBeInTheDocument()
+    expect(screen.getByText("7. Gifts and Prepaid Passes")).toBeInTheDocument()
+    expect(screen.getByText("8. Prohibited Activities")).toBeInTheDocument()
+    expect(screen.getByText("16. Contact Us")).toBeInTheDocument()
+  })
+
+  it("sets out the gift and pass terms David decided (2026-10-19)", () => {
+    const { container } = render(<TermsPage />)
+    const text = container.textContent ?? ""
+    expect(text).toMatch(/opened within one\s+year of purchase/)
+    expect(text).toMatch(/never renews/)
+    expect(text).toMatch(/refund a pass in full at any time\s+before it is opened/)
+    expect(text).toMatch(/not registered for VAT/)
+    expect(text).not.toMatch(/23 June beta/)
   })
 })

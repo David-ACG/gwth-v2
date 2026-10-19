@@ -30,7 +30,8 @@ vi.mock("@/lib/better-auth", () => ({
   getAuth: () => ({ api: { getSession: mockGetSession } }),
 }))
 
-vi.mock("@/lib/billing/access", () => ({
+vi.mock("@/lib/billing/access", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/billing/access")>()),
   getAccessForUser: mockGetAccessForUser,
 }))
 
@@ -54,6 +55,8 @@ const GRANTED_ACCESS: UserAccess = {
   stripeSubscriptionId: null,
   stripePriceId: null,
   stripeSubscriptionStatus: null,
+  onHoldFor: null,
+  prepaidPassId: null,
 }
 
 const REGISTERED_ACCESS: UserAccess = {
@@ -67,6 +70,8 @@ const REGISTERED_ACCESS: UserAccess = {
   stripeSubscriptionId: null,
   stripePriceId: null,
   stripeSubscriptionStatus: null,
+  onHoldFor: null,
+  prepaidPassId: null,
 }
 
 describe("getCurrentUser beta gate (W11)", () => {
@@ -148,5 +153,42 @@ describe("getCurrentUser beta gate (W11)", () => {
 
     const user = await getCurrentUser()
     expect(user?.name).toBe("beta") // local part of beta@example.com
+  })
+
+  it("admits an opened prepaid pass (gift or self-purchase) and carries the hold notice", async () => {
+    mockGetSession.mockResolvedValue({ user: SESSION_USER })
+    mockGetAccessForUser.mockResolvedValue({
+      ...GRANTED_ACCESS,
+      source: "prepaid",
+      subscriptionState: "month1",
+      subscriptionMonth: 1,
+      validUntil: null,
+      onHoldFor: 2,
+      prepaidPassId: "pass_1",
+    })
+    const { getCurrentUser } = await import("./auth")
+
+    const user = await getCurrentUser()
+    expect(user?.subscriptionState).toBe("month1")
+    expect(user?.accessSource).toBe("prepaid")
+    expect(user?.courseOnHoldFor).toBe(2)
+  })
+
+  it("admits paid subscriptions (course and stay current)", async () => {
+    mockGetSession.mockResolvedValue({ user: SESSION_USER })
+    const { getCurrentUser } = await import("./auth")
+
+    for (const source of ["stripe_course", "stripe_ongoing"] as const) {
+      mockGetAccessForUser.mockResolvedValue({ ...GRANTED_ACCESS, source })
+      expect((await getCurrentUser())?.accessSource).toBe(source)
+    }
+  })
+
+  it("does not admit an org seat through the student gate", async () => {
+    mockGetSession.mockResolvedValue({ user: SESSION_USER })
+    mockGetAccessForUser.mockResolvedValue({ ...GRANTED_ACCESS, source: "org_seat" })
+    const { getCurrentUser } = await import("./auth")
+
+    expect(await getCurrentUser()).toBeNull()
   })
 })

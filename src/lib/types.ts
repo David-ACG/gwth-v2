@@ -38,6 +38,12 @@ export interface User {
   gracePeriodEnds: Date | null
   /** Date of last successful payment */
   lastPaymentDate: Date | null
+  /** How the learner has course access (manual_beta, prepaid, stripe_course...) */
+  accessSource?: string
+  /** When course access ends, when known (a prepaid pass or a dated grant) */
+  accessEndsAt?: Date | null
+  /** Hold the clock: the month they are waiting for while it is not open yet */
+  courseOnHoldFor?: 2 | 3 | null
   /** When the user account was created */
   createdAt: Date
   /** When the user profile was last updated */

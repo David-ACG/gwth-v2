@@ -1,7 +1,13 @@
+/**
+ * POST /api/stripe/portal: the Stripe Customer Portal, where a payer updates
+ * their card or cancels online (DMCC readiness, bead gwth-launch-v1uj.9).
+ * Rewritten on Better Auth + Drizzle; the Supabase version stopped at W11.
+ */
 import { NextResponse } from "next/server"
-import { createClient, createAdminClient } from "@/lib/supabase/server"
+import { eq } from "drizzle-orm"
 import { ENABLE_BILLING } from "@/lib/config"
-import { billingDisabledForBetaBody, getStripeClient } from "@/lib/billing/stripe"
+import { getSessionIdentity } from "@/lib/auth"
+import { billingDisabledForBetaBody, getStripeClient, siteOrigin } from "@/lib/billing/stripe"
 
 export async function POST() {
   if (!ENABLE_BILLING) {
@@ -9,41 +15,36 @@ export async function POST() {
   }
 
   try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
-
-    if (authError || !user) {
+    const identity = await getSessionIdentity()
+    if (!identity) {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 })
     }
 
-    const admin = createAdminClient()
-    const { data: access } = await admin
-      .from("user_access")
-      .select("stripe_customer_id")
-      .eq("user_id", user.id)
-      .maybeSingle()
+    const { getDb } = await import("@/db")
+    const { userAccess } = await import("@/db/schema")
+    const row = (
+      await getDb()
+        .select({ customerId: userAccess.stripeCustomerId })
+        .from(userAccess)
+        .where(eq(userAccess.userId, identity.id))
+        .limit(1)
+    )[0]
 
-    if (!access?.stripe_customer_id) {
-      return NextResponse.json(
-        { error: "No Stripe customer found for this user" },
-        { status: 404 }
-      )
+    if (!row?.customerId) {
+      return NextResponse.json({ error: "No payments found for this account" }, { status: 404 })
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
     const session = await getStripeClient().billingPortal.sessions.create({
-      customer: access.stripe_customer_id,
-      return_url: `${siteUrl}/settings`,
+      customer: row.customerId,
+      return_url: `${siteOrigin()}/settings`,
+      // The configuration that allows cancelling online (scripts/stripe-setup-gift-sale.mjs).
+      ...(process.env.STRIPE_PORTAL_CONFIGURATION_ID
+        ? { configuration: process.env.STRIPE_PORTAL_CONFIGURATION_ID }
+        : {}),
     })
-
     return NextResponse.json({ url: session.url })
   } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Unable to open billing portal" },
-      { status: 500 }
-    )
+    console.error("[stripe] portal failed", err)
+    return NextResponse.json({ error: "Unable to open billing" }, { status: 500 })
   }
 }

@@ -16,6 +16,7 @@ import { Lock } from "lucide-react"
 import { MONTH_CONFIGS } from "@/lib/config"
 import type { LessonStatus } from "@/lib/types"
 import styles from "./course-fde.module.css"
+import { CourseHoldNotice } from "@/components/billing/course-hold-notice"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -222,6 +223,9 @@ export default async function CourseDetailPage({ params }: PageProps) {
       {jsonLd}
 
       <div className={styles.shell} data-section="course-detail">
+        {/* Hold the clock (gift sale, decision 5): waiting for the next month. */}
+        <CourseHoldNotice onHoldFor={user?.courseOnHoldFor} accessSource={user?.accessSource} />
+
         {/* Course header */}
         <header>
           <div className={styles.head}>

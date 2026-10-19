@@ -8,6 +8,18 @@ import {
 } from "@/lib/config"
 import styles from "./pricing-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
+import { ENABLE_BILLING } from "@/lib/config"
+import {
+  formatPence,
+  formatUkDate,
+  getSaleWindow,
+  isChristmasSale,
+  isSalesOpen,
+  PASS_PRICES_PENCE,
+  passPrice,
+} from "@/lib/billing/passes"
+import { BuyButton } from "@/components/billing/buy-button"
+import { PRICING_OFFER_COPY as OFFER } from "@/components/marketing/gift/gift-copy"
 
 /**
  * David's /pricing annotations, 14 September 2026, applied here and in
@@ -85,10 +97,31 @@ const COMPARISONS = [
  * institutions split and a closing band. Prices come from the canonical
  * PRICING data so copy cannot drift from config.
  */
-export function PricingFde() {
+export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
   const free = PRICING[0]!
   const course = PRICING[1]!
   const ongoing = ONGOING_MONTHLY_PRICE.toFixed(2)
+
+  // Christmas gift sale (beads gwth-launch-v1uj.5 and .9). Before sales open
+  // (1 December) this page is exactly as David approved it on 14 September.
+  // From then the Member button takes the monthly payment and a band offers
+  // paying once for all three months (£69 until 6 January, then £87) or
+  // giving the course as a gift. The checkout routes enforce the same dates.
+  const window = getSaleWindow()
+  const selling = ENABLE_BILLING && isSalesOpen(now, window)
+  const christmas = selling && isChristmasSale(now, window)
+  const coursePass = formatPence(passPrice("course", now, window).pence)
+  const saleEndsOn = formatUkDate(new Date(window.saleEndsAt.getTime() - 1))
+  const monthlyCta = (
+    <BuyButton
+      endpoint="/api/stripe/checkout"
+      body={{ plan: "course" }}
+      label={OFFER.monthly(`£${COURSE_MONTHLY_PRICE}`)}
+      returnTo="/pricing"
+      className={styles.buttonSolid}
+      errorClassName={styles.buyError}
+    />
+  )
 
   const tiers = [
     {
@@ -186,6 +219,58 @@ export function PricingFde() {
         </div>
       </section>
 
+      {selling && (
+        <section
+          className={`${styles.section} ${styles.sectionAlt}`}
+          data-section="offer"
+          data-testid="pricing-offer"
+        >
+          <div className={`${styles.page} ${styles.splitGrid}`}>
+            <div>
+              <h2>
+                {christmas ? (
+                  <>
+                    {OFFER.sale.title}{" "}
+                    <em>{OFFER.sale.titleAccent(coursePass, saleEndsOn)}</em>
+                  </>
+                ) : (
+                  <>
+                    {OFFER.allYear.title} <em>{OFFER.allYear.titleAccent}</em>
+                  </>
+                )}
+              </h2>
+            </div>
+            <div className={styles.splitNote}>
+              <p>
+                {christmas
+                  ? OFFER.sale.body(
+                      coursePass,
+                      formatPence(PASS_PRICES_PENCE.courseFull),
+                      saleEndsOn
+                    )
+                  : OFFER.allYear.body(
+                      coursePass,
+                      formatPence(PASS_PRICES_PENCE.month1)
+                    )}
+              </p>
+              <div className={styles.buttonRow}>
+                <BuyButton
+                  endpoint="/api/passes/checkout"
+                  body={{ gift: false, product: "course" }}
+                  label={OFFER.buySelf(coursePass)}
+                  returnTo="/pricing"
+                  className={styles.buttonSolid}
+                  errorClassName={styles.buyError}
+                />
+                <Link href="/gift" className={styles.buttonOutline}>
+                  {OFFER.gift}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className={styles.section} data-section="tiers">
         <div className={styles.page}>
           {/* Named for assistive technology only: the visible hierarchy runs
@@ -230,16 +315,20 @@ export function PricingFde() {
                     ))}
                   </ul>
                   <div className={styles.tierCta}>
-                    <Link
-                      href={tier.cta.href}
-                      className={
-                        tier.featured
-                          ? styles.buttonSolid
-                          : styles.buttonOutline
-                      }
-                    >
-                      {tier.cta.label}
-                    </Link>
+                    {selling && tier.key === "course" ? (
+                      monthlyCta
+                    ) : (
+                      <Link
+                        href={tier.cta.href}
+                        className={
+                          tier.featured
+                            ? styles.buttonSolid
+                            : styles.buttonOutline
+                        }
+                      >
+                        {tier.cta.label}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </article>
@@ -379,19 +468,25 @@ export function PricingFde() {
             the thing that keeps us honest.
           </p>
           <div className={styles.closingActions}>
+            {selling && monthlyCta}
             {canPromoteLabs() && (
-              <Link href="/labs" className={styles.buttonSolid}>
+              <Link
+                href="/labs"
+                className={selling ? styles.buttonOutline : styles.buttonSolid}
+              >
                 Try a free lab
               </Link>
             )}
-            <Link
-              href="/waitlist"
-              className={
-                canPromoteLabs() ? styles.buttonOutline : styles.buttonSolid
-              }
-            >
-              Join the waitlist
-            </Link>
+            {!selling && (
+              <Link
+                href="/waitlist"
+                className={
+                  canPromoteLabs() ? styles.buttonOutline : styles.buttonSolid
+                }
+              >
+                Join the waitlist
+              </Link>
+            )}
           </div>
         </div>
       </section>

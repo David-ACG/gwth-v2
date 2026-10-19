@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function TermsPage() {
   return (
-    <LegalFde title="Terms and Conditions" updated="25 February 2026">
+    <LegalFde title="Terms and Conditions" updated="1 December 2026">
       <p>
         These Terms and Conditions (&quot;Terms&quot;) govern your use of the
         GWTH.ai website and services (&quot;Services&quot;) provided at{" "}
@@ -33,6 +33,7 @@ export default function TermsPage() {
           <li><a href="#registration">Account Registration</a></li>
           <li><a href="#purchases">Purchases and Payment</a></li>
           <li><a href="#subscriptions">Subscriptions</a></li>
+          <li><a href="#passes">Gifts and Prepaid Passes</a></li>
           <li><a href="#prohibited">Prohibited Activities</a></li>
           <li><a href="#content">User-Generated Content</a></li>
           <li><a href="#privacy">Privacy Policy</a></li>
@@ -106,8 +107,8 @@ export default function TermsPage() {
         notify us immediately of any unauthorised use.
       </p>
       <p>
-        During the 23 June beta, public signup is closed. Course access is
-        invite-only and manually granted by GWTH to approved email addresses.
+        Anyone can create a free account. To access the course, you need a
+        subscription, an opened prepaid pass or a place given by GWTH.
       </p>
       <p>
         We reserve the right to suspend or terminate accounts that violate
@@ -117,37 +118,46 @@ export default function TermsPage() {
 
       <h2 id="purchases">5. Purchases and Payment</h2>
       <p>
-        Billing is disabled for the 23 June beta. Approved beta learners
-        receive manual access rather than self-service checkout.
+        Stripe processes payments securely. All prices are in GBP. GWTH.ai
+        is not registered for VAT, so no VAT is added to any price. You agree to provide current, complete and
+        accurate payment information.
       </p>
       <p>
-        If billing reopens after beta, payments will be processed securely
-        through our third-party payment provider. All prices are displayed
-        in GBP unless otherwise stated. You agree to provide current,
-        complete, and accurate payment information.
+        A price offered for a limited time, such as a Christmas price, applies
+        only to purchases made during the dates shown.
       </p>
       <p>
-        We reserve the right to refuse or cancel any order at our
-        discretion. If we cancel an order after payment has been taken, we
-        will issue a full refund.
+        We may refuse or cancel any order at our discretion. If we cancel an
+        order after taking payment, we will refund it in full.
       </p>
 
       <h2 id="subscriptions">6. Subscriptions</h2>
       <p>
-        Self-service subscriptions are not available during the 23 June
-        beta. If subscriptions reopen after beta, the course may be offered
-        monthly and you will authorise us to charge your payment method on
-        a recurring monthly basis until you cancel.
+        You can pay for the course monthly. You authorise us to charge your
+        payment method once a month until you cancel. Each payment opens the
+        next month of the course. After your third monthly payment for the
+        course, the monthly price drops to the lower price shown on our
+        pricing page. This payment keeps your lessons up to date.
       </p>
       <ul>
         <li>
-          <strong>Cancellation:</strong> You may cancel your subscription
-          at any time. Cancellation takes effect at the end of the current
-          billing period. You retain access until then.
+          <strong>Reminders:</strong> We will email you before each payment
+          with the amount and date.
+        </li>
+        <li>
+          <strong>Cancellation:</strong> You can cancel your subscription
+          online at any time in your account settings. Cancellation takes
+          effect at the end of the current billing period. You keep access
+          until then.
+        </li>
+        <li>
+          <strong>Months not yet available:</strong> If the next month of the
+          course is not ready when your next payment is due, we will not
+          take that payment until the month opens.
         </li>
         <li>
           <strong>No lock-in:</strong> There is no minimum commitment
-          period, no cancellation fee, and no penalty for leaving.
+          period, cancellation fee or penalty for leaving.
         </li>
         <li>
           <strong>Grace period:</strong> If a payment fails, you have a
@@ -157,12 +167,48 @@ export default function TermsPage() {
         <li>
           <strong>Price changes:</strong> We will give you at least 30
           days&apos; notice of any price changes. Existing subscribers will
-          be honoured at their current rate for the remainder of their
-          course period.
+          keep their current rate for the rest of their course period.
         </li>
       </ul>
 
-      <h2 id="prohibited">7. Prohibited Activities</h2>
+      <h2 id="passes">7. Gifts and Prepaid Passes</h2>
+      <p>
+        A prepaid pass covers the whole course (Months 1 to 3) or the first
+        month with one payment. You can buy one for yourself or as a gift
+        for someone in the United Kingdom.
+      </p>
+      <ul>
+        <li>
+          <strong>No renewal:</strong> A pass is paid once and never renews.
+          We never ask the person who opens a gift for payment details.
+        </li>
+        <li>
+          <strong>Opening a pass:</strong> A pass must be opened within one
+          year of purchase. The date is shown on the gift email and the gift
+          card. Your course time starts when you open the pass, not when it is
+          bought. Anyone with the code can open the pass, so please keep it
+          safe.
+        </li>
+        <li>
+          <strong>Months not yet available:</strong> If Month 2 or Month 3 is
+          not ready when you reach it, your course time is paused until it
+          opens, so you receive the full length of your pass.
+        </li>
+        <li>
+          <strong>When a pass ends:</strong> Access to the course lessons
+          stops. You keep your account, progress and the free labs. We will
+          email you about continuing. You are charged only if you choose to
+          subscribe.
+        </li>
+        <li>
+          <strong>Refunds:</strong> We will refund a pass in full at any time
+          before it is opened. Please{" "}
+          <Link href="/contact">contact us</Link> to ask. Once a pass has been
+          opened, it is not refundable, except where the law requires.
+        </li>
+      </ul>
+
+      <h2 id="prohibited">8. Prohibited Activities</h2>
       <p>You agree not to:</p>
       <ul>
         <li>Share your account credentials with others.</li>
@@ -190,7 +236,7 @@ export default function TermsPage() {
         </li>
       </ul>
 
-      <h2 id="content">8. User-Generated Content</h2>
+      <h2 id="content">9. User-Generated Content</h2>
       <p>
         You may create notes, quiz answers, and other content within the
         platform. You retain ownership of content you create. By
@@ -202,7 +248,7 @@ export default function TermsPage() {
         You can export or delete your content at any time.
       </p>
 
-      <h2 id="privacy">9. Privacy Policy</h2>
+      <h2 id="privacy">10. Privacy Policy</h2>
       <p>
         Your use of our Services is also governed by our{" "}
         <Link href="/privacy">Privacy Policy</Link>, which describes how we
@@ -211,7 +257,7 @@ export default function TermsPage() {
         Policy.
       </p>
 
-      <h2 id="termination">10. Termination</h2>
+      <h2 id="termination">11. Termination</h2>
       <p>
         We may terminate or suspend your access to our Services
         immediately, without prior notice, if you breach these Terms. Upon
@@ -230,7 +276,7 @@ export default function TermsPage() {
         </li>
       </ul>
 
-      <h2 id="governing-law">11. Governing Law</h2>
+      <h2 id="governing-law">12. Governing Law</h2>
       <p>
         These Terms are governed by and construed in accordance with the
         laws of England and Wales. Any disputes arising from these Terms
@@ -238,7 +284,7 @@ export default function TermsPage() {
         England and Wales.
       </p>
 
-      <h2 id="disputes">12. Dispute Resolution</h2>
+      <h2 id="disputes">13. Dispute Resolution</h2>
       <p>
         If you have a dispute with us, we encourage you to{" "}
         <Link href="/contact">contact us</Link> first so we can try to
@@ -247,7 +293,7 @@ export default function TermsPage() {
         accordance with the governing law above.
       </p>
 
-      <h2 id="disclaimer">13. Disclaimer</h2>
+      <h2 id="disclaimer">14. Disclaimer</h2>
       <p>
         Our Services are provided &quot;as is&quot; and &quot;as available&quot; without
         warranties of any kind, whether express or implied, including but
@@ -260,7 +306,7 @@ export default function TermsPage() {
         outcomes or employment results from completing our courses.
       </p>
 
-      <h2 id="liability">14. Limitation of Liability</h2>
+      <h2 id="liability">15. Limitation of Liability</h2>
       <p>
         To the maximum extent permitted by law, GWTH.ai shall not be
         liable for any indirect, incidental, special, consequential, or
@@ -274,7 +320,7 @@ export default function TermsPage() {
         have paid us in the 12 months preceding the claim.
       </p>
 
-      <h2 id="contact">15. Contact Us</h2>
+      <h2 id="contact">16. Contact Us</h2>
       <p>
         If you have any questions about these Terms, please{" "}
         <Link href="/contact">contact us through our website</Link>.

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function PrivacyPage() {
   return (
-    <LegalFde title="Privacy Policy" updated="29 September 2026">
+    <LegalFde title="Privacy Policy" updated="1 December 2026">
       <p>
         This Privacy Policy describes how GWTH.ai (&quot;we&quot;, &quot;us&quot;, or
         &quot;our&quot;) collects, uses, and protects your personal information when
@@ -38,9 +38,14 @@ export default function PrivacyPage() {
           and results, lab completions, notes, and bookmarks.
         </li>
         <li>
-          <strong>Payment information:</strong> billing details processed
-          securely through our third-party payment provider if billing
-          reopens after beta. We do not store your full card details.
+          <strong>Payment information:</strong> Stripe securely processes your
+          billing details. We don&apos;t see or store your full card details.
+        </li>
+        <li>
+          <strong>Gifts:</strong> we collect the recipient&apos;s name
+          and email address and your message when you buy a gift. We use
+          them only to send and manage that gift. If you receive a gift, the
+          buyer gave us your name and email address for this purpose.
         </li>
       </ul>
 

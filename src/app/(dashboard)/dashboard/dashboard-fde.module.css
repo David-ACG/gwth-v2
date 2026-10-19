@@ -1256,3 +1256,10 @@
     padding-right: 1.25rem;
   }
 }
+
+/* An inline text link inside body copy (gift sale: "Open your gift"). */
+.inlineLink {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

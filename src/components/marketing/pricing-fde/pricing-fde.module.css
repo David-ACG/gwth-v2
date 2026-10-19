@@ -607,3 +607,13 @@
   gap: 0.875rem;
   margin-top: 2.25rem;
 }
+
+/* A checkout that could not start (gift sale, bead gwth-launch-v1uj.9): the
+   words carry the error, in the one error colour. */
+.buyError {
+  flex-basis: 100%;
+  margin-top: 0.5rem;
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-error-text);
+}

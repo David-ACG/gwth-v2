@@ -1,11 +1,29 @@
 import type { SubscriptionState } from "@/lib/types"
 import { eq } from "drizzle-orm"
+import {
+  passStatus,
+  type MonthRelease,
+  type PassProduct,
+} from "@/lib/billing/passes"
 
 export type AccessSource =
   | "registered"
   | "manual_beta"
   | "stripe_course"
   | "stripe_ongoing"
+  | "org_seat"
+  | "prepaid"
+
+/**
+ * The sources that admit a learner to the course (getCurrentUser). org_seat is
+ * NOT here: institution seats are resolved through org_membership.
+ */
+export const COURSE_ACCESS_SOURCES: readonly AccessSource[] = [
+  "manual_beta",
+  "prepaid",
+  "stripe_course",
+  "stripe_ongoing",
+]
 
 export type UserAccessRow = {
   user_id: string
@@ -20,6 +38,19 @@ export type UserAccessRow = {
   stripe_price_id: string | null
   stripe_subscription_status: string | null
   notes: string | null
+  /** 026: the opened pass behind a 'prepaid' row. */
+  prepaid_pass_id?: string | null
+  /** 026: course payments made on a monthly subscription (0..3). */
+  course_months_paid?: number | null
+}
+
+/** What normaliseAccessRow needs from an opened pass (026). */
+export type PassForAccess = {
+  id: string
+  product: PassProduct
+  redeemed_at: string | null
+  extra_months: number
+  refunded_at: string | null
 }
 
 export type BetaAccessGrantRow = {
@@ -41,6 +72,14 @@ export type UserAccess = {
   stripeSubscriptionId: string | null
   stripePriceId: string | null
   stripeSubscriptionStatus: string | null
+  /**
+   * Hold the clock: the month this learner is waiting for, when their time is
+   * paused because that month is not open yet (prepaid passes, and payers
+   * whose next charge is held). null otherwise.
+   */
+  onHoldFor: 2 | 3 | null
+  /** The opened pass behind 'prepaid' access, else null. */
+  prepaidPassId: string | null
 }
 
 export const BETA_ACCESS_REQUIRED_MESSAGE =
@@ -57,6 +96,8 @@ export const REGISTERED_ACCESS: UserAccess = {
   stripeSubscriptionId: null,
   stripePriceId: null,
   stripeSubscriptionStatus: null,
+  onHoldFor: null,
+  prepaidPassId: null,
 }
 
 export function clampCourseMonth(month: unknown): 0 | 1 | 2 | 3 {
@@ -110,9 +151,12 @@ function isGrantActive(
   return validUntil === null || validUntil > now
 }
 
+export const NO_RELEASE: MonthRelease = { month2: null, month3: null }
+
 export function normaliseAccessRow(
   row: UserAccessRow | null,
-  now = new Date()
+  now = new Date(),
+  extras: { pass?: PassForAccess | null; release?: MonthRelease } = {}
 ): UserAccess {
   if (!row) return REGISTERED_ACCESS
 
@@ -124,7 +168,7 @@ export function normaliseAccessRow(
     return REGISTERED_ACCESS
   }
 
-  return {
+  const base: UserAccess = {
     source: row.access_source,
     subscriptionState: row.subscription_state,
     subscriptionMonth: clampCourseMonth(row.subscription_month),
@@ -135,6 +179,72 @@ export function normaliseAccessRow(
     stripeSubscriptionId: row.stripe_subscription_id,
     stripePriceId: row.stripe_price_id,
     stripeSubscriptionStatus: row.stripe_subscription_status,
+    onHoldFor: null,
+    prepaidPassId: row.prepaid_pass_id ?? null,
+  }
+
+  if (row.access_source === "prepaid") {
+    // Computed on read from the pass and the release dates (hold the clock).
+    // No pass, an unopened pass or one for another row: no access.
+    const pass = extras.pass
+    if (!pass || pass.id !== row.prepaid_pass_id || !pass.redeemed_at) {
+      return REGISTERED_ACCESS
+    }
+    const status = passStatus(
+      {
+        product: pass.product,
+        openedAt: new Date(pass.redeemed_at),
+        release: extras.release ?? NO_RELEASE,
+        extraMonths: pass.extra_months,
+        refundedAt: parseDate(pass.refunded_at),
+      },
+      now
+    )
+    if (status.expired || status.month === 0) return REGISTERED_ACCESS
+    return {
+      ...base,
+      subscriptionState: stateForCourseMonth(status.month),
+      subscriptionMonth: status.month,
+      validUntil: status.endsAt,
+      gracePeriodEnds: null,
+      onHoldFor: status.onHoldFor,
+    }
+  }
+
+  if (row.access_source === "stripe_course") {
+    // A payer's month is the number of course payments made, so a held
+    // month never costs them one. While the next charge is held (Stripe
+    // status 'trialing' after the first payment) they wait for the next month.
+    const paid = clampCourseMonth(row.course_months_paid ?? 0)
+    const month = paid > 0 ? paid : base.subscriptionMonth
+    const held =
+      row.stripe_subscription_status === "trialing" && paid > 0 && paid < 3
+    return {
+      ...base,
+      subscriptionMonth: month,
+      subscriptionState:
+        row.subscription_state === "lapsed" ? "lapsed" : stateForCourseMonth(month),
+      onHoldFor: held ? ((paid + 1) as 2 | 3) : null,
+    }
+  }
+
+  return base
+}
+
+/** Month 2 and Month 3 open dates (course_month_release). Fails to "not open". */
+export async function getMonthRelease(): Promise<MonthRelease> {
+  try {
+    const { getDb } = await import("@/db")
+    const { courseMonthRelease } = await import("@/db/schema")
+    const rows = await getDb().select().from(courseMonthRelease)
+    const at = (m: number) => {
+      const v = rows.find((r) => r.month === m)?.opensAt
+      return v ? new Date(v) : null
+    }
+    return { month2: at(2), month3: at(3) }
+  } catch (err) {
+    console.error("[access] getMonthRelease failed; treating months as not open", err)
+    return NO_RELEASE
   }
 }
 
@@ -161,6 +271,28 @@ export async function getAccessForUser(userId: string): Promise<UserAccess> {
     const row = rows[0]
     if (!row) return REGISTERED_ACCESS
 
+    let pass: PassForAccess | null = null
+    let release: MonthRelease = NO_RELEASE
+    if (row.accessSource === "prepaid" && row.prepaidPassId) {
+      const { prepaidPasses } = await import("@/db/schema")
+      const passRows = await db
+        .select()
+        .from(prepaidPasses)
+        .where(eq(prepaidPasses.id, row.prepaidPassId))
+        .limit(1)
+      const p = passRows[0]
+      if (p) {
+        pass = {
+          id: p.id,
+          product: p.product as PassProduct,
+          redeemed_at: p.redeemedAt,
+          extra_months: p.extraMonths,
+          refunded_at: p.refundedAt,
+        }
+      }
+      release = await getMonthRelease()
+    }
+
     return normaliseAccessRow({
       user_id: row.userId,
       access_source: row.accessSource as AccessSource,
@@ -177,7 +309,9 @@ export async function getAccessForUser(userId: string): Promise<UserAccess> {
       stripe_price_id: row.stripePriceId,
       stripe_subscription_status: row.stripeSubscriptionStatus,
       notes: row.notes,
-    })
+      prepaid_pass_id: row.prepaidPassId,
+      course_months_paid: row.courseMonthsPaid,
+    }, new Date(), { pass, release })
   } catch (err) {
     // Fail CLOSED: a transient DB error must never admit a user beyond
     // "registered". But log it — silently demoting a GRANTED tester on a blip

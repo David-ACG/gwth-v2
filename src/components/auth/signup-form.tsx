@@ -28,10 +28,11 @@ import styles from "@/components/auth/auth-fde.module.css"
  * Un-invited visitors can still register but get free labs only (W8), so the
  * open form does not open the beta.
  */
-export function SignupForm({ oauthProviders = [] }: PostBetaSignupFormProps) {
+export function SignupForm({ oauthProviders = [], next = null }: PostBetaSignupFormProps) {
   return (
     <PostBetaSignupForm
       oauthProviders={oauthProviders}
+      next={next}
       title="Invite-only beta"
       subtitle="Registration is closed to public signup. Access is granted manually by the GWTH team."
       notice={
@@ -62,6 +63,12 @@ interface PostBetaSignupFormProps {
   subtitle?: string
   /** Optional notice paragraph rendered between the head and the form. */
   notice?: ReactNode
+  /**
+   * A safe same-site path to land on after the emailed confirmation link
+   * signs them in (e.g. back to /gift/open?code=... or /pricing). Already
+   * checked with safeNextPath by the page.
+   */
+  next?: string | null
 }
 
 /**
@@ -74,6 +81,7 @@ export function PostBetaSignupForm({
   title = "Create your account",
   subtitle = "Sign up to start learning. We'll send you a confirmation email.",
   notice,
+  next = null,
 }: PostBetaSignupFormProps) {
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [submittedName, setSubmittedName] = useState("")
@@ -90,7 +98,7 @@ export function PostBetaSignupForm({
       name: data.name,
       email: data.email,
       password: data.password,
-      callbackURL: "/dashboard",
+      callbackURL: next ?? "/dashboard",
     })
 
     if (error) {
@@ -244,7 +252,10 @@ export function PostBetaSignupForm({
 
       <p className={styles.altPrompt}>
         Already have an account?{" "}
-        <Link href="/login" className={styles.link}>
+        <Link
+          href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"}
+          className={styles.link}
+        >
           Log in
         </Link>
       </p>

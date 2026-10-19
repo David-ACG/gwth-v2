@@ -698,4 +698,26 @@ html [data-sonner-toaster][data-theme] {
   .no-print {
     display: none !important;
   }
+
+  /* Paper is light. A page printed while the site is in dark mode (the gift
+     card, bead gwth-launch-v1uj.5) would otherwise print cream ink on white
+     paper. EXACTLY the :root light set; paper-first-tokens.test.ts fails if
+     the two blocks ever differ. */
+  .dark {
+    --v-bg: #f2f4f3;
+    --v-surface: #ffffff;
+    --v-quiet: #e6efeb;
+    --v-ink: #17211d;
+    --v-soft: #414b46;
+    --v-muted: #67716b;
+    --v-line: #838884;
+    --v-line-soft: #dde2df;
+    --v-btn: #b5dbd0;
+    --v-btn-text: #17211d;
+    --v-accent: #3f7d6d;
+    --v-error-bg: #fbe9e7;
+    --v-error-text: #8f1d1d;
+    --v-error-line: #c0392b;
+    color-scheme: light;
+  }
 }
