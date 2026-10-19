@@ -140,7 +140,7 @@ test.describe("Christmas gift sale on the hlab preview", () => {
     await page.getByLabel("Password", { exact: true }).fill(PASSWORD)
     await page.getByLabel("Confirm password").fill(PASSWORD)
     await page.getByRole("button", { name: /create account/i }).click()
-    await expect(page.getByText(/check your email/i)).toBeVisible()
+    await expect(page.getByRole("heading", { name: /check your email/i })).toBeVisible()
 
     const verify = await waitForMail(RECIPIENT, /verify/i)
     const verifyUrl = new URL(linkIn(verify, /verify-email/))

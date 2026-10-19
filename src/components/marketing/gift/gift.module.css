@@ -124,6 +124,7 @@
 .twoCol {
   display: grid;
   gap: 1.25rem;
+  align-items: start;
 }
 
 @media (min-width: 40rem) {

@@ -32,12 +32,23 @@ describe("sendPlunkEmail", () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }))
     vi.stubGlobal("fetch", fetchMock)
 
-    const ok = await sendPlunkEmail({ to: "a@example.com", subject: "Hi", body: "<p>Hi</p>", text: "Hi" })
+    const ok = await sendPlunkEmail({ to: "a@learner.co.uk", subject: "Hi", body: "<p>Hi</p>", text: "Hi" })
 
     expect(ok).toBe(true)
     const [url, init] = fetchMock.mock.calls[0]!
     expect(url).toBe(NEXT_PLUNK_SEND_URL)
     expect(init.headers.Authorization).toBe("Bearer sk_new")
-    expect(JSON.parse(init.body)).toMatchObject({ to: "a@example.com", from: "david@gwth.ai", name: "GWTH.ai" })
+    expect(JSON.parse(init.body)).toMatchObject({ to: "a@learner.co.uk", from: "david@gwth.ai", name: "GWTH.ai" })
+  })
+})
+
+describe("reserved test addresses", () => {
+  it("never sends to example.com, .test, .invalid or .example addresses", async () => {
+    const { isReservedTestAddress } = await import("./plunk")
+    for (const to of ["x@example.com", "x@sub.test", "x@nowhere.invalid", "x@shop.example", "X@Example.ORG"]) {
+      expect(isReservedTestAddress(to)).toBe(true)
+    }
+    expect(isReservedTestAddress("sam@gmail.com")).toBe(false)
+    expect(isReservedTestAddress("x@examples.com")).toBe(false)
   })
 })

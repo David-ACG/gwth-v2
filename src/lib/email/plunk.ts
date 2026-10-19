@@ -53,6 +53,11 @@ export async function sendPlunkEmail(params: {
   // copy of every email as JSON so an end-to-end run can read what was sent.
   await writeToOutbox(params)
 
+  // Reserved test domains (RFC 2606: example.com/.org/.net, .test, .invalid,
+  // .example) never reach a real inbox; sending would only bounce and hurt
+  // the sender's reputation. Test runs read the outbox instead.
+  if (isReservedTestAddress(params.to)) return false
+
   const plunk = resolvePlunk()
   if (!plunk) {
     console.log(
@@ -89,6 +94,15 @@ export async function sendPlunkEmail(params: {
     console.error("[Plunk] Unexpected error:", err)
     return false
   }
+}
+
+export function isReservedTestAddress(to: string): boolean {
+  const domain = to.trim().toLowerCase().split("@")[1] ?? ""
+  return (
+    /^example\.(com|org|net)$/.test(domain) ||
+    /\.(test|invalid|example)$/.test(domain) ||
+    /^(test|invalid|example)$/.test(domain)
+  )
 }
 
 async function writeToOutbox(params: {
