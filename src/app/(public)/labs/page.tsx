@@ -21,9 +21,9 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Labs: the Model Arena",
+  title: "Free AI labs",
   description:
-    "Head-to-head AI labs: two tools run the same real UK work task, outputs side by side, a rubric, and a dated verdict. Included free with your GWTH beta place.",
+    "Head-to-head AI labs: two tools do the same real UK work task, with both answers side by side, a checklist to judge them by and a dated verdict. Free to open, no card required.",
 }
 
 /**

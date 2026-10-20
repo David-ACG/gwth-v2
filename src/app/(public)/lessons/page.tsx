@@ -1,25 +1,26 @@
 import type { Metadata } from "next"
 import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
 import { TOTAL_MANDATORY_LESSONS } from "@/lib/config"
+import { isSelling } from "@/lib/launch"
 
 export const metadata: Metadata = {
   title: "Lessons",
   // The mandatory figure is derived from the month configs rather than typed
-  // out: the old literal 64 went stale as soon as Month 1 grew from 24 lessons
-  // to 26 (W26). The OPTIONAL total was removed on 2026-09-17 for the reason
-  // /for-teams already refuses to print one: config says 30, the canonical
-  // syllabus register says 44 over the three live months, and no register owns
-  // the split (bead gwth-launch-88z.32.35).
+  // out, and no optional total is printed (a-20260914-201426-ae7f0e). The old
+  // description also promised "a score you can show", which is switched on in
+  // no environment (launch readiness review, 2026-10-20).
   description:
-    `A three-month applied AI syllabus written for the UK, with ${TOTAL_MANDATORY_LESSONS} core lessons, ` +
-    `optional lessons for going deeper by profession against the codes UK regulators set, ` +
-    `practical projects, and a score you can show.`,
+    `GWTH is a practical AI course for work and everyday life in the UK: ` +
+    `${TOTAL_MANDATORY_LESSONS} core lessons over three months, optional lessons ` +
+    `for going deeper in your own field, and a project in every lesson.`,
 }
 
 /**
- * Public lessons landing page in the FDE journal register.
- * Showcases the 3-month course structure, features, and CTAs.
+ * Public lessons landing page in the paper-first register.
+ *
+ * `isSelling()` is read here, per request (the (public) layout is
+ * force-dynamic), and passed down, so only the buttons change on 1 December.
  */
 export default function LessonsPage() {
-  return <LessonsFde />
+  return <LessonsFde selling={isSelling()} />
 }

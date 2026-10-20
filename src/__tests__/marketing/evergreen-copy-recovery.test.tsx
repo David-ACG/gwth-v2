@@ -67,7 +67,11 @@ describe("recovered ideas are on the page", () => {
   it("C02 /lessons names what the projects are, not only what they are not", () => {
     render(<LessonsFde />)
     const body = text()
-    expect(body).toMatch(/transformer architecture/i)
+    // The idea is kept; the wording changed on 2026-10-20, when the latest
+    // Sol writing check asked for plain words in place of "transformer
+    // architecture" and three fragments (launch readiness, bead
+    // gwth-launch-ajqs.2).
+    expect(body).toMatch(/not quizzes about how AI models are made/i)
     expect(body).toMatch(/build, use and show to people/i)
   })
 
@@ -78,7 +82,11 @@ describe("recovered ideas are on the page", () => {
 
   it("C04 /lessons closes on what a learner will have built", () => {
     render(<LessonsFde />)
-    expect(text()).toMatch(/most people assume need a developer/i)
+    // The idea is kept: the page closes on what the learner builds. "Most
+    // people assume need a developer" and the fixed "three months from now"
+    // went on 2026-10-20 (latest Sol writing check: unsupported, and untrue
+    // for anyone whose time is paused).
+    expect(text()).toMatch(/you build useful tools for your work and everyday life/i)
   })
 
   /**
@@ -180,9 +188,19 @@ describe("recovered ideas are on the page", () => {
     )
   })
 
+  /**
+   * C14 was "that keeps us honest". Both launch readiness reviewers (Claude
+   * and the latest Sol, 2026-10-20, which David accepted for every page) read
+   * it as self-praise, so the phrase went. The idea it carried stays: the
+   * closing block ties cancelling to whether the course is still worth it.
+   */
   it("C14 /pricing ties cancellation to the reason it is offered", () => {
-    render(<PricingFde />)
-    expect(text()).toMatch(/keeps us honest/i)
+    const { container } = render(<PricingFde />)
+    const closing = (
+      container.querySelector('[data-section="closing"]')?.textContent ?? ""
+    ).replace(/\s+/g, " ")
+    expect(closing).toMatch(/If it stops being worth it to you, cancel/i)
+    expect(closing).not.toMatch(/keeps us honest/i)
   })
 
   it("C15 /newsletter promises something usable, not a category of thing", () => {
@@ -237,7 +255,10 @@ describe("recovered ideas did not displace what was already decided", () => {
   it("C13 and C14 leave the a-20260914-203753-b9d050 closing intact", () => {
     render(<PricingFde />)
     const body = text()
-    expect(body).toMatch(/no timer and no pretend scarcity/i)
+    // "No timer and no pretend scarcity" went on 2026-10-20 (launch
+    // readiness): it sat beside a dated £69 offer, which is a timer.
+    expect(body).not.toMatch(/no timer/i)
+    expect(body).toMatch(/unlock one month at a time/i)
     expect(body).toMatch(/cancel whenever you like/i)
     // "Try before you join" was removed by that annotation and must stay out.
     expect(body).not.toMatch(/try (it )?before you (join|subscribe)/i)

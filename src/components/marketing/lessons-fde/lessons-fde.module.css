@@ -103,6 +103,18 @@
   color: var(--v-line);
 }
 
+/* On a phone the facts stack, one to a line, with no separator, so no line
+   ends in a stray middot (launch readiness review, 2026-10-20). */
+@media (max-width: 40rem) {
+  .mastheadFoot {
+    flex-direction: column;
+  }
+
+  .mastheadFoot p:not(:last-child)::after {
+    content: none;
+  }
+}
+
 .mastheadFoot p {
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
@@ -263,30 +275,6 @@
   overflow: hidden;
 }
 
-.cardTop {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 1.25rem;
-  color: var(--v-ink);
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-}
-
-.flvTeal {
-  background: var(--v-quiet);
-}
-
-.flvMoss {
-  background: var(--v-quiet);
-}
-
-.flvRust {
-  background: var(--v-quiet);
-}
-
 .monthBody {
   display: flex;
   flex-direction: column;
@@ -302,6 +290,18 @@
   letter-spacing: -0.01em;
 }
 
+/* The month and its core count: a metadata line on the card surface, set off
+   from the title by a hairline. It replaces the tinted card top, which the
+   paper-first rules ban (launch readiness review, 2026-10-20). */
+.monthMeta {
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-family: var(--font-sans);
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  color: var(--v-soft);
+}
+
 .monthSub {
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
@@ -309,7 +309,9 @@
   color: var(--v-muted);
 }
 
-.monthBody > p {
+/* Only the description grows to fill the card. The rule used to match every
+   paragraph, so the subtitle grew too and left a gap under it on Month 2. */
+.monthDesc {
   font-size: var(--fde-body);
   line-height: 1.6;
   color: var(--v-soft);
@@ -367,32 +369,8 @@
 }
 
 .featureItem {
-  display: grid;
-  gap: 0.75rem;
   border-top: 1px solid var(--v-line-soft);
   padding: 1.4rem 0;
-}
-
-@media (min-width: 40rem) {
-  .featureItem {
-    grid-template-columns: 9rem minmax(0, 1fr);
-    gap: 1.75rem;
-  }
-}
-
-.featureIndex p:first-child {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 600;
-  color: var(--v-ink);
-}
-
-.featureIndex p + p {
-  margin-top: 0.3rem;
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-xs);
-  font-weight: 500;
-  color: var(--v-muted);
 }
 
 .featureItem h3 {
@@ -405,51 +383,6 @@
   margin-top: 0.5rem;
   font-size: var(--fde-body);
   line-height: 1.65;
-  color: var(--v-soft);
-}
-
-/* ---------------- Why one hour a day (essay) ---------------- */
-
-.essay {
-  margin: 0 auto;
-  max-width: 44rem;
-}
-
-.essayImage {
-  border: 1px solid var(--v-line);
-  margin-bottom: 2.25rem;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.essayImage img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.essay h2 {
-  margin-top: 0.75rem;
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.15;
-}
-
-.essay h2 em {
-  font-style: italic;
-  color: var(--v-accent);
-}
-
-.essayBody {
-  margin-top: 1.5rem;
-  display: grid;
-  gap: 1.25rem;
-}
-
-.essayBody p {
-  font-size: var(--fde-body-lg);
-  line-height: 1.75;
   color: var(--v-soft);
 }
 
@@ -497,8 +430,7 @@
  * the page's own: a reading-width lead, three panels on the same card recipe as
  * the month cards, then two quieter blocks under them. No new colour, no tint
  * carrying meaning, no rule under the heading (paper-first-register; batch 1
- * retired those). The kicker is a label in the mono metadata face, which the
- * page already uses for month numbers and the capstone label.
+ * retired those). The small-capitals kickers went on 2026-10-20.
  */
 
 .sectionLead {
@@ -528,15 +460,6 @@
   border: 1px solid var(--v-line);
   border-radius: var(--radius-lg);
   padding: 1.35rem 1.35rem 1.5rem;
-}
-
-.pathKicker {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-xs);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--v-muted);
 }
 
 .pathCard h3 {

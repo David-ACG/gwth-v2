@@ -76,14 +76,21 @@ test.describe("Labs index", () => {
       await expect(card.getByTestId("lab-task-cue")).toBeVisible({
         timeout: 15000,
       })
-      // No lab has been filmed, so no card may imply one has.
-      await expect(card).toHaveAttribute("data-video-state", "planned")
-      await expect(card.getByTestId("lab-video-state")).toContainText(/planned/i)
+      // A card names a video guide only where one exists, and never says
+      // "planned" (launch readiness review, 2026-10-20). Only the spreadsheet
+      // lab has been filmed.
+      if ((await card.getAttribute("data-video-state")) === "planned") {
+        await expect(card.getByTestId("lab-video-state")).toHaveCount(0)
+      } else {
+        await expect(card.getByTestId("lab-video-state")).toContainText(
+          /Video guide/
+        )
+      }
     }
     expect(await page.locator("video").count()).toBe(0)
   })
 
-  test("the spreadsheet card shows spreadsheet rows, not a paragraph", async ({
+  test("the spreadsheet card shows a still from its own video", async ({
     page,
   }) => {
     await page.goto(INDEX)
@@ -92,8 +99,8 @@ test.describe("Labs index", () => {
 
     const card = cards.filter({ hasText: "messy spreadsheet" })
     await expect(card).toHaveCount(1)
-    await expect(card.locator('[data-preview="specimen"]')).toHaveCount(1)
-    await expect(card.locator('[data-testid="lab-specimen-grid"]')).toBeVisible()
+    // It has a real video guide now, so its card shows a still from it.
+    await expect(card.locator('[data-preview="video"]')).toHaveCount(1)
   })
 
   for (const theme of ["light", "dark"] as const) {
@@ -128,9 +135,10 @@ test.describe("Spreadsheet lab", () => {
     await page.goto(LAB)
     await expect(page.locator("main").getByRole("heading", { level: 1 })).toBeVisible()
 
+    // The spreadsheet lab has a real, captioned video guide.
     const guide = page.locator("main").getByTestId("lab-video-guide")
-    await expect(guide).toHaveAttribute("data-video-state", "planned")
-    expect(await page.locator("video").count()).toBe(0)
+    await expect(guide).toHaveAttribute("data-video-state", "available")
+    expect(await page.locator("video").count()).toBe(1)
 
     // The read-aloud control is in the opening, not buried at the bottom.
     await expect(page.locator("main").getByTestId("lab-listen")).toBeVisible()

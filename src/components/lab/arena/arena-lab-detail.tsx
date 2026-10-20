@@ -1,4 +1,5 @@
 import Link from "next/link"
+import type { ReactNode } from "react"
 import type { ModelArenaLab } from "@/lib/types"
 import { formatTestedOn } from "@/lib/data/model-arena"
 import { LabListen } from "./lab-listen"
@@ -22,6 +23,94 @@ const JUMP: ReadonlyArray<{ id: string; label: string }> = [
 ]
 
 /**
+ * Answers longer than this many characters open with their first few
+ * paragraphs and keep the rest behind a "Show the full answer" disclosure. The
+ * weekly-chore lab printed about six hundred lines of code open, so a phone
+ * reader scrolled some fifteen screens before reaching the scoring questions
+ * (launch readiness review, 2026-10-20). Every other lab's answers are shorter
+ * than this and stay fully open.
+ */
+export const LONG_ANSWER_CHARS = 6000
+
+/** Roughly how much of a long answer shows before the disclosure. */
+const OPENING_CHARS = 900
+
+/**
+ * Splits a long answer at the first paragraph break after
+ * {@link OPENING_CHARS}. The two parts joined are exactly the original text,
+ * so nothing a tool wrote is lost or changed; only where it folds.
+ */
+export function splitLongAnswer(text: string): [string, string] {
+  if (text.length <= LONG_ANSWER_CHARS) return [text, ""]
+  const at = text.indexOf("\n\n", OPENING_CHARS)
+  if (at === -1) return [text, ""]
+  return [text.slice(0, at), text.slice(at)]
+}
+
+/** A web address in a tool's answer, up to whitespace or a closing bracket. */
+const URL_PATTERN = /https?:\/\/[^\s<>"'()[\]]+/g
+
+/** The fence a markdown code block opens and closes with. */
+const FENCE = "```"
+
+/**
+ * Renders a tool's answer with every web address made clickable. The text is
+ * unchanged, character for character: an address stays exactly as the tool
+ * wrote it and simply becomes a link, so a reader can do what the cite-sources
+ * lab asks and click every source (launch readiness review, 2026-10-20).
+ * Trailing full stops and commas are left outside the link.
+ *
+ * Addresses inside a ``` code block are left as text: there they are examples
+ * of what to copy (a made-up spreadsheet address, say), not sources.
+ * `startsInCode` says whether the text begins inside such a block, for the
+ * second half of an answer split by {@link splitLongAnswer}.
+ */
+export function withLinks(text: string, startsInCode = false): ReactNode[] {
+  const nodes: ReactNode[] = []
+  const parts = text.split(FENCE)
+  parts.forEach((part, index) => {
+    if (index > 0) nodes.push(FENCE)
+    const inCode = startsInCode ? index % 2 === 0 : index % 2 === 1
+    if (inCode) {
+      nodes.push(part)
+      return
+    }
+    let last = 0
+    for (const match of part.matchAll(URL_PATTERN)) {
+      const start = match.index ?? 0
+      const url = match[0].replace(/[.,;:!?]+$/, "")
+      if (start > last) nodes.push(part.slice(last, start))
+      nodes.push(
+        <a
+          key={`${index}-${start}`}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {url}
+        </a>
+      )
+      last = start + url.length
+    }
+    if (last < part.length) nodes.push(part.slice(last))
+  })
+  return nodes
+}
+
+/** True when a text leaves a ``` code block open at its end. */
+function endsInCode(text: string): boolean {
+  return (text.split(FENCE).length - 1) % 2 === 1
+}
+
+/**
+ * The category as the kicker shows it: lower case in the sentence, except an
+ * abbreviation such as HR, which keeps its capitals ("Lab, HR", not "Lab, hr").
+ */
+function kickerCategory(category: string): string {
+  return category === category.toUpperCase() ? category : category.toLowerCase()
+}
+
+/**
  * Head-to-head lab detail, PAPER-FIRST register (bible paper-first-lab-page).
  *
  * Rebuilt for bead gwth-launch-88z.32.22 from David's annotation
@@ -39,11 +128,16 @@ const JUMP: ReadonlyArray<{ id: string; label: string }> = [
  * shared prompt, which is a screenful of raw CSV, is behind its own disclosure
  * rather than being the third thing on the page.
  *
- * NO LAB VIDEO HAS BEEN RECORDED. The video panel therefore renders a plainly
- * labelled ready state with no play control at all; it becomes a real player
- * the moment a lab carries a `video` object, and never before. Both states are
- * driven by `labVideoState`, so no surface can disagree with another about
- * whether a video exists.
+ * Only the messy-spreadsheet lab has a recorded video. The video panel is a
+ * real player where a lab carries a `video` object, and is left out entirely
+ * everywhere else: the "Video guide planned" panel that stood in its place was
+ * a promise of unfinished work and went on 2026-10-20 (launch readiness
+ * review). `labVideoState` decides, so no surface can disagree with another
+ * about whether a video exists.
+ *
+ * The labs are not re-run for the launch, so the line under the headline says
+ * when each was tested, with which models, and that both tools have newer
+ * versions since (launch readiness review, 2026-10-20).
  *
  * Everything below the opening is unchanged in substance: the brief, the
  * shared prompt, both outputs verbatim, the rubric, the dated verdict and the
@@ -78,7 +172,7 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
       <header className={styles.matchup} data-section="intro">
         <div className={styles.page}>
           <p className={styles.kicker}>
-            Lab{lab.category ? `, ${lab.category.toLowerCase()}` : ""}
+            Lab{lab.category ? `, ${kickerCategory(lab.category)}` : ""}
           </p>
           <h1 className={styles.matchupTitle}>{lab.title}</h1>
 
@@ -94,12 +188,12 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
           ) : null}
 
           <div className={styles.matchupFoot}>
-            <p>
-              {first.modelLabel ?? first.modelId} versus{" "}
-              {second.modelLabel ?? second.modelId}
+            <p className={styles.testedNote} data-testid="lab-tested-note">
+              Tested on {formatTestedOn(lab.testedOn)} with{" "}
+              {first.modelLabel ?? first.modelId} and{" "}
+              {second.modelLabel ?? second.modelId}. Both tools have newer
+              versions now, so the answers you get today may differ.
             </p>
-            <p>Tested on {formatTestedOn(lab.testedOn)}</p>
-            <p>{isArchived ? "Archived" : "Live now"}</p>
           </div>
         </div>
       </header>
@@ -111,7 +205,11 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
           2.84 : 1 against --v-quiet and 3.02 : 1 against --v-bg, and the bar
           is 3 : 1 (bible boundary-contrast-check).
         */}
-        <div className={styles.introMedia}>
+        <div
+          className={`${styles.introMedia} ${
+            videoState === "available" ? "" : styles.introMediaSingle
+          }`}
+        >
           {videoState === "available" && lab.video ? (
             <div
               className={styles.videoPanel}
@@ -146,24 +244,7 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
                 . The written walkthrough below covers the same ground.
               </p>
             </div>
-          ) : (
-            <div
-              className={styles.videoPanel}
-              data-testid="lab-video-guide"
-              data-video-state="planned"
-            >
-              {/* Deliberately not a player and deliberately not a black
-                  rectangle with a triangle on it. A play control that cannot
-                  play is the thing this panel exists to avoid. */}
-              <h2 className={styles.videoTitle}>Video guide planned</h2>
-              <p className={styles.videoNote}>
-                Every lab is getting a short video of the task and both
-                answers. This one has not been recorded yet. The written
-                walkthrough below is the whole lab, and you can have it read
-                aloud.
-              </p>
-            </div>
-          )}
+          ) : null}
 
           <LabListen
             segments={listenSegments}
@@ -253,11 +334,14 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
           <p className={styles.sectionNote}>
             Each answer is printed exactly as the tool returned it, formatting
             marks and all, so you are judging the real output rather than a
-            tidied-up version of it.
+            tidied-up version of it. Marks such as ## and ** are formatting
+            codes that a chat window would normally show as headings and bold
+            text. Web addresses in the answers are links you can open.
           </p>
           <div className={styles.outputsGrid}>
             {lab.outputs.map((output) => {
               const contestant = lab.matchup.find((m) => m.name === output.by)
+              const [opening, rest] = splitLongAnswer(output.verbatim)
               return (
                 <article
                   className={styles.outputCol}
@@ -270,7 +354,18 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
                       {contestant?.modelLabel ?? contestant?.modelId}
                     </span>
                   </header>
-                  <div className={styles.outputBody}>{output.verbatim}</div>
+                  <div className={styles.outputBody}>{withLinks(opening)}</div>
+                  {rest ? (
+                    <details
+                      className={styles.outputMore}
+                      data-testid="answer-more"
+                    >
+                      <summary className={styles.disclosureSummary}>
+                        Show the full answer
+                      </summary>
+                      <div className={styles.outputBody}>{withLinks(rest, endsInCode(opening))}</div>
+                    </details>
+                  ) : null}
                 </article>
               )
             })}
@@ -286,7 +381,7 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
               <li className={styles.rubricItem} key={item.criterion}>
                 <p className={styles.rubricQ}>{item.criterion}</p>
                 <p className={styles.rubricGood}>
-                  <span>Good looks like</span>
+                  <span>What a good answer includes:</span>
                   {item.goodLooksLike}
                 </p>
               </li>
@@ -306,9 +401,15 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
             {lab.verdict.winner ? (
               <p className={styles.verdictWinner}>{lab.verdict.winner}</p>
             ) : null}
-            <p className={styles.verdictCall}>{lab.verdict.callText}</p>
+            {/* The verdict is authored as short paragraphs separated by a
+                blank line, so it can be scanned on a phone. */}
+            {lab.verdict.callText.split(/\n\n+/).map((paragraph, index) => (
+              <p className={styles.verdictCall} key={index}>
+                {paragraph}
+              </p>
+            ))}
             <p className={styles.freshness}>
-              <span>Freshness</span>
+              <span>When this was tested</span>
               {lab.verdict.freshnessNote}
             </p>
           </div>

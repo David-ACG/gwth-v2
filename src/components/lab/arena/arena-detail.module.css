@@ -41,10 +41,14 @@
   color: var(--v-muted);
 }
 
-/* ---------------- Matchup header (teal band) ---------------- */
+/* ---------------- Matchup header ---------------- */
 
+/* On the page ground with a hairline under it. It sat on a full-width
+   --v-quiet band, which the paper-first rules ban as a drenched hero band
+   (launch readiness review, 2026-10-20). */
 .matchup {
-  background: var(--v-quiet);
+  background: var(--v-bg);
+  border-bottom: 1px solid var(--v-line-soft);
   color: var(--v-ink);
   padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
 }
@@ -159,6 +163,12 @@
   .introMedia {
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     gap: 1.5rem;
+  }
+
+  /* No video guide, so the read-aloud control stands alone at a readable
+     width rather than in half a grid. */
+  .introMediaSingle {
+    grid-template-columns: minmax(0, 32rem);
   }
 }
 
@@ -326,6 +336,15 @@
   color: var(--v-soft);
 }
 
+/* When the lab was tested, with which models, and that both tools have moved
+   on since. A sentence to read, so body size in the ink, not metadata. */
+.matchupFoot .testedNote {
+  max-width: 54ch;
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-ink);
+}
+
 /* ---------------- Archived banner ---------------- */
 
 .archivedBanner {
@@ -419,9 +438,12 @@
 
 /* ---------------- Side-by-side outputs ---------------- */
 
+/* Each answer is as tall as itself: stretched columns left the shorter
+   answer's panel empty for screens beside the longer one. */
 .outputsGrid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  align-items: start;
   gap: 1.5rem;
 }
 
@@ -446,7 +468,7 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.7rem 1.1rem;
-  background: var(--v-quiet);
+  border-bottom: 1px solid var(--v-line-soft);
   color: var(--v-ink);
 }
 
@@ -473,6 +495,40 @@
   color: var(--v-ink);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+/* The rest of a long answer, one click away. */
+.outputMore {
+  border-top: 1px solid var(--v-line-soft);
+  padding: 0.8rem 1.2rem 0;
+}
+
+.outputMore[open] {
+  padding-bottom: 0;
+}
+
+.outputMore > .outputBody {
+  padding-inline: 0;
+}
+
+.outputMore:not([open]) {
+  padding-bottom: 0.9rem;
+}
+
+.outputBody a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--v-accent);
+  text-underline-offset: 0.2em;
+}
+
+.outputBody a:hover {
+  color: var(--v-accent);
+}
+
+.outputBody a:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
 }
 
 /* ---------------- Rubric ---------------- */
@@ -514,11 +570,13 @@
   color: var(--v-soft);
 }
 
+/* Small body size in --v-soft: at 0.62rem in --v-muted the label was hard to
+   read on a phone (launch readiness review, 2026-10-20). */
 .rubricGood span {
   font-family: var(--font-sans);
-  font-size: 0.62rem;
+  font-size: inherit;
   font-weight: 600;
-  color: var(--v-muted);
+  color: var(--v-soft);
   margin-right: 0.5rem;
 }
 
@@ -540,7 +598,7 @@
 }
 
 .verdictCall {
-  margin-top: 1rem;
+  margin-top: 0.9rem;
   font-size: 1rem;
   line-height: 1.7;
   color: var(--v-soft);

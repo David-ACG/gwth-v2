@@ -1,6 +1,10 @@
 import { describe, it, expect, afterEach } from "vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
-import { ArenaLabDetail } from "./arena-lab-detail"
+import {
+  ArenaLabDetail,
+  LONG_ANSWER_CHARS,
+  splitLongAnswer,
+} from "./arena-lab-detail"
 import { getArenaLab } from "@/lib/data/model-arena"
 import type { ModelArenaLab } from "@/lib/types"
 
@@ -50,8 +54,9 @@ describe("ArenaLabDetail", () => {
  * > much text, which is difficult to read, and there's not even a voice reader
  *
  * The frozen decisions: the first screen says what the lab is before it says
- * how the models were run; the video state is stated rather than mimed; there
- * is a read-aloud route; and none of the evidence is lost in the process.
+ * how the models were run; a video is shown only where one exists, never
+ * mimed; there is a read-aloud route; and none of the evidence is lost in the
+ * process.
  */
 describe("ArenaLabDetail opening", () => {
   it("opens with the lab in a sentence, then what the reader decides", () => {
@@ -87,15 +92,16 @@ describe("ArenaLabDetail opening", () => {
     expect(block!.textContent).toBe(spreadsheet.prompt)
   })
 
-  it("states that the video guide is planned where no media exists", () => {
-    // The pilot lab is the one that has a video; every other lab must still
-    // say "planned" rather than draw a control over nothing.
+  it("shows no video panel where no media exists", () => {
+    // Only the spreadsheet lab has a video. The others used to show a "Video
+    // guide planned" panel ("Every lab is getting a short video... This one
+    // has not been recorded yet"), which the launch readiness review of
+    // 2026-10-20 ruled a promise of unfinished work. Now they show nothing.
     expect(pilot.video).toBeUndefined()
     const { container } = render(<ArenaLabDetail lab={pilot} />)
 
-    const panel = screen.getByTestId("lab-video-guide")
-    expect(panel).toHaveAttribute("data-video-state", "planned")
-    expect(panel).toHaveTextContent(/planned/i)
+    expect(screen.queryByTestId("lab-video-guide")).toBeNull()
+    expect(container.textContent).not.toMatch(/planned|not been recorded/i)
     // No media element and no play control: nothing to press that cannot work.
     expect(container.querySelector("video")).toBeNull()
     expect(screen.queryByRole("button", { name: /play/i })).toBeNull()
@@ -175,7 +181,10 @@ describe("ArenaLabDetail opening", () => {
     for (const item of spreadsheet.rubric) {
       expect(screen.getByText(item.criterion)).toBeInTheDocument()
     }
-    expect(screen.getByText(spreadsheet.verdict.callText)).toBeInTheDocument()
+    // The verdict is authored as short paragraphs; every one is on the page.
+    for (const paragraph of spreadsheet.verdict.callText.split(/\n\n+/)) {
+      expect(screen.getByText(paragraph)).toBeInTheDocument()
+    }
     expect(
       screen.getByText(spreadsheet.verdict.freshnessNote)
     ).toBeInTheDocument()
@@ -191,9 +200,125 @@ describe("ArenaLabDetail opening", () => {
 
     expect(screen.queryByTestId("lab-outcome")).toBeNull()
     expect(screen.getByText(bare.brief)).toBeInTheDocument()
-    expect(screen.getByTestId("lab-video-guide")).toHaveAttribute(
-      "data-video-state",
-      "planned"
+    expect(screen.queryByTestId("lab-video-guide")).toBeNull()
+  })
+})
+
+const citeSources = getArenaLab(
+  "cite-your-sources-claude-vs-chatgpt"
+) as ModelArenaLab
+const weeklyChore = getArenaLab(
+  "automate-a-weekly-chore-claude-vs-chatgpt"
+) as ModelArenaLab
+
+/**
+ * The launch readiness review (2026-10-20, Claude and the latest Sol). The
+ * labs are not re-run for the launch, so each page says plainly when it was
+ * tested and that both tools have moved on. The models' own answers stay
+ * exactly as they were; only the surrounding GWTH words changed.
+ */
+describe("ArenaLabDetail launch readiness", () => {
+  it("says near the top when it was tested, with which models, and that both have moved on", () => {
+    render(<ArenaLabDetail lab={pilot} />)
+    const note = screen.getByTestId("lab-tested-note").textContent ?? ""
+    expect(note).toMatch(/Tested on 23 July 2026/)
+    expect(note).toContain("Claude Opus 4.8")
+    expect(note).toContain("OpenAI GPT-5.6 Sol")
+    expect(note).toMatch(/newer versions/i)
+    expect(note).toMatch(/may differ/i)
+  })
+
+  it("drops the 1M-context jargon and names the Claude model one way", () => {
+    const { container } = render(<ArenaLabDetail lab={pilot} />)
+    expect(container.textContent).not.toMatch(/1M-context/i)
+  })
+
+  it("keeps an abbreviation in capitals in the kicker", () => {
+    render(<ArenaLabDetail lab={pilot} />)
+    expect(screen.getByText("Lab, HR")).toBeInTheDocument()
+  })
+
+  it("points at no archived version that does not exist", () => {
+    for (const lab of [pilot, spreadsheet, citeSources, weeklyChore]) {
+      cleanup()
+      const { container } = render(<ArenaLabDetail lab={lab} />)
+      expect(container.textContent).not.toMatch(/archived version/i)
+    }
+  })
+
+  it("makes every source address in an answer a link you can open", () => {
+    const { container } = render(<ArenaLabDetail lab={citeSources} />)
+    const hrefs = Array.from(
+      container.querySelectorAll('[data-testid="arena-output"] a')
+    ).map((a) => a.getAttribute("href"))
+    expect(hrefs).toContain("https://www.gov.uk/national-minimum-wage-rates")
+    expect(hrefs).toContain(
+      "https://www.gov.uk/guidance/statutory-sick-pay-manually-calculate-your-employees-payments"
     )
+    // A markdown link keeps its closing bracket outside the address.
+    expect(hrefs.every((href) => !href?.endsWith(")"))).toBe(true)
+    // And the answer text itself is untouched.
+    for (const output of citeSources.outputs) {
+      const column = screen
+        .getAllByTestId("arena-output")
+        .find((el) => el.textContent?.includes(output.by))!
+      expect(column.textContent).toContain(output.verbatim)
+    }
+  })
+
+  it("tells readers to check the address bar shows www.gov.uk", () => {
+    const { container } = render(<ArenaLabDetail lab={citeSources} />)
+    expect(container.textContent).toMatch(/address bar/i)
+    expect(container.textContent).toContain("www.gov.uk")
+  })
+
+  it("does not credit Claude for a link that covers all three figures", () => {
+    expect(citeSources.verdict.callText).not.toMatch(
+      /covers all three figures/i
+    )
+    expect(citeSources.verdict.callText).toMatch(/not the redundancy cap/i)
+  })
+
+  it("credits ChatGPT for leaving out the 31 March row too", () => {
+    expect(spreadsheet.verdict.callText).not.toMatch(
+      /two problems ChatGPT does not mention at all/i
+    )
+    expect(spreadsheet.verdict.callText).toMatch(
+      /Both tools leave out the 31 March row/
+    )
+  })
+
+  it("folds a very long answer behind 'Show the full answer', losing nothing", () => {
+    render(<ArenaLabDetail lab={weeklyChore} />)
+    const more = screen.getAllByTestId("answer-more")
+    expect(more.length).toBeGreaterThan(0)
+    for (const details of more) {
+      expect(details.tagName).toBe("DETAILS")
+      expect(details.querySelector("summary")).toHaveTextContent(
+        "Show the full answer"
+      )
+    }
+    for (const output of weeklyChore.outputs) {
+      const [opening, rest] = splitLongAnswer(output.verbatim)
+      expect(opening + rest).toBe(output.verbatim)
+      if (output.verbatim.length > LONG_ANSWER_CHARS) {
+        expect(rest.length).toBeGreaterThan(0)
+        expect(opening.length).toBeLessThan(output.verbatim.length / 2)
+      }
+    }
+  })
+
+  it("leaves a short answer fully open", () => {
+    render(<ArenaLabDetail lab={citeSources} />)
+    expect(screen.queryAllByTestId("answer-more")).toHaveLength(0)
+  })
+
+  it("does not reward clicking past Google's warning", () => {
+    const text = weeklyChore.verdict.callText
+    expect(text).not.toMatch(/unsafe means unreviewed/i)
+    expect(text).not.toMatch(/most people give up|lose your nerve/i)
+    expect(text).not.toMatch(/next two years/i)
+    expect(weeklyChore.brief).not.toMatch(/still be working next year/i)
+    expect(text).toMatch(/read the list of permissions/i)
   })
 })

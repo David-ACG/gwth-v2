@@ -1,14 +1,21 @@
 import type { Metadata } from "next"
 import { CourseJsonLd } from "@/components/marketing/json-ld/course-jsonld"
 import { HomeFde } from "@/components/marketing/home-fde/home-fde"
+import { ENABLE_GWTH_SCORE } from "@/lib/config"
+import { isSelling } from "@/lib/launch"
 
 export const metadata: Metadata = {
   // `absolute` opts out of the root layout's "%s | GWTH.ai" template. This
   // title already carries the brand, so the template was stacking a second
   // one (W26).
-  title: { absolute: "GWTH.ai | The applied AI foundation for UK professions" },
+  //
+  // Launch readiness, 2026-10-20: the title and description start from the
+  // approved general line in the public writing skill ("GWTH is a practical
+  // AI course for work and everyday life in the UK.") and no longer describe
+  // the audience as professionals or promise a "verified record".
+  title: { absolute: "GWTH.ai | A practical AI course for work and everyday life" },
   description:
-    "A three-month applied AI foundation for UK professionals and the institutions that serve them: build, automate, research and analyse in plain English, assessed throughout, with a verified record at the end.",
+    "GWTH is a practical AI course for work and everyday life in the UK. Three monthly parts at about five hours a week, with a project in every lesson and work you keep.",
   alternates: {
     canonical: "/",
   },
@@ -25,10 +32,12 @@ export const metadata: Metadata = {
  * audio defect on it is bead gwth-launch-ps5.
  */
 export default function HomePage() {
+  // Read at request time: the (public) layout is force-dynamic, so the
+  // buttons switch from the waitlist to buying on 1 December by themselves.
   return (
     <>
       <CourseJsonLd />
-      <HomeFde />
+      <HomeFde selling={isSelling()} showScore={ENABLE_GWTH_SCORE} />
     </>
   )
 }

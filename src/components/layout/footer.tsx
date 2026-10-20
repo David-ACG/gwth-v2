@@ -89,8 +89,7 @@ export function Footer({ showLabs, lessonsHref }: FooterProps) {
               <LogoGwth width={150} className="h-7 w-auto" />
             </Link>
             <p className={cn("mt-4 max-w-xs", styles.tagline)}>
-              A UK applied AI foundation. Build, automate, research and analyse
-              in plain English, and finish with work you can show.
+              A UK-first applied AI course for work and everyday life.
             </p>
           </div>
           {groups.map((group) => (

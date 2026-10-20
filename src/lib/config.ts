@@ -125,10 +125,15 @@ export const SCORE_PERCENTILE_MILESTONES = [
 export const MONTH_CONFIGS: MonthConfig[] = [
   {
     month: 1,
-    title: "From Zero to Building",
-    subtitle: "AI for Your Life",
+    // The month names and descriptions were rewritten in plain words for the
+    // launch (launch readiness review, 2026-10-20): "the six primitives", "the
+    // main spine", "the strategic layer" and "an actionable transformation
+    // roadmap" were jargon a beginner could not decode, and the names are in
+    // sentence case so every page that reads them uses one set.
+    title: "From zero to building",
+    subtitle: "AI for your own life and work",
     description:
-      "Move beyond using ChatGPT like Google. Learn AI foundations, the six primitives, and AI-assisted coding/building as the main spine: apps, websites, dashboards, research projects, content packages, AI assistants, and automations.",
+      "Learn to get good results from AI tools, then build useful things with their help: a simple app or website, a dashboard, a research report, your own AI assistant and an automation for a regular task.",
     // The counts on every month follow the syllabus database (the pipeline's
     // v3 syllabus, the source of truth for lesson identity), re-counted on
     // 2026-10-20 for the launch readiness check: Month 1 is 22 core and 10
@@ -140,17 +145,17 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     capstoneName: "Family AI Bot",
     capstoneDomain: "familyaibot.com",
     capstoneDescription:
-      "Record your weekly family meeting. AI transcribes it, extracts tasks, books calendar events, creates a meal plan, and generates a shopping list. Automatically.",
+      "Record your weekly family meeting, and AI turns it into a written record, a list of jobs, calendar events, a meal plan and a shopping list.",
   },
   {
     month: 2,
-    title: "Building Real Apps",
-    subtitle: "AI for Small Business & Consulting",
+    title: "Building real apps",
+    subtitle: "AI for business and consulting",
     description:
-      "Go deeper into building, coding, workflows, apps, small-business use cases, and the practical toolkit needed by individuals who want to become AI consultants.",
+      "Go further with building: write code with an AI helper, connect tools into workflows, and make small apps for real business tasks. You also learn what you need to help other people use AI, for example as a consultant.",
     mandatoryLessons: 20,
     optionalLessons: 22,
-    capstoneName: "AI Customer-Support Chatbot",
+    capstoneName: "AI customer support chatbot",
     capstoneDomain: "askmyco.com",
     // 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate): this said
     // "A production-grade chatbot trained on real business data. The kind of
@@ -164,16 +169,16 @@ export const MONTH_CONFIGS: MonthConfig[] = [
   },
   {
     month: 3,
-    title: "Enterprise AI & Multi-Agent Systems",
-    subtitle: "AI Transformation",
+    title: "Leading AI at work",
+    subtitle: "AI across an organisation",
     description:
-      "Go from individual contributor to the person who can lead an AI transformation. Multi-agent systems. Self-hosted AI. Governance frameworks. The strategic layer that separates someone who uses AI from someone who deploys it.",
+      "Learn to lead AI work in an organisation. You set up several AI assistants to share one job, run AI models on your own computer so data stays with you, and learn the rules and checks an organisation needs before it relies on AI.",
     mandatoryLessons: 21,
     optionalLessons: 15,
-    capstoneName: "AI Readiness Assessment Tool",
+    capstoneName: "AI readiness assessment tool",
     capstoneDomain: "askevery.one",
     capstoneDescription:
-      "A working tool that evaluates any business's AI maturity and produces an actionable transformation roadmap.",
+      "A working tool that asks a business how it uses AI today and gives it a step-by-step plan for what to do next.",
   },
 ]
 

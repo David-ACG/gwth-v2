@@ -158,7 +158,9 @@ describe("David's points from the writing rounds", () => {
     expect(reason("independent")).toMatch(/nobody pays us to recommend/i)
     expect(reason("up-to-date")).toMatch(/stopped using/i)
     expect(reason("hands-on")).toMatch(/learn to use AI by using it/i)
-    expect(reason("proof")).toMatch(/check that it.s genuine/i)
+    // The credential sentence went at launch readiness (2026-10-20): none is
+    // switched on at launch, so the proof is the work, which anyone can check.
+    expect(reason("proof")).toMatch(/check for themselves/i)
   })
 
   it("never uses an em dash, an en dash or a section sign", () => {
@@ -168,28 +170,34 @@ describe("David's points from the writing rounds", () => {
 })
 
 describe("Why GWTH sign-up", () => {
-  it("asks the visitor to sign up on this page, and never sends them to a lab", () => {
-    process.env.PRIVATE_CONTENT_MODE = "off"
-    const { container } = render(<WhyGwthFde />)
+  /**
+   * David: "The call to action should be to sign up on the Why GWTH page. We
+   * don't want to send them back to the lab to procrastinate further". From
+   * 1 December (launch readiness, 2026-10-20) joining starts on /pricing, as
+   * the header's "Join the course" does, and the only other link in the close
+   * is the gift: /for-teams is hidden at launch.
+   */
+  it("asks the visitor to join on this page, and never sends them to a lab", () => {
+    const { container } = render(<WhyGwthFde selling />)
     const closing = container.querySelector('[data-section="closing"]') as HTMLElement
-    const signUp = within(closing).getByRole("link", { name: "Sign up" })
-    expect(signUp).toHaveAttribute("href", "/signup")
-    // The only other link in the close is for someone buying for a team.
+    const join = within(closing).getByRole("link", { name: "Join the course" })
+    expect(join).toHaveAttribute("href", "/pricing")
     const others = within(closing)
       .getAllByRole("link")
-      .filter((a) => a !== signUp)
+      .filter((a) => a !== join)
       .map((a) => a.getAttribute("href"))
-    expect(others).toEqual(["/for-teams"])
+    expect(others).toEqual(["/gift"])
     const hrefs = Array.from(container.querySelectorAll("a")).map((a) => a.getAttribute("href"))
     expect(hrefs).not.toContain("/labs")
+    expect(hrefs).not.toContain("/for-teams")
   })
 
-  it("sends the button where its label says while registration is closed", () => {
-    process.env.PRIVATE_CONTENT_MODE = "on"
+  it("sends the button to the waitlist before sales open", () => {
     const { container } = render(<WhyGwthFde />)
     const closing = container.querySelector('[data-section="closing"]') as HTMLElement
     const link = within(closing).getByRole("link", { name: "Join the waitlist" })
     expect(link).toHaveAttribute("href", "/waitlist")
+    expect(within(closing).getAllByRole("link")).toHaveLength(1)
   })
 })
 
@@ -220,12 +228,45 @@ describe("What the old About page brought", () => {
     expect(uk).toMatch(/workplace pensions/i)
   })
 
-  it("is honest that credentials are not switched on during the beta", () => {
-    // Must agree with the home page: "No score is switched on while the
-    // course is in beta."
+  it("promises no credential, since none is switched on at launch", () => {
+    // Launch readiness, 2026-10-20: "Credentials are switched on after the
+    // beta" was untrue from 1 December (there is no beta), and the score and
+    // /verify are off at launch. The page says what a learner has instead.
     const { container } = render(<WhyGwthFde />)
+    const text = pageText()
+    expect(text).not.toMatch(/beta/i)
+    expect(text).not.toMatch(/credential/i)
     const proof = container.querySelector('[data-reason="proof"]')?.textContent ?? ""
-    expect(proof).toMatch(/switched on after the beta/i)
+    expect(proof).toMatch(/the proof GWTH gives you is the work itself/i)
+  })
+
+  it("gives the £69 offer beside the monthly price, and when the later months open", () => {
+    const { container } = render(<WhyGwthFde />)
+    const price = (container.querySelector('[data-reason="price"]')?.textContent ?? "").replace(/\s+/g, " ")
+    expect(price).toMatch(/£29 a month/)
+    expect(price).toMatch(
+      /£69 once for the whole three-month course, for yourself or as a gift, if you buy between 1 December 2026 and 6 January 2027/
+    )
+    const fields = (container.querySelector('[data-reason="optional-lessons"]')?.textContent ?? "")
+    expect(fields).toMatch(/Months 2 and 3, which open around 1 January 2027 and 1 February 2027/)
+    expect(fields).not.toMatch(/being written now|today/)
+  })
+
+  it("presents no paraphrase as a direct quotation, and links each article", () => {
+    const { container } = render(<WhyGwthFde />)
+    const gov = container.querySelector('[data-section="government"]') as HTMLElement
+    expect(gov.querySelector("blockquote")).toBeNull()
+    expect(gov.textContent).not.toMatch(/[\u201c\u201d]/)
+    const links = Array.from(gov.querySelectorAll("figure a")).map((a) => a.getAttribute("href"))
+    expect(links).toHaveLength(2)
+    for (const href of links) expect(href).toMatch(/^https:\/\//)
+  })
+
+  it("scopes the UK figures to the people and businesses they describe", () => {
+    render(<WhyGwthFde />)
+    const text = pageText()
+    expect(text).toMatch(/of UK adults in work say they feel confident using AI at work/)
+    expect(text).toMatch(/by a UK business with ten or more staff that has started using AI/)
   })
 
   it("prints no lesson count, since config and the syllabus disagree on the split", () => {

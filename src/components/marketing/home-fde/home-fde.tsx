@@ -1,6 +1,17 @@
 import Link from "next/link"
-import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
-import { CURRICULUM } from "@/components/marketing/data"
+import {
+  COURSE_MONTHLY_PRICE,
+  ENABLE_GWTH_SCORE,
+  MONTH_CONFIGS,
+  ONGOING_MONTHLY_PRICE,
+} from "@/lib/config"
+import { CURRICULUM, LATER_MONTHS_OPEN } from "@/components/marketing/data"
+import {
+  formatPence,
+  formatUkDate,
+  getSaleWindow,
+  PASS_PRICES_PENCE,
+} from "@/lib/billing/passes"
 import { canPromoteLabs } from "@/lib/labs-cta"
 import { Plate } from "@/components/marketing/paper/plate"
 import { ScoreCard, type ScoreState } from "./score-card"
@@ -184,13 +195,16 @@ import styles from "./home-fde.module.css"
  *   `m3_l30` produces a one-page infrastructure plan, not a deployment.
  * - **How institution editions are priced** (a-20260915-085041-eaa513).
  *
- * ## What the self-service route may promise
+ * ## What the self-service route may promise (launch readiness, 2026-10-20)
  *
- * There is no live checkout. `/api/stripe/checkout` answers 503 unless
- * `BILLING_ENABLED` is set, and it is set nowhere; `/signup` is invite-only
- * while `PRIVATE_CONTENT_MODE` is on, which is its fail-closed default in
- * production. The honest self-service step today is therefore the waitlist.
- * The prices are the canonical ones from config.
+ * gwth.ai changes at David's GO LIVE release (about 28 November) and sales
+ * open on 1 December 2026, so every visible WORD here is written to be true on
+ * both sides of that date, and only the buttons branch on `selling`
+ * (`isSelling()` in `lib/launch.ts`, read by the server page and passed in):
+ * buy or give from 1 December, the waitlist before. The beta, invite-only and
+ * intake wording went at the same time, because the course is on open sale
+ * from 1 December. The prices are the canonical ones from config and from
+ * `lib/billing/passes.ts`; the dates come from the sale window.
  *
  * Copy rules: British English, sentence case, no em or en dashes, GBP only.
  * Every visitor-visible passage here passed the marketing copy gate
@@ -213,7 +227,7 @@ export const MONTHS = [
   {
     kicker: "Month 2",
     title: "A small business",
-    body: "You take the same skills into the work of a small business. Before anything you make is used by other people, you learn how to secure their data: where keys are kept, who can see what, and how to test that one customer cannot see another's records. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you specify a second assistant, FractionalBuddy, for a small consulting firm, and plan the ten days of work that would build it.",
+    body: "You take the same skills into the work of a small business. Before anything you make is used by other people, you learn how to secure their data: where you keep the secret keys that let software connect to a service, who can see what, and how to test that one customer cannot see another's records. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you specify a second assistant, FractionalBuddy, for a small consulting firm, and plan the ten days of work that would build it.",
   },
   {
     kicker: "Month 3",
@@ -363,15 +377,21 @@ export const SIX_BLOCKS = [
  * enforce the same thing on that page.
  *
  * So the section does NOT assert the mechanic in the present tense. It says on
- * the page, in body copy rather than in a footnote, that this part is still
- * being built and that no score is switched on during the beta, and the note
- * under the cards says the numbers are examples. That is the only honest way
- * to publish what David asked for. If the mechanic ships, delete the
- * still-being-built sentence and nothing else needs to move.
+ * the page, in body copy rather than in a footnote, that the update tracking
+ * is still being built, and the note under the cards says the numbers are
+ * examples.
  *
- * Values are kept under 99 on purpose: 66 mandatory lessons at 1.5 points is a
- * ceiling of 99, so a marketing "104" or "reaching 100" would be a number the
- * product cannot produce.
+ * **Launch readiness, 2026-10-20: the whole section renders only while the
+ * score is switched on** (`showScore`, which the page reads from
+ * `ENABLE_GWTH_SCORE`). Both reviewers read it as a preview of a feature a
+ * 1 December buyer does not get, and the launch rule is to say what exists or
+ * say nothing. The flag is off unless an environment sets it, so the section
+ * is not on the launch page. It is kept, not deleted, because David asked for
+ * it (a-20260915-211845-237ea3): switching the score on brings it back.
+ *
+ * Values are kept under 94 on purpose: the core lessons at 1.5 points each
+ * set the ceiling (63 core lessons is 94.5), so a marketing "104" or "reaching
+ * 100" would be a number the product cannot produce.
  *
  * Deliberately absent: any percentile or rarity claim ("top 1%"), any claim
  * about what an employer thinks, the word certificate as something GWTH
@@ -427,7 +447,7 @@ const UK_THREAD = [
   },
   {
     title: "Proof you can point at",
-    body: "Most of what an AI model has read was written about somewhere else, so it will answer confidently about the wrong country. You are taught to ask for the source and to check it against the GOV.UK page, the regulator's own words or your employer's policy before you act on it.",
+    body: "AI can give you an answer that is right for another country and wrong here. You are taught to ask for the source and to check it against the GOV.UK page, the regulator's own words or your employer's policy before you act on it.",
   },
 ]
 
@@ -437,7 +457,41 @@ export const PRIMITIVES_URL =
 /** Month 1's capstone, read from the canonical curriculum so it cannot drift. */
 const MONTH_ONE_CAPSTONE = CURRICULUM[0]?.capstone ?? "the Month 1 capstone"
 
-export function HomeFde() {
+/**
+ * The launch offer, in words that are true from the GO LIVE release onward
+ * (launch readiness, 2026-10-20). Prices and dates come from the billing
+ * module, never typed: the £69 whole-course price runs from the day sales
+ * open to the last day of the sale window, and a gift is the same pass.
+ */
+function launchOffer() {
+  const window = getSaleWindow()
+  return {
+    sale: formatPence(PASS_PRICES_PENCE.courseSale),
+    opensOn: formatUkDate(window.salesOpenAt),
+    endsOn: formatUkDate(new Date(window.saleEndsAt.getTime() - 1)),
+  }
+}
+
+export type HomeFdeProps = {
+  /**
+   * True once GWTH is on sale (`isSelling()`, read by the server page). Only
+   * the buttons change with it: buy or give from 1 December, the waitlist
+   * before.
+   */
+  selling?: boolean
+  /** Shows the score section. Defaults to the `ENABLE_GWTH_SCORE` flag. */
+  showScore?: boolean
+}
+
+export function HomeFde({
+  selling = false,
+  showScore = ENABLE_GWTH_SCORE,
+}: HomeFdeProps = {}) {
+  const offer = launchOffer()
+  const joinCta = selling
+    ? { href: "/pricing", label: "Join the course" }
+    : { href: "/waitlist", label: "Join the waitlist" }
+
   // Server component under the force-dynamic (public) layout, so this reads
   // the RUNTIME gate. While /labs is private an anonymous visitor bounces off
   // a login wall, and the precedent on this page is already written down:
@@ -463,24 +517,24 @@ export function HomeFde() {
               </span>
             </h1>
             <div className={styles.heroCopy}>
+              {/* Cut from nine sentences to three (launch readiness,
+                  2026-10-20: on a phone the nine filled the first screen).
+                  The opening is the approved general line from the public
+                  writing skill. The Month 1 examples live in the Month 1
+                  card, and RAG is described there in plain words (AskMyCo).
+                  The destination stays, because David asked for it
+                  (a-20260915-210111-aaf2c4). */}
               <p className={p.standfirst}>
-                GWTH is a three-month course in using AI well at work and in
-                life. You are taught how to check what AI gives you and how to
-                spot when it has got something wrong. The course is practical
-                because we have found that making things is the best way to
-                learn. You start with simple, fun projects based on your own
-                work, and the projects get bigger and more useful every month.
-                You keep what you make. That includes a rewritten CV, a
-                spreadsheet turned into a chart you can act on, and a retrieval
-                system called RAG. RAG lets AI work with your company&apos;s
-                information. By Month 3, you build your own AI consultant. It
-                interviews people across an organisation by voice and uses
-                their answers to score the organisation. It produces a report
-                and a plan for what to change first.
+                GWTH is a practical AI course for work and everyday life in the
+                UK. You start with simple projects based on your own work, and
+                the projects get bigger and more useful every month. By Month
+                3, you build your own AI consultant, which interviews people
+                across an organisation and writes a plan for what to change
+                first.
               </p>
               <div className={p.actions}>
-                <Link href="/waitlist" className={p.buttonSolid}>
-                  Join the waitlist
+                <Link href={joinCta.href} className={p.buttonSolid}>
+                  {joinCta.label}
                 </Link>
                 <Link href="/lessons" className={p.buttonOutline}>
                   See what you build
@@ -521,8 +575,7 @@ export function HomeFde() {
             </figcaption>
           </figure>
           <div className={p.plateMeta}>
-            <p>Three months · Five hours a week · Assessed throughout</p>
-            <p>Independent. No sponsors. No vendor partnerships.</p>
+            <p>Three months · About five hours a week · Assessed throughout</p>
           </div>
         </div>
       </section>
@@ -549,24 +602,39 @@ export function HomeFde() {
               </p>
             </div>
             <div className={styles.offerAside}>
-              <p className={styles.offerPrice}>
-                For one person it is £{COURSE_MONTHLY_PRICE} a month while the
-                teaching runs. After that, £
-                {ONGOING_MONTHLY_PRICE.toFixed(2)} a month keeps your access and
-                brings you the new lessons as the tools change. You can cancel
-                at any time.
+              {/* The launch offer (launch readiness, 2026-10-20). The words
+                  are true before and after sales open; only the buttons
+                  change. */}
+              <p className={styles.offerPrice} data-testid="home-offer">
+                From {offer.opensOn} to {offer.endsOn}, the whole three-month
+                course is {offer.sale}, for yourself or as a gift. Or pay £
+                {COURSE_MONTHLY_PRICE} a month. After the first three months,
+                you can keep your lessons up to date for £
+                {ONGOING_MONTHLY_PRICE.toFixed(2)} a month if you want to, and
+                you can cancel at any time.
               </p>
-              <p className={styles.offerNote}>
-                Places are invite-only. A small group of beta testers is
-                working through the course now. Leave a name and an email and
-                we will write to you when the next intake opens. No call, no
-                demo, no sales conversation.
+              <p className={styles.offerNote} data-testid="home-offer-months">
+                Month 1 opens on {offer.opensOn}. Month 2 opens around{" "}
+                {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
+                {LATER_MONTHS_OPEN.month3}. If you reach a month before it
+                opens, your time is paused until it does.
               </p>
               <div className={styles.offerActions}>
-                <Link href="/waitlist" className={p.buttonSolid}>
-                  Join the waitlist
-                </Link>
-                {labsArePublic ? (
+                {selling ? (
+                  <>
+                    <Link href="/pricing" className={p.buttonSolid}>
+                      Buy it for yourself
+                    </Link>
+                    <Link href="/gift" className={p.buttonOutline}>
+                      Give it as a gift
+                    </Link>
+                  </>
+                ) : (
+                  <Link href="/waitlist" className={p.buttonSolid}>
+                    Join the waitlist
+                  </Link>
+                )}
+                {selling ? null : labsArePublic ? (
                   <Link href="/labs" className={p.buttonOutline}>
                     Try a free lab
                   </Link>
@@ -612,10 +680,10 @@ export function HomeFde() {
             full explanation belongs on the course page, and this paragraph
             exists so a reader of the home page knows there is one.
 
-            Two rules it is written under. The STRUCTURE is safe: MONTH_CONFIGS,
-            the canonical syllabus register and the authored lessons on disk all
-            agree that Months 2 and 3 run twenty core lessons and then optional
-            ones. The CHOICE is not a live control: the pipeline importer marks
+            Two rules it is written under. The STRUCTURE is safe: Months 2 and 3
+            each run their core lessons and then optional ones, and the core
+            counts are read from MONTH_CONFIGS (which follows the syllabus
+            database, re-counted 2026-10-20: 20 and 21), never typed here. The CHOICE is not a live control: the pipeline importer marks
             every lesson core, so nothing in the product lets a learner select
             an optional lesson yet. Hence "you are not expected to take all of
             them", which is true of the syllabus, rather than "you choose",
@@ -623,8 +691,9 @@ export function HomeFde() {
             here for the reason /for-teams prints none (a-20260914-201426-ae7f0e).
           */}
           <p className={styles.monthsNote} data-testid="months-optional-note">
-            Months 2 and 3 each open with twenty core lessons that everybody
-            does. The lessons after those are optional. There are lessons on
+            Month 2 starts with {MONTH_CONFIGS[1]?.mandatoryLessons} core
+            lessons and Month 3 with {MONTH_CONFIGS[2]?.mandatoryLessons}, and
+            everybody does those. The lessons after them are optional. There are lessons on
             using AI inside UK legal work, finance, healthcare, manufacturing
             and the public sector, and others that go further into building
             things or into leading the change at work. You are not expected to
@@ -678,7 +747,9 @@ export function HomeFde() {
           <div className={p.cards3}>
             {SIX_BLOCKS.map((block) => (
               <article className={p.card} key={block.n} data-testid="block-card">
-                <p className={p.cardKicker}>{block.n} · Building block</p>
+                {/* The "01 · Building block" label went (launch readiness,
+                    2026-10-20): a numbered filler label under a heading that
+                    already says "Six building blocks". */}
                 <h3 className={p.cardTitle}>{block.name}</h3>
                 {/* One row per month, so the reader can see where the block
                     takes them rather than only where it starts
@@ -751,6 +822,7 @@ export function HomeFde() {
 
         What may and may not be claimed is in the SCORE_STATES comment above.
       */}
+      {showScore && (
       <section className={p.section} data-section="score">
         <div className={p.page}>
           <div className={p.sectionHead}>
@@ -767,19 +839,17 @@ export function HomeFde() {
             Your GWTH score is one number, worked out from the lessons you have
             finished and how you did on the questions at the end of each one.
             It is a record of work you have actually done rather than a note
-            saying you attended. No score is switched on while the course is in
-            beta.
+            saying you attended.
           </p>
           {/* The copy says only what the planned update tracking can establish:
               whether a completed lesson has since changed. It does not claim
               to measure whether the learner's knowledge or work is current. */}
           <p className={styles.scoreLead} data-testid="score-honesty">
-            Once scores are switched on, yours will show more than what you
-            have finished. It will show whether any lesson you passed has since
-            been rewritten and needs completing again. AI tools move quickly,
-            and a completion date on its own does not show whether somebody has
-            kept up with them. We are still building this update tracking. The
-            three cards below show what that will look like.
+            AI tools move quickly, and a completion date on its own does not
+            show whether somebody has kept up with them. We are still building
+            the part of the score that shows when a lesson you passed has been
+            rewritten. The three cards below show what that part will look
+            like.
           </p>
           <div className={p.cards3} data-testid="score-cards">
             {SCORE_STATES.map((state) => (
@@ -796,6 +866,7 @@ export function HomeFde() {
           </p>
         </div>
       </section>
+      )}
 
       {/*
         The signpost, and deliberately nothing more. Everything an institution
@@ -806,20 +877,25 @@ export function HomeFde() {
         <div className={p.page}>
           <div className={styles.signpost} data-testid="organisations-signpost">
             <h2 className={p.sectionTitle}>Buying this for other people?</h2>
+            {/* The teams sentence and its /for-teams link went on
+                2026-10-20: /for-teams is hidden at launch (a real 404,
+                `lib/public-routes.ts`). The gift is the way one person buys
+                for another, so it is named first. */}
             <p className={styles.signpostBody}>
-              A professional body or a large company gets its own edition: you
+              To give the course to one person, buy it as a gift. A
+              professional body or a large company gets its own edition: you
               pick the lessons and you set the pass mark. Your tutors or
               training leads can see who has reached it, and each learner
-              finishes with a record of the lessons they passed. If you are
-              buying for one team of five or more rather than a whole
-              organisation, the teams page has what you need.
+              finishes with a record of the lessons they passed.
             </p>
             <div className={p.actions}>
+              {selling && (
+                <Link href="/gift" className={p.buttonOutline}>
+                  Give it as a gift
+                </Link>
+              )}
               <Link href="/for-institutions" className={p.buttonOutline}>
                 For institutions and large companies
-              </Link>
-              <Link href="/for-teams" className={p.buttonOutline}>
-                For teams of five or more
               </Link>
             </div>
           </div>
@@ -843,12 +919,11 @@ export function HomeFde() {
             Everything you make in a lesson is yours, and it stays yours when
             the course ends. By the end of the three months that is a folder of
             finished work: documents you can hand to somebody else, and tools
-            you can open and run. Each project is marked, so you know which
-            parts you got right.
+            you can open and run.
           </p>
           <div className={p.actions}>
-            <Link href="/waitlist" className={p.buttonSolid}>
-              Join the waitlist
+            <Link href={joinCta.href} className={p.buttonSolid}>
+              {joinCta.label}
             </Link>
             <Link href="/lessons" className={p.buttonOutline}>
               See the course

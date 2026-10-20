@@ -1,15 +1,14 @@
 # lessons-fde
 
-Lessons page (`/lessons`) in the FDE journal register, the homepage direction
-David chose on 2026-06-12 (see `../home-fde/`). Second inner page ported to
-the new theme, following the `../labs-fde/` pattern.
+Lessons page (`/lessons`) in the paper-first register.
 
-- `lessons-fde.tsx` — server component: drenched teal masthead, three month
-  cards with colour-block tops keyed to month (teal = Month 1, moss = Month 2,
-  rust = Month 3, matching the labs difficulty colours), numbered
-  how-it-works list, the 5-Hour Rule essay, closing band.
-- `lessons-fde.module.css` — scoped `--v-*` palette on `.shell` with a
-  `:global(.dark)` override block, mirroring `labs-fde.module.css`.
+- `lessons-fde.tsx` — server component: two-column masthead, three month cards
+  on the card surface (no coloured card tops), when each month opens, the
+  optional lessons, a how-it-works list, the score, and a closing band. Takes a
+  `selling` prop from the page (`isSelling()`), which only the buttons use.
+- `lessons-fde.module.css` — scoped styles on the shared `--v-*` tokens.
 
 The page (`src/app/(public)/lessons/page.tsx`) renders this module directly;
-course-structure data comes from `MONTH_CONFIGS` in `lib/config.ts`.
+course-structure data and every lesson count come from `MONTH_CONFIGS` in
+`lib/config.ts`. The "Why one hour a day?" essay and its picture
+(`/five-hour-rule.png`, still on disk) were removed on 2026-10-20.

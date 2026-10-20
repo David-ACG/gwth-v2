@@ -1,11 +1,6 @@
 import Link from "next/link"
-import { PRICING } from "@/components/marketing/data"
-import {
-  COURSE_MONTHLY_PRICE,
-  ONGOING_MONTHLY_PRICE,
-  ONGOING_NEW_CONTENT_HOURS,
-  TOTAL_COURSE_COST,
-} from "@/lib/config"
+import { LATER_MONTHS_OPEN, PRICING } from "@/components/marketing/data"
+import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import styles from "./pricing-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 import { ENABLE_BILLING } from "@/lib/config"
@@ -42,6 +37,9 @@ import { PRICING_OFFER_COPY as OFFER } from "@/components/marketing/gift/gift-co
  *   the heading text being smaller than the text in the table."
  * - **a-20260914-203941-b69458**, on the masthead: "It should say the whole
  *   three months are less than the cost of one hour with a consultant."
+ *   SUPERSEDED on 2026-10-20 by the launch readiness check (David: "Use your
+ *   recommendations for all 30 pages"): both reviewers read the consultant
+ *   hour as an unsupported comparison, so the masthead now states what you pay.
  * - **a-20260914-204053-7fd060**, same paragraph: "I'm not sure we should say
  *   the course has finished because it never really finishes because it's
  *   always up to date". Nothing on this page says the course is finished or
@@ -51,6 +49,20 @@ import { PRICING_OFFER_COPY as OFFER } from "@/components/marketing/gift/gift-co
  * (COURSE_MONTHLY_PRICE a month for TOTAL_COURSE_MONTHS months,
  * TOTAL_COURSE_COST in total, then ONGOING_MONTHLY_PRICE a month); none is
  * typed into the copy, so the £87 comparison cannot drift from the £29.
+ *
+ * LAUNCH READINESS, 2026-10-20 (bead gwth-launch-ajqs.2). Both reviewers'
+ * findings, applied here: a short note on what happens after paying, how to
+ * cancel and the refund rule, with a link to the Terms, beside every paying
+ * button; Months 2 and 3 open around 1 January and 1 February 2027 and time
+ * is paused if a month is late; the core count from config and no optional
+ * count; the projects named as the home page names them; plain words instead
+ * of "pricing theatre", "unusually fair" and the consultant-hour comparison;
+ * the £7.50 plan explained once, without the "optional lessons you skipped"
+ * and "five hours of new material" claims nothing supports; the comparison
+ * stacked one plan at a time on a phone; no tinted card tops or table header;
+ * and nothing links to /for-teams, which is hidden at launch. The £69 offer
+ * is now on the page before 1 December too, in words that are true on both
+ * sides of that date; only its buttons wait for sales to open.
  *
  * ONE RECORDED DISCREPANCY. `SHOW_TOTAL_COURSE_COST` in that file is `false`
  * and its comment says marketing pages should not prominently show the
@@ -82,7 +94,7 @@ const COMPARISONS = [
   ["A practical project in every lesson", "No", "Included", "Included"],
   ["Plain progress tracking", "No", "Included", "Included, plus an admin view"],
   [
-    "Stay Current refreshes",
+    "Lessons kept up to date",
     "No",
     `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo after the first three months`,
     "Set by your organisation",
@@ -90,10 +102,54 @@ const COMPARISONS = [
   ["Admin dashboard", "No", "No", "Included for 5 or more"],
 ]
 
+/** The plan names, in the order of the comparison table's columns. */
+const COMPARISON_PLANS = ["Free", "Member", GROUP_AUDIENCE] as const
+
 /**
- * Pricing page, in the PAPER-FIRST register: a two-column quiet masthead, three
- * rounded tier cards with a quiet header strip (the colour-block tops and the
- * ochre feature border are retired), a comparison table, the teams and
+ * What happens after paying, how to cancel and how to get a refund, in one
+ * short line beside each paying button (launch readiness checklist, check 5).
+ * The rules are the Terms' own (sections 6 and 7), summarised, never
+ * redrafted, and each line links to the section that applies.
+ */
+function TermsNote({
+  kind,
+  testId,
+}: {
+  kind: "pass" | "monthly"
+  testId: string
+}) {
+  return kind === "pass" ? (
+    <p className={styles.termsNote} data-testid={testId}>
+      You pay once and it never renews. If you buy it for yourself, sign in
+      first and the course opens as soon as you&apos;ve paid. With a gift, the
+      person you give it to has a year to enter its code, their course time
+      starts when they do, and we never ask them for card details. We refund a
+      pass in full until it&apos;s opened, but not after, unless the law
+      requires. See the{" "}
+      <Link href="/terms#passes" className={styles.inlineLink}>
+        Terms for passes
+      </Link>
+      .
+    </p>
+  ) : (
+    <p className={styles.termsNote} data-testid={testId}>
+      Your first three monthly payments each open one month of the course.
+      After that, the plan carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)} a
+      month to keep your lessons up to date, unless you cancel. We email you
+      before each payment. Cancel at any time in your account settings and you
+      keep access until the end of the month you&apos;ve paid for. See the{" "}
+      <Link href="/terms#subscriptions" className={styles.inlineLink}>
+        Terms for monthly payments
+      </Link>
+      , including refunds.
+    </p>
+  )
+}
+
+/**
+ * Pricing page, in the PAPER-FIRST register: a two-column quiet masthead, the
+ * pay-once offer, three rounded tier cards (no coloured or tinted card tops),
+ * a comparison table that stacks one plan at a time on a phone, the teams and
  * institutions split and a closing band. Prices come from the canonical
  * PRICING data so copy cannot drift from config.
  */
@@ -102,15 +158,25 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
   const course = PRICING[1]!
   const ongoing = ONGOING_MONTHLY_PRICE.toFixed(2)
 
-  // Christmas gift sale (beads gwth-launch-v1uj.5 and .9). Before sales open
-  // (1 December) this page is exactly as David approved it on 14 September.
-  // From then the Member button takes the monthly payment and a band offers
-  // paying once for all three months (£69 until 6 January, then £87) or
-  // giving the course as a gift. The checkout routes enforce the same dates.
+  // Christmas gift sale (beads gwth-launch-v1uj.5 and .9). The band offering
+  // to pay once for all three months (£69 from 1 December to 6 January, then
+  // £87) or to give the course as a gift is on the page from the GO LIVE
+  // release (launch readiness, 2026-10-20). Before sales open its button is
+  // the waitlist; from 1 December the Member button takes the monthly payment
+  // and the band sells the pass. The checkout routes enforce the same dates.
   const window = getSaleWindow()
   const selling = ENABLE_BILLING && isSalesOpen(now, window)
-  const christmas = selling && isChristmasSale(now, window)
-  const coursePass = formatPence(passPrice("course", now, window).pence)
+  // The £69 words are shown from the GO LIVE release, before sales open, and
+  // stay until the sale window closes; only the buttons wait for 1 December.
+  const christmas = isChristmasSale(now, window) || !isSalesOpen(now, window)
+  const salesOpenOn = formatUkDate(window.salesOpenAt)
+  // Before sales open the band already names the £69 sale price it will sell
+  // at; passPrice() alone would give the full price until 1 December.
+  const coursePass = formatPence(
+    christmas
+      ? PASS_PRICES_PENCE.courseSale
+      : passPrice("course", now, window).pence
+  )
   const saleEndsOn = formatUkDate(new Date(window.saleEndsAt.getTime() - 1))
   const monthlyCta = (
     <BuyButton
@@ -128,7 +194,6 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
       key: "free",
       badge: free.badge,
       tag: "Forever",
-      flavour: styles.flvTeal,
       price: free.price,
       per: free.per,
       features: free.features,
@@ -144,7 +209,6 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
       key: "course",
       badge: "Member",
       tag: course.flag ?? "The course",
-      flavour: styles.flvMoss,
       price: course.price,
       per: course.per,
       features: course.features,
@@ -152,14 +216,13 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
       // registration, so /signup renders "Registration closed" under a button
       // labelled "Join the Waitlist". Send it where the label says it goes.
       cta: { label: course.cta.label, href: "/waitlist" },
-      after: "a month once the first three months are done",
+      after: "a month after the first three months, unless you cancel",
       featured: true,
     },
     {
       key: "team",
       badge: GROUP_AUDIENCE,
       tag: "5 or more people",
-      flavour: styles.flvRust,
       price: "Same",
       per: "per-person price",
       features: TEAM_FEATURES,
@@ -181,7 +244,7 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
           </h1>
           <p className={styles.priceLine} data-testid="masthead-price-line">
             £{COURSE_MONTHLY_PRICE} a month for the first three months, then{" "}
-            <em>£{ongoing} a month</em>.
+            <em>£{ongoing} a month</em> if you stay.
           </p>
           {/* a-20260914-203941-b69458 and a-20260914-204053-7fd060. The
               comparison is now the WHOLE foundation against one consultant
@@ -190,13 +253,12 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               is finished: it is always being updated, which is what the £7.50
               buys. */}
           <p className={styles.standfirst}>
-            All three months together come to £{TOTAL_COURSE_COST}, less than
-            the cost of one hour with an AI consultant. Join when you&apos;re
-            ready. Teams pay the same per-person price, with no hidden
-            enterprise deals. Institutions that want their own edition get a
-            proposal based on what they need. After the first three
-            months the lower price keeps your lessons current as they change,
-            and you can stop whenever you like.
+            Pay a month at a time, or pay once for the whole course. Teams pay
+            the same per-person price, and institutions that want their own
+            edition get a proposal based on what they need. After the first
+            three months, you can keep your lessons up to date for £{ongoing} a
+            month. A monthly plan moves to that price by itself, and a pass
+            ends without charging you, so you choose whether to carry on.
           </p>
           {/* The UK thread on this page (bead gwth-launch-88z.32.25). Money
               is the only thing this page is about, so this is where it earns
@@ -211,16 +273,15 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
             somebody joining on their own.
           </p>
           <div className={styles.mastheadFoot}>
-            <p>Prices in GBP</p>
+            <p>Prices in GBP, with no VAT added</p>
             <p>Unlock one month at a time</p>
             <p>£{ongoing}/mo after the first three months</p>
-            <p>Cancel anytime</p>
+            <p>Cancel at any time</p>
           </div>
         </div>
       </section>
 
-      {selling && (
-        <section
+      <section
           className={`${styles.section} ${styles.sectionAlt}`}
           data-section="offer"
           data-testid="pricing-offer"
@@ -230,8 +291,10 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               <h2>
                 {christmas ? (
                   <>
-                    {OFFER.sale.title}{" "}
-                    <em>{OFFER.sale.titleAccent(coursePass, saleEndsOn)}</em>
+                    The whole course for {coursePass}{" "}
+                    <em>
+                      from {salesOpenOn} to {saleEndsOn}
+                    </em>
                   </>
                 ) : (
                   <>
@@ -243,33 +306,50 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
             <div className={styles.splitNote}>
               <p>
                 {christmas
-                  ? OFFER.sale.body(
-                      coursePass,
-                      formatPence(PASS_PRICES_PENCE.courseFull),
-                      saleEndsOn
-                    )
+                  ? `Pay once for all three months: ${coursePass} instead of ${formatPence(
+                      PASS_PRICES_PENCE.courseFull
+                    )}, if you buy between ${salesOpenOn} and ${saleEndsOn}. Buy it for yourself or give it as a gift. You can also give just the first month for ${formatPence(
+                      PASS_PRICES_PENCE.month1
+                    )}. After ${saleEndsOn}, the whole course is ${formatPence(
+                      PASS_PRICES_PENCE.courseFull
+                    )} and gifts stay on sale.`
                   : OFFER.allYear.body(
                       coursePass,
                       formatPence(PASS_PRICES_PENCE.month1)
                     )}
               </p>
+              <p data-testid="pricing-offer-months">
+                Month 1 opens on {salesOpenOn}. Month 2 opens around{" "}
+                {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
+                {LATER_MONTHS_OPEN.month3}. If you reach a month before it
+                opens, your time is paused until it does, so you get all three
+                months.
+              </p>
               <div className={styles.buttonRow}>
-                <BuyButton
-                  endpoint="/api/passes/checkout"
-                  body={{ gift: false, product: "course" }}
-                  label={OFFER.buySelf(coursePass)}
-                  returnTo="/pricing"
-                  className={styles.buttonSolid}
-                  errorClassName={styles.buyError}
-                />
-                <Link href="/gift" className={styles.buttonOutline}>
-                  {OFFER.gift}
-                </Link>
+                {selling ? (
+                  <>
+                    <BuyButton
+                      endpoint="/api/passes/checkout"
+                      body={{ gift: false, product: "course" }}
+                      label={OFFER.buySelf(coursePass)}
+                      returnTo="/pricing"
+                      className={styles.buttonSolid}
+                      errorClassName={styles.buyError}
+                    />
+                    <Link href="/gift" className={styles.buttonOutline}>
+                      {OFFER.gift}
+                    </Link>
+                  </>
+                ) : (
+                  <Link href="/waitlist" className={styles.buttonSolid}>
+                    Join the waitlist
+                  </Link>
+                )}
               </div>
+              <TermsNote kind="pass" testId="pricing-offer-terms" />
             </div>
           </div>
         </section>
-      )}
 
       <section className={styles.section} data-section="tiers">
         <div className={styles.page}>
@@ -288,7 +368,10 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
                   tier.featured ? styles.tierFeatured : ""
                 }`}
               >
-                <div className={`${styles.cardTop} ${tier.flavour}`}>
+                {/* No tinted header strip (paper-first-components: no
+                    coloured card tops). The label sits on the card surface
+                    with a hairline under it. */}
+                <div className={styles.cardTop}>
                   <h3>{tier.badge}</h3>
                   <span>{tier.tag}</span>
                 </div>
@@ -329,14 +412,18 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
                         {tier.cta.label}
                       </Link>
                     )}
+                    {tier.key === "course" && (
+                      <TermsNote kind="monthly" testId="member-terms" />
+                    )}
                   </div>
                 </div>
               </article>
             ))}
           </div>
           <p className={styles.fineprint}>
-            No yearly price · Cancel anytime · Stay Current remains available
-            after the first three months at {PRICING[2]!.price}/mo
+            No yearly price · Cancel at any time · Keeping your lessons up to
+            date stays available after the first three months at{" "}
+            {PRICING[2]!.price}/mo
           </p>
         </div>
       </section>
@@ -348,15 +435,15 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              The useful differences, <em>without pricing theatre.</em>
+              What each plan <em>includes</em>
             </h2>
           </div>
           {/* a-20260914-203753-b9d050: the labs are not sample lessons, so the
               free tier is no longer described as a taste of the course. */}
           <p className={styles.sectionLead}>
-            The point is simple: the free labs compare the newest AI tools on
-            one real task, member is the course itself with its lessons and
-            projects, and teams add management visibility.
+            The free labs compare the newest AI tools on one real task. Member
+            is the course itself, with its lessons and projects. Teams adds a
+            view of progress for managers.
           </p>
           {/* Focusable because it scrolls sideways on a phone: a scrollable
               region a keyboard cannot reach is a serious axe violation. */}
@@ -389,6 +476,29 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               </tbody>
             </table>
           </div>
+          {/* On a phone the table is replaced by one block per plan (launch
+              readiness, 2026-10-20: at 390px the Member column was cut off
+              and the Teams column could not be seen). The stylesheet shows
+              exactly one of the two at any width. */}
+          <div className={styles.compareStack} data-testid="compare-stack">
+            {COMPARISON_PLANS.map((plan, planIndex) => (
+              <div
+                key={plan}
+                className={styles.compareStackPlan}
+                data-testid="compare-stack-plan"
+              >
+                <h3>{plan}</h3>
+                <dl>
+                  {COMPARISONS.map((row) => (
+                    <div key={row[0]} className={styles.compareStackEntry}>
+                      <dt>{row[0]}</dt>
+                      <dd>{row[planIndex + 1]}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -408,15 +518,14 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               Institutions that want their own edition get a proposal based
               on what they need.
             </p>
+            {/* No link to /for-teams: it is hidden at launch (a real 404,
+                lib/public-routes.ts), so a team buyer is sent to contact. */}
             <div className={styles.buttonRow}>
-              <Link href="/for-teams" className={styles.buttonSolid}>
-                Learn about teams
+              <Link href="/contact" className={styles.buttonSolid}>
+                Contact GWTH
               </Link>
               <Link href="/for-institutions" className={styles.buttonOutline}>
                 Learn about institutions
-              </Link>
-              <Link href="/contact" className={styles.buttonOutline}>
-                Contact GWTH
               </Link>
             </div>
           </div>
@@ -455,8 +564,14 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
           falls once the first three months are behind you. */}
       <section className={styles.closing} data-section="closing">
         <div className={styles.page}>
+          {/* Launch readiness, 2026-10-20: "Unusually fair pricing" and
+              "the thing that keeps us honest" were read by both reviewers as
+              self-praise, "no timer and no pretend scarcity" sat beside a
+              dated offer, and "opens the optional lessons you skipped" and
+              the five hours of new material a month are claims nothing
+              supports. The block now states the terms plainly. */}
           <h2>
-            Unusually fair pricing. <em>Stop whenever you like.</em>
+            One month at a time. <em>Stop whenever you like.</em>
           </h2>
           {/* Recovered 2026-09-14 (ledger C13 and C14). C13 is David's own
               sentence from his pre-N12 home copy (c6e610d): the page already
@@ -483,14 +598,11 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               for the same reason: /terms offers a refund only where GWTH
               cancels an order (ledger C25, bead filed). */}
           <p>
-            You unlock one month at a time, with no timer and no pretend
-            scarcity, and you can cancel whenever you like. The price drops
-            after the first three months, so you are never paying course prices
-            out of habit: £{ongoing} a month keeps every lesson current as it
-            changes, adds around {ONGOING_NEW_CONTENT_HOURS} hours of new
-            material a month, and opens the optional lessons you skipped. If it
-            stops being worth it, cancel. That is the arrangement, and it is
-            the thing that keeps us honest.
+            You unlock one month at a time, and you can cancel whenever you
+            like. The price drops after the first three months, so you are
+            never paying course prices out of habit: £{ongoing} a month keeps
+            every lesson current as it changes. If it stops being worth it to
+            you, cancel.
           </p>
           <div className={styles.closingActions}>
             {selling && monthlyCta}
@@ -513,6 +625,7 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               </Link>
             )}
           </div>
+          {selling && <TermsNote kind="monthly" testId="closing-terms" />}
         </div>
       </section>
     </div>

@@ -64,10 +64,18 @@ describe("/gift", () => {
 })
 
 describe("/pricing during the gift sale", () => {
-  it("is unchanged before sales open: no sale band, the waitlist still offered", async () => {
+  it("before sales open, shows the £69 band in words with the waitlist as its button", async () => {
     const { PricingFde } = await load(true)
     render(<PricingFde now={BEFORE} />)
-    expect(screen.queryByTestId("pricing-offer")).toBeNull()
+    // Launch readiness, 2026-10-20: the £69 band is on the page from the GO
+    // LIVE release, in words true before and after 1 December; only its
+    // button waits (the waitlist until sales open, no checkout).
+    const band = screen.getByTestId("pricing-offer")
+    expect(band).toHaveTextContent("£69")
+    expect(band).toHaveTextContent("1 December 2026")
+    expect(band).toHaveTextContent("6 January 2027")
+    expect(screen.queryByRole("button", { name: /Buy the whole course/ })).toBeNull()
+    expect(screen.queryByRole("link", { name: "Give it as a gift" })).toBeNull()
     expect(screen.getAllByRole("link", { name: /join the waitlist/i }).length).toBeGreaterThan(0)
   })
 
@@ -75,7 +83,7 @@ describe("/pricing during the gift sale", () => {
     const { PricingFde } = await load(true)
     render(<PricingFde now={IN_SALE} />)
     const band = screen.getByTestId("pricing-offer")
-    expect(band).toHaveTextContent("£69 until 6 January 2027")
+    expect(band).toHaveTextContent("£69 from 1 December 2026 to 6 January 2027")
     expect(band).toHaveTextContent("£87")
     expect(screen.getByRole("button", { name: "Buy the whole course (£69)" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Give it as a gift" })).toHaveAttribute("href", "/gift")

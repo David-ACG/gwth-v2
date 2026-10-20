@@ -52,19 +52,22 @@ interface HowItWorksItem {
  * an archive the page no longer shows.
  */
 const FEW_AT_ONCE: HowItWorksItem = {
-  title: "Only a few at once.",
-  body: "Models change quickly, so we keep a small set of labs up to date rather than a long list that goes stale.",
+  // It said "we keep a small set of labs up to date", beside labs tested in
+  // July 2026. The labs are not re-run for the launch, so the promise went and
+  // the page says what is true instead (launch readiness review, 2026-10-20).
+  title: "Every lab is dated.",
+  body: "Each lab names the models it tested and the date. The tools change often, so the answers you get today may differ.",
 }
 
 /** A single reason the Model Arena format exists, shown in the explainer row. */
 const HOW_IT_WORKS: ReadonlyArray<HowItWorksItem> = [
   {
     title: "One task, two tools.",
-    body: "A real job you would actually give an AI, handed to two models with the exact same prompt.",
+    body: "Two AI tools get exactly the same instructions for a realistic work task.",
   },
   {
-    title: "You judge, we date it.",
-    body: "Outputs sit side by side with a rubric a beginner can follow, and a verdict stamped with the models and the date.",
+    title: "Compare both answers.",
+    body: "The answers sit side by side with a checklist a beginner can follow, and a verdict that names the models and the date.",
   },
   {
     title: "Fresh now, kept forever.",
@@ -100,9 +103,8 @@ interface ArchiveRow {
  * Structure: a two-column quiet masthead, a "how it works" explainer, a live
  * card row, a dated ARCHIVE list (arena first, then retired tiered labs; hidden
  * while {@link LABS_ARCHIVE_VISIBLE} is false), and a closing band pointing at
- * the course. Labs are included free with a beta
- * place; during the private pre-launch period (W25) the route itself is behind
- * the content gate, so the copy must not promise anonymous reading.
+ * the course. Labs are free to open; during the private pre-launch period (W25)
+ * the route itself is behind the content gate.
  *
  * The live cards were rebuilt for bead gwth-launch-88z.32.22 from David's
  * annotation a-20260914-205407-b3dbb2: "They need a video for each lab and the
@@ -112,9 +114,10 @@ interface ArchiveRow {
  * opens with a preview panel built from that lab's OWN material (see
  * `LabPreview`), then a plain task cue, the matchup, one outcome line in place
  * of the four-line brief that made every card look identical, and a metadata
- * row that says "Video guide planned" as a fact rather than a promise. The day
- * a lab gains a real `video` object, the same card shows its poster frame and
- * its running time with no further change here.
+ * row. A card names a video guide only where one exists: "Video guide planned"
+ * was a promise of unfinished work and went on 2026-10-20 (launch readiness
+ * review). The day a lab gains a real `video` object, the same card shows its
+ * poster frame and its running time with no further change here.
  */
 export function LabsFde({
   liveLabs,
@@ -158,10 +161,11 @@ export function LabsFde({
             Two tools, one task. <em>You judge.</em>
           </h1>
           <p className={styles.standfirst}>
-            Each lab runs two AI tools head to head on a real job, with the same
-            prompt, and shows you both answers side by side. A short rubric
-            helps you call the winner. Lessons teach you how to use AI; labs
-            help you choose which tool to use for a job.
+            Each lab gives two AI tools the same instructions for a realistic
+            work task, then shows you both answers side by side. A short checklist
+            of what a good answer should include helps you decide which is
+            better. Lessons teach you how to use AI; labs help you choose which
+            tool to use for a job.
           </p>
           {/* The UK thread on this page (bead gwth-launch-88z.32.25), and it
               is a description of the labs that exist rather than a promise:
@@ -193,7 +197,6 @@ export function LabsFde({
           <div className={styles.mastheadFoot}>
             <p>Dated head-to-head tests</p>
             <p>Free, no card required</p>
-            <p>New matchups as the models change</p>
           </div>
         </div>
       </section>
@@ -215,7 +218,9 @@ export function LabsFde({
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>Live now.</h2>
-            <p className={styles.mono}>{liveLabs.length} in the arena</p>
+            <p className={styles.mono}>
+              {liveLabs.length} {liveLabs.length === 1 ? "lab" : "labs"}
+            </p>
           </div>
 
           {/*
@@ -226,13 +231,15 @@ export function LabsFde({
           */}
           <p className={styles.sectionLead}>
             Start with the task that is closest to your own work.{" "}
+            {/* States only what exists: no "planned" guides (launch readiness
+                review, 2026-10-20). */}
             {withVideo === 0
-              ? "Video guides are planned for these labs but none is ready yet."
+              ? ""
               : withVideo === liveLabs.length
                 ? "Each of these labs has a video guide."
                 : `${withVideo} of these ${liveLabs.length} labs ${
                     withVideo === 1 ? "has" : "have"
-                  } a video guide so far, and guides for the others are planned.`}
+                  } a video guide.`}
           </p>
 
           {liveLabs.length === 0 ? (
@@ -252,6 +259,7 @@ export function LabsFde({
                 return (
                   <Link
                     href={`/labs/${lab.slug}`}
+                    aria-label={lab.title}
                     className={styles.card}
                     data-testid="arena-lab-card"
                     data-video-state={labVideoState(lab)}
@@ -273,11 +281,10 @@ export function LabsFde({
                         {lab.preview?.outcome ?? lab.brief}
                       </p>
                       {/*
-                        One metadata row, and the video fact lives in it as
-                        metadata rather than as the card's promise. A play
-                        control appears only where media genuinely plays, which
-                        for now is nowhere: `labVideoState` reads the authored
-                        `video` object and nothing else.
+                        One metadata row. The video fact appears only where a
+                        video exists, and the index never draws a play control:
+                        a card links to the lab page. `labVideoState` reads the
+                        authored `video` object and nothing else.
                       */}
                       <p className={styles.cardMeta}>
                         <span className={styles.cardLive}>
@@ -285,15 +292,15 @@ export function LabsFde({
                           Live now
                         </span>
                         <span>Tested {formatTestedOn(lab.testedOn)}</span>
-                        <span data-testid="lab-video-state">
-                          {video
-                            ? `Video guide${
-                                video.durationLabel
-                                  ? `, ${video.durationLabel}`
-                                  : ""
-                              }`
-                            : "Video guide planned"}
-                        </span>
+                        {video ? (
+                          <span data-testid="lab-video-state">
+                            {`Video guide${
+                              video.durationLabel
+                                ? `, ${video.durationLabel}`
+                                : ""
+                            }`}
+                          </span>
+                        ) : null}
                       </p>
                     </div>
                   </Link>

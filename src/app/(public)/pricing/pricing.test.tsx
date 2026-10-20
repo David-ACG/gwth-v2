@@ -1,16 +1,19 @@
-import { render, screen, cleanup } from "@testing-library/react"
+import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import PricingPage from "./page"
-import {
-  COURSE_MONTHLY_PRICE,
-  TOTAL_COURSE_COST,
-  TOTAL_COURSE_MONTHS,
-} from "@/lib/config"
+import { TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 
 /** Rows in the comparison table body, kept beside the component it mirrors. */
 const COMPARISON_ROWS = 6
 
 afterEach(cleanup)
+
+/** The tier cards, scoped: the phone comparison also names each plan. */
+function tiers() {
+  return within(
+    document.querySelector('[data-section="tiers"]') as HTMLElement
+  )
+}
 
 describe("PricingPage", () => {
   it("renders the page heading as h1", () => {
@@ -25,16 +28,17 @@ describe("PricingPage", () => {
   it("renders the three redesigned pricing tiers", () => {
     render(<PricingPage />)
     expect(
-      screen.getByRole("heading", { level: 3, name: "Free Labs" })
+      // Sentence case since 2026-10-20 (Sol copy check).
+      tiers().getByRole("heading", { level: 3, name: "Free labs" })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("heading", { level: 3, name: "Member" })
+      tiers().getByRole("heading", { level: 3, name: "Member" })
     ).toBeInTheDocument()
     // Deliberately updated (copy gate, 2026-09-28, commit f3816ac): David
     // chose to separate teams from institutions, so the per-person tier is
     // "Teams" and institutions get a proposal instead.
     expect(
-      screen.getByRole("heading", { level: 3, name: "Teams" })
+      tiers().getByRole("heading", { level: 3, name: "Teams" })
     ).toBeInTheDocument()
   })
 
@@ -50,10 +54,21 @@ describe("PricingPage", () => {
     expect(screen.queryByText(/£87 total/)).not.toBeInTheDocument()
   })
 
-  it("keeps Stay Current as an optional refresh offer once the three months are done", () => {
+  it("keeps the £7.50 plan as an optional refresh offer once the three months are done", () => {
     render(<PricingPage />)
-    expect(screen.getByText(/Stay Current remains available/)).toBeInTheDocument()
-    expect(screen.getByText("Stay Current refreshes")).toBeInTheDocument()
+    // Launch readiness, 2026-10-20: "Stay Current" was a product name the
+    // page never explained, so the page now says what it is.
+    expect(
+      screen.getByText(/Keeping your lessons up to date stays available/)
+    ).toBeInTheDocument()
+    expect(screen.getAllByText("Lessons kept up to date").length).toBeGreaterThan(0)
+    // Optional, and said once how each way of paying carries on (Sol).
+    expect(screen.getByTestId("masthead-price-line").textContent).toMatch(
+      /then £7\.50 a month if you stay/
+    )
+    expect(document.body.textContent).toMatch(
+      /A monthly plan moves to that price by itself, and a pass ends without charging you/
+    )
     // Deliberately updated: the Member cell used to read "Available after
     // course", which hid the one number that proves there is no lock-in.
     // getAllByText because the drop is now stated in several places on the
@@ -97,8 +112,9 @@ describe("PricingPage", () => {
     process.env.PRIVATE_CONTENT_MODE = "off"
     try {
       render(<PricingPage />)
+      // Sentence case (launch readiness, 2026-10-20; bible: no title-case CTAs).
       expect(
-        screen.getByRole("link", { name: "Try a Free Lab" })
+        tiers().getByRole("link", { name: "Try a free lab" })
       ).toHaveAttribute("href", "/labs")
     } finally {
       if (original === undefined) delete process.env.PRIVATE_CONTENT_MODE
@@ -106,15 +122,68 @@ describe("PricingPage", () => {
     }
   })
 
-  it("has Join the Waitlist CTA on the member tier", () => {
+  it("has a Join the waitlist CTA on the member tier before sales open", () => {
     // Deliberately updated (W26). This used to assert /signup, but W25 shut
     // registration, so /signup renders "Registration closed" behind a button
     // labelled "Join the Waitlist". Every waitlist-labelled CTA on the page
-    // now goes to /waitlist, so the label tells the truth.
+    // now goes to /waitlist, so the label tells the truth. Sentence case since
+    // 2026-10-20 (bible: no title-case CTAs).
     render(<PricingPage />)
+    const member = document.querySelector('[data-tier="course"]') as HTMLElement
     expect(
-      screen.getByRole("link", { name: "Join the Waitlist" })
+      within(member).getByRole("link", { name: "Join the waitlist" })
     ).toHaveAttribute("href", "/waitlist")
+  })
+
+  /**
+   * Launch readiness checklist, check 5: a page that takes money says what
+   * happens next, how to cancel and how to get a refund, and links the terms
+   * that apply, beside the paying buttons. Summarised from Terms sections 6
+   * and 7, never redrafted.
+   */
+  it("puts what happens next, cancelling, refunds and the Terms beside the paying buttons", () => {
+    render(<PricingPage />)
+    const pass = screen.getByTestId("pricing-offer-terms")
+    expect(pass.textContent).toMatch(/never renews/)
+    expect(pass.textContent).toMatch(/refund a pass in full until it.s opened/)
+    expect(within(pass).getByRole("link")).toHaveAttribute("href", "/terms#passes")
+    const monthly = screen.getByTestId("member-terms")
+    expect(monthly.textContent).toMatch(/Cancel at any time in your account settings/)
+    // Only the first three payments open a month; after that the plan carries
+    // on at £7.50 unless you cancel (Terms section 6, Sol copy check).
+    expect(monthly.textContent).toMatch(/first three monthly payments each open one month/)
+    expect(monthly.textContent).toMatch(/£7\.50 a month to keep your lessons up to date, unless you cancel/)
+    expect(pass.textContent).toMatch(/has a year to enter its code/)
+    expect(within(monthly).getByRole("link")).toHaveAttribute(
+      "href",
+      "/terms#subscriptions"
+    )
+    expect(monthly.textContent).toMatch(/refunds/)
+  })
+
+  it("says when Months 2 and 3 open and that time is paused if a month is late", () => {
+    render(<PricingPage />)
+    const member = document.querySelector('[data-tier="course"]')?.textContent ?? ""
+    expect(member).toMatch(/Month 2 opens around 1 January 2027 and Month 3 around 1 February 2027/)
+    expect(member).toMatch(/your time is paused/)
+    expect(screen.getByTestId("pricing-offer-months").textContent).toMatch(/your time is paused/)
+  })
+
+  it("prints the core count from config, no optional count, and the projects the home page names", () => {
+    render(<PricingPage />)
+    const member = document.querySelector('[data-tier="course"]')?.textContent ?? ""
+    expect(member).toContain(`${TOTAL_MANDATORY_LESSONS} core lessons`)
+    expect(member).not.toMatch(/\d+ go-deeper|\d+ optional/)
+    expect(member).toMatch(/Family AI Bot/)
+    expect(member).toMatch(/AskMyCo/)
+    expect(member).toMatch(/your own AI consultant/)
+    expect(member).not.toMatch(/AskEveryone|Capstones for/)
+    expect(document.body.textContent).not.toMatch(/optional lessons you skipped/)
+  })
+
+  it("says no VAT is added", () => {
+    render(<PricingPage />)
+    expect(screen.getByText(/no VAT added/)).toBeInTheDocument()
   })
 
   it("does not expose a Stripe checkout CTA during beta", () => {
@@ -134,7 +203,7 @@ describe("PricingPage", () => {
     )
   })
 
-  it("has For Teams section with contact link and learn-more link", () => {
+  it("has For Teams section with contact link and no link to the hidden teams page", () => {
     render(<PricingPage />)
     expect(
       screen.getByRole("heading", {
@@ -145,9 +214,12 @@ describe("PricingPage", () => {
     expect(
       screen.getByRole("link", { name: /Contact GWTH/i })
     ).toBeInTheDocument()
+    // /for-teams is hidden at launch (a real 404, lib/public-routes.ts,
+    // 2026-10-20), so nothing on the page links to it.
     expect(
-      screen.getByRole("link", { name: /Learn about teams/i })
-    ).toBeInTheDocument()
+      screen.queryByRole("link", { name: /Learn about teams/i })
+    ).toBeNull()
+    expect(document.querySelector('a[href^="/for-teams"]')).toBeNull()
   })
 
   it("renders the redesigned comparison table", () => {
@@ -159,8 +231,27 @@ describe("PricingPage", () => {
     expect(
       screen.getByRole("columnheader", { name: "Teams" })
     ).toBeInTheDocument()
-    expect(screen.getByText("Admin dashboard")).toBeInTheDocument()
-    expect(screen.getByText("Included for 5 or more")).toBeInTheDocument()
+    expect(screen.getAllByText("Admin dashboard").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Included for 5 or more").length).toBeGreaterThan(0)
+  })
+
+  /**
+   * Launch readiness, 2026-10-20: at 390px the table cut off the Member column
+   * and hid the Teams column. Phones get one block per plan with every row,
+   * so nothing in the table is unreadable there (the stylesheet shows one of
+   * the two at any width).
+   */
+  it("gives phones the comparison one plan at a time, with every row", () => {
+    render(<PricingPage />)
+    const plans = screen.getAllByTestId("compare-stack-plan")
+    expect(plans.map((p) => p.querySelector("h3")?.textContent)).toEqual([
+      "Free",
+      "Member",
+      "Teams",
+    ])
+    for (const plan of plans) {
+      expect(plan.querySelectorAll("dt")).toHaveLength(COMPARISON_ROWS)
+    }
   })
 })
 
@@ -195,7 +286,7 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     expect(headers).not.toContain("Team")
     // The card above the table agrees with it.
     expect(
-      screen.getByRole("heading", { level: 3, name: "Teams" })
+      tiers().getByRole("heading", { level: 3, name: "Teams" })
     ).toBeInTheDocument()
     // Institutions are told they get a proposal, not the per-person price...
     const split = screen
@@ -232,17 +323,20 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     }
   })
 
-  /** a-20260914-203941-b69458: the WHOLE three months, against one hour. */
-  it("compares all three months, not one month, with an hour of consulting", () => {
+  /**
+   * a-20260914-203941-b69458 asked for "the whole three months are less than
+   * the cost of one hour with a consultant". SUPERSEDED on 2026-10-20 by the
+   * launch readiness check, which David accepted for every page ("Use your
+   * recommendations for all 30 pages"): both reviewers read the consultant
+   * hour as an unsupported comparison. What still holds from his annotation:
+   * the masthead talks about the whole course, and the £7.50 is never swept
+   * into a three-month total.
+   */
+  it("states what you pay, with no unsupported consultant comparison", () => {
     const text = pageText()
-    expect(text).toMatch(
-      /All three months together come to £87, less than the cost of one hour with an AI consultant/
-    )
-    // £87 is 3 x £29, so the claim cannot drift from the canonical price.
-    expect(TOTAL_COURSE_COST).toBe(COURSE_MONTHLY_PRICE * TOTAL_COURSE_MONTHS)
-    // The consultant comparison must not sweep the continuing price into it.
-    const sentence = text.slice(text.indexOf("All three months together"))
-    expect(sentence.slice(0, sentence.indexOf(".") + 1)).not.toMatch(/7\.50/)
+    expect(text).not.toMatch(/hour with an AI consultant|cost of one hour/i)
+    expect(text).not.toMatch(/pricing theatre|unusually fair|keeps us honest/i)
+    expect(text).toMatch(/pay once for the whole course/i)
   })
 
   /**
@@ -288,7 +382,7 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     expect(closingText).toMatch(/first three months/i)
     expect(closingText).toMatch(/current as it changes|keeps every lesson current/i)
     // Cancellation is also visible without scrolling to the closing band.
-    expect(screen.getAllByText(/Cancel anytime/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Cancel at any time/i).length).toBeGreaterThan(0)
   })
 
   /**

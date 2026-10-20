@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { getArenaLab } from "@/lib/data/model-arena"
+import { formatTestedOn, getArenaLab } from "@/lib/data/model-arena"
 import { getLab } from "@/lib/data/labs"
 import { ArenaLabDetail } from "@/components/lab/arena/arena-lab-detail"
 import { ArchiveLabDetail } from "@/components/lab/arena/archive-lab-detail"
@@ -27,7 +27,7 @@ export async function generateMetadata({
   if (arena) {
     return {
       title: arena.title,
-      description: `${arena.matchup[0].name} vs ${arena.matchup[1].name} on one real task, tested ${arena.testedOn}. Outputs side by side, a rubric, and a dated verdict.`,
+      description: `${arena.matchup[0].name} vs ${arena.matchup[1].name} on one real task, tested on ${formatTestedOn(arena.testedOn)}. Both answers side by side, a checklist to judge them by and a dated verdict.`,
     }
   }
 

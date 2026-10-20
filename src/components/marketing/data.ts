@@ -360,12 +360,27 @@ export const CURRICULUM: readonly CurriculumModule[] = [
   },
 ]
 
+// ─── When the later months open ─────────────────────────────────────────────
+
+/**
+ * When Months 2 and 3 open for students (launch readiness facts sheet,
+ * 2026-10-20). Month 1 is complete on 1 December 2026. These are the
+ * expected dates, so every page says "around" before them, and a student who
+ * reaches a month before it opens has their time paused (the clock is held,
+ * `lib/billing/passes.ts`). One place, so /, /pricing and /why-gwth agree.
+ */
+export const LATER_MONTHS_OPEN = {
+  month2: "1 January 2027",
+  month3: "1 February 2027",
+} as const
+
 // ─── Pricing tiers ──────────────────────────────────────────────────────────
 
 export const PRICING: readonly PricingTier[] = [
   {
     id: "free",
-    badge: "Free Labs",
+    // Sentence case (Sol copy check, launch readiness 2026-10-20).
+    badge: "Free labs",
     price: "£0",
     pricePence: 0,
     per: "forever, no card required",
@@ -375,25 +390,29 @@ export const PRICING: readonly PricingTier[] = [
       "New labs as new tools launch",
       "Lessons and their projects come with the course, not the free tier",
     ],
-    cta: { label: "Try a Free Lab", href: "/labs", style: "ghost" },
+    // Sentence case (bible paper-first-banned-patterns: no title-case CTAs).
+    cta: { label: "Try a free lab", href: "/labs", style: "ghost" },
   },
   {
     id: "course",
     badge: "The Course",
-    flag: "Starter pricing",
+    flag: "Months 1 to 3",
     price: `£${COURSE_MONTHLY_PRICE}`,
     pricePence: COURSE_MONTHLY_PRICE * 100,
     per: "/mo · unlock one month at a time",
+    // Launch readiness, 2026-10-20 (both reviewers on /pricing). The core
+    // count comes from config and no optional count is printed (David,
+    // a-20260914-201426-ae7f0e). The projects are named the way the home page
+    // names them. "Starter price may rise later" went: it sat beside "no
+    // pretend scarcity" and promised nothing a buyer could use.
     features: [
-      "Full Month 1 available now; Months 2 and 3 follow",
-      `${TOTAL_MANDATORY_LESSONS} core lessons plus ${TOTAL_OPTIONAL_LESSONS} go-deeper optional lessons`,
-      "Capstones for AskMyCo, FractionalBuddy, and AskEveryone",
-      "Industry-specific modules for your field",
+      `Month 1 opens on 1 December 2026. Month 2 opens around ${LATER_MONTHS_OPEN.month2} and Month 3 around ${LATER_MONTHS_OPEN.month3}. If you reach a month before it opens, your time is paused until it does.`,
+      `${TOTAL_MANDATORY_LESSONS} core lessons, plus optional lessons for your field`,
+      "Projects including the Family AI Bot, the AskMyCo support chatbot and your own AI consultant",
       "Plain course progress tracking",
-      "Starter price may rise later",
       "No ads, no upsells, no hidden tier",
     ],
-    cta: { label: "Join the Waitlist", href: "/signup", style: "accent2" },
+    cta: { label: "Join the waitlist", href: "/signup", style: "accent2" },
   },
   {
     id: "stay",

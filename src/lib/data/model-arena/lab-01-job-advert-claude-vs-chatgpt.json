@@ -6,7 +6,7 @@
   "status": "live",
   "category": "HR",
   "testedOn": "2026-07-23",
-  "brief": "You are an HR advisor at a small charity that runs a care home in rural Shropshire. A Registered Nurse post has sat open for four months, and the current advert is dry and forgettable. You give the same tired advert to two AI tools and ask each to rewrite it. Then you decide which rewrite you would actually be happy to post, and why. The skill you are practising is not writing the advert yourself. It is judging which tool did the better job, on a task you understand.",
+  "brief": "You are a human resources (HR) adviser at a small charity that runs a care home in rural Shropshire. A Registered Nurse post has sat open for four months, and the current advert is dry and forgettable. You give the same tired advert to two AI tools and ask each to rewrite it. Then you decide which rewrite you would actually be happy to post, and why. The skill you are practising is not writing the advert yourself. It is judging which tool did the better job, on a task you understand.",
   "summary": "A Registered Nurse advert that has not worked for four months, rewritten by both tools from the same brief. You decide which rewrite you would be happy to post, and why.",
   "preview": {
     "taskCue": "Job advert rewrite",
@@ -34,14 +34,14 @@
     {
       "name": "Claude",
       "modelId": "claude-opus-4-8",
-      "modelLabel": "Claude Opus 4.8 (1M-context variant)",
+      "modelLabel": "Claude Opus 4.8",
       "howRun": "Generated directly from Claude Opus 4.8 on 2026-07-23."
     },
     {
       "name": "ChatGPT",
       "modelId": "gpt-5.6-sol",
-      "modelLabel": "OpenAI GPT-5.6",
-      "howRun": "Generated via the Codex CLI 0.144.1 at high reasoning effort on 2026-07-23. The consumer ChatGPT app uses the same GPT-5.6 family."
+      "modelLabel": "OpenAI GPT-5.6 Sol",
+      "howRun": "Generated via the Codex CLI 0.144.1 at high reasoning effort on 2026-07-23. Answers in the ChatGPT app may differ from this one."
     }
   ],
   "prompt": "You are helping a busy HR advisor at a small charity that runs a care home in rural Shropshire. We have been trying to fill a Registered Nurse vacancy for four months with no luck. Here is our current job advert, which we think is part of the problem:\n\nRegistered Nurse required. Applicants must hold a valid NMC pin and have a minimum of two years post-registration experience. Duties include administering medication, managing care plans, supervising healthcare assistants and liaising with GPs and families. Shift work including nights and weekends is required. Competitive salary. To apply, send your CV to recruitment@example.org.uk.\n\nPlease rewrite this advert so it is more likely to attract good candidates. Keep it honest and accurate, keep it to about 250 words, use British English, and make it warm and human without overselling the role. Include a short, genuine reason a nurse might actually want to work here.",
@@ -69,8 +69,8 @@
       "goodLooksLike": "A concrete reason tied to this workplace, not a vague perk like 'competitive salary'."
     },
     {
-      "criterion": "Is the British English and punctuation clean for a UK advert?",
-      "goodLooksLike": "British spelling and no stray dashes or Americanisms you would have to fix before posting."
+      "criterion": "Is the British English clean, with nothing to fix before posting?",
+      "goodLooksLike": "British spelling, no Americanisms, and punctuation that matches your organisation's own style."
     },
     {
       "criterion": "Is it easy to skim in ten seconds?",
@@ -83,14 +83,14 @@
   ],
   "verdict": {
     "winner": "Close, slight edge to Claude for this brief",
-    "callText": "This one is close, and both rewrites are a big improvement on the original. ChatGPT is the more polished advert at a glance: it opens with a clear heading, lists the duties as bullet points, and would drop straight onto a job board. But it leans on advert clichés the brief asked us to avoid, such as the 'Are you a compassionate Registered Nurse...' opener and phrases like 'person-centred care' and 'purpose-led charitable organisation'. It also slipped in an en dash in the heading and an em dash in the body, and a UK advert would want those tidied. Claude reads warmer and more human, and its genuine reason is stronger and more specific: seeing the same residents week after week, being a person rather than a number on a rota, senior staff on the floor beside you. It is honest about the shifts in plain words. Its weakness is that it is all prose, so it is harder to skim than ChatGPT's bulleted duties. For this brief, which asked for warmth, honesty and a genuine reason without overselling, Claude fits slightly better. The best real-world answer is to take Claude's honesty and specific reason and borrow ChatGPT's bulleted duties for skim-ability.",
-    "freshnessNote": "Tested on 2026-07-23 with Claude Opus 4.8 and OpenAI GPT-5.6. Models change often, so this verdict is only true for these versions on this date. The archived version of this lab shows how the two tools compared at this point, which is useful once newer models arrive."
+    "callText": "This one is close, and both rewrites are a big improvement on the original.\n\nChatGPT is the more polished advert at a glance: it opens with a clear heading, lists the duties as bullet points, and would drop straight onto a job board. But it leans on stock advert phrases, which works against the brief's request for something warm and human: the 'Are you a compassionate Registered Nurse...' opener, 'person-centred care' and 'purpose-led charitable organisation'. It also puts a long dash in the heading and another in the body. The brief did not mention dashes, but if your organisation's style avoids them, as GWTH's does, you would tidy them before posting.\n\nClaude reads warmer and more human, and its reason to want the job is stronger and more specific: seeing the same residents week after week, being a person rather than a number on a rota, senior staff on the floor beside you. It is honest about the shifts in plain words. Its weakness is that it is all prose, so it is harder to skim than ChatGPT's bulleted duties.\n\nFor this brief, which asked for warmth, honesty and a genuine reason without overselling, Claude fits slightly better. The best advert would take Claude's honesty and specific reason and borrow ChatGPT's bulleted duties, so it is easier to skim.",
+    "freshnessNote": "Tested on 23 July 2026 with Claude Opus 4.8 and OpenAI GPT-5.6 Sol. Models change often, so this verdict is only true for these versions on this date."
   },
   "tryItYourself": [
     "Find a real advert for a role you know is hard to fill, or use the care home one above.",
-    "Open claude.ai and chatgpt.com. Both have a free option and neither needs payment for this.",
+    "Open claude.ai and chatgpt.com. Both have a free option, but it may not use the models tested here, so note which model you used and the date, and expect answers that differ from the ones above.",
     "Paste the exact same prompt into both, word for word, so the test is fair.",
-    "Read both rewrites and score each one against the six questions in the rubric above.",
+    "Read both rewrites and score each one against the six questions above.",
     "Pick the one you would actually post, write one line on why, and note anything you would still change by hand."
   ]
 }

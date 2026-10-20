@@ -146,14 +146,20 @@ describe("no page claims the unbuilt half of the score", () => {
     }
   }
 
-  it("every page that names the score also says it is off during the beta", () => {
+  it("every page that names the score also says it is not switched on", () => {
+    // The boundary is the same; only the wording changed. From the launch
+    // there is no beta (launch readiness, 2026-10-20), so /lessons says "The
+    // score is not switched on in the course yet". The old beta sentence is
+    // still accepted for the pages that have not been rewritten.
     for (const page of PAGES) {
       cleanup()
       render(page.node)
       const body = text()
       if (!/GWTH score/i.test(body)) continue
       expect(
-        /no score is switched on while the course is in beta/i.test(body),
+        /no score is switched on while the course is in beta|score is not switched on in the course yet/i.test(
+          body
+        ),
         `${page.name} names the score without the beta boundary`
       ).toBe(true)
     }
@@ -167,8 +173,14 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     expect(section).not.toBeNull()
     expect(screen.getAllByTestId("path-card")).toHaveLength(3)
     const body = section!.textContent ?? ""
-    // The structure three registers agree on.
-    expect(body).toMatch(/twenty core lessons/i)
+    // The structure, with every month's core count read from config: the
+    // syllabus re-count of 2026-10-20 made "Months 2 and 3 each open with
+    // twenty core lessons" untrue (Month 3 has 21), so no count is typed.
+    for (const month of MONTH_CONFIGS) {
+      expect(body).toMatch(
+        new RegExp(`${month.mandatoryLessons} in Month ${month.month}`)
+      )
+    }
     // Deep by field, deep by craft, deep by role: David's "go deep into one
     // area, or do optional lessons by industry".
     expect(body).toMatch(/UK legal practice/i)
@@ -183,7 +195,9 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     render(<LessonsFde />)
     const note = screen.getByTestId("optional-beta-note").textContent ?? ""
     expect(note).toMatch(/given the whole set rather than picking from it/i)
-    expect(note).toMatch(/building next/i)
+    // "the part we are building next" was a promise about future work, which
+    // the launch readiness checklist does not allow (2026-10-20).
+    expect(note).not.toMatch(/building next|beta/i)
   })
 
   it("sends an institution or team buyer to its own page", () => {
@@ -200,12 +214,13 @@ describe("/lessons: the fullest learner-facing explanation", () => {
       new RegExp(`same ${TOTAL_MANDATORY_LESSONS} core lessons`, "i")
     )
     expect(text).toMatch(/100 or more learners/i)
-    expect(text).toMatch(/smaller team takes the standard core/i)
     const hrefs = Array.from(buyers.querySelectorAll("a")).map((a) =>
       a.getAttribute("href")
     )
     expect(hrefs).toContain("/for-institutions")
-    expect(hrefs).toContain("/for-teams")
+    // /for-teams returns a 404 from the launch (launch readiness, 2026-10-20),
+    // so the page no longer links to it, nor describes the team admin there.
+    expect(hrefs).not.toContain("/for-teams")
   })
 
   it("explains the score in terms of what is actually computed", () => {
@@ -226,14 +241,23 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     )
   })
 
-  it("puts the shareable record after the beta, not in it", () => {
-    render(<LessonsFde />)
-    const record = screen.getByTestId("score-record").textContent ?? ""
-    expect(record).toMatch(/after the beta/i)
-    expect(record).toMatch(/its own web address/i)
-    // David asked for LinkedIn by name. It may be named as a place to put a
+  it("does not promise the shareable record page while it does not exist", () => {
+    // This test used to pin the record paragraph ("After the beta, your score
+    // will come with a page of its own ... such as LinkedIn"), which David
+    // asked for on 2026-09-14 (a-20260914-204708-9f6b63). Nothing has ever
+    // written a credential row and the score is switched on in no
+    // environment, so from the launch that paragraph was a promise of a
+    // feature that may not exist on 1 December. The launch readiness brief
+    // (rule 3) and the latest Sol writing check both ruled it out on
+    // 2026-10-20. Restore the paragraph, and this test's old shape, the day
+    // the record page is live; LinkedIn may then be named as a place to put a
     // link, never as an integration (the banned patterns above enforce that).
-    expect(record).toMatch(/linkedin/i)
+    render(<LessonsFde />)
+    expect(screen.queryByTestId("score-record")).toBeNull()
+    expect(text()).not.toMatch(/its own web address/i)
+    expect(screen.getByTestId("score-beta-note").textContent).toMatch(
+      /not switched on/i
+    )
   })
 })
 
@@ -320,8 +344,12 @@ describe("/for-teams: the same story, told for somebody choosing for other peopl
 describe("/: a signpost, not a fifth copy of the argument", () => {
   it("points at the optional lessons and links to the course page", () => {
     render(<HomeFde />)
-    const note = screen.getByTestId("months-optional-note").textContent ?? ""
-    expect(note).toMatch(/twenty core lessons that everybody does/i)
+    const note = (screen.getByTestId("months-optional-note").textContent ?? "").replace(/\s+/g, " ")
+    // The core counts come from config, never typed (launch readiness,
+    // 2026-10-20: the syllabus now runs 20 and 21, not twenty and twenty).
+    expect(note).toContain(
+      `Month 2 starts with ${MONTH_CONFIGS[1]!.mandatoryLessons} core lessons and Month 3 with ${MONTH_CONFIGS[2]!.mandatoryLessons}, and everybody does those`
+    )
     expect(note).toMatch(/UK legal work/i)
     // Not a picker: the product has no way for a learner to select one.
     expect(note).toMatch(/not expected to take all of them/i)
@@ -330,10 +358,16 @@ describe("/: a signpost, not a fifth copy of the argument", () => {
     expect(link).toHaveAttribute("href", "/lessons")
   })
 
+  // Launch readiness, 2026-10-20: the score section renders only while the
+  // score is switched on (ENABLE_GWTH_SCORE, off at launch). Switched on, it is
+  // still exactly the one section already approved.
   it("still carries exactly one score section, the one already approved", () => {
-    const { container } = render(<HomeFde />)
+    const { container } = render(<HomeFde showScore />)
     expect(container.querySelectorAll('[data-section="score"]')).toHaveLength(1)
     expect(screen.getAllByTestId("score-card")).toHaveLength(3)
+    cleanup()
+    const off = render(<HomeFde showScore={false} />)
+    expect(off.container.querySelectorAll('[data-section="score"]')).toHaveLength(0)
   })
 })
 

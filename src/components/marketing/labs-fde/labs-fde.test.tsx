@@ -31,7 +31,8 @@ function renderIndex(labs: ModelArenaLab[] = liveLabs) {
  * a preview of the lab's own material, a plain task cue, the matchup, one
  * outcome line. And a card must never claim a video that does not exist: the
  * thumbnail he asked for arrives with the video, and until then the card says
- * "planned" instead of drawing a play button over nothing.
+ * nothing about a video at all. It used to say "Video guide planned", which the
+ * launch readiness review (2026-10-20) ruled a promise of unfinished work.
  *
  * Assertions are on semantics and data attributes rather than on sentences, so
  * the copy can be rewritten without the suite having to be rewritten with it.
@@ -89,7 +90,7 @@ describe("LabsFde live cards", () => {
     }
   })
 
-  it("claims a video only where one exists, and says planned everywhere else", () => {
+  it("claims a video only where one exists, and says nothing everywhere else", () => {
     const { container } = renderIndex()
 
     // The index never plays anything: a card links to the lab page, so a play
@@ -103,8 +104,8 @@ describe("LabsFde live cards", () => {
         card.getAttribute("href")?.endsWith(`/labs/${l.slug}`)
       )!
       const state = card.getAttribute("data-video-state")
-      const label = within(card).getByTestId("lab-video-state")
       if (lab.video) {
+        const label = within(card).getByTestId("lab-video-state")
         // Real media, so the card shows its own poster frame and the running
         // time the lab AUTHORED. Nothing here estimates a duration.
         expect(state).toBe("available")
@@ -117,9 +118,12 @@ describe("LabsFde live cards", () => {
         )
       } else {
         expect(state).toBe("planned")
-        expect(label).toHaveTextContent(/planned/i)
+        expect(within(card).queryByTestId("lab-video-state")).toBeNull()
+        expect(card.textContent).not.toMatch(/video guide/i)
       }
     }
+    // No promise of guides that do not exist, anywhere on the index.
+    expect(container.textContent).not.toMatch(/planned/i)
   })
 
   it("states the video position from the data, not from a frozen sentence", () => {
@@ -130,6 +134,7 @@ describe("LabsFde live cards", () => {
     expect(withVideo).toBeGreaterThan(0)
     const lead = screen.getByText(/Start with the task that is closest/)
     expect(lead.textContent).not.toMatch(/none has been recorded/)
+    expect(lead.textContent).not.toMatch(/planned/i)
     expect(lead.textContent).toContain(String(withVideo))
   })
 
@@ -274,5 +279,33 @@ describe("LabsFde archive", () => {
     expect(rows.map((r) => r.getAttribute("href"))).toContain(
       `/labs/${RETIRED_LAB.slug}`
     )
+  })
+})
+
+/**
+ * The launch readiness review (2026-10-20, Claude and the latest Sol): the
+ * labs were tested in July and are not re-run for the launch, so the index
+ * must not promise freshness, and "rubric" is a word a beginner has to decode.
+ */
+describe("LabsFde launch readiness", () => {
+  it("makes no up-to-date or new-matchup promise", () => {
+    const { container } = renderIndex()
+    expect(container.textContent).not.toMatch(/up to date|new matchups/i)
+  })
+
+  it("says checklist rather than rubric", () => {
+    const { container } = renderIndex()
+    expect(container.textContent).not.toMatch(/rubric/i)
+    expect(container.textContent).toMatch(/checklist/i)
+  })
+
+  it("names each card link by its lab title", () => {
+    renderIndex()
+    for (const lab of liveLabs) {
+      expect(screen.getByRole("link", { name: lab.title })).toHaveAttribute(
+        "href",
+        `/labs/${lab.slug}`
+      )
+    }
   })
 })

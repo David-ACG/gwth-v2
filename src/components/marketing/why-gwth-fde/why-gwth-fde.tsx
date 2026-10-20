@@ -1,7 +1,13 @@
 import type { ReactNode } from "react"
 import Link from "next/link"
 import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
-import { isPrivateContentMode } from "@/lib/content-mode"
+import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
+import {
+  formatPence,
+  formatUkDate,
+  getSaleWindow,
+  PASS_PRICES_PENCE,
+} from "@/lib/billing/passes"
 import {
   ukFigure,
   ukFigureCitation,
@@ -16,6 +22,22 @@ import styles from "./why-gwth-fde.module.css"
 function gbp(amount: number): string {
   return `£${Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2)}`
 }
+
+/**
+ * The pay-once launch offer, in words true from the GO LIVE release onward
+ * (launch readiness, 2026-10-20). Price and dates come from the billing
+ * module, never typed.
+ */
+function launchOffer() {
+  const window = getSaleWindow()
+  return {
+    sale: formatPence(PASS_PRICES_PENCE.courseSale),
+    opensOn: formatUkDate(window.salesOpenAt),
+    endsOn: formatUkDate(new Date(window.saleEndsAt.getTime() - 1)),
+  }
+}
+
+const OFFER = launchOffer()
 
 /** One reason to learn with GWTH: a heading and the paragraphs beneath it. */
 interface Reason {
@@ -59,7 +81,8 @@ const REASONS: readonly Reason[] = [
   },
   {
     id: "up-to-date",
-    title: "Always up to date",
+    // "Always" was an absolute promise (Sol copy check, 2026-10-20).
+    title: "Lessons updated as tools change",
     body: [
       "AI changes quickly. A course written two or three years ago can recommend tools and methods that people have since stopped using. We update the lessons as the tools change and rewrite any instruction that no longer works, so you're learning what works now.",
       // Recovered idea C07 (evergreen copy recovery, 2026-09-14): why a course
@@ -75,7 +98,9 @@ const REASONS: readonly Reason[] = [
     title: "Hands-on, and good fun",
     body: [
       // "A fun tracker", never a reason to sign up: David, why-gwth-video B s6.
-      "Most of the course is hands-on, because you learn to use AI by using it. The projects are meant to be fun and interesting, and many of them build tools you might otherwise pay a monthly fee for. There's even a fun tracker that shows how much you've saved.",
+      // Launch readiness, 2026-10-20: "fun" was said three times in three
+      // lines, and "how much you've saved" did not say saved what.
+      "Most of the course is hands-on, because you learn to use AI by using it. The projects are meant to be interesting, and many of them build tools you might otherwise pay a monthly fee for. There's even a fun tracker that adds up the monthly fees you no longer pay.",
     ],
   },
   {
@@ -91,7 +116,11 @@ const REASONS: readonly Reason[] = [
     body: [
       // Every field is named: David, why-gwth round 1, D s3, "Add all the
       // fields as people will be looking for their own."
-      "Everyone wants something different from AI, so alongside the core course there are lots of optional lessons, especially in months two and three. You can focus on AI in your own field: finance, medicine, law or logistics today, with lessons for HR, marketing and sales being written now. You can go further with local AI, which runs on your own computer, with advanced AI-assisted coding, or with hardware that uses AI. Or you can take the lessons for AI transformation experts, who help a business, your own or someone else's, choose AI tools and start using them well.",
+      // Launch readiness, 2026-10-20: the field lessons sit in Months 2 and 3,
+      // which open after 1 December, so "today" and "being written now" went.
+      // HR, marketing and sales are optional Month 2 lessons in the syllabus
+      // (facts sheet, re-counted 2026-10-20).
+      `Everyone wants something different from AI, so alongside the core course there are lots of optional lessons, most of them in Months 2 and 3, which open around ${LATER_MONTHS_OPEN.month2} and ${LATER_MONTHS_OPEN.month3}. You can focus on AI in your own field: finance, medicine, law, logistics, human resources (HR), marketing or sales. You can go further with local AI, which runs on your own computer, with advanced AI-assisted coding, or with hardware that uses AI. Or you can take the lessons for AI transformation experts, who help a business, your own or someone else's, choose AI tools and start using them well.`,
       "Shaping a course around one person is usually what people pay for with bespoke training. With GWTH, you do that yourself by choosing the optional lessons that match your work.",
     ],
   },
@@ -101,7 +130,11 @@ const REASONS: readonly Reason[] = [
     body: [
       // Recovered idea C06 (from the old /about): the REASON a record has to
       // stay current, not just the mechanic.
-      "Every lesson leaves you with real work you can show people. A certificate from six months ago tells you what somebody once passed, not what they can do today. So your GWTH credential is built from the lessons you've finished and your answers to the questions in each one. An employer or client will be able to check that it's genuine. It will also show if a lesson you passed has since been rewritten and needs completing again, so it reflects what you can do now. Credentials are switched on after the beta.",
+      // Launch readiness, 2026-10-20: "Credentials are switched on after the
+      // beta" went. There is no beta on 1 December and no credential is
+      // switched on at launch (the score and /verify are off), so the page
+      // says what a learner actually has: the work itself.
+      "Every lesson leaves you with real work you can show people. A certificate from six months ago tells you what somebody once passed, not what they can do today. So the proof GWTH gives you is the work itself: the documents and tools you made, which anyone you show them to can open and check for themselves.",
     ],
   },
   {
@@ -113,6 +146,18 @@ const REASONS: readonly Reason[] = [
       // why-gwth round 1, D s5 and E s7). The course never really ends
       // because it is always updated (E s3).
       `Course access is ${gbp(COURSE_MONTHLY_PRICE)} a month, paid monthly, and you can stop at any time. After your first three months the course doesn't end, because we keep updating it, and you can stay current for ${gbp(ONGOING_MONTHLY_PRICE)} a month.`,
+      // The pay-once offer beside the monthly price (launch readiness,
+      // 2026-10-20). No full price or total is printed: David, why-gwth round
+      // 1, "We don't need to know how much three times twenty nine is."
+      <>
+        Or pay {OFFER.sale} once for the whole three-month course, for
+        yourself or as a gift, if you buy between {OFFER.opensOn} and{" "}
+        {OFFER.endsOn}. The{" "}
+        <Link href="/pricing" className={styles.inlineLink}>
+          pricing page
+        </Link>{" "}
+        has the details.
+      </>,
     ],
   },
 ]
@@ -165,23 +210,32 @@ const COMPARISON_ROWS = [
     dimension: "At the end",
     boost: "A digital badge",
     hub: "Some offer certificates, some do not",
-    gwth: "Real work to show, and a credential others can check",
+    // No credential is switched on at launch (launch readiness, 2026-10-20).
+    gwth: "Real work you made yourself, to show people",
   },
 ] as const
 
-/** Published press quotes about the AI Skills Hub, kept verbatim. */
+/**
+ * What two independent reviewers said about the government's AI training,
+ * as attributed summaries with a link to each article (launch readiness,
+ * 2026-10-20). They used to be printed in quotation marks, but the Sol copy
+ * check found both were paraphrases or joined passages; the LSE sentence was
+ * checked against the article and only "extensive but fragmented" is the
+ * article's own wording, quoting an earlier report. So nothing here is
+ * presented as a direct quotation.
+ */
 const PRESS_QUOTES = [
   {
-    quote:
-      "All 14 benchmarked courses come from US big tech companies… the opposite of positioning the UK as an AI maker, not an AI taker.",
+    summary:
+      "An opinion article argued that all 14 courses the government benchmarked come from US big technology companies, which makes the UK more dependent on them.",
     source: "Computer Weekly",
-    detail: "on dependence on the big technology companies",
+    url: "https://www.computerweekly.com/opinion/The-UK-governments-AI-skills-programme-betrays-UK-workers-and-our-digital-sovereignty",
   },
   {
-    quote:
-      "The UK’s AI training landscape is extensive but fragmented, lacking coordination and progression pathways.",
-    source: "LSE Impact Blog",
-    detail: "February 2026",
+    summary:
+      "Jon Cardoso-Silva and Jeni Brown argued that the UK's AI training is a long list of courses with no clear route through them.",
+    source: "LSE Impact Blog, February 2026",
+    url: "https://blogs.lse.ac.uk/impactofsocialsciences/2026/02/17/the-uks-ai-training-ambition-deserves-better-than-a-course-directory/",
   },
 ] as const
 
@@ -196,8 +250,8 @@ const UK_STATS = [
     id: "worker-confidence",
     label: (
       <>
-        of UK adults say they feel confident using AI at work, in a survey
-        carried out in 2024
+        of UK adults in work say they feel confident using AI at work, in a
+        survey carried out in 2024
       </>
     ),
   },
@@ -218,8 +272,9 @@ const UK_STATS = [
     id: "adoption-depth",
     label: (
       <>
-        AI technologies used, on average, by a UK business that has started
-        using AI. The ONS calls this adoption relatively shallow.
+        AI technologies used, on average, by a UK business with ten or more
+        staff that has started using AI. The ONS calls this adoption
+        relatively shallow.
       </>
     ),
   },
@@ -275,16 +330,27 @@ const UK_WORKED_EXAMPLES =
  * 2026-09-28, evidence in GWTH-launch-plan/completion/marketing-copy-gate/
  * why-gwth-merge-r*): the suit analogy became a direct sentence, the
  * computer-literacy prediction (C08) and the "better choice for most people"
- * claim went, the credential is described as it will work (and as switched
- * on after the beta, matching the home page), and the close says what happens
+ * claim went, the credential is no longer described (launch readiness,
+ * 2026-10-20: none is switched on at launch), and the close says what happens
  * next instead of ending on the old /about promise line. "AI transformation
  * expert" is kept by name because David asked for every optional field to be
  * named.
  */
-export function WhyGwthFde() {
-  const cta = isPrivateContentMode()
-    ? { href: "/waitlist", label: "Join the waitlist" }
-    : { href: "/signup", label: "Sign up" }
+export function WhyGwthFde({
+  selling = false,
+}: {
+  /**
+   * True once GWTH is on sale (`isSelling()`, read by the server page). Only
+   * the buttons change with it (launch readiness, 2026-10-20).
+   */
+  selling?: boolean
+} = {}) {
+  // From 1 December joining the course starts on /pricing, as the header's
+  // "Join the course" does; before it, the waitlist. Never a lab (David: "We
+  // don't want to send them back to the lab to procrastinate further").
+  const cta = selling
+    ? { href: "/pricing", label: "Join the course" }
+    : { href: "/waitlist", label: "Join the waitlist" }
 
   return (
     <div className={styles.shell}>
@@ -454,9 +520,16 @@ export function WhyGwthFde() {
           <div className={styles.quoteGrid}>
             {PRESS_QUOTES.map((item) => (
               <figure key={item.source} className={styles.quotePanel}>
-                <blockquote>&ldquo;{item.quote}&rdquo;</blockquote>
+                <p className={styles.quotePanelSummary}>{item.summary}</p>
                 <figcaption className={styles.quotePanelSource}>
-                  {item.source}, {item.detail}
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.inlineLink}
+                  >
+                    {item.source}
+                  </a>
                 </figcaption>
               </figure>
             ))}
@@ -550,18 +623,22 @@ export function WhyGwthFde() {
           <h2>
             Start building <em>with AI.</em>
           </h2>
+          {/* /for-teams is hidden at launch (a real 404,
+              lib/public-routes.ts), so the line for somebody buying for
+              another person now points at the gift. */}
           <p>
-            If you&apos;re buying
-            places for colleagues, the{" "}
-            <Link href="/for-teams" className={styles.inlineLink}>
-              For teams page
-            </Link>{" "}
-            explains how that works.
+            From {OFFER.opensOn}, you can also give the whole course to someone
+            as a gift.
           </p>
           <div className={styles.closingActions}>
             <Link href={cta.href} className={styles.buttonSolid}>
               {cta.label}
             </Link>
+            {selling && (
+              <Link href="/gift" className={styles.buttonOutline}>
+                Give it as a gift
+              </Link>
+            )}
           </div>
         </div>
       </section>

@@ -116,7 +116,22 @@ describe("HomeFde is individual-first", () => {
     // It sits between `blocks` and `score` because "and it is set here" only
     // means something once the reader knows what the work is, and it must
     // stay ahead of anything addressed to a buyer.
+    //
+    // `score` renders only while the score is switched on (launch readiness,
+    // 2026-10-20), so the launch page has no score section and the order is
+    // checked both ways.
     expect(order).toEqual([
+      "hero",
+      "course",
+      "months",
+      "blocks",
+      "uk",
+      "organisations",
+      "individuals",
+    ])
+    cleanup()
+    const withScore = render(<HomeFde showScore />)
+    expect(sectionOrder(withScore.container)).toEqual([
       "hero",
       "course",
       "months",
@@ -149,11 +164,19 @@ describe("HomeFde is individual-first", () => {
       .filter(Boolean)
     expect(sentences.length).toBeLessThanOrEqual(5)
     expect(signpost.querySelectorAll("p")).toHaveLength(1)
-    // And it routes off the page rather than pitching on it.
+    // And it routes off the page rather than pitching on it. /for-teams is
+    // hidden at launch (a real 404, lib/public-routes.ts, 2026-10-20), so its
+    // link went; from 1 December the gift is the way to buy for one person.
     const links = within(signpost)
       .getAllByRole("link")
       .map((a) => a.getAttribute("href"))
-    expect(links).toEqual(["/for-institutions", "/for-teams"])
+    expect(links).toEqual(["/for-institutions"])
+    cleanup()
+    render(<HomeFde selling />)
+    const selling = within(screen.getByTestId("organisations-signpost"))
+      .getAllByRole("link")
+      .map((a) => a.getAttribute("href"))
+    expect(selling).toEqual(["/gift", "/for-institutions"])
   })
 
   it("does not rebuild the institution feature list on the home page", () => {
@@ -394,51 +417,99 @@ describe("HomeFde offers no walkthrough", () => {
 
 describe("HomeFde self-service promises match the product", () => {
   /**
-   * There is no live checkout: `/api/stripe/checkout` answers 503 unless
-   * BILLING_ENABLED is set, and /signup is invite-only under the fail-closed
-   * content gate. The page may therefore point at the waitlist and say what it
-   * does; it may not tell anybody to buy.
+   * Launch readiness, 2026-10-20. gwth.ai changes at the GO LIVE release
+   * (about 28 November) and sales open on 1 December, so the WORDS are true on
+   * both sides of that date and only the buttons branch on `selling`
+   * (`isSelling()`): the waitlist before, buy or give from 1 December. The
+   * invite-only, beta tester and next-intake wording is gone, because the
+   * course is on open sale from 1 December.
    */
-  it("never claims an instant purchase, and links the waitlist instead", () => {
+  it("never claims an instant purchase, and links the waitlist before sales open", () => {
     const { container } = render(<HomeFde />)
     expect(container.textContent).not.toMatch(
       /buy now|start today|enrol now|checkout|pay now|sign up now/i
     )
     expect(hrefs(container)).toContain("/waitlist")
-    expect(sectionText("course")).toMatch(
-      /Leave a name and an email and we will write to you when the next intake opens/i
+    expect(hrefs(container)).not.toContain("/gift")
+    expect(container.textContent).not.toMatch(
+      /invite-only|beta|testers|intake/i
     )
+  })
+
+  it("from 1 December, buys through /pricing and gives through /gift", () => {
+    const { container } = render(<HomeFde selling />)
+    const course = within(
+      document.querySelector('[data-section="course"]') as HTMLElement
+    )
+    expect(course.getByRole("link", { name: "Buy it for yourself" })).toHaveAttribute(
+      "href",
+      "/pricing"
+    )
+    expect(course.getByRole("link", { name: "Give it as a gift" })).toHaveAttribute(
+      "href",
+      "/gift"
+    )
+    expect(hrefs(container)).not.toContain("/waitlist")
+    // The hero and the close join the course, as the header button does.
+    for (const name of ["hero", "individuals"]) {
+      const section = document.querySelector(`[data-section="${name}"]`) as HTMLElement
+      expect(
+        within(section).getByRole("link", { name: "Join the course" })
+      ).toHaveAttribute("href", "/pricing")
+    }
+  })
+
+  it("states the launch offer in words that are true before and after 1 December", () => {
+    render(<HomeFde />)
+    const offer = screen.getByTestId("home-offer").textContent ?? ""
+    expect(offer).toMatch(
+      /From 1 December 2026 to 6 January 2027, the whole three-month course is £69, for yourself or as a gift/
+    )
+    expect(offer).toMatch(/Or pay £29 a month/)
+    const months = screen.getByTestId("home-offer-months").textContent ?? ""
+    expect(months).toMatch(/Month 1 opens on 1 December 2026/)
+    expect(months).toMatch(/Month 2 opens around 1 January 2027/)
+    expect(months).toMatch(/Month 3 around 1 February 2027/)
+    expect(months).toMatch(/your time is paused/)
   })
 
   it("quotes the canonical prices and the stop-any-time terms, once", () => {
     render(<HomeFde />)
     const course = sectionText("course")
-    expect(course).toMatch(/£29 a month while the teaching runs/)
-    expect(course).toMatch(/£7\.50 a month keeps your access/)
+    expect(course).toMatch(/£29 a month/)
+    // The £7.50 plan is optional (facts sheet).
+    expect(course).toMatch(/£7\.50 a month if you want to/)
     expect(course).toMatch(/cancel at any time/)
   })
 
-  it("gives the learner no call, no demo and no sales conversation", () => {
-    render(<HomeFde />)
-    expect(sectionText("course")).toMatch(
-      /No call, no demo, no sales conversation/
-    )
+  // "No call, no demo, no sales conversation" went on 2026-10-20 (Sol copy
+  // check: it interrupted the paragraph about when the months open). What it
+  // guarded still holds: the learner is offered no call or demo to book.
+  it("gives the learner no call, no demo and no sales conversation to book", () => {
+    const { container } = render(<HomeFde selling />)
+    expect(container.textContent).not.toMatch(/book a (call|demo)|walkthrough/i)
+    expect(hrefs(container)).not.toContain("/contact")
   })
 
-  it("points only at routes that exist", () => {
-    const { container } = render(<HomeFde />)
-    const internal = hrefs(container).filter((h) => h.startsWith("/"))
+  it("points only at routes that exist, and at no page hidden at launch", () => {
+    // /for-teams is hidden at launch (lib/public-routes.ts, 2026-10-20).
     const known = new Set([
       "/waitlist",
       "/pricing",
       "/lessons",
       "/labs",
+      "/gift",
       "/for-institutions",
-      "/for-teams",
       "/why-gwth",
     ])
-    for (const href of internal) {
-      expect(known.has(href), `unexpected internal href ${href}`).toBe(true)
+    for (const selling of [false, true]) {
+      cleanup()
+      const { container } = render(<HomeFde selling={selling} />)
+      const internal = hrefs(container).filter((h) => h.startsWith("/"))
+      for (const href of internal) {
+        expect(known.has(href), `unexpected internal href ${href}`).toBe(true)
+      }
+      expect(internal).not.toContain("/for-teams")
     }
   })
 
@@ -516,17 +587,24 @@ describe("HomeFde standfirst", () => {
    * where you start, and the paragraph now ENDS on where you get to. The
    * Month 3 example is the authored capstone, m3_l16 to m3_l18.
    */
+  /**
+   * Launch readiness, 2026-10-20: the paragraph was nine sentences and filled
+   * a phone's first screen, so it is three. The Month 1 examples (CV,
+   * spreadsheet) live in the Month 1 card, and the RAG system is described in
+   * plain words in the Month 2 card (AskMyCo). What David asked for here, the
+   * destination, stays as the last sentence.
+   */
   it("ends on how far a beginner gets, not on where they start", () => {
     const text = standfirst()
-    expect(text).toMatch(/CV/)
-    expect(text).toMatch(/spreadsheet/)
-    expect(text).toMatch(/retrieval system called RAG/i)
+    const sentences = text.split(/(?<=\.)\s+/).filter(Boolean)
+    expect(sentences.length).toBeLessThanOrEqual(3)
+    expect(text).toMatch(/^GWTH is a practical AI course for work and everyday life in the UK\./)
     expect(text).toMatch(/your own AI consultant/i)
-    const last = text.split(/(?<=\.)\s+/).filter(Boolean).pop() ?? ""
+    const last = sentences.pop() ?? ""
     expect(text).toMatch(/By Month 3, you build your own AI consultant/)
-    expect(text).toMatch(/interviews people across an organisation by voice/)
-    expect(text).toMatch(/uses their answers to score the organisation/)
-    expect(last).toMatch(/report and a plan for what to change first/)
+    expect(text).toMatch(/interviews people across an organisation/)
+    expect(last).toMatch(/a plan for what to change first/)
+    expect(text).not.toMatch(/RAG/)
     // m1_l17 produces a decision note holding a chart, not a dashboard, so the
     // page no longer promises one. GPT-5.6 Sol caught this independently.
     expect(text).not.toMatch(/dashboard/)
@@ -617,8 +695,11 @@ describe("HomeFde: the six building blocks carry a month by month progression", 
     expect(text).toContain("six building blocks")
     // The bare noun survives only inside "building blocks" and nowhere else.
     expect(text.replace(/building blocks/g, "")).not.toMatch(/\bblocks\b/i)
+    // The "01 · Building block" card label went on 2026-10-20 (launch
+    // readiness: a numbered filler label under a heading that already says
+    // "Six building blocks"). The full phrase stays in the heading and lead.
     for (const card of container.querySelectorAll('[data-testid="block-card"]')) {
-      expect(card.textContent).toMatch(/· Building block/)
+      expect(card.textContent).not.toMatch(/· Building block|^0\d/)
     }
   })
 
@@ -706,8 +787,21 @@ describe("HomeFde: the six building blocks carry a month by month progression", 
  * date"*.
  */
 describe("HomeFde score section", () => {
+  /**
+   * Launch readiness, 2026-10-20: the section renders only while the score is
+   * switched on (`showScore`, from ENABLE_GWTH_SCORE, which is off unless an
+   * environment sets it). Both reviewers read it as a preview of a feature a
+   * 1 December buyer does not get. It is kept, not deleted, because David
+   * asked for it; these tests render it switched on.
+   */
+  it("is not on the page while the score is switched off", () => {
+    const { container } = render(<HomeFde showScore={false} />)
+    expect(container.querySelector('[data-section="score"]')).toBeNull()
+    expect(container.textContent).not.toMatch(/GWTH score|beta/i)
+  })
+
   it("gives the three states David named, once each", () => {
-    render(<HomeFde />)
+    render(<HomeFde showScore />)
     const cards = screen.getAllByTestId("score-card")
     expect(cards).toHaveLength(3)
     expect(cards.map((c) => c.getAttribute("data-state"))).toEqual([
@@ -733,7 +827,7 @@ describe("HomeFde score section", () => {
    * accessible name.
    */
   it("tells the three trajectories apart without using colour", () => {
-    render(<HomeFde />)
+    render(<HomeFde showScore />)
     const charts = screen.getAllByTestId("score-chart")
     expect(charts).toHaveLength(3)
     for (const chart of charts) {
@@ -765,7 +859,7 @@ describe("HomeFde score section", () => {
       expect(state.value).toBeLessThan(100)
       expect(state.history[state.history.length - 1]).toBe(state.value)
     }
-    render(<HomeFde />)
+    render(<HomeFde showScore />)
     expect(sectionText("score")).not.toMatch(/\b1[0-9]{2}\b/)
   })
 
@@ -787,14 +881,12 @@ describe("HomeFde score section", () => {
    * than a footnote, that this part is still being built.
    */
   it("does not claim a mechanic the product has not implemented", () => {
-    render(<HomeFde />)
+    render(<HomeFde showScore />)
     const honesty = screen.getByTestId("score-honesty").textContent ?? ""
     expect(honesty).toMatch(/still building/i)
-    // The qualification reaches the reader in the FIRST paragraph, not the
-    // third: Sol read the section as claiming a live feature until then.
-    expect(screen.getByTestId("score-lead").textContent).toMatch(
-      /no score is switched on while the course is in beta/i
-    )
+    // The beta wording went with the beta (launch readiness, 2026-10-20):
+    // the section only shows once the score is switched on.
+    expect(screen.getByTestId("score-lead").textContent).not.toMatch(/beta/i)
     const text = sectionText("score")
     expect(text).toMatch(/examples rather than real learners/i)
     // Ledger C35: four metrics that do not exist. Ledger C36: "credential".
@@ -813,7 +905,7 @@ describe("HomeFde score section", () => {
    * "Add to LinkedIn" control in the product is disabled and marked SOON.
    */
   it("claims no rarity, no employer belief and no social network", () => {
-    const { container } = render(<HomeFde />)
+    const { container } = render(<HomeFde showScore />)
     const text = container.textContent ?? ""
     expect(text).not.toMatch(/top \d+(\.\d+)?%/i)
     expect(text).not.toMatch(/percentile|rare|rarest/i)
@@ -826,7 +918,7 @@ describe("HomeFde score section", () => {
   /** The score is about the number; the close is about the files. Neither
    *  borrows the other's line, or the page repeats itself at the end. */
   it("does not repeat the closing section's promise", () => {
-    render(<HomeFde />)
+    render(<HomeFde showScore />)
     expect(sectionText("score")).not.toMatch(/work you can show/i)
     expect(sectionText("individuals")).not.toMatch(/GWTH score/i)
   })

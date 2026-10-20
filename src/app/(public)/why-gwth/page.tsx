@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { WhyGwthFde } from "@/components/marketing/why-gwth-fde/why-gwth-fde"
+import { isSelling } from "@/lib/launch"
 
 const TITLE = "Why GWTH"
 
@@ -38,7 +39,9 @@ export default function WhyGwthPage() {
           }),
         }}
       />
-      <WhyGwthFde />
+      {/* Read at request time (the (public) layout is force-dynamic), so
+          the buttons switch to buying on 1 December by themselves. */}
+      <WhyGwthFde selling={isSelling()} />
     </>
   )
 }

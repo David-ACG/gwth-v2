@@ -6,7 +6,7 @@
   "status": "live",
   "category": "Automation",
   "testedOn": "2026-07-26",
-  "brief": "You manage a team of twelve at a housing association. Every Friday you open the timesheet spreadsheet, work out who has not filled theirs in, and email each of them a reminder. It takes half an hour and you dread it. You have never written a line of code, and nobody at work is going to help you. Two AI tools are asked to automate it. One gives you something you could finish this afternoon. The other gives you something that will still be working next year. You decide which you would actually attempt.",
+  "brief": "You manage a team of twelve at a housing association. Every Friday you open the timesheet spreadsheet, work out who has not filled theirs in, and email each of them a reminder. It takes half an hour and you dread it. You have never written a line of code, and nobody at work is going to help you. Two AI tools are asked to automate it. One gives you something short you could finish this afternoon. The other gives you something longer that handles more situations. You decide which you would actually attempt.",
   "summary": "A Friday chore that eats half an hour every week. Both tools are asked to automate it for somebody who has never written a line of code, and you decide which set of instructions you would actually attempt.",
   "preview": {
     "taskCue": "Weekly admin, automated",
@@ -40,7 +40,7 @@
     {
       "name": "ChatGPT",
       "modelId": "gpt-5.6-sol",
-      "modelLabel": "OpenAI GPT-5.6",
+      "modelLabel": "OpenAI GPT-5.6 Sol",
       "howRun": "Generated via the Codex CLI 0.144.1 on 2026-07-26, set to its most careful answer mode, which OpenAI calls high reasoning effort. It searched Google's own Apps Script documentation before answering, which Claude did not. That difference is worth holding in mind when you read the two."
     }
   ],
@@ -69,8 +69,8 @@
       "goodLooksLike": "The lines you edit are marked, and everything else is explicitly hands off."
     },
     {
-      "criterion": "Does it warn you about the scary Google permission screen?",
-      "goodLooksLike": "It tells you the warning is coming and what it means, so you do not stop there."
+      "criterion": "Does it prepare you for Google's permission screens?",
+      "goodLooksLike": "It tells you a warning may appear, what it means, and what to check before you allow access."
     },
     {
       "criterion": "Does it deal with real life, like annual leave and people who log zero?",
@@ -78,9 +78,9 @@
     }
   ],
   "verdict": {
-    "winner": "Close. ChatGPT if you want it to keep working, Claude if you want it working today",
-    "callText": "These two answers are so different that the useful question is not which is better, it is which one you would actually get to the end of. ChatGPT built the thing an IT department would build. It asks which of two sheet layouts you have and handles both. It gives you a preview that sends no email at all, then a test that emails only you, then the live run. It remembers who it has already chased so nobody gets two reminders. It writes an audit tab, emails you a summary, supports a pause date for annual leave, and links to Google's own documentation for the claims it makes. It is about six hundred lines of code and nine numbered steps. Claude built the thing you could finish before the school run. One short script, seven settings at the top, and a test mode that emails only you until you turn it off. It reaches Apps Script through Extensions on the sheet itself, so you never have to find your spreadsheet ID. It is honest about its own limits: it tells you it does not handle a sheet with one column per week, and invites you to say so and get an adjusted version. Claude has one advantage that matters more than its size. It warns you about the Google screen that says the app is not verified, tells you to click Advanced and continue anyway, and explains that unsafe means unreviewed rather than dangerous. That screen is where most people give up. ChatGPT walks you through granting permission and never mentions it. Both are right about the timing, which is a nice detail. Claude says 4pm means some time between 4pm and 5pm, which is true of the trigger it tells you to set up by hand. ChatGPT says roughly a quarter to four until quarter past, which is true of the tighter trigger its code creates. If your sheet is simple and you want this done today, start with Claude's, and go back and ask for the extras once it works. If twelve people are going to get an automatic email from you every Friday for the next two years, ChatGPT's is the one you want running, as long as you do not lose your nerve at the permission screen.",
-    "freshnessNote": "Tested on 2026-07-26 with Claude Opus 5 and OpenAI GPT-5.6. Models change often, and so does Google's interface, so both the verdict and the exact menu names are only reliable for this date. The archived version of this lab shows how the two tools handled the same request at this point in time."
+    "winner": "Close. ChatGPT for a careful set-up, Claude for a quick one",
+    "callText": "These two answers are so different that the useful question is not which is better, it is which one you would actually get to the end of.\n\nChatGPT built the thing an IT department would build. It asks which of two sheet layouts you have and handles both. It gives you a preview that sends no email at all, then a test that sends the reminder only to you, then the live run. It remembers who it has already chased so nobody gets two reminders. It writes an audit tab, emails you a summary, supports a pause date for annual leave, and links to Google's own documentation for the claims it makes. It is about six hundred lines of code and nine numbered steps.\n\nClaude built the thing you could finish this afternoon. One short script, seven settings at the top, and a test mode that emails only you until you turn it off. Its step 9 says the test email shows what people would have been sent, but the code sends you only their names and email addresses, so you see who would be chased but not the reminder itself. It reaches Apps Script through Extensions on the sheet itself, so you never have to find your spreadsheet ID. It is honest about its own limits: it tells you it does not handle a sheet with one column per week, and invites you to say so and get an adjusted version.\n\nOnly Claude warns you about the Google screen that says the app is not verified, which helps, because that screen can be alarming. Be careful with its advice, though. It tells you to click Advanced and carry on, and says that because you pasted the script, you know what it does. Pasting code you cannot read does not tell you what it does. Before you allow access, read the list of permissions and check it matches the job: working with your spreadsheets and sending email as you. If it asks for anything else, such as reading your Gmail or the other files in your Drive, stop and ask someone who can read the code. Depending on your Google account and your organisation's settings, you may not see this warning at all. ChatGPT tells you to read the permissions and explains that its email service can send but not read your Gmail, but it never mentions the warning.\n\nBoth are right about the timing, which is a nice detail. Claude says 4pm means some time between 4pm and 5pm, which is true of the trigger it tells you to set up by hand. ChatGPT says roughly a quarter to four until quarter past, which is true of the tighter trigger its code creates.\n\nIf your sheet is simple and you want this done today, start with Claude's, and go back and ask for the extras once it works. If twelve people are going to get an automatic email from you every Friday, ChatGPT's is the more careful set-up, with a real test of the reminder before anyone else receives one.",
+    "freshnessNote": "Tested on 26 July 2026 with Claude Opus 5 and OpenAI GPT-5.6 Sol. Models change often, and so does Google's interface, so both the verdict and the exact menu names are only reliable for this date."
   },
   "tryItYourself": [
     "Pick the job you do every week that you most resent. Chasing something, copying something, checking something.",

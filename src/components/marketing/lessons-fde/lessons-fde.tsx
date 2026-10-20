@@ -1,30 +1,43 @@
 import Link from "next/link"
-import Image from "next/image"
 import { MONTH_CONFIGS, TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 import styles from "./lessons-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 
 /**
- * Colour-block card headers keyed by course month, mirroring the
- * difficulty colours on the labs page: teal for Month 1 (beginner),
- * moss for Month 2 (intermediate), rust for Month 3 (advanced).
+ * The core-lesson count for one month, read from config. Never type a count
+ * into this page, and never print an optional count (launch readiness brief,
+ * 2026-10-20; a-20260914-201426-ae7f0e).
  */
-const MONTH_FLAVOURS: Record<number, string> = {
-  1: styles.flvTeal ?? "",
-  2: styles.flvMoss ?? "",
-  3: styles.flvRust ?? "",
+function coreLessons(month: number): number {
+  return MONTH_CONFIGS.find((m) => m.month === month)?.mandatoryLessons ?? 0
 }
 
-/** How-the-course-works entries for the numbered journal list. */
+/**
+ * How-the-course-works entries. Plain rows with a title and a sentence: the
+ * numbered "01 Format" labels beside them were filler and are gone
+ * (paper-first-banned-patterns; launch readiness review, 2026-10-20).
+ */
 const FEATURES = [
   {
-    label: "Format",
-    title: "Video walkthroughs",
+    // The lesson films are short intros, written as tasters, not step-by-step
+    // walkthroughs (gwth-public-writing, "Lesson intro videos are a taster").
+    // The old line promised "a video showing you exactly what to do, step by
+    // step", which no lesson contains (launch readiness review, 2026-10-20).
+    title: "A short film to start each lesson",
     description:
-      "Every lesson includes a video showing you exactly what to do, step by step.",
+      "Every lesson opens with a short film about what you will do. The written lesson then takes you through it, one step at a time.",
   },
   {
-    label: "Volume",
+    // The "Why one hour a day?" essay and its picture went on 2026-10-20: the
+    // picture showed Bill Gates, Warren Buffett, Elon Musk and Oprah Winfrey as
+    // if they endorsed GWTH, and the millionaire figures beside it had no
+    // source (launch readiness review, blocker). What is left is the one plain
+    // fact about why a lesson is about an hour.
+    title: "About an hour a lesson",
+    description:
+      "Each lesson takes about an hour, so five lessons fit into a working week and you can use each new skill before you move on to the next.",
+  },
+  {
     // No optional TOTAL is printed anywhere on this page any more, for the
     // reason /for-teams already refuses to print one (a-20260914-201426-ae7f0e):
     // config says 30 optional, the canonical syllabus register says 44 over the
@@ -37,20 +50,24 @@ const FEATURES = [
     // is not; this names the thing it is. The projects count that travelled
     // with it in the original is deliberately NOT recovered (ledger C30: no
     // register agrees on it).
+    // The recovered C02 line was three fragments with two technical terms in
+    // them ("transformer architecture", "large language models"); the latest
+    // Sol writing check asked for the same idea in a plain sentence
+    // (2026-10-20).
     description:
-      "Not quizzes about transformer architecture. Not slide decks about large language models. Real things you build, use and show to people.",
+      "The lessons are not quizzes about how AI models are made. You make real things that you build, use and show to people.",
   },
   {
-    label: "Proof",
     title: "Progress you can see",
     description:
       "You can see which lessons you have finished, which projects you have done, and how you did on the questions at the end of each lesson.",
   },
   {
-    label: "Approach",
-    title: "Vendor-neutral",
+    // "We cover every major AI platform" was a claim no syllabus row backs
+    // (launch readiness review, 2026-10-20).
+    title: "Not tied to one AI company",
     description:
-      "Learn principles, not products. We cover every major AI platform so you can pick the right tool for the job.",
+      "The lessons teach skills that work across AI tools, not tricks for one product, so you can pick the right tool for each job.",
   },
 ]
 
@@ -66,13 +83,11 @@ const FEATURES = [
  *
  * ## What may be named here, and what may not. Read before editing the copy.
  *
- * The structure is safe: THREE independent registers agree that Months 2 and 3
- * each run twenty core lessons and then a set of optional ones. `MONTH_CONFIGS`
- * says 20 mandatory for each; the canonical syllabus register
- * (`/home/david/gwth-dashboard/gwth_pipeline.db`, modules month2 and month3)
- * marks exactly the first twenty of each month mandatory; and the authored
- * lessons on disk run `m2_l01..l20` and `m3_l01..l20` before the optional
- * remainder.
+ * The structure is safe: every month has core lessons and optional ones. The
+ * per-month core counts are read from `MONTH_CONFIGS`, which follows the
+ * syllabus database (re-counted 2026-10-20: 22, 20 and 21), so this page never
+ * types a count of its own. The "BY PROFESSION" style small-capitals kickers
+ * on these cards went on the same day (paper-first-components).
  *
  * The SUBJECTS named below are authored lessons, not titles from a plan:
  * `m2_l35` UK legal, `m2_l36` UK finance, `m2_l34` UK healthcare, `m3_l23`
@@ -84,8 +99,11 @@ const FEATURES = [
  * ISA (UK) 700, and `m2_l35` teaches UK legal practice against the SRA code and
  * the Ayinde judgment.
  *
- * **HR is deliberately absent.** David's example was CIPD wanting HR lessons,
- * and there is no HR lesson: the only one in the whole register is
+ * **HR is deliberately absent.** David's example was CIPD wanting HR lessons.
+ * On 2026-10-20 optional HR, marketing and sales lessons were added to the
+ * syllabus, but the launch readiness brief says to leave the test that pins
+ * this, so this page still does not name them. When this note was first
+ * written there was no HR lesson: the only one in the whole register is
  * "AI for HR and Recruitment" in the retired `old_backlog` module. Writing HR
  * into this list would be inventing a lesson. The honest answer to his example
  * is the exclusive-lesson mechanic on /for-institutions, which is where a body
@@ -96,17 +114,14 @@ const FEATURES = [
  */
 const PATHS = [
   {
-    kicker: "By profession",
     title: "Go deeper in your own field",
     body: "These lessons take the same skills into the rules your own work already has to follow. The syllabus covers UK legal practice, finance, healthcare, manufacturing and supply chain, buying AI in the public sector, and professional services for consulting, legal and accountancy firms. A lesson written for solicitors works to what the regulator actually requires, and one written for accountants works to the codes their institute sets, rather than a general warning to be careful.",
   },
   {
-    kicker: "By depth",
     title: "Go further into building",
     body: "If building is the part you want, the optional lessons carry on where the core stops. There is retrieval that answers from your own documents and shows where each answer came from, testing and evaluating what you have made, security, running models on your own machine instead of sending data out, and several AI assistants working together on one job.",
   },
   {
-    kicker: "By role",
     title: "Learn to lead the change",
     body: "Month 3 has optional lessons for the person who ends up responsible for AI at work: what a board needs to be told and how often, how AI is bought and its suppliers checked in the public sector, how an AI consulting practice is run, and what an organisation owes its people when the work itself changes.",
   },
@@ -156,12 +171,21 @@ const SCORE_INPUTS = [
   },
 ] as const
 
+/** Props for {@link LessonsFde}. */
+interface LessonsFdeProps {
+  /**
+   * True once GWTH is on sale (`isSelling()` in `lib/launch.ts`, read by the
+   * server page). Only the buttons branch on it: the page copy is written to
+   * be true on both sides of 1 December (launch readiness brief, rule 2).
+   */
+  selling?: boolean
+}
+
 /**
  * The course page, in the PAPER-FIRST register: a two-column quiet masthead with
- * a Bitter headline, rounded month cards with a quiet header strip (the
- * teal/moss/rust rotation is retired), a numbered how-it-works list, the
- * 5-Hour Rule essay and a closing band. The shared tokens give light/dark
- * parity.
+ * a Bitter headline, rounded month cards on the card surface (no coloured card
+ * tops; the quiet header strip went on 2026-10-20), a how-it-works list, and a
+ * closing band. The shared tokens give light/dark parity.
  *
  * ## Copy sources (bead gwth-launch-88z.32.26, 2026-09-14)
  *
@@ -177,13 +201,23 @@ const SCORE_INPUTS = [
  *   `components/marketing/data.ts`
  * - C04 the closing line, from `docs/marketing/landing-page-hero-copy.md`
  *
- * No lesson or project COUNT was recovered. The archive says 94 projects split
- * 24/35/35; this config computes 66 mandatory and 30 optional, /about prints
- * 64 and 30, and /why-gwth prints 94. Until one register owns the split, the
- * only numbers on this page are the two read from config. Full reasoning and
- * every rejected line: `GWTH-launch-plan/completion/evergreen-copy-recovery/`.
+ * ## Launch readiness (2026-10-20, bead gwth-launch-ajqs.2)
+ *
+ * Every count comes from `MONTH_CONFIGS`; no optional count is printed. The
+ * beta wording is gone, replaced by what is true from the GO LIVE release:
+ * Month 1 is complete, Month 2 opens around 1 January 2027 and Month 3 around
+ * 1 February 2027, and a student who reaches a month before it opens has their
+ * time paused. Both "Join waitlist" buttons now follow `selling`.
  */
-export function LessonsFde() {
+export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
+  // The one self-service step, the same rule as the header button
+  // (`primaryCta()` in public-nav): the prices once sales are open, the
+  // waitlist before.
+  const primary = selling
+    ? { href: "/pricing", label: "Join the course" }
+    : { href: "/waitlist", label: "Join the waitlist" }
+  const labsOpen = canPromoteLabs()
+
   return (
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
@@ -198,23 +232,27 @@ export function LessonsFde() {
             example.
           </p>
           <div className={styles.mastheadActions}>
-            <Link href="/waitlist" className={styles.buttonSolid}>
-              Join waitlist
+            <Link
+              href={primary.href}
+              className={styles.buttonSolid}
+              data-testid="lessons-primary-cta"
+            >
+              {primary.label}
             </Link>
-            {canPromoteLabs() ? (
+            {labsOpen ? (
               <Link href="/labs" className={styles.buttonOutline}>
                 Try a free lab
               </Link>
-            ) : (
+            ) : selling ? null : (
               <Link href="/pricing" className={styles.buttonOutline}>
                 See pricing
               </Link>
             )}
           </div>
           <div className={styles.mastheadFoot}>
-            <p>3 months · 5 hours a week, around the day job</p>
-            <p>Video in every lesson</p>
-            <p>One Capstone project per month</p>
+            <p>3 months, 5 hours a week, around the day job</p>
+            <p>A short film in every lesson</p>
+            <p>One main project each month</p>
             <p>Plain progress tracking</p>
           </div>
         </div>
@@ -237,22 +275,20 @@ export function LessonsFde() {
                 className={styles.monthCard}
                 data-testid="month-card"
               >
-                <div
-                  className={`${styles.cardTop} ${MONTH_FLAVOURS[month.month]}`}
-                >
-                  <span>Month {String(month.month).padStart(2, "0")}</span>
-                  <span>
-                    {month.optionalLessons > 0
-                      ? `${month.mandatoryLessons} core, plus optional`
-                      : `${month.mandatoryLessons} core lessons`}
-                  </span>
-                </div>
+                {/* The month and its count are a metadata line on the card
+                    surface, separated by a hairline. The tinted strip that
+                    carried them was a coloured card top
+                    (paper-first-components). */}
                 <div className={styles.monthBody}>
+                  <p className={styles.monthMeta}>
+                    Month {month.month}, {month.mandatoryLessons} core lessons
+                    {month.optionalLessons > 0 ? ", plus optional lessons" : ""}
+                  </p>
                   <h3>{month.title}</h3>
                   <p className={styles.monthSub}>{month.subtitle}</p>
-                  <p>{month.description}</p>
+                  <p className={styles.monthDesc}>{month.description}</p>
                   <div className={styles.capstone}>
-                    <p>Capstone project</p>
+                    <p>The month&apos;s main project</p>
                     <strong>{month.capstoneName}</strong>
                     <em>{month.capstoneDescription}</em>
                   </div>
@@ -260,6 +296,14 @@ export function LessonsFde() {
               </article>
             ))}
           </div>
+          {/* When each month opens, as it is true from the GO LIVE release
+              (facts sheet, launch readiness 2026-10-20). Written so it stays
+              true on both sides of 1 December. */}
+          <p className={styles.optionalNote} data-testid="months-availability">
+            Month 1 is complete. Month 2 opens around 1 January 2027 and Month
+            3 around 1 February 2027. If you reach a month before it opens,
+            your time on the course is paused until it does.
+          </p>
         </div>
       </section>
 
@@ -267,8 +311,8 @@ export function LessonsFde() {
         The optional lessons (David, 2026-09-17, a-20260917-145147-bfd191). It
         sits directly under the three month cards because it is the thing those
         cards leave unanswered: they show the course getting harder, and this
-        shows that after Month 1 it also opens out. What may be named here is on
-        the PATHS comment above.
+        shows that it also opens out. What may be named here is on the PATHS
+        comment above.
       */}
       <section
         className={`${styles.section} ${styles.sectionAlt}`}
@@ -280,13 +324,18 @@ export function LessonsFde() {
               Everyone does the core. <em>The rest is where you go deeper.</em>
             </h2>
           </div>
+          {/* "Month 1 is the same for everybody" and "Months 2 and 3 each open
+              with twenty core lessons" were both wrong once the syllabus was
+              re-counted (Month 1 has optional lessons; Month 3 has 21 core).
+              The counts are now read from config. */}
           <p className={styles.sectionLead} data-testid="optional-lead">
-            Month 1 is the same for everybody, because everybody needs the same
-            start. Months 2 and 3 each open with twenty core lessons, and the
-            lessons after those are optional. That is where the course stops
-            being the same for everybody. The optional lessons run in three
-            directions: using AI in your own profession, building more advanced
-            AI tools, and leading AI work in an organisation.
+            Every month has core lessons that everybody does:{" "}
+            {coreLessons(1)} in Month 1, {coreLessons(2)} in Month 2 and{" "}
+            {coreLessons(3)} in Month 3. Each month also has optional lessons,
+            and that is where the course stops being the same for everybody.
+            The optional lessons run in three directions: using AI in your own
+            profession, building more advanced AI tools, and leading AI work in
+            an organisation.
           </p>
           <div className={styles.pathsRow}>
             {PATHS.map((path) => (
@@ -295,25 +344,23 @@ export function LessonsFde() {
                 key={path.title}
                 data-testid="path-card"
               >
-                <p className={styles.pathKicker}>{path.kicker}</p>
                 <h3>{path.title}</h3>
                 <p>{path.body}</p>
               </article>
             ))}
           </div>
-          {/* The boundary, in body copy rather than a footnote. Month 1 is what
-              the product database actually holds today; Months 2 and 3 are
-              authored on disk and being prepared. And there is no picker in the
-              course yet: the importer marks every lesson core, so a learner
-              cannot select an optional lesson however the syllabus is written.
-              Saying so is the only honest way to publish this section. */}
+          {/* The boundary, in body copy rather than a footnote. There is no
+              picker in the course: the importer marks every lesson core, so a
+              learner cannot select an optional lesson however the syllabus is
+              written. Said in the present tense, with no promise of when that
+              changes (launch readiness brief, rule 3). */}
           <p className={styles.optionalNote} data-testid="optional-beta-note">
-            Month 1 is what the beta group is working through now, and Months 2
-            and 3 are written and being prepared for release. While the course
-            is in beta you are given the whole set rather than picking from it.
-            Choosing your own path through the optional lessons is the part we
-            are building next.
+            For now, every student is given the whole set rather than picking
+            from it.
           </p>
+          {/* /for-teams is closed to visitors from the launch (it returns a
+              404), so its link and the smaller-team sentence went with it.
+              /for-institutions is unlisted but its link works. */}
           <div className={styles.optionalBuyers} data-testid="optional-buyers">
             <h3>Buying for an organisation?</h3>
             <p>
@@ -323,16 +370,11 @@ export function LessonsFde() {
               edition of its own instead: it chooses which lessons make up the
               core its members must complete, which optional lessons are open
               to them, and it can have lessons written on subjects the standard
-              course does not cover yet. A smaller team takes the standard
-              core, and its admin recommends the optional lessons that suit
-              each role.
+              course does not cover yet.
             </p>
             <div className={styles.mastheadActions}>
               <Link href="/for-institutions" className={styles.buttonOutline}>
                 For institutions and large companies
-              </Link>
-              <Link href="/for-teams" className={styles.buttonOutline}>
-                For teams of five or more
               </Link>
             </div>
           </div>
@@ -344,23 +386,17 @@ export function LessonsFde() {
           <div className={styles.featuresGrid}>
             <div>
               <h2 className={styles.sectionTitle}>
-                Built for <em>practical proof.</em>
+                How the course <em>works.</em>
               </h2>
             </div>
-            <ol className={styles.featureList}>
-              {FEATURES.map((feature, i) => (
+            <ul className={styles.featureList}>
+              {FEATURES.map((feature) => (
                 <li key={feature.title} className={styles.featureItem}>
-                  <div className={styles.featureIndex}>
-                    <p>{String(i + 1).padStart(2, "0")}</p>
-                    <p>{feature.label}</p>
-                  </div>
-                  <div>
-                    <h3>{feature.title}</h3>
-                    <p>{feature.description}</p>
-                  </div>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
                 </li>
               ))}
-            </ol>
+            </ul>
           </div>
           {/* The UK thread on this page (bead gwth-launch-88z.32.25). Every
               code named here is one an authored lesson actually works to, and
@@ -370,14 +406,14 @@ export function LessonsFde() {
               sign-off rule in ISA (UK) 700. Do not add a profession here that
               has no written lesson behind it. */}
           <p className={styles.sectionLead} data-testid="lessons-uk-note">
-            The rules in the lessons are the ones that bind you. The lesson on
-            legal practice works to the Solicitors Regulation Authority code
-            and to the Ayinde judgment on citing cases a model invented. The
-            lesson on accountancy works to the ICAEW, ACCA and CIMA codes and
-            to the audit sign-off rule in ISA (UK) 700. Where a lesson handles
-            personal data it works to UK data protection law. You are never
-            asked to translate an American example into your own practice and
-            hope the answer survives the trip.
+            The specialist lessons use the UK rules and professional standards
+            that apply to your work. The lesson on legal practice works to the
+            Solicitors Regulation Authority code and to the Ayinde judgment, a
+            court ruling about citing cases that an AI tool invented. The
+            lesson on accountancy works to the codes of the three main UK
+            accountancy bodies (ICAEW, ACCA and CIMA) and to the rule for
+            signing off an audit, ISA (UK) 700. Lessons that handle personal
+            information work to UK data protection law.
           </p>
         </div>
       </section>
@@ -386,9 +422,10 @@ export function LessonsFde() {
         The score and the record (David, 2026-09-14, a-20260914-204708-9f6b63).
         It follows how-it-works because it is the answer to "and what do I have
         at the end of it", which only lands once the reader knows what a lesson
-        is. The home page carries the three trajectory cards; this page carries
-        the fuller explanation, so the two do not repeat each other. What may be
-        claimed is on the SCORE_INPUTS comment above.
+        is. What may be claimed is on the SCORE_INPUTS comment above. The beta
+        wording went on 2026-10-20; the score is still switched on in no
+        environment, so the page says so in the present tense and makes no
+        promise about the part that is not built (the trend over time).
       */}
       <section
         className={`${styles.section} ${styles.sectionAlt}`}
@@ -397,7 +434,7 @@ export function LessonsFde() {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              Your score, and <em>what you can show for it.</em>
+              Your score, and <em>how it is worked out.</em>
             </h2>
           </div>
           <div className={styles.scoreGrid}>
@@ -416,22 +453,15 @@ export function LessonsFde() {
                 its own pass mark is choosing what the number is measured
                 against.
               </p>
-              {/* Future tense throughout, and it says why: nothing has ever
-                  written a credential row, so no learner has a verification
-                  page yet. LinkedIn is a place to put a link, not an
-                  integration. */}
-              <p data-testid="score-record">
-                After the beta, your score will come with a page of its own, at
-                its own web address: the lessons you completed, the project from
-                each, and how you did on the questions. Anyone you send the link
-                to can open it and check it, and you can put that link on a CV
-                or a professional profile such as LinkedIn.
-              </p>
+              {/* The shareable record page (with the LinkedIn mention David
+                  asked for on 2026-09-14) went on 2026-10-20: no credential
+                  row has ever been written and the score is switched on in no
+                  environment, so describing the page was a promise of a
+                  feature that may not exist on 1 December (launch readiness
+                  brief, rule 3; latest Sol writing check). Bring it back the
+                  day the record page is live. */}
               <p data-testid="score-beta-note">
-                No score is switched on while the course is in beta. We are
-                also still building the part that shows which way a score is
-                going, so a lesson you passed before the tools changed can be
-                brought up to date rather than counting for ever.
+                The score is not switched on in the course yet.
               </p>
             </div>
             <div className={styles.scoreAside}>
@@ -449,66 +479,39 @@ export function LessonsFde() {
         </div>
       </section>
 
-      <section className={styles.section} data-section="five-hour-rule">
-        <div className={styles.page}>
-          <div className={styles.essay}>
-            <div className={styles.essayImage}>
-              <Image
-                src="/five-hour-rule.png"
-                alt="The 5-Hour Rule: Bill Gates, Warren Buffett, Elon Musk, and Oprah Winfrey all dedicate at least an hour a day to deliberate learning"
-                width={900}
-                height={450}
-              />
-            </div>
-            <h2>
-              Why <em>one hour a day?</em>
-            </h2>
-            <div className={styles.essayBody}>
-              <p>
-                GWTH.ai is built around the 5-Hour Rule: the principle, coined
-                by Michael Simmons, that no matter how busy successful people
-                are, they always set aside at least an hour a day for
-                deliberate learning. Bill Gates, Warren Buffett, Elon Musk,
-                and Oprah Winfrey all follow this approach. Simmons traces the
-                idea back to Benjamin Franklin, who consistently invested an
-                hour a day in reading, writing, and tracking his goals.
-                Entrepreneur Thomas Corley&apos;s five-year study of 233
-                millionaires confirmed that 88% dedicate at least 30 minutes
-                daily to self-education, not for fun, but to sharpen their
-                edge. The research is clear: sustained daily learning beats
-                occasional cramming every time.
-              </p>
-              <p>
-                GWTH.ai lessons are designed to fit this rhythm. Each one
-                delivers focused, practical AI skills in roughly an hour, five
-                hours across your working week, so you build real capability
-                without disrupting your life. Read, reflect, then apply what
-                you&apos;ve learned through hands-on projects. Spreading five
-                hours of practical lessons across the working week is what lets
-                you learn and apply one skill at a time.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className={styles.closing} data-section="closing">
         <div className={styles.page}>
           <h2>
             Ready to start <em>building?</em>
           </h2>
+          {/* C04 said "Three months from now you will have built things most
+              people assume need a developer". The latest Sol writing check
+              (2026-10-20) blocked "most people assume" as unsupported and the
+              fixed three months as untrue for anyone who starts later or is
+              paused, so the idea is kept in a sentence that is true. */}
           <p>
-            Three months from now you will have built things most people assume
-            need a developer. Join the waitlist and we will write to you when
-            places open.
+            Lesson by lesson, you build useful tools for your work and everyday
+            life.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/waitlist" className={styles.buttonSolid}>
-              Join waitlist
+            <Link
+              href={primary.href}
+              className={styles.buttonSolid}
+              data-testid="lessons-closing-cta"
+            >
+              {primary.label}
             </Link>
-            <Link href="/pricing" className={styles.buttonOutline}>
-              View pricing
-            </Link>
+            {selling ? (
+              labsOpen ? (
+                <Link href="/labs" className={styles.buttonOutline}>
+                  Try a free lab
+                </Link>
+              ) : null
+            ) : (
+              <Link href="/pricing" className={styles.buttonOutline}>
+                See pricing
+              </Link>
+            )}
           </div>
         </div>
       </section>

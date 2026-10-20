@@ -326,28 +326,22 @@
   border-color: var(--v-ink);
 }
 
+/* The card label sits on the card surface with a hairline under it. The
+   quiet-filled header strip went on 2026-10-20 (launch readiness, both
+   reviewers): paper-first-components bans coloured card tops, and a tint
+   there was decoration standing in for a boundary. */
 .cardTop {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.6rem 1.25rem;
+  margin: 0 1.25rem;
+  padding: 0.9rem 0 0.6rem;
+  border-bottom: 1px solid var(--v-line-soft);
   color: var(--v-ink);
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
-}
-
-.flvTeal {
-  background: var(--v-quiet);
-}
-
-.flvMoss {
-  background: var(--v-quiet);
-}
-
-.flvRust {
-  background: var(--v-quiet);
 }
 
 .tierBody {
@@ -432,11 +426,38 @@
   margin-top: 1.4rem;
 }
 
-.tierCta a,
-.tierCta p {
+.tierCta > a,
+.tierCta > button {
   width: 100%;
   justify-content: center;
   text-align: center;
+}
+
+/* What happens after paying, how to cancel, and the Terms link, under every
+   paying button (launch readiness checklist, check 5). Body copy at small
+   size in --v-soft, never muted, so it stays readable. */
+.termsNote {
+  margin-top: 0.85rem;
+  max-width: 40rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+  text-align: left;
+}
+
+.closing .termsNote {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.inlineLink {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.inlineLink:hover {
+  color: var(--v-accent);
 }
 
 .tierDisabled {
@@ -501,7 +522,8 @@
   font-weight: 700;
   color: var(--v-ink);
   text-align: left;
-  background: var(--v-quiet);
+  /* No tinted band behind the header row (launch readiness, 2026-10-20:
+     paper-first, no brand colour in surfaces). The 2px boundary carries it. */
   border-bottom: 2px solid var(--v-line);
   padding: 0.75rem 1rem 0.75rem 0.75rem;
   vertical-align: bottom;
@@ -529,6 +551,63 @@
 .compareTable tbody th:first-child,
 .compareTable td:first-child {
   padding-left: 0;
+}
+
+/* ---------------- Compare, stacked one plan at a time on a phone ---------- */
+
+/* At 390px the four-column table cut off the Member column and hid the Teams
+   column entirely (launch readiness, 2026-10-20). Below 48rem the table is
+   replaced by one block per plan; above it the block is hidden. Exactly one
+   of the two is ever shown, so nothing is read twice. */
+.compareStack {
+  display: none;
+}
+
+@media (max-width: 47.99rem) {
+  .tableWrap {
+    display: none;
+  }
+
+  .compareStack {
+    display: block;
+    margin-top: 1.5rem;
+  }
+
+  .compareStackPlan {
+    border-top: 1px solid var(--v-line);
+    padding: 1.25rem 0 1.4rem;
+  }
+
+  .compareStackPlan h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .compareStackPlan dl {
+    margin: 0;
+  }
+
+  .compareStackEntry {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--v-line-soft);
+  }
+
+  .compareStackEntry dt {
+    font-size: var(--fde-body-sm);
+    font-weight: 600;
+    color: var(--v-ink);
+  }
+
+  .compareStackEntry dd {
+    margin: 0;
+    font-size: var(--fde-body-sm);
+    line-height: 1.5;
+    color: var(--v-soft);
+  }
 }
 
 /* ---------------- Teams split ---------------- */
