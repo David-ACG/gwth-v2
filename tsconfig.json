@@ -159,7 +159,21 @@
     ".next-candidate-3344503/types/**/*.ts",
     ".next-candidate-3344503/dev/types/**/*.ts",
     ".next-candidate-78002/types/**/*.ts",
-    ".next-candidate-78002/dev/types/**/*.ts"
+    ".next-candidate-78002/dev/types/**/*.ts",
+    ".next-candidate-1673286/types/**/*.ts",
+    ".next-candidate-1673286/dev/types/**/*.ts",
+    ".next-gift-e2e/types/**/*.ts",
+    ".next-gift-e2e/dev/types/**/*.ts",
+    ".next-candidate-726186/types/**/*.ts",
+    ".next-candidate-726186/dev/types/**/*.ts",
+    ".next-candidate-760592/types/**/*.ts",
+    ".next-candidate-760592/dev/types/**/*.ts",
+    ".next-candidate-798799/types/**/*.ts",
+    ".next-candidate-798799/dev/types/**/*.ts",
+    ".next-candidate-4143928/types/**/*.ts",
+    ".next-candidate-4143928/dev/types/**/*.ts",
+    ".next-candidate-71864/types/**/*.ts",
+    ".next-candidate-71864/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
