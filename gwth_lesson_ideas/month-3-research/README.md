@@ -25,6 +25,7 @@ Each file is a structured summary of one primary source: key arguments, quotes, 
 | 09 | [AI trust, risk & the right to deploy](09-ai-trust-right-to-deploy.md) | McKinsey State of AI Trust 2026, Agentic AI Governance |
 | 10 | [Six capabilities framework (synthesised)](10-six-capabilities-framework.md) | Rewired + companion articles |
 | 11 | [Podcast transcript — how the best companies use AI](11-podcast-transcript-summary.md) | AI Daily Brief, NLW, Apr 2026 |
+| 14 | [AI watermarks: who can actually check?](14-ai-watermarks-who-can-check.md) | OpenAI textGrain, Google SynthID, Content Credentials, Oct 2026 |
 | 12 | [Rewired book notes — internal corpus](../rewired-book-notes/INDEX.md) | David's own Kindle highlights scaffold |
 
 ## How to use this for lesson design
