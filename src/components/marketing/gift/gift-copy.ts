@@ -175,6 +175,12 @@ export const CARD_COPY = {
   openBy: (date: string) => `Open it by ${date}. Your time starts when you open it.`,
   print: "Print this card",
   notFound: "We can't find that gift code.",
+  // Shown on screen to the buyer, above the card; never printed.
+  thanks: (buyer: string | null) => (buyer ? `Thank you, ${buyer}.` : "Thank you."),
+  sent: (who: string, date: string) => `We emailed your gift to ${who} on ${date}.`,
+  willSend: (who: string, date: string) => `We'll email your gift to ${who} on ${date} at 7am UK time.`,
+  printToo: "You can also print this card and give it to them yourself.",
+  back: "Back to GWTH.ai",
 } as const
 
 /** The pricing-page band (bead gwth-launch-v1uj.5, row 1.5). */
