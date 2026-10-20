@@ -67,7 +67,7 @@ export const GIFT_COPY = {
   answers: [
     {
       title: "When does their time start?",
-      body: "When they open the gift. They must open it within one year of purchase.",
+      body: "When they open the gift with its code on GWTH, not when the email arrives. They must open it within one year of purchase.",
     },
     {
       title: "What if a month isn't ready yet?",
