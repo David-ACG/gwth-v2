@@ -169,12 +169,17 @@ export default function PrivacyPage() {
         in your browser.
       </p>
 
-      <h2>8. Children&apos;s Privacy</h2>
+      {/* Bible audience-by-purpose (David, 2026-10-20). One of the four
+          places the age is stated; change all four together. */}
+      <h2>8. Age and privacy</h2>
       <p>
-        Our services are not directed at children under the age of 13. We
-        do not knowingly collect personal information from children under
-        13. If we become aware that we have collected data from a child
-        under 13, we will delete it promptly.
+        GWTH is for anyone aged 16 or over. We do not knowingly collect
+        personal information from anyone under 16. If we discover that we
+        have, we will delete it promptly. Your data protection rights belong
+        to you, even when someone else holds your account. You can ask us to
+        access or delete your personal information. If someone makes a
+        request on your behalf, we will check that they are authorised to act
+        for you.
       </p>
 
       <h2>9. Third-Party Links</h2>

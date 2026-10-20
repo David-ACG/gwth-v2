@@ -423,6 +423,31 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
         </div>
       </section>
 
+      {/* Bible audience-by-purpose (David, 2026-10-20). One of the four places
+          the age is stated (with Terms, Privacy and the sign-up form); change
+          all four together. Tool age limits are stated, and no alternative
+          tool is promised. */}
+      <section
+        className={`${styles.section} ${styles.sectionAlt}`}
+        data-section="who"
+      >
+        <div className={`${styles.page} ${styles.splitGrid}`}>
+          <div>
+            <h2 id="who-can-take-gwth">Who can take GWTH?</h2>
+          </div>
+          <p data-testid="who-can-take">
+            Anyone aged 16 or over. The course focuses on using AI at work. If
+            you&apos;re 16 or 17, a parent or guardian must hold your GWTH
+            account and agree to the Terms. Your employer can do this if
+            you&apos;re an apprentice or employee. Some tools used in lessons
+            have their own age limits: Claude requires users to be 18 or over,
+            and ChatGPT requires permission from a parent or legal guardian if
+            you&apos;re under 18. An alternative tool may not be available for
+            every lesson.
+          </p>
+        </div>
+      </section>
+
       {/* a-20260914-203753-b9d050. This block used to be headed "Try before
           you join", which leaned on the free labs standing in for the course.
           They do not: the labs compare tools, the lessons teach. What is

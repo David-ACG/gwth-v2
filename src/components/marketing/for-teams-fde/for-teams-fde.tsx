@@ -222,8 +222,10 @@ const FAQS = [
     // ended "for people ready to go deeper", which reads as a filter rather
     // than a promise, and it was the sentence a non-technical buyer would
     // reach for to talk themselves out of it.
+    // Bible audience-by-purpose (David, 2026-10-20): say the range by role,
+    // never by age, and claim no customers we do not have yet.
     answer:
-      "People need a computer, an internet connection and the ability to type. That is the complete list of technical requirements. Month 1 uses plain English and practical AI patterns. Later lessons do introduce AI-assisted coding and stronger building techniques, and they are taught the same way as the first ones: you see it, you attempt it, then the lesson works through it. The subject gets deeper, the hand-holding does not stop.",
+      "Yes, it's designed for people across your workforce, from apprentices to senior leaders. People need a computer, an internet connection and the ability to type. That is the complete list of technical requirements. Month 1 uses plain English and practical AI patterns. Later lessons do introduce AI-assisted coding and stronger building techniques, and they are taught the same way as the first ones: you see it, you attempt it, then the lesson works through it. The subject gets deeper, the hand-holding does not stop.",
   },
   {
     question: "How is this different from training published by an AI company?",

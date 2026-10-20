@@ -247,6 +247,13 @@ export function PostBetaSignupForm({
           >
             {form.formState.isSubmitting ? "Creating account..." : "Create account"}
           </button>
+          {/* Bible audience-by-purpose (David, 2026-10-20). One of the four
+              places the age is stated; change all four together. */}
+          <p className={styles.ageNote} data-testid="signup-age-note">
+            You must be 16 or over. If you&apos;re 16 or 17, a parent or
+            guardian must hold your account and agree to the Terms, or your
+            employer must do so if you&apos;re an apprentice or employee.
+          </p>
         </form>
       </Form>
 

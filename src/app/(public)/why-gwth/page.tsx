@@ -6,7 +6,7 @@ const TITLE = "Why GWTH"
 export const metadata: Metadata = {
   title: TITLE,
   description:
-    "Why UK adults learn AI with GWTH: plain English, independent advice, a course that is always up to date, hands-on projects, optional lessons for your field, and how it compares with the government's AI Skills Boost.",
+    "Why learn AI with GWTH: a UK-first course for work and everyday life, with plain English, independent advice and up-to-date lessons, hands-on projects, optional lessons for your field, and how it compares with the government's AI Skills Boost.",
 }
 
 /**

@@ -11,7 +11,7 @@ brand
 
 ## Users
 
-UK-focused adult learners — spread across the AI-fluency spectrum. The course is built around UK context, examples, currency, and workplace reality, but it should not explicitly block non-UK learners. Other countries can be described as launching soon.
+UK-focused learners aged 16 and over, mostly using AI for work, spread across the AI-fluency spectrum. Describe who GWTH is for by purpose (work and everyday life), never by age: Style Bible item `audience-by-purpose` (David, 2026-10-20). The course is built around UK context, examples, currency, and workplace reality, but it should not explicitly block non-UK learners. Other countries can be described as launching soon.
 
 The primary starting audience is people who mostly use ChatGPT like Google: asking questions, getting answers, and not yet doing much serious research, building, coding, or workflow creation. Other audiences include defensive ("worried AI will take my job"), transitional (made redundant, reskilling), entrepreneurial (small-business owners), advisory (parents thinking about a teenager's future), upgrading (already using ChatGPT but suspecting they're scratching the surface), career (looking for a salary lift backed by proof), and light team-scope (managers whose competitors are moving faster).
 

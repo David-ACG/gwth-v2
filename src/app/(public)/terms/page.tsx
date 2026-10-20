@@ -84,7 +84,13 @@ export default function TermsPage() {
       <h2 id="representations">3. User Representations</h2>
       <p>By using our Services, you represent and warrant that:</p>
       <ul>
-        <li>You are at least 13 years of age.</li>
+        {/* Bible audience-by-purpose (David, 2026-10-20). One of the four
+            places the age is stated; change all four together. */}
+        <li>
+          You are aged 18 or over, or you are aged 16 or 17 and a parent or
+          guardian (or your employer, if you are an apprentice or employee)
+          holds your account and has agreed to these Terms.
+        </li>
         <li>
           The information you provide during registration is accurate,
           complete, and current.

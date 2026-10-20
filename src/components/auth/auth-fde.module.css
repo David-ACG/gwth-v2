@@ -329,6 +329,15 @@
   color: var(--v-muted);
 }
 
+/* ---------------- Age note under Create account (audience-by-purpose) ---------------- */
+
+.ageNote {
+  margin: 0.75rem 0 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
 /* ---------------- Alt prompt (cross-links between surfaces) ---------------- */
 
 .altPrompt {
