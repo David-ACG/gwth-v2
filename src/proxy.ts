@@ -9,8 +9,7 @@ import { isPrivateContentMode } from "@/lib/content-mode"
 import { PROTECTED_PATHS, DEV_REVIEW_PATHS } from "@/lib/protected-routes"
 import { safeNextPath } from "@/lib/safe-next"
 import { isHiddenPublicPath } from "@/lib/public-routes"
-import { isSalesOpen } from "@/lib/billing/passes"
-import { ENABLE_BILLING } from "@/lib/config"
+import { isSelling } from "@/lib/launch"
 
 /**
  * Security headers applied to all responses.
@@ -289,7 +288,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // From the day sales open, nobody waits: old waitlist links go to sign-up.
-  if (pathname === "/waitlist" && ENABLE_BILLING && isSalesOpen(new Date())) {
+  if (pathname === "/waitlist" && isSelling()) {
     const url = request.nextUrl.clone()
     url.pathname = "/signup"
     url.search = ""

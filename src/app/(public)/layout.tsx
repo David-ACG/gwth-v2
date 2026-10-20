@@ -2,8 +2,8 @@ import { PublicNav } from "@/components/layout/public-nav"
 import { Footer } from "@/components/layout/footer"
 import { getCurrentUser, canUserAccessCourse } from "@/lib/auth"
 import { canViewPrivateContent } from "@/lib/content-access"
-import { COURSE_PATH, ENABLE_BILLING } from "@/lib/config"
-import { isSalesOpen } from "@/lib/billing/passes"
+import { COURSE_PATH } from "@/lib/config"
+import { isSelling } from "@/lib/launch"
 import { CommentLayerGate } from "@/components/comments/comment-layer-gate"
 
 /**
@@ -59,7 +59,7 @@ export default async function PublicLayout({
         user={user ? { name: user.name, email: user.email } : null}
         showLabs={showLabs}
         lessonsHref={lessonsHref}
-        selling={ENABLE_BILLING && isSalesOpen(new Date())}
+        selling={isSelling()}
       />
       <main className="flex-1">{children}</main>
       <Footer showLabs={showLabs} lessonsHref={lessonsHref} />
