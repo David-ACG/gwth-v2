@@ -63,7 +63,12 @@ function linkIn(mail: Mail, pattern: RegExp): string {
 async function payOnStripe(page: Page) {
   await page.waitForURL(/checkout\.stripe\.com/, { timeout: 60_000 })
   await page.locator("#email").fill(BUYER)
-  await page.locator("#cardNumber").fill("4242 4242 4242 4242")
+  // Checkout lists payment methods (card, Klarna...) as an accordion: pick Card.
+  const card = page.locator("#cardNumber")
+  if (!(await card.isVisible().catch(() => false))) {
+    await page.getByTestId("card-accordion-item").click({ position: { x: 40, y: 20 } })
+  }
+  await card.fill("4242 4242 4242 4242")
   await page.locator("#cardExpiry").fill("12 / 34")
   await page.locator("#cardCvc").fill("123")
   await page.locator("#billingName").fill("Gift E2E Buyer")
