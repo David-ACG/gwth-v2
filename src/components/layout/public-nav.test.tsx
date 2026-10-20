@@ -68,13 +68,19 @@ describe("PublicNav lessons link", () => {
       view.getAllByRole("link", { name: "Pricing" })[0]?.getAttribute("href")
     ).toBe("/pricing")
     expect(
-      view.getAllByRole("link", { name: "For teams" })[0]?.getAttribute("href")
-    ).toBe("/for-teams")
-    expect(
-      view
-        .getAllByRole("link", { name: "For institutions" })[0]
-        ?.getAttribute("href")
-    ).toBe("/for-institutions")
+      view.getAllByRole("link", { name: "Why GWTH" })[0]?.getAttribute("href")
+    ).toBe("/why-gwth")
+  })
+
+  it("keeps hidden and unlisted pages off the header (launch readiness, 2026-10-20)", () => {
+    // David: "Use your recommendations for all 30 pages (1 Ready, 21 Fix,
+    // 8 Hide)". /for-teams and /news are hidden; /for-institutions is unlisted
+    // (direct link still works). src/lib/public-routes.ts owns both lists.
+    const view = renderNav({ lessonsHref: "/lessons" })
+    const hrefs = view.getAllByRole("link").map((el) => el.getAttribute("href"))
+    for (const gone of ["/for-teams", "/for-institutions", "/news", "/tech-radar"]) {
+      expect(hrefs).not.toContain(gone)
+    }
   })
 
   it("links the merged Why GWTH page and no longer links /about (2026-09-28)", () => {
@@ -106,7 +112,7 @@ describe("PublicNav selected item (M2, N12)", () => {
   })
 
   it("marks the current section, including nested routes, and nothing else", () => {
-    pathname = "/for-institutions/anything"
+    pathname = "/why-gwth/anything"
     const view = renderNav({ lessonsHref: "/lessons" })
     const current = view
       .getAllByRole("link")
@@ -114,7 +120,7 @@ describe("PublicNav selected item (M2, N12)", () => {
     // the desktop row renders; the mobile sheet is a closed portal in jsdom
     expect(current.length).toBeGreaterThanOrEqual(1)
     for (const el of current) {
-      expect(el).toHaveTextContent("For institutions")
+      expect(el).toHaveTextContent("Why GWTH")
       expect(el.className).toMatch(/Active/)
     }
   })
@@ -143,13 +149,12 @@ describe("PublicNav primary CTA follows the audience", () => {
     "/terms",
     "/verify",
     "/tech-radar",
-  ]
-  const INSTITUTION_ROUTES = [
-    "/for-institutions",
-    "/for-teams",
+    // /contact left the institution list on 2026-10-20: its walkthrough button
+    // pointed at the page the visitor was already on. /for-teams is hidden.
     "/contact",
-    "/for-institutions/anything",
+    "/for-teams",
   ]
+  const INSTITUTION_ROUTES = ["/for-institutions", "/for-institutions/anything"]
 
   it("offers the walkthrough on the institution-facing routes only", () => {
     for (const route of INSTITUTION_ROUTES) {
@@ -165,6 +170,21 @@ describe("PublicNav primary CTA follows the audience", () => {
       expect(primaryCta(route)).toEqual({
         href: "/waitlist",
         label: "Join the waitlist",
+      })
+    }
+  })
+
+  it("leads to the prices once sales open (1 December 2026)", () => {
+    for (const route of SELF_SERVE_ROUTES) {
+      expect(primaryCta(route, true)).toEqual({
+        href: "/pricing",
+        label: "Join the course",
+      })
+    }
+    for (const route of INSTITUTION_ROUTES) {
+      expect(primaryCta(route, true)).toEqual({
+        href: "/contact",
+        label: "Book a walkthrough",
       })
     }
   })

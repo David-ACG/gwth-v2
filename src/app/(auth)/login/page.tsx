@@ -6,8 +6,8 @@ import { getEnabledOAuthProviders } from "@/lib/oauth-providers"
 import { safeNextPath } from "@/lib/safe-next"
 
 export const metadata: Metadata = {
-  title: "Log In",
-  description: "Sign in to your GWTH.ai account.",
+  title: "Log in",
+  description: "Log in to your GWTH.ai account.",
 }
 
 /** Props for {@link LoginPage}. */

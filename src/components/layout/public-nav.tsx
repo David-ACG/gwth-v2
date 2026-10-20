@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils"
 import { signOut } from "@/lib/actions/auth"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { ENABLE_NEWS } from "@/lib/config"
+import { isOffMenu } from "@/lib/public-routes"
 import styles from "./public-nav-fde.module.css"
 
 /**
@@ -40,7 +41,9 @@ const navLinks = [
   { href: "/pricing", label: "Pricing" },
   { href: "/why-gwth", label: "Why GWTH" },
   { href: "/news", label: "News" },
-].filter((link) => ENABLE_NEWS || link.href !== "/news")
+].filter(
+  (link) => (ENABLE_NEWS || link.href !== "/news") && !isOffMenu(link.href)
+)
 
 interface PublicNavProps {
   /** Authenticated user info, or null if not logged in */
@@ -62,6 +65,8 @@ interface PublicNavProps {
    * in `(public)/layout.tsx` for the same reason as `showLabs`.
    */
   lessonsHref: string
+  /** True once sales are open (billing on and SALES_OPEN_AT passed). */
+  selling?: boolean
 }
 
 /**
@@ -78,7 +83,10 @@ function isCurrent(pathname: string, href: string): boolean {
  * The routes where the reader is buying for an ORGANISATION. Everywhere else
  * the reader is one person deciding for themselves.
  */
-const INSTITUTION_ROUTES = ["/for-institutions", "/for-teams", "/contact"]
+// /for-teams is hidden at launch and /contact left this list on 2026-10-20:
+// on the contact page itself the walkthrough button pointed at the page the
+// visitor was already on, so the click appeared to do nothing.
+const INSTITUTION_ROUTES = ["/for-institutions"]
 
 /**
  * The header's one button, resolved per route.
@@ -95,12 +103,19 @@ const INSTITUTION_ROUTES = ["/for-institutions", "/for-teams", "/contact"]
  * checkout, so the waitlist is the only self-service step that does what its
  * label says.
  */
-export function primaryCta(pathname: string): { href: string; label: string } {
+export function primaryCta(
+  pathname: string,
+  selling = false
+): { href: string; label: string } {
   const institutional = INSTITUTION_ROUTES.some((route) =>
     isCurrent(pathname, route)
   )
-  return institutional
-    ? { href: "/contact", label: "Book a walkthrough" }
+  if (institutional) return { href: "/contact", label: "Book a walkthrough" }
+  // From the day sales open (1 December 2026) the self-service step is buying,
+  // so the button leads to the prices; before it, the waitlist is still the
+  // only step that does what its label says.
+  return selling
+    ? { href: "/pricing", label: "Join the course" }
     : { href: "/waitlist", label: "Join the waitlist" }
 }
 
@@ -111,9 +126,14 @@ export function primaryCta(pathname: string): { href: string; label: string } {
  * toggle, and log-in / primary CTA. When authenticated, shows the user avatar
  * with a dropdown instead. Responsive: hamburger sheet on mobile.
  */
-export function PublicNav({ user, showLabs, lessonsHref }: PublicNavProps) {
+export function PublicNav({
+  user,
+  showLabs,
+  lessonsHref,
+  selling = false,
+}: PublicNavProps) {
   const pathname = usePathname()
-  const cta = primaryCta(pathname)
+  const cta = primaryCta(pathname, selling)
 
   // Hiding a link is presentation, not protection: /labs is gated in the proxy
   // and again inside the page. This only keeps a visitor who cannot open Labs

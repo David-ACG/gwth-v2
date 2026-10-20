@@ -577,7 +577,7 @@ describe("a-20260914-201048-8373b2: Month 1 sounds hands-on", () => {
   })
 
   it("still shows the mandatory count from config", () => {
-    expect(monthCard("Foundations")).toMatch(/26 mandatory/)
+    expect(monthCard("Foundations")).toMatch(/22 mandatory/)
   })
 })
 
@@ -721,7 +721,8 @@ describe("a-20260914-201426-ae7f0e: no invented optional-lesson count", () => {
     // same unowned split at a finer grain, and would contradict the bullet.
     render(<ForTeamsPage />)
     expect(document.body.textContent).not.toMatch(/\d+ mandatory \+ \d+ optional/)
-    expect(screen.getAllByText(/mandatory, plus optional/).length).toBe(2)
+    // Month 1 has optional lessons too since the 2026-10-20 re-count.
+    expect(screen.getAllByText(/mandatory, plus optional/).length).toBe(3)
   })
 
   it("records the derivation in the source, so the next editor sees it", () => {

@@ -104,9 +104,6 @@ export const SCORE_DECAY_DAYS = 14
 /** Estimated hours of new content added per month (ongoing subscribers) */
 export const ONGOING_NEW_CONTENT_HOURS = 5
 
-/** Total optional lessons available across Months 2 & 3 */
-export const TOTAL_OPTIONAL_LESSONS = 30
-
 /** Total course cost for 3 months (GBP) */
 export const TOTAL_COURSE_COST = COURSE_MONTHLY_PRICE * TOTAL_COURSE_MONTHS
 
@@ -132,12 +129,14 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     subtitle: "AI for Your Life",
     description:
       "Move beyond using ChatGPT like Google. Learn AI foundations, the six primitives, and AI-assisted coding/building as the main spine: apps, websites, dashboards, research projects, content packages, AI assistants, and automations.",
-    // 26, not 24: production really holds 26 Month-1 lessons (months=1,
-    // orders 1..26), and the course page, the dashboard and the lesson viewer
-    // all count the rows rather than this config. Verified against the
-    // production database 2026-07-26 (W26 defect 4).
-    mandatoryLessons: 26,
-    optionalLessons: 0,
+    // The counts on every month follow the syllabus database (the pipeline's
+    // v3 syllabus, the source of truth for lesson identity), re-counted on
+    // 2026-10-20 for the launch readiness check: Month 1 is 22 core and 10
+    // optional, Month 2 is 20 and 22 (with the HR, marketing and sales
+    // lessons), Month 3 is 21 and 15. The pages had said 26 core in Month 1,
+    // 66 core and 30 optional in all. Re-count when the syllabus changes.
+    mandatoryLessons: 22,
+    optionalLessons: 10,
     capstoneName: "Family AI Bot",
     capstoneDomain: "familyaibot.com",
     capstoneDescription:
@@ -150,7 +149,7 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     description:
       "Go deeper into building, coding, workflows, apps, small-business use cases, and the practical toolkit needed by individuals who want to become AI consultants.",
     mandatoryLessons: 20,
-    optionalLessons: 15,
+    optionalLessons: 22,
     capstoneName: "AI Customer-Support Chatbot",
     capstoneDomain: "askmyco.com",
     // 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate): this said
@@ -169,7 +168,7 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     subtitle: "AI Transformation",
     description:
       "Go from individual contributor to the person who can lead an AI transformation. Multi-agent systems. Self-hosted AI. Governance frameworks. The strategic layer that separates someone who uses AI from someone who deploys it.",
-    mandatoryLessons: 20,
+    mandatoryLessons: 21,
     optionalLessons: 15,
     capstoneName: "AI Readiness Assessment Tool",
     capstoneDomain: "askevery.one",
@@ -187,6 +186,12 @@ export const MONTH_CONFIGS: MonthConfig[] = [
  */
 export const TOTAL_MANDATORY_LESSONS = MONTH_CONFIGS.reduce(
   (total, month) => total + month.mandatoryLessons,
+  0
+)
+
+/** Total optional lessons across all 3 months, derived the same way. */
+export const TOTAL_OPTIONAL_LESSONS = MONTH_CONFIGS.reduce(
+  (total, month) => total + month.optionalLessons,
   0
 )
 

@@ -87,7 +87,7 @@ describe("no page invents an optional-lesson count", () => {
 
   it("/lessons keeps the mandatory figure, which config owns", () => {
     render(<LessonsFde />)
-    expect(text()).toMatch(/66 core lessons/i)
+    expect(text()).toMatch(/63 core lessons/i)
   })
 })
 

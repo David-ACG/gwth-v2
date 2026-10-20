@@ -35,6 +35,21 @@ export default function AuthLayout({
       <main className={styles.main}>
         <div className={styles.panelColumn}>{children}</div>
       </main>
+      {/* Launch readiness (2026-10-20): these pages take a name, an email and a
+          password, so Terms and Privacy must be one click away on each. */}
+      <footer className={styles.legalFooter} data-section="legal-footer">
+        <nav aria-label="Legal" className={`${styles.page} ${styles.legalLinks}`}>
+          <Link href="/terms" className={styles.link}>
+            Terms
+          </Link>
+          <Link href="/privacy" className={styles.link}>
+            Privacy
+          </Link>
+          <Link href="/contact" className={styles.link}>
+            Contact
+          </Link>
+        </nav>
+      </footer>
     </div>
   )
 }

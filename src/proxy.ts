@@ -8,6 +8,9 @@ import { isPrivateContentMode } from "@/lib/content-mode"
 // same constants, so the two can no longer drift apart silently.
 import { PROTECTED_PATHS, DEV_REVIEW_PATHS } from "@/lib/protected-routes"
 import { safeNextPath } from "@/lib/safe-next"
+import { isHiddenPublicPath } from "@/lib/public-routes"
+import { isSalesOpen } from "@/lib/billing/passes"
+import { ENABLE_BILLING } from "@/lib/config"
 
 /**
  * Security headers applied to all responses.
@@ -271,6 +274,24 @@ export async function proxy(request: NextRequest) {
   if (!sitePassword && pathname === "/access") {
     const url = request.nextUrl.clone()
     url.pathname = "/"
+    url.search = ""
+    return NextResponse.redirect(url)
+  }
+
+  // Launch readiness (David, 2026-10-20): pages judged Hide answer a real 404,
+  // decided here for the same reason as /access above. Rewriting to a path no
+  // route matches renders the normal not-found page with a 404 status.
+  if (isHiddenPublicPath(pathname)) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/__hidden"
+    url.search = ""
+    return NextResponse.rewrite(url)
+  }
+
+  // From the day sales open, nobody waits: old waitlist links go to sign-up.
+  if (pathname === "/waitlist" && ENABLE_BILLING && isSalesOpen(new Date())) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/signup"
     url.search = ""
     return NextResponse.redirect(url)
   }

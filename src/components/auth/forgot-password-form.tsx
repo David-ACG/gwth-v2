@@ -55,7 +55,6 @@ export function ForgotPasswordForm() {
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
-        <p className={styles.panelKicker}>Reset password</p>
         <h1 className={styles.title}>Reset your password</h1>
         <p className={styles.subtitle}>
           Enter your email and we&apos;ll send you a reset link.

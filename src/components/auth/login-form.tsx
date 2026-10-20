@@ -81,7 +81,6 @@ export function LoginForm({ oauthProviders = [], next }: LoginFormProps) {
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
-        <p className={styles.panelKicker}>Sign in</p>
         <h1 className={styles.title}>Welcome back</h1>
         <p className={styles.subtitle}>
           Log in to your account to continue learning.

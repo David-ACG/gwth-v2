@@ -89,6 +89,19 @@
   max-width: 29rem;
 }
 
+.legalFooter {
+  border-top: 1px solid var(--v-line);
+  padding: 1rem 0 1.25rem;
+}
+
+.legalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+}
+
 /* ---------------- Paper panel (the credential-panel anatomy) ---------------- */
 
 .panel {

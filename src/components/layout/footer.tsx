@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { APP_NAME, ENABLE_NEWS } from "@/lib/config"
+import { isOffMenu } from "@/lib/public-routes"
 import { LogoGwth } from "@/components/marketing/redesign/logo-gwth"
 import { cn } from "@/lib/utils"
 import styles from "./footer-fde.module.css"
@@ -11,6 +12,7 @@ const footerLinks = [
       { href: "/for-institutions", label: "For institutions" },
       { href: "/for-teams", label: "For teams" },
       { href: "/pricing", label: "Pricing" },
+      { href: "/gift", label: "Gifts" },
       { href: "/why-gwth", label: "Why GWTH" },
       { href: "/contact", label: "Contact" },
     ],
@@ -33,7 +35,9 @@ const footerLinks = [
   },
 ].map((col) => ({
   ...col,
-  links: col.links.filter((link) => ENABLE_NEWS || link.href !== "/news"),
+  links: col.links.filter(
+    (link) => (ENABLE_NEWS || link.href !== "/news") && !isOffMenu(link.href)
+  ),
 }))
 
 /** Props for {@link Footer}. */

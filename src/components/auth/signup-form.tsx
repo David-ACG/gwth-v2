@@ -79,7 +79,7 @@ interface PostBetaSignupFormProps {
 export function PostBetaSignupForm({
   oauthProviders = [],
   title = "Create your account",
-  subtitle = "Sign up to start learning. We'll send you a confirmation email.",
+  subtitle = "Create your account, then choose how to pay or open your gift. We'll email you to confirm your address.",
   notice,
   next = null,
 }: PostBetaSignupFormProps) {
@@ -143,7 +143,6 @@ export function PostBetaSignupForm({
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
-        <p className={styles.panelKicker}>Create account</p>
         <h1 className={styles.title}>{title}</h1>
         <p className={styles.subtitle}>{subtitle}</p>
       </div>
@@ -251,7 +250,11 @@ export function PostBetaSignupForm({
               places the age is stated; change all four together. */}
           <p className={styles.ageNote} data-testid="signup-age-note">
             You must be 16 or over. If you&apos;re 16 or 17, a parent or
-            guardian must hold your account and agree to the Terms, or your
+            guardian must hold your account and agree to the{" "}
+            <Link href="/terms" className={styles.link}>
+              Terms
+            </Link>
+            , or your
             employer must do so if you&apos;re an apprentice or employee.
           </p>
         </form>
