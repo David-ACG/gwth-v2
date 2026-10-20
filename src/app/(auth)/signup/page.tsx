@@ -38,9 +38,8 @@ export async function generateMetadata(): Promise<Metadata> {
     }
   }
   return {
-    title: "Invite-only Beta",
-    description:
-      "The beta is invite-only. Join the waitlist or sign up with an approved email.",
+    title: "Create your account",
+    description: "Sign-up opens to everyone on 1 December 2026. Join the waitlist to hear when it does.",
   }
 }
 

@@ -34,7 +34,7 @@ const resetPasswordSchema = z
       .string()
       .min(1, "Password is required")
       .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[A-Z]/, "Password must contain at least one capital letter")
       .regex(/[0-9]/, "Password must contain at least one number"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
@@ -60,7 +60,7 @@ function ResetPasswordForm() {
     setServerError(null)
     if (!token) {
       setServerError(
-        "This reset link is missing its token. Request a new link to continue."
+        "This password reset link is incomplete. Request a new link to continue."
       )
       return
     }

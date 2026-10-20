@@ -33,17 +33,16 @@ export function SignupForm({ oauthProviders = [], next = null }: PostBetaSignupF
     <PostBetaSignupForm
       oauthProviders={oauthProviders}
       next={next}
-      title="Invite-only beta"
-      subtitle="Registration is closed to public signup. Access is granted manually by the GWTH team."
+      title="Create your account"
+      subtitle="Sign-up opens to everyone on 1 December 2026."
       notice={
         <>
-          If you have been invited, create your account below with the exact
-          email address GWTH approved; your beta access is applied
-          automatically at signup. Not invited yet?{" "}
+          If GWTH has invited you already, create your account below with the
+          email address the invitation went to. Everyone else can{" "}
           <Link href="/waitlist" className={styles.link}>
-            Join the waitlist
+            join the waitlist
           </Link>{" "}
-          and we will contact you when more beta places open.
+          and we will email you when sign-up opens.
         </>
       }
     />
@@ -123,8 +122,8 @@ export function PostBetaSignupForm({
           <div className={styles.panelHead}>
             <h1 className={styles.title}>Check your email, {submittedName}.</h1>
             <p className={styles.subtitle}>
-              We&apos;ve sent you a confirmation link. Click it to activate your
-              account and start learning.
+              We&apos;ve sent you a confirmation link. Follow it to confirm your
+              email address.
             </p>
           </div>
           <div className={styles.actions}>

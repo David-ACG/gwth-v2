@@ -11,11 +11,11 @@ import { SignupForm } from "./signup-form"
 afterEach(cleanup)
 
 describe("SignupForm", () => {
-  it("renders invite-only beta messaging", () => {
+  it("says when sign-up opens, with no beta wording (launch readiness, 2026-10-20)", () => {
     render(<SignupForm />)
 
-    expect(screen.getByText(/invite-only beta/i)).toBeInTheDocument()
-    expect(screen.getByText(/closed to public signup/i)).toBeInTheDocument()
+    expect(screen.getByText(/opens to everyone on 1 December 2026/i)).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/beta|invite-only/i)
   })
 
   it("points un-invited visitors to the waitlist and existing users to login", () => {
