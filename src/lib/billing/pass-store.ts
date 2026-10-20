@@ -53,6 +53,8 @@ export type PassRecord = {
   deliveredAt: Date | null
   receiptSentAt: Date | null
   openedEmailSentAt: Date | null
+  /** 027: the buyer's "your gift has been sent" email went at this time. */
+  buyerNotifiedAt: Date | null
   redeemBy: Date
   redeemedBy: string | null
   redeemedAt: Date | null
@@ -86,6 +88,7 @@ function toRecord(row: PassRow): PassRecord {
     deliveredAt: date(row.deliveredAt),
     receiptSentAt: date(row.receiptSentAt),
     openedEmailSentAt: date(row.openedEmailSentAt),
+    buyerNotifiedAt: date(row.buyerNotifiedAt),
     redeemBy: new Date(row.redeemBy),
     redeemedBy: row.redeemedBy,
     redeemedAt: date(row.redeemedAt),
@@ -261,6 +264,7 @@ const EMAIL_FIELD = {
   receipt: "receipt_sent_at",
   delivered: "delivered_at",
   opened: "opened_email_sent_at",
+  buyerNotified: "buyer_notified_at",
 } as const
 
 /**

@@ -62,6 +62,7 @@ describeDb("prepaid passes (live DB)", () => {
     // Other DB suites re-run older migrations (015 re-creates the
     // access_source CHECK without 'prepaid'); 026 is idempotent, so re-apply it.
     await sql.unsafe(readFileSync(join(process.cwd(), "supabase/migrations/026_prepaid_passes.sql"), "utf8"))
+    await sql.unsafe(readFileSync(join(process.cwd(), "supabase/migrations/027_gift_sent_notice.sql"), "utf8"))
     store = await import("./pass-store")
     access = await import("./access")
     savedRelease = await sql`select month, opens_at from course_month_release`
@@ -202,5 +203,15 @@ describeDb("prepaid passes (live DB)", () => {
     expect(await store.rollingTwelveMonthTakings()).toBe(before + 6900)
     await store.recordRefund(payment.id, 6900)
     expect(await store.rollingTwelveMonthTakings()).toBe(before)
+  })
+
+  it("claims the buyer's gift-sent email once, separately from the gift email", async () => {
+    const { pass } = await newPass(12)
+    expect(pass.buyerNotifiedAt).toBeNull()
+    expect(await store.claimPassEmail(pass.id, "buyerNotified")).toBe(true)
+    expect(await store.claimPassEmail(pass.id, "buyerNotified")).toBe(false)
+    const fresh = await store.getPassById(pass.id)
+    expect(fresh?.buyerNotifiedAt).not.toBeNull()
+    expect(fresh?.deliveredAt).toBeNull()
   })
 })

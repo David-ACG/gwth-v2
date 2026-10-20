@@ -39,6 +39,7 @@
 //      courseMonthsPaid, renewalReminderFor and the access_source CHECK twin
 //      widens to + 'prepaid'; the prepaidPasses, courseMonthRelease and
 //      stripePayments tables are hand-written at the end of this file.
+//  12. Gift sent notice (canonical DDL: 027): prepaidPasses.buyerNotifiedAt.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -920,6 +921,7 @@ export const prepaidPasses = pgTable("prepaid_passes", {
 	deliveredAt: timestamp("delivered_at", { withTimezone: true, mode: 'string' }),
 	receiptSentAt: timestamp("receipt_sent_at", { withTimezone: true, mode: 'string' }),
 	openedEmailSentAt: timestamp("opened_email_sent_at", { withTimezone: true, mode: 'string' }),
+	buyerNotifiedAt: timestamp("buyer_notified_at", { withTimezone: true, mode: 'string' }),
 	redeemBy: timestamp("redeem_by", { withTimezone: true, mode: 'string' }).notNull(),
 	redeemedBy: text("redeemed_by"),
 	redeemedAt: timestamp("redeemed_at", { withTimezone: true, mode: 'string' }),

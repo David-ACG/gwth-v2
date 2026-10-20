@@ -39,8 +39,9 @@ at once, through `ship.py release website`). Nothing here is done by the code on
 7. **`PRIVATE_CONTENT_MODE=off`** in production. While it is locked, sign-up is closed and only
    allowlisted emails can see lessons, so neither a gift recipient nor a monthly payer could use
    the course. This opens sign-up and the free labs to everyone.
-8. **Database migration** before the release that carries the code:
+8. **Database migrations** before the release that carries the code, in order:
    `ssh hetzner 'docker exec -i zo0gkcwoo0o4gow0go4cwk0o psql -U gwth -d gwth_v2' < supabase/migrations/026_prepaid_passes.sql`
+   `ssh hetzner 'docker exec -i zo0gkcwoo0o4gow0go4cwk0o psql -U gwth -d gwth_v2' < supabase/migrations/027_gift_sent_notice.sql`
 9. **Scheduler.** A Coolify scheduled task on the production app, every 15 minutes:
    `curl -fsS -X POST -H "x-cron-secret: $CRON_SECRET" http://localhost:3000/api/cron/passes`
    (sends gift emails on their day, retries receipts, holds payers' charges while a month is not open).

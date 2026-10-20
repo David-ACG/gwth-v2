@@ -23,6 +23,7 @@ import type { PassProduct } from "@/lib/billing/passes"
 import { sendPlunkEmail } from "@/lib/email/plunk"
 import {
   giftArrivedEmail,
+  giftSentEmail,
   giftReceiptEmail,
   passOpenedEmail,
   selfReceiptEmail,
@@ -128,7 +129,7 @@ export async function fulfilPassCheckout(
 
 async function sendClaimed(
   pass: PassRecord,
-  field: "receipt" | "delivered" | "opened",
+  field: "receipt" | "delivered" | "opened" | "buyerNotified",
   to: string,
   email: BuiltEmail
 ): Promise<boolean> {
@@ -171,9 +172,30 @@ export async function sendReceipt(pass: PassRecord): Promise<boolean> {
 }
 
 /** The recipient's "a gift for you" email. Sent once, on or after deliver_at. */
-export async function deliverGift(pass: PassRecord): Promise<boolean> {
+export async function deliverGift(pass: PassRecord, now = new Date()): Promise<boolean> {
   if (!pass.isGift || !pass.recipientEmail || pass.deliveredAt || pass.refundedAt) return false
-  return sendClaimed(pass, "delivered", pass.recipientEmail, giftArrivedEmail(passForEmail(pass)))
+  const sent = await sendClaimed(pass, "delivered", pass.recipientEmail, giftArrivedEmail(passForEmail(pass)))
+  if (sent && wasScheduled(pass)) {
+    await sendGiftSentNotice(pass, now)
+  }
+  return sent
+}
+
+/**
+ * A gift bought for a later day, not "straight away". A straight-away gift's
+ * receipt already says it has been sent, so the buyer gets no second email.
+ */
+export function wasScheduled(pass: Pick<PassRecord, "deliverAt" | "createdAt">): boolean {
+  return pass.deliverAt !== null && pass.deliverAt.getTime() - pass.createdAt.getTime() > 10 * 60 * 1000
+}
+
+/**
+ * To the buyer, once, when their scheduled gift has gone (David, 2026-10-20:
+ * "send you a short email when the gift has gone").
+ */
+export async function sendGiftSentNotice(pass: PassRecord, now = new Date()): Promise<boolean> {
+  if (pass.buyerNotifiedAt || pass.refundedAt) return false
+  return sendClaimed(pass, "buyerNotified", pass.buyerEmail, giftSentEmail(passForEmail(pass), now))
 }
 
 /** The "your course has started" email to whoever opened a gift. Sent once. */

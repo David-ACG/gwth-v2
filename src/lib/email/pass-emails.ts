@@ -98,6 +98,35 @@ export function giftReceiptEmail(
   return { subject: `Your GWTH gift for ${who} is ready`, parts }
 }
 
+/** To the buyer, on the day a scheduled gift goes to its recipient. */
+export function giftSentEmail(
+  pass: PassForEmail,
+  now: Date = new Date(),
+  env: Env = process.env
+): BuiltEmail {
+  const who = pass.recipientName?.trim() || "your recipient"
+  const hello = firstName(pass.buyerName, "there")
+  const parts = renderPaperEmail(
+    {
+      preheader: `We've sent your gift to ${who}.`,
+      heading: `Hi ${hello}, we've sent your gift to ${who}.`,
+      blocks: [
+        {
+          type: "p",
+          text: `We emailed ${who} (${pass.recipientEmail}) on ${formatUkDate(now)} with your message and a link to open the gift.`,
+        },
+        {
+          type: "p",
+          text: `If they haven't received the email, ask them to check their junk folder. You can also print the gift card and give them the code: ${pass.code}.`,
+        },
+      ],
+      cta: { label: "See the gift card", href: giftCardUrl(pass.code, env) },
+    },
+    env
+  )
+  return { subject: `Your gift to ${who} has been sent`, parts }
+}
+
 /** To the buyer, straight after paying, for themselves. */
 export function selfReceiptEmail(pass: PassForEmail, env: Env = process.env): BuiltEmail {
   const opened = pass.redeemedAt !== null

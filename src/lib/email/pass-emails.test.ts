@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   giftArrivedEmail,
+  giftSentEmail,
   giftReceiptEmail,
   passOpenedEmail,
   renewalReminderEmail,
@@ -28,6 +29,7 @@ const GIFT: PassForEmail = {
 const ALL = [
   giftReceiptEmail(GIFT, ENV, new Date("2026-12-03T10:00:00Z")),
   giftArrivedEmail(GIFT, ENV),
+  giftSentEmail(GIFT, new Date("2026-12-25T07:05:00Z"), ENV),
   passOpenedEmail(GIFT, "Sam Patel", ENV),
   selfReceiptEmail({ ...GIFT, isGift: false, redeemedAt: new Date("2026-12-03T10:00:00Z") }, ENV),
   renewalReminderEmail({ name: "Jo", amountPence: 2900, chargeOn: new Date("2027-01-03T10:00:00Z"), forMonth: 2 }, ENV),
@@ -98,5 +100,14 @@ describe("gift and pass emails", () => {
     const { parts } = giftReceiptEmail({ ...GIFT, deliverAt: now }, ENV, new Date(now.getTime() + 1000))
     expect(parts.text).toMatch(/We've emailed Sam Patel/)
     expect(parts.text).not.toMatch(/7am/)
+  })
+
+  it("tells the buyer on the day their scheduled gift has been sent (David, 2026-10-20)", () => {
+    const { subject, parts } = giftSentEmail(GIFT, new Date("2026-12-25T07:05:00Z"), ENV)
+    expect(subject).toBe("Your gift to Sam Patel has been sent")
+    expect(parts.text).toContain("Hi Alex, we've sent your gift to Sam Patel.")
+    expect(parts.text).toContain("We emailed Sam Patel (sam@example.com) on 25 December 2026")
+    expect(parts.text).toContain("GWTH-7KQ2-M9XD-4TPA")
+    expect(parts.html).toContain("/gift/card?code=GWTH-7KQ2-M9XD-4TPA")
   })
 })
