@@ -188,6 +188,13 @@
   color: var(--v-error-text);
 }
 
+/* The line under the contact form's button: how the details are used. */
+.formNote {
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
 /* ---------------- Buttons ---------------- */
 
 .buttonSolid,

@@ -22,7 +22,8 @@ export default async function Page({
   const sessionId = Array.isArray(session_id) ? session_id[0] : session_id
 
   let pass: PassRecord | null = null
-  if (sessionId && /^cs_[A-Za-z0-9_]+$/.test(sessionId)) {
+  const hasPayment = Boolean(sessionId && /^cs_[A-Za-z0-9_]+$/.test(sessionId))
+  if (sessionId && hasPayment) {
     pass = await getPassByCheckoutSession(sessionId).catch(() => null)
     if (!pass && ENABLE_BILLING) {
       // The webhook has not landed yet: fulfil from Stripe directly. Safe to
@@ -33,5 +34,5 @@ export default async function Page({
       })
     }
   }
-  return <GiftThanksPage pass={pass} />
+  return <GiftThanksPage pass={pass} hasPayment={hasPayment} />
 }

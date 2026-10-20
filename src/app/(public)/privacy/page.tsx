@@ -3,31 +3,35 @@ import Link from "next/link"
 import { LegalFde } from "@/components/marketing/legal-fde/legal-fde"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Privacy policy",
   description:
-    "GWTH.ai Privacy Policy: how we collect, use, and protect your personal data.",
+    "GWTH.ai privacy policy: how we collect, use, and protect your personal data.",
 }
 
 /**
  * Privacy Policy page in the FDE journal register.
- * Stealth mode: no physical address, no personal names, contact via form only.
+ * Stealth mode: no physical address, no personal names, contact via form only. *
+ * Keep the explicit {" "} after a bold label: the build drops the leading
+ * space of a text node that holds an HTML entity such as &apos;, and the
+ * page then read "Price changes:We" (launch readiness review, 2026-10-20).
  */
 export default function PrivacyPage() {
   return (
-    <LegalFde title="Privacy Policy" updated="1 December 2026">
+    <LegalFde title="Privacy policy" updated="1 December 2026">
       <p>
-        This Privacy Policy describes how GWTH.ai (&quot;we&quot;, &quot;us&quot;, or
+        This privacy policy describes how GWTH.ai (&quot;we&quot;, &quot;us&quot;, or
         &quot;our&quot;) collects, uses, and protects your personal information when
         you use our website and services at <Link href="/">gwth.ai</Link>.
       </p>
 
-      <h2>1. Information We Collect</h2>
+      <h2>1. Information we collect</h2>
 
       <h3>Information you provide directly</h3>
       <ul>
         <li>
-          <strong>Account information:</strong> name, email address, and
-          password when you create an account or join our waitlist.
+          <strong>Account information:</strong> name and email address
+          when you create an account or join our waitlist, and a password
+          if you create an account with one.
         </li>
         <li>
           <strong>Contact form submissions:</strong> name, email address,
@@ -38,11 +42,11 @@ export default function PrivacyPage() {
           and results, lab completions, notes, and bookmarks.
         </li>
         <li>
-          <strong>Payment information:</strong> Stripe securely processes your
+          <strong>Payment information:</strong>{" "}Stripe securely processes your
           billing details. We don&apos;t see or store your full card details.
         </li>
         <li>
-          <strong>Gifts:</strong> we collect the recipient&apos;s name
+          <strong>Gifts:</strong>{" "}We collect the recipient&apos;s name
           and email address and your message when you buy a gift. We use
           them only to send and manage that gift. If you receive a gift, the
           buyer gave us your name and email address for this purpose.
@@ -75,7 +79,7 @@ export default function PrivacyPage() {
         </li>
       </ul>
 
-      <h2>2. How We Use Your Information</h2>
+      <h2>2. How we use your information</h2>
       <p>We use the information we collect to:</p>
       <ul>
         <li>Provide, maintain, and improve our services.</li>
@@ -99,7 +103,7 @@ export default function PrivacyPage() {
         </li>
       </ul>
 
-      <h2>3. How We Share Your Information</h2>
+      <h2>3. How we share your information</h2>
       <p>
         We do not sell your personal information. We may share your
         information only in the following circumstances:
@@ -107,8 +111,8 @@ export default function PrivacyPage() {
       <ul>
         <li>
           <strong>Service providers:</strong> third-party services that
-          help us operate (hosting, email delivery, payment processing,
-          analytics). These providers are contractually obligated to
+          help us operate (hosting, email delivery and payment processing).
+          These providers are contractually obligated to
           protect your data.
         </li>
         <li>
@@ -121,12 +125,11 @@ export default function PrivacyPage() {
         </li>
         <li>
           <strong>With your consent:</strong> when you explicitly agree to
-          share your information (e.g. making post-beta credentials or
-          course progress publicly verifiable).
+          share your information.
         </li>
       </ul>
 
-      <h2>4. Data Retention</h2>
+      <h2>4. Data retention</h2>
       <p>
         We retain your personal data for as long as your account is active
         or as needed to provide our services. If you delete your account,
@@ -135,7 +138,7 @@ export default function PrivacyPage() {
         purposes.
       </p>
 
-      <h2>5. Data Security</h2>
+      <h2>5. Data security</h2>
       <p>
         We implement appropriate technical and organisational measures to
         protect your personal data against unauthorised access, alteration,
@@ -144,7 +147,7 @@ export default function PrivacyPage() {
         security.
       </p>
 
-      <h2>6. Your Rights</h2>
+      <h2>6. Your rights</h2>
       <p>
         Depending on your location, you may have the right to:
       </p>
@@ -163,10 +166,11 @@ export default function PrivacyPage() {
 
       <h2>7. Cookies</h2>
       <p>
-        We use essential cookies to keep you logged in and remember your
-        preferences (such as light/dark mode). We may use analytics cookies
-        to understand how our site is used. You can control cookie settings
-        in your browser.
+        We use only essential cookies, which keep you signed in. Your
+        choice of light or dark mode is saved in your browser on your
+        device, not in a cookie. We count visits with Plausible Analytics,
+        which we run on our own server. It uses no cookies and does not
+        identify you. You can control cookie settings in your browser.
       </p>
 
       {/* Bible audience-by-purpose (David, 2026-10-20). One of the four
@@ -182,7 +186,7 @@ export default function PrivacyPage() {
         for you.
       </p>
 
-      <h2>9. Third-Party Links</h2>
+      <h2>9. Third-party links</h2>
       <p>
         Our site may contain links to third-party websites and services. We
         are not responsible for the privacy practices of those third
@@ -190,18 +194,18 @@ export default function PrivacyPage() {
         providing any personal information.
       </p>
 
-      <h2>10. Changes to This Policy</h2>
+      <h2>10. Changes to this policy</h2>
       <p>
-        We may update this Privacy Policy from time to time. We will notify
+        We may update this privacy policy from time to time. We will notify
         you of any material changes by posting the new policy on this page
         and updating the &quot;Last updated&quot; date. Your continued use of our
         services after changes constitutes acceptance of the updated
         policy.
       </p>
 
-      <h2>11. Contact Us</h2>
+      <h2>11. Contact us</h2>
       <p>
-        If you have any questions about this Privacy Policy or our data
+        If you have any questions about this privacy policy or our data
         practices, please{" "}
         <Link href="/contact">contact us through our website</Link>.
       </p>

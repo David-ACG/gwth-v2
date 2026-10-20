@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
 import { toast } from "sonner"
 import { contactSchema, type ContactFormData } from "@/lib/validations"
 import {
@@ -53,11 +54,9 @@ export function ContactForm() {
     return (
       <div className={styles.panel}>
         <div className={styles.success} role="status">
-          <p className={styles.mono}>Status · Sent</p>
           <h2 className={styles.successTitle}>Message sent!</h2>
           <p className={styles.successBody}>
-            Thank you for getting in touch. We will get back to you as soon as
-            possible.
+            Thank you for your message. We&apos;ll reply by email.
           </p>
           <button
             type="button"
@@ -138,8 +137,15 @@ export function ContactForm() {
             className={`${styles.buttonSolid} ${styles.buttonFull}`}
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? "Sending..." : "Send Message"}
+            {form.formState.isSubmitting ? "Sending..." : "Send message"}
           </button>
+          <p className={styles.formNote} data-testid="contact-privacy-note">
+            {"We'll only use your details to reply. See our"}{" "}
+            <Link href="/privacy" className={styles.standfirstLink}>
+              Privacy policy
+            </Link>
+            .
+          </p>
         </form>
       </Form>
     </div>

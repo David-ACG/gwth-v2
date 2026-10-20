@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { GIFT_COPY as C } from "./gift-copy"
 import form from "@/components/marketing/contact-fde/contact-fde.module.css"
 import styles from "./gift.module.css"
@@ -98,7 +99,12 @@ export function GiftForm({ prices, courseWasPrice, saleEndsOn, christmasLabel, t
               <span className={styles.productTitle}>{C.products[key].title}</span>
               <span className={styles.productPrice}>
                 {prices[key]}
-                {key === "course" && courseWasPrice && <span className={styles.productWas}>{courseWasPrice}</span>}
+                {key === "course" && courseWasPrice && (
+                  <>
+                    <span className="sr-only">{C.products.was}</span>
+                    <span className={styles.productWas}>{courseWasPrice}</span>
+                  </>
+                )}
               </span>
               <span className={styles.productNote}>
                 {key === "course" ? C.products.course.note(saleEndsOn) : C.products.month1.note}
@@ -226,6 +232,18 @@ export function GiftForm({ prices, courseWasPrice, saleEndsOn, christmasLabel, t
               </p>
             )}
             <p className={styles.hint}>{C.pay.note}</p>
+            <p className={styles.hint} data-testid="gift-pay-terms">
+              {C.pay.agree}{" "}
+              <Link href="/terms" className={styles.inlineLink}>
+                {C.pay.terms}
+              </Link>
+              {". "}
+              {C.pay.refund}{" "}
+              <Link href="/contact" className={styles.inlineLink}>
+                {C.pay.contact}
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </div>

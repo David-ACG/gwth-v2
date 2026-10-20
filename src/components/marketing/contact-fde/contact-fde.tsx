@@ -12,12 +12,17 @@ export function ContactFde() {
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
           <h1 className={styles.mastheadTitle}>
-            Get in <em>Touch</em>
+            Get in <em>touch</em>
           </h1>
+          {/* No reply time: none is promised anywhere we can check, so the
+              page only says how we reply (launch readiness review,
+              2026-10-20). The walkthrough line is for visitors who arrive
+              from "Book a walkthrough" on /for-institutions. */}
           <p className={styles.standfirst}>
-            Have a question about the course, team pricing, or anything else?
-            Send us a message and we will get back to you. GWTH is based in
-            the United Kingdom.
+            Have a question about the course, a gift, team pricing or anything
+            else? Send us a message and we&apos;ll reply by email. If
+            you&apos;d like us to show your organisation how the course works,
+            ask in your message. GWTH is based in the United Kingdom.
           </p>
         </div>
       </section>

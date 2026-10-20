@@ -20,8 +20,31 @@ describe("ContactPage", () => {
     // Queried by accessible name, not by a single text node: the emphasis in
     // the headline is an <em>, so the words span two nodes (batch 1).
     expect(
-      screen.getByRole("heading", { level: 1, name: "Get in Touch" })
+      screen.getByRole("heading", { level: 1, name: "Get in touch" })
     ).toBeInTheDocument()
+  })
+
+  it("uses sentence case for the button and the tab title (launch readiness, 2026-10-20)", async () => {
+    render(<ContactPage />)
+    expect(screen.getByRole("button", { name: "Send message" })).toBeInTheDocument()
+    const { metadata } = await import("./page")
+    expect(metadata.title).toBe("Contact us")
+  })
+
+  it("says how the details are used, with the Privacy Policy linked", () => {
+    render(<ContactPage />)
+    expect(screen.getByTestId("contact-privacy-note")).toHaveTextContent(
+      "We'll only use your details to reply. See our Privacy policy."
+    )
+    expect(screen.getByRole("link", { name: "Privacy policy" })).toHaveAttribute("href", "/privacy")
+  })
+
+  it("promises no reply time it cannot keep, and says how to ask for a walkthrough", () => {
+    const { container } = render(<ContactPage />)
+    const text = container.textContent ?? ""
+    expect(text).toContain("we'll reply by email")
+    expect(text).not.toMatch(/within \d|working day|24 hours/i)
+    expect(text).toMatch(/show your organisation how the course works,\s+ask in your message/)
   })
 
   it("renders the contact form fields", () => {

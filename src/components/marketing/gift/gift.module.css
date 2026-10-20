@@ -265,10 +265,14 @@
   }
 }
 
+/* letter-spacing: 0 undoes the global tracking-tight on headings, which
+   squeezed the word spaces in Bitter at this size until the three questions
+   read as one word on a phone (launch readiness review, 2026-10-20). */
 .answer h3 {
   font-family: var(--font-serif);
   font-size: 1.15rem;
   font-weight: 600;
+  letter-spacing: 0;
   color: var(--v-ink);
   margin-bottom: 0.4rem;
 }

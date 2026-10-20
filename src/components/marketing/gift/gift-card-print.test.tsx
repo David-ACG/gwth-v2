@@ -28,7 +28,7 @@ describe("the printable gift card page (David, 2026-10-20)", () => {
     render(<GiftCardPrint pass={PASS} now={new Date("2026-12-03T10:00:00Z")} />)
     const note = screen.getByTestId("gift-card-thanks")
     expect(note).toHaveTextContent("Thank you, David.")
-    expect(note).toHaveTextContent("We'll email your gift to Keri Ashpole on 25 December 2026 at 7am UK time.")
+    expect(note).toHaveTextContent("We'll email your gift to Keri Ashpole on 25 December 2026 at about 7am UK time.")
   })
 
   it("says the gift has been sent once it has", () => {

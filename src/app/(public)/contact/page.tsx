@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import { ContactFde } from "@/components/marketing/contact-fde/contact-fde"
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact us",
   description:
-    "Have a question about the course, team pricing, or anything else? Send a message to the GWTH team in the United Kingdom and we will get back to you.",
+    "Have a question about the course, a gift, team pricing or anything else? Send a message to the GWTH team in the United Kingdom and we'll reply by email.",
 }
 
 /**

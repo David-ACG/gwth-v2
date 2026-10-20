@@ -3,20 +3,23 @@ import Link from "next/link"
 import { LegalFde } from "@/components/marketing/legal-fde/legal-fde"
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions",
+  title: "Terms and conditions",
   description:
-    "GWTH.ai Terms and Conditions: the rules and guidelines for using our platform and services.",
+    "GWTH.ai terms and conditions: the rules and guidelines for using our platform and services.",
 }
 
 /**
  * Terms and Conditions page in the FDE journal register.
- * Stealth mode: no physical address, no personal names, contact via form only.
+ * Stealth mode: no physical address, no personal names, contact via form only. *
+ * Keep the explicit {" "} after a bold label: the build drops the leading
+ * space of a text node that holds an HTML entity such as &apos;, and the
+ * page then read "Price changes:We" (launch readiness review, 2026-10-20).
  */
 export default function TermsPage() {
   return (
-    <LegalFde title="Terms and Conditions" updated="1 December 2026">
+    <LegalFde title="Terms and conditions" updated="1 December 2026">
       <p>
-        These Terms and Conditions (&quot;Terms&quot;) govern your use of the
+        These terms and conditions (&quot;Terms&quot;) govern your use of the
         GWTH.ai website and services (&quot;Services&quot;) provided at{" "}
         <Link href="/">gwth.ai</Link>. By accessing or using our Services, you
         agree to be bound by these Terms. If you do not agree, please do not
@@ -25,28 +28,28 @@ export default function TermsPage() {
 
       {/* Table of Contents */}
       <nav aria-label="Table of contents">
-        <h2>Table of Contents</h2>
+        <h2>Table of contents</h2>
         <ol>
-          <li><a href="#services">Our Services</a></li>
-          <li><a href="#ip">Intellectual Property</a></li>
-          <li><a href="#representations">User Representations</a></li>
-          <li><a href="#registration">Account Registration</a></li>
-          <li><a href="#purchases">Purchases and Payment</a></li>
+          <li><a href="#services">Our services</a></li>
+          <li><a href="#ip">Intellectual property</a></li>
+          <li><a href="#representations">User representations</a></li>
+          <li><a href="#registration">Account registration</a></li>
+          <li><a href="#purchases">Purchases and payment</a></li>
           <li><a href="#subscriptions">Subscriptions</a></li>
-          <li><a href="#passes">Gifts and Prepaid Passes</a></li>
-          <li><a href="#prohibited">Prohibited Activities</a></li>
-          <li><a href="#content">User-Generated Content</a></li>
-          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#passes">Gifts and prepaid passes</a></li>
+          <li><a href="#prohibited">Prohibited activities</a></li>
+          <li><a href="#content">User-generated content</a></li>
+          <li><a href="#privacy">Privacy policy</a></li>
           <li><a href="#termination">Termination</a></li>
-          <li><a href="#governing-law">Governing Law</a></li>
-          <li><a href="#disputes">Dispute Resolution</a></li>
+          <li><a href="#governing-law">Governing law</a></li>
+          <li><a href="#disputes">Dispute resolution</a></li>
           <li><a href="#disclaimer">Disclaimer</a></li>
-          <li><a href="#liability">Limitation of Liability</a></li>
-          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#liability">Limitation of liability</a></li>
+          <li><a href="#contact">Contact us</a></li>
         </ol>
       </nav>
 
-      <h2 id="services">1. Our Services</h2>
+      <h2 id="services">1. Our services</h2>
       <p>
         GWTH.ai provides an online learning platform offering courses,
         lessons, labs, quizzes, and related educational content focused on
@@ -55,14 +58,10 @@ export default function TermsPage() {
       <ul>
         <li>Access to course materials, video content, and interactive labs.</li>
         <li>Progress tracking, assessments, and course completion records.</li>
-        <li>
-          Invite-only beta access, manually granted by GWTH for approved
-          learners.
-        </li>
         <li>Team administration features for group subscriptions.</li>
       </ul>
 
-      <h2 id="ip">2. Intellectual Property</h2>
+      <h2 id="ip">2. Intellectual property</h2>
       <p>
         All content on GWTH.ai (including course materials, videos, text,
         graphics, logos, assessments, and progress systems) is the
@@ -81,7 +80,7 @@ export default function TermsPage() {
         <li>Remove any copyright or proprietary notices.</li>
       </ul>
 
-      <h2 id="representations">3. User Representations</h2>
+      <h2 id="representations">3. User representations</h2>
       <p>By using our Services, you represent and warrant that:</p>
       <ul>
         {/* Bible audience-by-purpose (David, 2026-10-20). One of the four
@@ -105,7 +104,7 @@ export default function TermsPage() {
         </li>
       </ul>
 
-      <h2 id="registration">4. Account Registration</h2>
+      <h2 id="registration">4. Account registration</h2>
       <p>
         To access certain features, you must create an account. You are
         responsible for maintaining the confidentiality of your login
@@ -113,7 +112,8 @@ export default function TermsPage() {
         notify us immediately of any unauthorised use.
       </p>
       <p>
-        Anyone can create a free account. To access the course, you need a
+        Anyone who meets the requirements in section 3 can create a free
+        account. To access the course, you need a
         subscription, an opened prepaid pass or a place given by GWTH.
       </p>
       <p>
@@ -122,9 +122,9 @@ export default function TermsPage() {
         notice.
       </p>
 
-      <h2 id="purchases">5. Purchases and Payment</h2>
+      <h2 id="purchases">5. Purchases and payment</h2>
       <p>
-        Stripe processes payments securely. All prices are in GBP. GWTH.ai
+        Stripe processes payments securely. All prices are in pounds sterling (£). GWTH.ai
         is not registered for VAT, so no VAT is added to any price. You agree to provide current, complete and
         accurate payment information.
       </p>
@@ -171,13 +171,13 @@ export default function TermsPage() {
           is suspended.
         </li>
         <li>
-          <strong>Price changes:</strong> We will give you at least 30
+          <strong>Price changes:</strong>{" "}We will give you at least 30
           days&apos; notice of any price changes. Existing subscribers will
           keep their current rate for the rest of their course period.
         </li>
       </ul>
 
-      <h2 id="passes">7. Gifts and Prepaid Passes</h2>
+      <h2 id="passes">7. Gifts and prepaid passes</h2>
       <p>
         A prepaid pass covers the whole course (Months 1 to 3) or the first
         month with one payment. You can buy one for yourself or as a gift
@@ -214,7 +214,7 @@ export default function TermsPage() {
         </li>
       </ul>
 
-      <h2 id="prohibited">8. Prohibited Activities</h2>
+      <h2 id="prohibited">8. Prohibited activities</h2>
       <p>You agree not to:</p>
       <ul>
         <li>Share your account credentials with others.</li>
@@ -242,7 +242,7 @@ export default function TermsPage() {
         </li>
       </ul>
 
-      <h2 id="content">9. User-Generated Content</h2>
+      <h2 id="content">9. User-generated content</h2>
       <p>
         You may create notes, quiz answers, and other content within the
         platform. You retain ownership of content you create. By
@@ -254,10 +254,10 @@ export default function TermsPage() {
         You can export or delete your content at any time.
       </p>
 
-      <h2 id="privacy">10. Privacy Policy</h2>
+      <h2 id="privacy">10. Privacy policy</h2>
       <p>
         Your use of our Services is also governed by our{" "}
-        <Link href="/privacy">Privacy Policy</Link>, which describes how we
+        <Link href="/privacy">Privacy policy</Link>, which describes how we
         collect, use, and protect your personal information. By using our
         Services, you consent to the data practices described in the Privacy
         Policy.
@@ -282,7 +282,7 @@ export default function TermsPage() {
         </li>
       </ul>
 
-      <h2 id="governing-law">12. Governing Law</h2>
+      <h2 id="governing-law">12. Governing law</h2>
       <p>
         These Terms are governed by and construed in accordance with the
         laws of England and Wales. Any disputes arising from these Terms
@@ -290,7 +290,7 @@ export default function TermsPage() {
         England and Wales.
       </p>
 
-      <h2 id="disputes">13. Dispute Resolution</h2>
+      <h2 id="disputes">13. Dispute resolution</h2>
       <p>
         If you have a dispute with us, we encourage you to{" "}
         <Link href="/contact">contact us</Link> first so we can try to
@@ -312,7 +312,7 @@ export default function TermsPage() {
         outcomes or employment results from completing our courses.
       </p>
 
-      <h2 id="liability">15. Limitation of Liability</h2>
+      <h2 id="liability">15. Limitation of liability</h2>
       <p>
         To the maximum extent permitted by law, GWTH.ai shall not be
         liable for any indirect, incidental, special, consequential, or
@@ -326,7 +326,7 @@ export default function TermsPage() {
         have paid us in the 12 months preceding the claim.
       </p>
 
-      <h2 id="contact">16. Contact Us</h2>
+      <h2 id="contact">16. Contact us</h2>
       <p>
         If you have any questions about these Terms, please{" "}
         <Link href="/contact">contact us through our website</Link>.

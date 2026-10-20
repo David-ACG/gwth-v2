@@ -8,18 +8,59 @@ import styles from "./gift.module.css"
 /**
  * /gift/thanks (bead gwth-launch-v1uj.5): where Stripe returns the buyer. The
  * page route fulfils the order itself if the webhook has not yet, so this
- * always shows the real pass, or "we're confirming your payment".
+ * always shows the real pass, or "we're confirming your payment". Opened
+ * with no payment to check (no Stripe session in the link), it says so and
+ * offers the gift page and Contact instead of waiting forever (launch
+ * readiness review, 2026-10-20).
  */
-export function GiftThanksPage({ pass, now = new Date() }: { pass: PassRecord | null; now?: Date }) {
+export function GiftThanksPage({
+  pass,
+  hasPayment = true,
+  now = new Date(),
+}: {
+  pass: PassRecord | null
+  /** False when the link carries no Stripe checkout session to look up. */
+  hasPayment?: boolean
+  now?: Date
+}) {
   let title: React.ReactNode
   let body: React.ReactNode
 
-  if (!pass) {
+  if (!pass && !hasPayment) {
+    title = C.noPayment.title
+    body = (
+      <div className={styles.stack} data-testid="thanks-no-payment">
+        <p className={styles.noticeBody}>{C.noPayment.body}</p>
+        <div className={styles.actions}>
+          <Link href="/gift" className={form.buttonSolid}>
+            {C.noPayment.gift}
+          </Link>
+          <Link href="/contact" className={form.buttonOutline}>
+            {C.noPayment.contact}
+          </Link>
+        </div>
+      </div>
+    )
+  } else if (!pass) {
     title = C.pending.title
-    body = <p className={styles.noticeBody}>{C.pending.body}</p>
+    body = (
+      <div className={styles.stack} data-testid="thanks-pending">
+        <p className={styles.noticeBody}>{C.pending.body}</p>
+        <p className={styles.hint}>
+          {C.pending.helpLead}{" "}
+          <Link href="/contact" className={styles.inlineLink}>
+            {C.pending.helpLink}
+          </Link>
+          .
+        </p>
+      </div>
+    )
   } else if (pass.isGift) {
     const who = pass.recipientName ?? "them"
-    const sentAlready = pass.deliveredAt !== null || (pass.deliverAt !== null && pass.deliverAt <= now)
+    // Only a confirmed send says "we've emailed"; a passed send time with no
+    // confirmation says it is going now (Sol copy check, 2026-10-20).
+    const sent = pass.deliveredAt !== null
+    const due = !sent && pass.deliverAt !== null && pass.deliverAt <= now
     title = (
       <>
         {C.gift.title} <em>{C.gift.titleAccent}</em>
@@ -28,7 +69,11 @@ export function GiftThanksPage({ pass, now = new Date() }: { pass: PassRecord | 
     body = (
       <div className={styles.stack} data-testid="gift-thanks">
         <p className={styles.noticeBody}>
-          {sentAlready ? C.gift.sentNow(who) : C.gift.body(who, pass.deliverAt ? formatUkDate(pass.deliverAt) : "")}
+          {sent
+            ? C.gift.sentNow(who)
+            : due
+              ? C.gift.sending(who)
+              : C.gift.body(who, pass.deliverAt ? formatUkDate(pass.deliverAt) : "")}
         </p>
         <dl className={styles.rows}>
           <div>
@@ -50,12 +95,23 @@ export function GiftThanksPage({ pass, now = new Date() }: { pass: PassRecord | 
             {C.gift.print}
           </Link>
         </div>
+        <p className={styles.hint} data-testid="gift-thanks-refund">
+          {C.refund.lead}{" "}
+          <Link href="/contact" className={styles.inlineLink}>
+            {C.refund.contact}
+          </Link>
+          {C.refund.rest}{" "}
+          <Link href="/terms" className={styles.inlineLink}>
+            {C.refund.terms}
+          </Link>
+          .
+        </p>
       </div>
     )
   } else {
     title = (
       <>
-        {C.self.title} <em>{C.self.titleAccent}</em>
+        {C.self.title} <em>{pass.redeemedAt ? C.self.titleAccent : C.self.titleAccentNotOpened}</em>
       </>
     )
     body = (

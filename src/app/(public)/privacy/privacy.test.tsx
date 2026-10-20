@@ -7,7 +7,7 @@ afterEach(cleanup)
 describe("PrivacyPage", () => {
   it("renders the page heading", () => {
     render(<PrivacyPage />)
-    expect(screen.getByText("Privacy Policy")).toBeInTheDocument()
+    expect(screen.getByText("Privacy policy")).toBeInTheDocument()
   })
 
   it("renders the last updated date", () => {
@@ -42,10 +42,31 @@ describe("PrivacyPage", () => {
 
   it("renders key sections", () => {
     render(<PrivacyPage />)
-    expect(screen.getByText("1. Information We Collect")).toBeInTheDocument()
-    expect(screen.getByText("2. How We Use Your Information")).toBeInTheDocument()
-    expect(screen.getByText("5. Data Security")).toBeInTheDocument()
-    expect(screen.getByText("6. Your Rights")).toBeInTheDocument()
-    expect(screen.getByText("11. Contact Us")).toBeInTheDocument()
+    expect(screen.getByText("1. Information we collect")).toBeInTheDocument()
+    expect(screen.getByText("2. How we use your information")).toBeInTheDocument()
+    expect(screen.getByText("5. Data security")).toBeInTheDocument()
+    expect(screen.getByText("6. Your rights")).toBeInTheDocument()
+    expect(screen.getByText("11. Contact us")).toBeInTheDocument()
+  })
+
+  it("says what the code does about cookies and analytics (launch readiness, 2026-10-20)", () => {
+    // src/app/layout.tsx loads only analytics.gwth.ai/js/script.outbound-links.js,
+    // our own Plausible, which sets no cookies; next-themes keeps the theme in
+    // localStorage. So the policy must not say "We may use analytics cookies".
+    const { container } = render(<PrivacyPage />)
+    const text = (container.textContent ?? "").replace(/\s+/g, " ")
+    expect(text).not.toMatch(/may use analytics cookies/i)
+    expect(text).toContain("We use only essential cookies, which keep you signed in.")
+    expect(text).toContain("Plausible Analytics, which we run on our own server. It uses no cookies")
+    expect(text).not.toMatch(/post-beta/i)
+  })
+
+  it("keeps a space after every bold label and starts each sentence with a capital", () => {
+    const { container } = render(<PrivacyPage />)
+    for (const strong of container.querySelectorAll("li > strong")) {
+      const next = strong.nextSibling?.textContent ?? ""
+      expect(next.startsWith(" "), `${strong.textContent} is followed by "${next.slice(0, 12)}"`).toBe(true)
+    }
+    expect(container.textContent).toContain("Gifts: We collect")
   })
 })

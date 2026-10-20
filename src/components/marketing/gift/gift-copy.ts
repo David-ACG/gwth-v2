@@ -14,7 +14,7 @@ export const GIFT_COPY = {
     title: "Give someone",
     titleAccent: "the GWTH course",
     standfirst:
-      "GWTH is a practical three-month AI course for people who aren't programmers, about an hour a day. Give the whole course or the first month. Their time starts when they open it. We never ask for their card.",
+      "GWTH is a practical AI course for work and everyday life in the UK. It runs for three months, at about five hours a week. Give the whole course or the first month. Their time starts when they open it. We never ask for their card.",
   },
   notOnSale: {
     title: (opensOn: string) => `Gifts go on sale on ${opensOn}`,
@@ -34,6 +34,8 @@ export const GIFT_COPY = {
       note: "Month 1. They can choose to pay for Months 2 and 3 afterwards.",
     },
     selected: "Selected",
+    // Read aloud between the sale price and the struck-through one.
+    was: ", was",
   },
   recipient: {
     legend: "Who is it for?",
@@ -51,12 +53,18 @@ export const GIFT_COPY = {
     legend: "When should we email it?",
     christmas: (at: string) => `On Christmas morning (${at} UK time)`,
     now: "Straight away",
-    date: "On a date I choose (at 7am UK time)",
+    date: "On a date I choose (at about 7am UK time)",
     dateLabel: "Date",
   },
   pay: {
     button: (price: string) => `Continue to payment (${price})`,
     note: "You'll pay on Stripe's secure page. We'll then email your receipt and a gift card to print.",
+    // "By paying, you agree to our Terms. To refund a gift that hasn't been
+    // opened, contact us." The two links sit between the parts.
+    agree: "By paying, you agree to our",
+    terms: "Terms",
+    refund: "To ask for a refund before the gift is opened,",
+    contact: "contact us",
   },
   links: {
     haveCode: "Have a gift code?",
@@ -75,7 +83,7 @@ export const GIFT_COPY = {
     },
     {
       title: "What happens at the end?",
-      body: "The gift stops without renewing. We'll email them about carrying on. Unopened gifts get a full refund. Once opened, gifts aren't refundable unless the law requires.",
+      body: "Their access to the course lessons ends without renewing. We'll email them about continuing. Contact us for a full refund before the gift is opened. Once opened, gifts aren't refundable unless the law requires.",
     },
   ],
   errors: {
@@ -96,12 +104,18 @@ export const OPEN_COPY = {
     title: "Open your",
     titleAccent: "gift",
     standfirst:
-      "Enter the code from your gift email or card. Your time starts when you open the gift.",
+      "Enter the code from your gift email or card. You'll need a free GWTH account to open it. Your time starts when you open the gift.",
   },
   enter: {
     label: "Gift code",
     placeholder: "GWTH-XXXX-XXXX-XXXX",
     button: "Find my gift",
+    empty: "Enter the code from your gift email or card.",
+  },
+  // "Can't find your code? ... contact us." with Contact linked.
+  lostCode: {
+    lead: "Can't find your code? It's in the gift email and on the printed gift card. If you still can't find it,",
+    link: "contact us",
   },
   notFound: "We can't find that code. Please check it and try again.",
   found: {
@@ -128,7 +142,7 @@ export const OPEN_COPY = {
     body: "Keep the code to open later, or give it to someone else. It must be opened by the date shown.",
   },
   refunded: { title: "This gift was refunded", body: "It can't be opened. If you think that's wrong, please contact us." },
-  expired: { title: "This gift's opening deadline has passed", body: "Please contact us and we'll help." },
+  expired: { title: "The time to open this gift has passed", body: "Please contact us and we'll help." },
   openedElsewhere: {
     title: "This gift has already been opened",
     body: "It was opened on a different account. If that wasn't you, please contact us.",
@@ -139,8 +153,24 @@ export const OPEN_COPY = {
 export const THANKS_COPY = {
   meta: { title: "Thank you", description: "Your GWTH order." },
   pending: {
-    title: "We're confirming your payment",
-    body: "This usually takes a few seconds. Refresh this page in a moment. We'll also email you a receipt.",
+    title: "We’re confirming your payment",
+    body: "This usually takes a few seconds. Refresh this page in a moment. Once it's confirmed, you'll see your gift or course details here, and we'll email you a receipt.",
+    helpLead: "If this hasn't changed after a few minutes,",
+    helpLink: "contact us",
+  },
+  // Opened without the payment details Stripe adds to the link.
+  noPayment: {
+    title: "We can't check a payment from this link",
+    body: "Stripe returns you to this page after payment. If you've already paid, your receipt email has everything you need.",
+    gift: "Give a gift",
+    contact: "Contact us",
+  },
+  // The refund rule, as in the Terms (section 7).
+  refund: {
+    lead: "For a full refund before the gift is opened,",
+    contact: "contact us",
+    rest: ". Once it's opened, it isn't refundable unless the law requires. See our",
+    terms: "Terms",
   },
   gift: {
     title: "Thank you.",
@@ -148,6 +178,9 @@ export const THANKS_COPY = {
     body: (who: string, when: string) =>
       `We'll email ${who} on ${when} at about 7am UK time, with your message and a link to open the gift.`,
     sentNow: (who: string) => `We've emailed ${who} with your message and a link to open the gift.`,
+    // The send time has passed but the email has not been confirmed as sent.
+    sending: (who: string) =>
+      `We'll email ${who} your message and a link to open the gift. If it doesn't arrive, please contact us.`,
     code: "Gift code",
     openBy: "Open it by",
     printNote: "To give it in person, print the gift card. The code works without the email.",
@@ -156,6 +189,7 @@ export const THANKS_COPY = {
   self: {
     title: "Thank you.",
     titleAccent: "Your course has started.",
+    titleAccentNotOpened: "Your course is ready.",
     body: "Month 1 is open in your account now. We've emailed you a receipt.",
     button: "Start Month 1",
     notOpened:
@@ -164,7 +198,10 @@ export const THANKS_COPY = {
 } as const
 
 export const CARD_COPY = {
-  meta: { title: "Your GWTH gift card" },
+  meta: {
+    title: "Your GWTH gift card",
+    description: "GWTH is a practical AI course for work and everyday life in the UK.",
+  },
   heading: (name: string | null) => (name ? `A gift for ${name}` : "A gift for you"),
   what: {
     course: "The whole GWTH course: Months 1, 2 and 3",
@@ -175,10 +212,17 @@ export const CARD_COPY = {
   openBy: (date: string) => `Open it by ${date}. Your time starts when you open it.`,
   print: "Print this card",
   notFound: "We can't find that gift code.",
+  notFoundHelp:
+    "The link to the gift card is in the receipt email we sent when the gift was bought. If you have the gift code, you can open the gift with it.",
+  openGift: "Open your gift",
+  contact: "Contact us",
+  terms: "Terms",
+  privacy: "Privacy",
   // Shown on screen to the buyer, above the card; never printed.
   thanks: (buyer: string | null) => (buyer ? `Thank you, ${buyer}.` : "Thank you."),
   sent: (who: string, date: string) => `We emailed your gift to ${who} on ${date}.`,
-  willSend: (who: string, date: string) => `We'll email your gift to ${who} on ${date} at 7am UK time.`,
+  sending: (who: string) => `We'll email your gift to ${who}. If it doesn't arrive, please contact us.`,
+  willSend: (who: string, date: string) => `We'll email your gift to ${who} on ${date} at about 7am UK time.`,
   printToo: "You can also print this card and give it to them yourself.",
   back: "Back to GWTH.ai",
 } as const

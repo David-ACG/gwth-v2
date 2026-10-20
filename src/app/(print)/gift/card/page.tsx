@@ -6,6 +6,7 @@ import { getPassByCode } from "@/lib/billing/pass-store"
 
 export const metadata: Metadata = {
   title: CARD_COPY.meta.title,
+  description: CARD_COPY.meta.description,
   robots: { index: false },
 }
 

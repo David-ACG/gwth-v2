@@ -3,6 +3,7 @@ import { formatUkDate, normalisePassCode } from "@/lib/billing/passes"
 import { getPassByCode, passOpenability } from "@/lib/billing/pass-store"
 import { getAccessForUser } from "@/lib/billing/access"
 import { OpenGiftButton } from "./open-gift-button"
+import { GiftCodeForm } from "./gift-code-form"
 import { OPEN_COPY as C } from "./gift-copy"
 import form from "@/components/marketing/contact-fde/contact-fde.module.css"
 import styles from "./gift.module.css"
@@ -19,33 +20,19 @@ function Notice({ title, body, children }: { title: string; body?: string; child
   )
 }
 
+/** The code box, then where to find a lost code (with Contact linked). */
 function CodeForm({ value, error }: { value?: string; error?: string }) {
   return (
-    <form method="get" action="/gift/open" className={form.form}>
-      <div className={form.field}>
-        <label className={form.label} htmlFor="code">{C.enter.label}</label>
-        <input
-          id="code"
-          name="code"
-          className={form.input}
-          defaultValue={value}
-          placeholder={C.enter.placeholder}
-          autoComplete="off"
-          autoCapitalize="characters"
-          spellCheck={false}
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? "code-error" : undefined}
-        />
-        {error && (
-          <p className={form.error} id="code-error">
-            {error}
-          </p>
-        )}
-      </div>
-      <button type="submit" className={form.buttonSolid}>
-        {C.enter.button}
-      </button>
-    </form>
+    <div className={styles.stack}>
+      <GiftCodeForm value={value} error={error} />
+      <p className={styles.hint} data-testid="gift-lost-code">
+        {C.lostCode.lead}{" "}
+        <Link href="/contact" className={styles.inlineLink}>
+          {C.lostCode.link}
+        </Link>
+        .
+      </p>
+    </div>
   )
 }
 
@@ -55,13 +42,16 @@ function CodeForm({ value, error }: { value?: string; error?: string }) {
  * POST /api/passes/open call; this page only reads.
  */
 export async function OpenGiftPage({ rawCode, identity }: { rawCode: string | null; identity: Identity }) {
+  // rawCode is null when no code was sent, and "" when the box was sent empty.
   const code = rawCode ? normalisePassCode(rawCode) : null
   const pass = code ? await getPassByCode(code).catch(() => null) : null
   const back = code ? `/gift/open?code=${encodeURIComponent(code)}` : "/gift/open"
 
   let body: React.ReactNode
-  if (!rawCode) {
+  if (rawCode === null) {
     body = <CodeForm />
+  } else if (!rawCode) {
+    body = <CodeForm error={C.enter.empty} />
   } else if (!pass) {
     body = <CodeForm value={rawCode} error={C.notFound} />
   } else {

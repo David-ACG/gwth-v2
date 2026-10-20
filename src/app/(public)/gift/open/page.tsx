@@ -18,5 +18,6 @@ export default async function Page({
 }) {
   const { code } = await searchParams
   const raw = Array.isArray(code) ? code[0] : code
-  return <OpenGiftPage rawCode={raw?.trim() || null} identity={await getSessionIdentity()} />
+  // An empty box sends "?code=": keep it as "" so the page can say what to enter.
+  return <OpenGiftPage rawCode={raw === undefined ? null : raw.trim()} identity={await getSessionIdentity()} />
 }
