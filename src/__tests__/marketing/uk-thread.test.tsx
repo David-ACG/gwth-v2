@@ -14,7 +14,7 @@ import { ContactFde } from "@/components/marketing/contact-fde/contact-fde"
 import { WaitlistFde } from "@/components/marketing/waitlist-fde/waitlist-fde"
 import { NewsletterFde } from "@/components/marketing/newsletter-fde/newsletter-fde"
 import { Footer } from "@/components/layout/footer"
-import { getLiveArenaLabs, getArchivedArenaLabs } from "@/lib/data/model-arena"
+import { getModelLabIndex } from "@/lib/data/model-lab"
 import {
   UK_AI_FIGURES,
   UK_AI_SOURCES,
@@ -91,13 +91,7 @@ const SURFACES: readonly Surface[] = [
   {
     route: "/labs",
     render: () =>
-      void render(
-        <LabsFde
-          liveLabs={getLiveArenaLabs()}
-          archivedArenaLabs={getArchivedArenaLabs()}
-          legacyArchive={[]}
-        />
-      ),
+      void render(<LabsFde index={getModelLabIndex()} />),
   },
   { route: "/contact", render: () => void render(<ContactFde />) },
   { route: "/waitlist", render: () => void render(<WaitlistFde />) },

@@ -38,13 +38,6 @@
   width: min(1100px, calc(100% - 2.5rem));
 }
 
-.mono {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-muted);
-}
-
 /* ---------------- Masthead (quiet band) ---------------- */
 
 .masthead {
@@ -265,6 +258,13 @@
   }
 }
 
+.explainerHead {
+  font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.25rem;
+}
+
 .explainerItem {
   border-top: 1px solid var(--v-line-soft);
   padding-top: 1rem;
@@ -353,25 +353,32 @@
   color: var(--v-accent);
 }
 
-.cardMatchup {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 600;
-  color: var(--v-ink);
+/* A pick on a lab card: its label on its own line in the metadata style,
+   then the model in ink. */
+.cardPick {
+  font-size: var(--fde-body);
+  line-height: 1.5;
+  color: var(--v-soft);
 }
 
-/* One outcome line replaces the four clamped lines of brief that made four
-   different labs look like the same paragraph four times (David: the cards
-   "need to look very different to this"). */
-.cardOutcome {
-  margin-top: 0.15rem;
-  font-size: var(--fde-body);
-  line-height: 1.55;
-  color: var(--v-soft);
-  flex: 1;
+.cardPick strong {
+  color: var(--v-ink);
+  font-weight: 600;
+}
+
+.cardPickLabel {
+  display: block;
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  color: var(--v-muted);
+}
+
+.cardBody h3 + .cardPick {
+  margin-top: 0.35rem;
 }
 
 .cardMeta {
+  margin-top: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -391,91 +398,137 @@
   color: var(--v-line);
 }
 
-/* Live is a status, so it is a word plus a glyph in the ink, never a colour or
-   a tint on its own (paper-first-lab-page; tint-is-never-the-only-signal).
-   There is no measured status colour in the token set to reach for. */
-.cardLive {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.35rem;
-  font-weight: 600;
-  color: var(--v-ink);
+/* ---------------- Cost and score chart (David, 2026-10-21) ----------------
+   Copied from the Model Lab plan page: one row per set-up, the bar the
+   list-price cost of every task, the figure at its end, the average score in
+   a right-hand column. The figure and the score are text, so the bar never
+   carries the number alone. A premium set-up's bar takes the decided error
+   colour (the plan page drew it red) AND says "premium" under the name, so
+   colour is never the only signal (tint-is-never-the-only-signal). */
+
+.chart {
+  margin: 0;
 }
 
-.cardLive span {
-  font-size: 0.6em;
-  line-height: 1;
+.chart figcaption .sectionTitle {
+  margin-bottom: 1.25rem;
+  max-width: 40rem;
 }
 
-/* ---------------- Archive list (dated hairline rows) ---------------- */
-
-.archiveList {
-  border-top: 1px solid var(--v-line-soft);
+.chartHead,
+.chartRow {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 3.5rem;
+  gap: 0.75rem;
+  align-items: center;
 }
 
-.archiveItem {
+.chartHead {
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  color: var(--v-muted);
 }
 
-.archiveLink {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  padding: 1.1rem 0;
-  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+.chartScoreHead,
+.chartScore {
+  text-align: right;
 }
 
-.archiveMain {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+.chartRows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chartRow {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+}
+
+.chartName {
+  color: var(--v-ink);
+  line-height: 1.35;
   min-width: 0;
 }
 
-.archiveTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.archiveLink:hover .archiveTitle {
-  color: var(--v-accent);
-}
-
-.archiveMeta {
-  font-family: var(--font-sans);
+.chartName small {
+  display: block;
   font-size: var(--fde-mono-sm);
-  font-weight: 500;
   color: var(--v-muted);
 }
 
-.archiveTail {
+.chartTrack {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
-  flex-shrink: 0;
+  gap: 0.45rem;
+  min-width: 0;
 }
 
-.archiveBadge {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-xs);
-  font-weight: 600;
-  color: var(--v-muted);
-  border: 1px solid var(--v-line);
-  padding: 0.25rem 0.55rem;
-  border-radius: var(--radius-sm);
+.chartFill {
+  display: block;
+  flex: none;
+  height: 1.25rem;
+  min-width: 3px;
+  border-radius: 4px;
+  background: var(--v-accent);
 }
 
-.archiveDate {
-  font-family: var(--font-sans);
-  font-size: var(--fde-mono-sm);
-  font-weight: 500;
-  color: var(--v-soft);
+.chartFillPremium {
+  background: var(--v-error-line);
+}
+
+.chartCost {
   white-space: nowrap;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.chartScore {
+  font-weight: 600;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* On a phone the name goes above its bar, so the bar keeps the width. */
+@media (max-width: 40rem) {
+  .chartHead {
+    grid-template-columns: minmax(0, 1fr) 3rem;
+  }
+
+  .chartHead span:first-child {
+    display: none;
+  }
+
+  .chartRow {
+    grid-template-columns: minmax(0, 1fr) 3rem;
+    grid-template-areas:
+      "name name"
+      "track score";
+    row-gap: 0.25rem;
+  }
+
+  .chartName {
+    grid-area: name;
+  }
+
+  .chartTrack {
+    grid-area: track;
+  }
+
+  .chartScore {
+    grid-area: score;
+  }
+}
+
+.chartNote {
+  margin-top: 1rem;
+  max-width: 44rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
 }
 
 /* ---------------- Empty state ---------------- */

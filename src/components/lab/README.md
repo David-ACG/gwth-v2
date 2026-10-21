@@ -10,6 +10,9 @@ Card displaying a single lab. Shows a colored top bar (using the lab's assigned 
 ### `LabsFilter` (`labs-filter.tsx`)
 Filter bar for the labs listing page. Provides a search input, category dropdown, difficulty dropdown, and technology dropdown. All filter state is synced to URL search params for shareable/bookmarkable filtered views. Client component.
 
+### `model-lab/`
+The Model Lab results pages at `/labs/<superpower>`; see `model-lab/README.md`.
+
 ## Main Entry Points
 
 - `LabCard` is used on the labs listing page, dashboard, and bookmarks page.
@@ -17,4 +20,4 @@ Filter bar for the labs listing page. Provides a search input, category dropdown
 
 ## Data
 
-Lab data is served from `lib/data/labs.ts` with functions: `getLabs()`, `getLab(slug)`, `searchLabs()`, `getLabFilters()`.
+The retired tiered labs are served from `lib/data/labs.ts` (kept for bookmarks) with functions: `getLabs()`, `getLab(slug)`, `searchLabs()`, `getLabFilters()`.

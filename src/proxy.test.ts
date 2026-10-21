@@ -25,6 +25,7 @@ vi.mock("better-auth/cookies", () => ({
 }))
 
 import { proxy } from "./proxy"
+import { LABS_FILES_CSP } from "@/lib/labs-files"
 
 function setSessionCookie(value: string | null) {
   sessionCookie.value = value
@@ -175,8 +176,8 @@ describe("proxy route guard (W11)", () => {
       setSessionCookie(null)
       for (const path of [
         "/labs",
-        "/labs/job-advert-claude-vs-chatgpt",
-        "/labs/some-archived-lab",
+        "/labs/thinking",
+        "/labs/building",
       ]) {
         const response = await proxy(request(path))
         expect(
@@ -192,7 +193,7 @@ describe("proxy route guard (W11)", () => {
         "/",
         "/lessons",
         "/labs",
-        "/labs/job-advert-claude-vs-chatgpt",
+        "/labs/thinking",
         "/api/health",
       ]) {
         const response = await proxy(request(path))
@@ -340,7 +341,7 @@ describe("proxy route guard (W11)", () => {
   describe("private content mode (W25)", () => {
     it("bounces anonymous traffic off /labs when the mode variable is unset", async () => {
       setSessionCookie(null)
-      for (const path of ["/labs", "/labs/job-advert-claude-vs-chatgpt"]) {
+      for (const path of ["/labs", "/labs/thinking"]) {
         const response = await proxy(request(path))
         expect(response.status, `${path} must not answer anonymously`).toBe(307)
         expect(redirectPath(response)).toBe("/login")
@@ -461,6 +462,38 @@ describe("proxy route guard (W11)", () => {
         if (original === undefined) delete process.env.ALLOW_INDEXING
         else process.env.ALLOW_INDEXING = original
       }
+    })
+  })
+
+  describe("model-written lab files keep their sandbox (Model Lab, 2026-10-21)", () => {
+    // The site-wide CSP would otherwise replace the one next.config gives
+    // /labs-files, and a Building app opened from "Try it" would run on this
+    // origin with the visitor's cookies.
+    it("sends the sandbox policy, not the site policy, for a lab file", async () => {
+      setSessionCookie(null)
+      const response = await proxy(
+        request("/labs-files/opus-5.5_medium/building_02_pronunciation_coach/index.html")
+      )
+      expect(response.headers.get("Content-Security-Policy")).toBe(LABS_FILES_CSP)
+    })
+
+    it("answers an unknown /labs/<slug> with the 404 rewrite, and leaves the six labs alone", async () => {
+      process.env.PRIVATE_CONTENT_MODE = "off"
+      setSessionCookie(null)
+      const unknown = await proxy(request("/labs/build-mcp-server"))
+      expect(unknown.headers.get("x-middleware-rewrite")).toMatch(/\/__hidden$/)
+      const known = await proxy(request("/labs/thinking"))
+      expect(known.headers.get("x-middleware-rewrite")).toBeNull()
+    })
+
+    it("is not blocked by private content mode, and leaves the lab pages on the site policy", async () => {
+      setSessionCookie(null)
+      const file = await proxy(request("/labs-files/a/b/briefing.md"))
+      expect(redirectPath(file)).toBeNull()
+      process.env.PRIVATE_CONTENT_MODE = "off"
+      const page = await proxy(request("/labs/building"))
+      expect(page.headers.get("Content-Security-Policy")).toMatch(/^default-src 'self'/)
+      expect(page.headers.get("Content-Security-Policy")).not.toMatch(/sandbox/)
     })
   })
 

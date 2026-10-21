@@ -438,167 +438,297 @@ export interface LabStep {
   content: string
 }
 
-// ─── Model Arena labs (the current lab format, David 2026-07-22) ──────────────
+// ─── Model Lab (the six results pages at /labs, David 2026-10-21) ─────────────
+//
+// The shapes below are the JSON that model-bakeoff's `lab/site/export_gwth.py`
+// writes into `src/lib/data/model-lab/`. Field names stay in the exporter's
+// snake_case on purpose: the files are generated, and one spelling on both
+// sides means a re-export never needs a mapping layer to be kept in step.
 
-/**
- * One contestant in a Model Arena matchup: a named AI tool run on the shared
- * task, recorded with its exact model id so the test is checkable and dated.
- */
-export interface ArenaContestant {
-  /** Friendly product name, e.g. "Claude", "ChatGPT". */
+/** The six superpowers, each with its own lab page at /labs/<slug>. */
+export type ModelLabSlug =
+  | "research"
+  | "content"
+  | "thinking"
+  | "building"
+  | "data"
+  | "automation"
+
+/** One tested set-up named for a visitor: model, thinking level and maker. */
+export interface ModelLabSetupName {
+  /** Product name, e.g. "Claude Opus 5.5". */
   name: string
-  /** Exact model id, never rounded, e.g. "claude-opus-4-8", "gpt-5.6-sol". */
-  modelId: string
-  /** Human model label, e.g. "Claude Opus 4.8". */
-  modelLabel?: string
-  /** Exactly how it was run, e.g. "Codex CLI 0.144.1 at high reasoning effort". */
-  howRun: string
+  /** Thinking level as tested: "standard", "low", "medium", "high", "xhigh" or "max". */
+  level: string
+  /** The company that makes the model, e.g. "Anthropic". */
+  maker: string
 }
 
-/** One contestant's verbatim answer to the shared prompt. */
-export interface ArenaOutput {
-  /** Which contestant produced it (matches {@link ArenaContestant.name}). */
-  by: string
-  /** The output exactly as generated. Never edited, trimmed or paraphrased. */
-  verbatim: string
+/** A pick (best, best value) with its average mark and cost. */
+export interface ModelLabPick extends ModelLabSetupName {
+  /** Average mark out of 100 over the lab's tasks, rounded. */
+  score: number
+  /** About what one task costs at the maker's published API prices, e.g. "38p". */
+  cost: string
+  /** Tasks whose trap it caught. */
+  basics: number
+  /** Tasks it ran. */
+  n: number
 }
 
-/**
- * A REAL, playable video guide for a lab.
- *
- * This field exists ONLY when the media genuinely exists and can be played.
- * Absence is the honest default and is what every surface reads to decide
- * between a real play control and a "video guide planned" state; nothing may
- * infer a video from a slug, a poster or a naming convention. Adding this
- * object to a lab's JSON is the single switch that turns the planned state
- * into a player (bead gwth-launch-88z.32.22, David's Labs annotations).
- */
-export interface ArenaVideo {
-  /** Playable source URL. Must resolve to real media. */
-  src: string
-  /** Poster frame shown before play. */
-  poster?: string
-  /** WebVTT captions track. */
-  captions?: string
-  /** Human running time as authored, e.g. "4 min". Never estimated. */
-  durationLabel?: string
+/** An everyday app plan a set-up can be chosen in. */
+export interface ModelLabPlan {
+  /** Plan name, e.g. "Claude Pro". */
+  plan: string
+  /** Price as shown, e.g. "£20 a month" or "free". */
+  price: string
+  /** Whether the plan is free. */
+  free: boolean
+  /** What the free allowance is, for free plans. */
+  allowance?: string
 }
 
-/** One cell-flagged row of a spreadsheet specimen. */
-export interface ArenaSpecimenRow {
-  /** The row's cells, in `columns` order. Quoted from the lab's own material. */
-  cells: string[]
-  /** Why this row is interesting, in a few words. Omitted for a clean row. */
-  note?: string
+/** The daily-driver and best-for-free picks, which name a plan rather than a cost. */
+export interface ModelLabPlanPick extends ModelLabSetupName {
+  /** Average mark out of 100, rounded. */
+  score: number
+  /** The plan it is available in. */
+  plan: ModelLabPlan
 }
 
-/**
- * A small composition of the lab's OWN material, drawn in CSS rather than
- * shipped as an image, so a visitor can tell at a glance what the lab is about
- * (David: "so people understand just by glancing what it's going to be about.
- * For example, spreadsheets"). Every value is quoted from the lab's prompt or
- * brief: this is a preview of real content, never an illustration of it.
- */
-export type ArenaSpecimen =
-  | {
-      /** A few rows of tabular data, for labs whose input is a spreadsheet. */
-      kind: "grid"
-      /** Where the rows come from, e.g. "From the April export in this lab". */
-      caption: string
-      /** Column headers, in order. */
-      columns: string[]
-      /** The quoted rows. Keep to four or fewer so the panel stays scannable. */
-      rows: ArenaSpecimenRow[]
-    }
-  | {
-      /** Label and value pairs, for labs whose input is not tabular. */
-      kind: "pairs"
-      /** Where the pairs come from. */
-      caption: string
-      /** Three or fewer pairs, quoted from the lab. */
-      items: { label: string; value: string }[]
-    }
-
-/**
- * The glanceable preview a lab shows on the index, and the outcome line it
- * leads with on its own page.
- */
-export interface ArenaPreview {
-  /** Plain task cue in a visitor's own words, e.g. "Spreadsheet clean-up". */
-  taskCue: string
-  /** One outcome-led line: what the visitor walks away knowing. */
-  outcome: string
-  /** The specimen drawn in the preview panel. */
-  specimen: ArenaSpecimen
-}
-
-/** A single rubric criterion a beginner scores each output against. */
-export interface ArenaRubricItem {
-  /** A plain question the student answers for each output. */
-  criterion: string
-  /** One line on what a strong answer looks like. */
-  goodLooksLike: string
-}
-
-/** The dated verdict for a matchup, always fair to the loser. */
-export interface ArenaVerdict {
-  /** Contestant name, or "Close" / "Tie". Honest, never rigged. */
-  winner?: string
-  /** The reasoned verdict, fair to the loser. */
-  callText: string
-  /** Reminder that models change, so this holds only for these versions/date. */
-  freshnessNote: string
-}
-
-/**
- * A Model Arena lab: one realistic task, two AI models run head-to-head on the
- * same prompt, outputs shown verbatim side by side, a beginner rubric, and a
- * dated verdict. Deliberately perishable; superseded to the archive when models
- * change. Authored to `model-arena.schema.json` (launch task L23).
- */
-export interface ModelArenaLab {
-  /** Stable unique id, e.g. "arena_001". */
+/** One task in a lab. */
+export interface ModelLabTask {
+  /** Task id, e.g. "thinking_02_four_day_week". */
   id: string
-  /** URL-friendly slug. */
-  slug: string
-  /** Discriminates this from the retired tiered-lab format. */
-  format: "model-arena"
-  /** Plain and specific: the task, then the matchup. */
+  /** Short title, e.g. "The four-day week pilot". */
   title: string
-  /** live = one of the ~6 current labs; archived = superseded but kept. */
-  status: "live" | "archived"
-  /** Broad task area, e.g. "Writing", "HR", "Research", "Admin". */
-  category?: string
-  /** The date both outputs were generated (ISO yyyy-mm-dd). */
-  testedOn: string
-  /** One paragraph: who the student pretends to be, the task, why it matters. */
-  brief: string
-  /**
-   * The brief in a sentence or two, for the opening of the lab page and for
-   * the read-aloud control. The full `brief` stays below it; this is
-   * progressive disclosure, never a replacement.
-   */
-  summary?: string
-  /** The glanceable preview used on the labs index. */
-  preview?: ArenaPreview
-  /**
-   * A real, playable video guide. ABSENT until the media exists, which is
-   * what makes "video guide planned" an honest state rather than a broken
-   * promise.
-   */
-  video?: ArenaVideo
-  /** Exactly two contestants. */
-  matchup: [ArenaContestant, ArenaContestant]
-  /** The single prompt given to BOTH models, verbatim and identical. */
-  prompt: string
-  /** Each contestant's real answer, verbatim, in the same order as matchup. */
-  outputs: [ArenaOutput, ArenaOutput]
-  /** 4-6 criteria a beginner can score by reading. */
-  rubric: ArenaRubricItem[]
-  /** The dated verdict. */
-  verdict: ArenaVerdict
-  /** Short numbered steps for the student to run the same task themselves. */
-  tryItYourself: string[]
+  /** Whether this is the lab's main task, whose answers are shown. */
+  signature: boolean
+}
+
+/** One file of an answer to the main task, as the blind comparison shows it. */
+export type ModelLabAnswerFile =
+  | {
+      /** Markdown answer, carried inline. */
+      kind: "md"
+      /** File name, e.g. "pilot_plan.md". */
+      name: string
+      /** The model's markdown, verbatim (cut at 20,000 characters). */
+      text: string
+    }
+  | {
+      /** A model-written web page or chart, shown in a sandboxed frame or an image. */
+      kind: "html" | "svg"
+      /** File name. */
+      name: string
+      /** Path under /labs-files/. */
+      src: string
+    }
+  | {
+      /** A screenshot of a model-written page, with a link to open the page itself. */
+      kind: "shot"
+      /** File name of the page the screenshot was taken of. */
+      name: string
+      /** Path of the screenshot under /labs-files/. */
+      src: string
+      /** Path the link opens: the live page for Building, else the screenshot. */
+      try: string
+      /** Link label, "Try it" or "Open full size". */
+      try_label: string
+    }
+
+/** One of the four blind answers to the main task. */
+export interface ModelLabAnswer extends ModelLabSetupName {
+  /** "A" to "D", in a fixed shuffled order. */
+  letter: string
+  /** Set-up id, e.g. "opus-5.5_medium". */
+  setup: string
+  /** The answer's files. */
+  files: ModelLabAnswerFile[]
+  /** Mark out of 100 on the main task. */
+  score: number
+  /** Whether it caught the main task's trap. */
+  basics: boolean
+  /** About what this answer cost. */
+  cost: string
+}
+
+/** One file of a table row's answer to the main task. */
+export interface ModelLabRowFile {
+  /** File name; its extension decides how it is shown. */
+  name: string
+  /** Path under /labs-files/. */
+  src: string
+  /** The markdown, for .md files (rendered on the server when the row is opened). */
+  text?: string
+}
+
+/** One row of "Every set-up we tested". */
+export interface ModelLabRow extends ModelLabSetupName {
+  /** Position by average mark; equal marks share a rank. */
+  rank: number
+  /** Set-up id. */
+  setup: string
+  /** Average mark out of 100, rounded. */
+  score: number
+  /** Tasks whose trap it caught. */
+  basics: number
+  /** Tasks it ran. */
+  n: number
+  /** Average cost of a task. */
+  cost: string
+  /** Mark on each task in the lab's task order; null where not marked yet. */
+  tasks: (number | null)[]
+  /** Where an everyday person can use it. */
+  where: string
+  /** Its answer to the main task. */
+  sig_files: ModelLabRowFile[]
+}
+
+/** A premium set-up, shown for cost only and never ranked or picked. */
+export interface ModelLabPremiumRow extends ModelLabSetupName {
+  /** Average mark out of 100, rounded. */
+  score: number
+  /** Average cost of a task. */
+  cost: string
+}
+
+/** The main-task cost check (GPT-6 Astra against GPT-6.1 Sol). */
+export interface ModelLabPremiumMainRow extends ModelLabSetupName {
+  /** What the main task cost. */
+  cost: string
+  /** Whether this is the premium set-up. */
+  premium: boolean
+}
+
+/** The premium section's wording, split around its cost box. */
+export interface ModelLabPremiumNote {
+  /** Section title. */
+  title: string
+  /** Markdown before the cost box. */
+  before: string
+  /** The sentence on how GPT-6 Astra was run. */
+  astra: string
+  /** Markdown after the cost box. */
+  after: string
+  /** The sources line. */
+  sources: string
+}
+
+/** Everything one lab page shows, exactly as the exporter writes it. */
+export interface ModelLabData {
+  /** The lab's slug. */
+  sp: ModelLabSlug
+  /** Display name, e.g. "Thinking". */
+  sp_name: string
+  /** Page headline, e.g. "Which AI is best at thinking a problem through?". */
+  headline: string
+  /** The blind comparison's question, e.g. "Which plan would you take to the board?". */
+  ask: string
+  /** The lab's tasks in table order. */
+  tasks: ModelLabTask[]
+  /** The main task's title. */
+  sig_title: string
+  /** The main task in plain English. */
+  sig_plain: string
+  /** The brief every model was given for the main task (markdown). */
+  sig_task: string
+  /** The best set-up. */
+  best: ModelLabPick
+  /** The best value set-up. */
+  value: ModelLabPick
+  /** The daily driver in an everyday app, or null if none qualifies. */
+  app: ModelLabPlanPick | null
+  /** The best set-up in a free app, or null if none qualifies. */
+  free: ModelLabPlanPick | null
+  /** Premium set-ups, cheapest first. */
+  premium: ModelLabPremiumRow[]
+  /** The main-task cost check, empty if not run in this lab. */
+  premium_main: ModelLabPremiumMainRow[]
+  /** Whether Claude Fable ran every task in this lab. */
+  fable_all: boolean
+  /** The premium section's wording. */
+  premium_note: ModelLabPremiumNote
+  /** The four blind answers. */
+  answers: ModelLabAnswer[]
+  /** Every set-up, best first. */
+  table: ModelLabRow[]
+  /** The six labs, for the lab menu. */
+  nav: { id: ModelLabSlug; name: string }[]
+  /** How many set-ups are in the table. */
+  count: number
+  /** First day any answer on the page was made (ISO date). */
+  tested_from: string
+  /** Last day any answer on the page was made (ISO date). */
+  tested_to: string
+}
+
+/** One lab in the index. */
+export interface ModelLabSummary {
+  /** The lab's slug. */
+  sp: ModelLabSlug
+  /** Display name. */
+  sp_name: string
+  /** Page headline. */
+  headline: string
+  /** The blind comparison's question. */
+  ask: string
+  /** The main task's title. */
+  sig_title: string
+  /** The best set-up. */
+  best: ModelLabPick
+  /** The best value set-up. */
+  value: ModelLabPick
+  /** Set-ups in the table. */
+  count: number
+  /** Tasks in the lab. */
+  tasks: number
+  /** First test day (ISO date). */
+  tested_from: string
+  /** Last test day (ISO date). */
+  tested_to: string
+}
+
+/** One bar of the cost-and-score chart on /labs. */
+export interface ModelLabCostRow extends ModelLabSetupName {
+  /** Set-up id. */
+  setup: string
+  /** Whether it is a premium set-up (shown with its own colour AND the word). */
+  premium: boolean
+  /** List-price cost in pounds of every scored task it ran, for the bar length. */
+  cost_gbp: number
+  /** The same cost as the page prints it, e.g. "£67.73" or "38p". */
+  cost: string
+  /** Average score out of 100 across the six labs, rounded. */
+  score: number
+  /** How many of the scored tasks it ran. */
+  tasks_run: number
+}
+
+/** The cost-and-score chart: every set-up, dearest first. */
+export interface ModelLabCostChart {
+  /** How many scored tasks there are across the six labs. */
+  tasks: number
+  /** One row per set-up, dearest first. */
+  rows: ModelLabCostRow[]
+}
+
+/** The lab list with the dates and counts the index page states. */
+export interface ModelLabIndex {
+  /** The six labs, in menu order. */
+  labs: ModelLabSummary[]
+  /** First test day across every lab (ISO date). */
+  tested_from: string
+  /** Last test day across every lab (ISO date). */
+  tested_to: string
+  /** Distinct models in the tables. */
+  model_count: number
+  /** Distinct set-ups (model plus thinking level) in the tables. */
+  setup_count: number
+  /** Pence to the dollar used for every cost. */
+  p_per_usd: number
+  /** The cost-and-score chart. */
+  cost_chart: ModelLabCostChart
 }
 
 // ─── Progress ─────────────────────────────────────────────────────────────────

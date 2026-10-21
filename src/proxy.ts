@@ -10,6 +10,7 @@ import { PROTECTED_PATHS, DEV_REVIEW_PATHS } from "@/lib/protected-routes"
 import { safeNextPath } from "@/lib/safe-next"
 import { isHiddenPublicPath } from "@/lib/public-routes"
 import { isSelling } from "@/lib/launch"
+import { isLabsFilePath, isUnknownLabPath, LABS_FILES_CSP } from "@/lib/labs-files"
 
 /**
  * Security headers applied to all responses.
@@ -287,6 +288,17 @@ export async function proxy(request: NextRequest) {
     return NextResponse.rewrite(url)
   }
 
+  // Model Lab (2026-10-21): only the six labs exist under /labs/<slug>. Any
+  // other slug (a retired practise lab, a typo) is a real 404, decided here
+  // for the same reason as the hidden pages above. The four old Arena slugs
+  // never get this far: next.config redirects them first.
+  if (isUnknownLabPath(pathname)) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/__hidden"
+    url.search = ""
+    return NextResponse.rewrite(url)
+  }
+
   // From the day sales open, nobody waits: old waitlist links go to sign-up.
   if (pathname === "/waitlist" && isSelling()) {
     const url = request.nextUrl.clone()
@@ -337,6 +349,13 @@ export async function proxy(request: NextRequest) {
   // Apply security headers to the response
   for (const [key, value] of Object.entries(baseSecurityHeaders)) {
     response.headers.set(key, value)
+  }
+
+  // Model-written files (Model Lab answers) keep their sandbox policy: the
+  // site-wide CSP set just above would otherwise replace the one next.config
+  // gives them, and an app opened in a new tab would run on this origin.
+  if (isLabsFilePath(pathname)) {
+    response.headers.set("Content-Security-Policy", LABS_FILES_CSP)
   }
 
   // Keep playable media out of the edge cache so byte ranges survive the CDN.

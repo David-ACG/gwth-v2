@@ -1,26 +1,20 @@
 # labs-fde
 
-Labs landing (`/labs`) in the FDE journal register, reworked to the **Model
-Arena** format (W22, David 2026-07-22). A lab is a head-to-head test: two AI
-tools run the same real task, outputs shown side by side, a rubric, and a dated
-verdict. Labs complement lessons (lessons teach you how; labs show you which
-tool when).
+The Model Lab index at `/labs` (David, 2026-10-21, option A), paper-first
+register. It replaced the Model Arena listing: every new AI model gets the same
+real UK work tasks in six labs (research, content, thinking, building, data,
+automation), marked by computer checks and AI judges.
 
-- `labs-fde.tsx` — server component: drenched teal masthead with the Model
-  Arena framing, a "how it works" explainer row, a **Live now** card row (the
-  ~6 labs in rotation), a dated **archive** list (superseded arena labs first,
-  then the retired tiered labs kept read-only), and a closing band pointing at
-  the course.
-- `labs-fde.module.css` — scoped `--v-*` palette on `.shell` with a
-  `:global(.dark)` override block, mirroring `home-fde.module.css`.
+- `labs-fde.tsx`: server components. `LabsFde` is the page (masthead, a short
+  "How we test", the six lab cards with each lab's question, best pick and
+  best value, the cost-and-score chart, and the closing band). `CostChart` is
+  the chart: one row per set-up, its list-price cost of running every scored
+  task as a bar with the figure printed at its end, and its average score
+  across the six labs; premium set-ups have their own bar colour and the word
+  "premium".
+- `labs-fde.module.css`: layout only; every colour is a `--v-*` token.
 
-The page (`src/app/(public)/labs/page.tsx`) fetches live/archived arena labs via
-`src/lib/data/model-arena.ts` and the retired tiered labs via
-`src/lib/data/labs.ts` (`getLabs`), then passes them down; this module owns
-presentation only.
-
-The **detail** pages live at `src/app/(public)/labs/[slug]/` and render with
-`src/components/lab/arena/` (`ArenaLabDetail` for the head-to-head, and
-`ArchiveLabDetail` for the read-only retired labs). Labs are the free marketing
-taster, so the whole `/labs` subtree is public (no login redirect — see
-`src/proxy.ts` and bead gwth-launch-bbg).
+The page (`src/app/(public)/labs/page.tsx`) reads `getModelLabIndex()` from
+`src/lib/data/model-lab.ts`, which serves the JSON written by model-bakeoff's
+`lab/site/export_gwth.py`. The lab pages themselves are in
+`src/components/lab/model-lab/`.

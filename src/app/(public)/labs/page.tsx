@@ -1,9 +1,5 @@
 import type { Metadata } from "next"
-import { getLabs } from "@/lib/data/labs"
-import {
-  getLiveArenaLabs,
-  getArchivedArenaLabs,
-} from "@/lib/data/model-arena"
+import { getModelLabIndex } from "@/lib/data/model-lab"
 import { LabsFde } from "@/components/marketing/labs-fde/labs-fde"
 import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
@@ -23,37 +19,22 @@ export const revalidate = 0
 export const metadata: Metadata = {
   title: "Free AI labs",
   description:
-    "Head-to-head AI labs: two tools do the same real UK work task, with both answers side by side, a checklist to judge them by and a dated verdict. Free to open, no card required.",
+    "Every new AI model on the same real UK work tasks, in six labs: research, writing, thinking, building, data and automation. Marked by computer checks and AI judges, with the best pick, the best value and the cost of each. Free, no card required.",
 }
 
 /**
- * Public labs landing in the Model Arena format (FDE journal register).
- *
- * Shows the labs currently in rotation (LIVE). The dated ARCHIVE of
- * superseded matchups and retired tiered-format labs is still fetched and kept
- * read-only at /labs/<slug>, but the listing hides it while
- * `LABS_ARCHIVE_VISIBLE` is false (bead gwth-launch-amb). No progress data:
- * labs are the free taster once the site is public.
+ * The Model Lab index (David, 2026-10-21, option A): the six labs, how we
+ * test, and the cost and score of every set-up. It replaced the Model Arena
+ * listing. No progress data: labs are the free taster once the site is
+ * public.
  *
  * While `PRIVATE_CONTENT_MODE` is on the gate below restricts the page to the
- * content allowlist. It is the FIRST await, before any lab is fetched: App
+ * content allowlist. It is the FIRST await, before any lab is read: App
  * Router renders a page in parallel with its layout, so a gate placed after a
- * data read still streams the lab bodies out in the RSC payload.
+ * data read still streams the lab data out in the RSC payload.
  */
 export default async function PublicLabsPage() {
   await requireContentAccessOrRedirect()
 
-  const [liveLabs, archivedArenaLabs, legacyArchive] = await Promise.all([
-    getLiveArenaLabs(),
-    getArchivedArenaLabs(),
-    getLabs(),
-  ])
-
-  return (
-    <LabsFde
-      liveLabs={liveLabs}
-      archivedArenaLabs={archivedArenaLabs}
-      legacyArchive={legacyArchive}
-    />
-  )
+  return <LabsFde index={getModelLabIndex()} />
 }

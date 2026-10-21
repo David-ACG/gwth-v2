@@ -1,5 +1,6 @@
 import type { NextConfig } from "next"
 import bundleAnalyzer from "@next/bundle-analyzer"
+import { LABS_FILES_HEADERS, MODEL_ARENA_REDIRECTS } from "./src/lib/labs-files"
 
 const nextConfig: NextConfig = {
   // Marketing candidates are built beside the live preview, then promoted
@@ -35,7 +36,15 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/about", destination: "/why-gwth", permanent: true },
+      // The four Model Arena labs were replaced by the six Model Lab pages
+      // (David, 2026-10-21, option A). Each old lab goes to the lab that now
+      // covers its task, permanently, so shared links keep working.
+      ...MODEL_ARENA_REDIRECTS,
     ]
+  },
+  // Model-written files run sandboxed with no network (src/lib/labs-files.ts).
+  async headers() {
+    return [LABS_FILES_HEADERS]
   },
 }
 

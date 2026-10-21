@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { formatTestedOn, getArenaLab } from "@/lib/data/model-arena"
-import { getLab } from "@/lib/data/labs"
-import { ArenaLabDetail } from "@/components/lab/arena/arena-lab-detail"
-import { ArchiveLabDetail } from "@/components/lab/arena/archive-lab-detail"
+import { getModelLab } from "@/lib/data/model-lab"
+import { countWord, formatTestedRange } from "@/lib/model-lab-format"
+import { ModelLabPage } from "@/components/lab/model-lab/lab-page"
 import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 /** Per-request evaluation of the content gate — see the note in ../page.tsx. */
@@ -15,38 +14,26 @@ type PageProps = {
 }
 
 /**
- * Metadata for a lab detail page. Model Arena labs describe the matchup and
- * test date; retired tiered labs fall back to their own description.
+ * Metadata for a Model Lab page: its headline, and what was tested when.
  */
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-
-  const arena = getArenaLab(slug)
-  if (arena) {
-    return {
-      title: arena.title,
-      description: `${arena.matchup[0].name} vs ${arena.matchup[1].name} on one real task, tested on ${formatTestedOn(arena.testedOn)}. Both answers side by side, a checklist to judge them by and a dated verdict.`,
-    }
+  const lab = getModelLab(slug)
+  if (!lab) return { title: "Lab not found" }
+  return {
+    title: lab.headline,
+    description: `${lab.count} AI set-ups did the same ${countWord(lab.tasks.length)} real ${lab.sp_name.toLowerCase()} tasks, marked by computer checks and AI judges. Read four answers with the names hidden and choose yours. Tested ${formatTestedRange(lab.tested_from, lab.tested_to)}.`,
   }
-
-  const legacy = await getLab(slug)
-  if (legacy) {
-    return { title: `${legacy.title} (archived)`, description: legacy.description }
-  }
-
-  return { title: "Lab not found" }
 }
 
 /**
- * Lab detail page. Labs are the free marketing taster once the site is public
- * (see gwth-launch-bbg), which is why this lives in the (public) group under
- * the marketing nav rather than the dashboard shell.
+ * One of the six Model Lab pages (research, content, thinking, building,
+ * data, automation). Labs are the free marketing taster once the site is
+ * public (gwth-launch-bbg), which is why this lives in the (public) group.
  *
- * It renders two shapes from the same URL: a live or archived Model Arena lab
- * (head-to-head), or a retired tiered-format lab presented read-only as part of
- * the archive. A slug matching neither is a 404.
+ * Any other slug is a 404: the four Model Arena labs redirect to the lab that
+ * replaced each (next.config.ts), and the 23 tiered practise labs retired in
+ * July are no longer served here.
  *
  * The gate is the FIRST await, before `params` is even unwrapped, so no lab
  * body reaches the RSC payload while private mode is on. `generateMetadata`
@@ -57,16 +44,8 @@ export default async function LabDetailPage({ params }: PageProps) {
   await requireContentAccessOrRedirect()
 
   const { slug } = await params
+  const lab = getModelLab(slug)
+  if (!lab) notFound()
 
-  const arena = getArenaLab(slug)
-  if (arena) {
-    return <ArenaLabDetail lab={arena} />
-  }
-
-  const legacy = await getLab(slug)
-  if (legacy) {
-    return <ArchiveLabDetail lab={legacy} />
-  }
-
-  notFound()
+  return <ModelLabPage lab={lab} />
 }

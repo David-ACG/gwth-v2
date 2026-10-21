@@ -1,311 +1,140 @@
 import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
-import { LabsFde, LABS_ARCHIVE_VISIBLE } from "./labs-fde"
-import { getLiveArenaLabs, getArchivedArenaLabs } from "@/lib/data/model-arena"
-import type { Lab, ModelArenaLab } from "@/lib/types"
+import { CostChart, LabsFde } from "./labs-fde"
+import { getModelLabIndex } from "@/lib/data/model-lab"
+import type { ModelLabCostChart } from "@/lib/types"
 
 afterEach(cleanup)
 
-const liveLabs = getLiveArenaLabs()
+const index = getModelLabIndex()
 
-function renderIndex(labs: ModelArenaLab[] = liveLabs) {
-  return render(
-    <LabsFde
-      liveLabs={labs}
-      archivedArenaLabs={getArchivedArenaLabs()}
-      legacyArchive={[]}
-    />
-  )
+function renderIndex() {
+  return render(<LabsFde index={index} />)
 }
 
 /**
- * The /labs index, against David's annotation a-20260914-205407-b3dbb2:
- *
- * > I think we definitely want to demo labs to CIPD, but they need to look
- * > very different to this. They need a video for each lab and the menu here
- * > on the labs page should show a thumbnail from the video (like youtube) so
- * > people understand just by glancing what it's going to be about. For
- * > example, spreadsheets
- *
- * Two decisions are frozen here. A card must be understandable at a glance:
- * a preview of the lab's own material, a plain task cue, the matchup, one
- * outcome line. And a card must never claim a video that does not exist: the
- * thumbnail he asked for arrives with the video, and until then the card says
- * nothing about a video at all. It used to say "Video guide planned", which the
- * launch readiness review (2026-10-20) ruled a promise of unfinished work.
- *
- * Assertions are on semantics and data attributes rather than on sentences, so
- * the copy can be rewritten without the suite having to be rewritten with it.
+ * The /labs index after David's 2026-10-21 decision (option A): the four Model
+ * Arena labs went and the six Model Lab pages came in. Assertions are on the
+ * data and on semantics, so the copy can be rewritten (it goes through the
+ * latest Sol) without the suite being rewritten with it.
  */
-describe("LabsFde live cards", () => {
-  it("gives every live lab a preview panel and a plain task cue", () => {
+describe("LabsFde, the six labs", () => {
+  it("shows one card per lab, each linked to its own page", () => {
     renderIndex()
-    const cards = screen.getAllByTestId("arena-lab-card")
-    expect(cards).toHaveLength(liveLabs.length)
+    const cards = screen.getAllByTestId("model-lab-card")
+    expect(cards).toHaveLength(6)
+    expect(cards.map((c) => c.getAttribute("href"))).toEqual([
+      "/labs/research",
+      "/labs/content",
+      "/labs/thinking",
+      "/labs/building",
+      "/labs/data",
+      "/labs/automation",
+    ])
+  })
 
-    for (const card of cards) {
-      expect(within(card).getByTestId("lab-preview")).toBeInTheDocument()
-      const cue = within(card).getByTestId("lab-task-cue")
-      expect(cue.textContent?.trim().length ?? 0).toBeGreaterThan(3)
+  it("gives each card the lab's question, best pick and best value with score and cost", () => {
+    renderIndex()
+    for (const lab of index.labs) {
+      const card = screen.getByRole("link", { name: `${lab.sp_name} lab: ${lab.headline}` })
+      const text = card.textContent ?? ""
+      expect(text).toContain(lab.headline)
+      expect(text).toContain(lab.best.name)
+      expect(text).toContain(`${lab.best.score} out of 100, about ${lab.best.cost} a task`)
+      expect(text).toContain(lab.value.name)
+      expect(text).toContain(`${lab.value.score} out of 100, about ${lab.value.cost} a task`)
     }
   })
 
-  it("previews the spreadsheet lab with the poster from its own video", () => {
-    // The CSS specimen was the honest stand-in while no lab had media. The
-    // spreadsheet lab now has a real guide, so its card shows a real still
-    // from that guide, which is the "like youtube" thumbnail David asked for.
-    renderIndex()
-    const card = screen
-      .getAllByTestId("arena-lab-card")
-      .find((c) => c.getAttribute("href")?.includes("messy-spreadsheet"))
-    expect(card).toBeDefined()
-    expect(within(card!).getByTestId("lab-preview")).toHaveAttribute(
-      "data-preview",
-      "video"
-    )
-    expect(within(card!).queryByTestId("lab-specimen-grid")).toBeNull()
-  })
-
-  it("quotes the lab's own material on every card that has no video yet", () => {
-    renderIndex()
-    for (const lab of liveLabs) {
-      if (lab.video || !lab.preview) continue
-      const card = screen
-        .getAllByTestId("arena-lab-card")
-        .find((c) => c.getAttribute("href")?.endsWith(`/labs/${lab.slug}`))!
-      expect(within(card).getByTestId("lab-preview")).toHaveAttribute(
-        "data-preview",
-        "specimen"
-      )
-      const specimen = lab.preview.specimen
-      // Every quoted cell really appears in the lab's own shared prompt: the
-      // preview is a quotation from the lab, never an illustration of it.
-      if (specimen.kind === "grid") {
-        for (const row of specimen.rows) {
-          for (const cell of row.cells) {
-            expect(lab.prompt).toContain(cell)
-          }
-        }
-      }
-    }
-  })
-
-  it("claims a video only where one exists, and says nothing everywhere else", () => {
+  it("says what the labs are: same real UK tasks, two kinds of marking, nobody pays us, when", () => {
     const { container } = renderIndex()
-
-    // The index never plays anything: a card links to the lab page, so a play
-    // control here would navigate rather than play. That stays true even now
-    // that one lab has real media.
-    expect(container.querySelector("video")).toBeNull()
-    expect(screen.queryByRole("button", { name: /play/i })).toBeNull()
-
-    for (const card of screen.getAllByTestId("arena-lab-card")) {
-      const lab = liveLabs.find((l) =>
-        card.getAttribute("href")?.endsWith(`/labs/${l.slug}`)
-      )!
-      const state = card.getAttribute("data-video-state")
-      if (lab.video) {
-        const label = within(card).getByTestId("lab-video-state")
-        // Real media, so the card shows its own poster frame and the running
-        // time the lab AUTHORED. Nothing here estimates a duration.
-        expect(state).toBe("available")
-        expect(within(card).getByTestId("lab-preview")).toHaveAttribute(
-          "data-preview",
-          "video"
-        )
-        expect(label).toHaveTextContent(
-          `Video guide, ${lab.video.durationLabel}`
-        )
-      } else {
-        expect(state).toBe("planned")
-        expect(within(card).queryByTestId("lab-video-state")).toBeNull()
-        expect(card.textContent).not.toMatch(/video guide/i)
-      }
-    }
-    // No promise of guides that do not exist, anywhere on the index.
-    expect(container.textContent).not.toMatch(/planned/i)
+    const text = container.textContent ?? ""
+    expect(text).toMatch(/same real UK work tasks/)
+    expect(text).toMatch(/Computer checks and AI judges/)
+    expect(text).toMatch(/No AI company pays us/)
+    expect(text).toMatch(/Tested October 2026/)
+    expect(screen.getByRole("heading", { name: "How we test" })).toBeInTheDocument()
   })
 
-  it("states the video position from the data, not from a frozen sentence", () => {
-    // The lead said "none has been recorded yet" for as long as that was true,
-    // and would have gone on saying it after the first guide landed.
-    renderIndex()
-    const withVideo = liveLabs.filter((l) => l.video).length
-    expect(withVideo).toBeGreaterThan(0)
-    const lead = screen.getByText(/Start with the task that is closest/)
-    expect(lead.textContent).not.toMatch(/none has been recorded/)
-    expect(lead.textContent).not.toMatch(/planned/i)
-    expect(lead.textContent).toContain(String(withVideo))
-  })
-
-  it("gives the messy-spreadsheet lab a real, complete video guide", () => {
-    // The pilot (bead gwth-launch-88z.32.23). A lab video ships as a set or it
-    // does not ship: a playable source, a poster frame taken from that video,
-    // a captions track, and a running time written by a person.
-    const lab = liveLabs.find(
-      (l) => l.slug === "messy-spreadsheet-claude-vs-chatgpt"
-    )!
-    expect(lab.video).toBeDefined()
-    expect(lab.video!.src).toMatch(/\.mp4$/)
-    expect(lab.video!.poster).toMatch(/\.(png|jpg|webp)$/)
-    expect(lab.video!.captions).toMatch(/\.vtt$/)
-    expect(lab.video!.durationLabel).toBeTruthy()
-  })
-
-  it("shows a real poster and running time once a lab has real media", () => {
-    const [first, ...rest] = liveLabs
-    const withVideo: ModelArenaLab = {
-      ...first!,
-      video: {
-        src: "/labs/video/example.mp4",
-        poster: "/labs/video/example.png",
-        durationLabel: "4 min",
-      },
-    }
-    renderIndex([withVideo, ...rest])
-
-    const card = screen
-      .getAllByTestId("arena-lab-card")
-      .find((c) => c.getAttribute("href")?.includes(withVideo.slug))!
-    expect(card).toHaveAttribute("data-video-state", "available")
-    expect(within(card).getByTestId("lab-preview")).toHaveAttribute(
-      "data-preview",
-      "video"
-    )
-    expect(within(card).getByTestId("lab-video-state")).toHaveTextContent(
-      "Video guide, 4 min"
+  it("states the model and set-up counts from the data", () => {
+    const { container } = renderIndex()
+    expect(container.textContent).toContain(
+      `${index.model_count} models, ${index.setup_count} set-ups`,
     )
   })
 
-  it("drops the matchup suffix from a card title that already carries it", () => {
+  it("carries none of the Arena wording and no banned punctuation", () => {
+    const { container } = renderIndex()
+    const text = container.textContent ?? ""
+    expect(text).not.toMatch(/arena|head-to-head|matchup|rubric|archive/i)
+    expect(text).not.toMatch(/[–—§]/)
+  })
+})
+
+describe("CostChart", () => {
+  it("draws every set-up in the export, dearest first", () => {
     renderIndex()
-    const card = screen
-      .getAllByTestId("arena-lab-card")
-      .find((c) => c.getAttribute("href")?.includes("messy-spreadsheet"))!
-    const heading = within(card).getByRole("heading", { level: 3 })
-    expect(heading).toHaveTextContent("Make sense of a messy spreadsheet")
-    expect(heading.textContent).not.toMatch(/Claude vs ChatGPT/)
-    // The matchup is still on the card, once, on its own line.
-    expect(within(card).getByText("Claude vs ChatGPT")).toBeInTheDocument()
+    const chart = screen.getByTestId("labs-cost-chart")
+    const rows = within(chart).getAllByRole("listitem")
+    expect(rows).toHaveLength(index.cost_chart.rows.length)
+    expect(rows.length).toBeGreaterThan(30)
+    const costs = index.cost_chart.rows.map((r) => r.cost_gbp)
+    expect([...costs].sort((a, b) => b - a)).toEqual(costs)
+    rows.forEach((row, i) => {
+      const r = index.cost_chart.rows[i]!
+      expect(row.textContent).toContain(r.name)
+      expect(row.textContent).toContain(r.cost)
+      expect(row.textContent).toContain(String(r.score))
+    })
   })
 
-  it("leads with one outcome line rather than the whole brief", () => {
+  it("counts the tasks from the data rather than a fixed 24", () => {
     renderIndex()
-    for (const lab of liveLabs) {
-      const card = screen
-        .getAllByTestId("arena-lab-card")
-        .find((c) => c.getAttribute("href")?.includes(lab.slug))!
-      // The four-line clamped brief is what made every card look the same.
-      expect(card.textContent).not.toContain(lab.brief)
-      expect(card).toHaveTextContent(lab.preview!.outcome)
-    }
-  })
-
-  it("keeps every live lab linked to its own page", () => {
-    renderIndex()
-    const hrefs = screen
-      .getAllByTestId("arena-lab-card")
-      .map((c) => c.getAttribute("href"))
-    expect(hrefs).toEqual(liveLabs.map((lab) => `/labs/${lab.slug}`))
-  })
-
-  it("still renders the empty state when nothing is live", () => {
-    renderIndex([])
-    expect(screen.queryAllByTestId("arena-lab-card")).toHaveLength(0)
     expect(
-      screen.getByRole("heading", { name: /no live labs/i })
+      screen.getByRole("heading", {
+        name: `What it cost to run all ${index.cost_chart.tasks} tasks, and the score each set-up got`,
+      }),
     ).toBeInTheDocument()
-  })
-})
-
-/** A retired tiered-format lab, standing in for the old archive rows. */
-const RETIRED_LAB: Lab = {
-  id: "legacy-1",
-  slug: "legacy-chatbot",
-  title: "Build a customer service chatbot",
-  description: "A retired tiered lab.",
-  difficulty: "beginner",
-  duration: 30,
-  technologies: [],
-  learningOutcomes: [],
-  prerequisites: null,
-  content: "",
-  instructions: [],
-  category: "Building",
-  projectType: "app",
-  color: "",
-  icon: "",
-  isPremium: false,
-  createdAt: new Date("2026-05-01"),
-  updatedAt: new Date("2026-05-01"),
-}
-
-/**
- * Bead gwth-launch-amb. David, 2026-07-25: "I'm not sure we should have all of
- * the olds Labs archived because it just looks like we started them and didn't
- * finish them". The old labs stay in the database; the listing hides them, and
- * one flag brings them back.
- */
-describe("LabsFde archive", () => {
-  it("is hidden by default", () => {
-    expect(LABS_ARCHIVE_VISIBLE).toBe(false)
-    const { container } = render(
-      <LabsFde
-        liveLabs={liveLabs}
-        archivedArenaLabs={getArchivedArenaLabs()}
-        legacyArchive={[RETIRED_LAB]}
-      />
-    )
-    expect(container.querySelector('[data-section="archive"]')).toBeNull()
-    expect(screen.queryAllByTestId("archive-lab-row")).toHaveLength(0)
-    expect(screen.queryByText(RETIRED_LAB.title)).toBeNull()
-    // No sentence on the page points at an archive it no longer shows.
-    expect(container.textContent).not.toMatch(/archive/i)
-    // The live labs are untouched.
-    expect(screen.getAllByTestId("arena-lab-card")).toHaveLength(liveLabs.length)
-  })
-
-  it("comes back, unchanged, when the flag is turned on", () => {
-    const { container } = render(
-      <LabsFde
-        liveLabs={liveLabs}
-        archivedArenaLabs={getArchivedArenaLabs()}
-        legacyArchive={[RETIRED_LAB]}
-        showArchive
-      />
-    )
-    expect(container.querySelector('[data-section="archive"]')).not.toBeNull()
-    const rows = screen.getAllByTestId("archive-lab-row")
-    expect(rows.map((r) => r.getAttribute("href"))).toContain(
-      `/labs/${RETIRED_LAB.slug}`
+    expect(index.cost_chart.tasks).toBe(
+      index.labs.reduce((sum, lab) => sum + lab.tasks, 0),
     )
   })
-})
 
-/**
- * The launch readiness review (2026-10-20, Claude and the latest Sol): the
- * labs were tested in July and are not re-run for the launch, so the index
- * must not promise freshness, and "rubric" is a word a beginner has to decode.
- */
-describe("LabsFde launch readiness", () => {
-  it("makes no up-to-date or new-matchup promise", () => {
-    const { container } = renderIndex()
-    expect(container.textContent).not.toMatch(/up to date|new matchups/i)
-  })
-
-  it("says checklist rather than rubric", () => {
-    const { container } = renderIndex()
-    expect(container.textContent).not.toMatch(/rubric/i)
-    expect(container.textContent).toMatch(/checklist/i)
-  })
-
-  it("names each card link by its lab title", () => {
+  it("marks a premium set-up with the word as well as the colour", () => {
     renderIndex()
-    for (const lab of liveLabs) {
-      expect(screen.getByRole("link", { name: lab.title })).toHaveAttribute(
-        "href",
-        `/labs/${lab.slug}`
-      )
+    const chart = screen.getByTestId("labs-cost-chart")
+    const premium = within(chart)
+      .getAllByRole("listitem")
+      .filter((li) => li.getAttribute("data-premium") === "true")
+    expect(premium.length).toBe(index.cost_chart.rows.filter((r) => r.premium).length)
+    for (const li of premium) expect(li.textContent).toMatch(/premium/)
+    // Fable is premium and is on the chart.
+    expect(premium.some((li) => /Claude Fable/.test(li.textContent ?? ""))).toBe(true)
+  })
+
+  it("says when a set-up ran fewer tasks than the rest, and leaves the rest alone", () => {
+    const chart: ModelLabCostChart = {
+      tasks: 25,
+      rows: [
+        { setup: "fable-5.1_max", name: "Claude Fable 5.1", level: "max", maker: "Anthropic", premium: true, cost_gbp: 85, cost: "£85.00", score: 94, tasks_run: 24 },
+        { setup: "gpt-6-astra_medium", name: "GPT-6 Astra", level: "medium", maker: "OpenAI", premium: true, cost_gbp: 20, cost: "£20.00", score: 95, tasks_run: 25 },
+        { setup: "gpt-6-luna_medium", name: "GPT-6 Luna", level: "medium", maker: "OpenAI", premium: false, cost_gbp: 0.1, cost: "10p", score: 78, tasks_run: 25 },
+      ],
     }
+    render(<CostChart chart={chart} />)
+    const [fable, astra, luna] = screen.getAllByRole("listitem")
+    expect(fable!.textContent).toMatch(/premium · ran 24 of 25 tasks/)
+    expect(astra!.textContent).toMatch(/premium/)
+    expect(astra!.textContent).not.toMatch(/ran \d+ of/)
+    expect(luna!.textContent).not.toMatch(/premium|ran \d+ of/)
+    expect(screen.getByRole("heading", { name: /all 25 tasks/ })).toBeInTheDocument()
+  })
+
+  it("explains the bar, the number and the noise under the chart", () => {
+    renderIndex()
+    const chart = screen.getByTestId("labs-cost-chart")
+    expect(chart.textContent).toMatch(/The bar is the cost/)
+    expect(chart.textContent).toMatch(/average score out of 100 across the six labs/)
+    expect(chart.textContent).toMatch(/a gap of one or two points is noise/)
   })
 })
