@@ -164,7 +164,8 @@ export function LabsFde({ index }: LabsFdeProps) {
           <p className={styles.standfirst}>
             Each lab names the best model and the best value, lets you read four answers with
             the names hidden and choose your own, and lists every model&apos;s marks and costs.
-            Tested {formatTestedMonth(index.tested_from, index.tested_to)}.
+            The costs are what the tests cost through developer access (the API), not the price of
+            an app subscription. Tested {formatTestedMonth(index.tested_from, index.tested_to)}.
           </p>
           <div className={styles.mastheadActions}>
             <a href="#labs" className={styles.buttonSolid}>
