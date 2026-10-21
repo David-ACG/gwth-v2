@@ -18,7 +18,6 @@
  * Email clients strip <style> blocks and ignore web fonts, so every style is
  * inline. Colours are hex because email has no CSS custom properties.
  */
-import { resolvePublicEmailBase } from "@/lib/email/auth-links"
 import type { EmailParts } from "@/lib/email/fde-layout"
 
 export type { EmailParts }
@@ -35,6 +34,14 @@ const COLOR = {
   button: "#b5dbd0",
   buttonText: "#17211d",
 } as const
+
+/**
+ * The wordmark lives on the public media CDN, not on the site that sends the
+ * email: an inbox fetches images through its own proxy, which cannot reach a
+ * private preview (David, 2026-10-21: the logo did not show in a gift email
+ * sent from hlab). Same image as public/logo-email-paper.png.
+ */
+export const EMAIL_LOGO_URL = "https://media.gwth.ai/email/logo-email-paper.png"
 
 const DISPLAY = "Georgia, 'Times New Roman', serif"
 const SANS = "-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
@@ -98,11 +105,7 @@ function buttonHtml(cta: { label: string; href: string }): string {
 </td></tr></table>`
 }
 
-export function renderPaperEmail(
-  input: PaperEmailInput,
-  env: Record<string, string | undefined> = process.env
-): EmailParts {
-  const base = resolvePublicEmailBase(env)
+export function renderPaperEmail(input: PaperEmailInput): EmailParts {
   const footer = input.footer ?? ["GWTH.ai is a practical AI course for people who aren't programmers."]
   const preheader = input.preheader
     ? `<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:${COLOR.ground};">${esc(input.preheader)}</div>`
@@ -125,7 +128,7 @@ ${preheader}
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;border-collapse:collapse;">
         <tr>
           <td style="padding:0 4px 18px;">
-            <img src="${esc(base)}/logo-email-paper.png" width="150" height="26" alt="GWTH.ai" style="display:block;border:0;outline:none;text-decoration:none;height:26px;width:150px;">
+            <img src="${esc(EMAIL_LOGO_URL)}" width="150" height="26" alt="GWTH.ai" style="display:block;border:0;outline:none;text-decoration:none;height:26px;width:150px;">
           </td>
         </tr>
         <tr>

@@ -92,8 +92,7 @@ export function giftReceiptEmail(
         },
       ],
       cta: { label: "Print the gift card", href: giftCardUrl(pass.code, env) },
-    },
-    env
+    }
   )
   return { subject: `Your GWTH gift for ${who} is ready`, parts }
 }
@@ -121,8 +120,7 @@ export function giftSentEmail(
         },
       ],
       cta: { label: "See the gift card", href: giftCardUrl(pass.code, env) },
-    },
-    env
+    }
   )
   return { subject: `Your gift to ${who} has been sent`, parts }
 }
@@ -157,8 +155,7 @@ export function selfReceiptEmail(pass: PassForEmail, env: Env = process.env): Bu
       cta: opened
         ? { label: "Start Month 1", href: `${resolvePublicEmailBase(env)}/dashboard` }
         : { label: "Open your course", href: openGiftUrl(pass.code, env) },
-    },
-    env
+    }
   )
   return { subject: "Your GWTH course receipt", parts }
 }
@@ -190,8 +187,7 @@ export function giftArrivedEmail(pass: PassForEmail, env: Env = process.env): Bu
       heading: `Hi ${hello}. Here's your gift.`,
       blocks,
       cta: { label: "Open your gift", href: openGiftUrl(pass.code, env) },
-    },
-    env
+    }
   )
   return { subject: `${from} has given you the GWTH course`, parts }
 }
@@ -223,8 +219,7 @@ export function passOpenedEmail(
       heading: `Hi ${hello}. Month 1 is open.`,
       blocks,
       cta: { label: "Start Month 1", href: `${resolvePublicEmailBase(env)}/dashboard` },
-    },
-    env
+    }
   )
   return { subject: "Your GWTH course has started", parts }
 }
@@ -257,8 +252,7 @@ export function renewalReminderEmail(
         },
       ],
       cta: { label: "Manage your payments", href: `${resolvePublicEmailBase(env)}/settings` },
-    },
-    env
+    }
   )
   return { subject: `Your next GWTH payment on ${formatUkDate(input.chargeOn)}`, parts }
 }
