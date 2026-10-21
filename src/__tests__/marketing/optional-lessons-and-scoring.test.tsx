@@ -307,7 +307,11 @@ describe("/for-institutions: curating depth, and what the score can be asked to 
     expect(screen.queryAllByTestId("score-not-yet-card")).toHaveLength(0)
     const section =
       container.querySelector('[data-section="tutor-view"]')?.textContent ?? ""
-    expect(section).toMatch(/average of their best mark on each quiz/i)
+    // The measures are listed once, on the "A learners screen for your
+    // tutors" card; the 21 Oct copy gate blocked a third telling here, so
+    // this section keeps only the baseline rule and the limitation.
+    expect(text()).toMatch(/average of their best mark on each quiz/i)
+    expect(section).toMatch(/meets your baseline by completing every required lesson/i)
     expect(section).toMatch(/passed the earlier version still counts/i)
     expect(text()).not.toMatch(/being built|GWTH score/i)
   })

@@ -125,7 +125,7 @@ export const EVIDENCE = [
   },
   {
     value: "16%",
-    body: "Microsoft surveyed 20,000 people who use AI at work. It classed 16% as advanced users, based on three things they reported: using AI for complex, multi-step work, changing how they work to make use of it, and taking part in shared ways of using it across a team. Support from the organisation, such as its culture and managers, was linked to twice as much of the reported benefit as individual effort.",
+    body: "Microsoft surveyed 20,000 people who use AI at work. It classed 16% as advanced users: people who said they use AI for complex, multi-step work, have changed how they work to make use of it, and use it together with their team.",
     source: "Microsoft Work Trend Index, 2026",
     href: "https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization",
   },
@@ -494,12 +494,9 @@ export function ForInstitutionsFde() {
             <h2 className={p.sectionTitle}>What your tutors see</h2>
           </div>
           <p className={p.lead} data-testid="institutions-tutor-lead">
-            Your tutors sign in to a learners screen for your edition. For each
-            member it shows how many of the required lessons they have
-            completed, the average of their best mark on each quiz, when
-            they were last active and whether they have met your baseline. A member meets it
-            by completing every required lesson with a quiz mark at or
-            above your pass mark.
+            Your tutors sign in to a learners screen for your edition. A
+            member meets your baseline by completing every required lesson
+            with a quiz mark at or above your pass mark.
           </p>
           <p className={`${p.lead} ${styles.leadAfter}`}>
             Tutors see whether each member has met the baseline, not their

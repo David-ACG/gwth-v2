@@ -368,10 +368,10 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               Everyone on the standard course completes the same{" "}
               {TOTAL_MANDATORY_LESSONS} core lessons. A professional body, or a
               company or team of 100 or more learners, can commission an
-              edition of its own instead: it chooses which lessons make up the
-              core its members must complete, which optional lessons are open
-              to them, and it can have lessons written on subjects the standard
-              course does not cover yet.
+              edition of its own. Every edition keeps the same core lessons.
+              The institution chooses which optional lessons are open to its
+              members and which they must complete, and it can have lessons
+              written on subjects the standard course does not cover yet.
             </p>
             <div className={styles.mastheadActions}>
               <Link href="/for-institutions" className={styles.buttonOutline}>
@@ -454,9 +454,9 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               <p data-testid="score-denominator">
                 The score is measured against the lessons you were given, so two
                 scores mean the same thing only when they come from the same set
-                of lessons. An institution that chooses its own core and sets
-                its own pass mark is choosing what the number is measured
-                against.
+                of lessons. An institution that chooses which optional lessons
+                its members must complete, and sets its own pass mark, is
+                choosing what the number is measured against.
               </p>
               {/* The shareable record page (with the LinkedIn mention David
                   asked for on 2026-09-14) went on 2026-10-20: no credential
