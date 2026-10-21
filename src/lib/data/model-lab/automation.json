@@ -1,7 +1,7 @@
 {
  "sp": "automation",
  "sp_name": "Automation",
- "headline": "Which AI can you trust to act for you?",
+ "headline": "Which AI is best at acting for you?",
  "ask": "Which assistant would you trust with your week?",
  "tasks": [
   {
@@ -1056,7 +1056,7 @@
    "name": "Automation"
   }
  ],
- "count": 34,
+ "count": 37,
  "tested_from": "2026-10-02",
  "tested_to": "2026-10-21"
 }

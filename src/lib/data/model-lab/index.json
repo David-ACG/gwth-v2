@@ -24,7 +24,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 34,
+   "count": 37,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -53,7 +53,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 34,
+   "count": 37,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -82,7 +82,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 34,
+   "count": 37,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -111,7 +111,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 34,
+   "count": 37,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -140,7 +140,7 @@
     "basics": 5,
     "n": 5
    },
-   "count": 34,
+   "count": 37,
    "tasks": 5,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -148,7 +148,7 @@
   {
    "sp": "automation",
    "sp_name": "Automation",
-   "headline": "Which AI can you trust to act for you?",
+   "headline": "Which AI is best at acting for you?",
    "ask": "Which assistant would you trust with your week?",
    "sig_title": "Clear my week",
    "best": {
@@ -169,7 +169,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 34,
+   "count": 37,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -177,8 +177,8 @@
  ],
  "tested_from": "2026-10-02",
  "tested_to": "2026-10-21",
- "model_count": 21,
- "setup_count": 34,
+ "model_count": 23,
+ "setup_count": 37,
  "p_per_usd": 75,
  "cost_chart": {
   "tasks": 25,

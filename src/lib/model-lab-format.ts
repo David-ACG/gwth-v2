@@ -12,6 +12,11 @@ export function levelLabel(level: string): string {
   return level === "standard" ? "standard" : `${level === "xhigh" ? "extra-high" : level} thinking`
 }
 
+/** "about 38p", but "under 1p" on its own: never "about under 1p" (copy gate, 21 Oct). */
+export function aboutCost(cost: string): string {
+  return /^under\b/.test(cost) ? cost : `about ${cost}`
+}
+
 const MONTH = new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "UTC" })
 
 function parts(iso: string): { day: number; month: string; year: number } {

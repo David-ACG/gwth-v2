@@ -1,6 +1,6 @@
 import Link from "next/link"
 import type { ModelLabCostChart, ModelLabIndex, ModelLabPick } from "@/lib/types"
-import { formatTestedMonth, formatTestedRange, levelLabel } from "@/lib/model-lab-format"
+import { aboutCost, formatTestedMonth, formatTestedRange, levelLabel } from "@/lib/model-lab-format"
 import styles from "./labs-fde.module.css"
 
 /**
@@ -40,8 +40,8 @@ function PickLine({ label, pick }: { label: string; pick: ModelLabPick }) {
   return (
     <p className={styles.cardPick}>
       <span className={styles.cardPickLabel}>{label}</span>
-      <strong>{pick.name}</strong>, {levelLabel(pick.level)}. {pick.score} out of 100, about{" "}
-      {pick.cost} a task.
+      <strong>{pick.name}</strong>, {levelLabel(pick.level)}. {pick.score} out of 100,{" "}
+      {aboutCost(pick.cost)} a task.
     </p>
   )
 }

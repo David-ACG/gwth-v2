@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { levelLabel, ordinalWord } from "@/lib/model-lab-format"
+import { aboutCost, levelLabel, ordinalWord } from "@/lib/model-lab-format"
 import styles from "./model-lab.module.css"
 
 /** One file of a blind answer, ready to show (markdown already rendered on the server). */
@@ -186,7 +186,7 @@ export function WhichWouldYouUse({ answers }: WhichWouldYouUseProps) {
               <div className={styles.reveal} data-testid="lab-reveal">
                 <strong>{a.name}</strong>, {levelLabel(a.level)}
                 <br />
-                Our mark: {a.score} out of 100 · about {a.cost} ·{" "}
+                Our mark: {a.score} out of 100 · {aboutCost(a.cost)} ·{" "}
                 {a.basics ? (
                   "Passed the trap"
                 ) : (

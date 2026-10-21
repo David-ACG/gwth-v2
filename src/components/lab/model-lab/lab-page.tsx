@@ -2,6 +2,7 @@ import Link from "next/link"
 import type { ModelLabData, ModelLabAnswerFile, ModelLabPick } from "@/lib/types"
 import { rowForClient } from "@/lib/data/model-lab"
 import {
+  aboutCost,
   MODEL_LAB_HOW_WE_TEST,
   countWord,
   formatTestedRange,
@@ -35,7 +36,7 @@ function PickCard({ label, pick }: { label: string; pick: ModelLabPick }) {
       <div className={styles.pickName}>{pick.name}</div>
       <div>{levelLabel(pick.level)}</div>
       <div className={styles.meta}>
-        Scored {pick.score} out of 100 · about {pick.cost} a task ·{" "}
+        Scored {pick.score} out of 100 · {aboutCost(pick.cost)} a task ·{" "}
         <Basics basics={pick.basics} n={pick.n} />
       </div>
     </div>

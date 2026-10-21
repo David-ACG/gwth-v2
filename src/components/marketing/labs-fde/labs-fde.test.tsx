@@ -1,3 +1,4 @@
+import { aboutCost } from "@/lib/model-lab-format"
 import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import { CostChart, shortRunsSentence, LabsFde } from "./labs-fde"
@@ -40,9 +41,10 @@ describe("LabsFde, the six labs", () => {
       const text = card.textContent ?? ""
       expect(text).toContain(lab.headline)
       expect(text).toContain(lab.best.name)
-      expect(text).toContain(`${lab.best.score} out of 100, about ${lab.best.cost} a task`)
+      expect(text).toContain(`${lab.best.score} out of 100, ${aboutCost(lab.best.cost)} a task`)
       expect(text).toContain(lab.value.name)
-      expect(text).toContain(`${lab.value.score} out of 100, about ${lab.value.cost} a task`)
+      expect(text).toContain(`${lab.value.score} out of 100, ${aboutCost(lab.value.cost)} a task`)
+      expect(text).not.toContain("about under")
     }
   })
 
