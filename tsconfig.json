@@ -173,7 +173,13 @@
     ".next-candidate-4143928/types/**/*.ts",
     ".next-candidate-4143928/dev/types/**/*.ts",
     ".next-candidate-71864/types/**/*.ts",
-    ".next-candidate-71864/dev/types/**/*.ts"
+    ".next-candidate-71864/dev/types/**/*.ts",
+    ".next-candidate-2333228/types/**/*.ts",
+    ".next-candidate-2333228/dev/types/**/*.ts",
+    ".next-candidate-2342955/types/**/*.ts",
+    ".next-candidate-2342955/dev/types/**/*.ts",
+    ".next-candidate-2414884/types/**/*.ts",
+    ".next-candidate-2414884/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
