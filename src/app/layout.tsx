@@ -64,13 +64,19 @@ export const metadata: Metadata = {
     process.env.ALLOW_INDEXING === "1"
       ? { index: true, follow: true }
       : { index: false, follow: false },
+  // Favicon option 3, the G on its own (David, 2026-10-21: "I like 3. The G on
+  // its own, no tile"). icon.svg switches ink/paper with the browser's colour
+  // scheme; the PNG and ICO fallbacks are the light version, and the phone and
+  // app icons sit on paper because those platforms fill transparency black.
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon.ico", sizes: "any" },
     ],
     apple: "/apple-touch-icon.png",
   },
+  manifest: "/site.webmanifest",
 }
 
 export default function RootLayout({
