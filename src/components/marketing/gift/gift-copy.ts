@@ -18,7 +18,7 @@ export const GIFT_COPY = {
   },
   notOnSale: {
     title: (opensOn: string) => `Gifts go on sale on ${opensOn}`,
-    body: "Come back then to choose a gift. If you already have a gift code, you can open it now.",
+    body: "From 1 December 2026 to 6 January 2027 you can give the whole three-month course for £69, or the first month for £29. After that, the whole course costs £87. If you already have a gift code, you can open it now.",
   },
   products: {
     legend: "Choose a gift",

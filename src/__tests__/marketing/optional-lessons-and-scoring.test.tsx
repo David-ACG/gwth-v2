@@ -239,7 +239,9 @@ describe("/lessons: the fullest learner-facing explanation", () => {
       /same set of lessons/i
     )
     expect(screen.getAllByTestId("score-inputs")[0]!.textContent).toMatch(
-      /answer key never sent to your browser/i
+      // Marketing copy gate, 2026-10-21: the server detail meant nothing to a
+      // beginner; the line now says what the marking is for.
+      /marked automatically, so you can see what to go back over/i
     )
   })
 

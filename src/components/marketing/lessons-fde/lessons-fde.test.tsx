@@ -52,7 +52,7 @@ describe("LessonsFde launch readiness", () => {
   it("says when each month opens, with no beta wording", () => {
     render(<LessonsFde />)
     const note = screen.getByTestId("months-availability").textContent ?? ""
-    expect(note).toMatch(/Month 1 is complete/)
+    expect(note).toMatch(/Month 1 is open from 1 December 2026/)
     expect(note).toMatch(/Month 2 opens around 1 January 2027/)
     expect(note).toMatch(/Month 3 around 1 February 2027/)
     expect(note).toMatch(/paused/)

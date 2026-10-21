@@ -227,7 +227,7 @@ export const MONTHS = [
   {
     kicker: "Month 2",
     title: "A small business",
-    body: "You take the same skills into the work of a small business. Before anything you make is used by other people, you learn how to secure their data: where you keep the secret keys that let software connect to a service, who can see what, and how to test that one customer cannot see another's records. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you write a plan for a second assistant, FractionalBuddy, for a small consulting firm, and set out the ten days of work that would build it.",
+    body: "You take the same skills into the work of a small business. Before other people use what you build, you learn to protect their data. You keep private the secret keys that let software connect to a service, you decide who can see each record, and you test that one customer cannot see another's. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you write a plan for a second assistant, FractionalBuddy, for a small consulting firm, and set out the ten days of work that would build it.",
   },
   {
     kicker: "Month 3",
@@ -881,9 +881,10 @@ export function HomeFde({
                 `lib/public-routes.ts`). The gift is the way one person buys
                 for another, so it is named first. */}
             <p className={styles.signpostBody}>
-              To give the course to one person, buy it as a gift. A
-              professional body or a large company gets its own edition: you
-              pick the lessons and you set the pass mark. Your tutors or
+              You can give one person the course as a gift. A team pays the
+              same price per person, shown on the Pricing page. A professional
+              body or a large company can have its own edition: you pick the
+              lessons and you set the pass mark. Your tutors or
               training leads can see who has reached it, and each learner
               finishes with a record of the lessons they passed.
             </p>

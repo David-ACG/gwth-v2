@@ -119,7 +119,7 @@ const PATHS = [
   },
   {
     title: "Go further into building",
-    body: "If building is the part you want, the optional lessons carry on where the core stops. You build tools that answer questions using your own documents and show where each answer came from. You also learn how to test and protect what you build, run AI on your own computer and get several AI assistants to work together on one job.",
+    body: "The optional building lessons give you more practice. You build tools that answer questions using your own documents and show where each answer came from. You also learn how to test and protect what you build, run AI on your own computer and get several AI assistants to work together on one job.",
   },
   {
     title: "Learn to lead the change",
@@ -163,7 +163,7 @@ const SCORE_INPUTS = [
   },
   {
     title: "The questions at the end of each one",
-    body: "They are marked on our server, with the answer key never sent to your browser.",
+    body: "Your answers are marked automatically, so you can see what to go back over.",
   },
   {
     title: "Nothing else",
@@ -302,7 +302,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               (facts sheet, launch readiness 2026-10-20). Written so it stays
               true on both sides of 1 December. */}
           <p className={styles.optionalNote} data-testid="months-availability">
-            Month 1 is complete. Month 2 opens around 1 January 2027 and Month
+            Month 1 is open from 1 December 2026. Month 2 opens around 1 January 2027 and Month
             3 around 1 February 2027. If you reach a month before it opens,
             your time on the course is paused until it does.
           </p>
@@ -441,8 +441,8 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           <div className={styles.scoreGrid}>
             <div className={styles.scoreBody}>
               <p data-testid="score-beta-note">
-                The course does not show a GWTH score yet. Here is how the score
-                is worked out.
+                The course does not show a GWTH score yet. This is how it is
+                worked out.
               </p>
               <p data-testid="score-lead">
                 Finishing a lesson is not the same as being able to do what it
