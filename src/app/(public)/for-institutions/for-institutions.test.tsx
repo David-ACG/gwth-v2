@@ -85,7 +85,7 @@ describe("ForInstitutionsPage", () => {
     // sets, and tutors who can see who has met it.
     // Reworded 2026-10-21 (marketing copy gate): "Everyone arrives at the
     // level you set" guaranteed readiness; the panel now says what the
-    // learners screen really shows. Present tense, because /org/learners
+    // learners dashboard really shows. Present tense, because /org/learners
     // exists from the launch; the "after the beta" wording went with the beta.
     expect(answer).toMatch(/core lessons and any optional ones you require/i)
     expect(answer).toMatch(/pass mark you set/i)
@@ -129,7 +129,7 @@ describe("ForInstitutionsPage", () => {
     const features = screen.getAllByTestId("edition-feature")
     expect(features.map((el) => el.querySelector("h3")?.textContent)).toEqual([
       "A pass mark you set",
-      "A learners screen for your tutors",
+      "A learners dashboard for your tutors",
       "Separate admin and tutor access",
       "Core, optional and exclusive lessons",
       "Exclusive lessons you approve",
@@ -150,9 +150,9 @@ describe("ForInstitutionsPage", () => {
     // writing skill (both launch reviewers, 2026-10-20).
     expect(answer).toMatch(/before your course begins/i)
     // Nothing in the product has ever written a credential row and /verify is
-    // closed from the launch, so the evidence is the tutors' learners screen,
+    // closed from the launch, so the evidence is the tutors' learners dashboard,
     // not a page anyone can open (bead gwth-launch-88z.32.36, then 2026-10-21).
-    expect(answer).toMatch(/learners screen/i)
+    expect(answer).toMatch(/learners dashboard/i)
     expect(answer).not.toMatch(/anyone can open/i)
   })
 

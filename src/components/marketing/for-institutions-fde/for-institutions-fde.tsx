@@ -168,7 +168,7 @@ const EDITION = [
     body: "You set one pass mark for your edition. Every quiz is marked automatically against it, and learners cannot see the answers before they submit.",
   },
   {
-    title: "A learners screen for your tutors",
+    title: "A learners dashboard for your tutors",
     body: "Your tutors see each member's progress on the required lessons, the average of their best mark on each quiz, when they were last active and whether they have met your pass mark.",
   },
   {
@@ -237,7 +237,7 @@ const STEPS = [
   },
   {
     title: "Members take it before your courses",
-    body: "Your members take your edition before your own courses, and your tutors check who has met your pass mark on the learners screen.",
+    body: "Your members take your edition before your own courses, and your tutors check who has met your pass mark on the learners dashboard.",
   },
 ] as const
 
@@ -266,7 +266,7 @@ const PATTERN = [
 const FAQS = [
   {
     q: "Can we require it before our own courses?",
-    a: "Yes. Your members complete the core lessons and any optional lessons you require, and you set the pass mark. Before your course begins, your tutors can see on the learners screen who has met it.",
+    a: "Yes. Your members complete the core lessons and any optional lessons you require, and you set the pass mark. Before your course begins, your tutors can see on the learners dashboard who has met it.",
   },
   {
     // Refined 2026-09-17 (a-20260917-145147-bfd191): the subject lessons teach
@@ -494,7 +494,7 @@ export function ForInstitutionsFde() {
             <h2 className={p.sectionTitle}>What your tutors see</h2>
           </div>
           <p className={p.lead} data-testid="institutions-tutor-lead">
-            Your tutors sign in to a learners screen for your edition. A
+            Your tutors sign in to a learners dashboard for your edition. A
             member meets your baseline by completing every required lesson
             with a quiz mark at or above your pass mark.
           </p>
@@ -600,7 +600,7 @@ export function ForInstitutionsFde() {
           </div>
           <p className={p.lead} data-testid="institutions-commercials-lead">
             One agreement covers your edition, the admin screen and the
-            learners screen your tutors use. There is no published price for an
+            learners dashboard your tutors use. There is no published price for an
             institution edition, because it depends on the lessons you choose,
             any lessons we write for you, and how you want to start. Tell us
             what you need and we will send you a proposal.
@@ -632,7 +632,7 @@ export function ForInstitutionsFde() {
           <p className={p.standfirst}>
             A walkthrough takes about forty minutes. We show you what a member
             sees, the admin screen where you choose lessons and set the pass
-            mark, and the learners screen your tutors use. Tell us which of
+            mark, and the learners dashboard your tutors use. Tell us which of
             your courses you want members to arrive ready for.
           </p>
           <div className={p.actions}>

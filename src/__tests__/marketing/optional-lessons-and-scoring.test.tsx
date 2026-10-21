@@ -307,7 +307,7 @@ describe("/for-institutions: curating depth, and what the score can be asked to 
     expect(screen.queryAllByTestId("score-not-yet-card")).toHaveLength(0)
     const section =
       container.querySelector('[data-section="tutor-view"]')?.textContent ?? ""
-    // The measures are listed once, on the "A learners screen for your
+    // The measures are listed once, on the "A learners dashboard for your
     // tutors" card; the 21 Oct copy gate blocked a third telling here, so
     // this section keeps only the baseline rule and the limitation.
     expect(text()).toMatch(/average of their best mark on each quiz/i)
@@ -514,7 +514,7 @@ describe("the copy gate's corrections stay corrected", () => {
     // Decay was removed earlier in this bead and must not come back.
     expect(body).not.toMatch(/decays/i)
     const lead = screen.getByTestId("institutions-tutor-lead").textContent ?? ""
-    expect(lead).toMatch(/sign in to a learners screen/i)
+    expect(lead).toMatch(/sign in to a learners dashboard/i)
     // Server-side grading IS live, so it stays in the present tense. The
     // latest Sol (2026-10-21) asked for the plain result rather than the
     // server detail: marked automatically, answers unseen before submitting.

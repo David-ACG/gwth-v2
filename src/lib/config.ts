@@ -234,6 +234,18 @@ export const ENABLE_BILLING = envFlagEnabled(process.env.BILLING_ENABLED)
 /** Explicit GWTH Score feature flag. Defaults off for the 23 June beta. */
 export const ENABLE_GWTH_SCORE = envFlagEnabled(process.env.GWTH_SCORE_ENABLED)
 
+/**
+ * The manager dashboard for any team (David, 2026-10-21, Pricing Teams card
+ * option B: "a dashboard where a manager sees who has finished each lesson and
+ * their quiz marks. We'll also be marking the big projects that they do each
+ * month"). Not built yet: no team organisation on the standard course, no
+ * invitation page, no project submission or marking. Pricing promises the
+ * dashboard only while this is on; switch it on when all three exist.
+ */
+export const ENABLE_TEAM_DASHBOARD = envFlagEnabled(
+  process.env.TEAM_DASHBOARD_ENABLED
+)
+
 /** Whether the dev state switcher toolbar is shown (development only) */
 export const ENABLE_DEV_TOOLBAR = process.env.NODE_ENV === "development"
 

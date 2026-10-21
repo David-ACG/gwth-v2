@@ -3,8 +3,12 @@ import { describe, it, expect, afterEach } from "vitest"
 import PricingPage from "./page"
 import { TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 
-/** Rows in the comparison table body, kept beside the component it mirrors. */
-const COMPARISON_ROWS = 6
+/**
+ * Rows in the comparison table body, kept beside the component it mirrors.
+ * Five while the team dashboard is off; the "Manager dashboard" row is the
+ * sixth once ENABLE_TEAM_DASHBOARD is on (David, 2026-10-21, option B).
+ */
+const COMPARISON_ROWS = 5
 
 afterEach(cleanup)
 
@@ -215,23 +219,25 @@ describe("PricingPage", () => {
     )
   })
 
-  it("has For Teams section with contact link and no link to the hidden teams page", () => {
-    render(<PricingPage />)
+  it("Teams section says what a team gets today and links to For teams", () => {
+    // David, 2026-10-21, option B: the manager dashboard is promised only once
+    // ENABLE_TEAM_DASHBOARD is on (see pricing-team-dashboard.test.tsx). Off,
+    // which is every environment today, nothing promises a dashboard for a
+    // team, a minimum size or role recommendations.
+    const { container } = render(<PricingPage />)
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: /Same learner experience\. More visibility for managers\./i,
+        name: /Same course for everyone\. A tutor dashboard for larger groups\./i,
       })
     ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Contact GWTH/i })
-    ).toBeInTheDocument()
-    // /for-teams is hidden at launch (a real 404, lib/public-routes.ts,
-    // 2026-10-20), so nothing on the page links to it.
-    expect(
-      screen.queryByRole("link", { name: /Learn about teams/i })
-    ).toBeNull()
-    expect(document.querySelector('a[href^="/for-teams"]')).toBeNull()
+    const body = screen.getByTestId("teams-split-body").textContent ?? ""
+    expect(body).toMatch(/no minimum team size/i)
+    expect(body).not.toMatch(/admin dashboard|manager dashboard|by role|5 or more/i)
+    expect(container.querySelector('a[href="/for-teams"]')).not.toBeNull()
+    expect(container.textContent).not.toMatch(
+      /5 or more|Role-specific|Admin dashboard|manager dashboard|view of progress/i
+    )
   })
 
   it("renders the redesigned comparison table", () => {
@@ -243,8 +249,10 @@ describe("PricingPage", () => {
     expect(
       screen.getByRole("columnheader", { name: "Teams" })
     ).toBeInTheDocument()
-    expect(screen.getAllByText("Admin dashboard").length).toBeGreaterThan(0)
-    expect(screen.getAllByText("Included for 5 or more").length).toBeGreaterThan(0)
+    // The "Admin dashboard / Included for 5 or more" row went on 2026-10-21;
+    // it comes back as "Manager dashboard" with ENABLE_TEAM_DASHBOARD.
+    expect(screen.queryAllByText("Admin dashboard")).toHaveLength(0)
+    expect(screen.queryAllByText("Manager dashboard")).toHaveLength(0)
   })
 
   /**
@@ -302,7 +310,7 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     ).toBeInTheDocument()
     // Institutions are told they get a proposal, not the per-person price...
     const split = screen
-      .getByRole("heading", { level: 2, name: /More visibility for managers/i })
+      .getByRole("heading", { level: 2, name: /A tutor dashboard for larger groups/i })
       .closest("section")
     expect(split?.textContent ?? "").toMatch(/institutions/i)
     expect(split?.textContent ?? "").toMatch(/proposal/i)

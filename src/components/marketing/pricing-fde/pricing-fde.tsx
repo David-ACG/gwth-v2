@@ -3,7 +3,7 @@ import { LATER_MONTHS_OPEN, PRICING } from "@/components/marketing/data"
 import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import styles from "./pricing-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
-import { ENABLE_BILLING } from "@/lib/config"
+import { ENABLE_BILLING, ENABLE_TEAM_DASHBOARD } from "@/lib/config"
 import {
   formatPence,
   formatUkDate,
@@ -73,13 +73,25 @@ import { PRICING_OFFER_COPY as OFFER } from "@/components/marketing/gift/gift-co
  * regression test was protecting.
  */
 
-/** Extra capabilities included for teams and institutions of 5 or more. */
-const TEAM_FEATURES = [
-  "Admin dashboard for managers",
-  "Progress and completion reporting",
-  "Role-specific lesson recommendations",
-  "Bespoke workflow lessons for larger groups",
-]
+/**
+ * What a team gets. "Admin dashboard for managers", "Progress and completion
+ * reporting" and "Role-specific lesson recommendations" for "5 or more" went on
+ * 2026-10-21: none exists, there is no minimum team size, and each person picks
+ * their own optional lessons. David chose option B that day (a manager
+ * dashboard with lessons finished, quiz marks and project marks), so the
+ * dashboard is promised only once ENABLE_TEAM_DASHBOARD is on.
+ */
+const TEAM_FEATURES = ENABLE_TEAM_DASHBOARD
+  ? [
+      "A manager dashboard for any team",
+      "Lessons finished, quiz marks and project marks",
+      "Bespoke workflow lessons for 100 or more people",
+    ]
+  : [
+      "Each person has their own account and progress",
+      "No minimum team size",
+      "An edition of your own for 100 or more people",
+    ]
 
 /** The audience of the third tier, in one place: card, column and split. */
 const GROUP_AUDIENCE = "Teams"
@@ -92,7 +104,12 @@ const COMPARISONS = [
   ["The six free labs", "Included", "Included", "Included"],
   ["Full core course", "No", "Included", "Included"],
   ["A practical project in every lesson", "No", "Included", "Included"],
-  ["Plain progress tracking", "No", "Included", "Included, plus an admin view"],
+  [
+    "Plain progress tracking",
+    "No",
+    "Included",
+    ENABLE_TEAM_DASHBOARD ? "Included, plus a manager dashboard" : "Included",
+  ],
   [
     "Lessons kept up to date",
     "No",
@@ -100,7 +117,9 @@ const COMPARISONS = [
     // Same price per person as the Teams card says (Sol copy check, 2026-10-20).
     `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo per person after the first three months`,
   ],
-  ["Admin dashboard", "No", "No", "Included for 5 or more"],
+  ...(ENABLE_TEAM_DASHBOARD
+    ? [["Manager dashboard", "No", "No", "Included"]]
+    : []),
 ]
 
 /** The plan names, in the order of the comparison table's columns. */
@@ -229,7 +248,7 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
     {
       key: "team",
       badge: GROUP_AUDIENCE,
-      tag: "5 or more people",
+      tag: "Any number of people",
       price: "Same",
       per: "per-person price",
       features: TEAM_FEATURES,
@@ -450,7 +469,10 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
           <p className={styles.sectionLead}>
             The free labs test new AI models on the same real work tasks
             and show which one to use. Member is the course itself, with its
-            lessons and projects. Teams adds a view of progress for managers.
+            lessons and projects.{" "}
+            {ENABLE_TEAM_DASHBOARD
+              ? "Teams adds a manager dashboard."
+              : "With Teams, each person has their own account and tracks their own progress."}
           </p>
           {/* Focusable because it scrolls sideways on a phone: a scrollable
               region a keyboard cannot reach is a serious axe violation. */}
@@ -511,25 +533,51 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
 
       <section className={styles.section} data-section="teams">
         <div className={`${styles.page} ${styles.splitGrid}`}>
-          <div>
-            <h2>
-              Same learner experience. <em>More visibility for managers.</em>
-            </h2>
-          </div>
+          {/* David, 2026-10-21, option B with his edits: a dashboard, not a
+              "screen", and it shows project marks too. Until the dashboard
+              exists (ENABLE_TEAM_DASHBOARD) the section says what a team
+              gets today, which matches /for-teams. */}
+          {ENABLE_TEAM_DASHBOARD ? (
+            <div>
+              <h2>
+                Same learner experience.{" "}
+                <em>More visibility for managers.</em>
+              </h2>
+            </div>
+          ) : (
+            <div>
+              <h2>
+                Same course for everyone.{" "}
+                <em>A tutor dashboard for larger groups.</em>
+              </h2>
+            </div>
+          )}
           <div className={styles.splitNote}>
-            <p>
-              {GROUP_AUDIENCE} of 5 or more get an admin dashboard with
-              progress tracking, completion rates, and the ability to recommend
-              optional lessons by role. For 100 or more people, GWTH can create
-              bespoke lessons around your own workflows and tools.
-              Institutions that want their own edition get a proposal based
-              on what they need.
-            </p>
-            {/* No link to /for-teams: it is hidden at launch (a real 404,
-                lib/public-routes.ts), so a team buyer is sent to contact. */}
+            {ENABLE_TEAM_DASHBOARD ? (
+              <p data-testid="teams-split-body">
+                Any team can ask us for a manager dashboard. It shows who has
+                finished each lesson, their quiz marks and the mark for the
+                project they build each month. For 100 or more people, GWTH can
+                create bespoke lessons around your own workflows and tools.
+                Institutions that want their own edition get a proposal based
+                on what they need.
+              </p>
+            ) : (
+              <p data-testid="teams-split-body">
+                There is no minimum team size. Each person has their own place
+                and their own account, and tracks their own progress. You can
+                pay monthly for each person, or buy places one at a time. For
+                100 or more people, GWTH can set up an edition of your own, with
+                a dashboard for your tutors and lessons written around your
+                work. Institutions that want their own edition get a
+                proposal based on what they need.
+              </p>
+            )}
+            {/* For teams is back on the site (David, 2026-10-21: "Also put
+                back the teams page"), so the team buyer goes there first. */}
             <div className={styles.buttonRow}>
-              <Link href="/contact" className={styles.buttonSolid}>
-                Contact GWTH
+              <Link href="/for-teams" className={styles.buttonSolid}>
+                GWTH for teams
               </Link>
               <Link href="/for-institutions" className={styles.buttonOutline}>
                 Learn about institutions
