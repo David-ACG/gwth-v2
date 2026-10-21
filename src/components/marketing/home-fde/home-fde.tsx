@@ -15,6 +15,7 @@ import {
 import { canPromoteLabs } from "@/lib/labs-cta"
 import { Plate } from "@/components/marketing/paper/plate"
 import { ScoreCard, type ScoreState } from "./score-card"
+import { HomeFilm } from "./home-film"
 import p from "@/components/marketing/paper/paper.module.css"
 import styles from "./home-fde.module.css"
 
@@ -579,6 +580,9 @@ export function HomeFde({
           </div>
         </div>
       </section>
+
+      {/* The home page film, straight after the hero (David, 2026-10-21). */}
+      <HomeFilm />
 
       {/*
         How a lesson works, straight after the hero, because this is the page's

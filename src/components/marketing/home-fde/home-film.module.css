@@ -1,0 +1,95 @@
+/* The home page film block, paper-first register: paper ground, one hairline
+   frame, Bitter heading, the one mint button for Play. Tokens come from the
+   home page's scoped --v-* block, so light and dark follow the page. */
+.section {
+  padding: clamp(3rem, 6vw, 4.5rem) 0 0;
+}
+
+.page {
+  margin: 0 auto;
+  width: min(1140px, calc(100% - 2.5rem));
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+  color: var(--v-ink);
+  margin: 0;
+}
+
+.meta {
+  margin: 0.4rem 0 1.25rem;
+  font-size: var(--fde-body-sm);
+  color: var(--v-muted);
+}
+
+.frame {
+  margin: 0;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--v-surface);
+}
+
+.video,
+.posterButton,
+.poster {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.video {
+  background: #000;
+}
+
+.posterButton {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.poster {
+  object-fit: cover;
+}
+
+.nightOnly {
+  display: none;
+}
+
+:global(.dark) .paperOnly {
+  display: none;
+}
+
+:global(.dark) .nightOnly {
+  display: block;
+}
+
+.play {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--v-btn);
+  color: var(--v-ink);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.posterButton:hover .play,
+.posterButton:focus-visible .play {
+  outline: 2px solid var(--v-ink);
+  outline-offset: 2px;
+}
