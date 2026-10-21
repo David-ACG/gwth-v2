@@ -229,14 +229,14 @@ const MONTH_OPENS: Record<number, string> = {
 const STEPS = [
   {
     title: "Pilot with your own staff",
-    body: "From 1 December 2026, start a small group of your staff on the standard course. They try the standard course, and their feedback helps you choose the lessons for your edition.",
+    body: "From 1 December 2026, a small group of your staff can try the standard course. Their feedback helps you choose the lessons for your edition.",
   },
   {
     title: "Set up your edition with us",
     body: "Choose the optional lessons, tell us the titles of any lessons you want written for you, and set your pass mark. We create the edition for you.",
   },
   {
-    title: "Put it before your courses",
+    title: "Members take it before your courses",
     body: "Your members take your edition before your own courses, and your tutors check who has met your pass mark on the learners screen.",
   },
 ] as const

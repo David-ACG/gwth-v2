@@ -123,7 +123,8 @@ export const UK_AI_FIGURES: readonly UkFigure[] = [
   {
     id: "worker-confidence",
     value: "21%",
-    label: "of UK adults feel confident using AI at work",
+    label:
+      "of UK adults in work said they felt confident using AI at work, in a survey from February and March 2024",
     sourceId: "dsit-ai-skills-public",
     caveat:
       "Published 28 January 2026 from fieldwork carried out between 29 February and 7 March 2024, on a random probability sample of 1,189 adults. Confidence in day-to-day life was higher, at 28%. No later like-for-like survey exists, so both dates are given wherever the figure is used.",
@@ -159,7 +160,7 @@ export const UK_AI_FIGURES: readonly UkFigure[] = [
     id: "smallest-vs-largest",
     value: "28% vs 49%",
     label:
-      "of the smallest UK businesses use AI, against the largest firms",
+      "of UK businesses with fewer than ten staff reported using AI in 2026, against those with 250 or more",
     sourceId: "ons-ai-in-business",
     caveat:
       "Smallest means nought to nine employees; largest means 250 or more. Given as the raw pair rather than a ratio, because the ratio invites a question the source does not answer.",

@@ -328,7 +328,7 @@ const HOW_IT_WORKS = [
   { label: "3 months", detail: "one month of lessons at a time" },
   { label: "About 5 hours a week", detail: "for each person" },
   { label: "Fully online", detail: "no travel required" },
-  { label: "Own accounts", detail: "each person signs in and tracks their own progress" },
+  { label: "Individual accounts", detail: "each person signs in and tracks their own progress" },
 ]
 
 /**
