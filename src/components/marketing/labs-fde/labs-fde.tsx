@@ -122,7 +122,11 @@ export function CostChart({ chart }: { chart: ModelLabCostChart }) {
       <p className={styles.chartNote}>
         Each bar shows the total cost of the tasks that set-up ran, using each company&apos;s
         published prices for developer access (API), converted at 75p to the dollar.
-        {shortRunsSentence(chart)} The number on the right is the average of its six lab scores, out of 100. Each completed test was run
+        {shortRunsSentence(chart)}{" "}
+        {chart.rows.some((r) => r.premium)
+          ? "Rows marked premium are Claude Fable and GPT-6 Astra, which we show for their cost and leave out of our picks. "
+          : ""}
+        The number on the right is the average of its six lab scores, out of 100. Each completed test was run
         once, so small score differences may change on another run. App subscriptions are charged
         separately.
       </p>
@@ -251,9 +255,9 @@ export function LabsFde({ index }: LabsFdeProps) {
           </h2>
           <p>
             Each lab shows which AI did best on real work tasks, what it cost and when we tested
-            it. Over three months, the course shows you, in plain English, how to build a
-            household helper, a simple website and a tool that does a weekly task for you. You
-            practise what you learn through projects you do yourself.
+            it. In Month 1 of the course you build the Family AI Bot. In Month 2 you build a
+            customer support chatbot. In Month 3 you build an AI consultant that interviews people
+            and writes a plan for an organisation.
           </p>
           <div className={styles.closingActions}>
             <Link href="/pricing" className={styles.buttonSolid}>
