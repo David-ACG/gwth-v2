@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" font-family="Arial,Helvetica,sans-serif">
+<rect width="100%" height="100%" fill="white"/>
+<text x="360" y="30" text-anchor="middle" font-size="18" font-weight="bold">Women and men in each pay quartile, 5 April 2026</text>
+<text x="360" y="50" text-anchor="middle" font-size="12" fill="#444">Thistlecombe Care Ltd, 248 full-pay relevant employees (62 per quartile)</text>
+<line x1="70" y1="380.0" x2="680" y2="380.0" stroke="#ddd"/><text x="62" y="384.0" text-anchor="end" font-size="11">0%</text>
+<line x1="70" y1="320.0" x2="680" y2="320.0" stroke="#ddd"/><text x="62" y="324.0" text-anchor="end" font-size="11">20%</text>
+<line x1="70" y1="260.0" x2="680" y2="260.0" stroke="#ddd"/><text x="62" y="264.0" text-anchor="end" font-size="11">40%</text>
+<line x1="70" y1="200.0" x2="680" y2="200.0" stroke="#ddd"/><text x="62" y="204.0" text-anchor="end" font-size="11">60%</text>
+<line x1="70" y1="140.0" x2="680" y2="140.0" stroke="#ddd"/><text x="62" y="144.0" text-anchor="end" font-size="11">80%</text>
+<line x1="70" y1="80.0" x2="680" y2="80.0" stroke="#ddd"/><text x="62" y="84.0" text-anchor="end" font-size="11">100%</text>
+<text x="18" y="230.0" transform="rotate(-90 18 230.0)" text-anchor="middle" font-size="12">Share of quartile</text>
+<rect x="88.3" y="147.8" width="54.9" height="232.2" fill="#1f6f8b"/><text x="115.8" y="142.8" text-anchor="middle" font-size="12">77.4%</text>
+<rect x="146.2" y="312.2" width="54.9" height="67.8" fill="#e08a1e"/><text x="173.7" y="307.2" text-anchor="middle" font-size="12">22.6%</text>
+<text x="146.2" y="398" text-anchor="middle" font-size="12">Lower</text>
+<rect x="240.8" y="167.0" width="54.9" height="213.0" fill="#1f6f8b"/><text x="268.2" y="162.0" text-anchor="middle" font-size="12">71.0%</text>
+<rect x="298.8" y="293.0" width="54.9" height="87.0" fill="#e08a1e"/><text x="326.2" y="288.0" text-anchor="middle" font-size="12">29.0%</text>
+<text x="298.8" y="398" text-anchor="middle" font-size="12">Lower middle</text>
+<rect x="393.3" y="157.4" width="54.9" height="222.6" fill="#1f6f8b"/><text x="420.8" y="152.4" text-anchor="middle" font-size="12">74.2%</text>
+<rect x="451.2" y="302.6" width="54.9" height="77.4" fill="#e08a1e"/><text x="478.7" y="297.6" text-anchor="middle" font-size="12">25.8%</text>
+<text x="451.2" y="398" text-anchor="middle" font-size="12">Upper middle</text>
+<rect x="545.8" y="220.4" width="54.9" height="159.6" fill="#1f6f8b"/><text x="573.2" y="215.4" text-anchor="middle" font-size="12">53.2%</text>
+<rect x="603.8" y="239.6" width="54.9" height="140.4" fill="#e08a1e"/><text x="631.2" y="234.6" text-anchor="middle" font-size="12">46.8%</text>
+<text x="603.8" y="398" text-anchor="middle" font-size="12">Upper</text>
+<line x1="70" y1="380" x2="680" y2="380" stroke="#333"/>
+<text x="375.0" y="418" text-anchor="middle" font-size="12">Pay quartile (lower = lowest paid)</text>
+<rect x="250" y="425" width="12" height="12" fill="#1f6f8b"/><text x="268" y="436" font-size="12">Women</text><rect x="350" y="425" width="12" height="12" fill="#e08a1e"/><text x="368" y="436" font-size="12">Men</text>
+</svg>

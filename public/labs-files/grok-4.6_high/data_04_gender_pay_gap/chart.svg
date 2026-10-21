@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="560" viewBox="0 0 920 560" role="img" aria-label="Percentage of women and men in each hourly pay quartile">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="460" y="36" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1B2A4A">Pay quartiles by sex — 5 April 2026 snapshot</text>
+<text x="460" y="60" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" fill="#5A6A7A">Share of full-pay relevant employees in each hourly pay quartile (1 = lowest paid)</text>
+<line x1="70" y1="480.0" x2="890" y2="480.0" stroke="#E6EAF0" stroke-width="1"/>
+<text x="58" y="484.0" text-anchor="end" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="12" fill="#5A6A7A">0%</text>
+<line x1="70" y1="402.0" x2="890" y2="402.0" stroke="#E6EAF0" stroke-width="1"/>
+<text x="58" y="406.0" text-anchor="end" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="12" fill="#5A6A7A">20%</text>
+<line x1="70" y1="324.0" x2="890" y2="324.0" stroke="#E6EAF0" stroke-width="1"/>
+<text x="58" y="328.0" text-anchor="end" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="12" fill="#5A6A7A">40%</text>
+<line x1="70" y1="246.0" x2="890" y2="246.0" stroke="#E6EAF0" stroke-width="1"/>
+<text x="58" y="250.0" text-anchor="end" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="12" fill="#5A6A7A">60%</text>
+<line x1="70" y1="168.0" x2="890" y2="168.0" stroke="#E6EAF0" stroke-width="1"/>
+<text x="58" y="172.0" text-anchor="end" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="12" fill="#5A6A7A">80%</text>
+<line x1="70" y1="90.0" x2="890" y2="90.0" stroke="#E6EAF0" stroke-width="1"/>
+<text x="58" y="94.0" text-anchor="end" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="12" fill="#5A6A7A">100%</text>
+<line x1="70" y1="90" x2="70" y2="480" stroke="#607080" stroke-width="1.5"/>
+<line x1="70" y1="480" x2="890" y2="480" stroke="#607080" stroke-width="1.5"/>
+<rect x="102.8" y="178.1" width="65.6" height="301.9" rx="6" fill="#6A1B9A"/>
+<text x="135.6" y="170.1" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#6A1B9A">77.4%</text>
+<rect x="184.8" y="391.9" width="65.6" height="88.1" rx="6" fill="#1565C0"/>
+<text x="217.6" y="383.9" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1565C0">22.6%</text>
+<text x="176.6" y="504.0" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#1B2A4A">Lower</text>
+<rect x="307.8" y="203.1" width="65.6" height="276.9" rx="6" fill="#6A1B9A"/>
+<text x="340.6" y="195.1" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#6A1B9A">71.0%</text>
+<rect x="389.8" y="366.9" width="65.6" height="113.1" rx="6" fill="#1565C0"/>
+<text x="422.6" y="358.9" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1565C0">29.0%</text>
+<text x="381.6" y="504.0" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#1B2A4A">Lower middle</text>
+<rect x="512.8" y="190.6" width="65.6" height="289.4" rx="6" fill="#6A1B9A"/>
+<text x="545.6" y="182.6" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#6A1B9A">74.2%</text>
+<rect x="594.8" y="379.4" width="65.6" height="100.6" rx="6" fill="#1565C0"/>
+<text x="627.6" y="371.4" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1565C0">25.8%</text>
+<text x="586.6" y="504.0" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#1B2A4A">Upper middle</text>
+<rect x="717.8" y="272.5" width="65.6" height="207.5" rx="6" fill="#6A1B9A"/>
+<text x="750.6" y="264.5" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#6A1B9A">53.2%</text>
+<rect x="799.8" y="297.5" width="65.6" height="182.5" rx="6" fill="#1565C0"/>
+<text x="832.6" y="289.5" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1565C0">46.8%</text>
+<text x="791.6" y="504.0" text-anchor="middle" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#1B2A4A">Upper</text>
+<rect x="340" y="532" width="14" height="14" rx="3" fill="#6A1B9A"/>
+<text x="362" y="544" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" fill="#1B2A4A">Women</text>
+<rect x="450" y="532" width="14" height="14" rx="3" fill="#1565C0"/>
+<text x="472" y="544" font-family="Calibri, Arial, Helvetica, sans-serif" font-size="13" fill="#1B2A4A">Men</text>
+</svg>

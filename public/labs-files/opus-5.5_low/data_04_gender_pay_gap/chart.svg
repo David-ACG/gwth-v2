@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="380" font-family="Arial" font-size="13">
+<text x="320" y="24" text-anchor="middle" font-size="16" font-weight="bold">Women and men in each hourly pay quartile, 5 April 2026</text>
+<text x="130" y="88" text-anchor="end">Lower</text>
+<rect x="140" y="60" width="340.6" height="44" fill="#b8336a"/>
+<rect x="480.6" y="60" width="99.4" height="44" fill="#2a6f97"/>
+<text x="148" y="88" fill="white">Women 77.4%</text>
+<text x="572" y="88" fill="white" text-anchor="end">Men 22.6%</text>
+<text x="130" y="158" text-anchor="end">Lower middle</text>
+<rect x="140" y="130" width="312.3" height="44" fill="#b8336a"/>
+<rect x="452.3" y="130" width="127.7" height="44" fill="#2a6f97"/>
+<text x="148" y="158" fill="white">Women 71.0%</text>
+<text x="572" y="158" fill="white" text-anchor="end">Men 29.0%</text>
+<text x="130" y="228" text-anchor="end">Upper middle</text>
+<rect x="140" y="200" width="326.5" height="44" fill="#b8336a"/>
+<rect x="466.5" y="200" width="113.5" height="44" fill="#2a6f97"/>
+<text x="148" y="228" fill="white">Women 74.2%</text>
+<text x="572" y="228" fill="white" text-anchor="end">Men 25.8%</text>
+<text x="130" y="298" text-anchor="end">Upper</text>
+<rect x="140" y="270" width="234.2" height="44" fill="#b8336a"/>
+<rect x="374.2" y="270" width="205.8" height="44" fill="#2a6f97"/>
+<text x="148" y="298" fill="white">Women 53.2%</text>
+<text x="572" y="298" fill="white" text-anchor="end">Men 46.8%</text>
+<text x="320" y="355" text-anchor="middle" font-size="11">62 full-pay relevant employees per quartile; quartile 1 = lowest paid</text></svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="480" viewBox="0 0 860 480" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <rect width="860" height="480" fill="#ffffff" rx="8"/>
+  
+  <!-- Header -->
+  <text x="40" y="44" font-size="20" font-weight="700" fill="#111827">Thistlecombe Care Ltd: Gender Distribution by Pay Quartile</text>
+  <text x="40" y="68" font-size="13.5" fill="#4b5563">Snapshot date: 5 April 2026 | Full-pay relevant employees (N = 248; 62 employees per quartile)</text>
+
+  <!-- Legend -->
+  <rect x="40" y="88" width="16" height="16" rx="3" fill="#0d9488"/>
+  <text x="64" y="101" font-size="13.5" font-weight="600" fill="#1f2937">Women (171 total, 69.0%)</text>
+  <rect x="250" y="88" width="16" height="16" rx="3" fill="#334155"/>
+  <text x="274" y="101" font-size="13.5" font-weight="600" fill="#1f2937">Men (77 total, 31.0%)</text>
+
+  <!-- X-axis grid lines & labels (Chart area: x=220 to x=800, width=580; y=130 to y=390) -->
+  <g stroke="#e5e7eb" stroke-width="1">
+    <line x1="220" y1="125" x2="220" y2="395"/>
+    <line x1="365" y1="125" x2="365" y2="395" stroke-dasharray="4,4"/>
+    <line x1="510" y1="125" x2="510" y2="395" stroke-dasharray="4,4"/>
+    <line x1="655" y1="125" x2="655" y2="395" stroke-dasharray="4,4"/>
+    <line x1="800" y1="125" x2="800" y2="395"/>
+  </g>
+  <g font-size="12" fill="#6b7280" text-anchor="middle">
+    <text x="220" y="416">0%</text>
+    <text x="365" y="416">25%</text>
+    <text x="510" y="416">50%</text>
+    <text x="655" y="416">75%</text>
+    <text x="800" y="416">100%</text>
+  </g>
+
+  <!-- Quartile 1: Lower (77.4% Women = 448.9px, 22.6% Men = 131.1px) -->
+  <text x="206" y="160" font-size="14" font-weight="600" fill="#111827" text-anchor="end">Lower quartile</text>
+  <text x="206" y="177" font-size="12" fill="#6b7280" text-anchor="end">(Quartile 1: lowest paid)</text>
+  <rect x="220" y="140" width="448.9" height="44" fill="#0d9488" rx="2"/>
+  <rect x="668.9" y="140" width="131.1" height="44" fill="#334155" rx="2"/>
+  <text x="444.5" y="167" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">77.4% (48)</text>
+  <text x="734.5" y="167" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">22.6% (14)</text>
+
+  <!-- Quartile 2: Lower middle (71.0% Women = 411.8px, 29.0% Men = 168.2px) -->
+  <text x="206" y="226" font-size="14" font-weight="600" fill="#111827" text-anchor="end">Lower middle quartile</text>
+  <text x="206" y="243" font-size="12" fill="#6b7280" text-anchor="end">(Quartile 2)</text>
+  <rect x="220" y="206" width="411.8" height="44" fill="#0d9488" rx="2"/>
+  <rect x="631.8" y="206" width="168.2" height="44" fill="#334155" rx="2"/>
+  <text x="425.9" y="233" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">71.0% (44)</text>
+  <text x="715.9" y="233" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">29.0% (18)</text>
+
+  <!-- Quartile 3: Upper middle (74.2% Women = 430.4px, 25.8% Men = 149.6px) -->
+  <text x="206" y="292" font-size="14" font-weight="600" fill="#111827" text-anchor="end">Upper middle quartile</text>
+  <text x="206" y="309" font-size="12" fill="#6b7280" text-anchor="end">(Quartile 3)</text>
+  <rect x="220" y="272" width="430.4" height="44" fill="#0d9488" rx="2"/>
+  <rect x="650.4" y="272" width="149.6" height="44" fill="#334155" rx="2"/>
+  <text x="435.2" y="299" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">74.2% (46)</text>
+  <text x="725.2" y="299" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">25.8% (16)</text>
+
+  <!-- Quartile 4: Upper (53.2% Women = 308.6px, 46.8% Men = 271.4px) -->
+  <text x="206" y="358" font-size="14" font-weight="600" fill="#111827" text-anchor="end">Upper quartile</text>
+  <text x="206" y="375" font-size="12" fill="#6b7280" text-anchor="end">(Quartile 4: highest paid)</text>
+  <rect x="220" y="338" width="308.6" height="44" fill="#0d9488" rx="2"/>
+  <rect x="528.6" y="338" width="271.4" height="44" fill="#334155" rx="2"/>
+  <text x="374.3" y="365" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">53.2% (33)</text>
+  <text x="664.3" y="365" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">46.8% (29)</text>
+
+  <!-- Overall workforce % women reference line (171/248 = 68.95% -> x = 220 + 0.6895 * 580 = 619.9) -->
+  <line x1="619.9" y1="125" x2="619.9" y2="395" stroke="#d97706" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="619.9" y="118" font-size="11.5" font-weight="600" fill="#b45309" text-anchor="middle">Overall full-pay women: 69.0%</text>
+
+  <!-- Footer note -->
+  <text x="40" y="452" font-size="12" fill="#6b7280">Note: Excludes 14 relevant employees on reduced or nil pay in April 2026 due to statutory/half sick pay, maternity leave, or unpaid leave.</text>
+</svg>

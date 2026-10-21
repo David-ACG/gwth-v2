@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pronunciation coach – Harbour &amp; Vale Logistics</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --ink: #16202b;
+    --muted: #46566a;
+    --bg: #f2f5f8;
+    --card: #ffffff;
+    --line: #b9c5d2;
+    --accent: #0b5cad;
+    --accent-soft: #e6f0fa;
+    --stop: #a31515;
+    --green: #1a7f37;
+    --amber: #ffc233;
+    --red: #c62828;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    overflow-wrap: anywhere;
+  }
+  .wrap { max-width: 64rem; margin: 0 auto; padding: 1rem; }
+  h1 { font-size: 1.6rem; line-height: 1.2; margin: 0 0 .4rem; }
+  h2 { font-size: 1.25rem; line-height: 1.25; margin: 0 0 .75rem; }
+  h3 { font-size: 1rem; margin: 1rem 0 .5rem; color: var(--muted); }
+  p { margin: 0 0 .6rem; }
+  .intro { color: var(--muted); max-width: 40rem; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  .layout { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 52rem) {
+    .layout { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+    #practise {
+      position: sticky; top: 1rem;
+      max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto;
+    }
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  .summary { color: var(--muted); margin: 0 0 .25rem; }
+  .notice {
+    background: #fff4d6; border: 1px solid #d9b44a; border-radius: 8px;
+    padding: .5rem .75rem; margin: 0 0 .75rem;
+  }
+
+  /* Phrase list */
+  .phrase-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+  .phrase-item {
+    border: 2px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden;
+  }
+  .phrase-item.selected { border-color: var(--accent); background: var(--accent-soft); }
+  .phrase-btn {
+    display: block; width: 100%; min-height: 48px; text-align: left;
+    font: inherit; font-size: 1.1rem; font-weight: 700; color: var(--ink);
+    background: transparent; border: 0; padding: .7rem .8rem .2rem; cursor: pointer;
+  }
+  .phrase-btn[aria-pressed="true"]::after { content: " \2713"; content: " \2713" / ""; color: var(--accent); }
+  .phrase-meta {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: .1rem .75rem;
+    padding: 0 .8rem .6rem; color: var(--muted); font-size: .95rem;
+  }
+  .best { font-weight: 600; white-space: nowrap; }
+  .best[data-tried="false"] .best-label,
+  .best[data-tried="false"] .best-val { display: none; }
+  .best[data-tried="true"] .best-none { display: none; }
+  .best-val::after { content: "/100"; content: "/100" / " out of 100"; font-weight: 400; }
+
+  /* Practice panel */
+  .target-card { border-left: 6px solid var(--accent); padding: .25rem 0 .25rem .85rem; margin-bottom: 1rem; }
+  .target { font-size: 1.7rem; line-height: 1.25; font-weight: 800; margin: 0; }
+  .target:empty::before { content: "Choose a phrase from the list."; font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .english { margin: .3rem 0 0; color: var(--muted); }
+
+  .controls { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: .75rem; }
+  .btn {
+    min-width: 0; min-height: 52px; padding: .6rem .8rem; font: inherit; font-size: 1.05rem; font-weight: 700;
+    border-radius: 10px; border: 2px solid var(--accent); background: var(--accent); color: #fff;
+    cursor: pointer;
+  }
+  .btn-listen { grid-column: 1 / -1; background: #fff; color: var(--accent); }
+  .btn-stop { background: #fff; color: var(--stop); border-color: var(--stop); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  button:focus-visible { outline: 3px solid #ff9f1a; outline-offset: 2px; }
+
+  .status { min-height: 1.5rem; color: var(--muted); font-weight: 600; }
+  .status.recording { color: var(--stop); }
+  .status.recording::before {
+    content: ""; display: inline-block; width: .7em; height: .7em; margin-right: .5em;
+    border-radius: 50%; background: var(--stop); animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: .25; } }
+  @media (prefers-reduced-motion: reduce) { .status.recording::before { animation: none; } }
+
+  .message {
+    margin: 0 0 .75rem; padding: .7rem .85rem; border-radius: 8px;
+    background: #fdecea; border: 2px solid var(--red); color: #5f1111; font-weight: 600;
+  }
+
+  /* Result */
+  .result { border-top: 1px solid var(--line); margin-top: .75rem; padding-top: .75rem; }
+  .score-line { margin: 0 0 .5rem; }
+  .score-value { font-size: 3rem; font-weight: 800; line-height: 1; }
+  .score-of { color: var(--muted); margin-left: .4rem; }
+  .words { font-size: 1.45rem; line-height: 2.3; margin: .25rem 0 .5rem; }
+  .word, .chip {
+    display: inline-block; padding: 0 .45em; border-radius: .5em; font-weight: 700; line-height: 1.5;
+  }
+  .word { margin: 0 .05em; }
+  .word[data-colour="green"], .chip-green { background: var(--green); color: #fff; }
+  .word[data-colour="amber"], .chip-amber { background: var(--amber); color: #1d1d1b; }
+  .word[data-colour="red"], .chip-red { background: var(--red); color: #fff; }
+  .word[data-colour="green"]::after, .chip-green::after { content: " \2713"; content: " \2713" / ", green"; }
+  .word[data-colour="amber"]::after, .chip-amber::after { content: " ~"; content: " ~" / ", amber"; }
+  .word[data-colour="red"]::after,   .chip-red::after   { content: " \2717"; content: " \2717" / ", red"; }
+  .legend { list-style: none; margin: 0 0 .75rem; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem .6rem; font-size: .9rem; }
+  .legend .chip { font-size: .9rem; }
+  .heard:empty::before { content: "nothing"; font-style: italic; color: var(--muted); }
+  .heard { font-weight: 700; }
+  .extras, .best-note { margin: 0 0 .5rem; }
+  .best-note { font-weight: 700; color: var(--accent); }
+
+  footer { margin-top: 1rem; color: var(--muted); font-size: .9rem; max-width: 46rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Pronunciation coach</h1>
+    <p class="intro">Practise everyday Spanish and French phrases out loud, on your own. Pick a phrase, listen to it, record yourself saying it, and see how you did.</p>
+  </header>
+
+  <p class="notice" id="storage-note" hidden>Your scores can't be saved in this browser, so they will be forgotten when you close the page.</p>
+
+  <main class="layout">
+    <section class="card" id="choose" aria-labelledby="choose-h">
+      <h2 id="choose-h">1. Choose a phrase</h2>
+      <p class="summary" id="summary"></p>
+      <h3 id="h-es-ES">Spanish (Spain)</h3>
+      <ul class="phrase-list" id="list-es-ES" aria-labelledby="h-es-ES"></ul>
+      <h3 id="h-fr-FR">French (France)</h3>
+      <ul class="phrase-list" id="list-fr-FR" aria-labelledby="h-fr-FR"></ul>
+    </section>
+
+    <section class="card" id="practise" aria-labelledby="practise-h">
+      <h2 id="practise-h">2. Practise</h2>
+
+      <div class="target-card">
+        <p class="target" id="target" data-testid="target"></p>
+        <p class="english" id="english"></p>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="btn btn-listen" id="listen" data-testid="listen" disabled>Listen to the phrase</button>
+        <button type="button" class="btn btn-record" id="record" data-testid="record" disabled>Start recording</button>
+        <button type="button" class="btn btn-stop" id="stop" data-testid="stop" disabled>Stop recording</button>
+      </div>
+
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <div aria-live="assertive" aria-atomic="true">
+        <p class="message" id="message" data-testid="message" hidden></p>
+      </div>
+      <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
+
+      <div class="result" id="result" hidden>
+        <h3 id="result-h">Your result</h3>
+        <p class="score-line"><span class="score-value" id="score" data-testid="score"></span><span class="score-of">out of 100</span></p>
+        <p id="words-label" class="sr-only">Your phrase, with each word coloured by how well you said it</p>
+        <div class="words" id="words" role="group" aria-labelledby="words-label"></div>
+        <ul class="legend" aria-label="What the colours mean">
+          <li><span class="chip chip-green">Green</span> clear</li>
+          <li><span class="chip chip-amber">Amber</span> nearly there</li>
+          <li><span class="chip chip-red">Red</span> unclear or missed</li>
+        </ul>
+        <p>What the computer heard: <span class="heard" id="heard" data-testid="heard"></span></p>
+        <p class="extras" id="extras" hidden></p>
+        <p class="best-note" id="best-note" hidden></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Your recording is sent only to the company's AI listening service, so it can tell you what it heard. This page never keeps your recordings. Your best score for each phrase is saved on this device only.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------------------------------------------------------------------------
+  // Settings (taken from the papers in the inputs folder)
+  // ---------------------------------------------------------------------------
+  const SERVICE_URL = '/api/listen';   // Tomasz: the only address the page may contact
+  const SERVICE_TIMEOUT_MS = 8000;     // Tomasz: stop waiting after 8 seconds
+  const GREEN_FROM = 0.85;             // Carmen: green at 0.85 or more
+  const AMBER_FROM = 0.60;             // Carmen: amber at 0.60 or more, below 0.85
+  const EXTRA_WORD_PENALTY = 5;        // Carmen: 5 points off per extra word
+  const MAX_RECORDING_MS = 30000;      // my addition: never leave the microphone open for ever
+  const STORE_KEY = 'hv-pronunciation-coach:best-scores:v1';
+
+  // Same content as phrases.json (the page may not load any other file).
+  const PHRASES = [
+    {id: 'es_01', language: 'es-ES', text: 'Buenos días, ¿qué tal?', english: 'Good morning, how are you?'},
+    {id: 'es_02', language: 'es-ES', text: 'Me llamo Sam y trabajo en el almacén.', english: 'My name is Sam and I work in the warehouse.'},
+    {id: 'es_03', language: 'es-ES', text: '¿Dónde está la estación de tren?', english: 'Where is the train station?'},
+    {id: 'es_04', language: 'es-ES', text: 'El camión llega a las tres y media.', english: 'The lorry arrives at half past three.'},
+    {id: 'es_05', language: 'es-ES', text: 'Me gustaría reservar una mesa para dos.', english: 'I would like to book a table for two.'},
+    {id: 'es_06', language: 'es-ES', text: '¿Puede repetirlo más despacio, por favor?', english: 'Can you repeat it more slowly, please?'},
+    {id: 'fr_01', language: 'fr-FR', text: 'Bonjour, je suis nouveau ici.', english: 'Hello, I am new here.'},
+    {id: 'fr_02', language: 'fr-FR', text: 'Je voudrais un café, s\'il vous plaît.', english: 'I would like a coffee, please.'},
+    {id: 'fr_03', language: 'fr-FR', text: 'À quelle heure part le prochain train ?', english: 'What time does the next train leave?'},
+    {id: 'fr_04', language: 'fr-FR', text: 'Il fait très beau aujourd\'hui.', english: 'The weather is lovely today.'},
+    {id: 'fr_05', language: 'fr-FR', text: 'Le chargement est prêt à partir.', english: 'The load is ready to go.'},
+    {id: 'fr_06', language: 'fr-FR', text: 'Pouvez-vous parler plus lentement ?', english: 'Can you speak more slowly?'}
+  ];
+
+  const LANGUAGE_NAME = {'es-ES': 'Spanish', 'fr-FR': 'French'};
+
+  const MESSAGES = {
+    micBlocked: 'The microphone is switched off for this page, so we can\'t hear you. To allow it, tap or click the padlock (or settings) icon next to the web address, set Microphone to Allow, then reload the page and press Start recording again. On an iPhone, also check Settings, then Safari, then Microphone.',
+    micMissing: 'We can\'t find a microphone. Check that your phone or laptop has one, plug in a headset if you use one, then try again.',
+    micBusy: 'The microphone is being used by another app or browser tab. Close it, then try again.',
+    micOther: 'We couldn\'t start the microphone. Please try again.',
+    noRecording: 'This browser can\'t record your voice. Please open this page in a recent version of Chrome, Edge, Firefox or Safari. The web address must start with https://.',
+    recordingFailed: 'The recording stopped unexpectedly. Please try again.',
+    noSpeech: 'This browser can\'t say the phrase out loud. Please open this page in a recent version of Chrome, Edge or Safari.',
+    speechFailed: 'Sorry, the phrase could not be played. Please try again.',
+    noVoice: function (language) {
+      return 'This device may not have a ' + language + ' voice installed, so the phrase might not sound right. You can add one in your device\'s language or speech settings.';
+    },
+    serviceProblem: 'Sorry, the listening service had a problem. Please try again.',
+    serviceSlow: 'The listening service is taking too long to answer. Please try again.',
+    serviceUnreachable: 'We couldn\'t reach the listening service. Check your internet connection, then try again.',
+    serviceUnreadable: 'The listening service sent back something we couldn\'t read. Please try again.'
+  };
+
+  // ---------------------------------------------------------------------------
+  // Carmen's rules: words, matching, colours and score
+  // ---------------------------------------------------------------------------
+
+  // Lower case, no accents, no punctuation (apostrophes included).
+  function plain(text) {
+    return String(text)
+      .normalize('NFD')
+      .replace(/\p{M}/gu, '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]/gu, '');
+  }
+
+  // Pieces of the phrase between spaces. A piece is a "word" only if it still has
+  // a letter or number once punctuation is taken off (so a lone "?" is not a word).
+  function splitPhrase(text) {
+    const pieces = [];
+    let n = 0;
+    String(text).split(/\s+/).forEach(function (piece) {
+      if (!piece) return;
+      if (/[\p{L}\p{N}]/u.test(piece)) {
+        n += 1;
+        pieces.push({text: piece, isWord: true, n: n});
+      } else {
+        pieces.push({text: piece, isWord: false});
+      }
+    });
+    return pieces;
+  }
+
+  function colourFor(matched, confidence) {
+    if (!matched) return 'red';
+    if (confidence >= GREEN_FROM) return 'green';
+    if (confidence >= AMBER_FROM) return 'amber';
+    return 'red';
+  }
+
+  // Round half up, ignoring tiny floating-point noise (so 87.4999999999 counts as 87.5).
+  function roundToWhole(x) {
+    return Math.round(Number(x.toFixed(6)));
+  }
+
+  // pieces: output of splitPhrase. heardWords: [{word, confidence}] in the order heard.
+  function assess(pieces, heardWords) {
+    const heard = heardWords
+      .map(function (h) { return {word: h.word, confidence: h.confidence, key: plain(h.word)}; })
+      .filter(function (h) { return h.key !== ''; });   // nothing but punctuation: not a word
+    const used = heard.map(function () { return false; });
+
+    let from = 0;
+    const words = pieces.filter(function (p) { return p.isWord; }).map(function (p) {
+      const key = plain(p.text);
+      let found = -1;
+      for (let i = from; i < heard.length; i += 1) {
+        if (heard[i].key === key) { found = i; break; }
+      }
+      const matched = found !== -1;
+      if (matched) { used[found] = true; from = found + 1; }
+      const confidence = matched ? heard[found].confidence : 0;
+      return {n: p.n, text: p.text, matched: matched, confidence: confidence, colour: colourFor(matched, confidence)};
+    });
+
+    const extras = heard.filter(function (h, i) { return !used[i]; }).map(function (h) { return h.word; });
+
+    let score = 0;
+    if (words.length > 0) {
+      const total = words.reduce(function (sum, w) { return sum + w.confidence; }, 0);
+      score = roundToWhole((total / words.length) * 100);
+    }
+    score = Math.max(0, score - EXTRA_WORD_PENALTY * extras.length);
+    return {words: words, extras: extras, score: score};
+  }
+
+  // Check what the service sent back. Returns null if it can't be used.
+  function readReply(data) {
+    if (!data || typeof data !== 'object' || !Array.isArray(data.words)) return null;
+    const words = [];
+    for (let i = 0; i < data.words.length; i += 1) {
+      const w = data.words[i];
+      if (!w || typeof w !== 'object') return null;
+      const text = typeof w.word === 'string' ? w.word : (typeof w.word === 'number' ? String(w.word) : null);
+      let confidence = w.confidence;
+      if (typeof confidence === 'string' && confidence.trim() !== '') confidence = Number(confidence);
+      if (text === null || typeof confidence !== 'number' || !Number.isFinite(confidence)) return null;
+      words.push({word: text, confidence: Math.min(1, Math.max(0, confidence))});
+    }
+    const transcript = typeof data.transcript === 'string'
+      ? data.transcript.trim()
+      : words.map(function (w) { return w.word; }).join(' ');
+    return {transcript: transcript, words: words};
+  }
+
+  // ---------------------------------------------------------------------------
+  // Best scores, kept in localStorage (numbers only, never audio)
+  // ---------------------------------------------------------------------------
+  let best = {};
+  let storageWorks = true;
+
+  function readStore() {
+    const out = {};
+    try {
+      const raw = window.localStorage.getItem(STORE_KEY);
+      if (!raw) return out;
+      const saved = JSON.parse(raw);
+      if (!saved || typeof saved !== 'object') return out;
+      PHRASES.forEach(function (p) {
+        const v = saved[p.id];
+        if (typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100) out[p.id] = Math.round(v);
+      });
+    } catch (e) {
+      storageWorks = false;
+    }
+    return out;
+  }
+
+  function writeStore() {
+    try {
+      window.localStorage.setItem(STORE_KEY, JSON.stringify(best));
+    } catch (e) {
+      storageWorks = false;
+    }
+    document.getElementById('storage-note').hidden = storageWorks;
+  }
+
+  // A worse score never lowers the best. Returns the best before this attempt and
+  // whether this attempt beat it.
+  function recordScore(id, score) {
+    const stored = readStore();               // pick up anything saved from another tab
+    Object.keys(stored).forEach(function (k) {
+      if (best[k] === undefined || stored[k] > best[k]) best[k] = stored[k];
+    });
+    const previous = best[id];
+    const improved = previous === undefined || score > previous;
+    if (improved) {
+      best[id] = score;
+      writeStore();
+    }
+    return {previous: previous, improved: improved};
+  }
+
+  // ---------------------------------------------------------------------------
+  // Page
+  // ---------------------------------------------------------------------------
+  const $ = function (id) { return document.getElementById(id); };
+  const el = {
+    summary: $('summary'), target: $('target'), english: $('english'),
+    listen: $('listen'), record: $('record'), stop: $('stop'),
+    status: $('status'), message: $('message'), announce: $('announce'),
+    result: $('result'), score: $('score'), words: $('words'), heard: $('heard'),
+    extras: $('extras'), bestNote: $('best-note'), practise: $('practise')
+  };
+
+  PHRASES.forEach(function (p) { p.pieces = splitPhrase(p.text); });
+
+  let current = null;       // the chosen phrase
+  let state = 'idle';       // idle | starting | recording | sending
+  let attempt = 0;          // goes up whenever an attempt is started or abandoned
+  let pendingStop = false;  // Stop pressed while the microphone was still starting
+  let rec = null;           // {recorder, stream, chunks, timer}
+  let inflight = null;      // AbortController of the request being waited for
+
+  function showMessage(text) {
+    el.message.textContent = text;
+    el.message.hidden = !text;
+  }
+
+  function setStatus(text, recording) {
+    el.status.textContent = text;
+    el.status.classList.toggle('recording', !!recording);
+  }
+
+  function updateButtons() {
+    const chosen = current !== null;
+    el.listen.disabled = !chosen || state === 'starting' || state === 'recording';
+    el.record.disabled = !chosen || state !== 'idle';
+    el.stop.disabled = !(state === 'starting' || state === 'recording');
+    if (state === 'starting') setStatus('Starting the microphone…', false);
+    else if (state === 'recording') setStatus('Recording. Say the phrase, then press Stop recording.', true);
+    else if (state === 'sending') setStatus('Checking what you said…', false);
+    else setStatus('', false);
+  }
+
+  // After a button turns itself off, hand keyboard focus to the next useful one.
+  function focusIfLost(button) {
+    const active = document.activeElement;
+    if (!button.disabled && (!active || active === document.body || active.disabled)) {
+      try { button.focus({preventScroll: true}); } catch (e) { /* not important */ }
+    }
+  }
+
+  function clearResult() {
+    el.result.hidden = true;
+    el.score.textContent = '';
+    el.heard.textContent = '';
+    el.words.textContent = '';
+    el.extras.textContent = '';
+    el.extras.hidden = true;
+    el.bestNote.textContent = '';
+    el.bestNote.hidden = true;
+  }
+
+  function stopStream(stream) {
+    try {
+      if (stream && typeof stream.getTracks === 'function') {
+        stream.getTracks().forEach(function (t) { t.stop(); });
+      }
+    } catch (e) { /* not important */ }
+  }
+
+  // Drop whatever is going on (recording or waiting) without showing a result.
+  function abandonAttempt() {
+    attempt += 1;
+    pendingStop = false;
+    if (inflight) {
+      try { inflight.abort(); } catch (e) { /* not important */ }
+      inflight = null;
+    }
+    if (rec) {
+      const r = rec;
+      rec = null;
+      clearTimeout(r.timer);
+      r.recorder.onstop = null;
+      r.recorder.ondataavailable = null;
+      r.recorder.onerror = null;
+      try { r.recorder.stop(); } catch (e) { /* already stopped */ }
+      stopStream(r.stream);
+    }
+    state = 'idle';
+  }
+
+  // ----- Choosing a phrase -----
+  function updateBestDisplay(id) {
+    const line = $('bestline-' + id);
+    const value = line.querySelector('.best-val');
+    const tried = best[id] !== undefined;
+    value.textContent = tried ? String(best[id]) : '';
+    line.setAttribute('data-tried', tried ? 'true' : 'false');
+  }
+
+  function updateSummary() {
+    const tried = PHRASES.filter(function (p) { return best[p.id] !== undefined; }).length;
+    el.summary.textContent = 'You have tried ' + tried + ' of ' + PHRASES.length + ' phrases on this device.';
+  }
+
+  function choosePhrase(phrase) {
+    abandonAttempt();
+    stopSpeaking();
+    current = phrase;
+    showMessage('');
+    clearResult();
+    el.target.textContent = phrase.text;
+    el.target.setAttribute('lang', phrase.language);
+    el.english.textContent = phrase.english;
+    el.words.setAttribute('lang', phrase.language);
+    PHRASES.forEach(function (p) {
+      const item = $('item-' + p.id);
+      const on = p.id === phrase.id;
+      item.classList.toggle('selected', on);
+      item.querySelector('button').setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    updateButtons();
+    const top = el.practise.getBoundingClientRect().top;
+    if ((top < 0 || top > window.innerHeight * 0.6) && typeof el.practise.scrollIntoView === 'function') {
+      el.practise.scrollIntoView({block: 'start'});
+    }
+  }
+
+  function buildList() {
+    PHRASES.forEach(function (p) {
+      const list = $('list-' + p.language);
+      const item = document.createElement('li');
+      item.className = 'phrase-item';
+      item.id = 'item-' + p.id;
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'phrase-btn';
+      button.setAttribute('data-testid', 'phrase-' + p.id);
+      button.setAttribute('aria-pressed', 'false');
+      button.setAttribute('aria-describedby', 'en-' + p.id + ' bestline-' + p.id);
+      button.setAttribute('lang', p.language);
+      button.textContent = p.text;
+      button.addEventListener('click', function () { choosePhrase(p); });
+
+      const meta = document.createElement('div');
+      meta.className = 'phrase-meta';
+
+      const english = document.createElement('span');
+      english.id = 'en-' + p.id;
+      english.textContent = p.english;
+
+      const bestLine = document.createElement('span');
+      bestLine.className = 'best';
+      bestLine.id = 'bestline-' + p.id;
+      bestLine.setAttribute('data-tried', 'false');
+      const label = document.createElement('span');
+      label.className = 'best-label';
+      label.textContent = 'Best score: ';
+      const value = document.createElement('span');
+      value.className = 'best-val';
+      value.setAttribute('data-testid', 'best-' + p.id);
+      const none = document.createElement('span');
+      none.className = 'best-none';
+      none.textContent = 'Not tried yet';
+      bestLine.appendChild(label);
+      bestLine.appendChild(value);
+      bestLine.appendChild(none);
+
+      meta.appendChild(english);
+      meta.appendChild(bestLine);
+      item.appendChild(button);
+      item.appendChild(meta);
+      list.appendChild(item);
+    });
+  }
+
+  // ----- Hearing the phrase (the browser's own speech) -----
+  function stopSpeaking() {
+    try {
+      const ss = window.speechSynthesis;
+      if (ss && typeof ss.cancel === 'function' && (ss.speaking || ss.pending)) ss.cancel();
+    } catch (e) { /* not important */ }
+  }
+
+  function findVoice(language) {
+    const ss = window.speechSynthesis;
+    let voices = [];
+    try {
+      if (ss && typeof ss.getVoices === 'function') voices = Array.prototype.slice.call(ss.getVoices() || []);
+    } catch (e) { voices = []; }
+    const code = function (v) { return String(v.lang || '').replace('_', '-').toLowerCase(); };
+    const want = language.toLowerCase();
+    const family = want.split('-')[0];
+    return {
+      exact: voices.filter(function (v) { return code(v) === want; })[0] || null,
+      known: voices.length > 0,
+      sameLanguage: voices.some(function (v) { return code(v).split('-')[0] === family; })
+    };
+  }
+
+  function listen() {
+    if (!current) return;
+    showMessage('');
+    const ss = window.speechSynthesis;
+    if (!ss || typeof ss.speak !== 'function' || typeof window.SpeechSynthesisUtterance === 'undefined') {
+      showMessage(MESSAGES.noSpeech);
+      return;
+    }
+    try {
+      stopSpeaking();
+      const utterance = new window.SpeechSynthesisUtterance(current.text);
+      utterance.lang = current.language;                 // es-ES or fr-FR, as Tomasz asks
+      const voice = findVoice(current.language);
+      if (voice.exact) utterance.voice = voice.exact;    // prefer a voice for exactly Spain / France
+      utterance.onerror = function (event) {
+        const reason = event && event.error;
+        if (reason === 'canceled' || reason === 'interrupted') return;
+        showMessage(MESSAGES.speechFailed);
+      };
+      ss.speak(utterance);
+      if (voice.known && !voice.sameLanguage) {
+        showMessage(MESSAGES.noVoice(LANGUAGE_NAME[current.language] || 'matching'));
+      }
+    } catch (e) {
+      showMessage(MESSAGES.speechFailed);
+    }
+  }
+
+  // ----- Recording -----
+  function micMessage(err) {
+    const name = err && err.name;
+    if (name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError') return MESSAGES.micBlocked;
+    if (name === 'NotFoundError' || name === 'DevicesNotFoundError' || name === 'OverconstrainedError') return MESSAGES.micMissing;
+    if (name === 'NotReadableError' || name === 'TrackStartError' || name === 'AbortError') return MESSAGES.micBusy;
+    return MESSAGES.micOther;
+  }
+
+  function failAttempt(text) {
+    showMessage(text);
+    state = 'idle';
+    updateButtons();
+    focusIfLost(el.record);
+  }
+
+  async function startRecording() {
+    if (!current || state !== 'idle') return;
+    showMessage('');
+    clearResult();
+    stopSpeaking();                       // so the voice isn't picked up by the microphone
+    attempt += 1;
+    const mine = attempt;
+    pendingStop = false;
+    state = 'starting';
+    updateButtons();
+
+    const media = navigator.mediaDevices;
+    if (!media || typeof media.getUserMedia !== 'function' || typeof window.MediaRecorder === 'undefined') {
+      failAttempt(MESSAGES.noRecording);
+      return;
+    }
+
+    let stream;
+    try {
+      stream = await media.getUserMedia({audio: true});
+    } catch (err) {
+      if (mine === attempt) failAttempt(micMessage(err));
+      return;
+    }
+    if (mine !== attempt) { stopStream(stream); return; }   // the person moved on while we waited
+
+    let recorder;
+    try {
+      recorder = new window.MediaRecorder(stream);
+    } catch (err) {
+      stopStream(stream);
+      failAttempt(MESSAGES.noRecording);
+      return;
+    }
+
+    const chunks = [];
+    const session = {recorder: recorder, stream: stream, chunks: chunks, timer: null};
+    recorder.ondataavailable = function (event) {
+      if (event && event.data && event.data.size > 0) chunks.push(event.data);
+    };
+    recorder.onerror = function () {
+      if (rec !== session) return;
+      abandonAttempt();
+      failAttempt(MESSAGES.recordingFailed);
+    };
+    recorder.onstop = function () {
+      stopStream(stream);
+      clearTimeout(session.timer);
+      if (rec !== session || mine !== attempt) return;
+      rec = null;
+      state = 'sending';
+      updateButtons();
+      const type = mimeBase(recorder.mimeType || (chunks[0] && chunks[0].type) || '') || 'audio/webm';
+      submit(new Blob(chunks, {type: type}), mine);
+    };
+
+    try {
+      recorder.start();
+    } catch (err) {
+      stopStream(stream);
+      failAttempt(MESSAGES.noRecording);
+      return;
+    }
+    rec = session;
+    session.timer = setTimeout(stopRecording, MAX_RECORDING_MS);
+    state = 'recording';
+    updateButtons();
+    focusIfLost(el.stop);
+    if (pendingStop) stopRecording();
+  }
+
+  function stopRecording() {
+    if (state === 'starting') { pendingStop = true; return; }
+    if (state !== 'recording' || !rec) return;
+    clearTimeout(rec.timer);
+    state = 'sending';
+    updateButtons();
+    try {
+      rec.recorder.stop();
+    } catch (err) {
+      abandonAttempt();
+      failAttempt(MESSAGES.recordingFailed);
+    }
+  }
+
+  function mimeBase(type) { return String(type).split(';')[0].trim().toLowerCase(); }
+
+  function fileName(type) {
+    const ext = {
+      'audio/webm': 'webm', 'audio/ogg': 'ogg', 'audio/mp4': 'mp4', 'audio/x-m4a': 'm4a',
+      'audio/mpeg': 'mp3', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/wave': 'wav'
+    }[type];
+    return 'recording.' + (ext || 'webm');
+  }
+
+  // ----- The AI listening service -----
+  function ServiceProblem(kind) { this.kind = kind; }
+
+  function askService(form) {
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    inflight = controller;
+    let timer = null;
+
+    const work = (async function () {
+      let response;
+      try {
+        response = await fetch(SERVICE_URL, {method: 'POST', body: form, signal: controller ? controller.signal : undefined});
+      } catch (err) {
+        throw new ServiceProblem('unreachable');
+      }
+      if (response.status !== 200) throw new ServiceProblem('problem');
+      try {
+        return await response.json();
+      } catch (err) {
+        throw new ServiceProblem('unreadable');
+      }
+    })();
+
+    const tooSlow = new Promise(function (resolve, reject) {
+      timer = setTimeout(function () {
+        if (controller) { try { controller.abort(); } catch (e) { /* not important */ } }
+        reject(new ServiceProblem('slow'));
+      }, SERVICE_TIMEOUT_MS);
+    });
+
+    return Promise.race([work, tooSlow]).then(
+      function (data) { clearTimeout(timer); if (inflight === controller) inflight = null; return data; },
+      function (err) { clearTimeout(timer); if (inflight === controller) inflight = null; throw err; }
+    );
+  }
+
+  function serviceMessage(err) {
+    switch (err && err.kind) {
+      case 'slow': return MESSAGES.serviceSlow;
+      case 'unreachable': return MESSAGES.serviceUnreachable;
+      case 'unreadable': return MESSAGES.serviceUnreadable;
+      default: return MESSAGES.serviceProblem;
+    }
+  }
+
+  async function submit(blob, mine) {
+    const phrase = current;
+    const form = new FormData();
+    form.append('audio', blob, fileName(blob.type));
+    form.append('language', phrase.language);
+    form.append('phrase_id', phrase.id);
+    form.append('target', phrase.text);
+
+    let reply;
+    try {
+      reply = readReply(await askService(form));
+      if (!reply) throw new ServiceProblem('unreadable');
+    } catch (err) {
+      if (mine === attempt) failAttempt(serviceMessage(err));
+      return;
+    }
+    if (mine !== attempt) return;
+
+    const result = assess(phrase.pieces, reply.words);
+    if (!Number.isFinite(result.score)) { failAttempt(MESSAGES.serviceUnreadable); return; }
+    showResult(phrase, result, reply);
+    state = 'idle';
+    updateButtons();
+    focusIfLost(el.record);
+  }
+
+  // ----- Showing the result -----
+  function showResult(phrase, result, reply) {
+    const saved = recordScore(phrase.id, result.score);
+    updateBestDisplay(phrase.id);
+    updateSummary();
+
+    el.words.textContent = '';
+    phrase.pieces.forEach(function (piece, index) {
+      // a lone mark such as the French " ?" stays attached to the word before it
+      if (index > 0) el.words.appendChild(document.createTextNode(piece.isWord ? ' ' : '\u00a0'));
+      if (piece.isWord) {
+        const w = result.words[piece.n - 1];
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.setAttribute('data-testid', 'word-' + piece.n);
+        span.setAttribute('data-colour', w.colour);
+        span.textContent = piece.text;
+        el.words.appendChild(span);
+      } else {
+        el.words.appendChild(document.createTextNode(piece.text));
+      }
+    });
+
+    el.score.textContent = String(result.score);
+    el.heard.textContent = reply.transcript;
+    el.heard.setAttribute('lang', phrase.language);
+
+    if (reply.words.length === 0) {
+      el.extras.textContent = 'We didn\'t hear any words. Check that your microphone is on, move a little closer, and try again.';
+      el.extras.hidden = false;
+    } else if (result.extras.length > 0) {
+      const count = result.extras.length;
+      el.extras.textContent = 'Extra ' + (count === 1 ? 'word' : 'words') + ' heard: ' + result.extras.join(', ') +
+        ' (' + (count * EXTRA_WORD_PENALTY) + ' points off).';
+      el.extras.hidden = false;
+    } else {
+      el.extras.textContent = '';
+      el.extras.hidden = true;
+    }
+
+    let note;
+    if (saved.previous === undefined) note = 'First score for this phrase saved. Try again to beat it!';
+    else if (saved.improved) note = 'New best score for this phrase!';
+    else note = 'Your best score for this phrase is still ' + best[phrase.id] + '.';
+    el.bestNote.textContent = note;
+    el.bestNote.hidden = false;
+
+    el.announce.textContent = 'Result ready. You scored ' + result.score + ' out of 100.';
+    el.result.hidden = false;
+    if (typeof el.result.scrollIntoView === 'function') el.result.scrollIntoView({block: 'nearest'});
+  }
+
+  // ----- Start up -----
+  buildList();
+  best = readStore();
+  document.getElementById('storage-note').hidden = storageWorks;
+  PHRASES.forEach(function (p) { updateBestDisplay(p.id); });
+  updateSummary();
+  updateButtons();
+
+  el.listen.addEventListener('click', listen);
+  el.record.addEventListener('click', startRecording);
+  el.stop.addEventListener('click', stopRecording);
+  window.addEventListener('storage', function (event) {
+    if (event.key !== null && event.key !== STORE_KEY) return;
+    best = readStore();
+    PHRASES.forEach(function (p) { updateBestDisplay(p.id); });
+    updateSummary();
+  });
+  window.addEventListener('pagehide', abandonAttempt);
+})();
+</script>
+</body>
+</html>

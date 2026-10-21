@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="Helvetica, Arial, sans-serif">
+<rect width="960" height="600" fill="#ffffff"/>
+<text x="78" y="40" font-size="23" font-weight="bold" fill="#1a1a1a">Thistlecombe Care Ltd: pay quartiles by sex</text>
+<text x="78" y="70" font-size="14" fill="#4d4d4d">Snapshot date 5 April 2026 &#183; share of each pay quartile who are women or men &#183; 248 full-pay relevant employees</text>
+<rect x="736" y="26" width="16" height="16" fill="#8c4a7e"/>
+<text x="758" y="39" font-size="14" fill="#1a1a1a">Women</text>
+<rect x="840" y="26" width="16" height="16" fill="#3f6f9f"/>
+<text x="862" y="39" font-size="14" fill="#1a1a1a">Men</text>
+<line x1="78" y1="496.0" x2="936" y2="496.0" stroke="#9a9a9a" stroke-width="1"/>
+<text x="66" y="500.5" font-size="13" text-anchor="end" fill="#4d4d4d">0%</text>
+<line x1="78" y1="456.8" x2="936" y2="456.8" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="461.3" font-size="13" text-anchor="end" fill="#4d4d4d">10%</text>
+<line x1="78" y1="417.6" x2="936" y2="417.6" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="422.1" font-size="13" text-anchor="end" fill="#4d4d4d">20%</text>
+<line x1="78" y1="378.4" x2="936" y2="378.4" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="382.9" font-size="13" text-anchor="end" fill="#4d4d4d">30%</text>
+<line x1="78" y1="339.2" x2="936" y2="339.2" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="343.7" font-size="13" text-anchor="end" fill="#4d4d4d">40%</text>
+<line x1="78" y1="300.0" x2="936" y2="300.0" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="304.5" font-size="13" text-anchor="end" fill="#4d4d4d">50%</text>
+<line x1="78" y1="260.8" x2="936" y2="260.8" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="265.3" font-size="13" text-anchor="end" fill="#4d4d4d">60%</text>
+<line x1="78" y1="221.6" x2="936" y2="221.6" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="226.1" font-size="13" text-anchor="end" fill="#4d4d4d">70%</text>
+<line x1="78" y1="182.4" x2="936" y2="182.4" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="186.9" font-size="13" text-anchor="end" fill="#4d4d4d">80%</text>
+<line x1="78" y1="143.2" x2="936" y2="143.2" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="147.7" font-size="13" text-anchor="end" fill="#4d4d4d">90%</text>
+<line x1="78" y1="104.0" x2="936" y2="104.0" stroke="#e6e6e6" stroke-width="1"/>
+<text x="66" y="108.5" font-size="13" text-anchor="end" fill="#4d4d4d">100%</text>
+<text x="22" y="300" font-size="14" fill="#333333" text-anchor="middle" transform="rotate(-90 22 300)">Share of quartile</text>
+<rect x="124.3" y="192.5" width="57.9" height="303.5" fill="#8c4a7e"/>
+<text x="153.3" y="183.5" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">77.4%</text>
+<rect x="188.2" y="407.5" width="57.9" height="88.5" fill="#3f6f9f"/>
+<text x="217.2" y="398.5" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">22.6%</text>
+<text x="185.2" y="524.0" font-size="15" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Lower quartile</text>
+<text x="185.2" y="544.0" font-size="12" text-anchor="middle" fill="#4d4d4d">&#163;12.22&#8211;&#163;13.29 per hour</text>
+<text x="185.2" y="562.0" font-size="12" text-anchor="middle" fill="#4d4d4d">48 women &#183; 14 men</text>
+<rect x="338.8" y="217.8" width="57.9" height="278.2" fill="#8c4a7e"/>
+<text x="367.8" y="208.8" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">71.0%</text>
+<rect x="402.8" y="382.2" width="57.9" height="113.8" fill="#3f6f9f"/>
+<text x="431.7" y="373.2" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">29.0%</text>
+<text x="399.8" y="524.0" font-size="15" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Lower middle quartile</text>
+<text x="399.8" y="544.0" font-size="12" text-anchor="middle" fill="#4d4d4d">&#163;13.31&#8211;&#163;14.14 per hour</text>
+<text x="399.8" y="562.0" font-size="12" text-anchor="middle" fill="#4d4d4d">44 women &#183; 18 men</text>
+<rect x="553.3" y="205.2" width="57.9" height="290.8" fill="#8c4a7e"/>
+<text x="582.3" y="196.2" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">74.2%</text>
+<rect x="617.2" y="394.8" width="57.9" height="101.2" fill="#3f6f9f"/>
+<text x="646.2" y="385.8" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">25.8%</text>
+<text x="614.2" y="524.0" font-size="15" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Upper middle quartile</text>
+<text x="614.2" y="544.0" font-size="12" text-anchor="middle" fill="#4d4d4d">&#163;14.14&#8211;&#163;15.84 per hour</text>
+<text x="614.2" y="562.0" font-size="12" text-anchor="middle" fill="#4d4d4d">46 women &#183; 16 men</text>
+<rect x="767.8" y="287.4" width="57.9" height="208.6" fill="#8c4a7e"/>
+<text x="796.8" y="278.4" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">53.2%</text>
+<rect x="831.8" y="312.6" width="57.9" height="183.4" fill="#3f6f9f"/>
+<text x="860.7" y="303.6" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a1a1a">46.8%</text>
+<text x="828.8" y="524.0" font-size="15" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Upper quartile</text>
+<text x="828.8" y="544.0" font-size="12" text-anchor="middle" fill="#4d4d4d">&#163;16.01&#8211;&#163;72.41 per hour</text>
+<text x="828.8" y="562.0" font-size="12" text-anchor="middle" fill="#4d4d4d">33 women &#183; 29 men</text>
+<text x="78" y="566" font-size="12" fill="#666666">Source: Thistlecombe Care HR and payroll exports, 5 April 2026 snapshot.</text>
+<text x="78" y="584" font-size="12" fill="#666666">Quartiles rank the 248 full-pay relevant employees by hourly rate, lowest paid first.</text>
+</svg>

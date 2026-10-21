@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 20px; font-weight: bold; }
+    .label { font-size: 14px; }
+    .value { font-size: 12px; }
+    .women { fill: #E8A0BF; }
+    .men { fill: #7CB9E8; }
+    .legend-label { font-size: 12px; }
+  </style>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" class="title">Gender representation by pay quartile</text>
+  <text x="400" y="55" text-anchor="middle" class="label">Percentage of women and men in each quartile (based on hourly pay)</text>
+
+  <!-- Chart area -->
+  <g id="chart">
+    <!-- Grid lines and labels -->
+    <line x1="80" y1="420" x2="750" y2="420" stroke="#ddd" stroke-width="1"/>
+
+    <!-- Y-axis -->
+    <line x1="80" y1="80" x2="80" y2="420" stroke="#000" stroke-width="2"/>
+    <!-- X-axis -->
+    <line x1="80" y1="420" x2="750" y2="420" stroke="#000" stroke-width="2"/>
+
+    <!-- Y-axis labels -->
+    <text x="70" y="425" text-anchor="end" class="value">0%</text>
+    <text x="70" y="325" text-anchor="end" class="value">25%</text>
+    <text x="70" y="225" text-anchor="end" class="value">50%</text>
+    <text x="70" y="125" text-anchor="end" class="value">75%</text>
+    <text x="70" y="85" text-anchor="end" class="value">100%</text>
+
+    <!-- Grid lines -->
+    <line x1="80" y1="320" x2="750" y2="320" stroke="#eee" stroke-width="1"/>
+    <line x1="80" y1="220" x2="750" y2="220" stroke="#eee" stroke-width="1"/>
+    <line x1="80" y1="120" x2="750" y2="120" stroke="#eee" stroke-width="1"/>
+
+    <!-- Lower Quartile -->
+    <g>
+      <rect x="100" y="420" width="0" height="0" class="women"/>
+      <!-- Women percentage bar -->
+      <rect x="100" y="420" width="60" height="-295" class="women" stroke="#999" stroke-width="1"/>
+      <!-- Men percentage bar -->
+      <rect x="170" y="420" width="60" height="-86" class="men" stroke="#999" stroke-width="1"/>
+      <!-- Labels -->
+      <text x="215" y="440" text-anchor="middle" class="label">Lower quartile</text>
+      <text x="130" y="115" text-anchor="middle" class="value">79.0%</text>
+      <text x="200" y="340" text-anchor="middle" class="value">21.0%</text>
+    </g>
+
+    <!-- Lower Middle Quartile -->
+    <g>
+      <!-- Women percentage bar -->
+      <rect x="260" y="420" width="60" height="-278" class="women" stroke="#999" stroke-width="1"/>
+      <!-- Men percentage bar -->
+      <rect x="330" y="420" width="60" height="-103" class="men" stroke="#999" stroke-width="1"/>
+      <!-- Labels -->
+      <text x="375" y="440" text-anchor="middle" class="label">Lower middle</text>
+      <text x="290" y="130" text-anchor="middle" class="value">74.2%</text>
+      <text x="360" y="325" text-anchor="middle" class="value">25.8%</text>
+    </g>
+
+    <!-- Upper Middle Quartile -->
+    <g>
+      <!-- Women percentage bar -->
+      <rect x="420" y="420" width="60" height="-248" class="women" stroke="#999" stroke-width="1"/>
+      <!-- Men percentage bar -->
+      <rect x="490" y="420" width="60" height="-134" class="men" stroke="#999" stroke-width="1"/>
+      <!-- Labels -->
+      <text x="535" y="440" text-anchor="middle" class="label">Upper middle</text>
+      <text x="450" y="160" text-anchor="middle" class="value">66.1%</text>
+      <text x="520" y="295" text-anchor="middle" class="value">33.9%</text>
+    </g>
+
+    <!-- Upper Quartile -->
+    <g>
+      <!-- Women percentage bar -->
+      <rect x="580" y="420" width="60" height="-212" class="women" stroke="#999" stroke-width="1"/>
+      <!-- Men percentage bar -->
+      <rect x="650" y="420" width="60" height="-173" class="men" stroke="#999" stroke-width="1"/>
+      <!-- Labels -->
+      <text x="695" y="440" text-anchor="middle" class="label">Upper quartile</text>
+      <text x="610" y="195" text-anchor="middle" class="value">56.5%</text>
+      <text x="680" y="260" text-anchor="middle" class="value">43.5%</text>
+    </g>
+  </g>
+
+  <!-- Legend -->
+  <g id="legend" transform="translate(100, 460)">
+    <rect x="0" y="0" width="20" height="20" class="women" stroke="#999" stroke-width="1"/>
+    <text x="30" y="15" class="legend-label">Women</text>
+
+    <rect x="150" y="0" width="20" height="20" class="men" stroke="#999" stroke-width="1"/>
+    <text x="180" y="15" class="legend-label">Men</text>
+  </g>
+</svg>

@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harbour & Vale pronunciation coach</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #f4f7f9;
+      --card: #ffffff;
+      --ink: #172630;
+      --muted: #5d6b75;
+      --line: #d7dee3;
+      --blue: #155e75;
+      --green: #137333;
+      --green-bg: #e6f4ea;
+      --amber: #8a5300;
+      --amber-bg: #fef7e0;
+      --red: #a61b1b;
+      --red-bg: #fceeee;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(100%, 46rem);
+      margin: 0 auto;
+      padding: 1rem 0.875rem 2rem;
+    }
+
+    header {
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      line-height: 1.25;
+    }
+
+    .intro {
+      margin: 0.3rem 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    section, .phrase-card {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 0.75rem;
+      background: var(--card);
+    }
+
+    h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.1rem;
+    }
+
+    h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1rem;
+    }
+
+    .phrase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .phrase-button, .action {
+      font: inherit;
+      border: 0;
+      border-radius: 0.55rem;
+      cursor: pointer;
+    }
+
+    .phrase-button {
+      width: 100%;
+      min-height: 3rem;
+      padding: 0.6rem 0.75rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.35rem;
+      text-align: left;
+      background: #eaf1f4;
+      border: 1px solid #c9d7de;
+    }
+
+    .phrase-button:hover, .action:hover:not(:disabled) { filter: brightness(0.97); }
+    .phrase-button:focus-visible, .action:focus-visible { outline: 3px solid #0b5b73; outline-offset: 2px; }
+    .phrase-button[aria-pressed="true"] { background: #d8e8ee; border-color: var(--blue); }
+
+    .phrase-text {
+      grid-column: 1;
+      font-size: 1rem;
+    }
+
+    .best {
+      grid-column: 2;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      align-self: start;
+    }
+
+    .phrase-language {
+      grid-column: 1 / -1;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .target {
+      margin: 0;
+      font-size: clamp(1.4rem, 6vw, 1.8rem);
+      line-height: 1.3;
+    }
+
+    .english {
+      margin: 0.45rem 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 0.9rem;
+    }
+
+    .action {
+      min-height: 2.9rem;
+      padding: 0.55rem 0.95rem;
+      background: var(--blue);
+      color: white;
+      flex: 1 1 8rem;
+    }
+
+    .action:disabled {
+      background: #b6c3c9;
+      color: #505b62;
+      cursor: not-allowed;
+      filter: none;
+    }
+
+    #record.recording { background: #a61b1b; }
+
+    .message {
+      margin: 0.75rem 0 0;
+      padding: 0.7rem;
+      border-left: 4px solid var(--blue);
+      background: #eaf1f4;
+      font-weight: 600;
+    }
+
+    .message[hidden] { display: none; }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    .score {
+      margin: 0;
+      font-size: 2.1rem;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .score-label { color: var(--muted); font-size: 0.9rem; }
+
+    .word-results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .word-results li {
+      padding: 0.45rem 0.65rem;
+      border-radius: 0.4rem;
+      border: 1px solid;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    [data-colour="green"] { background: var(--green-bg); color: var(--green); border-color: #a5d6b4; }
+    [data-colour="amber"] { background: var(--amber-bg); color: var(--amber); border-color: #f0cf89; }
+    [data-colour="red"] { background: var(--red-bg); color: var(--red); border-color: #f0a8a8; }
+
+    .output {
+      min-height: 1.4rem;
+      padding: 0.65rem;
+      margin: 0;
+      border-radius: 0.4rem;
+      background: #eaf1f4;
+      overflow-wrap: anywhere;
+    }
+
+    @media (min-width: 43rem) {
+      .phrase-grid { grid-template-columns: 1fr 1fr; }
+      .phrase-text { grid-column: 1 / -1; }
+      .phrase-language { grid-column: 1 / -1; }
+      .result-grid { grid-template-columns: 12rem 1fr; align-items: start; }
+      .result-grid > div:last-child { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Pronunciation coach</h1>
+      <p class="intro">Choose a phrase, listen to it, then record your own try. Scores are saved only on this device.</p>
+    </header>
+
+    <section aria-labelledby="phrases-heading">
+      <h2 id="phrases-heading">1. Choose your phrase</h2>
+      <ul class="phrase-grid" id="phrase-list"></ul>
+    </section>
+
+    <section aria-labelledby="practise-heading">
+      <h2 id="practise-heading">2. Listen and practise</h2>
+      <p class="target" data-testid="target" lang="es-ES">Buenos días, ¿qué tal?</p>
+      <p class="english">Good morning, how are you?</p>
+      <div class="controls">
+        <button class="action" id="listen" data-testid="listen" type="button">🔊 Listen to phrase</button>
+        <button class="action" id="record" data-testid="record" type="button">🎙 Start recording</button>
+        <button class="action" id="stop" data-testid="stop" type="button" disabled>⏹ Stop and check</button>
+      </div>
+      <p class="message" id="message" data-testid="message" role="status" aria-live="polite" hidden></p>
+    </section>
+
+    <section aria-labelledby="feedback-heading">
+      <h2 id="feedback-heading">3. Your feedback</h2>
+      <div class="result-grid">
+        <div>
+          <h3>Overall score</h3>
+          <p class="score" data-testid="score">—</p>
+          <p class="score-label">out of 100</p>
+        </div>
+        <div>
+          <h3>Phrase words</h3>
+          <ul class="word-results" id="word-results"></ul>
+          <h3>The computer heard</h3>
+          <p class="output" data-testid="heard">No attempt checked yet.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  (() => {
+    "use strict";
+
+    const phrases = [
+      {"id":"es_01","language":"es-ES","text":"Buenos días, ¿qué tal?","english":"Good morning, how are you?"},
+      {"id":"es_02","language":"es-ES","text":"Me llamo Sam y trabajo en el almacén.","english":"My name is Sam and I work in the warehouse."},
+      {"id":"es_03","language":"es-ES","text":"¿Dónde está la estación de tren?","english":"Where is the train station?"},
+      {"id":"es_04","language":"es-ES","text":"El camión llega a las tres y media.","english":"The lorry arrives at half past three."},
+      {"id":"es_05","language":"es-ES","text":"Me gustaría reservar una mesa para dos.","english":"I would like to book a table for two."},
+      {"id":"es_06","language":"es-ES","text":"¿Puede repetirlo más despacio, por favor?","english":"Can you repeat it more slowly, please?"},
+      {"id":"fr_01","language":"fr-FR","text":"Bonjour, je suis nouveau ici.","english":"Hello, I am new here."},
+      {"id":"fr_02","language":"fr-FR","text":"Je voudrais un café, s'il vous plaît.","english":"I would like a coffee, please."},
+      {"id":"fr_03","language":"fr-FR","text":"À quelle heure part le prochain train ?","english":"What time does the next train leave?"},
+      {"id":"fr_04","language":"fr-FR","text":"Il fait très beau aujourd'hui.","english":"The weather is lovely today."},
+      {"id":"fr_05","language":"fr-FR","text":"Le chargement est prêt à partir.","english":"The load is ready to go."},
+      {"id":"fr_06","language":"fr-FR","text":"Pouvez-vous parler plus lentement ?","english":"Can you speak more slowly?"}
+    ];
+
+    const list = document.getElementById("phrase-list");
+    const target = document.querySelector('[data-testid="target"]');
+    const english = document.querySelector(".english");
+    const listenButton = document.getElementById("listen");
+    const recordButton = document.getElementById("record");
+    const stopButton = document.getElementById("stop");
+    const message = document.getElementById("message");
+    const score = document.querySelector('[data-testid="score"]');
+    const wordResults = document.getElementById("word-results");
+    const heard = document.querySelector('[data-testid="heard"]');
+
+    let selected = phrases[0];
+    let mediaStream;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let recording = false;
+
+    const bestScores = readScores();
+
+    function readScores() {
+      try {
+        const saved = localStorage.getItem("harbour-vale-pronunciation-scores");
+        if (!saved) return {};
+        const value = JSON.parse(saved);
+        if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+        const scores = {};
+        for (const phrase of phrases) {
+          const item = value[phrase.id];
+          if (typeof item === "number" && Number.isFinite(item)) scores[phrase.id] = Math.max(0, Math.min(100, Math.round(item)));
+        }
+        return scores;
+      } catch (_) {
+        return {};
+      }
+    }
+
+    function saveScore(id, value) {
+      bestScores[id] = value;
+      try {
+        localStorage.setItem("harbour-vale-pronunciation-scores", JSON.stringify(bestScores));
+      } catch (_) {
+      }
+    }
+
+    function bestLabel(value) {
+      return typeof value === "number" ? String(value) : "";
+    }
+
+    function showMessage(text) {
+      message.textContent = text;
+      message.hidden = !text;
+    }
+
+    function renderPhrases() {
+      for (const phrase of phrases) {
+        const item = document.createElement("li");
+        const button = document.createElement("button");
+        button.className = "phrase-button";
+        button.type = "button";
+        button.dataset.testid = "phrase-" + phrase.id;
+        button.setAttribute("aria-pressed", phrase.id === selected.id ? "true" : "false");
+        button.setAttribute("lang", phrase.language);
+        button.setAttribute("aria-label", "Choose phrase: " + phrase.text);
+
+        const text = document.createElement("span");
+        text.className = "phrase-text";
+        text.textContent = phrase.text;
+        const label = document.createElement("span");
+        label.className = "best";
+        label.dataset.testid = "best-" + phrase.id;
+        label.textContent = bestLabel(bestScores[phrase.id]);
+        const language = document.createElement("span");
+        language.className = "phrase-language";
+        language.textContent = phrase.language.startsWith("es") ? "Spanish" : "French";
+
+        button.append(text, label, language);
+        button.addEventListener("click", () => selectPhrase(phrase));
+        item.append(button);
+        list.append(item);
+      }
+    }
+
+    function selectPhrase(phrase) {
+      if (recording) return;
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      selected = phrase;
+      target.textContent = phrase.text;
+      target.lang = phrase.language;
+      english.textContent = phrase.english;
+      recordButton.disabled = false;
+      stopButton.disabled = true;
+      clearFeedback();
+      showMessage("");
+
+      for (const button of list.querySelectorAll(".phrase-button")) {
+        button.setAttribute("aria-pressed", button.dataset.testid === "phrase-" + phrase.id ? "true" : "false");
+      }
+    }
+
+    function clearFeedback() {
+      score.textContent = "—";
+      wordResults.replaceChildren();
+      heard.textContent = "No attempt checked yet.";
+    }
+
+    function speakPhrase() {
+      if (!("speechSynthesis" in window)) {
+        showMessage("Sorry, this browser cannot speak the phrase. Please try Chrome, Edge or Safari.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(selected.text);
+      utterance.lang = selected.language;
+      utterance.rate = 0.9;
+      utterance.onstart = () => showMessage("Speaking the phrase…");
+      utterance.onend = () => {
+        if (!recording) showMessage("");
+      };
+      utterance.onerror = () => {
+        if (!recording) showMessage("Sorry, the phrase could not be spoken. Please try again.");
+      };
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function plainWord(word) {
+      return word
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\p{P}\p{S}]/gu, "")
+        .toLowerCase();
+    }
+
+    function phraseWords(text) {
+      return text.split(/\s+/).filter(Boolean).filter(word => /\p{L}|\p{N}/u.test(plainWord(word)));
+    }
+
+    function scoreAttempt(response) {
+      const targetWords = phraseWords(selected.text);
+      const heardWords = Array.isArray(response.words) ? response.words : [];
+      const colours = [];
+      let total = 0;
+      let heardIndex = 0;
+
+      for (const targetWord of targetWords) {
+        const targetPlain = plainWord(targetWord);
+        let matched = null;
+        let matchedAt = -1;
+
+        for (let index = heardIndex; index < heardWords.length; index += 1) {
+          const heardItem = heardWords[index] || {};
+          if (plainWord(String(heardItem.word ?? "")) === targetPlain) {
+            matched = heardItem;
+            matchedAt = index;
+            break;
+          }
+        }
+
+        if (matched) {
+          heardIndex = matchedAt + 1;
+          const confidence = Number(matched.confidence);
+          const validConfidence = Number.isFinite(confidence) ? confidence : 0;
+          total += validConfidence;
+          const colour = validConfidence >= 0.85 ? "green" : validConfidence >= 0.6 ? "amber" : "red";
+          colours.push({ word: targetWord, colour: colour });
+        } else {
+          colours.push({ word: targetWord, colour: "red" });
+        }
+      }
+
+      const average = Number((total / targetWords.length).toFixed(9));
+      let result = Math.round(average * 100);
+      result -= 5 * countExtras(heardWords);
+      result = Math.max(0, result);
+      return { score: result, colours: colours, transcript: typeof response.transcript === "string" ? response.transcript : "" };
+    }
+
+    function countExtras(heardWords) {
+      const targetWords = phraseWords(selected.text);
+      let heardIndex = 0;
+      let matchedCount = 0;
+      for (const targetWord of targetWords) {
+        const targetPlain = plainWord(targetWord);
+        for (let index = heardIndex; index < heardWords.length; index += 1) {
+          const heardItem = heardWords[index] || {};
+          if (plainWord(String(heardItem.word ?? "")) === targetPlain) {
+            heardIndex = index + 1;
+            matchedCount += 1;
+            break;
+          }
+        }
+      }
+      return Math.max(0, heardWords.length - matchedCount);
+    }
+
+    function showAttempt(result) {
+      score.textContent = String(result.score);
+      heard.textContent = result.transcript.trim() ? result.transcript : "(Nothing was heard.)";
+      wordResults.replaceChildren();
+      for (const item of result.colours) {
+        const entry = document.createElement("li");
+        entry.dataset.colour = item.colour;
+        entry.textContent = item.word;
+        wordResults.append(entry);
+      }
+      for (let index = 0; index < result.colours.length; index += 1) {
+        wordResults.children[index].dataset.testid = "word-" + String(index + 1);
+      }
+      if (typeof bestScores[selected.id] !== "number" || result.score > bestScores[selected.id]) {
+        saveScore(selected.id, result.score);
+      }
+      const bestButton = list.querySelector('[data-testid="best-' + selected.id + '"]');
+      if (bestButton) bestButton.textContent = String(bestScores[selected.id]);
+    }
+
+    async function sendRecording(blob) {
+      showMessage("Checking your pronunciation…");
+      score.textContent = "—";
+      wordResults.replaceChildren();
+      heard.textContent = "No attempt checked yet.";
+      const form = new FormData();
+      form.append("audio", blob, "recording");
+      form.append("language", selected.language);
+      form.append("phrase_id", selected.id);
+      form.append("target", selected.text);
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 8000);
+
+      try {
+        const response = await fetch("/api/listen", { method: "POST", body: form, signal: controller.signal });
+        if (!response.ok) throw new Error("Service returned status " + String(response.status));
+        const data = await response.json();
+        showAttempt(scoreAttempt(data));
+        showMessage("");
+      } catch (error) {
+        score.textContent = "—";
+        wordResults.replaceChildren();
+        heard.textContent = "No attempt checked yet.";
+        if (error.name === "AbortError") {
+          showMessage("Sorry, checking is taking too long. Please try again.");
+        } else {
+          showMessage("Sorry, the listening service had a problem. Please try again; no score was shown.");
+        }
+      } finally {
+        window.clearTimeout(timer);
+      }
+    }
+
+    async function startRecording() {
+      if (recording) return;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
+        showMessage("Sorry, this browser cannot record sound. Please try Chrome, Edge or Safari.");
+        return;
+      }
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(mediaStream);
+        mediaRecorder.addEventListener("dataavailable", event => {
+          if (event.data && event.data.size > 0) recordedChunks.push(event.data);
+        });
+        mediaRecorder.addEventListener("stop", () => {
+          const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+          for (const track of mediaStream.getTracks()) track.stop();
+          recording = false;
+          listenButton.disabled = false;
+          recordButton.disabled = false;
+          recordButton.classList.remove("recording");
+          recordButton.textContent = "🎙 Start recording";
+          stopButton.disabled = true;
+          sendRecording(blob);
+        });
+        mediaRecorder.start();
+        recording = true;
+        listenButton.disabled = true;
+        recordButton.disabled = true;
+        recordButton.classList.add("recording");
+        recordButton.textContent = "🎙 Recording…";
+        stopButton.disabled = false;
+        showMessage("Recording. Say the whole phrase, then press Stop and check.");
+      } catch (error) {
+        if (error && error.name === "NotAllowedError") {
+          showMessage("Microphone not allowed. In your browser settings, allow this page to use your microphone, then try again.");
+        } else if (error && error.name === "NotFoundError") {
+          showMessage("No microphone was found. Please connect or choose one, then try again.");
+        } else {
+          showMessage("Sorry, the microphone could not be started. Please try again.");
+        }
+      }
+    }
+
+    function stopRecording() {
+      if (!recording || !mediaRecorder) return;
+      if (mediaRecorder.state !== "inactive") mediaRecorder.stop();
+    }
+
+    listenButton.addEventListener("click", speakPhrase);
+    recordButton.addEventListener("click", startRecording);
+    stopButton.addEventListener("click", stopRecording);
+    renderPhrases();
+    clearFeedback();
+  })();
+  </script>
+</body>
+</html>

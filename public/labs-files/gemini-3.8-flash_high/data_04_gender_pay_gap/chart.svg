@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 460" width="850" height="460">
+  <defs>
+    <clipPath id="clip-q0"><rect x="240" y="130" width="540" height="38" rx="6" ry="6" /></clipPath>
+    <clipPath id="clip-q1"><rect x="240" y="195" width="540" height="38" rx="6" ry="6" /></clipPath>
+    <clipPath id="clip-q2"><rect x="240" y="260" width="540" height="38" rx="6" ry="6" /></clipPath>
+    <clipPath id="clip-q3"><rect x="240" y="325" width="540" height="38" rx="6" ry="6" /></clipPath>
+  </defs>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .title { font-size: 20px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-size: 13px; fill: #64748b; }
+    .label { font-size: 14px; font-weight: 600; fill: #1e293b; }
+    .sublabel { font-size: 11px; fill: #64748b; }
+    .bar-text { font-size: 13px; font-weight: 600; fill: #ffffff; text-anchor: middle; }
+    .legend { font-size: 13px; font-weight: 500; fill: #334155; }
+    .axis { font-size: 11px; fill: #94a3b8; }
+    .grid { stroke: #e2e8f0; stroke-width: 1; stroke-dasharray: 4,4; }
+    .benchmark { stroke: #e11d48; stroke-width: 2; stroke-dasharray: 4,4; }
+  </style>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <!-- Header -->
+  <text x="35" y="42" class="title">Thistlecombe Care – Gender Distribution by Pay Quartile</text>
+  <text x="35" y="65" class="subtitle">Snapshot Date: 5 April 2026 | Full-Pay Relevant Employees (N = 248: 171 Women, 77 Men)</text>
+
+  <!-- Legend -->
+  <g transform="translate(540, 48)">
+    <rect x="0" y="0" width="16" height="16" rx="3" fill="#2563eb" />
+    <text x="24" y="13" class="legend">Women (69.0% total)</text>
+    <rect x="160" y="0" width="16" height="16" rx="3" fill="#f59e0b" />
+    <text x="184" y="13" class="legend">Men (31.0% total)</text>
+  </g>
+
+  <!-- Grid lines -->
+  <line x1="240.0" y1="115" x2="240.0" y2="375" class="grid" />
+  <text x="240.0" y="395" text-anchor="middle" class="axis">0%</text>
+  <line x1="375.0" y1="115" x2="375.0" y2="375" class="grid" />
+  <text x="375.0" y="395" text-anchor="middle" class="axis">25%</text>
+  <line x1="510.0" y1="115" x2="510.0" y2="375" class="grid" />
+  <text x="510.0" y="395" text-anchor="middle" class="axis">50%</text>
+  <line x1="645.0" y1="115" x2="645.0" y2="375" class="grid" />
+  <text x="645.0" y="395" text-anchor="middle" class="axis">75%</text>
+  <line x1="780.0" y1="115" x2="780.0" y2="375" class="grid" />
+  <text x="780.0" y="395" text-anchor="middle" class="axis">100%</text>
+  <line x1="612.3" y1="112" x2="612.3" y2="375" class="benchmark" />
+  <text x="612.3" y="108" text-anchor="middle" style="font-size: 10px; fill: #e11d48; font-weight: 600;">Workforce Average: 69.0% Women</text>
+  <text x="225" y="145" text-anchor="end" class="label">Upper Quartile (Band 4)</text>
+  <text x="225" y="160" text-anchor="end" class="sublabel">Highest paid 25%</text>
+  <g clip-path="url(#clip-q0)">
+    <rect x="240" y="130" width="287.3" height="38" fill="#2563eb" />
+    <rect x="527.3" y="130" width="252.7" height="38" fill="#f59e0b" />
+  </g>
+  <text x="383.6" y="154" class="bar-text">53.2% (33)</text>
+  <text x="653.6" y="154" class="bar-text">46.8% (29)</text>
+  <text x="225" y="210" text-anchor="end" class="label">Upper Middle Quartile (Band 3)</text>
+  <text x="225" y="225" text-anchor="end" class="sublabel">50th to 75th percentile</text>
+  <g clip-path="url(#clip-q1)">
+    <rect x="240" y="195" width="400.7" height="38" fill="#2563eb" />
+    <rect x="640.7" y="195" width="139.3" height="38" fill="#f59e0b" />
+  </g>
+  <text x="440.3" y="219" class="bar-text">74.2% (46)</text>
+  <text x="710.3" y="219" class="bar-text">25.8% (16)</text>
+  <text x="225" y="275" text-anchor="end" class="label">Lower Middle Quartile (Band 2)</text>
+  <text x="225" y="290" text-anchor="end" class="sublabel">25th to 50th percentile</text>
+  <g clip-path="url(#clip-q2)">
+    <rect x="240" y="260" width="383.4" height="38" fill="#2563eb" />
+    <rect x="623.4" y="260" width="156.6" height="38" fill="#f59e0b" />
+  </g>
+  <text x="431.7" y="284" class="bar-text">71.0% (44)</text>
+  <text x="701.7" y="284" class="bar-text">29.0% (18)</text>
+  <text x="225" y="340" text-anchor="end" class="label">Lower Quartile (Band 1)</text>
+  <text x="225" y="355" text-anchor="end" class="sublabel">Lowest paid 25%</text>
+  <g clip-path="url(#clip-q3)">
+    <rect x="240" y="325" width="418.0" height="38" fill="#2563eb" />
+    <rect x="658.0" y="325" width="122.0" height="38" fill="#f59e0b" />
+  </g>
+  <text x="449.0" y="349" class="bar-text">77.4% (48)</text>
+  <text x="719.0" y="349" class="bar-text">22.6% (14)</text>
+  <!-- Footer Note -->
+  <text x="35" y="430" style="font-size: 11px; fill: #64748b;">Note: Each quartile contains 62 full-pay relevant employees ranked by hourly rate. Red dashed line indicates overall female representation across the workforce (69.0%).</text>
+</svg>

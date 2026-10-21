@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="460" viewBox="0 0 760 460" font-family="Arial, Helvetica, sans-serif">
+<rect width="760" height="460" fill="#ffffff"/>
+<text x="380.0" y="28" text-anchor="middle" font-size="18" font-weight="bold">Share of women and men in each pay quartile</text>
+<text x="380.0" y="50" text-anchor="middle" font-size="13" fill="#444">Full-pay relevant employees, 5 April 2026 snapshot (n = 248, 62 per quartile)</text>
+<line x1="70" y1="370.0" x2="730" y2="370.0" stroke="#ddd"/>
+<text x="62" y="374.0" text-anchor="end" font-size="12" fill="#444">0%</text>
+<line x1="70" y1="310.0" x2="730" y2="310.0" stroke="#ddd"/>
+<text x="62" y="314.0" text-anchor="end" font-size="12" fill="#444">20%</text>
+<line x1="70" y1="250.0" x2="730" y2="250.0" stroke="#ddd"/>
+<text x="62" y="254.0" text-anchor="end" font-size="12" fill="#444">40%</text>
+<line x1="70" y1="190.0" x2="730" y2="190.0" stroke="#ddd"/>
+<text x="62" y="194.0" text-anchor="end" font-size="12" fill="#444">60%</text>
+<line x1="70" y1="130.0" x2="730" y2="130.0" stroke="#ddd"/>
+<text x="62" y="134.0" text-anchor="end" font-size="12" fill="#444">80%</text>
+<line x1="70" y1="70.0" x2="730" y2="70.0" stroke="#ddd"/>
+<text x="62" y="74.0" text-anchor="end" font-size="12" fill="#444">100%</text>
+<line x1="70" y1="70" x2="70" y2="370" stroke="#333"/>
+<line x1="70" y1="370" x2="730" y2="370" stroke="#333"/>
+<rect x="92.5" y="137.8" width="56" height="232.2" fill="#7a3e9d"/>
+<text x="120.5" y="131.8" text-anchor="middle" font-size="12">77.4%</text>
+<rect x="156.5" y="302.2" width="56" height="67.8" fill="#2e7d9a"/>
+<text x="184.5" y="296.2" text-anchor="middle" font-size="12">22.6%</text>
+<text x="152.5" y="394" text-anchor="middle" font-size="13">Lower</text>
+<rect x="257.5" y="157.0" width="56" height="213.0" fill="#7a3e9d"/>
+<text x="285.5" y="151.0" text-anchor="middle" font-size="12">71.0%</text>
+<rect x="321.5" y="283.0" width="56" height="87.0" fill="#2e7d9a"/>
+<text x="349.5" y="277.0" text-anchor="middle" font-size="12">29.0%</text>
+<text x="317.5" y="394" text-anchor="middle" font-size="13">Lower middle</text>
+<rect x="422.5" y="147.4" width="56" height="222.6" fill="#7a3e9d"/>
+<text x="450.5" y="141.4" text-anchor="middle" font-size="12">74.2%</text>
+<rect x="486.5" y="292.6" width="56" height="77.4" fill="#2e7d9a"/>
+<text x="514.5" y="286.6" text-anchor="middle" font-size="12">25.8%</text>
+<text x="482.5" y="394" text-anchor="middle" font-size="13">Upper middle</text>
+<rect x="587.5" y="210.4" width="56" height="159.6" fill="#7a3e9d"/>
+<text x="615.5" y="204.4" text-anchor="middle" font-size="12">53.2%</text>
+<rect x="651.5" y="229.6" width="56" height="140.4" fill="#2e7d9a"/>
+<text x="679.5" y="223.6" text-anchor="middle" font-size="12">46.8%</text>
+<text x="647.5" y="394" text-anchor="middle" font-size="13">Upper</text>
+<rect x="270.0" y="427" width="14" height="14" fill="#7a3e9d"/><text x="290.0" y="438" font-size="13">Women</text>
+<rect x="370.0" y="427" width="14" height="14" fill="#2e7d9a"/><text x="390.0" y="438" font-size="13">Men</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="470" viewBox="0 0 840 470">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#202124}.title{font-size:22px;font-weight:700}.subtitle{font-size:14px;fill:#4d5156}.axis{font-size:12px;fill:#4d5156}.quartile{font-size:14px;font-weight:600}.segment{font-size:13px;font-weight:700;fill:#ffffff}</style>
+<text class="title" x="420" y="38" text-anchor="middle">Women and men across pay quartiles</text>
+<text class="subtitle" x="420" y="64" text-anchor="middle">Composition of 248 full-pay relevant employees by April 2026 hourly rate</text>
+<line x1="210.0" y1="112" x2="210.0" y2="404" stroke="#d9dce1" stroke-width="1"/>
+<text class="axis" x="210.0" y="424" text-anchor="middle">0%</text>
+<line x1="322.0" y1="112" x2="322.0" y2="404" stroke="#d9dce1" stroke-width="1"/>
+<text class="axis" x="322.0" y="424" text-anchor="middle">20%</text>
+<line x1="434.0" y1="112" x2="434.0" y2="404" stroke="#d9dce1" stroke-width="1"/>
+<text class="axis" x="434.0" y="424" text-anchor="middle">40%</text>
+<line x1="546.0" y1="112" x2="546.0" y2="404" stroke="#d9dce1" stroke-width="1"/>
+<text class="axis" x="546.0" y="424" text-anchor="middle">60%</text>
+<line x1="658.0" y1="112" x2="658.0" y2="404" stroke="#d9dce1" stroke-width="1"/>
+<text class="axis" x="658.0" y="424" text-anchor="middle">80%</text>
+<line x1="770.0" y1="112" x2="770.0" y2="404" stroke="#d9dce1" stroke-width="1"/>
+<text class="axis" x="770.0" y="424" text-anchor="middle">100%</text>
+<text class="quartile" x="194" y="163" text-anchor="end">Lower</text>
+<rect x="210" y="130" width="433.55" height="54" fill="#4B356F"/>
+<rect x="643.55" y="130" width="126.45" height="54" fill="#9B4A1F"/>
+<text class="segment" x="426.77" y="163" text-anchor="middle">77.4%</text>
+<text class="segment" x="706.77" y="163" text-anchor="middle">22.6%</text>
+<text class="quartile" x="194" y="235" text-anchor="end">Lower middle</text>
+<rect x="210" y="202" width="397.42" height="54" fill="#4B356F"/>
+<rect x="607.42" y="202" width="162.58" height="54" fill="#9B4A1F"/>
+<text class="segment" x="408.71" y="235" text-anchor="middle">71.0%</text>
+<text class="segment" x="688.71" y="235" text-anchor="middle">29.0%</text>
+<text class="quartile" x="194" y="307" text-anchor="end">Upper middle</text>
+<rect x="210" y="274" width="415.48" height="54" fill="#4B356F"/>
+<rect x="625.48" y="274" width="144.52" height="54" fill="#9B4A1F"/>
+<text class="segment" x="417.74" y="307" text-anchor="middle">74.2%</text>
+<text class="segment" x="697.74" y="307" text-anchor="middle">25.8%</text>
+<text class="quartile" x="194" y="379" text-anchor="end">Upper</text>
+<rect x="210" y="346" width="298.06" height="54" fill="#4B356F"/>
+<rect x="508.06" y="346" width="261.94" height="54" fill="#9B4A1F"/>
+<text class="segment" x="359.03" y="379" text-anchor="middle">53.2%</text>
+<text class="segment" x="639.03" y="379" text-anchor="middle">46.8%</text>
+<rect x="355" y="415" width="16" height="16" fill="#4B356F"/>
+<text class="axis" x="379" y="428">Women</text>
+<rect x="495" y="415" width="16" height="16" fill="#9B4A1F"/>
+<text class="axis" x="519" y="428">Men</text>
+</svg>

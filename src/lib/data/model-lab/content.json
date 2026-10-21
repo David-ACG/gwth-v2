@@ -1,0 +1,1048 @@
+{
+ "sp": "content",
+ "sp_name": "Content",
+ "headline": "Which AI makes the best content?",
+ "ask": "Which post would you publish?",
+ "tasks": [
+  {
+   "id": "content_01_bakery_preorder",
+   "title": "The bakery post",
+   "signature": true
+  },
+  {
+   "id": "content_02_flexible_working_email",
+   "title": "The flexible working email",
+   "signature": false
+  },
+  {
+   "id": "content_03_complaint_reply",
+   "title": "The angry customer",
+   "signature": false
+  },
+  {
+   "id": "content_04_job_advert",
+   "title": "The job advert",
+   "signature": false
+  }
+ ],
+ "sig_title": "The bakery post",
+ "sig_plain": "Write a small bakery's announcement in the owner's own voice, and leave out a false legal claim that a friend asked her to include.",
+ "sig_task": "I'm Priya. My voice card is in `inputs/voice_card.md`, samples of my writing are in `inputs/samples/`, and this week's brief is `inputs/brief.md`.\n\nPlease write, in my voice:\n\n- `out/short_post.md`: the short social post, 250 to 400 words.\n- `out/long_note.md`: the newsletter note, 600 to 1,200 words, including a paragraph on the limits of what we know.\n- `out/image_brief.md`: a short brief for the photo I'll take, and the one-line caption. Put the caption on its own line, starting `Caption:`.\n- `out/final_check.md`: your own check of the two pieces against these six points: Truth, Voice, Action, Permission, Audience-fit, Ethics. One or two lines each. Under Truth, list every factual or legal claim and say whether it's safe to publish.\n\nThe post and the note should be exactly what I'll publish, with nothing else in those files. If you need to tell me anything, put it in `out/final_check.md`.\n\nFollow the voice card strictly. Work only from the files in `inputs/`.\n",
+ "best": {
+  "name": "Claude Opus 5.5",
+  "level": "max",
+  "maker": "Anthropic",
+  "score": 96,
+  "cost": "£3.42",
+  "basics": 4,
+  "n": 4
+ },
+ "value": {
+  "name": "GLM-5.3 Flash",
+  "level": "max",
+  "maker": "Z.ai",
+  "score": 88,
+  "cost": "under 1p",
+  "basics": 4,
+  "n": 4
+ },
+ "app": {
+  "name": "GPT-6 Luna",
+  "level": "max",
+  "maker": "OpenAI",
+  "score": 91,
+  "plan": {
+   "plan": "ChatGPT Plus, in the desktop app",
+   "price": "£19.99 a month",
+   "free": false
+  }
+ },
+ "free": {
+  "name": "Claude Sonnet 5.5",
+  "level": "medium",
+  "maker": "Anthropic",
+  "score": 90,
+  "plan": {
+   "plan": "Claude Free",
+   "price": "free",
+   "free": true,
+   "allowance": "Resets every 5 hours. Claude does not publish a number of messages, and it stops at the limit rather than switching to a weaker model."
+  }
+ },
+ "premium": [
+  {
+   "name": "Claude Fable 5.1",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 85,
+   "cost": "97p"
+  },
+  {
+   "name": "Claude Fable 5.1",
+   "level": "max",
+   "maker": "Anthropic",
+   "score": 91,
+   "cost": "£3.23"
+  }
+ ],
+ "premium_main": [],
+ "fable_all": true,
+ "premium_note": {
+  "title": "The premium models: Claude Fable and GPT-6 Astra",
+  "before": "Claude Fable costs two and a half times as much as Claude Opus to use, and GPT-6 Astra costs five times as much as GPT-6.1 Sol.\n\nWe tested Claude Fable on every task. It didn't score higher than the usual top models, and it cost much more:",
+  "astra": "We ran GPT-6 Astra on one task only, in the Thinking lab, to compare its cost.",
+  "after": "### Why we don't recommend them\n\nThe personal versions of Claude and ChatGPT keep your chats, whichever model you choose. Some business services can be set up so the provider does not keep the data you send. A business account alone does not guarantee this.\n\nClaude Fable has an extra requirement. Anthropic says: \"Using Fable requires 30-day data retention for safety monitoring by default.\" That applies to business accounts too. Some eligible organisations can turn this retention off for a limited time. Fable has no option for processing data in the UK or EU.\n\nSome providers make Fable optional. Harvey, which makes AI tools for law firms, says: \"We are making this model available as an opt-in option vs. by default.\" Cursor, a popular coding tool, says Fable \"is off by default in every Team that has Cursor Privacy Mode enabled and for every Enterprise customer\". Jennifer Ellis, a lawyer who writes about legal technology, advises: \"Don't use it if you have concerns about data retention or your firm has AI use policies against allowing data to be retained by outside tools.\"\n\nSo keep personal details, staff and customer records, unreleased figures, business plans and confidential findings out of Claude Fable. Check your organisation's AI policy before using it for work at all.\n\nGPT-6 Astra has the same data retention rules as other OpenAI models. By default, OpenAI keeps records of use for up to 30 days to monitor misuse. Eligible customers can arrange for their data not to be kept in those records. Our reason for not recommending Astra is cost: it costs five times as much as GPT-6.1 Sol, and we haven't tested whether it gives better results.\n\n### When a premium model is fine to use\n\nIf you need a lot of power for a long or difficult job, and none of the information is private or sensitive, a premium model is fine to use. Examples include researching a public topic in depth, working through published documents or completing a long coding task using code that isn't confidential. For Fable, Stephen Smith, who trains law firms to use AI, suggests asking: \"can this engagement tolerate 30-day retention by the model provider? For a lot of work, the answer is yes. For some matters, it won't be.\"\n\nFor everyday work, start with a usual top model. Compare a premium model only if the results don't meet your needs.",
+  "sources": "Sources, checked 20 October 2026: Anthropic, Claude Fable page (anthropic.com/claude/fable); OpenAI, GPT-6 Astra announcement and API data controls; Harvey blog, \"Fable 5.1 in Harvey\", 1 September 2026; Cursor documentation for Claude Fable 5.1; Jennifer Ellis, jlellis.net, 10 June 2026; Stephen Smith, smithstephen.com, 9 June 2026."
+ },
+ "answers": [
+  {
+   "letter": "A",
+   "setup": "grok-4.6_high",
+   "files": [
+    {
+     "name": "short_post.md",
+     "text": "The shelf was empty at 9.40am on Saturday. If you came after that, there was no loaf left.\n\nThree people walked from Headingley for bread and found nothing. I still think about that. I felt awful.\n\nYou got up early. We had already run out.\n\nOn a busy Saturday you walk away empty. On a quiet week we throw away about 6 loaves.\n\nEmpty hands, or bread in the bin. That is a poor system.\n\nI have one oven. I can bake 64 loaves on a Saturday. I have nowhere to put a 65th.\n\nFrom Saturday 7 November, Saturday bread is pre-order only.\n\nUntil then, Saturday stays walk-in, as now. We may still sell out by 9.40am.\n\nYou order on our website by 8pm Thursday. You pay when you order.\n\nYou collect between 8am and 11am on Saturday. You do not need to race for the last loaf.\n\nI bake what you paid for. Not a pile for luck.\n\nThere are 64 Saturday loaves. Once the list is full, it is full.\n\n8pm Thursday is the time to remember. One time, not five.\n\nIf you cannot come, cancel by 8pm Thursday. You get a full refund.\n\nAfter 8pm Thursday, there is no refund. The bread is baked for you.\n\nIf the loaf is burnt or wrong, that is on me.\n\nAnything not collected by 11am goes to the Chapeltown food bank.\n\nWeekdays stay walk-in, as now. Saturday is the only day that changes.\n\nThe first pre-order Saturday is 7 November. The first cut-off is 8pm on Thursday 5 November.\n\nI have not tried this before. I may muddle a name. I may be slow at the counter.\n\nI would rather pack your loaf than apologise over crumbs.\n\nOrder Saturday bread on our website by 8pm each Thursday, starting 5 November.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "Grok 4.6",
+   "level": "high",
+   "maker": "xAI",
+   "score": 84,
+   "basics": true,
+   "cost": "37p"
+  },
+  {
+   "letter": "B",
+   "setup": "glm-5.3-flash_max",
+   "files": [
+    {
+     "name": "short_post.md",
+     "text": "By 9.40am on Saturday, the bread shelf was empty.\n\nThree people had walked from Headingley. They went home with nothing.\n\nI have 1 oven. It makes 64 loaves on a Saturday. That is the limit.\n\nFrom Saturday 7 November, Saturday bread will be pre-order only. You can order on our website by 8pm on Thursday and pay when you order.\n\nYou can collect between 8am and 11am on Saturday. Weekday sales stay walk-in, as now.\n\nI know pre-paying is a change. But it means we bake what people have actually asked for, rather than guessing at 4am.\n\nHere's what it means for you. Choose your bread on the website before Thursday at 8pm. Pay then. Come on Saturday between 8am and 11am. Your loaf will be set aside.\n\nWeekdays aren't changing. If you like walking in for a loaf or something sweet, you can still do that.\n\nI want you to get the loaf you came for. I also don't want to bake bread nobody needs. On a quiet week, we throw away about 6 loaves.\n\nSo the pre-orders set the bake. Anything not collected by 11am goes to the Chapeltown food bank. That feels better than filling the bin.\n\nIf you can't make it, cancel by 8pm on Thursday for a full refund. After that, there's no refund, because the bread is baked for you.\n\nI haven't done this before. The first few Saturdays will teach me things I can't guess now. I'll tell you what I find.\n\nIf you've missed out before, I hope this helps. If it makes things harder, please tell me. I'd rather hear it from you than assume I've got it right.\n\nOrder your Saturday loaf by 8pm on Thursday.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "GLM-5.3 Flash",
+   "level": "max",
+   "maker": "Z.ai",
+   "score": 78,
+   "basics": true,
+   "cost": "under 1p"
+  },
+  {
+   "letter": "C",
+   "setup": "haiku-4.5_default",
+   "files": [
+    {
+     "name": "short_post.md",
+     "text": "We sold out by 9.40am last Saturday. A customer came in from Headingley right after. The shelf was empty. I felt awful.\n\nThis happens most weeks. The bread sells fast, which is brilliant. But it means people leave empty-handed. Three customers have told me they've travelled across Leeds hoping to buy from us and found nothing. You got up early. You travelled. We let you down.\n\nHere's why. I have one oven. On a Saturday I can bake 64 loaves maximum. That's it. Not 65, not 70 if I stay later. One oven, two hands, one Saturday morning.\n\nWhen sales are quiet we throw bread away. About 6 loaves on a slow week. Bread made but unsold. That bothers me. There are people who need food.\n\nSo from 7 November, Saturday bread is pre-order only.\n\nHere's what it means. You order on our website by 8pm Thursday and pay when you order. On Saturday morning come in between 8am and 11am to collect your bread. We've made it, it's ready, you take it home.\n\nWeekday bread doesn't change. Walk in Monday to Friday, buy what we've got.\n\nWhat if Saturday doesn't work for you this week?\n\nCancel by 8pm Thursday for a full refund. We haven't started baking yet.\n\nCancel after 8pm Thursday and there's no refund. Why? The bread is already baked for you. You've paid for it.\n\nAnything not collected by 11am goes to Chapeltown food bank. No waste.\n\nOrder your Saturday bread online by 8pm Thursday.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "Claude Haiku 4.5",
+   "level": "standard",
+   "maker": "Anthropic",
+   "score": 46,
+   "basics": false,
+   "cost": "10p"
+  },
+  {
+   "letter": "D",
+   "setup": "opus-5.5_max",
+   "files": [
+    {
+     "name": "short_post.md",
+     "text": "We keep selling out by 9.40am on Saturdays. So from Saturday 7 November, Saturday bread is pre-order only.\n\nSelling out sounds like a nice problem. It isn't, if you've walked over for nothing. I heard from 3 people who'd walked from Headingley to an empty shelf. You made the effort, and we let you down. I'm sorry.\n\nThe other problem is the opposite. On a quiet week, we throw away about 6 loaves. That's bread baked for nobody. Neither is good enough, and pre-ordering is the fairest idea I've got.\n\nYou order and pay on our website by 8pm on the Thursday before. By then, I'll know exactly how much to bake. That should mean less waste.\n\nYou collect between 8am and 11am on Saturday. There won't be spare loaves to buy on the day.\n\nAnything not collected by 11am goes to the Chapeltown food bank. Better eaten than binned.\n\nCan't make it? You can cancel by 8pm on Thursday for a full refund. After that, there's no refund, because your bread is baked for you. None of this changes your legal rights if we get something wrong.\n\nPre-ordering doesn't make the oven any bigger. I can still bake 64 loaves on a Saturday, and no more. Once they're all ordered, that Saturday is full. The difference is you'd find out when you order, not at our door.\n\nI know this asks more of you. You'll need to order by Thursday, not just turn up. If that doesn't suit you, weekdays stay walk-in, as now.\n\nWe haven't done this before, so 7 November might wobble a bit. If it does, I'll say so.\n\nOrder for Saturday 7 November on our website by 8pm on Thursday 5 November.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "Claude Opus 5.5",
+   "level": "max",
+   "maker": "Anthropic",
+   "score": 97,
+   "basics": true,
+   "cost": "£3.98"
+  }
+ ],
+ "table": [
+  {
+   "rank": 1,
+   "setup": "opus-5.5_max",
+   "name": "Claude Opus 5.5",
+   "level": "max",
+   "maker": "Anthropic",
+   "score": 96,
+   "basics": 4,
+   "n": 4,
+   "cost": "£3.42",
+   "tasks": [
+    97,
+    96,
+    92,
+    97
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/opus-5.5_max/content_01_bakery_preorder/short_post.md",
+     "text": "We keep selling out by 9.40am on Saturdays. So from Saturday 7 November, Saturday bread is pre-order only.\n\nSelling out sounds like a nice problem. It isn't, if you've walked over for nothing. I heard from 3 people who'd walked from Headingley to an empty shelf. You made the effort, and we let you down. I'm sorry.\n\nThe other problem is the opposite. On a quiet week, we throw away about 6 loaves. That's bread baked for nobody. Neither is good enough, and pre-ordering is the fairest idea I've got.\n\nYou order and pay on our website by 8pm on the Thursday before. By then, I'll know exactly how much to bake. That should mean less waste.\n\nYou collect between 8am and 11am on Saturday. There won't be spare loaves to buy on the day.\n\nAnything not collected by 11am goes to the Chapeltown food bank. Better eaten than binned.\n\nCan't make it? You can cancel by 8pm on Thursday for a full refund. After that, there's no refund, because your bread is baked for you. None of this changes your legal rights if we get something wrong.\n\nPre-ordering doesn't make the oven any bigger. I can still bake 64 loaves on a Saturday, and no more. Once they're all ordered, that Saturday is full. The difference is you'd find out when you order, not at our door.\n\nI know this asks more of you. You'll need to order by Thursday, not just turn up. If that doesn't suit you, weekdays stay walk-in, as now.\n\nWe haven't done this before, so 7 November might wobble a bit. If it does, I'll say so.\n\nOrder for Saturday 7 November on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 2,
+   "setup": "gpt-6.1-sol_max",
+   "name": "GPT-6.1 Sol",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 94,
+   "basics": 4,
+   "n": 4,
+   "cost": "13p",
+   "tasks": [
+    95,
+    97,
+    94,
+    91
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gpt-6.1-sol_max/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am again. An empty shelf isn't much use to you.\n\nIf you've walked a long way, that's a wasted trip. We've let you down. We need a better way to plan Saturday bread.\n\nWe have 1 oven. I can't negotiate more space in it.\n\nWe can bake a maximum of 64 loaves on a Saturday. Pre-orders won't increase that capacity.\n\nOn a quiet week, we throw away about 6 loaves. That's hard to square with those empty-handed walks.\n\nFrom Saturday 7 November 2026, Saturday bread will be pre-order only. You won't be able to buy Saturday bread by walking in.\n\nYou'll order on our website. Ordering ahead should give us a clearer idea of what to bake. That may be less convenient than walking in.\n\nOrders close at 8pm Thursday. For 7 November, that means ordering by Thursday 5 November.\n\nYou'll pay when you order. That means paying before collection, which may change how you usually buy bread.\n\nCollection is between 8am and 11am on Saturday. That's the window for picking up your order.\n\nAny bread still uncollected then goes to the Chapeltown food bank.\n\nIf your plans change, cancelling by 8pm Thursday gets you a full refund. That's the order deadline as well as the cancellation deadline.\n\nAfter that, we don't refund cancellations for changes of plans. The bread is baked for you. Problems with the bread or your order are a separate matter.\n\nWeekday sales stay walk-in, as they are now. If that's how you prefer buying bread, that option remains during the week.\n\nWe haven't tried this before. We hope it means fewer wasted walks and loaves. We can't put a number on that yet.\n\nPlace your Saturday bread order on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 3,
+   "setup": "gpt-6.1-sol_medium",
+   "name": "GPT-6.1 Sol",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "6p",
+   "tasks": [
+    94,
+    97,
+    93,
+    89
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gpt-6.1-sol_medium/content_01_bakery_preorder/short_post.md",
+     "text": "We’ve been selling out by 9.40am on Saturdays. You can walk a long way for an empty shelf. We’ve let you down, and we need to change that.\n\nFrom Saturday 7 November 2026, our Saturday bread will be pre-order only. If you usually walk in for a loaf, this changes your Saturday routine.\n\nYou’ll order on our website. You’ll pay when you order, so there’s no payment to make at collection. That’s the booking part sorted.\n\nOrders close at 8pm Thursday. That gives us a number to bake towards. It also means deciding on your Saturday bread a little earlier.\n\nCollection is between 8am and 11am on Saturday. That’s the window to plan around if you’re ordering bread for breakfast or later.\n\nWe have 1 oven. It does a fair amount of work, but it cannot make every possible Saturday loaf. I have considered staring at it harder.\n\nOur Saturday limit is 64 loaves. Pre-ordering won’t increase that limit. We’re trying to make the bread we can bake fit the orders we receive.\n\nOn a quiet week, we throw away about 6 loaves. An empty shelf and wasted bread both happen here. Neither feels like a good way to run a bakery.\n\nIf your plans change, cancel by 8pm Thursday for a full refund. After that, there’s no refund for a change of plans. The bread is baked for you.\n\nAnything uncollected by 11am goes to the Chapeltown food bank. That means collection has a finish time as well as a start time.\n\nWeekday sales stay walk-in. We haven’t tried Saturday pre-orders before, so we can’t yet say how well they’ll work. The aim is less waste and fewer wasted walks.\n\nPre-order your Saturday bread on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 4,
+   "setup": "sonnet-5.5_max",
+   "name": "Claude Sonnet 5.5",
+   "level": "max",
+   "maker": "Anthropic",
+   "score": 92,
+   "basics": 4,
+   "n": 4,
+   "cost": "£2.21",
+   "tasks": [
+    95,
+    90,
+    88,
+    96
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/sonnet-5.5_max/content_01_bakery_preorder/short_post.md",
+     "text": "I've had 3 people tell me they walked from Headingley and found an empty shelf.\n\nWe'd sold out by 9.40am. They went home with nothing. That's not good enough. If it's ever been you, I'm sorry.\n\nSo we're changing how Saturdays work. From Saturday 7 November, Saturday bread is pre-order only.\n\nHere's how it works. You order on our website by 8pm on Thursday. You pay when you order. You collect on Saturday between 8am and 11am.\n\nWhy? On a quiet week, we throw away about 6 loaves. On a busy week, someone goes home with nothing. Either way, I'm baking before I know how many are coming. With orders in by 8pm on Thursday, I'll know how many to bake.\n\nWe have a single oven. The most it can make on a Saturday is 64 loaves. I've done the sums several times. The answer is still 64. If all 64 are ordered, that's it for that Saturday. At least you'll know before you set off.\n\nIf you can't make it, you can cancel by 8pm on Thursday for a full refund. After that, there's no refund, because the bread is baked for you. I know that's firm.\n\nAnything not collected by 11am goes to the Chapeltown food bank. I'd rather a loaf fed someone than went in the bin.\n\nFrom 7 November, you can't just turn up for Saturday bread. I know that's a loss. Weekday sales stay walk-in, as now.\n\nWe haven't done this before. I don't know how many people will order. I don't know if 8pm on Thursday suits you. I may get parts of it wrong. If I do, I'll say so.\n\nOrder your loaf on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 4,
+   "setup": "opus-5.5_xhigh",
+   "name": "Claude Opus 5.5",
+   "level": "xhigh",
+   "maker": "Anthropic",
+   "score": 92,
+   "basics": 4,
+   "n": 4,
+   "cost": "£1.07",
+   "tasks": [
+    90,
+    92,
+    90,
+    95
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/opus-5.5_xhigh/content_01_bakery_preorder/short_post.md",
+     "text": "A while back, 3 people told me they'd walked from Headingley and found an empty shelf. I still think about it. They'd got up early for bread, and we let them down.\n\nWe keep selling out by 9.40am on Saturdays. Saturday bread goes to whoever gets here first. If you've walked a long way, that means going home with nothing.\n\nAnd on a quiet week, we throw away about 6 loaves. Too little some weeks, too much on others. Neither is good enough.\n\nThe oven doesn't get any bigger when I get up earlier. I've checked. We can bake 64 loaves on a Saturday, and that's the limit.\n\nSo from Saturday 7 November, Saturday bread is pre-order only. Weekday bread stays walk-in, same as now.\n\nYou order on our website by 8pm on Thursday, and you pay when you order. You collect between 8am and 11am on Saturday. With orders in by Thursday, we bake for real people, not a guess.\n\nAnything not collected by 11am goes to the Chapeltown food bank. I'd rather an uncollected loaf gets eaten than binned.\n\nIf you can't make it, cancel by 8pm on Thursday for a full refund. After that there's no refund, because your loaf is baked just for you. None of this changes your legal rights.\n\nWe can still only bake 64 loaves, so orders might run out. The difference is that you'll know before you set off.\n\nWe've never tried this before. Some of it might wobble on 7 November. If it does, I'll say so.\n\nThe first order deadline falls on Bonfire Night. I didn't think that through.\n\nPut 8pm on Thursday 5 November in your diary.\n"
+    }
+   ]
+  },
+  {
+   "rank": 4,
+   "setup": "sonnet-5.5_high",
+   "name": "Claude Sonnet 5.5",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 92,
+   "basics": 4,
+   "n": 4,
+   "cost": "16p",
+   "tasks": [
+    82,
+    97,
+    91,
+    96
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/sonnet-5.5_high/content_01_bakery_preorder/short_post.md",
+     "text": "We keep selling out of Saturday bread by 9.40am.\n\nThat means some of you walk a long way, reach the door and go home with nothing. I hate that. It's a poor start to your weekend, and I'm sorry.\n\nThe odd part is the other side of it. On a quiet week, we throw away about 6 loaves. So some weeks you go without, and other weeks we bin bread. I've been calling that planning. It isn't.\n\nHere's the change. From Saturday 7 November, Saturday bread is pre-order only.\n\nYou order on our website by 8pm on Thursday. You pay when you order, so we know your loaf is wanted. Then you collect between 8am and 11am on Saturday.\n\nAnything not collected by 11am goes to the Chapeltown food bank. Weekday sales stay walk-in, exactly as now.\n\nWe have one oven, and it will bake 64 loaves on a Saturday and no more. Pre-orders mean we bake the right number. They also mean you know your loaf is waiting for you, even if you reach us at 10.30am.\n\nIf you can't make it, cancel by 8pm on Thursday and you get a full refund. After that, there's no refund, because the bread has been baked for you. That's our own rule for these orders, and I'd rather say it plainly now than awkwardly at the door. If the bread itself is wrong, that's different. Tell me and we'll put it right.\n\nI should be honest about one more thing. We haven't done this before. Something will probably go wrong in the first few weeks. I'll tell you what, and I'll fix it.\n\nOrder your first Saturday loaf on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 4,
+   "setup": "sonnet-5.5_xhigh",
+   "name": "Claude Sonnet 5.5",
+   "level": "xhigh",
+   "maker": "Anthropic",
+   "score": 92,
+   "basics": 4,
+   "n": 4,
+   "cost": "47p",
+   "tasks": [
+    93,
+    89,
+    91,
+    93
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/sonnet-5.5_xhigh/content_01_bakery_preorder/short_post.md",
+     "text": "On a Saturday, 3 people told me they'd walked from Headingley and found an empty shelf.\n\nThat's on us, not on them. We keep selling out by 9.40am. People who walk a long way go home with nothing. Selling out sounds like good news. It isn't, when someone has walked that far.\n\nQuiet weeks go the other way. We throw away about 6 loaves. I seem to be getting the sums wrong in both directions.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nYou order on our website by 8pm on Thursday. You pay when you order. For the first Saturday, that deadline is Thursday 5 November.\n\nYou collect on Saturday between 8am and 11am.\n\nAnything not collected by 11am goes to the Chapeltown food bank. That's better than the bin. I also know it means you'd have paid for bread you didn't get. I'd rather say that plainly now.\n\nIf you can't make it, cancel by 8pm on Thursday for a full refund. After that, there's no refund, because the bread is baked for you.\n\nThat rule is for people who can't make it. If the loaf itself is wrong, that's a separate matter.\n\nWeekday sales stay walk-in, as now.\n\nWe have 1 oven. I can bake 64 loaves on a Saturday, and no more. Pre-ordering won't change that. Baking to orders means we bake for people who are actually coming. It should also mean you don't make the trip for nothing.\n\nWe haven't tried this before. I expect to get some of it wrong, probably on the first Saturday. I'll say so when I do.\n\nOrder on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "opus-5.5_high",
+   "name": "Claude Opus 5.5",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 91,
+   "basics": 4,
+   "n": 4,
+   "cost": "39p",
+   "tasks": [
+    90,
+    95,
+    87,
+    94
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/opus-5.5_high/content_01_bakery_preorder/short_post.md",
+     "text": "Most Saturdays, our shelf is empty by 9.40am.\n\nSome of you walk all the way from Headingley for a loaf. You get here and there's nothing left. I hate that, and it keeps happening.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nHere's how it works. You order on our website by 8pm on Thursday. You pay when you order. Then you collect your bread between 8am and 11am on Saturday.\n\nThat means no walk-in bread on Saturdays from 7 November. Every Saturday loaf will already belong to someone.\n\nWeekdays stay the same. You can still walk in and buy bread, just as you do now.\n\nWhy the change? We have a single oven. On a Saturday it bakes 64 loaves, and not one more. I've tried. The oven doesn't care how early I get up.\n\nRight now, those 64 loaves go to whoever arrives first. That's fine if you live round the corner. It's not fine if you've come on 2 buses. Pre-orders mean the loaves go to the people who asked for them.\n\nIt helps with waste too. On a quiet week, we throw away about 6 loaves. I'd rather bake what you've actually ordered.\n\nIf you can't make it, cancel by 8pm on Thursday. You'll get a full refund. After that, we can't refund you, because your loaf is baked for you.\n\nAnything not collected by 11am goes to the Chapeltown food bank.\n\nWe've never done this before. Some of it will probably need fixing. I'll tell you honestly what isn't working.\n\nTo get bread on Saturday 7 November, order on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "gpt-6-luna_max",
+   "name": "GPT-6 Luna",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 91,
+   "basics": 4,
+   "n": 4,
+   "cost": "under 1p",
+   "tasks": [
+    88,
+    96,
+    92,
+    89
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gpt-6-luna_max/content_01_bakery_preorder/short_post.md",
+     "text": "Last Saturday, we sold out by 9.40am. Three people had walked from Headingley and found an empty shelf. I felt awful.\n\nFrom Saturday 7 November 2026, Saturday bread will be pre-order only. Order on our website by 8pm Thursday and pay when you order. Collect between 8am and 11am on Saturday. Anything not collected by 11am goes to Chapeltown food bank.\n\nWeekday bread stays walk-in, as it is now. This change is only for Saturdays.\n\nWe have one oven, and 64 loaves is our Saturday limit. Another coffee won't make it 65.\n\nOn a quiet week, we throw away about 6 loaves. Meanwhile, people have been making the trip and finding nothing by 9.40am. I want more of the bread to reach people who came for it, and fewer loaves to go spare.\n\nThe empty shelf is the part people see. The unsold loaves are the part I see at the end of a quiet week. I would like those two numbers to sit closer together, though I don't know yet if they will.\n\nIf your plans change, cancel by 8pm Thursday for a full refund. After that, our policy is no refund, because the bread is baked for you. The cutoff gives us time to plan Saturday's bake.\n\nWe haven't tried this before. I don't know how many people will pre-order, or whether the new collection window will work for you. It is a change, and we will have to learn as we go.\n\nIf you want Saturday bread from 7 November, place your order on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "deepseek-v4.1-flash_max",
+   "name": "DeepSeek V4.1 Flash",
+   "level": "max",
+   "maker": "DeepSeek",
+   "score": 91,
+   "basics": 4,
+   "n": 4,
+   "cost": "8p",
+   "tasks": [
+    89,
+    93,
+    90,
+    92
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/deepseek-v4.1-flash_max/content_01_bakery_preorder/short_post.md",
+     "text": "Three people told me they walked from Headingley and found an empty shelf. We had sold out by 9.40am. I felt awful.\n\nYou got up early and walked here, and we had nothing left. That is on us.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nOrder on our website by 8pm on Thursday. Pay when you order. Collect between 8am and 11am on Saturday. Anything not collected by 11am goes to the Chapeltown food bank.\n\nWeekday sales stay the same. Walk in as normal.\n\nWhy the change? I have one oven, and it bakes 64 loaves on a Saturday. Not one more. There is no second oven out the back. I have looked. On a quiet week we also throw away about 6 loaves. I hate that. Pre-orders mean we bake what people want, and your loaf is baked for you.\n\nPre-orders also help us plan the bake. I know on Friday how much flour to use. Saturday morning is for mixing, proving and baking. Your loaf is set aside until 11am.\n\nI will not pretend this is perfect. It is a change, and change is annoying. A wasted walk is worse.\n\nIf you cannot make it, cancel by 8pm on Thursday for a full refund. After that there is no refund, because your bread is already baked for you. This does not affect your statutory rights.\n\nI have not tried this before. I do not know how the first Saturdays will go. I will tell you honestly what happens, good or bad.\n\nThe first pre-order Saturday is 7 November. Orders close at 8pm on Thursday 5 November.\n\nOrder your Saturday loaf on our website before 8pm on Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 11,
+   "setup": "sonnet-5.5_medium",
+   "name": "Claude Sonnet 5.5",
+   "level": "medium",
+   "maker": "Anthropic",
+   "score": 90,
+   "basics": 4,
+   "n": 4,
+   "cost": "11p",
+   "tasks": [
+    86,
+    92,
+    92,
+    92
+   ],
+   "where": "Claude Free (free), Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/sonnet-5.5_medium/content_01_bakery_preorder/short_post.md",
+     "text": "Some Saturdays, someone walks a long way to the bakery and goes home with nothing. I hate that.\n\nThe shelf keeps emptying by 9.40am. On a quiet week, we have the opposite problem. We throw away about 6 loaves. Neither one is fair to you, and neither one is good for the bread.\n\nSo from Saturday 7 November 2026, Saturday bread is pre-order only.\n\nHere is how it works.\n\nYou order on our website by 8pm on Thursday. You pay when you order. Then you collect your loaf on Saturday between 8am and 11am.\n\nWeekday sales stay walk-in, exactly as now.\n\nThe reason is simple. I have 1 oven and 2 hands, and neither is getting bigger. The oven makes 64 loaves on a Saturday at most. If I know what you've asked for, I can bake that, and you know your loaf is set aside before you leave the house.\n\nTwo rules you should know now.\n\nIf you can't make it, cancel by 8pm on Thursday and you get a full refund. After that, there is no refund, because the bread is baked for you.\n\nAnything not collected by 11am goes to the Chapeltown food bank.\n\nI'll be honest. We haven't done this before. It may be clumsy for the first few Saturdays. I'll probably get something wrong, and I'll tell you when I do.\n\nI also know it's less casual than wandering in on a Saturday morning. That's a real cost, and I'm asking you to put up with it. I think it's better than a long walk and an empty shelf.\n\nIf something about the new system doesn't work for you, reply and tell me. I read every message.\n\nOrder your Saturday loaf on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 11,
+   "setup": "gpt-6.1-sol_low",
+   "name": "GPT-6.1 Sol",
+   "level": "low",
+   "maker": "OpenAI",
+   "score": 90,
+   "basics": 3,
+   "n": 4,
+   "cost": "5p",
+   "tasks": [
+    94,
+    89,
+    89,
+    90
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gpt-6.1-sol_low/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am on Saturday. You might recognise the empty shelf.\n\nSome people walked from Headingley and went home without bread. I felt awful about that. Getting up early shouldn't end with a wasted walk.\n\nOn a quiet week, we throw away about 6 loaves. That's the other end of the same problem. We haven't got the amount right.\n\nWe have 1 oven, with room to bake 64 loaves on a Saturday. I haven't found a useful way to argue with it.\n\nFrom Saturday 7 November 2026, Saturday bread will be pre-order only. We want to bake for the orders you place. That gives us something firmer to work from than a guess.\n\nThe website is where you'll order and pay. Payment happens when you place your order. There won't be walk-in bread sales on Saturdays under this system.\n\nOrders close at 8pm Thursday. That gives us time to plan the Saturday bake. If Saturday bread is part of your routine, this adds a bit of planning.\n\nCollection is between 8am and 11am on Saturday. Anything uncollected after that goes to the Chapeltown food bank. We won't keep it aside for a later collection.\n\nIf you can't make it, cancel by 8pm Thursday for a full refund. After that, we won't refund a cancellation because we've committed to baking for you.\n\nWeekday sales stay walk-in. You can still come in for bread during the week as you do now.\n\nWe haven't tried Saturday pre-orders before. We don't yet know how this will fit your routine. It won't give the oven more space, either. We hope it means fewer wasted walks and fewer wasted loaves.\n\nFor bread on 7 November, place your order on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 11,
+   "setup": "opus-5.5_medium",
+   "name": "Claude Opus 5.5",
+   "level": "medium",
+   "maker": "Anthropic",
+   "score": 90,
+   "basics": 4,
+   "n": 4,
+   "cost": "29p",
+   "tasks": [
+    86,
+    97,
+    84,
+    94
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/opus-5.5_medium/content_01_bakery_preorder/short_post.md",
+     "text": "We keep selling out by 9.40am on Saturdays.\n\nThat sounds like a nice problem. It isn't, if you've walked across Leeds and found an empty shelf. You got up early for bread, and we let you down. I hate that part.\n\nHere's the thing I can't change. I have one oven, and it bakes 64 loaves on a Saturday. I've asked it nicely for more. It doesn't listen.\n\nOn quiet weeks it goes the other way. We throw away about 6 loaves. That's flour, time and money in the bin, and it bothers me too.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nHow it works:\n- Order on our website by 8pm Thursday.\n- Pay when you order.\n- Collect between 8am and 11am on Saturday.\n\nPaying upfront might feel a bit formal for a loaf of bread. It means your loaf is waiting for you, not gone by 9.40am.\n\nIf your plans change, cancel by 8pm Thursday for a full refund. After that we can't refund, because the bread is baked for you. This doesn't change your rights if something is wrong with the loaf itself.\n\nAnything not collected by 11am goes to the Chapeltown food bank. Your loaf still gets eaten, just by someone else.\n\nWeekdays stay the same. You can walk in and buy bread as you do now, no ordering needed.\n\nWe haven't done this before. I expect to get a few things wrong in the first weeks, and I'd rather hear about it than guess. I read every comment and message.\n\nIf you want bread on Saturday 7 November, order on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 11,
+   "setup": "glm-5.3_max",
+   "name": "GLM-5.3",
+   "level": "max",
+   "maker": "Z.ai",
+   "score": 90,
+   "basics": 4,
+   "n": 4,
+   "cost": "5p",
+   "tasks": [
+    91,
+    88,
+    89,
+    92
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/glm-5.3_max/content_01_bakery_preorder/short_post.md",
+     "text": "At 9.40am last Saturday, the bread shelf was empty.\n\nThree people told me they had walked from Headingley. You got up early, came to Rise & Crumb, and found nothing. I hated that.\n\nSo we are changing how Saturday bread works. From Saturday 7 November, it will be pre-order only.\n\nHere is the plan.\n\nYou order on our website by 8pm Thursday. You pay when you order. Then you collect between 8am and 11am on Saturday.\n\nIf you cannot make it, cancel by 8pm Thursday for a full refund. After that, our policy is no refund. The bread will have been baked for you.\n\nAnything not collected by 11am goes to the Chapeltown food bank. I would rather it feed someone than sit here looking reproachful.\n\nThis is not a way to sell more bread. It is a way to stop the same problem repeating every week.\n\nWe have one oven. On a Saturday, I can bake 64 loaves and not one more. Last week, they had all gone by 9.40am. On a quiet week, we still throw away about 6 loaves. That is too much at both ends.\n\nPre-orders will tell me what to bake. They should mean fewer people leave with nothing, and fewer loaves go to waste.\n\nWeekday sales stay walk-in as now. If you come on Tuesday or Thursday, nothing changes for you.\n\nI know this adds a step. I have tried to keep it simple: order by 8pm Thursday, pay then, collect by 11am Saturday.\n\nOrder your Saturday bread on the website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 11,
+   "setup": "grok-4.6_high",
+   "name": "Grok 4.6",
+   "level": "high",
+   "maker": "xAI",
+   "score": 90,
+   "basics": 4,
+   "n": 4,
+   "cost": "44p",
+   "tasks": [
+    84,
+    94,
+    89,
+    92
+   ],
+   "where": "Grok (free)",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/grok-4.6_high/content_01_bakery_preorder/short_post.md",
+     "text": "The shelf was empty at 9.40am on Saturday. If you came after that, there was no loaf left.\n\nThree people walked from Headingley for bread and found nothing. I still think about that. I felt awful.\n\nYou got up early. We had already run out.\n\nOn a busy Saturday you walk away empty. On a quiet week we throw away about 6 loaves.\n\nEmpty hands, or bread in the bin. That is a poor system.\n\nI have one oven. I can bake 64 loaves on a Saturday. I have nowhere to put a 65th.\n\nFrom Saturday 7 November, Saturday bread is pre-order only.\n\nUntil then, Saturday stays walk-in, as now. We may still sell out by 9.40am.\n\nYou order on our website by 8pm Thursday. You pay when you order.\n\nYou collect between 8am and 11am on Saturday. You do not need to race for the last loaf.\n\nI bake what you paid for. Not a pile for luck.\n\nThere are 64 Saturday loaves. Once the list is full, it is full.\n\n8pm Thursday is the time to remember. One time, not five.\n\nIf you cannot come, cancel by 8pm Thursday. You get a full refund.\n\nAfter 8pm Thursday, there is no refund. The bread is baked for you.\n\nIf the loaf is burnt or wrong, that is on me.\n\nAnything not collected by 11am goes to the Chapeltown food bank.\n\nWeekdays stay walk-in, as now. Saturday is the only day that changes.\n\nThe first pre-order Saturday is 7 November. The first cut-off is 8pm on Thursday 5 November.\n\nI have not tried this before. I may muddle a name. I may be slow at the counter.\n\nI would rather pack your loaf than apologise over crumbs.\n\nOrder Saturday bread on our website by 8pm each Thursday, starting 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 16,
+   "setup": "gpt-6.1-sol_high",
+   "name": "GPT-6.1 Sol",
+   "level": "high",
+   "maker": "OpenAI",
+   "score": 89,
+   "basics": 3,
+   "n": 4,
+   "cost": "7p",
+   "tasks": [
+    96,
+    96,
+    73,
+    90
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gpt-6.1-sol_high/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am on Saturday. You might have been pleased to get a loaf. You might have arrived to an empty shelf. We've let you down when that's happened.\n\nFrom Saturday 7 November 2026, Saturday bread will be pre-order only. If you usually walk in for it, this changes your routine.\n\nYou'll order on our website by 8pm Thursday. You'll pay when you order, so this means planning ahead for your bread.\n\nCollection will be between 8am and 11am on Saturday. That window is part of the change too. I know it may make things awkward for you.\n\nAnything left uncollected after the window closes goes to the Chapeltown food bank. We won't keep your loaf aside beyond collection time.\n\nIf your plans change, you can cancel by 8pm Thursday. We'll give you a full refund. After that deadline, we won't refund a change of plans. The bread is baked for you.\n\nWe have 1 oven. My enthusiasm is not extra oven space, though I keep hoping.\n\nWe can bake a maximum of 64 loaves on a Saturday. Pre-ordering gives us a number to bake towards within that limit.\n\nOn a quiet week, we throw away about 6 loaves. That sits badly alongside you walking a long way and finding nothing.\n\nWe haven't tried pre-orders before. I hope this makes planning easier. I can't tell you yet how well it will work.\n\nWeekday sales stay walk-in. If that's how you buy your bread during the week, your routine stays the same.\n\nFor Saturday bread, there's now a Thursday deadline to remember. I know that's another thing in your week. I want the reason for it to be clear.\n\nPre-order your Saturday bread on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 17,
+   "setup": "glm-5.3-flash_max",
+   "name": "GLM-5.3 Flash",
+   "level": "max",
+   "maker": "Z.ai",
+   "score": 88,
+   "basics": 4,
+   "n": 4,
+   "cost": "under 1p",
+   "tasks": [
+    78,
+    94,
+    89,
+    92
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/glm-5.3-flash_max/content_01_bakery_preorder/short_post.md",
+     "text": "By 9.40am on Saturday, the bread shelf was empty.\n\nThree people had walked from Headingley. They went home with nothing.\n\nI have 1 oven. It makes 64 loaves on a Saturday. That is the limit.\n\nFrom Saturday 7 November, Saturday bread will be pre-order only. You can order on our website by 8pm on Thursday and pay when you order.\n\nYou can collect between 8am and 11am on Saturday. Weekday sales stay walk-in, as now.\n\nI know pre-paying is a change. But it means we bake what people have actually asked for, rather than guessing at 4am.\n\nHere's what it means for you. Choose your bread on the website before Thursday at 8pm. Pay then. Come on Saturday between 8am and 11am. Your loaf will be set aside.\n\nWeekdays aren't changing. If you like walking in for a loaf or something sweet, you can still do that.\n\nI want you to get the loaf you came for. I also don't want to bake bread nobody needs. On a quiet week, we throw away about 6 loaves.\n\nSo the pre-orders set the bake. Anything not collected by 11am goes to the Chapeltown food bank. That feels better than filling the bin.\n\nIf you can't make it, cancel by 8pm on Thursday for a full refund. After that, there's no refund, because the bread is baked for you.\n\nI haven't done this before. The first few Saturdays will teach me things I can't guess now. I'll tell you what I find.\n\nIf you've missed out before, I hope this helps. If it makes things harder, please tell me. I'd rather hear it from you than assume I've got it right.\n\nOrder your Saturday loaf by 8pm on Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 17,
+   "setup": "muse-spark-1.3_max",
+   "name": "Muse Spark 1.3",
+   "level": "max",
+   "maker": "Meta",
+   "score": 88,
+   "basics": 4,
+   "n": 4,
+   "cost": "22p",
+   "tasks": [
+    75,
+    96,
+    92,
+    90
+   ],
+   "where": "Meta AI (free)",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/muse-spark-1.3_max/content_01_bakery_preorder/short_post.md",
+     "text": "Last Saturday we sold out by 9.40am.\nI watched 3 people read the empty shelf and leave.\n\nYou walked here for bread and found nothing.\nI felt bad at the till at 9.40am.\nWe had baked 64 loaves and they were gone.\n\nYou deserve to know at 8am if bread is yours.\nI do not like seeing you leave empty-handed at 9.40am.\nWe need a fairer way to share 64 loaves.\n\nOn a quiet week we bin about 6 loaves.\nI mind that waste after 11am on Saturday.\nWe have 1 oven, so 64 is our limit.\n\nThe oven fits 64 loaves at 250 degrees.\nI load it at 4.10am in my coat.\nWe cannot bake more on a Saturday morning.\n\nFrom Saturday 7 November 2026, bread is pre-order only on Saturdays.\nOrders are on our website by 8pm on Thursday.\nPayment is taken when you order.\n\nThe list closes at 8pm on Thursday.\nI see your name on the list at 4.10am.\nWe bake with that list on the bench at 8am.\n\nCollection is between 8am and 11am on Saturday.\nAnything left at 11am goes to Chapeltown food bank.\nI wanted a clear cut off.\n\nUncollected bread should feed people by 11am.\nI do not want good loaves in the bin at 11am.\nWe take spare loaves to Chapeltown food bank.\n\nWeekday bread stays walk-in as now.\nCancellation by 8pm on Thursday gets a full refund.\nAfter 8pm on Thursday there is no refund.\nWe bake your loaf for you after 8pm on Thursday.\n\nAfter 8pm on Thursday your loaf is planned.\nI plan the bake by numbers at 8pm.\nWe cannot resell a loaf baked for you at 8am.\n\nI am slow at maths before 8am.\nPre-orders help me bake the right number at 4.10am.\nOrder on our website by 8pm on Thursday if you want Saturday bread.\n"
+    }
+   ]
+  },
+  {
+   "rank": 17,
+   "setup": "kimi-k3_max",
+   "name": "Kimi K3",
+   "level": "max",
+   "maker": "Moonshot AI",
+   "score": 88,
+   "basics": 3,
+   "n": 4,
+   "cost": "37p",
+   "tasks": [
+    88,
+    82,
+    88,
+    94
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/kimi-k3_max/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am last Saturday. Again.\n\nThree people told me they had walked from Headingley and found an empty shelf. I felt awful. You got up early for bread and we let you down.\n\nSo we're changing how Saturdays work. From Saturday 7 November 2026, Saturday bread is pre-order only.\n\nHere is how it works.\n\nYou order on our website by 8pm on Thursday. You pay when you order. You collect between 8am and 11am on Saturday. When you arrive, your loaf will be waiting for you. No queue at the till, because you've already paid.\n\nIf your plans change, cancel by 8pm Thursday for a full refund. After that we can't refund. By then the flour is weighed and your loaf is baked. It exists because you asked for it.\n\nAnything not collected by 11am goes to the Chapeltown food bank. Good bread shouldn't end up in a bin.\n\nWhy the change. I only have one oven and two hands. I can bake 64 loaves on a Saturday, and not one more, however much coffee I drink. A bigger oven would mean a different shop, and I like this one. At the moment we run out early, and on a quiet week we throw away about 6 loaves. Neither sits right with me.\n\nIf you usually get here at 10am, this is for you most of all. Your loaf will be waiting, not sold from under you.\n\nWeekdays stay as they are. Monday to Friday, walk in as normal.\n\nWe haven't done this before, so the first few weeks may be wobbly. Tell me when I get it wrong. I read every message.\n\nOrder your Saturday loaf on our website by 8pm on Thursday.\n\n#LeedsBakery #RealBread #FreshBread\n"
+    }
+   ]
+  },
+  {
+   "rank": 17,
+   "setup": "opus-5.5_low",
+   "name": "Claude Opus 5.5",
+   "level": "low",
+   "maker": "Anthropic",
+   "score": 88,
+   "basics": 4,
+   "n": 4,
+   "cost": "17p",
+   "tasks": [
+    79,
+    95,
+    80,
+    98
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/opus-5.5_low/content_01_bakery_preorder/short_post.md",
+     "text": "On Saturday the shelf was empty by 9.40am. People had walked from as far as Headingley. They went home with nothing.\n\nThat keeps happening, and I've stopped pretending it's fine.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nHere's how it works:\n\n1. Order on our website by 8pm Thursday.\n2. Pay when you order.\n3. Collect between 8am and 11am on Saturday.\n\nWeekday bread stays walk-in, just as now.\n\nWhy the change? I have one oven. It bakes 64 loaves on a Saturday and not one more, however much coffee I drink. Some weeks you get up early and miss out. On quiet weeks we throw away about 6 loaves. Neither feels right to me. Pre-orders mean every loaf is baked for someone who wants it, and you know it's there before you leave the house.\n\nIf your plans change, cancel by 8pm Thursday for a full refund. After that we can't refund, because your loaf has been baked for you. If something is actually wrong with your bread, that's different. Tell us and we'll sort it out.\n\nAnything not collected by 11am goes to the Chapeltown food bank. Someone still gets to eat it.\n\nWe haven't done this before. Some of it will need fixing. The first few Saturdays might be a bit wobbly, mostly because of me and a new order list.\n\nI'll be honest. I'll miss a bit of the early queue. I won't miss the faces at 9.45am.\n\nIf Saturday bread matters to you, set a reminder now for 8pm on Thursday 5 November.\n\n#RiseAndCrumb #LeedsBread\n"
+    }
+   ]
+  },
+  {
+   "rank": 21,
+   "setup": "gpt-6.1-sol_xhigh",
+   "name": "GPT-6.1 Sol",
+   "level": "xhigh",
+   "maker": "OpenAI",
+   "score": 87,
+   "basics": 2,
+   "n": 4,
+   "cost": "11p",
+   "tasks": [
+    95,
+    88,
+    74,
+    90
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gpt-6.1-sol_xhigh/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am on Saturday. If you walked here and found an empty shelf, we let you down. Getting up early shouldn't mean going home without bread.\n\nFrom Saturday 7 November 2026, Saturday bread will be pre-order only. Your order will be part of the plan before we bake.\n\nOrder on our website by 8pm Thursday. You pay when you order. That gives us a count to bake for, instead of guessing.\n\nWe have 1 oven. I can't give it more room by drinking more coffee.\n\nOur Saturday limit is 64 loaves. Pre-ordering won't increase that limit. It should help us match what we bake to what you've ordered.\n\nOn a quiet week, we throw away about 6 loaves. Pre-orders are meant to help us waste less. We haven't tried this before. We can't yet say how much difference the change will make.\n\nCollect between 8am and 11am on Saturday. That's the collection window for your order. The bread will already be paid for.\n\nAnything not collected by 11am goes to the Chapeltown food bank. That includes paid orders. Those loaves won't be held for a later collection.\n\nIf you can't make it, cancel by 8pm Thursday for a full refund. After that, we don't offer cancellation refunds. The bread is baked for your order. This policy covers changed plans and missed collections.\n\nPlanning round the Thursday deadline is a change, too. Paying ahead may not suit you every week. We shouldn't pretend this makes Saturday bread easier for everyone.\n\nWeekday sales stay walk-in. You can still come in for bread as you do now, without a pre-order.\n\nFor Saturday bread, place your pre-order on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 21,
+   "setup": "gemini-3.8-flash_high",
+   "name": "Gemini 3.8 Flash",
+   "level": "high",
+   "maker": "Google",
+   "score": 87,
+   "basics": 4,
+   "n": 4,
+   "cost": "28p",
+   "tasks": [
+    82,
+    92,
+    87,
+    86
+   ],
+   "where": "Google AI Plus, Google AI Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gemini-3.8-flash_high/content_01_bakery_preorder/short_post.md",
+     "text": "Last Saturday at 9.40am, the last loaf left the wooden cooling rack.\n\nA customer walked 2 miles from Headingley and found an empty shelf. I had to tell her there was no bread left. She walked home with an empty tote bag, and I felt rotten. You make the effort to visit, and we let you down.\n\nRight now, Saturdays are unpredictable. When the sun shines, our shelves clear out in 90 minutes. When it rains, we end up throwing away about 6 loaves. I hate seeing good bread in the bin.\n\nI only have 1 oven and 2 hands. That means 64 loaves is the absolute limit for us on a Saturday. The oven holds what it holds, however much coffee I drink.\n\nSo from Saturday 7 November 2026, Saturday bread is pre-order only.\n\nWeekday sales stay walk-in as now. You can pop in on Wednesday at 8.30am for a loaf without ordering.\n\nHere is how Saturday orders will work. You order on our website by 8pm on Thursday and pay then. You collect your loaf from the counter between 8am and 11am on Saturday.\n\nIf you cannot make it, cancel by 8pm on Thursday for a full refund. After 8pm on Thursday, we do not offer refunds. The dough is already mixed by then, and that loaf is baked for you.\n\nAnything not collected by 11am on Saturday goes straight to the Chapeltown food bank. Volunteers pick it up in crates at 11.15am, so no loaf goes to waste.\n\nI know changing a Saturday routine can be annoying. But this way, you do not have to sprint across Leeds before 9.30am. Your loaf will be waiting on the counter.\n\nVisit our website to set up your pre-order account before Thursday.\n\n#RiseAndCrumb #LeedsBakery #MicroBakery"
+    }
+   ]
+  },
+  {
+   "rank": 21,
+   "setup": "haiku-5.5_default",
+   "name": "Claude Haiku 5.5",
+   "level": "standard",
+   "maker": "Anthropic",
+   "score": 87,
+   "basics": 3,
+   "n": 4,
+   "cost": "2p",
+   "tasks": [
+    84,
+    89,
+    80,
+    93
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/haiku-5.5_default/content_01_bakery_preorder/short_post.md",
+     "text": "We keep selling out of Saturday bread by 9.40am.\n\nSome of you walk a long way and find an empty shelf. Some of you go home with nothing. That's on us, and we should have sorted it sooner.\n\nWalk-in bread goes to whoever gets there first. That tends to leave out people who work on Saturdays, or who can't get across town early.\n\nWe also throw bread away. On a quiet week, it's about 6 loaves. That's flour, time and money in the bin, and it's bread someone could have eaten.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nWe have 1 oven. On a Saturday, that's 64 loaves at most. Pre-ordering means we stop guessing how many to bake, and you know your loaf is waiting.\n\nPre-ordering asks more of you. You'll need to plan ahead, and you'll need to be ready to collect in that window. We'd rather say that plainly than pretend it's easy.\n\nHere's how it works. Order on our website by 8pm on Thursday and pay when you order. Collect between 8am and 11am on Saturday.\n\nAnything not collected by 11am goes to the Chapeltown food bank. We'd rather it went to someone who needs it than into the bin.\n\nCan't make it? Cancel by 8pm on Thursday for a full refund. After that, there's no refund, because the bread is baked for you. If a loaf is faulty, tell us and we'll put it right.\n\nIf you like to pop in on the way past, weekdays stay walk-in, as they are now.\n\nThank you for putting up with the empty shelf. Order on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 24,
+   "setup": "qwen3.8-max-0902_xhigh",
+   "name": "Qwen 3.8 Max",
+   "level": "xhigh",
+   "maker": "Alibaba",
+   "score": 86,
+   "basics": 3,
+   "n": 4,
+   "cost": "33p",
+   "tasks": [
+    84,
+    89,
+    82,
+    91
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/qwen3.8-max-0902_xhigh/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am on Saturday. 3 people told me they'd walked in from Headingley. The shelf was empty.\n\nI felt awful. You got up early for bread and we let you down.\n\nSo we're changing how Saturday works.\n\nFrom Saturday 7 November 2026, Saturday bread is pre-order only.\n\nYou order on our website by 8pm on the Thursday. You pay when you order. You collect between 8am and 11am on Saturday, and your name goes on the loaf.\n\nWeekdays stay walk-in. Nothing changes there. Same bread, same recipe, same very early start.\n\nHere's why. We have 1 oven and 2 hands. The Saturday limit is 64 loaves, however much coffee I drink. On a quiet week we still throw away about 6 loaves. That sits badly with me.\n\nThe people who miss out are the ones who travelled furthest. That's the part I can't live with. A pre-order means the shelf stops being a race.\n\nYou'll know you have bread before you leave the house. You get the loaf you asked for, and we bake what people actually want.\n\nIf we can't bake your loaf, you get your money back.\n\nIf you change your mind, cancel by 8pm Thursday and we refund you in full. After that there's no refund, because your loaf has been made for you.\n\nOur rules sit on top of your rights, not instead of them. We're a small bakery and the Consumer Rights Act still applies to us.\n\nAnything not collected by 11am, we plan to take to the Chapeltown food bank.\n\nI haven't done this before. The first few Saturdays might wobble, and I'll say so here when they do.\n\nBook your loaf for Saturday 7 November on our website.\n\n#RiseAndCrumb #Leeds #SaturdayBread\n"
+    }
+   ]
+  },
+  {
+   "rank": 24,
+   "setup": "mimo-v2.6-pro_default",
+   "name": "MiMo v2.6 Pro",
+   "level": "standard",
+   "maker": "Xiaomi",
+   "score": 86,
+   "basics": 3,
+   "n": 4,
+   "cost": "2p",
+   "tasks": [
+    69,
+    98,
+    88,
+    90
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/mimo-v2.6-pro_default/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am again. You may have walked a long way. You may have gone home with nothing. We let you down.\n\nThat is not the welcome we want to give you. It is not a fair way to share 64 loaves.\n\nWe have one oven. It can bake 64 loaves on a Saturday. That is the hard limit.\n\nOn a quiet week, we still throw away about 6 loaves. That does not feel sensible either.\n\nA pre-order list by 8pm Thursday gives us something real to plan against. It tells us what to bake before the first tray goes in.\n\nFrom Saturday 7 November 2026, Saturday bread will be pre-order only. You can order on our website by 8pm Thursday. You pay when you order.\n\nYou pay on the website at the point you place the order. That keeps the numbers tied to the bread we bake.\n\nCollection is between 8am and 11am on Saturday. Anything not collected by 11am goes to the Chapeltown food bank.\n\nWeekday sales stay walk-in as now.\n\nThis change is for Saturday bread. It does not change the rest of the week.\n\nIf you cannot make it, cancellation is due by 8pm Thursday. You will get a full refund. After that, we cannot refund you. The bread is baked for you.\n\nA friend told me the law says small businesses with under 10 staff do not have to follow the Consumer Rights Act. They said we can make our own refund rules. I have not checked that claim. We are not using it as our basis.\n\nWe have not tried this before. We may learn that the 8pm cut-off is wrong. We will be clear if that changes.\n\nWe want fewer empty shelves. We also want fewer than 6 loaves in the bin.\n\nOrder your Saturday bread on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 24,
+   "setup": "minimax-m3_default",
+   "name": "MiniMax M3",
+   "level": "standard",
+   "maker": "MiniMax",
+   "score": 86,
+   "basics": 4,
+   "n": 4,
+   "cost": "5p",
+   "tasks": [
+    81,
+    88,
+    86,
+    90
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/minimax-m3_default/content_01_bakery_preorder/short_post.md",
+     "text": "Last Saturday a man walked from Headingley. He got to the shop at 9.20am and the shelf was empty. I had nothing to give him. He just said, \"Oh,\" and that was it. I went back to the oven and thought about it for the rest of the morning.\n\nThat's why, from Saturday 7 November, our Saturday bread is pre-order only.\n\nMost Saturdays we sell out by 9.40am. On a quiet week we throw away about 6 loaves. Either you walk a long way for nothing, or I bake bread no one eats. Both are wrong, and one of them is on me.\n\nI tried a few small things first. None of it shifted the basic problem. The oven holds 64 loaves, and that's the lot.\n\nSo here's the new way. Order on our website by 8pm Thursday. Pay when you order. Collect between 8am and 11am on Saturday. We bake 64 loaves and not one more.\n\nIf you can't come, cancel by 8pm Thursday for a full refund. After 8pm Thursday, no refund. By then the bread is in the mixer, baked for you and no one else.\n\nAnything still on the shelf at 11am goes to the Chapeltown food bank. Nothing wasted if we can help it. I'd rather it fed someone than sat there.\n\nWeekday sales stay walk-in, same as now. Only Saturday changes.\n\nThe first collection is Saturday 7 November. The order page is on our website now. If you want a loaf, order by 8pm on Thursday 5 November.\n\n#SaturdayLoaf #RiseAndCrumb #Chapeltown\n"
+    }
+   ]
+  },
+  {
+   "rank": 27,
+   "setup": "sonnet-5.5_low",
+   "name": "Claude Sonnet 5.5",
+   "level": "low",
+   "maker": "Anthropic",
+   "score": 85,
+   "basics": 4,
+   "n": 4,
+   "cost": "9p",
+   "tasks": [
+    74,
+    90,
+    82,
+    94
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/sonnet-5.5_low/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am again. Some of you walked a long way and went home with nothing.\n\nI hate that. You got up early for bread and we had none left to sell you.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nHere is how it works. You order on our website by 8pm on Thursday. You pay when you order. Then you collect your bread on Saturday between 8am and 11am.\n\nThat's the whole change. Weekday sales stay walk-in, just as they are now.\n\nWhy are we doing it? There is one oven and one me. We can bake 64 loaves on a Saturday, and that is the most we can do. Pre-orders mean the 64 go to people who asked for them, not to whoever got here first.\n\nIt also helps with waste. On a quiet week we throw away about 6 loaves.\n\nIf you can't make it, cancel by 8pm on Thursday and you get a full refund. After that we can't refund you, because the bread has been baked for you.\n\nAnything not collected by 11am goes to the Chapeltown food bank. So it won't be wasted, but I'd rather it ended up with you.\n\nWe haven't tried this before, so we may get things wrong. I'll tell you if we do, and we'll fix it. I'd rather you heard it from me than guessed.\n\nQuestions about how it works? Ask in the comments or send me a message. I read every one.\n\nReady to order for 7 November? Go to our website and place your Saturday order by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 27,
+   "setup": "mistral-large-4_high",
+   "name": "Mistral Large 4",
+   "level": "high",
+   "maker": "Mistral AI",
+   "score": 85,
+   "basics": 3,
+   "n": 4,
+   "cost": "44p",
+   "tasks": [
+    82,
+    79,
+    88,
+    91
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/mistral-large-4_high/content_01_bakery_preorder/short_post.md",
+     "text": "Last Saturday we sold out by 9.40am. Again. The Saturday before, the same.\n\n3 people told me they had walked from Headingley and found an empty shelf. I felt awful. You got up early for bread, and we let you down. I hate that more than almost anything in this shop.\n\nI have 1 oven and 2 hands. On a Saturday I can bake 64 loaves and not one more. On a quiet week we throw away about 6 loaves. Both of those things are daft, and I am tired of them. It is not stubbornness. It is the size of the oven.\n\nSo from Saturday 7 November, Saturday bread is pre-order only. There will be no walk-in bread on Saturdays. Weekday sales stay walk-in, exactly as they are now.\n\nHere is how it works. You order on our website by 8pm on Thursday. You pay when you order, because we bake your loaf for you. We only bake what has been ordered. You collect between 8am and 11am on Saturday. Your loaf is baked on Saturday morning.\n\nIf you cannot make it, cancel by 8pm on Thursday. We will refund you in full. After that there is no refund. The bread is baked for you, and nobody else can eat it. I know some of you will not like that. The bread cannot be unbaked.\n\nAnything not collected by 11am goes to the Chapeltown food bank, not the bin. The bread is still good at 11am. The food bank takes it from there.\n\nI know \"pre-order\" sounds like a big-chain word. It is just a website and a deadline. The deadline is 8pm on Thursday. We have not tried this before. We do not know yet how many of you will order. If it is clumsy, tell me and I will fix it.\n\nOrder your Saturday loaf on the website before 8pm on Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 29,
+   "setup": "grok-4.7_high",
+   "name": "Grok 4.7",
+   "level": "high",
+   "maker": "xAI",
+   "score": 84,
+   "basics": 3,
+   "n": 4,
+   "cost": "£1.29",
+   "tasks": [
+    88,
+    69,
+    89,
+    89
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/grok-4.7_high/content_01_bakery_preorder/short_post.md",
+     "text": "On Saturday, 3 people told me they had walked from Headingley. They said the shelf was empty. They had come for bread. We had none left. I felt awful about that.\n\nWe had sold out by 9.40am. It keeps happening. You can come a long way and still go home with nothing. We let you down.\n\nI have 1 oven. Staring at it doesn't make it bigger. I have tried.\n\nI can bake 64 loaves on a Saturday. I cannot bake 65. That's the whole bake.\n\nOn a quiet week we throw away about 6 loaves. I guess the number, and some weeks I guess high.\n\nFrom Saturday 7 November 2026, Saturday bread is pre-order only. We will bake what has been ordered. We will not bake a guess.\n\nYou order on our website. You pay when you order. We bake that loaf for you.\n\nThe Saturday list closes at 8pm on Thursday. The first list closes on Thursday 5 November 2026. After 8pm, we cannot add you to that week's list.\n\nOnce 64 loaves are ordered, the list is full. Loaf 65 will not fit.\n\nYou collect between 8am and 11am on Saturday. The loaf is baked for you. You do not have to arrive first.\n\nSaturday is not a walk-in from that date. We will not sell Saturday bread without an order.\n\nMonday to Friday stays walk-in. You can still buy what is on the shelf.\n\nWe do not hold a loaf after 11am. We take what is left to the Chapeltown food bank. We would rather it was eaten than thrown away.\n\nA cancellation by 8pm on Thursday gets a full refund. After that, there is no refund, because the bread is baked for you. That covers a late cancel, or a loaf you do not collect. It does not cover a loaf that is not right.\n\nWe have not tried this before. I don't know if these times will suit you. I will not call the first week a success in advance.\n\nOrder your Saturday loaf on our website by 8pm on Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 30,
+   "setup": "gpt-6-luna_medium",
+   "name": "GPT-6 Luna",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 82,
+   "basics": 3,
+   "n": 4,
+   "cost": "under 1p",
+   "tasks": [
+    66,
+    93,
+    81,
+    90
+   ],
+   "where": "ChatGPT Free, in the desktop app (free), ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gpt-6-luna_medium/content_01_bakery_preorder/short_post.md",
+     "text": "At 9.40am on Saturday, the bread was gone. I was still in my coat when the oven hit 250 at 4.10am, so I know what went into making it.\n\nFrom Saturday 7 November, Saturday bread will be pre-order only. You can order on our website and pay by 8pm on Thursday. Collect between 8am and 11am on Saturday.\n\nWe sell out early. People walk a long way and sometimes find an empty shelf. We also throw away about 6 loaves on a quiet week. I want to make the number we bake closer to the number you need.\n\nThere is a limit. One oven gives us room for 64 loaves on Saturday. Pre-orders help us plan, but they don't make the oven bigger. If Saturday bread is what you came for, you will need to order ahead. Weekday bread stays walk-in as usual.\n\nIf you can't collect, cancel by 8pm Thursday for a full refund. After that, we can't refund the order. The bread is baked for you. Anything not collected by 11am Saturday goes to the Chapeltown food bank.\n\nI haven't tried this before, so I don't know yet how it will work in practice. I don't know how many people will order, or whether the collection window will suit you. We'll pay attention and adjust if we need to. The numbers tell me there is a problem, but they don't tell me exactly what will fix it.\n\nPlease place your Saturday order on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 31,
+   "setup": "gemini-4-argon_high",
+   "name": "Gemini 4 Argon",
+   "level": "high",
+   "maker": "Google",
+   "score": 79,
+   "basics": 2,
+   "n": 4,
+   "cost": "35p",
+   "tasks": [
+    82,
+    88,
+    54,
+    90
+   ],
+   "where": "Google AI Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gemini-4-argon_high/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am on Saturday again. That's lovely, and also a problem. Soon after 9.40am, 3 people told me they'd walked from Headingley. They found an empty shelf and went home with nothing. You got up early for bread and we let you down. I felt awful for the rest of the morning.\n\nOn a quiet week, the opposite goes wrong. We throw away about 6 loaves at the end of a slow Saturday. Watching 6 good loaves go in the bin hurts. I only have 1 oven and 2 hands here in Leeds. Even when the oven hits 250 at 4.10am, 64 loaves is my limit. Drinking extra coffee at 6am hasn't improved my Saturday guesswork.\n\nSo we're changing how Saturdays work at Rise & Crumb. From Saturday 7 November 2026, Saturday bread is pre-order only. You choose your bread on our website by 8pm on Thursday. You pay when you order, and we bake your loaves for you.\n\nOn Saturday, you collect your order between 8am and 11am. You don't need to rush down the street before 9.40am anymore. Your bread will be waiting on the shelf with your name on it. Anything not collected by 11am goes to the Chapeltown food bank. Weekday sales stay walk-in, just as they are now.\n\nPlans change sometimes. If you can't make it, cancel by 8pm on Thursday for a full refund. After 8pm on Thursday, we can't give a refund. By then, the bread is already baked for you.\n\nWe haven't tried a pre-order system before. I'll still be in my coat checking the list at 8am on 7 November. Please bear with me while I learn the ropes on week 1. Order your Saturday loaf on our website by 8pm on Thursday 5 November.\n"
+    }
+   ]
+  },
+  {
+   "rank": 32,
+   "setup": "gemini-3.6-flash_low",
+   "name": "Gemini 3.6 Flash",
+   "level": "low",
+   "maker": "Google",
+   "score": 78,
+   "basics": 2,
+   "n": 4,
+   "cost": "8p",
+   "tasks": [
+    67,
+    83,
+    73,
+    87
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gemini-3.6-flash_low/content_01_bakery_preorder/short_post.md",
+     "text": "Last Saturday at 9.40am, I turned the shop door sign to closed on Harrogate Road. The shelves were empty. I went back to sweep the floor and felt miserable.\n\nA customer walked all the way from Headingley at 9.45am and found no sourdough left. I felt awful about that. That happens far too often on a busy weekend. On a quiet week, we throw away 6 loaves. That is a waste of good flour, gas and early morning effort.\n\nWe have 1 oven in the bakehouse. I can bake 64 loaves on a Saturday morning, and not 1 loaf more. My baking schedule starts at 4.10am. There is no time to bake extra rounds later in the day.\n\nFrom Saturday 7 November 2026, Saturday bread will be pre-order only. You order on our website by 8pm on Thursday and pay when you order. You collect your loaf between 8am and 11am on Saturday. Weekday sales stay walk-in as they are now.\n\nAny loaf left at 11am on Saturday goes to the Chapeltown food bank. A friend told me small shops with under 10 staff fall outside the Consumer Rights Act. So we can set our own refund policy. If you cancel by 8pm on Thursday, you get a full refund. After 8pm on Thursday, we give no refund. The bread is already baked specifically for your order.\n\nWe want this system to give everyone a fair chance at getting weekend sourdough. I know change takes time to get used to. We appreciate your patience while we try this out.\n\nVisit our website today to set up your account before Thursday.\n\n#RiseAndCrumb #LeedsBakery #PreorderBread\n"
+    }
+   ]
+  },
+  {
+   "rank": 33,
+   "setup": "gemini-3.5-flash-lite_default",
+   "name": "Gemini 3.5 Flash-Lite",
+   "level": "standard",
+   "maker": "Google",
+   "score": 77,
+   "basics": 4,
+   "n": 4,
+   "cost": "2p",
+   "tasks": [
+    64,
+    79,
+    81,
+    86
+   ],
+   "where": "Gemini (free), Google AI Plus, Google AI Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gemini-3.5-flash-lite_default/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am last Saturday morning at Rise & Crumb. That is lovely for our books, and also a real problem for you. Three people told me they walked all the way from Headingley and found an empty shelf. You got up early for bread and we let you down. On a quiet week we also throw away about 6 loaves that nobody bought. \n\nI only have one oven and two hands. We can bake 64 loaves on a Saturday and not one more, however much coffee I drink. \n\nSo we are changing how Saturday works. From Saturday 7 November 2026, Saturday bread is pre-order only. \n\nHere is how it works. You order on our website by 8pm Thursday and pay when you order. You collect your loaf between 8am and 11am on Saturday morning. If you do not collect by 11am, the loaf goes straight to the Chapeltown food bank so nothing is wasted. \n\nIf you cannot make it, cancel by 8pm Thursday for a full refund. After that, no refund, because the bread is baked specifically for you. Under the Consumer Rights Act, refund rules for perishable goods apply to businesses of any size. \n\nWeekday sales stay walk-in as they are now. We still love a quick chat at the counter during the week when things are calmer. \n\nHead to our website and place your order by 8pm Thursday this week. Thank you for supporting us through every single change we make together.\n\n#RiseAndCrumb #LeedsBread #Chapeltown\n"
+    }
+   ]
+  },
+  {
+   "rank": 34,
+   "setup": "haiku-4.5_default",
+   "name": "Claude Haiku 4.5",
+   "level": "standard",
+   "maker": "Anthropic",
+   "score": 71,
+   "basics": 3,
+   "n": 4,
+   "cost": "7p",
+   "tasks": [
+    46,
+    82,
+    76,
+    82
+   ],
+   "where": "Claude Free (free), Claude Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/haiku-4.5_default/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am last Saturday. A customer came in from Headingley right after. The shelf was empty. I felt awful.\n\nThis happens most weeks. The bread sells fast, which is brilliant. But it means people leave empty-handed. Three customers have told me they've travelled across Leeds hoping to buy from us and found nothing. You got up early. You travelled. We let you down.\n\nHere's why. I have one oven. On a Saturday I can bake 64 loaves maximum. That's it. Not 65, not 70 if I stay later. One oven, two hands, one Saturday morning.\n\nWhen sales are quiet we throw bread away. About 6 loaves on a slow week. Bread made but unsold. That bothers me. There are people who need food.\n\nSo from 7 November, Saturday bread is pre-order only.\n\nHere's what it means. You order on our website by 8pm Thursday and pay when you order. On Saturday morning come in between 8am and 11am to collect your bread. We've made it, it's ready, you take it home.\n\nWeekday bread doesn't change. Walk in Monday to Friday, buy what we've got.\n\nWhat if Saturday doesn't work for you this week?\n\nCancel by 8pm Thursday for a full refund. We haven't started baking yet.\n\nCancel after 8pm Thursday and there's no refund. Why? The bread is already baked for you. You've paid for it.\n\nAnything not collected by 11am goes to Chapeltown food bank. No waste.\n\nOrder your Saturday bread online by 8pm Thursday.\n"
+    }
+   ]
+  }
+ ],
+ "nav": [
+  {
+   "id": "research",
+   "name": "Research"
+  },
+  {
+   "id": "content",
+   "name": "Content"
+  },
+  {
+   "id": "thinking",
+   "name": "Thinking"
+  },
+  {
+   "id": "building",
+   "name": "Building"
+  },
+  {
+   "id": "data",
+   "name": "Data"
+  },
+  {
+   "id": "automation",
+   "name": "Automation"
+  }
+ ],
+ "count": 34,
+ "tested_from": "2026-10-02",
+ "tested_to": "2026-10-21"
+}

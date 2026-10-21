@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 460" font-family="Helvetica, Arial, sans-serif">
+<rect width="720" height="460" fill="white"/>
+<text x="360.0" y="32" text-anchor="middle" font-size="20" font-weight="bold">Pay quartiles — % women and men</text>
+<text x="360.0" y="52" text-anchor="middle" font-size="13" fill="#444">Thistlecombe Care Ltd, snapshot 5 April 2026 (n=248 full-pay relevant employees)</text>
+<line x1="90" y1="60" x2="90" y2="370" stroke="#333" stroke-width="1"/>
+<line x1="86" y1="370.0" x2="90" y2="370.0" stroke="#333" stroke-width="1"/>
+<text x="82" y="374.0" text-anchor="end" font-size="12">0%</text>
+<line x1="86" y1="308.0" x2="90" y2="308.0" stroke="#333" stroke-width="1"/>
+<text x="82" y="312.0" text-anchor="end" font-size="12">20%</text>
+<line x1="90" y1="308.0" x2="690" y2="308.0" stroke="#ddd" stroke-width="1"/>
+<line x1="86" y1="246.0" x2="90" y2="246.0" stroke="#333" stroke-width="1"/>
+<text x="82" y="250.0" text-anchor="end" font-size="12">40%</text>
+<line x1="90" y1="246.0" x2="690" y2="246.0" stroke="#ddd" stroke-width="1"/>
+<line x1="86" y1="184.0" x2="90" y2="184.0" stroke="#333" stroke-width="1"/>
+<text x="82" y="188.0" text-anchor="end" font-size="12">60%</text>
+<line x1="90" y1="184.0" x2="690" y2="184.0" stroke="#ddd" stroke-width="1"/>
+<line x1="86" y1="122.0" x2="90" y2="122.0" stroke="#333" stroke-width="1"/>
+<text x="82" y="126.0" text-anchor="end" font-size="12">80%</text>
+<line x1="90" y1="122.0" x2="690" y2="122.0" stroke="#ddd" stroke-width="1"/>
+<line x1="86" y1="60.0" x2="90" y2="60.0" stroke="#333" stroke-width="1"/>
+<text x="82" y="64.0" text-anchor="end" font-size="12">100%</text>
+<line x1="90" y1="60.0" x2="690" y2="60.0" stroke="#ddd" stroke-width="1"/>
+<text x="25" y="215.0" font-size="13" fill="#444" transform="rotate(-90 25 215.0)" text-anchor="middle">Percentage of quartile</text>
+<line x1="90" y1="370" x2="690" y2="370" stroke="#333" stroke-width="1"/>
+<rect x="117.0" y="125.1" width="48.0" height="244.9" fill="#c2185b" />
+<text x="141.0" y="119.1" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">79.0%</text>
+<rect x="165.0" y="304.9" width="48.0" height="65.1" fill="#1976d2" />
+<text x="189.0" y="298.9" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">21.0%</text>
+<text x="165.0" y="388" text-anchor="middle" font-size="13" font-weight="bold">Lower</text>
+<text x="165.0" y="404" text-anchor="middle" font-size="11" fill="#555">(quartile 1)</text>
+<rect x="267.0" y="165.09000000000003" width="48.0" height="204.90999999999997" fill="#c2185b" />
+<text x="291.0" y="159.09000000000003" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">66.1%</text>
+<rect x="315.0" y="264.91" width="48.0" height="105.08999999999999" fill="#1976d2" />
+<text x="339.0" y="258.91" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">33.9%</text>
+<text x="315.0" y="388" text-anchor="middle" font-size="13" font-weight="bold">Lower middle</text>
+<text x="315.0" y="404" text-anchor="middle" font-size="11" fill="#555">(quartile 2)</text>
+<rect x="417.0" y="144.94" width="48.0" height="225.06" fill="#c2185b" />
+<text x="441.0" y="138.94" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">72.6%</text>
+<rect x="465.0" y="285.06" width="48.0" height="84.93999999999998" fill="#1976d2" />
+<text x="489.0" y="279.06" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">27.4%</text>
+<text x="465.0" y="388" text-anchor="middle" font-size="13" font-weight="bold">Upper middle</text>
+<text x="465.0" y="404" text-anchor="middle" font-size="11" fill="#555">(quartile 3)</text>
+<rect x="567.0" y="189.89000000000001" width="48.0" height="180.10999999999999" fill="#c2185b" />
+<text x="591.0" y="183.89000000000001" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">58.1%</text>
+<rect x="615.0" y="240.11" width="48.0" height="129.89" fill="#1976d2" />
+<text x="639.0" y="234.11" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">41.9%</text>
+<text x="615.0" y="388" text-anchor="middle" font-size="13" font-weight="bold">Upper</text>
+<text x="615.0" y="404" text-anchor="middle" font-size="11" fill="#555">(quartile 4)</text>
+<rect x="490" y="38" width="14" height="14" fill="#c2185b"/>
+<text x="510" y="49" font-size="12">Women</text>
+<rect x="580" y="38" width="14" height="14" fill="#1976d2"/>
+<text x="600" y="49" font-size="12">Men</text>
+</svg>

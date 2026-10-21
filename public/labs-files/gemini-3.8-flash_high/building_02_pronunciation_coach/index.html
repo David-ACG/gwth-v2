@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harbour &amp; Vale Logistics - Pronunciation Coach</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --navy: #0f172a;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #3b82f6;
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+      --danger-light: #fef2f2;
+      --danger-border: #fecaca;
+      --success: #15803d;
+      --success-light: #f0fdf4;
+      --success-border: #bbf7d0;
+      --amber: #b45309;
+      --amber-light: #fffbeb;
+      --amber-border: #fde68a;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+      overflow-x: hidden;
+      min-width: 320px;
+    }
+
+    .app-container {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header */
+    header {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .header-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .header-desc {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    /* Message banner */
+    .message-banner {
+      background-color: var(--danger-light);
+      border: 1px solid var(--danger-border);
+      color: var(--danger);
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Target Section */
+    .target-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .target-display-box {
+      background: var(--primary-light);
+      border: 2px solid #bfdbfe;
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .target-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+    }
+
+    .target-text {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .target-english {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Controls */
+    .controls-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      text-align: center;
+      min-height: 48px;
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-listen {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-listen:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-listen.speaking {
+      background-color: #2563eb;
+    }
+
+    .btn-record {
+      background-color: var(--danger);
+      color: #ffffff;
+    }
+
+    .btn-record:hover:not(:disabled) {
+      background-color: var(--danger-hover);
+    }
+
+    .btn-stop {
+      background-color: #475569;
+      color: #ffffff;
+    }
+
+    .btn-stop:hover:not(:disabled) {
+      background-color: #334155;
+    }
+
+    /* Status notices */
+    .status-notice {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .status-recording {
+      background-color: var(--danger-light);
+      border: 1px solid var(--danger-border);
+      color: var(--danger);
+    }
+
+    .status-analyzing {
+      background-color: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: var(--navy);
+    }
+
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--danger);
+      animation: pulse-dot 1s infinite alternate;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #cbd5e1;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes pulse-dot {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.15); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Results section */
+    .results-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .score-summary-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+    }
+
+    .score-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .score-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .score-rating {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .score-box {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .score-denom {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .result-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .result-block-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .heard-box {
+      background: #f1f5f9;
+      border-left: 4px solid #94a3b8;
+      padding: 12px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 1.05rem;
+      color: var(--navy);
+      font-style: italic;
+      word-break: break-word;
+    }
+
+    .words-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      line-height: 1.8;
+    }
+
+    .word-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.3;
+      border: 1px solid transparent;
+    }
+
+    .word-badge[data-colour="green"] {
+      background-color: var(--success-light);
+      color: var(--success);
+      border-color: var(--success-border);
+    }
+
+    .word-badge[data-colour="amber"] {
+      background-color: var(--amber-light);
+      color: var(--amber);
+      border-color: var(--amber-border);
+    }
+
+    .word-badge[data-colour="red"] {
+      background-color: var(--danger-light);
+      color: var(--danger);
+      border-color: var(--danger-border);
+    }
+
+    .phrase-punct {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--navy);
+      padding: 0 2px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .swatch-green { background-color: #22c55e; }
+    .swatch-amber { background-color: #f59e0b; }
+    .swatch-red { background-color: #ef4444; }
+
+    /* Phrase list */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .filter-btn:hover {
+      background: #e2e8f0;
+      color: var(--navy);
+    }
+
+    .filter-btn.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #ffffff;
+    }
+
+    .phrase-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .phrase-item-card {
+      display: flex;
+      align-items: stretch;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .phrase-item-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .phrase-item-card.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .phrase-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .phrase-btn:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: -2px;
+    }
+
+    .phrase-btn-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .phrase-btn-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+
+    .phrase-btn-english {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .phrase-best-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-left: 1px solid var(--border);
+      min-width: 72px;
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .phrase-best-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .phrase-best-num {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--navy);
+      min-height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Responsiveness for 375px phone screens */
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .card {
+        padding: 14px;
+      }
+      .target-display-box {
+        padding: 14px;
+      }
+      .target-text {
+        font-size: 1.25rem;
+      }
+      .controls-grid {
+        gap: 6px;
+      }
+      .btn {
+        padding: 10px 8px;
+        font-size: 0.88rem;
+      }
+      .score-box {
+        font-size: 2.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header>
+      <span class="header-badge">Harbour &amp; Vale Logistics • L&amp;D</span>
+      <h1>Pronunciation Coach</h1>
+      <p class="header-desc">Practise speaking Spanish &amp; French phrases for your secondment in Valencia or Lyon.</p>
+    </header>
+
+    <!-- Error / Status Message Banner -->
+    <div data-testid="message" class="message-banner" role="alert" hidden style="display: none;"></div>
+
+    <!-- Active Practice Card -->
+    <main class="card" aria-labelledby="section-target-heading">
+      <h2 id="section-target-heading" class="card-heading">
+        <span>Current Phrase</span>
+      </h2>
+
+      <div class="target-wrapper">
+        <!-- Target Phrase Box -->
+        <div class="target-display-box">
+          <div class="target-meta">
+            <span id="target-phrase-id-badge">Phrase ES_01</span>
+            <span id="target-phrase-lang-badge">Spanish (Valencia)</span>
+          </div>
+          <div data-testid="target" class="target-text">Buenos días, ¿qué tal?</div>
+          <div id="target-phrase-english" class="target-english">Good morning, how are you?</div>
+        </div>
+
+        <!-- Controls -->
+        <div>
+          <div class="controls-label" id="controls-group-label">Voice &amp; Recording Controls</div>
+          <div class="controls-grid" role="group" aria-labelledby="controls-group-label">
+            <button type="button" class="btn btn-listen" data-testid="listen" id="btn-listen" aria-label="Listen to phrase spoken properly">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+              <span>Listen</span>
+            </button>
+
+            <button type="button" class="btn btn-record" data-testid="record" id="btn-record" aria-label="Start recording your voice">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="22"></line>
+              </svg>
+              <span>Record</span>
+            </button>
+
+            <button type="button" class="btn btn-stop" data-testid="stop" id="btn-stop" aria-label="Stop recording and check pronunciation" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+              </svg>
+              <span>Stop</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Status Notice (Recording or Analyzing) -->
+        <div id="recording-notice" class="status-notice status-recording" hidden style="display: none;" role="status">
+          <div class="pulse-dot"></div>
+          <span>Recording in progress... speak clearly, then press <strong>Stop</strong>.</span>
+        </div>
+
+        <div id="analyzing-notice" class="status-notice status-analyzing" hidden style="display: none;" role="status">
+          <div class="spinner"></div>
+          <span>Analyzing your pronunciation with AI listening service...</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Results Area (only shown after a successful attempt) -->
+    <section id="results-area" class="card" aria-labelledby="section-results-heading" hidden style="display: none;">
+      <h2 id="section-results-heading" class="card-heading">
+        <span>Pronunciation Feedback</span>
+      </h2>
+
+      <div class="results-wrapper">
+        <!-- Overall Score Card -->
+        <div class="score-summary-card">
+          <div class="score-left">
+            <span class="score-label">Overall Score</span>
+            <span id="score-feedback-text" class="score-rating"></span>
+          </div>
+          <div class="score-box">
+            <span data-testid="score"></span>
+            <span class="score-denom">/ 100</span>
+          </div>
+        </div>
+
+        <!-- What was heard -->
+        <div class="result-block">
+          <span class="result-block-label">What the AI Heard</span>
+          <div data-testid="heard" class="heard-box"></div>
+        </div>
+
+        <!-- Word by word breakdown -->
+        <div class="result-block">
+          <span class="result-block-label">Word-by-word Accuracy</span>
+          <div id="result-words-container" class="words-container"></div>
+          <div class="legend" aria-label="Colour guide">
+            <span class="legend-item"><span class="legend-swatch swatch-green"></span> Green: Great (&ge; 85%)</span>
+            <span class="legend-item"><span class="legend-swatch swatch-amber"></span> Amber: Almost (&ge; 60%)</span>
+            <span class="legend-item"><span class="legend-swatch swatch-red"></span> Red: Needs work / Missed (&lt; 60%)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phrase Selection List -->
+    <section class="card" aria-labelledby="section-phrases-heading">
+      <h2 id="section-phrases-heading" class="card-heading">
+        <span>Select Phrase</span>
+      </h2>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs" role="tablist" aria-label="Filter phrases by language">
+        <button type="button" class="filter-btn active" id="filter-all" role="tab" aria-selected="true">All (12)</button>
+        <button type="button" class="filter-btn" id="filter-es" role="tab" aria-selected="false">Spanish (6)</button>
+        <button type="button" class="filter-btn" id="filter-fr" role="tab" aria-selected="false">French (6)</button>
+      </div>
+
+      <!-- Phrase list container with pre-rendered phrases -->
+      <div id="phrase-list-container" class="phrase-list">
+        <!-- es_01 -->
+        <div class="phrase-item-card selected" data-phrase-id="es_01" data-language="es-ES">
+          <button type="button" class="phrase-btn" data-testid="phrase-es_01" aria-label="Select phrase es_01: Buenos días, ¿qué tal?">
+            <div class="phrase-btn-header">
+              <span>ES_01</span>
+              <span>•</span>
+              <span>Spanish</span>
+            </div>
+            <div class="phrase-btn-text">Buenos días, ¿qué tal?</div>
+            <div class="phrase-btn-english">Good morning, how are you?</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase es_01">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-es_01"></span>
+          </div>
+        </div>
+
+        <!-- es_02 -->
+        <div class="phrase-item-card" data-phrase-id="es_02" data-language="es-ES">
+          <button type="button" class="phrase-btn" data-testid="phrase-es_02" aria-label="Select phrase es_02: Me llamo Sam y trabajo en el almacén.">
+            <div class="phrase-btn-header">
+              <span>ES_02</span>
+              <span>•</span>
+              <span>Spanish</span>
+            </div>
+            <div class="phrase-btn-text">Me llamo Sam y trabajo en el almacén.</div>
+            <div class="phrase-btn-english">My name is Sam and I work in the warehouse.</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase es_02">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-es_02"></span>
+          </div>
+        </div>
+
+        <!-- es_03 -->
+        <div class="phrase-item-card" data-phrase-id="es_03" data-language="es-ES">
+          <button type="button" class="phrase-btn" data-testid="phrase-es_03" aria-label="Select phrase es_03: ¿Dónde está la estación de tren?">
+            <div class="phrase-btn-header">
+              <span>ES_03</span>
+              <span>•</span>
+              <span>Spanish</span>
+            </div>
+            <div class="phrase-btn-text">¿Dónde está la estación de tren?</div>
+            <div class="phrase-btn-english">Where is the train station?</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase es_03">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-es_03"></span>
+          </div>
+        </div>
+
+        <!-- es_04 -->
+        <div class="phrase-item-card" data-phrase-id="es_04" data-language="es-ES">
+          <button type="button" class="phrase-btn" data-testid="phrase-es_04" aria-label="Select phrase es_04: El camión llega a las tres y media.">
+            <div class="phrase-btn-header">
+              <span>ES_04</span>
+              <span>•</span>
+              <span>Spanish</span>
+            </div>
+            <div class="phrase-btn-text">El camión llega a las tres y media.</div>
+            <div class="phrase-btn-english">The lorry arrives at half past three.</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase es_04">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-es_04"></span>
+          </div>
+        </div>
+
+        <!-- es_05 -->
+        <div class="phrase-item-card" data-phrase-id="es_05" data-language="es-ES">
+          <button type="button" class="phrase-btn" data-testid="phrase-es_05" aria-label="Select phrase es_05: Me gustaría reservar una mesa para dos.">
+            <div class="phrase-btn-header">
+              <span>ES_05</span>
+              <span>•</span>
+              <span>Spanish</span>
+            </div>
+            <div class="phrase-btn-text">Me gustaría reservar una mesa para dos.</div>
+            <div class="phrase-btn-english">I would like to book a table for two.</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase es_05">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-es_05"></span>
+          </div>
+        </div>
+
+        <!-- es_06 -->
+        <div class="phrase-item-card" data-phrase-id="es_06" data-language="es-ES">
+          <button type="button" class="phrase-btn" data-testid="phrase-es_06" aria-label="Select phrase es_06: ¿Puede repetirlo más despacio, por favor?">
+            <div class="phrase-btn-header">
+              <span>ES_06</span>
+              <span>•</span>
+              <span>Spanish</span>
+            </div>
+            <div class="phrase-btn-text">¿Puede repetirlo más despacio, por favor?</div>
+            <div class="phrase-btn-english">Can you repeat it more slowly, please?</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase es_06">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-es_06"></span>
+          </div>
+        </div>
+
+        <!-- fr_01 -->
+        <div class="phrase-item-card" data-phrase-id="fr_01" data-language="fr-FR">
+          <button type="button" class="phrase-btn" data-testid="phrase-fr_01" aria-label="Select phrase fr_01: Bonjour, je suis nouveau ici.">
+            <div class="phrase-btn-header">
+              <span>FR_01</span>
+              <span>•</span>
+              <span>French</span>
+            </div>
+            <div class="phrase-btn-text">Bonjour, je suis nouveau ici.</div>
+            <div class="phrase-btn-english">Hello, I am new here.</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase fr_01">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-fr_01"></span>
+          </div>
+        </div>
+
+        <!-- fr_02 -->
+        <div class="phrase-item-card" data-phrase-id="fr_02" data-language="fr-FR">
+          <button type="button" class="phrase-btn" data-testid="phrase-fr_02" aria-label="Select phrase fr_02: Je voudrais un café, s'il vous plaît.">
+            <div class="phrase-btn-header">
+              <span>FR_02</span>
+              <span>•</span>
+              <span>French</span>
+            </div>
+            <div class="phrase-btn-text">Je voudrais un café, s'il vous plaît.</div>
+            <div class="phrase-btn-english">I would like a coffee, please.</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase fr_02">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-fr_02"></span>
+          </div>
+        </div>
+
+        <!-- fr_03 -->
+        <div class="phrase-item-card" data-phrase-id="fr_03" data-language="fr-FR">
+          <button type="button" class="phrase-btn" data-testid="phrase-fr_03" aria-label="Select phrase fr_03: À quelle heure part le prochain train ?">
+            <div class="phrase-btn-header">
+              <span>FR_03</span>
+              <span>•</span>
+              <span>French</span>
+            </div>
+            <div class="phrase-btn-text">À quelle heure part le prochain train ?</div>
+            <div class="phrase-btn-english">What time does the next train leave?</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase fr_03">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-fr_03"></span>
+          </div>
+        </div>
+
+        <!-- fr_04 -->
+        <div class="phrase-item-card" data-phrase-id="fr_04" data-language="fr-FR">
+          <button type="button" class="phrase-btn" data-testid="phrase-fr_04" aria-label="Select phrase fr_04: Il fait très beau aujourd'hui.">
+            <div class="phrase-btn-header">
+              <span>FR_04</span>
+              <span>•</span>
+              <span>French</span>
+            </div>
+            <div class="phrase-btn-text">Il fait très beau aujourd'hui.</div>
+            <div class="phrase-btn-english">The weather is lovely today.</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase fr_04">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-fr_04"></span>
+          </div>
+        </div>
+
+        <!-- fr_05 -->
+        <div class="phrase-item-card" data-phrase-id="fr_05" data-language="fr-FR">
+          <button type="button" class="phrase-btn" data-testid="phrase-fr_05" aria-label="Select phrase fr_05: Le chargement est prêt à partir.">
+            <div class="phrase-btn-header">
+              <span>FR_05</span>
+              <span>•</span>
+              <span>French</span>
+            </div>
+            <div class="phrase-btn-text">Le chargement est prêt à partir.</div>
+            <div class="phrase-btn-english">The load is ready to go.</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase fr_05">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-fr_05"></span>
+          </div>
+        </div>
+
+        <!-- fr_06 -->
+        <div class="phrase-item-card" data-phrase-id="fr_06" data-language="fr-FR">
+          <button type="button" class="phrase-btn" data-testid="phrase-fr_06" aria-label="Select phrase fr_06: Pouvez-vous parler plus lentement ?">
+            <div class="phrase-btn-header">
+              <span>FR_06</span>
+              <span>•</span>
+              <span>French</span>
+            </div>
+            <div class="phrase-btn-text">Pouvez-vous parler plus lentement ?</div>
+            <div class="phrase-btn-english">Can you speak more slowly?</div>
+          </button>
+          <div class="phrase-best-container" aria-label="Best score for phrase fr_06">
+            <span class="phrase-best-title">Best</span>
+            <span class="phrase-best-num" data-testid="best-fr_06"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Embedded phrases data from inputs/phrases.json
+    const PHRASES = [
+      {"id": "es_01", "language": "es-ES", "text": "Buenos días, ¿qué tal?", "english": "Good morning, how are you?"},
+      {"id": "es_02", "language": "es-ES", "text": "Me llamo Sam y trabajo en el almacén.", "english": "My name is Sam and I work in the warehouse."},
+      {"id": "es_03", "language": "es-ES", "text": "¿Dónde está la estación de tren?", "english": "Where is the train station?"},
+      {"id": "es_04", "language": "es-ES", "text": "El camión llega a las tres y media.", "english": "The lorry arrives at half past three."},
+      {"id": "es_05", "language": "es-ES", "text": "Me gustaría reservar una mesa para dos.", "english": "I would like to book a table for two."},
+      {"id": "es_06", "language": "es-ES", "text": "¿Puede repetirlo más despacio, por favor?", "english": "Can you repeat it more slowly, please?"},
+      {"id": "fr_01", "language": "fr-FR", "text": "Bonjour, je suis nouveau ici.", "english": "Hello, I am new here."},
+      {"id": "fr_02", "language": "fr-FR", "text": "Je voudrais un café, s'il vous plaît.", "english": "I would like a coffee, please."},
+      {"id": "fr_03", "language": "fr-FR", "text": "À quelle heure part le prochain train ?", "english": "What time does the next train leave?"},
+      {"id": "fr_04", "language": "fr-FR", "text": "Il fait très beau aujourd'hui.", "english": "The weather is lovely today."},
+      {"id": "fr_05", "language": "fr-FR", "text": "Le chargement est prêt à partir.", "english": "The load is ready to go."},
+      {"id": "fr_06", "language": "fr-FR", "text": "Pouvez-vous parler plus lentement ?", "english": "Can you speak more slowly?"}
+    ];
+
+    let currentPhraseId = "es_01";
+    let activeFilter = "all";
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let mediaStream = null;
+
+    // LocalStorage helper for best scores
+    const STORAGE_KEY = "pronunciation_best_scores";
+
+    function getStoredBestScores() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") {
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not read from localStorage", e);
+      }
+      return {};
+    }
+
+    function saveBestScore(phraseId, score) {
+      if (typeof score !== "number" || isNaN(score)) return;
+      const scores = getStoredBestScores();
+      const existing = scores[phraseId];
+      if (typeof existing !== "number" || score > existing) {
+        scores[phraseId] = score;
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+        } catch (e) {
+          console.warn("Could not save to localStorage", e);
+        }
+        updateBestScoreDisplay(phraseId, score);
+      }
+    }
+
+    function updateBestScoreDisplay(phraseId, score) {
+      const bestEl = document.querySelector(`[data-testid="best-${phraseId}"]`);
+      if (bestEl) {
+        if (typeof score === "number" && !isNaN(score)) {
+          bestEl.textContent = String(score);
+        } else {
+          bestEl.textContent = "";
+        }
+      }
+    }
+
+    function loadAllStoredScores() {
+      const scores = getStoredBestScores();
+      PHRASES.forEach(p => {
+        const score = scores[p.id];
+        updateBestScoreDisplay(p.id, score);
+      });
+    }
+
+    // Carmen's Word Normalization and Scoring Rules
+    function cleanWord(str) {
+      if (!str) return "";
+      return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // remove diacritics / accents
+        .replace(/[^\p{L}\p{N}]/gu, "");  // remove all punctuation, apostrophes, ¿, ¡, hyphens, etc.
+    }
+
+    function extractPhraseWords(phraseText) {
+      const pieces = phraseText.trim().split(/\s+/);
+      const words = [];
+      const trailingNonWords = [];
+
+      for (let i = 0; i < pieces.length; i++) {
+        const piece = pieces[i];
+        const plain = cleanWord(piece);
+        if (plain.length > 0) {
+          words.push({ original: piece, plain: plain });
+        } else {
+          trailingNonWords.push(piece);
+        }
+      }
+      return { words, trailingNonWords };
+    }
+
+    function evaluatePronunciation(phraseText, serviceResponse) {
+      const { words: phraseWords, trailingNonWords } = extractPhraseWords(phraseText);
+      const heardItems = (serviceResponse.words || [])
+        .map(hw => ({
+          word: hw.word || "",
+          confidence: typeof hw.confidence === "number" ? hw.confidence : 0,
+          plain: cleanWord(hw.word || "")
+        }))
+        .filter(hw => hw.plain.length > 0);
+
+      let lastMatchedIndex = -1;
+      let matchedHeardCount = 0;
+      const wordResults = [];
+
+      // Step 2: Match phrase words in order
+      for (let i = 0; i < phraseWords.length; i++) {
+        const pw = phraseWords[i];
+        let matchIndex = -1;
+
+        for (let j = lastMatchedIndex + 1; j < heardItems.length; j++) {
+          if (heardItems[j].plain === pw.plain) {
+            matchIndex = j;
+            break;
+          }
+        }
+
+        if (matchIndex !== -1) {
+          lastMatchedIndex = matchIndex;
+          matchedHeardCount++;
+          const conf = heardItems[matchIndex].confidence;
+          let colour = "red";
+          if (conf >= 0.85) {
+            colour = "green";
+          } else if (conf >= 0.60) {
+            colour = "amber";
+          } else {
+            colour = "red";
+          }
+          wordResults.push({
+            original: pw.original,
+            matched: true,
+            confidence: conf,
+            colour: colour
+          });
+        } else {
+          wordResults.push({
+            original: pw.original,
+            matched: false,
+            confidence: 0,
+            colour: "red"
+          });
+        }
+      }
+
+      // Any heard word not matched is an extra word
+      const extraWords = heardItems.length - matchedHeardCount;
+
+      // Score calculation: average confidence * 100, round, minus 5 per extra word, min 0
+      const sumConf = wordResults.reduce((acc, r) => acc + r.confidence, 0);
+      const avg = phraseWords.length > 0 ? (sumConf / phraseWords.length) : 0;
+      const rounded = Math.round(avg * 100);
+      const finalScore = Math.max(0, rounded - (extraWords * 5));
+
+      return {
+        wordResults,
+        trailingNonWords,
+        extraWords,
+        average: avg,
+        rawScore: rounded,
+        finalScore: isNaN(finalScore) ? 0 : finalScore
+      };
+    }
+
+    // Message Banner handling (only shown when there is something to say)
+    function showMessage(msg) {
+      const msgEl = document.querySelector('[data-testid="message"]');
+      if (msgEl) {
+        msgEl.textContent = msg;
+        msgEl.hidden = false;
+        msgEl.style.display = "flex";
+      }
+    }
+
+    function hideMessage() {
+      const msgEl = document.querySelector('[data-testid="message"]');
+      if (msgEl) {
+        msgEl.textContent = "";
+        msgEl.hidden = true;
+        msgEl.style.display = "none";
+      }
+    }
+
+    // Results UI display
+    function showResults(phrase, serviceResponse) {
+      const evaluation = evaluatePronunciation(phrase.text, serviceResponse);
+
+      // Score display (just the number)
+      const scoreEl = document.querySelector('[data-testid="score"]');
+      if (scoreEl) {
+        scoreEl.textContent = String(evaluation.finalScore);
+      }
+
+      // Rating message
+      const ratingEl = document.getElementById("score-feedback-text");
+      if (ratingEl) {
+        if (evaluation.finalScore >= 85) {
+          ratingEl.textContent = "Great pronunciation!";
+          ratingEl.style.color = "var(--success)";
+        } else if (evaluation.finalScore >= 60) {
+          ratingEl.textContent = "Good effort! Almost there.";
+          ratingEl.style.color = "var(--amber)";
+        } else {
+          ratingEl.textContent = "Keep practising!";
+          ratingEl.style.color = "var(--danger)";
+        }
+      }
+
+      // What was heard display
+      const heardEl = document.querySelector('[data-testid="heard"]');
+      if (heardEl) {
+        const heardText = typeof serviceResponse.transcript === "string"
+          ? serviceResponse.transcript
+          : ((serviceResponse.words || []).map(w => w.word).join(" "));
+        heardEl.textContent = heardText;
+      }
+
+      // Word results badges
+      const wordsContainer = document.getElementById("result-words-container");
+      if (wordsContainer) {
+        wordsContainer.innerHTML = "";
+        evaluation.wordResults.forEach((wr, idx) => {
+          const span = document.createElement("span");
+          span.setAttribute("data-testid", `word-${idx + 1}`);
+          span.setAttribute("data-colour", wr.colour);
+          span.setAttribute("data-color", wr.colour);
+          span.className = "word-badge";
+          span.textContent = wr.original;
+          wordsContainer.appendChild(span);
+        });
+
+        if (evaluation.trailingNonWords && evaluation.trailingNonWords.length > 0) {
+          evaluation.trailingNonWords.forEach(nonWord => {
+            const punctSpan = document.createElement("span");
+            punctSpan.className = "phrase-punct";
+            punctSpan.textContent = nonWord;
+            wordsContainer.appendChild(punctSpan);
+          });
+        }
+      }
+
+      // Update best score
+      saveBestScore(phrase.id, evaluation.finalScore);
+
+      // Show results area
+      const resultsArea = document.getElementById("results-area");
+      if (resultsArea) {
+        resultsArea.hidden = false;
+        resultsArea.style.display = "block";
+      }
+    }
+
+    function hideResults() {
+      const resultsArea = document.getElementById("results-area");
+      if (resultsArea) {
+        resultsArea.hidden = true;
+        resultsArea.style.display = "none";
+      }
+      const scoreEl = document.querySelector('[data-testid="score"]');
+      if (scoreEl) scoreEl.textContent = "";
+      const heardEl = document.querySelector('[data-testid="heard"]');
+      if (heardEl) heardEl.textContent = "";
+      const wordsContainer = document.getElementById("result-words-container");
+      if (wordsContainer) wordsContainer.innerHTML = "";
+    }
+
+    // Active phrase selection
+    function selectPhrase(phraseId) {
+      const phrase = PHRASES.find(p => p.id === phraseId);
+      if (!phrase) return;
+
+      currentPhraseId = phrase.id;
+
+      // Stop any speech playback or recording
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+
+      // Update Target Box
+      const targetEl = document.querySelector('[data-testid="target"]');
+      if (targetEl) targetEl.textContent = phrase.text;
+
+      const idBadge = document.getElementById("target-phrase-id-badge");
+      if (idBadge) idBadge.textContent = `Phrase ${phrase.id.toUpperCase()}`;
+
+      const langBadge = document.getElementById("target-phrase-lang-badge");
+      if (langBadge) {
+        langBadge.textContent = phrase.language === "es-ES" ? "Spanish (Valencia)" : "French (Lyon)";
+      }
+
+      const engEl = document.getElementById("target-phrase-english");
+      if (engEl) engEl.textContent = phrase.english;
+
+      // Update active style in list
+      document.querySelectorAll(".phrase-item-card").forEach(card => {
+        if (card.getAttribute("data-phrase-id") === phrase.id) {
+          card.classList.add("selected");
+        } else {
+          card.classList.remove("selected");
+        }
+      });
+
+      // Clear messages and hide old results
+      hideMessage();
+      hideResults();
+      resetControlsState();
+    }
+
+    function resetControlsState() {
+      const btnListen = document.getElementById("btn-listen");
+      const btnRecord = document.getElementById("btn-record");
+      const btnStop = document.getElementById("btn-stop");
+      const recNotice = document.getElementById("recording-notice");
+      const anaNotice = document.getElementById("analyzing-notice");
+
+      if (btnListen) {
+        btnListen.disabled = false;
+        btnListen.classList.remove("speaking");
+      }
+      if (btnRecord) btnRecord.disabled = false;
+      if (btnStop) btnStop.disabled = true;
+      if (recNotice) {
+        recNotice.hidden = true;
+        recNotice.style.display = "none";
+      }
+      if (anaNotice) {
+        anaNotice.hidden = true;
+        anaNotice.style.display = "none";
+      }
+    }
+
+    // Audio Playback via speechSynthesis
+    function playPhrase() {
+      if (!("speechSynthesis" in window)) {
+        showMessage("Speech playback is not supported in this browser.");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      hideMessage();
+
+      const phrase = PHRASES.find(p => p.id === currentPhraseId);
+      if (!phrase) return;
+
+      const utterance = new SpeechSynthesisUtterance(phrase.text);
+      utterance.lang = phrase.language;
+
+      // Attempt matching system voice
+      try {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices && voices.length > 0) {
+          const exact = voices.find(v => v.lang === phrase.language || v.lang.replace("_", "-") === phrase.language);
+          if (exact) {
+            utterance.voice = exact;
+          } else {
+            const prefix = phrase.language.split("-")[0];
+            const langVoice = voices.find(v => v.lang.startsWith(prefix));
+            if (langVoice) {
+              utterance.voice = langVoice;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("SpeechSynthesis voice selection error", err);
+      }
+
+      const listenBtn = document.getElementById("btn-listen");
+      if (listenBtn) listenBtn.classList.add("speaking");
+
+      utterance.onend = () => {
+        if (listenBtn) listenBtn.classList.remove("speaking");
+      };
+      utterance.onerror = () => {
+        if (listenBtn) listenBtn.classList.remove("speaking");
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Recording via MediaRecorder and getUserMedia
+    async function startRecording() {
+      hideMessage();
+      hideResults();
+
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
+        showMessage("Microphone recording is not supported in this browser environment. Please check browser permissions and settings.");
+        return;
+      }
+
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (err) {
+        console.error("Microphone access error:", err);
+        showMessage("Microphone access was denied or no microphone was found. To allow access, please check your browser settings (look for the lock or site settings icon in the address bar) and ensure a microphone is connected.");
+        return;
+      }
+
+      audioChunks = [];
+      try {
+        let options = {};
+        if (typeof MediaRecorder.isTypeSupported === "function") {
+          if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) {
+            options = { mimeType: "audio/webm;codecs=opus" };
+          } else if (MediaRecorder.isTypeSupported("audio/webm")) {
+            options = { mimeType: "audio/webm" };
+          } else if (MediaRecorder.isTypeSupported("audio/mp4")) {
+            options = { mimeType: "audio/mp4" };
+          } else if (MediaRecorder.isTypeSupported("audio/ogg")) {
+            options = { mimeType: "audio/ogg" };
+          }
+        }
+        mediaRecorder = new MediaRecorder(mediaStream, options);
+      } catch (e) {
+        try {
+          mediaRecorder = new MediaRecorder(mediaStream);
+        } catch (e2) {
+          showMessage("Could not initialize audio recorder. Please check your browser audio settings.");
+          if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+          return;
+        }
+      }
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) {
+          audioChunks.push(e.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(t => t.stop());
+          mediaStream = null;
+        }
+
+        const mimeType = mediaRecorder.mimeType || "audio/webm";
+        const audioBlob = new Blob(audioChunks, { type: mimeType });
+        await uploadRecording(audioBlob);
+      };
+
+      mediaRecorder.start();
+
+      // UI update
+      const btnListen = document.getElementById("btn-listen");
+      const btnRecord = document.getElementById("btn-record");
+      const btnStop = document.getElementById("btn-stop");
+      const recNotice = document.getElementById("recording-notice");
+
+      if (btnListen) btnListen.disabled = true;
+      if (btnRecord) btnRecord.disabled = true;
+      if (btnStop) btnStop.disabled = false;
+      if (recNotice) {
+        recNotice.hidden = false;
+        recNotice.style.display = "flex";
+      }
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+
+      const btnStop = document.getElementById("btn-stop");
+      const recNotice = document.getElementById("recording-notice");
+      if (btnStop) btnStop.disabled = true;
+      if (recNotice) {
+        recNotice.hidden = true;
+        recNotice.style.display = "none";
+      }
+    }
+
+    // Upload to Tomasz's listening service: POST /api/listen
+    async function uploadRecording(audioBlob) {
+      const phrase = PHRASES.find(p => p.id === currentPhraseId);
+      if (!phrase) return;
+
+      const anaNotice = document.getElementById("analyzing-notice");
+      if (anaNotice) {
+        anaNotice.hidden = false;
+        anaNotice.style.display = "flex";
+      }
+
+      const formData = new FormData();
+      let filename = "recording.webm";
+      if (audioBlob.type && audioBlob.type.includes("mp4")) {
+        filename = "recording.mp4";
+      } else if (audioBlob.type && audioBlob.type.includes("ogg")) {
+        filename = "recording.ogg";
+      }
+
+      formData.append("audio", audioBlob, filename);
+      formData.append("language", phrase.language);
+      formData.append("phrase_id", phrase.id);
+      formData.append("target", phrase.text);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 8000);
+
+      try {
+        const response = await fetch("/api/listen", {
+          method: "POST",
+          body: formData,
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok || response.status !== 200) {
+          showMessage("The listening service encountered a problem. Please try again.");
+          hideResults();
+          return;
+        }
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonErr) {
+          showMessage("The listening service returned an unreadable response. Please try again.");
+          hideResults();
+          return;
+        }
+
+        showResults(phrase, data);
+
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === "AbortError") {
+          showMessage("The listening service is taking too long to respond (over 8 seconds). Please try again.");
+        } else {
+          showMessage("Could not connect to the listening service. Please try again.");
+        }
+        hideResults();
+      } finally {
+        if (anaNotice) {
+          anaNotice.hidden = true;
+          anaNotice.style.display = "none";
+        }
+        const btnListen = document.getElementById("btn-listen");
+        const btnRecord = document.getElementById("btn-record");
+        if (btnListen) btnListen.disabled = false;
+        if (btnRecord) btnRecord.disabled = false;
+      }
+    }
+
+    function applyFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll(".phrase-item-card").forEach(card => {
+        const lang = card.getAttribute("data-language");
+        if (
+          filter === "all" ||
+          (filter === "es" && lang === "es-ES") ||
+          (filter === "fr" && lang === "fr-FR")
+        ) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    function setupFilterTabs() {
+      const tabs = [
+        { id: "filter-all", filter: "all" },
+        { id: "filter-es", filter: "es" },
+        { id: "filter-fr", filter: "fr" }
+      ];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(t.id);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            tabs.forEach(other => {
+              const otherBtn = document.getElementById(other.id);
+              if (otherBtn) {
+                const isActive = other.id === t.id;
+                otherBtn.classList.toggle("active", isActive);
+                otherBtn.setAttribute("aria-selected", isActive ? "true" : "false");
+              }
+            });
+            applyFilter(t.filter);
+          });
+        }
+      });
+    }
+
+    function setupPhraseClickHandlers() {
+      PHRASES.forEach(phrase => {
+        const btn = document.querySelector(`[data-testid="phrase-${phrase.id}"]`);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            selectPhrase(phrase.id);
+          });
+        }
+      });
+    }
+
+    // Attach Event Listeners on Load
+    window.addEventListener("DOMContentLoaded", () => {
+      // Setup controls
+      const btnListen = document.getElementById("btn-listen");
+      if (btnListen) btnListen.addEventListener("click", playPhrase);
+
+      const btnRecord = document.getElementById("btn-record");
+      if (btnRecord) btnRecord.addEventListener("click", startRecording);
+
+      const btnStop = document.getElementById("btn-stop");
+      if (btnStop) btnStop.addEventListener("click", stopRecording);
+
+      // Setup phrase list handlers and stored scores
+      setupFilterTabs();
+      setupPhraseClickHandlers();
+      loadAllStoredScores();
+      selectPhrase("es_01");
+
+      // Load speech voices in background
+      if (window.speechSynthesis) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.getVoices();
+        };
+      }
+    });
+  </script>
+</body>
+</html>

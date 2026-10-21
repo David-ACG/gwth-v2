@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">Women and men in each pay quartile</title>
+<desc id="chart-desc">Grouped bar chart showing the percentage of women and men in the lower, lower middle, upper middle and upper pay quartiles.</desc>
+<rect width="900" height="520" fill="#ffffff"/>
+<text x="450" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#20262e">Women and men in each pay quartile</text>
+<text x="450" y="67" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#58616b">Percentages within each quartile - 5 April 2026 snapshot</text>
+<rect x="347" y="88" width="15" height="15" fill="#a33b5d"/>
+<text x="370" y="101" font-family="Arial, sans-serif" font-size="14" fill="#20262e">Women</text>
+<rect x="458" y="88" width="15" height="15" fill="#2f5d8c"/>
+<text x="481" y="101" font-family="Arial, sans-serif" font-size="14" fill="#20262e">Men</text>
+<line x1="100" y1="420.0" x2="850" y2="420.0" stroke="#d9dee3" stroke-width="1"/>
+<text x="88" y="425.0" text-anchor="end" font-family="Arial, sans-serif" font-size="12" fill="#58616b">0%</text>
+<line x1="100" y1="352.5" x2="850" y2="352.5" stroke="#d9dee3" stroke-width="1"/>
+<text x="88" y="357.5" text-anchor="end" font-family="Arial, sans-serif" font-size="12" fill="#58616b">25%</text>
+<line x1="100" y1="285.0" x2="850" y2="285.0" stroke="#d9dee3" stroke-width="1"/>
+<text x="88" y="290.0" text-anchor="end" font-family="Arial, sans-serif" font-size="12" fill="#58616b">50%</text>
+<line x1="100" y1="217.5" x2="850" y2="217.5" stroke="#d9dee3" stroke-width="1"/>
+<text x="88" y="222.5" text-anchor="end" font-family="Arial, sans-serif" font-size="12" fill="#58616b">75%</text>
+<line x1="100" y1="150.0" x2="850" y2="150.0" stroke="#d9dee3" stroke-width="1"/>
+<text x="88" y="155.0" text-anchor="end" font-family="Arial, sans-serif" font-size="12" fill="#58616b">100%</text>
+<line x1="100" y1="150" x2="100" y2="420" stroke="#6b747d" stroke-width="1.5"/>
+<line x1="100" y1="420" x2="850" y2="420" stroke="#6b747d" stroke-width="1.5"/>
+<rect x="136" y="202.26" width="52" height="217.74" fill="#a33b5d" rx="2"/>
+<rect x="200" y="367.74" width="52" height="52.26" fill="#2f5d8c" rx="2"/>
+<text x="162.0" y="194.26" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#762943">80.6%</text>
+<text x="226.0" y="359.74" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#244a72">19.4%</text>
+<text x="194" y="451" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#20262e">Lower</text>
+<text x="194" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#58616b">62 employees</text>
+<rect x="323" y="224.03" width="52" height="195.97" fill="#a33b5d" rx="2"/>
+<rect x="387" y="345.97" width="52" height="74.03" fill="#2f5d8c" rx="2"/>
+<text x="349.0" y="216.03" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#762943">72.6%</text>
+<text x="413.0" y="337.97" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#244a72">27.4%</text>
+<text x="381" y="451" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#20262e">Lower middle</text>
+<text x="381" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#58616b">62 employees</text>
+<rect x="511" y="228.39" width="52" height="191.61" fill="#a33b5d" rx="2"/>
+<rect x="575" y="341.61" width="52" height="78.39" fill="#2f5d8c" rx="2"/>
+<text x="537.0" y="220.39" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#762943">71.0%</text>
+<text x="601.0" y="333.61" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#244a72">29.0%</text>
+<text x="569" y="451" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#20262e">Upper middle</text>
+<text x="569" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#58616b">62 employees</text>
+<rect x="698" y="280.65" width="52" height="139.35" fill="#a33b5d" rx="2"/>
+<rect x="762" y="289.35" width="52" height="130.65" fill="#2f5d8c" rx="2"/>
+<text x="724.0" y="272.65" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#762943">51.6%</text>
+<text x="788.0" y="281.35" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#244a72">48.4%</text>
+<text x="756" y="451" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#20262e">Upper</text>
+<text x="756" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#58616b">62 employees</text>
+</svg>

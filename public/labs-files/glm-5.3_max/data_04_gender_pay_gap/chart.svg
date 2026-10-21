@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="530" viewBox="0 0 900 530" role="img" aria-labelledby="title subtitle">
+  <title id="title">Gender composition of pay quartiles</title>
+  <desc id="subtitle">Percentage of women and men in each hourly pay quartile, full-pay relevant employees.</desc>
+  <rect width="900" height="530" fill="#ffffff"/>
+  <text x="60" y="38" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172033">Women and men by pay quartile</text>
+  <text x="60" y="63" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#526070">Thistlecombe Care, 5 April 2026 snapshot • percentages within each quartile</text>
+  <rect x="612" y="26" width="18" height="18" fill="#147D64"/>
+  <text x="638" y="41" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#333F4F">Women</text>
+  <rect x="708" y="26" width="18" height="18" fill="#2A5CA8"/>
+  <text x="734" y="41" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#333F4F">Men</text>
+  <line x1="80" y1="440" x2="850" y2="440" stroke="#8794A3" stroke-width="1"/>
+  <line x1="80" y1="440.0" x2="850" y2="440.0" stroke="#D9DEE4" stroke-width="1"/>
+  <text x="68" y="445.0" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#526070">0%</text>
+  <line x1="80" y1="372.0" x2="850" y2="372.0" stroke="#D9DEE4" stroke-width="1"/>
+  <text x="68" y="377.0" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#526070">20%</text>
+  <line x1="80" y1="304.0" x2="850" y2="304.0" stroke="#D9DEE4" stroke-width="1"/>
+  <text x="68" y="309.0" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#526070">40%</text>
+  <line x1="80" y1="236.0" x2="850" y2="236.0" stroke="#D9DEE4" stroke-width="1"/>
+  <text x="68" y="241.0" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#526070">60%</text>
+  <line x1="80" y1="168.0" x2="850" y2="168.0" stroke="#D9DEE4" stroke-width="1"/>
+  <text x="68" y="173.0" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#526070">80%</text>
+  <line x1="80" y1="100.0" x2="850" y2="100.0" stroke="#D9DEE4" stroke-width="1"/>
+  <text x="68" y="105.0" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#526070">100%</text>
+  <rect x="125.0" y="171.4" width="62" height="268.6" rx="3" fill="#147D64"/>
+  <rect x="197.0" y="368.6" width="62" height="71.4" rx="3" fill="#2A5CA8"/>
+  <text x="156.0" y="163.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#147D64">79.0%</text>
+  <text x="228.0" y="360.6" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#2A5CA8">21.0%</text>
+  <text x="192.0" y="470" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#333F4F">Lower</text>
+  <text x="192.0" y="492" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#68757F">quartile 1</text>
+  <rect x="310.0" y="215.3" width="62" height="224.7" rx="3" fill="#147D64"/>
+  <rect x="382.0" y="324.7" width="62" height="115.3" rx="3" fill="#2A5CA8"/>
+  <text x="341.0" y="207.3" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#147D64">66.1%</text>
+  <text x="413.0" y="316.7" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#2A5CA8">33.9%</text>
+  <text x="377.0" y="470" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#333F4F">Lower middle</text>
+  <text x="377.0" y="492" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#68757F">quartile 2</text>
+  <rect x="495.0" y="193.2" width="62" height="246.8" rx="3" fill="#147D64"/>
+  <rect x="567.0" y="346.8" width="62" height="93.2" rx="3" fill="#2A5CA8"/>
+  <text x="526.0" y="185.2" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#147D64">72.6%</text>
+  <text x="598.0" y="338.8" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#2A5CA8">27.4%</text>
+  <text x="562.0" y="470" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#333F4F">Upper middle</text>
+  <text x="562.0" y="492" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#68757F">quartile 3</text>
+  <rect x="680.0" y="242.5" width="62" height="197.5" rx="3" fill="#147D64"/>
+  <rect x="752.0" y="297.5" width="62" height="142.5" rx="3" fill="#2A5CA8"/>
+  <text x="711.0" y="234.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#147D64">58.1%</text>
+  <text x="783.0" y="289.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#2A5CA8">41.9%</text>
+  <text x="747.0" y="470" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#333F4F">Upper</text>
+  <text x="747.0" y="492" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#68757F">quartile 4</text>
+  <text x="80" y="518" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#68757F">Quartile 1 is the lowest-paid group. Based on 248 full-pay relevant employees, 62 in each quartile.</text>
+</svg>

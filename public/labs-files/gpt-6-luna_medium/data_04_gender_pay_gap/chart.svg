@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500" role="img" aria-labelledby="title desc">
+<title id="title">Gender mix across hourly pay quartiles</title>
+<desc id="desc">Each pay quartile has 62 full-pay relevant employees. The percentage of women decreases from 79.0 percent in the lower quartile to 56.5 percent in the upper quartile.</desc>
+<rect width="900" height="500" fill="#ffffff"/>
+<text x="450" y="42" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="bold" fill="#263238">Gender mix across hourly pay quartiles</text>
+<text x="450" y="70" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#546e7a">Full-pay relevant employees, ranked by hourly rate (n = 248)</text>
+<g font-family="Arial,sans-serif" font-size="13" fill="#455a64">
+<text x="35" y="115">100%</text><text x="45" y="185">75%</text><text x="45" y="255">50%</text><text x="45" y="325">25%</text><text x="55" y="395">0%</text>
+</g>
+<g stroke="#cfd8dc" stroke-width="1">
+<line x1="95" y1="110" x2="850" y2="110"/><line x1="95" y1="180" x2="850" y2="180"/><line x1="95" y1="250" x2="850" y2="250"/><line x1="95" y1="320" x2="850" y2="320"/><line x1="95" y1="390" x2="850" y2="390"/>
+</g>
+<g>
+<rect x="145" y="110" width="110" height="221" fill="#b44b78"/><rect x="145" y="331" width="110" height="59" fill="#3978a8"/>
+<rect x="325" y="110" width="110" height="208" fill="#b44b78"/><rect x="325" y="318" width="110" height="72" fill="#3978a8"/>
+<rect x="505" y="110" width="110" height="185" fill="#b44b78"/><rect x="505" y="295" width="110" height="95" fill="#3978a8"/>
+<rect x="685" y="110" width="110" height="158" fill="#b44b78"/><rect x="685" y="268" width="110" height="122" fill="#3978a8"/>
+</g>
+<g font-family="Arial,sans-serif" font-size="15" font-weight="bold" text-anchor="middle" fill="#ffffff">
+<text x="200" y="225">Women 79.0%</text><text x="200" y="367">Men 21.0%</text>
+<text x="380" y="220">Women 74.2%</text><text x="380" y="361">Men 25.8%</text>
+<text x="560" y="206">Women 66.1%</text><text x="560" y="350">Men 33.9%</text>
+<text x="740" y="197">Women 56.5%</text><text x="740" y="337">Men 43.5%</text>
+</g>
+<g font-family="Arial,sans-serif" font-size="14" text-anchor="middle" fill="#37474f">
+<text x="200" y="418">Lower</text><text x="380" y="418">Lower middle</text><text x="560" y="418">Upper middle</text><text x="740" y="418">Upper</text>
+</g>
+<text x="450" y="465" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#546e7a">Quartile 1 is the lowest hourly pay. Each bar shows the share of women and men within that quartile.</text>
+</svg>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="640" viewBox="0 0 1040 640" role="img">
+<title>Women and men in each pay quartile, 5 April 2026</title>
+<desc>Percentage of women and men in the four hourly-pay quartiles. Lower: women 77.4%, men 22.6%. Lower middle: women 71.0%, men 29.0%. Upper middle: women 74.2%, men 25.8%. Upper: women 53.2%, men 46.8%. Each quartile has 62 full-pay relevant employees.</desc>
+<rect width="1040" height="640" fill="#ffffff"/>
+<rect width="1040" height="8" fill="#0C6E6A"/>
+<text x="40" y="48" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#142228">Women and men in each pay quartile</text>
+<text x="40" y="76" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" fill="#5C6A72">5 April 2026 snapshot. Each quartile is 62 full-pay relevant employees, from lowest hourly pay to highest.</text>
+<rect x="40" y="98" width="16" height="16" rx="2" fill="#0C6E6A"/>
+<text x="64" y="111" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="14" fill="#142228">Women</text>
+<rect x="140" y="98" width="16" height="16" rx="2" fill="#D08A2C"/>
+<text x="164" y="111" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="14" fill="#142228">Men</text>
+<line x1="230" y1="106" x2="262" y2="106" stroke="#142228" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="270" y="111" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="14" fill="#142228">Women are 69.0% of full-pay staff</text>
+<clipPath id="q1"><rect x="210" y="156" width="520" height="48" rx="6"/></clipPath>
+<g clip-path="url(#q1)">
+<rect x="210" y="156" width="402.58" height="48" fill="#0C6E6A"/>
+<rect x="612.58" y="156" width="117.42" height="48" fill="#D08A2C"/>
+</g>
+<text x="196" y="186" text-anchor="end" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#142228">Lower</text>
+<text x="748" y="177" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#0C6E6A">Women 77.4%</text>
+<text x="748" y="196" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#8A5A12">Men 22.6%</text>
+<clipPath id="q2"><rect x="210" y="252" width="520" height="48" rx="6"/></clipPath>
+<g clip-path="url(#q2)">
+<rect x="210" y="252" width="369.03" height="48" fill="#0C6E6A"/>
+<rect x="579.03" y="252" width="150.97" height="48" fill="#D08A2C"/>
+</g>
+<text x="196" y="282" text-anchor="end" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#142228">Lower middle</text>
+<text x="748" y="273" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#0C6E6A">Women 71.0%</text>
+<text x="748" y="292" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#8A5A12">Men 29.0%</text>
+<clipPath id="q3"><rect x="210" y="348" width="520" height="48" rx="6"/></clipPath>
+<g clip-path="url(#q3)">
+<rect x="210" y="348" width="385.81" height="48" fill="#0C6E6A"/>
+<rect x="595.81" y="348" width="134.19" height="48" fill="#D08A2C"/>
+</g>
+<text x="196" y="378" text-anchor="end" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#142228">Upper middle</text>
+<text x="748" y="369" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#0C6E6A">Women 74.2%</text>
+<text x="748" y="388" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#8A5A12">Men 25.8%</text>
+<clipPath id="q4"><rect x="210" y="444" width="520" height="48" rx="6"/></clipPath>
+<g clip-path="url(#q4)">
+<rect x="210" y="444" width="276.77" height="48" fill="#0C6E6A"/>
+<rect x="486.77" y="444" width="243.23" height="48" fill="#D08A2C"/>
+</g>
+<text x="196" y="474" text-anchor="end" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#142228">Upper</text>
+<text x="748" y="465" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#0C6E6A">Women 53.2%</text>
+<text x="748" y="484" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#8A5A12">Men 46.8%</text>
+<line x1="568.55" y1="146" x2="568.55" y2="502" stroke="#142228" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="568.55" y="140" text-anchor="middle" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#142228">69.0%</text>
+<line x1="210" y1="522" x2="730" y2="522" stroke="#E6EBED" stroke-width="1"/>
+<line x1="210.00" y1="522" x2="210.00" y2="528" stroke="#5C6A72" stroke-width="1"/>
+<text x="210.00" y="544" text-anchor="start" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="12" fill="#5C6A72">0%</text>
+<line x1="340.00" y1="522" x2="340.00" y2="528" stroke="#5C6A72" stroke-width="1"/>
+<text x="340.00" y="544" text-anchor="middle" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="12" fill="#5C6A72">25%</text>
+<line x1="470.00" y1="522" x2="470.00" y2="528" stroke="#5C6A72" stroke-width="1"/>
+<text x="470.00" y="544" text-anchor="middle" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="12" fill="#5C6A72">50%</text>
+<line x1="600.00" y1="522" x2="600.00" y2="528" stroke="#5C6A72" stroke-width="1"/>
+<text x="600.00" y="544" text-anchor="middle" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="12" fill="#5C6A72">75%</text>
+<line x1="730.00" y1="522" x2="730.00" y2="528" stroke="#5C6A72" stroke-width="1"/>
+<text x="730.00" y="544" text-anchor="end" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="12" fill="#5C6A72">100%</text>
+<text x="40" y="580" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="13" fill="#5C6A72">The dashed line shows that 69.0% of full-pay staff are women. Only the upper quartile falls short of that share.</text>
+<text x="40" y="604" font-family="Liberation Sans, Segoe UI, Arial, Helvetica, sans-serif" font-size="13" fill="#5C6A72">Thistlecombe Care Ltd. Hourly pay quartiles at the 5 April 2026 snapshot. Lower is the lowest paid.</text>
+</svg>

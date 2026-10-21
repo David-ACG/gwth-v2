@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img" aria-labelledby="title desc">
+<title id="title">Thistlecombe Care: women and men by pay quartile</title>
+<desc id="desc">Full-pay relevant employees at 5 April 2026. Four equal quartiles, lowest pay first.</desc>
+<rect width="960" height="470" fill="white"/>
+<g font-family="Arial, sans-serif" fill="#172033">
+<text x="35" y="42" font-size="25" font-weight="bold">Women and men by pay quartile</text>
+<text x="35" y="72" font-size="16">Thistlecombe Care · 5 April 2026 · 62 employees per quartile</text>
+<text x="35" y="140" font-size="18">Lower</text>
+<rect x="205" y="110" width="474.0" height="48" fill="#6d3b8d"/>
+<rect x="679.0" y="110" width="126.0" height="48" fill="#176c8e"/>
+<text x="442.0" y="140" text-anchor="middle" fill="white" font-size="18">79.0%</text>
+<text x="742.0" y="140" text-anchor="middle" fill="white" font-size="18">21.0%</text>
+<text x="35" y="210" font-size="18">Lower middle</text>
+<rect x="205" y="180" width="396.6" height="48" fill="#6d3b8d"/>
+<rect x="601.6" y="180" width="203.39999999999998" height="48" fill="#176c8e"/>
+<text x="403.3" y="210" text-anchor="middle" fill="white" font-size="18">66.1%</text>
+<text x="703.3" y="210" text-anchor="middle" fill="white" font-size="18">33.9%</text>
+<text x="35" y="280" font-size="18">Upper middle</text>
+<rect x="205" y="250" width="435.6" height="48" fill="#6d3b8d"/>
+<rect x="640.6" y="250" width="164.39999999999998" height="48" fill="#176c8e"/>
+<text x="422.8" y="280" text-anchor="middle" fill="white" font-size="18">72.6%</text>
+<text x="722.8" y="280" text-anchor="middle" fill="white" font-size="18">27.4%</text>
+<text x="35" y="350" font-size="18">Upper</text>
+<rect x="205" y="320" width="348.6" height="48" fill="#6d3b8d"/>
+<rect x="553.6" y="320" width="251.39999999999998" height="48" fill="#176c8e"/>
+<text x="379.3" y="350" text-anchor="middle" fill="white" font-size="18">58.1%</text>
+<text x="679.3" y="350" text-anchor="middle" fill="white" font-size="18">41.9%</text>
+<rect x="205" y="411" width="18" height="18" fill="#6d3b8d"/><text x="232" y="426" font-size="16">Women</text>
+<rect x="340" y="411" width="18" height="18" fill="#176c8e"/><text x="367" y="426" font-size="16">Men</text>
+</g></svg>

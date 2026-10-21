@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" font-family="Arial, sans-serif" font-size="14">
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="32" font-size="18" font-weight="bold">Thistlecombe Care: women and men in each pay quartile</text>
+<text x="20" y="54" fill="#444">Snapshot date 5 April 2026. Full-pay relevant employees (248), ranked by hourly pay; 62 in each quartile.</text>
+<text x="140" y="107" text-anchor="end">Upper</text>
+<rect x="150" y="80" width="276.8" height="40" fill="#7b3294"/>
+<rect x="426.8" y="80" width="243.2" height="40" fill="#5ab4ac"/>
+<text x="158" y="106" fill="white" font-weight="bold">Women 53.2%</text>
+<text x="662" y="106" fill="black" font-weight="bold" text-anchor="end">Men 46.8%</text>
+<text x="680" y="106" fill="#444" font-size="12">33 W / 29 M</text>
+<text x="140" y="167" text-anchor="end">Upper middle</text>
+<rect x="150" y="140" width="385.8" height="40" fill="#7b3294"/>
+<rect x="535.8" y="140" width="134.2" height="40" fill="#5ab4ac"/>
+<text x="158" y="166" fill="white" font-weight="bold">Women 74.2%</text>
+<text x="662" y="166" fill="black" font-weight="bold" text-anchor="end">Men 25.8%</text>
+<text x="680" y="166" fill="#444" font-size="12">46 W / 16 M</text>
+<text x="140" y="227" text-anchor="end">Lower middle</text>
+<rect x="150" y="200" width="369.0" height="40" fill="#7b3294"/>
+<rect x="519.0" y="200" width="151.0" height="40" fill="#5ab4ac"/>
+<text x="158" y="226" fill="white" font-weight="bold">Women 71.0%</text>
+<text x="662" y="226" fill="black" font-weight="bold" text-anchor="end">Men 29.0%</text>
+<text x="680" y="226" fill="#444" font-size="12">44 W / 18 M</text>
+<text x="140" y="287" text-anchor="end">Lower</text>
+<rect x="150" y="260" width="402.6" height="40" fill="#7b3294"/>
+<rect x="552.6" y="260" width="117.4" height="40" fill="#5ab4ac"/>
+<text x="158" y="286" fill="white" font-weight="bold">Women 77.4%</text>
+<text x="662" y="286" fill="black" font-weight="bold" text-anchor="end">Men 22.6%</text>
+<text x="680" y="286" fill="#444" font-size="12">48 W / 14 M</text>
+<text x="20" y="345" fill="#444" font-size="12">Upper = highest paid quartile. Source: HR and payroll exports, April 2026 pay period.</text>
+</svg>

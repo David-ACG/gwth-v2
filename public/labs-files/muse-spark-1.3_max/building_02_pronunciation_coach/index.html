@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pronunciation Coach — Spanish and French phrases</title>
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5;color:#1a1a1a;background:#ffffff}
+header,main,footer{max-width:640px;margin:0 auto;padding:0 16px}
+header{padding-top:20px;padding-bottom:8px;border-bottom:2px solid #0b5fff}
+header h1{font-size:1.4rem;margin:0 0 4px}
+header p{margin:4px 0;color:#333}
+main{padding-bottom:24px}
+section{margin-top:20px}
+h2{font-size:1.15rem;margin:0 0 8px}
+h3{font-size:1rem;margin:16px 0 8px}
+.hint{margin:0 0 8px;color:#333}
+ul.phrases{list-style:none;padding:0;margin:0}
+ul.phrases li{margin:8px 0;border:1px solid #c9c9c9;border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#fafafa}
+ul.phrases li.selected{border-color:#0b5fff;background:#eef4ff}
+.phrase-btn{flex:1 1 200px;min-width:0;text-align:left;font-size:1rem;padding:10px 12px;min-height:44px;border-radius:8px;border:1px solid #333;background:#fff;cursor:pointer;line-height:1.35}
+.phrase-btn small{display:block;font-size:0.85rem;color:#444}
+.best-wrap{flex:0 0 auto;white-space:nowrap;font-size:0.95rem}
+.best-wrap strong{display:inline-block;min-width:2ch;text-align:right}
+.practise-box{border:1px solid #c9c9c9;border-radius:12px;padding:16px;background:#fff}
+#target{font-size:1.6rem;font-weight:700;margin:0 0 4px;overflow-wrap:break-word}
+#english{margin:0 0 4px;color:#333}
+#langline{margin:0 0 4px;color:#333;font-size:0.95rem}
+#current-best-line{margin:0 0 12px;font-size:0.95rem}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{flex:1 1 140px;min-width:120px;font-size:1rem;padding:12px;min-height:48px;border-radius:10px;border:1px solid #333;background:#fff;cursor:pointer}
+.controls button:disabled{opacity:0.5;cursor:not-allowed}
+#listen-btn{background:#0b5fff;color:#fff;border-color:#0b5fff}
+#record-btn{background:#d93025;color:#fff;border-color:#d93025}
+#record-btn:disabled{background:#d93025}
+#stop-btn{background:#fff;color:#111}
+#status{min-height:1.5em;margin:12px 0 0;color:#333}
+#message{background:#fce8e6;border:2px solid #a50e0e;color:#5f0b0b;padding:12px;border-radius:10px;margin:12px 0 0}
+#results{margin-top:16px;border-top:1px solid #ddd;padding-top:12px}
+#words{margin:8px 0;line-height:2.2;overflow-wrap:break-word}
+.word{display:inline-block;padding:2px 8px;margin:1px;border-radius:6px;border:2px solid;font-weight:600;font-size:1.1rem}
+.word-green{background:#e6f4ea;color:#137333;border-color:#137333;border-style:solid}
+.word-amber{background:#fef7e0;color:#7a4a00;border-color:#b26a00;border-style:dashed}
+.word-red{background:#fce8e6;color:#a50e0e;border-color:#a50e0e;border-style:dotted}
+.word-green::after{content:" \2713"}
+.word-amber::after{content:" !"}
+.word-red::after{content:" \2715"}
+.score-line{font-size:1.2rem;margin:8px 0}
+.heard-line{margin:8px 0;overflow-wrap:break-word}
+.heard-line span{display:inline}
+footer{padding-bottom:32px;color:#444;font-size:0.9rem;border-top:1px solid #ddd;padding-top:12px}
+[hidden]{display:none !important}
+:focus-visible{outline:3px solid #0b5fff;outline-offset:2px}
+@media (max-width:400px){
+  #target{font-size:1.35rem}
+  .controls button{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Pronunciation Coach</h1>
+<p>Practise your Spanish and French phrases out loud. Pick a phrase, listen, then record yourself.</p>
+</header>
+<main>
+<section aria-labelledby="choose-heading">
+<h2 id="choose-heading">1. Choose a phrase</h2>
+<p class="hint" id="choose-desc">Pick a phrase to practise. Your best score for each phrase on this device is shown next to it.</p>
+<h3 id="es-heading">Spanish (Spain)</h3>
+<ul class="phrases" id="list-es" aria-labelledby="es-heading">
+<li id="row-es_01"><button type="button" data-testid="phrase-es_01">Buenos días, ¿qué tal?<br><small>Good morning, how are you?</small></button> <span class="best-wrap">Best: <strong data-testid="best-es_01"></strong></span></li>
+<li id="row-es_02"><button type="button" data-testid="phrase-es_02">Me llamo Sam y trabajo en el almacén.<br><small>My name is Sam and I work in the warehouse.</small></button> <span class="best-wrap">Best: <strong data-testid="best-es_02"></strong></span></li>
+<li id="row-es_03"><button type="button" data-testid="phrase-es_03">¿Dónde está la estación de tren?<br><small>Where is the train station?</small></button> <span class="best-wrap">Best: <strong data-testid="best-es_03"></strong></span></li>
+<li id="row-es_04"><button type="button" data-testid="phrase-es_04">El camión llega a las tres y media.<br><small>The lorry arrives at half past three.</small></button> <span class="best-wrap">Best: <strong data-testid="best-es_04"></strong></span></li>
+<li id="row-es_05"><button type="button" data-testid="phrase-es_05">Me gustaría reservar una mesa para dos.<br><small>I would like to book a table for two.</small></button> <span class="best-wrap">Best: <strong data-testid="best-es_05"></strong></span></li>
+<li id="row-es_06"><button type="button" data-testid="phrase-es_06">¿Puede repetirlo más despacio, por favor?<br><small>Can you repeat it more slowly, please?</small></button> <span class="best-wrap">Best: <strong data-testid="best-es_06"></strong></span></li>
+</ul>
+<h3 id="fr-heading">French (France)</h3>
+<ul class="phrases" id="list-fr" aria-labelledby="fr-heading">
+<li id="row-fr_01"><button type="button" data-testid="phrase-fr_01">Bonjour, je suis nouveau ici.<br><small>Hello, I am new here.</small></button> <span class="best-wrap">Best: <strong data-testid="best-fr_01"></strong></span></li>
+<li id="row-fr_02"><button type="button" data-testid="phrase-fr_02">Je voudrais un café, s'il vous plaît.<br><small>I would like a coffee, please.</small></button> <span class="best-wrap">Best: <strong data-testid="best-fr_02"></strong></span></li>
+<li id="row-fr_03"><button type="button" data-testid="phrase-fr_03">À quelle heure part le prochain train ?<br><small>What time does the next train leave?</small></button> <span class="best-wrap">Best: <strong data-testid="best-fr_03"></strong></span></li>
+<li id="row-fr_04"><button type="button" data-testid="phrase-fr_04">Il fait très beau aujourd'hui.<br><small>The weather is lovely today.</small></button> <span class="best-wrap">Best: <strong data-testid="best-fr_04"></strong></span></li>
+<li id="row-fr_05"><button type="button" data-testid="phrase-fr_05">Le chargement est prêt à partir.<br><small>The load is ready to go.</small></button> <span class="best-wrap">Best: <strong data-testid="best-fr_05"></strong></span></li>
+<li id="row-fr_06"><button type="button" data-testid="phrase-fr_06">Pouvez-vous parler plus lentement ?<br><small>Can you speak more slowly?</small></button> <span class="best-wrap">Best: <strong data-testid="best-fr_06"></strong></span></li>
+</ul>
+</section>
+<section aria-labelledby="practise-heading">
+<h2 id="practise-heading">2. Listen and practise</h2>
+<div class="practise-box">
+<p data-testid="target" id="target" aria-live="polite"></p>
+<p id="english"></p>
+<p id="langline"></p>
+<p id="current-best-line">Best score for this phrase on this device: <strong id="current-best"></strong></p>
+<div class="controls">
+<button type="button" data-testid="listen" id="listen-btn">Hear it said properly</button>
+<button type="button" data-testid="record" id="record-btn">Record yourself saying it</button>
+<button type="button" data-testid="stop" id="stop-btn">Stop recording</button>
+</div>
+<p id="status" aria-live="polite"></p>
+<p id="message" data-testid="message" role="status" hidden></p>
+<div id="results" aria-labelledby="result-heading">
+<h3 id="result-heading">Your result</h3>
+<div id="words" aria-live="polite" aria-label="Your words, coloured by how well you said them"></div>
+<p class="score-line">Score: <span data-testid="score" id="score"></span><span id="score-suffix"> / 100</span></p>
+<p class="heard-line">What the computer heard: <span data-testid="heard" id="heard"></span></p>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<p>Your recordings are only sent to the depot listening service to score your try, and are not kept. Only your best scores are kept on this device.</p>
+</footer>
+<script>
+(function(){
+"use strict";
+var PHRASES=[
+{"id":"es_01","language":"es-ES","text":"Buenos días, ¿qué tal?","english":"Good morning, how are you?"},
+{"id":"es_02","language":"es-ES","text":"Me llamo Sam y trabajo en el almacén.","english":"My name is Sam and I work in the warehouse."},
+{"id":"es_03","language":"es-ES","text":"¿Dónde está la estación de tren?","english":"Where is the train station?"},
+{"id":"es_04","language":"es-ES","text":"El camión llega a las tres y media.","english":"The lorry arrives at half past three."},
+{"id":"es_05","language":"es-ES","text":"Me gustaría reservar una mesa para dos.","english":"I would like to book a table for two."},
+{"id":"es_06","language":"es-ES","text":"¿Puede repetirlo más despacio, por favor?","english":"Can you repeat it more slowly, please?"},
+{"id":"fr_01","language":"fr-FR","text":"Bonjour, je suis nouveau ici.","english":"Hello, I am new here."},
+{"id":"fr_02","language":"fr-FR","text":"Je voudrais un café, s'il vous plaît.","english":"I would like a coffee, please."},
+{"id":"fr_03","language":"fr-FR","text":"À quelle heure part le prochain train ?","english":"What time does the next train leave?"},
+{"id":"fr_04","language":"fr-FR","text":"Il fait très beau aujourd'hui.","english":"The weather is lovely today."},
+{"id":"fr_05","language":"fr-FR","text":"Le chargement est prêt à partir.","english":"The load is ready to go."},
+{"id":"fr_06","language":"fr-FR","text":"Pouvez-vous parler plus lentement ?","english":"Can you speak more slowly?"}
+];
+var BEST_KEY="pronunciationCoachBestV1";
+var targetEl=document.getElementById("target");
+var englishEl=document.getElementById("english");
+var langlineEl=document.getElementById("langline");
+var currentBestEl=document.getElementById("current-best");
+var listenBtn=document.getElementById("listen-btn");
+var recordBtn=document.getElementById("record-btn");
+var stopBtn=document.getElementById("stop-btn");
+var statusEl=document.getElementById("status");
+var messageEl=document.getElementById("message");
+var wordsEl=document.getElementById("words");
+var scoreEl=document.getElementById("score");
+var heardEl=document.getElementById("heard");
+var listEs=document.getElementById("list-es");
+var listFr=document.getElementById("list-fr");
+var currentId=PHRASES[0].id;
+var best=loadBest();
+var isRecording=false;
+var isSending=false;
+var mediaRecorder=null;
+var audioChunks=[];
+var activeStream=null;
+function getPhrase(id){
+  for(var i=0;i<PHRASES.length;i++){if(PHRASES[i].id===id){return PHRASES[i];}}
+  return PHRASES[0];
+}
+function loadBest(){
+  var out={};
+  try{
+    var raw=null;
+    try{raw=window.localStorage.getItem(BEST_KEY);}catch(e){return {};}
+    if(!raw){return {};}
+    var parsed=JSON.parse(raw);
+    if(!parsed||typeof parsed!=="object"){return {};}
+    for(var i=0;i<PHRASES.length;i++){
+      var v=parsed[PHRASES[i].id];
+      if(typeof v==="number"&&isFinite(v)&&v>=0&&v<=100){out[PHRASES[i].id]=Math.round(v);}
+    }
+  }catch(e){return {};}
+  return out;
+}
+function saveBest(){
+  try{window.localStorage.setItem(BEST_KEY,JSON.stringify(best));}catch(e){}
+}
+function normalizeWord(s){
+  var str=String(s==null?"":s);
+  str=str.toLowerCase();
+  try{str=str.normalize("NFD");}catch(e){}
+  str=str.replace(/[\u0300-\u036f]/g,"");
+  str=str.replace(/[^a-z0-9]/g,"");
+  return str;
+}
+function getPhraseWords(text){
+  var parts=String(text==null?"":text).split(/\s+/);
+  var words=[];
+  for(var i=0;i<parts.length;i++){
+    var part=parts[i];
+    if(!part){continue;}
+    var norm=normalizeWord(part);
+    if(/[a-z0-9]/.test(norm)){
+      words.push({display:part,normalized:norm});
+    }
+  }
+  return words;
+}
+function scoreAttempt(phraseWords,heardRaw){
+  var heardList=[];
+  if(heardRaw&&typeof heardRaw.length==="number"){
+    for(var i=0;i<heardRaw.length;i++){
+      var h=heardRaw[i];
+      var w="";
+      if(h&&typeof h.word==="string"){w=h.word;}
+      else if(h&&h.word!=null){try{w=String(h.word);}catch(e){w="";}}
+      var c=0;
+      if(h&&h.confidence!=null){
+        var n=Number(h.confidence);
+        if(isFinite(n)){c=n;}
+      }
+      if(c<0){c=0;}
+      if(c>1){c=1;}
+      heardList.push({normalized:normalizeWord(w),confidence:c});
+    }
+  }
+  var colours=[];
+  var values=[];
+  var lastMatched=-1;
+  var matchedCount=0;
+  for(var p=0;p<phraseWords.length;p++){
+    var found=-1;
+    for(var j=lastMatched+1;j<heardList.length;j++){
+      if(heardList[j].normalized!==""&&heardList[j].normalized===phraseWords[p].normalized){
+        found=j;
+        break;
+      }
+    }
+    if(found>=0){
+      lastMatched=found;
+      matchedCount++;
+      var conf=heardList[found].confidence;
+      values.push(conf);
+      if(conf>=0.85){colours.push("green");}
+      else if(conf>=0.60){colours.push("amber");}
+      else{colours.push("red");}
+    }else{
+      values.push(0);
+      colours.push("red");
+    }
+  }
+  var extra=heardList.length-matchedCount;
+  if(extra<0){extra=0;}
+  var score=0;
+  if(phraseWords.length>0){
+    var sum=0;
+    for(var k=0;k<values.length;k++){sum+=values[k];}
+    var avg=sum/phraseWords.length;
+    score=Math.round(avg*100)-5*extra;
+    if(!isFinite(score)){score=0;}
+    if(score<0){score=0;}
+  }else{
+    score=0;
+  }
+  return {colours:colours,score:score,extra:extra};
+}
+function showMessage(msg){
+  var t="";
+  try{t=String(msg==null?"":msg);}catch(e){t="Sorry, something went wrong. Please try again.";}
+  if(!t){t="Sorry, something went wrong. Please try again.";}
+  messageEl.textContent=t;
+  messageEl.hidden=false;
+}
+function hideMessage(){
+  messageEl.textContent="";
+  messageEl.hidden=true;
+}
+function setStatus(msg){
+  var t="";
+  try{t=String(msg==null?"":msg);}catch(e){t="";}
+  statusEl.textContent=t;
+}
+function clearResults(){
+  while(wordsEl.firstChild){wordsEl.removeChild(wordsEl.firstChild);}
+  scoreEl.textContent="";
+  heardEl.textContent="";
+}
+function updateBestDisplays(){
+  for(var i=0;i<PHRASES.length;i++){
+    var id=PHRASES[i].id;
+    var el=document.querySelector('[data-testid="best-'+id+'"]');
+    if(el){
+      if(typeof best[id]==="number"&&isFinite(best[id])){el.textContent=String(best[id]);}
+      else{el.textContent="";}
+    }
+  }
+  var cur=best[currentId];
+  if(typeof cur==="number"&&isFinite(cur)){currentBestEl.textContent=String(cur)+" / 100";}
+  else{currentBestEl.textContent="not tried yet";}
+}
+function updateButtons(){
+  var busy=isRecording||isSending;
+  recordBtn.disabled=busy?true:false;
+  stopBtn.disabled=isRecording?false:true;
+  listenBtn.disabled=busy?true:false;
+}
+function renderPhraseList(){
+  function makeItem(p){
+    var li=document.createElement("li");
+    li.id="row-"+p.id;
+    var btn=document.createElement("button");
+    btn.type="button";
+    btn.setAttribute("data-testid","phrase-"+p.id);
+    btn.setAttribute("aria-label",(p.language==="es-ES"?"Spanish: ":"French: ")+p.text+" — "+p.english);
+    btn.textContent=p.text;
+    var sm=document.createElement("small");
+    sm.textContent=p.english;
+    btn.appendChild(document.createElement("br"));
+    btn.appendChild(sm);
+    btn.addEventListener("click",function(){selectPhrase(p.id);});
+    var wrap=document.createElement("span");
+    wrap.className="best-wrap";
+    wrap.textContent="Best: ";
+    var b=document.createElement("strong");
+    b.setAttribute("data-testid","best-"+p.id);
+    b.textContent="";
+    wrap.appendChild(b);
+    li.appendChild(btn);
+    li.appendChild(wrap);
+    return li;
+  }
+  while(listEs.firstChild){listEs.removeChild(listEs.firstChild);}
+  while(listFr.firstChild){listFr.removeChild(listFr.firstChild);}
+  for(var i=0;i<PHRASES.length;i++){
+    var p=PHRASES[i];
+    var li=makeItem(p);
+    if(p.language==="es-ES"){listEs.appendChild(li);}
+    else{listFr.appendChild(li);}
+  }
+}
+function selectPhrase(id){
+  currentId=id;
+  var p=getPhrase(id);
+  try{if("speechSynthesis" in window){window.speechSynthesis.cancel();}}catch(e){}
+  targetEl.textContent=p.text;
+  try{targetEl.setAttribute("lang",p.language);}catch(e){}
+  englishEl.textContent=p.english;
+  langlineEl.textContent=p.language==="es-ES"?"Language: Spanish (Spain)":"Language: French (France)";
+  clearResults();
+  hideMessage();
+  setStatus("");
+  var rows=document.querySelectorAll("ul.phrases li");
+  for(var i=0;i<rows.length;i++){rows[i].classList.remove("selected");}
+  var row=document.getElementById("row-"+p.id);
+  if(row){row.classList.add("selected");}
+  var btns=document.querySelectorAll("ul.phrases button");
+  for(var b=0;b<btns.length;b++){btns[b].removeAttribute("aria-current");}
+  var curBtn=document.querySelector('[data-testid="phrase-'+p.id+'"]');
+  if(curBtn){curBtn.setAttribute("aria-current","true");}
+  updateBestDisplays();
+  updateButtons();
+}
+function renderResults(phraseWords,colours,score,transcript){
+  while(wordsEl.firstChild){wordsEl.removeChild(wordsEl.firstChild);}
+  for(var i=0;i<phraseWords.length;i++){
+    var s=document.createElement("span");
+    s.className="word word-"+colours[i];
+    s.setAttribute("data-testid","word-"+(i+1));
+    s.setAttribute("data-colour",colours[i]);
+    s.textContent=phraseWords[i].display;
+    try{s.setAttribute("aria-label",phraseWords[i].display+", "+colours[i]);}catch(e){}
+    try{s.title=colours[i];}catch(e){}
+    wordsEl.appendChild(s);
+    if(i<phraseWords.length-1){wordsEl.appendChild(document.createTextNode(" "));}
+  }
+  var safe=0;
+  if(typeof score==="number"&&isFinite(score)){safe=Math.max(0,Math.round(score));}
+  scoreEl.textContent=String(safe);
+  var ht="";
+  try{ht=String(transcript==null?"":transcript);}catch(e){ht="";}
+  heardEl.textContent=ht;
+}
+function stopTracks(){
+  if(activeStream){
+    try{
+      var tracks=activeStream.getTracks();
+      for(var i=0;i<tracks.length;i++){try{tracks[i].stop();}catch(e){}}
+    }catch(e){}
+    activeStream=null;
+  }
+}
+function handleRecordingStop(){
+  isRecording=false;
+  stopTracks();
+  setStatus("Checking your pronunciation...");
+  isSending=true;
+  updateButtons();
+  var p=getPhrase(currentId);
+  var mime="audio/webm";
+  try{if(mediaRecorder&&mediaRecorder.mimeType){mime=mediaRecorder.mimeType;}}catch(e){}
+  var blob=null;
+  try{
+    blob=new Blob(audioChunks,{type:mime||"audio/webm"});
+    if(!blob.type){blob=new Blob(audioChunks,{type:"audio/webm"});}
+  }catch(e){
+    try{blob=new Blob([],{type:"audio/webm"});}catch(e2){blob=null;}
+  }
+  if(!blob){
+    isSending=false;
+    setStatus("");
+    updateButtons();
+    clearResults();
+    showMessage("Sorry, the recording did not work. Please try again.");
+    return;
+  }
+  var filename="recording.webm";
+  try{
+    var bt=String(blob.type||"").toLowerCase();
+    if(bt.indexOf("mp4")>=0||bt.indexOf("m4a")>=0){filename="recording.mp4";}
+    else if(bt.indexOf("ogg")>=0){filename="recording.ogg";}
+    else if(bt.indexOf("wav")>=0){filename="recording.wav";}
+  }catch(e){}
+  var form=null;
+  try{form=new FormData();}catch(e){
+    isSending=false;
+    setStatus("");
+    updateButtons();
+    clearResults();
+    showMessage("Sorry, your browser could not send the recording. Please try a recent version of Chrome or Safari.");
+    return;
+  }
+  try{form.append("audio",blob,filename);}
+  catch(e){try{form.append("audio",blob);}catch(e2){}}
+  form.append("language",p.language);
+  form.append("phrase_id",p.id);
+  form.append("target",p.text);
+  var controller=null;
+  var timeoutId=null;
+  try{
+    if(typeof AbortController!=="undefined"){controller=new AbortController();}
+  }catch(e){controller=null;}
+  var didTimeout=false;
+  if(controller){
+    timeoutId=setTimeout(function(){
+      didTimeout=true;
+      try{controller.abort();}catch(e){}
+    },8000);
+  }else{
+    timeoutId=setTimeout(function(){didTimeout=true;},8000);
+  }
+  var fetchOpts={method:"POST",body:form};
+  if(controller&&controller.signal){fetchOpts.signal=controller.signal;}
+  fetch("/api/listen",fetchOpts).then(function(resp){
+    if(timeoutId){clearTimeout(timeoutId);}
+    if(didTimeout){return null;}
+    if(!resp||resp.status!==200){
+      isSending=false;
+      setStatus("");
+      updateButtons();
+      clearResults();
+      showMessage("Sorry, the listening service had a problem. Please try again.");
+      return null;
+    }
+    return resp.json().then(function(data){
+      isSending=false;
+      setStatus("");
+      updateButtons();
+      var phraseWords=getPhraseWords(p.text);
+      var heardList=[];
+      if(data&&typeof data.length!=="undefined"){}
+      if(data&&Array.isArray(data.words)){heardList=data.words;}
+      var res=scoreAttempt(phraseWords,heardList);
+      var transcript="";
+      if(data&&typeof data.transcript==="string"){transcript=data.transcript;}
+      else{
+        var parts=[];
+        for(var i=0;i<heardList.length;i++){
+          try{
+            var w=heardList[i]&&heardList[i].word!=null?String(heardList[i].word):"";
+            if(w){parts.push(w);}
+          }catch(e){}
+        }
+        transcript=parts.join(" ");
+      }
+      renderResults(phraseWords,res.colours,res.score,transcript);
+      hideMessage();
+      var prev=best[p.id];
+      if(typeof prev!=="number"||res.score>prev){
+        best[p.id]=res.score;
+        saveBest();
+        updateBestDisplays();
+      }
+      return null;
+    },function(){
+      isSending=false;
+      setStatus("");
+      updateButtons();
+      clearResults();
+      showMessage("Sorry, the listening service sent an unexpected reply. Please try again.");
+      return null;
+    });
+  }).catch(function(err){
+    if(timeoutId){clearTimeout(timeoutId);}
+    isSending=false;
+    setStatus("");
+    updateButtons();
+    clearResults();
+    var name="";
+    try{name=err&&err.name?String(err.name):"";}catch(e){}
+    if(name==="AbortError"||didTimeout){
+      showMessage("Sorry, it is taking too long. Please try again.");
+    }else{
+      showMessage("Sorry, the listening service could not be reached. Please check your connection and try again.");
+    }
+  });
+}
+listenBtn.addEventListener("click",function(){
+  hideMessage();
+  var p=getPhrase(currentId);
+  try{
+    if(!("speechSynthesis" in window)){
+      showMessage("Sorry, your browser cannot play speech aloud. Please try Chrome, Edge or Safari.");
+      return;
+    }
+    if(typeof SpeechSynthesisUtterance==="undefined"){
+      showMessage("Sorry, your browser cannot play speech aloud. Please try Chrome, Edge or Safari.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(p.text);
+    u.lang=p.language;
+    window.speechSynthesis.speak(u);
+  }catch(e){
+    showMessage("Sorry, something went wrong playing the phrase. Please try again.");
+  }
+});
+recordBtn.addEventListener("click",function(){
+  if(isRecording||isSending){return;}
+  hideMessage();
+  clearResults();
+  setStatus("");
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    showMessage("Recording is not supported in this browser. Please try a recent version of Chrome or Safari on your phone or laptop.");
+    return;
+  }
+  if(typeof MediaRecorder==="undefined"){
+    showMessage("Recording is not supported in this browser. Please try a recent version of Chrome, Edge, Firefox or Safari.");
+    return;
+  }
+  setStatus("Asking for the microphone...");
+  updateButtons();
+  recordBtn.disabled=true;
+  stopBtn.disabled=true;
+  listenBtn.disabled=true;
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    activeStream=stream;
+    audioChunks=[];
+    try{
+      mediaRecorder=new MediaRecorder(stream);
+    }catch(e){
+      stopTracks();
+      setStatus("");
+      updateButtons();
+      showMessage("Recording is not supported in this browser. Please try a recent version of Chrome, Edge, Firefox or Safari.");
+      return;
+    }
+    mediaRecorder.ondataavailable=function(e){
+      try{if(e.data&&e.data.size>0){audioChunks.push(e.data);}}catch(err){}
+    };
+    mediaRecorder.onstop=function(){handleRecordingStop();};
+    try{
+      mediaRecorder.start();
+    }catch(e){
+      stopTracks();
+      setStatus("");
+      updateButtons();
+      showMessage("Could not start recording. Please try again.");
+      return;
+    }
+    isRecording=true;
+    setStatus("Recording... Press Stop recording when you finish.");
+    updateButtons();
+  }).catch(function(err){
+    setStatus("");
+    updateButtons();
+    var name="";
+    try{name=err&&err.name?String(err.name):"";}catch(e){}
+    if(name==="NotAllowedError"||name==="SecurityError"){
+      showMessage("Microphone is blocked. To allow it: tap the lock or tune icon in the address bar, allow the microphone for this page, then press Record again.");
+    }else if(name==="NotFoundError"||name==="OverconstrainedError"){
+      showMessage("No microphone was found. Please check your device has a microphone connected, then try again.");
+    }else if(name==="NotReadableError"){
+      showMessage("Your microphone is being used by another app. Please close it and try again.");
+    }else{
+      showMessage("Could not use the microphone. Please check your microphone settings and try again.");
+    }
+  });
+});
+stopBtn.addEventListener("click",function(){
+  if(!isRecording||!mediaRecorder){return;}
+  try{
+    if(mediaRecorder.state!=="inactive"){mediaRecorder.stop();}
+    else{handleRecordingStop();}
+  }catch(e){
+    try{handleRecordingStop();}catch(err){}
+  }
+  setStatus("Finishing recording...");
+  stopBtn.disabled=true;
+});
+renderPhraseList();
+selectPhrase(currentId);
+})();
+</script>
+</body>
+</html>

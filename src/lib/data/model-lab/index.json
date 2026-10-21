@@ -1,0 +1,584 @@
+{
+ "labs": [
+  {
+   "sp": "research",
+   "sp_name": "Research",
+   "headline": "Which AI is best at research?",
+   "ask": "Which fact-check would you trust?",
+   "sig_title": "Fact-check the CEO",
+   "best": {
+    "name": "Claude Opus 5.5",
+    "level": "medium",
+    "maker": "Anthropic",
+    "score": 94,
+    "cost": "38p",
+    "basics": 4,
+    "n": 4
+   },
+   "value": {
+    "name": "Claude Sonnet 5.5",
+    "level": "low",
+    "maker": "Anthropic",
+    "score": 88,
+    "cost": "14p",
+    "basics": 4,
+    "n": 4
+   },
+   "count": 34,
+   "tasks": 4,
+   "tested_from": "2026-10-02",
+   "tested_to": "2026-10-21"
+  },
+  {
+   "sp": "content",
+   "sp_name": "Content",
+   "headline": "Which AI makes the best content?",
+   "ask": "Which post would you publish?",
+   "sig_title": "The bakery post",
+   "best": {
+    "name": "Claude Opus 5.5",
+    "level": "max",
+    "maker": "Anthropic",
+    "score": 96,
+    "cost": "£3.42",
+    "basics": 4,
+    "n": 4
+   },
+   "value": {
+    "name": "GLM-5.3 Flash",
+    "level": "max",
+    "maker": "Z.ai",
+    "score": 88,
+    "cost": "under 1p",
+    "basics": 4,
+    "n": 4
+   },
+   "count": 34,
+   "tasks": 4,
+   "tested_from": "2026-10-02",
+   "tested_to": "2026-10-21"
+  },
+  {
+   "sp": "thinking",
+   "sp_name": "Thinking",
+   "headline": "Which AI is best at thinking a problem through?",
+   "ask": "Which plan would you take to the board?",
+   "sig_title": "The four-day week pilot",
+   "best": {
+    "name": "Claude Sonnet 5.5",
+    "level": "xhigh",
+    "maker": "Anthropic",
+    "score": 96,
+    "cost": "39p",
+    "basics": 4,
+    "n": 4
+   },
+   "value": {
+    "name": "GPT-6 Luna",
+    "level": "max",
+    "maker": "OpenAI",
+    "score": 89,
+    "cost": "1p",
+    "basics": 4,
+    "n": 4
+   },
+   "count": 34,
+   "tasks": 4,
+   "tested_from": "2026-10-02",
+   "tested_to": "2026-10-21"
+  },
+  {
+   "sp": "building",
+   "sp_name": "Building",
+   "headline": "Which AI builds the best working tool?",
+   "ask": "Which coach would you use?",
+   "sig_title": "The pronunciation coach",
+   "best": {
+    "name": "Claude Opus 5.5",
+    "level": "medium",
+    "maker": "Anthropic",
+    "score": 98,
+    "cost": "46p",
+    "basics": 4,
+    "n": 4
+   },
+   "value": {
+    "name": "Claude Haiku 5.5",
+    "level": "standard",
+    "maker": "Anthropic",
+    "score": 91,
+    "cost": "3p",
+    "basics": 4,
+    "n": 4
+   },
+   "count": 34,
+   "tasks": 4,
+   "tested_from": "2026-10-02",
+   "tested_to": "2026-10-21"
+  },
+  {
+   "sp": "data",
+   "sp_name": "Data",
+   "headline": "Which AI is best with spreadsheets and data?",
+   "ask": "Which report would you send to the board?",
+   "sig_title": "The gender pay gap report",
+   "best": {
+    "name": "GPT-6.1 Sol",
+    "level": "max",
+    "maker": "OpenAI",
+    "score": 99,
+    "cost": "22p",
+    "basics": 5,
+    "n": 5
+   },
+   "value": {
+    "name": "GPT-6 Luna",
+    "level": "max",
+    "maker": "OpenAI",
+    "score": 91,
+    "cost": "2p",
+    "basics": 5,
+    "n": 5
+   },
+   "count": 34,
+   "tasks": 5,
+   "tested_from": "2026-10-02",
+   "tested_to": "2026-10-21"
+  },
+  {
+   "sp": "automation",
+   "sp_name": "Automation",
+   "headline": "Which AI can you trust to act for you?",
+   "ask": "Whose week would you trust?",
+   "sig_title": "Clear my week",
+   "best": {
+    "name": "Claude Opus 5.5",
+    "level": "xhigh",
+    "maker": "Anthropic",
+    "score": 98,
+    "cost": "91p",
+    "basics": 4,
+    "n": 4
+   },
+   "value": {
+    "name": "GPT-6 Luna",
+    "level": "max",
+    "maker": "OpenAI",
+    "score": 94,
+    "cost": "2p",
+    "basics": 4,
+    "n": 4
+   },
+   "count": 34,
+   "tasks": 4,
+   "tested_from": "2026-10-02",
+   "tested_to": "2026-10-21"
+  }
+ ],
+ "tested_from": "2026-10-02",
+ "tested_to": "2026-10-21",
+ "model_count": 21,
+ "setup_count": 34,
+ "p_per_usd": 75,
+ "cost_chart": {
+  "tasks": 25,
+  "rows": [
+   {
+    "setup": "fable-5.1_max",
+    "name": "Claude Fable 5.1",
+    "level": "max",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 85.4623,
+    "cost": "£85.46",
+    "score": 94,
+    "tasks_run": 24
+   },
+   {
+    "setup": "opus-5.5_max",
+    "name": "Claude Opus 5.5",
+    "level": "max",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 67.7316,
+    "cost": "£67.73",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "sonnet-5.5_max",
+    "name": "Claude Sonnet 5.5",
+    "level": "max",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 49.1015,
+    "cost": "£49.10",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "fable-5.1_high",
+    "name": "Claude Fable 5.1",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 33.3407,
+    "cost": "£33.34",
+    "score": 93,
+    "tasks_run": 24
+   },
+   {
+    "setup": "opus-5.5_xhigh",
+    "name": "Claude Opus 5.5",
+    "level": "xhigh",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 30.4036,
+    "cost": "£30.40",
+    "score": 95,
+    "tasks_run": 25
+   },
+   {
+    "setup": "grok-4.7_high",
+    "name": "Grok 4.7",
+    "level": "high",
+    "maker": "xAI",
+    "premium": false,
+    "cost_gbp": 28.5685,
+    "cost": "£28.57",
+    "score": 84,
+    "tasks_run": 25
+   },
+   {
+    "setup": "sonnet-5.5_xhigh",
+    "name": "Claude Sonnet 5.5",
+    "level": "xhigh",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 14.7647,
+    "cost": "£14.76",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "opus-5.5_high",
+    "name": "Claude Opus 5.5",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 13.0948,
+    "cost": "£13.09",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-3.8-flash_high",
+    "name": "Gemini 3.8 Flash",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 12.7302,
+    "cost": "£12.73",
+    "score": 88,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-4-argon_high",
+    "name": "Gemini 4 Argon",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 11.8255,
+    "cost": "£11.83",
+    "score": 79,
+    "tasks_run": 25
+   },
+   {
+    "setup": "kimi-k3_max",
+    "name": "Kimi K3",
+    "level": "max",
+    "maker": "Moonshot AI",
+    "premium": false,
+    "cost_gbp": 11.0228,
+    "cost": "£11.02",
+    "score": 91,
+    "tasks_run": 25
+   },
+   {
+    "setup": "qwen3.8-max-0902_xhigh",
+    "name": "Qwen 3.8 Max",
+    "level": "xhigh",
+    "maker": "Alibaba",
+    "premium": false,
+    "cost_gbp": 10.5142,
+    "cost": "£10.51",
+    "score": 87,
+    "tasks_run": 25
+   },
+   {
+    "setup": "mistral-large-4_high",
+    "name": "Mistral Large 4",
+    "level": "high",
+    "maker": "Mistral AI",
+    "premium": false,
+    "cost_gbp": 10.0131,
+    "cost": "£10.01",
+    "score": 80,
+    "tasks_run": 25
+   },
+   {
+    "setup": "opus-5.5_medium",
+    "name": "Claude Opus 5.5",
+    "level": "medium",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 9.735,
+    "cost": "£9.74",
+    "score": 93,
+    "tasks_run": 25
+   },
+   {
+    "setup": "grok-4.6_high",
+    "name": "Grok 4.6",
+    "level": "high",
+    "maker": "xAI",
+    "premium": false,
+    "cost_gbp": 9.1695,
+    "cost": "£9.17",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "muse-spark-1.3_max",
+    "name": "Muse Spark 1.3",
+    "level": "max",
+    "maker": "Meta",
+    "premium": false,
+    "cost_gbp": 6.5706,
+    "cost": "£6.57",
+    "score": 93,
+    "tasks_run": 25
+   },
+   {
+    "setup": "opus-5.5_low",
+    "name": "Claude Opus 5.5",
+    "level": "low",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 5.996,
+    "cost": "£6.00",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "sonnet-5.5_high",
+    "name": "Claude Sonnet 5.5",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 5.9075,
+    "cost": "£5.91",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6.1-sol_max",
+    "name": "GPT-6.1 Sol",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 5.4363,
+    "cost": "£5.44",
+    "score": 95,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6.1-sol_xhigh",
+    "name": "GPT-6.1 Sol",
+    "level": "xhigh",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 4.6669,
+    "cost": "£4.67",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "sonnet-5.5_medium",
+    "name": "Claude Sonnet 5.5",
+    "level": "medium",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 3.9528,
+    "cost": "£3.95",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "glm-5.3_max",
+    "name": "GLM-5.3",
+    "level": "max",
+    "maker": "Z.ai",
+    "premium": false,
+    "cost_gbp": 3.7245,
+    "cost": "£3.72",
+    "score": 82,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-3.6-flash_low",
+    "name": "Gemini 3.6 Flash",
+    "level": "low",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 3.6937,
+    "cost": "£3.69",
+    "score": 81,
+    "tasks_run": 25
+   },
+   {
+    "setup": "haiku-4.5_default",
+    "name": "Claude Haiku 4.5",
+    "level": "standard",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 3.2822,
+    "cost": "£3.28",
+    "score": 67,
+    "tasks_run": 25
+   },
+   {
+    "setup": "sonnet-5.5_low",
+    "name": "Claude Sonnet 5.5",
+    "level": "low",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 3.2727,
+    "cost": "£3.27",
+    "score": 88,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6.1-sol_high",
+    "name": "GPT-6.1 Sol",
+    "level": "high",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 3.2676,
+    "cost": "£3.27",
+    "score": 93,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6.1-sol_medium",
+    "name": "GPT-6.1 Sol",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 2.2345,
+    "cost": "£2.23",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "deepseek-v4.1-flash_max",
+    "name": "DeepSeek V4.1 Flash",
+    "level": "max",
+    "maker": "DeepSeek",
+    "premium": false,
+    "cost_gbp": 2.1006,
+    "cost": "£2.10",
+    "score": 93,
+    "tasks_run": 25
+   },
+   {
+    "setup": "minimax-m3_default",
+    "name": "MiniMax M3",
+    "level": "standard",
+    "maker": "MiniMax",
+    "premium": false,
+    "cost_gbp": 1.7906,
+    "cost": "£1.79",
+    "score": 84,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6.1-sol_low",
+    "name": "GPT-6.1 Sol",
+    "level": "low",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 1.6801,
+    "cost": "£1.68",
+    "score": 91,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-3.5-flash-lite_default",
+    "name": "Gemini 3.5 Flash-Lite",
+    "level": "standard",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 0.9585,
+    "cost": "96p",
+    "score": 71,
+    "tasks_run": 25
+   },
+   {
+    "setup": "mimo-v2.6-pro_default",
+    "name": "MiMo v2.6 Pro",
+    "level": "standard",
+    "maker": "Xiaomi",
+    "premium": false,
+    "cost_gbp": 0.7045,
+    "cost": "70p",
+    "score": 87,
+    "tasks_run": 25
+   },
+   {
+    "setup": "haiku-5.5_default",
+    "name": "Claude Haiku 5.5",
+    "level": "standard",
+    "maker": "Anthropic",
+    "premium": false,
+    "cost_gbp": 0.6382,
+    "cost": "64p",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6-luna_max",
+    "name": "GPT-6 Luna",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.3769,
+    "cost": "38p",
+    "score": 89,
+    "tasks_run": 25
+   },
+   {
+    "setup": "glm-5.3-flash_max",
+    "name": "GLM-5.3 Flash",
+    "level": "max",
+    "maker": "Z.ai",
+    "premium": false,
+    "cost_gbp": 0.2835,
+    "cost": "28p",
+    "score": 81,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6-luna_medium",
+    "name": "GPT-6 Luna",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.0969,
+    "cost": "10p",
+    "score": 78,
+    "tasks_run": 25
+   }
+  ]
+ }
+}

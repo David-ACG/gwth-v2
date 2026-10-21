@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" font-family="Arial, Helvetica, sans-serif" role="img" aria-labelledby="t d">
+<title id="t">Women and men in each pay quartile, 5 April 2026</title>
+<desc id="d">Percentage of women and men in each of four pay quartiles. Lower quartile: women 77.4%, men 22.6%; Lower middle: women 71.0%, men 29.0%; Upper middle: women 74.2%, men 25.8%; Upper quartile: women 53.2%, men 46.8%.</desc>
+<rect width="900" height="560" fill="#ffffff"/>
+<text x="90" y="38" font-size="22" font-weight="bold" fill="#222">Women and men in each pay quartile</text>
+<text x="90" y="62" font-size="14" fill="#444">Full-pay relevant employees at 5 April 2026 (248 people, 62 in each quartile). Quartile 1 is the lowest paid.</text>
+<rect x="90" y="78" width="14" height="14" fill="#7b3294"/>
+<text x="110" y="90" font-size="14" fill="#222">Women</text>
+<rect x="180" y="78" width="14" height="14" fill="#1b7f9e"/>
+<text x="200" y="90" font-size="14" fill="#222">Men</text>
+<line x1="90" y1="470.0" x2="860" y2="470.0" stroke="#d9d9d9" stroke-width="1"/>
+<text x="80" y="475.0" font-size="13" text-anchor="end" fill="#444">0%</text>
+<line x1="90" y1="398.0" x2="860" y2="398.0" stroke="#d9d9d9" stroke-width="1"/>
+<text x="80" y="403.0" font-size="13" text-anchor="end" fill="#444">20%</text>
+<line x1="90" y1="326.0" x2="860" y2="326.0" stroke="#d9d9d9" stroke-width="1"/>
+<text x="80" y="331.0" font-size="13" text-anchor="end" fill="#444">40%</text>
+<line x1="90" y1="254.0" x2="860" y2="254.0" stroke="#d9d9d9" stroke-width="1"/>
+<text x="80" y="259.0" font-size="13" text-anchor="end" fill="#444">60%</text>
+<line x1="90" y1="182.0" x2="860" y2="182.0" stroke="#d9d9d9" stroke-width="1"/>
+<text x="80" y="187.0" font-size="13" text-anchor="end" fill="#444">80%</text>
+<line x1="90" y1="110.0" x2="860" y2="110.0" stroke="#d9d9d9" stroke-width="1"/>
+<text x="80" y="115.0" font-size="13" text-anchor="end" fill="#444">100%</text>
+<text x="22" y="290.0" font-size="13" fill="#444" text-anchor="middle" transform="rotate(-90 22 290.0)">Share of people in the quartile</text>
+<rect x="130.4" y="110.0" width="111.6" height="81.3" fill="#1b7f9e"/>
+<rect x="130.4" y="191.3" width="111.6" height="278.7" fill="#7b3294"/>
+<text x="186.2" y="156.6" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">22.6%</text>
+<text x="186.2" y="336.6" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">77.4%</text>
+<text x="186.2" y="494" font-size="14" text-anchor="middle" fill="#222">Lower quartile</text>
+<text x="186.2" y="512" font-size="12" text-anchor="middle" fill="#555">(quartile 1)</text>
+<rect x="322.9" y="110.0" width="111.6" height="104.5" fill="#1b7f9e"/>
+<rect x="322.9" y="214.5" width="111.6" height="255.5" fill="#7b3294"/>
+<text x="378.8" y="168.3" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">29.0%</text>
+<text x="378.8" y="348.3" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">71.0%</text>
+<text x="378.8" y="494" font-size="14" text-anchor="middle" fill="#222">Lower middle</text>
+<text x="378.8" y="512" font-size="12" text-anchor="middle" fill="#555">(quartile 2)</text>
+<rect x="515.4" y="110.0" width="111.6" height="92.9" fill="#1b7f9e"/>
+<rect x="515.4" y="202.9" width="111.6" height="267.1" fill="#7b3294"/>
+<text x="571.2" y="162.5" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">25.8%</text>
+<text x="571.2" y="342.5" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">74.2%</text>
+<text x="571.2" y="494" font-size="14" text-anchor="middle" fill="#222">Upper middle</text>
+<text x="571.2" y="512" font-size="12" text-anchor="middle" fill="#555">(quartile 3)</text>
+<rect x="707.9" y="110.0" width="111.6" height="168.4" fill="#1b7f9e"/>
+<rect x="707.9" y="278.4" width="111.6" height="191.6" fill="#7b3294"/>
+<text x="763.8" y="200.2" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">46.8%</text>
+<text x="763.8" y="380.2" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">53.2%</text>
+<text x="763.8" y="494" font-size="14" text-anchor="middle" fill="#222">Upper quartile</text>
+<text x="763.8" y="512" font-size="12" text-anchor="middle" fill="#555">(quartile 4)</text>
+<text x="90" y="542" font-size="12" fill="#555">Source: April 2026 payroll run and HR records. Excludes agency workers and staff not on full pay in April 2026.</text>
+</svg>

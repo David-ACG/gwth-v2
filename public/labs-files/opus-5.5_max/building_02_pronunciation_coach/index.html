@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Safety net for IT's rule 2: the browser refuses any connection except to this page's own server (/api/listen). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#083a50">
+<title>Pronunciation coach – Harbour &amp; Vale</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #17212b;
+    --muted: #55606e;
+    --line: #d5dbe3;
+    --page: #eef2f6;
+    --card: #ffffff;
+    --brand: #0b4f6c;
+    --brand-deep: #083a50;
+    --brand-soft: #e3eff5;
+    --record: #b42318;
+    --stop: #1f2a37;
+    --green: #1d7a3a;  --green-bg: #e2f4e7;  --green-ink: #0f4a23;
+    --amber: #a85d00;  --amber-bg: #fff1d1;  --amber-ink: #5f3500;
+    --red: #b42318;    --red-bg: #fde5e3;    --red-ink: #7a150e;
+    --focus: #f59e0b;
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 4px 16px rgba(16, 24, 40, .06);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--page);
+    overflow-wrap: break-word;
+  }
+  h1, h2, h3, p { margin: 0; }
+  h1, h2, h3 { line-height: 1.25; }
+  button { font: inherit; }
+  [hidden] { display: none !important; }
+  .vh {
+    position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+    overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+  }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+  /* Header */
+  .site-header { background: linear-gradient(135deg, var(--brand-deep), var(--brand)); color: #fff; }
+  .site-header-inner { max-width: 72rem; margin: 0 auto; padding: 1rem .75rem 1.25rem; }
+  .brand { display: flex; align-items: center; gap: .5rem; font-size: .85rem; font-weight: 700; letter-spacing: .02em; }
+  .brand svg { width: 1.75rem; height: 1.75rem; flex: none; }
+  .site-header h1 { margin-top: .6rem; font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.1rem); }
+  .intro { margin-top: .3rem; max-width: 40rem; color: #d7e7f0; }
+  .how { display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0 0; padding: 0; list-style: none; counter-reset: how; }
+  .how li {
+    counter-increment: how; display: flex; align-items: center; gap: .4rem;
+    padding: .2rem .7rem .2rem .25rem; border-radius: 999px; background: rgba(255, 255, 255, .13); font-size: .85rem;
+  }
+  .how li::before {
+    content: counter(how); display: inline-grid; place-items: center; width: 1.35rem; height: 1.35rem;
+    border-radius: 50%; background: #fff; color: var(--brand); font-size: .75rem; font-weight: 800;
+  }
+
+  /* Layout: one column on phones, list and practice side by side on wider screens */
+  .layout { max-width: 72rem; margin: 0 auto; padding: .75rem; display: grid; gap: .75rem; }
+  .card { min-width: 0; padding: 1rem; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); }
+  @media (min-width: 600px) { .card { padding: 1.25rem 1.5rem; } }
+  @media (min-width: 900px) {
+    .layout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; gap: 1.25rem; padding: 1.25rem; }
+  }
+  .card-title { font-size: 1.25rem; }
+  .card-sub { margin-top: .2rem; color: var(--muted); font-size: .9rem; }
+
+  /* Phrase list */
+  .group-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem .75rem; margin: 1.1rem 0 .5rem; }
+  .group-title { display: flex; align-items: center; gap: .45rem; font-size: 1rem; }
+  .lang-badge, .target-lang {
+    display: inline-block; padding: .1rem .45rem; border-radius: 6px; background: var(--brand); color: #fff;
+    font-size: .7rem; font-weight: 800; letter-spacing: .06em;
+  }
+  .group-progress { color: var(--muted); font-size: .85rem; }
+  .phrase-list { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+  .phrase {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .75rem;
+    width: 100%; min-height: 3.25rem; padding: .7rem .85rem; border: 2px solid var(--line); border-radius: 12px;
+    background: #fff; color: inherit; text-align: left; cursor: pointer; touch-action: manipulation;
+  }
+  .phrase:hover { border-color: #9fb3c3; }
+  .phrase[aria-current="true"] { border-color: var(--brand); background: var(--brand-soft); box-shadow: inset 5px 0 0 var(--brand); }
+  .phrase-main { display: grid; gap: .1rem; min-width: 0; }
+  .phrase-text { font-weight: 650; }
+  .phrase-english { color: var(--muted); font-size: .875rem; }
+  .phrase-best { display: grid; justify-items: end; gap: .3rem; color: var(--muted); font-size: .8rem; text-align: right; }
+  .best-score { white-space: nowrap; }
+  .best-num { color: var(--ink); font-size: 1.15rem; font-weight: 750; }
+  .best-none { white-space: nowrap; }
+  .best-bar { display: block; width: 3.25rem; height: 5px; overflow: hidden; border-radius: 99px; background: var(--line); }
+  .best-fill { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--red); }
+  .best-fill[data-band="amber"] { background: var(--amber); }
+  .best-fill[data-band="green"] { background: var(--green); }
+  .phrase-best.is-empty .best-score, .phrase-best.is-empty .best-bar { display: none; }
+  .phrase-best:not(.is-empty) .best-none { display: none; }
+  .note {
+    margin-top: .75rem; padding: .6rem .75rem; border: 1px solid #f0c36d; border-radius: 10px;
+    background: #fff7e6; color: var(--amber-ink); font-size: .9rem;
+  }
+
+  /* Practice panel */
+  .practice, .result { scroll-margin-top: .75rem; }
+  .practice-empty { margin-top: .5rem; color: var(--muted); }
+  .target-lang { margin-top: .75rem; }
+  .target {
+    margin: .45rem 0 .3rem; font-size: clamp(1.5rem, 1.15rem + 2vw, 2.25rem); font-weight: 750;
+    line-height: 1.2; letter-spacing: -.01em;
+  }
+  .target:focus:not(:focus-visible) { outline: none; }
+  .target-english { color: var(--muted); }
+  .target-best { margin-top: .4rem; font-size: .9rem; }
+  .step { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+  .step-title { display: flex; align-items: center; gap: .55rem; margin-bottom: .7rem; font-size: 1.05rem; }
+  .step-title:focus:not(:focus-visible) { outline: none; }
+  .step-num {
+    display: inline-grid; place-items: center; flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%;
+    background: var(--brand); color: #fff; font-size: .85rem; font-weight: 800;
+  }
+  .btn-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .btn-row .btn { flex: 1 1 auto; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem; max-width: 100%; min-height: 3rem;
+    padding: .7rem 1rem; border: 2px solid transparent; border-radius: 999px; font-weight: 650; line-height: 1.2;
+    text-align: center; cursor: pointer; touch-action: manipulation;
+  }
+  .btn svg { flex: none; width: 1.25rem; height: 1.25rem; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:not(:disabled):hover { background: var(--brand-deep); }
+  .btn-secondary { border-color: var(--brand); background: #fff; color: var(--brand); }
+  .btn-secondary:not(:disabled):hover { background: var(--brand-soft); }
+  .btn-record, .btn-stop { width: 100%; min-height: 3.5rem; font-size: 1.1rem; }
+  .btn-record { background: var(--record); color: #fff; }
+  .btn-stop { background: var(--stop); color: #fff; }
+  .hint { margin-top: .5rem; color: var(--muted); font-size: .85rem; }
+  .rec-indicator { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .5rem; margin-top: .7rem; }
+  .rec-live { display: inline-flex; align-items: center; gap: .45rem; color: var(--record); font-weight: 700; }
+  .rec-dot { width: .8rem; height: .8rem; border-radius: 50%; background: var(--record); animation: pulse 1.2s ease-in-out infinite; }
+  .rec-help { color: var(--muted); font-size: .85rem; }
+  @keyframes pulse { 50% { opacity: .3; transform: scale(.8); } }
+  .status { margin-top: .6rem; color: var(--muted); }
+  .status:empty { margin-top: 0; }
+  .status.is-checking { display: flex; align-items: center; gap: .55rem; color: var(--ink); font-weight: 600; }
+  .status.is-checking::before {
+    content: ""; flex: none; width: 1.1rem; height: 1.1rem; border: 3px solid var(--line); border-top-color: var(--brand);
+    border-radius: 50%; animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .message {
+    margin-top: .9rem; padding: .75rem 1rem; border: 2px solid #e8a33d; border-radius: 12px;
+    background: #fff4e5; color: #4a2a00;
+  }
+
+  /* Result */
+  .result { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+  .score-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+  .score-ring {
+    --p: 0; --ring: var(--red);
+    display: grid; place-content: center; flex: none; width: 7.5rem; height: 7.5rem; border-radius: 50%; text-align: center;
+    background: radial-gradient(closest-side, #fff 79%, transparent 80% 100%), conic-gradient(var(--ring) calc(var(--p) * 1%), #e6eaef 0);
+  }
+  .score-ring[data-band="amber"] { --ring: var(--amber); }
+  .score-ring[data-band="green"] { --ring: var(--green); }
+  .score-num { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+  .score-of { color: var(--muted); font-size: .78rem; }
+  .score-text { flex: 1 1 10rem; min-width: 0; }
+  .score-comment { font-size: 1.05rem; font-weight: 650; }
+  .score-best { margin-top: .25rem; color: var(--muted); font-size: .9rem; }
+  .mini-label { margin-top: 1rem; color: var(--muted); font-size: .85rem; font-weight: 600; }
+  .words { display: flex; flex-wrap: wrap; gap: .5rem; margin: .4rem 0 0; padding: 0; list-style: none; }
+  .chip {
+    display: flex; flex-direction: column; align-items: center; min-width: 3rem; max-width: 100%;
+    padding: .35rem .65rem .3rem; border: 2px solid; border-radius: 10px;
+  }
+  .chip-word { font-size: 1.15rem; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+  .chip-label { font-size: .72rem; font-weight: 650; }
+  .chip--green { border-color: var(--green); background: var(--green-bg); color: var(--green-ink); }
+  .chip--amber { border-color: var(--amber); background: var(--amber-bg); color: var(--amber-ink); }
+  .chip--red { border-color: var(--red); background: var(--red-bg); color: var(--red-ink); }
+  .chip--missed { border-style: dashed; }
+  .piece { align-self: flex-start; padding-top: .45rem; color: var(--muted); font-size: 1.15rem; font-weight: 700; }
+  .heard { font-size: 1.05rem; overflow-wrap: anywhere; }
+  .heard:not(.is-empty)::before { content: "“"; }
+  .heard:not(.is-empty)::after { content: "”"; }
+  .heard.is-empty { color: var(--muted); font-style: italic; }
+  .extras { margin-top: .5rem; color: var(--red-ink); font-size: .9rem; }
+  .working { margin-top: 1rem; padding: .6rem .85rem; border: 1px solid var(--line); border-radius: 12px; }
+  .working summary { color: var(--brand); font-weight: 650; cursor: pointer; }
+  .working-body { display: grid; gap: .5rem; margin-top: .6rem; font-size: .9rem; }
+  .working-words { margin: 0; padding-left: 1.2rem; }
+  .working-key { color: var(--muted); }
+  .try-again { margin-top: 1rem; color: var(--muted); font-size: .9rem; }
+  .back { margin-top: 1.25rem; }
+  .link-btn {
+    padding: .5rem 0; border: 0; background: none; color: var(--brand); font-weight: 650;
+    text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+  }
+  @media (min-width: 900px) { .back { display: none; } }
+
+  .site-footer { max-width: 72rem; margin: 0 auto; padding: .25rem .75rem 2rem; color: var(--muted); font-size: .85rem; }
+  @media (min-width: 900px) { .site-footer { padding: .25rem 1.25rem 2rem; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <p class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="15" fill="#ffffff" fill-opacity=".14"/><path d="M8.5 13.5 16 8l7.5 5.5" fill="none" stroke="#9fd8f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 19.5c2.6 0 2.6-2.3 5.2-2.3s2.6 2.3 5.3 2.3 2.6-2.3 5.3-2.3 2.6 2.3 5.2 2.3" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      Harbour &amp; Vale Logistics
+    </p>
+    <h1>Pronunciation coach</h1>
+    <p class="intro">Practise everyday Spanish and French out loud, on your own, as often as you like.</p>
+    <ol class="how" aria-label="How it works">
+      <li>Choose a phrase</li>
+      <li>Listen to it</li>
+      <li>Record yourself</li>
+      <li>See how you did</li>
+    </ol>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="card phrases" id="phrases" aria-labelledby="phrases-title">
+    <h2 class="card-title" id="phrases-title">Choose a phrase</h2>
+    <p class="card-sub">Your best score for each phrase is kept on this device.</p>
+    <div id="phrase-groups"></div>
+    <p class="note" id="no-phrases" hidden>Sorry, the list of phrases couldn’t be loaded. Please let IT know.</p>
+    <noscript><p class="note">This page needs JavaScript switched on to work.</p></noscript>
+  </section>
+
+  <section class="card practice" id="practice" aria-labelledby="practice-title">
+    <h2 class="card-title" id="practice-title">Practise</h2>
+    <p class="practice-empty" id="practice-empty">Choose a phrase from the list to start practising.</p>
+
+    <div id="practice-body" hidden>
+      <p class="target-lang" id="target-lang"></p>
+      <p class="target" id="target" data-testid="target" tabindex="-1"></p>
+      <p class="target-english" id="target-english"></p>
+      <p class="target-best" id="target-best"></p>
+
+      <div class="step">
+        <h3 class="step-title"><span class="step-num" aria-hidden="true">1</span>Listen to the phrase</h3>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="listen" data-testid="listen">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Listen<span class="vh"> to the phrase</span></span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="listen-slow">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Listen slowly</span>
+          </button>
+        </div>
+        <p class="hint">Can’t hear anything? Turn the volume up, and check your phone isn’t on silent.</p>
+        <p class="note" id="voice-note" hidden></p>
+      </div>
+
+      <div class="step">
+        <h3 class="step-title"><span class="step-num" aria-hidden="true">2</span>Say it yourself</h3>
+        <button type="button" class="btn btn-record" id="record" data-testid="record">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Start recording</span>
+        </button>
+        <button type="button" class="btn btn-stop" id="stop" data-testid="stop" hidden disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
+          <span>Stop recording</span>
+        </button>
+        <p class="rec-indicator" id="rec-indicator" hidden>
+          <span class="rec-live"><span class="rec-dot" aria-hidden="true"></span>Recording <span id="rec-time">0:00</span></span>
+          <span class="rec-help">Say the phrase, then press Stop recording. (It stops by itself after 20 seconds.)</span>
+        </p>
+        <p class="status" id="status" role="status"></p>
+        <div aria-live="assertive" aria-atomic="true">
+          <p class="message" id="message" data-testid="message" hidden></p>
+        </div>
+      </div>
+
+      <section class="result" id="result" aria-labelledby="result-title" hidden>
+        <h3 class="step-title" id="result-title" tabindex="-1"><span class="step-num" aria-hidden="true">3</span>How you did</h3>
+        <div class="score-wrap">
+          <p class="score-ring" id="score-ring"><span class="score-num" id="score" data-testid="score"></span><span class="score-of">out of 100</span></p>
+          <div class="score-text">
+            <p class="score-comment" id="score-comment"></p>
+            <p class="score-best" id="score-best"></p>
+          </div>
+        </div>
+        <p class="mini-label" id="words-label">Word by word</p>
+        <ol class="words" id="words" aria-labelledby="words-label"></ol>
+        <p class="mini-label" id="heard-label">What the computer heard</p>
+        <p><span class="heard" id="heard" data-testid="heard"></span></p>
+        <p class="extras" id="extras" hidden></p>
+        <details class="working">
+          <summary>How this score was worked out</summary>
+          <div class="working-body" id="working"></div>
+        </details>
+        <p class="try-again">Try again as many times as you like. Only your best score is kept.</p>
+      </section>
+
+      <p class="back"><button type="button" class="link-btn" id="back"><span aria-hidden="true">↑ </span>Choose another phrase</button></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Privacy: this page doesn’t save your recordings. Each one is sent only to Harbour &amp; Vale’s own listening service to be checked. Only your best scores are kept, on this device.</p>
+</footer>
+
+<!-- The phrase list, exactly as in phrases.json. To change the phrases, replace everything between these two script tags. -->
+<script type="application/json" id="phrase-data">
+{
+  "phrases": [
+    {"id": "es_01", "language": "es-ES", "text": "Buenos días, ¿qué tal?", "english": "Good morning, how are you?"},
+    {"id": "es_02", "language": "es-ES", "text": "Me llamo Sam y trabajo en el almacén.", "english": "My name is Sam and I work in the warehouse."},
+    {"id": "es_03", "language": "es-ES", "text": "¿Dónde está la estación de tren?", "english": "Where is the train station?"},
+    {"id": "es_04", "language": "es-ES", "text": "El camión llega a las tres y media.", "english": "The lorry arrives at half past three."},
+    {"id": "es_05", "language": "es-ES", "text": "Me gustaría reservar una mesa para dos.", "english": "I would like to book a table for two."},
+    {"id": "es_06", "language": "es-ES", "text": "¿Puede repetirlo más despacio, por favor?", "english": "Can you repeat it more slowly, please?"},
+    {"id": "fr_01", "language": "fr-FR", "text": "Bonjour, je suis nouveau ici.", "english": "Hello, I am new here."},
+    {"id": "fr_02", "language": "fr-FR", "text": "Je voudrais un café, s'il vous plaît.", "english": "I would like a coffee, please."},
+    {"id": "fr_03", "language": "fr-FR", "text": "À quelle heure part le prochain train ?", "english": "What time does the next train leave?"},
+    {"id": "fr_04", "language": "fr-FR", "text": "Il fait très beau aujourd'hui.", "english": "The weather is lovely today."},
+    {"id": "fr_05", "language": "fr-FR", "text": "Le chargement est prêt à partir.", "english": "The load is ready to go."},
+    {"id": "fr_06", "language": "fr-FR", "text": "Pouvez-vous parler plus lentement ?", "english": "Can you speak more slowly?"}
+  ]
+}
+</script>
+
+<script>
+/*
+ * Carmen's rules for the colours and the score (scoring_rules.md), kept apart from the rest of the
+ * page so they are easy to check. Section numbers below refer to her document.
+ */
+const CoachScoring = (() => {
+  'use strict';
+
+  // §2: lower case, accents removed, all punctuation removed (including apostrophes, ¿ and ¡).
+  function plain(text) {
+    return String(text)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/\p{M}/gu, '')          // é → e, ñ → n, ç → c
+      .replace(/[^\p{L}\p{N}]/gu, ''); // s'il → sil, aujourd'hui → aujourdhui, ¿qué → que
+  }
+
+  // §1: a word is a piece of the phrase between spaces that still has a letter or number once
+  // punctuation is taken off. Other pieces (the lone "?" in the French phrases) are kept for
+  // display but are not words and get no number.
+  function splitPhrase(text) {
+    let number = 0;
+    return String(text).split(/\s+/).filter(Boolean).map((piece) => {
+      const cleaned = plain(piece);
+      return cleaned
+        ? { text: piece, plain: cleaned, isWord: true, number: ++number }
+        : { text: piece, plain: '', isWord: false, number: 0 };
+    });
+  }
+
+  // §3
+  function colourFor(matched, confidence) {
+    if (!matched) return 'red';
+    if (confidence >= 0.85) return 'green';
+    if (confidence >= 0.6) return 'amber';
+    return 'red';
+  }
+
+  // §2 to §4. `heard` is the service's list of {word, confidence}, in the order it heard them.
+  function score(phraseText, heard) {
+    const pieces = splitPhrase(phraseText);
+    const words = pieces.filter((piece) => piece.isWord);
+    // A heard "word" with no letters or numbers at all isn't a word under §1, so it is ignored.
+    const heardWords = heard
+      .map((item) => ({ word: String(item.word), plain: plain(item.word), confidence: item.confidence }))
+      .filter((item) => item.plain !== '');
+
+    // §2: for each phrase word in order, take the first equal heard word after the last match.
+    const used = heardWords.map(() => false);
+    let searchFrom = 0;
+    for (const word of words) {
+      word.matched = false;
+      word.confidence = 0;
+      for (let i = searchFrom; i < heardWords.length; i++) {
+        if (heardWords[i].plain === word.plain) {
+          word.matched = true;
+          word.confidence = heardWords[i].confidence;
+          used[i] = true;
+          searchFrom = i + 1;
+          break;
+        }
+      }
+      word.colour = colourFor(word.matched, word.confidence);
+    }
+    const extras = heardWords.filter((item, i) => !used[i]);
+
+    // §4, worked in whole billionths so that rounding matches pen and paper (no 84.4999… surprises).
+    const UNIT = 1e9;
+    const total = words.reduce((sum, word) => sum + Math.round(word.confidence * UNIT), 0);
+    const perPoint = words.length * (UNIT / 100);
+    const average = words.length ? total / perPoint : 0;                                  // average × 100
+    const rounded = words.length ? Math.floor((2 * total + perPoint) / (2 * perPoint)) : 0; // halves round up
+    const finalScore = Math.max(0, rounded - 5 * extras.length);
+
+    return { pieces, words, extras, heardCount: heardWords.length, average, rounded, score: finalScore };
+  }
+
+  return { plain, splitPhrase, colourFor, score };
+})();
+</script>
+
+<script>
+(() => {
+  'use strict';
+
+  // Tomasz's listening service lives on the same web address as this page.
+  const SERVICE_URL = '/api/listen';
+  const SERVICE_TIMEOUT_MS = 8000;
+  // A safety net in case someone forgets to press Stop; every phrase takes a few seconds to say.
+  const MAX_RECORDING_SECONDS = 20;
+  // Best scores only, for example {"es_03":72}. Recordings are never stored.
+  const STORAGE_KEY = 'hv-pronunciation-coach:best-scores';
+  const LANGUAGE_NAMES = { 'es-ES': 'Spanish (Spain)', 'fr-FR': 'French (France)' };
+  // Apple's "character" voices sound robotic, so a standard voice is preferred when there is a choice.
+  const CHARACTER_VOICE = /^(eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/i;
+
+  const MESSAGES = {
+    serviceProblem: 'Sorry, something went wrong while checking your recording. Please try again.',
+    unreachable: 'We couldn’t reach the listening service. Check your internet connection, then try again.',
+    tooSlow: 'This is taking too long, so we’ve stopped waiting. Please try again.',
+    recordingFailed: 'Something went wrong with the recording. Please try again.',
+    leftPage: 'Recording stopped because you left the page. Press Start recording to try again.',
+    insecure: 'Recording only works when this page is opened from a secure (https) web address. Please let IT know.',
+    cannotRecord: 'This browser can’t record your voice. Please open the page in an up-to-date Safari, Chrome, Edge or Firefox. (If you opened the link from inside another app, choose “Open in browser” first.)',
+    noMicrophone: 'We couldn’t find a microphone. On a laptop, plug in a headset with a microphone (or check the built-in one is switched on), then press Start recording again.',
+    microphoneBusy: 'Your microphone seems to be in use by another app, such as Teams or Zoom. Close that app or end the call, then press Start recording again.',
+    microphoneOther: 'We couldn’t start your microphone. Please reload the page and try again.',
+    cannotSpeak: 'Sorry, this browser can’t read phrases aloud. Please try an up-to-date Safari, Chrome or Edge.',
+    speechFailed: 'Sorry, the phrase couldn’t be played. Check your volume, then press Listen again.',
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const ui = {
+    phrasesCard: $('phrases'), groups: $('phrase-groups'), noPhrases: $('no-phrases'),
+    practice: $('practice'), practiceEmpty: $('practice-empty'), practiceBody: $('practice-body'),
+    targetLang: $('target-lang'), target: $('target'), targetEnglish: $('target-english'), targetBest: $('target-best'),
+    listen: $('listen'), listenSlow: $('listen-slow'), voiceNote: $('voice-note'),
+    record: $('record'), stop: $('stop'), recIndicator: $('rec-indicator'), recTime: $('rec-time'),
+    status: $('status'), message: $('message'),
+    result: $('result'), resultTitle: $('result-title'), scoreRing: $('score-ring'), score: $('score'),
+    scoreComment: $('score-comment'), scoreBest: $('score-best'), words: $('words'), heard: $('heard'),
+    extras: $('extras'), working: $('working'), back: $('back'),
+  };
+
+  let current = null;         // the chosen phrase
+  let state = 'idle';         // idle | starting | recording | checking
+  let attempt = 0;            // goes up whenever an attempt starts or is abandoned, so late answers are ignored
+  let recording = null;       // the recording in progress
+  let pending = null;         // the request waiting for the listening service
+  let spokenUtterance = null; // kept so the browser doesn't drop it part-way through
+  let storageWorks = true;
+
+  const phrases = readPhrases();
+  const best = readBestScores();
+  const phraseButtons = new Map(); // phrase id → its parts in the list
+  const groupProgress = new Map(); // language → "Tried 2 of 6" element
+
+  /* ---------- Phrases ---------- */
+
+  function readPhrases() {
+    try {
+      const data = JSON.parse($('phrase-data').textContent);
+      const list = data && Array.isArray(data.phrases) ? data.phrases : [];
+      return list.filter((p) => p && typeof p.id === 'string' && p.id !== '' &&
+        typeof p.language === 'string' && p.language !== '' &&
+        typeof p.text === 'string' && p.text.trim() !== '');
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function languageName(code) {
+    if (LANGUAGE_NAMES[code]) return LANGUAGE_NAMES[code];
+    try {
+      return new Intl.DisplayNames(['en-GB'], { type: 'language' }).of(code) || code;
+    } catch (err) {
+      return code;
+    }
+  }
+
+  /* ---------- Best scores, on this device only ---------- */
+
+  function readBestScores() {
+    const scores = Object.create(null);
+    let raw = null;
+    try {
+      raw = window.localStorage.getItem(STORAGE_KEY);
+    } catch (err) {
+      storageWorks = false;
+    }
+    if (!raw) return scores;
+    try {
+      const saved = JSON.parse(raw);
+      if (saved && typeof saved === 'object' && !Array.isArray(saved)) {
+        for (const [id, value] of Object.entries(saved)) {
+          if (Number.isInteger(value) && value >= 0 && value <= 100) scores[id] = value;
+        }
+      }
+    } catch (err) {
+      // Unreadable: start afresh rather than show nonsense.
+    }
+    return scores;
+  }
+
+  function saveBestScores() {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(best));
+      storageWorks = true;
+    } catch (err) {
+      storageWorks = false;
+    }
+  }
+
+  function band(value) {
+    if (value >= 85) return 'green';
+    if (value >= 60) return 'amber';
+    return 'red';
+  }
+
+  /* ---------- The phrase list ---------- */
+
+  function el(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
+  }
+
+  function buildPhraseList() {
+    if (!phrases.length) {
+      ui.noPhrases.hidden = false;
+      return;
+    }
+    const byLanguage = new Map();
+    for (const phrase of phrases) {
+      if (!byLanguage.has(phrase.language)) byLanguage.set(phrase.language, []);
+      byLanguage.get(phrase.language).push(phrase);
+    }
+    let groupNumber = 0;
+    for (const [language, list] of byLanguage) {
+      const headingId = `phrase-group-${++groupNumber}`;
+      const head = el('div', 'group-head');
+      const heading = el('h3', 'group-title');
+      heading.id = headingId;
+      const badge = el('span', 'lang-badge', language.split('-')[0].toUpperCase());
+      badge.setAttribute('aria-hidden', 'true');
+      heading.append(badge, languageName(language));
+      const progress = el('p', 'group-progress');
+      groupProgress.set(language, progress);
+      head.append(heading, progress);
+
+      const listElement = el('ul', 'phrase-list');
+      listElement.setAttribute('aria-labelledby', headingId);
+      for (const phrase of list) listElement.append(buildPhraseButton(phrase));
+
+      const group = el('div', 'phrase-group');
+      group.append(head, listElement);
+      ui.groups.append(group);
+    }
+  }
+
+  function buildPhraseButton(phrase) {
+    const button = el('button', 'phrase');
+    button.type = 'button';
+    button.dataset.testid = `phrase-${phrase.id}`;
+
+    const main = el('span', 'phrase-main');
+    const text = el('span', 'phrase-text', phrase.text);
+    text.lang = phrase.language;
+    main.append(text);
+    if (typeof phrase.english === 'string' && phrase.english) main.append(el('span', 'phrase-english', phrase.english));
+
+    const bestWrap = el('span', 'phrase-best');
+    const bestNum = el('span', 'best-num');
+    bestNum.dataset.testid = `best-${phrase.id}`;
+    const bestScore = el('span', 'best-score');
+    bestScore.append(el('span', 'best-label', 'Best '), bestNum);
+    const bar = el('span', 'best-bar');
+    bar.setAttribute('aria-hidden', 'true');
+    const bestFill = el('span', 'best-fill');
+    bar.append(bestFill);
+    bestWrap.append(bestScore, el('span', 'best-none', 'Not tried yet'), bar);
+
+    button.append(main, bestWrap);
+    button.addEventListener('click', () => choosePhrase(phrase.id));
+    phraseButtons.set(phrase.id, { button, bestWrap, bestNum, bestFill });
+
+    const item = el('li');
+    item.append(button);
+    return item;
+  }
+
+  function renderBest(id) {
+    const parts = phraseButtons.get(id);
+    if (!parts) return;
+    const value = best[id];
+    const tried = Number.isInteger(value);
+    parts.bestNum.textContent = tried ? String(value) : '';
+    parts.bestWrap.classList.toggle('is-empty', !tried);
+    parts.bestFill.style.width = `${tried ? value : 0}%`;
+    parts.bestFill.dataset.band = tried ? band(value) : '';
+  }
+
+  function renderGroupProgress() {
+    for (const [language, element] of groupProgress) {
+      const list = phrases.filter((p) => p.language === language);
+      const tried = list.filter((p) => Number.isInteger(best[p.id])).length;
+      element.textContent = `Tried ${tried} of ${list.length}`;
+    }
+  }
+
+  function renderPanelBest() {
+    if (!current) return;
+    const value = best[current.id];
+    ui.targetBest.textContent = Number.isInteger(value)
+      ? `Your best so far: ${value} out of 100`
+      : 'Not tried yet. Have a go!';
+  }
+
+  function choosePhrase(id) {
+    const phrase = phrases.find((p) => p.id === id);
+    if (!phrase) return;
+    cancelAttempt();
+    stopSpeaking();
+    clearMessage();
+    hideResult();
+    ui.voiceNote.hidden = true;
+
+    current = phrase;
+    for (const [phraseId, parts] of phraseButtons) {
+      if (phraseId === id) parts.button.setAttribute('aria-current', 'true');
+      else parts.button.removeAttribute('aria-current');
+    }
+    ui.targetLang.textContent = languageName(phrase.language);
+    ui.target.textContent = phrase.text;
+    ui.target.lang = phrase.language;
+    ui.targetEnglish.textContent = typeof phrase.english === 'string' ? phrase.english : '';
+    ui.targetEnglish.hidden = !ui.targetEnglish.textContent;
+    renderPanelBest();
+    ui.practiceEmpty.hidden = true;
+    ui.practiceBody.hidden = false;
+    setState('idle');
+
+    bringIntoView(ui.practice);
+    ui.target.focus({ preventScroll: true });
+  }
+
+  function backToList() {
+    const parts = current && phraseButtons.get(current.id);
+    const destination = parts ? parts.button : ui.phrasesCard;
+    if (typeof destination.scrollIntoView === 'function') {
+      destination.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    }
+    if (parts) parts.button.focus({ preventScroll: true });
+  }
+
+  function prefersReducedMotion() {
+    return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function bringIntoView(element) {
+    if (typeof element.scrollIntoView !== 'function') return;
+    const top = element.getBoundingClientRect().top;
+    const height = window.innerHeight || document.documentElement.clientHeight || 0;
+    if (top >= 0 && top <= height * 0.5) return; // already comfortably in view
+    element.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  /* ---------- Buttons, status and messages ---------- */
+
+  function setState(next) {
+    state = next;
+    const ready = Boolean(current);
+    ui.listen.disabled = ui.listenSlow.disabled = !ready || next === 'starting' || next === 'recording';
+    ui.record.disabled = !ready || next !== 'idle';
+    ui.record.hidden = next === 'recording';
+    ui.stop.disabled = next !== 'recording';
+    ui.stop.hidden = next !== 'recording';
+    ui.recIndicator.hidden = next !== 'recording';
+  }
+
+  function setStatus(text) {
+    ui.status.textContent = text;
+    ui.status.classList.toggle('is-checking', state === 'checking' && text !== '');
+  }
+
+  function showMessage(text) {
+    ui.message.textContent = text;
+    ui.message.hidden = false;
+  }
+
+  function clearMessage() {
+    ui.message.textContent = '';
+    ui.message.hidden = true;
+  }
+
+  /* ---------- Hearing the phrase (the browser's own speech) ---------- */
+
+  function chooseVoice(language) {
+    let voices = [];
+    try {
+      voices = Array.from(window.speechSynthesis.getVoices() || []);
+    } catch (err) {
+      voices = [];
+    }
+    const wanted = language.toLowerCase();
+    const matching = voices.filter((voice) => voice && typeof voice.lang === 'string' &&
+      voice.lang.replace(/_/g, '-').toLowerCase() === wanted);
+    // Prefer voices built into the device, then standard voices; otherwise keep the browser's order.
+    const rank = (voice) => (voice.localService === false ? 2 : 0) + (CHARACTER_VOICE.test(String(voice.name || '')) ? 1 : 0);
+    matching.sort((a, b) => rank(a) - rank(b));
+    return { voice: matching[0] || null, voicesKnown: voices.length > 0 };
+  }
+
+  function addVoiceAdvice(language) {
+    return `You can usually add a ${languageName(language)} voice in your device’s settings: look for “Text-to-speech” or “Spoken content”.`;
+  }
+
+  function speak(slowly) {
+    if (!current || state === 'starting' || state === 'recording') return;
+    clearMessage();
+    if (!('speechSynthesis' in window) || typeof window.SpeechSynthesisUtterance !== 'function') {
+      showMessage(MESSAGES.cannotSpeak);
+      return;
+    }
+    const phrase = current;
+    const utterance = new window.SpeechSynthesisUtterance(phrase.text);
+    utterance.lang = phrase.language;
+    const choice = chooseVoice(phrase.language);
+    if (choice.voice) utterance.voice = choice.voice;
+    utterance.rate = slowly ? 0.7 : 1;
+
+    // If the device has no voice for this exact language and country, say so: it may sound wrong.
+    const noExactVoice = choice.voicesKnown && !choice.voice;
+    ui.voiceNote.textContent = noExactVoice
+      ? `This device doesn’t seem to have a ${languageName(phrase.language)} voice, so the phrase may be read with a different accent. ${addVoiceAdvice(phrase.language)}`
+      : '';
+    ui.voiceNote.hidden = !noExactVoice;
+
+    utterance.onerror = (event) => {
+      const kind = event && event.error;
+      if (kind === 'interrupted' || kind === 'canceled' || utterance !== spokenUtterance) return;
+      showMessage(kind === 'language-unavailable' || kind === 'voice-unavailable'
+        ? `Sorry, this device can’t read ${languageName(phrase.language)} aloud yet. ${addVoiceAdvice(phrase.language)}`
+        : MESSAGES.speechFailed);
+    };
+    spokenUtterance = utterance;
+    try {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      showMessage(MESSAGES.speechFailed);
+    }
+  }
+
+  function stopSpeaking() {
+    try {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+    } catch (err) {
+      // Nothing was playing.
+    }
+  }
+
+  /* ---------- Recording ---------- */
+
+  function recordingProblem() {
+    if (window.isSecureContext === false) return MESSAGES.insecure;
+    const devices = navigator.mediaDevices;
+    if (!devices || typeof devices.getUserMedia !== 'function' || typeof window.MediaRecorder !== 'function') {
+      return MESSAGES.cannotRecord;
+    }
+    return '';
+  }
+
+  function deviceKind() {
+    const agent = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod/.test(agent) || (/Macintosh/.test(agent) && navigator.maxTouchPoints > 1)) return 'apple';
+    if (/Android/.test(agent)) return 'android';
+    return 'computer';
+  }
+
+  function microphoneProblem(err) {
+    const name = (err && err.name) || '';
+    if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError') {
+      const intro = 'This page isn’t allowed to use your microphone. To allow it: ';
+      const kind = deviceKind();
+      if (kind === 'apple') {
+        return `${intro}open the Settings app, tap Safari (on newer iPhones it’s under Apps), tap Microphone and choose Ask or Allow. If you use Chrome, it’s Chrome instead of Safari. Then come back, reload this page and press Start recording.`;
+      }
+      if (kind === 'android') {
+        return `${intro}tap the icon just to the left of the web address, tap Permissions (or Site settings) and turn Microphone on. Then reload this page and press Start recording.`;
+      }
+      return `${intro}click the icon just to the left of the web address and set Microphone to Allow. Then reload this page and press Start recording. If it’s still blocked, check your computer’s privacy settings let your browser use the microphone.`;
+    }
+    if (name === 'NotFoundError' || name === 'DevicesNotFoundError' || name === 'OverconstrainedError') return MESSAGES.noMicrophone;
+    if (name === 'NotReadableError' || name === 'TrackStartError' || name === 'AbortError') return MESSAGES.microphoneBusy;
+    return MESSAGES.microphoneOther;
+  }
+
+  async function startRecording() {
+    if (!current || state !== 'idle') return;
+    clearMessage();
+    hideResult();
+    stopSpeaking(); // so the phrase being read aloud isn't recorded too
+    const problem = recordingProblem();
+    if (problem) {
+      showMessage(problem);
+      return;
+    }
+
+    const thisAttempt = ++attempt;
+    setState('starting');
+    setStatus('Waiting for your microphone… If you’re asked, choose Allow.');
+
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err) {
+      if (thisAttempt !== attempt) return;
+      setState('idle');
+      setStatus('');
+      showMessage(microphoneProblem(err));
+      ui.record.focus();
+      return;
+    }
+    if (thisAttempt !== attempt) {
+      releaseMicrophone(stream);
+      return;
+    }
+
+    const rec = { stream, recorder: null, chunks: [], attempt: thisAttempt, startedAt: Date.now(), clock: 0, stopGuard: 0, discarded: false, done: false };
+    try {
+      rec.recorder = new window.MediaRecorder(stream); // whatever format the browser records
+      rec.recorder.ondataavailable = (event) => {
+        if (event && event.data && event.data.size !== 0) rec.chunks.push(event.data);
+      };
+      rec.recorder.onstop = () => recorderStopped(rec);
+      rec.recorder.onerror = () => recordingFailed(rec);
+      rec.recorder.start();
+    } catch (err) {
+      releaseMicrophone(stream);
+      setState('idle');
+      setStatus('');
+      showMessage(MESSAGES.recordingFailed);
+      ui.record.focus();
+      return;
+    }
+
+    recording = rec;
+    setState('recording');
+    setStatus('');
+    tickClock(rec);
+    rec.clock = window.setInterval(() => tickClock(rec), 250);
+    ui.stop.focus();
+  }
+
+  function tickClock(rec) {
+    const seconds = Math.min(MAX_RECORDING_SECONDS, Math.floor((Date.now() - rec.startedAt) / 1000));
+    ui.recTime.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+    if (seconds >= MAX_RECORDING_SECONDS) stopRecording();
+  }
+
+  function stopRecording() {
+    const rec = recording;
+    if (state !== 'recording' || !rec) return;
+    window.clearInterval(rec.clock);
+    setState('checking');
+    setStatus('Checking how you did…');
+    // If the browser never hands the recording over, don't leave the person waiting for ever.
+    rec.stopGuard = window.setTimeout(() => recordingFailed(rec), 4000);
+    try {
+      rec.recorder.stop();
+    } catch (err) {
+      recordingFailed(rec);
+    }
+  }
+
+  function finishWith(rec) {
+    rec.done = true;
+    window.clearTimeout(rec.stopGuard);
+    window.clearInterval(rec.clock);
+    releaseMicrophone(rec.stream);
+    if (recording === rec) recording = null;
+    return !rec.discarded && rec.attempt === attempt;
+  }
+
+  function recorderStopped(rec) {
+    if (rec.done || !finishWith(rec)) return;
+    const type = (rec.chunks[0] && rec.chunks[0].type) || rec.recorder.mimeType || 'audio/webm';
+    sendRecording(new Blob(rec.chunks, { type }), rec.attempt);
+  }
+
+  function recordingFailed(rec) {
+    if (rec.done || !finishWith(rec)) return;
+    attempt++;
+    setState('idle');
+    setStatus('');
+    showMessage(MESSAGES.recordingFailed);
+    ui.record.focus();
+  }
+
+  function releaseMicrophone(stream) {
+    try {
+      stream.getTracks().forEach((track) => track.stop());
+    } catch (err) {
+      // Nothing to release.
+    }
+  }
+
+  // Abandon whatever is in progress (a new phrase was chosen, or the person left the page).
+  function cancelAttempt() {
+    attempt++;
+    const rec = recording;
+    recording = null;
+    if (rec) {
+      rec.discarded = true;
+      window.clearInterval(rec.clock);
+      window.clearTimeout(rec.stopGuard);
+      try {
+        if (rec.recorder.state !== 'inactive') rec.recorder.stop();
+      } catch (err) {
+        // Already stopped.
+      }
+      releaseMicrophone(rec.stream);
+    }
+    if (pending) {
+      window.clearTimeout(pending.timer);
+      if (pending.controller) pending.controller.abort();
+      pending = null;
+    }
+    setState('idle');
+    setStatus('');
+  }
+
+  function fileExtension(type) {
+    const t = String(type).toLowerCase();
+    if (t.includes('ogg')) return 'ogg';
+    if (t.includes('mp4') || t.includes('m4a') || t.includes('aac')) return 'mp4';
+    if (t.includes('wav')) return 'wav';
+    if (t.includes('mpeg')) return 'mp3';
+    return 'webm';
+  }
+
+  /* ---------- The listening service, exactly as Tomasz describes it ---------- */
+
+  async function sendRecording(audio, thisAttempt) {
+    const phrase = current;
+    const form = new FormData();
+    form.append('audio', audio, `recording.${fileExtension(audio.type)}`);
+    form.append('language', phrase.language);
+    form.append('phrase_id', phrase.id);
+    form.append('target', phrase.text);
+
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const request = { controller, timer: 0, settled: false };
+    pending = request;
+    request.timer = window.setTimeout(() => {
+      if (request.settled || thisAttempt !== attempt) return;
+      request.settled = true;
+      if (controller) controller.abort();
+      serviceFailed(MESSAGES.tooSlow);
+    }, SERVICE_TIMEOUT_MS);
+
+    let answer = null;
+    let problem = '';
+    try {
+      const response = await fetch(SERVICE_URL, { method: 'POST', body: form, signal: controller ? controller.signal : undefined });
+      if (response.status !== 200) {
+        problem = MESSAGES.serviceProblem; // any status other than 200 is a problem: no score
+      } else {
+        let data = null;
+        try {
+          data = await response.json();
+        } catch (err) {
+          data = null;
+        }
+        answer = readAnswer(data);
+        if (!answer) problem = MESSAGES.serviceProblem;
+      }
+    } catch (err) {
+      problem = MESSAGES.unreachable;
+    }
+
+    if (request.settled || thisAttempt !== attempt) return; // timed out, or abandoned
+    request.settled = true;
+    window.clearTimeout(request.timer);
+    pending = null;
+    if (problem) serviceFailed(problem);
+    else showResult(phrase, answer);
+  }
+
+  // Accept only an answer shaped as Tomasz describes; anything else is treated as a service problem.
+  function readAnswer(data) {
+    if (!data || typeof data !== 'object' || !Array.isArray(data.words)) return null;
+    const words = [];
+    for (const item of data.words) {
+      if (!item || typeof item !== 'object') return null;
+      const word = typeof item.word === 'string' ? item.word
+        : (typeof item.word === 'number' && Number.isFinite(item.word) ? String(item.word) : null);
+      const confidence = toNumber(item.confidence);
+      if (word === null || confidence === null || confidence < 0 || confidence > 1) return null;
+      words.push({ word, confidence });
+    }
+    return { transcript: typeof data.transcript === 'string' ? data.transcript : '', words };
+  }
+
+  function toNumber(value) {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+    if (typeof value === 'string' && value.trim() !== '' && Number.isFinite(Number(value))) return Number(value);
+    return null;
+  }
+
+  function serviceFailed(text) {
+    pending = null;
+    setState('idle');
+    setStatus('');
+    hideResult();
+    showMessage(text);
+    ui.record.focus();
+  }
+
+  /* ---------- Showing the result ---------- */
+
+  function hideResult() {
+    ui.result.hidden = true;
+    ui.words.replaceChildren();
+    ui.score.textContent = '';
+    ui.scoreComment.textContent = '';
+    ui.scoreBest.textContent = '';
+    ui.heard.textContent = '';
+    ui.extras.textContent = '';
+    ui.extras.hidden = true;
+    ui.working.replaceChildren();
+  }
+
+  function wordLabel(word) {
+    if (!word.matched) return 'Missed';
+    if (word.colour === 'green') return 'Good';
+    if (word.colour === 'amber') return 'Nearly';
+    return 'Needs work';
+  }
+
+  function formatNumber(value) {
+    return Number.isFinite(value) ? String(Math.round(value * 100) / 100) : '0';
+  }
+
+  function showResult(phrase, answer) {
+    const outcome = CoachScoring.score(phrase.text, answer.words);
+
+    // Each word, coloured, in phrase order and as written in the phrase.
+    ui.words.replaceChildren(...outcome.pieces.map((piece) => {
+      const item = el('li');
+      if (!piece.isWord) {
+        item.className = 'piece';
+        item.setAttribute('aria-hidden', 'true');
+        item.textContent = piece.text;
+        return item;
+      }
+      item.className = `chip chip--${piece.colour}${piece.matched ? '' : ' chip--missed'}`;
+      const word = el('span', 'chip-word', piece.text);
+      word.dataset.testid = `word-${piece.number}`;
+      word.dataset.colour = piece.colour;
+      word.lang = phrase.language;
+      item.append(word, el('span', 'vh', ': '), el('span', 'chip-label', wordLabel(piece)));
+      return item;
+    }));
+
+    ui.score.textContent = String(outcome.score);
+    ui.scoreRing.style.setProperty('--p', String(outcome.score));
+    ui.scoreRing.dataset.band = band(outcome.score);
+    if (outcome.heardCount === 0) ui.scoreComment.textContent = 'We didn’t catch any words that time. Hold the phone a little closer and speak clearly.';
+    else if (outcome.score >= 85) ui.scoreComment.textContent = 'Excellent, that sounded great!';
+    else if (outcome.score >= 60) ui.scoreComment.textContent = 'Good effort, you’re nearly there.';
+    else ui.scoreComment.textContent = 'Keep going: listen again, then have another try.';
+
+    // What the computer actually heard.
+    const heardText = answer.transcript.trim() || answer.words.map((w) => w.word.trim()).filter(Boolean).join(' ');
+    ui.heard.textContent = heardText || 'Nothing: no words were picked up.';
+    ui.heard.lang = heardText ? phrase.language : 'en-GB';
+    ui.heard.classList.toggle('is-empty', !heardText);
+
+    const extras = outcome.extras.map((item) => `“${item.word.trim()}”`);
+    ui.extras.textContent = extras.length
+      ? `${extras.length === 1 ? 'An extra word was' : `${extras.length} extra words were`} heard: ${extras.join(', ')}. Each one takes 5 points off.`
+      : '';
+    ui.extras.hidden = extras.length === 0;
+
+    renderWorking(phrase, outcome);
+
+    // A worse attempt never lowers the best score.
+    const previous = best[phrase.id];
+    let bestText;
+    if (!Number.isInteger(previous) || outcome.score > previous) {
+      best[phrase.id] = outcome.score;
+      saveBestScores();
+      renderBest(phrase.id);
+      renderGroupProgress();
+      renderPanelBest();
+      bestText = Number.isInteger(previous) ? `New best score! Your previous best was ${previous}.` : 'Saved as your best score for this phrase.';
+    } else {
+      bestText = `Your best for this phrase is still ${previous}.`;
+    }
+    if (!storageWorks) bestText += ' This browser isn’t letting the page save scores, so they’ll be forgotten when you close it.';
+    ui.scoreBest.textContent = bestText;
+
+    ui.result.hidden = false;
+    setState('idle');
+    setStatus(`Done. You scored ${outcome.score} out of 100.`);
+    bringIntoView(ui.result);
+    ui.resultTitle.focus({ preventScroll: true });
+  }
+
+  // Carmen's steps, with this attempt's numbers, so anyone can check the score by hand.
+  function renderWorking(phrase, outcome) {
+    const intro = el('p', null, 'Each word gets points for how sure the computer was that you said it correctly, out of 100. A missed word gets 0.');
+    const list = el('ul', 'working-words');
+    for (const word of outcome.words) {
+      const item = el('li');
+      const label = el('span', null, word.text);
+      label.lang = phrase.language;
+      item.append(label, `: ${word.matched ? formatNumber(word.confidence * 100) : '0 (missed)'}`);
+      list.append(item);
+    }
+    const lines = [`Average: ${formatNumber(outcome.average)}, rounded to ${outcome.rounded}.`];
+    const extraCount = outcome.extras.length;
+    if (extraCount) lines.push(`Extra words: ${extraCount} × 5 = ${extraCount * 5} points off.`);
+    lines.push(`Score: ${outcome.score} out of 100${outcome.rounded - 5 * extraCount < 0 ? ' (a score can’t go below 0)' : ''}.`);
+    const key = el('p', 'working-key', 'Colours: green is 85 points or more, amber is 60 up to 85, and red is under 60 or missed.');
+    ui.working.replaceChildren(intro, list, ...lines.map((line) => el('p', null, line)), key);
+  }
+
+  /* ---------- Start up ---------- */
+
+  ui.listen.addEventListener('click', () => speak(false));
+  ui.listenSlow.addEventListener('click', () => speak(true));
+  ui.record.addEventListener('click', () => { startRecording(); });
+  ui.stop.addEventListener('click', stopRecording);
+  ui.back.addEventListener('click', backToList);
+
+  // Never keep recording in the background.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && state === 'recording') {
+      cancelAttempt();
+      showMessage(MESSAGES.leftPage);
+    }
+  });
+  window.addEventListener('pagehide', () => {
+    if (recording || pending) cancelAttempt();
+    stopSpeaking();
+  });
+
+  buildPhraseList();
+  for (const id of phraseButtons.keys()) renderBest(id);
+  renderGroupProgress();
+  setState('idle');
+  try {
+    if (window.speechSynthesis) window.speechSynthesis.getVoices(); // starts the voice list loading in some browsers
+  } catch (err) {
+    // Voices will load when needed.
+  }
+})();
+</script>
+</body>
+</html>

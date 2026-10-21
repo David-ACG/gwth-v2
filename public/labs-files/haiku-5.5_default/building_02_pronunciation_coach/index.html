@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pronunciation coach</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; font-size: 1rem; line-height: 1.45; color: #1a1a1a; background: #f7f7f5; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; overflow-wrap: anywhere; }
+  h1 { font-size: 1.6rem; margin: 8px 0 4px; }
+  h2 { font-size: 1.25rem; margin: 0 0 10px; }
+  h3 { font-size: 1rem; margin: 16px 0 6px; color: #444; }
+  section { background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 14px 0; }
+  p { margin: 8px 0; }
+  .phrases { list-style: none; margin: 0; padding: 0; }
+  .phrases li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-bottom: 8px; }
+  button { font: inherit; min-height: 44px; padding: 8px 14px; border-radius: 8px; border: 2px solid #1d4f91; background: #fff; color: #1a1a1a; cursor: pointer; text-align: left; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button[aria-pressed="true"] { background: #dbe8ff; }
+  .phrases button { flex: 1 1 200px; }
+  .best { font-size: 0.95rem; color: #333; white-space: nowrap; }
+  .target { font-size: 1.6rem; font-weight: 600; margin: 8px 0 4px; }
+  .english { color: #555; margin: 0 0 12px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .buttons button { flex: 1 1 140px; text-align: center; }
+  .message { margin-top: 12px; padding: 12px; border-radius: 8px; background: #fff3cd; border: 1px solid #c49a00; }
+  .legend { margin: 0 0 10px; color: #444; font-size: 0.95rem; }
+  .words { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .word { padding: 6px 10px; border-width: 3px; border-style: solid; border-radius: 6px; font-size: 1.15rem; }
+  .word[data-colour="green"] { background: #c6efd3; border-color: #1e7a3c; }
+  .word[data-colour="amber"] { background: #ffe39a; border-color: #9a6a00; border-style: dashed; }
+  .word[data-colour="red"] { background: #f7c4c4; border-color: #a12525; border-style: dotted; }
+  .score { font-size: 2.2rem; font-weight: 700; }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 3px solid #ff9900; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Pronunciation coach</h1>
+<p>Choose a phrase, listen to it, then say it yourself. Each word is coloured by how clearly the listening service heard it.</p>
+<noscript><p>This page needs JavaScript to work.</p></noscript>
+
+<section aria-labelledby="choose-heading">
+<h2 id="choose-heading">1. Choose a phrase</h2>
+<h3>Spanish (Spain)</h3>
+<ul class="phrases" data-language="es-ES"></ul>
+<h3>French (France)</h3>
+<ul class="phrases" data-language="fr-FR"></ul>
+</section>
+
+<section aria-labelledby="practise-heading">
+<h2 id="practise-heading">2. Practise</h2>
+<p id="hint">Choose a phrase above to start.</p>
+<p class="target" id="target" data-testid="target"></p>
+<p class="english" id="english"></p>
+<div class="buttons">
+<button type="button" id="listen" data-testid="listen" disabled>Listen to the phrase</button>
+<button type="button" id="record" data-testid="record" disabled>Start recording</button>
+<button type="button" id="stop" data-testid="stop" disabled>Stop recording</button>
+</div>
+<div class="message" id="message" data-testid="message" role="status" aria-live="polite" hidden></div>
+</section>
+
+<section id="result" aria-labelledby="result-heading">
+<h2 id="result-heading">3. Your result</h2>
+<p class="legend">Green: clear. Amber: nearly right. Red: needs more practice, or was not heard.</p>
+<div class="words" id="words" role="list"></div>
+<p>Score out of 100: <span class="score" id="score" data-testid="score"></span></p>
+<p>What the listening service heard: <span id="heard" data-testid="heard"></span></p>
+</section>
+</main>
+<script>
+const PHRASES = [
+  { id: "es_01", language: "es-ES", text: "Buenos días, ¿qué tal?", english: "Good morning, how are you?" },
+  { id: "es_02", language: "es-ES", text: "Me llamo Sam y trabajo en el almacén.", english: "My name is Sam and I work in the warehouse." },
+  { id: "es_03", language: "es-ES", text: "¿Dónde está la estación de tren?", english: "Where is the train station?" },
+  { id: "es_04", language: "es-ES", text: "El camión llega a las tres y media.", english: "The lorry arrives at half past three." },
+  { id: "es_05", language: "es-ES", text: "Me gustaría reservar una mesa para dos.", english: "I would like to book a table for two." },
+  { id: "es_06", language: "es-ES", text: "¿Puede repetirlo más despacio, por favor?", english: "Can you repeat it more slowly, please?" },
+  { id: "fr_01", language: "fr-FR", text: "Bonjour, je suis nouveau ici.", english: "Hello, I am new here." },
+  { id: "fr_02", language: "fr-FR", text: "Je voudrais un café, s'il vous plaît.", english: "I would like a coffee, please." },
+  { id: "fr_03", language: "fr-FR", text: "À quelle heure part le prochain train ?", english: "What time does the next train leave?" },
+  { id: "fr_04", language: "fr-FR", text: "Il fait très beau aujourd'hui.", english: "The weather is lovely today." },
+  { id: "fr_05", language: "fr-FR", text: "Le chargement est prêt à partir.", english: "The load is ready to go." },
+  { id: "fr_06", language: "fr-FR", text: "Pouvez-vous parler plus lentement ?", english: "Can you speak more slowly?" }
+];
+
+const SERVICE_URL = "/api/listen";
+const SERVICE_TIMEOUT_MS = 8000;
+const BEST_KEY = "pronunciation-coach-best-scores";
+const LANGUAGE_NAMES = { "es-ES": "Spanish", "fr-FR": "French" };
+const COLOUR_MEANING = { green: "clear", amber: "nearly right", red: "needs practice" };
+const MIME_TYPES = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"];
+
+function plain(text) {
+  // Accents are split off by NFD, then dropped with the punctuation by the filter.
+  return text.toLowerCase().normalize("NFD").replace(/[^\p{L}\p{N}]/gu, "");
+}
+
+function phraseWords(text) {
+  return text.split(/\s+/).filter(piece => plain(piece) !== "");
+}
+
+function colourFor(confidence) {
+  if (confidence >= 0.85) return "green";
+  if (confidence >= 0.6) return "amber";
+  return "red";
+}
+
+function validWords(data) {
+  return Boolean(data) && Array.isArray(data.words) && data.words.every(w =>
+    w && typeof w.word === "string" && Number.isFinite(w.confidence) && w.confidence >= 0 && w.confidence <= 1);
+}
+
+function scoreAttempt(text, heard) {
+  const heardKeys = heard.map(w => plain(w.word));
+  let cursor = 0;
+  let matched = 0;
+  const words = phraseWords(text).map(piece => {
+    const key = plain(piece);
+    let index = -1;
+    for (let i = cursor; i < heardKeys.length; i++) {
+      if (heardKeys[i] === key) { index = i; break; }
+    }
+    if (index === -1) return { text: piece, colour: "red", missed: true, value: 0 };
+    cursor = index + 1;
+    matched++;
+    const confidence = heard[index].confidence;
+    return { text: piece, colour: colourFor(confidence), missed: false, value: confidence };
+  });
+  const sum = words.reduce((total, w) => total + w.value, 0);
+  const extras = heard.length - matched;
+  const score = Math.max(0, Math.round((sum / words.length) * 100) - 5 * extras);
+  return { words, extras, score };
+}
+
+function loadBest() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(BEST_KEY)) || {}; } catch (e) { saved = {}; }
+  const best = {};
+  for (const p of PHRASES) {
+    const value = saved[p.id];
+    if (Number.isFinite(value) && value >= 0 && value <= 100) best[p.id] = value;
+  }
+  return best;
+}
+
+function chooseMimeType() {
+  return MIME_TYPES.find(type => MediaRecorder.isTypeSupported(type)) || "";
+}
+
+function extensionFor(type) {
+  if (type.includes("mp4")) return "mp4";
+  if (type.includes("ogg")) return "ogg";
+  return "webm";
+}
+
+function microphoneProblem(err) {
+  const name = err && err.name;
+  if (name === "NotAllowedError" || name === "SecurityError") {
+    return "Microphone access is blocked. To allow it, open this page's settings in your browser (the lock or settings icon beside the web address), change Microphone to Allow, then reload the page.";
+  }
+  if (name === "NotFoundError" || name === "DevicesNotFoundError") {
+    return "No microphone was found. Connect a microphone or switch it on, then try again.";
+  }
+  if (name === "NotReadableError" || name === "TrackStartError") {
+    return "The microphone is being used by another app. Close that app, then try again.";
+  }
+  return "The microphone could not be started. Please try again.";
+}
+
+const el = id => document.getElementById(id);
+const hint = el("hint");
+const targetEl = el("target");
+const englishEl = el("english");
+const listenButton = el("listen");
+const recordButton = el("record");
+const stopButton = el("stop");
+const messageEl = el("message");
+const wordsEl = el("words");
+const scoreEl = el("score");
+const heardEl = el("heard");
+const resultEl = el("result");
+
+const best = loadBest();
+const phraseButtons = {};
+const bestCells = {};
+let current = null;
+let state = "idle";
+let recorder = null;
+let stream = null;
+let chunks = [];
+
+function showMessage(text) {
+  messageEl.textContent = text;
+  messageEl.hidden = false;
+}
+
+function clearMessage() {
+  messageEl.textContent = "";
+  messageEl.hidden = true;
+}
+
+function updateControls() {
+  const idle = state === "idle";
+  const hasPhrase = current !== null;
+  listenButton.disabled = !(hasPhrase && idle);
+  recordButton.disabled = !(hasPhrase && idle);
+  stopButton.disabled = state !== "recording";
+  for (const button of Object.values(phraseButtons)) button.disabled = !idle;
+}
+
+function clearResult() {
+  wordsEl.replaceChildren();
+  scoreEl.textContent = "";
+  heardEl.textContent = "";
+}
+
+function buildTile(word, number) {
+  const tile = document.createElement("span");
+  tile.className = "word";
+  tile.setAttribute("role", "listitem");
+  tile.dataset.testid = "word-" + number;
+  tile.dataset.colour = word.colour;
+  tile.textContent = word.text;
+  tile.setAttribute("aria-label", word.text + ", " + (word.missed ? "not heard" : COLOUR_MEANING[word.colour]));
+  return tile;
+}
+
+function showResult(phrase, data) {
+  const result = scoreAttempt(phrase.text, data.words);
+  const transcript = typeof data.transcript === "string" ? data.transcript.trim() : "";
+  const heardText = transcript || data.words.map(w => w.word).join(" ").trim();
+  wordsEl.replaceChildren(...result.words.map((word, i) => buildTile(word, i + 1)));
+  scoreEl.textContent = String(result.score);
+  heardEl.textContent = heardText || "Nothing was heard";
+  keepBest(phrase.id, result.score);
+  resultEl.scrollIntoView({ block: "start" });
+}
+
+function renderBest(id) {
+  const cell = bestCells[id];
+  const known = id in best;
+  cell.value.textContent = known ? String(best[id]) : "";
+  cell.label.hidden = !known;
+}
+
+function keepBest(id, score) {
+  if (id in best && best[id] >= score) return;
+  best[id] = score;
+  renderBest(id);
+  try {
+    localStorage.setItem(BEST_KEY, JSON.stringify(best));
+  } catch (e) {
+    showMessage("Your best score could not be saved on this device, so it may not be there next time.");
+  }
+}
+
+function choose(id) {
+  current = PHRASES.find(p => p.id === id);
+  for (const [phraseId, button] of Object.entries(phraseButtons)) {
+    button.setAttribute("aria-pressed", String(phraseId === id));
+  }
+  targetEl.textContent = current.text;
+  targetEl.lang = current.language;
+  englishEl.textContent = "Meaning: " + current.english;
+  hint.hidden = true;
+  clearResult();
+  clearMessage();
+  updateControls();
+}
+
+function playPhrase() {
+  if (!current) return;
+  if (!("speechSynthesis" in window)) {
+    showMessage("This browser cannot play the phrase aloud. Try another browser.");
+    return;
+  }
+  clearMessage();
+  const voices = speechSynthesis.getVoices();
+  const utterance = new SpeechSynthesisUtterance(current.text);
+  utterance.lang = current.language;
+  const base = current.language.slice(0, 2);
+  const voice = voices.find(v => v.lang.replace("_", "-") === current.language)
+    || voices.find(v => v.lang.slice(0, 2) === base);
+  if (voice) {
+    utterance.voice = voice;
+  } else if (voices.length) {
+    showMessage("This device has no " + LANGUAGE_NAMES[current.language] + " voice, so the phrase may not sound right.");
+  }
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+async function startRecording() {
+  if (!current || state !== "idle") return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+    showMessage("Recording is not available here. Open this page on its secure (https) address, in an up-to-date browser.");
+    return;
+  }
+  const phrase = current;
+  state = "starting";
+  updateControls();
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (err) {
+    state = "idle";
+    updateControls();
+    showMessage(microphoneProblem(err));
+    return;
+  }
+  chunks = [];
+  const type = chooseMimeType();
+  try {
+    recorder = type ? new MediaRecorder(stream, { mimeType: type }) : new MediaRecorder(stream);
+  } catch (err) {
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+    state = "idle";
+    updateControls();
+    showMessage("Recording could not start on this device. Please try again.");
+    return;
+  }
+  recorder.addEventListener("dataavailable", e => {
+    if (e.data.size > 0) chunks.push(e.data);
+  });
+  recorder.addEventListener("stop", () => finishRecording(phrase));
+  clearResult();
+  recorder.start();
+  state = "recording";
+  updateControls();
+  showMessage("Recording. Say the phrase, then press Stop recording.");
+}
+
+function stopRecording() {
+  if (state !== "recording") return;
+  state = "working";
+  updateControls();
+  recorder.stop();
+}
+
+function finishRecording(phrase) {
+  const blob = new Blob(chunks, { type: recorder.mimeType });
+  stream.getTracks().forEach(track => track.stop());
+  recorder = null;
+  stream = null;
+  chunks = [];
+  if (blob.size === 0) {
+    state = "idle";
+    updateControls();
+    showMessage("Nothing was recorded. Please try again.");
+    return;
+  }
+  sendAttempt(phrase, blob);
+}
+
+async function sendAttempt(phrase, blob) {
+  const form = new FormData();
+  form.append("audio", blob, "attempt." + extensionFor(blob.type));
+  form.append("language", phrase.language);
+  form.append("phrase_id", phrase.id);
+  form.append("target", phrase.text);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), SERVICE_TIMEOUT_MS);
+  clearResult();
+  showMessage("Checking what you said…");
+  try {
+    const response = await fetch(SERVICE_URL, { method: "POST", body: form, signal: controller.signal });
+    if (response.status !== 200) throw new Error("status " + response.status);
+    const data = await response.json();
+    if (!validWords(data)) throw new Error("unexpected reply");
+    clearMessage();
+    showResult(phrase, data);
+  } catch (err) {
+    if (err.name === "AbortError") {
+      showMessage("The listening service is taking too long to answer. Please try again.");
+    } else {
+      showMessage("The listening service had a problem. Please try again.");
+    }
+  } finally {
+    clearTimeout(timer);
+    state = "idle";
+    updateControls();
+  }
+}
+
+function buildRow(phrase) {
+  const item = document.createElement("li");
+  const button = document.createElement("button");
+  button.type = "button";
+  button.dataset.testid = "phrase-" + phrase.id;
+  button.textContent = phrase.text;
+  button.setAttribute("aria-pressed", "false");
+  button.addEventListener("click", () => choose(phrase.id));
+  const label = document.createElement("span");
+  label.textContent = "Best score: ";
+  const value = document.createElement("span");
+  value.dataset.testid = "best-" + phrase.id;
+  const bestWrap = document.createElement("span");
+  bestWrap.className = "best";
+  bestWrap.append(label, value);
+  item.append(button, bestWrap);
+  phraseButtons[phrase.id] = button;
+  bestCells[phrase.id] = { label, value };
+  return item;
+}
+
+for (const list of document.querySelectorAll("ul.phrases")) {
+  for (const phrase of PHRASES.filter(p => p.language === list.dataset.language)) {
+    list.append(buildRow(phrase));
+  }
+}
+for (const phrase of PHRASES) renderBest(phrase.id);
+listenButton.addEventListener("click", playPhrase);
+recordButton.addEventListener("click", startRecording);
+stopButton.addEventListener("click", stopRecording);
+updateControls();
+</script>
+</body>
+</html>

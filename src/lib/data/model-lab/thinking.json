@@ -1,0 +1,1057 @@
+{
+ "sp": "thinking",
+ "sp_name": "Thinking",
+ "headline": "Which AI is best at thinking a problem through?",
+ "ask": "Which plan would you take to the board?",
+ "tasks": [
+  {
+   "id": "thinking_01_goal_plan",
+   "title": "Should Sam retrain?",
+   "signature": false
+  },
+  {
+   "id": "thinking_02_four_day_week",
+   "title": "The four-day week pilot",
+   "signature": true
+  },
+  {
+   "id": "thinking_03_monday_questions",
+   "title": "The Monday questions",
+   "signature": false
+  },
+  {
+   "id": "thinking_04_hire_dont_fire",
+   "title": "Hire, don't fire",
+   "signature": false
+  }
+ ],
+ "sig_title": "The four-day week pilot",
+ "sig_plain": "A kitchen company's boss wants to trial a four-day week. Can the plan keep the showroom open on Saturdays, and does the staff survey really show everyone wants it? Play along before the reveal.",
+ "sig_task": "Hi, I'm Nina Ashworth, managing director of Fernhill Kitchens. We have 40 staff and a showroom that opens six days a week. I'm thinking about trialling a four-day week from January and I'd like your help before I decide.\n\nMy proposal is in `inputs/proposal.md`. You'll also find our staff list (`inputs/staff.csv`), how the showroom is covered and the minimum cover we need (`inputs/showroom_cover.md`), our pay rules (`inputs/pay_rules.md`) and the results of our staff survey (`inputs/survey_results.md`).\n\nI'll make the decision myself, so please don't make it for me. I need two things.\n\n**1. `out/pilot_plan.md`**: a one-page plan, no more than 600 words, that I can read in a few minutes. Tell me whether my proposal works as written, lay out my realistic options, and set out a pilot I could run: the working pattern for the showroom, how cover works on each day, how we would measure success, and when we would review it.\n\n**2. `out/numbers.json`**, in exactly this shape:\n\n```json\n{\n  \"hours_per_week_now\": 0,\n  \"hours_per_week_pilot\": 0,\n  \"hours_reduction_percent\": 0.00,\n  \"showroom_cover_under_proposal\": {\"Mon\": 0, \"Tue\": 0, \"Wed\": 0, \"Thu\": 0, \"Fri\": 0, \"Sat\": 0},\n  \"saturday_minimum_cover\": 0,\n  \"saturday_shortfall_under_proposal\": 0,\n  \"saturday_cover_with_overtime_volunteers\": 0,\n  \"overtime_cost_per_saturday\": 0.00,\n  \"overtime_cost_whole_pilot\": 0.00,\n  \"saturdays_in_pilot\": 0,\n  \"bank_holidays_in_pilot\": [\"YYYY-MM-DD\"],\n  \"survey_response_rate_percent\": 0.0,\n  \"survey_yes_as_percent_of_all_staff\": 0.0,\n  \"pilot_showroom_pattern\": {\"S01\": [\"Mon\", \"Tue\", \"Wed\", \"Thu\"]},\n  \"review_meeting_date\": \"YYYY-MM-DD\"\n}\n```\n\nWhat the fields mean:\n\n- `hours_per_week_now` and `hours_per_week_pilot`: total contracted hours a week across all 40 staff, now and in the pilot as I've proposed it. `hours_reduction_percent` is the fall, to 2 decimal places.\n- `showroom_cover_under_proposal`: how many showroom staff would be working on each day under my proposal as written, counting only each person's four pilot days (no overtime). `saturday_shortfall_under_proposal` is the Saturday minimum minus the Saturday figure.\n- `saturday_cover_with_overtime_volunteers`: the most showroom staff we could have on a Saturday if, on top of my proposal, everyone who could cover the showroom and has volunteered for Saturday overtime came in.\n- `overtime_cost_per_saturday`: the cost of all of those volunteers working one Saturday shift as overtime, under our pay rules. `overtime_cost_whole_pilot` is that cost for every Saturday in the pilot.\n- `saturdays_in_pilot` and `bank_holidays_in_pilot`: for a 12-week pilot starting Monday 4 January 2027 (England bank holidays).\n- `survey_response_rate_percent`: responses as a share of all staff. `survey_yes_as_percent_of_all_staff`: the \"Yes\" answers as a share of all staff.\n- `pilot_showroom_pattern`: the four working days (from Mon, Tue, Wed, Thu, Fri, Sat) for each of the 12 showroom staff, S01 to S12, in the pilot you set out.\n- `review_meeting_date`: the date of the meeting, after the pilot, where I'd decide whether to keep the four-day week.\n\nMoney to the penny, percentages as numbers without the % sign.\n",
+ "best": {
+  "name": "Claude Sonnet 5.5",
+  "level": "xhigh",
+  "maker": "Anthropic",
+  "score": 96,
+  "cost": "39p",
+  "basics": 4,
+  "n": 4
+ },
+ "value": {
+  "name": "GPT-6 Luna",
+  "level": "max",
+  "maker": "OpenAI",
+  "score": 89,
+  "cost": "1p",
+  "basics": 4,
+  "n": 4
+ },
+ "app": {
+  "name": "GPT-6 Luna",
+  "level": "max",
+  "maker": "OpenAI",
+  "score": 89,
+  "plan": {
+   "plan": "ChatGPT Plus, in the desktop app",
+   "price": "£19.99 a month",
+   "free": false
+  }
+ },
+ "free": {
+  "name": "Muse Spark 1.3",
+  "level": "max",
+  "maker": "Meta",
+  "score": 93,
+  "plan": {
+   "plan": "Meta AI",
+   "price": "free",
+   "free": true,
+   "allowance": "Meta does not publish a number of messages for the free tier."
+  }
+ },
+ "premium": [
+  {
+   "name": "Claude Fable 5.1",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 90,
+   "cost": "91p"
+  },
+  {
+   "name": "Claude Fable 5.1",
+   "level": "max",
+   "maker": "Anthropic",
+   "score": 92,
+   "cost": "£2.20"
+  }
+ ],
+ "premium_main": [
+  {
+   "name": "GPT-6 Astra",
+   "level": "medium",
+   "maker": "OpenAI",
+   "cost": "28p",
+   "premium": true
+  },
+  {
+   "name": "GPT-6.1 Sol",
+   "level": "medium",
+   "maker": "OpenAI",
+   "cost": "9p",
+   "premium": false
+  }
+ ],
+ "fable_all": true,
+ "premium_note": {
+  "title": "The premium models: Claude Fable and GPT-6 Astra",
+  "before": "Claude Fable costs two and a half times as much as Claude Opus to use, and GPT-6 Astra costs five times as much as GPT-6.1 Sol.\n\nWe tested Claude Fable on every task. It didn't score higher than the usual top models, and it cost much more:",
+  "astra": "We ran GPT-6 Astra on this lab's main task only, to compare its cost with GPT-6.1 Sol.",
+  "after": "### Why we don't recommend them\n\nThe personal versions of Claude and ChatGPT keep your chats, whichever model you choose. Some business services can be set up so the provider does not keep the data you send. A business account alone does not guarantee this.\n\nClaude Fable has an extra requirement. Anthropic says: \"Using Fable requires 30-day data retention for safety monitoring by default.\" That applies to business accounts too. Some eligible organisations can turn this retention off for a limited time. Fable has no option for processing data in the UK or EU.\n\nSome providers make Fable optional. Harvey, which makes AI tools for law firms, says: \"We are making this model available as an opt-in option vs. by default.\" Cursor, a popular coding tool, says Fable \"is off by default in every Team that has Cursor Privacy Mode enabled and for every Enterprise customer\". Jennifer Ellis, a lawyer who writes about legal technology, advises: \"Don't use it if you have concerns about data retention or your firm has AI use policies against allowing data to be retained by outside tools.\"\n\nSo keep personal details, staff and customer records, unreleased figures, business plans and confidential findings out of Claude Fable. Check your organisation's AI policy before using it for work at all.\n\nGPT-6 Astra has the same data retention rules as other OpenAI models. By default, OpenAI keeps records of use for up to 30 days to monitor misuse. Eligible customers can arrange for their data not to be kept in those records. Our reason for not recommending Astra is cost: it costs five times as much as GPT-6.1 Sol, and we haven't tested whether it gives better results.\n\n### When a premium model is fine to use\n\nIf you need a lot of power for a long or difficult job, and none of the information is private or sensitive, a premium model is fine to use. Examples include researching a public topic in depth, working through published documents or completing a long coding task using code that isn't confidential. For Fable, Stephen Smith, who trains law firms to use AI, suggests asking: \"can this engagement tolerate 30-day retention by the model provider? For a lot of work, the answer is yes. For some matters, it won't be.\"\n\nFor everyday work, start with a usual top model. Compare a premium model only if the results don't meet your needs.",
+  "sources": "Sources, checked 20 October 2026: Anthropic, Claude Fable page (anthropic.com/claude/fable); OpenAI, GPT-6 Astra announcement and API data controls; Harvey blog, \"Fable 5.1 in Harvey\", 1 September 2026; Cursor documentation for Claude Fable 5.1; Jennifer Ellis, jlellis.net, 10 June 2026; Stephen Smith, smithstephen.com, 9 June 2026."
+ },
+ "answers": [
+  {
+   "letter": "A",
+   "setup": "sonnet-5.5_xhigh",
+   "files": [
+    {
+     "name": "pilot_plan.md",
+     "text": "# Four-day week pilot: plan for your 15 October decision\n\n## Does the proposal work as written?\n\n**Not for the showroom.** I have no cover data for fitting, warehouse or office, so I can't test half-strength Mondays and Fridays there.\n\n- **Hours:** 1,500 a week now, 1,280 in the pilot (down 14.67%) on the same pay. Days lengthen from 7.5 to 8 hours, which a survey comment warned against for fitters.\n- **Saturday:** Patterns A and B put nobody in. Cover would be Mon 6, Tue-Thu 12, Fri 6, **Sat 0 against a minimum of 6**.\n- **Overtime doesn't close the gap.** Only four showroom staff volunteered (S02, S07, S09, S11); the fitter volunteer can't cover the showroom. That gives 4 on Saturday: two short, with one designer against two required. It also costs £617.40 a Saturday, £7,408.80 over 12 Saturdays, and relies on overtime that happened twice in 2026.\n- **Survey:** 87% is of 15 respondents. That is 37.5% of staff; the 13 \"yes\" answers are 32.5% of all 40. It went via a WhatsApp group and only 3 of 12 showroom staff replied. Encouraging, not a mandate.\n- **Good Friday (26 March)** is the only bank holiday in the pilot. Anyone with Friday in their pattern loses a working day that week; Mon-Thu staff don't. Decide how to treat that beforehand.\n\n## Your options\n\n1. **As proposed, plus overtime.** Fails the Saturday minimum even with every volunteer.\n2. **Saturday inside the four days** (pilot below). No overtime, every minimum met. Cost: seven people work every Saturday (now about three in five), and a 7-hour Saturday leaves them 1 hour short of 32 unless weekdays gain 20 minutes.\n3. **Everyone except the showroom** (28 staff). Lowest risk, but it excludes 12 colleagues and your designers, a hard-to-recruit group.\n4. **Wait.** Gather baseline data and run a proper all-staff survey first; the January start goes.\n\n## Pilot: Mon 4 January to Sun 28 March 2027 (option 2)\n\n**Showroom pattern** (S05 and S06 never Saturday):\n- Mon, Tue, Fri, Sat: S01, S03, S04, S11\n- Wed, Thu, Fri, Sat: S02, S07, S09\n- Mon-Thu: S05, S06, S08, S10\n- Tue-Fri: S12\n\nEveryone else: Mon-Thu or Tue-Fri, half each.\n\n**Cover by day:**\n\n| | Mon | Tue | Wed | Thu | Fri | Sat |\n|---|---|---|---|---|---|---|\n| Staff (min 5; Sat 6) | 8 | 9 | 8 | 8 | 8 | 7 |\n| Key holders (min 1) | 2 | 2 | 2 | 2 | 2 | 2 |\n| Designers (min 1; Sat 2) | 3 | 3 | 2 | 2 | 3 | 3 |\n\nLosing any one person on any day still meets every minimum. Beyond that, ask S08, S10 or S12 for paid Saturday overtime.\n\n**Measures** (against the same weeks of 2026; you set thresholds):\n1. Minimum cover met every open day; two breaches in a month pauses the showroom.\n2. Appointments held (including Saturdays) and quote-to-order conversion no worse than baseline.\n3. Fitting jobs on time, deliveries and complaints no worse than baseline.\n4. Anonymous survey of all staff before and at week 12 (aim for 80% replies), plus sickness, leavers, applications per vacancy.\n5. Overtime spend.\n\n**Review:** checks after weeks 4 and 8. Final review **Tuesday 13 April 2027**, two weeks after the pilot, with full data. Then keep, adjust or stop.\n\n**Before January:** agree 32-hour terms in writing with a right to revert; check S05's and S06's childcare arrangements.\n\nThe decision is yours.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "Claude Sonnet 5.5",
+   "level": "xhigh",
+   "maker": "Anthropic",
+   "score": 97,
+   "basics": true,
+   "cost": "61p"
+  },
+  {
+   "letter": "B",
+   "setup": "grok-4.7_high",
+   "files": [
+    {
+     "name": "pilot_plan.md",
+     "text": "# Four-day week: facts, options, and a pilot rota\n\nThis does not decide for you. 15 October is whether to start. Figures are in `out/numbers.json`.\n\n## Does it work as written?\n\nNo. On the four contracted days, cover is Mon 6, Tue 12, Wed 12, Thu 12, Fri 6, Sat 0. Weekdays meet the minimum of 5, with a key holder and a designer. Saturday needs 6, including a key holder and two designers. Shortfall: 6.\n\n\"Saturdays as now\" is a fifth day: voluntary overtime. Imran (S02), Callum (S07), Owen (S09) and Ben (S11) have offered. Lewis Grant also offered; fitters do not count. Four people leave Saturday two short, with one designer, not two. Gross overtime is £617.40 a Saturday and £7,408.80 for 12. Cover still fails.\n\nHours fall from 1,500 to 1,280 (14.67%) on the same pay. Weekly gross stays £22,526.25. The same output needs about 17% more per hour. Outside the showroom, a half split also halves Monday and Friday cover.\n\nThe 87% is of replies, not staff. 15 of 40 replied (37.5%); 13 said yes (32.5% of staff). It was a three-day WhatsApp link, mostly office (7 of 8). Showroom 3 of 12, fitting 3 of 14. Of replies, 11 wanted Friday off and 4 Monday.\n\n## Options\n\n1. As written, plus overtime. Misses Saturday cover, at the cost above.\n2. Four days for all 40, Saturday inside the showroom four. Rota below, if seven agree. Those weeks are 31 paid hours, not 32.\n3. Four days except the showroom. Safe, two-tier; designers are left out.\n4. Do not start in January. Survey all 40 first. A nine-day fortnight is a smaller test.\n\n## Pilot you could run\n\nMonday 4 January to Sunday 28 March 2027. Same pay, including 31-hour Saturday weeks. Written hours change first. Overtime stays voluntary. Fixed crew for this test only, not a permanent Saturday claim.\n\n- Wed–Sat: Rachel (S01), Hannah (S03), Callum (S07), Grace (S10), Ben (S11)\n- Mon, Tue, Wed, Sat: Imran (S02), Owen (S09)\n- Mon–Thu: Tomasz (S04), Ella (S05), Joy (S06)\n- Tue–Fri: Amira (S12)\n- Mon, Tue, Thu, Fri: Sunita (S08)\n\nElla and Joy stay off Saturday. Confirm childcare first; another weekday off still clears the minimum.\n\nCover: Mon 6, Tue 7, Wed 11, Thu 10, Fri 7, Sat 7. Keys: Imran and Sunita (Mon–Tue); Rachel and Imran (Wed, Sat); Rachel and Sunita (Thu–Fri). Designers: Tomasz and Owen (Mon–Tue); all four (Wed); Tomasz, Hannah and Grace (Thu); Hannah and Grace (Fri); Hannah, Owen and Grace (Sat). One absence still meets the minimum on Monday, Friday and Saturday; a second does not. Cap leave at one on those days.\n\nRachel, Hannah and Grace have not offered Saturdays. Do not require 12 in a row. If either says no, swap Tomasz in. Do not start on a refused rota. Gaps: an agreed swap with Tomasz, Sunita or Amira, still four days, not assumed overtime.\n\nOther teams, if included: one lead fitter on each pattern; electrician and plumber on Mon, Tue, Thu and Fri; drivers split; warehouse supervisor and an office key holder on Monday and Friday. Days are 8 hours, 30 minutes longer than now, not a compressed shift.\n\nOne bank holiday in the pilot: Good Friday 26 March 2027, closed. Easter Monday 29 March is the next day. If Friday is already off, take any lieu day on Wednesday or Thursday.\n\n## Measures and review\n\nWeekly: headcount, key holder, designers, appointments kept, quotes, orders, jobs on time, snags, sickness, gross overtime, complaints. Keep Saturday separate. Compare with 4 January–28 March 2026, allowing for season.\n\nYou set the pass marks. Warnings, not a verdict: any day under the minimum; a sharp drop in orders or Saturday appointments; a jump in sickness or resignations. Pulse on Thursday 18 February, after six weeks. Confidential survey of all 40 in week 12.\n\nKeep-or-stop meeting: Thursday 8 April 2027. That decision stays yours.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "Grok 4.7",
+   "level": "high",
+   "maker": "xAI",
+   "score": 38,
+   "basics": false,
+   "cost": "£1.17"
+  },
+  {
+   "letter": "C",
+   "setup": "gpt-6-luna_max",
+   "files": [
+    {
+     "name": "pilot_plan.md",
+     "text": "# Four-day week pilot decision plan\n\n**As written, the proposal does not work for the showroom.** Its weekday split gives 6 staff on Monday and Friday, and 12 on Tuesday to Thursday, so weekday headcounts and skill cover are available. But all 12 patterns are weekdays: Saturday cover is 0 against a minimum of 6. The only showroom Saturday-overtime volunteers are S02, S07, S09 and S11. All four would provide only 4 staff, including just 1 designer; they cannot meet the Saturday minimum or skill mix. That overtime would cost **£617.40 per Saturday** (£7,408.80 over 12 Saturdays) and still leave the showroom short. Across all teams, hours fall from 1,500 to 1,280 per week, a **14.67% reduction at the same pay**; matching weekly output would require 17.19% more output per paid hour. The survey was 15 of 40 staff (37.5%); 13 Yes answers are 32.5% of all staff, not 87%.\n\n**Options for the board:**\n\n- Trial 32 hours over four 8-hour paid days at the same pay, with Saturday included as a contracted day. The schedule below repeats weekly; an alternative is to rotate Saturday assignments, with weekday pairings changed to preserve cover.\n- Keep 37.5 hours over four days (9 hours 22 minutes 30 seconds paid each day). This preserves contracted hours but means long days and does not reduce total labour hours.\n- Trial 32 hours only with trained relief/recruitment or changed opening arrangements for the uncovered hours. Overtime volunteers alone are not a workable Saturday solution.\n\n**Pilot to cost and schedule:** 4 January–28 March 2027, 12 weeks. Keep pay unchanged and roster four 8-hour paid shifts per person. Repeat the showroom pattern in `numbers.json` weekly. Keep S05 and S06's childcare arrangements. In this pattern, showroom headcount is Mon 7, Tue 8, Wed 9, Thu 10, Fri 7 and Sat 7. Every weekday has at least two keyholders and two designers scheduled. Saturday has two keyholders and three designers; roster 7 so staggered breaks leave at least 6 on duty. Stagger weekday breaks too, keeping at least 5 on duty and a keyholder and designer available. Schedule an 8 paid-hour Saturday shift around the 09:00–16:30 opening (for example, 08:30–17:00 with a 30-minute unpaid break). The pattern assigns the same seven people to every Saturday, so confirm their agreement and monitor workload and fairness; a rotating version would need different weekly day pairings while retaining these cover checks. The showroom closes on Good Friday, 26 March; agree in writing how that closure and annual leave are treated under the temporary pattern before launch.\n\nUse the 12 weeks before launch as the baseline. Track weekly sales and gross margin, design appointments completed and conversion, customer complaints and response times, fitting completion/rework, absence, overtime, and short staff pulses on workload, wellbeing and rota fairness. Set acceptable service, output and cost thresholds before starting; review the dashboard weekly and check showroom cover daily. Compare like-for-like weeks and account for the bank-holiday closure. The survey was optional and shared through a WhatsApp group, so treat it as a prompt for a representative staff consultation, not a mandate.\n\nThe pilot runs through Sunday 28 March. Hold the decision review on **Wednesday 7 April 2027**, after the Easter bank holidays, with the 12-week results, costs, cover record and staff feedback.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "GPT-6 Luna",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 87,
+   "basics": true,
+   "cost": "2p"
+  },
+  {
+   "letter": "D",
+   "setup": "opus-5.5_xhigh",
+   "files": [
+    {
+     "name": "pilot_plan.md",
+     "text": "# Four-day week: pilot plan\n\n## Does the proposal work as written?\n\n**No, not for the showroom.**\n\n- **Saturdays:** Patterns A and B put nobody on a Saturday. Cover would be 0 against a minimum of 6 (1 key holder, 2 designers).\n- **Overtime can't fill the gap:** only four showroom staff have volunteered (S02, S07, S09, S11; F03 is a fitter). All four would give 4 staff and 1 designer, at £617.40 a Saturday (£7,408.80 over the pilot), and those four would be back on five-day weeks.\n- **Survey:** the 87% is 13 \"Yes\" answers out of 15 responses. That's 32.5% of staff. The link could be forwarded, and few of the showroom (3 of 12) or fitters (3 of 14) answered. 11 of 15 want Fridays off, which a half-and-half split can't give.\n- **Arithmetic:** hours fall 14.67% (1,500 to 1,280 a week) on the same pay, so each hour must be about 17% more productive. Days get longer (8 hours, not 7.5); one survey comment asked that fitters' days not get longer.\n\n## Your realistic options\n\n1. **As written:** Saturday cover falls short every week.\n2. **As written, plus the showroom rota below:** no routine overtime.\n3. **Office and warehouse first, showroom and fitting later:** lower risk, but may feel unfair.\n4. **Delay:** run a proper survey and consult each team first.\n\n## A pilot you could run: 4 January to 28 March 2027\n\nOther teams: Patterns A and B as proposed, once team leads confirm cover (the warehouse has one key holder).\n\nShowroom: four patterns of four consecutive opening days:\n\n- **A, Mon–Thu:** S02, S05, S06, S09\n- **B, Tue–Fri:** S07, S11\n- **C, Wed–Sat:** S01, S03, S12\n- **D, Fri–Tue:** S04, S08, S10\n\n| | Mon | Tue | Wed | Thu | Fri | Sat |\n|---|---|---|---|---|---|---|\n| Staff (minimum) | 7 (5) | 9 (5) | 9 (5) | 9 (5) | 8 (5) | 6 (6) |\n| Key holders | 2 | 2 | 2 | 2 | 2 | 2 |\n| Designers | 3 | 3 | 2 | 2 | 3 | 3 |\n\n- **Weekdays:** at least 2 people spare.\n- **Saturdays:** no one spare, as now.\n  - Leave: someone off Saturdays works the shift and takes a weekday off that week.\n  - Sickness: an overtime volunteer covers it (£138.60–£176.40); that's why all four volunteers are off Saturdays.\n- **Trade-off:** six people work every Saturday (now about six in ten). Check they agree, and that S05's and S06's childcare still fits. Same-role swaps keep these figures.\n- **Decide before you start:**\n  - A Saturday week is 31 paid hours, not 32 (as now, 37 not 37.5).\n  - Good Friday (26 March) falls in the pilot: agree a bank-holiday rule so Friday-off staff don't lose out.\n\n## Measuring success\n\nSet targets before January; compare with January–March 2026. Figures are suggestions.\n\n- **Cover:** no day below minimum, and Saturday overtime only for absences.\n- **Business:** design appointments, orders and sales within 5% of last year. Fitting jobs on schedule, and no rise in complaints.\n- **People:** sickness absence, plus an all-staff survey run by HR in December, week 6 and week 12.\n- **Recruitment:** applications per fitter or designer vacancy.\n\n## Review timetable\n\n- **By mid-December:** consult staff and put the temporary change in writing.\n- **Weekly:** Rachel checks showroom cover.\n- **Wednesday 10 February:** mid-point review (adjust or stop).\n- **Friday 2 April:** final data.\n- **Wednesday 7 April 2027:** decision meeting. Pilot patterns continue from 29 March until you announce your decision.\n",
+     "kind": "md"
+    }
+   ],
+   "name": "Claude Opus 5.5",
+   "level": "xhigh",
+   "maker": "Anthropic",
+   "score": 90,
+   "basics": true,
+   "cost": "£1.36"
+  }
+ ],
+ "table": [
+  {
+   "rank": 1,
+   "setup": "sonnet-5.5_xhigh",
+   "name": "Claude Sonnet 5.5",
+   "level": "xhigh",
+   "maker": "Anthropic",
+   "score": 96,
+   "basics": 4,
+   "n": 4,
+   "cost": "39p",
+   "tasks": [
+    100,
+    97,
+    96,
+    93
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/sonnet-5.5_xhigh/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan for your 15 October decision\n\n## Does the proposal work as written?\n\n**Not for the showroom.** I have no cover data for fitting, warehouse or office, so I can't test half-strength Mondays and Fridays there.\n\n- **Hours:** 1,500 a week now, 1,280 in the pilot (down 14.67%) on the same pay. Days lengthen from 7.5 to 8 hours, which a survey comment warned against for fitters.\n- **Saturday:** Patterns A and B put nobody in. Cover would be Mon 6, Tue-Thu 12, Fri 6, **Sat 0 against a minimum of 6**.\n- **Overtime doesn't close the gap.** Only four showroom staff volunteered (S02, S07, S09, S11); the fitter volunteer can't cover the showroom. That gives 4 on Saturday: two short, with one designer against two required. It also costs £617.40 a Saturday, £7,408.80 over 12 Saturdays, and relies on overtime that happened twice in 2026.\n- **Survey:** 87% is of 15 respondents. That is 37.5% of staff; the 13 \"yes\" answers are 32.5% of all 40. It went via a WhatsApp group and only 3 of 12 showroom staff replied. Encouraging, not a mandate.\n- **Good Friday (26 March)** is the only bank holiday in the pilot. Anyone with Friday in their pattern loses a working day that week; Mon-Thu staff don't. Decide how to treat that beforehand.\n\n## Your options\n\n1. **As proposed, plus overtime.** Fails the Saturday minimum even with every volunteer.\n2. **Saturday inside the four days** (pilot below). No overtime, every minimum met. Cost: seven people work every Saturday (now about three in five), and a 7-hour Saturday leaves them 1 hour short of 32 unless weekdays gain 20 minutes.\n3. **Everyone except the showroom** (28 staff). Lowest risk, but it excludes 12 colleagues and your designers, a hard-to-recruit group.\n4. **Wait.** Gather baseline data and run a proper all-staff survey first; the January start goes.\n\n## Pilot: Mon 4 January to Sun 28 March 2027 (option 2)\n\n**Showroom pattern** (S05 and S06 never Saturday):\n- Mon, Tue, Fri, Sat: S01, S03, S04, S11\n- Wed, Thu, Fri, Sat: S02, S07, S09\n- Mon-Thu: S05, S06, S08, S10\n- Tue-Fri: S12\n\nEveryone else: Mon-Thu or Tue-Fri, half each.\n\n**Cover by day:**\n\n| | Mon | Tue | Wed | Thu | Fri | Sat |\n|---|---|---|---|---|---|---|\n| Staff (min 5; Sat 6) | 8 | 9 | 8 | 8 | 8 | 7 |\n| Key holders (min 1) | 2 | 2 | 2 | 2 | 2 | 2 |\n| Designers (min 1; Sat 2) | 3 | 3 | 2 | 2 | 3 | 3 |\n\nLosing any one person on any day still meets every minimum. Beyond that, ask S08, S10 or S12 for paid Saturday overtime.\n\n**Measures** (against the same weeks of 2026; you set thresholds):\n1. Minimum cover met every open day; two breaches in a month pauses the showroom.\n2. Appointments held (including Saturdays) and quote-to-order conversion no worse than baseline.\n3. Fitting jobs on time, deliveries and complaints no worse than baseline.\n4. Anonymous survey of all staff before and at week 12 (aim for 80% replies), plus sickness, leavers, applications per vacancy.\n5. Overtime spend.\n\n**Review:** checks after weeks 4 and 8. Final review **Tuesday 13 April 2027**, two weeks after the pilot, with full data. Then keep, adjust or stop.\n\n**Before January:** agree 32-hour terms in writing with a right to revert; check S05's and S06's childcare arrangements.\n\nThe decision is yours.\n"
+    }
+   ]
+  },
+  {
+   "rank": 2,
+   "setup": "sonnet-5.5_max",
+   "name": "Claude Sonnet 5.5",
+   "level": "max",
+   "maker": "Anthropic",
+   "score": 95,
+   "basics": 4,
+   "n": 4,
+   "cost": "£1.43",
+   "tasks": [
+    94,
+    98,
+    100,
+    88
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/sonnet-5.5_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot plan\n\nThe decision is yours; this sets out the facts and options.\n\n## Does the proposal work as written?\n\n**Not for the showroom.**\n\n- **Saturdays have no cover.** Patterns A (Mon–Thu) and B (Tue–Fri) leave Saturday with 0 showroom staff against a minimum of 6. Weekdays are fine (Mon 6, Tue–Thu 12, Fri 6; minimum 5).\n- **Overtime can't close the gap.** Four showroom staff have volunteered (the fifth is a fitter and can't cover). That gives 4 on a Saturday: 2 short, with one designer where two are required. It costs £617.40 a Saturday (£7,408.80 over 12 Saturdays), and overtime is voluntary.\n- **\"87% of staff\" is 13 of the 15 who replied.** Only 15 of 40 replied (37.5%), so 13 yeses is 32.5% of all staff. It went round one WhatsApp group; the office answered 7 of 8, the showroom 3 of 12. Encouraging, not conclusive. And 11 of 15 want Friday off; A/B gives that to half.\n- **Hours.** Same pay for 32 hours, not 37.5, cuts total weekly hours from 1,500 to 1,280 (−14.67%). Days lengthen from 7.5 to 8 hours, a worry one survey comment raised for fitters.\n\n## Your options\n\n1. **As written**, with or without overtime: fails Saturday cover.\n2. **Four-day week for all, Saturday built into the showroom pattern** (pilot below): meets every minimum without overtime, but the Saturday team works every Saturday (12 in the pilot, about 7 in 12 weeks now).\n3. **Everyone except the showroom** (28 staff): no Saturday problem, but leaves out the designers you want to recruit.\n4. **Wait:** survey all 40 staff and set cover rules for every team first.\n\n## Pilot (option 2): 4 January to 28 March 2027\n\n12 weeks, 12 Saturdays. Rachel Byrne agrees it with each person, checking S05's and S06's childcare arrangements first.\n\n- **Mon–Thu:** S02, S05, S06, S09, S11\n- **Saturday team, Wed–Sat:** S01, S03, S04, S07, S12\n- **Saturday team, Mon, Tue, Fri, Sat:** S08, S10 (no three-day break; ask for volunteers)\n\n| Day | On duty (minimum) | Key holders | Designers |\n|---|---|---|---|\n| Mon, Tue | 7 (5) | S02, S08 | S09, S10 |\n| Wed, Thu | 10 (5) | S01, S02 | S03, S04, S09 |\n| Fri | 7 (5) | S01, S08 | S03, S04, S10 |\n| Sat | 7 (6) | S01, S08 | S03, S04, S10 |\n\nEvery day has two key holders and at least two designers (three on Saturday, our busiest day), so one absence never breaks the minimum. Cover absences by swapping with a same-role colleague, then overtime from S02, S09 or S11 (£138.60 to £176.40 a shift).\n\n**Other teams:** Pattern A or B as proposed, by preference. Team leads set minimum cover first (none exists), because Mondays and Fridays run at half strength.\n\n**Good Friday (26 March)** is the only bank holiday. Anyone working Fridays loses a day that week; agree how it is treated.\n\n## How we would know it worked\n\nAgree pass marks first; baseline is the same 12 weeks of 2026.\n\n- Showroom minimum met every open day; any breach triggers a review.\n- Appointments kept, sales, fitting jobs and deliveries on time: each within 5% of baseline.\n- Short survey of all 40 at weeks 0, 6 and 12; sickness; resignations.\n- Applications per vacancy (12 weeks can't prove retention).\n\n## Review\n\nWeek-6 check: Tuesday 16 February 2027. Decision meeting: **Tuesday 13 April 2027**, after Easter Monday (29 March, closed), leaving time for March figures and the final survey.\n"
+    }
+   ]
+  },
+  {
+   "rank": 3,
+   "setup": "gpt-6.1-sol_max",
+   "name": "GPT-6.1 Sol",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 94,
+   "basics": 4,
+   "n": 4,
+   "cost": "13p",
+   "tasks": [
+    94,
+    93,
+    100,
+    90
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6.1-sol_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "**Fernhill Kitchens: four-day-week pilot for your decision**\n\nThe proposal does not work as written. Contracted hours fall from 1,500 to 1,280 weekly (14.67%), with unchanged pay. Showroom cover Mon–Sat would be 6, 12, 12, 12, 6, 0. Saturday needs six, including one key holder and two designers: a six-person shortfall. Volunteers S02, S07, S09 and S11 provide only four, including one key holder and one designer; fitter F03 cannot count. Overtime costs £617.40 per Saturday, £7,408.80 over 12 Saturdays, without meeting minimums. Friday also has only one key holder, leaving break cover unresolved.\n\nThe survey shows 15/40 responses (37.5%) and 13 Yes answers (32.5% of all staff). The quoted 87% describes respondents. Voluntary WhatsApp recruitment and uneven team participation may bias results; consult all 40 privately through a neutral channel before agreeing changes.\n\nOptions for your 15 October decision:\n\n- Retain the current five-day week, or defer for consultation.\n- Trial 32 hours at unchanged pay with staggered showroom days, including Saturdays, as below.\n- Retain A/B and recruit or train a separately budgeted Saturday team with sufficient skills and break cover. Volunteers alone cannot provide it; their overtime adds a fifth working day.\n- A compressed 37.5-hour four-day week needs longer days and Saturday planning; it does not reduce hours.\n\nThe optional pilot runs **4 January–28 March 2027**, with 12 Saturdays. All teams close on **Good Friday, 26 March**, the only England bank holiday within it. Agree these fixed showroom patterns for 12 weeks, retaining S05/S06’s no-Saturday arrangements and consulting on fair Saturday allocation:\n\n| Staff | Working days | Staff | Working days |\n|---|---|---|---|\n| S01 | Mon Tue Thu Sat | S07 | Mon Tue Fri Sat |\n| S02 | Mon Wed Fri Sat | S08 | Tue Wed Thu Fri |\n| S03 | Mon Tue Wed Sat | S09 | Tue Thu Fri Sat |\n| S04 | Mon Wed Thu Sat | S10 | Mon Tue Wed Fri |\n| S05 | Mon Tue Wed Thu | S11 | Mon Wed Fri Sat |\n| S06 | Tue Wed Thu Fri | S12 | Tue Thu Fri Sat |\n\n| Scheduled cover | Mon | Tue | Wed | Thu | Fri | Sat |\n|---|---:|---:|---:|---:|---:|---:|\n| Staff | 8 | 9 | 8 | 7 | 8 | 8 |\n| Key holders | 2 | 2 | 2 | 2 | 2 | 2 |\n| Designers | 3 | 3 | 3 | 2 | 2 | 3 |\n\nWeekdays run 09:00–17:30; Saturday staff work 08:00–16:30, with preparation/training before 09:00 opening. Each shift includes 30 minutes’ unpaid lunch, giving 32 paid hours over four days. Saturdays are contracted days; this rota requires no routine Saturday overtime. Rachel staggers lunches to maintain five staff/one key holder/one designer on weekdays and six/one/two on Saturdays. Confirm qualified absence cover before launch; check leave and swaps against these minima. Record bank-holiday entitlement fairly in hours, including staff off Fridays. Other teams use balanced A/B patterns only after checking specialist skills and job schedules.\n\nEstablish a November–December baseline and compare with prior January–March demand. Agree success thresholds before launch: minimum cover throughout opening; demand-adjusted output, quality and gross margin maintained; overtime within an agreed contingency budget; wellbeing improved without unpaid work. Track weekly appointments, sales/conversion, installations/deliveries, waiting times, rework, complaints, sickness, actual hours and anonymous wellbeing. Adjust output comparisons for the bank-holiday closure. Review on **18 January** and **15 February**, correcting cover failures immediately. At the **Tuesday 30 March 2027** meeting, after Easter Monday, you decide whether to continue, amend or stop.\n"
+    }
+   ]
+  },
+  {
+   "rank": 3,
+   "setup": "opus-5.5_max",
+   "name": "Claude Opus 5.5",
+   "level": "max",
+   "maker": "Anthropic",
+   "score": 94,
+   "basics": 4,
+   "n": 4,
+   "cost": "£2.02",
+   "tasks": [
+    91,
+    97,
+    100,
+    89
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/opus-5.5_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week: pilot plan\n\n## Does it work as written?\n\n**Not for the showroom.**\n\n- **Saturdays are empty.** Patterns A (Mon–Thu) and B (Tue–Fri) roster nobody on Saturday: 0 against a minimum of 6, on the day with a third of design appointments. Midweek gets 12 (minimum 5).\n- **Overtime can't fill it.** Only four volunteers can cover the showroom (Imran, Callum, Owen, Ben; Lewis is a fitter): 4 staff, 1 designer, still 2 people and a designer short, for £617.40 a Saturday (£7,408.80 over 12), with those four working 39 hours over five days.\n- **\"87%\" is 13 of 15 replies**: 32.5% of all 40 staff, on a 37.5% response rate. 7 of 8 office staff replied; only 3 of 12 showroom staff and 3 of 14 fitters. The anonymous link could be forwarded, so replies can't be verified. 11 of 15 prefer Fridays off, which a 50/50 split can't give.\n- **Hours fall 14.67%** (1,500 to 1,280 a week) on the same pay: each hour must produce about 17% more to hold output. Days lengthen to 8 hours, a concern raised for fitters.\n\n## Options\n\n1. **As written:** Saturday falls short every week, even with every volunteer.\n2. **Amended pilot (below):** whole company; showroom patterns include Saturday. Meets every minimum without overtime, but more complex, and Saturday staff must agree.\n3. **Pilot without the showroom:** simpler, but two-tier, and leaves out the designers you most want to recruit.\n4. **Delay:** consult all 40 staff on real patterns, then start later or not at all; recruitment benefits wait.\n\n## Pilot (option 2)\n\n**Monday 4 January to Sunday 28 March 2027:** 12 weeks, 12 Saturdays. Good Friday (26 March) is the only bank holiday.\n\n|Pattern|Days|Showroom staff|\n|---|---|---|\n|A|Mon–Thu|Rachel, Hannah, Ella, Joy|\n|B|Tue–Fri|Tomasz, Amira|\n|C|Wed–Sat|Imran, Callum, Owen|\n|D|Mon, Tue, Fri, Sat|Sunita, Grace, Ben|\n\n|Cover|Mon|Tue|Wed|Thu|Fri|Sat|\n|---|---|---|---|---|---|---|\n|Staff (minimum 5; Sat 6)|7|9|9|9|8|6|\n|Key holders|2|2|2|2|2|2|\n|Designers|2|3|3|3|3|2|\n\n- C and D each have a key holder, designer and consultant. Two key holders every day, and every weekday survives one absence.\n- **Saturday absence:** Rachel, Hannah, Tomasz or Amira swaps a weekday for that Saturday (Hannah or Tomasz for a designer). Not overtime; weekdays still meet the minimum.\n- Ella and Joy stay off Saturdays (childcare); confirm their weekdays.\n- C and D total 31 hours (Saturday is 7 paid hours): accept that or add an hour.\n- Saturdays can rotate by swapping whole patterns between same-role colleagues; cover stays identical.\n- **Other teams:** A or B by preference where cover allows; plan around days off for Karen and Helen (sole warehouse/office key holders) and our only electrician and plumber.\n- Agree temporary terms in writing; count leave and bank holidays in hours (Good Friday is Pattern A's day off).\n\n## Measuring success\n\nSet pass marks before January against the same weeks of 2026:\n\n- **Business:** orders (number and value), design appointments and wait for the next slot, kitchens fitted and deliveries made on time, complaints.\n- **Cover:** Saturdays at minimum without overtime (12 of 12).\n- **People:** survey all staff (one reply each) in December and week 11; sickness; leavers; applicants for fitter and designer jobs.\n\n## Review\n\n- **Weekly:** Rachel logs cover, swaps and overtime.\n- **Mid-point check, Thursday 18 February 2027,** against stop triggers agreed in advance.\n- **Decision meeting, Thursday 15 April 2027:** after Easter, with final figures and survey in; pilot patterns continue until then.\n"
+    }
+   ]
+  },
+  {
+   "rank": 3,
+   "setup": "deepseek-v4.1-flash_max",
+   "name": "DeepSeek V4.1 Flash",
+   "level": "max",
+   "maker": "DeepSeek",
+   "score": 94,
+   "basics": 4,
+   "n": 4,
+   "cost": "4p",
+   "tasks": [
+    90,
+    94,
+    99,
+    92
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/deepseek-v4.1-flash_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week: pilot plan\n\n**For:** Nina Ashworth, Fernhill Kitchens · **Pilot window:** Mon 4 Jan – Sun 28 Mar 2027\n\n## Does your proposal work as written?\n\n**Not for the showroom.** The fixed Mon–Thu / Tue–Fri patterns leave **no one on duty on Saturday**, against a minimum of 6, and weekday cover is lopsided (Mon 6, Tue–Thu 12, Fri 6). Overtime cannot close the gap: only four showroom staff have volunteered, and even if all four worked every Saturday you would have 4 people — one designer, not the two required — at **£617.40 per Saturday (£7,408.80 over the 12 Saturdays)**.\n\nThe other 28 staff (fitting, warehouse, office) can run your A/B patterns as proposed; they do not work weekends.\n\nTwo more things to weigh:\n- **32 hours for the same pay cuts contracted hours by 14.67%** (1,500 → 1,280 hours a week). That is 17.2% more per hour worked, so output must hold.\n- **The survey overstates support.** 87% is 13 of 15 responses. Only 15 of 40 staff answered (37.5%), so “yes” is **32.5% of all staff**. It was self-selected, and only 3 of 12 showroom staff replied.\n\n## Your options\n\n1. **Staggered showroom rota (the pilot below).** All 40 on 32 hours over four days; showroom rest days are spread across Mon–Sat so every day is covered.\n2. **Non-showroom teams only.** The other 28 staff trial the four-day week; the showroom stays five days. Easy cover, but two tiers of staff, and skips the showroom designers.\n3. **Pause and redesign.** Recruit or train more Saturday-capable staff first (at least two designers, one key holder), or keep 37.5 hours and trial compressed hours.\n\n## The pilot\n\n- 12 weeks, 4 Jan – 28 Mar 2027. All staff move to 32 hours over four 8-hour days, same pay.\n- **Non-showroom:** Pattern A Mon–Thu / Pattern B Tue–Fri, split half and half per team.\n- **Showroom:** staggered patterns below. S05 (Ella Marsh) and S06 (Joy Adeyemi) keep their agreed no-Saturday arrangements; the other ten work Saturdays, so Saturday duty is shared equally. Saturday is a 7-paid-hour shift (09:00–16:30); one weekday shift is extended so each week totals 32 hours. No Saturday overtime is needed.\n- **Closed:** Good Friday, 26 March 2027.\n\nShowroom working days:\n\n- Wed–Sat: S03, S07, S09\n- Mon, Thu, Fri, Sat: S01, S10\n- Mon, Tue, Fri, Sat: S02, S11\n- Mon, Tue, Wed, Sat: S04, S08, S12\n- Mon, Tue, Thu, Fri: S05\n- Tue–Fri: S06\n\nDaily cover (staff on duty / key holders / designers): **Mon 8/3/2 · Tue 7/2/1 · Wed 7/1/3 · Thu 7/1/3 · Fri 9/2/3 · Sat 10/3/4.** Every day meets the minimum (5 on Mon–Fri with 1 key holder and 1 designer; 6 on Saturday with 1 key holder and 2 designers), with buffer for sickness.\n\n## Measuring success\n\nBaseline: the same 12 weeks in 2026.\n\n- **Cover:** no day below minimum; no missed design appointments.\n- **Output:** enquiries, quotes, orders and conversion at or above baseline; installations on time.\n- **Customers:** appointment availability, response times, complaints.\n- **People:** all-staff pulse at weeks 4, 8 and 12 (target 80%+ response); absence, overtime, resignations.\n- **Cost:** overtime or temporary cover, and pay per hour worked, against the 14.67% hours cut.\n- **Mid-pilot checkpoint:** Mon 15 Feb 2027 — adjust or stop if cover fails or output drops materially.\n\n## Review\n\nA results pack in week 12; decision meeting **Tuesday 30 March 2027** (the first working day after the pilot — Monday 29 March is Easter Monday). Keep, adjust or stop: your call.\n"
+    }
+   ]
+  },
+  {
+   "rank": 3,
+   "setup": "gpt-6.1-sol_low",
+   "name": "GPT-6.1 Sol",
+   "level": "low",
+   "maker": "OpenAI",
+   "score": 94,
+   "basics": 4,
+   "n": 4,
+   "cost": "6p",
+   "tasks": [
+    92,
+    92,
+    100,
+    92
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6.1-sol_low/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens: four-day week pilot for Nina’s decision\n\n**The proposal does not work as written.** Contracted hours fall from 1,500 to 1,280 weekly (14.67%) at unchanged pay. Its showroom patterns provide Mon–Sat cover of **6, 12, 12, 12, 6, 0**. Weekday headcount and skills meet minimums, but Saturday needs six staff, including one key holder and two designers. “Saturdays carry on” would add a fifth day.\n\nOnly S02, S07, S09 and S11 are qualified Saturday overtime volunteers: four staff, one key holder and only one designer. F03 cannot count. All four cost **£617.40 per Saturday; £7,408.80 over 12 Saturdays**, gross pay only. This still leaves two staff and one designer missing, and willingness is not guaranteed availability.\n\nSurvey support is 13 of 15 respondents (86.7%), **32.5% of all staff**; response rate is 37.5%. The optional WhatsApp survey overrepresents office staff; it does not establish company-wide support. Invite all 40 staff to a fresh confidential survey and discuss constraints individually.\n\n**Realistic options:** retain current arrangements; trial 32 hours at unchanged pay with Saturday included in showroom contracts as below; or retain the proposed weekday patterns and recruit/secure extra Saturday cover, budgeting for skills and absences as well as overtime. Compressing 37.5 hours into four days is another option, but offers no hours reduction and longer days. You choose the route at the 15 October board meeting.\n\n**A runnable 32-hour option, subject to staff agreement:** 4 January–28 March 2027 inclusive. Other teams use balanced A/B patterns, after checking skills and operational capacity. Showroom staff work these four fixed days:\n\n| Staff | Working days |\n|---|---|\n| S01 | Mon Tue Thu Sat |\n| S02 | Mon Wed Fri Sat |\n| S03 | Tue Thu Fri Sat |\n| S04 | Mon Tue Fri Sat |\n| S05, S12 | Mon Tue Wed Thu |\n| S06 | Mon Wed Thu Fri |\n| S07, S11 | Mon Wed Thu Sat |\n| S08 | Tue Wed Thu Fri |\n| S09 | Wed Thu Fri Sat |\n| S10 | Mon Tue Wed Thu |\n\nS05/S06 retain Saturday-free childcare arrangements. Weekdays run 09:00–17:30 with 30 minutes unpaid lunch (eight paid hours). Saturday workers run **08:00–16:30**, including paid preparation and 30 minutes unpaid lunch: eight paid hours, preserving 32 weekly. Agree this change; the existing seven-paid-hour Saturday would otherwise yield only 31 hours.\n\n| Day | Staff | Key holders | Designers |\n|---|---:|---:|---:|\n| Mon | 9 | 2 | 2 |\n| Tue | 7 | 2 | 3 |\n| Wed | 9 | 2 | 2 |\n| Thu | 10 | 2 | 3 |\n| Fri | 6 | 2 | 3 |\n| Sat | 7 | 2 | 3 |\n\nStagger lunches to maintain minimums continuously. Rachel checks leave and sickness cover before booking; arrange qualified swaps or paid relief, preserving four days where possible. Escalate any unresolved gap to Nina before opening. Do not assume volunteers can fill every absence.\n\nAgree baselines and thresholds before launch: weekly completed installations/designs, sales and appointments against comparable demand; lead times, errors, complaints, overtime cost, absence and staff wellbeing. Require minimum cover throughout opening and no deterioration in quality or service; record actual hours to detect hidden overtime.\n\nReview weekly, formally at weeks 4 and 8; correct or pause unsafe/undercovered arrangements. Closed **26 March (Good Friday)**; agree equitable holiday/leave treatment beforehand. There are 12 Saturdays. Easter Monday, 29 March, falls outside the pilot. Hold the decision meeting **6 April 2027**, to consider continuation, amendment or reversion using results and staff feedback.\n"
+    }
+   ]
+  },
+  {
+   "rank": 3,
+   "setup": "gpt-6.1-sol_medium",
+   "name": "GPT-6.1 Sol",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 94,
+   "basics": 4,
+   "n": 4,
+   "cost": "6p",
+   "tasks": [
+    92,
+    91,
+    100,
+    93
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6.1-sol_medium/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens: four-day-week pilot for Nina’s decision\n\n**The proposal does not work as written.** Contracted hours fall from 1,500 to 1,280 weekly (14.67%) at unchanged pay. The A/B showroom patterns give Mon–Sat cover of **6, 12, 12, 12, 6, 0**. Weekdays meet headcount and skill minima; Saturday needs six staff, including a key holder and two designers. Continuing the existing Saturday rota on top would mean five working days for those staff and paid overtime.\n\nOnly S02, S07, S09 and S11 are eligible Saturday overtime volunteers: four staff, one key holder and one designer. F03 is untrained for showroom cover. All four volunteers cost **£617.40 per Saturday; £7,408.80 over 12 Saturdays**, gross pay only. They still leave a two-person shortfall and one missing designer; willingness is not guaranteed attendance.\n\n**Options:** stagger showroom days across Monday–Saturday within 32 hours; retain A/B but secure and cost additional trained Saturday cover; or change Saturday opening/service, accepting the commercial impact (a third of design appointments occur then). Compressing 37.5 hours into four days requires longer days and feasibility checks.\n\n**A runnable pilot:** Monday 4 January–Sunday 28 March 2027, same pay, 32 contracted hours. Keep A/B for other teams after checking skills, deliveries and workload at Monday/Friday half-strength. Agree temporary patterns, leave and reversion terms with staff; preserve S05/S06’s childcare arrangements.\n\n| Staff | Four working days |\n|---|---|\n| S01 | Mon, Tue, Wed, Sat |\n| S02 | Mon, Thu, Fri, Sat |\n| S03 | Mon, Tue, Thu, Sat |\n| S04 | Tue, Wed, Fri, Sat |\n| S05, S06 | Mon, Tue, Wed, Thu |\n| S07 | Mon, Tue, Fri, Sat |\n| S08 | Tue, Wed, Thu, Fri |\n| S09 | Mon, Thu, Fri, Sat |\n| S10 | Mon, Tue, Wed, Fri |\n| S11 | Tue, Wed, Thu, Sat |\n| S12 | Mon, Wed, Fri, Sat |\n\n| Day | Staff | Key holders | Designers | Minimum staff |\n|---|---:|---:|---:|---:|\n| Mon | 9 | 2 | 3 | 5 |\n| Tue | 9 | 2 | 3 | 5 |\n| Wed | 8 | 2 | 2 | 5 |\n| Thu | 7 | 2 | 2 | 5 |\n| Fri | 7 | 2 | 3 | 5 |\n| Sat | 8 | 2 | 3 | 6 |\n\nWeekdays: 09:00–17:30, with 30 minutes unpaid lunch. Saturdays: **08:30–17:00**, including preparation/admin outside public opening, with 30 minutes unpaid lunch: eight paid hours. The usual seven-hour Saturday shift would leave workers at 31 hours. Stagger breaks to maintain headcount and skills continuously. Rachel must check leave/absence cover before bookings; arrange agreed swaps or qualified relief, and reduce bookings if minima cannot be maintained. Margins are limited, especially for designers.\n\n**Evidence and review:** 15/40 responded (37.5%); 13 Yes answers represent 32.5% of all staff, not 87%. The voluntary WhatsApp survey overrepresents office staff. Invite all staff confidentially before and during the pilot.\n\nBefore launch, agree comparable seasonal baselines and targets: maintain weekly completed installations, design appointments and gross margin; no worsening backlogs, complaints, rework or safety; every opening shift meets cover minima. Track actual hours, overtime costs, absence and wellbeing weekly. Review on **1 February** and **1 March**, adjusting or pausing if cover/safety fails. Good Friday **26 March** is closed; Easter Monday **29 March** falls outside the pilot. Account for closure and fair bank-holiday entitlement. Hold the decision meeting **Tuesday 30 March 2027**, reviewing results and staff feedback; continuation remains your decision.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "gpt-6.1-sol_xhigh",
+   "name": "GPT-6.1 Sol",
+   "level": "xhigh",
+   "maker": "OpenAI",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "11p",
+   "tasks": [
+    89,
+    92,
+    100,
+    92
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6.1-sol_xhigh/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens: four-day week pilot for consideration\n\nYour proposal does not work as written. Weekly contracted hours fall from **1,500 to 1,280 (14.67%)**, with pay unchanged. Showroom cover becomes Mon 6, Tue–Thu 12, Fri 6, Sat 0. Saturday needs six staff, including a key holder and two designers. The four eligible overtime volunteers (S02, S07, S09, S11) provide only four staff and one designer. Their gross overtime costs **£617.40 each Saturday; £7,408.80 over twelve Saturdays**, without solving the shortage. Other teams’ volunteers cannot count as showroom cover.\n\nThe survey shows support among respondents, not 87% of all staff: 15/40 responded (**37.5%**); 13/40 said yes (**32.5%**). Optional WhatsApp recruitment and uneven team participation limit its representativeness. Invite all 40 staff directly to a confidential follow-up before launch.\n\nYour options are to retain 37.5 hours with more flexible rotas; compress 37.5 hours into four longer days; or trial 32 hours on unchanged pay using staggered days including Saturdays. Keeping A/B would require additional qualified Saturday staffing or changed opening, risking a day carrying about one-third of appointments. Compression preserves hours but requires longer shifts. The choice remains yours at the **15 October 2026 board meeting**.\n\nIf you choose reduced hours, one viable pilot runs **4 January–28 March 2027**. It includes twelve Saturdays and one England bank holiday, **Good Friday, 26 March**, when everyone is closed. Easter Monday, 29 March, falls after the pilot.\n\nAgree this fixed showroom rota with staff; preserve S05/S06’s weekday-only childcare arrangements:\n\n| Staff | Four working days |\n|---|---|\n| S01 | Mon, Tue, Thu, Fri |\n| S02 | Mon, Wed, Thu, Sat |\n| S03 | Mon, Tue, Fri, Sat |\n| S04, S05 | Mon, Tue, Wed, Thu |\n| S06 | Tue, Wed, Thu, Fri |\n| S07, S09 | Mon, Wed, Fri, Sat |\n| S08 | Tue, Wed, Fri, Sat |\n| S10 | Tue, Thu, Fri, Sat |\n| S11 | Mon, Thu, Fri, Sat |\n| S12 | Tue, Wed, Thu, Sat |\n\n| Scheduled cover | Mon | Tue | Wed | Thu | Fri | Sat |\n|---|---:|---:|---:|---:|---:|---:|\n| Staff | 8 | 8 | 8 | 8 | 8 | 8 |\n| Key holders | 2 | 2 | 2 | 2 | 2 | 2 |\n| Designers | 3 | 3 | 2 | 2 | 3 | 3 |\n\nSaturday remains 09:00–16:30 with seven paid hours. Saturday workers’ three weekdays are **08:50–17:40**, with 30 minutes unpaid lunch: 8h20 paid each. Weekday-only staff work 09:00–17:30 with 30 minutes unpaid lunch. Both patterns total 32 hours over four days. Stagger breaks to maintain live cover. Agree qualified absence relief/swaps; pause if minimums cannot be maintained. This rota needs no routine overtime.\n\nBefore launch, agree Saturday allocation, temporary terms and holiday accounting, including bank holidays on days off. Use A/B elsewhere only after managers verify fitting partnerships, deliveries and essential-role cover.\n\nRachel checks cover weekly. Against pre-pilot baselines and comparable winter data, track weekly appointments/orders, gross margin, completed fittings, delivery reliability, rework/complaints, absence, overtime cost and anonymous wellbeing; also measure output per paid hour. Agree targets before launch: maintain output/service and margin, meet every cover minimum, stay within the overtime budget, and improve wellbeing without unpaid work. Account for holidays and seasonality.\n\nReview weekly and formally on **15 February**. Bring results to your decision meeting on **6 April 2027**, after the pilot and Easter Monday, to consider continuing, modifying or reverting.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "gpt-6.1-sol_high",
+   "name": "GPT-6.1 Sol",
+   "level": "high",
+   "maker": "OpenAI",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "8p",
+   "tasks": [
+    93,
+    91,
+    100,
+    88
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6.1-sol_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens: four-day week pilot for Nina's decision\n\n**The proposal does not work as written.** Contracted hours fall from 1,500 to 1,280 weekly (14.67%), with unchanged pay. Showroom cover becomes Mon 6, Tue–Thu 12, Fri 6, Sat 0. Weekdays meet headcount and skill minima; Saturday is six short. Only S02, S07, S09 and S11 qualify and volunteer for showroom overtime: four staff, one key holder and only one designer, against Saturday's six staff/two designers requirement. Their seven-hour shifts cost £617.40 each Saturday, £7,408.80 over 12 Saturdays, without solving cover. Other teams' volunteers cannot count.\n\n**Staff support is uncertain.** Fifteen responses represent 37.5% of staff; 13 yes answers represent 32.5% of all staff, or 86.7% of respondents. The optional WhatsApp survey was self-selected and office-heavy. Repeat confidentially with all 40 staff, reporting team response rates and constraints before agreeing patterns.\n\n**Realistic options:** trial 32 hours at unchanged pay using staggered showroom days including Saturdays; phase the trial into teams whose cover is ready while retaining the showroom's current rota; compress 37.5 hours into four longer days (9 hours 22½ minutes paid daily, still needing staggered Saturday cover); or retain current arrangements. Keeping A/B for the showroom requires additional trained Saturday staff, including another designer; existing volunteers alone cannot deliver it. Recruitment or training would need a separate costed plan.\n\n**A 32-hour pilot you could authorise:** 4 January–28 March 2027, subject to consultation, temporary written agreements and verified fitting/warehouse/office coverage, including specialist trades. Keep A/B outside the showroom only where service coverage is demonstrated. Use this fixed showroom rota:\n\n| Staff | Four working days | Staff | Four working days |\n|---|---|---|---|\n| S01 | Mon, Thu, Fri, Sat | S07 | Tue, Wed, Thu, Sat |\n| S02 | Mon, Tue, Wed, Sat | S08 | Tue, Wed, Thu, Fri |\n| S03 | Mon, Tue, Wed, Sat | S09 | Mon, Thu, Fri, Sat |\n| S04 | Tue, Thu, Fri, Sat | S10 | Mon, Wed, Thu, Fri |\n| S05 | Mon, Tue, Wed, Thu | S11 | Tue, Thu, Fri, Sat |\n| S06 | Mon, Tue, Wed, Fri | S12 | Mon, Wed, Fri, Sat |\n\n**Daily cover:** eight staff and two key holders on each day, Mon–Sat. Designers: Mon 3, Tue 2, Wed 2, Thu 3, Fri 3, Sat 3. Minima are weekdays 5/1/1 and Saturday 6/1/2 (staff/key holders/designers).\n\nWeekdays: 09:00–17:30, unpaid 30-minute lunch. Saturdays: 08:00–16:30, same lunch; 08:00–09:00 is paid preparation/training before public opening. Each day therefore pays eight hours; Saturdays form part of the four days, with no routine overtime. Preserve S05/S06's childcare arrangements; agree Saturday allocation with staff. Stagger breaks to maintain minima throughout opening. Prearrange qualified leave/sickness relief and swaps; never open below minima.\n\nClosed on **Good Friday, 26 March**, the only England bank holiday within the pilot; scheduled hours are paid holiday, without make-up. Agree equitable holiday accounting before launch.\n\n**Measure and review:** establish comparable January–March 2026 and pre-pilot baselines; agree demand adjustments and thresholds. Track weekly completed installations/design appointments and gross margin (proposed floor: 95% of adjusted baseline), waiting times, complaints/rework, actual hours, overtime costs, sickness and monthly wellbeing. Require full cover, no worsening service quality and no routine overtime; address breaches immediately and pause if unresolved. Review weekly, formally at halfway on **15 February**, then Nina decides at the post-pilot meeting on **30 March 2027**, after Easter Monday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "muse-spark-1.3_max",
+   "name": "Muse Spark 1.3",
+   "level": "max",
+   "maker": "Meta",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "7p",
+   "tasks": [
+    89,
+    94,
+    98,
+    92
+   ],
+   "where": "Meta AI (free)",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/muse-spark-1.3_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens — Four-Day Week Pilot Plan\nFor Nina Ashworth | 12 weeks: Mon 4 Jan – Sun 28 Mar 2027\n\n## Does your proposal work as written?\nNo, not for the showroom. Mon–Thu / Tue–Fri with Saturdays \"as now\" gives contracted showroom cover of 6/12/12/12/6/0 from Mon to Sat. Saturday needs 6, so the shortfall is 6.\n\nEven with overtime, only four showroom staff have volunteered (S02, S07, S09, S11). That lifts Saturday to 4, still short of 6, with one key-holder but only one designer against two required. Cost is £617.40 per Saturday, £7,408.80 for 12 Saturdays, and still non-compliant. Total contracted hours fall from 1,500 to 1,280 a week (-14.67%) on same pay.\n\nThe 87% is 13 of 15 respondents, not of staff. Only 15 of 40 replied (37.5%), via an optional WhatsApp link, skewed to Office (7 of 8 replied, but 3 of 12 Showroom and 3 of 14 Fitting). Yes is 32.5% of all staff. Treat as indicative only.\n\n## Your options\nA. Proceed as written. Simple and even, but Saturdays fall below your minimum cover; overtime does not close the gap.\n\nB. Staggered showroom rota within 32 hours, below, with office, fitting and warehouse on your A/B patterns. Meets minima with no overtime.\n\nC. Narrow or defer. Pilot non-showroom teams only, or pause to re-survey all 40 properly and resolve Saturday cover. Protects Saturday service but loses a whole-company test.\n\n## A workable pilot — showroom\n32 hours, four days each, Saturday as a contracted day for seven staff. S05 and S06 stay off Saturdays for childcare.\n\nRota: S01, S07: Mon, Tue, Wed, Sat. S02: Mon, Thu, Fri, Sat. S04, S11: Wed, Thu, Fri, Sat. S09: Mon, Tue, Fri, Sat. S10: Tue, Thu, Fri, Sat. S03, S05: Mon–Thu. S06, S08: Tue–Fri. S12: Mon, Tue, Thu, Fri. Full pattern in `out/numbers.json`.\n\nDaily cover (minimum in brackets): Mon 7 (5), Tue 9 (5), Wed 8 (5), Thu 9 (5), Fri 8 (5), Sat 7 (6). Each weekday has at least one key-holder (S01, S02, S08) and one designer (S03, S04, S09, S10); Saturday has two key-holders and three designers, so one absence still meets the minimum on your busiest day.\n\nNon-showroom: half Mon–Thu, half Tue–Fri. Tue–Thu full cover, Mon/Fri half cover; plan handovers. Bank holiday Fri 26 Mar: all closed. Easter Mon 29 Mar falls just after the pilot.\n\n## How to judge success\nCompare with Sep–Dec 2026: appointments kept/cancelled, Saturday conversion and sales, fitting lead-times and rework, complaints, sickness/absence, cover breaches, overtime spend, applications/resignations (especially fitters/designers), and a repeat survey of all 40. Set thresholds before 4 Jan, for example no rise in cancellations, breaches or sustained overtime.\n\n## Review\nRun all 12 Saturdays, collate data in week of 29 Mar, then decision meeting Wed 14 Apr 2027, where you decide to continue, amend and rotate the Saturday group, or revert.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "qwen3.8-max-0902_xhigh",
+   "name": "Qwen 3.8 Max",
+   "level": "xhigh",
+   "maker": "Alibaba",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "24p",
+   "tasks": [
+    88,
+    94,
+    100,
+    90
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/qwen3.8-max-0902_xhigh/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: facts and options\n\n## Does your proposal work as written?\n\nFor the 28 staff outside the showroom, yes. For the showroom, no: one flaw is fatal.\n\n**Saturday cover falls to zero.** Pattern A (Mon–Thu) and Pattern B (Tue–Fri) put nobody in on Saturday: 0 against a minimum of 6, including 1 key holder and 2 designers. Weekdays are fine (Mon 6, Tue–Thu 12, Fri 6; minimum 5), but Saturday is your busiest day (a third of design appointments), so \"Saturdays carry on as now\" cannot survive two fixed Mon–Fri patterns.\n\n**Overtime cannot fill it.** Four showroom staff volunteered for Saturday overtime: S02, S07, S09, S11 (fitter F03 volunteered but is not showroom-trained). All four in gives 4 of the 6 needed, 1 key holder and 1 designer instead of 2, still below minimum. Gross cost: £617.40 per Saturday (7 paid hours at 1.5×), £7,408.80 over 12 Saturdays.\n\n**The 87% will not survive scrutiny.** 15 of 40 answered (37.5%) via a self-selecting WhatsApp link; the 13 \"Yes\" votes are 32.5% of all staff. Only 3 of 12 showroom staff and 3 of 14 fitters responded, the teams carrying most risk. Treat support as unproven.\n\n**Two staff are protected.** S05 and S06 have agreed flexible working and do not work Saturdays; no rota may schedule them.\n\nAlso: 37.5 to 32 hours cuts contracted hours 14.67% (1,500 to 1,280 a week) at unchanged pay, and 8-hour days are 30 minutes longer, the fitters' survey worry.\n\n## Your options\n\n- **A. As written.** Not viable: Saturday below minimum every week.\n- **B. Overtime Saturday.** Not viable: £7,408.80, still 2 staff and 1 designer short.\n- **C. Saturday-inclusive showroom rota** (below). Meets every minimum, no overtime.\n- **D. Pilot the other 28 only,** showroom stays at 37.5. Simplest, but two-tier risk.\n- **E. Re-run the survey properly first.** Costs the January start.\n\nOnly C and D work; the choice is yours.\n\n## The pilot I would run (Option C)\n\nTwo showroom teams, with Saturday inside contracted hours.\n\n- **Weekday team** (S01, S04, S05, S06, S08, S10): Mon, Tue, Wed, Thu.\n- **Saturday team** (S02, S03, S07, S09, S11, S12): Fri and Sat, plus two staggered weekdays (S02 Mon/Tue, S03 Mon/Wed, S07 Mon/Thu, S09 Tue/Wed, S11 Tue/Thu, S12 Wed/Thu).\n\n**Cover:** Mon 9, Tue 9, Wed 9, Thu 9, Fri 6, Sat 6: all at or above minimum, with a key holder and required designers each day. Other teams keep Patterns A and B (check Friday deliveries).\n\n**Rules.** S05/S06 never on Saturday; same faces Friday and Saturday for appointment handover. Standby: S01 or S08 (key holder) and S04 or S10 (designer) on paid overtime. Saturday shifts are 7 paid hours, so that team works 31: decide whether to top up. Swaps allowed at week 6 (a designer-for-designer swap, S03/S10, keeps both teams compliant). Voluntary, pay unchanged, written opt-out.\n\n## Measuring success\n\nSet baselines in December. **Weekly:** Saturday cover met (6/1/2), rota compliance, sickness, overtime cost. **Monthly, against the same period last year:** appointments held and completed, Saturday revenue, quote turnaround, customer satisfaction, on-time fittings. **People:** applications, leavers, and a week-6 survey with a proper all-staff sample. Agree the pass mark first: no fall in Saturday appointments or revenue, no rise in sickness.\n\n## Dates\n\n- Pilot: Mon 4 Jan to Sun 28 Mar 2027 (12 weeks, 12 Saturdays).\n- Good Friday 26 Mar 2027 is the only bank holiday inside it; showroom closed.\n- Week-6 checkpoint: Fri 12 Feb 2027.\n- Decision meeting: Thu 15 Apr 2027, 18 days after the end so the data is clean.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "opus-5.5_low",
+   "name": "Claude Opus 5.5",
+   "level": "low",
+   "maker": "Anthropic",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "17p",
+   "tasks": [
+    93,
+    90,
+    100,
+    87
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/opus-5.5_low/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan for the 15 October board\n\n## Does the proposal work as written?\n**Not for the showroom.** Patterns A (Mon–Thu) and B (Tue–Fri) leave **nobody on Saturday**, our busiest day. The minimum is 6, including 1 key holder and 2 designers.\n\nOvertime doesn't fix it. Only **4 showroom staff** have volunteered (S02, S07, S09, S11), and only one of them is a designer. That would cost **£617.40 a Saturday, or £7,408.80 over 12 Saturdays**, and we'd still be below minimum.\n\n**The \"87% support\" figure is weaker than it looks.** Only 15 of 40 staff responded (37.5%), so the Yes answers are **32.5% of all staff**. Only 3 of 12 showroom staff and 3 of 14 fitters replied.\n\nHours fall from 1,500 to 1,280 a week (**−14.67%**). **Good Friday (26 Mar 2027)** falls inside the pilot.\n\n## Realistic options\n1. **Company-wide pilot with its own showroom rota (below).** Other teams use Patterns A and B. No overtime is planned.\n2. **Pilot for office, warehouse and fitting only.** Simpler, but it leaves out 12 people.\n3. **The proposal plus overtime.** It misses minimum cover, costs about £7.4k and depends on goodwill.\n4. **Delay to April.** Run a proper all-staff survey first.\n\n## Showroom pilot pattern (option 1)\n\n| Staff | Days |\n|---|---|\n| S01 Rachel (KH) | Mon Tue Wed Thu |\n| S02 Imran (KH) | Wed Thu Fri Sat |\n| S03 Hannah (D) | Tue Wed Thu Sat |\n| S04 Tomasz (D) | Mon Tue Wed Fri |\n| S05 Ella | Mon Tue Thu Fri |\n| S06 Joy | Mon Wed Thu Fri |\n| S07 Callum | Tue Wed Fri Sat |\n| S08 Sunita (KH) | Mon Tue Thu Fri |\n| S09 Owen (D) | Mon Thu Fri Sat |\n| S10 Grace (D) | Mon Tue Wed Thu |\n| S11 Ben | Mon Tue Fri Sat |\n| S12 Amira | Mon Wed Thu Sat |\n\nKH = key holder, D = kitchen designer.\n\n| Day | Staff | Key holders | Designers |\n|---|---|---|---|\n| Mon | 9 | 2 | 3 |\n| Tue | 8 | 2 | 3 |\n| Wed | 8 | 2 | 3 |\n| Thu | 9 | 3 | 3 |\n| Fri | 8 | 2 | 2 |\n| Sat | **6** | 1 | 2 |\n\nEvery day meets the minimum. S05 and S06 keep their agreed no-Saturday arrangements. Saturday has no slack. If someone is absent, swap in a colleague first: S01 or S08 for S02, and S04 or S10 for a designer. Overtime is the fallback. Rachel can rotate the Saturday team, as long as every day still meets the minimum.\n\n## Measuring success\nCompare against the same weeks in 2026:\n- **Sales:** design appointments, conversion rate and order value (Saturdays separately)\n- **Fitting:** jobs completed on time, and call-backs\n- **Customer service:** response times and complaints\n- **Cover:** days below minimum, and overtime cost\n- **People:** sickness absence and turnover, plus a named all-staff survey at weeks 0, 6 and 12 (aim for at least 80% response)\n\nAgree the pass thresholds before the pilot starts, for example \"sales within 5% of baseline and no day below minimum\".\n\n## Timeline\n- **15 Oct 2026:** board decision\n- **By 30 Nov:** staff consultation, then written temporary contract changes\n- **4 Jan 2027:** start\n- **12 Feb:** mid-point check\n- **25 Mar:** last day (26 Mar is Good Friday)\n- **15 Apr 2027:** review meeting to keep, adjust or end\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
+   "setup": "sonnet-5.5_high",
+   "name": "Claude Sonnet 5.5",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "17p",
+   "tasks": [
+    87,
+    92,
+    96,
+    96
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/sonnet-5.5_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan\n\nThe decision is yours; this sets out facts, options and one workable pilot.\n\n## Does the proposal work as written?\n\n**Not for the showroom.** Hours fall from 1,500 to 1,280 a week (-14.67%) on the same pay. Under Mon–Thu / Tue–Fri patterns, showroom cover is Mon 6, Tue–Thu 12, Fri 6, **Sat 0 against a minimum of 6**. Weekdays are fine.\n\nOvertime doesn't close the gap. Only four showroom staff volunteered (Imran, Callum, Owen, Ben; Lewis is a fitter and can't count). That gives 4 on a Saturday: still 2 short, with one designer where we need two. It costs £617.40 a Saturday, **£7,408.80** over 12 Saturdays, and has happened twice in 2026.\n\nThe survey is weaker than \"87%\". It was self-selected through a WhatsApp group. 15 of 40 replied (37.5%), so the 13 yeses are 32.5% of all staff. Only 3 of 12 showroom staff replied. Also, 8-hour days are 30 minutes longer than now, which a fitter's comment worries about.\n\n## Options\n\n1. **Run as written.** Saturday unstaffed. Not viable.\n2. **Four-day week for all, showroom rebuilt around Saturday** (below). No overtime needed.\n3. **Start with office, fitting and warehouse (28 staff)**; showroom later. Lower risk, but leaves out the largest recruitment and Saturday question.\n4. **Wait.** Survey all 40 staff directly, then start later.\n\nIf you want January, option 2 is the one that holds up on the numbers.\n\n## Pilot: 12 weeks, 4 January – 28 March 2027\n\nNon-showroom staff: Pattern A or B as proposed, half each.\n\n| Showroom days | Staff |\n|---|---|\n| Mon–Wed + Sat | S02, S03, S04 |\n| Wed–Sat | S07, S08, S09, S11 |\n| Mon–Thu | S01, S05, S06 |\n| Tue–Fri | S10, S12 |\n\n| Day | On duty | Key holders | Designers |\n|---|---|---|---|\n| Mon | 6 | S01, S02 | S03, S04 |\n| Tue | 8 | S01, S02 | S03, S04, S10 |\n| Wed | 12 | S01, S02, S08 | S03, S04, S09, S10 |\n| Thu | 9 | S01, S08 | S09, S10 |\n| Fri | 6 | S08 | S09, S10 |\n| Sat | 7 | S02, S08 | S03, S04, S09 |\n\nEvery day meets minimum cover.\n\nPoints to settle:\n- **Friday has one key holder** (S08). Train a second before January.\n- **Saturday has one spare person**, so one absence is survivable.\n- **A fixed Saturday team replaces the rotation.** S01, S10 and S12 would not work Saturdays. Consider rotating at week 6.\n- **Saturday is 7 paid hours**, so Saturday staff would work 31, not 32. Decide how to make up the hour.\n- **Ella and Joy:** check Mon–Thu fits their childcare arrangements.\n- **Good Friday (26 March)** is the only bank holiday. Staff who work Fridays get it as a day off; Mon–Thu staff don't. Decide how to treat that.\n\n## Measuring success\n\nRecord a baseline for October–December. Suggested measures, for you to set targets on:\n- Showroom minimum met every open day, with any shortfall logged.\n- Design appointments held, especially Saturdays, and orders won.\n- Fitting jobs finished on schedule, and customer complaints.\n- Sickness absence, overtime hours and cost.\n- Staff pulse at weeks 6 and 12, sent to all 40 directly, aiming for 80% response.\n- Applications for open roles.\n\nSuggested pause trigger: showroom below minimum on two days.\n\n## Review\n\nWeek 6 check-in: Wednesday 17 February 2027. **Review meeting: Wednesday 14 April 2027**, after Easter, with everyone in. Options then: keep, extend, change or stop.\n"
+    }
+   ]
+  },
+  {
+   "rank": 14,
+   "setup": "opus-5.5_xhigh",
+   "name": "Claude Opus 5.5",
+   "level": "xhigh",
+   "maker": "Anthropic",
+   "score": 92,
+   "basics": 4,
+   "n": 4,
+   "cost": "82p",
+   "tasks": [
+    84,
+    90,
+    100,
+    95
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/opus-5.5_xhigh/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week: pilot plan\n\n## Does the proposal work as written?\n\n**No, not for the showroom.**\n\n- **Saturdays:** Patterns A and B put nobody on a Saturday. Cover would be 0 against a minimum of 6 (1 key holder, 2 designers).\n- **Overtime can't fill the gap:** only four showroom staff have volunteered (S02, S07, S09, S11; F03 is a fitter). All four would give 4 staff and 1 designer, at £617.40 a Saturday (£7,408.80 over the pilot), and those four would be back on five-day weeks.\n- **Survey:** the 87% is 13 \"Yes\" answers out of 15 responses. That's 32.5% of staff. The link could be forwarded, and few of the showroom (3 of 12) or fitters (3 of 14) answered. 11 of 15 want Fridays off, which a half-and-half split can't give.\n- **Arithmetic:** hours fall 14.67% (1,500 to 1,280 a week) on the same pay, so each hour must be about 17% more productive. Days get longer (8 hours, not 7.5); one survey comment asked that fitters' days not get longer.\n\n## Your realistic options\n\n1. **As written:** Saturday cover falls short every week.\n2. **As written, plus the showroom rota below:** no routine overtime.\n3. **Office and warehouse first, showroom and fitting later:** lower risk, but may feel unfair.\n4. **Delay:** run a proper survey and consult each team first.\n\n## A pilot you could run: 4 January to 28 March 2027\n\nOther teams: Patterns A and B as proposed, once team leads confirm cover (the warehouse has one key holder).\n\nShowroom: four patterns of four consecutive opening days:\n\n- **A, Mon–Thu:** S02, S05, S06, S09\n- **B, Tue–Fri:** S07, S11\n- **C, Wed–Sat:** S01, S03, S12\n- **D, Fri–Tue:** S04, S08, S10\n\n| | Mon | Tue | Wed | Thu | Fri | Sat |\n|---|---|---|---|---|---|---|\n| Staff (minimum) | 7 (5) | 9 (5) | 9 (5) | 9 (5) | 8 (5) | 6 (6) |\n| Key holders | 2 | 2 | 2 | 2 | 2 | 2 |\n| Designers | 3 | 3 | 2 | 2 | 3 | 3 |\n\n- **Weekdays:** at least 2 people spare.\n- **Saturdays:** no one spare, as now.\n  - Leave: someone off Saturdays works the shift and takes a weekday off that week.\n  - Sickness: an overtime volunteer covers it (£138.60–£176.40); that's why all four volunteers are off Saturdays.\n- **Trade-off:** six people work every Saturday (now about six in ten). Check they agree, and that S05's and S06's childcare still fits. Same-role swaps keep these figures.\n- **Decide before you start:**\n  - A Saturday week is 31 paid hours, not 32 (as now, 37 not 37.5).\n  - Good Friday (26 March) falls in the pilot: agree a bank-holiday rule so Friday-off staff don't lose out.\n\n## Measuring success\n\nSet targets before January; compare with January–March 2026. Figures are suggestions.\n\n- **Cover:** no day below minimum, and Saturday overtime only for absences.\n- **Business:** design appointments, orders and sales within 5% of last year. Fitting jobs on schedule, and no rise in complaints.\n- **People:** sickness absence, plus an all-staff survey run by HR in December, week 6 and week 12.\n- **Recruitment:** applications per fitter or designer vacancy.\n\n## Review timetable\n\n- **By mid-December:** consult staff and put the temporary change in writing.\n- **Weekly:** Rachel checks showroom cover.\n- **Wednesday 10 February:** mid-point review (adjust or stop).\n- **Friday 2 April:** final data.\n- **Wednesday 7 April 2027:** decision meeting. Pilot patterns continue from 29 March until you announce your decision.\n"
+    }
+   ]
+  },
+  {
+   "rank": 15,
+   "setup": "grok-4.6_high",
+   "name": "Grok 4.6",
+   "level": "high",
+   "maker": "xAI",
+   "score": 91,
+   "basics": 3,
+   "n": 4,
+   "cost": "19p",
+   "tasks": [
+    89,
+    92,
+    98,
+    85
+   ],
+   "where": "Grok (free)",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/grok-4.6_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week: facts, options, and a 12-week pilot\n\n**If you proceed:** Monday 4 January to Sunday 28 March 2027 (12 weeks). Closed Good Friday 26 March. **Review: Thursday 8 April 2027**, when you decide whether to keep it. 15 October is only whether to start.\n\n## Does your proposal work as written?\n\n**No. Weekdays yes; Saturdays no.**\n\nPatterns A (S01–S06 Mon–Thu) and B (S07–S12 Tue–Fri), four contracted days only, no overtime: Mon 6, Tue 12, Wed 12, Thu 12, Fri 6, **Sat 0**. Minimum is 5 each weekday (with a key holder and a designer) and **6 on Saturday** (one key holder, two designers). Monday and Friday still clear that. **Saturday has nobody.** A third of design appointments are on Saturday.\n\n“Saturdays carry on as now” conflicts with two weekday-only patterns. A fifth day is overtime, not a four-day week.\n\nOvertime does not close the gap. Only four showroom staff have volunteered (Imran S02, Callum S07, Owen S09, Ben S11): four people, one key holder, one designer — still two people and one designer short. Non-showroom staff do not count. All four, every Saturday: **£617.40 a week, £7,408.80 over 12 Saturdays** (7 hours at 1.5×, gross only).\n\n**Hours:** 1,500 a week now, 1,280 in the pilot — **14.67% fewer hours, same pay**.\n\n**87% is of respondents, not of staff.** 15 of 40 replied (37.5%) to a three-day optional WhatsApp poll. Thirteen yes: **32.5% of all staff**. Showroom 3/12; fitting 3/14. Eleven of 15 want Friday off. Not a staff mandate.\n\n## Options (you choose)\n\n1. **Do not run it as written.** Saturday fails, or you close the busiest day.\n2. **Four-day week with Saturday in the showroom rota.** Same 32 hours and pay. Office, fitting and warehouse on A/B. Six showroom staff have Saturday as one of four days. Keeps Saturday open without overtime.\n3. **Four-day week off the shop floor only.** Fitting, warehouse and office trial it; showroom stays five-from-six. Unequal, and designers would not get it.\n4. **Pause and survey all 40** (including Saturday) before you commit.\n\n## A pilot you could run (option 2)\n\nAll 40 staff, 32 hours over four days, same pay, 8-hour days (not compressed 37.5). Non-showroom teams half A (Mon–Thu), half B (Tue–Fri). Split customer service, warehouse and lead fitters so Monday and Friday are not hollow.\n\n**Showroom** (Ella S05 and Joy S06 still have no Saturdays):\n\n- Mon–Thu: Ella S05, Joy S06, Grace S10\n- Tue–Fri: Imran S02, Tomasz S04, Amira S12\n- Mon, Tue, Wed, Sat: Rachel S01, Hannah S03\n- Tue, Wed, Thu, Sat: Callum S07\n- Mon, Thu, Fri, Sat: Sunita S08, Ben S11\n- Wed, Thu, Fri, Sat: Owen S09\n\n**Cover:** Mon 8, Tue 9, Wed 9, Thu 10, Fri 6, Sat 6. Every weekday has a key holder and a designer. Saturday has two key holders (Rachel, Sunita) and two designers (Hannah, Owen). Friday is tightest (6). Saturday stays 09:00–16:30 (7 paid hours); those people stay on 32-hour pay. Same six work every Saturday; swap the group at week 7 if needed.\n\n**Measure vs Jan–Mar 2026 and Oct–Dec 2026:** days below minimum cover; Saturday appointments and conversion; orders and waits; fitting jobs and rework (watch Mon/Fri); sickness, resignations, time-to-fill for fitters and designers; Saturday overtime (near zero if the rota works); sales per contracted hour; complaints. All-staff pulse at weeks 6 and 12.\n\n**Fix or stop early if** a Saturday is below 6 / 1 key holder / 2 designers, or fitting completions drop sharply.\n\n**Decide Thursday 8 April 2027**, after Easter, with 12 weeks of figures: keep, amend, or revert.\n"
+    }
+   ]
+  },
+  {
+   "rank": 16,
+   "setup": "sonnet-5.5_medium",
+   "name": "Claude Sonnet 5.5",
+   "level": "medium",
+   "maker": "Anthropic",
+   "score": 90,
+   "basics": 4,
+   "n": 4,
+   "cost": "10p",
+   "tasks": [
+    90,
+    87,
+    96,
+    87
+   ],
+   "where": "Claude Free (free), Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/sonnet-5.5_medium/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan for the 15 October board\n\n## Does the proposal work as written?\n\n**Not for the showroom.** Patterns A and B (Mon–Thu, Tue–Fri) leave nobody in on Saturday. Cover would be 0 against a minimum of 6, a shortfall of 6. Weekdays are fine (6 on Mon and Fri, 12 on Tue–Thu).\n\n**Overtime doesn't fix it.** Only four volunteers can cover the showroom (Imran, Callum, Owen, Ben; Lewis is a fitter). That gives 4 on a Saturday, still 2 short. It would cost £617.40 a Saturday, or **£7,408.80** over 12 Saturdays, relying on goodwill.\n\n**The survey is weaker than \"87%\".** It went out through the Wellbeing Champions WhatsApp group. Only 15 of 40 staff replied (37.5%), and just 3 of 12 showroom staff. 13 \"Yes\" answers is 32.5% of all staff. It shows enthusiasm, not majority support.\n\n**Other points:**\n- Hours fall 14.67% (1,500 to 1,280 a week), same pay.\n- Fitting capacity is unchecked: half the fitters would be off on Mondays and Fridays.\n- Good Friday (26 March) is the only bank holiday in the pilot.\n\n## Options\n\n1. **Four-day week with a Saturday fix (recommended for the showroom).** Plan below.\n2. **Pilot everywhere except the showroom.** Simple, but sidesteps the hard part.\n3. **Proposal as written plus overtime.** Not workable.\n4. **Don't pilot yet.** Run a proper all-staff survey and a fitting capacity check first.\n\nThe decision is yours.\n\n## Pilot design (12 weeks, 4 Jan – 28 Mar 2027)\n\nEach person has a fixed four-day pattern, with Saturday as one of the four for seven people.\n\n| Day | On duty | Key holders | Designers |\n|---|---|---|---|\n| Mon | S01 S02 S03 S04 S06 S10 S11 S12 (8) | 2 | 3 |\n| Tue | S01 S02 S04 S05 S06 S07 S09 S12 (8) | 2 | 2 |\n| Wed | S02 S04 S05 S06 S08 S09 S10 S11 (8) | 2 | 3 |\n| Thu | S01 S03 S04 S05 S06 S07 S08 S10 S12 (9) | 2 | 3 |\n| Fri | S01 S03 S05 S07 S08 S09 S11 S12 (8) | 2 | 2 |\n| Sat | S02 S03 S07 S08 S09 S10 S11 (7) | 2 | 3 |\n\n- Minimums are 5 on weekdays and 6 on Saturday, each with at least one key holder and one designer (two on Saturday). Every day has a spare person, so one absence doesn't break cover.\n- Ella (S05) and Joy (S06) stay off Saturdays.\n- **Hours check:** a Saturday shift is 7 paid hours, so Saturday workers would do 31 hours against 32. Add an hour on a weekday, or accept 31?\n- Overtime volunteers are back-up only.\n\n## Measuring success\n\nCompare with the same weeks a year earlier where possible:\n- **Service:** showroom days meeting minimum cover (target 100%). Appointments kept and sales conversion, especially Saturdays.\n- **Output:** fitting jobs completed, delivery lead times, customer complaints.\n- **People:** sickness days, overtime hours, a full anonymous survey of all 40 staff at weeks 0, 6 and 12.\n- **Cost:** overtime spend and any agency cover.\n\nAgree stop triggers in advance, e.g. cover below minimum twice in a month.\n\n## Review\n\n- A check-in at week 6, on Tuesday 16 February.\n- The pilot ends Sunday 28 March.\n- **Decision meeting: Tuesday 13 April 2027**, once the final data is in.\n\n## Before January\n\nCheck fitting capacity and contracts; agree the rota with the showroom team.\n"
+    }
+   ]
+  },
+  {
+   "rank": 16,
+   "setup": "glm-5.3_max",
+   "name": "GLM-5.3",
+   "level": "max",
+   "maker": "Z.ai",
+   "score": 90,
+   "basics": 4,
+   "n": 4,
+   "cost": "4p",
+   "tasks": [
+    89,
+    85,
+    100,
+    85
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/glm-5.3_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens: Four-Day Week Pilot Plan\n\n**Prepared for:** Nina Ashworth, Managing Director  \n**Pilot:** 12 weeks, Monday 4 January to Sunday 28 March 2027.\n\n## Does the proposal work as written?\n\nNo. The proposed showroom patterns give Monday 6, Tuesday to Thursday 12, Friday 6, and Saturday 0 staff. Saturday needs 6, so the shortfall is 6. Only four showroom staff have volunteered for Saturday overtime, giving a maximum of 4 and leaving a shortfall of 2. Using every volunteer every Saturday would cost £617.40 per Saturday, or £7,408.80 across 12 Saturdays, and still not meet minimum cover.\n\nThe survey is also weaker evidence than the headline suggests: 15 of 40 staff responded (37.5%), and 13 of all 40 staff (32.5%) said yes. Only 3 of 12 showroom staff responded, so more consultation is needed before treating it as a mandate.\n\n## Realistic options\n\n1. **Run a revised four-day pilot:** build Saturday into six showroom working patterns. This can meet every minimum without overtime and is described below.\n2. **Run a partial pilot:** apply four-day patterns to fitting, warehouse, and office first, while the showroom retains its current rota. This is lower-risk for cover but creates fairness and communication issues.\n3. **Pause and consult:** gather October–December baseline data and run a better-attended survey, especially with showroom staff. This delays learning but improves consent.\n\n## Recommended pilot design\n\nRun for 12 weeks from Monday 4 January 2027. Everyone contracts 32 hours over four days at current pay. Non-showroom staff use Monday–Thursday or Tuesday–Friday. Showroom staff use the following patterns:\n\nContracted hours fall from 1,500 to 1,280 a week (14.67%). The pilot contains 12 Saturdays and no England bank holidays.\n\n| Staff | Working days |\n|---|---|\n| S01 | Mon, Tue, Wed, Sat |\n| S02, S09, S11 | Tue, Thu, Fri, Sat |\n| S04 | Mon, Thu, Fri, Sat |\n| S07 | Mon, Wed, Thu, Sat |\n| S03 | Mon, Tue, Wed, Thu |\n| S05, S12 | Mon, Wed, Thu, Fri |\n| S06 | Tue, Wed, Thu, Fri |\n| S08 | Mon, Tue, Thu, Fri |\n| S10 | Mon, Tue, Wed, Fri |\n\nWeekday showroom shifts provide 8 paid hours. A Saturday shift provides 7 paid hours, so staff whose pattern includes Saturday also complete one flexible weekday preparation/administration hour to reach 32 hours.\n\n| Day | Cover | Key holder | Kitchen designers |\n|---|---:|---|---|\n| Mon | 8 | S01, S08 | S03, S04, S10 |\n| Tue | 8 | S01, S02, S08 | S03, S09, S10 |\n| Wed | 8 | S01 | S03, S10 |\n| Thu | 9 | S02, S08 | S03, S04, S09 |\n| Fri | 9 | S02, S08 | S04, S09, S10 |\n| Sat | 6 | S01, S02 | S04, S09 |\n\nThe Saturday cohort contains only existing Saturday workers and includes all four volunteers. Keep patterns fixed for the pilot so results are comparable; discuss rotation or Saturday recognition before any permanent rollout.\n\n## Success measures and review\n\nCollect October–December 2026 as baseline. Track weekly: cover compliance, unplanned closures, Saturday appointments kept, design-to-quote time, quotes issued, sales conversion, installations completed, revenue per labour hour, overtime, absence, and a short wellbeing pulse. Hold a midpoint check after week six on Monday 15 February 2027. Require no missed minimum cover, no reliance on overtime, and service/productivity at least matching baseline before considering continuation.\n\nHold the decision meeting on Wednesday 31 March 2027, after the pilot ends on Sunday 28 March 2027.\n"
+    }
+   ]
+  },
+  {
+   "rank": 16,
+   "setup": "kimi-k3_max",
+   "name": "Kimi K3",
+   "level": "max",
+   "maker": "Moonshot AI",
+   "score": 90,
+   "basics": 3,
+   "n": 4,
+   "cost": "22p",
+   "tasks": [
+    80,
+    91,
+    100,
+    87
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/kimi-k3_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan for Fernhill Kitchens\n\nPrepared for Nina Ashworth, 21 October 2026. Figures in `out/numbers.json`.\n\n## Does your proposal work as written?\n\nNo — one gap breaks it. Patterns A (S01–S06, Mon–Thu) and B (S07–S12, Tue–Fri) put **nobody** in the showroom on Saturdays, which needs 6 staff including a key holder and 2 designers. \"Saturdays carry on exactly as now\" cannot hold alongside fixed Mon–Fri patterns. Weekday cover would be fine (6–12 against a minimum of 5), and office, fitting and warehouse teams work well on A/B.\n\nSaturday overtime does not rescue it: only four showroom staff have volunteered (S02, S07, S09, S11), so even with all four every Saturday you get 4 people and 1 designer — below the 6-and-2 minimum — at £617.40 per Saturday (£7,408.80 over the pilot), relying on the same four people weekly.\n\nTreat \"87% support\" carefully: only 15 of 40 staff responded (37.5%), so the 13 yeses are 32.5% of all staff — and only 3 of 12 showroom staff, the team most affected, answered. Re-survey everyone before committing.\n\n## Your options\n\n1. **As written, plus Saturday overtime.** Fails the Saturday minimum even with every volunteer. Not workable.\n2. **Showroom rota (recommended below).** Showroom staff each work 4 of Mon–Sat within 32 hours; a six-strong Saturday crew covers Saturdays at no overtime cost. Other teams keep A/B.\n3. **Non-showroom first.** Run A/B for the 28 office/fitting/warehouse staff from January; showroom joins from April once its rota beds in. Lower risk, slower learning.\n4. **Different model.** Five shorter days or a four-and-a-half-day week keeps Saturdays simple but dilutes the recruitment benefit.\n\n## Recommended pilot (option 2)\n\n**When:** Monday 4 January – Saturday 27 March 2027 (12 weeks, 12 Saturdays); closed Good Friday 26 March as normal.\n\n**Hours and pay:** 32 hours (4 × 8-hour days), same pay. Days lengthen slightly (8 vs 7.5 hours) — watch this for fitters, as one survey comment flagged.\n\n**Showroom pattern** (S05 and S06 keep their agreed no-Saturday arrangements):\n\n- S01 Wed–Sat · S02 Mon–Thu · S03 Mon/Tue/Fri/Sat · S04 Mon/Tue/Thu/Fri\n- S05 Mon/Tue/Wed/Fri · S06 Tue–Fri · S07 Mon/Wed/Thu/Sat · S08 Tue–Fri\n- S09 Mon/Tue/Wed/Sat · S10 Mon/Wed/Thu/Fri · S11 Tue/Thu/Fri/Sat · S12 Mon/Tue/Thu/Sat\n\nThe Saturday crew (S01, S03, S07, S09, S11, S12 — covering the key holder and both designers, and including three of the four overtime volunteers) takes three weekdays off. Swap them with S02, S04, S08, S10 halfway through if you want Saturdays shared more widely.\n\n**Cover each day** (minimum 5 Mon–Fri, 6 Sat, with key-holder and designer rules): Mon 8, Tue 9, Wed 8, Thu 9, Fri 8, Sat 6 — every day meets it. Saturday overtime stays a voluntary backstop for sickness and holidays.\n\n**Other teams:** half on Pattern A, half on Pattern B, as you proposed.\n\n## Measuring success\n\nBaseline: autumn 2026. Track weekly:\n\n- **Cover:** days meeting the showroom minimum (target 100%); overtime hours.\n- **Trading:** design appointments (Saturdays are a third of them), sales, conversion.\n- **Customers:** appointment waiting times; complaints.\n- **People:** sickness/absence, turnover; anonymous survey of all 40 staff at weeks 1, 6 and 12 — not just the WhatsApp group.\n- **Output:** installations on time (fitting), deliveries (warehouse), orders and payroll processed (office).\n\n## Review\n\nPilot ends Saturday 27 March 2027. Compile results and the week-12 survey in the following fortnight, then hold your keep/adjust/stop meeting on **Thursday 15 April 2027**. Agree success thresholds with team leads before January, so that decision rests on evidence.\n"
+    }
+   ]
+  },
+  {
+   "rank": 19,
+   "setup": "opus-5.5_high",
+   "name": "Claude Opus 5.5",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 89,
+   "basics": 4,
+   "n": 4,
+   "cost": "34p",
+   "tasks": [
+    86,
+    89,
+    96,
+    87
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/opus-5.5_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan for the 15 October board\n\n## Does the proposal work as written?\n\n**Not in the showroom.**\n\n- Neither pattern includes Saturday, so Saturday cover is **0 of the 6 needed**.\n- Only four showroom staff volunteer for overtime (S02, S07, S09, S11). With all four every week, Saturday has **4 staff and 1 designer, against a minimum of 6 staff and 2 designers**. That costs **£617.40 a Saturday (£7,408.80 over 12)** and still falls short of minimum cover.\n- **The survey doesn't show 87% support.** 15 of 40 staff replied (37.5%). The 13 \"Yes\" answers are **32.5% of all staff**. Only 3 of the 12 showroom staff replied, and the link could be forwarded. Friday was the preferred day off by 11 to 4.\n- Hours fall from 1,500 to 1,280 a week (**−14.67%**) on the same pay. Days get longer, from 7.5 to 8 hours.\n- **Good Friday (26 March 2027)** falls in the pilot and only affects staff who work Fridays, so you need a pro-rata rule.\n\n## Realistic options\n\n1. **Pilot with a separate showroom pattern** (below). Other teams use A and B. Cover is met every day with no planned overtime.\n2. **Pilot outside the showroom only** (28 staff). This creates two tiers and leaves out the designers you struggle to recruit.\n3. **Delay to April 2027** and survey all staff properly first.\n4. **Don't pilot.**\n\n## Pilot showroom pattern\n\nEveryone works four 8-hour days. A fixed Saturday team of six who already work Saturdays leaves the four overtime volunteers free to cover absences.\n\n| Staff | Days | Staff | Days |\n|---|---|---|---|\n| S01 (KH) | Wed Thu Fri Sat | S07 | Mon–Thu |\n| S02 (KH) | Mon–Thu | S08 (KH) | Mon Tue Fri Sat |\n| S03 (D) | Mon Tue Fri Sat | S09 (D) | Mon–Thu |\n| S04 (D) | Wed Thu Fri Sat | S10 (D) | Mon Thu Fri Sat |\n| S05 | Mon–Thu | S11 | Tue–Fri |\n| S06 | Tue–Fri | S12 | Mon Wed Fri Sat |\n\nKH = key holder, D = designer.\n\n**Cover:** Mon 8, Tue 8, Wed 9, Thu 9, Fri 8, Sat 6. Two key holders and at least two designers every day.\n\n**To settle first:**\n- The Saturday six would go from about 3 Saturdays in 5 to every Saturday. This needs their agreement.\n- Saturday is 7 paid hours. Either extend it to 8 or accept a 31-hour week for those staff.\n- Check that S05 having Friday off and S06 having Monday off fit their childcare arrangements.\n- Cover Saturday absence like-for-like with a volunteer: S02 (KH), S09 (D), S07 or S11 (£138.60–£176.40 a shift).\n\n## Measuring success\n\nSet targets in advance and compare against January–March 2026:\n\n- Showroom minimum cover met on all 71 open days; design appointments and sales\n- Installs completed on schedule; call-backs\n- Calls answered; complaints\n- Overtime cost; sickness absence\n- An HR-run survey of all 40 staff at the start and end, one response each, aiming for 80%+\n- Applications per fitter and designer vacancy\n\n## Timeline\n\n- **15 Oct 2026:** board decision\n- **By 30 Nov:** consult staff and issue temporary contract variations running until your decision\n- **4 Jan 2027:** pilot starts; Rachel logs cover weekly\n- **12 Feb:** mid-point check\n- **22–26 Mar:** final survey\n- **28 Mar:** pilot ends\n- **Thu 15 Apr 2027: review meeting where you decide whether to keep it**\n"
+    }
+   ]
+  },
+  {
+   "rank": 19,
+   "setup": "gpt-6-luna_max",
+   "name": "GPT-6 Luna",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 89,
+   "basics": 4,
+   "n": 4,
+   "cost": "1p",
+   "tasks": [
+    87,
+    87,
+    100,
+    83
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6-luna_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot decision plan\n\n**As written, the proposal does not work for the showroom.** Its weekday split gives 6 staff on Monday and Friday, and 12 on Tuesday to Thursday, so weekday headcounts and skill cover are available. But all 12 patterns are weekdays: Saturday cover is 0 against a minimum of 6. The only showroom Saturday-overtime volunteers are S02, S07, S09 and S11. All four would provide only 4 staff, including just 1 designer; they cannot meet the Saturday minimum or skill mix. That overtime would cost **£617.40 per Saturday** (£7,408.80 over 12 Saturdays) and still leave the showroom short. Across all teams, hours fall from 1,500 to 1,280 per week, a **14.67% reduction at the same pay**; matching weekly output would require 17.19% more output per paid hour. The survey was 15 of 40 staff (37.5%); 13 Yes answers are 32.5% of all staff, not 87%.\n\n**Options for the board:**\n\n- Trial 32 hours over four 8-hour paid days at the same pay, with Saturday included as a contracted day. The schedule below repeats weekly; an alternative is to rotate Saturday assignments, with weekday pairings changed to preserve cover.\n- Keep 37.5 hours over four days (9 hours 22 minutes 30 seconds paid each day). This preserves contracted hours but means long days and does not reduce total labour hours.\n- Trial 32 hours only with trained relief/recruitment or changed opening arrangements for the uncovered hours. Overtime volunteers alone are not a workable Saturday solution.\n\n**Pilot to cost and schedule:** 4 January–28 March 2027, 12 weeks. Keep pay unchanged and roster four 8-hour paid shifts per person. Repeat the showroom pattern in `numbers.json` weekly. Keep S05 and S06's childcare arrangements. In this pattern, showroom headcount is Mon 7, Tue 8, Wed 9, Thu 10, Fri 7 and Sat 7. Every weekday has at least two keyholders and two designers scheduled. Saturday has two keyholders and three designers; roster 7 so staggered breaks leave at least 6 on duty. Stagger weekday breaks too, keeping at least 5 on duty and a keyholder and designer available. Schedule an 8 paid-hour Saturday shift around the 09:00–16:30 opening (for example, 08:30–17:00 with a 30-minute unpaid break). The pattern assigns the same seven people to every Saturday, so confirm their agreement and monitor workload and fairness; a rotating version would need different weekly day pairings while retaining these cover checks. The showroom closes on Good Friday, 26 March; agree in writing how that closure and annual leave are treated under the temporary pattern before launch.\n\nUse the 12 weeks before launch as the baseline. Track weekly sales and gross margin, design appointments completed and conversion, customer complaints and response times, fitting completion/rework, absence, overtime, and short staff pulses on workload, wellbeing and rota fairness. Set acceptable service, output and cost thresholds before starting; review the dashboard weekly and check showroom cover daily. Compare like-for-like weeks and account for the bank-holiday closure. The survey was optional and shared through a WhatsApp group, so treat it as a prompt for a representative staff consultation, not a mandate.\n\nThe pilot runs through Sunday 28 March. Hold the decision review on **Wednesday 7 April 2027**, after the Easter bank holidays, with the 12-week results, costs, cover record and staff feedback.\n"
+    }
+   ]
+  },
+  {
+   "rank": 19,
+   "setup": "gemini-4-argon_high",
+   "name": "Gemini 4 Argon",
+   "level": "high",
+   "maker": "Google",
+   "score": 89,
+   "basics": 4,
+   "n": 4,
+   "cost": "42p",
+   "tasks": [
+    78,
+    88,
+    100,
+    89
+   ],
+   "where": "Google AI Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gemini-4-argon_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-Day Week Pilot Plan\n\n## 1. Does Your Proposal Work as Written?\n\n**No — it leaves Saturdays uncovered and creates weekday single-point risks.**\n\n- **Showroom Saturdays:** Putting `S01–S06` on `Mon–Thu` and `S07–S12` on `Tue–Fri` gives cover of **Mon: 6, Tue: 12, Wed: 12, Thu: 12, Fri: 6, Sat: 0**. Saturday (a third of design appointments) requires **≥6 staff (≥1 key holder, ≥2 designers)**—a **shortfall of 6**. Friday has only **1 key holder (`S08`)**, with no absence cover, while `Tue–Thu` has all 12 staff.\n- **Overtime volunteers:** Five staff volunteered for Saturday overtime, but `F03` (Lewis Grant) is a fitter, not showroom-trained. Even if all **4 showroom volunteers (`S02, S07, S09, S11`)** worked every Saturday (39h/5 days weekly), cover reaches only **4 staff and 1 designer (`S09`)**—2 staff and 1 designer short—costing **£617.40/Saturday** (**£7,408.80 over 12 Saturdays**).\n- **Hours, operations, and survey:** Moving 40 staff from 37.5 to 32h cuts weekly hours from **1,500 to 1,280 (-14.67%, -220h)** on full pay and lengthens shifts from 7.5 to 8h (flagged by fitters). Warehouse (`W01`) and Office (`O01`) each have **1 key holder**, and Fitting has **1 Electrician (`F08`)** and **1 Plumber (`F09`)**. Moreover, \"87% support\" came from **15 responses (37.5% response rate)**—only **32.5% of all 40 staff** voted \"Yes\" (skewed to Office 7/8 vs Showroom 3/12, Fitting 3/14, Warehouse 2/6).\n\n## 2. Realistic Options (15 October Board Decision)\n\n1. **Option A — 12-week 32h pilot (100% pay) with a 6-day Showroom rota:** Use `Mon–Thu` and `Tue–Fri` outside the showroom, and include Saturday as a contracted day across three 4-day Showroom patterns (**£0 routine overtime**).\n2. **Option B — 9-day fortnight (~34–35h/week):** Halves the capacity cut (~7%) and keeps 7.5h shifts for fitters.\n3. **Option C — Consult all staff first:** Re-survey all 40 staff and model fitting schedules before committing.\n\n## 3. Recommended Pilot: 4 Jan – 27 Mar 2027\n\n### Showroom Pattern (`S01–S12`, 4 days / 32h)\nProtect weekday childcare arrangements for `S05` and `S06` across three 4-person patterns (Saturday is 7 paid hours vs 8h weekdays; Patterns 2–3 include 1h weekday prep/handover):\n- **Pattern 1 (`Mon, Tue, Wed, Thu`):** `S01` (key holder), `S03` (designer), `S05, S06` (sales).\n- **Pattern 2 (`Mon, Tue, Fri, Sat`):** `S02` (key holder), `S04` (designer), `S07, S11` (sales).\n- **Pattern 3 (`Wed, Thu, Fri, Sat`):** `S08` (key holder), `S09, S10` (designers), `S12` (sales).\n\n### Daily Cover\nEvery open day (`Mon–Sat`) has **8 showroom staff** (vs minimum 5 Mon–Fri, 6 Sat), absorbing leave without overtime:\n- **Mon & Tue:** **8 staff** (`S01, S02` key holders; `S03, S04` designers; 4 sales).\n- **Wed & Thu:** **8 staff** (`S01, S08` key holders; `S03, S09, S10` designers; 3 sales).\n- **Fri & Sat:** **8 staff** (`S02, S08` key holders; `S04, S09, S10` designers; 3 sales).\n\n**Other teams & bank holidays:** Split Office, Warehouse, and Fitting between `Mon–Thu` and `Tue–Fri` (1 Lead Fitter, 1 Apprentice, 1 Driver per pattern), add backup key holders for `W01` and `O01`, and schedule `F08` and `F09` on their working days. All teams close on **Good Friday (`2027-03-26`)**, with bank holiday hours pro-rated.\n\n### Success Metrics & Review\n- **KPIs (vs Q1 2026):** Weekly/Saturday design appointments and conversion; on-time fittings, snagging, and delivery punctuality; sickness, overtime (£0 routine), recruitment, and an **all-staff survey** (≥85% response).\n- **Review:** Midpoint check **17 February 2027**. Pilot ends **27 March 2027** (`12` Saturdays). Since **29 March is Easter Monday** (closed), collate metrics **30 March** and hold the decision meeting **31 March 2027 (`2027-03-31`)**.\n"
+    }
+   ]
+  },
+  {
+   "rank": 19,
+   "setup": "haiku-5.5_default",
+   "name": "Claude Haiku 5.5",
+   "level": "standard",
+   "maker": "Anthropic",
+   "score": 89,
+   "basics": 3,
+   "n": 4,
+   "cost": "2p",
+   "tasks": [
+    91,
+    90,
+    99,
+    76
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/haiku-5.5_default/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week: review of the proposal and a pilot\n\n**Board date:** the 15 October board meeting has passed. Confirm the decision is still open before the 4 January 2027 start.\n\n## 1. Does the proposal work as written? No.\n\n- **Hours:** 1,500 a week falls to 1,280 (down 14.67%).\n- **Weekdays work.** Showroom cover under your patterns is Mon 6, Tue 12, Wed 12, Thu 12, Fri 6. Each day meets the minimum of five, with a key holder and a designer.\n- **Saturday fails.** Nobody works Saturday on their four pilot days, so cover is 0 against a minimum of 6.\n- **Overtime does not close the gap.** Four showroom staff volunteer (S02, S07, S09, S11). All four in gives 4 of 6, with one designer where two are required. Cost: £617.40 per Saturday, £7,408.80 over 12.\n- **The rules conflict.** \"Saturdays carry on as now\" means a rota Saturday on top of four days: five days, which the handbook treats as overtime.\n- **The survey is weak evidence.** The 87% is 13 of 15 responses. Only 32.5% of all staff said yes. It was shared through a WhatsApp group, and 7 of 15 responses came from the office (8 staff), against 3 of 14 fitters.\n\n## 2. Options\n\n- **A. Run as written.** Not viable, because Saturday fails every week.\n- **B. Four-day pilot with fixed showroom patterns (set out below).** Saturday meets the minimum with no overtime. The cost is that six people work Saturdays permanently. Four who work Saturdays now stop (S01, S09, S10, S12), and S05 and S06 never work Saturdays.\n- **C. Four-day week for fitting, warehouse and office only (28 staff).** The showroom stays on 37.5 hours. Hours fall by 154 a week (10.27%), with the least trading risk.\n- **D. Change Saturday opening.** Saturday is about a third of design appointments, so this is a commercial call.\n\nI lean towards C for low risk, or B to test the full idea.\n\n## 3. Pilot (option B)\n\n**Showroom patterns, fixed for 12 weeks** (full list in `numbers.json`):\n- Saturday group (S02, S03, S04, S07, S08, S11): Saturday plus three weekdays.\n- Weekday group (S01, S05, S06, S09, S10, S12): four weekdays.\n\n**Cover by day:** Mon 8, Tue 7, Wed 9, Thu 9, Fri 9, Sat 6. Every day meets the minimum. Saturday has two key holders (S02, S08) and two designers (S03, S04).\n\n**Settle before launch:**\n- Saturday-group staff would total 31 paid hours (three 8-hour days and a 7-hour Saturday). Decide how to make up the hour.\n- Good Friday, 26 March 2027, is a bank holiday: the showroom closes and Friday-pattern staff lose a day.\n- Each person must agree the change to 32 hours in writing. Pay stays the same.\n\n**Measures:**\n- Showroom minimum met on every trading day (target 100%).\n- Showroom appointments and design sales against the same weeks of 2026, with a threshold agreed now.\n- Fitting jobs finished to programme; warehouse on-time deliveries.\n- Staff sickness absence, resignations and overtime spend.\n- HR-run anonymous survey at weeks 0, 6 and 12, aiming for 70% response.\n\n**Suggested decision rule:** continue only if the showroom minimum holds every trading day, sales stay within your threshold, absence and resignations do not rise, and a majority of all 40 staff support continuing.\n\n**Timeline:**\n- Mid-December 2026: decide, obtain written agreements, brief staff.\n- Wed 10 February 2027: mid-point check (week 6).\n- Mon 4 January to Sun 28 March 2027: pilot (12 Saturdays).\n- Tue 6 April 2027: review meeting.\n"
+    }
+   ]
+  },
+  {
+   "rank": 19,
+   "setup": "opus-5.5_medium",
+   "name": "Claude Opus 5.5",
+   "level": "medium",
+   "maker": "Anthropic",
+   "score": 89,
+   "basics": 4,
+   "n": 4,
+   "cost": "26p",
+   "tasks": [
+    86,
+    86,
+    96,
+    86
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/opus-5.5_medium/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan for decision (board, 15 October 2026)\n\n## Does the proposal work as written?\n\n**No, because Saturdays in the showroom aren't covered.** Patterns A (Mon–Thu) and B (Tue–Fri) leave nobody rostered on a Saturday. Showroom cover would be Mon 6, Tue–Thu 12, Fri 6, **Sat 0**, against a Saturday minimum of 6 (a key holder and 2 designers) on our busiest day.\n\nOvertime doesn't fix it. Only four showroom staff have volunteered (S02, S07, S09, S11). That's **2 short, with 1 designer instead of 2**. It would also cost **£617.40 a Saturday (£7,408.80 over the pilot)**, with the same four people working six days a week.\n\nAlso note:\n- **The 87% is a share of the people who replied.** There were 15 responses from 40 staff (37.5%). The 13 \"Yes\" answers are **32.5% of all staff**. Only 3 of 12 showroom staff replied. The link could be forwarded, so we can't check who answered.\n- **Contracted hours fall 14.67%** (1,500 to 1,280 a week) at the same pay. Output per hour must rise about 17% to stand still. Fitters on Mondays and Fridays halve, from 14 to 7.\n\n## Realistic options\n\n1. **Pilot with a separate showroom rota (below).** Four days each, with no overtime needed.\n2. **Pilot without the showroom.** Simpler, but it creates a fairness problem.\n3. **Delay to April.** Run a proper survey and collect baseline data first.\n4. **Don't go ahead.**\n\n## Pilot (option 1)\n\n**Dates:** Mon 4 January to Sun 28 March 2027 (12 weeks, 12 Saturdays). Good Friday, **26 March**, is a bank holiday. Other teams use Patterns A/B as proposed.\n\n**Showroom pattern:**\n\n- S01, S05, S09: Mon–Thu\n- S02, S06, S11: Tue–Fri\n- S03: Mon, Tue, Wed, Sat\n- S04: Wed, Thu, Fri, Sat\n- S07, S08: Mon, Tue, Fri, Sat\n- S10: Mon, Thu, Fri, Sat\n- S12: Mon, Wed, Fri, Sat\n\n**Cover each day:**\n\n| Day | Mon | Tue | Wed | Thu | Fri | Sat |\n|---|---|---|---|---|---|---|\n| Staff (min) | 8 (5) | 9 (5) | 9 (5) | 8 (5) | 8 (5) | 6 (6) |\n| Key holders | 2 | 3 | 2 | 2 | 2 | 1 |\n| Designers | 3 | 2 | 3 | 3 | 2 | 3 |\n\n- **Saturday has no slack.** Volunteers are kept off the Saturday rota so they can cover absences as overtime (£138.60–£176.40 per person). S02 covers the key holder, S09 a designer, and S07 or S11 anyone else.\n- S05 and S06 stay on weekdays only, in line with their childcare arrangements. Check with them before confirming.\n- Like-for-like swaps are allowed if the manager approves.\n\n**Settle first:**\n- Saturday shifts are 7 paid hours, so Saturday staff work 31 hours, not 32.\n- Good Friday's effect on pro-rata leave for Friday workers.\n- Written, temporary contract changes with a right to revert.\n\n## Measuring success\n\nCompare against a baseline from Jan–Mar 2026 and Oct–Dec 2026. **Fix the pass/fail thresholds before 4 January.**\n\n- Revenue, plus design appointments booked and converted (Saturdays tracked separately)\n- Fitting jobs on schedule, on-time deliveries, complaints\n- Days below minimum cover (target: zero), and overtime cost\n- Sickness absence, staff leaving, job applications\n- An anonymous survey of all staff, one response per person, in December and at weeks 6 and 12\n\n## Review\n\n- **Mid-point check, Thu 11 February 2027:** to fix problems only.\n- **Pilot ends Sun 28 March.** Patterns continue as an interim until you decide.\n- **Decision meeting: Thursday 15 April 2027.**\n"
+    }
+   ]
+  },
+  {
+   "rank": 24,
+   "setup": "mistral-large-4_high",
+   "name": "Mistral Large 4",
+   "level": "high",
+   "maker": "Mistral AI",
+   "score": 88,
+   "basics": 4,
+   "n": 4,
+   "cost": "17p",
+   "tasks": [
+    84,
+    85,
+    100,
+    84
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/mistral-large-4_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: one-page plan\n\nFor Nina Ashworth, Managing Director — decision at the board meeting, 15 October 2026.\n\n## Does the proposal work as written? No.\n\n- **Hours.** 1,500 contracted hours a week now (40 staff × 37.5); 1,280 as proposed (40 × 32) — down 14.67%.\n- **Weekdays are fine.** Under Patterns A and B, cover is Mon 6, Tue–Thu 12, Fri 6: every weekday meets the minimum of 5 with a key holder and kitchen designer on duty.\n- **Saturdays collapse.** No four-day pattern includes Saturday, so Saturday cover is 0 against a minimum of 6 (1 key holder, 2 designers) on your busiest day (a third of design appointments).\n- **Overtime cannot rescue it.** Only four showroom staff volunteered for Saturday overtime (S02, S07, S09, S11): cover of 4, one key holder, one designer. Cost: £617.40 every Saturday, £7,408.80 over the pilot, and still short.\n- **The survey is weaker than \"87%.\"** 15 of 40 staff responded (37.5%); 13 \"yes\" = 32.5% of all staff — indicative, not a mandate (11 of 15 wanted Friday off, 4 Monday).\n\n## Your realistic options\n\n1. **As written.** Not viable: Saturdays fail; paid overtime still fails and costs £7,408.80.\n2. **Pilot with a redesigned showroom rota (recommended).** Saturdays staffed within contracted hours; no overtime; wage bill unchanged.\n3. **Do not pilot.** Keep the five-day week: no risk, but no progress on retention and recruitment.\n\n## Recommended pilot: 12 weeks, Mon 4 Jan to Sun 28 Mar 2027\n\n**All staff:** four days a week, same weekly pay (32 hours; Saturday rota 31 — see note).\n\n**Showroom — two fixed groups:**\n\n- **Saturday rota (6):** S02, S07, S09, S10, S11, S12 work **Tue, Wed, Fri, Sat**. All four Saturday-overtime volunteers are on it, plus S10 and S12, who work Saturdays today (confirm with them); Mon, Thu and Sun off.\n- **Weekday group (6):** S01, S03, S04, S05, S06, S08 work **Mon–Thu**, off Fri–Sun. S05 and S06 keep their no-Saturday childcare arrangements.\n\n**Cover each day (minimum in brackets):**\n\n- Mon 6 (5), Thu 6 (5): key holders S01, S08; designers S03, S04\n- Tue 12 (5), Wed 12 (5): everyone in\n- Fri 6 (5): key holder S02; designers S09, S10\n- Sat 6 (6): key holder S02; designers S09, S10 — exactly the Saturday minimum\n\n**Hours note:** the Saturday shift is 7 paid hours, so this rota works 31-hour weeks (3 × 8 + 7); anyone wanting 32 can work one longer weekday by arrangement.\n\n**Other 28 staff:** half Mon–Thu, half Tue–Fri, as you proposed.\n\n**Bank holiday:** Good Friday 26 March 2027 is the only one in the pilot: showroom closed, showroom staff have Friday off anyway, and the 14 Tue–Fri staff elsewhere get a paid day off.\n\n**Fairness:** the Saturday rota works every Saturday for 12 weeks; if you keep the four-day week, rotate the groups so nobody works Saturdays permanently.\n\n## How we would measure success\n\n- **Cover:** 100% of days at or above minimum, checked weekly by the showroom manager.\n- **Trading:** Saturday sales and design appointments within 5% of last year's same 12 Saturdays.\n- **Productivity:** sales per staff-hour within 5% of baseline — hours fall 14.67% at the same wage bill.\n- **People:** sickness absence, regretted leavers and recruitment enquiries tracked; pulse survey at weeks 6 and 12.\n- **Cost:** unplanned overtime £0.\n\n## Review\n\nThe pilot ends Sunday 28 March 2027; results are collated in the week of 5 April. **Review meeting: Monday 12 April 2027**, where you decide to keep, adjust or stop.\n"
+    }
+   ]
+  },
+  {
+   "rank": 24,
+   "setup": "mimo-v2.6-pro_default",
+   "name": "MiMo v2.6 Pro",
+   "level": "standard",
+   "maker": "Xiaomi",
+   "score": 88,
+   "basics": 4,
+   "n": 4,
+   "cost": "2p",
+   "tasks": [
+    88,
+    80,
+    98,
+    84
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/mimo-v2.6-pro_default/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens four-day week pilot\n\n**Bottom line**\n\nThe proposal does **not work as written**. Its showroom patterns (S01-S06: Mon-Thu; S07-S12: Tue-Fri) give cover of Mon 6, Tue 12, Wed 12, Thu 12, Fri 6 and **Sat 0**. Saturday needs 6 showroom staff. The four Saturday-overtime volunteers (S02, S07, S09 and S11) could raise cover only to 4, leaving a shortfall of 2. Saying “Saturdays carry on exactly as now” is therefore incompatible with the four-day patterns. The survey is encouraging but not conclusive: 15/40 responded (37.5%); 13 “Yes” answers are 87% of respondents but only 32.5% of all staff.\n\n**Realistic options**\n\n1. **Run the proposal unchanged**, adding volunteers: not operationally viable. It still misses Saturday minimum cover; the four volunteer shifts cost £617.40 each, or £7,408.80 across 12 Saturdays.\n2. **Keep four days but include Saturdays in the rota** (the viable pilot design below). This tests the hours and pay change without relying on routine overtime.\n3. **Trial four days for Monday-Friday teams and retain the current showroom pattern**, or phase in a shorter-hours/five-day arrangement. This reduces disruption but tests less of the proposal.\n\n**Pilot design**\n\nRun for 12 weeks, Monday 4 January to Sunday 28 March 2027. Everyone works 32 hours over four 8-hour days at current pay. Non-showroom teams split between Mon-Thu and Tue-Fri patterns, with team leads protecting customer and fitting deadlines.\n\nShowroom groups work these fixed days:\n\n- **Group 1:** S01, S03, S07, S09 — Mon, Tue, Thu, Sat\n- **Group 2:** S02, S04, S08, S10 — Mon, Wed, Fri, Sat\n- **Group 3:** S05, S06, S11, S12 — Tue, Wed, Thu, Fri\n\nThis gives the same cover every open day:\n\n| Day | Showroom staff | Minimum check |\n|---|---:|---|\n| Mon | 8 | 5; key holders S01/S02/S08; designers S03/S04/S09/S10 |\n| Tue | 8 | 5; key holder S01; designers S03/S09 |\n| Wed | 8 | 5; key holders S02/S08; designers S04/S10 |\n| Thu | 8 | 5; key holder S01; designers S03/S09 |\n| Fri | 8 | 5; key holders S02/S08; designers S04/S10 |\n| Sat | 8 | 6; key holders S01/S02/S08; designers S03/S04/S09/S10 |\n\nS05 and S06 retain no Saturday working. The volunteer list is the contingency pool: S02, S07 and S09 are already on Saturdays in this revised rota, while S11 is the reserve for absence or demand surges.\n\n**Measures and review**\n\nTake a four-week baseline before 4 January. Weekly, track cover breaches, appointments offered/kept and waiting time, design-to-order conversion, sales and contribution, order errors, complaints, overtime, absence, holiday use, fatigue and staff pulse. Compare output per paid hour and customer service with the baseline; flag any deterioration in fitting or delivery lead times. At the end of 12 weeks, review the operational and financial results with the staff forum and team leads. Nina's keep/change/stop decision is at the review meeting on **Monday 29 March 2027**.\n"
+    }
+   ]
+  },
+  {
+   "rank": 26,
+   "setup": "glm-5.3-flash_max",
+   "name": "GLM-5.3 Flash",
+   "level": "max",
+   "maker": "Z.ai",
+   "score": 87,
+   "basics": 4,
+   "n": 4,
+   "cost": "under 1p",
+   "tasks": [
+    80,
+    90,
+    89,
+    87
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/glm-5.3-flash_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens: four-day week pilot plan\n\n## Does the proposal work as written?\n\nNo, not for the showroom. Moving S01–S06 to Monday–Thursday and S07–S12 to Tuesday–Friday leaves **zero** contracted showroom staff on Saturday. The Saturday minimum is six, including one key holder and two kitchen designers, so there is a shortfall of six. Even bringing in every showroom volunteer who currently works Saturdays would add only S02, S07, S09 and S11: four people, still below the minimum. Their gross Saturday overtime cost would be £617.40 per week and £7,408.80 across 12 pilot Saturdays.\n\nThe 32-hour, same-pay proposal reduces contracted hours from 1,500 to 1,280 per week: **14.67%**. The survey is not strong evidence: 15 of 40 staff responded (**37.5%**), and 13 \"Yes\" answers are **32.5%** of all staff.\n\n## Realistic options\n\n1. **Do not pilot yet.** Keep 37.5-hour contracts and design a showroom rota and business measures first.\n2. **Hybrid pilot.** Office, fitting and warehouse staff trial 32 hours over four days; showroom staff keep their current 37.5-hour pattern. This is lower risk but gives less showroom evidence.\n3. **Full pilot with a purpose-built showroom rota.** Keep 32 hours for all staff, but use fixed four-day patterns that place six trained showroom staff on Saturday. This is the pilot below.\n4. **Increase Saturday capacity.** Recruit or contract trained weekend showroom staff before any four-day pilot. This adds lead time and cost but improves fairness and resilience.\n\n## Proposed 12-week pilot\n\n- **Dates:** Monday 4 January to Sunday 28 March 2027. The showroom closes on Good Friday, 26 March.\n- **Non-showroom staff:** a balanced mix of Monday–Thursday and Tuesday–Friday, 32 hours at current pay.\n- **Showroom:** six rostered staff work Saturday plus three weekdays; the other six work four weekdays. The fixed pilot rota is shown in `numbers.json`.\n- **Daily cover:** Monday 8, Tuesday 9, Wednesday 10, Thursday 8, Friday 7, Saturday 6. Every day has at least one key holder and one designer; Saturday has two key holders and two designers.\n- **Saturday rota:** S02, S03, S04, S07, S08 and S11 are rostered each pilot Saturday. If one is absent, use a qualified volunteer first; otherwise move a qualified weekday showroom employee to Saturday and backfill their weekday shift. Treat Saturday hours as overtime for anyone already working four contracted days.\n- **Baseline:** compare against the equivalent 12 weeks in 2026, adjusted for seasonal promotions, holidays and known one-offs.\n\n## Success measures and review\n\n- **Cover and service:** no shift below the stated minimum; no unplanned closure; completed appointments, quote conversion, orders, revenue, complaints and response times no worse than agreed thresholds.\n- **Operations:** installations, deliveries and warranty work completed on schedule; overtime held within budget.\n- **People:** sickness, unplanned absence, resignations, a staff pulse survey and a short manager log.\n- **Review:** weekly operational check-ins; a formal review in week 11; board decision meeting on **Wednesday 7 April 2027**. Continue, revise, or stop only after reviewing all measures.\n"
+    }
+   ]
+  },
+  {
+   "rank": 27,
+   "setup": "gemini-3.6-flash_low",
+   "name": "Gemini 3.6 Flash",
+   "level": "low",
+   "maker": "Google",
+   "score": 86,
+   "basics": 4,
+   "n": 4,
+   "cost": "6p",
+   "tasks": [
+    86,
+    78,
+    98,
+    83
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gemini-3.6-flash_low/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-Day Week Pilot Plan: Recommendation & Implementation\n\n**To:** Nina Ashworth, Managing Director  \n**From:** Operational Advisory  \n**Date:** October 2026  \n\n---\n\n## 1. Evaluation of Proposal as Written\n\nYour proposed 12-week pilot (4 January – 28 March 2027) reduces weekly contracted hours from 1,500 to 1,280 (a 14.67% reduction) on equal pay. \n\nHowever, **the proposal does not work as written**:\n\n* **Showroom Saturday Deficit:** Fixed Patterns A (Mon–Thu) and B (Tue–Fri) leave Saturday with zero scheduled staff against a minimum requirement of 6 (shortfall of 6).\n* **Unviable Overtime Reliance:** Only 4 showroom staff have volunteered for Saturday overtime (S02, S07, S09, S11). Even if all 4 work every Saturday, cover reaches 4 staff (still 2 short of the minimum). This overtime would cost £617.40 per Saturday (£7,408.80 across 12 weeks) without meeting operational requirements.\n* **Survey Context:** While 87% of survey respondents favored a pilot, the survey response rate was only 37.5% (15/40 staff). Only 32.5% of total staff (13/40) explicitly voted \"Yes\", and only 3 of 12 showroom staff responded.\n\n---\n\n## 2. Realistic Options\n\n1. **Option A: Staggered 6-Day Showroom Roster (Recommended)**  \n   Maintain a 32-hour week across four 8-hour days, but stagger days off across Monday to Saturday for showroom staff. Non-showroom teams (Office, Fitting, Warehouse) remain on Patterns A and B (Mon–Thu / Tue–Fri).\n2. **Option B: Voluntary Saturday Overtime + Rota Adjustments**  \n   Assign 4 days Mon–Fri and rely on rotas plus temporary cover incentives. Unviable due to staff shortage and unnecessary overtime expense (£7.4k).\n3. **Option C: Phased Implementation / Pilot Postponement**  \n   Delay the pilot until full consultation is conducted with all 40 staff members to address Saturday cover and client appointment capacity.\n\n---\n\n## 3. Recommended Pilot Framework\n\n### Showroom Working Pattern (S01–S12)\nEach staff member works four 8-hour days per week:\n\n* **S01 (Mgr / Keyholder):** Mon, Tue, Wed, Sat\n* **S02 (Asst Mgr / Keyholder):** Mon, Thu, Fri, Sat\n* **S03 (Designer):** Mon, Tue, Wed, Thu\n* **S04 (Designer):** Tue, Wed, Thu, Fri\n* **S05 (Sales / Childcare):** Mon, Tue, Wed, Thu\n* **S06 (Sales / Childcare):** Tue, Wed, Thu, Fri\n* **S07 (Sales):** Mon, Wed, Thu, Sat\n* **S08 (Senior Sales / Keyholder):** Mon, Tue, Wed, Fri\n* **S09 (Designer):** Wed, Thu, Fri, Sat\n* **S10 (Designer):** Mon, Tue, Fri, Sat\n* **S11 (Sales):** Tue, Thu, Fri, Sat\n* **S12 (Sales):** Mon, Wed, Thu, Fri\n\n### Daily Showroom Cover\n* **Mon (8 staff):** 3 Keyholders, 2 Designers (Min: 5 staff, 1 KH, 1 Des)\n* **Tue (8 staff):** 2 Keyholders, 3 Designers (Min: 5 staff, 1 KH, 1 Des)\n* **Wed (9 staff):** 2 Keyholders, 3 Designers (Min: 5 staff, 1 KH, 1 Des)\n* **Thu (9 staff):** 1 Keyholder, 3 Designers (Min: 5 staff, 1 KH, 1 Des)\n* **Fri (8 staff):** 2 Keyholders, 3 Designers (Min: 5 staff, 1 KH, 1 Des)\n* **Sat (6 staff):** 2 Keyholders (S01, S02), 2 Designers (S09, S10), 2 Sales (S07, S11) (Min: 6 staff, 1 KH, 2 Des)\n\n---\n\n## 4. Success Metrics & Review\n\n### Key Performance Indicators\n* **Customer & Revenue Metrics:** Completed design appointments and sales lead conversion rates (especially Saturdays).\n* **Operational Delivery:** Fitting project completion dates and warehouse delivery turnaround.\n* **Staff & Cost Metrics:** Absenteeism, turnover intent, and zero unbudgeted overtime expense.\n\n### Review Schedule\n* **Mid-Pilot Check-in:** Week 6 (12 February 2027) for operational tweaks.\n* **Final Review Meeting:** **Monday 29 March 2027** (or Tuesday 30 March 2027 following the Easter bank holiday on 26–29 March) to evaluate metrics and decide on permanent adoption.\n"
+    }
+   ]
+  },
+  {
+   "rank": 28,
+   "setup": "gemini-3.8-flash_high",
+   "name": "Gemini 3.8 Flash",
+   "level": "high",
+   "maker": "Google",
+   "score": 85,
+   "basics": 4,
+   "n": 4,
+   "cost": "28p",
+   "tasks": [
+    70,
+    87,
+    100,
+    85
+   ],
+   "where": "Google AI Plus, Google AI Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gemini-3.8-flash_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-Day Week Pilot Plan: Board Briefing\n\n**To:** Nina Ashworth, Managing Director | **Date:** October 2026\n\n---\n\n### 1. Proposal Viability Assessment\nYour proposal **does not work as written**:\n- **Zero Saturday Cover:** Fixed Patterns A (Mon–Thu) and B (Tue–Fri) schedule zero showroom staff on Saturday.\n- **Overtime Shortfall:** Overtime cannot bridge the gap. Only 4 showroom staff volunteered (S02, S07, S09, S11). Non-showroom staff cannot cover the showroom. At 4 staff, Saturday is 2 short of the 6-person minimum and has only 1 kitchen designer (minimum 2 required).\n- **Cost and Burnout:** Using these 4 volunteers costs £617.40 weekly (£7,408.80 over 12 weeks) gross, requiring 39-hour weeks and defeating the 32-hour trial's purpose.\n- **Weekday Inefficiency:** Showroom staffing peaks at 12 on Tue–Thu (vs 5 required), while Mon/Fri have 6 and Sat has 0.\n- **Limited Survey Mandate:** The 87% support represents 13 of 15 respondents across 40 staff (32.5% of total workforce). Only 3 of 12 showroom staff and 3 of 14 fitters responded, citing concerns over Saturday cover and longer fitting days.\n\n---\n\n### 2. Realistic Options\n1. **Split-Week Fixed Patterns (Recommended Pilot):** Assign showroom staff to Mon–Thu and Wed–Sat teams. Satisfies all cover rules, requires zero overtime, and provides 3 consecutive days off.\n2. **Rotating Saturday Rota:** Rotate the 10 eligible showroom staff across Saturdays (~3 in 5 weeks), with S05 and S06 fixed Mon–Thu. Balances weekends, but adds administrative complexity.\n3. **Weekend Hiring:** Recruit part-time weekend staff. Protects weekday patterns but adds payroll cost and cannot be hired by January 2027.\n4. **Pause or Defer:** Consult showroom and fitting teams directly to resolve operational concerns before launching later in 2027.\n\n---\n\n### 3. Recommended Pilot Framework\nAll 40 staff move to 32 contracted hours over 4 days (8 hours/day, equal pay), reducing weekly company hours from 1,500 to 1,280 (-14.67%). Fitting, Warehouse, and Office split across Mon–Thu and Tue–Fri.\n\n**Showroom Schedule:**\n- **Team 1 (Mon–Thu):** S01, S02, S03, S04, S05, S06 (honours agreed childcare arrangements for S05 and S06).\n- **Team 2 (Wed–Sat):** S07, S08, S09, S10, S11, S12 (all eligible for Saturday work).\n\n**Daily Showroom Cover:**\n- **Mon & Tue (6 on duty):** 2 key holders (S01, S02), 2 designers (S03, S04). *Exceeds min 5 staff, 1 key, 1 designer.*\n- **Wed & Thu (12 on duty):** Full team on duty (3 keys, 4 designers). Facilitates training and handovers.\n- **Fri (6 on duty):** 1 key holder (S08), 2 designers (S09, S10). *Exceeds min 5 staff, 1 key, 1 designer.*\n- **Sat (6 on duty):** 1 key holder (S08), 2 designers (S09, S10). *Meets min 6 staff, 1 key, 2 designers.*\n- **Sundays & Bank Holidays:** Closed (Good Friday, 26 March 2027).\n\n---\n\n### 4. Success Metrics & Review Timeline\n**Measuring Success:**\n- **Commercial:** Design appointments completed, sales conversion rate, weekly revenue vs prior year.\n- **Operations:** Fitting first-time completion rate, snagging rates, customer review ratings.\n- **Staff Wellbeing:** Sickness absence, staff turnover, pulse survey scores (weeks 4, 8, 12).\n- **Financial:** Overtime spend (target: £0 showroom overtime).\n\n**Review Timeline:**\n- **Pilot Duration:** 12 weeks: Monday 4 January 2027 to Sunday 28 March 2027 (12 Saturdays).\n- **Checkpoints:** End of Week 4 (29 January) and Week 8 (26 February) for operational reviews.\n- **Board Review Meeting:** Thursday 15 April 2027 (`2027-04-15`) to decide whether to retain the four-day week.\n"
+    }
+   ]
+  },
+  {
+   "rank": 28,
+   "setup": "minimax-m3_default",
+   "name": "MiniMax M3",
+   "level": "standard",
+   "maker": "MiniMax",
+   "score": 85,
+   "basics": 4,
+   "n": 4,
+   "cost": "3p",
+   "tasks": [
+    86,
+    80,
+    95,
+    80
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/minimax-m3_default/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: a plan for Nina\n\n**Does your proposal as written work?**\n\nMostly, but Saturday does not.\n\n- **Hours.** 40 staff × 32 hours = **1,280 hours a week**, down from **1,500** — a **14.67% cut** on the same pay.\n- **Monday to Friday is fine.** Your split (S01–S06 Mon–Thu, S07–S12 Tue–Fri) gives 6 staff each weekday, above the 5-staff minimum, with key holders and designers covered.\n- **Saturday is the gap.** With everyone on a 4-day Mon–Thu or Tue–Fri pattern, no one is contracted to work Saturdays, so the line in your proposal that \"Saturdays carry on exactly as now\" cannot work as written. Only four staff have volunteered for Saturday overtime (S02, S07, S09, S11). The most we can field on a Saturday is **4**, against a **minimum of 6** (1 key holder, 2 designers). Saturday is your busiest day, so this is the part to fix.\n\n**Survey note.** \"87% in favour\" is 13 of 15 respondents. **15 of 40 staff responded (37.5%)** and 13 of 40 said yes (32.5%). Support is real, but the survey went out via the Wellbeing Champions WhatsApp group, so it over-represents engaged staff. Only 3 of 12 showroom staff responded — the team most affected.\n\n**Your three realistic options**\n\n1. **Run as written, accept 4-staff Saturdays.** Cheapest, but Saturday service runs at 67% of minimum for 12 weeks.\n2. **Add a small Saturday pattern.** Put 2 staff on a Wed–Sat pattern (4 days, 8 hours, normal pay) — one key holder, one designer. Combined with the 4 overtime volunteers, Saturday cover reaches 6. This is the pilot I would run.\n3. **Recruit more Saturday volunteers** before the pilot starts.\n\n**The pilot: option 2**\n\nShowroom pattern (4 days × 8 hours, normal pay):\n\n| Pattern | Days | Staff |\n|---|---|---|\n| A | Mon–Thu | S01, S03, S04, S05, S07 |\n| B | Tue–Fri | S02, S06, S09, S11, S12 |\n| C | Wed–Sat | S08, S10 |\n\nA and B follow your two-pattern logic, 5 staff each. Pattern C anchors Saturday with a key holder (S08) and a designer (S10) at normal pay.\n\n**Cover each day (Mon–Fri min 5, Sat min 6):**\n\n- Mon: 5 — 1 key holder, 2 designers ✓\n- Tue–Thu: 10–12 ✓\n- Fri: 7 — 2 key holders, 2 designers ✓\n- Sat: 2 (C) + 4 overtime (S02, S07, S09, S11) = **6** — 2 key holders, 2 designers ✓\n\n**Overtime cost.** Each Saturday costs **£617.40** (7 paid hours × 1.5× rate for 4 volunteers). Over 12 Saturdays: **£7,408.80** gross, per the handbook.\n\n**Other teams.** Fitters, warehouse and office move to 32 hours over 4 days, same pay. Let each team pick its own A/B split to match demand — the survey preference is Friday (11) then Monday (4).\n\n**Bank holiday.** Good Friday, **26 March 2027**, is in the pilot. Showroom closed, no cover needed.\n\n**Measuring success** (vs the same 12 weeks a year earlier)\n\n- Sales and orders by week, Saturday split out\n- Showroom appointments: booked, kept, conversion rate\n- Customer complaints and Saturday wait times\n- Sickness days, voluntary turnover, time-to-fill\n- Pulse survey at week 6 and week 12\n\nPass = no fall in sales/orders, no rise in complaints, Saturday appointments still hit, staff mood improves or holds.\n\n**Review**\n\nPilot: **Mon 4 Jan – Sun 28 Mar 2027** (12 weeks).\nReview meeting: **Wed 14 April 2027**, two weeks after pilot end to gather and analyse the data. That is when you decide keep, tweak, or drop.\n"
+    }
+   ]
+  },
+  {
+   "rank": 30,
+   "setup": "gpt-6-luna_medium",
+   "name": "GPT-6 Luna",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 84,
+   "basics": 4,
+   "n": 4,
+   "cost": "under 1p",
+   "tasks": [
+    88,
+    80,
+    89,
+    80
+   ],
+   "where": "ChatGPT Free, in the desktop app (free), ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6-luna_medium/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: decision brief\n\n**Does the proposal work as written?** No. The hours and pay change is clear, but a 32-hour week is a 14.67% reduction in contracted hours across the business (1,500 to 1,280 hours weekly) on unchanged pay. In the showroom, its fixed split leaves six people Mon, six Tue, and 12 Wed/Thu, but only six Friday and **none Saturday**. The Saturday minimum is six, including a key holder and two designers; the four showroom overtime volunteers could raise Saturday cover only to four, still two short. The proposal also treats survey support as 87% of staff: 13 of 15 respondents said yes, which is 32.5% of all 40 staff. The optional WhatsApp survey is a small, self-selected sample, not a reliable measure of all staff views.\n\n**Realistic options for the board**\n\n- Keep the five-day arrangement and improve recruitment/retention in other ways.\n- Trial four days at 32 hours on the same pay, with a redesigned showroom rota and agreed cover arrangements. The rota below is one workable option: six people work Saturday as part of their four days.\n- Consider a smaller or phased trial, or a different hours/pay arrangement, if the cost or service risk of a full 32-hour trial is too high. Cost and operational effects should be modelled before commitment.\n\n**Suggested 12-week pilot (4 Jan–28 Mar 2027)**\n\nUse the individual four-day showroom rota in `numbers.json`. It schedules six people Saturday (including key holders and designers) and at least seven each weekday, above the five-person minimum. Saturday workers take three weekdays; the other six take four weekdays. The showroom remains open six days, with one key holder and at least one designer weekdays, and one key holder plus two designers Saturday. Keep Sunday and bank holidays closed. The rota is a starting point: confirm leave, appointment demand, breaks, and staff agreement before launch. The weekday headroom helps cover absence; set a named, trained reserve process and avoid assuming voluntary overtime is guaranteed.\n\nFor the other 28 staff, agree team-level four-day patterns and handovers before launch, with customer service and fitting capacity covered each weekday. In particular, test fitting workload and customer response times; do not assume fewer hours can be absorbed without changes. Clarify pay, annual leave and bank-holiday treatment for the pilot in writing.\n\n**Measure and review**\n\nRecord a four-week pre-pilot baseline, then review weekly: completed appointments and sales/conversion; wait time and missed appointments; showroom daily cover and absence; fitting jobs completed, delays and rework; customer complaints; overtime and total labour cost; and staff wellbeing, workload and fairness by team. Set numerical service and cost guardrails with managers before launch, report exceptions weekly, and ask all staff for confidential pulse feedback at weeks 4, 8 and 12. Meet on **5 April 2027**, after the 12 weeks, to compare results with baseline and guardrails and decide whether to stop, adjust, extend or keep the arrangement.\n"
+    }
+   ]
+  },
+  {
+   "rank": 31,
+   "setup": "grok-4.7_high",
+   "name": "Grok 4.7",
+   "level": "high",
+   "maker": "xAI",
+   "score": 78,
+   "basics": 2,
+   "n": 4,
+   "cost": "60p",
+   "tasks": [
+    86,
+    38,
+    100,
+    90
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/grok-4.7_high/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week: facts, options, and a pilot rota\n\nThis does not decide for you. 15 October is whether to start. Figures are in `out/numbers.json`.\n\n## Does it work as written?\n\nNo. On the four contracted days, cover is Mon 6, Tue 12, Wed 12, Thu 12, Fri 6, Sat 0. Weekdays meet the minimum of 5, with a key holder and a designer. Saturday needs 6, including a key holder and two designers. Shortfall: 6.\n\n\"Saturdays as now\" is a fifth day: voluntary overtime. Imran (S02), Callum (S07), Owen (S09) and Ben (S11) have offered. Lewis Grant also offered; fitters do not count. Four people leave Saturday two short, with one designer, not two. Gross overtime is £617.40 a Saturday and £7,408.80 for 12. Cover still fails.\n\nHours fall from 1,500 to 1,280 (14.67%) on the same pay. Weekly gross stays £22,526.25. The same output needs about 17% more per hour. Outside the showroom, a half split also halves Monday and Friday cover.\n\nThe 87% is of replies, not staff. 15 of 40 replied (37.5%); 13 said yes (32.5% of staff). It was a three-day WhatsApp link, mostly office (7 of 8). Showroom 3 of 12, fitting 3 of 14. Of replies, 11 wanted Friday off and 4 Monday.\n\n## Options\n\n1. As written, plus overtime. Misses Saturday cover, at the cost above.\n2. Four days for all 40, Saturday inside the showroom four. Rota below, if seven agree. Those weeks are 31 paid hours, not 32.\n3. Four days except the showroom. Safe, two-tier; designers are left out.\n4. Do not start in January. Survey all 40 first. A nine-day fortnight is a smaller test.\n\n## Pilot you could run\n\nMonday 4 January to Sunday 28 March 2027. Same pay, including 31-hour Saturday weeks. Written hours change first. Overtime stays voluntary. Fixed crew for this test only, not a permanent Saturday claim.\n\n- Wed–Sat: Rachel (S01), Hannah (S03), Callum (S07), Grace (S10), Ben (S11)\n- Mon, Tue, Wed, Sat: Imran (S02), Owen (S09)\n- Mon–Thu: Tomasz (S04), Ella (S05), Joy (S06)\n- Tue–Fri: Amira (S12)\n- Mon, Tue, Thu, Fri: Sunita (S08)\n\nElla and Joy stay off Saturday. Confirm childcare first; another weekday off still clears the minimum.\n\nCover: Mon 6, Tue 7, Wed 11, Thu 10, Fri 7, Sat 7. Keys: Imran and Sunita (Mon–Tue); Rachel and Imran (Wed, Sat); Rachel and Sunita (Thu–Fri). Designers: Tomasz and Owen (Mon–Tue); all four (Wed); Tomasz, Hannah and Grace (Thu); Hannah and Grace (Fri); Hannah, Owen and Grace (Sat). One absence still meets the minimum on Monday, Friday and Saturday; a second does not. Cap leave at one on those days.\n\nRachel, Hannah and Grace have not offered Saturdays. Do not require 12 in a row. If either says no, swap Tomasz in. Do not start on a refused rota. Gaps: an agreed swap with Tomasz, Sunita or Amira, still four days, not assumed overtime.\n\nOther teams, if included: one lead fitter on each pattern; electrician and plumber on Mon, Tue, Thu and Fri; drivers split; warehouse supervisor and an office key holder on Monday and Friday. Days are 8 hours, 30 minutes longer than now, not a compressed shift.\n\nOne bank holiday in the pilot: Good Friday 26 March 2027, closed. Easter Monday 29 March is the next day. If Friday is already off, take any lieu day on Wednesday or Thursday.\n\n## Measures and review\n\nWeekly: headcount, key holder, designers, appointments kept, quotes, orders, jobs on time, snags, sickness, gross overtime, complaints. Keep Saturday separate. Compare with 4 January–28 March 2026, allowing for season.\n\nYou set the pass marks. Warnings, not a verdict: any day under the minimum; a sharp drop in orders or Saturday appointments; a jump in sickness or resignations. Pulse on Thursday 18 February, after six weeks. Confidential survey of all 40 in week 12.\n\nKeep-or-stop meeting: Thursday 8 April 2027. That decision stays yours.\n"
+    }
+   ]
+  },
+  {
+   "rank": 32,
+   "setup": "sonnet-5.5_low",
+   "name": "Claude Sonnet 5.5",
+   "level": "low",
+   "maker": "Anthropic",
+   "score": 70,
+   "basics": 3,
+   "n": 4,
+   "cost": "9p",
+   "tasks": [
+    90,
+    96,
+    96,
+    0
+   ],
+   "where": "Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/sonnet-5.5_low/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan for Nina\n\n## Does the proposal work as written?\n**Not for the showroom.** Patterns A and B (Mon–Thu, Tue–Fri) put all 12 showroom staff on weekdays, so **nobody is in on Saturday**: cover is 0 against a minimum of 6. Weekdays are fine (Mon 6, Tue–Thu 12, Fri 6).\n\nOvertime doesn't rescue it. Only four showroom volunteers exist (S02, S07, S09, S11), giving 4 of 6, with one designer where two are needed. It would also cost £617.40 a Saturday, £7,408.80 over 12 Saturdays (gross, 1.5× for 7 hours).\n\nTwo other points:\n- **The 87% figure is weak.** 15 of 40 staff replied (37.5%) via a WhatsApp group, so it is self-selected. Yes = 13, or 32.5% of all staff. Only 3 of 12 showroom staff replied, and one comment doubts Saturdays will work.\n- **Hours:** 1,500 to 1,280 a week, a 14.67% cut. Good Friday (26 March 2027) is the only bank holiday in the pilot. Decide how it affects a 32-hour week for Tue–Fri staff.\n\n## Options (your decision)\n1. **Proposal as written, with overtime.** Cheapest to describe, but leaves Saturday short and costs about £7.4k.\n2. **Four-day week with Saturdays built into the showroom pattern** (below). No overtime, but showroom staff lose the fixed A/B pattern, and Saturday workers have a different day off.\n3. **Pilot office, fitting and warehouse only (A/B patterns); showroom stays at five days.** Simplest, but excludes the team with the hardest recruitment story and gives no showroom evidence.\n4. **Delay** until the showroom pattern is agreed with the team.\n\n## Pilot (option 2)\nStarts Mon 4 Jan 2027, 12 weeks, ending Sun 28 Mar. Non-showroom staff use A/B, balanced half and half.\n\n**Showroom days:**\n- **Mon (7 staff):** S02, S03, S05, S08, S09, S11, S12\n- **Tue (8):** S02, S03, S05, S06, S07, S08, S09, S10\n- **Wed (9):** S01, S02, S04, S05, S06, S07, S09, S10, S11\n- **Thu (9):** S01, S02, S04, S05, S06, S08, S09, S10, S12\n- **Fri (9):** S01, S03, S04, S06, S07, S08, S10, S11, S12\n- **Sat (6):** S01, S03, S04, S07, S11, S12\n\nEvery day has a key holder and a designer, and Saturday has S01 as key holder with designers S03 and S04. Weekdays have 2+ key holders and 2+ designers, so one absence is absorbed. **Saturday has no slack**: if any of the six is off, call volunteers S02 (key holder) or S09 (designer) as paid overtime, which should be a rare cost. Mon–Fri days off vary by person, so check this with the team. Fixed Saturday staff may find it unfair, so consider rotating after week 6.\n\n## Measuring success\nCompare with Oct–Dec 2026 where possible:\n- Saturday and weekday cover met (target 100% of days at minimum).\n- Overtime hours and cost (budget: under £1,000).\n- Design appointments and sales, with Saturday appointments tracked.\n- Fitting completions and delivery lead times.\n- Sickness absence and staff pulse survey at weeks 0, 6 and 12 (aim for responses from all 40 this time).\n- Applications for open fitter and designer roles.\n\n## Review\n- **Week 6 check-in:** Mon 15 February 2027, with a go/stop/adjust on cover.\n- **Decision meeting:** Tue 13 April 2027, after the pilot and the final survey.\n"
+    }
+   ]
+  },
+  {
+   "rank": 32,
+   "setup": "haiku-4.5_default",
+   "name": "Claude Haiku 4.5",
+   "level": "standard",
+   "maker": "Anthropic",
+   "score": 70,
+   "basics": 3,
+   "n": 4,
+   "cost": "11p",
+   "tasks": [
+    66,
+    54,
+    86,
+    74
+   ],
+   "where": "Claude Free (free), Claude Pro",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/haiku-4.5_default/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week pilot: plan and options\n\n## Does your proposal work as written?\n\nNot quite. For office, warehouse and fitting staff, yes—they work Monday to Friday and the two patterns cover every weekday. For the showroom, there's a gap.\n\n**The Saturday problem:** With fixed patterns (S01–S06 on Mon-Thu, S07–S12 on Tue-Fri), nobody is scheduled for Saturday. You currently rotate: six of ten Saturday workers each week, taking a weekday off. You can't run that with fixed patterns. Saturday would need voluntary overtime. Only four showroom staff (S02, S07, S09, S11) have volunteered. You need six. Shortfall: two.\n\n## Your realistic options\n\n**Option A (recommended): Fixed weekday patterns for showroom; Saturday as overtime.**\n\nUse Mon-Thu/Tue-Fri as proposed. For Saturday, recruit two additional volunteers from the six current Saturday workers (S01, S03, S04, S08, S10, S12) to join the four explicit volunteers. Target: six people for Saturday overtime.\n\n**Pros:** Closest to your original idea; fixed day off; tests overtime model; gives cost data.\n\n**Cons:** Doesn't give Saturday workers a day off; costs ~£12,000 for pilot.\n\n**Option B: Rotating week (Saturday built in).**\n\nSaturday is part of the rota on rotation. In even weeks S07–S12 work Tue-Fri-Sat; in odd weeks S01–S06 work Mon-Thu-Sat. Everyone works four days; Saturday is always covered.\n\n**Pros:** Everyone gets a day off; no overtime cost.\n\n**Cons:** More complex; staff don't have a fixed day off.\n\n**Option C: Reduce Saturday cover.**\n\nRun fixed four-day weeks; reduce Saturday staff to four or five (minimum is six). Measure customer impact.\n\n**Pros:** Simplest.\n\n**Cons:** May disappoint customers.\n\n## The pilot plan: my recommendation\n\n**Working pattern:** S01–S06 work Mon-Thu. S07–S12 work Tue-Fri. All other teams on the same 4-day split.\n\n**Daily cover:** Monday (S01–S06); Tue–Thu (all showroom); Friday (S07–S12); Saturday (six volunteers, overtime at 1.5×).\n\n**Recruit Saturday team:** Before launch, ask the four explicit volunteers (S02, S07, S09, S11) and approach six current Saturday workers (S01, S03, S04, S08, S10, S12) to volunteer for the pilot. Target: six.\n\n**Success metrics:** (1) Can you recruit six volunteers? (2) Staff satisfaction and absenteeism. (3) Do you hit Saturday appointment targets? (4) Is the overtime cost (£12,000 for 12 weeks) sustainable?\n\n**Review:** Monday 30 March 2027. Decide whether to roll out, try Option B or C, or pause.\n\n**Why Option A:** Your survey shows strong support. Fixed patterns match your fairness goal. This model tests sustainability and gives you cost data. If it fails, Options B and C remain available.\n"
+    }
+   ]
+  },
+  {
+   "rank": 34,
+   "setup": "gemini-3.5-flash-lite_default",
+   "name": "Gemini 3.5 Flash-Lite",
+   "level": "standard",
+   "maker": "Google",
+   "score": 62,
+   "basics": 2,
+   "n": 4,
+   "cost": "2p",
+   "tasks": [
+    77,
+    0,
+    94,
+    76
+   ],
+   "where": "Gemini (free), Google AI Plus, Google AI Pro",
+   "sig_files": []
+  }
+ ],
+ "nav": [
+  {
+   "id": "research",
+   "name": "Research"
+  },
+  {
+   "id": "content",
+   "name": "Content"
+  },
+  {
+   "id": "thinking",
+   "name": "Thinking"
+  },
+  {
+   "id": "building",
+   "name": "Building"
+  },
+  {
+   "id": "data",
+   "name": "Data"
+  },
+  {
+   "id": "automation",
+   "name": "Automation"
+  }
+ ],
+ "count": 34,
+ "tested_from": "2026-10-02",
+ "tested_to": "2026-10-21"
+}
