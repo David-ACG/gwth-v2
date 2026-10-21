@@ -2,211 +2,118 @@ import { test, expect, type Page } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
 
 /**
- * The two Labs routes David marked up on 2026-09-14, checked in a real
- * browser: annotation a-20260914-205407-b3dbb2 on the /labs listing, and
- * a-20260914-205206-82935a on the opening of the spreadsheet lab.
+ * The Model Lab pages (David, 2026-10-21, option A) in a real browser: the
+ * /labs index with its cost chart, and a lab page with its blind answers, its
+ * table and its sandboxed apps.
  *
  * These are the checks a component test cannot make: that nothing pushes the
- * page sideways on a phone, that the read-aloud control is reachable and
- * operable from the keyboard, that the preview panels survive both themes,
- * and that neither page ships a serious accessibility violation. Deliberately
- * not snapshots: the copy on these pages is still moving, and a sentence-level
- * baseline would fail for the wrong reason.
+ * page sideways on a phone, that the pick and the row toggle work with real
+ * hydration and a real fetch, that a model-written file comes back with the
+ * sandbox policy, and that no page ships a serious accessibility violation.
+ * Deliberately not snapshots: the copy is still going through its writing
+ * check.
+ *
+ * Run against a server with private content mode off, e.g.
+ * `PRIVATE_CONTENT_MODE=off npx next start -p 3107` and
+ * `PLAYWRIGHT_BASE_URL=http://localhost:3107 npx playwright test labs.spec.ts`.
  */
 
 const INDEX = "/labs"
-const LAB = "/labs/messy-spreadsheet-claude-vs-chatgpt"
-
-async function setTheme(page: Page, theme: "light" | "dark") {
-  await page.emulateMedia({ colorScheme: theme })
-  await page.addInitScript(
-    (value) => {
-      try {
-        window.localStorage.setItem("theme", value as string)
-      } catch {
-        // Private mode: the emulated colour scheme still applies.
-      }
-    },
-    theme
-  )
-}
-
-/**
- * The live lab cards, scoped to `main`.
- *
- * Next streams a page's HTML into `<body>` and relocates it into the app shell
- * with inline scripts, so a snapshot taken mid-stream can briefly see the same
- * section twice, once in place and once still parked at the end of the body.
- * Scoping to `main` counts the cards a reader can actually see, and the raw
- * server HTML always carries exactly one set. Nothing to do with the theme,
- * despite only the dark project being unlucky enough to catch it.
- */
-function liveCards(page: Page) {
-  return page.locator("main").getByTestId("arena-lab-card")
-}
+const THINKING = "/labs/thinking"
+const BUILDING = "/labs/building"
 
 /** True when the document is wider than its own viewport. */
 async function overflowsSideways(page: Page): Promise<boolean> {
   return page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-      document.documentElement.clientWidth + 1
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
   )
 }
 
+async function seriousViolations(page: Page) {
+  const results = await new AxeBuilder({ page }).include("main").analyze()
+  return results.violations
+    .filter((v) => v.impact === "serious" || v.impact === "critical")
+    .map((v) => `${v.id}: ${v.nodes.length}`)
+}
+
 test.describe("Labs index", () => {
-  test("every live card previews its lab and none claims a video", async ({
-    page,
-  }) => {
+  test("shows the six labs and the cost chart, dearest first", async ({ page }) => {
     await page.goto(INDEX)
-    const cards = liveCards(page)
-    await expect(cards.first()).toBeVisible()
-    const count = await cards.count()
-    expect(count).toBeGreaterThan(0)
-
-    // /labs is force-dynamic, so a card lower down can still be streaming in
-    // while the suite runs three browsers against one `next start`. The wait
-    // is generous on purpose: this test is about what the card says, not how
-    // fast a shared preview server answers.
-    for (let i = 0; i < count; i++) {
-      const card = cards.nth(i)
-      await expect(card.getByTestId("lab-preview")).toBeVisible({
-        timeout: 15000,
-      })
-      await expect(card.getByTestId("lab-task-cue")).toBeVisible({
-        timeout: 15000,
-      })
-      // A card names a video guide only where one exists, and never says
-      // "planned" (launch readiness review, 2026-10-20). Only the spreadsheet
-      // lab has been filmed.
-      if ((await card.getAttribute("data-video-state")) === "planned") {
-        await expect(card.getByTestId("lab-video-state")).toHaveCount(0)
-      } else {
-        await expect(card.getByTestId("lab-video-state")).toContainText(
-          /Video guide/
-        )
-      }
-    }
-    expect(await page.locator("video").count()).toBe(0)
+    const cards = page.locator("main").getByTestId("model-lab-card")
+    await expect(cards).toHaveCount(6)
+    await expect(cards.first()).toHaveAttribute("href", "/labs/research")
+    const chart = page.locator("main").getByTestId("labs-cost-chart")
+    await expect(chart).toBeVisible()
+    const rows = chart.getByRole("listitem")
+    expect(await rows.count()).toBeGreaterThan(30)
+    await expect(chart.getByText("premium").first()).toBeVisible()
   })
 
-  test("the spreadsheet card shows a still from its own video", async ({
-    page,
-  }) => {
+  test("fits the screen and has no serious accessibility violations", async ({ page }) => {
     await page.goto(INDEX)
-    const cards = liveCards(page)
-    await expect(cards.first()).toBeVisible()
-
-    const card = cards.filter({ hasText: "messy spreadsheet" })
-    await expect(card).toHaveCount(1)
-    // It has a real video guide now, so its card shows a still from it.
-    await expect(card.locator('[data-preview="video"]')).toHaveCount(1)
-  })
-
-  for (const theme of ["light", "dark"] as const) {
-    test(`does not scroll sideways, ${theme}`, async ({ page }) => {
-      await setTheme(page, theme)
-      await page.goto(INDEX)
-      await expect(liveCards(page).first()).toBeVisible()
-      expect(await overflowsSideways(page)).toBe(false)
-    })
-  }
-
-  test("has no serious accessibility violations", async ({ page }) => {
-    await page.goto(INDEX)
-    await expect(liveCards(page).first()).toBeVisible()
-    const results = await new AxeBuilder({ page })
-      // hlab injects its annotation toolbar outside the product app. Its own
-      // accessibility is tracked separately; this suite gates the Labs page.
-      .exclude("#gwth-review-root")
-      .withTags(["wcag2a", "wcag2aa"])
-      .analyze()
-    const serious = results.violations.filter((v) =>
-      ["serious", "critical"].includes(v.impact ?? "")
-    )
-    expect(serious.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([])
+    expect(await overflowsSideways(page)).toBe(false)
+    expect(await seriousViolations(page)).toEqual([])
   })
 })
 
-test.describe("Spreadsheet lab", () => {
-  test("opens with the lab, an honest video state and a read-aloud route", async ({
+test.describe("A lab page", () => {
+  test("hides the names until a pick, then reveals them all", async ({ page }) => {
+    await page.goto(THINKING)
+    await expect(page.locator("main").getByTestId("lab-answer")).toHaveCount(4)
+    await expect(page.locator("main").getByTestId("lab-reveal")).toHaveCount(0)
+    await page.getByRole("button", { name: "I would use answer C" }).click()
+    await expect(page.locator("main").getByTestId("lab-reveal")).toHaveCount(4)
+    await expect(page.getByTestId("lab-result")).toContainText("You chose answer C")
+  })
+
+  test("opens a row's written answer from the server", async ({ page }) => {
+    await page.goto(THINKING)
+    // Held by aria-controls: the button's name changes to "Hide" once open.
+    const first = page.locator("main table").getByRole("button", { name: /^Answer from / }).first()
+    const id = await first.getAttribute("aria-controls")
+    const button = page.locator(`main table button[aria-controls="${id}"]`)
+    await button.click()
+    await expect(button).toHaveAttribute("aria-expanded", "true")
+    await expect(page.locator(`#${id} .lesson-prose`).first()).toBeVisible()
+    await button.click()
+    await expect(page.locator(`#${id}`)).toBeHidden()
+  })
+
+  test("frames Building apps sandboxed, and serves them with the sandbox policy", async ({
     page,
+    request,
   }) => {
-    await page.goto(LAB)
-    await expect(page.locator("main").getByRole("heading", { level: 1 })).toBeVisible()
-
-    // The spreadsheet lab has a real, captioned video guide.
-    const guide = page.locator("main").getByTestId("lab-video-guide")
-    await expect(guide).toHaveAttribute("data-video-state", "available")
-    expect(await page.locator("video").count()).toBe(1)
-
-    // The read-aloud control is in the opening, not buried at the bottom.
-    await expect(page.locator("main").getByTestId("lab-listen")).toBeVisible()
+    await page.goto(BUILDING)
+    const frames = page.locator("main iframe")
+    const count = await frames.count()
+    for (let i = 0; i < count; i++) {
+      await expect(frames.nth(i)).toHaveAttribute("sandbox", "allow-scripts allow-forms allow-modals")
+    }
+    const tryIt = page.getByRole("link", { name: "Try it" }).first()
+    const href = await tryIt.getAttribute("href")
+    expect(href).toMatch(/^\/labs-files\/.+\/index\.html$/)
+    const res = await request.get(href!)
+    expect(res.status()).toBe(200)
+    expect(res.headers()["content-security-policy"]).toMatch(/^sandbox allow-scripts allow-forms allow-modals;/)
+    expect(res.headers()["content-security-policy"]).toContain("connect-src 'none'")
   })
 
-  test("keeps the long evidence below, behind disclosures that open", async ({
-    page,
-  }) => {
-    await page.goto(LAB)
-
-    const prompt = page.locator("main").getByTestId("shared-prompt")
-    await expect(prompt.locator("pre")).toBeHidden()
-    await prompt.locator("summary").click()
-    await expect(prompt.locator("pre")).toBeVisible()
-
-    // Both answers are always present: evidence is never behind a click.
-    await expect(page.locator("main").getByTestId("arena-output")).toHaveCount(2)
+  test("redirects an old Arena lab to the lab that replaced it", async ({ request }) => {
+    const res = await request.get("/labs/messy-spreadsheet-claude-vs-chatgpt", { maxRedirects: 0 })
+    expect(res.status()).toBe(308)
+    expect(res.headers()["location"]).toMatch(/\/labs\/data$/)
   })
 
-  test("the listen control works from the keyboard", async ({ page }) => {
-    await page.goto(LAB)
-    const panel = page.locator("main").getByTestId("lab-listen")
-    await expect(panel).toBeVisible()
-
-    const listen = panel.getByRole("button", { name: "Listen" })
-    await listen.focus()
-    await expect(listen).toBeFocused()
-    await page.keyboard.press("Enter")
-
-    // Chromium in CI has no voices, so the queue may end immediately. Either
-    // the transport controls appear, or it returns to idle: what must never
-    // happen is the button doing nothing at all and no state being announced.
-    await expect(panel.getByRole("status")).toBeAttached()
-    await expect(
-      panel.getByRole("button", { name: /pause|stop|listen/i }).first()
-    ).toBeVisible()
+  test("is a 404 for an unknown lab", async ({ request }) => {
+    const res = await request.get("/labs/build-mcp-server")
+    expect(res.status()).toBe(404)
   })
 
-  test("the jump list moves the reader down the page", async ({ page }) => {
-    await page.goto(LAB)
-    const nav = page
-      .locator("main")
-      .getByRole("navigation", { name: /sections of this lab/i })
-    await nav.getByRole("link", { name: "The verdict" }).click()
-    await expect(page.locator("#the-verdict")).toBeInViewport()
-  })
-
-  for (const theme of ["light", "dark"] as const) {
-    test(`does not scroll sideways, ${theme}`, async ({ page }) => {
-      await setTheme(page, theme)
-      await page.goto(LAB)
-      await expect(page.locator("main").getByRole("heading", { level: 1 })).toBeVisible()
+  for (const path of [THINKING, BUILDING]) {
+    test(`${path} fits the screen and has no serious accessibility violations`, async ({ page }) => {
+      await page.goto(path)
       expect(await overflowsSideways(page)).toBe(false)
+      expect(await seriousViolations(page)).toEqual([])
     })
   }
-
-  test("has no serious accessibility violations", async ({ page }) => {
-    await page.goto(LAB)
-    await expect(page.locator("main").getByRole("heading", { level: 1 })).toBeVisible()
-    const results = await new AxeBuilder({ page })
-      // hlab injects its annotation toolbar outside the product app. Its own
-      // accessibility is tracked separately; this suite gates the Lab page.
-      .exclude("#gwth-review-root")
-      .withTags(["wcag2a", "wcag2aa"])
-      .analyze()
-    const serious = results.violations.filter((v) =>
-      ["serious", "critical"].includes(v.impact ?? "")
-    )
-    expect(serious.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([])
-  })
 })
