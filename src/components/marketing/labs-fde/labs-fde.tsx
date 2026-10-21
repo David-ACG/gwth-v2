@@ -121,7 +121,7 @@ export function CostChart({ chart }: { chart: ModelLabCostChart }) {
       </ol>
       <p className={styles.chartNote}>
         Each bar shows the total cost of the tasks that set-up ran, using each company&apos;s
-        published prices for developer access (API), converted at 75p to the dollar.
+        published prices for developer access (API), converted at 75p to the dollar.{" "}
         {shortRunsSentence(chart)}{" "}
         {chart.rows.some((r) => r.premium)
           ? "Rows marked premium are Claude Fable and GPT-6 Astra, which we show for their cost and leave out of our picks. "
