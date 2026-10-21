@@ -14,9 +14,7 @@
  * caught /news, /verify and /score doing exactly that).
  *
  * UNLISTED pages leave the menus and search engines but keep working for
- * anyone with the link. /for-institutions is the one: the CIPD demo on
- * 6 November and the institution conversations after it are sent there
- * directly, while the 1 December launch sells to individuals.
+ * anyone with the link. None at the moment (see below).
  *
  * To bring a page back, delete it from the list; menus follow on their own.
  */
@@ -29,7 +27,10 @@ export const HIDDEN_PUBLIC_PATHS = [
   "/score",
 ] as const
 
-export const UNLISTED_PUBLIC_PATHS = ["/for-institutions"] as const
+// Empty since 2026-10-21. /for-institutions was unlisted for a day; David:
+// "CIPD are going to help get other institutions to look at the site so it
+// has to be visible." Keep the mechanism for the next page that needs it.
+export const UNLISTED_PUBLIC_PATHS: readonly string[] = []
 
 function under(pathname: string, route: string): boolean {
   return pathname === route || pathname.startsWith(`${route}/`)

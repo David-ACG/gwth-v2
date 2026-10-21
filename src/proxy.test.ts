@@ -502,7 +502,7 @@ describe("proxy hides the pages judged Hide", () => {
     }
   })
 
-  it("keeps the unlisted institutions page and the waitlist (before sales open) reachable", async () => {
+  it("keeps the institutions page and the waitlist (before sales open) reachable", async () => {
     for (const path of ["/for-institutions", "/waitlist", "/pricing"]) {
       const response = await proxy(request(path))
       expect(response.headers.get("x-middleware-rewrite")).toBeNull()

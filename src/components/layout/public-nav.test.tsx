@@ -74,11 +74,12 @@ describe("PublicNav lessons link", () => {
 
   it("keeps hidden and unlisted pages off the header (launch readiness, 2026-10-20)", () => {
     // David: "Use your recommendations for all 30 pages (1 Ready, 21 Fix,
-    // 8 Hide)". /for-teams and /news are hidden; /for-institutions is unlisted
-    // (direct link still works). src/lib/public-routes.ts owns both lists.
+    // 8 Hide)". /for-teams and /news are hidden. /for-institutions stays on
+    // the menu: "it has to be visible" (David, 2026-10-21).
     const view = renderNav({ lessonsHref: "/lessons" })
     const hrefs = view.getAllByRole("link").map((el) => el.getAttribute("href"))
-    for (const gone of ["/for-teams", "/for-institutions", "/news", "/tech-radar"]) {
+    expect(hrefs).toContain("/for-institutions")
+    for (const gone of ["/for-teams", "/news", "/tech-radar"]) {
       expect(hrefs).not.toContain(gone)
     }
   })
