@@ -79,7 +79,9 @@ describe("PublicNav lessons link", () => {
     const view = renderNav({ lessonsHref: "/lessons" })
     const hrefs = view.getAllByRole("link").map((el) => el.getAttribute("href"))
     expect(hrefs).toContain("/for-institutions")
-    for (const gone of ["/for-teams", "/news", "/tech-radar"]) {
+    // "Also put back the teams page" (David, 2026-10-21).
+    expect(hrefs).toContain("/for-teams")
+    for (const gone of ["/news", "/tech-radar"]) {
       expect(hrefs).not.toContain(gone)
     }
   })
@@ -151,11 +153,14 @@ describe("PublicNav primary CTA follows the audience", () => {
     "/verify",
     "/tech-radar",
     // /contact left the institution list on 2026-10-20: its walkthrough button
-    // pointed at the page the visitor was already on. /for-teams is hidden.
+    // pointed at the page the visitor was already on.
     "/contact",
-    "/for-teams",
   ]
-  const INSTITUTION_ROUTES = ["/for-institutions", "/for-institutions/anything"]
+  const INSTITUTION_ROUTES = [
+    "/for-institutions",
+    "/for-teams",
+    "/for-institutions/anything",
+  ]
 
   it("offers the walkthrough on the institution-facing routes only", () => {
     for (const route of INSTITUTION_ROUTES) {

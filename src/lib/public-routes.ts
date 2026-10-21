@@ -22,7 +22,7 @@ export const HIDDEN_PUBLIC_PATHS = [
   "/news",
   "/tech-radar",
   "/newsletter",
-  "/for-teams",
+  // /for-teams came back on 2026-10-21 (David: "Also put back the teams page").
   "/verify",
   "/score",
 ] as const

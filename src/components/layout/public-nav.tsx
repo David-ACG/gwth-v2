@@ -83,10 +83,10 @@ function isCurrent(pathname: string, href: string): boolean {
  * The routes where the reader is buying for an ORGANISATION. Everywhere else
  * the reader is one person deciding for themselves.
  */
-// /for-teams is hidden at launch and /contact left this list on 2026-10-20:
-// on the contact page itself the walkthrough button pointed at the page the
-// visitor was already on, so the click appeared to do nothing.
-const INSTITUTION_ROUTES = ["/for-institutions"]
+// /contact left this list on 2026-10-20: on the contact page itself the
+// walkthrough button pointed at the page the visitor was already on, so the
+// click appeared to do nothing. /for-teams is back since 2026-10-21.
+const INSTITUTION_ROUTES = ["/for-institutions", "/for-teams"]
 
 /**
  * The header's one button, resolved per route.

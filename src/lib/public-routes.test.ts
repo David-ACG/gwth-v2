@@ -6,13 +6,13 @@ import { isHiddenPublicPath, isOffMenu } from "./public-routes"
 // /for-institutions was unlisted for a day, then made visible again.
 describe("public routes at launch", () => {
   it("hides the pages judged Hide, and everything below them", () => {
-    for (const p of ["/news", "/news/a-story", "/tech-radar", "/newsletter", "/for-teams", "/verify/ABC", "/score/123"]) {
+    for (const p of ["/news", "/news/a-story", "/tech-radar", "/newsletter", "/verify/ABC", "/score/123"]) {
       expect(isHiddenPublicPath(p)).toBe(true)
     }
   })
 
   it("leaves every page judged Ready or Fix alone, including look-alikes", () => {
-    for (const p of ["/", "/pricing", "/gift", "/lessons", "/labs", "/for-institutions", "/contact", "/newsletters", "/verifying", "/terms"]) {
+    for (const p of ["/", "/pricing", "/gift", "/lessons", "/labs", "/for-institutions", "/for-teams", "/contact", "/newsletters", "/verifying", "/terms"]) {
       expect(isHiddenPublicPath(p)).toBe(false)
     }
   })
