@@ -56,11 +56,14 @@ export function BreadcrumbNav() {
         {segments.map((segment, index) => {
           const href = "/" + segments.slice(0, index + 1).join("/")
           const isLast = index === segments.length - 1
+          const titled = segment
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase())
+          // A Model Lab page (/labs/thinking) reads "Thinking lab", the name
+          // the lab menu and the search palette use.
           const label =
             segmentLabels[segment] ??
-            segment
-              .replace(/-/g, " ")
-              .replace(/\b\w/g, (c) => c.toUpperCase())
+            (segments[index - 1] === "labs" ? `${titled} lab` : titled)
 
           return (
             <React.Fragment key={href}>

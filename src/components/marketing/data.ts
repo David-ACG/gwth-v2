@@ -385,9 +385,9 @@ export const PRICING: readonly PricingTier[] = [
     pricePence: 0,
     per: "forever, no card required",
     features: [
-      "Every free lab, no card required",
-      "Side-by-side comparisons of the newest AI tools on one real task",
-      "New labs as new tools launch",
+      "All six free labs, no card required",
+      "Every new AI model tested on the same real work tasks",
+      "Re-tested when new models come out",
       "Lessons and their projects come with the course, not the free tier",
     ],
     // Sentence case (bible paper-first-banned-patterns: no title-case CTAs).

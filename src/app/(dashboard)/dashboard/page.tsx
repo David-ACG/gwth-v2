@@ -2,6 +2,7 @@ import * as React from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getCourses } from "@/lib/data/courses"
+import { getModelLabs } from "@/lib/data/model-lab"
 import {
   getAllCourseProgress,
   getAllLessonProgress,
@@ -716,7 +717,7 @@ export function FreeDashboard({ user }: { user: User | null }) {
             <em>Try a lab. Decide later.</em>
           </h1>
           <p className={styles.bandLead}>
-            You have access to all 18 free labs. The course is £
+            You have access to the six free labs. The course is £
             {COURSE_MONTHLY_PRICE.toFixed(0)}/month, one month at a time, and £
             {ONGOING_MONTHLY_PRICE.toFixed(2)}/month to stay current after it
             {selling ? (
@@ -786,20 +787,26 @@ export function FreeDashboard({ user }: { user: User | null }) {
         <div className={styles.splitCell}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              18 public labs. <em>Use them tonight.</em>
+              Six free labs. <em>Which AI for which job.</em>
             </h2>
           </div>
           <p className={styles.mono}>No card required</p>
           <div className={styles.labList}>
-            <LabFullRow title="Resume rewriter for non-tech roles" tag="Job search" duration="40 min" />
-            <LabFullRow title="Email triage with three rules" tag="Ops" duration="25 min" />
-            <LabFullRow title="Spreadsheet QA in plain English" tag="Ops" duration="35 min" />
-            <LabFullRow title="Brief generator for marketing teams" tag="Marketing" duration="50 min" />
-            <LabFullRow title="Reading dense PDFs without reading them" tag="Research" duration="30 min" />
+            {/* The six Model Lab pages (2026-10-21), from the same export
+                /labs reads, so this list cannot drift from the site. */}
+            {getModelLabs().map((lab) => (
+              <LabFullRow
+                key={lab.sp}
+                title={lab.headline}
+                tag={lab.sp_name}
+                detail={`${lab.count} set-ups`}
+                href={`/labs/${lab.sp}`}
+              />
+            ))}
             <div className={styles.tableFoot}>
-              <span className={styles.mono}>+ 13 more</span>
+              <span className={styles.mono}>Every new AI model, the same real tasks</span>
               <Link href="/labs" className={styles.monoLink}>
-                Browse all 18
+                See all six labs
               </Link>
             </div>
           </div>
@@ -811,7 +818,7 @@ export function FreeDashboard({ user }: { user: User | null }) {
           </h2>
           <div className={styles.panel}>
             <p className={styles.mono}>Plain beta progress</p>
-            <div className={cn(styles.bigStat, "mt-2")}>18 free labs</div>
+            <div className={cn(styles.bigStat, "mt-2")}>6 free labs</div>
             <p className={cn(styles.bodyText, "mt-2")}>
               Approved learners receive course access from the GWTH team.
               Everyone else can join the waitlist and keep using the labs.
@@ -1353,18 +1360,20 @@ function TeaserCol({
 function LabFullRow({
   title,
   tag,
-  duration,
+  detail,
+  href,
 }: {
   title: string
   tag: string
-  duration: string
+  detail: string
+  href: string
 }) {
   return (
     <div className={styles.labRow}>
       <span className={styles.mono}>{tag}</span>
       <span className={styles.labTitle}>{title}</span>
-      <span className={styles.mono}>{duration}</span>
-      <Link href="/labs" className={styles.monoLink}>
+      <span className={styles.mono}>{detail}</span>
+      <Link href={href} className={styles.monoLink} aria-label={`Open the ${tag} lab`}>
         OPEN →
       </Link>
     </div>

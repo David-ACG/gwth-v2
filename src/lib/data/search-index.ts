@@ -1,7 +1,7 @@
 import "server-only"
 
 import { getCourses } from "@/lib/data/courses"
-import { getLabs } from "@/lib/data/labs"
+import { getModelLabs } from "@/lib/data/model-lab"
 import { getLessons } from "@/lib/data/lessons"
 import { mockNewsArticles } from "@/lib/data/mock-data"
 import { ENABLE_NEWS } from "@/lib/config"
@@ -67,8 +67,9 @@ export const EMPTY_SEARCH_INDEX: SearchIndex = {
  * for every other surface — the palette offered the mock syllabus. Whatever it
  * listed that the database does not carry navigated to a 404, and whatever the
  * database carries that the mock set does not was unfindable. `getCourses`,
- * `getLessons` and `getLabs` already fall back to the mock arrays in mock mode,
- * so the no-database path is unchanged.
+ * `getCourses` and `getLessons` already fall back to the mock arrays in mock mode,
+ * so the no-database path is unchanged. Labs come from the Model Lab
+ * export (`getModelLabs`), the six pages /labs actually serves.
  *
  * Lessons are in the index because the palette has always said "Search
  * lessons, labs, pages..." and never carried one. `getLessons` applies the N6
@@ -83,7 +84,7 @@ export const EMPTY_SEARCH_INDEX: SearchIndex = {
  * silent regression of the same leak.
  */
 export async function getSearchIndex(): Promise<SearchIndex> {
-  const [courseList, labList] = await Promise.all([getCourses(), getLabs()])
+  const courseList = await getCourses()
 
   // One request per course, in parallel. There is one course today; the shape
   // is per-course because `getLessons` is keyed by course slug and the edition
@@ -108,10 +109,13 @@ export async function getSearchIndex(): Promise<SearchIndex> {
         href: `/course/${courseSlug}/lesson/${lesson.slug}`,
       }))
     ),
-    labs: labList.map((lab) => ({
-      id: lab.id,
-      title: lab.title,
-      href: `/labs/${lab.slug}`,
+    // The six Model Lab pages (2026-10-21). The 23 tiered practise labs that
+    // getLabs() still returns were retired in July and are no longer served
+    // at /labs/<slug>, so they are not offered here.
+    labs: getModelLabs().map((lab) => ({
+      id: `model-lab-${lab.sp}`,
+      title: `${lab.sp_name} lab: ${lab.headline}`,
+      href: `/labs/${lab.sp}`,
     })),
     news: ENABLE_NEWS
       ? mockNewsArticles

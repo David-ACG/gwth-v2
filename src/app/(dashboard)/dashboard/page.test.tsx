@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
-import { ActiveDashboard } from "./page"
+import { ActiveDashboard, FreeDashboard } from "./page"
 import { emptyStreak } from "@/lib/progress/derive"
 import type { Course, LessonProgress, User } from "@/lib/types"
 
@@ -307,5 +307,21 @@ describe("ActiveDashboard lesson rows are links", () => {
     )
     // Six upcoming rows are listed, and every one of them is now a link.
     expect(rowLinks(container).length).toBeGreaterThanOrEqual(6)
+  })
+})
+
+describe("FreeDashboard labs (Model Lab, 2026-10-21)", () => {
+  it("lists the six labs, each linked to its own page, instead of 18 practise labs", () => {
+    render(<FreeDashboard user={null} />)
+    const text = document.body.textContent ?? ""
+    expect(text).not.toMatch(/18 (free|public) labs|Browse all 18|\+ 13 more/)
+    expect(text).toContain("You have access to the six free labs.")
+    for (const slug of ["research", "content", "thinking", "building", "data", "automation"]) {
+      const link = screen
+        .getAllByRole("link")
+        .find((a) => a.getAttribute("href") === `/labs/${slug}`)
+      expect(link, slug).toBeDefined()
+    }
+    expect(screen.getByRole("link", { name: "See all six labs" })).toHaveAttribute("href", "/labs")
   })
 })

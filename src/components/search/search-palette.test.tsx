@@ -43,7 +43,7 @@ const index: SearchIndex = {
       href: "/course/applied-ai-skills/lesson/your-ai-toolkit",
     },
   ],
-  labs: [{ id: "lab_1", title: "The Messy Spreadsheet", href: "/labs/messy-spreadsheet" }],
+  labs: [{ id: "model-lab-data", title: "Data lab: Which AI is best with spreadsheets and data?", href: "/labs/data" }],
   news: [],
 }
 
@@ -132,7 +132,7 @@ describe("the header Search button", () => {
     const input = await screen.findByPlaceholderText(/Search lessons, labs, pages/i)
     await user.type(input, "spreadsheet")
 
-    expect(await screen.findByRole("option", { name: /The Messy Spreadsheet/i })).toBeInTheDocument()
+    expect(await screen.findByRole("option", { name: /Data lab/i })).toBeInTheDocument()
     await waitFor(() =>
       expect(screen.queryByRole("option", { name: /Welcome to GWTH/i })).toBeNull()
     )

@@ -42,6 +42,17 @@ describe("PricingPage", () => {
     ).toBeInTheDocument()
   })
 
+  it("describes the free tier as the six Model Lab labs (2026-10-21)", () => {
+    render(<PricingPage />)
+    const text = document.body.textContent ?? ""
+    expect(text).toContain("All six free labs, no card required")
+    expect(text).toContain("Every new AI model tested on the same real work tasks")
+    expect(text).toContain("Re-tested when new models come out")
+    expect(text).toContain("The six free labs")
+    expect(text).toMatch(/The free labs test every new AI model on the same real work tasks/)
+    expect(text).not.toMatch(/one real task|Side-by-side comparisons/)
+  })
+
   it("displays free, member, and team pricing", () => {
     render(<PricingPage />)
     expect(screen.getByText("£0")).toBeInTheDocument()

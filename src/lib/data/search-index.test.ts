@@ -9,18 +9,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const getCourses = vi.hoisted(() => vi.fn())
 const getLessons = vi.hoisted(() => vi.fn())
-const getLabs = vi.hoisted(() => vi.fn())
 
 vi.mock("@/lib/data/courses", () => ({ getCourses }))
 vi.mock("@/lib/data/lessons", () => ({ getLessons }))
-vi.mock("@/lib/data/labs", () => ({ getLabs }))
 
 import { EMPTY_SEARCH_INDEX, getSearchIndex } from "./search-index"
 
 beforeEach(() => {
   getCourses.mockReset()
   getLessons.mockReset()
-  getLabs.mockReset()
 })
 
 describe("getSearchIndex", () => {
@@ -29,18 +26,27 @@ describe("getSearchIndex", () => {
       { id: "c1", slug: "applied-ai-skills", title: "Applied AI Skills" },
     ])
     getLessons.mockResolvedValue([])
-    getLabs.mockResolvedValue([{ id: "lab1", slug: "clean-a-list", title: "Clean a list" }])
 
     const index = await getSearchIndex()
 
     expect(getCourses).toHaveBeenCalled()
-    expect(getLabs).toHaveBeenCalled()
     expect(index.courses).toEqual([
       { id: "c1", title: "Applied AI Skills", href: "/course/applied-ai-skills" },
     ])
-    expect(index.labs).toEqual([
-      { id: "lab1", title: "Clean a list", href: "/labs/clean-a-list" },
+    // The six Model Lab pages, not the retired tiered labs.
+    expect(index.labs.map((l) => l.href)).toEqual([
+      "/labs/research",
+      "/labs/content",
+      "/labs/thinking",
+      "/labs/building",
+      "/labs/data",
+      "/labs/automation",
     ])
+    expect(index.labs[0]).toEqual({
+      id: "model-lab-research",
+      title: "Research lab: Which AI is best at research?",
+      href: "/labs/research",
+    })
   })
 
   it("carries lessons, addressed under their own course", async () => {
@@ -51,7 +57,6 @@ describe("getSearchIndex", () => {
       { id: "m1_l01", slug: "welcome-to-gwth", title: "Welcome to GWTH" },
       { id: "m1_l02", slug: "your-ai-toolkit", title: "Your AI Toolkit" },
     ])
-    getLabs.mockResolvedValue([])
 
     const index = await getSearchIndex()
 
@@ -78,7 +83,6 @@ describe("getSearchIndex", () => {
     getLessons.mockImplementation(async (slug: string) => [
       { id: `${slug}-l1`, slug: "one", title: `${slug} one` },
     ])
-    getLabs.mockResolvedValue([])
 
     const index = await getSearchIndex()
 
@@ -89,13 +93,14 @@ describe("getSearchIndex", () => {
     ])
   })
 
-  it("returns an empty index for an empty catalogue rather than mock titles", async () => {
+  it("returns no courses or lessons for an empty catalogue rather than mock titles", async () => {
     getCourses.mockResolvedValue([])
-    getLabs.mockResolvedValue([])
 
     const index = await getSearchIndex()
 
-    expect(index).toEqual(EMPTY_SEARCH_INDEX)
+    // The six labs come from the Model Lab export, not the catalogue.
+    expect({ ...index, labs: [] }).toEqual(EMPTY_SEARCH_INDEX)
+    expect(index.labs).toHaveLength(6)
     expect(getLessons).not.toHaveBeenCalled()
   })
 

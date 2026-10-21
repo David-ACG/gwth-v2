@@ -40,8 +40,8 @@ describe("BreadcrumbNav", () => {
   })
 
   it("renders the deepest segment as the current page, never a link", () => {
-    const view = renderAt("/labs/job-advert-claude-vs-chatgpt")
-    expect(view.getByText("Job Advert Claude Vs Chatgpt").closest("a")).toBeNull()
+    const view = renderAt("/labs/thinking")
+    expect(view.getByText("Thinking lab").closest("a")).toBeNull()
     expect(view.getByText("Labs").closest("a")?.getAttribute("href")).toBe("/labs")
   })
 

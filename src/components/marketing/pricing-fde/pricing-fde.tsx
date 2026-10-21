@@ -89,7 +89,7 @@ const GROUP_AUDIENCE = "Teams"
 // it. There is no lesson preview and no progress tracking without an account,
 // so both used to promise something the product does not do.
 const COMPARISONS = [
-  ["Free labs", "Included", "Included", "Included"],
+  ["The six free labs", "Included", "Included", "Included"],
   ["Full core course", "No", "Included", "Included"],
   ["A practical project in every lesson", "No", "Included", "Included"],
   ["Plain progress tracking", "No", "Included", "Included, plus an admin view"],
@@ -448,9 +448,9 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
           {/* a-20260914-203753-b9d050: the labs are not sample lessons, so the
               free tier is no longer described as a taste of the course. */}
           <p className={styles.sectionLead}>
-            The free labs compare the newest AI tools on one real task. Member
-            is the course itself, with its lessons and projects. Teams adds a
-            view of progress for managers.
+            The free labs test every new AI model on the same real work tasks
+            and show which one to use. Member is the course itself, with its
+            lessons and projects. Teams adds a view of progress for managers.
           </p>
           {/* Focusable because it scrolls sideways on a phone: a scrollable
               region a keyboard cannot reach is a serious axe violation. */}
