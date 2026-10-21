@@ -97,7 +97,8 @@ const COMPARISONS = [
     "Lessons kept up to date",
     "No",
     `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo after the first three months`,
-    "Set by your organisation",
+    // Same price per person as the Teams card says (Sol copy check, 2026-10-20).
+    `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo per person after the first three months`,
   ],
   ["Admin dashboard", "No", "No", "Included for 5 or more"],
 ]
@@ -121,11 +122,17 @@ function TermsNote({
   return kind === "pass" ? (
     <p className={styles.termsNote} data-testid={testId}>
       You pay once and it never renews. If you buy it for yourself, sign in
-      first and the course opens as soon as you&apos;ve paid. With a gift, the
-      person you give it to has a year to enter its code, their course time
+      first: Month 1 opens as soon as you&apos;ve paid, and Months 2 and 3
+      open around the dates above, with your time paused if you reach one
+      first. With a gift, the person you give it to has one year from the
+      date you buy it to enter its code, their course time
       starts when they do, and we never ask them for card details. We refund a
       pass in full until it&apos;s opened, but not after, unless the law
-      requires. See the{" "}
+      requires; to ask for one,{" "}
+      <Link href="/contact" className={styles.inlineLink}>
+        contact us
+      </Link>
+      . See the{" "}
       <Link href="/terms#passes" className={styles.inlineLink}>
         Terms for passes
       </Link>
@@ -267,10 +274,9 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               NOT claim anything about VAT treatment, which is a Stripe
               configuration question and not settled here. */}
           <p className={styles.standfirst} data-testid="pricing-uk-note">
-            The price is in pounds because the course is written for the
-            United Kingdom. There is no dollar price converted at the till,
-            and a British team buying places pays the same per person as
-            somebody joining on their own.
+            All prices are in pounds, because the course is written for the
+            UK. A team pays the same per person as someone joining on their
+            own.
           </p>
           <div className={styles.mastheadFoot}>
             <p>Prices in GBP, with no VAT added</p>
@@ -598,8 +604,8 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               for the same reason: /terms offers a refund only where GWTH
               cancels an order (ledger C25, bead filed). */}
           <p>
-            You unlock one month at a time, and you can cancel whenever you
-            like. The price drops after the first three months, so you are
+            With monthly payments, you unlock one month at a time and can
+            cancel whenever you like. The price drops after the first three months, so you are
             never paying course prices out of habit: £{ongoing} a month keeps
             every lesson current as it changes. If it stops being worth it to
             you, cancel.

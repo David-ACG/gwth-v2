@@ -149,7 +149,7 @@ describe("no page claims the unbuilt half of the score", () => {
   it("every page that names the score also says it is not switched on", () => {
     // The boundary is the same; only the wording changed. From the launch
     // there is no beta (launch readiness, 2026-10-20), so /lessons says "The
-    // score is not switched on in the course yet". The old beta sentence is
+    // course does not show a GWTH score yet". The old beta sentence is
     // still accepted for the pages that have not been rewritten.
     for (const page of PAGES) {
       cleanup()
@@ -157,7 +157,7 @@ describe("no page claims the unbuilt half of the score", () => {
       const body = text()
       if (!/GWTH score/i.test(body)) continue
       expect(
-        /no score is switched on while the course is in beta|score is not switched on in the course yet/i.test(
+        /no score is switched on while the course is in beta|does not show a GWTH score yet/i.test(
           body
         ),
         `${page.name} names the score without the beta boundary`
@@ -194,7 +194,9 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     // read as though a picker exists.
     render(<LessonsFde />)
     const note = screen.getByTestId("optional-beta-note").textContent ?? ""
-    expect(note).toMatch(/given the whole set rather than picking from it/i)
+    // Reworded on the latest Sol's final check (2026-10-20): still says no
+    // picker exists, in plainer words.
+    expect(note).toMatch(/includes its core and optional lessons when that month opens/i)
     // "the part we are building next" was a promise about future work, which
     // the launch readiness checklist does not allow (2026-10-20).
     expect(note).not.toMatch(/building next|beta/i)
@@ -256,7 +258,7 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     expect(screen.queryByTestId("score-record")).toBeNull()
     expect(text()).not.toMatch(/its own web address/i)
     expect(screen.getByTestId("score-beta-note").textContent).toMatch(
-      /not switched on/i
+      /does not show a GWTH score yet/i
     )
   })
 })
@@ -381,7 +383,7 @@ describe("the four pages do four different jobs", () => {
     {
       page: "/lessons",
       node: <LessonsFde />,
-      phrase: /given the whole set rather than picking from it/i,
+      phrase: /includes its core and optional lessons when that month opens/i,
     },
     {
       page: "/for-institutions",

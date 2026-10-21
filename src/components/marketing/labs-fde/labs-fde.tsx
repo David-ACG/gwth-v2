@@ -178,8 +178,8 @@ export function LabsFde({
             The tasks are set in UK workplaces, so you see how each tool
             handles UK rules and sources. One lab asks each tool to rewrite
             a job advert for a nursing vacancy at a Shropshire care home.
-            Another asks for this year&apos;s Statutory Sick Pay rate, with
-            the GOV.UK page that proves it.
+            Another, tested in July 2026, asks for the Statutory Sick Pay
+            rate, with a GOV.UK source for the figure.
           </p>
           <div className={styles.mastheadActions}>
             {liveLabs[0] ? (
@@ -367,8 +367,8 @@ export function LabsFde({
             Each lab shows which tool did better on one task, and the date it
             was tested. Over three months, the course shows you, in plain
             English, how to build a household helper, a simple website and
-            an automation for a weekly chore. Every lesson ends with a short
-            project you do yourself.
+            a tool that does a weekly task for you. You practise what you learn
+            through projects you do yourself.
           </p>
           <div className={styles.closingActions}>
             <Link href="/pricing" className={styles.buttonSolid}>

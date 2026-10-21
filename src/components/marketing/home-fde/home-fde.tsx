@@ -227,7 +227,7 @@ export const MONTHS = [
   {
     kicker: "Month 2",
     title: "A small business",
-    body: "You take the same skills into the work of a small business. Before anything you make is used by other people, you learn how to secure their data: where you keep the secret keys that let software connect to a service, who can see what, and how to test that one customer cannot see another's records. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you specify a second assistant, FractionalBuddy, for a small consulting firm, and plan the ten days of work that would build it.",
+    body: "You take the same skills into the work of a small business. Before anything you make is used by other people, you learn how to secure their data: where you keep the secret keys that let software connect to a service, who can see what, and how to test that one customer cannot see another's records. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you write a plan for a second assistant, FractionalBuddy, for a small consulting firm, and set out the ten days of work that would build it.",
   },
   {
     kicker: "Month 3",
@@ -298,7 +298,7 @@ export const SIX_BLOCKS = [
     clause: "find facts and check the source",
     months: [
       "You build a one-page comparison to settle a real decision you are facing, and you say where every fact came from.",
-      "You audit what one organisation actually knows, and where that knowledge is kept.",
+      "You check what information an organisation has and where it keeps it.",
       "You design the search system that reads a whole organisation's interviews and finds the evidence behind an answer.",
     ],
   },
@@ -308,8 +308,8 @@ export const SIX_BLOCKS = [
     clause: "create work in your own voice",
     months: [
       "You write a short post and a longer piece in your own voice, with one image you are allowed to use commercially.",
-      "You write your brand down once, in a form your AI tools can read, so everything you make after that is consistent.",
-      "Your own tool produces a twelve-page report and a ten-slide deck from the interviews it collected.",
+      "You describe your brand in a form your AI tools can read, to help you keep your later work consistent.",
+      "Your own tool produces a twelve-page report and a ten-slide presentation from the interviews it collected.",
     ],
   },
   {
@@ -329,7 +329,7 @@ export const SIX_BLOCKS = [
     months: [
       "In your first couple of weeks you build one small working tool, without writing any code.",
       "You start building real software: a database with real logins, a chatbot that shows where its answers came from, a dashboard, and tests that check each part works.",
-      "You build the AI consultant itself, from the voice interview at the front to the report that comes out of the back.",
+      "You build an AI consultant that interviews people by voice and writes a report from their answers.",
     ],
   },
   {
@@ -443,10 +443,10 @@ const UK_THREAD = [
   },
   {
     title: "The rules you are actually held to",
-    body: "Tax, pensions, employment and data protection all work differently here. Where a lesson touches any of them it teaches the version that applies to you, because an answer that is right somewhere else and wrong in the United Kingdom is worse than no answer at all.",
+    body: "Tax, pensions, employment and data protection all work differently here. Where a lesson covers these topics, you practise with UK examples and learn to check which rules apply to your situation.",
   },
   {
-    title: "Proof you can point at",
+    title: "Check the source before you act",
     body: "AI can give you an answer that is right for another country and wrong here. You are taught to ask for the source and to check it against the GOV.UK page, the regulator's own words or your employer's policy before you act on it.",
   },
 ]
@@ -798,9 +798,8 @@ export function HomeFde({
             </h2>
           </div>
           <p className={styles.blocksLead} data-testid="uk-lead">
-            The skills travel anywhere. The paperwork does not, and neither do
-            the rules or the money, so the work you do in this course uses the
-            things you already have to deal with in the United Kingdom.
+            The course uses UK examples, because forms, rules and money work
+            differently from country to country.
           </p>
           <div className={p.cards3}>
             {UK_THREAD.map((item) => (

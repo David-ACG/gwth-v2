@@ -61,7 +61,11 @@ function text(): string {
 describe("recovered ideas are on the page", () => {
   it("C01 /lessons says what the course teaches instead of what AI is", () => {
     render(<LessonsFde />)
-    expect(text()).toMatch(/not teach you what AI is.*teach you what AI does/i)
+    // The idea is kept (practical use, through your own work), the contrast
+    // went: the latest Sol writing check ruled three times on 2026-10-20 that
+    // "We do not teach you what AI is" confuses a beginner, since Month 1 does
+    // explain how AI tools work (launch readiness, bead gwth-launch-ajqs.2).
+    expect(text()).toMatch(/learn to use AI through practical tasks from your own work/i)
   })
 
   it("C02 /lessons names what the projects are, not only what they are not", () => {
@@ -71,8 +75,7 @@ describe("recovered ideas are on the page", () => {
     // Sol writing check asked for plain words in place of "transformer
     // architecture" and three fragments (launch readiness, bead
     // gwth-launch-ajqs.2).
-    expect(body).toMatch(/not quizzes about how AI models are made/i)
-    expect(body).toMatch(/build, use and show to people/i)
+    expect(body).toMatch(/You build useful things that you can use and show to other people/i)
   })
 
   it("C03 /lessons answers the objection that there is no time for it", () => {

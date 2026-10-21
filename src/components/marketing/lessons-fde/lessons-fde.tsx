@@ -55,7 +55,7 @@ const FEATURES = [
     // Sol writing check asked for the same idea in a plain sentence
     // (2026-10-20).
     description:
-      "The lessons are not quizzes about how AI models are made. You make real things that you build, use and show to people.",
+      "You build useful things that you can use and show to other people.",
   },
   {
     title: "Progress you can see",
@@ -119,7 +119,7 @@ const PATHS = [
   },
   {
     title: "Go further into building",
-    body: "If building is the part you want, the optional lessons carry on where the core stops. There is retrieval that answers from your own documents and shows where each answer came from, testing and evaluating what you have made, security, running models on your own machine instead of sending data out, and several AI assistants working together on one job.",
+    body: "If building is the part you want, the optional lessons carry on where the core stops. You build tools that answer questions using your own documents and show where each answer came from. You also learn how to test and protect what you build, run AI on your own computer and get several AI assistants to work together on one job.",
   },
   {
     title: "Learn to lead the change",
@@ -201,6 +201,9 @@ interface LessonsFdeProps {
  *   `components/marketing/data.ts`
  * - C04 the closing line, from `docs/marketing/landing-page-hero-copy.md`
  *
+ * C01, C02 and C04 were reworded on 2026-10-20 at the latest Sol writing
+ * check; each keeps its idea, and the evergreen suite says why at each test.
+ *
  * ## Launch readiness (2026-10-20, bead gwth-launch-ajqs.2)
  *
  * Every count comes from `MONTH_CONFIGS`; no optional count is printed. The
@@ -223,13 +226,12 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
           <h1 className={styles.mastheadTitle}>
-            Real projects, <em>not toy exercises.</em>
+            Build useful things <em>with AI.</em>
           </h1>
           <p className={styles.standfirst}>
             {TOTAL_MANDATORY_LESSONS} core lessons across three months, and a
-            further set of optional lessons for going deeper. We do not teach
-            you what AI is. We teach you what AI does, using your own work as an
-            example.
+            further set of optional lessons for going deeper. You learn to use
+            AI through practical tasks from your own work and everyday life.
           </p>
           <div className={styles.mastheadActions}>
             <Link
@@ -355,8 +357,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               written. Said in the present tense, with no promise of when that
               changes (launch readiness brief, rule 3). */}
           <p className={styles.optionalNote} data-testid="optional-beta-note">
-            For now, every student is given the whole set rather than picking
-            from it.
+            Each month includes its core and optional lessons when that month opens.
           </p>
           {/* /for-teams is closed to visitors from the launch (it returns a
               404), so its link and the smaller-team sentence went with it.
@@ -439,6 +440,10 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           </div>
           <div className={styles.scoreGrid}>
             <div className={styles.scoreBody}>
+              <p data-testid="score-beta-note">
+                The course does not show a GWTH score yet. Here is how the score
+                is worked out.
+              </p>
               <p data-testid="score-lead">
                 Finishing a lesson is not the same as being able to do what it
                 taught, so every lesson ends with a few questions. Your GWTH
@@ -460,9 +465,6 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
                   feature that may not exist on 1 December (launch readiness
                   brief, rule 3; latest Sol writing check). Bring it back the
                   day the record page is live. */}
-              <p data-testid="score-beta-note">
-                The score is not switched on in the course yet.
-              </p>
             </div>
             <div className={styles.scoreAside}>
               <h3>What the score is worked out from</h3>

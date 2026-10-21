@@ -61,7 +61,7 @@ const REASONS: readonly Reason[] = [
     id: "plain-english",
     title: "Plain English, and only what you need",
     body: [
-      "The AI industry is often bad at explaining things simply. We explain each term in plain English the first time you need it, and we only teach what will improve your skills. We say each thing once, so you understand ideas quickly and spend your time practising. Your time is worth more than the price of any course, so we work hard not to waste it.",
+      "The AI industry is often bad at explaining things simply. We explain each term in plain English the first time you need it, and we only teach what will improve your skills. Your time is worth more than the price of any course, so we work hard not to waste it.",
     ],
   },
   {
@@ -73,10 +73,10 @@ const REASONS: readonly Reason[] = [
   },
   {
     id: "independent",
-    title: "Independent, so our advice is honest",
+    title: "Independent advice on AI tools",
     body: [
       "We have no sponsors and no deals with AI companies. Nobody pays us to recommend a tool, so we can point you to the one that suits the job, whoever makes it.",
-      "Free courses from AI companies can be useful, but they're usually short introductions to that company's own products. GWTH teaches you to choose between tools and use them well.",
+      "Free courses from AI companies can be useful. GWTH teaches you to choose between tools and use them well.",
     ],
   },
   {
@@ -134,18 +134,19 @@ const REASONS: readonly Reason[] = [
       // beta" went. There is no beta on 1 December and no credential is
       // switched on at launch (the score and /verify are off), so the page
       // says what a learner actually has: the work itself.
-      "Every lesson leaves you with real work you can show people. A certificate from six months ago tells you what somebody once passed, not what they can do today. So the proof GWTH gives you is the work itself: the documents and tools you made, which anyone you show them to can open and check for themselves.",
+      "Every lesson leaves you with real work you can show people. A certificate from six months ago tells you what somebody once passed, not what they can do today. So the proof GWTH gives you is the work itself: the documents and tools you made, which you can show to anyone who wants to see what you can do.",
     ],
   },
   {
     id: "price",
     title: "The price",
     body: [
-      "We've built GWTH mainly for individuals paying for themselves, so we've set a price one person can afford.",
+      // Sol copy check, 2026-10-20: affordability depends on the reader.
+      "We've built GWTH mainly for people paying for themselves.",
       // The price is stated once, simply, with no sums or totals (David,
       // why-gwth round 1, D s5 and E s7). The course never really ends
       // because it is always updated (E s3).
-      `Course access is ${gbp(COURSE_MONTHLY_PRICE)} a month, paid monthly, and you can stop at any time. After your first three months the course doesn't end, because we keep updating it, and you can stay current for ${gbp(ONGOING_MONTHLY_PRICE)} a month.`,
+      `From ${OFFER.opensOn}, course access is ${gbp(COURSE_MONTHLY_PRICE)} a month, paid monthly, and you can stop at any time. After your first three months the course doesn't end, because we keep updating it, and you can stay current for ${gbp(ONGOING_MONTHLY_PRICE)} a month.`,
       // The pay-once offer beside the monthly price (launch readiness,
       // 2026-10-20). No full price or total is printed: David, why-gwth round
       // 1, "We don't need to know how much three times twenty nine is."
@@ -178,7 +179,7 @@ const REASONS: readonly Reason[] = [
 const COMPARISON_ROWS = [
   {
     dimension: "How long",
-    boost: "20 minutes to 9 hours per course",
+    boost: "Varies by course",
     hub: "Varies by course",
     gwth: "About five hours a week for three months, plus optional lessons",
   },
@@ -190,8 +191,10 @@ const COMPARISON_ROWS = [
   },
   {
     dimension: "Who makes it",
-    boost: "US technology companies, mostly about their own tools",
-    hub: "A mix of providers, each usually teaching its own tools",
+    // Sol copy check, 2026-10-20: the programme also includes non-US
+    // providers, and what each Hub provider teaches is not established.
+    boost: "Technology companies including Google, Microsoft, Amazon, IBM and Salesforce",
+    hub: "A mix of course providers",
     gwth: "Independent, with no sponsors or deals with AI companies",
   },
   {
@@ -202,13 +205,14 @@ const COMPARISON_ROWS = [
   },
   {
     dimension: "A route through",
-    boost: "Nothing beyond the foundation courses",
-    hub: "You browse and choose for yourself",
+    boost: "Courses and a guide to getting started with AI in a business",
+    // The government describes a tailored learning journey (Sol, 2026-10-20).
+    hub: "Browse courses or follow a tailored learning journey",
     gwth: "Three months in which each lesson builds on the last",
   },
   {
     dimension: "At the end",
-    boost: "A digital badge",
+    boost: "A digital badge on some courses",
     hub: "Some offer certificates, some do not",
     // No credential is switched on at launch (launch readiness, 2026-10-20).
     gwth: "Real work you made yourself, to show people",
@@ -415,12 +419,12 @@ export function WhyGwthFde({
             </h2>
             <div className={styles.prose}>
               <p>
-                The government&apos;s free AI Skills Boost aims to train 10 million UK workers by 2030. It offers 14 free
-                foundation courses, from 20 minutes to 9 hours long, made by
-                technology companies including Google, Microsoft, Amazon, IBM
-                and Salesforce. They cover what AI is, how to write prompts and
-                how to use AI responsibly, and you get a digital badge when you
-                finish. The government&apos;s AI Skills Hub also lists more than
+                The government&apos;s free AI Skills Boost aims to train 10 million UK workers by 2030. It offers free
+                AI courses of different lengths and levels, made by technology
+                companies including Google, Microsoft, Amazon, IBM and
+                Salesforce. They cover what AI is, how to write instructions for
+                it and how to use it responsibly, and some courses give you a
+                digital badge when you finish. The government&apos;s AI Skills Hub also lists more than
                 600 other courses from a mix of providers.
               </p>
               <p>
@@ -472,7 +476,7 @@ export function WhyGwthFde({
                   </th>
                   <th scope="col">
                     AI Skills Boost
-                    <span>14 free courses</span>
+                    <span>Free AI courses</span>
                   </th>
                   <th scope="col">
                     AI Skills Hub
@@ -516,7 +520,9 @@ export function WhyGwthFde({
             </div>
           </div>
 
-          <h3 className={styles.subTitle}>What independent reviewers said</h3>
+          <h3 className={styles.subTitle}>
+            Independent views on the government&apos;s AI training
+          </h3>
           <div className={styles.quoteGrid}>
             {PRESS_QUOTES.map((item) => (
               <figure key={item.source} className={styles.quotePanel}>

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     `GWTH is a practical AI course for work and everyday life in the UK: ` +
     `${TOTAL_MANDATORY_LESSONS} core lessons over three months, optional lessons ` +
-    `for going deeper in your own field, and a project in every lesson.`,
+    `for going deeper in your own field, and practical projects.`,
 }
 
 /**

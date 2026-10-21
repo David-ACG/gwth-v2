@@ -160,7 +160,7 @@ describe("David's points from the writing rounds", () => {
     expect(reason("hands-on")).toMatch(/learn to use AI by using it/i)
     // The credential sentence went at launch readiness (2026-10-20): none is
     // switched on at launch, so the proof is the work, which anyone can check.
-    expect(reason("proof")).toMatch(/check for themselves/i)
+    expect(reason("proof")).toMatch(/show to anyone who wants to see what you can do/i)
   })
 
   it("never uses an em dash, an en dash or a section sign", () => {

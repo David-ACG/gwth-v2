@@ -410,7 +410,7 @@ export const PRICING: readonly PricingTier[] = [
       `${TOTAL_MANDATORY_LESSONS} core lessons, plus optional lessons for your field`,
       "Projects including the Family AI Bot, the AskMyCo support chatbot and your own AI consultant",
       "Plain course progress tracking",
-      "No ads, no upsells, no hidden tier",
+      "No adverts or hidden charges",
     ],
     cta: { label: "Join the waitlist", href: "/signup", style: "accent2" },
   },

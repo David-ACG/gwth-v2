@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Pricing",
   description: `GWTH course prices: ${formatPence(
     PASS_PRICES_PENCE.courseSale
-  )} for the whole three-month course if bought from 1 December 2026 to 6 January 2027, or £${COURSE_MONTHLY_PRICE} a month. Keeping your lessons up to date costs £${ONGOING_MONTHLY_PRICE.toFixed(2)} a month after that, if you want it. The free labs cost nothing.`,
+  )} for the whole three-month course if bought from 1 December 2026 to 6 January 2027, or £${COURSE_MONTHLY_PRICE} a month. After your first three months, you can keep your lessons up to date for £${ONGOING_MONTHLY_PRICE.toFixed(2)} a month if you want to. The free labs cost nothing.`,
 }
 
 /**

@@ -133,7 +133,7 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     title: "From zero to building",
     subtitle: "AI for your own life and work",
     description:
-      "Learn to get good results from AI tools, then build useful things with their help: a simple app or website, a dashboard, a research report, your own AI assistant and an automation for a regular task.",
+      "Learn to get good results from AI tools, then build useful things with their help: a simple app or website, a dashboard, a research report, your own AI assistant and a tool that does a regular task for you.",
     // The counts on every month follow the syllabus database (the pipeline's
     // v3 syllabus, the source of truth for lesson identity), re-counted on
     // 2026-10-20 for the launch readiness check: Month 1 is 22 core and 10
@@ -152,7 +152,7 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     title: "Building real apps",
     subtitle: "AI for business and consulting",
     description:
-      "Go further with building: write code with an AI helper, connect tools into workflows, and make small apps for real business tasks. You also learn what you need to help other people use AI, for example as a consultant.",
+      "Go further with building: write code with an AI helper, connect tools so they carry out a task together, and make small apps for real business tasks. You also learn what you need to help other people use AI, for example as a consultant.",
     mandatoryLessons: 20,
     optionalLessons: 22,
     capstoneName: "AI customer support chatbot",
@@ -172,7 +172,7 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     title: "Leading AI at work",
     subtitle: "AI across an organisation",
     description:
-      "Learn to lead AI work in an organisation. You set up several AI assistants to share one job, run AI models on your own computer so data stays with you, and learn the rules and checks an organisation needs before it relies on AI.",
+      "Learn to lead AI work in an organisation. You set up several AI assistants to share one job, run AI models on your own computer, and learn the rules and checks an organisation needs before it relies on AI.",
     mandatoryLessons: 21,
     optionalLessons: 15,
     capstoneName: "AI readiness assessment tool",

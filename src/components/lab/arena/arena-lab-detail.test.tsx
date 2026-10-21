@@ -218,13 +218,15 @@ const weeklyChore = getArenaLab(
  * exactly as they were; only the surrounding GWTH words changed.
  */
 describe("ArenaLabDetail launch readiness", () => {
-  it("says near the top when it was tested, with which models, and that both have moved on", () => {
+  it("says near the top when it was tested, with which models, and that answers may differ now", () => {
     render(<ArenaLabDetail lab={pilot} />)
     const note = screen.getByTestId("lab-tested-note").textContent ?? ""
     expect(note).toMatch(/Tested on 23 July 2026/)
     expect(note).toContain("Claude Opus 4.8")
     expect(note).toContain("OpenAI GPT-5.6 Sol")
-    expect(note).toMatch(/newer versions/i)
+    // Sol's final check (2026-10-20) asked for "AI tools change over time"
+    // rather than a claim about each maker's release history.
+    expect(note).toMatch(/change over time/i)
     expect(note).toMatch(/may differ/i)
   })
 

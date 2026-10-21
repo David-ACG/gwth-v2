@@ -191,8 +191,7 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
             <p className={styles.testedNote} data-testid="lab-tested-note">
               Tested on {formatTestedOn(lab.testedOn)} with{" "}
               {first.modelLabel ?? first.modelId} and{" "}
-              {second.modelLabel ?? second.modelId}. Both tools have newer
-              versions now, so the answers you get today may differ.
+              {second.modelLabel ?? second.modelId}. AI tools change over time, so the answers you get today may differ.
             </p>
           </div>
         </div>
@@ -248,7 +247,7 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
 
           <LabListen
             segments={listenSegments}
-            covers="Reads the task, the questions to score by and the verdict."
+            covers="Reads the task, the scoring questions and the verdict aloud."
           />
         </div>
 
@@ -304,14 +303,14 @@ export function ArenaLabDetail({ lab }: ArenaLabDetailProps) {
               </div>
             </div>
             <p className={styles.disclosureNote}>
-              The same prompt went to both, word for word, on{" "}
+              The same instructions went to both, word for word, on{" "}
               {formatTestedOn(lab.testedOn)}. Neither answer has been edited.
             </p>
           </details>
 
           <details className={styles.disclosure} data-testid="shared-prompt">
             <summary className={styles.disclosureSummary}>
-              The shared prompt, word for word
+              The instructions given to both tools, word for word
             </summary>
             <pre className={styles.promptBlock}>{lab.prompt}</pre>
           </details>

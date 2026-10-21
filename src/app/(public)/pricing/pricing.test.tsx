@@ -146,14 +146,15 @@ describe("PricingPage", () => {
     const pass = screen.getByTestId("pricing-offer-terms")
     expect(pass.textContent).toMatch(/never renews/)
     expect(pass.textContent).toMatch(/refund a pass in full until it.s opened/)
-    expect(within(pass).getByRole("link")).toHaveAttribute("href", "/terms#passes")
+    expect(within(pass).getByRole("link", { name: /Terms/ })).toHaveAttribute("href", "/terms#passes")
+    expect(within(pass).getByRole("link", { name: "contact us" })).toHaveAttribute("href", "/contact")
     const monthly = screen.getByTestId("member-terms")
     expect(monthly.textContent).toMatch(/Cancel at any time in your account settings/)
     // Only the first three payments open a month; after that the plan carries
     // on at £7.50 unless you cancel (Terms section 6, Sol copy check).
     expect(monthly.textContent).toMatch(/first three monthly payments each open one month/)
     expect(monthly.textContent).toMatch(/£7\.50 a month to keep your lessons up to date, unless you cancel/)
-    expect(pass.textContent).toMatch(/has a year to enter its code/)
+    expect(pass.textContent).toMatch(/one year from the date you buy it to enter its code/)
     expect(within(monthly).getByRole("link")).toHaveAttribute(
       "href",
       "/terms#subscriptions"
