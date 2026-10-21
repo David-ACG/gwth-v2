@@ -3,7 +3,8 @@ import { describe, it, expect, afterEach } from "vitest"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import ForTeamsPage from "./page"
-import { TOTAL_MANDATORY_LESSONS } from "@/lib/config"
+import { ForTeamsFde } from "@/components/marketing/for-teams-fde/for-teams-fde"
+import { MONTH_CONFIGS, TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 
 afterEach(cleanup)
 
@@ -112,8 +113,10 @@ describe("ForTeamsPage", () => {
     render(<ForTeamsPage />)
     // Queried by accessible name, not by a single text node: the emphasis in
     // the headline is an <em>, so the words span two nodes (batch 1).
+    // Sentence case since the launch readiness review (2026-10-21); it was
+    // "AI Training for Your Team".
     expect(
-      screen.getByRole("heading", { level: 1, name: "AI Training for Your Team" })
+      screen.getByRole("heading", { level: 1, name: "AI training for your team" })
     ).toBeInTheDocument()
   }, 10000)
 
@@ -134,14 +137,17 @@ describe("ForTeamsPage", () => {
 
   it("renders the syllabus flexibility section", () => {
     render(<ForTeamsPage />)
-    expect(
-      screen.getByText("Complete control over what your team learns")
-    ).toBeInTheDocument()
+    // Was "Complete control over what your team learns", which promised a
+    // team admin screen the standard course does not have (launch readiness
+    // review, 2026-10-21).
+    expect(screen.getByText("What your team learns")).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/complete control/i)
     // Read from config rather than hardcoded (W26): the standalone 64 drifted
-    // out of step with the per-month numbers once Month 1 became 26.
+    // out of step with the per-month numbers once Month 1 became 26. "Core"
+    // since 2026-10-21, the course page's word.
     expect(
       screen.getAllByText(
-        new RegExp(`${TOTAL_MANDATORY_LESSONS} mandatory lessons`)
+        new RegExp(`${TOTAL_MANDATORY_LESSONS} core lessons`)
       ).length
     ).toBeGreaterThanOrEqual(1)
   })
@@ -155,10 +161,15 @@ describe("ForTeamsPage", () => {
   })
 
   it("renders the syllabus choice differentiator", () => {
+    // Was "You choose the syllabus", with team admins assigning optional
+    // lessons per role. Each learner chooses on the standard course; setting
+    // the lessons for a group is an edition (/for-institutions).
     render(<ForTeamsPage />)
-    expect(
-      screen.getByText("You choose the syllabus")
-    ).toBeInTheDocument()
+    const item = screen
+      .getByText("The same core for everyone, optional lessons by role")
+      .closest("li")
+    expect(item?.textContent).toMatch(/each person chooses/i)
+    expect(item?.textContent).not.toMatch(/admin/i)
   })
 
   it("renders all whyGwth cards", () => {
@@ -167,10 +178,9 @@ describe("ForTeamsPage", () => {
       "Zero wasted time",
       "Try it yourself first, then we work through it",
       "Beginner-friendly, and it stays that way",
-      "You choose the syllabus",
-      "Leading models, plus better-value alternatives",
-      "Achievement you can assess and reward",
-      "Built for the enterprise conversation",
+      "The same core for everyone, optional lessons by role",
+      "Leading AI models, plus cheaper alternatives",
+      "Month 3 covers leading AI at work",
     ]
     for (const title of expectedTitles) {
       expect(screen.getByText(title)).toBeInTheDocument()
@@ -203,7 +213,9 @@ describe("ForTeamsPage", () => {
     expect(screen.getByText("£29")).toBeInTheDocument()
     // The ongoing price is quoted everywhere the course price is quoted now,
     // so this is deliberately getAllByText: more than one is the point.
-    expect(screen.getAllByText(/£7\.50\/mo/).length).toBeGreaterThan(0)
+    // Written "a month" since 2026-10-21, as the rest of the page is.
+    expect(screen.getAllByText(/£7\.50 a month/).length).toBeGreaterThan(0)
+    expect(document.body.textContent).not.toMatch(/\/mo\b/)
   })
 
   it("has contact CTA", () => {
@@ -369,9 +381,13 @@ describe("a-20260914-200101-e34e36: the comparison panel is professional and rea
     // name-label-figure-argument order, same single italic accent. What
     // changed is that the left panel now tells a buyer what to count instead
     // of telling them what a competitor sells.
+    //
+    // 2026-10-21 (launch readiness review): the GWTH figure was "Zero filler",
+    // which the reviewer read as hype. It is now the parallel of the left one.
     render(<ForTeamsPage />)
     expect(screen.getByText("Count the hours")).toBeInTheDocument()
-    expect(screen.getByText("Zero filler")).toBeInTheDocument()
+    expect(screen.getByText("Count what they make")).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/Zero filler/)
     const body = document.body.textContent ?? ""
     expect(body).not.toMatch(/Padded with filler/)
     expect(body).not.toMatch(/could be covered in 10/)
@@ -449,17 +465,21 @@ describe("a-20260914-200722-f1a859: vendor neutrality against single-provider co
   // like Anthropic and OpenAI are starting to do their own courses, but these
   // are all very specific to their own LLMs and tools"
 
-  it("claims leading models AND better-value alternatives", () => {
+  it("claims leading models AND cheaper alternatives", () => {
+    // Worded for a beginner since the latest Sol's check (2026-10-21): the
+    // heading was "Leading models, plus better-value alternatives" and the
+    // body said "open and self-hosted" without saying what that means. The
+    // point David asked for, top models plus better-value ones, is unchanged.
     render(<ForTeamsPage />)
     const item = screen
-      .getByText("Leading models, plus better-value alternatives")
+      .getByText("Leading AI models, plus cheaper alternatives")
       .closest("li")
     const text = item?.textContent ?? ""
-    expect(text).toMatch(/leading models/i)
-    expect(text).toMatch(/better-value alternatives/i)
+    expect(text).toMatch(/leading AI companies/i)
+    expect(text).toMatch(/lower-cost alternatives/i)
     // Grounded in the canonical syllabus register: "Cheaper and open models",
     // "Self-hosting LLMs", "Open-source models at enterprise scale".
-    expect(text).toMatch(/open and self-hosted/i)
+    expect(text).toMatch(/run on your own computers/i)
   })
 
   it("claims coverage of leading models without claiming EVERY model", () => {
@@ -508,9 +528,16 @@ describe("a-20260914-200722-f1a859: vendor neutrality against single-provider co
 describe("a-20260914-200925-203041: dynamic scoring makes achievement assessable", () => {
   // "We haven't mentioned the dynamic scoring that makes it easy to reward and
   // assess achievement"
+  //
+  // Launch readiness review, 2026-10-21: the score is switched off at launch
+  // (ENABLE_GWTH_SCORE), so the item shows only while it is on, like the home
+  // page's score section. Its old text said "No score is switched on while the
+  // course is in beta. After it, ..." and "Both are being built": beta wording
+  // and a promise, both ruled out. It also promised admins a pass mark they
+  // set, which is an edition's /org screen, not the standard course.
 
   function scoringText(): string {
-    render(<ForTeamsPage />)
+    render(<ForTeamsFde showScore />)
     const item = screen
       .getByText("Achievement you can assess and reward")
       .closest("li")
@@ -522,24 +549,29 @@ describe("a-20260914-200925-203041: dynamic scoring makes achievement assessable
     const text = scoringText()
     expect(text).toMatch(/dynamic GWTH Score/i)
     // calculateGwthScore(): completed lessons x POINTS_PER_LESSON, weighted by
-    // quiz average, against the learner's own edition.
+    // quiz average.
     expect(text).toMatch(/lessons they have finished/i)
     expect(text).toMatch(/check questions/i)
-    expect(text).toMatch(/syllabus you assigned/i)
   })
 
-  it("says what an admin can actually do with it", () => {
-    // src/app/org/learners: who has reached and passed each lesson, at the
-    // edition's pass mark.
+  it("claims no edition admin screen and no unbuilt work", () => {
     const text = scoringText()
-    expect(text).toMatch(/reached and passed/i)
-    expect(text).toMatch(/pass mark/i)
+    expect(text).not.toMatch(/pass mark|syllabus you assigned|admins? will/i)
+    expect(text).not.toMatch(/beta|being built|after it/i)
+  })
+
+  it("is not on the page while the score is switched off", () => {
+    render(<ForTeamsFde showScore={false} />)
+    expect(
+      screen.queryByText("Achievement you can assess and reward")
+    ).toBeNull()
+    expect(document.body.textContent).not.toMatch(/GWTH Score/i)
   })
 
   it("does not promise score decay or currentness, which are not implemented", () => {
     // SCORE_DECAY_DAYS is a config constant with nothing reading it. The old
     // "Plain progress reporting" item promised reporting on "currentness".
-    render(<ForTeamsPage />)
+    render(<ForTeamsFde showScore />)
     const text = document.body.textContent ?? ""
     expect(text).not.toMatch(/currentness/i)
     expect(text).not.toMatch(/score decays|decaying score/i)
@@ -560,8 +592,12 @@ describe("a-20260914-201048-8373b2: Month 1 sounds hands-on", () => {
     return article!.textContent ?? ""
   }
 
+  // The month names come from config since 2026-10-21, so this page uses the
+  // course page's names ("Foundations" was a third set of its own).
+  const MONTH_1 = MONTH_CONFIGS[0]!.title
+
   it("names things the learner finishes, not topics they cover", () => {
-    const text = monthCard("Foundations")
+    const text = monthCard(MONTH_1)
     expect(text).toMatch(/Hands-on from the first lesson/i)
     // Grounded in the register's Month 1: the six superpower lessons, the
     // dashboard lesson, the automation lesson and the four FamilyBot lessons.
@@ -572,12 +608,18 @@ describe("a-20260914-201048-8373b2: Month 1 sounds hands-on", () => {
     expect(text).toMatch(/project to complete/i)
   })
 
-  it("keeps the six primitives promise it already made", () => {
-    expect(monthCard("Foundations")).toMatch(/Six practical superpowers/i)
+  it("keeps a project in every lesson, without the 'superpowers' label", () => {
+    // "Six practical superpowers" went on 2026-10-21: the reviewer read it as
+    // hype, and config had already retired "the six primitives" as jargon.
+    const text = monthCard(MONTH_1)
+    expect(text).toMatch(/Each lesson has a project to complete/i)
+    expect(text).not.toMatch(/superpowers/i)
   })
 
-  it("still shows the mandatory count from config", () => {
-    expect(monthCard("Foundations")).toMatch(/22 mandatory/)
+  it("still shows the core count from config", () => {
+    expect(monthCard(MONTH_1)).toMatch(
+      new RegExp(`${MONTH_CONFIGS[0]!.mandatoryLessons} core lessons`)
+    )
   })
 })
 
@@ -589,8 +631,10 @@ describe("a-20260914-201147-7a211a: Month 2 does not exclude enterprises", () =>
 
   function month2(): string {
     render(<ForTeamsPage />)
+    // Card title from config since 2026-10-21 (was "Apps, Workflows &
+    // Consulting").
     const article = screen
-      .getByText("Apps, Workflows & Consulting")
+      .getByText(MONTH_CONFIGS[1]!.title)
       .closest("article")
     expect(article).toBeTruthy()
     return article!.textContent ?? ""
@@ -632,18 +676,21 @@ describe("a-20260914-201312-2b5bdf: Month 3 has a choice-of-path theme", () => {
 
   function month3(): string {
     render(<ForTeamsPage />)
+    // Card title from config since 2026-10-21 (was "Transformation or
+    // advanced building"); the two paths are named in the card's words.
     const article = screen
-      .getByText("Transformation or advanced building")
+      .getByText(MONTH_CONFIGS[2]!.title)
       .closest("article")
     expect(article).toBeTruthy()
     return article!.textContent ?? ""
   }
 
-  it("names both paths in the card title", () => {
-    render(<ForTeamsPage />)
-    expect(
-      screen.getByText("Transformation or advanced building")
-    ).toBeInTheDocument()
+  it("names both paths in the card", () => {
+    // The title used to carry both paths; it is now the course page's month
+    // name, so the two paths are checked in the card's own words.
+    const text = month3()
+    expect(text).toMatch(/leading AI across an organisation/i)
+    expect(text).toMatch(/building more complex tools/i)
   })
 
   it("says there is a shared core before the fork", () => {
@@ -655,13 +702,22 @@ describe("a-20260914-201312-2b5bdf: Month 3 has a choice-of-path theme", () => {
   })
 
   it("describes the enterprise transformation path", () => {
-    expect(month3()).toMatch(/governance, board reporting and adoption/i)
+    // Said in plain words since the latest Sol's check (2026-10-21); it was
+    // "governance, board reporting and adoption that sticks".
+    const text = month3()
+    expect(text).toMatch(/leading AI across an organisation/i)
+    expect(text).toMatch(
+      /setting the rules for using AI, reporting to the board and helping staff take it up/i
+    )
   })
 
-  it("describes the advanced building path", () => {
-    expect(month3()).toMatch(
-      /multi-agent orchestration, self-hosted models and red teaming/i
-    )
+  it("describes the advanced building path, in words a beginner can follow", () => {
+    // Sol, 2026-10-21: "multi-agent orchestration" and "red teaming" were left
+    // unexplained. The same three topics, said plainly.
+    const text = month3()
+    expect(text).toMatch(/several AI assistants working together on one job/i)
+    expect(text).toMatch(/AI models run on your own hardware/i)
+    expect(text).toMatch(/red teaming, which means testing a system for weaknesses/i)
   })
 
   it("no longer reads as an unordered list of topics", () => {
@@ -707,11 +763,11 @@ describe("a-20260914-201426-ae7f0e: no invented optional-lesson count", () => {
     )
   })
 
-  it("keeps the mandatory figure, which config owns and the dashboard enforces", () => {
+  it("keeps the core figure, which config owns", () => {
     render(<ForTeamsPage />)
     expect(
       screen.getAllByText(
-        new RegExp(`${TOTAL_MANDATORY_LESSONS} mandatory lessons`)
+        new RegExp(`${TOTAL_MANDATORY_LESSONS} core lessons`)
       ).length
     ).toBeGreaterThanOrEqual(1)
   })
@@ -722,7 +778,7 @@ describe("a-20260914-201426-ae7f0e: no invented optional-lesson count", () => {
     render(<ForTeamsPage />)
     expect(document.body.textContent).not.toMatch(/\d+ mandatory \+ \d+ optional/)
     // Month 1 has optional lessons too since the 2026-10-20 re-count.
-    expect(screen.getAllByText(/mandatory, plus optional/).length).toBe(3)
+    expect(screen.getAllByText(/core lessons, plus optional/).length).toBe(3)
   })
 
   it("records the derivation in the source, so the next editor sees it", () => {
@@ -754,7 +810,9 @@ describe("the stated duration and the stated total hours agree", () => {
 
   it("states the commitment the masthead shows, in words", () => {
     render(<ForTeamsPage />)
-    expect(screen.getByText("3 months \u00b7 5 hours a week")).toBeInTheDocument()
+    // "about" since the Sol check of 2026-10-21: the weekly time is an
+    // estimate, as the FAQ says.
+    expect(screen.getByText("3 months \u00b7 about 5 hours a week")).toBeInTheDocument()
     // Deliberately updated (copy gate, 2026-09-28, commit f3816ac): the old
     // "Three months of hands-on, vendor-neutral training, at five hours a
     // week, will." promised organisational change the page cannot evidence.
@@ -779,5 +837,80 @@ describe("the canned keep action a-20260914-200143-635cd6 is honoured", () => {
         "No repetition. No filler. No outdated material. Every lesson teaches the newest, most relevant applied AI skills. Your team's time is more valuable than the course, and we treat it that way."
       )
     ).toBeInTheDocument()
+  })
+})
+
+describe("launch readiness review, 2026-10-21: true from the GO LIVE release", () => {
+  // Bead gwth-launch-ajqs.2. David, 21 Oct: "Also put back the teams page."
+  // Findings: reviews/claude/for-teams.json and reviews/sol/for-teams.json.
+
+  function body(): string {
+    return (document.body.textContent ?? "").replace(/\s+/g, " ")
+  }
+
+  it("states the one-off price and its dates, and drops 'lowest possible price'", () => {
+    render(<ForTeamsPage />)
+    expect(body()).toMatch(/£69 per person paid once if you buy between 1 December 2026 and 6 January 2027/)
+    expect(body()).toMatch(/After that, the whole course is £87/)
+    expect(body()).not.toMatch(/lowest possible price/i)
+  })
+
+  it("promises no team dashboard, per-role assignment or later feature", () => {
+    render(<ForTeamsPage />)
+    const text = body()
+    expect(text).not.toMatch(/admin dashboard|team admins?|via the dashboard|per department/i)
+    expect(text).not.toMatch(/\bbeta\b|coming soon|being built|invite-only|testers|intake/i)
+    expect(text).not.toMatch(/always current|daily updates|self-paced/i)
+  })
+
+  it("uses the course page's month names and says when each month opens", () => {
+    render(<ForTeamsPage />)
+    for (const month of MONTH_CONFIGS) {
+      expect(screen.getByText(month.title)).toBeInTheDocument()
+    }
+    const note = screen.getByTestId("months-availability").textContent ?? ""
+    expect(note.replace(/\s+/g, " ")).toMatch(
+      /Month 2 opens around 1 January 2027 and Month 3 around 1 February 2027/
+    )
+    expect(note).toMatch(/paused/)
+  })
+
+  it("says who the page is for and links to the institutions page", () => {
+    render(<ForTeamsPage />)
+    const split = screen.getByTestId("for-teams-split")
+    expect(split.textContent).toMatch(/same course as everyone else/i)
+    expect(within(split).getByRole("link")).toHaveAttribute("href", "/for-institutions")
+  })
+
+  it("sends buyers to the waitlist before sales open and to the gift page after", () => {
+    render(<ForTeamsFde selling={false} />)
+    let hrefs = screen.getAllByRole("link").map((a) => a.getAttribute("href"))
+    expect(hrefs).toContain("/waitlist")
+    expect(hrefs).not.toContain("/gift")
+    cleanup()
+    render(<ForTeamsFde selling />)
+    hrefs = screen.getAllByRole("link").map((a) => a.getAttribute("href"))
+    expect(hrefs).toContain("/gift")
+    expect(hrefs).not.toContain("/waitlist")
+    expect(
+      screen.getAllByRole("link", { name: "Buy places for your team" }).length
+    ).toBeGreaterThan(0)
+  })
+
+  it("closes with a button to the course, matching its sentence", () => {
+    render(<ForTeamsPage />)
+    expect(
+      screen.getByRole("link", { name: "See the course" })
+    ).toHaveAttribute("href", "/lessons")
+  })
+
+  it("keeps the month and price cards free of tinted tops", () => {
+    // Comments may still tell the history; the code may not use the strip.
+    const css = CSS.replace(/\/\*[\s\S]*?\*\//g, "")
+    expect(css).not.toMatch(/\.cardTop\b/)
+    expect(TSX).not.toMatch(/styles\.cardTop/)
+    expect(rule(".investPrice strong")).toMatch(/color:\s*var\(--v-ink\)/)
+    expect(rule(".investPrice strong")).toMatch(/font-family:\s*var\(--font-serif\)/)
+    expect(rule(".stat strong")).toMatch(/font-family:\s*var\(--font-serif\)/)
   })
 })

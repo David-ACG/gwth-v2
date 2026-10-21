@@ -1,34 +1,39 @@
 import Link from "next/link"
+import type { ReactNode } from "react"
 import {
   COURSE_MONTHLY_PRICE,
   MONTH_CONFIGS,
   ONGOING_MONTHLY_PRICE,
   TOTAL_MANDATORY_LESSONS,
 } from "@/lib/config"
-import { UK_STAT_IDS } from "@/components/marketing/data"
+import { LATER_MONTHS_OPEN, UK_STAT_IDS } from "@/components/marketing/data"
+import {
+  formatPence,
+  formatUkDate,
+  getSaleWindow,
+  PASS_PRICES_PENCE,
+} from "@/lib/billing/passes"
 import {
   ukFigure,
   ukFigureCitation,
   ukFigureSource,
 } from "@/lib/data/uk-ai-context"
 import styles from "./for-teams-fde.module.css"
-import { canPromoteLabs } from "@/lib/labs-cta"
 
 /**
  * Per-month lesson counts, read from config rather than retyped, so this page
- * cannot drift from the course page and the dashboard (W26 defect 4).
+ * cannot drift from the course page (W26 defect 4).
  *
- * The MANDATORY figure is printed, because that is the number the admin
- * dashboard enforces against a learner's edition. The per-month OPTIONAL figure
- * is not, for the same reason the page no longer prints an optional total: the
- * canonical syllabus register and this config disagree about the split. See the
- * table on SYLLABUS_BULLETS (a-20260914-201426-ae7f0e).
+ * The CORE figure is printed. The per-month OPTIONAL figure never is: David's
+ * rule, a-20260914-201426-ae7f0e (see the table on SYLLABUS_BULLETS). "Core"
+ * rather than "mandatory" since the launch readiness review (2026-10-21), so
+ * this page uses the course page's and the facts sheet's word.
  */
 function lessonCount(month: 1 | 2 | 3): string {
   const config = MONTH_CONFIGS[month - 1]!
   return config.optionalLessons > 0
-    ? `${config.mandatoryLessons} mandatory, plus optional`
-    : `${config.mandatoryLessons} mandatory`
+    ? `${config.mandatoryLessons} core lessons, plus optional`
+    : `${config.mandatoryLessons} core lessons`
 }
 
 /**
@@ -63,18 +68,25 @@ const WHY_GWTH = [
     // walkthrough as carefully as beginners".
     title: "Try it yourself first, then we work through it",
     description:
-      "Not slides. Not theory. Every lesson builds towards a real output your team can use at work, and nobody is left staring at a blank screen: people attempt the project themselves, then the lesson works through it step by step. Anyone who already works with AI can build it their own way and dip into the worked solution only where they want it.",
+      "Every lesson builds towards a piece of work your team can relate to their own jobs, and nobody is left staring at a blank screen: people attempt the project themselves, then the lesson works through it step by step. Anyone who already works with AI can build it their own way and dip into the worked solution only where they want it.",
   },
   {
     // a-20260914-200357-6dddb2: "This is good, but again, I don't want people
     // to think that they're going to get lost towards the end of the course".
     title: "Beginner-friendly, and it stays that way",
     description:
-      "Month 1 starts in plain English. Later lessons introduce AI-assisted coding and building patterns, and they are taught exactly like the first ones: shown, attempted, then worked through. The depth goes up; the support does not thin out.",
+      "Month 1 starts in plain English. Later lessons introduce writing code and building tools with help from AI, and they are taught exactly like the first ones: shown, attempted, then worked through. As the work gets more advanced, the support does not thin out.",
   },
   {
-    title: "You choose the syllabus",
-    description: `${TOTAL_MANDATORY_LESSONS} essential lessons are mandatory. Beyond those, a further set of optional lessons covers industry-specific and advanced topics, and it grows as new lessons are published. Team admins assign the right optional lessons to each role, so no one wastes time on irrelevant content.`,
+    // Was "You choose the syllabus", with team admins assigning optional
+    // lessons to each role. The standard course has no picker and no team
+    // admin screen: every month opens with all its core and optional lessons
+    // and each learner chooses which optional ones to take (the course page
+    // says the same). Choosing the lessons for a whole group is what an
+    // edition does, which is the /for-institutions page (launch readiness
+    // review, 2026-10-21).
+    title: "The same core for everyone, optional lessons by role",
+    description: `Everyone takes the same ${TOTAL_MANDATORY_LESSONS} core lessons. Each month also includes optional lessons for particular industries, for building more complex AI tools and for leading AI work. Each person chooses which of those to take, so you can point people to the ones that fit their job.`,
   },
   {
     // a-20260914-200722-f1a859: "we should say that we cover all of the top
@@ -100,41 +112,53 @@ const WHY_GWTH = [
     // outside its own products. Both absolutes are gone; the contrast David
     // asked for is now made as a tendency, which is defensible and does not
     // need re-checking every time a model ships.
-    title: "Leading models, plus better-value alternatives",
+    title: "Leading AI models, plus cheaper alternatives",
     description:
-      "We do not sell tools and we are not owned by a model provider. Your team works across leading models and the strong better-value alternatives beside them, including open and self-hosted ones, and learns to choose between them on cost, privacy and fit. Provider-authored training naturally centres that provider's own models and tools.",
+      "We do not sell tools and we are not owned by an AI company. Your team works with AI models from the leading AI companies and with lower-cost alternatives, including ones you can run on your own computers, and learns to choose between them on cost, privacy and fit. Provider-authored training naturally centres that provider's own models and tools.",
   },
   {
-    // a-20260914-200925-203041: "We haven't mentioned the dynamic scoring that
-    // makes it easy to reward and assess achievement". This replaces the older
-    // "Plain progress reporting" item, which promised reporting on
-    // "currentness": score decay is a config constant (SCORE_DECAY_DAYS) with
-    // no implementation behind it, so that word is gone rather than restated.
-    // What IS implemented: calculateGwthScore() in lib/progress/gwth-score.ts
-    // (completed lessons x POINTS_PER_LESSON, weighted by quiz average, against
-    // the learner's own edition), and the org learner table, which shows who
-    // has reached and passed each lesson at the edition's pass mark.
-    //
-    // 2026-09-17 (bead gwth-launch-88z.32.36): the two gaps are now NAMED on
-    // the page rather than only kept out of it. There is no stored score
-    // history anywhere in the product, so movement over time cannot be shown,
-    // and nothing re-opens a lesson that has been rewritten. Saying so in the
-    // item is what lets the item claim the rest in the present tense. The two
-    // banned words stay banned: "currentness" and "score decays" are enforced
-    // by for-teams.test.tsx.
-    title: "Achievement you can assess and reward",
+    // Was "Built for the enterprise conversation", ending "The strategic layer
+    // that boards and compliance teams need to hear." Both reviewers read it as
+    // sales language, and Sol asked for "ROI measurement" and "multi-agent
+    // systems" to be explained (launch readiness review, 2026-10-21). The
+    // topics are the config's own Month 3 description.
+    title: "Month 3 covers leading AI at work",
     description:
-      "No score is switched on while the course is in beta. After it, each learner will have a dynamic GWTH Score rather than a one-time certificate: calculated from the lessons they have finished on the syllabus you assigned them and how they did on the check questions, so it moves as they work. Admins will see who has reached and passed each lesson against the pass mark they set, which is enough to recognise real progress without running a survey. Two things it will not do at first: show which way a learner is going over time, and fall when a lesson they passed has been rewritten. Both are being built.",
-  },
-  {
-    title: "Built for the enterprise conversation",
-    description:
-      "Month 3 covers governance, ROI measurement, change management, and multi-agent systems. The strategic layer that boards and compliance teams need to hear.",
+      "The last month is about using AI across an organisation: the rules and checks it needs before it relies on AI, weighing what AI work costs against what it saves, helping people through the change, and setting up several AI assistants to share one job.",
   },
 ]
 
 /**
- * Syllabus month summaries.
+ * The score item, shown only while the GWTH Score is switched on
+ * (ENABLE_GWTH_SCORE, off at launch). Same rule as the home page's score
+ * section (launch readiness, 2026-10-20).
+ *
+ * a-20260914-200925-203041, David: "We haven't mentioned the dynamic scoring
+ * that makes it easy to reward and assess achievement". This replaced the
+ * older "Plain progress reporting" item, which promised reporting on
+ * "currentness": score decay is a config constant (SCORE_DECAY_DAYS) with no
+ * implementation behind it, so that word stays banned, as does "score decays"
+ * (for-teams.test.tsx).
+ *
+ * Rewritten 2026-10-21 (launch readiness review). The old text opened "No
+ * score is switched on while the course is in beta. After it, ..." and ended
+ * "Both are being built": beta wording and a promise of unbuilt work, which
+ * the launch brief rules out. It also said admins see who passed each lesson
+ * against a pass mark they set, which is the /org screen of an EDITION, not
+ * something a team on the standard course gets. What is left is what
+ * calculateGwthScore() in lib/progress/gwth-score.ts does: completed lessons x
+ * POINTS_PER_LESSON, weighted by the quiz average.
+ */
+const SCORE_ITEM = {
+  title: "Achievement you can assess and reward",
+  description:
+    "Each learner has a dynamic GWTH Score rather than a one-time certificate. It is worked out from the lessons they have finished and how they did on the check questions, so it moves as they work.",
+}
+
+/**
+ * Syllabus month summaries. The month names come from MONTH_CONFIGS, so this
+ * page uses the same names as the course page (launch readiness review,
+ * 2026-10-21); before that it had a third set of its own.
  *
  * Every claim below is checked against the canonical syllabus register
  * (`/home/david/gwth-dashboard/gwth_pipeline.db`, modules month1 / month2 /
@@ -164,120 +188,165 @@ const WHY_GWTH = [
 const MONTHS = [
   {
     month: 1,
-    title: "Foundations",
+    title: MONTH_CONFIGS[0]!.title,
     lessons: lessonCount(1),
+    // "Six practical superpowers" went on 2026-10-21: the reviewer read it as
+    // hype, and config had already retired "the six primitives" as jargon.
     description:
-      "Hands-on from the first lesson. Your team stops using ChatGPT like a search box and starts finishing things: a research brief that checks its own sources, a first working dashboard, an automation that removes a weekly chore, and an assistant that turns a voice note into tasks. Six practical superpowers, each with a project to complete.",
+      "Hands-on from the first lesson. Your team practises using AI to finish real pieces of work: a research brief with sources they have checked, a first working dashboard, an automation that removes a weekly chore, and an assistant that turns a voice note into tasks. Each lesson has a project to complete.",
   },
   {
     month: 2,
-    title: "Apps, Workflows & Consulting",
+    title: MONTH_CONFIGS[1]!.title,
     lessons: lessonCount(2),
     description:
-      "Build the things other people come to rely on: real apps, a knowledge engine that answers from your own documents and cites them, and agents that take the admin off your team. The security, testing and data foundations sit underneath, and the business use cases run from a one-person practice to a large organisation, with the consulting toolkit to package the work.",
+      "Build apps, an AI assistant that answers from your own documents and cites them, and agents: AI assistants that carry out routine admin tasks. You learn the security, testing and data skills that keep this work safe, and the business use cases run from one-person practices to a large organisation. You also learn how to offer this work as a consulting service.",
   },
   {
     month: 3,
-    title: "Transformation or advanced building",
+    title: MONTH_CONFIGS[2]!.title,
     lessons: lessonCount(3),
+    // The two directions David asked for stay; the jargon Sol flagged ("AI
+    // maturity", "multi-agent orchestration", "red teaming") is explained
+    // where it is used (launch readiness review, 2026-10-21).
     description:
-      "One shared core, then your team picks a direction. Everyone learns to assess an organisation, score its AI maturity, cost the work and lead the change. After that it forks: enterprise transformation, with governance, board reporting and adoption that sticks, or deeper building, with multi-agent orchestration, self-hosted models and red teaming for systems that have to hold up.",
+      "One shared core, then each person picks a direction. Everyone learns to assess how an organisation uses AI today, cost the work and lead the change. You then choose between leading AI across an organisation and building more complex tools. The leadership lessons cover setting the rules for using AI, reporting to the board and helping staff take it up. The building lessons cover several AI assistants working together on one job, AI models run on your own hardware, and red teaming, which means testing a system for weaknesses before anyone relies on it.",
   },
 ]
 
-/** Frequently asked questions, rendered as native disclosure elements. */
-const FAQS = [
-  {
-    question: "Can we choose which lessons our team completes?",
-    answer: `Yes. The ${TOTAL_MANDATORY_LESSONS} mandatory lessons cover essential AI skills that everyone needs. Beyond that, optional lessons cover industry-specific applications, advanced topics and specialisations, and more are added as they are published. Team admins can assign relevant optional lessons per role: your marketing team does not need the same modules as your engineering team. Individual learners can also pick their own path from the optional lessons.`,
-  },
-  {
-    // REWRITTEN 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate).
-    // The old answer began "No.", which promises an outcome GWTH does not
-    // control, and supported it with "retain 34% more staff", a figure with no
-    // source on the page and no source in the archive that is safe to publish.
-    // What the course can honestly say is what it teaches and who decides.
-    question: "Will this displace our employees?",
-    answer:
-      "That is not something a course decides. GWTH teaches the people you already have to use AI in the work they already do, so the skill sits with your team rather than only with the tools. Decisions about roles and staffing stay with your organisation.",
-  },
-  {
-    question: "Is our data safe?",
-    answer:
-      "The course teaches your team how to use AI responsibly, including when to use private/local models versus cloud APIs. Month 3 includes governance frameworks specifically designed for enterprise data handling. Your team will understand the security implications before they start building.",
-  },
-  {
-    question: "What is the ROI?",
-    // REWRITTEN 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate).
-    // "By Month 1, your team should be automating tasks that currently take
-    // hours" turned a lesson into a guaranteed result at work, and Month 3 did
-    // the same with an organisation-wide initiative. The answer now states the
-    // price and what the months actually ask a learner to do.
-    answer: `Starter pricing is £${COURSE_MONTHLY_PRICE}/mo for each person, with monthly access rather than an annual lock-in, and £${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo per person after the course to stay current. In Month 1 each person designs an automation for a routine job they do now. By Month 3 they have built an internal tool and worked through how an organisation-wide AI change is planned and costed.`,
-  },
-  {
-    question: "Our team is not technical. Is this appropriate?",
-    // a-20260914-200357-6dddb2 again: "I don't want people to think that
-    // they're going to get lost towards the end of the course". The old answer
-    // ended "for people ready to go deeper", which reads as a filter rather
-    // than a promise, and it was the sentence a non-technical buyer would
-    // reach for to talk themselves out of it.
-    // Bible audience-by-purpose (David, 2026-10-20): say the range by role,
-    // never by age, and claim no customers we do not have yet.
-    answer:
-      "Yes, it's designed for people across your workforce, from apprentices to senior leaders. People need a computer, an internet connection and the ability to type. That is the complete list of technical requirements. Month 1 uses plain English and practical AI patterns. Later lessons do introduce AI-assisted coding and stronger building techniques, and they are taught the same way as the first ones: you see it, you attempt it, then the lesson works through it. The subject gets deeper, the hand-holding does not stop.",
-  },
-  {
-    question: "How is this different from training published by an AI company?",
-    // a-20260914-200722-f1a859. Same point as the differentiator list, made at
-    // the length a buyer comparing offers will actually want, and corrected
-    // the same way: a tendency ("naturally centres", "little reason"), never
-    // an absolute about what another publisher is able to teach.
-    answer:
-      "Provider-authored training naturally centres that provider's own models and tools, and has little reason to point you at a cheaper option elsewhere. A course built around one platform also goes out of date the moment that platform changes its pricing, its capabilities or its terms. GWTH is not owned by a provider and sells no tools. Your team works across leading models and the strong better-value alternatives beside them, including open and self-hosted ones, and learns to judge which to reach for on cost, privacy and fit. That judgement is the part that still works after the next release.",
-  },
-  {
-    question: "How does this compare to the government's AI Skills Boost?",
-    answer:
-      "The government programme covers AI awareness basics in 20 minutes to 9 hours. GWTH goes further with structured lessons, practical projects, AI-assisted building, and enterprise transformation. A team can take a free government course as a short introduction, then use GWTH for three months of teaching and practice on its own work.",
-  },
-  {
-    question: "Can employees complete this during working hours?",
-    answer:
-      "Many companies do exactly this, and it is the most effective approach. At 5 hours per week for 3 months, the time investment is modest. Because every lesson is practical and immediately applicable, employees start returning value from week one. The syllabus flexibility means admins can prioritise lessons most relevant to each team's daily work.",
-  },
-  {
-    question: "Can we pilot with a small group first?",
-    answer:
-      "Absolutely. There is no minimum team size and no contract. Start with 2 people or 200. The admin dashboard is available for teams of 5+, but smaller groups work perfectly well with individual accounts.",
-  },
-  {
-    question: "Can you create bespoke content for our company?",
-    answer:
-      "Yes. For teams of 100+, we can create bespoke lessons tailored specifically to your company's workflows, tools, and industry challenges. This means your team learns AI skills in the context of the work they actually do every day, not generic examples they have to mentally translate. Get in touch to discuss your requirements.",
-  },
-]
+/** The whole-course price and its window, from lib/billing/passes. */
+function coursePrices() {
+  const window = getSaleWindow()
+  return {
+    sale: formatPence(PASS_PRICES_PENCE.courseSale),
+    full: formatPence(PASS_PRICES_PENCE.courseFull),
+    month1: formatPence(PASS_PRICES_PENCE.month1),
+    opensOn: formatUkDate(window.salesOpenAt),
+    // The window ends at midnight; the last day it covers is the day before.
+    endsOn: formatUkDate(new Date(window.saleEndsAt.getTime() - 1)),
+  }
+}
 
-/** Logistics mini-stats. */
+type Faq = { question: string; answer: ReactNode }
+
+/**
+ * Frequently asked questions, rendered as native disclosure elements.
+ *
+ * Launch readiness review, 2026-10-21: every answer that promised a team admin
+ * dashboard, per-role lesson assignment, or that "many companies" do
+ * something was rewritten to what the standard course actually is. The admin
+ * screens (src/app/org) belong to an edition, which is /for-institutions.
+ */
+function faqs(): Faq[] {
+  const price = coursePrices()
+  return [
+    {
+      question: "Can we choose which lessons our team completes?",
+      answer: `Everyone takes the same ${TOTAL_MANDATORY_LESSONS} core lessons. Each month also opens optional lessons on particular industries, advanced topics and specialisations, and each person chooses which of those to take, so you can tell people which ones matter for their role. If you need to set the lessons for a whole group yourself, that is an edition of the course, which is explained on the institutions page.`,
+    },
+    {
+      // REWRITTEN 2026-09-17 (bead gwth-launch-88z.32.36, marketing copy gate).
+      // The old answer began "No.", which promises an outcome GWTH does not
+      // control, and supported it with "retain 34% more staff", a figure with
+      // no source on the page and no source in the archive that is safe to
+      // publish. What the course can honestly say is what it teaches and who
+      // decides.
+      question: "Will this displace our employees?",
+      answer:
+        "That is not something a course decides. GWTH teaches the people you already have to use AI in the work they already do, so the skill sits with your team rather than only with the tools. Decisions about roles and staffing stay with your organisation.",
+    },
+    {
+      question: "What does the course teach about company data?",
+      answer:
+        "It teaches your team to use AI responsibly with company information, including when to use a model that runs on your own computers rather than a service on the internet. Month 3 covers the rules and checks an organisation needs before it relies on AI. People learn the security risks before they start building.",
+    },
+    {
+      // Was "What is the ROI?" with "Starter pricing" and no word of the
+      // one-off price (launch readiness review, 2026-10-21). The outcome
+      // sentences are the ones the 2026-09-17 copy gate settled.
+      question: "What does it cost, and what will people have made?",
+      answer: `${price.sale} a person for the whole course if you buy between ${price.opensOn} and ${price.endsOn}, then ${price.full}. Or £${COURSE_MONTHLY_PRICE} a month for each of the three months, and each person can cancel at any time. Staying current afterwards is optional, at £${ONGOING_MONTHLY_PRICE.toFixed(2)} a month. In Month 1 each person designs an automation for a routine job they do now. By Month 3 they have built an internal tool and worked through how an organisation-wide AI change is planned and costed.`,
+    },
+    {
+      question: "Our team is not technical. Is this appropriate?",
+      // a-20260914-200357-6dddb2 again: "I don't want people to think that
+      // they're going to get lost towards the end of the course". The old
+      // answer ended "for people ready to go deeper", which reads as a filter
+      // rather than a promise.
+      // Bible audience-by-purpose (David, 2026-10-20): say the range by role,
+      // never by age, and claim no customers we do not have yet.
+      answer:
+        "Yes, it's designed for people across your workforce, from apprentices to senior leaders. People need a computer, an internet connection and the ability to type. That is the complete list of technical requirements. Month 1 uses plain English and practical examples. Later lessons introduce writing code with help from AI and building more complex tools, and they are taught the same way as the first ones: you see it, you attempt it, then the lesson works through it. The subject gets deeper, the hand-holding does not stop.",
+    },
+    {
+      question: "How is this different from training published by an AI company?",
+      // a-20260914-200722-f1a859. Same point as the differentiator list, made
+      // at the length a buyer comparing offers will actually want, and made as
+      // a tendency ("naturally centres", "little reason"), never an absolute
+      // about what another publisher is able to teach.
+      answer:
+        "Provider-authored training naturally centres that provider's own models and tools. A course built around one platform can also go out of date when that platform changes its pricing, its capabilities or its terms. GWTH is not owned by a provider and sells no tools. Your team works with AI models from the leading AI companies and with lower-cost alternatives, including ones you can run on your own computers, and learns to judge which to reach for on cost, privacy and fit. That judgement is the part that still works after the next release.",
+    },
+    {
+      question: "How does this compare to the government's AI Skills Boost?",
+      answer:
+        "AI Skills Boost offers free training in practical AI skills for work. GWTH is a three-month course with lessons and projects on using AI, building tools with it and leading AI work in an organisation. A team can take both.",
+    },
+    {
+      // "Many companies do exactly this, and it is the most effective
+      // approach", "start returning value from week one" and "admins can
+      // prioritise lessons" were unsupported or untrue (2026-10-21).
+      question: "Can employees complete this during working hours?",
+      answer:
+        "Yes. It takes about five hours a week for three months. Each lesson is built around a project that people can relate to the work they already do, so time spent on it during working hours is practice on familiar tasks.",
+    },
+    {
+      question: "Can we start with a small group first?",
+      answer:
+        "Yes. There is no minimum number of places. You can buy places for two or three people, see how they get on, and buy more later.",
+    },
+    {
+      question: "Can you write lessons for our company?",
+      answer: (
+        <>
+          Yes, for a company or team of 100 or more learners, as part of an
+          edition of the course. The lessons are written for your work and
+          approved by your own experts before anyone sees them. That is on
+          the <Link href="/for-institutions">institutions page</Link>.
+        </>
+      ),
+    },
+  ]
+}
+
+/**
+ * Logistics mini-stats. "Self-paced, fits any schedule" and "Daily updates,
+ * always current" went on 2026-10-21: neither is backed up, and the months
+ * open on dates, which the note under the month cards now says.
+ */
 const HOW_IT_WORKS = [
-  { label: "3 months", detail: "structured curriculum" },
-  { label: "5 hours/week", detail: "per team member" },
+  { label: "3 months", detail: "one month of lessons at a time" },
+  { label: "About 5 hours a week", detail: "for each person" },
   { label: "Fully online", detail: "no travel required" },
-  { label: "Self-paced", detail: "fits any schedule" },
-  { label: "Daily updates", detail: "always current" },
-]
-
-/** What the per-person price includes for teams. */
-const TEAM_PRICE_FEATURES = [
-  "Same price for teams: no bulk discount because it is already the lowest possible price",
-  "No minimum contract, no lock-in",
-  "Teams of 5+ get an admin dashboard with progress tracking and completion rates",
-  "Admin chooses which optional lessons each role completes",
-  "Cancel anytime, per seat",
+  { label: "Own accounts", detail: "each person signs in and tracks their own progress" },
 ]
 
 /**
- * How syllabus control works, shown in the ruled control box.
+ * What a team buyer needs to know beside the two prices. "Same price for
+ * teams: no bulk discount because it is already the lowest possible price"
+ * was untrue while the one-off price is cheaper, and the admin dashboard and
+ * per-role lesson lines described an edition, not the standard course (launch
+ * readiness review, 2026-10-21). Gift facts from the gift sale plan.
+ */
+const TEAM_PRICE_FEATURES = [
+  "To pay for someone else, buy them a place on the gift page. We email them a code. They have one year from purchase to use it, and their time starts when they do",
+  "The person you buy for is never asked for their card, and there are no automatic renewal payments",
+  "No minimum number of places",
+  "GWTH is not VAT registered, so there is no VAT on these prices",
+]
+
+/**
+ * How lesson choice works, shown in the ruled control box.
  *
  * ## Why there is no optional-lesson TOTAL here (a-20260914-201426-ae7f0e)
  *
@@ -298,16 +367,23 @@ const TEAM_PRICE_FEATURES = [
  * even inside that one database the split lives in a metadata blob rather than
  * in the schema. There is no stable optional total to print, and 50 or 54 would
  * be an invented one. So the page keeps the mandatory figure, which comes from
- * config and is what the admin dashboard actually enforces, and describes the
- * optional set without counting it. Print a number here again only when one
- * register owns the split and the others read from it.
+ * config, and describes the optional set without counting it.
+ *
+ * 2026-10-20: MONTH_CONFIGS was re-counted to the syllabus database (22, 20
+ * and 21 core; 63 in all), so the core figure on this page is now the
+ * syllabus's. The optional figure is still never printed: David's rule stands
+ * whatever the count (src/__tests__/marketing/optional-lessons-and-scoring).
+ *
+ * 2026-10-21 (launch readiness review): the bullets that promised a team admin
+ * dashboard, per-role assignment and per-department completion rates are gone.
+ * The standard course has no picker and no team admin screen; the /org
+ * screens belong to an edition, which /for-institutions sells.
  */
 const SYLLABUS_BULLETS = [
-  `${TOTAL_MANDATORY_LESSONS} mandatory lessons cover the essential AI skills everyone needs, no choices required`,
+  `${TOTAL_MANDATORY_LESSONS} core lessons cover the AI skills everyone needs, and they are the same for every learner`,
   "A further set of optional lessons covers industry-specific and advanced topics, and it grows as new lessons are published",
-  "Team admins assign relevant optional lessons per role via the dashboard",
-  "Individual learners (non-team) pick their own path from optional lessons",
-  "Progress tracking shows completion rates per person and per department",
+  "Each month's optional lessons open with it, and each person chooses which to take",
+  "Each person has their own account and their own progress page",
 ]
 
 /**
@@ -333,8 +409,9 @@ const SYLLABUS_BULLETS = [
  * lessons are `m2_l27` to `m2_l32` and `m3_l28` to `m3_l32`; the leadership
  * lessons are `m3_l21`, `m3_l22` and `m3_l35`.
  *
- * NOT named, deliberately: HR. There is no HR lesson in the course; the only
- * one in the syllabus register sits in the retired `old_backlog` module.
+ * NOT named, deliberately: HR. When this was written there was no HR lesson;
+ * the 2026-10-20 re-count lists HR, marketing and sales lessons in Month 2,
+ * but the shared test still bans HR on this page until David says otherwise.
  * /for-institutions is where commissioning a subject is explained, and the
  * pointer at the end of this block sends a company that needs one there.
  *
@@ -344,15 +421,15 @@ const ROLE_PATHS = [
   {
     label: "Client-facing and regulated work",
     detail:
-      "Lessons on UK legal practice, finance, healthcare, manufacturing and supply chain, buying AI in the public sector, and professional services for consulting, legal and accountancy firms. Each works to the rules that field is held to, so nobody has to translate a general course into their own job.",
+      "Lessons on UK legal practice, finance, healthcare, manufacturing and supply chain, buying AI in the public sector, and professional services for consulting, legal and accountancy firms. Each is written around the rules and examples of that field, so people can see how the skills apply to their own job.",
   },
   {
     label: "The people who build",
     detail:
-      "Retrieval that answers from your own documents and shows where each answer came from, testing and evaluating what has been built, security, running models on your own hardware, and several AI assistants working together on one job.",
+      "AI assistants that answer from your own documents and show where each answer came from, testing and evaluating what has been built, security, running models on your own hardware, and several AI assistants working together on one job.",
   },
   {
-    label: "The people who lead it",
+    label: "The people who lead AI work",
     detail:
       "What a board needs to be told and how often, how AI suppliers are checked, and how to run the change itself rather than only the tools.",
   },
@@ -424,44 +501,75 @@ const STAT_SOURCES = Array.from(
   new Map(UK_STAT_IDS.map((id) => [ukFigureSource(id).id, ukFigureSource(id)])).values()
 )
 
-export function ForTeamsFde() {
+export type ForTeamsFdeProps = {
+  /**
+   * True once GWTH is on sale (isSelling(), read per request in page.tsx).
+   * Only the buttons branch on it: buy from 1 December, the waitlist before.
+   * The words are written to be true on both sides.
+   */
+  selling?: boolean
+  /** True while the GWTH Score is switched on (ENABLE_GWTH_SCORE). */
+  showScore?: boolean
+}
+
+export function ForTeamsFde({
+  selling = false,
+  showScore = false,
+}: ForTeamsFdeProps = {}) {
+  const price = coursePrices()
+  const why = showScore
+    ? [...WHY_GWTH.slice(0, 5), SCORE_ITEM, ...WHY_GWTH.slice(5)]
+    : WHY_GWTH
+  const primaryAction = selling ? (
+    <Link href="/gift" className={styles.buttonSolid}>
+      Buy places for your team
+    </Link>
+  ) : (
+    <Link href="/waitlist" className={styles.buttonSolid}>
+      Join the waitlist
+    </Link>
+  )
+
   return (
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
           <h1 className={styles.mastheadTitle}>
-            AI Training for <em>Your Team</em>
+            AI training for <em>your team</em>
           </h1>
           {/* Recovered (ledger C09) from docs/marketing/for-employers-and-teams.md.
-              It replaces "The gap is not tools, it is training", which said the
-              same thing more weakly and in the same shape as the home page
-              headline ("The gap is not access. It is depth."), so the two pages
-              read as one sentence repeated. */}
+              Its opening sentence, "UK businesses are falling behind on AI
+              skills", went on 2026-10-21: both launch readiness reviewers read
+              it as the scare language the public voice rules out. The point
+              it carried, capability over tool spend, stays. */}
           <p className={styles.standfirst}>
-            UK businesses are falling behind on AI skills. The companies that
-            will lead in three years are not the ones buying the most AI tools
-            today. They are the ones whose people know how to use them.
+            Buying AI tools is only the start. They are useful at work when the
+            people using them know how. GWTH is a practical AI course for work
+            and everyday life in the UK. You can buy places for your team
+            from {price.opensOn}.
           </p>
           <div className={styles.mastheadActions}>
-            <Link href="/contact" className={styles.buttonSolid}>
+            {primaryAction}
+            <Link href="/contact" className={styles.buttonOutline}>
               Get in touch
             </Link>
-            {canPromoteLabs() ? (
-              <Link href="/labs" className={styles.buttonOutline}>
-                Try a free lab
-              </Link>
-            ) : (
-              <Link href="/lessons" className={styles.buttonOutline}>
-                See the curriculum
-              </Link>
-            )}
           </div>
+          {/* The split with /for-institutions, said once near the top so the
+              two pages do not read as the same offer (launch readiness review,
+              2026-10-21). */}
+          <p className={styles.mastheadAside} data-testid="for-teams-split">
+            Your team takes the same course as everyone else. A professional
+            body, or an organisation that wants its own edition of the course,
+            should read the{" "}
+            <Link href="/for-institutions">institutions page</Link> instead.
+          </p>
           <div className={styles.mastheadFoot}>
-            <p>3 months · 5 hours a week</p>
+            <p>3 months · about 5 hours a week</p>
             <p>Fully online</p>
             <p>
-              £{COURSE_MONTHLY_PRICE}/mo, then £
-              {ONGOING_MONTHLY_PRICE.toFixed(2)}/mo
+              £{COURSE_MONTHLY_PRICE} a month for 3 months, then £
+              {ONGOING_MONTHLY_PRICE.toFixed(2)} a month if you want to stay
+              current
             </p>
           </div>
         </div>
@@ -470,8 +578,10 @@ export function ForTeamsFde() {
       <section className={styles.section} data-section="stats">
         <div className={styles.page}>
           <div className={styles.sectionHead}>
+            {/* Was "The numbers are clear.", which both reviewers read as
+                hype (2026-10-21). The heading now says what the figures are. */}
             <h2 className={styles.sectionTitle}>
-              The numbers <em>are clear.</em>
+              AI skills at work <em>in the UK.</em>
             </h2>
           </div>
           <div className={styles.statsRow}>
@@ -490,11 +600,8 @@ export function ForTeamsFde() {
             ))}
           </div>
           {/* The documents themselves, linked once for the section rather than
-              once per tile: the tile line has to stay short enough to sit
-              under a number, and a reader checking a figure wants the paper,
-              not a second copy of the citation. Resolved from
-              src/lib/data/uk-ai-context.ts so a link can never point at a
-              document the figure did not come from. */}
+              once per tile. Resolved from src/lib/data/uk-ai-context.ts so a
+              link can never point at a document the figure did not come from. */}
           <p className={styles.statSource} data-testid="for-teams-stat-sources">
             Read them:{" "}
             {STAT_SOURCES.map((source, i) => (
@@ -509,27 +616,15 @@ export function ForTeamsFde() {
             .
           </p>
           {/* Recovered (ledger C10) from the "real risk is inaction" section of
-              docs/marketing/for-employers-and-teams.md. It replaces "Most AI
-              training fails because it teaches tools, not skills", which is
-              true and abstract; this is the same point as something a buyer
-              recognises about their own organisation. The archive's label for
-              it, "pilot purgatory", is not recovered: the picture is the useful
-              part and the jargon is not.
-
-              The sentence after it went with the swap: it said "the UK
-              government's own research shows only 21% of workers feel confident
-              using AI", which is the stat tile immediately above it, with its
-              own citation. One substitution had made the paragraph six lines
-              with the same figure twice in it; removing the repeat puts it back
-              to five and gives "will not change" a better antecedent, which is
-              the two-places diagnosis rather than a number already on screen. */}
+              docs/marketing/for-employers-and-teams.md. "Most organisations"
+              became "Many organisations" on 2026-10-21: the page has no
+              figure for most. */}
           <p className={styles.statsNote}>
-            Most organisations are stuck in one of two places: a few
+            Many organisations get stuck in one of two places: a few
             enthusiasts experimenting with no path from experiment to
             organisational capability, or enterprise AI tools bought and barely
             used because nobody was ever taught how to think with AI, only how
-            to click the buttons in one product. A short vendor course can
-            introduce the basics. GWTH gives each person three months of guided
+            to click the buttons in one product. GWTH gives each person three months of guided
             practice using AI on the work they already do.
           </p>
         </div>
@@ -546,39 +641,30 @@ export function ForTeamsFde() {
               <em>It is your team&apos;s time.</em>
             </h2>
           </div>
+          {/* "That is deliberately priced below even a short consultant call"
+              went on 2026-10-21: an unsupported comparison. The one-off price
+              is now beside the monthly one. */}
           <p className={styles.sectionLead}>
             The course costs £{COURSE_MONTHLY_PRICE} per person each month for
-            three months. After that,
+            three months, or {price.sale} per person paid once if you buy
+            between {price.opensOn} and {price.endsOn}. After the course,
             staying current is optional and costs £
             {ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
-            That is deliberately priced below even a short consultant call.
           </p>
           {/*
-            The comparison, rebuilt after a-20260914-200101-e34e36. It used to
-            be two cards each wearing a full-width coloured band: "it looks like
-            it's a square shading box at the top inside a curved box which looks
-            unprofessional and messy ... the dark colour where it says elsewhere
-            is too dark with the dark text on top of it, so it's difficult to
-            read, and the light just fades into the background ... the font is
-            really small and it's meant to be a kind of title, so it should be
-            much bigger".
+            The comparison, rebuilt after a-20260914-200101-e34e36 ("it looks
+            like it's a square shading box at the top inside a curved box which
+            looks unprofessional and messy ... the font is really small and it's
+            meant to be a kind of title, so it should be much bigger"). Same
+            panel recipe on both sides, the name at heading size, the claim
+            carried by the figure underneath it, the difference told by the
+            WORDS rather than by a fill. The one piece of colour is the Bitter
+            italic jade on the GWTH figure (paper-first-components, italic
+            accent).
 
-            All four faults had one cause: a retired component. Coloured card
-            tops went out with FDE (bible paper-first-components, "No coloured
-            card tops"), and the two that were left had been repainted in
-            --v-muted and --v-quiet, which are a METADATA INK and a QUIET FILL.
-            --v-muted behind --v-ink is 1.85:1, hence unreadable; --v-quiet on
-            the white band is 1.17:1, hence invisible; and the band was a square
-            child of a 10px-radius parent with no overflow clip, hence the
-            square-inside-curve.
-
-            It is now an ordinary comparison: same panel recipe on both sides
-            (--v-bg on the white band, one measured --v-line boundary, 10px
-            radius), the name at heading size so the title IS the title, the
-            claim carried by the figure underneath it, and the difference told
-            by the WORDS rather than by a fill. The one piece of colour is the
-            Bitter italic jade on the GWTH figure, which is the register's own
-            emphasis device (paper-first-components, italic accent).
+            2026-10-21: the GWTH figure was "Zero filler", which the reviewer
+            read as hype. It now names what the buyer counts, in parallel with
+            the left-hand panel.
           */}
           <div className={styles.compareRow}>
             <article className={styles.compareCard}>
@@ -597,20 +683,20 @@ export function ForTeamsFde() {
               <h3 className={styles.compareWho}>GWTH</h3>
               <p className={styles.compareWhat}>This course</p>
               <p className={`${styles.compareFigure} ${styles.compareFigureOurs}`}>
-                Zero filler
+                Count what they make
               </p>
               <p className={styles.compareBody}>
-                Every lesson ends with something your team has made: a tool, a
-                document or a plan they can take straight into the work they
-                were already doing.
+                Each lesson is built around a project, such as a tool, a
+                document or a plan, that people can relate to the work they
+                already do.
               </p>
             </article>
           </div>
           <p className={styles.compareNote}>
-            When your employees complete lessons during working hours, as many
-            companies encourage, every hour is paid for twice. That is why each
-            lesson is built around a piece of work rather than around a video
-            to sit through.
+            If people take lessons during working hours, you are paying for
+            their time as well as for the course. That is why each lesson is
+            built around a piece of work rather than around a video to sit
+            through.
           </p>
         </div>
       </section>
@@ -624,7 +710,7 @@ export function ForTeamsFde() {
               </h2>
             </div>
             <ol className={styles.whyList}>
-              {WHY_GWTH.map((item, i) => (
+              {why.map((item, i) => (
                 <li key={item.title} className={styles.whyItem}>
                   <p className={styles.whyIndex}>
                     {String(i + 1).padStart(2, "0")}
@@ -646,33 +732,43 @@ export function ForTeamsFde() {
       >
         <div className={styles.page}>
           <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>
-              Complete control over what your team learns
-            </h2>
+            {/* Was "Complete control over what your team learns", over a lead
+                that promised a team admin dashboard. Neither is true of the
+                standard course (launch readiness review, 2026-10-21). */}
+            <h2 className={styles.sectionTitle}>What your team learns</h2>
           </div>
           <p className={styles.sectionLead}>
-            Not every role needs every lesson. The team admin dashboard lets
-            you build the right syllabus for each department. Every concept
-            is introduced with a clear explanation of why it matters, not
-            just what it is, so your team stays engaged because they
-            understand the practical benefit before learning the skill.
+            Not every role needs every lesson. Everyone takes the same core
+            lessons, and each month also opens a set of optional lessons, so
+            people can spend their time on the ones that fit their work. Every
+            idea is introduced with a clear explanation of why it matters, not
+            just what it is, so people understand the practical benefit before
+            they learn the skill.
           </p>
           <div className={styles.monthsRow}>
             {MONTHS.map((month) => (
               <article key={month.month} className={styles.monthCard}>
-                <div className={styles.cardTop}>
-                  <span>Month {String(month.month).padStart(2, "0")}</span>
-                  <span>{month.lessons}</span>
-                </div>
                 <div className={styles.monthBody}>
+                  <p className={styles.cardMeta}>
+                    Month {month.month} · {month.lessons}
+                  </p>
                   <h3>{month.title}</h3>
                   <p>{month.description}</p>
                 </div>
               </article>
             ))}
           </div>
+          {/* When each month opens, true on both sides of 1 December (facts
+              sheet, launch readiness 2026-10-20). Dates from
+              LATER_MONTHS_OPEN, so this page agrees with / and /pricing. */}
+          <p className={styles.monthsNote} data-testid="months-availability">
+            Month 1 is open from {price.opensOn}. Month 2 opens around{" "}
+            {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
+            {LATER_MONTHS_OPEN.month3}. If someone reaches a month before it
+            opens, their time on the course is paused until it does.
+          </p>
           <div className={styles.controlBox}>
-            <h3>How syllabus control works</h3>
+            <h3>How lesson choice works</h3>
             <ul className={styles.ruledList}>
               {SYLLABUS_BULLETS.map((item) => (
                 <li key={item}>{item}</li>
@@ -726,23 +822,38 @@ export function ForTeamsFde() {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              Same per-person price <em>for any team size.</em>
+              The same price per person, <em>whatever the size of the team.</em>
             </h2>
           </div>
           <article className={styles.investCard}>
-            <div className={styles.cardTop}>
-              <span>Per person</span>
-              <span>GBP · monthly</span>
-            </div>
             <div className={styles.investBody}>
-              <p className={styles.investPrice}>
-                <strong>£{COURSE_MONTHLY_PRICE}</strong>
-                <span>/mo per person</span>
-              </p>
-              <p>
-                per course month, then £{ONGOING_MONTHLY_PRICE.toFixed(2)}/mo
-                optional Stay Current access after course access ends.
-              </p>
+              <div className={styles.priceRows}>
+                <div className={styles.priceRow}>
+                  <p className={styles.cardMeta}>Paid monthly</p>
+                  <p className={styles.investPrice}>
+                    <strong>£{COURSE_MONTHLY_PRICE}</strong>
+                    <span>a month for each person</span>
+                  </p>
+                  <p>
+                    For each of the three months. Each person signs up with
+                    their own account and can cancel at any time. After the
+                    course, staying current is optional at £
+                    {ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
+                  </p>
+                </div>
+                <div className={styles.priceRow}>
+                  <p className={styles.cardMeta}>Paid once</p>
+                  <p className={styles.investPrice}>
+                    <strong>{price.sale}</strong>
+                    <span>for the whole course, for each person</span>
+                  </p>
+                  <p>
+                    If you buy between {price.opensOn} and {price.endsOn}.
+                    After that, the whole course is {price.full}. The first
+                    month on its own is {price.month1}.
+                  </p>
+                </div>
+              </div>
               <ul className={styles.ruledList}>
                 {TEAM_PRICE_FEATURES.map((feature) => (
                   <li key={feature}>{feature}</li>
@@ -750,9 +861,10 @@ export function ForTeamsFde() {
               </ul>
             </div>
           </article>
+          {/* "International pricing coming soon" went on 2026-10-21: a promise
+              the launch brief rules out. */}
           <p className={styles.investFoot}>
-            All prices in GBP. International pricing coming soon. See the
-            full pricing breakdown on the{" "}
+            All prices are in pounds. Every option is on the{" "}
             <Link href="/pricing">pricing page</Link>.
           </p>
         </div>
@@ -766,7 +878,7 @@ export function ForTeamsFde() {
             </h2>
           </div>
           <div className={styles.faqList}>
-            {FAQS.map((faq) => (
+            {faqs().map((faq) => (
               <details key={faq.question} className={styles.faqItem}>
                 <summary>{faq.question}</summary>
                 <p>{faq.answer}</p>
@@ -776,28 +888,26 @@ export function ForTeamsFde() {
         </div>
       </section>
 
+      {/* The second button was "Try a free lab" under a sentence about what
+          the course covers (reviewer, 2026-10-21). It now goes to the course,
+          and the first button says how a team actually pays. */}
       <section className={styles.closing} data-section="closing">
         <div className={styles.page}>
           <h2>
-            Ready to upskill <em>your UK team?</em>
+            Buying places <em>for your team?</em>
           </h2>
           <p>
-            Get in touch to discuss your team&apos;s needs, or take a look at
-            what the course covers.
+            Places are on sale from {price.opensOn}. Buy one for each person
+            on the gift page, or get in touch if you have a question first.
           </p>
           <div className={styles.closingActions}>
-            <Link href="/contact" className={styles.buttonSolid}>
+            {primaryAction}
+            <Link href="/contact" className={styles.buttonOutline}>
               Get in touch
             </Link>
-            {canPromoteLabs() ? (
-              <Link href="/labs" className={styles.buttonOutline}>
-                Try a free lab
-              </Link>
-            ) : (
-              <Link href="/lessons" className={styles.buttonOutline}>
-                See the curriculum
-              </Link>
-            )}
+            <Link href="/lessons" className={styles.buttonOutline}>
+              See the course
+            </Link>
           </div>
         </div>
       </section>

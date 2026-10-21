@@ -87,6 +87,32 @@
    David, on /tech-radar, "it just looks like it's been thrown in the middle of
    nowhere". Facts now sit together as one line under the standfirst, separated
    by a middot rather than by a rule. paper-first-components, metadata rows. */
+/* Who this page is for, and where the other buyer goes. */
+.mastheadAside {
+  margin-top: 1.25rem;
+  max-width: 38rem;
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.mastheadAside a,
+.monthsNote a,
+.faqItem a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* When each month opens, under the month cards. */
+.monthsNote {
+  margin-top: 1.25rem;
+  max-width: 44rem;
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
 .mastheadFoot {
   margin-top: clamp(1.75rem, 4vw, 2.5rem);
   display: flex;
@@ -270,6 +296,7 @@
 
 .stat strong {
   display: block;
+  font-family: var(--font-serif);
   font-size: clamp(2.6rem, 5vw, 3.6rem);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -427,20 +454,15 @@
   color: var(--v-soft);
 }
 
-/* Still worn by the month and investment cards: a quiet metadata strip, never
-   a coloured one. `overflow: hidden` on the parent is what keeps its square
-   corners inside the panel radius; see .monthCard and .investCard. */
-.cardTop {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 1.25rem;
-  background: var(--v-quiet);
-  color: var(--v-ink);
+/* Month and price cards carry their metadata as a plain line inside the card
+   body. The quiet-filled strip that used to sit across the top of each card is
+   gone (launch readiness review, 2026-10-21: tinted card tops are a retired
+   pattern, bible paper-first-components). */
+.cardMeta {
   font-family: var(--font-sans);
   font-size: var(--fde-mono-sm);
   font-weight: 500;
+  color: var(--v-soft);
 }
 
 .compareNote {
@@ -679,9 +701,10 @@
 
 /* ---------------- Investment card ---------------- */
 
-/* `overflow: hidden` for the same reason .monthCard carries it: .cardTop is a
-   square-cornered child, and without the clip its top corners hang outside the
-   panel radius. That is the "square shading box at the top inside a curved box"
+/* `overflow: hidden` for the same reason .monthCard carries it: the old
+   .cardTop strip was a square-cornered child, and without the clip its top
+   corners hung outside the panel radius. The strip is gone (2026-10-21); the
+   clip stays so a square child can never hang out again. That is the "square shading box at the top inside a curved box"
    David marked on the comparison cards (a-20260914-200101-e34e36); it was the
    same defect here, on the same page. */
 .investCard {
@@ -704,6 +727,8 @@
 }
 
 .investPrice strong {
+  font-family: var(--font-serif);
+  color: var(--v-ink);
   font-size: 2.6rem;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -711,15 +736,35 @@
 }
 
 .investPrice span {
-  font-size: var(--fde-body-sm);
-  color: var(--v-muted);
+  font-size: var(--fde-body);
+  color: var(--v-soft);
+}
+
+/* Two ways to pay, side by side from tablet width, each a figure and a line. */
+.priceRows {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .priceRows {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+.priceRow > p:not(.investPrice) {
+  margin-top: 0.6rem;
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-soft);
 }
 
 .investBody > p {
   margin-top: 0.75rem;
   font-size: var(--fde-body-sm);
   line-height: 1.6;
-  color: var(--v-muted);
+  color: var(--v-soft);
 }
 
 .investFoot {

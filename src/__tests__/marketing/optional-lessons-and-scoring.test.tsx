@@ -332,7 +332,9 @@ describe("/for-teams: the same story, told for somebody choosing for other peopl
     const paths = screen.getByTestId("role-paths").textContent ?? ""
     expect(paths).toMatch(/Client-facing and regulated work/i)
     expect(paths).toMatch(/The people who build/i)
-    expect(paths).toMatch(/The people who lead it/i)
+    // "The people who lead AI work" since the latest Sol's check (2026-10-21):
+    // "lead it" had no clear antecedent.
+    expect(paths).toMatch(/The people who lead AI work/i)
     expect(paths).toMatch(/UK legal practice/i)
     expect(paths).toMatch(/nobody has to take all of it/i)
   })

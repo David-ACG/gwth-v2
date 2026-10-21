@@ -157,9 +157,14 @@ describe("recovered ideas are on the page", () => {
    */
 
   it("C09 /for-teams leads on capability over tool spend", () => {
+    // Reworded on 2026-10-21 (launch readiness review and the latest Sol):
+    // "UK businesses are falling behind" was scare language, and "the
+    // companies that will lead in three years are not the ones buying the
+    // most AI tools today" an unsupported claim about other companies. The
+    // recovered idea, capability over tool spend, still opens the page.
     render(<ForTeamsFde />)
     expect(text()).toMatch(
-      /not the ones buying the most AI tools today.*whose people know how to use them/i
+      /Buying AI tools is only the start.*useful at work when the people using them know how/i
     )
   })
 
