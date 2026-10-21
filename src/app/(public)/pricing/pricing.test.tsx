@@ -67,7 +67,7 @@ describe("PricingPage", () => {
       /then £7\.50 a month if you stay/
     )
     expect(document.body.textContent).toMatch(
-      /A monthly plan moves to that price by itself, and a pass ends without charging you/
+      /Monthly plans carry on at that price by themselves/
     )
     // Deliberately updated: the Member cell used to read "Available after
     // course", which hid the one number that proves there is no lock-in.
@@ -154,7 +154,7 @@ describe("PricingPage", () => {
     // on at £7.50 unless you cancel (Terms section 6, Sol copy check).
     expect(monthly.textContent).toMatch(/first three monthly payments each open one month/)
     expect(monthly.textContent).toMatch(/£7\.50 a month to keep your lessons up to date, unless you cancel/)
-    expect(pass.textContent).toMatch(/one year from the date you buy it to enter its code/)
+    expect(pass.textContent).toMatch(/one year from the date you buy it to enter the gift code/)
     expect(within(monthly).getByRole("link")).toHaveAttribute(
       "href",
       "/terms#subscriptions"

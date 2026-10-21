@@ -107,7 +107,7 @@ const REASONS: readonly Reason[] = [
     id: "what-you-build",
     title: "What you'll build",
     body: [
-      "In your first month, you'll build small apps. By month three, you'll build more advanced apps that, once tested, you could use at work or offer to customers. AI writes the code, and you learn how to direct it and check the result.",
+      "In Month 1 you build the Family AI Bot. In Month 2 you build a customer support chatbot. In Month 3 you build an AI consultant that interviews people and writes a plan for an organisation. AI writes the code, and you learn how to direct it and check the result.",
     ],
   },
   {
@@ -199,8 +199,8 @@ const COMPARISON_ROWS = [
   },
   {
     dimension: "How current",
-    boost: "Some courses date from 2023 and 2024",
-    hub: "Some courses are more than 10 years old",
+    boost: "Check each course's latest update date",
+    hub: "Check each course's latest update date",
     gwth: "Updated as the tools change",
   },
   {
@@ -633,8 +633,8 @@ export function WhyGwthFde({
               lib/public-routes.ts), so the line for somebody buying for
               another person now points at the gift. */}
           <p>
-            From {OFFER.opensOn}, you can also give the whole course to someone
-            as a gift.
+            From {OFFER.opensOn}, you can join the course, for yourself or as a
+            gift.
           </p>
           <div className={styles.closingActions}>
             <Link href={cta.href} className={styles.buttonSolid}>

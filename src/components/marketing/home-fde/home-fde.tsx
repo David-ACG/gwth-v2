@@ -608,10 +608,10 @@ export function HomeFde({
               <p className={styles.offerPrice} data-testid="home-offer">
                 From {offer.opensOn} to {offer.endsOn}, the whole three-month
                 course is {offer.sale}, for yourself or as a gift. Or pay £
-                {COURSE_MONTHLY_PRICE} a month. After the first three months,
-                you can keep your lessons up to date for £
-                {ONGOING_MONTHLY_PRICE.toFixed(2)} a month if you want to, and
-                you can cancel at any time.
+                {COURSE_MONTHLY_PRICE} a month. After your first three months,
+                continued access to the updated lessons costs £
+                {ONGOING_MONTHLY_PRICE.toFixed(2)} a month, and you can cancel
+                at any time.
               </p>
               <p className={styles.offerNote} data-testid="home-offer-months">
                 Month 1 opens on {offer.opensOn}. Month 2 opens around{" "}

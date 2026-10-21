@@ -125,8 +125,8 @@ function TermsNote({
       first: Month 1 opens as soon as you&apos;ve paid, and Months 2 and 3
       open around the dates above, with your time paused if you reach one
       first. With a gift, the person you give it to has one year from the
-      date you buy it to enter its code, their course time
-      starts when they do, and we never ask them for card details. We refund a
+      date you buy it to enter the gift code. Their course starts when they
+      do, and we never ask for their card details. We refund a
       pass in full until it&apos;s opened, but not after, unless the law
       requires; to ask for one,{" "}
       <Link href="/contact" className={styles.inlineLink}>
@@ -141,8 +141,8 @@ function TermsNote({
   ) : (
     <p className={styles.termsNote} data-testid={testId}>
       Your first three monthly payments each open one month of the course.
-      After that, the plan carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)} a
-      month to keep your lessons up to date, unless you cancel. We email you
+      After that, the plan carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)}
+      {" "}a month to keep your lessons up to date, unless you cancel. We email you
       before each payment. Cancel at any time in your account settings and you
       keep access until the end of the month you&apos;ve paid for. See the{" "}
       <Link href="/terms#subscriptions" className={styles.inlineLink}>
@@ -263,9 +263,10 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
             Pay a month at a time, or pay once for the whole course. Teams pay
             the same per-person price, and institutions that want their own
             edition get a proposal based on what they need. After the first
-            three months, you can keep your lessons up to date for £{ongoing} a
-            month. A monthly plan moves to that price by itself, and a pass
-            ends without charging you, so you choose whether to carry on.
+            three months, continued access to the updated lessons costs
+            £{ongoing} a month. Monthly plans carry on at that price by
+            themselves. With a pass, lesson access ends after three months
+            unless you choose to continue.
           </p>
           {/* The UK thread on this page (bead gwth-launch-88z.32.25). Money
               is the only thing this page is about, so this is where it earns
