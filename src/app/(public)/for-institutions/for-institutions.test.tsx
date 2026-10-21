@@ -1,6 +1,7 @@
 import { render, screen, cleanup } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import ForInstitutionsPage from "./page"
+import { MONTH_CONFIGS } from "@/lib/config"
 import {
   BASELINE,
   EVIDENCE,
@@ -21,6 +22,10 @@ describe("ForInstitutionsPage", () => {
    * own tutors should not have to level the room first. The masthead has to
    * carry all four halves of that: the problem, the shared foundation, the
    * threshold the institution sets, and the evidence its tutors can see.
+   * Reworded 2026-10-21 (launch readiness, both reviewers and the copy gate):
+   * "levelling the room" and "verified evidence" went, the first for words
+   * close to David's own ("get the whole class up to a certain level"), the
+   * second because the public verification page is closed from the launch.
    */
   it("states the tutor-time problem and the answer in the masthead itself", () => {
     const { container } = render(<ForInstitutionsPage />)
@@ -28,10 +33,10 @@ describe("ForInstitutionsPage", () => {
     expect(masthead).not.toBeNull()
     const text = masthead!.textContent ?? ""
     expect(text).toMatch(/tutors/i)
-    expect(text).toMatch(/levelling the room|level the room/i)
-    expect(text).toMatch(/foundation that runs before it/i)
+    expect(text).toMatch(/whole class up to the same level/i)
+    expect(text).toMatch(/before your course begins/i)
     expect(text).toMatch(/set the pass mark/i)
-    expect(text).toMatch(/verified evidence/i)
+    expect(text).toMatch(/tutors can see who has met it/i)
   })
 
   /**
@@ -73,27 +78,34 @@ describe("ForInstitutionsPage", () => {
     const cards = screen.getAllByTestId("baseline-card")
     expect(cards).toHaveLength(BASELINE.length)
     const [problem, answer] = cards.map((el) => el.textContent ?? "")
-    // The problem panel: tutor time lost to levelling a mixed room.
+    // The problem panel: tutor time lost to levelling a mixed class.
     expect(problem).toMatch(/specialist course/i)
-    expect(problem).toMatch(/levels the room/i)
+    expect(problem).toMatch(/bring(ing)? the whole class up to the same level/i)
     // The answer panel: one shared foundation, a threshold the institution
     // sets, and tutors who can see who has met it.
-    expect(answer).toMatch(/shared applied AI foundation/i)
-    expect(answer).toMatch(/you choose which lessons count and what score passes/i)
-    // Future tense since 2026-09-17 (bead gwth-launch-88z.32.36): the tutor
-    // view is built but no institution edition is switched on during the beta,
-    // and the copy gate blocked the page for claiming otherwise.
-    expect(answer).toMatch(/tutors will see who has met the baseline/i)
+    // Reworded 2026-10-21 (marketing copy gate): "Everyone arrives at the
+    // level you set" guaranteed readiness; the panel now says what the
+    // learners screen really shows. Present tense, because /org/learners
+    // exists from the launch; the "after the beta" wording went with the beta.
+    expect(answer).toMatch(/core lessons and any optional ones you require/i)
+    expect(answer).toMatch(/pass mark you set/i)
+    expect(answer).toMatch(/tutors can see who has met it/i)
   })
 
   it("promises evidence a tutor can check, not an assurance", () => {
     const { container } = render(<ForInstitutionsPage />)
     const baseline = container.querySelector('[data-section="baseline"]')
     const text = baseline?.textContent ?? ""
-    expect(text).toMatch(/precursor, not a replacement/i)
-    expect(text).toMatch(/evidence rather than an assurance/i)
+    // "It is a precursor, not a replacement" was a slogan both launch
+    // reviewers flagged (2026-10-20); the plain sentence keeps the point.
+    expect(text).toMatch(/does not teach your profession/i)
+    // "Evidence rather than an assurance", then "not an assurance": the
+    // latest Sol (2026-10-21) asked for the limitation to be said plainly.
+    expect(text).toMatch(/record of what each member\s+has done/i)
     expect(text).toMatch(/pass mark you chose/i)
-    expect(text).toMatch(/can verify/i)
+    // /verify is a 404 from the launch, so nothing may say a record can be
+    // verified by anyone it is sent to.
+    expect(text).not.toMatch(/can verify/i)
   })
 
   it("shows every evidence figure with a linked source", () => {
@@ -108,16 +120,20 @@ describe("ForInstitutionsPage", () => {
     }
   })
 
+  // Titles changed 2026-10-21 to what /org implements on the launch day: the
+  // public verified record went (/verify is closed), and the tiers line now
+  // says core lessons cannot be removed (D-N7-3). "Ratify" became "approve"
+  // on the latest Sol's check (2026-10-21): the familiar word for the action.
   it("names the six edition features, threshold and tutor view first, and the walkthrough call to action", () => {
     render(<ForInstitutionsPage />)
     const features = screen.getAllByTestId("edition-feature")
     expect(features.map((el) => el.querySelector("h3")?.textContent)).toEqual([
       "A pass mark you set",
-      "A tutor baseline view",
-      "A verified record",
-      "Core, optional and exclusive tiers",
-      "Exclusive lessons you ratify",
-      "Records your members can log",
+      "A learners screen for your tutors",
+      "Separate admin and tutor access",
+      "Core, optional and exclusive lessons",
+      "Exclusive lessons you approve",
+      "Progress your members can log",
     ])
     const ctas = screen.getAllByRole("link", { name: "Book a walkthrough" })
     expect(ctas.length).toBeGreaterThanOrEqual(2)
@@ -130,11 +146,14 @@ describe("ForInstitutionsPage", () => {
     expect(question).toBeInTheDocument()
     const answer = question.parentElement?.textContent ?? ""
     expect(answer).toMatch(/pass mark/i)
-    expect(answer).toMatch(/before the room starts/i)
-    // "its public verification page" became "the page anyone can open to check
-    // it": nothing in the product has ever written a credential row, so no
-    // member has a verification page yet (bead gwth-launch-88z.32.36).
-    expect(answer).toMatch(/anyone can open to check it/i)
+    // "Before the room starts" is named as wording to remove in the public
+    // writing skill (both launch reviewers, 2026-10-20).
+    expect(answer).toMatch(/before your course begins/i)
+    // Nothing in the product has ever written a credential row and /verify is
+    // closed from the launch, so the evidence is the tutors' learners screen,
+    // not a page anyone can open (bead gwth-launch-88z.32.36, then 2026-10-21).
+    expect(answer).toMatch(/learners screen/i)
+    expect(answer).not.toMatch(/anyone can open/i)
   })
 
   /**
@@ -214,5 +233,31 @@ describe("ForInstitutionsPage", () => {
     expect(text).toMatch(/one agreement/i)
     expect(text).toMatch(/admin screen/i)
     expect(text).toMatch(/proposal/i)
+  })
+
+  /**
+   * Launch readiness, 2026-10-21 (bead gwth-launch-ajqs.2). The page must be
+   * true from the GO LIVE release: counts and month names come from config,
+   * no optional count is printed (a-20260914-201426-ae7f0e), and no beta or
+   * "being built" promise survives.
+   */
+  it("reads every month's name and core count from config", () => {
+    render(<ForInstitutionsPage />)
+    const cards = screen.getAllByTestId("month-card")
+    expect(cards).toHaveLength(MONTH_CONFIGS.length)
+    MONTH_CONFIGS.forEach((month, i) => {
+      const text = cards[i]!.textContent ?? ""
+      expect(text).toContain(month.title)
+      expect(text).toContain(`${month.mandatoryLessons} core lessons`)
+    })
+  })
+
+  it("makes no beta, intake or being-built promise", () => {
+    const { container } = render(<ForInstitutionsPage />)
+    const text = container.textContent ?? ""
+    expect(text).not.toMatch(/\bbeta\b|invite-only|testers|\bintake\b/i)
+    expect(text).not.toMatch(/being built|coming soon|next piece of work/i)
+    expect(text).not.toMatch(/before the room starts|level(s|ling)? the room/i)
+    expect(text).not.toMatch(/FractionalBuddy/)
   })
 })

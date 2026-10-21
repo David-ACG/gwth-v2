@@ -120,8 +120,11 @@ describe("HomeFde is individual-first", () => {
     // `score` renders only while the score is switched on (launch readiness,
     // 2026-10-20), so the launch page has no score section and the order is
     // checked both ways.
+    // `film` joined on 2026-10-21, straight after the hero (David: "We need
+    // to put the home page video on the home page").
     expect(order).toEqual([
       "hero",
+      "film",
       "course",
       "months",
       "blocks",
@@ -133,6 +136,7 @@ describe("HomeFde is individual-first", () => {
     const withScore = render(<HomeFde showScore />)
     expect(sectionOrder(withScore.container)).toEqual([
       "hero",
+      "film",
       "course",
       "months",
       "blocks",

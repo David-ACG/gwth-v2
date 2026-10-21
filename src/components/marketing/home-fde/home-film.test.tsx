@@ -1,9 +1,11 @@
-import { describe, expect, it } from "vitest"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { afterEach, describe, expect, it } from "vitest"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { HomeFilm } from "./home-film"
 
 // David, 2026-10-21: "We need to put the home page video on the home page."
 describe("HomeFilm", () => {
+  afterEach(() => cleanup())
+
   it("shows a poster for each edition and nothing plays until asked", () => {
     const { container } = render(<HomeFilm />)
     expect(container.querySelector("video")).toBeNull()
