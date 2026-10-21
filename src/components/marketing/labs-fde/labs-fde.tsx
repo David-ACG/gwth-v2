@@ -23,7 +23,7 @@ interface HowItem {
 const HOW_WE_TEST: ReadonlyArray<HowItem> = [
   {
     title: "Real tasks, each with a trap.",
-    body: "Four to six tasks a lab, based on real UK work. Each hides a trap a careful person would catch, such as an out-of-date figure or a false legal claim.",
+    body: "We used 25 tasks across six labs, based on real UK work. Each hides a trap a careful person would catch, such as an out-of-date figure or a false legal claim.",
   },
   {
     title: "Marked two ways.",
@@ -54,19 +54,31 @@ function PickLine({ label, pick }: { label: string; pick: ModelLabPick }) {
  * bars themselves are decoration over the printed figure. A premium set-up has
  * its own bar colour AND the word "premium" under its name.
  */
+/** "Claude Fable 5.1 ran 24 of the 25 tasks; the other set-ups ran all 25." from the data, or
+ * "Every set-up ran all 25." when none ran fewer (premium set-ups can skip a task added later). */
+export function shortRunsSentence(chart: ModelLabCostChart): string {
+  const short = [...new Set(chart.rows.filter((r) => r.tasks_run < chart.tasks).map((r) => `${r.name}|${r.tasks_run}`))]
+  if (!short.length) return `Every set-up ran all ${chart.tasks} tasks.`
+  const parts = short.map((k) => {
+    const [name, n] = k.split("|")
+    return `${name} ran ${n} of the ${chart.tasks} tasks`
+  })
+  return `${parts.join("; ")}; the other set-ups ran all ${chart.tasks}.`
+}
+
 export function CostChart({ chart }: { chart: ModelLabCostChart }) {
   const max = Math.max(...chart.rows.map((r) => r.cost_gbp), 0)
   return (
     <figure className={styles.chart} data-testid="labs-cost-chart">
       <figcaption>
         <h2 className={styles.sectionTitle} id="h-cost">
-          What it cost to run all {chart.tasks} tasks, and the score each set-up got
+          Test costs and average scores across {chart.tasks} tasks
         </h2>
       </figcaption>
       <div className={styles.chartHead} aria-hidden="true">
         <span>Set-up</span>
-        <span>Cost of every task, at list price</span>
-        <span className={styles.chartScoreHead}>Score</span>
+        <span>Total test cost at list price</span>
+        <span className={styles.chartScoreHead}>Average score out of 100</span>
       </div>
       <ol className={styles.chartRows} aria-labelledby="h-cost">
         {chart.rows.map((r) => {
@@ -108,10 +120,11 @@ export function CostChart({ chart }: { chart: ModelLabCostChart }) {
         })}
       </ol>
       <p className={styles.chartNote}>
-        The bar is the cost of running every task once at each company&apos;s published API
-        prices, converted at 75p to the dollar. The number on the right is the average score out
-        of 100 across the six labs. Each set-up ran each task once, so a gap of one or two points
-        is noise.
+        Each bar shows the total cost of the tasks that set-up ran, using each company&apos;s
+        published prices for developer access (API), converted at 75p to the dollar.
+        {shortRunsSentence(chart)} The number on the right is the average of its six lab scores, out of 100. Each completed test was run
+        once, so small score differences may change on another run. App subscriptions are charged
+        separately.
       </p>
     </figure>
   )
@@ -119,7 +132,7 @@ export function CostChart({ chart }: { chart: ModelLabCostChart }) {
 
 /**
  * The Model Lab index at /labs (David, 2026-10-21, option A), PAPER-FIRST
- * register. It replaced the Model Arena listing: every new AI model now gets
+ * register. It replaced the Model Arena listing: new AI models now get
  * the same real UK work tasks in six labs, marked by computer checks and AI
  * judges, and each lab has its own results page.
  *
@@ -140,7 +153,7 @@ export function LabsFde({ index }: LabsFdeProps) {
             Which AI should you use? <em>We test them to find out.</em>
           </h1>
           <p className={styles.standfirst} data-testid="labs-uk-note">
-            Every new AI model gets the same real UK work tasks, in six labs: research, writing,
+            We give new AI models the same real UK work tasks, in six labs: research, writing,
             thinking a problem through, building a tool, spreadsheets and data, and acting for
             you. Computer checks and AI judges mark every answer. No AI company pays us.
           </p>
@@ -160,7 +173,7 @@ export function LabsFde({ index }: LabsFdeProps) {
           <div className={styles.mastheadFoot}>
             <p>Tested {tested}</p>
             <p>
-              {index.model_count} models, {index.setup_count} set-ups
+              {index.model_count} models, {index.setup_count} set-ups including different thinking settings
             </p>
             <p>Free, no card required</p>
           </div>

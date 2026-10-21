@@ -26,7 +26,7 @@
   }
  ],
  "sig_title": "The four-day week pilot",
- "sig_plain": "A kitchen company's boss wants to trial a four-day week. Can the plan keep the showroom open on Saturdays, and does the staff survey really show everyone wants it? Play along before the reveal.",
+ "sig_plain": "A kitchen company's boss wants to trial a four-day week. Check whether the plan keeps the showroom open on Saturdays and whether the staff survey really shows everyone wants it.",
  "sig_task": "Hi, I'm Nina Ashworth, managing director of Fernhill Kitchens. We have 40 staff and a showroom that opens six days a week. I'm thinking about trialling a four-day week from January and I'd like your help before I decide.\n\nMy proposal is in `inputs/proposal.md`. You'll also find our staff list (`inputs/staff.csv`), how the showroom is covered and the minimum cover we need (`inputs/showroom_cover.md`), our pay rules (`inputs/pay_rules.md`) and the results of our staff survey (`inputs/survey_results.md`).\n\nI'll make the decision myself, so please don't make it for me. I need two things.\n\n**1. `out/pilot_plan.md`**: a one-page plan, no more than 600 words, that I can read in a few minutes. Tell me whether my proposal works as written, lay out my realistic options, and set out a pilot I could run: the working pattern for the showroom, how cover works on each day, how we would measure success, and when we would review it.\n\n**2. `out/numbers.json`**, in exactly this shape:\n\n```json\n{\n  \"hours_per_week_now\": 0,\n  \"hours_per_week_pilot\": 0,\n  \"hours_reduction_percent\": 0.00,\n  \"showroom_cover_under_proposal\": {\"Mon\": 0, \"Tue\": 0, \"Wed\": 0, \"Thu\": 0, \"Fri\": 0, \"Sat\": 0},\n  \"saturday_minimum_cover\": 0,\n  \"saturday_shortfall_under_proposal\": 0,\n  \"saturday_cover_with_overtime_volunteers\": 0,\n  \"overtime_cost_per_saturday\": 0.00,\n  \"overtime_cost_whole_pilot\": 0.00,\n  \"saturdays_in_pilot\": 0,\n  \"bank_holidays_in_pilot\": [\"YYYY-MM-DD\"],\n  \"survey_response_rate_percent\": 0.0,\n  \"survey_yes_as_percent_of_all_staff\": 0.0,\n  \"pilot_showroom_pattern\": {\"S01\": [\"Mon\", \"Tue\", \"Wed\", \"Thu\"]},\n  \"review_meeting_date\": \"YYYY-MM-DD\"\n}\n```\n\nWhat the fields mean:\n\n- `hours_per_week_now` and `hours_per_week_pilot`: total contracted hours a week across all 40 staff, now and in the pilot as I've proposed it. `hours_reduction_percent` is the fall, to 2 decimal places.\n- `showroom_cover_under_proposal`: how many showroom staff would be working on each day under my proposal as written, counting only each person's four pilot days (no overtime). `saturday_shortfall_under_proposal` is the Saturday minimum minus the Saturday figure.\n- `saturday_cover_with_overtime_volunteers`: the most showroom staff we could have on a Saturday if, on top of my proposal, everyone who could cover the showroom and has volunteered for Saturday overtime came in.\n- `overtime_cost_per_saturday`: the cost of all of those volunteers working one Saturday shift as overtime, under our pay rules. `overtime_cost_whole_pilot` is that cost for every Saturday in the pilot.\n- `saturdays_in_pilot` and `bank_holidays_in_pilot`: for a 12-week pilot starting Monday 4 January 2027 (England bank holidays).\n- `survey_response_rate_percent`: responses as a share of all staff. `survey_yes_as_percent_of_all_staff`: the \"Yes\" answers as a share of all staff.\n- `pilot_showroom_pattern`: the four working days (from Mon, Tue, Wed, Thu, Fri, Sat) for each of the 12 showroom staff, S01 to S12, in the pilot you set out.\n- `review_meeting_date`: the date of the meeting, after the pilot, where I'd decide whether to keep the four-day week.\n\nMoney to the penny, percentages as numbers without the % sign.\n",
  "best": {
   "name": "Claude Sonnet 5.5",
@@ -71,6 +71,13 @@
  },
  "premium": [
   {
+   "name": "GPT-6 Astra",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 93,
+   "cost": "24p"
+  },
+  {
    "name": "Claude Fable 5.1",
    "level": "high",
    "maker": "Anthropic",
@@ -85,28 +92,20 @@
    "cost": "£2.20"
   }
  ],
- "premium_main": [
-  {
-   "name": "GPT-6 Astra",
-   "level": "medium",
-   "maker": "OpenAI",
-   "cost": "28p",
-   "premium": true
-  },
-  {
-   "name": "GPT-6.1 Sol",
-   "level": "medium",
-   "maker": "OpenAI",
-   "cost": "9p",
-   "premium": false
-  }
- ],
+ "premium_main": [],
+ "premium_ref": {
+  "name": "GPT-6.1 Sol",
+  "level": "medium",
+  "maker": "OpenAI",
+  "score": 94,
+  "cost": "6p"
+ },
  "fable_all": true,
  "premium_note": {
   "title": "The premium models: Claude Fable and GPT-6 Astra",
-  "before": "Claude Fable costs two and a half times as much as Claude Opus to use, and GPT-6 Astra costs five times as much as GPT-6.1 Sol.\n\nWe tested Claude Fable on every task. It didn't score higher than the usual top models, and it cost much more:",
-  "astra": "We ran GPT-6 Astra on this lab's main task only, to compare its cost with GPT-6.1 Sol.",
-  "after": "### Why we don't recommend them\n\nThe personal versions of Claude and ChatGPT keep your chats, whichever model you choose. Some business services can be set up so the provider does not keep the data you send. A business account alone does not guarantee this.\n\nClaude Fable has an extra requirement. Anthropic says: \"Using Fable requires 30-day data retention for safety monitoring by default.\" That applies to business accounts too. Some eligible organisations can turn this retention off for a limited time. Fable has no option for processing data in the UK or EU.\n\nSome providers make Fable optional. Harvey, which makes AI tools for law firms, says: \"We are making this model available as an opt-in option vs. by default.\" Cursor, a popular coding tool, says Fable \"is off by default in every Team that has Cursor Privacy Mode enabled and for every Enterprise customer\". Jennifer Ellis, a lawyer who writes about legal technology, advises: \"Don't use it if you have concerns about data retention or your firm has AI use policies against allowing data to be retained by outside tools.\"\n\nSo keep personal details, staff and customer records, unreleased figures, business plans and confidential findings out of Claude Fable. Check your organisation's AI policy before using it for work at all.\n\nGPT-6 Astra has the same data retention rules as other OpenAI models. By default, OpenAI keeps records of use for up to 30 days to monitor misuse. Eligible customers can arrange for their data not to be kept in those records. Our reason for not recommending Astra is cost: it costs five times as much as GPT-6.1 Sol, and we haven't tested whether it gives better results.\n\n### When a premium model is fine to use\n\nIf you need a lot of power for a long or difficult job, and none of the information is private or sensitive, a premium model is fine to use. Examples include researching a public topic in depth, working through published documents or completing a long coding task using code that isn't confidential. For Fable, Stephen Smith, who trains law firms to use AI, suggests asking: \"can this engagement tolerate 30-day retention by the model provider? For a lot of work, the answer is yes. For some matters, it won't be.\"\n\nFor everyday work, start with a usual top model. Compare a premium model only if the results don't meet your needs.",
+  "before": "We tested both on every task in this lab. Neither scored higher than our best pick. Across all 25 tasks, Astra at medium thinking cost about four times as much as GPT-6.1 Sol at medium thinking. Both averaged 94 out of 100 across the six labs. Here are this lab's scores and costs:",
+  "astra": "",
+  "after": "### Why we don't recommend them\n\nThe personal versions of Claude and ChatGPT keep your chats, whichever model you choose. Some business services can be set up so the provider does not keep the data you send. A business account alone does not guarantee this.\n\nClaude Fable has an extra requirement. Anthropic says: \"Using Fable requires 30-day data retention for safety monitoring by default.\" That applies to business accounts too. Some eligible organisations can turn this retention off for a limited time. Fable has no option for processing data in the UK or EU.\n\nSome providers make Fable optional. Harvey, which makes AI tools for law firms, says: \"We are making this model available as an opt-in option vs. by default.\" Cursor, a popular coding tool, says Fable \"is off by default in every Team that has Cursor Privacy Mode enabled and for every Enterprise customer\". Jennifer Ellis, a lawyer who writes about legal technology, advises: \"Don't use it if you have concerns about data retention or your firm has AI use policies against allowing data to be retained by outside tools.\"\n\nSo keep personal details, staff and customer records, unreleased figures, business plans and confidential findings out of Claude Fable. Check your organisation's AI policy before using it for work at all.\n\nGPT-6 Astra has the same data retention rules as other OpenAI models. By default, OpenAI keeps records of use for up to 30 days to monitor misuse. Eligible customers can arrange for their data not to be kept in those records. Our reason for not recommending Astra is cost: with both set to medium thinking, Astra cost £8.87 and GPT-6.1 Sol cost £2.23 across all 25 tasks. Both averaged 94 out of 100 across the six labs.\n\n### When a premium model is fine to use\n\nIf you need a lot of power for a long or difficult job, and none of the information is private or sensitive, a premium model is fine to use. Examples include researching a public topic in depth, working through published documents or completing a long coding task using code that isn't confidential. For Fable, Stephen Smith, who trains law firms to use AI, suggests asking: \"can this engagement tolerate 30-day retention by the model provider? For a lot of work, the answer is yes. For some matters, it won't be.\"\n\nFor everyday work, start with a usual top model. Compare a premium model only if the results don't meet your needs.",
   "sources": "Sources, checked 20 October 2026: Anthropic, Claude Fable page (anthropic.com/claude/fable); OpenAI, GPT-6 Astra announcement and API data controls; Harvey blog, \"Fable 5.1 in Harvey\", 1 September 2026; Cursor documentation for Claude Fable 5.1; Jennifer Ellis, jlellis.net, 10 June 2026; Stephen Smith, smithstephen.com, 9 June 2026."
  },
  "answers": [

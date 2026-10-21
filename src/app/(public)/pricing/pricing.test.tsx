@@ -46,10 +46,10 @@ describe("PricingPage", () => {
     render(<PricingPage />)
     const text = document.body.textContent ?? ""
     expect(text).toContain("All six free labs, no card required")
-    expect(text).toContain("Every new AI model tested on the same real work tasks")
+    expect(text).toContain("New AI models tested on the same real work tasks")
     expect(text).toContain("Re-tested when new models come out")
     expect(text).toContain("The six free labs")
-    expect(text).toMatch(/The free labs test every new AI model on the same real work tasks/)
+    expect(text).toMatch(/The free labs test new AI models on the same real work tasks/)
     expect(text).not.toMatch(/one real task|Side-by-side comparisons/)
   })
 

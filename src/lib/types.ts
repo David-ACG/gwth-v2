@@ -645,6 +645,8 @@ export interface ModelLabData {
   premium: ModelLabPremiumRow[]
   /** The main-task cost check, empty if not run in this lab. */
   premium_main: ModelLabPremiumMainRow[]
+  /** GPT-6.1 Sol medium beside Astra in the premium box (21 Oct); null when Astra has not run every task */
+  premium_ref: ModelLabPremiumRow | null
   /** Whether Claude Fable ran every task in this lab. */
   fable_all: boolean
   /** The premium section's wording. */

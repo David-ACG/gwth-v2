@@ -804,7 +804,7 @@ export function FreeDashboard({ user }: { user: User | null }) {
               />
             ))}
             <div className={styles.tableFoot}>
-              <span className={styles.mono}>Every new AI model, the same real tasks</span>
+              <span className={styles.mono}>New AI models tested on the same real tasks</span>
               <Link href="/labs" className={styles.monoLink}>
                 See all six labs
               </Link>

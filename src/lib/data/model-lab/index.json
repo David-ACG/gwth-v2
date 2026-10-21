@@ -149,7 +149,7 @@
    "sp": "automation",
    "sp_name": "Automation",
    "headline": "Which AI can you trust to act for you?",
-   "ask": "Whose week would you trust?",
+   "ask": "Which assistant would you trust with your week?",
    "sig_title": "Clear my week",
    "best": {
     "name": "Claude Opus 5.5",
@@ -346,6 +346,17 @@
     "cost_gbp": 9.1695,
     "cost": "£9.17",
     "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6-astra_medium",
+    "name": "GPT-6 Astra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": true,
+    "cost_gbp": 8.8666,
+    "cost": "£8.87",
+    "score": 94,
     "tasks_run": 25
    },
    {

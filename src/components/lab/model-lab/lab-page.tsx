@@ -116,9 +116,9 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
         <header className={styles.hero}>
           <h1>{lab.headline}</h1>
           <p>
-            We gave {lab.count} AI set-ups the same {countWord(n)} real{" "}
-            {lab.sp_name.toLowerCase()} tasks and marked every answer. No AI company pays us, and
-            you can read every answer to the main task below.
+            We tested {lab.count} AI set-ups on {countWord(n)} real {lab.sp_name.toLowerCase()}{" "}
+            tasks. A set-up is a model with a particular thinking setting. No AI company pays us,
+            and you can read every answer to the main task below.
           </p>
           <p className={styles.meta}>Tested {tested}</p>
         </header>
@@ -160,12 +160,12 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
             </div>
           </div>
           <p className={styles.note}>
-            Best value is the cheapest set-up that scored within 10% of the best and passed every
-            trap. The daily driver is the cheapest to run of the set-ups you can choose in an app
-            costing £20 a month or less that scored within 10% of the best and passed every trap.
-            Set-ups that cost less to run usually use up an app&apos;s allowance more slowly. Best
-            for free is the highest-scoring set-up you can use in a free app that passed every
-            trap. We checked what each plan includes between 6 and 8 October 2026.
+            Best value is the set-up with the lowest test cost that scored at least 90% of the best
+            score and passed every trap. The daily driver uses the same rules, but the set-up must be
+            available in an app costing £20 a month or less. These comparisons use our test costs;
+            app subscriptions have their own prices and usage limits. Best for free is the
+            highest-scoring set-up available in a free app that passed every trap. We checked what
+            each plan includes between 6 and 8 October 2026.
           </p>
         </section>
 
@@ -330,10 +330,23 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
                     <td className={`${styles.num} ${styles.score}`}>{lab.best.score}</td>
                     <td className={styles.num}>{lab.best.cost}</td>
                   </tr>
+                  {lab.premium_ref ? (
+                    <tr>
+                      <td className={styles.name}>
+                        {lab.premium_ref.name}
+                        <small>
+                          {levelLabel(lab.premium_ref.level)} · {lab.premium_ref.maker} · OpenAI&apos;s
+                          usual top model
+                        </small>
+                      </td>
+                      <td className={`${styles.num} ${styles.score}`}>{lab.premium_ref.score}</td>
+                      <td className={styles.num}>{lab.premium_ref.cost}</td>
+                    </tr>
+                  ) : null}
                 </tbody>
               </table>
             </div>
-            <p>{lab.premium_note.astra}</p>
+            {lab.premium_note.astra ? <p>{lab.premium_note.astra}</p> : null}
             {lab.premium_main.length ? (
               <div className={styles.tableWrap} data-testid="lab-premium-main">
                 <table className={styles.board}>

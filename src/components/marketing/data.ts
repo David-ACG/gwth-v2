@@ -386,7 +386,7 @@ export const PRICING: readonly PricingTier[] = [
     per: "forever, no card required",
     features: [
       "All six free labs, no card required",
-      "Every new AI model tested on the same real work tasks",
+      "New AI models tested on the same real work tasks",
       "Re-tested when new models come out",
       "Lessons and their projects come with the course, not the free tier",
     ],

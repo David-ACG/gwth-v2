@@ -114,7 +114,7 @@ describe("Model Lab wording helpers", () => {
 
   it("names thinking levels, counts and places as the pages say them", () => {
     expect(levelLabel("standard")).toBe("standard")
-    expect(levelLabel("xhigh")).toBe("xhigh thinking")
+    expect(levelLabel("xhigh")).toBe("extra-high thinking")
     expect(countWord(4)).toBe("four")
     expect(countWord(12)).toBe("12")
     expect(ordinalWord(1)).toBe("first")

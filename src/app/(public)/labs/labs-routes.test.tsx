@@ -1,3 +1,4 @@
+import { levelLabel } from "@/lib/model-lab-format"
 import { render, screen, cleanup, within, fireEvent, waitFor } from "@testing-library/react"
 import { describe, it, expect, afterEach, vi, beforeEach } from "vitest"
 
@@ -59,22 +60,25 @@ describe("/labs/[slug]", () => {
     expect(text.replace(/<[^>]+>/g, "")).not.toMatch(/§/)
   })
 
-  it("shows the premium box with Fable, and the Astra main-task box only in Thinking", async () => {
-    render(await LabDetailPage(params("thinking")))
-    const premium = screen.getByTestId("lab-premium")
-    expect(premium.textContent).toMatch(/Claude Fable 5\.1/)
-    expect(within(premium).getByTestId("lab-premium-main").textContent).toMatch(/GPT-6 Astra/)
-    cleanup()
-    render(await LabDetailPage(params("research")))
-    expect(screen.queryByTestId("lab-premium-main")).toBeNull()
+  it("shows Fable and Astra in the premium box, beside GPT-6.1 Sol, in every lab", async () => {
+    for (const sp of ["thinking", "research"]) {
+      render(await LabDetailPage(params(sp)))
+      const premium = screen.getByTestId("lab-premium")
+      expect(premium.textContent).toMatch(/Claude Fable 5\.1/)
+      expect(premium.textContent).toMatch(/GPT-6 Astra/)
+      expect(premium.textContent).toMatch(/OpenAI.s usual top model/)
+      // Astra ran every task on 21 Oct, so its one-task cost box is gone
+      expect(screen.queryByTestId("lab-premium-main")).toBeNull()
+      cleanup()
+    }
   })
 
   it("says Fable skipped the flipchart photos in the Data lab only", async () => {
     render(await LabDetailPage(params("data")))
-    expect(screen.getByTestId("lab-premium").textContent).toMatch(/except the flipchart photos/)
+    expect(screen.getByTestId("lab-premium").textContent).toMatch(/Claude Fable on four\. We added the flipchart photos later/)
     cleanup()
     render(await LabDetailPage(params("thinking")))
-    expect(screen.getByTestId("lab-premium").textContent).not.toMatch(/except the flipchart photos/)
+    expect(screen.getByTestId("lab-premium").textContent).not.toMatch(/flipchart photos/)
   })
 
   it("is a 404 for any other slug, the old Arena and practise labs included", async () => {
@@ -133,7 +137,7 @@ describe("Every set-up we tested", () => {
     vi.stubGlobal("fetch", fetchMock)
     render(await LabDetailPage(params("thinking")))
     const first = lab.table[0]!
-    const label = `Answer from ${first.name}, ${first.level === "standard" ? "standard" : `${first.level} thinking`}`
+    const label = `Answer from ${first.name}, ${levelLabel(first.level)}`
     const button = screen.getAllByRole("button").find((b) => b.textContent === label)!
     expect(button).toBeDefined()
     fireEvent.click(button)

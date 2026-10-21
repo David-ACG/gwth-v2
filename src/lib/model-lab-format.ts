@@ -9,7 +9,7 @@
  * thinking" for every other level.
  */
 export function levelLabel(level: string): string {
-  return level === "standard" ? "standard" : `${level} thinking`
+  return level === "standard" ? "standard" : `${level === "xhigh" ? "extra-high" : level} thinking`
 }
 
 const MONTH = new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "UTC" })
@@ -68,7 +68,7 @@ export function countWord(n: number): string {
  * word from the Model Lab preview David reviewed (lab/site/template.html).
  */
 export const MODEL_LAB_HOW_WE_TEST: readonly string[] = [
-  "We wrote four to six tasks for each superpower, based on real work, such as a small business post, a staff absence report or a week of emails to sort out.",
+  "We used 25 tasks across six labs, based on real work, such as a small business post, a staff absence report or a week of emails to sort out.",
   "Each task hides a trap that a careful person would catch, such as an out-of-date figure or a false legal claim. Falling for it is shown in red, whatever the score.",
   "Computer checks mark what can be checked exactly, such as figures and dates. AI judges mark the rest against a written guide, and no judge marks its own company's work: Claude marks OpenAI's answers, GPT marks Anthropic's, and both mark everyone else's.",
   "A person at GWTH checked a sample of the marks by reading the answers to each task side by side.",

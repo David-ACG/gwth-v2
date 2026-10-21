@@ -2,7 +2,7 @@
  * Data access for the Model Lab: the six results pages at /labs (David,
  * 2026-10-21, option A, which replaced the four Model Arena labs).
  *
- * Every new AI model gets the same real UK work tasks in six superpowers.
+ * New AI models get the same real UK work tasks in six labs.
  * Computer checks and AI judges mark the answers; the pages show the picks,
  * four blind answers to the main task and every set-up's marks.
  *

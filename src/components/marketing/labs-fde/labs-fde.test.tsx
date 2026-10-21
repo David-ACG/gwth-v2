@@ -1,6 +1,6 @@
 import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
-import { CostChart, LabsFde } from "./labs-fde"
+import { CostChart, shortRunsSentence, LabsFde } from "./labs-fde"
 import { getModelLabIndex } from "@/lib/data/model-lab"
 import type { ModelLabCostChart } from "@/lib/types"
 
@@ -92,7 +92,7 @@ describe("CostChart", () => {
     renderIndex()
     expect(
       screen.getByRole("heading", {
-        name: `What it cost to run all ${index.cost_chart.tasks} tasks, and the score each set-up got`,
+        name: `Test costs and average scores across ${index.cost_chart.tasks} tasks`,
       }),
     ).toBeInTheDocument()
     expect(index.cost_chart.tasks).toBe(
@@ -127,14 +127,32 @@ describe("CostChart", () => {
     expect(astra!.textContent).toMatch(/premium/)
     expect(astra!.textContent).not.toMatch(/ran \d+ of/)
     expect(luna!.textContent).not.toMatch(/premium|ran \d+ of/)
-    expect(screen.getByRole("heading", { name: /all 25 tasks/ })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: /across 25 tasks/ })).toBeInTheDocument()
   })
 
   it("explains the bar, the number and the noise under the chart", () => {
     renderIndex()
     const chart = screen.getByTestId("labs-cost-chart")
-    expect(chart.textContent).toMatch(/The bar is the cost/)
-    expect(chart.textContent).toMatch(/average score out of 100 across the six labs/)
-    expect(chart.textContent).toMatch(/a gap of one or two points is noise/)
+    expect(chart.textContent).toMatch(/Each bar shows the total cost of the tasks that set-up ran/)
+    expect(chart.textContent).toMatch(/average of its six lab scores, out of 100/)
+    expect(chart.textContent).toMatch(/small score differences may change on another run/)
+    expect(chart.textContent).toMatch(/App subscriptions are charged separately/)
+  })
+
+  it("names the set-ups that ran fewer tasks from the data, not a fixed sentence", () => {
+    const row = { name: "X", level: "max", maker: "M", premium: false, cost_gbp: 1, cost: "£1.00", score: 90 }
+    expect(shortRunsSentence({ tasks: 25, rows: [{ ...row, setup: "a", tasks_run: 25 }] })).toBe(
+      "Every set-up ran all 25 tasks.",
+    )
+    expect(
+      shortRunsSentence({
+        tasks: 25,
+        rows: [
+          { ...row, setup: "fable-5.1_max", name: "Claude Fable 5.1", tasks_run: 24 },
+          { ...row, setup: "fable-5.1_high", name: "Claude Fable 5.1", tasks_run: 24 },
+          { ...row, setup: "b", tasks_run: 25 },
+        ],
+      }),
+    ).toBe("Claude Fable 5.1 ran 24 of the 25 tasks; the other set-ups ran all 25.")
   })
 })

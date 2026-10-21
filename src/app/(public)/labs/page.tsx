@@ -19,7 +19,7 @@ export const revalidate = 0
 export const metadata: Metadata = {
   title: "Free AI labs",
   description:
-    "Every new AI model on the same real UK work tasks, in six labs: research, writing, thinking, building, data and automation. Marked by computer checks and AI judges, with the best pick, the best value and the cost of each. Free, no card required.",
+    "New AI models tested on the same real UK work tasks, in six labs: research, writing, thinking, building, data and automation. Marked by computer checks and AI judges, with the best pick, the best value and the cost of each. Free, no card required.",
 }
 
 /**
