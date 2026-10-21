@@ -125,7 +125,7 @@ export const EVIDENCE = [
   },
   {
     value: "16%",
-    body: "Microsoft surveyed 20,000 people who use AI at work. It classed 16% as advanced users, based on three things they reported: using AI for complex, multi-step work, changing how they work to make use of it, and taking part in shared ways of using it across a team. Support from the organisation, such as its culture and managers, was linked to twice as much of the reported benefit as individual effort.",
+    body: "Microsoft surveyed 20,000 people who use AI at work. It classed 16% as advanced users: people who said they use AI for complex, multi-step work, have changed how they work to make use of it, and use it together with their team.",
     source: "Microsoft Work Trend Index, 2026",
     href: "https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization",
   },
@@ -229,14 +229,14 @@ const MONTH_OPENS: Record<number, string> = {
 const STEPS = [
   {
     title: "Pilot with your own staff",
-    body: "From 1 December 2026, start a small group of your staff on the standard course. They try the standard course, and their feedback helps you choose the lessons for your edition.",
+    body: "From 1 December 2026, a small group of your staff can try the standard course. Their feedback helps you choose the lessons for your edition.",
   },
   {
     title: "Set up your edition with us",
     body: "Choose the optional lessons, tell us the titles of any lessons you want written for you, and set your pass mark. We create the edition for you.",
   },
   {
-    title: "Put it before your courses",
+    title: "Members take it before your courses",
     body: "Your members take your edition before your own courses, and your tutors check who has met your pass mark on the learners screen.",
   },
 ] as const
@@ -494,12 +494,9 @@ export function ForInstitutionsFde() {
             <h2 className={p.sectionTitle}>What your tutors see</h2>
           </div>
           <p className={p.lead} data-testid="institutions-tutor-lead">
-            Your tutors sign in to a learners screen for your edition. For each
-            member it shows how many of the required lessons they have
-            completed, the average of their best mark on each quiz, when
-            they were last active and whether they have met your baseline. A member meets it
-            by completing every required lesson with a quiz mark at or
-            above your pass mark.
+            Your tutors sign in to a learners screen for your edition. A
+            member meets your baseline by completing every required lesson
+            with a quiz mark at or above your pass mark.
           </p>
           <p className={`${p.lead} ${styles.leadAfter}`}>
             Tutors see whether each member has met the baseline, not their

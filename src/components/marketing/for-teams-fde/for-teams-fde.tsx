@@ -328,7 +328,7 @@ const HOW_IT_WORKS = [
   { label: "3 months", detail: "one month of lessons at a time" },
   { label: "About 5 hours a week", detail: "for each person" },
   { label: "Fully online", detail: "no travel required" },
-  { label: "Own accounts", detail: "each person signs in and tracks their own progress" },
+  { label: "Individual accounts", detail: "each person signs in and tracks their own progress" },
 ]
 
 /**
@@ -647,9 +647,10 @@ export function ForTeamsFde({
           <p className={styles.sectionLead}>
             The course costs £{COURSE_MONTHLY_PRICE} per person each month for
             three months, or {price.sale} per person paid once if you buy
-            between {price.opensOn} and {price.endsOn}. After the course,
-            staying current is optional and costs £
-            {ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
+            between {price.opensOn} and {price.endsOn}. On the monthly plan,
+            after the three months the plan carries on at £
+            {ONGOING_MONTHLY_PRICE.toFixed(2)} a month to keep lessons up to
+            date, unless the person cancels.
           </p>
           {/*
             The comparison, rebuilt after a-20260914-200101-e34e36 ("it looks
@@ -837,8 +838,9 @@ export function ForTeamsFde({
                   <p>
                     For each of the three months. Each person signs up with
                     their own account and can cancel at any time. After the
-                    course, staying current is optional at £
-                    {ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
+                    three months, the plan carries on at £
+                    {ONGOING_MONTHLY_PRICE.toFixed(2)} a month unless they
+                    cancel.
                   </p>
                 </div>
                 <div className={styles.priceRow}>
