@@ -24,7 +24,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 37,
+   "count": 40,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -53,7 +53,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 37,
+   "count": 40,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -82,7 +82,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 37,
+   "count": 40,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -111,7 +111,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 37,
+   "count": 40,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -140,7 +140,7 @@
     "basics": 5,
     "n": 5
    },
-   "count": 37,
+   "count": 40,
    "tasks": 5,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -169,7 +169,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 37,
+   "count": 40,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-10-21"
@@ -178,7 +178,7 @@
  "tested_from": "2026-10-02",
  "tested_to": "2026-10-21",
  "model_count": 23,
- "setup_count": 37,
+ "setup_count": 40,
  "p_per_usd": 75,
  "cost_chart": {
   "tasks": 25,
@@ -250,6 +250,28 @@
     "tasks_run": 25
    },
    {
+    "setup": "gpt-6-astra_max",
+    "name": "GPT-6 Astra",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": true,
+    "cost_gbp": 27.363,
+    "cost": "£27.36",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6-astra_xhigh",
+    "name": "GPT-6 Astra",
+    "level": "xhigh",
+    "maker": "OpenAI",
+    "premium": true,
+    "cost_gbp": 21.5825,
+    "cost": "£21.58",
+    "score": 93,
+    "tasks_run": 25
+   },
+   {
     "setup": "sonnet-5.5_xhigh",
     "name": "Claude Sonnet 5.5",
     "level": "xhigh",
@@ -257,6 +279,17 @@
     "premium": false,
     "cost_gbp": 14.7647,
     "cost": "£14.76",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6-astra_high",
+    "name": "GPT-6 Astra",
+    "level": "high",
+    "maker": "OpenAI",
+    "premium": true,
+    "cost_gbp": 13.6751,
+    "cost": "£13.68",
     "score": 94,
     "tasks_run": 25
    },

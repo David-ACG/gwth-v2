@@ -78,11 +78,32 @@
    "cost": "43p"
   },
   {
+   "name": "GPT-6 Astra",
+   "level": "high",
+   "maker": "OpenAI",
+   "score": 88,
+   "cost": "88p"
+  },
+  {
+   "name": "GPT-6 Astra",
+   "level": "xhigh",
+   "maker": "OpenAI",
+   "score": 87,
+   "cost": "£1.59"
+  },
+  {
    "name": "Claude Fable 5.1",
    "level": "high",
    "maker": "Anthropic",
    "score": 97,
    "cost": "£1.81"
+  },
+  {
+   "name": "GPT-6 Astra",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 89,
+   "cost": "£1.92"
   },
   {
    "name": "Claude Fable 5.1",
@@ -1021,7 +1042,7 @@
    "name": "Automation"
   }
  ],
- "count": 37,
+ "count": 40,
  "tested_from": "2026-10-02",
  "tested_to": "2026-10-21"
 }
