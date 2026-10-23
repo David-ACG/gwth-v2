@@ -1,7 +1,8 @@
 import Link from "next/link"
-import type { ModelLabCostChart, ModelLabIndex, ModelLabPick } from "@/lib/types"
+import type { ModelLabIndex, ModelLabPick } from "@/lib/types"
 import { aboutCost, formatTestedMonth, formatTestedRange, levelLabel } from "@/lib/model-lab-format"
 import styles from "./labs-fde.module.css"
+import { CostChart as CostChartView } from "./cost-chart"
 
 /**
  * Props for {@link LabsFde}.
@@ -46,93 +47,7 @@ function PickLine({ label, pick }: { label: string; pick: ModelLabPick }) {
   )
 }
 
-/**
- * Every set-up's list-price cost of running every scored task, as a bar, with
- * its average score across the six labs beside it, dearest first (David,
- * 2026-10-21, copied from the Model Lab plan page). Plain HTML and CSS: an
- * ordered list whose rows read as "name, cost, score" to a screen reader; the
- * bars themselves are decoration over the printed figure. A premium set-up has
- * its own bar colour AND the word "premium" under its name.
- */
-/** "Claude Fable 5.1 ran 24 of the 25 tasks; the other set-ups ran all 25." from the data, or
- * "Every set-up ran all 25." when none ran fewer (premium set-ups can skip a task added later). */
-export function shortRunsSentence(chart: ModelLabCostChart): string {
-  const short = [...new Set(chart.rows.filter((r) => r.tasks_run < chart.tasks).map((r) => `${r.name}|${r.tasks_run}`))]
-  if (!short.length) return `Every set-up ran all ${chart.tasks} tasks.`
-  const parts = short.map((k) => {
-    const [name, n] = k.split("|")
-    return `${name} ran ${n} of the ${chart.tasks} tasks`
-  })
-  return `${parts.join("; ")}; the other set-ups ran all ${chart.tasks}.`
-}
-
-export function CostChart({ chart }: { chart: ModelLabCostChart }) {
-  const max = Math.max(...chart.rows.map((r) => r.cost_gbp), 0)
-  return (
-    <figure className={styles.chart} data-testid="labs-cost-chart">
-      <figcaption>
-        <h2 className={styles.sectionTitle} id="h-cost">
-          Test costs and average scores across {chart.tasks} tasks
-        </h2>
-      </figcaption>
-      <div className={styles.chartHead} aria-hidden="true">
-        <span>Set-up</span>
-        <span>Total test cost at list price</span>
-        <span className={styles.chartScoreHead}>Average score out of 100</span>
-      </div>
-      <ol className={styles.chartRows} aria-labelledby="h-cost">
-        {chart.rows.map((r) => {
-          const width = max > 0 ? (r.cost_gbp / max) * 100 : 0
-          const short = r.tasks_run < chart.tasks
-          return (
-            <li
-              key={r.setup}
-              className={styles.chartRow}
-              data-premium={r.premium ? "true" : undefined}
-            >
-              <span className={styles.chartName}>
-                {r.name}, {levelLabel(r.level)}
-                {r.premium || short ? (
-                  <small>
-                    {[r.premium ? "premium" : "", short ? `ran ${r.tasks_run} of ${chart.tasks} tasks` : ""]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </small>
-                ) : null}
-              </span>
-              <span className={styles.chartTrack}>
-                <span
-                  className={`${styles.chartFill} ${r.premium ? styles.chartFillPremium : ""}`}
-                  style={{ width: `calc(${width.toFixed(1)}% * 0.8)` }}
-                  aria-hidden="true"
-                />
-                <span className={styles.chartCost}>
-                  <span className="sr-only">Cost: </span>
-                  {r.cost}
-                </span>
-              </span>
-              <span className={styles.chartScore}>
-                <span className="sr-only">Average score: </span>
-                {r.score}
-              </span>
-            </li>
-          )
-        })}
-      </ol>
-      <p className={styles.chartNote}>
-        Each bar shows the total cost of the tasks that set-up ran, using each company&apos;s
-        published prices for developer access (API), converted at 75p to the dollar.{" "}
-        {shortRunsSentence(chart)}{" "}
-        {chart.rows.some((r) => r.premium)
-          ? "Rows marked premium are Claude Fable and GPT-6 Astra, which we show for their cost and leave out of our picks. "
-          : ""}
-        The number on the right is the average of its six lab scores, out of 100. Each completed test was run
-        once, so small score differences may change on another run. App subscriptions are charged
-        separately.
-      </p>
-    </figure>
-  )
-}
+export { CostChart, shortRunsSentence } from "./cost-chart"
 
 /**
  * The Model Lab index at /labs (David, 2026-10-21, option A), PAPER-FIRST
@@ -244,7 +159,7 @@ export function LabsFde({ index }: LabsFdeProps) {
       {index.cost_chart.rows.length ? (
         <section className={styles.section} data-section="cost-chart">
           <div className={styles.page}>
-            <CostChart chart={index.cost_chart} />
+            <CostChartView chart={index.cost_chart} />
           </div>
         </section>
       ) : null}

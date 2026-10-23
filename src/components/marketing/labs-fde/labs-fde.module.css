@@ -467,17 +467,112 @@
   min-width: 0;
 }
 
+/* Colour by company (David, 2026-10-23, option C), with a key above the chart. Each colour clears 3:1
+   on the page ground and on the card in both modes; the company is also in the model's name, and
+   "premium" is a word under the name, so colour is never the only signal. */
+.chart {
+  --maker-anthropic: #b35a24;
+  --maker-openai: #2f6f5e;
+  --maker-google: #3a6bb3;
+  --maker-other: #838884;
+}
+
+:global(.dark) .chart {
+  --maker-anthropic: #e39a6a;
+  --maker-openai: #8fd3b6;
+  --maker-google: #9dbdf0;
+  --maker-other: #7c8782;
+}
+
+.chartFill,
+.chartSwatch {
+  background: var(--maker-other);
+}
+
+.chartFill[data-maker="anthropic"],
+.chartSwatch[data-maker="anthropic"] {
+  background: var(--maker-anthropic);
+}
+
+.chartFill[data-maker="openai"],
+.chartSwatch[data-maker="openai"] {
+  background: var(--maker-openai);
+}
+
+.chartFill[data-maker="google"],
+.chartSwatch[data-maker="google"] {
+  background: var(--maker-google);
+}
+
 .chartFill {
   display: block;
   flex: none;
   height: 1.25rem;
   min-width: 3px;
   border-radius: 4px;
-  background: var(--v-accent);
 }
 
-.chartFillPremium {
-  background: var(--v-error-line);
+.chartTools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.chartSort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fde-body-sm);
+  color: var(--v-muted);
+}
+
+.chartSort button {
+  font: inherit;
+  color: var(--v-ink);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: 8px;
+  padding: 0.3rem 0.85rem;
+  cursor: pointer;
+}
+
+.chartSort button[aria-pressed="true"] {
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border-color: var(--v-btn);
+  font-weight: 600;
+}
+
+.chartSort button:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+.chartKey {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  font-size: var(--fde-body-sm);
+  color: var(--v-ink);
+}
+
+.chartKey li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chartSwatch {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 3px;
 }
 
 .chartCost {

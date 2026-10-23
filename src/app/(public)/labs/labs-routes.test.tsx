@@ -73,12 +73,14 @@ describe("/labs/[slug]", () => {
     }
   })
 
-  it("says Fable skipped the flipchart photos in the Data lab only", async () => {
-    render(await LabDetailPage(params("data")))
-    expect(screen.getByTestId("lab-premium").textContent).toMatch(/Claude Fable on four\. We added the flipchart photos later/)
-    cleanup()
-    render(await LabDetailPage(params("thinking")))
-    expect(screen.getByTestId("lab-premium").textContent).not.toMatch(/flipchart photos/)
+  it("says how many tasks each premium model ran only when one skipped a task", async () => {
+    // Fable ran the flipchart photos on 23 Oct, so every lab now opens with "We tested both on every task"
+    for (const sp of ["data", "thinking"]) {
+      render(await LabDetailPage(params(sp)))
+      expect(screen.getByTestId("lab-premium").textContent).toMatch(/We tested both on every task in this lab/)
+      expect(screen.getByTestId("lab-premium").textContent).not.toMatch(/added the flipchart photos later/)
+      cleanup()
+    }
   })
 
   it("is a 404 for any other slug, the old Arena and practise labs included", async () => {

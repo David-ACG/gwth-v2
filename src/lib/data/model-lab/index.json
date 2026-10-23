@@ -143,7 +143,7 @@
    "count": 40,
    "tasks": 5,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-10-23"
   },
   {
    "sp": "automation",
@@ -176,7 +176,7 @@
   }
  ],
  "tested_from": "2026-10-02",
- "tested_to": "2026-10-21",
+ "tested_to": "2026-10-23",
  "model_count": 23,
  "setup_count": 40,
  "p_per_usd": 75,
@@ -189,10 +189,10 @@
     "level": "max",
     "maker": "Anthropic",
     "premium": true,
-    "cost_gbp": 85.4623,
-    "cost": "£85.46",
+    "cost_gbp": 86.5676,
+    "cost": "£86.57",
     "score": 94,
-    "tasks_run": 24
+    "tasks_run": 25
    },
    {
     "setup": "opus-5.5_max",
@@ -222,10 +222,10 @@
     "level": "high",
     "maker": "Anthropic",
     "premium": true,
-    "cost_gbp": 33.3407,
-    "cost": "£33.34",
+    "cost_gbp": 33.797,
+    "cost": "£33.80",
     "score": 93,
-    "tasks_run": 24
+    "tasks_run": 25
    },
    {
     "setup": "opus-5.5_xhigh",

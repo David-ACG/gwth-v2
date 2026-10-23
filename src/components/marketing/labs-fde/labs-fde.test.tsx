@@ -1,5 +1,5 @@
 import { aboutCost } from "@/lib/model-lab-format"
-import { render, screen, cleanup, within } from "@testing-library/react"
+import { render, screen, cleanup, within, fireEvent } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import { CostChart, shortRunsSentence, LabsFde } from "./labs-fde"
 import { getModelLabIndex } from "@/lib/data/model-lab"
@@ -77,7 +77,7 @@ describe("CostChart", () => {
   it("draws every set-up in the export, dearest first", () => {
     renderIndex()
     const chart = screen.getByTestId("labs-cost-chart")
-    const rows = within(chart).getAllByRole("listitem")
+    const rows = within(chart.querySelector("ol")!).getAllByRole("listitem")
     expect(rows).toHaveLength(index.cost_chart.rows.length)
     expect(rows.length).toBeGreaterThan(30)
     const costs = index.cost_chart.rows.map((r) => r.cost_gbp)
@@ -102,7 +102,7 @@ describe("CostChart", () => {
     )
   })
 
-  it("marks a premium set-up with the word as well as the colour", () => {
+  it("marks a premium set-up with the word premium under its name", () => {
     renderIndex()
     const chart = screen.getByTestId("labs-cost-chart")
     const premium = within(chart)
@@ -124,7 +124,7 @@ describe("CostChart", () => {
       ],
     }
     render(<CostChart chart={chart} />)
-    const [fable, astra, luna] = screen.getAllByRole("listitem")
+    const [fable, astra, luna] = within(document.querySelector("ol")!).getAllByRole("listitem")
     expect(fable!.textContent).toMatch(/premium · ran 24 of 25 tasks/)
     expect(astra!.textContent).toMatch(/premium/)
     expect(astra!.textContent).not.toMatch(/ran \d+ of/)
@@ -156,5 +156,36 @@ describe("CostChart", () => {
         ],
       }),
     ).toBe("Claude Fable 5.1 ran 24 of the 25 tasks; the other set-ups ran all 25.")
+  })
+})
+
+describe("CostChart sort and colours (David, 2026-10-23)", () => {
+  const row = { level: "medium", premium: false, tasks_run: 25 }
+  const chart: ModelLabCostChart = {
+    tasks: 25,
+    rows: [
+      { ...row, setup: "a", name: "Claude Opus 5.5", maker: "Anthropic", cost_gbp: 10, cost: "£10.00", score: 92 },
+      { ...row, setup: "b", name: "GPT-6.1 Sol", maker: "OpenAI", cost_gbp: 2, cost: "£2.00", score: 94 },
+      { ...row, setup: "c", name: "Kimi K3", maker: "Moonshot AI", cost_gbp: 5, cost: "£5.00", score: 94 },
+      { ...row, setup: "d", name: "GPT-6 Astra", maker: "OpenAI", premium: true, cost_gbp: 20, cost: "£20.00", score: 93 },
+    ],
+  }
+  const names = () => screen.getAllByRole("listitem").filter((li) => li.closest("ol")).map((li) => li.textContent?.split(",")[0])
+
+  it("sorts by cost first, then by score with the cheaper of two equal scores first", () => {
+    render(<CostChart chart={chart} />)
+    expect(names()).toEqual(["GPT-6 Astra", "Claude Opus 5.5", "Kimi K3", "GPT-6.1 Sol"])
+    const score = screen.getByRole("button", { name: "Score" })
+    fireEvent.click(score)
+    expect(score).toHaveAttribute("aria-pressed", "true")
+    expect(names()).toEqual(["GPT-6.1 Sol", "Kimi K3", "GPT-6 Astra", "Claude Opus 5.5"])
+  })
+
+  it("colours each bar by company, with a key, and other makers share one colour", () => {
+    render(<CostChart chart={chart} />)
+    const key = screen.getByRole("list", { name: "Bar colours" })
+    expect(key.textContent).toMatch(/Anthropic \(Claude\).*OpenAI \(GPT\).*Google \(Gemini\).*Other makers/)
+    const fills = [...document.querySelectorAll("ol [data-maker]")].map((e) => e.getAttribute("data-maker"))
+    expect(fills).toEqual(["openai", "anthropic", "other", "openai"])
   })
 })
