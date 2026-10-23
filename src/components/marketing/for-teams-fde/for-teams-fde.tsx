@@ -68,7 +68,7 @@ const WHY_GWTH = [
     // walkthrough as carefully as beginners".
     title: "Try it yourself first, then we work through it",
     description:
-      "Every lesson builds towards a piece of work your team can relate to their own jobs, and nobody is left staring at a blank screen: people attempt the project themselves, then the lesson works through it step by step. Anyone who already works with AI can build it their own way and dip into the worked solution only where they want it.",
+      "Every lesson builds towards a piece of work your team can relate to their own jobs. Nobody is left staring at a blank screen: people attempt the project themselves, then the lesson works through it step by step. Anyone who already works with AI can build it their own way and dip into the worked solution only where they want it.",
   },
   {
     // a-20260914-200357-6dddb2: "This is good, but again, I don't want people
@@ -695,12 +695,8 @@ export function ForTeamsFde({
               </p>
             </article>
           </div>
-          <p className={styles.compareNote}>
-            If people take lessons during working hours, you are paying for
-            their time as well as for the course. That is why each lesson is
-            built around a piece of work rather than around a video to sit
-            through.
-          </p>
+          {/* Copy gate 23 Oct 18:27 (David: "apply the copy check's rewrites"): the closing note
+              repeated the heading and the card above, so the section now ends on the card. */}
         </div>
       </section>
 

@@ -248,7 +248,7 @@ describe("What the old About page brought", () => {
       /£69 once for the whole three-month course, for yourself or as a gift, if you buy between 1 December 2026 and 6 January 2027/
     )
     const fields = (container.querySelector('[data-reason="optional-lessons"]')?.textContent ?? "")
-    expect(fields).toMatch(/Months 2 and 3, which open around 1 January 2027 and 1 February 2027/)
+    expect(fields).toMatch(/Month 2 around 1 January 2027 and Month 3 around 1 February 2027/)
     expect(fields).not.toMatch(/being written now|today/)
   })
 
