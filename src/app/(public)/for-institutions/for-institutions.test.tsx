@@ -14,7 +14,9 @@ describe("ForInstitutionsPage", () => {
     render(<ForInstitutionsPage />)
     const h1 = screen.getByRole("heading", { level: 1 })
     expect(h1.textContent).toMatch(/specialist courses/i)
-    expect(h1.textContent).toMatch(/level they were written for/i)
+    // David, 2026-10-23, option A (was "at the level they were written for").
+    expect(h1.textContent).toMatch(/with the whole class on the same footing/i)
+    expect(document.body.textContent).not.toMatch(/level they were written for/i)
   })
 
   /**
