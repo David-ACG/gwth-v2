@@ -499,7 +499,9 @@ export function WhyGwthFde({
               </tbody>
             </table>
 
-            <div className={styles.compStack}>
+            {/* The phone layout of the table above (CSS shows one or the other). data-copy-duplicate
+                tells the copy gate it has already read these words (23 Oct 2026). */}
+            <div className={styles.compStack} data-copy-duplicate="phone layout of the Side by side table">
               {COMPARISON_ROWS.map((row) => (
                 <div key={row.dimension} className={styles.compStackRow}>
                   <h4>{row.dimension}</h4>
