@@ -192,8 +192,10 @@ const MONTHS = [
     lessons: lessonCount(1),
     // "Six practical superpowers" went on 2026-10-21: the reviewer read it as
     // hype, and config had already retired "the six primitives" as jargon.
+    // Copy gate, 2026-10-23: the first automation is designed on paper (as
+    // the home page and this page's FAQ say), so it is "a plan for" one.
     description:
-      "Hands-on from the first lesson. Your team practises using AI to finish real pieces of work: a research brief with sources they have checked, a first working dashboard, an automation that removes a weekly chore, and an assistant that turns a voice note into tasks. Each lesson has a project to complete.",
+      "Hands-on from the first lesson. Your team practises using AI to finish real pieces of work: a research brief with sources they have checked, a first working dashboard, a plan for an automation that removes a weekly chore, and an assistant that turns a voice note into tasks. Each lesson has a project to complete.",
   },
   {
     month: 2,
