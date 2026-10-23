@@ -128,8 +128,14 @@ const PATHS = [
 ] as const
 
 /**
- * What the score is worked out from, as three plain lines beside the
- * explanation. David, 2026-09-14 (a-20260914-204708-9f6b63): *"We haven't
+ * What the score is worked out from, as four plain lines beside the
+ * explanation. Bible `gwth-score-inputs` (David, 2026-10-23): the score counts
+ * finished lessons, the end-of-lesson questions AND the marks for each month's
+ * major project ("people are not going to take this seriously if we don't
+ * actually mark projects"). Project marking is not built yet (bead
+ * gwth-launch-9289), so the section is in the future tense and states no
+ * weighting and no marker.
+ * David, 2026-09-14 (a-20260914-204708-9f6b63): *"We haven't
  * talked at all about dynamic scoring or the certificate that you can display
  * on LinkedIn. These are real selling points. So I want to make it front and
  * center"*. The note says "about page"; the annotation was captured on
@@ -164,6 +170,10 @@ const SCORE_INPUTS = [
   {
     title: "The questions at the end of each one",
     body: "Your answers are marked automatically, so you can see what to go back over.",
+  },
+  {
+    title: "Your monthly projects",
+    body: "Each month you build a major project. It will be marked, and the mark will count toward your score.",
   },
   {
     title: "Nothing else",
@@ -435,21 +445,23 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              Your score, and <em>how it is worked out.</em>
+              Your score, and <em>how it will be worked out.</em>
             </h2>
           </div>
           <div className={styles.scoreGrid}>
             <div className={styles.scoreBody}>
               <p data-testid="score-beta-note">
-                The course does not show a GWTH score yet. This is how it is
-                worked out.
+                The course does not show a GWTH score yet. When it does, this is
+                how it will be worked out.
               </p>
               <p data-testid="score-lead">
                 Finishing a lesson is not the same as being able to do what it
-                taught, so every lesson ends with a few questions. Your GWTH
-                score is worked out from the lessons you have finished and how
-                you did on those questions. It counts what you did, not how long
-                you were signed in.
+                taught. So every lesson ends with a few questions, and each
+                month you build a major project that will be marked. Your GWTH
+                score will be worked out from the lessons you have finished, how
+                you did on those questions and the marks for your monthly
+                projects. It counts what you did, not how long you were signed
+                in.
               </p>
               <p data-testid="score-denominator">
                 The score is measured against the lessons you were given, so two

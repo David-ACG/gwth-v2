@@ -570,3 +570,38 @@ describe("the copy gate's corrections stay corrected", () => {
     expect(text()).not.toMatch(/delivery rail/i)
   })
 })
+
+describe("bible gwth-score-inputs: the score counts the marked monthly projects", () => {
+  // David, 2026-10-23: "we also want to work it out on the major projects, and
+  // that contributes to the score. Otherwise, people are not going to take
+  // this seriously if we don't actually mark projects." Every explanation of
+  // the score names lessons, questions and project marks. Marking is not built
+  // (bead gwth-launch-9289), so /lessons is in the future tense and names no
+  // weighting or marker.
+  it("/lessons names all three, in the future tense", () => {
+    cleanup()
+    render(<LessonsFde />)
+    const lead = screen.getByTestId("score-lead").textContent ?? ""
+    expect(lead).toMatch(/lessons you have finished/i)
+    expect(lead).toMatch(/questions/i)
+    expect(lead).toMatch(/marks for your monthly projects/i)
+    expect(lead).toMatch(/will be worked out/i)
+    const inputs = screen.getAllByTestId("score-inputs")[0]!.textContent ?? ""
+    expect(inputs).toMatch(/Your monthly projects/)
+    expect(inputs).toMatch(/will count toward your score/i)
+    expect(lead + inputs).not.toMatch(/per ?cent|%|half|tutors? mark|AI marks/i)
+  })
+
+  it("the home page and For teams name the project marks when the score is on", () => {
+    cleanup()
+    render(<HomeFde showScore />)
+    expect(screen.getByTestId("score-lead").textContent ?? "").toMatch(
+      /marks for your monthly projects/i
+    )
+    cleanup()
+    render(<ForTeamsFde showScore />)
+    expect(document.body.textContent ?? "").toMatch(
+      /marks for their monthly projects/i
+    )
+  })
+})
