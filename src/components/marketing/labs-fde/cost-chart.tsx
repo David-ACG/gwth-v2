@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import type { ModelLabCostChart } from "@/lib/types"
-import { levelLabel } from "@/lib/model-lab-format"
+import { countWord, levelLabel } from "@/lib/model-lab-format"
 import styles from "./labs-fde.module.css"
 
 /** The makers with their own bar colour (David, 2026-10-23: option C, colour by company). */
@@ -29,12 +29,13 @@ export function sortRows(rows: ModelLabCostChart["rows"], sort: ChartSort): Mode
  * "Every set-up ran all 25 tasks." when none ran fewer (premium set-ups can skip a task added later). */
 export function shortRunsSentence(chart: ModelLabCostChart): string {
   const short = [...new Set(chart.rows.filter((r) => r.tasks_run < chart.tasks).map((r) => `${r.name}|${r.tasks_run}`))]
-  if (!short.length) return `Every set-up ran all ${chart.tasks} tasks.`
+  const all = countWord(chart.tasks)
+  if (!short.length) return `Every set-up ran all ${all} tasks.`
   const parts = short.map((k) => {
     const [name, n] = k.split("|")
-    return `${name} ran ${n} of the ${chart.tasks} tasks`
+    return `${name} ran ${countWord(Number(n))} of the ${all} tasks`
   })
-  return `${parts.join("; ")}; the other set-ups ran all ${chart.tasks}.`
+  return `${parts.join("; ")}; the other set-ups ran all ${all}.`
 }
 
 /**
@@ -45,7 +46,14 @@ export function shortRunsSentence(chart: ModelLabCostChart): string {
  * the score?"; then "Please default to score instead of cost sorting"). An ordered list whose rows read as "name, cost, score" to a screen reader; the bars
  * are decoration over the printed figure.
  */
-export function CostChart({ chart }: { chart: ModelLabCostChart }) {
+export function CostChart({
+  chart,
+  scope = "all",
+}: {
+  chart: ModelLabCostChart
+  /** "all": the /labs chart over every lab; "lab": one lab's tasks only (David, 2026-10-23). */
+  scope?: "all" | "lab"
+}) {
   const [sort, setSort] = useState<ChartSort>("score")  // David 23 Oct: "default to score"
   const rows = useMemo(() => sortRows(chart.rows, sort), [chart.rows, sort])
   const max = Math.max(...chart.rows.map((r) => r.cost_gbp), 0)
@@ -53,7 +61,9 @@ export function CostChart({ chart }: { chart: ModelLabCostChart }) {
     <figure className={styles.chart} data-testid="labs-cost-chart">
       <figcaption>
         <h2 className={styles.sectionTitle} id="h-cost">
-          Test costs and average scores across {chart.tasks} tasks
+          {scope === "lab"
+            ? `Test costs and average scores across this lab's ${countWord(chart.tasks)} tasks`
+            : `Test costs and average scores across ${chart.tasks} tasks`}
         </h2>
       </figcaption>
       <div className={styles.chartTools}>
@@ -131,7 +141,10 @@ export function CostChart({ chart }: { chart: ModelLabCostChart }) {
         {chart.rows.some((r) => r.premium)
           ? "Rows marked premium are Claude Fable and GPT-6 Astra, which we show for their cost and leave out of our picks. "
           : ""}
-        The number on the right is the average of its six lab scores, out of 100. Each completed
+        {scope === "lab"
+          ? "The number on the right is its average score on this lab's tasks, out of 100."
+          : "The number on the right is the average of its six lab scores, out of 100."}{" "}
+        Each completed
         test was run once, so small score differences may change on another run. App
         subscriptions are charged separately.
       </p>

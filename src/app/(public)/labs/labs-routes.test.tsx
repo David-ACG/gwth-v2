@@ -83,6 +83,16 @@ describe("/labs/[slug]", () => {
     }
   })
 
+  it("draws this lab's cost and score chart, sorted by score, above the table (David, 2026-10-23)", async () => {
+    render(await LabDetailPage(params("thinking")))
+    const chart = screen.getByTestId("labs-cost-chart")
+    expect(within(chart).getByRole("heading").textContent).toBe("Test costs and average scores across this lab's four tasks")
+    expect(chart.textContent).toMatch(/its average score on this lab's tasks, out of 100/)
+    const lab = getModelLab("thinking")!
+    expect(within(chart.querySelector("ol")!).getAllByRole("listitem")).toHaveLength(lab.chart.rows.length)
+    expect(within(chart).getByRole("button", { name: "Score" })).toHaveAttribute("aria-pressed", "true")
+  })
+
   it("is a 404 for any other slug, the old Arena and practise labs included", async () => {
     for (const slug of ["job-advert-claude-vs-chatgpt", "build-mcp-server", "nope"]) {
       await expect(LabDetailPage(params(slug))).rejects.toThrow("NEXT_NOT_FOUND")

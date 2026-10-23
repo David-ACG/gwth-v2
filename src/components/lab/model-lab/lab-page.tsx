@@ -11,6 +11,7 @@ import {
 import { renderAnswerMarkdown } from "@/lib/model-lab-markdown"
 import { SetupRow } from "./setup-row"
 import { WhichWouldYouUse, type ClientAnswerFile } from "./which-would-you-use"
+import { CostChart } from "@/components/marketing/labs-fde/cost-chart"
 import styles from "./model-lab.module.css"
 
 /** Props for {@link ModelLabPage}. */
@@ -184,6 +185,12 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
           </details>
           <WhichWouldYouUse answers={answers} />
         </section>
+
+        {lab.chart?.rows.length ? (
+          <section className={styles.section} aria-labelledby="h-cost">
+            <CostChart chart={lab.chart} scope="lab" />
+          </section>
+        ) : null}
 
         <section className={styles.section} aria-labelledby="h-all">
           <h2 id="h-all">Every set-up we tested</h2>
