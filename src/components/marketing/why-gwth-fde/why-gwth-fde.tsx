@@ -148,7 +148,7 @@ const REASONS: readonly Reason[] = [
       // The price is stated once, simply, with no sums or totals (David,
       // why-gwth round 1, D s5 and E s7). The course never really ends
       // because it is always updated (E s3).
-      `From ${OFFER.opensOn}, course access is ${gbp(COURSE_MONTHLY_PRICE)} a month, paid monthly, and you can stop at any time. After your first three months the course doesn't end, because we keep updating it, and you can stay current for ${gbp(ONGOING_MONTHLY_PRICE)} a month.`,
+      `From ${OFFER.opensOn}, course access is ${gbp(COURSE_MONTHLY_PRICE)} a month, paid monthly, and you can stop at any time. After your first three months the course doesn't end, because we keep updating it: your subscription continues at ${gbp(ONGOING_MONTHLY_PRICE)} a month unless you cancel.`,
       // The pay-once offer beside the monthly price (launch readiness,
       // 2026-10-20). No full price or total is printed: David, why-gwth round
       // 1, "We don't need to know how much three times twenty nine is."

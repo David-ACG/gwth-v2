@@ -384,7 +384,6 @@ const TEAM_PRICE_FEATURES = [
 const SYLLABUS_BULLETS = [
   `${TOTAL_MANDATORY_LESSONS} core lessons cover the AI skills everyone needs, and they are the same for every learner`,
   "A further set of optional lessons covers industry-specific and advanced topics, and it grows as new lessons are published",
-  "Each month's optional lessons open with it, and each person chooses which to take",
   "Each person has their own account and their own progress page",
 ]
 
