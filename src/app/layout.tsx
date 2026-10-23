@@ -36,6 +36,12 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 })
 
+/**
+ * Cache-busting stamp for the favicon, app icon and manifest URLs. Change it
+ * whenever a file in public/ that those URLs point at is redrawn.
+ */
+const FAVICON_VERSION = "20261021"
+
 export const metadata: Metadata = {
   title: {
     default: "GWTH.ai | Applied AI Course for the UK",
@@ -68,15 +74,22 @@ export const metadata: Metadata = {
   // its own, no tile"). icon.svg switches ink/paper with the browser's colour
   // scheme; the PNG and ICO fallbacks are the light version, and the phone and
   // app icons sit on paper because those platforms fill transparency black.
+  // The ?v= stamp makes browsers drop the old tiled G they cached under the
+  // same file names (David, 2026-10-23 phone test: "Favicon is the old version
+  // of the Favicon"). Bump FAVICON_VERSION whenever the icon files change.
   icons: {
     icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.ico", sizes: "any" },
+      { url: `/icon.svg?v=${FAVICON_VERSION}`, type: "image/svg+xml" },
+      {
+        url: `/favicon-32x32.png?v=${FAVICON_VERSION}`,
+        sizes: "32x32",
+        type: "image/png",
+      },
+      { url: `/favicon.ico?v=${FAVICON_VERSION}`, sizes: "any" },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: `/apple-touch-icon.png?v=${FAVICON_VERSION}`,
   },
-  manifest: "/site.webmanifest",
+  manifest: `/site.webmanifest?v=${FAVICON_VERSION}`,
 }
 
 export default function RootLayout({
