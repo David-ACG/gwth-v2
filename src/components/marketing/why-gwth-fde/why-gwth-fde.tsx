@@ -121,7 +121,9 @@ const REASONS: readonly Reason[] = [
       // HR, marketing and sales are optional Month 2 lessons in the syllabus
       // (facts sheet, re-counted 2026-10-20).
       `Everyone wants something different from AI, so alongside the core course there are lots of optional lessons, most of them in Months 2 and 3, which open around ${LATER_MONTHS_OPEN.month2} and ${LATER_MONTHS_OPEN.month3}. You can focus on AI in your own field: finance, medicine, law, logistics, human resources (HR), marketing or sales. You can go further with local AI, which runs on your own computer, with advanced AI-assisted coding, or with hardware that uses AI. Or you can take the lessons for AI transformation experts, who help a business, your own or someone else's, choose AI tools and start using them well.`,
-      "Shaping a course around one person is usually what people pay for with bespoke training. With GWTH, you do that yourself by choosing the optional lessons that match your work.",
+      // Copy gate, 2026-10-23: the comparison with bespoke training was
+      // unsupported; the sentence now says only what the learner does.
+      "You decide which optional lessons to take, so the course fits the work you do.",
     ],
   },
   {

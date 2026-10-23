@@ -212,7 +212,7 @@ const MONTHS = [
     // maturity", "multi-agent orchestration", "red teaming") is explained
     // where it is used (launch readiness review, 2026-10-21).
     description:
-      "One shared core, then each person picks a direction. Everyone learns to assess how an organisation uses AI today, cost the work and lead the change. You then choose between leading AI across an organisation and building more complex tools. The leadership lessons cover setting the rules for using AI, reporting to the board and helping staff take it up. The building lessons cover several AI assistants working together on one job, AI models run on your own hardware, and red teaming, which means testing a system for weaknesses before anyone relies on it.",
+      "One shared core, then each person picks a direction. Everyone learns to assess how an organisation uses AI today, cost the work and lead the change. Then each person can take optional lessons on leading AI across an organisation, on building more complex tools, or both. The leadership lessons cover setting the rules for using AI, reporting to the board and helping staff take it up. The building lessons cover several AI assistants working together on one job, AI models run on your own hardware, and red teaming, which means testing a system for weaknesses before anyone relies on it.",
   },
 ]
 
