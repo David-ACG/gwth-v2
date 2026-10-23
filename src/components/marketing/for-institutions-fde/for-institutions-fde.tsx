@@ -272,7 +272,7 @@ const FAQS = [
     // Refined 2026-09-17 (a-20260917-145147-bfd191): the subject lessons teach
     // AI use INSIDE a profession's rules, not the profession.
     q: "Does it teach our profession?",
-    a: "No, and it is not meant to. The subject lessons teach people how to use AI within the rules their work already follows. Your own courses keep the professional depth, and can start at the level they were written for.",
+    a: "No, and it is not meant to. The subject lessons teach people how to use AI within the rules their work already follows. Your own courses keep the professional depth, and can start with the whole class on the same footing.",
   },
   {
     q: "Can our members skip the parts that are not for them?",
@@ -313,8 +313,11 @@ export function ForInstitutionsFde() {
         <div className={p.page}>
           <div className={styles.mastheadGrid}>
             <h1 className={styles.mastheadTitle}>
+              {/* David, 2026-10-23, option A. "At the level they were
+                  written for" promised a readiness the baseline section
+                  disclaims (copy gate 23 Oct 18:19). */}
               Start your specialist courses{" "}
-              <em>at the level they were written for</em>.
+              <em>with the whole class on the same footing</em>.
             </h1>
             <div>
               <p className={p.standfirst}>
