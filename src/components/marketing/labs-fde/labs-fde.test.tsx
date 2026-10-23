@@ -2,6 +2,7 @@ import { aboutCost } from "@/lib/model-lab-format"
 import { render, screen, cleanup, within, fireEvent } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import { CostChart, shortRunsSentence, LabsFde } from "./labs-fde"
+import { sortRows } from "./cost-chart"
 import { getModelLabIndex } from "@/lib/data/model-lab"
 import type { ModelLabCostChart } from "@/lib/types"
 
@@ -74,16 +75,17 @@ describe("LabsFde, the six labs", () => {
 })
 
 describe("CostChart", () => {
-  it("draws every set-up in the export, dearest first", () => {
+  it("draws every set-up in the export, highest score first", () => {
     renderIndex()
     const chart = screen.getByTestId("labs-cost-chart")
     const rows = within(chart.querySelector("ol")!).getAllByRole("listitem")
     expect(rows).toHaveLength(index.cost_chart.rows.length)
     expect(rows.length).toBeGreaterThan(30)
-    const costs = index.cost_chart.rows.map((r) => r.cost_gbp)
-    expect([...costs].sort((a, b) => b - a)).toEqual(costs)
+    const ordered = sortRows(index.cost_chart.rows, "score")
+    const scores = ordered.map((r) => r.score)
+    expect([...scores].sort((a, b) => b - a)).toEqual(scores)
     rows.forEach((row, i) => {
-      const r = index.cost_chart.rows[i]!
+      const r = ordered[i]!
       expect(row.textContent).toContain(r.name)
       expect(row.textContent).toContain(r.cost)
       expect(row.textContent).toContain(String(r.score))
@@ -124,7 +126,9 @@ describe("CostChart", () => {
       ],
     }
     render(<CostChart chart={chart} />)
-    const [fable, astra, luna] = within(document.querySelector("ol")!).getAllByRole("listitem")
+    const items = within(document.querySelector("ol")!).getAllByRole("listitem")
+    const pick = (name: string) => items.find((li) => li.textContent?.startsWith(name))
+    const [fable, astra, luna] = [pick("Claude Fable"), pick("GPT-6 Astra"), pick("GPT-6 Luna")]
     expect(fable!.textContent).toMatch(/premium · ran 24 of 25 tasks/)
     expect(astra!.textContent).toMatch(/premium/)
     expect(astra!.textContent).not.toMatch(/ran \d+ of/)
@@ -172,13 +176,14 @@ describe("CostChart sort and colours (David, 2026-10-23)", () => {
   }
   const names = () => screen.getAllByRole("listitem").filter((li) => li.closest("ol")).map((li) => li.textContent?.split(",")[0])
 
-  it("sorts by cost first, then by score with the cheaper of two equal scores first", () => {
+  it("opens sorted by score, the cheaper of two equal scores first, and switches to cost", () => {
     render(<CostChart chart={chart} />)
-    expect(names()).toEqual(["GPT-6 Astra", "Claude Opus 5.5", "Kimi K3", "GPT-6.1 Sol"])
-    const score = screen.getByRole("button", { name: "Score" })
-    fireEvent.click(score)
-    expect(score).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByRole("button", { name: "Score" })).toHaveAttribute("aria-pressed", "true")
     expect(names()).toEqual(["GPT-6.1 Sol", "Kimi K3", "GPT-6 Astra", "Claude Opus 5.5"])
+    const cost = screen.getByRole("button", { name: "Cost" })
+    fireEvent.click(cost)
+    expect(cost).toHaveAttribute("aria-pressed", "true")
+    expect(names()).toEqual(["GPT-6 Astra", "Claude Opus 5.5", "Kimi K3", "GPT-6.1 Sol"])
   })
 
   it("colours each bar by company, with a key, and other makers share one colour", () => {
@@ -186,6 +191,6 @@ describe("CostChart sort and colours (David, 2026-10-23)", () => {
     const key = screen.getByRole("list", { name: "Bar colours" })
     expect(key.textContent).toMatch(/Anthropic \(Claude\).*OpenAI \(GPT\).*Google \(Gemini\).*Other makers/)
     const fills = [...document.querySelectorAll("ol [data-maker]")].map((e) => e.getAttribute("data-maker"))
-    expect(fills).toEqual(["openai", "anthropic", "other", "openai"])
+    expect(fills).toEqual(["openai", "other", "openai", "anthropic"])  // score order
   })
 })

@@ -37,7 +37,7 @@ async function seriousViolations(page: Page) {
 }
 
 test.describe("Labs index", () => {
-  test("shows the six labs and the cost chart, dearest first", async ({ page }) => {
+  test("shows the six labs and the cost chart, highest score first", async ({ page }) => {
     await page.goto(INDEX)
     const cards = page.locator("main").getByTestId("model-lab-card")
     await expect(cards).toHaveCount(6)

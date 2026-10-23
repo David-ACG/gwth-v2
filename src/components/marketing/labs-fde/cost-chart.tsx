@@ -42,11 +42,11 @@ export function shortRunsSentence(chart: ModelLabCostChart): string {
  * across the six labs beside it (David, 2026-10-21, copied from the Model Lab plan page). Bars are
  * coloured by company with a key above (option C, 2026-10-23); premium set-ups say "premium" under
  * the name. Sorted by cost or by score (David, 2026-10-23: "Can we also add an option to sort it by
- * the score?"). An ordered list whose rows read as "name, cost, score" to a screen reader; the bars
+ * the score?"; then "Please default to score instead of cost sorting"). An ordered list whose rows read as "name, cost, score" to a screen reader; the bars
  * are decoration over the printed figure.
  */
 export function CostChart({ chart }: { chart: ModelLabCostChart }) {
-  const [sort, setSort] = useState<ChartSort>("cost")
+  const [sort, setSort] = useState<ChartSort>("score")  // David 23 Oct: "default to score"
   const rows = useMemo(() => sortRows(chart.rows, sort), [chart.rows, sort])
   const max = Math.max(...chart.rows.map((r) => r.cost_gbp), 0)
   return (
