@@ -834,13 +834,15 @@ export function HomeFde({
           {/* The gate caught two things here on the first run and both were
               right. The opening claimed everything marked feeds the score,
               which contradicted the sentence after it and is not what
-              `calculateGwthScore()` does: marked projects are feedback, and
-              the number comes from finished lessons and the end-of-lesson
-              questions. And a rising score was said to show somebody had kept
+              `calculateGwthScore()` does. Since 2026-10-23 (bible
+              gwth-score-inputs) the marked monthly projects count too; this
+              section only shows once the score is on, which is after
+              project marking exists. And a rising score was said to show somebody had kept
               up, which it cannot show until the update tracking exists. */}
           <p className={styles.scoreLead} data-testid="score-lead">
             Your GWTH score is one number, worked out from the lessons you have
-            finished and how you did on the questions at the end of each one.
+            finished, how you did on the questions at the end of each one and
+            the marks for your monthly projects.
             It is a record of work you have actually done rather than a note
             saying you attended.
           </p>

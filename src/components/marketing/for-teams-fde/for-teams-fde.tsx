@@ -152,7 +152,7 @@ const WHY_GWTH = [
 const SCORE_ITEM = {
   title: "Achievement you can assess and reward",
   description:
-    "Each learner has a dynamic GWTH Score rather than a one-time certificate. It is worked out from the lessons they have finished and how they did on the check questions, so it moves as they work.",
+    "Each learner has a dynamic GWTH Score rather than a one-time certificate. It is worked out from the lessons they have finished, how they did on the check questions and the marks for their monthly projects, so it moves as they work.",
 }
 
 /**
