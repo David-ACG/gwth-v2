@@ -175,6 +175,17 @@ export function LabsFde({ index }: LabsFdeProps) {
             customer support chatbot. In Month 3 you build an AI consultant that interviews people
             and writes a plan for an organisation.
           </p>
+          {/* David, 2026-10-23: "Do we have lessons that show you how to compare models? ... Maybe we
+              should mention that on the labs page." Month 1 Lesson 5 (frontier labs), Month 2's cheaper
+              and open models lesson and Month 3's premium plans lesson; numbers left out because the
+              syllabus can move. Latest Sol checked. */}
+          <p>
+            The course also teaches you to run your own comparison. In Month 1 you give two AI tools
+            the same task in exactly the same words. You compare their answers using four questions,
+            then set up a monthly check to keep your choice up to date as models change. Later lessons
+            show when a cheaper AI model or an open model you can download and run yourself is good
+            enough, and when a premium plan is worth paying for.
+          </p>
           <div className={styles.closingActions}>
             <Link href="/pricing" className={styles.buttonSolid}>
               See the course

@@ -194,3 +194,14 @@ describe("CostChart sort and colours (David, 2026-10-23)", () => {
     expect(fills).toEqual(["openai", "other", "openai", "anthropic"])  // score order
   })
 })
+
+
+describe("Labs closing: the course teaches you to compare models (David, 2026-10-23)", () => {
+  it("says the course teaches your own comparison, without lesson numbers that can move", () => {
+    renderIndex()
+    const body = document.body.textContent ?? ""
+    expect(body).toMatch(/The course also teaches you to run your own comparison/)
+    expect(body).toMatch(/same task in exactly the same words/)
+    expect(body).not.toMatch(/Lesson \d+/)
+  })
+})
