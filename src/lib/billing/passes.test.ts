@@ -195,6 +195,19 @@ describe("sale window and prices", () => {
     expect(w.saleEndsAt).toEqual(d("2027-01-07T00:00:00Z"))
   })
 
+  it("prints the decided date even when the hlab preview opens early", () => {
+    const w = getSaleWindow({ SALES_PREVIEW_OPEN_AT: "2026-10-01T00:00:00Z", STRIPE_REQUIRE_TEST_MODE: "1" })
+    expect(w.salesOpenAt).toEqual(d("2026-10-01T00:00:00Z"))
+    expect(w.announcedOpenAt).toEqual(d("2026-12-01T00:00:00Z"))
+    expect(isSalesOpen(d("2026-10-25T12:00:00Z"), w)).toBe(true)
+  })
+
+  it("ignores the preview's early opening outside Stripe test mode", () => {
+    const w = getSaleWindow({ SALES_PREVIEW_OPEN_AT: "2026-10-01T00:00:00Z" })
+    expect(w.salesOpenAt).toEqual(d("2026-12-01T00:00:00Z"))
+    expect(isSalesOpen(d("2026-10-25T12:00:00Z"), w)).toBe(false)
+  })
+
   it("sells nothing before 1 December", () => {
     expect(isSalesOpen(d("2026-11-30T23:59:59Z"), window)).toBe(false)
     expect(isSalesOpen(d("2026-12-01T00:00:00Z"), window)).toBe(true)

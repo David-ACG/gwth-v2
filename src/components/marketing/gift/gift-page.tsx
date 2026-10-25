@@ -63,7 +63,7 @@ export function GiftPage({ now = new Date() }: { now?: Date }) {
             />
           ) : (
             <div className={styles.notice} data-testid="gift-not-on-sale">
-              <p className={styles.noticeTitle}>{C.notOnSale.title(formatUkDate(window.salesOpenAt))}</p>
+              <p className={styles.noticeTitle}>{C.notOnSale.title(formatUkDate(window.announcedOpenAt))}</p>
               <p className={styles.noticeBody}>{C.notOnSale.body}</p>
             </div>
           )}

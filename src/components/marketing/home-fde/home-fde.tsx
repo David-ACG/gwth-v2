@@ -468,7 +468,7 @@ function launchOffer() {
   const window = getSaleWindow()
   return {
     sale: formatPence(PASS_PRICES_PENCE.courseSale),
-    opensOn: formatUkDate(window.salesOpenAt),
+    opensOn: formatUkDate(window.announcedOpenAt),
     endsOn: formatUkDate(new Date(window.saleEndsAt.getTime() - 1)),
   }
 }

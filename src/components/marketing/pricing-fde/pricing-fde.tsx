@@ -195,7 +195,7 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
   // The £69 words are shown from the GO LIVE release, before sales open, and
   // stay until the sale window closes; only the buttons wait for 1 December.
   const christmas = isChristmasSale(now, window) || !isSalesOpen(now, window)
-  const salesOpenOn = formatUkDate(window.salesOpenAt)
+  const salesOpenOn = formatUkDate(window.announcedOpenAt)
   // Before sales open the band already names the £69 sale price it will sell
   // at; passPrice() alone would give the full price until 1 December.
   const coursePass = formatPence(

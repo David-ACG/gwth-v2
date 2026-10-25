@@ -223,7 +223,7 @@ function coursePrices() {
     sale: formatPence(PASS_PRICES_PENCE.courseSale),
     full: formatPence(PASS_PRICES_PENCE.courseFull),
     month1: formatPence(PASS_PRICES_PENCE.month1),
-    opensOn: formatUkDate(window.salesOpenAt),
+    opensOn: formatUkDate(window.announcedOpenAt),
     // The window ends at midnight; the last day it covers is the day before.
     endsOn: formatUkDate(new Date(window.saleEndsAt.getTime() - 1)),
   }

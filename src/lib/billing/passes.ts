@@ -193,7 +193,13 @@ export function passStatus(
 // Sale window and prices
 // ---------------------------------------------------------------------------
 
-export type SaleWindow = { salesOpenAt: Date; saleEndsAt: Date }
+export type SaleWindow = {
+  /** When selling switches on. The hlab preview may move this earlier. */
+  salesOpenAt: Date
+  saleEndsAt: Date
+  /** The opening date the pages print: always the decided date, never the preview's early switch. */
+  announcedOpenAt: Date
+}
 
 function envDate(raw: string | undefined, fallback: string): Date {
   const parsed = raw ? new Date(raw) : null
@@ -205,13 +211,25 @@ function envDate(raw: string | undefined, fallback: string): Date {
  * monthly sign-up all open together, decisions 3 and 6).
  * CHRISTMAS_SALE_ENDS_AT: from it the whole course is £87 again (decision 9).
  * A malformed value falls back to the decided date rather than opening early.
+ *
+ * SALES_PREVIEW_OPEN_AT (hlab preview only) switches selling on earlier so
+ * David can try a test purchase, without changing the opening date the pages
+ * print (the preview once said "1 October" on five pages, 25 Oct 2026). It is
+ * ignored unless STRIPE_REQUIRE_TEST_MODE is on, so production can never open
+ * early through it.
  */
 export function getSaleWindow(
   env: Record<string, string | undefined> = process.env
 ): SaleWindow {
+  const announcedOpenAt = envDate(env.SALES_OPEN_AT, DEFAULT_SALES_OPEN_AT)
+  const testMode = ["1", "true", "yes"].includes(
+    (env.STRIPE_REQUIRE_TEST_MODE ?? "").trim().toLowerCase()
+  )
+  const preview = testMode ? envDate(env.SALES_PREVIEW_OPEN_AT, announcedOpenAt.toISOString()) : null
   return {
-    salesOpenAt: envDate(env.SALES_OPEN_AT, DEFAULT_SALES_OPEN_AT),
+    salesOpenAt: preview && preview < announcedOpenAt ? preview : announcedOpenAt,
     saleEndsAt: envDate(env.CHRISTMAS_SALE_ENDS_AT, DEFAULT_CHRISTMAS_SALE_ENDS_AT),
+    announcedOpenAt,
   }
 }
 
