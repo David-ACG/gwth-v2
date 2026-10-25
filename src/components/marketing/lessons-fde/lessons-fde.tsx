@@ -2,6 +2,8 @@ import Link from "next/link"
 import { MONTH_CONFIGS, TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 import styles from "./lessons-fde.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
+import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
 
 /**
  * The core-lesson count for one month, read from config. Never type a count
@@ -312,8 +314,8 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               (facts sheet, launch readiness 2026-10-20). Written so it stays
               true on both sides of 1 December. */}
           <p className={styles.optionalNote} data-testid="months-availability">
-            Month 1 is open from 1 December 2026. Month 2 opens around 1 January 2027 and Month
-            3 around 1 February 2027. If you reach a month before it opens,
+            Month 1 is open from {COURSE_OPENS_ON}. Month 2 opens around {LATER_MONTHS_OPEN.month2} and Month
+            3 around {LATER_MONTHS_OPEN.month3}. If you reach a month before it opens,
             your time on the course is paused until it does.
           </p>
         </div>

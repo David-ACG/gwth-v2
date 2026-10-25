@@ -7,6 +7,7 @@ import { ENABLE_BILLING } from "@/lib/config"
 import { isSalesOpen } from "@/lib/billing/passes"
 import { safeNextPath } from "@/lib/safe-next"
 import { PostBetaSignupForm, SignupForm } from "@/components/auth/signup-form"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 /**
  * Sign-up opens to everyone once sales open (decision 6, 2026-10-19: the
@@ -39,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
   return {
     title: "Create your account",
-    description: "Sign-up opens to everyone on 1 December 2026. Join the waitlist to hear when it does.",
+    description: `Sign-up opens to everyone on ${COURSE_OPENS_ON}. Join the waitlist to hear when it does.`,
   }
 }
 

@@ -23,6 +23,7 @@
  * lazy pattern that expires manual_beta grants; there is no job.
  */
 import { randomInt } from "node:crypto"
+import { DEFAULT_SALES_OPEN_AT } from "@/lib/launch-date"
 
 export type PassProduct = "course" | "month1"
 
@@ -42,8 +43,8 @@ export const PASS_PRICES_PENCE = {
   month1: 2900,
 } as const
 
-/** Default sale window (decision 3): sales open 1 Dec, the £69 price ends after 6 Jan (UK). */
-export const DEFAULT_SALES_OPEN_AT = "2026-12-01T00:00:00Z"
+/** Default sale window (decision 3): sales open 1 Dec (lib/launch-date.ts, the one place), the £69 price ends after 6 Jan (UK). */
+export { DEFAULT_SALES_OPEN_AT, formatUkDate, COURSE_OPENS_ON } from "@/lib/launch-date"
 export const DEFAULT_CHRISTMAS_SALE_ENDS_AT = "2027-01-07T00:00:00Z"
 
 /** Decision 4: a gift can be opened up to one year after purchase. */
@@ -396,12 +397,3 @@ export function redeemByFrom(purchasedAt: Date): Date {
   return addMonths(purchasedAt, REDEEM_WINDOW_MONTHS)
 }
 
-/** "25 December 2026", in UK time. */
-export function formatUkDate(date: Date): string {
-  return new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Europe/London",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date)
-}

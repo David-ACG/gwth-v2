@@ -31,6 +31,7 @@ import {
   resolveDeliverAt,
 } from "@/lib/billing/passes"
 import type { PassCheckoutMetadata } from "@/lib/billing/pass-fulfil"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 const deliverySchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("christmas") }),
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
   const now = new Date()
   const window = getSaleWindow()
   if (!isSalesOpen(now, window)) {
-    return refuse("not_on_sale_yet", "Gifts go on sale on 1 December.", 409)
+    return refuse("not_on_sale_yet", `Gifts go on sale on ${COURSE_OPENS_ON}.`, 409)
   }
 
   const body = await request.json().catch(() => null)

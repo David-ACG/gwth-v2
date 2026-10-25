@@ -19,6 +19,7 @@ import {
 import { OAuthButtons, OAuthDivider } from "@/components/auth/oauth-buttons"
 import type { OAuthProviderId } from "@/lib/oauth-providers"
 import styles from "@/components/auth/auth-fde.module.css"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 /**
  * Invite-only beta signup surface in the FDE journal register. Renders the
@@ -34,7 +35,7 @@ export function SignupForm({ oauthProviders = [], next = null }: PostBetaSignupF
       oauthProviders={oauthProviders}
       next={next}
       title="Create your account"
-      subtitle="Sign-up opens to everyone on 1 December 2026."
+      subtitle={`Sign-up opens to everyone on ${COURSE_OPENS_ON}.`}
       notice={
         <>
           If GWTH has invited you already, create your account below with the

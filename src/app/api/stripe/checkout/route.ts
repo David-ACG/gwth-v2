@@ -22,6 +22,7 @@ import {
   siteOrigin,
   type StripePlan,
 } from "@/lib/billing/stripe"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 const checkoutSchema = z.object({
   plan: z.enum(["course", "stay-current"]).default("course"),
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
   }
   if (!isSalesOpen(new Date())) {
     return NextResponse.json(
-      { code: "not_on_sale_yet", error: "The course opens for sign-up on 1 December." },
+      { code: "not_on_sale_yet", error: `The course opens for sign-up on ${COURSE_OPENS_ON}.` },
       { status: 409 }
     )
   }

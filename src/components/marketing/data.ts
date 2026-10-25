@@ -18,6 +18,7 @@ import {
   TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
 import { ukFigure, ukFigureCitation } from "@/lib/data/uk-ai-context"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -406,7 +407,7 @@ export const PRICING: readonly PricingTier[] = [
     // names them. "Starter price may rise later" went: it sat beside "no
     // pretend scarcity" and promised nothing a buyer could use.
     features: [
-      `Month 1 opens on 1 December 2026. Month 2 opens around ${LATER_MONTHS_OPEN.month2} and Month 3 around ${LATER_MONTHS_OPEN.month3}. If you reach a month before it opens, your time is paused until it does.`,
+      `Month 1 opens on ${COURSE_OPENS_ON}. Month 2 opens around ${LATER_MONTHS_OPEN.month2} and Month 3 around ${LATER_MONTHS_OPEN.month3}. If you reach a month before it opens, your time is paused until it does.`,
       `${TOTAL_MANDATORY_LESSONS} core lessons, plus optional lessons for your field`,
       "Projects including the Family AI Bot, the AskMyCo support chatbot and your own AI consultant",
       "Plain course progress tracking",

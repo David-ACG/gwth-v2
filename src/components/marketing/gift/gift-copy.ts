@@ -1,3 +1,5 @@
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
+
 /**
  * Every public word on the gift pages, in reading order, so the copy pass
  * (the latest GPT Sol, per the gwth-public-writing skill) reviews one file.
@@ -18,7 +20,7 @@ export const GIFT_COPY = {
   },
   notOnSale: {
     title: (opensOn: string) => `Gifts go on sale on ${opensOn}`,
-    body: "From 1 December 2026 to 6 January 2027 you can give the whole three-month course for £69, or the first month for £29. After that, the whole course costs £87. If you already have a gift code, you can open it now.",
+    body: `From ${COURSE_OPENS_ON} to 6 January 2027 you can give the whole three-month course for £69, or the first month for £29. After that, the whole course costs £87. If you already have a gift code, you can open it now.`,
   },
   products: {
     legend: "Choose a gift",
