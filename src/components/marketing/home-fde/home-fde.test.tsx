@@ -506,6 +506,8 @@ describe("HomeFde self-service promises match the product", () => {
       "/gift",
       "/for-institutions",
       "/why-gwth",
+      // P2, the line under the hero (video refresh, 2026-10-25).
+      "/why-gwth#up-to-date",
     ])
     for (const selling of [false, true]) {
       cleanup()

@@ -578,6 +578,14 @@ export function HomeFde({
           <div className={p.plateMeta}>
             <p>Three months · About five hours a week · Assessed throughout</p>
           </div>
+          {/* P2, video refresh (Felix Rieseberg's talk, bead gwth-launch-ooc6),
+              approved by David 2026-10-25. Under the hero, not in it: the hero
+              copy was cut to three sentences for phones. */}
+          <p className={styles.updatesLine} data-testid="home-updates-line">
+            AI changes quickly. When the tools change, or the best way to use
+            them changes, we rewrite the lessons.{" "}
+            <Link href="/why-gwth#up-to-date">See what we changed and why</Link>
+          </p>
         </div>
       </section>
 

@@ -386,3 +386,14 @@
   line-height: 1.6;
   color: var(--v-muted);
 }
+
+/* P2: the one line under the hero saying the lessons are rewritten (2026-10-25). */
+.updatesLine {
+  margin: 1rem 0 0;
+  max-width: 62ch;
+  color: var(--v-soft);
+}
+
+.updatesLine a {
+  color: var(--v-accent);
+}

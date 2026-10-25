@@ -53,12 +53,13 @@ function lessonCount(month: 1 | 2 | 3): string {
  */
 const WHY_GWTH = [
   {
-    // Untouched on purpose: annotation a-20260914-200143-635cd6 lands on this
-    // paragraph with the canned action "Keep this, I like it" and no added
-    // free text. The paragraph is therefore preserved unchanged.
+    // Kept on 2026-09-14 (a-20260914-200143-635cd6, "Keep this, I like it").
+    // The first two sentences changed on 2026-10-25 (P3, video refresh, bead
+    // gwth-launch-ooc6, approved by David): "No outdated material" was not
+    // true yet, so it now says what we do when the tools change.
     title: "Zero wasted time",
     description:
-      "No repetition. No filler. No outdated material. Every lesson teaches the newest, most relevant applied AI skills. Your team's time is more valuable than the course, and we treat it that way.",
+      "We keep lessons focused and cut repetition. When the tools change, or the way experts use them changes, we rewrite the lesson. Your team learns what works now, with those changes included. Your team's time is more valuable than the course, and we treat it that way.",
   },
   {
     // a-20260914-200315-d7c25e: "we should make more of the fact that new

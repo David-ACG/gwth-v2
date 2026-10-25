@@ -433,6 +433,12 @@ export function ForInstitutionsFde({ showScore = false }: { showScore?: boolean 
               </article>
             ))}
           </div>
+          {/* After the Microsoft figure: video refresh, bead gwth-launch-ooc6,
+              approved by David 2026-10-25. */}
+          <p className={`${p.lead} ${styles.leadAfter}`} data-testid="institutions-changed-way">
+            GWTH teaches these ways of working, and we rewrite the lessons when
+            the tools, or the best way to use them, change.
+          </p>
           {/* Scoped on the marketing copy gate (2026-10-21): the EU duty
               applies only to organisations the Act covers, so it is not aimed
               at every UK buyer. */}

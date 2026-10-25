@@ -156,7 +156,7 @@ describe("ForTeamsPage", () => {
     render(<ForTeamsPage />)
     expect(screen.getByText("Zero wasted time")).toBeInTheDocument()
     expect(
-      screen.getAllByText(/No repetition/).length
+      screen.getAllByText(/cut repetition/).length
     ).toBeGreaterThanOrEqual(1)
   })
 
@@ -827,16 +827,19 @@ describe("the stated duration and the stated total hours agree", () => {
   })
 })
 
-describe("the canned keep action a-20260914-200143-635cd6 is honoured", () => {
-  // The free-text note is blank, but the selected canned action is meaningful
-  // feedback. Preserve the paragraph exactly as David marked it.
-  it("keeps the zero-wasted-time paragraph unchanged", () => {
+describe("the zero-wasted-time paragraph: kept 2026-09-14, first sentences approved anew 2026-10-25", () => {
+  // a-20260914-200143-635cd6 ("Keep this, I like it") kept the paragraph;
+  // David approved P3 on 2026-10-25 (video refresh, bead gwth-launch-ooc6)
+  // because "No outdated material" was not true yet. The closing sentence he
+  // kept stays.
+  it("says what we do when the tools change, and keeps the closing sentence", () => {
     render(<ForTeamsPage />)
     expect(
       screen.getByText(
-        "No repetition. No filler. No outdated material. Every lesson teaches the newest, most relevant applied AI skills. Your team's time is more valuable than the course, and we treat it that way."
+        "We keep lessons focused and cut repetition. When the tools change, or the way experts use them changes, we rewrite the lesson. Your team learns what works now, with those changes included. Your team's time is more valuable than the course, and we treat it that way."
       )
     ).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/No outdated material/)
   })
 })
 

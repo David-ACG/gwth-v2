@@ -654,10 +654,11 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               cancels an order (ledger C25, bead filed). */}
           <p>
             With monthly payments, you unlock one month at a time and can
-            cancel whenever you like. The price drops after the first three months, so you are
-            never paying course prices out of habit: £{ongoing} a month keeps
-            every lesson current as it changes. If it stops being worth it to
-            you, cancel.
+            cancel whenever you like. The price drops after the first three
+            months, so you are never paying course prices out of habit:
+            £{ongoing} a month pays for ongoing lesson updates. We rewrite
+            lessons when the tools, or the best way to use them, change. If it
+            stops being worth it to you, cancel.
           </p>
           <div className={styles.closingActions}>
             {selling && monthlyCta}

@@ -69,7 +69,8 @@ const FEATURES = [
     // (launch readiness review, 2026-10-20).
     title: "Not tied to one AI company",
     description:
-      "The lessons teach skills that work across AI tools, not tricks for one product, so you can pick the right tool for each job.",
+      // Second sentence: video refresh, bead gwth-launch-ooc6, approved 2026-10-25.
+      "The lessons teach skills that work across AI tools, not tricks for one product, so you can pick the right tool for each job. Tricks that worked on older models are dropped when they stop helping.",
   },
 ]
 

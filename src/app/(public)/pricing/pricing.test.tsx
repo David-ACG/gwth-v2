@@ -400,7 +400,9 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     // The lower price, and what it keeps buying.
     expect(closingText).toMatch(/£7\.50 a month/)
     expect(closingText).toMatch(/first three months/i)
-    expect(closingText).toMatch(/current as it changes|keeps every lesson current/i)
+    // What an update is (video refresh, bead gwth-launch-ooc6, 2026-10-25).
+    expect(closingText).toMatch(/ongoing lesson updates/i)
+    expect(closingText).toMatch(/We rewrite lessons when the tools, or the best way to use them, change/)
     // Cancellation is also visible without scrolling to the closing band.
     expect(screen.getAllByText(/Cancel at any time/i).length).toBeGreaterThan(0)
   })

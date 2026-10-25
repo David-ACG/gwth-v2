@@ -396,6 +396,7 @@ export function WhyGwthFde({
           {REASONS.map((reason) => (
             <div
               key={reason.id}
+              id={reason.id}
               className={styles.reason}
               data-reason={reason.id}
             >
