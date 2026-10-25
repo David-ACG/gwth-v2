@@ -5,6 +5,7 @@ import { MONTH_CONFIGS } from "@/lib/config"
 import {
   BASELINE,
   EVIDENCE,
+  ForInstitutionsFde,
 } from "@/components/marketing/for-institutions-fde/for-institutions-fde"
 
 afterEach(cleanup)
@@ -261,5 +262,22 @@ describe("ForInstitutionsPage", () => {
     expect(text).not.toMatch(/being built|coming soon|next piece of work/i)
     expect(text).not.toMatch(/before the room starts|level(s|ling)? the room/i)
     expect(text).not.toMatch(/FractionalBuddy/)
+  })
+
+  /**
+   * David, 2026-10-25: every learner, institution members included, gets a
+   * score anyone can check, which rises and falls back. The page never denies
+   * it, and describes it only once the score is switched on.
+   */
+  it("never says there are no certificates, and describes the score only when it is on", () => {
+    render(<ForInstitutionsFde />)
+    expect(document.body.textContent).not.toMatch(/does not issue certificates|public record pages/i)
+    expect(document.body.textContent).not.toMatch(/A score anyone can check/)
+    cleanup()
+    render(<ForInstitutionsFde showScore />)
+    const text = document.body.textContent ?? ""
+    expect(text).toMatch(/A score anyone can check/)
+    expect(text).toMatch(/employers included, can check is genuine/)
+    expect(text).toMatch(/falls back if they stop/)
   })
 })

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { ForInstitutionsFde } from "@/components/marketing/for-institutions-fde/for-institutions-fde"
+import { ENABLE_GWTH_SCORE } from "@/lib/config"
 
 export const metadata: Metadata = {
   title: "Practical AI before your specialist courses",
@@ -20,5 +21,5 @@ export const metadata: Metadata = {
  * 2026-10-21 (bead gwth-launch-ajqs.2).
  */
 export default function ForInstitutionsPage() {
-  return <ForInstitutionsFde />
+  return <ForInstitutionsFde showScore={ENABLE_GWTH_SCORE} />
 }

@@ -4,6 +4,7 @@ import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
 import { Plate } from "@/components/marketing/paper/plate"
 import p from "@/components/marketing/paper/paper.module.css"
 import styles from "./for-institutions-fde.module.css"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 /**
  * /for-institutions in the paper-first register (N12, 2026-09-03). The
@@ -38,10 +39,14 @@ import styles from "./for-institutions-fde.module.css"
  * - The learner's own `/progress` page lists completed lessons and best quiz
  *   marks, which is what a member can copy into a CPD log.
  *
- * Gone, because it will not exist on 1 December: the public verification
- * page (`/verify` is a 404 from the launch, `src/lib/public-routes.ts`), the
- * GWTH score (`GWTH_SCORE_ENABLED` is set in no environment and `/score` is a
- * 404), score history, the "after the beta" wording, and the two "Being
+ * Gone on 21 Oct, because it was not switched on: the public verification
+ * page (`/verify` is a 404, `src/lib/public-routes.ts`) and the GWTH score
+ * (`GWTH_SCORE_ENABLED` is set in no environment and `/score` is a 404).
+ * REVERSED by David on 2026-10-25 for the score: every member, like every
+ * learner, gets a public score page anyone can check and share on LinkedIn,
+ * rising as they pass lessons and falling back if they stop (the "A score
+ * anyone can check" card and the "What can a member show" answer). Still
+ * gone: score history, the "after the beta" wording, and the two "Being
  * built" cards. The one current limitation an institution needs, that a pass
  * on an earlier version of a rewritten lesson still counts, is stated as a
  * plain fact in the tutor section, with no promise attached.
@@ -184,6 +189,21 @@ const EDITION = [
     body: "Each lesson we write for your edition waits on your admin screen until your admin approves it, or sends it back with a note. Your members cannot see it until it is approved.",
   },
   {
+    // David, 2026-10-25: "We definitely want all students, whether they're
+    // individuals, from companies or from institutions, to be able to have a
+    // certificate that can be checked on LinkedIn by anyone. The score should
+    // be dynamically updated as students pass more lessons or get left behind
+    // if they stop taking lessons. When I say score, it's equivalent to
+    // certificate." This reverses the 21 Oct "no certificates" line. The
+    // score he describes is not built yet (no public page is issued, it never
+    // falls, /score and /verify are hidden), so this card and the score answer
+    // below show only once GWTH_SCORE_ENABLED is on, and the page never
+    // promises it before it works.
+    needsScore: true,
+    title: "A score anyone can check",
+    body: "Every member gets a GWTH score, a public page that anyone, employers included, can check is genuine. Members can share it on LinkedIn. It goes up as they pass more lessons and falls back if they stop.",
+  },
+  {
     // a-20260914-202509-f3143d: was "CPD ready". Titled by the benefit, and
     // the abbreviation is written out the first time the page uses it.
     title: "Progress your members can log",
@@ -221,7 +241,7 @@ export const DEPTH = [
 
 /** Plain words for each month's opening, true on both sides of 1 December. */
 const MONTH_OPENS: Record<number, string> = {
-  1: "Opens on 1 December 2026",
+  1: `Opens on ${COURSE_OPENS_ON}`,
   2: `Opens around ${LATER_MONTHS_OPEN.month2}`,
   3: `Opens around ${LATER_MONTHS_OPEN.month3}`,
 }
@@ -229,7 +249,7 @@ const MONTH_OPENS: Record<number, string> = {
 const STEPS = [
   {
     title: "Pilot with your own staff",
-    body: "From 1 December 2026, a small group of your staff can try the standard course. Their feedback helps you choose the lessons for your edition.",
+    body: `From ${COURSE_OPENS_ON}, a small group of your staff can try the standard course. Their feedback helps you choose the lessons for your edition.`,
   },
   {
     title: "Set up your edition with us",
@@ -288,7 +308,9 @@ const FAQS = [
   },
   {
     q: "What can a member show for it?",
-    a: "Their progress page lists the lessons they have completed and their best mark on each quiz. GWTH does not issue certificates or public record pages.",
+    a: "Their progress page lists the lessons they have completed and their best mark on each quiz.",
+    scoreA:
+      "A GWTH score, like every GWTH learner. It is a public page that anyone, employers included, can check is genuine, and members can share it on LinkedIn. It goes up as they pass more lessons and falls back if they stop. Their progress page also lists the lessons they have completed and their best mark on each quiz.",
   },
   {
     q: "Who sees the lessons written for us?",
@@ -296,7 +318,7 @@ const FAQS = [
   },
   {
     q: "How quickly can we start?",
-    a: "A pilot group can start on the standard course once it opens on 1 December 2026. We agree the date your edition opens with you, because it depends on the lessons you choose and on any lessons we write for you and your admin approves.",
+    a: `A pilot group can start on the standard course once it opens on ${COURSE_OPENS_ON}. We agree the date your edition opens with you, because it depends on the lessons you choose and on any lessons we write for you and your admin approves.`,
   },
 ] as const
 
@@ -306,7 +328,12 @@ const LAW = {
     "https://www.gov.uk/government/news/free-ai-training-for-all-as-government-and-industry-programme-expands-to-provide-10-million-workers-with-key-ai-skills-by-2030",
 }
 
-export function ForInstitutionsFde() {
+/**
+ * `showScore` is ENABLE_GWTH_SCORE, read by the page: the public score is
+ * described only once it is switched on (David, 2026-10-25).
+ */
+export function ForInstitutionsFde({ showScore = false }: { showScore?: boolean } = {}) {
+  const edition = EDITION.filter((item) => showScore || !("needsScore" in item))
   return (
     <div className={p.shell}>
       <section className={styles.masthead} data-section="masthead">
@@ -439,7 +466,7 @@ export function ForInstitutionsFde() {
             <h2 className={p.sectionTitle}>Your own edition of the course</h2>
           </div>
           <div className={`${p.featureGrid} ${styles.featureGrid3}`}>
-            {EDITION.map((item) => (
+            {edition.map((item) => (
               <div className={p.feature} key={item.title} data-testid="edition-feature">
                 <h3>{item.title}</h3>
                 <p>{item.body}</p>
@@ -478,7 +505,7 @@ export function ForInstitutionsFde() {
           </div>
           <p className={`${p.lead} ${styles.leadAfter}`}>
             You do not set up an edition on your own. We set it up with you,
-            and from 1 December 2026 a pilot group can use the standard course
+            and from {COURSE_OPENS_ON} a pilot group can use the standard course
             while we do.
           </p>
         </div>
@@ -620,7 +647,7 @@ export function ForInstitutionsFde() {
             {FAQS.map((item, index) => (
               <details className={p.faqItem} key={item.q} open={index === 0}>
                 <summary>{item.q}</summary>
-                <p>{item.a}</p>
+                <p>{showScore && "scoreA" in item ? item.scoreA : item.a}</p>
               </details>
             ))}
           </div>
