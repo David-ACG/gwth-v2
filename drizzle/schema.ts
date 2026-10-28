@@ -40,6 +40,8 @@
 //      widens to + 'prepaid'; the prepaidPasses, courseMonthRelease and
 //      stripePayments tables are hand-written at the end of this file.
 //  12. Gift sent notice (canonical DDL: 027): prepaidPasses.buyerNotifiedAt.
+//  13. Capstone hand-ins (canonical DDL: 028): the capstoneSubmissions and
+//      capstoneAttempts tables are hand-written at the end of this file.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -989,4 +991,71 @@ export const stripePayments = pgTable("stripe_payments", {
 			name: "stripe_payments_pass_id_fkey"
 		}).onDelete("set null"),
 	check("stripe_payments_kind_check", sql`kind = ANY (ARRAY['pass'::text, 'subscription'::text])`),
+]);
+
+// 028: capstone hand-ins (beads gwth-launch-9289.2, 9289.3). Hand-written; the
+// canonical DDL and the meaning of every column is in
+// supabase/migrations/028_capstone_hand_ins.sql. best_attempt_id's FK to
+// capstone_attempts is added there with ALTER TABLE (the tables reference each
+// other), so it is not declared here.
+export const capstoneSubmissions = pgTable("capstone_submissions", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	capstoneId: text("capstone_id").notNull(),
+	bestAttemptId: uuid("best_attempt_id"),
+	bestTotal: integer("best_total"),
+	bestBand: text("best_band"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [user.id],
+			name: "capstone_submissions_user_id_fkey"
+		}).onDelete("cascade"),
+	unique("capstone_submissions_one_per_capstone").on(table.userId, table.capstoneId),
+	check("capstone_submissions_best_total_check", sql`(best_total >= 0) AND (best_total <= 100)`),
+	check("capstone_submissions_best_band_check", sql`best_band = ANY (ARRAY['not_yet'::text, 'pass'::text, 'good'::text, 'excellent'::text])`),
+]);
+
+export const capstoneAttempts = pgTable("capstone_attempts", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	submissionId: uuid("submission_id").notNull(),
+	handInId: text("hand_in_id").notNull(),
+	attemptNo: integer("attempt_no"),
+	status: text().default('draft').notNull(),
+	sourceKind: text("source_kind").notNull(),
+	repoUrl: text("repo_url"),
+	dataChoice: text("data_choice").notNull(),
+	answers: jsonb().notNull(),
+	files: jsonb().default([]).notNull(),
+	checklist: jsonb().default([]).notNull(),
+	redaction: jsonb().default({}).notNull(),
+	previewSha256: text("preview_sha256").notNull(),
+	recordingKey: text("recording_key"),
+	total: integer(),
+	band: text(),
+	criteria: jsonb().default([]).notNull(),
+	basics: jsonb().default([]).notNull(),
+	feedback: jsonb(),
+	flags: jsonb().default([]).notNull(),
+	confirmedAt: timestamp("confirmed_at", { withTimezone: true, mode: 'string' }),
+	markedAt: timestamp("marked_at", { withTimezone: true, mode: 'string' }),
+	finalisedAt: timestamp("finalised_at", { withTimezone: true, mode: 'string' }),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	uniqueIndex("idx_capstone_attempts_number").using("btree", table.submissionId.asc().nullsLast().op("uuid_ops"), table.attemptNo.asc().nullsLast().op("int4_ops")).where(sql`(attempt_no IS NOT NULL)`),
+	uniqueIndex("idx_capstone_attempts_one_draft").using("btree", table.submissionId.asc().nullsLast().op("uuid_ops")).where(sql`(status = 'draft'::text)`),
+	index("idx_capstone_attempts_status").using("btree", table.status.asc().nullsLast().op("text_ops"), table.confirmedAt.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({
+			columns: [table.submissionId],
+			foreignColumns: [capstoneSubmissions.id],
+			name: "capstone_attempts_submission_id_fkey"
+		}).onDelete("cascade"),
+	unique("capstone_attempts_hand_in_id_key").on(table.handInId),
+	check("capstone_attempts_attempt_no_check", sql`(attempt_no >= 1) AND (attempt_no <= 3)`),
+	check("capstone_attempts_status_check", sql`status = ANY (ARRAY['draft'::text, 'marking'::text, 'provisional'::text, 'with_david'::text, 'final'::text])`),
+	check("capstone_attempts_draft_shape_check", sql`((status = 'draft'::text) = ((attempt_no IS NULL) AND (confirmed_at IS NULL)))`),
+	check("capstone_attempts_repo_url_check", sql`((source_kind = 'repo'::text) = (repo_url IS NOT NULL))`),
 ]);

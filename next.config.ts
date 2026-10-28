@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
   // surface of each package on the critical path.
   experimental: {
     optimizePackageImports: ["lucide-react", "motion", "motion/react"],
+    // Capstone hand-ins (bead gwth-launch-9289.2) upload up to 25 MB of files
+    // and a 40 MB recording through /api/hand-in. The proxy buffers request
+    // bodies and cuts them at 10 MB by default, which would truncate a
+    // hand-in silently; the route handlers enforce the real limits.
+    proxyClientMaxBodySize: "45mb",
   },
   // /about and /why-gwth were merged into one page at /why-gwth (David,
   // 2026-09-28: "merge them into one Why GWTH page"). The redirect is

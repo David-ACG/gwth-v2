@@ -16,6 +16,10 @@ Filter bar for the courses listing page. Provides a search input, category dropd
 
 Course navigation sidebar tree showing sections and lessons with progress indicators (completed, in-progress, locked, available). Auto-expands the section containing the current lesson. Highlights the active lesson. Locked lessons are rendered as non-clickable items. Used in the lesson viewer page. Client component.
 
+### `HandInForm` (`hand-in/hand-in-form.tsx`)
+
+The capstone hand-in form and the preview the learner confirms (beads gwth-launch-9289.2 and 9289.3). Step one sends the folder (files, a zip or a public GitHub link), whose details are in it, the names to hide and the four answers to `/api/hand-in/<capstone>/prepare`, which stores only the redacted copies; step two shows exactly that, and "Hand in" sends the tick and the preview's hash to `/confirm`. Rendered by `src/app/(dashboard)/course/[slug]/hand-in/[capstone]/page.tsx`, behind `ENABLE_CAPSTONE_HAND_IN`. The rules live in `src/lib/capstones/`. Client component.
+
 ## Tests
 
 - `course-card.test.tsx` -- tests for CourseCard rendering, badges, progress, and links.

@@ -246,6 +246,17 @@ export const ENABLE_TEAM_DASHBOARD = envFlagEnabled(
   process.env.TEAM_DASHBOARD_ENABLED
 )
 
+/**
+ * Capstone hand-ins (beads gwth-launch-9289.2 and 9289.3): the hand-in page
+ * per capstone, its upload, redaction preview and storage. Off by default;
+ * switch on (CAPSTONE_HAND_IN_ENABLED=on) once the private hand-ins bucket
+ * and the privacy notice (bead 9289.11) are in place. Month 1 hand-ins
+ * arrive from late December 2026.
+ */
+export const ENABLE_CAPSTONE_HAND_IN = envFlagEnabled(
+  process.env.CAPSTONE_HAND_IN_ENABLED
+)
+
 /** Whether the dev state switcher toolbar is shown (development only) */
 export const ENABLE_DEV_TOOLBAR = process.env.NODE_ENV === "development"
 

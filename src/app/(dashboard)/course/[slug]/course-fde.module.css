@@ -308,6 +308,20 @@ a.lessonRow:hover .lessonTitle {
   color: var(--v-soft);
 }
 
+.capstoneLink {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.capstoneLink:hover {
+  color: var(--v-accent);
+}
+
 /* ── Members-only teaser (visitors without course access) ────────────── */
 
 .teaser {

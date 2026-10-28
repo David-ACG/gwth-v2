@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/accordion"
 import { formatDuration, formatProgress } from "@/lib/utils"
 import { Lock } from "lucide-react"
-import { MONTH_CONFIGS } from "@/lib/config"
+import { ENABLE_CAPSTONE_HAND_IN, MONTH_CONFIGS } from "@/lib/config"
+import { capstoneForMonth } from "@/lib/capstones/guides"
 import type { LessonStatus } from "@/lib/types"
 import styles from "./course-fde.module.css"
 import { CourseHoldNotice } from "@/components/billing/course-hold-notice"
@@ -395,6 +396,15 @@ export default async function CourseDetailPage({ params }: PageProps) {
               <p className={styles.capstoneBody}>
                 {config.capstoneDescription}
               </p>
+              {/* Hand-in page (bead gwth-launch-9289.2), behind its flag. */}
+              {ENABLE_CAPSTONE_HAND_IN && canAccess && capstoneForMonth(month) && (
+                <Link
+                  href={`/course/${course.slug}/hand-in/${capstoneForMonth(month)}`}
+                  className={styles.capstoneLink}
+                >
+                  Hand in this project
+                </Link>
+              )}
             </div>
           </section>
         ))}
