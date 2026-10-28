@@ -206,7 +206,11 @@ const DETECTORS: Detector[] = [
     accept: (m, text) => {
       if (m.index > 0 && /[\d+]/.test(text[m.index - 1] ?? "")) return null
       const national = ukNationalDigits(m[0])
-      return national ? whole(m, national) : null
+      if (!national) return null
+      // "(0113 496 0000)": the opening bracket belongs to the sentence, not
+      // the number, unless the number closes it ("(0113) 496 0000").
+      const skip = m[0].startsWith("(") && !m[0].includes(")") ? 1 : 0
+      return { value: national, start: m.index + skip, end: m.index + m[0].length }
     },
   },
   {

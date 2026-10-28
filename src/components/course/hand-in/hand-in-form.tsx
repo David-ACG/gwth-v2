@@ -307,9 +307,9 @@ export function HandInForm(props: HandInFormProps) {
           </ul>
           {missing.length > 0 && (
             <p className={styles.notice}>
-              {plural(missing.length, "required item could not be matched", "required items could not be matched")} to a
-              file. Check you&apos;ve included the work. You can still hand in, but missing work may affect your mark.
-              Choose Change something to add files.
+              {`${plural(missing.length, "required item could not be matched", "required items could not be matched")} to a file. `}
+              Check you&apos;ve included the work. You can still hand in, but missing work may affect your mark. Choose
+              Change something to add files.
             </p>
           )}
 

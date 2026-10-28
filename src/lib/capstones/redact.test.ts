@@ -21,6 +21,8 @@ describe("pattern details", () => {
     expect(plain("School: 020 7946 0018")).toBe("School: [Phone 1]")
     expect(plain("Ring (01632) 960 001")).toBe("Ring [Phone 1]")
     expect(plain("Office +44 (0) 20 7946 0018")).toBe("Office [Phone 1]")
+    // Found on the hlab proof run: the sentence's own bracket was swallowed.
+    expect(plain("reminder (0113 496 0000).")).toBe("reminder ([Phone 1]).")
   })
 
   it("gives the same number the same label in every spelling", () => {
