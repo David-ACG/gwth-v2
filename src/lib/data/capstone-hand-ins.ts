@@ -231,18 +231,18 @@ export async function confirmDraft(input: ConfirmInput, store?: HandInStore | nu
       .from(capstoneSubmissions)
       .where(and(eq(capstoneSubmissions.userId, input.userId), eq(capstoneSubmissions.capstoneId, input.capstoneId)))
       .for("update")
-    if (!submission) throw new HandInInputError("We could not find your prepared hand-in. Please prepare it again.")
+    if (!submission) throw new HandInInputError("We could not find your preview. Choose Change something, then Check and preview to try again.")
     const existing = await tx.select().from(capstoneAttempts).where(eq(capstoneAttempts.submissionId, submission.id))
     const draft = existing.find((a) => a.status === "draft" && a.handInId === input.handInId)
-    if (!draft) throw new HandInInputError("We could not find your prepared hand-in. Please prepare it again.")
+    if (!draft) throw new HandInInputError("We could not find your preview. Choose Change something, then Check and preview to try again.")
     if (draft.previewSha256 !== input.previewHash) {
-      throw new HandInInputError("Your hand-in changed after you previewed it. Please check the preview again.")
+      throw new HandInInputError("Your hand-in changed after you previewed it. Choose Change something, then Check and preview again.")
     }
     const confirmedSoFar = existing.map(toView).filter((a) => a.status !== "draft")
     const block = handInBlockReason(confirmedSoFar)
     if (block) throw new HandInInputError(block)
     const attemptNo = nextAttemptNo(confirmedSoFar)
-    if (attemptNo === null) throw new HandInInputError(handInBlockReason([]) ?? "No hand-ins left.")
+    if (attemptNo === null) throw new HandInInputError("You\u2019ve used all 3 hand-ins. Your best mark counts.")
     if (input.recording && key) await files.put(key, input.recording.bytes, input.recording.contentType)
     const [updated] = await tx
       .update(capstoneAttempts)
@@ -255,7 +255,7 @@ export async function confirmDraft(input: ConfirmInput, store?: HandInStore | nu
       })
       .where(and(eq(capstoneAttempts.id, draft.id), eq(capstoneAttempts.status, "draft")))
       .returning()
-    if (!updated) throw new HandInInputError("We could not find your prepared hand-in. Please prepare it again.")
+    if (!updated) throw new HandInInputError("We could not find your preview. Choose Change something, then Check and preview to try again.")
     return updated
   })
   return toView(row)

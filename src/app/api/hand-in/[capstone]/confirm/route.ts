@@ -35,12 +35,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ cap
   try {
     form = await request.formData()
   } catch {
-    return NextResponse.json({ error: "Your hand-in did not arrive in one piece. Please try again." }, { status: 400 })
+    return NextResponse.json({ error: "We could not read your upload. Please try again." }, { status: 400 })
   }
   const handInId = form.get("hand_in_id")
   const previewHash = form.get("preview_hash")
   if (typeof handInId !== "string" || !/^h_[A-Za-z0-9_-]{22}$/.test(handInId) || typeof previewHash !== "string") {
-    return NextResponse.json({ error: "We could not find your prepared hand-in. Please prepare it again." }, { status: 400 })
+    return NextResponse.json({ error: "We could not find your preview. Choose Change something, then Check and preview to try again." }, { status: 400 })
   }
 
   let recording: { bytes: Uint8Array; extension: string; contentType: string } | null = null
@@ -49,7 +49,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ cap
     const extension = RECORDING_TYPES[file.type]
     if (!extension) return NextResponse.json({ error: "The recording should be an MP4, WebM, MOV, MP3 or M4A file." }, { status: 400 })
     if (file.size > LIMITS.maxRecordingBytes) {
-      return NextResponse.json({ error: "The recording is over 40 MB. Please keep it to about 2 minutes." }, { status: 400 })
+      return NextResponse.json({ error: "The recording is over 40 MB. Please make the file smaller or leave it out. Keep recordings to 2 minutes or less." }, { status: 400 })
     }
     recording = { bytes: new Uint8Array(await file.arrayBuffer()), extension, contentType: file.type }
   }

@@ -102,7 +102,7 @@ export function handInBlockReason(attempts: AttemptLike[]): string | null {
     return `You have handed this project in ${MAX_HAND_INS} times, which is the most we can mark. Your best mark counts.`
   }
   if (done.some((a) => a.status === "marking" || a.status === "with_david")) {
-    return "Your last hand-in is still being marked. You can hand in again once its mark is back."
+    return "Your last hand-in is still being marked or checked. You can hand in again once its mark is ready."
   }
   return null
 }

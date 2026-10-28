@@ -106,7 +106,7 @@ export function fromZip(zip: Uint8Array): BundleFile[] {
         if (!path || entry.name.endsWith("/") || isJunk(path)) return false
         declared += entry.originalSize
         if (entry.originalSize > LIMITS.maxFileBytes || declared > LIMITS.maxTotalBytes * 2) {
-          throw new HandInInputError("Your zip unpacks to more than we can mark. Please leave out large files the marking guide does not ask for.")
+          throw new HandInInputError("Keep each file in your zip to 10 MB or less, and all files to 25 MB in total after unzipping.")
         }
         return true
       },
@@ -144,13 +144,13 @@ export function parseGitHubUrl(raw: string): { owner: string; repo: string } | n
  */
 export async function fromGitHub(raw: string, fetchImpl: typeof fetch = fetch): Promise<BundleFile[]> {
   const repo = parseGitHubUrl(raw)
-  if (!repo) throw new HandInInputError("That does not look like a GitHub repository link. It should look like https://github.com/your-name/your-project.")
+  if (!repo) throw new HandInInputError("That does not look like a GitHub project link. Use a link like https://github.com/your-name/your-project.")
   const response = await fetchImpl(`https://codeload.github.com/${repo.owner}/${repo.repo}/zip/HEAD`, {
     signal: AbortSignal.timeout(30_000),
     redirect: "follow",
   }).catch(() => null)
   if (!response || !response.ok || !response.body) {
-    throw new HandInInputError("We could not download that repository. Check the link, and that the repository is public; or hand in a zip instead.")
+    throw new HandInInputError("We could not download that GitHub project. Check the link and make sure the project is public, or hand in a zip file instead.")
   }
   const reader = response.body.getReader()
   const chunks: Uint8Array[] = []
@@ -161,7 +161,7 @@ export async function fromGitHub(raw: string, fetchImpl: typeof fetch = fetch): 
     size += value.length
     if (size > LIMITS.maxZipBytes) {
       await reader.cancel()
-      throw new HandInInputError("That repository is over 25 MB. Please hand in a zip with only the files the marking guide asks for.")
+      throw new HandInInputError("The download from GitHub is over 25 MB. Please hand in a zip file with only the files the marking guide asks for.")
     }
     chunks.push(value)
   }

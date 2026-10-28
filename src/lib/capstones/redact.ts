@@ -28,7 +28,15 @@ export interface NameEntry {
   kindLabel: string
   /** Every spelling of this one name, e.g. ["Amelia Jones", "Millie"]. */
   names: string[]
+  /**
+   * True for a person: their first name on its own is hidden too. Never for
+   * a place, school or company, where the first word is "14" or "St".
+   */
+  person?: boolean
 }
+
+/** Kind labels that name a person (their first name is hidden on its own). */
+export const PERSON_KINDS = ["Child", "Partner", "Adult", "Person"]
 
 /** The pattern kinds, in the order their labels are shown. */
 export const PATTERN_KINDS = [
@@ -264,7 +272,7 @@ export class Redactor {
    */
   constructor(entries: NameEntry[] = []) {
     for (const entry of entries) {
-      const spellings = expandSpellings(entry.names)
+      const spellings = expandSpellings(entry.names, entry.person ?? PERSON_KINDS.includes(entry.kindLabel))
       if (spellings.length === 0) continue
       const label = `[${entry.kindLabel} ${this.nextNumber(entry.kindLabel)}]`
       this.uses.set(label, { label, kind: entry.kindLabel, source: "name", count: 0 })
@@ -362,19 +370,20 @@ function resolveOverlaps<T extends Span>(spans: T[]): T[] {
 }
 
 /**
- * The spellings to search for one entry: each name as typed, plus the first
- * word of a full name ("Amelia Jones" also hides "Amelia"). A surname on its
- * own is not added, because families share them; the learner lists it if
- * they want it hidden.
+ * The spellings to search for one entry: each name as typed, plus, for a
+ * person, the first word of a full name ("Amelia Jones" also hides "Amelia")
+ * when that word is all letters. A surname on its own is not added, because
+ * families share them; the learner lists it if they want it hidden. A place
+ * gets no first word: "14 Elm Road" must not hide every "14".
  */
-export function expandSpellings(names: string[]): string[] {
+export function expandSpellings(names: string[], person = true): string[] {
   const out = new Set<string>()
   for (const raw of names) {
     const name = raw.trim().replace(/\s+/g, " ")
     if (name.length < 2 || !WORDISH.test(name)) continue
     out.add(name)
     const first = name.split(" ")[0] ?? ""
-    if (name.includes(" ") && first.length >= 2) out.add(first)
+    if (person && name.includes(" ") && first.length >= 2 && /^[\p{L}'-]+$/u.test(first)) out.add(first)
   }
   return [...out].sort((a, b) => b.length - a.length)
 }

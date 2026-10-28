@@ -92,9 +92,9 @@ describe("the hand-in form", () => {
 
   it("asks for each answer and a repo link when one is chosen", () => {
     expect(readPrepareForm(form({ answer_fixed: "ok" }), guide)).toEqual({
-      error: 'Please answer "What went wrong, and how did you fix it?" in a sentence or two.',
+      error: 'Please answer "What went wrong, and how did you fix it?" using at least 20 characters.',
     })
-    expect(readPrepareForm(form({ source: "repo" }), guide)).toEqual({ error: "Paste the link to your GitHub repository." })
+    expect(readPrepareForm(form({ source: "repo" }), guide)).toEqual({ error: "Paste the link to your public project on GitHub." })
     expect(readPrepareForm(form({ source: "ftp" }), guide)).toHaveProperty("error")
   })
 })

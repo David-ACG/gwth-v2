@@ -139,4 +139,17 @@ describe("the names box", () => {
     expect(expandSpellings(["Amelia Jones"])).toEqual(["Amelia Jones", "Amelia"])
     expect(expandSpellings(["A", " "])).toEqual([])
   })
+
+  it("never hides the first word of a place, school or address on its own", () => {
+    // Found on the hlab proof run: "14 Elm Road" hid every "14" in the brief.
+    expect(expandSpellings(["14 Elm Road"], false)).toEqual(["14 Elm Road"])
+    expect(expandSpellings(["14 Elm Road"], true)).toEqual(["14 Elm Road"])
+    const r = new Redactor([
+      { kindLabel: "Place", names: ["14 Elm Road"] },
+      { kindLabel: "School", names: ["St Mary's Primary"] },
+    ])
+    expect(r.redact("Week of 14 to 20 December. St Albans trip. Home: 14 Elm Road; St Mary's Primary.").text).toBe(
+      "Week of 14 to 20 December. St Albans trip. Home: [Place 1]; [School 1].",
+    )
+  })
 })

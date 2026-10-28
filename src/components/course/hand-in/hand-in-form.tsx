@@ -178,8 +178,10 @@ export function HandInForm(props: HandInFormProps) {
           <h2 id="step-folder" className={styles.h2}>
             1. Your project folder
           </h2>
-          <p className={styles.body}>{props.summary}</p>
-          <p className={styles.body}>The marking guide asks for:</p>
+          {props.summary && <p className={styles.body}>{props.summary}</p>}
+          <p className={styles.body}>
+            You can hand in up to 300 files: 25 MB in total and 10 MB per file. The marking guide asks for:
+          </p>
           <ul className={styles.expected}>
             {props.expectedFiles.map((f) => (
               <li key={f.id}>
@@ -200,7 +202,7 @@ export function HandInForm(props: HandInFormProps) {
             </label>
             <label className={styles.choice}>
               <input type="radio" name="source" value="repo" checked={source === "repo"} onChange={() => setSource("repo")} />
-              A link to a public GitHub repository
+              A link to a public project on GitHub
             </label>
           </fieldset>
           {source === "files" && (
@@ -223,7 +225,7 @@ export function HandInForm(props: HandInFormProps) {
           )}
           {source === "repo" && (
             <label className={styles.field}>
-              <span>Repository link</span>
+              <span>GitHub project link</span>
               <input type="url" name="repo_url" placeholder="https://github.com/your-name/your-project" className={styles.input} />
             </label>
           )}
@@ -246,18 +248,19 @@ export function HandInForm(props: HandInFormProps) {
           </fieldset>
           {dataChoice === "own" ? (
             <label className={styles.field}>
-              <span>Names to hide, one person or place per line</span>
+              <span>Names to hide, one person, company or place per line</span>
               <span className={styles.help}>
-                Start each line with {props.nameKinds.join(", ")} or Detail, then every spelling you use, with commas
-                between them. For example: Child: Amelia Jones, Millie. We swap each one for a label such as [Child 1],
-                the same in every file.
+                Start each line with {props.nameKinds.join(", ")} or Detail, followed by a colon. List every spelling
+                you use, separated by commas. For example: Detail: Alex Morgan, Alex. We replace these with the same
+                label, such as [Detail 1], in every file.
               </span>
               <textarea name="names" rows={5} className={styles.textarea} />
             </label>
           ) : null}
           <p className={styles.help}>
-            We always hide phone numbers, email addresses, postcodes, NHS numbers, bank and account numbers, and API
-            keys, in case a real one is left in. You will see every change before anything is sent.
+            We hide phone numbers, email addresses, postcodes, NHS numbers, bank and account numbers, and API keys
+            (secret access codes) that we find in text. Check pictures and other files for private details yourself.
+            You&apos;ll see every change and tick to confirm before anything is sent to a marker.
           </p>
         </section>
 
@@ -296,16 +299,17 @@ export function HandInForm(props: HandInFormProps) {
           <h3 className={styles.h3}>What is in your hand-in</h3>
           <ul className={styles.checklist}>
             {preview.checklist.map((c) => (
-              <li key={c.id} className={c.found.length ? styles.found : styles.missing}>
-                <strong>{c.found.length ? "Found" : c.required ? "Missing" : "Not included"}:</strong> {c.label}
+              <li key={c.id} className={c.found.length ? styles.found : c.required ? styles.missing : undefined}>
+                <strong>{c.found.length ? "Matching file found" : "No matching file found"}:</strong> {c.label}
                 {c.found.length > 0 && <span className={styles.muted}> ({c.found.join(", ")})</span>}
               </li>
             ))}
           </ul>
           {missing.length > 0 && (
             <p className={styles.notice}>
-              {plural(missing.length, "item the marking guide asks for is", "items the marking guide asks for are")}{" "}
-              missing. You can still hand in, but the mark will reflect it. To add them, choose Change something.
+              {plural(missing.length, "required item could not be matched", "required items could not be matched")} to a
+              file. Check you&apos;ve included the work. You can still hand in, but missing work may affect your mark.
+              Choose Change something to add files.
             </p>
           )}
 
@@ -386,7 +390,7 @@ export function HandInForm(props: HandInFormProps) {
           <h3 className={styles.h3}>A short recording (optional)</h3>
           <label className={styles.field}>
             <span className={styles.help}>
-              Up to 2 minutes showing your project working. We keep it for checks and for questions about your mark. It
+              Up to 2 minutes and 40 MB, showing your project working. We keep it for checks and for questions about your mark. It
               is never sent to an AI.
             </span>
             <input ref={recordingRef} type="file" accept="video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4" />

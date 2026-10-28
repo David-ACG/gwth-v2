@@ -31,7 +31,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ cap
   try {
     form = await request.formData()
   } catch {
-    return NextResponse.json({ error: "Your hand-in did not arrive in one piece. Please try again." }, { status: 400 })
+    return NextResponse.json({ error: "We could not read your upload. Please try again." }, { status: 400 })
   }
   const guide = await loadMarkingGuide(access.capstoneId)
   const fields = readPrepareForm(form, guide)

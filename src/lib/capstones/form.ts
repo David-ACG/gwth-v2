@@ -39,19 +39,19 @@ export function readPrepareForm(form: FormData, guide: CapstoneGuide): PrepareFo
   }
   const repoRaw = form.get("repo_url")
   const repoUrl = source === "repo" && typeof repoRaw === "string" ? repoRaw.trim() : null
-  if (source === "repo" && !repoUrl) return { error: "Paste the link to your GitHub repository." }
+  if (source === "repo" && !repoUrl) return { error: "Paste the link to your public project on GitHub." }
 
   const namesRaw = form.get("names")
   const namesText = typeof namesRaw === "string" ? namesRaw : ""
-  if (namesText.length > NAMES_MAX_CHARS) return { error: "The list of names to hide is too long." }
+  if (namesText.length > NAMES_MAX_CHARS) return { error: "Keep the list of names to hide to 4,000 characters or fewer." }
   const names = dataChoice === "own" ? parseNameLines(namesText, guide.nameKinds, "Detail") : []
 
   const answers = {} as Record<AnswerId, string>
   for (const q of HAND_IN_QUESTIONS) {
     const raw = form.get(answerField(q.id))
     const value = typeof raw === "string" ? raw.trim() : ""
-    if (value.length < ANSWER_MIN_CHARS) return { error: `Please answer "${q.question}" in a sentence or two.` }
-    if (value.length > ANSWER_MAX_CHARS) return { error: `Please keep "${q.question}" under ${ANSWER_MAX_CHARS} characters.` }
+    if (value.length < ANSWER_MIN_CHARS) return { error: `Please answer "${q.question}" using at least ${ANSWER_MIN_CHARS} characters.` }
+    if (value.length > ANSWER_MAX_CHARS) return { error: `Please keep your answer to "${q.question}" to ${ANSWER_MAX_CHARS} characters or fewer.` }
     answers[q.id] = value
   }
   return { source, repoUrl, dataChoice, names, answers }

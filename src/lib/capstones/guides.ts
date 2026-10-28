@@ -48,7 +48,7 @@ export interface CapstoneGuide {
   month: 1 | 2 | 3
   /** Short title. */
   title: string
-  /** One line on what is handed in. */
+  /** One extra instruction the checklist does not carry; may be empty. */
   summary: string
   /** The example the learner may use instead of their own details. */
   exampleLabel: string
@@ -118,8 +118,7 @@ const BUILT_IN: Record<CapstoneId, Omit<CapstoneGuide, "source">> = {
     id: "familybot",
     month: 1,
     title: "FamilyBot",
-    summary:
-      "Your FamilyBot Blueprint, voice-note transcript, weekly brief, WhatsApp summary, digest email and a screenshot of the task and event, plus four short answers.",
+    summary: "",
     exampleLabel: "The example household from the lessons",
     ownLabel: "My own household",
     nameKinds: HOUSEHOLD_KINDS,
@@ -137,18 +136,17 @@ const BUILT_IN: Record<CapstoneId, Omit<CapstoneGuide, "source">> = {
     id: "askmyco",
     month: 2,
     title: "AskMyCo and FractionalBuddy",
-    summary:
-      "Your AskMyCo code with screenshots of cited answers and the two-company test, the governance pack, the FractionalBuddy spec, the sprint plan and the Quality Statement, plus four short answers.",
+    summary: "Include screenshots of the test using two companies.",
     exampleLabel: "The example companies from the lessons",
     ownLabel: "A real company's documents",
     nameKinds: COMPANY_KINDS,
     expectedFiles: [
       { id: "code", label: "Your AskMyCo code", nameHints: ["package.json", "requirements.txt", "pyproject.toml"], extensions: [], required: true },
-      { id: "cited-answers", label: "Screenshots of cited answers", nameHints: ["citation", "cited", "answer"], extensions: IMAGE, required: true },
+      { id: "cited-answers", label: "Screenshots of answers with sources", nameHints: ["citation", "cited", "answer"], extensions: IMAGE, required: true },
       { id: "two-company-test", label: "The two-company test", nameHints: ["two-company", "two_company", "twocompany", "tenant", "isolation"], extensions: [], required: true },
       { id: "governance", label: "The governance pack", nameHints: ["governance", "lawful", "processing", "subject_access", "subject-access", "cyber"], extensions: [], required: true },
-      { id: "spec", label: "The FractionalBuddy spec", nameHints: ["fractionalbuddy", "fractional", "spec"], extensions: TEXT, required: true },
-      { id: "sprint-plan", label: "The ten-day sprint plan", nameHints: ["sprint"], extensions: TEXT, required: true },
+      { id: "spec", label: "The FractionalBuddy specification (what it should do)", nameHints: ["fractionalbuddy", "fractional", "spec"], extensions: TEXT, required: true },
+      { id: "sprint-plan", label: "The ten-day work plan", nameHints: ["sprint"], extensions: TEXT, required: true },
       { id: "quality-statement", label: "The Quality Statement", nameHints: ["quality"], extensions: TEXT, required: true },
     ],
   },
@@ -156,18 +154,17 @@ const BUILT_IN: Record<CapstoneId, Omit<CapstoneGuide, "source">> = {
     id: "askeveryone",
     month: 3,
     title: "askevery.one readiness assessment",
-    summary:
-      "Your portfolio with the interview prototype, the evidence and scoring engine, the Southbridge report, the ten-slide deck, the golden input, the output JSON, the eval results and a README, plus four short answers.",
+    summary: "Include your interview prototype and evidence and scoring engine in your portfolio.",
     exampleLabel: "The supplied Southbridge data",
     ownLabel: "Real interviews (with consent)",
     nameKinds: COMPANY_KINDS,
     expectedFiles: [
-      { id: "readme", label: "A README", nameHints: ["readme"], extensions: [], required: true },
+      { id: "readme", label: "A project guide (README file)", nameHints: ["readme"], extensions: [], required: true },
       { id: "report", label: "The Southbridge report (PDF)", nameHints: ["report", "southbridge"], extensions: ["pdf"], required: true },
-      { id: "deck", label: "The ten-slide deck", nameHints: ["deck", "slides"], extensions: ["pdf", "pptx", "key", "odp"], required: true },
-      { id: "golden-input", label: "The golden input", nameHints: ["golden"], extensions: [], required: true },
-      { id: "output-json", label: "The output JSON", nameHints: ["output"], extensions: ["json"], required: true },
-      { id: "eval-results", label: "The eval results", nameHints: ["eval"], extensions: [], required: true },
+      { id: "deck", label: "The ten-slide presentation", nameHints: ["deck", "slides"], extensions: ["pdf", "pptx", "key", "odp"], required: true },
+      { id: "golden-input", label: "The test data file called \u2018golden input\u2019", nameHints: ["golden"], extensions: [], required: true },
+      { id: "output-json", label: "The results file in JSON format", nameHints: ["output"], extensions: ["json"], required: true },
+      { id: "eval-results", label: "The results of your checks", nameHints: ["eval"], extensions: [], required: true },
       { id: "transcripts", label: "Interview transcripts", nameHints: ["transcript", "interview"], extensions: [], required: false },
     ],
   },

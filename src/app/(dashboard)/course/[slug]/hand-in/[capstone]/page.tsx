@@ -17,7 +17,7 @@ type PageProps = {
 
 export const metadata: Metadata = {
   title: "Hand in your project",
-  description: "Hand in your capstone project to be marked.",
+  description: "Hand in your monthly project to be marked.",
 }
 
 /** Per request: the flag, the session and the learner's hand-ins are live. */
@@ -90,7 +90,7 @@ export default async function HandInPage({ params }: PageProps) {
             ))}
           </ul>
           <p className={styles.note}>
-            A mark shows as provisional until David has checked it, which happens within 7 days.
+            Your mark is provisional until David, the course founder, checks it within 7 days. This means it may change.
           </p>
         </section>
       )}
