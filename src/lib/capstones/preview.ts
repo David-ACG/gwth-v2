@@ -8,8 +8,12 @@
  * every file's sha256 plus the redacted answers. The confirm step refuses
  * unless the learner ticks AND the hash they previewed equals the stored one.
  *
- * Files we cannot read as text (images, PDFs, slides) cannot be redacted; they
- * are kept as they are and flagged so the learner checks them before ticking.
+ * PDFs and Word files are turned into text first and only that redacted text
+ * is stored and sent, under the original name plus ".txt"; the document itself
+ * never is (David, 2026-10-30, option A). One with no readable text (a scan) is
+ * left out and the learner is told to hand in a text copy. Pictures and other
+ * files cannot be redacted; they are kept as they are and flagged so the
+ * learner checks them before ticking.
  */
 import "server-only"
 
@@ -17,6 +21,7 @@ import { createHash } from "node:crypto"
 import type { AnswerId } from "./guides"
 import { Redactor, type LabelUse, type NameEntry } from "./redact"
 import type { BundleFile } from "./bundle"
+import { extractDocumentText } from "./extract"
 
 /** Documents that are never read as text, even when they decode cleanly. */
 const BINARY_EXTENSIONS = new Set([
@@ -32,6 +37,8 @@ export interface PreparedFile {
   path: string
   /** "text" was read and redacted; "image" and "other" are kept as they are. */
   kind: "text" | "image" | "other"
+  /** For a PDF or Word file sent as its redacted text: the original's path. */
+  convertedFrom?: string
   bytes: Uint8Array
   size: number
   sha256: string
@@ -43,6 +50,7 @@ export interface PreparedFile {
 export interface ManifestEntry {
   path: string
   kind: PreparedFile["kind"]
+  convertedFrom?: string
   size: number
   sha256: string
   replaced: number
@@ -54,6 +62,8 @@ export interface PreparedHandIn {
   answers: Record<AnswerId, string>
   labels: LabelUse[]
   unusedNameLabels: string[]
+  /** Documents left out because they hold no readable text. */
+  leftOut: { path: string; reason: "unreadable" }[]
   hash: string
 }
 
@@ -81,7 +91,9 @@ function sha256(data: Uint8Array | string): string {
 
 /** The stored description of the prepared files. */
 export function toManifest(files: PreparedFile[]): ManifestEntry[] {
-  return files.map(({ path, kind, size, sha256, replaced }) => ({ path, kind, size, sha256, replaced }))
+  return files.map(({ path, kind, convertedFrom, size, sha256, replaced }) =>
+    convertedFrom ? { path, kind, convertedFrom, size, sha256, replaced } : { path, kind, size, sha256, replaced },
+  )
 }
 
 /**
@@ -104,24 +116,42 @@ export function manifestHash(manifest: ManifestEntry[], answers: Record<string, 
  * account numbers, keys) runs on every hand-in in case a real one is left in
  * the example.
  */
-export function prepareHandIn(
+export async function prepareHandIn(
   bundle: BundleFile[],
   answers: Record<AnswerId, string>,
   names: NameEntry[],
-): PreparedHandIn {
+): Promise<PreparedHandIn> {
   const redactor = new Redactor(names)
   const ordered = [...bundle].sort((a, b) => a.path.localeCompare(b.path, "en"))
+  const taken = new Set(ordered.map((f) => f.path))
   const encoder = new TextEncoder()
-  const files: PreparedFile[] = ordered.map(({ path, bytes }) => {
+  const files: PreparedFile[] = []
+  const leftOut: PreparedHandIn["leftOut"] = []
+  for (const { path, bytes } of ordered) {
+    const document = await extractDocumentText(path, bytes)
+    if (document?.kind === "unreadable") {
+      leftOut.push({ path, reason: "unreadable" })
+      continue
+    }
+    if (document) {
+      let textPath = `${path}.txt`
+      while (taken.has(textPath)) textPath = textPath.replace(/\.txt$/, ".converted.txt")
+      taken.add(textPath)
+      const redacted = redactor.redact(document.text)
+      const out = encoder.encode(redacted.text)
+      files.push({ path: textPath, kind: "text", convertedFrom: path, bytes: out, size: out.length, sha256: sha256(out), replaced: redacted.replaced })
+      continue
+    }
     const text = asText(path, bytes)
     if (text === null) {
       const kind = IMAGE_EXTENSIONS.has(extensionOf(path)) ? "image" : "other"
-      return { path, kind, bytes, size: bytes.length, sha256: sha256(bytes), replaced: 0 }
+      files.push({ path, kind, bytes, size: bytes.length, sha256: sha256(bytes), replaced: 0 })
+      continue
     }
     const redacted = redactor.redact(text)
     const out = redacted.replaced > 0 ? encoder.encode(redacted.text) : bytes
-    return { path, kind: "text", bytes: out, size: out.length, sha256: sha256(out), replaced: redacted.replaced }
-  })
+    files.push({ path, kind: "text", bytes: out, size: out.length, sha256: sha256(out), replaced: redacted.replaced })
+  }
   const redactedAnswers = Object.fromEntries(
     Object.entries(answers).map(([id, value]) => [id, redactor.redact(value).text]),
   ) as Record<AnswerId, string>
@@ -130,6 +160,7 @@ export function prepareHandIn(
     answers: redactedAnswers,
     labels: redactor.summary(),
     unusedNameLabels: redactor.unusedNameLabels(),
+    leftOut,
     hash: manifestHash(toManifest(files), redactedAnswers),
   }
 }

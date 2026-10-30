@@ -1,10 +1,11 @@
 // @vitest-environment node
 // Server modules: Node's own Uint8Array, not jsdom's (fflate checks instanceof).
-import { describe, expect, it } from "vitest"
+import { beforeAll, describe, expect, it } from "vitest"
 import { strToU8 } from "fflate"
 import { builtInGuide } from "./guides"
 import { readPrepareForm } from "./form"
-import { asText, manifestHash, prepareHandIn, toManifest } from "./preview"
+import { asText, manifestHash, prepareHandIn, toManifest, type PreparedHandIn } from "./preview"
+import { makeDocx, makePdf } from "./test-fixtures/documents"
 
 const answers = {
   built: "A FamilyBot for Amelia and Oscar that plans our week.",
@@ -20,13 +21,20 @@ const bundle = [
   { path: "weekly_brief.md", bytes: strToU8("Oscar: dentist. Call 07700 900123.") },
   { path: "digest.txt", bytes: strToU8("Amelia swims. Dentist 07700900123 for Oscar.") },
   { path: "shot.png", bytes: new Uint8Array([137, 80, 78, 71, 0, 1, 2]) },
-  { path: "report.pdf", bytes: strToU8("%PDF-1.4 Amelia") },
+  { path: "report.pdf", bytes: makePdf(["Report for Amelia and Oscar", "Phone 07700 900123 about the plan for Oscar"]) },
+  { path: "blueprint.docx", bytes: makeDocx(["Blueprint for Amelia", "Email sam@example.com"]) },
+  { path: "scan.pdf", bytes: makePdf([""]) },
+  { path: "slides.pptx", bytes: strToU8("PK not converted") },
 ]
 
 describe("prepared hand-in (what the preview shows is what is stored)", () => {
-  const prepared = prepareHandIn(bundle, answers, names)
-  const byPath = Object.fromEntries(prepared.files.map((f) => [f.path, f]))
+  let prepared: PreparedHandIn
+  let byPath: Record<string, PreparedHandIn["files"][number]>
   const text = (path: string) => new TextDecoder().decode(byPath[path]!.bytes)
+  beforeAll(async () => {
+    prepared = await prepareHandIn(bundle, answers, names)
+    byPath = Object.fromEntries(prepared.files.map((f) => [f.path, f]))
+  })
 
   it("hides names and details with the same labels across files and answers", () => {
     expect(text("weekly_brief.md")).toBe("[Child 2]: dentist. Call [Phone 1].")
@@ -35,10 +43,26 @@ describe("prepared hand-in (what the preview shows is what is stored)", () => {
     expect(prepared.answers.checked).toContain("[Phone 1]")
   })
 
-  it("keeps pictures and documents byte for byte and says so", () => {
+  it("keeps pictures and other files byte for byte and says so", () => {
     expect(byPath["shot.png"]!.kind).toBe("image")
-    expect(byPath["report.pdf"]!.kind).toBe("other")
-    expect(byPath["report.pdf"]!.bytes).toEqual(bundle[3]!.bytes)
+    expect(byPath["slides.pptx"]!.kind).toBe("other")
+    expect(byPath["slides.pptx"]!.bytes).toEqual(bundle[6]!.bytes)
+  })
+
+  it("sends a PDF or Word file as its redacted text, never the document itself", () => {
+    // David, 2026-10-30, option A.
+    expect(byPath["report.pdf"]).toBeUndefined()
+    expect(byPath["blueprint.docx"]).toBeUndefined()
+    expect(byPath["report.pdf.txt"]).toMatchObject({ kind: "text", convertedFrom: "report.pdf" })
+    expect(text("report.pdf.txt")).toContain("Report for [Child 1] and [Child 2]")
+    expect(text("report.pdf.txt")).toContain("Phone [Phone 1] about the plan for [Child 2]")
+    expect(text("blueprint.docx.txt")).toBe("Blueprint for [Child 1]\nEmail [Email 1]")
+    for (const f of prepared.files) expect(new TextDecoder().decode(f.bytes)).not.toMatch(/%PDF|word\/document/)
+  })
+
+  it("leaves out a document with no readable text, such as a scan", () => {
+    expect(prepared.leftOut).toEqual([{ path: "scan.pdf", reason: "unreadable" }])
+    expect(prepared.files.map((f) => f.path)).not.toContain("scan.pdf")
   })
 
   it("fingerprints exactly the stored bytes and answers", () => {
@@ -52,7 +76,9 @@ describe("prepared hand-in (what the preview shows is what is stored)", () => {
   it("does not keep the original names anywhere in what is stored", () => {
     const stored = JSON.stringify({ manifest: toManifest(prepared.files), answers: prepared.answers, labels: prepared.labels })
     expect(stored).not.toMatch(/Amelia|Oscar|07700/)
-    expect(text("weekly_brief.md") + text("digest.txt")).not.toMatch(/Amelia|Oscar|07700/)
+    for (const f of prepared.files.filter((f) => f.kind === "text")) {
+      expect(new TextDecoder().decode(f.bytes)).not.toMatch(/Amelia|Oscar|07700|sam@/)
+    }
   })
 
   it("only reads real text as text", () => {

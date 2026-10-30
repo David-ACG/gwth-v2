@@ -51,8 +51,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ cap
       bundle = await fromUploads(files)
     }
 
-    const prepared = prepareHandIn(bundle, fields.answers, fields.names)
-    const checklist = matchChecklist(prepared.files.map((f) => f.path), guide.expectedFiles)
+    const prepared = await prepareHandIn(bundle, fields.answers, fields.names)
+    if (prepared.files.length === 0) {
+      throw new HandInInputError("Hand in text copies of your files instead. We couldn\u2019t read any text in the files you added.")
+    }
+    // A converted PDF or Word file still counts as the document the guide asks for.
+    const checklist = matchChecklist(prepared.files.map((f) => f.convertedFrom ?? f.path), guide.expectedFiles)
     const draft = await saveDraft({
       userId: access.userId,
       capstoneId: access.capstoneId,
@@ -70,10 +74,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ cap
       checklist,
       labels: prepared.labels,
       unusedNameLabels: prepared.unusedNameLabels,
+      leftOut: prepared.leftOut,
       answers: prepared.answers,
       files: prepared.files.map((f) => ({
         path: f.path,
         kind: f.kind,
+        convertedFrom: f.convertedFrom ?? null,
         size: f.size,
         replaced: f.replaced,
         text: f.kind === "text" && f.size <= INLINE_TEXT_CHARS ? decoder.decode(f.bytes) : null,

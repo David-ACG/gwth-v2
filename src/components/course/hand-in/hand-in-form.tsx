@@ -41,6 +41,8 @@ export interface HandInFormProps {
 interface PreviewFile {
   path: string
   kind: "text" | "image" | "other"
+  /** Set when a PDF or Word file is sent as its text: the original's path. */
+  convertedFrom: string | null
   size: number
   replaced: number
   text: string | null
@@ -53,6 +55,7 @@ interface Preview {
   checklist: { id: string; label: string; required: boolean; found: string[] }[]
   labels: { label: string; kind: string; source: "name" | "pattern"; count: number }[]
   unusedNameLabels: string[]
+  leftOut: { path: string; reason: "unreadable" }[]
   answers: Record<string, string>
   files: PreviewFile[]
 }
@@ -258,9 +261,10 @@ export function HandInForm(props: HandInFormProps) {
             </label>
           ) : null}
           <p className={styles.help}>
-            We hide phone numbers, email addresses, postcodes, NHS numbers, bank and account numbers, and API keys
-            (secret access codes) that we find in text. Check pictures and other files for private details yourself.
-            You&apos;ll see every change and tick to confirm before anything is sent to a marker.
+            Check pictures and other files for private details. We hide phone numbers, email addresses, postcodes, NHS
+            numbers, bank and account numbers, and API keys (secret access codes) that we find in text. We turn PDF and
+            Word files into text and hide the same details there. Only that text is sent, never the original PDF or Word
+            file. You&apos;ll see every change and tick to confirm before anything is sent to a marker.
           </p>
         </section>
 
@@ -348,7 +352,9 @@ export function HandInForm(props: HandInFormProps) {
             return (
               <details key={f.path} className={styles.file} open={f.replaced > 0 || f.kind !== "text"}>
                 <summary className={styles.fileHead}>
-                  <span className={styles.filePath}>{f.path}</span>
+                  <span className={styles.filePath}>
+                    {f.convertedFrom ? `${f.convertedFrom}, sent as text` : f.path}
+                  </span>
                   <span className={styles.muted}>
                     {f.kind === "text"
                       ? f.replaced > 0
@@ -357,6 +363,13 @@ export function HandInForm(props: HandInFormProps) {
                       : "not changed: check it yourself"}
                   </span>
                 </summary>
+                {f.convertedFrom && (
+                  <p className={styles.notice}>
+                    Compare the text below with your file to check every private detail is hidden. The marker reads only
+                    this text. The {f.convertedFrom.split(".").pop()?.toUpperCase() === "PDF" ? "PDF" : "Word file"}{" "}
+                    itself is never sent.
+                  </p>
+                )}
                 {f.kind === "text" && f.text !== null && (
                   <pre className={styles.pre}>
                     <Highlighted text={f.text} />
@@ -386,6 +399,18 @@ export function HandInForm(props: HandInFormProps) {
               </details>
             )
           })}
+
+          {preview.leftOut.map((f) => (
+            <div key={f.path} className={styles.file}>
+              <p className={styles.fileHead}>
+                <span className={styles.filePath}>{f.path}</span>
+                <span className={styles.muted}>left out</span>
+              </p>
+              <p className={styles.notice}>
+                Hand in a text copy of this file instead. We couldn&apos;t read any text in it, so it won&apos;t be sent.
+              </p>
+            </div>
+          ))}
 
           <h3 className={styles.h3}>A short recording (optional)</h3>
           <label className={styles.field}>

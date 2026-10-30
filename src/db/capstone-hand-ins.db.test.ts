@@ -32,8 +32,8 @@ describeDb("028 capstone hand-ins (live DB)", () => {
     await sql`DELETE FROM "user" WHERE id = ${USER}`
   }
 
-  function draftInput() {
-    const prepared = prepareHandIn(
+  async function draftInput() {
+    const prepared = await prepareHandIn(
       [
         { path: "blueprint.md", bytes: strToU8("Blueprint for Amelia, call 07700 900123") },
         { path: "shot.png", bytes: new Uint8Array([137, 80, 78, 71, 1]) },
@@ -74,7 +74,7 @@ describeDb("028 capstone hand-ins (live DB)", () => {
   })
 
   it("stores only redacted files under a random id, and a draft uses no hand-in", async () => {
-    const draft = await data.saveDraft(draftInput(), store)
+    const draft = await data.saveDraft(await draftInput(), store)
     expect(draft.handInId).toMatch(/^h_[A-Za-z0-9_-]{22}$/)
     expect(draft.status).toBe("draft")
     const stored = readFileSync(join(dir, "hand-ins", draft.handInId, "files", "blueprint.md"), "utf8")
@@ -88,7 +88,7 @@ describeDb("028 capstone hand-ins (live DB)", () => {
 
   it("preparing again replaces the draft and its files", async () => {
     const first = (await data.getHandInState(USER, "familybot")).draft!
-    const second = await data.saveDraft(draftInput(), store)
+    const second = await data.saveDraft(await draftInput(), store)
     expect(second.handInId).not.toBe(first.handInId)
     expect(await store.get(`hand-ins/${first.handInId}/files/blueprint.md`)).toBeNull()
     const [counted] = await sql`SELECT count(*)::int AS count FROM capstone_attempts a JOIN capstone_submissions s ON s.id = a.submission_id WHERE s.user_id = ${USER} AND a.status = 'draft'`
@@ -97,7 +97,7 @@ describeDb("028 capstone hand-ins (live DB)", () => {
 
   it("never hands in, or lets a marker read, a draft without the tick", async () => {
     const draft = (await data.getHandInState(USER, "familybot")).draft!
-    const hash = draftInput().prepared.hash
+    const hash = (await draftInput()).prepared.hash
     await expect(
       data.confirmDraft({ userId: USER, capstoneId: "familybot", handInId: draft.handInId, previewHash: hash, confirmed: false }, store),
     ).rejects.toThrow(/Tick the box/)
@@ -118,7 +118,7 @@ describeDb("028 capstone hand-ins (live DB)", () => {
         userId: USER,
         capstoneId: "familybot",
         handInId: draft.handInId,
-        previewHash: draftInput().prepared.hash,
+        previewHash: (await draftInput()).prepared.hash,
         confirmed: true,
         recording: { bytes: new Uint8Array([1, 2, 3]), extension: "mp4", contentType: "video/mp4" },
       },
@@ -144,11 +144,11 @@ describeDb("028 capstone hand-ins (live DB)", () => {
 
   it("waits for a mark, allows three hand-ins, and the best mark counts", async () => {
     const hand = async () => {
-      const d = await data.saveDraft(draftInput(), store)
-      return data.confirmDraft({ userId: USER, capstoneId: "familybot", handInId: d.handInId, previewHash: draftInput().prepared.hash, confirmed: true }, store)
+      const d = await data.saveDraft(await draftInput(), store)
+      return data.confirmDraft({ userId: USER, capstoneId: "familybot", handInId: d.handInId, previewHash: (await draftInput()).prepared.hash, confirmed: true }, store)
     }
     // Hand-in 1 is still being marked.
-    await expect(data.saveDraft(draftInput(), store)).rejects.toThrow(/still being marked/)
+    await expect(data.saveDraft(await draftInput(), store)).rejects.toThrow(/still being marked/)
     const first = (await data.getHandInState(USER, "familybot")).attempts[0]!
     await data.applyMark(first.handInId, { status: "provisional", total: 70, band: "not_yet", flags: ["basics"] })
 
@@ -163,7 +163,7 @@ describeDb("028 capstone hand-ins (live DB)", () => {
     expect(state.attempts.map((a) => a.attemptNo)).toEqual([1, 2, 3])
     expect(state.best?.handInId).toBe(second.handInId)
     expect(state.blockReason).toMatch(/3 times/)
-    await expect(data.saveDraft(draftInput(), store)).rejects.toThrow(/3 times/)
+    await expect(data.saveDraft(await draftInput(), store)).rejects.toThrow(/3 times/)
     const [sub] = await sql`SELECT best_total, best_band, best_attempt_id FROM capstone_submissions WHERE user_id = ${USER}`
     expect(sub).toMatchObject({ best_total: 64, best_band: "good", best_attempt_id: second.id })
   })
