@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { LegalFde } from "@/components/marketing/legal-fde/legal-fde"
+import { ENABLE_CAPSTONE_HAND_IN } from "@/lib/config"
 
 export const metadata: Metadata = {
   title: "Privacy policy",
@@ -16,6 +17,11 @@ export const metadata: Metadata = {
  * page then read "Price changes:We" (launch readiness review, 2026-10-20).
  */
 export default function PrivacyPage() {
+  // Capstone marking (bead gwth-launch-9289.11) is described only once
+  // hand-ins are open, as section 9; the sections after it move down one.
+  // Section 8 stays "Age and privacy" (bible audience-by-purpose).
+  const marking = ENABLE_CAPSTONE_HAND_IN
+  const after = marking ? 1 : 0
   return (
     <LegalFde title="Privacy policy" updated="1 December 2026">
       <p>
@@ -115,6 +121,13 @@ export default function PrivacyPage() {
           These providers are contractually obligated to
           protect your data.
         </li>
+        {marking && (
+          <li>
+            <strong>AI marking:</strong>{" "}OpenAI and Anthropic mark the
+            capstone projects you hand in. Section 9 explains what they
+            receive.
+          </li>
+        )}
         <li>
           <strong>Legal requirements:</strong> when required by law, court
           order, or governmental authority.
@@ -137,6 +150,12 @@ export default function PrivacyPage() {
         except where we are required to retain it for legal or regulatory
         purposes.
       </p>
+      {marking && (
+        <p>
+          Section 9 explains how long we keep your capstone hand-ins and
+          drafts.
+        </p>
+      )}
 
       <h2>5. Data security</h2>
       <p>
@@ -186,7 +205,9 @@ export default function PrivacyPage() {
         for you.
       </p>
 
-      <h2>9. Third-party links</h2>
+      {marking && <CapstoneMarking />}
+
+      <h2>{`${9 + after}. Third-party links`}</h2>
       <p>
         Our site may contain links to third-party websites and services. We
         are not responsible for the privacy practices of those third
@@ -194,7 +215,7 @@ export default function PrivacyPage() {
         providing any personal information.
       </p>
 
-      <h2>10. Changes to this policy</h2>
+      <h2>{`${10 + after}. Changes to this policy`}</h2>
       <p>
         We may update this privacy policy from time to time. We will notify
         you of any material changes by posting the new policy on this page
@@ -203,12 +224,76 @@ export default function PrivacyPage() {
         policy.
       </p>
 
-      <h2>11. Contact us</h2>
+      <h2>{`${11 + after}. Contact us`}</h2>
       <p>
         If you have any questions about this privacy policy or our data
         practices, please{" "}
         <Link href="/contact">contact us through our website</Link>.
       </p>
     </LegalFde>
+  )
+}
+
+/**
+ * Section 9, shown only while ENABLE_CAPSTONE_HAND_IN is on (bead
+ * gwth-launch-9289.11, decisions 7a and 7b on bead gwth-launch-9289). Every
+ * statement here is enforced in code: redaction and the tick in
+ * src/lib/capstones/preview.ts and confirmDraft, the random hand-in id in
+ * newHandInId, the recording kept from markers in getHandInForMarking, and
+ * deletion in src/lib/data/capstone-retention.ts (12 months after final,
+ * drafts after 30 days, early deletion on request). Change them together.
+ */
+function CapstoneMarking() {
+  return (
+    <>
+      <h2>9. Marking your capstone projects</h2>
+      <p>
+        We use AI to mark your capstone projects. Here&apos;s what happens to
+        the work you hand in.
+      </p>
+      <ul>
+        <li>
+          <strong>What we send:</strong>{" "}Before you hand in your work, we
+          replace private details in your files and four short answers with
+          labels. These include names, email addresses, phone numbers and
+          similar details. You preview exactly what will be sent and tick a
+          box to confirm. We send only these versions of your files and
+          answers, along with our marking guide.
+        </li>
+        <li>
+          <strong>Who marks it:</strong>{" "}Two AI services mark each hand-in
+          separately, one provided by OpenAI and one by Anthropic. If their
+          marks disagree, or a mark is close to the boundary between two
+          grades, a person at GWTH checks it.
+        </li>
+        <li>
+          <strong>What they see:</strong>{" "}We send your work under a random
+          hand-in ID. We never send your name, email address or GWTH account
+          details. If you include a recording, it&apos;s never sent to an AI
+          service.
+        </li>
+        <li>
+          <strong>How OpenAI and Anthropic use it:</strong>{" "}They process
+          your hand-in on our behalf under data processing agreements with
+          us. This means they act as our data processors. They use your work
+          only to mark it, not to train their AI models. Processing may happen
+          in the United States, with the safeguards UK data protection law
+          requires.
+        </li>
+        <li>
+          <strong>How long we keep it:</strong>{" "}We keep the files you hand
+          in, your four answers and any recording for 12 months after your
+          mark is final, then delete them. We keep your mark and feedback.
+          Drafts you prepare but never hand in are deleted after 30 days.
+        </li>
+        <li>
+          <strong>Deleting it sooner:</strong>{" "}You can ask for earlier
+          deletion through our{" "}
+          <Link href="/contact">contact form</Link>. We keep your mark and
+          feedback. If your mark isn&apos;t final yet, deleting your hand-in
+          means we can&apos;t finish checking it.
+        </li>
+      </ul>
+    </>
   )
 }

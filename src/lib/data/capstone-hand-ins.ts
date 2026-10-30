@@ -303,6 +303,10 @@ export async function getHandInForMarking(handInId: string, store?: HandInStore 
   if (row.status === "draft" || !row.confirmedAt || row.attemptNo === null) {
     throw new Error(`hand-in ${handInId} has not been confirmed by the learner`)
   }
+  if (row.filesDeletedAt) {
+    // Retention or the learner's own request (bead 9289.11): never re-sent.
+    throw new Error(`hand-in ${handInId}: its files were deleted (${row.filesDeletedReason})`)
+  }
   const manifest = row.files as ManifestEntry[]
   const answers = row.answers as Record<AnswerId, string>
   if (manifestHash(manifest, answers) !== row.previewSha256) {

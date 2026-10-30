@@ -1042,6 +1042,9 @@ export const capstoneAttempts = pgTable("capstone_attempts", {
 	confirmedAt: timestamp("confirmed_at", { withTimezone: true, mode: 'string' }),
 	markedAt: timestamp("marked_at", { withTimezone: true, mode: 'string' }),
 	finalisedAt: timestamp("finalised_at", { withTimezone: true, mode: 'string' }),
+	// 030 (bead 9289.11): when and why the stored files were deleted.
+	filesDeletedAt: timestamp("files_deleted_at", { withTimezone: true, mode: 'string' }),
+	filesDeletedReason: text("files_deleted_reason"),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [

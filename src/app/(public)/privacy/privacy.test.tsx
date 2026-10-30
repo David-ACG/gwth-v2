@@ -69,4 +69,12 @@ describe("PrivacyPage", () => {
     }
     expect(container.textContent).toContain("Gifts: We collect")
   })
+
+  it("says nothing about capstone marking while hand-ins are off (bead gwth-launch-9289.11)", () => {
+    const { container } = render(<PrivacyPage />)
+    const text = container.textContent ?? ""
+    expect(text).not.toMatch(/capstone|OpenAI|Anthropic/i)
+    expect(screen.getByText("8. Age and privacy")).toBeInTheDocument()
+    expect(screen.getByText("9. Third-party links")).toBeInTheDocument()
+  })
 })
