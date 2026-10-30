@@ -21,8 +21,38 @@ import { readFile, readdir } from "node:fs/promises"
 import { join } from "node:path"
 import { builtInGuide, type CapstoneGuide, type CapstoneId, type ExpectedFile } from "./guides"
 
+/** One marking criterion, as the judges read it. */
+export interface GuideCriterion {
+  id: string
+  name: string
+  points: number
+  descriptors: { pass: string; good: string; excellent: string }
+  /** The same descriptors written to the learner. */
+  student?: { pass: string; good: string; excellent: string }
+}
+
+/** One basics line: miss it and the band is Not yet whatever the points. */
+export interface GuideBasic {
+  id: string
+  name: string
+  text: string
+  student?: string
+}
+
+/** The parts of a published `marking_guide.json` the marker uses. */
+export interface MarkingGuide {
+  capstone: CapstoneId
+  title: string
+  studentTitle: string
+  handInText: string
+  criteria: GuideCriterion[]
+  basics: GuideBasic[]
+  answersNote: string
+  expectedFiles: ExpectedFile[]
+}
+
 const CACHE_MS = 60_000
-let cache: { at: number; byCapstone: Map<string, ExpectedFile[]> } | null = null
+let cache: { at: number; byCapstone: Map<string, unknown> } | null = null
 
 /** Reads `hand_in.files` from a parsed guide, or null when it is not usable. */
 export function expectedFilesFromGuide(json: unknown): ExpectedFile[] | null {
@@ -45,8 +75,29 @@ export function expectedFilesFromGuide(json: unknown): ExpectedFile[] | null {
   return out
 }
 
-async function scan(): Promise<Map<string, ExpectedFile[]>> {
-  const byCapstone = new Map<string, ExpectedFile[]>()
+/** Reads the marker's view of a parsed guide, or null when it is not usable. */
+export function markingGuideFromJson(json: unknown): MarkingGuide | null {
+  const g = json as Record<string, unknown>
+  const expectedFiles = expectedFilesFromGuide(json)
+  if (!g || typeof g.capstone !== "string" || !Array.isArray(g.criteria) || !Array.isArray(g.basics) || !expectedFiles) return null
+  const criteria = (g.criteria as Record<string, unknown>[]).map((c) => c as unknown as GuideCriterion)
+  if (criteria.some((c) => typeof c.id !== "string" || typeof c.points !== "number" || !c.descriptors?.pass)) return null
+  if (criteria.reduce((n, c) => n + c.points, 0) !== 100) return null
+  const handIn = g.hand_in as { text?: string } | undefined
+  return {
+    capstone: g.capstone as CapstoneId,
+    title: String(g.title ?? g.capstone),
+    studentTitle: String(g.student_title ?? g.title ?? g.capstone),
+    handInText: String(handIn?.text ?? ""),
+    criteria,
+    basics: (g.basics as GuideBasic[]).filter((b) => typeof b.id === "string" && typeof b.text === "string"),
+    answersNote: String(g.answers_note ?? ""),
+    expectedFiles,
+  }
+}
+
+async function scan(): Promise<Map<string, unknown>> {
+  const byCapstone = new Map<string, unknown>()
   const root = process.env.MARKING_GUIDES_DIR ?? process.env.LESSON_DRAFTS_DIR
   if (!root) return byCapstone
   let dirs: string[] = []
@@ -58,8 +109,7 @@ async function scan(): Promise<Map<string, ExpectedFile[]>> {
   for (const dir of dirs) {
     try {
       const json = JSON.parse(await readFile(join(root, dir, "content", "marking_guide.json"), "utf8"))
-      const files = expectedFilesFromGuide(json)
-      if (typeof json?.capstone === "string" && files) byCapstone.set(json.capstone, files)
+      if (typeof json?.capstone === "string" && expectedFilesFromGuide(json)) byCapstone.set(json.capstone, json)
     } catch {
       // No guide in this lesson, or not valid JSON: the built-in list stands.
     }
@@ -71,6 +121,16 @@ async function scan(): Promise<Map<string, ExpectedFile[]>> {
 export async function loadMarkingGuide(id: CapstoneId): Promise<CapstoneGuide> {
   if (!cache || Date.now() - cache.at > CACHE_MS) cache = { at: Date.now(), byCapstone: await scan() }
   const guide = builtInGuide(id)
-  const published = cache.byCapstone.get(id)
+  const published = expectedFilesFromGuide(cache.byCapstone.get(id))
   return published ? { ...guide, expectedFiles: published, source: "marking_guide.json" } : guide
+}
+
+/**
+ * The full published guide the judges mark against, or null when none is
+ * published. There is no built-in fall-back: marking without the approved
+ * criteria would be marking against nothing.
+ */
+export async function loadPublishedGuide(id: CapstoneId): Promise<MarkingGuide | null> {
+  if (!cache || Date.now() - cache.at > CACHE_MS) cache = { at: Date.now(), byCapstone: await scan() }
+  return markingGuideFromJson(cache.byCapstone.get(id))
 }

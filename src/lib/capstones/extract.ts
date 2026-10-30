@@ -71,7 +71,8 @@ export async function pdfText(bytes: Uint8Array): Promise<string> {
   const pdf = await getDocumentProxy(new Uint8Array(bytes))
   try {
     const { text } = await extractText(pdf, { mergePages: false })
-    return (Array.isArray(text) ? text : [text]).map((page) => page.trim()).join("\n\n").trim()
+    // A form feed between pages keeps the page count (a ten-slide deck) countable.
+    return (Array.isArray(text) ? text : [text]).map((page) => page.trim()).join("\n\f\n").trim()
   } finally {
     // Frees pdf.js's worker state; the proxy's own method name varies by release.
     await (pdf as { destroy?: () => Promise<void> }).destroy?.().catch(() => undefined)
