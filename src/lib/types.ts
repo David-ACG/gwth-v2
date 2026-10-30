@@ -54,9 +54,13 @@ export interface User {
 
 /** Student's dynamic score and related metrics */
 export interface DynamicScore {
-  /** Overall score (1.5 pts per lesson, decays if content not reviewed) */
+  /**
+   * Overall score out of 100: lessons and quiz answers 50, the three
+   * capstones 50; falls back after 4 weeks without passing a lesson
+   * (calculateGwthScore, bead gwth-launch-9289.10)
+   */
   overallScore: number
-  /** Maximum possible score based on completed lessons */
+  /** The most this learner can score (100; 50 if their edition has no mandatory lessons) */
   maxPossibleScore: number
   /** Percentile rank among all students (0-100) */
   percentile: number

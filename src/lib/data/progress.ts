@@ -51,8 +51,12 @@ import {
   emptyDynamicScore,
   emptyStreak,
 } from "@/lib/progress/derive"
-import { calculateGwthScore } from "@/lib/progress/gwth-score"
+import {
+  calculateGwthScore,
+  lastLessonPassedAt,
+} from "@/lib/progress/gwth-score"
 import { getMandatoryLessonIds } from "./editions"
+import { getCapstoneBestTotals } from "./capstone-score"
 import { resolveDataMode } from "./mode"
 import { getCourses } from "./courses"
 import { getDb } from "@/db"
@@ -762,7 +766,7 @@ export async function getStreak(): Promise<StudyStreak> {
 }
 
 /**
- * Fetches the user's GWTH Score, computed PER LEARNER (N6):
+ * Fetches the user's GWTH Score out of 100, computed PER LEARNER (N6):
  *
  *  - the denominator is the mandatory-lesson count of the user's effective
  *    syllabus edition (`getMandatoryLessonIds`), not a global constant — an
@@ -784,14 +788,21 @@ export async function getDynamicScore(): Promise<DynamicScore> {
   // No early-out on empty progress (QA round-2 defect 6): a brand-new
   // learner still gets THEIR edition's maxPossibleScore (the per-learner
   // ceiling is the acceptance criterion), with an honest zero overallScore.
-  const [{ rows }, mandatoryIds] = await Promise.all([
+  //
+  // Bead gwth-launch-9289.10: lessons and quiz answers make 50 of the 100,
+  // the three capstones 50 (each capstone's counted best_total scaled to
+  // about 16.7), and the fall-back rule (bible gwth-score-fall-back) applies
+  // to the whole score, timed from the last mandatory lesson passed.
+  const [{ rows }, mandatoryIds, capstoneBestTotals] = await Promise.all([
     lessonRowsForMode(),
     getMandatoryLessonIds(),
+    getCapstoneBestTotals(mode.userId),
   ])
-  const summary = calculateGwthScore(
-    rows.filter((row) => mandatoryIds.has(row.lessonId)),
-    mandatoryIds.size
-  )
+  const mandatoryRows = rows.filter((row) => mandatoryIds.has(row.lessonId))
+  const summary = calculateGwthScore(mandatoryRows, mandatoryIds.size, {
+    capstoneBestTotals,
+    lastPassedAt: lastLessonPassedAt(mandatoryRows),
+  })
   return {
     overallScore: summary.overallScore,
     maxPossibleScore: summary.maxPossibleScore,
