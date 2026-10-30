@@ -42,7 +42,8 @@
 //  12. Gift sent notice (canonical DDL: 027): prepaidPasses.buyerNotifiedAt.
 //  13. Capstone hand-ins (canonical DDL: 028): the capstoneSubmissions and
 //      capstoneAttempts tables are hand-written at the end of this file.
-import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
+//  14. Capstone judge runs (canonical DDL: 029): capstoneJudgeRuns, end of file.
+import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, numeric, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
 // target for every user-scoped column below.
@@ -1061,4 +1062,33 @@ export const capstoneAttempts = pgTable("capstone_attempts", {
 	check("capstone_attempts_status_check", sql`status = ANY (ARRAY['draft'::text, 'marking'::text, 'provisional'::text, 'with_david'::text, 'final'::text])`),
 	check("capstone_attempts_draft_shape_check", sql`((status = 'draft'::text) = ((attempt_no IS NULL) AND (confirmed_at IS NULL)))`),
 	check("capstone_attempts_repo_url_check", sql`((source_kind = 'repo'::text) = (repo_url IS NOT NULL))`),
+]);
+
+// 029: capstone judge runs (bead gwth-launch-9289.5). Hand-written; canonical
+// DDL in supabase/migrations/029_capstone_judge_runs.sql.
+export const capstoneJudgeRuns = pgTable("capstone_judge_runs", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	attemptId: uuid("attempt_id"),
+	handInId: text("hand_in_id").notNull(),
+	judge: text().notNull(),
+	modelId: text("model_id"),
+	purpose: text().default('mark').notNull(),
+	status: text().notNull(),
+	inputTokens: integer("input_tokens"),
+	outputTokens: integer("output_tokens"),
+	costUsd: numeric("cost_usd", { precision: 10, scale: 6 }),
+	verdict: jsonb(),
+	error: text(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_capstone_judge_runs_attempt").using("btree", table.attemptId.asc().nullsLast().op("uuid_ops"), table.createdAt.asc().nullsLast().op("timestamptz_ops")),
+	index("idx_capstone_judge_runs_created").using("btree", table.createdAt.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({
+			columns: [table.attemptId],
+			foreignColumns: [capstoneAttempts.id],
+			name: "capstone_judge_runs_attempt_id_fkey"
+		}).onDelete("cascade"),
+	check("capstone_judge_runs_judge_check", sql`judge = ANY (ARRAY['luna'::text, 'haiku'::text])`),
+	check("capstone_judge_runs_purpose_check", sql`purpose = ANY (ARRAY['mark'::text, 'query'::text, 'test'::text])`),
+	check("capstone_judge_runs_status_check", sql`status = ANY (ARRAY['ok'::text, 'invalid'::text, 'error'::text])`),
 ]);

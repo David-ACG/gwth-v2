@@ -68,7 +68,13 @@ export interface HandInState {
 /** Everything a marker may read. The recording is deliberately absent. */
 export interface HandInForMarking {
   handInId: string
+  /** The attempt row, for judge runs and marks. */
+  attemptId: string
   capstoneId: CapstoneId
+  /** Where it is now: the runner marks only 'marking'. */
+  status: AttemptStatus
+  /** How often each kind of private detail was hidden (labels and counts only). */
+  labels: LabelUse[]
   attemptNo: number
   dataChoice: DataChoice
   answers: Record<AnswerId, string>
@@ -323,7 +329,10 @@ export async function getHandInForMarking(handInId: string, store?: HandInStore 
   }
   return {
     handInId,
+    attemptId: row.id,
     capstoneId: found.capstoneId as CapstoneId,
+    status: row.status as AttemptStatus,
+    labels: ((row.redaction as { labels?: LabelUse[] } | null)?.labels ?? []) satisfies LabelUse[],
     attemptNo: row.attemptNo,
     dataChoice: row.dataChoice as DataChoice,
     answers,
@@ -377,4 +386,18 @@ export async function applyMark(handInId: string, mark: MarkInput): Promise<void
       })
       .where(eq(capstoneSubmissions.id, row.submissionId))
   })
+}
+
+/**
+ * Hand-ins waiting for the judges, oldest first: confirmed and still
+ * 'marking'. The cron route works through these (bead 9289.5).
+ */
+export async function handInsAwaitingMarking(limit = 10): Promise<string[]> {
+  const rows = await getDb()
+    .select({ handInId: capstoneAttempts.handInId })
+    .from(capstoneAttempts)
+    .where(eq(capstoneAttempts.status, "marking"))
+    .orderBy(asc(capstoneAttempts.confirmedAt))
+    .limit(limit)
+  return rows.map((r) => r.handInId)
 }

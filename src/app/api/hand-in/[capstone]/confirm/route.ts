@@ -11,9 +11,10 @@
  * Without the tick, or when the stored draft is not the one previewed,
  * nothing changes.
  */
-import { NextResponse } from "next/server"
+import { after, NextResponse } from "next/server"
 import { checkHandInAccess } from "@/lib/capstones/access"
 import { HandInInputError, LIMITS } from "@/lib/capstones/bundle"
+import { markHandIn } from "@/lib/capstones/judge/runner"
 import { confirmDraft, HandInsClosedError } from "@/lib/data/capstone-hand-ins"
 
 export const dynamic = "force-dynamic"
@@ -62,6 +63,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ cap
       previewHash,
       confirmed: form.get("confirm") === "yes",
       recording,
+    })
+    // Mark straight away, after the reply is sent; the cron route catches any that wait.
+    after(async () => {
+      await markHandIn(attempt.handInId).catch((error) => console.error("[hand-in] marking failed", error))
     })
     return NextResponse.json({ attemptNo: attempt.attemptNo, status: attempt.status })
   } catch (error) {
