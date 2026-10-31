@@ -1,0 +1,65 @@
+{
+  "organisation": "Southbridge Community Trust",
+  "input_version": "southbridge_input.json@2026-10-28",
+  "executive_summary": {
+    "headline": "Southbridge should start with invoice help in Finance and case-note help in Programmes in the next thirty days.",
+    "key_findings": [
+      {
+        "text": "Invoice processing is the slowest task in Finance.",
+        "evidence_refs": ["R003", "R007"]
+      },
+      {
+        "text": "Case notes and funder reports take Programmes staff hours each week.",
+        "evidence_refs": ["R002", "R006"]
+      },
+      {
+        "text": "Trustees want a clear consent and data plan before any rollout.",
+        "evidence_refs": ["R008"]
+      },
+      {
+        "text": "Data foundations score lowest of the themes, at 1.8, with low confidence.",
+        "evidence_refs": ["data_foundations"]
+      }
+    ],
+    "summary_paragraph": "Southbridge Community Trust demonstrates nascent organisational AI readiness, characterised by comparatively mature operational processes within Finance and Programmes, counterbalanced by materially underdeveloped data foundations and constrained technological infrastructure capacity, necessitating prioritised investment in governance-aligned automation initiatives, particularly document-processing automation within Finance and case-note augmentation within Programmes, contingent upon trustee-endorsed assurance frameworks and comprehensive data protection impact assessment completion.",
+    "evidence_refs": [
+      "R002",
+      "R003",
+      "R006",
+      "R007",
+      "R008",
+      "data_foundations"
+    ]
+  },
+  "roadmap": {
+    "items": [
+      {
+        "title": "Invoice pilot in Finance",
+        "priority_band": "now",
+        "owner_placeholder": "Finance Officer",
+        "dependencies": ["DPIA signed off"],
+        "evidence_ref": "R003",
+        "governance_gate": "DPIA",
+        "kill_criterion": "invoice time does not fall by a quarter in four weeks"
+      },
+      {
+        "title": "Case-note templates in Programmes",
+        "priority_band": "next",
+        "owner_placeholder": "Programmes Manager",
+        "dependencies": ["consent wording agreed"],
+        "evidence_ref": "R002",
+        "governance_gate": "consent wording",
+        "kill_criterion": "checking takes longer than writing"
+      },
+      {
+        "title": "Onboarding checklist assistant",
+        "priority_band": "later",
+        "owner_placeholder": "HR Coordinator",
+        "dependencies": ["day 90 review"],
+        "evidence_ref": "R005",
+        "governance_gate": "trustee review",
+        "kill_criterion": "volunteers do not use it within a month"
+      }
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 70.0,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "pass"
+    },
+    {
+      "id": "data_apart",
+      "level": "good"
+    },
+    {
+      "id": "governance",
+      "level": "good"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "good"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "good"
+    },
+    {
+      "id": "quality_statement",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": false
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": "Asked a question the documents cannot answer (bank holiday call-out rate), AskMyCo invents 'double time, £90 per hour' with no citation; the system prompt tells it to use general knowledge.",
+  "why": "'No made-up answers' is not met, so Not yet. Citations drop to Pass: one cited answer works, and the student shows the invented answer as a success. Total 70."
+}

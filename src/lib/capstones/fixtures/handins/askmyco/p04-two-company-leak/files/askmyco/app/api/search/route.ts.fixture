@@ -1,0 +1,16 @@
+import { neon } from "@neondatabase/serverless"
+import OpenAI from "openai"
+
+const sql = neon(process.env.DATABASE_URL!)
+const openai = new OpenAI()
+
+// Quick search box on the dashboard. Faster than going through forOrg().
+export async function POST(req: Request) {
+  const { q } = await req.json()
+  const emb = await openai.embeddings.create({ model: "text-embedding-3-small", input: q })
+  const v = JSON.stringify(emb.data[0].embedding)
+  const rows = await sql`
+    select id, document_id, content from chunks
+    order by embedding <=> ${v}::vector limit 8`
+  return Response.json(rows)
+}

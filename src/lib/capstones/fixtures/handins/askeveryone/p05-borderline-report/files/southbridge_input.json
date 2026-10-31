@@ -1,0 +1,95 @@
+{
+  "organisation": {
+    "name": "Southbridge Community Trust",
+    "type": "UK registered charity (England and Wales)",
+    "mission": "Employment support and skills training for adults in economic hardship",
+    "staff_band": "85-120 (10 full-time)",
+    "annual_income_band": "£1.5M-£2.5M",
+    "location": "South Midlands, England (fictional)",
+    "it_stack": "Google Workspace; Salesforce nonprofit CRM; no dedicated IT team",
+    "ai_maturity_baseline": "tier_1_to_2"
+  },
+  "departments": [
+    "CEO Office",
+    "Programmes",
+    "Finance",
+    "IT",
+    "HR and Volunteers"
+  ],
+  "interviews": [
+    {
+      "respondent_id": "R001",
+      "role_band": "Senior Leadership",
+      "department": "CEO Office",
+      "quote_summary": "Concerned about AI risk but recognises competitive pressure; wants a phased approach."
+    },
+    {
+      "respondent_id": "R002",
+      "role_band": "Programmes Manager",
+      "department": "Programmes",
+      "quote_summary": "Beneficiary communication is the main pain point; case-note writing takes hours."
+    },
+    {
+      "respondent_id": "R003",
+      "role_band": "Finance Officer",
+      "department": "Finance",
+      "quote_summary": "Manual invoice processing is the slowest task; would value document extraction."
+    },
+    {
+      "respondent_id": "R004",
+      "role_band": "IT Volunteer",
+      "department": "IT",
+      "quote_summary": "Limited capacity; needs lightweight tooling that does not require maintenance."
+    },
+    {
+      "respondent_id": "R005",
+      "role_band": "HR Coordinator",
+      "department": "HR and Volunteers",
+      "quote_summary": "Volunteer onboarding is repetitive paperwork; an AI assistant might help."
+    },
+    {
+      "respondent_id": "R006",
+      "role_band": "Programmes Officer",
+      "department": "Programmes",
+      "quote_summary": "Reporting to funders is time-consuming and uses similar phrasing each time."
+    },
+    {
+      "respondent_id": "R007",
+      "role_band": "Finance Assistant",
+      "department": "Finance",
+      "quote_summary": "Reconciliation work is straightforward but slow; pattern-matching opportunity."
+    },
+    {
+      "respondent_id": "R008",
+      "role_band": "Trustee",
+      "department": "CEO Office",
+      "quote_summary": "Wants assurance on consent, data protection, and trustee oversight before any rollout."
+    }
+  ],
+  "theme_scores_baseline": {
+    "leadership_and_strategy": {
+      "score": 2.3,
+      "confidence": "medium"
+    },
+    "data_foundations": {
+      "score": 1.8,
+      "confidence": "low"
+    },
+    "people_and_skills": {
+      "score": 2.1,
+      "confidence": "medium"
+    },
+    "process_and_workflow": {
+      "score": 2.5,
+      "confidence": "high"
+    },
+    "governance_and_risk": {
+      "score": 2.0,
+      "confidence": "medium"
+    },
+    "technology_and_infrastructure": {
+      "score": 1.6,
+      "confidence": "high"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo for two test companies, Riverside Plumbing and Hill Top Bakery, with a dashboard search box added this week.",
+  "checked": "two_company_test.md: the chat page passes for both companies, but the new search box showed a Riverside document to the Hill Top user.",
+  "fixed": "Chat was fine from the start because it goes through forOrg(). I wrote the search route in a hurry and skipped the helper; I've noted it to fix.",
+  "next": "Route /api/search through forOrg() and re-run the test."
+}

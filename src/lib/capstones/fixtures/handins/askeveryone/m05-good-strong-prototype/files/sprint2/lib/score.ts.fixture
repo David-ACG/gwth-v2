@@ -1,0 +1,23 @@
+import Anthropic from "@anthropic-ai/sdk"
+import { retrieveTopChunks } from "./retrieve"
+
+const anthropic = new Anthropic()
+const PIPELINE_VERSION = "sprint2_v0.2"
+
+const SYSTEM =
+  "You are an AI readiness analyst. Give a maturity level only from the retrieved evidence. " +
+  "Every score must include at least one evidence_ref. Never invent evidence. Return JSON: " +
+  '{ "level": 1-5, "evidence_refs": string[], "confidence": "high"|"medium"|"low", "justification": string }'
+
+export async function scoreTheme(theme: string, organisationId: string) {
+  const chunks = await retrieveTopChunks(theme, organisationId, 8)
+  const res = await anthropic.messages.create({
+    model: process.env.SCORING_MODEL!,
+    max_tokens: 1200,
+    system: SYSTEM,
+    messages: [{ role: "user", content: `Theme: ${theme}\n\nEvidence:\n${chunks.map((c) => `[${c.ref}] ${c.text}`).join("\n")}` }],
+  })
+  const block = res.content.find((b) => b.type === "text")
+  const verdict = JSON.parse(block && block.type === "text" ? block.text : "{}")
+  return { ...verdict, theme, pipeline_version: PIPELINE_VERSION }
+}

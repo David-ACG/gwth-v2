@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo for Riverside Plumbing and Hill Top Bakery with cited answers.",
+  "checked": "I clicked the chips on three different questions (screenshots/cited_answer_1.png to _3.png) and each opened the right section of the right document.",
+  "fixed": "Citation chips didn't show at first; I was passing chunks as plain text instead of document blocks.",
+  "next": "Move the org filter into one helper and make the governance pack specific to Riverside."
+}

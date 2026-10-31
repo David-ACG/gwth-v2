@@ -1,0 +1,12 @@
+{
+  "table": "transcripts",
+  "exported_at": "2026-10-30",
+  "rows": [
+    {
+      "respondent_id": "T01",
+      "question_id": "q1",
+      "answer_text": "Writing up case notes after each session. It takes me most of Friday.",
+      "consent_event_id": "c0a8f3e2-0000-4000-8000-000000000001"
+    }
+  ]
+}

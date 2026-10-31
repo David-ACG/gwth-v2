@@ -1,0 +1,6 @@
+{
+  "built": "FamilyBot for the Patel-Brown example household: a Blueprint, the Sunday voice note, a traced weekly brief, and a WhatsApp summary and email digest for both parents.",
+  "checked": "Every line in weekly_brief_2026-05-11.md ends with a [T] tag and a quote from the transcript, so I could tick each one off against m1l22_week_ahead_voicenote_2026-05-10.txt. Two things the note does not say went into Uncertain.",
+  "fixed": "The first brief put the dentist practice's name in, which the calendar doesn't need, so I removed it and added a 'kept out on purpose' line. I read both messages, cut the WhatsApp one to eight lines and sent them myself.",
+  "next": "Put the gala into the family calendar from an ICS file instead of just a reminder, and share the reminders list with James."
+}

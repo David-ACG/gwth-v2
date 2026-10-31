@@ -1,0 +1,6 @@
+{
+  "built": "A readiness assessment for the fictional Southbridge charity, with a typed interview and one scored theme.",
+  "checked": "The report's summary cites R003 and R007 and they are in the golden input.",
+  "fixed": "The PDF export failed on Vercel; I added the Chromium package and it worked.",
+  "next": "Make the deck and run the eval suite."
+}

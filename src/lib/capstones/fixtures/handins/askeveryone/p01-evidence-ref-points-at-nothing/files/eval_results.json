@@ -1,0 +1,33 @@
+{
+  "run_at": "2026-10-30T09:12:00Z",
+  "input": "southbridge_input.json",
+  "passed": 5,
+  "total": 5,
+  "checks": [
+    {
+      "id": "citation_coverage",
+      "passed": true,
+      "detail": "every ref matches the pattern R + three digits (database lookup not wired up yet)"
+    },
+    {
+      "id": "unsupported_claims",
+      "passed": true,
+      "flagged": []
+    },
+    {
+      "id": "golden_test",
+      "passed": true,
+      "detail": "required fields present; no empty kill_criterion; matches southbridge.expected.json"
+    },
+    {
+      "id": "plain_english",
+      "passed": true,
+      "flesch_reading_ease": 77.3
+    },
+    {
+      "id": "schema",
+      "passed": true,
+      "detail": "6 of 6 objects valid against their tool schemas"
+    }
+  ]
+}

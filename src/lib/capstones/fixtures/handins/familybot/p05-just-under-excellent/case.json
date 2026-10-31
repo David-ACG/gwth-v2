@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "planted",
+  "intended_band": "good",
+  "intended_total": 78.75,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "good"
+    },
+    {
+      "id": "transcript",
+      "level": "good"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "excellent"
+    },
+    {
+      "id": "digest",
+      "level": "good"
+    },
+    {
+      "id": "in_apps",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": "Borderline just under the Excellent line: strong work let down by 'Really in their apps' (one screenshot of a task in a personal list), totalling 78.75.",
+  "why": "Borderline: 78.75, just under the Excellent line. An excellent, fully traced brief, good Blueprint, transcript and digest, but only one screenshot (a task in a personal Reminders list), so 'Really in their apps' is only Pass."
+}

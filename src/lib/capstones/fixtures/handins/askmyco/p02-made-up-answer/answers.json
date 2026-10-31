@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo for Riverside Plumbing and Hill Top Bakery: staff ask questions about their own documents and get cited answers.",
+  "checked": "screenshots/cited_answer_1.png shows the cancellation question answered with a citation to returns-and-refunds.md. screenshots/answer_not_in_documents.png shows that even questions the documents don't cover still get a useful answer.",
+  "fixed": "At first it kept saying 'I cannot find this', which users would find annoying, so I changed the system prompt to answer from general knowledge when the documents run out.",
+  "next": "Add more documents so it needs general knowledge less often."
+}

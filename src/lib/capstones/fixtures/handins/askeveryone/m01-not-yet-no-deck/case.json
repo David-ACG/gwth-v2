@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "made-up",
+  "intended_band": "not_yet",
+  "intended_total": 22.5,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "pass"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "pass"
+    },
+    {
+      "id": "report_deck",
+      "level": "not_yet"
+    },
+    {
+      "id": "evaluation",
+      "level": "not_yet"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": true
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": true
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Not yet on its total (22.5) with every basic met: a partial report (summary, roadmap, risk with the legal review line), no deck and no eval results."
+}

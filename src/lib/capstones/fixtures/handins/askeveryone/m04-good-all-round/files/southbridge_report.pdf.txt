@@ -1,0 +1,47 @@
+Southbridge Community Trust: AI readiness assessment
+October 2026. All data in this report is fictional.
+
+Executive summary
+Southbridge should start with invoice help in Finance and case-note help in Programmes in the next thirty days.
+Key findings
+- Invoice processing is the slowest task in Finance. (R003, R007)
+- Case notes and funder reports take Programmes staff hours each week. (R002, R006)
+- Trustees want a clear consent and data plan before any rollout. (R008)
+- Data foundations score lowest of the themes, at 1.8, with low confidence. (data_foundations)
+
+Southbridge is at an early stage with AI. Its work is well run in Finance and Programmes, but its data is weak and it has no IT team. Two pilots would save the most time. One helps Finance with invoices. The other helps Programmes write case notes. Both can start with tools the charity already uses. The trustees will back this if a plan for consent and data comes first. We suggest a thirty-day pilot in one Finance task, run alongside a data protection impact assessment.
+
+Readiness by theme
+Scores run from 1 (not started) to 5 (built in).
+- Process and workflow: 2.5, high confidence (R003, R006, R007)
+- Leadership and strategy: 2.3, medium (R001, R008)
+- People and skills: 2.1, medium (R002, R005)
+- Governance and risk: 2.0, medium (R001, R008)
+- Data foundations: 1.8, low (R003, R004)
+- Technology and infrastructure: 1.6, high (R004)
+
+Roadmap
+Now: invoice pilot in Finance (R003, R007). Governance gate: DPIA signed off.
+Next: case-note templates in Programmes (R002, R006). Gate: consent wording agreed.
+Later: volunteer onboarding help in HR (R005). Gate: pilot review at day 90.
+
+Department recommendations
+- Finance: pilot document extraction on one invoice task (R003, R007).
+- Programmes: templates for case notes and funder reports (R002, R006).
+- HR and Volunteers: a checklist assistant for onboarding paperwork, after the pilots (R005).
+- IT: choose only tools that need no upkeep from a volunteer (R004).
+- CEO Office: set up trustee oversight of every pilot (R001, R008).
+
+Risk and governance
+- Personal data in case notes. Mitigation: no beneficiary names in prompts; DPIA first. Owner: CEO.
+- Weak data foundations (low-confidence score). Mitigation: start with one clean invoice task. Owner: Finance Officer.
+- No IT capacity. Mitigation: managed tools only. Owner: IT Volunteer.
+Real deployment needs legal review before any tool goes live, including the DPIA and the charity's data protection duties. This report is not legal advice.
+
+30-60-90 day plan
+Day 30: Map three Finance invoice tasks and pick one for a pilot. Owner: Finance Officer. Depends on: DPIA started. Stop rule: stop if no task takes more than two hours a week.
+Day 30: Start a data protection impact assessment for the pilot. Owner: CEO. Depends on: none. Stop rule: stop the pilot if the DPIA finds a high risk we cannot reduce.
+Day 60: Run the invoice pilot with Google Workspace tools. Owner: Finance Officer. Depends on: DPIA signed off; trustee approval. Stop rule: stop if invoice time does not fall by a quarter in four weeks.
+Day 60: Draft case-note templates with an AI assistant, no beneficiary names. Owner: Programmes Manager. Depends on: consent wording agreed. Stop rule: stop if staff spend longer checking notes than writing them.
+Day 90: Decide whether to keep, change or stop each pilot. Owner: CEO and trustees. Depends on: pilot results. Stop rule: stop any pilot that missed its target.
+Day 90: Write a one-page AI use policy for staff and volunteers. Owner: HR Coordinator. Depends on: pilot lessons. Stop rule: stop if trustees do not approve it by day 90.

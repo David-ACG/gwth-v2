@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "planted",
+  "intended_band": "good",
+  "intended_total": 61.25,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "good"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "good"
+    },
+    {
+      "id": "report_deck",
+      "level": "pass"
+    },
+    {
+      "id": "evaluation",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": true
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": true
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": true
+    }
+  ],
+  "planted_problem": "Borderline report just over the Good line (61.25): the six sections are there, but the executive summary reads at reading ease well under 50 and two 30-60-90 actions have no stop rule, so Report and deck is only Pass; the eval results show those same failures.",
+  "why": "Borderline: 61.25, within 3 points of the Good line, every basic met. Tests that the judges place a weak report at Pass without dragging the whole hand-in below Good."
+}

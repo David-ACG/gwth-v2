@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 37.5,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "pass"
+    },
+    {
+      "id": "transcript",
+      "level": "pass"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "pass"
+    },
+    {
+      "id": "digest",
+      "level": "not_yet"
+    },
+    {
+      "id": "in_apps",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": "Borderline just under the Pass line: a thin but honest hand-in with no digest email (WhatsApp summary only) that totals 37.5.",
+  "why": "Borderline: 37.5, within 3 points under the Pass line. Every basic is met. A thin Blueprint, an uncorrected transcript, a brief with unresolved days and no Uncertain section, only a WhatsApp summary (no digest email, so the digest criterion is Not yet), and one screenshot of a task in a personal list."
+}

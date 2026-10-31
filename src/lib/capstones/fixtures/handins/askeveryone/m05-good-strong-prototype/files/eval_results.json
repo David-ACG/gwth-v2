@@ -1,0 +1,33 @@
+{
+  "run_at": "2026-10-30T09:12:00Z",
+  "input": "southbridge_input.json",
+  "passed": 3,
+  "total": 5,
+  "checks": [
+    {
+      "id": "citation_coverage",
+      "passed": true,
+      "detail": "21 of 21 evidence refs resolve"
+    },
+    {
+      "id": "unsupported_claims",
+      "passed": true,
+      "flagged": []
+    },
+    {
+      "id": "golden_test",
+      "passed": false,
+      "detail": "southbridge.expected.json not committed yet"
+    },
+    {
+      "id": "plain_english",
+      "passed": true,
+      "flesch_reading_ease": 77.3
+    },
+    {
+      "id": "schema",
+      "passed": false,
+      "detail": "department recommendations: 1 of 5 objects missing 90_day_action"
+    }
+  ]
+}

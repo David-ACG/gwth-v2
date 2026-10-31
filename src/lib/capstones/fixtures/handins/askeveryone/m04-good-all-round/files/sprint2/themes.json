@@ -1,0 +1,28 @@
+{
+  "themes": [
+    {
+      "theme_id": "TH1",
+      "label": "Finance loses time to manual invoices and reconciliation",
+      "evidence_refs": ["R003", "R007"],
+      "confidence": "high"
+    },
+    {
+      "theme_id": "TH2",
+      "label": "Programmes staff spend hours writing case notes and funder reports",
+      "evidence_refs": ["R002", "R006"],
+      "confidence": "high"
+    },
+    {
+      "theme_id": "TH3",
+      "label": "Leaders and trustees want consent and oversight before any rollout",
+      "evidence_refs": ["R001", "R008"],
+      "confidence": "medium"
+    },
+    {
+      "theme_id": "TH4",
+      "label": "No IT capacity to run or maintain new tools",
+      "evidence_refs": ["R004"],
+      "confidence": "medium"
+    }
+  ]
+}

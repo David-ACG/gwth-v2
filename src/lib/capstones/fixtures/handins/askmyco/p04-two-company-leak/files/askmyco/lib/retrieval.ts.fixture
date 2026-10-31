@@ -1,0 +1,41 @@
+import Anthropic from "@anthropic-ai/sdk"
+import OpenAI from "openai"
+import { neon } from "@neondatabase/serverless"
+
+const sql = neon(process.env.DATABASE_URL!)
+const anthropic = new Anthropic()
+const openai = new OpenAI()
+
+export const NOT_FOUND = "I cannot find this in your documents."
+
+const SYSTEM = `Answer only from the documents provided and cite the passage you use.
+If the documents do not answer the question, reply exactly: "${NOT_FOUND}"`
+
+export async function answer(orgId: string, question: string) {
+  const emb = await openai.embeddings.create({ model: "text-embedding-3-small", input: question })
+  const v = JSON.stringify(emb.data[0].embedding)
+  const chunks = await sql`
+    select id, document_id, content from chunks
+    where org_id = ${orgId}
+    order by embedding <=> ${v}::vector limit 8`
+  if (chunks.length === 0) return { text: NOT_FOUND, citations: [] }
+  return anthropic.messages.create({
+    model: process.env.ANSWER_MODEL!,
+    max_tokens: 800,
+    system: SYSTEM,
+    messages: [
+      {
+        role: "user",
+        content: [
+          ...chunks.map((c) => ({
+            type: "document" as const,
+            source: { type: "text" as const, media_type: "text/plain" as const, data: String(c.content) },
+            title: String(c.document_id),
+            citations: { enabled: true },
+          })),
+          { type: "text" as const, text: question },
+        ],
+      },
+    ],
+  })
+}

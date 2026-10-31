@@ -1,0 +1,7 @@
+{
+  "run_id": "s2-2026-10-29-02",
+  "pipeline_version": "sprint2_v0.2",
+  "faithfulness": 0.82,
+  "context_relevance": 0.77,
+  "answer_relevance": 0.84
+}

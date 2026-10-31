@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "made-up",
+  "intended_band": "good",
+  "intended_total": 75.0,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "good"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "good"
+    },
+    {
+      "id": "report_deck",
+      "level": "good"
+    },
+    {
+      "id": "evaluation",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": true
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": true
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Good on every criterion (75)."
+}

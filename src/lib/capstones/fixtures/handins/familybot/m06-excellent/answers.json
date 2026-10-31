@@ -1,0 +1,6 @@
+{
+  "built": "FamilyBot for the Patel-Brown example household in ChatGPT Projects. Priya records a Sunday voice note; FamilyBot makes a traced weekly brief, then a WhatsApp message and an email that lead with the week's one deadline, for both parents.",
+  "checked": "Every line in weekly_brief_2026-05-11.md has a [T] tag quoting m1l22_week_ahead_voicenote_2026-05-10.txt; I ticked each one off. The To Do task 'Pay £12 school trip on ParentPay, due Fri 15 May' matches the brief's top task word for word.",
+  "fixed": "The transcript had 'Tom's tide' for 'Tom's tie', which would have sent us hunting for the wrong thing on Monday; the header of the transcript lists that and the two other fixes. The first digest buried the £12 deadline in paragraph three, so I asked it to lead with the one deadline.",
+  "next": "Move the gala from my own calendar to the shared Family calendar so James gets it too."
+}

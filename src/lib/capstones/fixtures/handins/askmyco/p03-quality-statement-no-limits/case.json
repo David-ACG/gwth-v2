@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 71.25,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "good"
+    },
+    {
+      "id": "data_apart",
+      "level": "good"
+    },
+    {
+      "id": "governance",
+      "level": "good"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "good"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "good"
+    },
+    {
+      "id": "quality_statement",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": false
+    }
+  ],
+  "planted_problem": "The Quality Statement has no 'what it does not yet do' section and claims it 'answers every question accurately' and is 'fully secure and GDPR compliant'. It is signed and dated.",
+  "why": "'An honest Quality Statement' is not met, so Not yet. The statement itself is Pass (one page, signed, dated) but nowhere near Good. Total 71.25."
+}

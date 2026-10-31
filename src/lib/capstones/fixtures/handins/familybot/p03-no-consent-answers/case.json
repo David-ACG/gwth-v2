@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 75.0,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "good"
+    },
+    {
+      "id": "transcript",
+      "level": "good"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "good"
+    },
+    {
+      "id": "digest",
+      "level": "good"
+    },
+    {
+      "id": "in_apps",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": false
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": "The student used their own household, but the Blueprint's household consent section is left as blank placeholders and is not signed by either adult.",
+  "why": "Good on every criterion (75), but 'Consent' is not met: it is the student's own household, not the worked example, and the consent questions are unanswered. Band Not yet."
+}

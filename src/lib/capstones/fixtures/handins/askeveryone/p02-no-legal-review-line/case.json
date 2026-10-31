@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 75.0,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "good"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "good"
+    },
+    {
+      "id": "report_deck",
+      "level": "good"
+    },
+    {
+      "id": "evaluation",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": true
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": true
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": false
+    }
+  ],
+  "planted_problem": "The risk and governance section (and the deck's risk slide) never says that real deployment needs legal review; it says only that trustees will approve each pilot.",
+  "why": "'No regulated advice' is not met, so Not yet, though the work is Good throughout (75)."
+}

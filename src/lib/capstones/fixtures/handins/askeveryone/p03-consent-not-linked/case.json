@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 70.0,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "pass"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "good"
+    },
+    {
+      "id": "report_deck",
+      "level": "good"
+    },
+    {
+      "id": "evaluation",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": false
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": true
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": true
+    }
+  ],
+  "planted_problem": "The transcripts table's consent_event_id was made optional, one of three test transcripts (T02) has no consent record, and the deletion path was written but never tested.",
+  "why": "'Consent first' is not met, so Not yet. The interview prototype drops to Pass because consent can be skipped. Total 70."
+}

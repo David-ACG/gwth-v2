@@ -1,0 +1,6 @@
+{
+  "built": "The Southbridge readiness assessment, made more realistic with three real interviews from colleagues at Fernhill Housing Association, where I work.",
+  "checked": "The evidence references in southbridge_output.json all resolve to rows in southbridge_input.json, including the three new ones, and the five eval checks pass.",
+  "fixed": "The fictional data felt thin, so I interviewed three colleagues over lunch and added them as R009 to R011. They were happy to chat, so I skipped the consent page.",
+  "next": "Interview more colleagues so every department has two voices."
+}

@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "made-up",
+  "intended_band": "good",
+  "intended_total": 76.25,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "excellent"
+    },
+    {
+      "id": "data_apart",
+      "level": "good"
+    },
+    {
+      "id": "governance",
+      "level": "good"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "good"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "pass"
+    },
+    {
+      "id": "quality_statement",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Good (76.25): an Excellent citations check with a weak answer explained and fixed, a Pass-level sprint plan (no sources or 'done when' lines)."
+}

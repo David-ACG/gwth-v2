@@ -1,0 +1,35 @@
+{
+  "run_at": "2026-10-30T09:12:00Z",
+  "input": "southbridge_input.json",
+  "passed": 2,
+  "total": 5,
+  "checks": [
+    {
+      "id": "citation_coverage",
+      "passed": true,
+      "detail": "21 of 21 evidence refs resolve to Southbridge evidence rows"
+    },
+    {
+      "id": "unsupported_claims",
+      "passed": false,
+      "flagged": [
+        "'comprehensive data protection impact assessment completion' has no evidence_ref"
+      ]
+    },
+    {
+      "id": "golden_test",
+      "passed": false,
+      "detail": "2 empty kill_criterion fields in plan_30_60_90"
+    },
+    {
+      "id": "plain_english",
+      "passed": false,
+      "flesch_reading_ease": 3.6
+    },
+    {
+      "id": "schema",
+      "passed": true,
+      "detail": "6 of 6 objects valid against their tool schemas"
+    }
+  ]
+}

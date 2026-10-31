@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "made-up",
+  "intended_band": "pass",
+  "intended_total": 50.0,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "pass"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "pass"
+    },
+    {
+      "id": "report_deck",
+      "level": "pass"
+    },
+    {
+      "id": "evaluation",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": true
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": true
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Plain Pass on every criterion (50)."
+}

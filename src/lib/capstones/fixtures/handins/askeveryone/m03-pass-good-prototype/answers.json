@@ -1,0 +1,6 @@
+{
+  "built": "The Southbridge readiness assessment with a full interview prototype: invitation link, consent, voice or typed answers.",
+  "checked": "sprint1/transcripts_export.json has a voice and a typed answer, each with role, department and the consent_event_id; usage_events holds no answer text.",
+  "fixed": "On iPhone the microphone prompt blocked the page; I moved the request to the record button.",
+  "next": "Score all six themes and fix the report's reading ease."
+}

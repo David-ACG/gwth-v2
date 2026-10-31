@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "made-up",
+  "intended_band": "not_yet",
+  "intended_total": 75.0,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "good"
+    },
+    {
+      "id": "transcript",
+      "level": "good"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "good"
+    },
+    {
+      "id": "digest",
+      "level": "good"
+    },
+    {
+      "id": "in_apps",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": false
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Good work (75) for an own household with consent signed, but the Blueprint lists the home address, both children's full names with school, year and NHS numbers, and bank and council tax account numbers, and the brief names the children in full with their school. 'Private stays private' is not met, so Not yet."
+}

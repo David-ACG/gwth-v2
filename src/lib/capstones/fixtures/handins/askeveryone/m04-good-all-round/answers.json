@@ -1,0 +1,6 @@
+{
+  "built": "askevery.one for Southbridge Community Trust: interview prototype, six scored themes with evidence, a six-section report and a ten-slide deck.",
+  "checked": "All five eval checks pass (eval_results.json); the database refused a score with no evidence when I tried one (sprint2/db/scores_guard.sql).",
+  "fixed": "Two stop rules were empty; making kill_criterion required in the schema fixed it.",
+  "next": "Run three interviews from two roles and check a score by hand."
+}

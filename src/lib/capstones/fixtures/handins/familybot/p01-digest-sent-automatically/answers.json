@@ -1,0 +1,6 @@
+{
+  "built": "A FamilyBot for the Patel-Brown example household in ChatGPT Projects. It turns the Sunday voice note into a weekly brief, a WhatsApp summary and a digest email for both parents.",
+  "checked": "I checked the weekly brief (weekly_brief_2026-05-11.md) against the transcript line by line: every date and the £12 amount match, and the parents' evening question went into the Uncertain section.",
+  "fixed": "The first digest was too long, so I added 'keep it under 20 lines' to the prompt. Then I set up a Zapier schedule so FamilyBot emails the digest and posts the WhatsApp message every Sunday at 6pm on its own. I don't need to read them first now, which is the whole point.",
+  "next": "Add the meal plan to the WhatsApp message too, and let the automation add tasks to To Do as well."
+}

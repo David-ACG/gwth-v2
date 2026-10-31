@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "made-up",
+  "intended_band": "pass",
+  "intended_total": 50.0,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "pass"
+    },
+    {
+      "id": "transcript",
+      "level": "pass"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "pass"
+    },
+    {
+      "id": "digest",
+      "level": "pass"
+    },
+    {
+      "id": "in_apps",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Plain Pass on every criterion (50): everything is there at the simplest level, nothing more."
+}

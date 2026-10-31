@@ -1,0 +1,14 @@
+import { neon } from "@neondatabase/serverless"
+
+const sql = neon(process.env.DATABASE_URL!)
+
+type EventName = "interview_started" | "question_answered" | "interview_completed"
+
+/** Records how the interview is used. Never pass answer text in here. */
+export async function track(
+  name: EventName,
+  e: { respondentId: string; organisationId: string; questionId?: string; inputMode?: "voice" | "typed"; answerLength?: number },
+) {
+  await sql`insert into usage_events (event_name, respondent_id, organisation_id, question_id, input_mode, answer_length)
+            values (${name}, ${e.respondentId}, ${e.organisationId}, ${e.questionId ?? null}, ${e.inputMode ?? null}, ${e.answerLength ?? null})`
+}

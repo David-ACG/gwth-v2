@@ -1,0 +1,6 @@
+{
+  "built": "The askevery.one readiness assessment for the fictional Southbridge Community Trust: the interview prototype, evidence and scoring, and a report and deck for the leadership team.",
+  "checked": "eval_results.json shows all five checks passing, including citation coverage, and the executive summary in southbridge_report.pdf has an evidence reference on every finding.",
+  "fixed": "The first report had a finding with no reference at all, so I asked the summary tool to add one to every finding. It now gives R009 for the volunteer rota finding.",
+  "next": "Wire the citation check up to the database instead of the pattern test."
+}

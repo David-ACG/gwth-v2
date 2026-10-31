@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 75.0,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "good"
+    },
+    {
+      "id": "transcript",
+      "level": "good"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "good"
+    },
+    {
+      "id": "digest",
+      "level": "good"
+    },
+    {
+      "id": "in_apps",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": false
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": "The WhatsApp summary and the digest email were sent automatically by a Zapier schedule; the student says they did not read them before they went out.",
+  "why": "Good work on every criterion (75), but 'A person sends' is not met, so the band is Not yet whatever the total. Tests that a judge reads the footer lines and the answers, not just the quality of the digest."
+}

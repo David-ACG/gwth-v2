@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo for small businesses, tested with Riverside Plumbing and Hill Top Bakery, with a FractionalBuddy spec, sprint plan and Quality Statement.",
+  "checked": "Three questions with citation chips that open the right passage (screenshots/cited_answer_1.png to _3.png), and the two-company test in two_company_test.md.",
+  "fixed": "The ROPA template still had [your business name] in it; I filled it in for Riverside. I took the limitations out of the Quality Statement because a client would not buy something that lists its problems.",
+  "next": "Add spreadsheet support."
+}

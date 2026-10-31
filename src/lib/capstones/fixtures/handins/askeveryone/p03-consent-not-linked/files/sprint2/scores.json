@@ -1,0 +1,46 @@
+{
+  "scores": [
+    {
+      "theme": "process_and_workflow",
+      "score": 2.5,
+      "confidence": "high",
+      "evidence_refs": ["R003", "R006", "R007"],
+      "justification": "Finance and Programmes describe repeatable, well-understood tasks (invoices, reconciliation, funder reports) that are slow but stable."
+    },
+    {
+      "theme": "leadership_and_strategy",
+      "score": 2.3,
+      "confidence": "medium",
+      "evidence_refs": ["R001", "R008"],
+      "justification": "Leadership sees the pressure to use AI but wants a phased approach; a trustee wants assurance first."
+    },
+    {
+      "theme": "people_and_skills",
+      "score": 2.1,
+      "confidence": "medium",
+      "evidence_refs": ["R002", "R005"],
+      "justification": "Staff can name where time goes (case notes, onboarding paperwork) but no one mentions AI skills or training."
+    },
+    {
+      "theme": "governance_and_risk",
+      "score": 2.0,
+      "confidence": "medium",
+      "evidence_refs": ["R001", "R008"],
+      "justification": "Risk is a stated concern; consent and trustee oversight are asked for but not yet in place."
+    },
+    {
+      "theme": "data_foundations",
+      "score": 1.8,
+      "confidence": "low",
+      "evidence_refs": ["R003", "R004"],
+      "justification": "Invoices are processed by hand and there is no IT team to own data; only two interviews touch on data."
+    },
+    {
+      "theme": "technology_and_infrastructure",
+      "score": 1.6,
+      "confidence": "high",
+      "evidence_refs": ["R004"],
+      "justification": "The IT volunteer has limited capacity and needs tools that need no maintenance."
+    }
+  ]
+}

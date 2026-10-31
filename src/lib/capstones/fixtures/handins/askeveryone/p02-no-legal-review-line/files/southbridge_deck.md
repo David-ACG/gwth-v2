@@ -1,0 +1,68 @@
+---
+marp: true
+paginate: true
+---
+
+# Southbridge Community Trust
+
+AI readiness assessment, October 2026 (fictional data)
+
+---
+
+# Executive summary
+
+Start with invoice help in Finance and case-note help in Programmes in the next thirty days.
+
+---
+
+# Key findings
+
+- Invoices are the slowest Finance task (R003, R007)
+- Case notes take hours (R002, R006)
+- Trustees want consent first (R008)
+
+---
+
+# Roadmap
+
+- Now: invoice pilot
+- Next: case-note templates
+- Later: onboarding help
+
+---
+
+# Department snapshot
+
+Finance, Programmes, HR and Volunteers, IT, CEO Office
+
+---
+
+# Risk and governance
+
+- DPIA before any pilot
+- No beneficiary names in prompts
+- Trustees approve each pilot
+
+---
+
+# 30-day plan
+
+Map invoice tasks; start the DPIA
+
+---
+
+# 60-day plan
+
+Run the invoice pilot; draft case-note templates
+
+---
+
+# 90-day plan
+
+Keep, change or stop each pilot; staff AI policy
+
+---
+
+# Next steps
+
+Trustees approve the Finance pilot and name a DPIA trustee

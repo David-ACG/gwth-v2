@@ -1,0 +1,6 @@
+{
+  "built": "askevery.one for Southbridge: a voice and typed interview, evidence and scoring, and the report and deck.",
+  "checked": "sprint1/transcripts_export.json has three test interviews saved with role, department and input mode.",
+  "fixed": "Typed answers would not save when testers skipped the consent page, so I made consent_event_id optional in the schema. I have not run withdraw_consent() yet because I did not want to lose the test rows.",
+  "next": "Test the deletion function in Sprint 3."
+}

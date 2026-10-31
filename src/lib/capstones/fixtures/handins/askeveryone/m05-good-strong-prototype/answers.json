@@ -1,0 +1,6 @@
+{
+  "built": "The Southbridge readiness assessment, with the interview prototype tested by three cohort peers in two roles.",
+  "checked": "sprint1/README.md: T02's voice answer came back as 'matching in voices' with no way to fix it, so I made the transcript editable before saving and T03 then corrected one word.",
+  "fixed": "The editable transcript box above, and making kill_criterion required, though the eval still fails on reading ease.",
+  "next": "Get the report summary over reading ease 50 and the golden test passing."
+}

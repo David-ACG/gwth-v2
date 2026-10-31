@@ -1,0 +1,16 @@
+{
+  "request": {
+    "org": "Riverside Plumbing Ltd",
+    "person_name": "Dave Hughes",
+    "run_at": "2026-11-02T10:14:00Z"
+  },
+  "rows": [
+    {
+      "document_id": "doc_leave_policy",
+      "title": "leave-policy.md",
+      "chunk_index": 0,
+      "content": "Book leave with Dave Hughes, the office manager, at least two weeks ahead."
+    }
+  ],
+  "reviewed_by_hand": "Also searched 'Dave' and 'D. Hughes': no further rows. Sent to Dave on 2 Nov."
+}

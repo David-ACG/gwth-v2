@@ -1,0 +1,6 @@
+{
+  "built": "askevery.one for Southbridge: a typed interview, one evidence-backed score, the report and the deck.",
+  "checked": "The PDF report and the ten-slide deck both open; eval_results.json is there with two checks passing.",
+  "fixed": "Puppeteer would not run on Vercel until I added the Chromium package.",
+  "next": "Fix the reading ease and the empty stop rules."
+}

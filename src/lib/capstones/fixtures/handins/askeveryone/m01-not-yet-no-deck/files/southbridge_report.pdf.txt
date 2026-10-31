@@ -1,0 +1,23 @@
+Southbridge Community Trust: AI readiness assessment
+October 2026. All data in this report is fictional.
+
+Executive summary
+Southbridge should start with invoice help in Finance and case-note help in Programmes in the next thirty days.
+Key findings
+- Invoice processing is the slowest task in Finance. (R003, R007)
+- Case notes and funder reports take Programmes staff hours each week. (R002, R006)
+- Trustees want a clear consent and data plan before any rollout. (R008)
+- Data foundations score lowest of the themes, at 1.8, with low confidence. (data_foundations)
+
+Southbridge Community Trust demonstrates nascent organisational AI readiness, characterised by comparatively mature operational processes within Finance and Programmes, counterbalanced by materially underdeveloped data foundations and constrained technological infrastructure capacity, necessitating prioritised investment in governance-aligned automation initiatives, particularly document-processing automation within Finance and case-note augmentation within Programmes, contingent upon trustee-endorsed assurance frameworks and comprehensive data protection impact assessment completion.
+
+Roadmap
+Now: invoice pilot in Finance (R003, R007). Governance gate: DPIA signed off.
+Next: case-note templates in Programmes (R002, R006). Gate: consent wording agreed.
+Later: volunteer onboarding help in HR (R005). Gate: pilot review at day 90.
+
+Risk and governance
+- Personal data in case notes. Mitigation: no beneficiary names in prompts; DPIA first. Owner: CEO.
+- Weak data foundations (low-confidence score). Mitigation: start with one clean invoice task. Owner: Finance Officer.
+- No IT capacity. Mitigation: managed tools only. Owner: IT Volunteer.
+Real deployment needs legal review before any tool goes live, including the DPIA and the charity's data protection duties. This report is not legal advice.

@@ -1,0 +1,26 @@
+import { neon } from "@neondatabase/serverless"
+
+const sql = neon(process.env.DATABASE_URL!)
+
+/**
+ * The only way into tenant data. Every route calls forOrg(session.orgId), so
+ * no route can forget the org filter.
+ */
+export function forOrg(orgId: string) {
+  if (!orgId) throw new Error("No org on the session")
+  return {
+    similarChunks(embedding: number[], limit = 8) {
+      const v = JSON.stringify(embedding)
+      return sql`
+        select id, document_id, chunk_index, content,
+               1 - (embedding <=> ${v}::vector) as similarity
+        from chunks
+        where org_id = ${orgId}
+        order by embedding <=> ${v}::vector
+        limit ${limit}`
+    },
+    document(id: string) {
+      return sql`select id, title, body from documents where id = ${id} and org_id = ${orgId}`
+    },
+  }
+}

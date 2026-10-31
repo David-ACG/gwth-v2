@@ -1,0 +1,33 @@
+{
+  "table": "transcripts",
+  "exported_at": "2026-10-30",
+  "rows": [
+    {
+      "respondent_id": "T01",
+      "role": "Programmes Officer",
+      "department": "Programmes",
+      "input_mode": "voice",
+      "question_id": "q1",
+      "answer_text": "Writing up case notes after each session. It takes me most of Friday.",
+      "consent_event_id": "c0a8f3e2-0000-4000-8000-000000000001"
+    },
+    {
+      "respondent_id": "T02",
+      "role": "Finance Assistant",
+      "department": "Finance",
+      "input_mode": "typed",
+      "question_id": "q1",
+      "answer_text": "Matching invoices to purchase orders by hand every week.",
+      "consent_event_id": null
+    },
+    {
+      "respondent_id": "T03",
+      "role": "Programmes Officer",
+      "department": "Programmes",
+      "input_mode": "voice",
+      "question_id": "q2",
+      "answer_text": "Anything to do with safeguarding decisions should stay with a person.",
+      "consent_event_id": "c0a8f3e2-0000-4000-8000-000000000003"
+    }
+  ]
+}

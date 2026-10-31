@@ -1,0 +1,6 @@
+{
+  "built": "FamilyBot for the Patel-Brown example household in ChatGPT Projects: Blueprint, voice note, weekly brief, WhatsApp summary and digest email, plus a task and an event in our apps.",
+  "checked": "I checked that weekly_brief_2026-05-11.md turns 'Friday' into Fri 15 May and that the £12 matches the transcript. The gala event in the calendar came from familybot-practice.ics.",
+  "fixed": "The transcript said 'Tom's tide' and 'aunt gen'; I fixed both before making the brief. I read the WhatsApp summary and the email, cut the WhatsApp one to seven lines, and sent both myself.",
+  "next": "Share the calendar with James and lead the digest with the one deadline."
+}

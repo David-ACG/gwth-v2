@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "made-up",
+  "intended_band": "excellent",
+  "intended_total": 96.25,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "excellent"
+    },
+    {
+      "id": "data_apart",
+      "level": "excellent"
+    },
+    {
+      "id": "governance",
+      "level": "excellent"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "excellent"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "good"
+    },
+    {
+      "id": "quality_statement",
+      "level": "excellent"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Excellent (96.25): everything Excellent except the sprint plan (Good: no reasoned deployment path). The answers point at specific files."
+}

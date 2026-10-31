@@ -1,0 +1,11 @@
+{
+  "scores": [
+    {
+      "theme": "process_and_workflow",
+      "score": 2.5,
+      "confidence": "high",
+      "evidence_refs": ["R003", "R006", "R007"],
+      "justification": "Finance and Programmes describe repeatable, well-understood tasks (invoices, reconciliation, funder reports) that are slow but stable."
+    }
+  ]
+}

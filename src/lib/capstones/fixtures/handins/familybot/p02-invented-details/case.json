@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 67.5,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "good"
+    },
+    {
+      "id": "transcript",
+      "level": "good"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "pass"
+    },
+    {
+      "id": "digest",
+      "level": "good"
+    },
+    {
+      "id": "in_apps",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": false
+    }
+  ],
+  "planted_problem": "The brief and digest contain details that are not in the voice note: a dentist appointment on Thu 14 May at 15:30 at 'Smile Dental', a £5 gala entry fee, a £20 voucher, 4 pints of milk, a coach time, a pub for the lunch, and fish and chips instead of pizza. The Uncertain section says 'None'.",
+  "why": "'Nothing invented' is not met, so Not yet. The brief itself drops to Pass because its times, amounts and places no longer match the transcript. Total 67.5."
+}

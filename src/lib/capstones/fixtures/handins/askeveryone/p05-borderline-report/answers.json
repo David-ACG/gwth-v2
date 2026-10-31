@@ -1,0 +1,6 @@
+{
+  "built": "The askevery.one assessment for Southbridge: an invitation-and-consent interview, scored themes with evidence, and the report and deck.",
+  "checked": "eval_results.json shows citations and schema passing; plain English and the golden test fail.",
+  "fixed": "The deck came out with 14 slides; I capped the deck tool at ten. I have not fixed the reading ease yet.",
+  "next": "Rewrite the summary in shorter sentences and fill in the two missing stop rules."
+}

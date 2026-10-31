@@ -1,0 +1,6 @@
+{
+  "built": "askevery.one for Southbridge Community Trust: an interview tested by three peers in two roles, six evidence-backed scores with one corrected by hand, and a report a trustee could act on.",
+  "checked": "sprint2/score_correction.md: data_foundations first came back as 2.6 because the model read R003's wish for document extraction as a fact; I re-ran it with a new prompt line and it is now 1.8. Faithfulness is 0.82 (sprint2/eval_runs.json).",
+  "fixed": "T02 got stuck when voice misheard 'invoices'; the transcript is now editable before saving (sprint1/README.md).",
+  "next": "Show the history of failed eval runs in eval_results.json, not just the final pass."
+}

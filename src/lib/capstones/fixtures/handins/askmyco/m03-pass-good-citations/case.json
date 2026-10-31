@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "made-up",
+  "intended_band": "pass",
+  "intended_total": 55.0,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "good"
+    },
+    {
+      "id": "data_apart",
+      "level": "pass"
+    },
+    {
+      "id": "governance",
+      "level": "pass"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "pass"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "pass"
+    },
+    {
+      "id": "quality_statement",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Pass (55): citations Good (three questions with the right passages), everything else Pass."
+}

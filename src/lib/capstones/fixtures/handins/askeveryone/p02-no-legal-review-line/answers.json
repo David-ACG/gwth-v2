@@ -1,0 +1,6 @@
+{
+  "built": "A readiness assessment for Southbridge Community Trust (fictional): interviews, evidence-backed scores, and a six-section report with a ten-slide deck.",
+  "checked": "All five eval checks pass (eval_results.json); reading ease for the summary is 77.3, and every 30-60-90 action has an owner, a dependency and a stop rule.",
+  "fixed": "Two 90-day actions had an empty stop rule; I made kill_criterion required in the plan schema and regenerated. I also cut the long legal paragraph from the risk section because the trustees approve each pilot anyway.",
+  "next": "Add a department-by-department slide with the scores."
+}

@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "planted",
+  "intended_band": "pass",
+  "intended_total": 42.5,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "pass"
+    },
+    {
+      "id": "data_apart",
+      "level": "pass"
+    },
+    {
+      "id": "governance",
+      "level": "not_yet"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "pass"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "pass"
+    },
+    {
+      "id": "quality_statement",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": "Borderline just over the Pass line (42.5): the governance pack is missing the processing record and the subject access export, so governance is Not yet; everything else is the bare minimum.",
+  "why": "Borderline: 42.5, within 3 points of the Pass line, every basic met. Tests that a judge does not drop a thin but complete-enough hand-in to Not yet, and that it routes to David."
+}

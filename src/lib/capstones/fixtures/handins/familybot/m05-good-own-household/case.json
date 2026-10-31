@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "made-up",
+  "intended_band": "good",
+  "intended_total": 73.75,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "good"
+    },
+    {
+      "id": "transcript",
+      "level": "excellent"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "good"
+    },
+    {
+      "id": "digest",
+      "level": "good"
+    },
+    {
+      "id": "in_apps",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Good (73.75) for a student's own household with consent answered and signed: excellent transcript notes, good Blueprint, brief and digest, one task screenshot only."
+}

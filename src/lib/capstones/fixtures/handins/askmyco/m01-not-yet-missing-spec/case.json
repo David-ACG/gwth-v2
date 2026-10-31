@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "made-up",
+  "intended_band": "not_yet",
+  "intended_total": 32.5,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "pass"
+    },
+    {
+      "id": "data_apart",
+      "level": "pass"
+    },
+    {
+      "id": "governance",
+      "level": "not_yet"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "not_yet"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "pass"
+    },
+    {
+      "id": "quality_statement",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Not yet on its total (32.5) with every basic met: no FractionalBuddy spec, a partial governance pack, everything else at Pass."
+}

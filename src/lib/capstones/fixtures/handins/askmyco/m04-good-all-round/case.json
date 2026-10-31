@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "made-up",
+  "intended_band": "good",
+  "intended_total": 75.0,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "good"
+    },
+    {
+      "id": "data_apart",
+      "level": "good"
+    },
+    {
+      "id": "governance",
+      "level": "good"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "good"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "good"
+    },
+    {
+      "id": "quality_statement",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": true
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Good on every criterion (75)."
+}

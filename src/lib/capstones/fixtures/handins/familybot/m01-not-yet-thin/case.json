@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "made-up",
+  "intended_band": "not_yet",
+  "intended_total": 27.5,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "pass"
+    },
+    {
+      "id": "transcript",
+      "level": "pass"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "not_yet"
+    },
+    {
+      "id": "digest",
+      "level": "pass"
+    },
+    {
+      "id": "in_apps",
+      "level": "not_yet"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "An ordinary weak hand-in that is Not yet on its total (27.5) with every basic met: the brief has only Tasks and Shopping, and there are no screenshots or ICS file."
+}

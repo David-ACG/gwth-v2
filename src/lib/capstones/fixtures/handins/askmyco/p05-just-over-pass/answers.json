@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo, a question-answering app for company documents, and a FractionalBuddy spec for Northbridge Recruitment.",
+  "checked": "screenshots/cited_answer_1.png shows one cited answer working.",
+  "fixed": "Ingesting kept failing because the vector column size was wrong; I changed it to 1536.",
+  "next": "Finish the governance documents."
+}

@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo for two test companies with a citation check, a FractionalBuddy spec for Riverside, a sprint plan and Quality Statement.",
+  "checked": "citations_check.md: ten questions I know the answers to, every chip clicked; question 4 failed first.",
+  "fixed": "Question 4 cited a heading instead of the '5 working days' sentence because my chunker split every 400 characters. I now split on headings and keep sections whole; question 4 now cites section 3.",
+  "next": "Add sources and 'done when' lines to the sprint plan."
+}

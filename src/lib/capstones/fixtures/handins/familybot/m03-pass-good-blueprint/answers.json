@@ -1,0 +1,6 @@
+{
+  "built": "A FamilyBot in ChatGPT Projects for the example Patel-Brown family, with a full Blueprint and the weekly brief and messages.",
+  "checked": "The Blueprint has the training opt-out done and two-step sign-in on; I checked both in ChatGPT's settings. I compared the brief with the voice note and all events were there.",
+  "fixed": "My first system prompt was one line. I rewrote it with the four parts from the lesson.",
+  "next": "Fix the transcript errors and make the digest shorter."
+}

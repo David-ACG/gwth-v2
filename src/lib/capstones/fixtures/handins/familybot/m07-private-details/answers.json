@@ -1,0 +1,6 @@
+{
+  "built": "A FamilyBot for my own household in Claude Projects. I gave it a family details file so it can fill in school and council forms for us.",
+  "checked": "I asked it for Maisie's NHS number and our council tax account and it got both right from family_details.txt, so the file works.",
+  "fixed": "The recorder heard 'in set day' for INSET day; I fixed it in the transcript and re-ran the brief. I read and sent the messages myself.",
+  "next": "Add our car registration and the boiler service details so it can book those too."
+}

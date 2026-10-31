@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo, a cited Q&A engine for small UK businesses, tested with Riverside Plumbing and Hill Top Bakery, and a FractionalBuddy spec that Megan Lloyd at Hill Top read and agreed to.",
+  "checked": "governance/sar_export_output.json is the real output of dsar-export.sql for 'Dave Hughes'; I also searched 'Dave' and 'D. Hughes' by hand. two_company_test.md has the daily leak query I now run.",
+  "fixed": "The deposit-refund question cited a heading, not the sentence with the answer (citations_check.md); I changed chunking to split on headings and re-ingested both companies.",
+  "next": "Write the reasons for the managed-cloud path into the sprint plan, and add Row Level Security as a second fence."
+}

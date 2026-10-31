@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo, a cited company Q&A engine, tested with Riverside Plumbing and Hill Top Bakery; a FractionalBuddy spec for Riverside; a ten-day sprint plan and a Quality Statement.",
+  "checked": "two_company_test.md: as the Hill Top user I searched every /api/chat response in the network tab for 'Riverside' and '£500' and found nothing. All tenant queries go through forOrg() in lib/queries.ts.",
+  "fixed": "Citation chips didn't appear because I sent chunks as plain text; switching to document blocks with citations enabled fixed it.",
+  "next": "Run the subject access export for a real request and show the output."
+}

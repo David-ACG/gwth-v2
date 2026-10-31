@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "made-up",
+  "intended_band": "excellent",
+  "intended_total": 95.0,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "excellent"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "excellent"
+    },
+    {
+      "id": "report_deck",
+      "level": "excellent"
+    },
+    {
+      "id": "evaluation",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": true
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": true
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Excellent (95): everything Excellent except the evaluation run (Good: all five pass, but no failed-first story). The answers point at specific files."
+}

@@ -1,0 +1,44 @@
+{
+  "capstone": "askeveryone",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 70.0,
+  "criteria": [
+    {
+      "id": "interview_prototype",
+      "level": "good"
+    },
+    {
+      "id": "evidence_scoring",
+      "level": "good"
+    },
+    {
+      "id": "report_deck",
+      "level": "good"
+    },
+    {
+      "id": "evaluation",
+      "level": "pass"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent_first",
+      "met": true
+    },
+    {
+      "id": "evidence_behind_claims",
+      "met": false
+    },
+    {
+      "id": "no_real_personal_data",
+      "met": true
+    },
+    {
+      "id": "no_regulated_advice",
+      "met": true
+    }
+  ],
+  "planted_problem": "A key finding in the executive summary ('Volunteers want a chatbot to handle rota changes') cites R009, but the golden input only has R001 to R008. The student's citation check only tests the ID pattern, so it reports a pass.",
+  "why": "'Evidence behind every claim' is not met, so Not yet. Evaluation is Pass, not Good: the results claim all five pass, but the citation check does not look anything up. Total 70."
+}

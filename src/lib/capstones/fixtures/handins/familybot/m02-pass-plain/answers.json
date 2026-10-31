@@ -1,0 +1,6 @@
+{
+  "built": "FamilyBot for the Patel-Brown example family: it turns my Sunday voice note into a weekly list, a WhatsApp message and an email.",
+  "checked": "I compared weekly_brief_2026-05-11.md with the voice note and all the events were there.",
+  "fixed": "The WhatsApp message was long. I left it as it was because everyone reads it anyway. I sent both myself after reading them.",
+  "next": "Make the messages shorter and put the gala in the calendar."
+}

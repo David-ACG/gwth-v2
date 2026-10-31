@@ -1,0 +1,48 @@
+{
+  "capstone": "familybot",
+  "kind": "made-up",
+  "intended_band": "excellent",
+  "intended_total": 96.25,
+  "criteria": [
+    {
+      "id": "blueprint",
+      "level": "excellent"
+    },
+    {
+      "id": "transcript",
+      "level": "excellent"
+    },
+    {
+      "id": "weekly_brief",
+      "level": "excellent"
+    },
+    {
+      "id": "digest",
+      "level": "excellent"
+    },
+    {
+      "id": "in_apps",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "consent",
+      "met": true
+    },
+    {
+      "id": "private",
+      "met": true
+    },
+    {
+      "id": "person_sends",
+      "met": true
+    },
+    {
+      "id": "nothing_invented",
+      "met": true
+    }
+  ],
+  "planted_problem": null,
+  "why": "Excellent (96.25): every criterion Excellent except 'Really in their apps' (task shared, but the calendar event is in the student's own calendar, so Good). The answers point at specific files and fixes."
+}

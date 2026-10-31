@@ -1,0 +1,6 @@
+{
+  "built": "AskMyCo for Riverside Plumbing so staff can ask about policies.",
+  "checked": "I asked about cancellations and got an answer with a citation (screenshots/cited_answer_1.png).",
+  "fixed": "Ingesting kept failing until I fixed the vector column size.",
+  "next": "Write the FractionalBuddy spec and the rest of the governance pack."
+}

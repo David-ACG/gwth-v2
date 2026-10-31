@@ -1,0 +1,52 @@
+{
+  "capstone": "askmyco",
+  "kind": "planted",
+  "intended_band": "not_yet",
+  "intended_total": 71.25,
+  "criteria": [
+    {
+      "id": "citations",
+      "level": "good"
+    },
+    {
+      "id": "data_apart",
+      "level": "pass"
+    },
+    {
+      "id": "governance",
+      "level": "good"
+    },
+    {
+      "id": "fractionalbuddy_spec",
+      "level": "good"
+    },
+    {
+      "id": "sprint_plan",
+      "level": "good"
+    },
+    {
+      "id": "quality_statement",
+      "level": "good"
+    }
+  ],
+  "basics": [
+    {
+      "id": "data_fenced",
+      "met": false
+    },
+    {
+      "id": "no_made_up_answers",
+      "met": true
+    },
+    {
+      "id": "no_secrets",
+      "met": true
+    },
+    {
+      "id": "honest_statement",
+      "met": true
+    }
+  ],
+  "planted_problem": "The two-company test fails: a new /api/search route queries chunks with no org filter, and the student's own test shows the Hill Top user seeing Riverside's refunds document.",
+  "why": "'Data fenced' is not met, so Not yet, even though the student reports it honestly. 'Each company's data kept apart' is Pass (the test was run). Total 71.25."
+}
