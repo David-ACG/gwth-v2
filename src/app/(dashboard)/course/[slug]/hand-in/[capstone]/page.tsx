@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { HandInForm } from "@/components/course/hand-in/hand-in-form"
+import { MarkCard } from "@/components/course/hand-in/mark-card"
 import styles from "@/components/course/hand-in/hand-in.module.css"
 import { checkHandInAccess } from "@/lib/capstones/access"
 import { requireSessionOrRedirect } from "@/lib/content-access"
@@ -10,6 +11,7 @@ import { HAND_IN_QUESTIONS, MAX_HAND_INS } from "@/lib/capstones/guides"
 import { BAND_LABELS, STATUS_LABELS } from "@/lib/capstones/rules"
 import { handInStore } from "@/lib/capstones/storage"
 import { getHandInState } from "@/lib/data/capstone-hand-ins"
+import { getMarkCards } from "@/lib/data/capstone-marks"
 
 type PageProps = {
   params: Promise<{ slug: string; capstone: string }>
@@ -45,10 +47,13 @@ export default async function HandInPage({ params }: PageProps) {
     )
   }
 
-  const [guide, state] = await Promise.all([
+  const [guide, state, marks] = await Promise.all([
     loadMarkingGuide(access.capstoneId),
     getHandInState(access.userId, access.capstoneId),
+    getMarkCards(access.userId, access.capstoneId),
   ])
+  // The newest marked hand-in gets the full card; the list shows them all.
+  const latest = marks.cards[0] ?? null
   const open = handInStore() !== null
   const used = state.attempts.length
 
@@ -94,6 +99,8 @@ export default async function HandInPage({ params }: PageProps) {
           </p>
         </section>
       )}
+
+      {latest && <MarkCard capstoneId={guide.id} card={latest} query={marks.query} />}
 
       {!open ? (
         <p className={styles.notice} role="status">

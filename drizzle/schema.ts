@@ -43,6 +43,8 @@
 //  13. Capstone hand-ins (canonical DDL: 028): the capstoneSubmissions and
 //      capstoneAttempts tables are hand-written at the end of this file.
 //  14. Capstone judge runs (canonical DDL: 029): capstoneJudgeRuns, end of file.
+//  15. Checks and queries (canonical DDL: 031): capstoneAttempts gains five
+//      columns; capstoneQueries at the end of this file.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, numeric, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -1046,6 +1048,12 @@ export const capstoneAttempts = pgTable("capstone_attempts", {
 	// 030 (bead 9289.11): when and why the stored files were deleted.
 	filesDeletedAt: timestamp("files_deleted_at", { withTimezone: true, mode: 'string' }),
 	filesDeletedReason: text("files_deleted_reason"),
+	// 031 (beads 9289.6, 9289.7): David's check and a changed mark's reason.
+	checkedAt: timestamp("checked_at", { withTimezone: true, mode: 'string' }),
+	davidLevels: jsonb("david_levels"),
+	changeNote: text("change_note"),
+	previousTotal: integer("previous_total"),
+	previousBand: text("previous_band"),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
@@ -1091,4 +1099,29 @@ export const capstoneJudgeRuns = pgTable("capstone_judge_runs", {
 	check("capstone_judge_runs_judge_check", sql`judge = ANY (ARRAY['luna'::text, 'haiku'::text])`),
 	check("capstone_judge_runs_purpose_check", sql`purpose = ANY (ARRAY['mark'::text, 'query'::text, 'test'::text])`),
 	check("capstone_judge_runs_status_check", sql`status = ANY (ARRAY['ok'::text, 'invalid'::text, 'error'::text])`),
+]);
+
+// 031: learners' queries on a capstone mark (bead gwth-launch-9289.6).
+// Canonical DDL in supabase/migrations/031_capstone_checks_and_queries.sql.
+export const capstoneQueries = pgTable("capstone_queries", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	submissionId: uuid("submission_id").notNull(),
+	attemptId: uuid("attempt_id").notNull(),
+	criterionId: text("criterion_id").notNull(),
+	reason: text().notNull(),
+	status: text().default('remarking').notNull(),
+	levelBefore: text("level_before").notNull(),
+	levelAfter: text("level_after"),
+	remark: jsonb(),
+	stillDisagrees: boolean("still_disagrees").default(false).notNull(),
+	davidNote: text("david_note"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	resolvedAt: timestamp("resolved_at", { withTimezone: true, mode: 'string' }),
+}, (table) => [
+	index("idx_capstone_queries_status").using("btree", table.status.asc().nullsLast().op("text_ops"), table.createdAt.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({ columns: [table.submissionId], foreignColumns: [capstoneSubmissions.id], name: "capstone_queries_submission_id_fkey" }).onDelete("cascade"),
+	foreignKey({ columns: [table.attemptId], foreignColumns: [capstoneAttempts.id], name: "capstone_queries_attempt_id_fkey" }).onDelete("cascade"),
+	unique("capstone_queries_one_per_capstone").on(table.submissionId),
+	check("capstone_queries_reason_check", sql`(char_length(reason) >= 1) AND (char_length(reason) <= 500)`),
+	check("capstone_queries_status_check", sql`status = ANY (ARRAY['remarking'::text, 'answered'::text, 'with_david'::text, 'resolved'::text])`),
 ]);

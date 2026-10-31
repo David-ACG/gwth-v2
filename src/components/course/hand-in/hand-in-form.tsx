@@ -121,14 +121,14 @@ export function HandInForm(props: HandInFormProps) {
       const response = await fetch(`${base}/prepare`, { method: "POST", body: data })
       const json = await response.json().catch(() => ({}))
       if (!response.ok) {
-        setError(json.error ?? "Something went wrong. Please try again.")
+        setError(json.error ?? "Please try again. Something went wrong.")
         return
       }
       setPreview(json as Preview)
       setTicked(false)
       requestAnimationFrame(() => document.getElementById("preview")?.focus())
     } catch {
-      setError("We could not reach the server. Check your connection and try again.")
+      setError("Check your connection and try again. We couldn't reach the server.")
     } finally {
       setBusy(false)
     }
@@ -148,14 +148,14 @@ export function HandInForm(props: HandInFormProps) {
       const response = await fetch(`${base}/confirm`, { method: "POST", body: data })
       const json = await response.json().catch(() => ({}))
       if (!response.ok) {
-        setError(json.error ?? "Something went wrong. Please try again.")
+        setError(json.error ?? "Please try again. Something went wrong.")
         return
       }
       setDone(json.attemptNo)
       toast.success(`Handed in. This was hand-in ${json.attemptNo} of ${props.maxHandIns}.`)
       router.refresh()
     } catch {
-      setError("We could not reach the server. Check your connection and try again.")
+      setError("Check your connection and try again. We couldn't reach the server.")
     } finally {
       setBusy(false)
     }

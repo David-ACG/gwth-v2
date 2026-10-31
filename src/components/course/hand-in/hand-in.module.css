@@ -366,3 +366,41 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ── Mark card (bead gwth-launch-9289.6) ─────────────────────────────── */
+
+.markLine {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--v-ink);
+}
+
+.criterion {
+  margin: 1rem 0;
+  border-top: 1px solid var(--v-line-soft);
+  padding-top: 0.85rem;
+}
+
+.criterionHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  font-size: var(--fde-body);
+}
+
+.quote {
+  margin: 0.6rem 0;
+  border-left: 3px solid var(--v-line);
+  padding: 0.2rem 0 0.2rem 0.85rem;
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-soft);
+  white-space: pre-wrap;
+}
+
+.noMargin {
+  margin: 0 0 0.5rem;
+}

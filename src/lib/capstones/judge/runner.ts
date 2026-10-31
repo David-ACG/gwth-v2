@@ -9,7 +9,8 @@
  *   - agreed, capstone not yet trusted (its 17-of-20 agreement test, bead
  *     9289.8, has not passed): provisional, flagged for David's check (he
  *     checks all of the first 20 per capstone)
- *   - agreed, capstone trusted (CAPSTONE_JUDGES_TRUSTED_FOR lists it): final,
+ *   - agreed, capstone trusted (its agreement test passes on David's checked
+ *     marks, or CAPSTONE_JUDGES_TRUSTED_FOR lists it): final,
  *     except a random 1 in 20 that stays provisional for David's spot check
  *
  * Waiting rather than marking: no published marking guide, or no API keys.
@@ -22,10 +23,12 @@ import { capstoneJudgeRuns } from "@/db/schema"
 import { gte, sql } from "drizzle-orm"
 import { runScriptChecks, type CheckFile } from "../checks"
 import { loadPublishedGuide, type MarkingGuide } from "../guide-loader"
-import { HAND_IN_QUESTIONS } from "../guides"
+import { HAND_IN_QUESTIONS, type CapstoneId } from "../guides"
+import { agreementReport } from "../agreement"
 import { monthlyCapPence, wouldExceedCap } from "../spend"
 import type { HandInStore } from "../storage"
 import { applyMark, getHandInForMarking, type HandInForMarking } from "@/lib/data/capstone-hand-ins"
+import { checkedMarks } from "@/lib/data/capstone-marks"
 import { buildJudgeRequest, type JudgeFile } from "./prompt"
 import { anthropicHaiku, openAiLuna, type Judge, type JudgeName, type JudgeReply } from "./providers"
 import { combineVerdicts, extractJson, parseVerdict, verdictJsonSchema, type Combined, type Verdict } from "./verdict"
@@ -58,9 +61,20 @@ export function judgesConfigured(): boolean {
   return Boolean(process.env.OPENAI_API_KEY && process.env.ANTHROPIC_API_KEY)
 }
 
-/** Capstones whose judges passed the agreement test (comma list in CAPSTONE_JUDGES_TRUSTED_FOR). */
+/** Capstones David has trusted by hand (comma list in CAPSTONE_JUDGES_TRUSTED_FOR). */
 export function trustedCapstones(): string[] {
   return (process.env.CAPSTONE_JUDGES_TRUSTED_FOR ?? "").split(",").map((s) => s.trim()).filter(Boolean)
+}
+
+/**
+ * True when the pair's agreed marks may stand without David on a capstone:
+ * the agreement test (bead 9289.8) passes on his checked marks, or he has
+ * listed it by hand.
+ */
+export async function isTrusted(capstoneId: CapstoneId): Promise<boolean> {
+  if (trustedCapstones().includes(capstoneId)) return true
+  const [report] = agreementReport(await checkedMarks(), [capstoneId])
+  return report?.pair.passed ?? false
 }
 
 /** The judge's view of the stored files: text, pictures as images, the rest named. */
@@ -187,7 +201,7 @@ export async function markHandIn(handInId: string, deps: RunnerDeps = {}): Promi
   let status: "provisional" | "with_david" | "final" = combined.status
   const flags = [...combined.flags]
   if (status === "provisional") {
-    if (!trustedCapstones().includes(handIn.capstoneId)) flags.push("david_check:first_20")
+    if (!(await isTrusted(handIn.capstoneId))) flags.push("david_check:first_20")
     else if ((deps.random ?? Math.random)() < SPOT_CHECK_RATE) flags.push("david_check:spot")
     else status = "final"
   }
