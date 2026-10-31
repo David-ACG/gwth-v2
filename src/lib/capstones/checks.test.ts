@@ -123,6 +123,8 @@ describe("Month 3 checks", () => {
     const pptx = zipSync({ ...slides, "ppt/presentation.xml": strToU8("<p/>") })
     expect(slideCount(file("deck.pptx", null, { bytes: pptx }))).toBe(9)
     expect(slideCount(file("deck.pdf", deckPdf))).toBe(10)
+    const marp = "---\nmarp: true\n---\n# One\n\n---\n# Two\n\n---\n# Three\n"
+    expect(slideCount(file("deck.md", marp))).toBe(3)
     const r = run("askeveryone", good.map((f) => (f.originalPath === "deck.pdf" ? file("deck.pptx", null, { bytes: pptx }) : f)))
     expect(result(r, "deck_ten_slides")).toMatchObject({ passed: false, detail: "9 slides" })
   })

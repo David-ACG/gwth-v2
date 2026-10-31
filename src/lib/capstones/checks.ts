@@ -171,6 +171,12 @@ export function slideCount(file: CheckFile): number | null {
     }
   }
   if (ext === "pdf" && file.text !== null) return file.text.split("\f").length
+  // A Marp (Markdown) deck: slides are separated by a line of three dashes;
+  // a front-matter block at the top is not a slide.
+  if (ext === "md" && file.text !== null) {
+    const body = file.text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, "")
+    return body.split(/\r?\n---\s*\r?\n/).filter((s) => s.trim()).length
+  }
   return null
 }
 
