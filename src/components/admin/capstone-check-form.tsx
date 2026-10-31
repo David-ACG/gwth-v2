@@ -62,7 +62,14 @@ export function CapstoneCheckForm({ handInId, criteria, basics }: CapstoneCheckF
   return (
     <div>
       <div className={styles.tableWrap}>
-        <table className={styles.table}>
+        {/* Fixed widths, so the judges' long feedback never pushes "Your level" off the page. */}
+        <table className={styles.table} style={{ tableLayout: "fixed", width: "100%" }}>
+          <colgroup>
+            <col style={{ width: "16%" }} />
+            <col style={{ width: "33%" }} />
+            <col style={{ width: "33%" }} />
+            <col style={{ width: "18%" }} />
+          </colgroup>
           <thead>
             <tr>
               <th scope="col">Criterion</th>
@@ -79,7 +86,7 @@ export function CapstoneCheckForm({ handInId, criteria, basics }: CapstoneCheckF
                   <div className={styles.cellMuted}>{c.max} points</div>
                 </td>
                 {c.judges.map((j) => (
-                  <td key={j.judge}>
+                  <td key={j.judge} style={{ overflowWrap: "anywhere", whiteSpace: "normal" }}>
                     <strong>{j.level ? LEVEL_LABEL[j.level] : "No verdict"}</strong>
                     {j.quote && <div className={styles.cellMuted}>&ldquo;{j.quote}&rdquo;</div>}
                     {j.feedback && <div className={styles.cellMuted}>{j.feedback}</div>}
@@ -106,7 +113,7 @@ export function CapstoneCheckForm({ handInId, criteria, basics }: CapstoneCheckF
                   <strong>Basics: {b.name}</strong>
                 </td>
                 {b.judges.map((j) => (
-                  <td key={j.judge}>
+                  <td key={j.judge} style={{ overflowWrap: "anywhere", whiteSpace: "normal" }}>
                     <strong>{j.met === null ? "No verdict" : j.met ? (j.doubt ? "Met, in doubt" : "Met") : "Not met"}</strong>
                     {j.reason && <div className={styles.cellMuted}>{j.reason}</div>}
                   </td>

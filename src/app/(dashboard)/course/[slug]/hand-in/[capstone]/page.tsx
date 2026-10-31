@@ -94,9 +94,11 @@ export default async function HandInPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
-          <p className={styles.note}>
-            Your mark is provisional until David, the course founder, checks it within 7 days. This means it may change.
-          </p>
+          {state.attempts.some((a) => a.status === "provisional") && (
+            <p className={styles.note}>
+              Your mark is provisional until David, the course founder, checks it within 7 days. This means it may change.
+            </p>
+          )}
         </section>
       )}
 
