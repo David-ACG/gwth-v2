@@ -176,7 +176,9 @@ const DETECTORS: Detector[] = [
     regex: /\b(?:api[_-]?key|secret(?:[_-]?key)?|access[_-]?token|auth[_-]?token|password|passwd)\b["']?\s*[:=]\s*["']?([^\s"',;]{8,})/gi,
     accept: (m) => {
       const value = m[1] ?? ""
-      if (!value || /^(process\.env|os\.environ|env\(|\$\{|<|\[)/i.test(value)) return null
+      // A reference to where the key lives (an environment variable, a config
+      // lookup) is not the key itself.
+      if (!value || /^(process\.env|os\.environ|os\.getenv|getenv|import\.meta|deno\.env|env\(|config\.|settings\.|\$\{|<|\[)/i.test(value) || /^[A-Z][A-Z0-9_]+$/.test(value)) return null
       const start = m.index + m[0].lastIndexOf(value)
       return { value, start, end: start + value.length }
     },

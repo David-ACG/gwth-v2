@@ -73,12 +73,19 @@ export function matchChecklist(paths: string[], expected: ExpectedFile[]): Check
     id: item.id,
     label: item.label,
     required: item.required,
-    found: paths.filter((path) => {
+    // "The repo or a zip of it" is the folder itself: a zip is unpacked on
+    // hand-in, so any handed-in files satisfy it.
+    found: isWholeFolder(item) ? (paths.length ? ["the files you handed in"] : []) : paths.filter((path) => {
       const name = basename(path)
       const extOk = item.extensions.length === 0 || item.extensions.includes(extension(path))
       return extOk && item.nameHints.some((hint) => name.includes(hint))
     }),
   }))
+}
+
+/** True for the guide line that means the whole project folder (a zip of the repo). */
+function isWholeFolder(item: ExpectedFile): boolean {
+  return item.extensions.length === 1 && item.extensions[0] === "zip" && item.nameHints.every((h) => h === "")
 }
 
 /** The required items nobody handed in. */

@@ -68,6 +68,17 @@ function find(files: CheckFile[], hints: string[], exts: string[] = []): CheckFi
   })
 }
 
+/** The file the guide's line `ids` (first that exists) points at, else the fall-back hints. */
+function fileFor(input: CheckInput, ids: string[], fallback: string[], exts: string[] = []): CheckFile | undefined {
+  for (const id of ids) {
+    const item = input.expectedFiles.find((f) => f.id === id)
+    if (!item) continue
+    const hit = find(input.files, item.nameHints, item.extensions)
+    if (hit) return hit
+  }
+  return find(input.files, fallback, exts)
+}
+
 function hiddenCount(labels: LabelUse[], kinds: string[]): number {
   return labels.filter((l) => l.source === "pattern" && kinds.includes(l.kind)).reduce((n, l) => n + l.count, 0)
 }
@@ -244,7 +255,7 @@ function askmyco(input: CheckInput): CheckResult[] {
 
 function askeveryone(input: CheckInput): CheckResult[] {
   const out: CheckResult[] = []
-  const deck = find(input.files, ["deck", "slides"], ["pdf", "pptx", "key", "odp"])
+  const deck = fileFor(input, ["deck"], ["deck", "slides"], ["pdf", "pptx", "key", "odp"])
   const slides = deck ? slideCount(deck) : null
   out.push({
     id: "deck_ten_slides",
@@ -254,7 +265,10 @@ function askeveryone(input: CheckInput): CheckResult[] {
     criterion: "report_deck",
   })
 
-  const report = find(input.files, ["report", "southbridge"], ["pdf", "md", "docx", "txt"])
+  // "report" before "southbridge": southbridge_deck.md must never be taken for the report.
+  const report =
+    fileFor(input, ["report"], ["report"], ["pdf", "md", "docx", "txt"]) ??
+    input.files.find((f) => /southbridge/i.test(f.originalPath) && !/deck|slide/i.test(f.originalPath) && /\.(pdf|md|docx|txt)$/i.test(f.originalPath))
   const summary = report?.text ? section(report.text, /^executive summary\b/i) : null
   const ease = summary ? fleschReadingEase(summary) : null
   out.push({
@@ -273,7 +287,7 @@ function askeveryone(input: CheckInput): CheckResult[] {
     basic: "no_regulated_advice",
   })
 
-  const output = parseJson(find(input.files, ["output"], ["json"]))
+  const output = parseJson(fileFor(input, ["output", "output-json"], ["output"], ["json"]))
   out.push({
     id: "output_json_valid",
     label: "The output JSON opens as valid JSON",
@@ -281,7 +295,7 @@ function askeveryone(input: CheckInput): CheckResult[] {
     detail: output.ok ? "valid" : output.detail,
     criterion: "evaluation",
   })
-  const golden = find(input.files, ["golden"])
+  const golden = fileFor(input, ["golden_input", "golden-input"], ["golden"], ["json"])
   const sources = [golden, ...input.files.filter((f) => /transcript|interview/i.test(f.originalPath))]
     .map((f) => f?.text ?? "")
     .join("\n")
@@ -311,7 +325,7 @@ function askeveryone(input: CheckInput): CheckResult[] {
       criterion: "report_deck",
     })
   }
-  const evals = parseJson(find(input.files, ["eval"], ["json"]))
+  const evals = parseJson(fileFor(input, ["eval_results", "eval-results"], ["eval"], ["json"]))
   out.push({
     id: "eval_results_valid",
     label: "The eval results file is there and opens as valid JSON",
