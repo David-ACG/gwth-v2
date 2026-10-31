@@ -167,5 +167,6 @@ describe("queue reasons", () => {
       "Basics line in doubt: consent",
     ])
     expect(queueReasons("provisional", ["david_check:spot"], null)).toEqual(["Random 1 in 20 spot check"])
+    expect(queueReasons("with_david", ["basics:nothing_invented"], null, { nothing_invented: "Nothing invented" })).toEqual(["Basics line in doubt: Nothing invented"])
   })
 })

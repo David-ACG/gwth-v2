@@ -244,12 +244,12 @@ export interface CheckItem {
 }
 
 /** Why a hand-in is in David's queue, in his words. */
-export function queueReasons(status: string, flags: string[], query: QueryView | null): string[] {
+export function queueReasons(status: string, flags: string[], query: QueryView | null, basicNames: Record<string, string> = {}): string[] {
   const out: string[] = []
   if (query && query.status === "with_david") out.push(query.stillDisagrees ? "The learner still disagrees after a re-mark" : "The judges disagreed on a query")
   if (flags.includes("judges_disagree")) out.push("The judges gave different bands")
   if (flags.includes("near_band_line")) out.push("Within 3 points of a band line")
-  for (const f of flags.filter((x) => x.startsWith("basics:"))) out.push(`Basics line in doubt: ${f.slice(7)}`)
+  for (const f of flags.filter((x) => x.startsWith("basics:"))) out.push(`Basics line in doubt: ${basicNames[f.slice(7)] ?? f.slice(7)}`)
   for (const f of flags.filter((x) => x.startsWith("judge_failed:"))) out.push(`A judge could not mark it (${f.slice(13)})`)
   if (flags.includes("spend_cap")) out.push("The month's marking spend cap was reached")
   if (flags.includes("david_check:first_20")) out.push("One of the first 20 for this capstone")
@@ -295,7 +295,7 @@ export async function davidQueue(): Promise<CheckItem[]> {
       total: attempt.total,
       band: attempt.band as Band | null,
       flags,
-      reasons: queueReasons(attempt.status, flags, query),
+      reasons: queueReasons(attempt.status, flags, query, Object.fromEntries(((attempt.basics as CardBasic[]) ?? []).map((b) => [b.id, b.name]))),
       confirmedAt: attempt.confirmedAt,
       criteria: (attempt.criteria as CardCriterion[]) ?? [],
       basics: (attempt.basics as CardBasic[]) ?? [],
