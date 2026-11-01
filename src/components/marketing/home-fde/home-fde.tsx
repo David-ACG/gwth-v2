@@ -753,7 +753,7 @@ export function HomeFde({
       </section>
 
       {/* For people changing role or career: see CAREER_CARDS. */}
-      <section className={p.section} data-section="career">
+      <section className={p.section} data-section="career" id="career">
         <div className={p.page}>
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>Changing role or career?</h2>
