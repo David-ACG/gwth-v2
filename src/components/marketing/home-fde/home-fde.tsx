@@ -223,7 +223,7 @@ export const MONTHS = [
   {
     kicker: "Month 1",
     title: "Your own work and home life",
-    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews. You turn a spreadsheet of numbers into a chart and a decision you can act on. You make your first small working tool. You use your own information and routines, so the projects are useful to you and good fun to make. The month ends with the {CAPSTONE}: it takes the recording of your weekly family meeting and turns it into tasks, calendar events, a meal plan and a shopping list.",
+    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You turn a spreadsheet of numbers into a chart and a decision you can act on. You make your first small working tool. You use your own information and routines, so the projects are useful to you and good fun to make. The month ends with the {CAPSTONE}: it takes the recording of your weekly family meeting and turns it into tasks, calendar events, a meal plan and a shopping list.",
   },
   {
     kicker: "Month 2",
@@ -452,6 +452,36 @@ const UK_THREAD = [
   },
 ]
 
+/**
+ * For people changing role or career (bead gwth-launch-c5y8). David, 2026-11-01,
+ * picked B and D on completion/career-change-emphasis: "B and D as I don't want
+ * to let students see lessons (A)". So this section describes what the lessons
+ * teach and carries no button into them. It is described by purpose, never by
+ * age (bible audience-by-purpose), and like the UK section it carries no
+ * statistic: the research figures belong on a page of their own.
+ *
+ * The third card describes two optional lessons that are not written yet (a
+ * small online shop; a podcast, YouTube or Instagram channel). It stays hidden
+ * until they exist, so the page never promises a lesson nobody can take.
+ */
+export const CAREER_SIDE_LESSONS_WRITTEN = false
+
+export const CAREER_CARDS = [
+  {
+    title: "Prepare for applications and interviews",
+    body: "In Month 1 you rewrite your CV and LinkedIn profile, learn how AI screening tools read a CV and what your rights are, and practise interviews with AI playing the interviewer.",
+  },
+  {
+    title: "Build a portfolio and plan your prices",
+    body: "Month 2 ends with a portfolio of what you have built. You learn the different ways people price this kind of work and where to check the UK rules on self-employment.",
+  },
+  {
+    title: "Test a small shop or online channel",
+    body: "Two optional lessons show you how to test a small online shop, or a podcast, YouTube or Instagram channel, before you spend money on it, with honest figures on what most of them earn.",
+    needsSideLessons: true,
+  },
+] as const
+
 export const PRIMITIVES_URL =
   "https://openai.com/business/guides-and-resources/identifying-and-scaling-ai-use-cases/"
 
@@ -499,6 +529,9 @@ export function HomeFde({
   // advertising a call to action a visitor cannot reach is worse than one
   // button (W25, `lib/labs-cta.ts`).
   const labsArePublic = canPromoteLabs()
+  const careerCards = CAREER_CARDS.filter(
+    (c) => CAREER_SIDE_LESSONS_WRITTEN || !("needsSideLessons" in c)
+  )
 
   return (
     <div className={p.shell}>
@@ -715,6 +748,27 @@ export function HomeFde({
             <Link href="/lessons" className={p.buttonOutline}>
               See the optional lessons
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* For people changing role or career: see CAREER_CARDS. */}
+      <section className={p.section} data-section="career">
+        <div className={p.page}>
+          <div className={p.sectionHead}>
+            <h2 className={p.sectionTitle}>Changing role or career?</h2>
+          </div>
+          <p className={styles.blocksLead} data-testid="career-lead">
+            The course helps whether you want to do your current job better,
+            move to a new role or work for yourself.
+          </p>
+          <div className={careerCards.length === 3 ? p.cards3 : p.cards2}>
+            {careerCards.map((item) => (
+              <article className={p.card} key={item.title} data-testid="career-card">
+                <h3 className={p.cardTitle}>{item.title}</h3>
+                <p className={p.cardBody}>{item.body}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>

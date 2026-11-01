@@ -1,6 +1,13 @@
 import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach, beforeEach, vi } from "vitest"
-import { HomeFde, MONTHS, SIX_BLOCKS, SCORE_STATES } from "./home-fde"
+import {
+  HomeFde,
+  MONTHS,
+  SIX_BLOCKS,
+  SCORE_STATES,
+  CAREER_CARDS,
+  CAREER_SIDE_LESSONS_WRITTEN,
+} from "./home-fde"
 import { getTrajectoryLabel } from "@/lib/progress/gwth-score"
 import { CURRICULUM } from "@/components/marketing/data"
 
@@ -122,11 +129,15 @@ describe("HomeFde is individual-first", () => {
     // checked both ways.
     // `film` joined on 2026-10-21, straight after the hero (David: "We need
     // to put the home page video on the home page").
+    // `career` joined on 2026-11-01 straight after `months` (bead
+    // gwth-launch-c5y8, David picked option B): it is about what a learner
+    // does, so it stays ahead of anything addressed to a buyer.
     expect(order).toEqual([
       "hero",
       "film",
       "course",
       "months",
+      "career",
       "blocks",
       "uk",
       "organisations",
@@ -139,6 +150,7 @@ describe("HomeFde is individual-first", () => {
       "film",
       "course",
       "months",
+      "career",
       "blocks",
       "uk",
       "score",
@@ -928,5 +940,31 @@ describe("HomeFde score section", () => {
     render(<HomeFde showScore />)
     expect(sectionText("score")).not.toMatch(/work you can show/i)
     expect(sectionText("individuals")).not.toMatch(/GWTH score/i)
+  })
+})
+
+describe("HomeFde speaks to people changing role or career (bead gwth-launch-c5y8)", () => {
+  it("has a career section straight after the months, with no link into lessons", () => {
+    const { container } = render(<HomeFde />)
+    const order = sectionOrder(container)
+    expect(order.indexOf("career")).toBe(order.indexOf("months") + 1)
+    const section = container.querySelector('[data-section="career"]') as HTMLElement
+    expect(section.querySelectorAll("a")).toHaveLength(0)
+    expect(within(section).getByRole("heading", { level: 2 }).textContent).toBe(
+      "Changing role or career?"
+    )
+  })
+
+  it("hides the shop and channel card until those optional lessons are written", () => {
+    render(<HomeFde />)
+    const cards = screen.getAllByTestId("career-card").map((c) => c.textContent ?? "")
+    const promised = CAREER_CARDS.filter((c) => "needsSideLessons" in c).map((c) => c.title)
+    for (const title of promised) {
+      expect(cards.some((t) => t.includes(title))).toBe(CAREER_SIDE_LESSONS_WRITTEN)
+    }
+  })
+
+  it("tells the Month 1 reader the CV work also serves a change of career", () => {
+    expect(MONTHS[0].body).toContain("ready for a new role or a change of career")
   })
 })
