@@ -47,7 +47,7 @@ export function startHereEmail(confirmToken: string, unsubscribeToken: string, e
     ],
     cta: { label: "Open the lesson", href: startHereConfirmUrl(confirmToken, env) },
     footer: [
-      "GWTH.ai is a practical AI course for work and everyday life in the UK.",
+      "A UK-first applied AI course for work and everyday life.",
       "You're receiving this because someone entered this address on gwth.ai/start-here. If it wasn't you, ignore this email: we only send course news to people who open the lesson from it.",
     ],
   })
