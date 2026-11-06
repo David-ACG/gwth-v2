@@ -484,14 +484,19 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              Your score, and <em>how it will be worked out.</em>
+              Assessment now, and <em>the planned score</em>
             </h2>
           </div>
           <div className={styles.scoreGrid}>
             <div className={styles.scoreBody}>
+              <p>
+                Your answers to the lesson questions are marked automatically.
+              </p>
+              <p>
+                [David: state which monthly project assessments are available now, how they are checked by AI and people, what the marks cover, how feedback and queries work, and which records learners can keep. Add an existing marked project with its criteria and feedback.]
+              </p>
               <p data-testid="score-beta-note">
-                The course does not show a GWTH score yet. When it does, this is
-                how it will be worked out.
+                The course does not show a GWTH score yet. The explanation below describes the planned score.
               </p>
               <p data-testid="score-lead">
                 Finishing a lesson is not the same as being able to do what it
