@@ -111,7 +111,7 @@ const COMPARISONS = [
     ENABLE_TEAM_DASHBOARD ? "Included, plus a manager dashboard" : "Included",
   ],
   [
-    "Lessons kept up to date",
+    "Continued access to updated lessons",
     "No",
     `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo after the first three months`,
     // Same price per person as the Teams card says (Sol copy check, 2026-10-20).
@@ -161,7 +161,7 @@ function TermsNote({
     <p className={styles.termsNote} data-testid={testId}>
       Your first three monthly payments each open one month of the course.
       After that, the plan carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)}
-      {" "}a month to keep your lessons up to date, unless you cancel. We email you
+      {" "}a month for continued access to the updated lessons, unless you cancel. We email you
       before each payment. Cancel at any time in your account settings and you
       keep access until the end of the month you&apos;ve paid for. See the{" "}
       <Link href="/terms#subscriptions" className={styles.inlineLink}>
@@ -447,9 +447,10 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
             ))}
           </div>
           <p className={styles.fineprint}>
-            No yearly price · Cancel at any time · Keeping your lessons up to
-            date stays available after the first three months at{" "}
-            {PRICING[2]!.price}/mo
+            Monthly plans renew automatically. After the first three months,
+            continued access to the updated lessons costs {PRICING[2]!.price}
+            /mo unless you cancel. A three-month pass ends unless you choose
+            to continue.
           </p>
         </div>
       </section>
@@ -652,14 +653,7 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               (ledger C26). The money-back guarantee he dictated in July is out
               for the same reason: /terms offers a refund only where GWTH
               cancels an order (ledger C25, bead filed). */}
-          <p>
-            With monthly payments, you unlock one month at a time and can
-            cancel whenever you like. The price drops after the first three
-            months, so you are never paying course prices out of habit:
-            £{ongoing} a month pays for ongoing lesson updates. We rewrite
-            lessons when the tools, or the best way to use them, change. If it
-            stops being worth it to you, cancel.
-          </p>
+
           <div className={styles.closingActions}>
             {selling && monthlyCta}
             {canPromoteLabs() && (
