@@ -176,15 +176,18 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
         <section className={styles.section} aria-labelledby="h-try">
           <h2 id="h-try">{lab.ask}</h2>
           <p>
-            {lab.sig_plain} Here are four real answers, with the names hidden. Read them, choose
-            the one you would use, then see who wrote it and how we marked it.
+            {lab.sig_plain} Here are four real answers, with the names hidden.
+            Read the brief and the answers before choosing one. After
+            you choose, the page reveals the model names and marks.
           </p>
-          <details className={styles.details}>
+          <details className={styles.details} open>
             <summary>Read the brief every model was given</summary>
             <div className={`${styles.card} ${styles.briefBody}`}>
               <Markdown text={lab.sig_task} />
             </div>
           </details>
+          <h3>A worked check</h3>
+          <p>[David: insert an existing worked check for this lab, showing the source material, one mistake in an answer, how to spot it and the corrected result.]</p>
           <WhichWouldYouUse answers={answers} />
         </section>
 
