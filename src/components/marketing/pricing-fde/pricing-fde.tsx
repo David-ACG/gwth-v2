@@ -307,6 +307,31 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
         </div>
       </section>
 
+      {/* Persona review PR01 (bead gwth-launch-4p16): every persona asked what
+          else they would pay for, so the AI tool costs sit straight under the
+          prices. The bracketed line waits for David's facts. */}
+      <section className={styles.section} data-section="tool-costs">
+        <div className={`${styles.page} ${styles.splitGrid}`}>
+          <div>
+            <h2>AI tool costs</h2>
+          </div>
+          <div>
+            <p>
+              You can begin learning with a free plan of the main AI tools.
+              Paid plans mainly let you use a tool more before you reach a
+              limit. An app subscription is usually easier to budget for than
+              paying for each use through developer access, called an API.
+            </p>
+            <p>
+              [David: list the required AI accounts and extra costs for each
+              month, any optional spending, whether all core lessons can be
+              completed on free plans, and the cost of keeping finished
+              projects running.]
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section
           className={`${styles.section} ${styles.sectionAlt}`}
           data-section="offer"
