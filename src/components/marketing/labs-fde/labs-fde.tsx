@@ -93,7 +93,7 @@ export function LabsFde({ index }: LabsFdeProps) {
           <div className={styles.mastheadFoot}>
             <p>Tested {tested}</p>
             <p>
-              {index.model_count} models, {index.setup_count} set-ups including different thinking settings
+              {index.model_count} models tested in {index.setup_count} combinations of model and settings
             </p>
             <p>Free, no card required</p>
           </div>
