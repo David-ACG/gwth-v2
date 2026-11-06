@@ -95,7 +95,7 @@ export default async function StartHerePage({ searchParams }: PageProps) {
                 ))}
               </ul>
               <p className={styles.after}>
-                The 25-minute project at the end sets up three things you'll use in every lesson: a keyboard shortcut that types what you say, saved instructions that tell your AI tool how you like its answers, and a notebook for the requests that work for you.
+                The 25-minute project at the end sets up three things you&apos;ll use in every lesson: a keyboard shortcut that types what you say, saved instructions that tell your AI tool how you like its answers, and a notebook for the requests that work for you.
               </p>
               <div className={p.actions}>
                 <StartHereGate />

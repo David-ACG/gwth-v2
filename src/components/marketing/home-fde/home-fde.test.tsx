@@ -9,6 +9,7 @@ import {
   CAREER_SIDE_LESSONS_WRITTEN,
 } from "./home-fde"
 import { getTrajectoryLabel } from "@/lib/progress/gwth-score"
+import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
 import { CURRICULUM } from "@/components/marketing/data"
 
 afterEach(cleanup)
@@ -86,11 +87,16 @@ describe("HomeFde (paper-first, N12)", () => {
     ])
   })
 
-  it("attributes the six blocks to OpenAI's six use case primitives", () => {
+  // Persona review PR06 (David, 6 Nov 2026): the six building blocks, with
+  // their OpenAI attribution, moved to /lessons. Home keeps a short preview.
+  it("previews the six ways to use AI and links to the full section", () => {
     render(<HomeFde />)
+    const blocks = sectionText("blocks")
+    expect(blocks).toMatch(/^Six ways to use AI/)
     expect(
-      screen.getByRole("link", { name: /six common ways of using AI at work/ })
-    ).toHaveAttribute("href", expect.stringContaining("openai.com/business/"))
+      screen.getByRole("link", { name: "See how the skills develop" })
+    ).toHaveAttribute("href", "/lessons#six-building-blocks")
+    expect(document.querySelectorAll('[data-testid="block-card"]')).toHaveLength(0)
   })
 
   it("carries no em dashes, en dashes or section signs (bible emdash-policy)", () => {
@@ -332,35 +338,6 @@ describe("HomeFde plain language and truthfulness", () => {
  * `GWTH-launch-plan/completion/home-annotations-round2/curriculum-check.md`.
  */
 describe("HomeFde building emphasis", () => {
-  it("names building first and the other five as part of making something", () => {
-    const { container } = render(<HomeFde />)
-    const lead = screen.getByTestId("blocks-lead")
-    expect(lead.textContent).toMatch(/^Every month here is built around making something/)
-    // David, a-20260915-211138-69b27f: *"instead of saying blocks, say
-    // building blocks"*. The prose says the full phrase; the picture's key
-    // keeps its six short clauses.
-    expect(lead.textContent).toMatch(
-      /each project brings several of the six building blocks together/i
-    )
-    expect(lead.textContent).not.toMatch(/the six blocks together/i)
-    const cards = container.querySelectorAll('[data-testid="block-card"]')
-    expect(
-      lead.compareDocumentPosition(cards[0]!) &
-        Node.DOCUMENT_POSITION_FOLLOWING
-    ).toBeTruthy()
-  })
-
-  /**
-   * The old lead is the sentence the public-writing skill names as an example
-   * of the habit to delete (a-20260915-101927-9ec6a5).
-   */
-  it("no longer asks the reader to decode a metaphor", () => {
-    render(<HomeFde />)
-    const lead = screen.getByTestId("blocks-lead").textContent ?? ""
-    expect(lead).not.toMatch(/carries the other five/i)
-    expect(lead).not.toMatch(/the one that/i)
-  })
-
   it("makes the claim the curriculum supports: a project in every lesson", () => {
     render(<HomeFde />)
     expect(sectionText("course")).toMatch(
@@ -408,10 +385,7 @@ describe("HomeFde hero plate: the flagship picture, not a lesson figure", () => 
     expect(caption.textContent).not.toMatch(/them, on your own work/)
   })
 
-  it("keeps the ways-of-working sentence, in the section that owns the blocks", () => {
-    render(<HomeFde />)
-    const lead = screen.getByTestId("blocks-lead")
-    expect(lead.textContent).toMatch(/Six ways of working, not six subjects/)
+  it("still names six building blocks for /lessons to show", () => {
     expect(SIX_BLOCKS).toHaveLength(6)
   })
 })
@@ -522,6 +496,8 @@ describe("HomeFde self-service promises match the product", () => {
       "/why-gwth#up-to-date",
       // The free lesson, under the film (bead gwth-launch-xw6s, 2026-11-06).
       "/start-here",
+      // The six building blocks on /lessons (persona review PR06, 2026-11-06).
+      "/lessons#six-building-blocks",
     ])
     for (const selling of [false, true]) {
       cleanup()
@@ -707,10 +683,10 @@ describe("HomeFde three-month progression", () => {
  * David's fourth Home pass, 2026-09-15. Each block below names the annotation
  * it answers, so a later reader can tell what is a decision and what is taste.
  */
-describe("HomeFde: the six building blocks carry a month by month progression", () => {
+describe("The six building blocks carry a month by month progression (on /lessons since PR06)", () => {
   /** a-20260915-211138-69b27f: *"instead of saying blocks, say building blocks"*. */
   it("says building blocks, not blocks, in the prose around the cards", () => {
-    const { container } = render(<HomeFde />)
+    const { container } = render(<LessonsFde />)
     const section = container.querySelector('[data-section="blocks"]') as HTMLElement
     const text = (section.textContent ?? "").replace(/\s+/g, " ")
     expect(text).toContain("six building blocks")
@@ -718,7 +694,7 @@ describe("HomeFde: the six building blocks carry a month by month progression", 
     expect(text.replace(/building blocks/g, "")).not.toMatch(/\bblocks\b/i)
     // The "01 · Building block" card label went on 2026-10-20 (launch
     // readiness: a numbered filler label under a heading that already says
-    // "Six building blocks"). The full phrase stays in the heading and lead.
+    // "Six building blocks"). The full phrase stays in the attribution.
     for (const card of container.querySelectorAll('[data-testid="block-card"]')) {
       expect(card.textContent).not.toMatch(/· Building block|^0\d/)
     }
@@ -731,7 +707,7 @@ describe("HomeFde: the six building blocks carry a month by month progression", 
    * ALL six, not the interesting ones.
    */
   it("gives every one of the six a Month 1, Month 2 and Month 3 line", () => {
-    const { container } = render(<HomeFde />)
+    const { container } = render(<LessonsFde />)
     const cards = Array.from(
       container.querySelectorAll('[data-testid="block-card"]')
     )

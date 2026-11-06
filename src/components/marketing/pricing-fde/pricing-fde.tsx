@@ -653,7 +653,17 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               (ledger C26). The money-back guarantee he dictated in July is out
               for the same reason: /terms offers a refund only where GWTH
               cancels an order (ledger C25, bead filed). */}
-
+          {/* Persona review PR05 dropped this paragraph; it is David's own
+              recovered sentence (C13), so it stays, with the £7.50 described
+              as continued access like the rest of the page. */}
+          <p>
+            With monthly payments, you unlock one month at a time and can
+            cancel whenever you like. The price drops after the first three
+            months, so you are never paying course prices out of habit:
+            £{ongoing} a month pays for continued access to the lessons as we
+            update them. We rewrite lessons when the tools, or the best way to
+            use them, change. If it stops being worth it to you, cancel.
+          </p>
           <div className={styles.closingActions}>
             {selling && monthlyCta}
             {canPromoteLabs() && (

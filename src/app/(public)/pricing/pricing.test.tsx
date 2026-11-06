@@ -73,10 +73,12 @@ describe("PricingPage", () => {
     render(<PricingPage />)
     // Launch readiness, 2026-10-20: "Stay Current" was a product name the
     // page never explained, so the page now says what it is.
+    // Persona review PR05 (2026-11-06): the £7.50 buys continued access, and
+    // the fine print says which way of paying renews.
     expect(
-      screen.getByText(/Keeping your lessons up to date stays available/)
+      screen.getByText(/Monthly plans renew automatically/)
     ).toBeInTheDocument()
-    expect(screen.getAllByText("Lessons kept up to date").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Continued access to updated lessons").length).toBeGreaterThan(0)
     // Optional, and said once how each way of paying carries on (Sol).
     expect(screen.getByTestId("masthead-price-line").textContent).toMatch(
       /then £7\.50 a month if you stay/
@@ -168,7 +170,7 @@ describe("PricingPage", () => {
     // Only the first three payments open a month; after that the plan carries
     // on at £7.50 unless you cancel (Terms section 6, Sol copy check).
     expect(monthly.textContent).toMatch(/first three monthly payments each open one month/)
-    expect(monthly.textContent).toMatch(/£7\.50 a month to keep your lessons up to date, unless you cancel/)
+    expect(monthly.textContent).toMatch(/£7\.50 a month for continued access to the updated lessons, unless you cancel/)
     expect(pass.textContent).toMatch(/one year from the date you buy it to enter the gift code/)
     expect(within(monthly).getByRole("link")).toHaveAttribute(
       "href",
@@ -401,7 +403,8 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     expect(closingText).toMatch(/£7\.50 a month/)
     expect(closingText).toMatch(/first three months/i)
     // What an update is (video refresh, bead gwth-launch-ooc6, 2026-10-25).
-    expect(closingText).toMatch(/ongoing lesson updates/i)
+    // Continued access, not "updates", since the PR05 copy pass (2026-11-06).
+    expect(closingText).toMatch(/continued access to the lessons as we update them/i)
     expect(closingText).toMatch(/We rewrite lessons when the tools, or the best way to use them, change/)
     // Cancellation is also visible without scrolling to the closing band.
     expect(screen.getAllByText(/Cancel at any time/i).length).toBeGreaterThan(0)

@@ -223,7 +223,7 @@ export const MONTHS = [
   {
     kicker: "Month 1",
     title: "Your own work and home life",
-    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You turn a spreadsheet of numbers into a chart and a decision you can act on. You make your first small working tool. When a project uses your own information, you can leave out names, addresses and contact details, or make them up. For work tasks, use the AI tool your organisation has approved and follow its policy. The month ends with the {CAPSTONE}: it takes the recording of your weekly family meeting and turns it into tasks, calendar events, a meal plan and a shopping list.",
+    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You turn a spreadsheet of numbers into a chart and a decision you can act on. You make your first small working tool. You use your own information and routines, so the projects are useful to you and good fun to make. Before your end-of-month project is marked, we hide the names you list and details such as phone numbers and email addresses, and you see exactly what goes to the marker before you confirm. For work tasks, use the AI tool your organisation has approved. The month ends with the {CAPSTONE}: it takes the recording of your weekly family meeting and turns it into tasks, calendar events, a meal plan and a shopping list.",
   },
   {
     kicker: "Month 2",
@@ -650,21 +650,33 @@ export function HomeFde({
               {/* The launch offer (launch readiness, 2026-10-20). The words
                   are true before and after sales open; only the buttons
                   change. */}
-              <p className={styles.offerPrice} data-testid="home-offer">
-                From {offer.opensOn} to {offer.endsOn}, pay {offer.sale} once
-                for a three-month pass, for yourself or as a gift. A pass never
-                renews automatically. A gift recipient does not need to give
-                us card details. After the three months, access ends unless
-                the learner chooses to continue at £
-                {ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
-                Or pay £{COURSE_MONTHLY_PRICE} a month, with each of your first
-                three payments opening one month of the course. You can cancel
-                in your account settings at any time, including after the first
-                month, and keep access until the end of the month you have paid
-                for. After the first three months, the monthly plan continues
-                automatically at £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month
-                for access to the updated lessons unless you cancel.
-              </p>
+              {/* Persona review PR05 (David, 6 Nov 2026): the two ways to pay
+                  are separate purchases, so they are separate bullets rather
+                  than one long paragraph. */}
+              <div className={styles.offerPrice} data-testid="home-offer">
+                <p>
+                  From {offer.opensOn} to {offer.endsOn}, the whole three-month
+                  course is {offer.sale}, for yourself or as a gift.
+                </p>
+                <ul className={styles.offerList}>
+                  <li>
+                    <strong>Pay {offer.sale} once</strong> for a three-month
+                    pass. It never renews, and a gift needs no card details from
+                    the person you give it to.
+                  </li>
+                  <li>
+                    <strong>Or pay £{COURSE_MONTHLY_PRICE} a month.</strong>{" "}
+                    Each of your first three payments opens one month of the
+                    course. You can cancel at any time in your account settings.
+                  </li>
+                  <li>
+                    <strong>After three months</strong>, continued access to the
+                    updated lessons costs £{ONGOING_MONTHLY_PRICE.toFixed(2)} a
+                    month. A pass simply ends unless you choose this. A monthly
+                    plan moves onto it unless you cancel.
+                  </li>
+                </ul>
+              </div>
               <p className={styles.offerNote} data-testid="home-offer-months">
                 Month 1 opens on {offer.opensOn}. Month 2 opens around{" "}
                 {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}

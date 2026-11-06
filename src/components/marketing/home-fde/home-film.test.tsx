@@ -24,12 +24,13 @@ describe("HomeFilm", () => {
   })
 
   // The film says "Try our free lesson to get a feel for the course" (bead
-  // gwth-launch-xw6s), so the line under it goes to the free lesson.
+  // gwth-launch-xw6s), so the line under it goes to the free lesson. The
+  // link says the lesson opens through an email (persona review PR09).
   it("links the film's free lesson line to /start-here", () => {
     render(<HomeFilm />)
     const line = screen.getByTestId("home-free-lesson")
     expect(line.textContent).toMatch(/try our free lesson/i)
-    expect(screen.getByRole("link", { name: /read start here free/i }).getAttribute("href")).toBe("/start-here")
+    expect(screen.getByRole("link", { name: /get an email link to the free lesson/i }).getAttribute("href")).toBe("/start-here")
   })
 
   it("plays the night edition in the dark theme", () => {
