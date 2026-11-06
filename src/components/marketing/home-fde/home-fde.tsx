@@ -651,12 +651,19 @@ export function HomeFde({
                   are true before and after sales open; only the buttons
                   change. */}
               <p className={styles.offerPrice} data-testid="home-offer">
-                From {offer.opensOn} to {offer.endsOn}, the whole three-month
-                course is {offer.sale}, for yourself or as a gift. Or pay £
-                {COURSE_MONTHLY_PRICE} a month. After your first three months,
-                continued access to the updated lessons costs £
-                {ONGOING_MONTHLY_PRICE.toFixed(2)} a month, and you can cancel
-                at any time.
+                From {offer.opensOn} to {offer.endsOn}, pay {offer.sale} once
+                for a three-month pass, for yourself or as a gift. A pass never
+                renews automatically. A gift recipient does not need to give
+                us card details. After the three months, access ends unless
+                the learner chooses to continue at £
+                {ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
+                Or pay £{COURSE_MONTHLY_PRICE} a month, with each of your first
+                three payments opening one month of the course. You can cancel
+                in your account settings at any time, including after the first
+                month, and keep access until the end of the month you have paid
+                for. After the first three months, the monthly plan continues
+                automatically at £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month
+                for access to the updated lessons unless you cancel.
               </p>
               <p className={styles.offerNote} data-testid="home-offer-months">
                 Month 1 opens on {offer.opensOn}. Month 2 opens around{" "}
