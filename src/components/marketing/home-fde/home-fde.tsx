@@ -223,7 +223,7 @@ export const MONTHS = [
   {
     kicker: "Month 1",
     title: "Your own work and home life",
-    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You turn a spreadsheet of numbers into a chart and a decision you can act on. You make your first small working tool. You use your own information and routines, so the projects are useful to you and good fun to make. The month ends with the {CAPSTONE}: it takes the recording of your weekly family meeting and turns it into tasks, calendar events, a meal plan and a shopping list.",
+    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You turn a spreadsheet of numbers into a chart and a decision you can act on. You make your first small working tool. When a project uses your own information, you can leave out names, addresses and contact details, or make them up. For work tasks, use the AI tool your organisation has approved and follow its policy. The month ends with the {CAPSTONE}: it takes the recording of your weekly family meeting and turns it into tasks, calendar events, a meal plan and a shopping list.",
   },
   {
     kicker: "Month 2",
