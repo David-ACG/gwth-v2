@@ -1,6 +1,9 @@
 import Link from "next/link"
 import { MONTH_CONFIGS, TOTAL_MANDATORY_LESSONS } from "@/lib/config"
 import styles from "./lessons-fde.module.css"
+import { SIX_BLOCKS, PRIMITIVES_URL } from "@/components/marketing/home-fde/home-fde"
+import homeStyles from "@/components/marketing/home-fde/home-fde.module.css"
+import p from "@/components/marketing/paper/paper.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 import { COURSE_OPENS_ON } from "@/lib/launch-date"
 import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
@@ -318,6 +321,39 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
             Month 1 is open from {COURSE_OPENS_ON}. Month 2 opens around {LATER_MONTHS_OPEN.month2} and Month
             3 around {LATER_MONTHS_OPEN.month3}. If you reach a month before it opens,
             your time on the course is paused until it does.
+          </p>
+        </div>
+      </section>
+
+      <section className={p.section} data-section="blocks" id="six-building-blocks">
+        <div className={p.page}>
+          <div className={p.sectionHead}>
+            <h2 className={p.sectionTitle}>How your skills develop</h2>
+          </div>
+          <p className={styles.sectionLead}>The first lessons teach the skills everyone needs. You then use those skills in larger projects, from tasks in your own life to software for a business and an AI consultant for an organisation. These examples show how the six skills develop across the three months.</p>
+          <div className={p.cards3}>
+            {SIX_BLOCKS.map((block) => (
+              <article className={p.card} key={block.n} data-testid="block-card">
+                <h3 className={p.cardTitle}>{block.name}</h3>
+                <div className={homeStyles.blockTrack} data-testid="block-track">
+                  {block.months.map((line, i) => (
+                    <p className={homeStyles.blockStep} key={i} data-testid="block-step">
+                      <span className={homeStyles.blockStepMonth}>Month {i + 1}</span>
+                      <span className={homeStyles.blockStepBody}>{line}</span>
+                    </p>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className={p.attribution}>
+            The six building blocks follow the{" "}
+            <a href={PRIMITIVES_URL} rel="noopener noreferrer" target="_blank">
+              six common ways of using AI at work
+            </a>{" "}
+            that OpenAI found across its customers: research, content
+            creation, ideation and strategy, coding, data analysis and
+            automation. The names above are ours.
           </p>
         </div>
       </section>
