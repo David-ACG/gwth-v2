@@ -88,7 +88,7 @@ for (const width of [1280, 390]) {
     await page.getByTestId("start-here-open").first().click()
     const dialog = page.getByTestId("start-here-dialog").first()
     check(await dialog.isVisible(), `${label}: pop-up opens`)
-    const consent = await dialog.getByTestId("start-here-consent").textContent()
+    const consent = await dialog.locator('p[id$="-consent"]').textContent()
     check(
       consent.includes("By adding your email address, you agree to receive news about the GWTH course when it's available. You can opt out in any email."),
       `${label}: consent line is David's wording`
