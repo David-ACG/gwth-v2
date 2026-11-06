@@ -39,9 +39,21 @@ at once, through `ship.py release website`). Nothing here is done by the code on
 7. **`PRIVATE_CONTENT_MODE=off`** in production. While it is locked, sign-up is closed and only
    allowlisted emails can see lessons, so neither a gift recipient nor a monthly payer could use
    the course. This opens sign-up and the free labs to everyone.
-8. **Database migrations** before the release that carries the code, in order:
-   `ssh hetzner 'docker exec -i zo0gkcwoo0o4gow0go4cwk0o psql -U gwth -d gwth_v2' < supabase/migrations/026_prepaid_passes.sql`
-   `ssh hetzner 'docker exec -i zo0gkcwoo0o4gow0go4cwk0o psql -U gwth -d gwth_v2' < supabase/migrations/027_gift_sent_notice.sql`
+8. **Database migrations 016 to 032, all of them**, before the release that carries the code.
+   Production has 001 to 015. The release code reads tables and columns from the later files, and
+   at boot the schema guard (`src/lib/schema-guard.ts`) refuses to start if 016, 019, 021, 022
+   or 032 is missing. Back up first, then
+   apply them in order, each file in one transaction (all are additive and safe to run again):
+   ```bash
+   for f in supabase/migrations/0{16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32}_*.sql; do
+     echo "== $f"
+     ssh hetzner 'docker exec -i zo0gkcwoo0o4gow0go4cwk0o psql -U gwth -d gwth_v2 -v ON_ERROR_STOP=1 -1 -q' < "$f" || break
+   done
+   ```
+   The July code keeps working on the migrated database, so they can go in before the deploy.
+   What each one changes, the backup, the check query and the rollback are in the release
+   runbook: https://hlab.taila51191.ts.net:8101/packet/board/release-runbook/index.html#migrations
+   (rehearsed on a copy of the live database, bead `gwth-launch-j52c`).
 9. **Scheduler.** A Coolify scheduled task on the production app, every 15 minutes:
    `curl -fsS -X POST -H "x-cron-secret: $CRON_SECRET" http://localhost:3000/api/cron/passes`
    (sends gift emails on their day, retries receipts, holds payers' charges while a month is not open).
