@@ -93,6 +93,10 @@ export default async function StartHerePage({ searchParams }: PageProps) {
               <p className={styles.after}>
                 The 25-minute project at the end sets up three things you'll use in every lesson: a keyboard shortcut that types what you say, saved instructions that tell your AI tool how you like its answers, and a notebook for the requests that work for you.
               </p>
+              <p>Choose a personal task that contains no private information. Describe it to your AI tool in a sentence or two, then add:</p>
+              <blockquote>Before you answer, ask me any questions you need to do this well. Ask them one at a time.</blockquote>
+              <p>Answer its questions. When it has completed the task, ask it to write a request for a similar task, leaving spaces for the details you will change. Save that request in your notebook with a line explaining what it is for.</p>
+              <p>Check: you have saved one request that you could reuse next week.</p>
               <div className={p.actions}>
                 <StartHereGate />
               </div>
