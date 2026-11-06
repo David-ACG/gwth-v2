@@ -783,70 +783,14 @@ export function HomeFde({
       <section className={p.section} data-section="blocks">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>Six building blocks</h2>
+            <h2 className={p.sectionTitle}>Six ways to use AI</h2>
           </div>
-          {/* David, 2026-09-15 (a-20260915-085439-6c8134): *"We need to say
-              something here about building being the really important
-              foundation for almost everything else ... we're concentrating
-              maybe 50% of the course on building."* The emphasis is right and
-              the number is not something the syllabus can be made to say. The
-              sentence that used to carry the emphasis, "Building is the one
-              that carries the other five", is named in the public-writing
-              skill as the kind of line to delete, and David's
-              a-20260915-101927-9ec6a5 is about exactly that habit. So the
-              emphasis is now made by saying what happens when you make
-              something. */}
-          <p className={styles.blocksLead} data-testid="blocks-lead">
-            Every month here is built around making something, and each
-            project brings several of the six building blocks together. Take
-            the Family AI Bot in Month 1. To make it you research what your
-            family actually needs. You write the instructions, then judge what
-            the AI gives back. You check the tasks and dates it has pulled out
-            of the recording. You decide how much of the job it should do
-            without you. That is all six building blocks below, used in one
-            small tool: research, content, thinking, building, data and
-            automation.
-            Some projects are the working tool itself. Others are the plan or
-            the test that has to come before anyone else uses it.{" "}
-            {/* "Six ways of working, not six subjects" used to sit under the
-                hero picture, where it was explaining six tiles in that
-                photograph. The picture changed (bead gwth-launch-88z.32.12),
-                so the sentence moved to the section that owns the six blocks
-                rather than being dropped. It closes the paragraph rather than
-                opening it: the opening sentence is pinned by David's
-                building-emphasis annotation (a-20260915-085439-6c8134). */}
-            Six ways of working, not six subjects.
-          </p>
-          <div className={p.cards3}>
-            {SIX_BLOCKS.map((block) => (
-              <article className={p.card} key={block.n} data-testid="block-card">
-                {/* The "01 · Building block" label went (launch readiness,
-                    2026-10-20): a numbered filler label under a heading that
-                    already says "Six building blocks". */}
-                <h3 className={p.cardTitle}>{block.name}</h3>
-                {/* One row per month, so the reader can see where the block
-                    takes them rather than only where it starts
-                    (a-20260915-211445-2274ea). */}
-                <div className={styles.blockTrack} data-testid="block-track">
-                  {block.months.map((line, i) => (
-                    <p className={styles.blockStep} key={i} data-testid="block-step">
-                      <span className={styles.blockStepMonth}>Month {i + 1}</span>
-                      <span className={styles.blockStepBody}>{line}</span>
-                    </p>
-                  ))}
-                </div>
-              </article>
-            ))}
+          <p className={styles.blocksLead}>The course combines research, writing, planning, building tools, checking data and designing automation. In Month 1, for example, you turn a spreadsheet into a chart, two checked numbers and a decision.</p>
+          <div className={p.actions}>
+            <Link href="/lessons#six-building-blocks" className={p.buttonOutline}>
+              See how the skills develop
+            </Link>
           </div>
-          <p className={p.attribution}>
-            The six building blocks follow the{" "}
-            <a href={PRIMITIVES_URL} rel="noopener noreferrer" target="_blank">
-              six common ways of using AI at work
-            </a>{" "}
-            that OpenAI found across its customers: research, content
-            creation, ideation and strategy, coding, data analysis and
-            automation. The names above are ours.
-          </p>
         </div>
       </section>
 
