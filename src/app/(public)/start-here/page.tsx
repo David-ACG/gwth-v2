@@ -66,8 +66,12 @@ export default async function StartHerePage({ searchParams }: PageProps) {
           <div className={p.page}>
             {masthead}
             <p className={styles.summary}>
-              A free lesson from the GWTH course. It gives you seven tips for using AI well from the start, ten
-              shorter habits worth starting now and the most useful advice from the course&apos;s first month.
+              A free lesson from the GWTH course, with seven tips for using
+              AI, ten shorter habits and advice from the first month. Enter
+              your email address and we&apos;ll send you a link. Following the
+              link confirms your address and opens the lesson on this site.
+              We&apos;ll also send you news about the GWTH course, and you can
+              opt out in any email.
             </p>
             <p className={styles.meta}>About 20 to 25 minutes to read, with a short film and a 25-minute project.</p>
             {notice && (

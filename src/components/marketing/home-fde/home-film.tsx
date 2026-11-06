@@ -73,7 +73,7 @@ export function HomeFilm() {
             asks for an email before it opens. */}
         <p className={styles.freeLesson} data-testid="home-free-lesson">
           Try our free lesson to get a feel for the course.{" "}
-          <Link href="/start-here">Read Start Here free</Link>
+          <Link href="/start-here">Get an email link to the free lesson</Link>
         </p>
       </div>
     </section>
