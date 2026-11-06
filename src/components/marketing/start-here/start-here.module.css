@@ -95,6 +95,21 @@
   color: var(--v-ink);
 }
 
+.outcomes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.outcomes li {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-ink);
+}
+
 .tipNumber {
   font-family: var(--font-serif);
   font-size: 1.25rem;

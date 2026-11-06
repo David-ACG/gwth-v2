@@ -20,9 +20,15 @@ export const metadata: Metadata = {
 
 type PageProps = { searchParams: Promise<{ link?: string; welcome?: string }> }
 
-/** The seven tip titles, read from the lesson so they never drift from it. */
-function tipTitles(): string[] {
-  return [...START_HERE_LESSON_MD.matchAll(/^## Tip \d+: (.+)$/gm)].map((m) => (m[1] ?? "").trim())
+/**
+ * The lesson's own "What you will be able to do by the end" list (approved
+ * text), read from the lesson so it never drifts from it. Plain sentences
+ * explain the terms the bare tip titles left to the reader (copy gate,
+ * 2026-11-06).
+ */
+function outcomes(): string[] {
+  const section = START_HERE_LESSON_MD.split(/^## /m).find((s) => s.startsWith("What you will be able to do by the end"))
+  return [...(section ?? "").matchAll(/^- (.+)$/gm)].map((m) => (m[1] ?? "").trim())
 }
 
 /**
@@ -78,17 +84,12 @@ export default async function StartHerePage({ searchParams }: PageProps) {
         <section className={styles.bottomSection}>
           <div className={p.page}>
             <div className={styles.inside}>
-              <h2 className={styles.insideTitle}>The seven tips</h2>
-              <ol className={styles.tips}>
-                {tipTitles().map((title, i) => (
-                  <li key={title}>
-                    <span className={styles.tipNumber} aria-hidden="true">
-                      {i + 1}
-                    </span>
-                    <span>{title}</span>
-                  </li>
+              <h2 className={styles.insideTitle}>What you will be able to do by the end</h2>
+              <ul className={styles.outcomes}>
+                {outcomes().map((line) => (
+                  <li key={line}>{line}</li>
                 ))}
-              </ol>
+              </ul>
               <p className={styles.after}>
                 The project at the end helps you set up an AI starter kit for the rest of the course.
               </p>
