@@ -412,138 +412,32 @@ export function WhyGwthFde({
       </section>
 
       <section
-        className={`${styles.section} ${styles.sectionAlt}`}
+        className={styles.section}
         data-section="government"
       >
         <div className={styles.page}>
-          <div className={styles.split}>
-            <h2 className={styles.sectionTitle}>
-              How GWTH compares with the government&apos;s AI Skills Boost
-            </h2>
-            <div className={styles.prose}>
-              <p>
-                The government&apos;s free AI Skills Boost aims to train 10 million UK workers by 2030. It offers free
-                AI courses of different lengths and levels, made by technology
-                companies including Google, Microsoft, Amazon, IBM and
-                Salesforce. They cover what AI is, how to write instructions for
-                it and how to use it responsibly, and some courses give you a
-                digital badge when you finish. The government&apos;s AI Skills Hub also lists more than
-                600 other courses from a mix of providers.
-              </p>
-              <p>
-                We agree with the aim, and a short foundation course is a good
-                start. GWTH is a natural next step: three months of teaching and
-                practice so you can use AI in your own work.
-              </p>
-            </div>
-          </div>
-
-          <h3 className={styles.subTitle}>Where the UK is now</h3>
-          <div className={styles.statList}>
-            {UK_STATS.map((stat) => (
-              <div key={stat.id} className={styles.statListRow}>
-                <strong
-                  className={styles.statListValue}
-                  data-uk-figure={stat.id}
-                >
-                  {ukFigure(stat.id).value}
-                </strong>
-                <p>{stat.label}</p>
-                <p className={styles.statListSource}>
-                  {ukFigureCitation(stat.id)}
-                </p>
-              </div>
-            ))}
-          </div>
-          <p className={styles.sourcesLine} data-testid="why-gwth-sources">
-            Figures from{" "}
-            {UK_SOURCES.map((source, i) => (
-              <span key={source.id}>
-                {i > 0 ? " and " : ""}
-                <a href={source.url} target="_blank" rel="noopener noreferrer">
-                  {source.title}
-                </a>{" "}
-                ({source.releasedLabel})
-              </span>
-            ))}
-            .
-          </p>
-
-          <h3 className={styles.subTitle}>Side by side</h3>
-          <div className={styles.tableWrap}>
-            <table className={styles.compTable}>
-              <thead>
-                <tr>
-                  <th scope="col">
-                    <span className={styles.visuallyHidden}>Compared on</span>
-                  </th>
-                  <th scope="col">
-                    AI Skills Boost
-                    <span>Free AI courses</span>
-                  </th>
-                  <th scope="col">
-                    AI Skills Hub
-                    <span>600+ other courses</span>
-                  </th>
-                  <th scope="col">GWTH</th>
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARISON_ROWS.map((row) => (
-                  <tr key={row.dimension}>
-                    <th scope="row">{row.dimension}</th>
-                    <td>{row.boost}</td>
-                    <td>{row.hub}</td>
-                    <td className={styles.cellGwth}>{row.gwth}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* The phone layout of the table above (CSS shows one or the other). data-copy-duplicate
-                tells the copy gate it has already read these words (23 Oct 2026). */}
-            <div className={styles.compStack} data-copy-duplicate="phone layout of the Side by side table">
-              {COMPARISON_ROWS.map((row) => (
-                <div key={row.dimension} className={styles.compStackRow}>
-                  <h4>{row.dimension}</h4>
-                  <dl>
-                    <div className={styles.compStackEntry}>
-                      <dt>AI Skills Boost</dt>
-                      <dd>{row.boost}</dd>
-                    </div>
-                    <div className={styles.compStackEntry}>
-                      <dt>AI Skills Hub</dt>
-                      <dd>{row.hub}</dd>
-                    </div>
-                    <div className={styles.compStackEntry}>
-                      <dt>GWTH</dt>
-                      <dd className={styles.cellGwth}>{row.gwth}</dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <h3 className={styles.subTitle}>
-            Independent views on the government&apos;s AI training
-          </h3>
-          <div className={styles.quoteGrid}>
-            {PRESS_QUOTES.map((item) => (
-              <figure key={item.source} className={styles.quotePanel}>
-                <p className={styles.quotePanelSummary}>{item.summary}</p>
-                <figcaption className={styles.quotePanelSource}>
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.inlineLink}
-                  >
-                    {item.source}
-                  </a>
-                </figcaption>
-              </figure>
-            ))}
+          <h2 className={styles.sectionTitle}>Choosing a course</h2>
+          <div className={styles.prose}>
+            <p>
+              The government&apos;s AI Skills Boost offers free courses from
+              technology companies on what AI is, writing instructions for it
+              and using it responsibly.
+            </p>
+            <p>
+              GWTH provides three months of teaching and practice. Its projects
+              progress from your own work and everyday life to building
+              software for a business and an AI consultant for an organisation.
+            </p>
+            <p>
+              <Link href="/start-here" className={styles.inlineLink}>
+                Get an email link to the free lesson
+              </Link>
+            </p>
+            <p>
+              <Link href="/lessons" className={styles.inlineLink}>
+                See the course
+              </Link>
+            </p>
           </div>
         </div>
       </section>
