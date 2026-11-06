@@ -156,14 +156,6 @@ export function LabsFde({ index }: LabsFdeProps) {
         </div>
       </section>
 
-      {index.cost_chart.rows.length ? (
-        <section className={styles.section} data-section="cost-chart">
-          <div className={styles.page}>
-            <CostChartView chart={index.cost_chart} />
-          </div>
-        </section>
-      ) : null}
-
       <section className={styles.closing} data-section="closing">
         <div className={styles.page}>
           <h2>
@@ -196,6 +188,14 @@ export function LabsFde({ index }: LabsFdeProps) {
           </div>
         </div>
       </section>
+      {index.cost_chart.rows.length ? (
+        <section className={styles.section} data-section="cost-chart">
+          <div className={styles.page}>
+            <CostChartView chart={index.cost_chart} />
+          </div>
+        </section>
+      ) : null}
+
     </div>
   )
 }
