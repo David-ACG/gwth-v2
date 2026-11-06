@@ -91,7 +91,7 @@ export default async function StartHerePage({ searchParams }: PageProps) {
                 ))}
               </ul>
               <p className={styles.after}>
-                The project at the end helps you set up an AI starter kit for the rest of the course.
+                The 25-minute project at the end sets up three things you'll use in every lesson: a keyboard shortcut that types what you say, saved instructions that tell your AI tool how you like its answers, and a notebook for the requests that work for you.
               </p>
               <div className={p.actions}>
                 <StartHereGate />
