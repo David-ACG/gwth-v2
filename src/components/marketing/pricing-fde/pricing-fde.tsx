@@ -376,6 +376,17 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
                 opens, your time is paused until it does, so you get all three
                 months.
               </p>
+              <h3>Taking longer than three months</h3>
+              <p>
+                The course is planned around about five hours a week. With a
+                three-month pass, access ends after three months unless you
+                choose to continue at £{ongoing} a month. Monthly plans
+                continue automatically at £{ongoing} a month after the first
+                three months unless you cancel.
+              </p>
+              <p>
+                [David: explain what happens if a learner needs five months instead of three, including the total course payments, access to unfinished lessons, project submission and marking, any personal pause, and what is saved if they cancel and return.]
+              </p>
               <div className={styles.buttonRow}>
                 {selling ? (
                   <>
