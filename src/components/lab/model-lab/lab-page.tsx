@@ -119,7 +119,7 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
           <h1>{lab.headline}</h1>
           <p>
             We tested {lab.count} AI set-ups on {countWord(n)} real {lab.sp_name.toLowerCase()}{" "}
-            tasks. A set-up is a model with a particular thinking setting. No AI company pays us,
+            tasks. Each set-up combines a model with a setting for how long it can think before answering. No AI company pays us,
             and you can read every answer to the main task below.
           </p>
           <p className={styles.meta}>Tested {tested}</p>
@@ -131,7 +131,7 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
             <PickCard label="Best" pick={lab.best} />
             <PickCard label="Best value" pick={lab.value} />
             <div className={styles.card} data-testid="lab-pick">
-              <div className={styles.pickLabel}>Daily driver in an everyday app</div>
+              <div className={styles.pickLabel}>Everyday choice in an app</div>
               {lab.app ? (
                 <>
                   <div className={styles.pickName}>{lab.app.name}</div>
@@ -162,12 +162,14 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
             </div>
           </div>
           <p className={styles.note}>
-            Best value is the set-up with the lowest test cost that scored at least 90% of the best
-            score and passed every trap. The daily driver uses the same rules, but the set-up must be
-            available in an app costing £20 a month or less. These comparisons use our test costs;
-            app subscriptions have their own prices and usage limits. Best for free is the
-            highest-scoring set-up available in a free app that passed every trap. We checked what
-            each plan includes between 6 and 8 October 2026.
+            Best value is the model and setting with the lowest test cost
+            that scored at least 90% of the best score and passed every trap.
+            The everyday app choice follows the same rules and must be
+            available in an app costing £20 a month or less. Test costs are
+            separate from app subscription prices and usage limits. Best for
+            free is the highest-scoring model and setting available in a free
+            app that passed every trap. These were the plans available when
+            we checked.
           </p>
         </section>
 
