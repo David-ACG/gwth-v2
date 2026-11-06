@@ -186,6 +186,10 @@ export function ModelLabPage({ lab }: ModelLabPageProps) {
           <WhichWouldYouUse answers={answers} />
         </section>
 
+        <p className={styles.note}>
+          <Link href="/lessons">See the course</Link>
+        </p>
+
         {lab.chart?.rows.length ? (
           <section className={styles.section} aria-labelledby="h-cost">
             <CostChart chart={lab.chart} scope="lab" />
