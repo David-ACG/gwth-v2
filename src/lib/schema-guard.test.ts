@@ -20,6 +20,7 @@ const ALL_PRESENT = new Set([
   "page_comments.status",
   "page_comments.triage",
   "page_comments.action",
+  "marketing_consents.confirmed_at",
 ])
 
 const ORIGINAL_URL = process.env.DATABASE_URL
@@ -54,6 +55,15 @@ describe("assertSchemaMigrated", () => {
     await expect(
       assertSchemaMigrated(async () => missing)
     ).rejects.toThrow(/022_page_comments_actions\.sql/)
+  })
+
+  it("names 032 when the Start Here consent table is missing", async () => {
+    process.env.DATABASE_URL = "postgresql://x/y"
+    const missing = new Set(ALL_PRESENT)
+    missing.delete("marketing_consents.confirmed_at")
+    await expect(
+      assertSchemaMigrated(async () => missing)
+    ).rejects.toThrow(/032_marketing_consents\.sql/)
   })
 
   it("groups everything outstanding into one message", async () => {

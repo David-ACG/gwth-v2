@@ -520,6 +520,8 @@ describe("HomeFde self-service promises match the product", () => {
       "/why-gwth",
       // P2, the line under the hero (video refresh, 2026-10-25).
       "/why-gwth#up-to-date",
+      // The free lesson, under the film (bead gwth-launch-xw6s, 2026-11-06).
+      "/start-here",
     ])
     for (const selling of [false, true]) {
       cleanup()

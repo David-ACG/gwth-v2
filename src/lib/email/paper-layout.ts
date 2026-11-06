@@ -52,6 +52,8 @@ export type PaperBlock =
   | { type: "panel"; lines: string[]; large?: boolean }
   /** Label and value rows, e.g. a receipt. */
   | { type: "rows"; rows: [string, string][] }
+  /** A sentence ending in a plain text link, e.g. an opt-out (Start Here). */
+  | { type: "link"; text: string; label: string; href: string }
 
 export type PaperEmailInput = {
   /** Plain words shown by some inboxes beside the subject. */
@@ -85,6 +87,9 @@ function blockHtml(block: PaperBlock): string {
       )
       .join("")
     return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:separate;margin:0 0 20px;"><tr><td style="background:${COLOR.quiet};border:1px solid ${COLOR.boundary};border-radius:8px;padding:16px 20px;">${lines}</td></tr></table>`
+  }
+  if (block.type === "link") {
+    return `<p style="margin:0 0 16px;color:${COLOR.soft};font-family:${SANS};font-size:16px;line-height:1.6;">${esc(block.text)} <a href="${esc(block.href)}" style="color:${COLOR.ink};text-decoration:underline;">${esc(block.label)}</a></p>`
   }
   const rows = block.rows
     .map(
@@ -163,6 +168,7 @@ function renderPaperText(input: PaperEmailInput, footer: string[]): string {
   for (const block of input.blocks) {
     if (block.type === "p") lines.push(block.text, "")
     else if (block.type === "panel") lines.push(...block.lines.map((l) => `  ${l}`), "")
+    else if (block.type === "link") lines.push(`${block.text} ${block.label}: ${block.href}`, "")
     else {
       for (const [label, value] of block.rows) lines.push(`${label}: ${value}`)
       lines.push("")

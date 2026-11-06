@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 import styles from "./home-film.module.css"
 
@@ -66,6 +67,14 @@ export function HomeFilm() {
             </button>
           )}
         </figure>
+        {/* The film says "Try our free lesson to get a feel for the course"
+            (4:07), so the free lesson sits right under it (bead
+            gwth-launch-xw6s). Lesson zero is the one open lesson; it still
+            asks for an email before it opens. */}
+        <p className={styles.freeLesson} data-testid="home-free-lesson">
+          Try our free lesson to get a feel for the course.{" "}
+          <Link href="/start-here">Read Start Here free</Link>
+        </p>
       </div>
     </section>
   )

@@ -93,3 +93,23 @@
   outline: 2px solid var(--v-ink);
   outline-offset: 2px;
 }
+
+/* The film's "Try our free lesson" line, answered right under it (bead
+   gwth-launch-xw6s). */
+.freeLesson {
+  margin: 1rem 0 0;
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.freeLesson a {
+  color: var(--v-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.freeLesson a:hover {
+  text-decoration-thickness: 2px;
+}

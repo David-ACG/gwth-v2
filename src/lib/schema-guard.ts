@@ -43,6 +43,9 @@ const REQUIRED_COLUMNS: Array<{
   // The hybrid comment front end: toPageComment selects action, shape and
   // text_edit on every comment read.
   { table: "page_comments", column: "action", migration: "022_page_comments_actions.sql" },
+  // Start Here (/start-here): every sign-up writes its consent record here
+  // (bead gwth-launch-xw6s).
+  { table: "marketing_consents", column: "confirmed_at", migration: "032_marketing_consents.sql" },
 ]
 
 /**

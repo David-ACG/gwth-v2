@@ -23,6 +23,15 @@ describe("HomeFilm", () => {
     expect(container.querySelector("track")?.getAttribute("src")).toMatch(/homepage-film\.vtt$/)
   })
 
+  // The film says "Try our free lesson to get a feel for the course" (bead
+  // gwth-launch-xw6s), so the line under it goes to the free lesson.
+  it("links the film's free lesson line to /start-here", () => {
+    render(<HomeFilm />)
+    const line = screen.getByTestId("home-free-lesson")
+    expect(line.textContent).toMatch(/try our free lesson/i)
+    expect(screen.getByRole("link", { name: /read start here free/i }).getAttribute("href")).toBe("/start-here")
+  })
+
   it("plays the night edition in the dark theme", () => {
     document.documentElement.classList.add("dark")
     const { container } = render(<HomeFilm />)
