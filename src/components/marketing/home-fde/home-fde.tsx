@@ -709,10 +709,11 @@ export function HomeFde({
             />
             <figcaption className={styles.plateCaption}>
               <span className={styles.plateLine}>
-                Three projects from the course, in the order you make them. You
-                build <em>every one of them</em> yourself, starting with
-                example data we provide and then using your own work as an
-                example, and you keep all three.
+                Three projects from the course, in the order you make them: a
+                small working tool in Month 1, real software in Month 2 and
+                your own AI consultant in Month 3. You build{" "}
+                <em>every one of them</em> yourself, you can adapt each one
+                using your own work as an example, and you keep all three.
               </span>
             </figcaption>
           </figure>
