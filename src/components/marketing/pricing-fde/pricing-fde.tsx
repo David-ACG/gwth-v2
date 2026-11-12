@@ -203,8 +203,9 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
   // "No adverts or hidden charges" is left off here (latest Sol, 12 Nov
   // 2026): the page does not yet say what AI tools cost, so "hidden charges"
   // promises a complete cost it cannot show. The footer keeps "no adverts".
+  // The month opening dates are said once, under the comparison (D25).
   const courseFeatures = course.features.filter(
-    (feature) => !/hidden charges/i.test(feature)
+    (feature) => !/hidden charges|^Month 1 opens/i.test(feature)
   )
 
   return (
@@ -431,12 +432,10 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
                 <p data-testid="teams-split-body">
                   Teams pay the same per-person price, with no minimum size.
                   Each learner has an account and tracks their own progress. Pay
-                  monthly for each person or buy places one at a time.
-                </p>
-                <p>
-                  For 100 or more people, GWTH can create an edition with a
-                  tutor dashboard and lessons written around your work.
-                  Institutions get a proposal based on their needs.
+                  monthly for each person or buy places one at a time. For 100
+                  or more people, GWTH can create an edition with a tutor
+                  dashboard and lessons written around your work. Institutions
+                  get a proposal based on their needs.
                 </p>
               </>
             )}
