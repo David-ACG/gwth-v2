@@ -710,8 +710,9 @@ export function HomeFde({
             <figcaption className={styles.plateCaption}>
               <span className={styles.plateLine}>
                 Three projects from the course, in the order you make them. You
-                build <em>every one of them</em> yourself, using your own work
-                as an example, and you keep all three.
+                build <em>every one of them</em> yourself, starting with
+                example data we provide and then using your own work as an
+                example, and you keep all three.
               </span>
             </figcaption>
           </figure>
