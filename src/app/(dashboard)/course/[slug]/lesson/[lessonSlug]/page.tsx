@@ -38,6 +38,8 @@ import { getLessonPartsContent, getPartsViewerState } from "@/lib/data/lesson-pa
 import { toPublicParts, type LessonPartsContent, type PartCheckState } from "@/lib/lessons/parts"
 import { renderPartHtml } from "@/lib/lessons/parts-html"
 import { PartsLessonViewer } from "@/components/lesson-parts/parts-lesson-viewer"
+import { signLessonMedia } from "@/lib/media/signed"
+import { noteLessonAccess } from "@/lib/protection/lesson-page"
 import type { ClientCheck } from "@/components/lesson-parts/check-card"
 
 type PageProps = {
@@ -204,6 +206,9 @@ export default async function LessonPage({
   // lesson body, only the course overview teaser (snag fix 2026-07-05).
   const lessonMonth = lesson.month as 1 | 2 | 3
   if (!user || !canUserAccessMonth(user, lessonMonth)) {
+    // A try at a lesson this account cannot open is one of the too-fast
+    // monitor's signals (bead gwth-launch-735c).
+    if (user) await noteLessonAccess({ lessonId: lesson.id, month: lessonMonth, kind: "locked_lesson" })
     redirect(`/course/${slug}`)
   }
 
@@ -228,18 +233,31 @@ export default async function LessonPage({
           return { html: h.lead + h.rest }
         })()
       : null
+    // Signed per-learner media links, then a note of this view for the
+    // too-fast monitor (bead gwth-launch-735c).
+    const signedParts = await signLessonMedia({
+      parts: toPublicParts(partsContent, renderPartHtml),
+      project,
+    })
+    await noteLessonAccess({
+      lessonId: lesson.id,
+      month: lessonMonth,
+      kind: "lesson_view",
+      text: lesson.learnContent,
+      mediaLinks: signedParts.links,
+    })
     return (
       <div className={cn(LESSON_BREAKOUT)} data-variant="parts">
         <PartsLessonViewer
           key={lesson.id}
           lesson={{ id: lesson.id, number: lesson.order, title: lesson.title, courseHref: `/course/${course.slug}` }}
-          parts={toPublicParts(partsContent, renderPartHtml)}
+          parts={signedParts.value.parts}
           initialChecks={toClientChecks(partsContent, state.checks)}
           startScreen={asked ?? state.startAt}
           returning={state.returning}
           prefs={state.prefs}
           forceChoice={sp.choose === "1"}
-          project={project}
+          project={signedParts.value.project}
           nextLesson={nextLesson ? { title: nextLesson.title, href: nextLesson.href } : null}
           trackingEnabled={state.userId !== null}
         />
@@ -324,7 +342,28 @@ export default async function LessonPage({
     audioFileUrl: lesson.audioFileUrl,
     audioDuration: lesson.audioDuration,
     introVideoUrl: lesson.introVideoUrl,
+    // Word timings through the site, checked against this learner's access,
+    // because a signed audio link no longer points at the file beside it.
+    timingsUrl: lesson.audioFileUrl ? `/api/lesson-timings?lesson=${encodeURIComponent(lesson.id)}` : null,
   }
+
+  // Signed per-learner media links for the video, the narration and every
+  // picture in the lesson body, then a note of this view for the too-fast
+  // monitor (bead gwth-launch-735c).
+  const signedMeta = await signLessonMedia({
+    pages: meta.pages,
+    learnContent: meta.learnContent,
+    audioFileUrl: meta.audioFileUrl,
+    introVideoUrl: meta.introVideoUrl,
+  })
+  Object.assign(meta, signedMeta.value)
+  await noteLessonAccess({
+    lessonId: lesson.id,
+    month: lessonMonth,
+    kind: "lesson_view",
+    text: learnContent,
+    mediaLinks: signedMeta.links,
+  })
 
   // Default entry: page 1 (the intro video when the lesson has one), and the
   // viewer then returns the learner to the page they were last on (bead

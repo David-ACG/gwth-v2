@@ -1,6 +1,14 @@
 import type { SubscriptionState } from "@/lib/types"
 import { eq } from "drizzle-orm"
 import {
+  gatePercent,
+  learnerMonths,
+  lessonsNeeded,
+  type HoldReason,
+  type MonthCap,
+  type NextGate,
+} from "@/lib/protection/month-hold"
+import {
   passStatus,
   type MonthRelease,
   type PassProduct,
@@ -78,6 +86,15 @@ export type UserAccess = {
    * whose next charge is held). null otherwise.
    */
   onHoldFor: 2 | 3 | null
+  /**
+   * Why they are waiting (bead gwth-launch-735c): the month is not open for
+   * anyone yet ("release"), they have not completed enough of the month they
+   * are on ("progress", the 75% gate), or David is looking at their account
+   * ("review"). Absent or null when not on hold.
+   */
+  holdReason?: HoldReason | null
+  /** The next completion gate they have not passed yet, for the course page. */
+  nextGate?: NextGate | null
   /** The opened pass behind 'prepaid' access, else null. */
   prepaidPassId: string | null
 }
@@ -231,6 +248,68 @@ export function normaliseAccessRow(
   return base
 }
 
+/**
+ * The learner's own month cap (bead gwth-launch-735c): the 75% completion gate
+ * or David's review hold. Months already open beyond the cap close until it
+ * lifts; "on hold" shows which month they are waiting for, and why.
+ */
+export function applyMonthCap(access: UserAccess, cap: MonthCap | null): UserAccess {
+  if (!cap) {
+    return access.onHoldFor ? { ...access, holdReason: access.holdReason ?? "release" } : access
+  }
+  if (access.subscriptionMonth >= cap.month) {
+    const month = (cap.month - 1) as 1 | 2
+    return {
+      ...access,
+      subscriptionMonth: month,
+      subscriptionState:
+        access.subscriptionState === "lapsed" ? "lapsed" : stateForCourseMonth(month),
+      onHoldFor: cap.month,
+      holdReason: cap.reason,
+    }
+  }
+  if (access.onHoldFor === cap.month) return { ...access, holdReason: cap.reason }
+  return access.onHoldFor ? { ...access, holdReason: access.holdReason ?? "release" } : access
+}
+
+/** Sources the 75% completion gate applies to: the course people buy. */
+const GATED_SOURCES: readonly AccessSource[] = ["prepaid", "stripe_course"]
+
+/**
+ * One learner's month caps and their own Month 2/3 open dates, from the
+ * global release, their completions and any review flag. Fails open (no cap,
+ * the global dates) when the protection tables cannot be read.
+ */
+export async function learnerMonthsFor(
+  userId: string,
+  source: AccessSource,
+  global: MonthRelease
+): Promise<{ cap: MonthCap | null; release: MonthRelease; suspended: boolean; nextGate: NextGate | null }> {
+  const { holdInputs } = await import("@/lib/protection/store")
+  const inputs = await holdInputs(userId)
+  if (!inputs) return { cap: null, release: global, suspended: false, nextGate: null }
+  const percent = gatePercent()
+  const gated = GATED_SOURCES.includes(source) && percent > 0
+  const { cap, release } = learnerMonths({
+    global,
+    percent,
+    gate: gated ? inputs.gate : null,
+    flags: inputs.flags,
+  })
+  let nextGate: NextGate | null = null
+  if (gated) {
+    for (const m of [1, 2] as const) {
+      const c = inputs.gate[m]
+      const need = lessonsNeeded(c.total, percent)
+      if (c.completedAt.length < need) {
+        nextGate = { month: (m + 1) as 2 | 3, done: c.completedAt.length, need, total: c.total, percent }
+        break
+      }
+    }
+  }
+  return { cap, release, suspended: inputs.flags.some((f) => f.status === "suspended"), nextGate }
+}
+
 /** Month 2 and Month 3 open dates (course_month_release). Fails to "not open". */
 export async function getMonthRelease(): Promise<MonthRelease> {
   try {
@@ -293,7 +372,17 @@ export async function getAccessForUser(userId: string): Promise<UserAccess> {
       release = await getMonthRelease()
     }
 
-    return normaliseAccessRow({
+    // Content protection (bead gwth-launch-735c): the 75% gate, David's
+    // review hold and suspension. Their own open dates drive hold the clock.
+    const learner = await learnerMonthsFor(
+      row.userId,
+      row.accessSource as AccessSource,
+      row.accessSource === "prepaid" ? release : NO_RELEASE
+    )
+    if (learner.suspended) return REGISTERED_ACCESS
+    if (row.accessSource === "prepaid") release = learner.release
+
+    const access = normaliseAccessRow({
       user_id: row.userId,
       access_source: row.accessSource as AccessSource,
       subscription_state: row.subscriptionState as Exclude<
@@ -312,6 +401,7 @@ export async function getAccessForUser(userId: string): Promise<UserAccess> {
       prepaid_pass_id: row.prepaidPassId,
       course_months_paid: row.courseMonthsPaid,
     }, new Date(), { pass, release })
+    return { ...applyMonthCap(access, learner.cap), nextGate: learner.nextGate }
   } catch (err) {
     // Fail CLOSED: a transient DB error must never admit a user beyond
     // "registered". But log it — silently demoting a GRANTED tester on a blip

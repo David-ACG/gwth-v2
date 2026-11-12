@@ -225,7 +225,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
       <div className={styles.shell} data-section="course-detail">
         {/* Hold the clock (gift sale, decision 5): waiting for the next month. */}
-        <CourseHoldNotice onHoldFor={user?.courseOnHoldFor} accessSource={user?.accessSource} />
+        <CourseHoldNotice onHoldFor={user?.courseOnHoldFor} accessSource={user?.accessSource} reason={user?.courseHoldReason} nextGate={user?.courseNextGate} showAhead />
 
         {/* Course header */}
         <header>

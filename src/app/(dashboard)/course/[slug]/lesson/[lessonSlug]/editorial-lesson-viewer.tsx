@@ -181,6 +181,12 @@ export interface EditorialLessonMeta {
    * `mediaUrl()`; drives the real player on the intro-video surface.
    */
   introVideoUrl?: string | null
+  /**
+   * Where to fetch the narration's word timings (bead gwth-launch-735c). Set by
+   * the page when the audio link is signed, since a signed link no longer
+   * points at the timings file beside it.
+   */
+  timingsUrl?: string | null
 }
 
 interface EditorialLessonViewerProps {
@@ -375,7 +381,7 @@ export function EditorialLessonViewer({
     // Through the site's own proxy: the media CDN sends no CORS header, so a
     // direct cross-origin fetch is blocked and we would silently keep the
     // estimate.
-    const url = timestampsFetchUrl(audioSrc)
+    const url = lesson.timingsUrl ?? timestampsFetchUrl(audioSrc)
     if (!url) return
     let cancelled = false
     void fetch(url)
@@ -389,7 +395,7 @@ export function EditorialLessonViewer({
     return () => {
       cancelled = true
     }
-  }, [audioSrc, narratedPages, narrationKey])
+  }, [audioSrc, lesson.timingsUrl, narratedPages, narrationKey])
 
   /**
    * Moves the playhead to the top of a page's narration. Called on every page

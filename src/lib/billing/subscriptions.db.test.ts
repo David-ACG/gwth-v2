@@ -37,6 +37,9 @@ describeDb("subscription access (live DB)", () => {
   let access: typeof import("./access")
 
   beforeAll(async () => {
+    // These tests are about which month a payment buys. The 75% completion
+    // gate (bead gwth-launch-735c) is tested in src/lib/protection/.
+    process.env.MONTH_GATE_PERCENT = "0"
     process.env.STRIPE_COURSE_PRICE_ID = "price_course_test"
     process.env.STRIPE_STAY_CURRENT_PRICE_ID = "price_stay_test"
     sql = postgres(DATABASE_URL!)

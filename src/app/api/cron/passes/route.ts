@@ -9,7 +9,10 @@
  * - sends each gift email whose delivery time has come,
  * - retries any buyer receipt the webhook failed to send,
  * - holds payers' next charge while the month they would pay for is not
- *   open (hold the clock), when billing is on.
+ *   open (hold the clock), when billing is on; since bead gwth-launch-735c
+ *   that includes a month they cannot open yet (75% gate, review hold),
+ * - deletes content-protection records past their keep-by (raw lesson views
+ *   after 90 days, cleared flags after 12 months).
  * Fails closed: no CRON_SECRET on the server, nothing runs.
  */
 import { timingSafeEqual } from "node:crypto"
@@ -18,6 +21,7 @@ import { ENABLE_BILLING } from "@/lib/config"
 import { listDueGifts, listUnsentReceipts } from "@/lib/billing/pass-store"
 import { deliverGift, sendReceipt } from "@/lib/billing/pass-fulfil"
 import { holdPayersForUnopenedMonths } from "@/lib/billing/subscriptions"
+import { purgeOldProtectionRecords } from "@/lib/protection/store"
 
 export const dynamic = "force-dynamic"
 
@@ -38,7 +42,14 @@ export async function POST(request: Request) {
   }
 
   const now = new Date()
-  const result = { giftsSent: 0, giftsFailed: 0, receiptsSent: 0, payersHeld: 0, errors: [] as string[] }
+  const result = {
+    giftsSent: 0,
+    giftsFailed: 0,
+    receiptsSent: 0,
+    payersHeld: 0,
+    protectionPurged: 0,
+    errors: [] as string[],
+  }
 
   try {
     for (const pass of await listDueGifts(now)) {
@@ -60,6 +71,14 @@ export async function POST(request: Request) {
       console.error("[cron/passes] payer holds failed", err)
       result.errors.push("payer_holds")
     }
+  }
+
+  try {
+    const purged = await purgeOldProtectionRecords(now)
+    result.protectionPurged = purged.events + purged.flags
+  } catch (err) {
+    console.error("[cron/passes] protection purge failed", err)
+    result.errors.push("protection_purge")
   }
 
   return NextResponse.json(result, { status: result.errors.length ? 500 : 200 })

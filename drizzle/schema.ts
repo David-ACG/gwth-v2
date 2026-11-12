@@ -1125,3 +1125,44 @@ export const capstoneQueries = pgTable("capstone_queries", {
 	check("capstone_queries_reason_check", sql`(char_length(reason) >= 1) AND (char_length(reason) <= 500)`),
 	check("capstone_queries_status_check", sql`status = ANY (ARRAY['remarking'::text, 'answered'::text, 'with_david'::text, 'resolved'::text])`),
 ]);
+
+// 033 content protection (bead gwth-launch-735c), hand-added like 028-031.
+export const contentAccessEvents = pgTable("content_access_events", {
+	id: bigserial({ mode: "number" }).primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	lessonId: text("lesson_id").notNull(),
+	month: integer(),
+	kind: text().notNull(),
+	firstView: boolean("first_view").default(false).notNull(),
+	expectedSec: integer("expected_sec"),
+	mediaLinks: integer("media_links").default(0).notNull(),
+	ip: text(),
+	country: text(),
+	userAgent: text("user_agent"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_content_access_events_user").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.createdAt.asc().nullsLast().op("timestamptz_ops")),
+	index("idx_content_access_events_created").using("btree", table.createdAt.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({ columns: [table.userId], foreignColumns: [user.id], name: "content_access_events_user_id_fkey" }).onDelete("cascade"),
+	check("content_access_events_kind_check", sql`kind = ANY (ARRAY['lesson_view'::text, 'locked_lesson'::text])`),
+]);
+
+export const contentAccessFlags = pgTable("content_access_flags", {
+	id: bigserial({ mode: "number" }).primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	status: text().default('open').notNull(),
+	heldMonth: integer("held_month"),
+	reasons: jsonb().default([]).notNull(),
+	signals: jsonb().default({}).notNull(),
+	openedAt: timestamp("opened_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	lastSeenAt: timestamp("last_seen_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	alertSentAt: timestamp("alert_sent_at", { withTimezone: true, mode: 'string' }),
+	reviewedBy: text("reviewed_by"),
+	clearedAt: timestamp("cleared_at", { withTimezone: true, mode: 'string' }),
+	note: text(),
+}, (table) => [
+	index("idx_content_access_flags_user").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.status.asc().nullsLast().op("text_ops")),
+	foreignKey({ columns: [table.userId], foreignColumns: [user.id], name: "content_access_flags_user_id_fkey" }).onDelete("cascade"),
+	check("content_access_flags_status_check", sql`status = ANY (ARRAY['open'::text, 'cleared'::text, 'suspended'::text])`),
+	check("content_access_flags_held_month_check", sql`held_month = ANY (ARRAY[2, 3])`),
+]);

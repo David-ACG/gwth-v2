@@ -255,7 +255,7 @@ export function ActiveDashboard({
     <div className={styles.shell} data-section="dashboard-active">
 
       {/* Hold the clock (gift sale, decision 5): waiting for the next month. */}
-      <CourseHoldNotice onHoldFor={user.courseOnHoldFor} accessSource={user.accessSource} />
+      <CourseHoldNotice onHoldFor={user.courseOnHoldFor} accessSource={user.accessSource} reason={user.courseHoldReason} nextGate={user.courseNextGate} />
 
       {/* TOP TASK BAND */}
       <section className={styles.band}>

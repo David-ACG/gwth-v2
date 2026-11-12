@@ -26,6 +26,7 @@ import { GRACE_PERIOD_DAYS } from "@/lib/config"
 import {
   clampCourseMonth,
   getMonthRelease,
+  learnerMonthsFor,
   stateForCourseMonth,
 } from "@/lib/billing/access"
 import type { MonthRelease } from "@/lib/billing/passes"
@@ -305,7 +306,12 @@ export async function holdPayersForUnopenedMonths(now = new Date()): Promise<num
       const chargeAt = nextChargeAt(sub)
       if (!chargeAt) continue
       const held = sub.status === "trialing"
-      const opens = opensAtFor(row.courseMonthsPaid + 1, release)
+      // Their own open date (bead gwth-launch-735c): the month they would pay
+      // for next waits while they are under the 75% gate, held for David's
+      // review, or suspended, so they are never charged for a month they
+      // cannot open.
+      const own = await learnerMonthsFor(row.userId, "stripe_course", release)
+      const opens = own.suspended ? null : opensAtFor(row.courseMonthsPaid + 1, own.release)
 
       const target = payerHoldTarget({ opens, chargeAt, held, now })
 
