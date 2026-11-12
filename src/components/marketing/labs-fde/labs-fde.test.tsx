@@ -62,7 +62,8 @@ describe("LabsFde, the six labs", () => {
   it("states the model and set-up counts from the data", () => {
     const { container } = renderIndex()
     expect(container.textContent).toContain(
-      `${index.model_count} models, ${index.setup_count} set-ups`,
+      // Persona review PR07 (6 Nov 2026): plain words, not "set-ups".
+      `${index.model_count} models tested in ${index.setup_count} combinations of model and settings`,
     )
   })
 

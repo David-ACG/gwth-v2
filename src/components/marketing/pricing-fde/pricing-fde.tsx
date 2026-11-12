@@ -73,57 +73,6 @@ import { PRICING_OFFER_COPY as OFFER } from "@/components/marketing/gift/gift-co
  * regression test was protecting.
  */
 
-/**
- * What a team gets. "Admin dashboard for managers", "Progress and completion
- * reporting" and "Role-specific lesson recommendations" for "5 or more" went on
- * 2026-10-21: none exists, there is no minimum team size, and each person picks
- * their own optional lessons. David chose option B that day (a manager
- * dashboard with lessons finished, quiz marks and project marks), so the
- * dashboard is promised only once ENABLE_TEAM_DASHBOARD is on.
- */
-const TEAM_FEATURES = ENABLE_TEAM_DASHBOARD
-  ? [
-      "A manager dashboard for any team",
-      "Lessons finished, quiz marks and project marks",
-      "Bespoke workflow lessons for 100 or more people",
-    ]
-  : [
-      "Each person has their own account and progress",
-      "No minimum team size",
-      "An edition of your own for 100 or more people",
-    ]
-
-/** The audience of the third tier, in one place: card, column and split. */
-const GROUP_AUDIENCE = "Teams"
-
-/** Feature comparison rows: [feature, Free, Member, Teams]. */
-// Every "Free" cell here has to survive a signed-out visitor actually trying
-// it. There is no lesson preview and no progress tracking without an account,
-// so both used to promise something the product does not do.
-const COMPARISONS = [
-  ["The six free labs", "Included", "Included", "Included"],
-  ["Full core course", "No", "Included", "Included"],
-  ["A practical project in every lesson", "No", "Included", "Included"],
-  [
-    "Plain progress tracking",
-    "No",
-    "Included",
-    ENABLE_TEAM_DASHBOARD ? "Included, plus a manager dashboard" : "Included",
-  ],
-  [
-    "Continued access to updated lessons",
-    "No",
-    `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo after the first three months`,
-    // Same price per person as the Teams card says (Sol copy check, 2026-10-20).
-    `£${ONGOING_MONTHLY_PRICE.toFixed(2)}/mo per person after the first three months`,
-  ],
-  ...(ENABLE_TEAM_DASHBOARD
-    ? [["Manager dashboard", "No", "No", "Included"]]
-    : []),
-]
-
-/** The plan names, in the order of the comparison table's columns. */
-const COMPARISON_PLANS = ["Free", "Member", GROUP_AUDIENCE] as const
 
 /**
  * What happens after paying, how to cancel and how to get a refund, in one
@@ -215,367 +164,282 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
     />
   )
 
-  const tiers = [
+  // Persona review round 2 (D16 and D25, 7 Nov 2026): every persona wanted
+  // the two ways to pay side by side, with each condition said once. Words
+  // by the latest Astra, refined and checked by the latest Sol (12 Nov 2026,
+  // completion/public-pages-persona-apply/copy/).
+  const courseFull = formatPence(PASS_PRICES_PENCE.courseFull)
+  const payRows: { row: string; monthly: string; pass: string }[] = [
     {
-      key: "free",
-      badge: free.badge,
-      tag: "Forever",
-      price: free.price,
-      per: free.per,
-      features: free.features,
-      // The free tier IS the labs, so this card's CTA is the one place on the
-      // page that must follow the gate rather than the shared PRICING data
-      // (W25). While /labs is private the button would land on a login wall.
-      cta: canPromoteLabs()
-        ? { label: free.cta.label, href: free.cta.href }
-        : { label: "Join the waitlist", href: "/waitlist" },
-      featured: false,
+      row: "What you pay",
+      monthly: `£${COURSE_MONTHLY_PRICE} a month for the first three months. All three cost £${
+        COURSE_MONTHLY_PRICE * 3
+      }. Each payment opens one month.`,
+      pass: christmas
+        ? `${coursePass} once if you buy from ${salesOpenOn} to ${saleEndsOn}; ${courseFull} after that.`
+        : `${coursePass} once.`,
     },
     {
-      key: "course",
-      badge: "Member",
-      tag: course.flag ?? "The course",
-      price: course.price,
-      per: course.per,
-      features: course.features,
-      // The shared PRICING data still points this CTA at /signup, but W25 shut
-      // registration, so /signup renders "Registration closed" under a button
-      // labelled "Join the Waitlist". Send it where the label says it goes.
-      cta: { label: course.cta.label, href: "/waitlist" },
-      after: "a month after the first three months, unless you cancel",
-      featured: true,
+      row: "At the end of month three",
+      monthly: "Your plan continues automatically unless you cancel.",
+      pass: "Your lesson access ends unless you choose to continue.",
     },
     {
-      key: "team",
-      badge: GROUP_AUDIENCE,
-      tag: "Any number of people",
-      price: "Same",
-      per: "per-person price",
-      features: TEAM_FEATURES,
-      cta: { label: "Talk to us", href: "/contact" },
-      after: "a month for each person once the first three months are done",
-      featured: false,
+      row: "How to cancel",
+      monthly:
+        "Cancel at any time in your account settings. Keep access until the end of the month you've paid for.",
+      pass: "The pass ends by itself; you don't need to cancel.",
+    },
+    {
+      row: "Does it renew?",
+      monthly: "Yes. We email you before each payment.",
+      pass: "No.",
     },
   ]
+  const payPlans = [
+    { key: "monthly", name: "Pay monthly" },
+    { key: "pass", name: "Pay once for three months" },
+  ] as const
+  // "No adverts or hidden charges" is left off here (latest Sol, 12 Nov
+  // 2026): the page does not yet say what AI tools cost, so "hidden charges"
+  // promises a complete cost it cannot show. The footer keeps "no adverts".
+  const courseFeatures = course.features.filter(
+    (feature) => !/hidden charges/i.test(feature)
+  )
 
   return (
     <div className={styles.shell}>
       <section className={styles.masthead} data-section="masthead">
         <div className={styles.page}>
-          {/* The kicker used to carry both prices too. With priceLine saying
-              it directly below in headline type, that was the same sentence
-              twice in one block. */}
-          <h1 className={styles.mastheadTitle}>
-            Three ways to learn. <em>Start free.</em>
-          </h1>
+          <h1 className={styles.mastheadTitle}>Choose how to join GWTH</h1>
           <p className={styles.priceLine} data-testid="masthead-price-line">
             £{COURSE_MONTHLY_PRICE} a month for the first three months, then{" "}
             <em>£{ongoing} a month</em> if you stay.
           </p>
-          {/* a-20260914-203941-b69458 and a-20260914-204053-7fd060. The
-              comparison is now the WHOLE foundation against one consultant
-              hour, and the £7.50 is deliberately outside that sentence so it
-              cannot read as included in the £87. Nothing here says the course
-              is finished: it is always being updated, which is what the £7.50
-              buys. */}
-          <p className={styles.standfirst}>
-            Pay a month at a time, or pay once for the whole course. Teams pay
-            the same per-person price, and institutions that want their own
-            edition get a proposal based on what they need. After the first
-            three months, continued access to the updated lessons costs
-            £{ongoing} a month. Monthly plans carry on at that price by
-            themselves. With a pass, lesson access ends after three months
-            unless you choose to continue.
-          </p>
-          {/* The UK thread on this page (bead gwth-launch-88z.32.25). Money
-              is the only thing this page is about, so this is where it earns
-              its place. It states what the page can prove: one price, in
-              pounds, the same for a team place as for one person. It does
-              NOT claim anything about VAT treatment, which is a Stripe
-              configuration question and not settled here. */}
-          <p className={styles.standfirst} data-testid="pricing-uk-note">
-            All prices are in pounds, because the course is written for the
-            UK. A team pays the same per person as someone joining on their
-            own.
-          </p>
-          <div className={styles.mastheadFoot}>
-            <p>Prices in GBP, with no VAT added</p>
-            <p>Unlock one month at a time</p>
-            <p>£{ongoing}/mo after the first three months</p>
-            <p>Cancel at any time</p>
-          </div>
-        </div>
-      </section>
-
-      <section
-          className={`${styles.section} ${styles.sectionAlt}`}
-          data-section="offer"
-          data-testid="pricing-offer"
-        >
-          <div className={`${styles.page} ${styles.splitGrid}`}>
-            <div>
-              <h2>
-                {christmas ? (
-                  <>
-                    The whole course for {coursePass}{" "}
-                    <em>
-                      from {salesOpenOn} to {saleEndsOn}
-                    </em>
-                  </>
-                ) : (
-                  <>
-                    {OFFER.allYear.title} <em>{OFFER.allYear.titleAccent}</em>
-                  </>
-                )}
-              </h2>
-            </div>
-            <div className={styles.splitNote}>
-              <p>
-                {christmas
-                  ? `Pay once for all three months: ${coursePass} instead of ${formatPence(
-                      PASS_PRICES_PENCE.courseFull
-                    )}, if you buy between ${salesOpenOn} and ${saleEndsOn}. Buy it for yourself or give it as a gift. You can also give just the first month for ${formatPence(
-                      PASS_PRICES_PENCE.month1
-                    )}. After ${saleEndsOn}, the whole course is ${formatPence(
-                      PASS_PRICES_PENCE.courseFull
-                    )} and gifts stay on sale.`
-                  : OFFER.allYear.body(
-                      coursePass,
-                      formatPence(PASS_PRICES_PENCE.month1)
-                    )}
-              </p>
-              <p data-testid="pricing-offer-months">
-                Month 1 opens on {salesOpenOn}. Month 2 opens around{" "}
-                {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-                {LATER_MONTHS_OPEN.month3}. If you reach a month before it
-                opens, your time is paused until it does, so you get all three
-                months.
-              </p>
-              <div className={styles.buttonRow}>
-                {selling ? (
-                  <>
-                    <BuyButton
-                      endpoint="/api/passes/checkout"
-                      body={{ gift: false, product: "course" }}
-                      label={OFFER.buySelf(coursePass)}
-                      returnTo="/pricing"
-                      className={styles.buttonSolid}
-                      errorClassName={styles.buyError}
-                    />
-                    <Link href="/gift" className={styles.buttonOutline}>
-                      {OFFER.gift}
-                    </Link>
-                  </>
-                ) : (
-                  <Link href="/waitlist" className={styles.buttonSolid}>
-                    Join the waitlist
-                  </Link>
-                )}
-              </div>
-              <TermsNote kind="pass" testId="pricing-offer-terms" />
-            </div>
-          </div>
-        </section>
-
-      <section className={styles.section} data-section="tiers">
-        <div className={styles.page}>
-          {/* Named for assistive technology only: the visible hierarchy runs
-              h1 to the card h3s, which left the tier grid unlabelled and the
-              heading order broken. */}
-          <h2 className={styles.srOnly}>The three plans</h2>
-          <div className={styles.tiersRow}>
-            {tiers.map((tier) => (
-              <article
-                key={tier.key}
-                data-testid="pricing-tier"
-                data-tier={tier.key}
-                data-featured={tier.featured ? "true" : undefined}
-                className={`${styles.tierCard} ${
-                  tier.featured ? styles.tierFeatured : ""
-                }`}
-              >
-                {/* No tinted header strip (paper-first-components: no
-                    coloured card tops). The label sits on the card surface
-                    with a hairline under it. */}
-                <div className={styles.cardTop}>
-                  <h3>{tier.badge}</h3>
-                  <span>{tier.tag}</span>
-                </div>
-                <div className={styles.tierBody}>
-                  <p className={styles.tierPrice}>
-                    <strong>{tier.price}</strong>
-                    <span>{tier.per}</span>
-                  </p>
-                  {tier.after && (
-                    <p className={styles.tierAfter} data-testid="tier-after">
-                      then{" "}
-                      <strong
-                        className={styles.tierAfterPrice}
-                        data-testid="tier-after-price"
-                      >
-                        £{ongoing}
-                      </strong>{" "}
-                      {tier.after}
-                    </p>
-                  )}
-                  <ul className={styles.tierFeatures}>
-                    {tier.features.map((feature) => (
-                      <li key={feature}>{feature}</li>
-                    ))}
-                  </ul>
-                  <div className={styles.tierCta}>
-                    {selling && tier.key === "course" ? (
-                      monthlyCta
-                    ) : (
-                      <Link
-                        href={tier.cta.href}
-                        className={
-                          tier.featured
-                            ? styles.buttonSolid
-                            : styles.buttonOutline
-                        }
-                      >
-                        {tier.cta.label}
-                      </Link>
-                    )}
-                    {tier.key === "course" && (
-                      <TermsNote kind="monthly" testId="member-terms" />
-                    )}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-          <p className={styles.fineprint}>
-            Monthly plans renew automatically. After the first three months,
-            continued access to the updated lessons costs {PRICING[2]!.price}
-            /mo unless you cancel. A three-month pass ends unless you choose
-            to continue.
-          </p>
+          {/* Jump links (D25): a short decision path down a long page. */}
+          <nav className={styles.mastheadFoot} aria-label="On this page" data-testid="pricing-jump">
+            <p><a href="#how-to-pay" className={styles.inlineLink}>Compare payments</a></p>
+            {canPromoteLabs() && (
+              <p><a href="#what-you-get" className={styles.inlineLink}>Try the free labs</a></p>
+            )}
+            <p><a href="#teams" className={styles.inlineLink}>Teams and institutions</a></p>
+            <p data-testid="pricing-uk-note">Prices in pounds for the UK, with no VAT added</p>
+          </nav>
         </div>
       </section>
 
       <section
         className={`${styles.section} ${styles.sectionAlt}`}
-        data-section="compare"
+        data-section="offer"
+        data-testid="pricing-offer"
+        id="how-to-pay"
       >
         <div className={styles.page}>
           <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>
-              What each plan <em>includes</em>
-            </h2>
+            <h2 className={styles.sectionTitle}>Choose how to pay</h2>
           </div>
-          {/* a-20260914-203753-b9d050: the labs are not sample lessons, so the
-              free tier is no longer described as a taste of the course. */}
           <p className={styles.sectionLead}>
-            The free labs test new AI models on the same real work tasks
-            and show which one to use. Member is the course itself, with its
-            lessons and projects.{" "}
-            {ENABLE_TEAM_DASHBOARD
-              ? "Teams adds a manager dashboard."
-              : "With Teams, each person has their own account and tracks their own progress."}
+            Pay a month at a time, or pay once for the whole course: a
+            three-month pass for yourself.
           </p>
-          {/* Focusable because it scrolls sideways on a phone: a scrollable
-              region a keyboard cannot reach is a serious axe violation. */}
           <div
             className={styles.tableWrap}
             tabIndex={0}
             role="region"
-            aria-label="Plan comparison"
+            aria-label="Two ways to pay"
           >
-            <table className={styles.compareTable}>
+            <table className={styles.compareTable} data-testid="pay-compare">
               <thead>
                 <tr>
-                  <th scope="col">Feature</th>
-                  <th scope="col">Free</th>
-                  <th scope="col">Member</th>
-                  {/* a-20260914-203458-8004f0: the column used to read
-                      "Team", which read as excluding institutions. */}
-                  <th scope="col">{GROUP_AUDIENCE}</th>
+                  <th scope="col">
+                    <span className={styles.srOnly}>Question</span>
+                  </th>
+                  {payPlans.map((plan) => (
+                    <th scope="col" key={plan.key}>{plan.name}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {COMPARISONS.map((row) => (
-                  <tr key={row[0]}>
-                    <th scope="row">{row[0]}</th>
-                    {row.slice(1).map((cell, index) => (
-                      <td key={`${row[0]}-${index}`}>{cell}</td>
-                    ))}
+                {payRows.map((row) => (
+                  <tr key={row.row}>
+                    <th scope="row">{row.row}</th>
+                    <td>{row.monthly}</td>
+                    <td>{row.pass}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          {/* On a phone the table is replaced by one block per plan (launch
-              readiness, 2026-10-20: at 390px the Member column was cut off
-              and the Teams column could not be seen). The stylesheet shows
-              exactly one of the two at any width. */}
           <div className={styles.compareStack} data-testid="compare-stack">
-            {COMPARISON_PLANS.map((plan, planIndex) => (
+            {payPlans.map((plan) => (
               <div
-                key={plan}
+                key={plan.key}
                 className={styles.compareStackPlan}
                 data-testid="compare-stack-plan"
               >
-                <h3>{plan}</h3>
+                <h3>{plan.name}</h3>
                 <dl>
-                  {COMPARISONS.map((row) => (
-                    <div key={row[0]} className={styles.compareStackEntry}>
-                      <dt>{row[0]}</dt>
-                      <dd>{row[planIndex + 1]}</dd>
+                  {payRows.map((row) => (
+                    <div key={row.row} className={styles.compareStackEntry}>
+                      <dt>{row.row}</dt>
+                      <dd>{row[plan.key]}</dd>
                     </div>
                   ))}
                 </dl>
               </div>
             ))}
           </div>
+          <div className={styles.buttonRow}>
+            {selling ? (
+              <>
+                {monthlyCta}
+                <BuyButton
+                  endpoint="/api/passes/checkout"
+                  body={{ gift: false, product: "course" }}
+                  label={OFFER.buySelf(coursePass)}
+                  returnTo="/pricing"
+                  className={styles.buttonOutline}
+                  errorClassName={styles.buyError}
+                />
+              </>
+            ) : (
+              <Link href="/waitlist" className={styles.buttonSolid}>
+                Join the waitlist
+              </Link>
+            )}
+          </div>
+          <p className={styles.termsNote} data-testid="pricing-offer-months">
+            Month 1 opens on {salesOpenOn}. Month 2 opens around{" "}
+            {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
+            {LATER_MONTHS_OPEN.month3}. If you reach a month before it opens,
+            your time is paused until it does, so you get all three months.
+          </p>
+          <p className={styles.termsNote} data-testid="pricing-continuation">
+            After the first three months, continued access to updated lessons
+            costs £{ongoing} a month.
+          </p>
+          <p className={styles.termsNote} data-testid="pricing-offer-terms">
+            For a pass for yourself, sign in before paying. We refund a pass in
+            full until it&apos;s opened, but not after, unless the law
+            requires. To ask for a refund,{" "}
+            <Link href="/contact" className={styles.inlineLink}>
+              contact us
+            </Link>
+            . See the{" "}
+            <Link href="/terms#passes" className={styles.inlineLink}>
+              Terms for passes
+            </Link>{" "}
+            and the{" "}
+            <Link href="/terms#subscriptions" className={styles.inlineLink}>
+              Terms for monthly payments
+            </Link>
+            , including refunds.
+          </p>
         </div>
       </section>
 
-      <section className={styles.section} data-section="teams">
+      <section className={styles.section} data-section="tiers" id="what-you-get">
+        <div className={styles.page}>
+          <div className={styles.sectionHead}>
+            <h2 className={styles.sectionTitle}>What you get</h2>
+          </div>
+          <div className={styles.tiersRow}>
+            <article className={`${styles.tierCard} ${styles.tierFeatured}`} data-testid="pricing-tier" data-tier="course">
+              <div className={styles.cardTop}>
+                <h3>The course</h3>
+              </div>
+              <div className={styles.tierBody}>
+                <ul className={styles.tierFeatures}>
+                  {courseFeatures.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+            <article className={styles.tierCard} data-testid="pricing-tier" data-tier="free">
+              <div className={styles.cardTop}>
+                <h3>Free labs</h3>
+              </div>
+              <div className={styles.tierBody}>
+                <p className={styles.tierText}>
+                  All six labs are free forever, with no card required. They
+                  test new AI models on the same real work tasks and show which
+                  one to use. We re-test when new models come out. Lessons and
+                  their projects come with the course.
+                </p>
+                <div className={styles.tierCta}>
+                  <Link
+                    href={canPromoteLabs() ? free.cta.href : "/waitlist"}
+                    className={styles.buttonOutline}
+                  >
+                    {canPromoteLabs() ? free.cta.label : "Join the waitlist"}
+                  </Link>
+                </div>
+              </div>
+            </article>
+            <article className={styles.tierCard} data-testid="pricing-tier" data-tier="gift">
+              <div className={styles.cardTop}>
+                <h3>Give the course as a gift</h3>
+              </div>
+              <div className={styles.tierBody}>
+                <p className={styles.tierText}>
+                  Give a three-month pass, or just the first month for{" "}
+                  {formatPence(PASS_PRICES_PENCE.month1)}.
+                  {christmas ? " Gifts stay on sale after the offer ends." : ""}{" "}
+                  The recipient has one year from purchase to enter their code.
+                  Their course starts when they do, and we never ask for their
+                  card details.
+                </p>
+                {selling && (
+                  <div className={styles.tierCta}>
+                    <Link href="/gift" className={styles.buttonOutline}>
+                      {OFFER.gift}
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section} data-section="teams" id="teams">
         <div className={`${styles.page} ${styles.splitGrid}`}>
-          {/* David, 2026-10-21, option B with his edits: a dashboard, not a
-              "screen", and it shows project marks too. Until the dashboard
-              exists (ENABLE_TEAM_DASHBOARD) the section says what a team
-              gets today, which matches /for-teams. */}
-          {ENABLE_TEAM_DASHBOARD ? (
-            <div>
+          {/* David, 2026-10-21, option B: the dashboard heading is his, and
+              shows only once ENABLE_TEAM_DASHBOARD is on. */}
+          <div>
+            {ENABLE_TEAM_DASHBOARD ? (
               <h2>
                 Same learner experience.{" "}
                 <em>More visibility for managers.</em>
               </h2>
-            </div>
-          ) : (
-            <div>
-              <h2>
-                Same course for everyone.{" "}
-                <em>A tutor dashboard for larger groups.</em>
-              </h2>
-            </div>
-          )}
+            ) : (
+              <h2>Buying for a team or institution</h2>
+            )}
+          </div>
           <div className={styles.splitNote}>
             {ENABLE_TEAM_DASHBOARD ? (
               <p data-testid="teams-split-body">
                 Any team can ask us for a manager dashboard. It shows who has
                 finished each lesson, their quiz marks and the mark for the
                 project they build each month. For 100 or more people, GWTH can
-                create bespoke lessons around your own workflows and tools.
-                Institutions that want their own edition get a proposal based
-                on what they need.
+                create lessons around your own workflows and tools.
+                Institutions get a proposal based on their needs.
               </p>
             ) : (
-              <p data-testid="teams-split-body">
-                There is no minimum team size. Each person has their own place
-                and their own account, and tracks their own progress. You can
-                pay monthly for each person, or buy places one at a time. For
-                100 or more people, GWTH can set up an edition of your own, with
-                a dashboard for your tutors and lessons written around your
-                work. Institutions that want their own edition get a
-                proposal based on what they need.
-              </p>
+              <>
+                <p data-testid="teams-split-body">
+                  Teams pay the same per-person price, with no minimum size.
+                  Each learner has an account and tracks their own progress. Pay
+                  monthly for each person or buy places one at a time.
+                </p>
+                <p>
+                  For 100 or more people, GWTH can create an edition with a
+                  tutor dashboard and lessons written around your work.
+                  Institutions get a proposal based on their needs.
+                </p>
+              </>
             )}
-            {/* For teams is back on the site (David, 2026-10-21: "Also put
-                back the teams page"), so the team buyer goes there first. */}
             <div className={styles.buttonRow}>
               <Link href="/for-teams" className={styles.buttonSolid}>
                 GWTH for teams

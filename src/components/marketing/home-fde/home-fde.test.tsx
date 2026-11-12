@@ -230,7 +230,7 @@ describe("HomeFde names a large company beside an institution", () => {
     render(<HomeFde />)
     const signpost = sectionText("organisations")
     expect(signpost).toMatch(/large compan(y|ies)/i)
-    expect(signpost).toMatch(/professional body/i)
+    expect(signpost).toMatch(/professional bod(y|ies)/i)
   })
 
   it("never says institution on this page without a large company beside it", () => {
@@ -379,10 +379,12 @@ describe("HomeFde hero plate: the flagship picture, not a lesson figure", () => 
 
   it("makes the flagship point under the plate, about the work rather than the categories", () => {
     render(<HomeFde />)
-    const caption = screen.getByText(/Three projects from the course/)
-    expect(caption.textContent).toMatch(/in the order you make them/)
-    expect(caption.textContent).toMatch(/you keep all three/)
-    expect(caption.textContent).toMatch(/every one of them/)
+    // Persona review round 2 (D25, 12 Nov 2026): the caption names the three
+    // projects once, without retelling the progression the cards tell.
+    const caption = screen.getByText(/The picture shows a small working tool/)
+    expect(caption.textContent).toMatch(/real software in Month 2/)
+    expect(caption.textContent).toMatch(/your own AI consultant in Month 3/)
+    expect(caption.textContent).toMatch(/keep all three/)
     // David, a-20260915-210202-691323: *"The phrase on your own work is not
     // really used commonly in the UK. Maybe you could say using your own work
     // as an example."*
@@ -458,14 +460,14 @@ describe("HomeFde self-service promises match the product", () => {
     render(<HomeFde />)
     const offer = screen.getByTestId("home-offer").textContent ?? ""
     expect(offer).toMatch(
-      /From 1 December 2026 to 6 January 2027, the whole three-month course is £69, for yourself or as a gift/
+      /From 1 December 2026 to 6 January 2027, a three-month pass costs £69/
     )
     expect(offer).toMatch(/Or pay £29 a month/)
     const months = screen.getByTestId("home-offer-months").textContent ?? ""
     expect(months).toMatch(/Month 1 opens on 1 December 2026/)
-    expect(months).toMatch(/Month 2 opens around 1 January 2027/)
+    expect(months).toMatch(/Month 2 around 1 January 2027/)
     expect(months).toMatch(/Month 3 around 1 February 2027/)
-    expect(months).toMatch(/your time is paused/)
+    expect(months).toMatch(/Your time pauses/)
   })
 
   it("quotes the canonical prices and the stop-any-time terms, once", () => {
@@ -660,11 +662,13 @@ describe("HomeFde three-month progression", () => {
   it("moves from one person in Month 1 to an organisation in Month 3", () => {
     render(<HomeFde />)
     const [one, two, three] = screen.getAllByTestId("month-card")
-    expect(one!.textContent).toMatch(/your CV and your LinkedIn profile/i)
+    // Persona review round 2 (D25, 12 Nov 2026): the CV and LinkedIn work is
+    // told once, in the career cards, so Month 1 leads with what you build.
+    expect(one!.textContent).toMatch(/portfolio website/i)
     expect(two!.textContent).toMatch(/AskMyCo/)
     expect(two!.textContent).toMatch(/FractionalBuddy/)
-    expect(three!.textContent).toMatch(/how an organisation works as a whole/i)
-    expect(three!.textContent).toMatch(/twelve areas of its work/i)
+    expect(three!.textContent).toMatch(/an organisation's work/i)
+    expect(three!.textContent).toMatch(/twelve areas/i)
   })
 
   it("reads the Month 1 capstone name from the canonical curriculum", () => {
@@ -950,6 +954,11 @@ describe("HomeFde speaks to people changing role or career (bead gwth-launch-c5y
   })
 
   it("tells the Month 1 reader the CV work also serves a change of career", () => {
-    expect(MONTHS[0].body).toContain("ready for a new role or a change of career")
+    // Since 12 Nov 2026 (persona review round 2, D25) the CV work is told once,
+    // in the career section, which is written for a change of role or career.
+    render(<HomeFde />)
+    expect(sectionText("career")).toMatch(/new role/)
+    expect(sectionText("career")).toMatch(/CV and your LinkedIn profile/)
+    expect(MONTHS[0].body).not.toMatch(/LinkedIn/)
   })
 })

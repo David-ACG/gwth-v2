@@ -83,7 +83,7 @@ describe("/pricing during the gift sale", () => {
     const { PricingFde } = await load(true)
     render(<PricingFde now={IN_SALE} />)
     const band = screen.getByTestId("pricing-offer")
-    expect(band).toHaveTextContent("£69 from 1 December 2026 to 6 January 2027")
+    expect(band).toHaveTextContent("£69 once if you buy from 1 December 2026 to 6 January 2027")
     expect(band).toHaveTextContent("£87")
     expect(screen.getByRole("button", { name: "Buy the whole course (£69)" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Give it as a gift" })).toHaveAttribute("href", "/gift")

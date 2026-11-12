@@ -1,5 +1,10 @@
 import Link from "next/link"
 import { MONTH_CONFIGS, TOTAL_MANDATORY_LESSONS } from "@/lib/config"
+
+/** The core-lesson count for one month, read from config (never typed). */
+function coreLessons(month: number): number {
+  return MONTH_CONFIGS.find((m) => m.month === month)?.mandatoryLessons ?? 0
+}
 import styles from "./lessons-fde.module.css"
 import { SIX_BLOCKS, PRIMITIVES_URL } from "@/components/marketing/home-fde/home-fde"
 import homeStyles from "@/components/marketing/home-fde/home-fde.module.css"
@@ -8,14 +13,6 @@ import { canPromoteLabs } from "@/lib/labs-cta"
 import { COURSE_OPENS_ON } from "@/lib/launch-date"
 import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
 
-/**
- * The core-lesson count for one month, read from config. Never type a count
- * into this page, and never print an optional count (launch readiness brief,
- * 2026-10-20; a-20260914-201426-ae7f0e).
- */
-function coreLessons(month: number): number {
-  return MONTH_CONFIGS.find((m) => m.month === month)?.mandatoryLessons ?? 0
-}
 
 /**
  * How-the-course-works entries. Plain rows with a title and a sentence: the
@@ -28,9 +25,9 @@ const FEATURES = [
     // walkthroughs (gwth-public-writing, "Lesson intro videos are a taster").
     // The old line promised "a video showing you exactly what to do, step by
     // step", which no lesson contains (launch readiness review, 2026-10-20).
-    title: "A short film to start each lesson",
+    title: "A short film, then the written lesson",
     description:
-      "Every lesson opens with a short film about what you will do. The written lesson then takes you through it, one step at a time.",
+      "Every lesson opens with a film about what you'll do. The written lesson takes you through it step by step.",
   },
   {
     // The "Why one hour a day?" essay and its picture went on 2026-10-20: the
@@ -40,7 +37,7 @@ const FEATURES = [
     // fact about why a lesson is about an hour.
     title: "About an hour a lesson",
     description:
-      "Each lesson takes about an hour, so five lessons fit into a working week and you can use each new skill before you move on to the next.",
+      "Each lesson takes about an hour, so five fit into a working week, with time to use each new skill before moving on.",
   },
   {
     // No optional TOTAL is printed anywhere on this page any more, for the
@@ -65,7 +62,7 @@ const FEATURES = [
   {
     title: "Progress you can see",
     description:
-      "You can see which lessons you have finished, which projects you have done, and how you did on the questions at the end of each lesson.",
+      "You can track completed lessons, projects and your results on the questions.",
   },
   {
     // "We cover every major AI platform" was a claim no syllabus row backs
@@ -121,15 +118,15 @@ const FEATURES = [
 const PATHS = [
   {
     title: "Go deeper in your own field",
-    body: "These lessons take the same skills into the rules your own work already has to follow. The syllabus covers UK legal practice, finance, healthcare, manufacturing and supply chain, buying AI in the public sector, and professional services for consulting, legal and accountancy firms. A lesson written for solicitors works to what the regulator actually requires, and one written for accountants works to the codes their institute sets, rather than a general warning to be careful.",
+    body: "Apply AI within the rules of UK legal practice, finance, healthcare, manufacturing, supply chains, public-sector purchasing, and professional services for consulting, legal and accountancy firms.",
   },
   {
     title: "Go further into building",
-    body: "The optional building lessons give you more practice. You build tools that answer questions using your own documents and show where each answer came from. You also learn how to test and protect what you build, run AI on your own computer and get several AI assistants to work together on one job.",
+    body: "Build tools that answer from your documents and show their sources. Test and protect them, run AI on your computer and get several AI assistants working together.",
   },
   {
     title: "Learn to lead the change",
-    body: "Month 3 has optional lessons for the person who ends up responsible for AI at work: what a board needs to be told and how often, how AI is bought and its suppliers checked in the public sector, how an AI consulting practice is run, and what an organisation owes its people when the work itself changes.",
+    body: "Learn what boards need to know, how to check public-sector AI suppliers, how to run an AI consulting practice and what organisations owe people when work changes.",
   },
 ] as const
 
@@ -178,7 +175,7 @@ const SCORE_INPUTS = [
     body: "Your answers are marked automatically, so you can see what to go back over.",
   },
   {
-    title: "Your assessed projects",
+    title: "Your monthly projects",
     body: "Their marks will count toward your score. These projects use example data we provide. Afterwards, an unmarked step lets you make them your own.",
   },
   {
@@ -334,7 +331,12 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>How your skills develop</h2>
           </div>
-          <p className={styles.sectionLead}>The first lessons teach the skills everyone needs. You then use those skills in larger projects, from tasks in your own life to software for a business and an AI consultant for an organisation. These examples show how the six AI superpowers develop across the three months.</p>
+          {/* Persona review round 2 (D25, 7 Nov 2026): all ten personas found
+              this page too long. The six-skill grid stays, one click away. */}
+          <p className={styles.sectionLead}>See how you use the six AI superpowers in larger projects each month.</p>
+          <details className={p.reveal} data-testid="skills-reveal">
+          <summary>Show the six superpowers</summary>
+          <div className={p.revealBody}>
           <div className={p.cards3}>
             {SIX_BLOCKS.map((block) => (
               <article className={p.card} key={block.n} data-testid="block-card">
@@ -359,6 +361,8 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
             creation, ideation and strategy, coding, data analysis and
             automation. The names above are ours.
           </p>
+          </div>
+          </details>
         </div>
       </section>
 
@@ -376,7 +380,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              Everyone does the core. <em>The rest is where you go deeper.</em>
+              Core lessons, then optional ones
             </h2>
           </div>
           {/* "Month 1 is the same for everybody" and "Months 2 and 3 each open
@@ -386,12 +390,13 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           <p className={styles.sectionLead} data-testid="optional-lead">
             Every month has core lessons that everybody does:{" "}
             {coreLessons(1)} in Month 1, {coreLessons(2)} in Month 2 and{" "}
-            {coreLessons(3)} in Month 3. Each month also has optional lessons,
-            and that is where the course stops being the same for everybody.
-            The optional lessons run in three directions: using AI in your own
-            profession, building more advanced AI tools, and leading AI work in
-            an organisation.
+            {coreLessons(3)} in Month 3. The optional lessons go three ways:
+            your own profession, building more advanced AI tools and leading AI
+            work in an organisation.
           </p>
+          <details className={p.reveal} data-testid="optional-reveal">
+          <summary>Show the optional lessons</summary>
+          <div className={p.revealBody}>
           <div className={styles.pathsRow}>
             {PATHS.map((path) => (
               <article
@@ -412,6 +417,8 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           <p className={styles.optionalNote} data-testid="optional-beta-note">
             Each month includes its core and optional lessons when that month opens.
           </p>
+          </div>
+          </details>
           {/* /for-teams is closed to visitors from the launch (it returns a
               404), so its link and the smaller-team sentence went with it.
               /for-institutions is unlisted but its link works. */}
@@ -459,6 +466,9 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               `m3_l26` against the ICAEW, ACCA and CIMA codes and the audit
               sign-off rule in ISA (UK) 700. Do not add a profession here that
               has no written lesson behind it. */}
+          <details className={p.reveal}>
+          <summary>Which UK rules the specialist lessons follow</summary>
+          <div className={p.revealBody}>
           <p className={styles.sectionLead} data-testid="lessons-uk-note">
             The specialist lessons use the UK rules and professional standards
             that apply to your work. The lesson on legal practice works to the
@@ -469,6 +479,8 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
             signing off an audit, ISA (UK) 700. Lessons that handle personal
             information work to UK data protection law.
           </p>
+          </div>
+          </details>
         </div>
       </section>
 
@@ -488,30 +500,23 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              Your score, and <em>how it will be worked out.</em>
+              How your score will work
             </h2>
           </div>
           <div className={styles.scoreGrid}>
             <div className={styles.scoreBody}>
               <p data-testid="score-beta-note">
-                The course does not show a GWTH score yet. When it does, this is
-                how it will be worked out.
+                The course does not show a GWTH score yet.
               </p>
               <p data-testid="score-lead">
-                Finishing a lesson is not the same as being able to do what it
-                taught. So every lesson ends with a few questions, and the
-                course includes larger projects that will be marked. Your GWTH
-                score will be worked out from the lessons you have finished, how
-                you did on those questions and the marks for your assessed
-                projects. It counts what you did, not how long you were signed
-                in.
+                When it does, it will be worked out from the lessons you have
+                finished, how you did on the questions and the marks for your
+                monthly projects.
               </p>
               <p data-testid="score-denominator">
-                The score is measured against the lessons you were given, so two
-                scores mean the same thing only when they come from the same set
-                of lessons. An institution that chooses which optional lessons
-                its members must complete, and sets its own pass mark, is
-                choosing what the number is measured against.
+                You can compare scores only for the same set of lessons. An
+                institution choosing required optional lessons and its own pass
+                mark also chooses what the score measures.
               </p>
               {/* The shareable record page (with the LinkedIn mention David
                   asked for on 2026-09-14) went on 2026-10-20: no credential

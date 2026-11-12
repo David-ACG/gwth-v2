@@ -696,3 +696,13 @@
   font-weight: 600;
   color: var(--v-error-text);
 }
+
+/* Plain paragraph inside a "What you get" card (persona review round 2,
+   12 Nov 2026): the free labs and gift cards say one thing in a sentence
+   rather than a list. */
+.tierText {
+  margin: 0 0 1.25rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}

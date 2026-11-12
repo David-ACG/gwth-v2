@@ -223,17 +223,17 @@ export const MONTHS = [
   {
     kicker: "Month 1",
     title: "Your own work and home life",
-    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You build your own portfolio website without writing code. In Spending Detective, you clean up a messy bank export, find the top five spending categories and make two charts. For marked projects, you use example data we provide. Afterwards, an unmarked step lets you use your own information and routines, so the projects are useful to you and good fun to make. For work tasks, use the AI tool your organisation has approved. In the optional {CAPSTONE} lessons, you build an assistant that turns a family meeting recording into tasks, calendar events, a meal plan and a shopping list.",
+    body: "You build your own portfolio website without writing code. In Spending Detective, you clean a messy bank export, find the top five spending categories and make two charts. Marked projects use example data we provide. An unmarked step then lets you use your own information, so the projects are useful to you and good fun to make. The {CAPSTONE} lessons are optional.",
   },
   {
     kicker: "Month 2",
     title: "A small business",
-    body: "You take the same skills into the work of a small business. Before other people use what you build, you learn to protect their data. You keep private the secret keys that let software connect to a service, you decide who can see each record, and you test that one customer cannot see another's. Then you build AskMyCo, a customer support chatbot that answers from a company's own documents and shows you where each answer came from. You also write down what personal information it touches, and the legal reason you are allowed to use it. After that you write a plan for a second assistant, FractionalBuddy, for a small consulting firm, and set out the ten days of work that would build it.",
+    body: "You learn to protect other people's data before they use what you build. You build AskMyCo, a support chatbot that answers from a company's own documents and shows where each answer came from. You then write a plan for FractionalBuddy, a second assistant for a small consulting firm.",
   },
   {
     kicker: "Month 3",
     title: "A whole organisation",
-    body: "Month 3 is about how an organisation works as a whole, not one more tool for it. For the marked project, you use example data we provide about an organisation to find where AI would help. You score the organisation on twelve areas of its work, such as its skills, its data and the rules it has to follow. Then you build a working AI consultant that does all of that for you. It interviews people by voice, and every score it gives names the answers it came from. It sorts the work into what to change now, what comes next and what can wait, then writes the report and the slide deck. The people who run the organisation decide what changes, and when. Afterwards, an unmarked step lets you apply what you have built to your employer, a charity you help run or your own business.",
+    body: "For the marked project, you score twelve areas of an organisation's work using our example data. You build a working AI consultant that interviews people by voice, links every score to their answers and writes the report and slide deck. The organisation's leaders decide what changes. An unmarked step lets you adapt it for your employer, a charity or your own business.",
   },
 ] as const
 
@@ -440,15 +440,15 @@ export const SCORE_STATES: readonly ScoreState[] = [
 const UK_THREAD = [
   {
     title: "The documents you actually get",
-    body: "A letter from the NHS, a council or benefits form, a Self Assessment return, a workplace pension statement, the household spreadsheet behind all of it. You practise on the paperwork that lands in your own house, so the skill is ready the first time you need it.",
+    body: "Practise with NHS letters, council and benefits forms, Self Assessment returns, workplace pension statements and household spreadsheets.",
   },
   {
     title: "The rules you are actually held to",
-    body: "Tax, pensions, employment and data protection all work differently here. Where a lesson covers these topics, you practise with UK examples and learn to check which rules apply to your situation.",
+    body: "Practise with UK examples of tax, pensions, employment and data protection, and learn to check which rules apply to your situation.",
   },
   {
     title: "Check the source before you act",
-    body: "AI can give you an answer that is right for another country and wrong here. You are taught to ask for the source and to check it against the GOV.UK page, the regulator's own words or your employer's policy before you act on it.",
+    body: "AI may use another country's rules. Ask for the source and check it against GOV.UK, the regulator's guidance or your employer's policy before acting.",
   },
 ]
 
@@ -469,11 +469,11 @@ export const CAREER_SIDE_LESSONS_WRITTEN = false
 export const CAREER_CARDS = [
   {
     title: "Prepare for applications and interviews",
-    body: "In Month 1 you rewrite your CV and LinkedIn profile, learn how AI screening tools read a CV and what your rights are, and practise interviews with AI playing the interviewer.",
+    body: "Rewrite your CV and your LinkedIn profile, learn how AI screening tools read a CV and what your rights are, and practise interviews with AI playing the interviewer.",
   },
   {
     title: "Build a portfolio and plan your prices",
-    body: "Month 2 ends with a portfolio of what you have built. You learn the different ways people price this kind of work and where to check the UK rules on self-employment.",
+    body: "Build a portfolio, learn ways to price your work and find where to check the UK rules on self-employment.",
   },
   {
     title: "Test a small shop or online channel",
@@ -611,11 +611,10 @@ export function HomeFde({
           <div className={styles.offer}>
             <div>
               <p className={styles.offerBody}>
-                Every lesson is built around a project. You attempt it
-                yourself first, then the lesson works through it with you, step
-                by step. There are a few questions at the end, marked for you,
-                so you know what to go back over. You do not need any coding
-                experience to start.
+                Every lesson is built around a project. Try it first, then
+                follow the lesson step by step. The questions at the end are
+                marked for you, so you know what to revisit. You don&apos;t
+                need coding experience.
               </p>
             </div>
             <div className={styles.offerAside}>
@@ -627,33 +626,33 @@ export function HomeFde({
                   than one long paragraph. */}
               <div className={styles.offerPrice} data-testid="home-offer">
                 <p>
-                  From {offer.opensOn} to {offer.endsOn}, the whole three-month
-                  course is {offer.sale}, for yourself or as a gift.
+                  From {offer.opensOn} to {offer.endsOn}, a three-month pass
+                  costs {offer.sale}.
                 </p>
                 <ul className={styles.offerList}>
                   <li>
-                    <strong>Pay {offer.sale} once</strong> for a three-month
-                    pass. It never renews, and a gift needs no card details from
-                    the person you give it to.
+                    <strong>Pay {offer.sale} once.</strong> It never renews, and
+                    gift recipients give no card details.
                   </li>
                   <li>
-                    <strong>Or pay £{COURSE_MONTHLY_PRICE} a month.</strong>{" "}
-                    Each of your first three payments opens one month of the
-                    course. You can cancel at any time in your account settings.
+                    <strong>Or pay £{COURSE_MONTHLY_PRICE} a month</strong> for
+                    the first three months, and cancel at any time in your
+                    account settings.
                   </li>
                   <li>
-                    <strong>After three months</strong>, continued access to the
-                    updated lessons costs £{ONGOING_MONTHLY_PRICE.toFixed(2)} a
-                    month. A pass simply ends unless you choose this. A monthly
-                    plan moves onto it unless you cancel.
+                    <strong>Afterwards</strong>, continued access to the updated
+                    lessons costs £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
+                    Monthly plans
+                    renew automatically unless cancelled; a pass ends unless you
+                    choose to continue.
                   </li>
                 </ul>
               </div>
               <p className={styles.offerNote} data-testid="home-offer-months">
-                Month 1 opens on {offer.opensOn}. Month 2 opens around{" "}
+                Month 1 opens on {offer.opensOn}, Month 2 around{" "}
                 {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-                {LATER_MONTHS_OPEN.month3}. If you reach a month before it
-                opens, your time is paused until it does.
+                {LATER_MONTHS_OPEN.month3}. Your time pauses if you reach a
+                month before it opens.
               </p>
               <div className={styles.offerActions}>
                 {selling ? (
@@ -710,11 +709,10 @@ export function HomeFde({
             />
             <figcaption className={styles.plateCaption}>
               <span className={styles.plateLine}>
-                Three projects from the course, in the order you make them: a
-                small working tool in Month 1, real software in Month 2 and
-                your own AI consultant in Month 3. You build{" "}
-                <em>every one of them</em> yourself, you can adapt each one
-                using your own work as an example, and you keep all three.
+                The picture shows a small working tool in Month 1, real
+                software in Month 2 and your own AI consultant in Month 3. You
+                keep all three and can adapt them using your own work as an
+                example.
               </span>
             </figcaption>
           </figure>
@@ -750,11 +748,11 @@ export function HomeFde({
           <p className={styles.monthsNote} data-testid="months-optional-note">
             Month 2 starts with {MONTH_CONFIGS[1]?.mandatoryLessons} core
             lessons and Month 3 with {MONTH_CONFIGS[2]?.mandatoryLessons}, and
-            everybody does those. The lessons after them are optional. There are lessons on
-            using AI inside UK legal work, finance, healthcare, manufacturing
-            and the public sector, and others that go further into building
-            things or into leading the change at work. You are not expected to
-            take all of them.
+            everybody does those. Optional lessons follow: AI in UK legal work,
+            finance, healthcare and other fields, building more advanced AI
+            tools, and leading AI at work. You are not expected to take all of
+            them. For work tasks, use the AI tool your
+            organisation has approved.
           </p>
           <div className={p.actions}>
             <Link href="/lessons" className={p.buttonOutline}>
@@ -905,12 +903,11 @@ export function HomeFde({
                 `lib/public-routes.ts`). The gift is the way one person buys
                 for another, so it is named first. */}
             <p className={styles.signpostBody}>
-              You can give one person the course as a gift. A team pays the
-              same price per person, shown on the Pricing page. A professional
-              body or a large company can have its own edition: you pick the
-              lessons and you set the pass mark. Your tutors or
-              training leads can see who has reached it, and each learner
-              finishes with a record of the lessons they passed.
+              Give the course as a gift, or buy team places at the same price
+              per person. Professional bodies and large companies can choose
+              lessons and a pass mark for their own edition. Tutors and
+              training leads can see who passes; learners keep a record of
+              lessons passed.
             </p>
             <div className={p.actions}>
               {selling && (
