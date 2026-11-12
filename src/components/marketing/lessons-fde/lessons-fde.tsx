@@ -73,7 +73,7 @@ const FEATURES = [
     title: "Not tied to one AI company",
     description:
       // Second sentence: video refresh, bead gwth-launch-ooc6, approved 2026-10-25.
-      "The lessons teach skills that work across AI tools, not tricks for one product, so you can pick the right tool for each job. Tricks that worked on older models are dropped when they stop helping.",
+      "The lessons teach skills that work across AI tools, not tricks for one product. You learn to choose the right mix of AI services for your work and your budget, so you can avoid paying for tools you don't need. When the tools change, or the best way to use them changes, we rewrite the lessons.",
   },
 ]
 
@@ -178,8 +178,8 @@ const SCORE_INPUTS = [
     body: "Your answers are marked automatically, so you can see what to go back over.",
   },
   {
-    title: "Your monthly projects",
-    body: "Each month you build a major project. It will be marked, and the mark will count toward your score.",
+    title: "Your assessed projects",
+    body: "Their marks will count toward your score. These projects use example data we provide. Afterwards, an unmarked step lets you make them your own.",
   },
   {
     title: "Nothing else",
@@ -270,7 +270,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           <div className={styles.mastheadFoot}>
             <p>3 months, 5 hours a week, around the day job</p>
             <p>A short film in every lesson</p>
-            <p>One main project each month</p>
+            <p>A project in every lesson</p>
             <p>Plain progress tracking</p>
           </div>
         </div>
@@ -306,7 +306,11 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
                   <p className={styles.monthSub}>{month.subtitle}</p>
                   <p className={styles.monthDesc}>{month.description}</p>
                   <div className={styles.capstone}>
-                    <p>The month&apos;s main project</p>
+                    <p>
+                      {month.capstoneOptional
+                        ? "An optional project"
+                        : "The month's main project"}
+                    </p>
                     <strong>{month.capstoneName}</strong>
                     <em>{month.capstoneDescription}</em>
                   </div>
@@ -330,7 +334,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>How your skills develop</h2>
           </div>
-          <p className={styles.sectionLead}>The first lessons teach the skills everyone needs. You then use those skills in larger projects, from tasks in your own life to software for a business and an AI consultant for an organisation. These examples show how the six skills develop across the three months.</p>
+          <p className={styles.sectionLead}>The first lessons teach the skills everyone needs. You then use those skills in larger projects, from tasks in your own life to software for a business and an AI consultant for an organisation. These examples show how the six AI superpowers develop across the three months.</p>
           <div className={p.cards3}>
             {SIX_BLOCKS.map((block) => (
               <article className={p.card} key={block.n} data-testid="block-card">
@@ -347,7 +351,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
             ))}
           </div>
           <p className={p.attribution}>
-            The six building blocks follow the{" "}
+            The six superpowers follow the{" "}
             <a href={PRIMITIVES_URL} rel="noopener noreferrer" target="_blank">
               six common ways of using AI at work
             </a>{" "}
@@ -495,10 +499,10 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               </p>
               <p data-testid="score-lead">
                 Finishing a lesson is not the same as being able to do what it
-                taught. So every lesson ends with a few questions, and each
-                month you build a major project that will be marked. Your GWTH
+                taught. So every lesson ends with a few questions, and the
+                course includes larger projects that will be marked. Your GWTH
                 score will be worked out from the lessons you have finished, how
-                you did on those questions and the marks for your monthly
+                you did on those questions and the marks for your assessed
                 projects. It counts what you did, not how long you were signed
                 in.
               </p>

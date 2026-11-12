@@ -223,7 +223,7 @@ export const MONTHS = [
   {
     kicker: "Month 1",
     title: "Your own work and home life",
-    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You turn a spreadsheet of numbers into a chart and a decision you can act on. You make your first small working tool. You use your own information and routines, so the projects are useful to you and good fun to make. Before your end-of-month project is marked, we hide the names you list and details such as phone numbers and email addresses, and you see exactly what goes to the marker before you confirm. For work tasks, use the AI tool your organisation has approved. The month ends with the {CAPSTONE}: it takes the recording of your weekly family meeting and turns it into tasks, calendar events, a meal plan and a shopping list.",
+    body: "You rewrite your CV and your LinkedIn profile, and practise for interviews, ready for a new role or a change of career. You build your own portfolio website without writing code. In Spending Detective, you clean up a messy bank export, find the top five spending categories and make two charts. For marked projects, you use example data we provide. Afterwards, an unmarked step lets you use your own information and routines, so the projects are useful to you and good fun to make. For work tasks, use the AI tool your organisation has approved. In the optional {CAPSTONE} lessons, you build an assistant that turns a family meeting recording into tasks, calendar events, a meal plan and a shopping list.",
   },
   {
     kicker: "Month 2",
@@ -233,7 +233,7 @@ export const MONTHS = [
   {
     kicker: "Month 3",
     title: "A whole organisation",
-    body: "Month 3 is about how an organisation works as a whole, not one more tool for it. You pick a real one: your employer, a charity you help run, or your own business. You interview people in different teams to find where AI would genuinely help. You score the organisation on twelve areas of its work, such as its skills, its data and the rules it has to follow. Then you build a working AI consultant that does all of that for you. It interviews people by voice, and every score it gives names the answers it came from. It sorts the work into what to change now, what comes next and what can wait, then writes the report and the slide deck. The people who run the organisation decide what changes, and when.",
+    body: "Month 3 is about how an organisation works as a whole, not one more tool for it. For the marked project, you use example data we provide about an organisation to find where AI would help. You score the organisation on twelve areas of its work, such as its skills, its data and the rules it has to follow. Then you build a working AI consultant that does all of that for you. It interviews people by voice, and every score it gives names the answers it came from. It sorts the work into what to change now, what comes next and what can wait, then writes the report and the slide deck. The people who run the organisation decide what changes, and when. Afterwards, an unmarked step lets you apply what you have built to your employer, a charity you help run or your own business.",
   },
 ] as const
 
@@ -338,14 +338,14 @@ export const SIX_BLOCKS = [
     name: "Data",
     clause: "check that the numbers add up",
     months: [
-      "You take one messy real spreadsheet and get a chart, two checked numbers and a decision out of it.",
+      "You clean up a messy bank export, find the top five spending categories and make two charts from it.",
       "You build a dashboard with three panels, and a way of measuring whether the answers it gives are any good.",
       "You turn dozens of interviews into themes, and into scores that each name the answers they came from.",
     ],
   },
   {
     n: "06",
-    name: "Automation",
+    name: "Automation and agents",
     clause: "hand routine jobs to AI",
     months: [
       "You design your first safe automation on paper: the steps, the permissions, four test cases and how to undo it if it goes wrong.",
@@ -545,7 +545,7 @@ export function HomeFde({
                 contrast to decode before it tells you anything. The layout is
                 unchanged; the words say what the course is. */}
             <h1 className={styles.heroTitle}>
-              <span>Learn to use AI at work </span>
+              <span>Learn to use AI at work and at home </span>
               <span>
                 by <em>making things</em>.
               </span>
@@ -577,37 +577,11 @@ export function HomeFde({
             </div>
           </div>
 
-          {/* The one saturated thing on the page. No frame, no tint, 8px.
-
-              David, 2026-09-13, on the picture that used to be here: *"the
-              image could be better for a home page as it just looks like a
-              kind of standard image that you get in a lesson rather than a
-              special image that goes on the home page"* (bead
-              gwth-launch-88z.32.12). Six equal cards in a three by two grid is
-              the form every lesson figure takes, it is the picture of breadth
-              rather than of depth, and the six blocks have a section of their
-              own further down that does the job properly. This picture makes
-              the headline's argument instead: three projects, each one bigger
-              than the last, the newest one in a hand. Its labels are lettered
-              into the photograph (landscape-labelled-images), so the page no
-              longer renders a key under it; David, 2026-09-14, had already
-              said the six bare category words there were "totally
-              uninspiring". */}
-          <figure className={`${p.plate} ${styles.heroPlate}`} id="what-you-make">
-            <Plate
-              name="what-you-make"
-              alt="Three paper-craft objects on a desk, each larger than the one before. A small card with a speech bubble and a cog, labelled Month 1, a tool that works. A propped screen showing a bar chart with a key beside it, labelled Month 2, real software. A bound booklet with a microphone on its mint cover, labelled Month 3, your AI consultant, being set down by a hand."
-              priority
-              sizes="(max-width: 1180px) 100vw, 1140px"
-            />
-            <figcaption className={styles.plateCaption}>
-              <span className={styles.plateLine}>
-                Three projects from the course, in the order you make them. You
-                build <em>every one of them</em> yourself, using your own work
-                as an example, and you keep all three.
-              </span>
-            </figcaption>
-          </figure>
+          {/* Film A in the hero, with the free-lesson panel beside it
+              (David, 12 Nov 2026). It takes the place of the three-projects
+              picture, which moved to the top of the months section, where it
+              illustrates exactly what that section says. */}
+          <HomeFilm />
           <div className={p.plateMeta}>
             <p>Three months · About five hours a week · Assessed throughout</p>
           </div>
@@ -615,15 +589,12 @@ export function HomeFde({
               approved by David 2026-10-25. Under the hero, not in it: the hero
               copy was cut to three sentences for phones. */}
           <p className={styles.updatesLine} data-testid="home-updates-line">
-            AI changes quickly. When the tools change, or the best way to use
-            them changes, we rewrite the lessons.{" "}
+            When the tools change, or the best way to use them changes, we
+            rewrite the lessons and add new ones.{" "}
             <Link href="/why-gwth#up-to-date">See what we changed and why</Link>
           </p>
         </div>
       </section>
-
-      {/* The home page film, straight after the hero (David, 2026-10-21). */}
-      <HomeFilm />
 
       {/*
         How a lesson works, straight after the hero, because this is the page's
@@ -725,6 +696,25 @@ export function HomeFde({
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>The work gets bigger every month</h2>
           </div>
+          {/* The three-projects picture (bead gwth-launch-88z.32.12), moved
+              here from the hero on 12 Nov 2026 when Film A took the hero.
+              Three projects, each bigger than the last, the newest in a hand:
+              the picture of this section's argument. Its labels are lettered
+              into the photograph, so the page renders no key under it. */}
+          <figure className={`${p.plate} ${styles.monthsPlate}`} id="what-you-make">
+            <Plate
+              name="what-you-make"
+              alt="Three paper-craft objects on a desk, each larger than the one before. A small card with a speech bubble and a cog, labelled Month 1, a tool that works. A propped screen showing a bar chart with a key beside it, labelled Month 2, real software. A bound booklet with a microphone on its mint cover, labelled Month 3, your AI consultant, being set down by a hand."
+              sizes="(max-width: 1180px) 100vw, 1140px"
+            />
+            <figcaption className={styles.plateCaption}>
+              <span className={styles.plateLine}>
+                Three projects from the course, in the order you make them. You
+                build <em>every one of them</em> yourself, using your own work
+                as an example, and you keep all three.
+              </span>
+            </figcaption>
+          </figure>
           <div className={p.cards3}>
             {MONTHS.map((month) => (
               <article className={p.card} key={month.kicker} data-testid="month-card">
@@ -795,9 +785,9 @@ export function HomeFde({
       <section className={p.section} data-section="blocks">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>Six ways to use AI</h2>
+            <h2 className={p.sectionTitle}>Six AI superpowers</h2>
           </div>
-          <p className={styles.blocksLead}>The course combines research, writing, planning, building tools, checking data and designing automation. In Month 1, for example, you turn a spreadsheet into a chart, two checked numbers and a decision.</p>
+          <p className={styles.blocksLead}>The course is built around six AI superpowers: Research, Content, Thinking, Building, Data, and Automation and agents. In the Month 1 dashboard lesson, for example, you turn a spreadsheet into one chart, two checked numbers and a decision.</p>
           <div className={p.actions}>
             <Link href="/lessons#six-building-blocks" className={p.buttonOutline}>
               See how the skills develop

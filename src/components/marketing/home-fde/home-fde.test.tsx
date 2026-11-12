@@ -60,7 +60,9 @@ describe("HomeFde (paper-first, N12)", () => {
   it("opens on a headline a beginner reads once", () => {
     render(<HomeFde />)
     const h1 = screen.getByRole("heading", { level: 1 })
-    expect(h1).toHaveTextContent("Learn to use AI at work by making things.")
+    // "at home" added 12 Nov 2026 so the headline matches Film A, which
+    // David approved: AI at work and in everyday life (bead gwth-launch-ote8).
+    expect(h1).toHaveTextContent("Learn to use AI at work and at home by making things.")
     expect(h1.textContent).not.toMatch(/gap is not access|It is depth/i)
   })
 
@@ -89,10 +91,13 @@ describe("HomeFde (paper-first, N12)", () => {
 
   // Persona review PR06 (David, 6 Nov 2026): the six building blocks, with
   // their OpenAI attribution, moved to /lessons. Home keeps a short preview.
-  it("previews the six ways to use AI and links to the full section", () => {
+  // 12 Nov 2026: the heading says "Six AI superpowers", the words Film A
+  // (approved by David) uses for the same six.
+  it("previews the six AI superpowers and links to the full section", () => {
     render(<HomeFde />)
     const blocks = sectionText("blocks")
-    expect(blocks).toMatch(/^Six ways to use AI/)
+    expect(blocks).toMatch(/^Six AI superpowers/)
+    expect(blocks).toMatch(/Automation and agents/)
     expect(
       screen.getByRole("link", { name: "See how the skills develop" })
     ).toHaveAttribute("href", "/lessons#six-building-blocks")
@@ -689,8 +694,10 @@ describe("The six building blocks carry a month by month progression (on /lesson
     const { container } = render(<LessonsFde />)
     const section = container.querySelector('[data-section="blocks"]') as HTMLElement
     const text = (section.textContent ?? "").replace(/\s+/g, " ")
-    expect(text).toContain("six building blocks")
-    // The bare noun survives only inside "building blocks" and nowhere else.
+    // 12 Nov 2026: the prose now says "six AI superpowers", the words of
+    // Film A (approved by David) and lesson 1. The annotation's point still
+    // holds: the bare noun "blocks" appears nowhere.
+    expect(text).toContain("six AI superpowers")
     expect(text.replace(/building blocks/g, "")).not.toMatch(/\bblocks\b/i)
     // The "01 · Building block" card label went on 2026-10-20 (launch
     // readiness: a numbered filler label under a heading that already says
@@ -768,7 +775,7 @@ describe("The six building blocks carry a month by month progression (on /lesson
    * will not write code."* The page therefore says design, in all three.
    */
   it("says Automation is designed, because no month builds one", () => {
-    const automation = SIX_BLOCKS.find((b) => b.name === "Automation")!
+    const automation = SIX_BLOCKS.find((b) => b.name === "Automation and agents")!
     for (const line of automation.months) {
       expect(line).toMatch(/^You design /)
     }

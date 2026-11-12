@@ -409,7 +409,7 @@ export const PRICING: readonly PricingTier[] = [
     features: [
       `Month 1 opens on ${COURSE_OPENS_ON}. Month 2 opens around ${LATER_MONTHS_OPEN.month2} and Month 3 around ${LATER_MONTHS_OPEN.month3}. If you reach a month before it opens, your time is paused until it does.`,
       `${TOTAL_MANDATORY_LESSONS} core lessons, plus optional lessons for your field`,
-      "Projects including the Family AI Bot, the AskMyCo support chatbot and your own AI consultant",
+      "Projects including your own portfolio website, the AskMyCo support chatbot and your own AI consultant",
       "Plain course progress tracking",
       "No adverts or hidden charges",
     ],

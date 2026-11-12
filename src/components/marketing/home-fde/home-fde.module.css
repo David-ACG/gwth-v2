@@ -62,6 +62,12 @@
   scroll-margin-top: 5rem;
 }
 
+/* The same picture, at the top of the months section since 12 Nov 2026. */
+.monthsPlate {
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  scroll-margin-top: 5rem;
+}
+
 .plateCaption {
   display: block;
 }

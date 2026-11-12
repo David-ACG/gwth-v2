@@ -143,9 +143,13 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     mandatoryLessons: 22,
     optionalLessons: 10,
     capstoneName: "Family AI Bot",
+    // The four FamilyBot lessons (m1_l21 to m1_l24) are optional in the
+    // syllabus database (checked 12 Nov 2026, bead gwth-launch-ote8), so the
+    // public pages call it an optional project, not the month's main one.
+    capstoneOptional: true,
     capstoneDomain: "familyaibot.com",
     capstoneDescription:
-      "Record your weekly family meeting, and AI turns it into a written record, a list of jobs, calendar events, a meal plan and a shopping list.",
+      "Build an assistant that turns a family meeting recording into a written record, a list of jobs, calendar events, a meal plan and a shopping list.",
   },
   {
     month: 2,

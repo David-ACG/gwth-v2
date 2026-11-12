@@ -126,6 +126,12 @@ export interface MonthConfig {
   capstoneDomain: string
   /** Capstone project description */
   capstoneDescription: string
+  /**
+   * True when the capstone's lessons are optional in the syllabus (Month 1's
+   * four FamilyBot lessons, checked 12 Nov 2026). Public pages then label it
+   * "An optional project" rather than "The month's main project".
+   */
+  capstoneOptional?: boolean
 }
 
 // ─── Course ───────────────────────────────────────────────────────────────────

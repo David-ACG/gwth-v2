@@ -72,9 +72,9 @@ export function LabsFde({ index }: LabsFdeProps) {
             Which AI should you use? <em>We test them to find out.</em>
           </h1>
           <p className={styles.standfirst} data-testid="labs-uk-note">
-            We give new AI models the same real UK work tasks, in six labs: research, writing,
-            thinking a problem through, building a tool, spreadsheets and data, and acting for
-            you. Computer checks and AI judges mark every answer. No AI company pays us.
+            We give new AI models the same real UK work tasks in six labs, one for each AI
+            superpower: Research, Content, Thinking, Building, Data, and Automation and agents.
+            Computer checks and AI judges mark every answer. No AI company pays us.
           </p>
           <p className={styles.standfirst}>
             Each lab names the best model and the best value, lets you read four answers with
@@ -171,7 +171,8 @@ export function LabsFde({ index }: LabsFdeProps) {
           </h2>
           <p>
             Each lab shows which AI did best on real work tasks, what it cost and when we tested
-            it. In Month 1 of the course you build the Family AI Bot. In Month 2 you build a
+            it. In Month 1 of the course you build your own portfolio website without writing code.
+            In Month 2 you build a
             customer support chatbot. In Month 3 you build an AI consultant that interviews people
             and writes a plan for an organisation.
           </p>

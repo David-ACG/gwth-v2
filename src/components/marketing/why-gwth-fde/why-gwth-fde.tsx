@@ -84,7 +84,7 @@ const REASONS: readonly Reason[] = [
     // "Always" was an absolute promise (Sol copy check, 2026-10-20).
     title: "Lessons updated as tools change",
     body: [
-      "AI changes quickly. A course written two or three years ago can recommend tools and methods that people have since stopped using. We update the lessons as the tools change and rewrite any instruction that no longer works, so you're learning what works now.",
+      "AI changes quickly. A course written two or three years ago can recommend tools and methods that people have since stopped using. When the tools change, or the best way to use them changes, we rewrite the lessons and add new ones, so you're learning what works now.",
       // Recovered idea C07 (evergreen copy recovery, 2026-09-14): why a course
       // beats teaching yourself with a chatbot. The earlier wording said a
       // chatbot answers from out-of-date training data; the GPT-6 Sol pass on
@@ -107,7 +107,7 @@ const REASONS: readonly Reason[] = [
     id: "what-you-build",
     title: "What you'll build",
     body: [
-      "In Month 1 you build the Family AI Bot. In Month 2 you build a customer support chatbot. In Month 3 you build an AI consultant that interviews people and writes a plan for an organisation. AI writes the code, and you learn how to direct it and check the result.",
+      "In Month 1 you build your own portfolio website without writing code. In Month 2 you build a customer support chatbot. In Month 3 you build an AI consultant that interviews people and writes a plan for an organisation. AI writes the code, and you learn how to direct it and check the result.",
     ],
   },
   {

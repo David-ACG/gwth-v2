@@ -192,7 +192,10 @@ describe("PricingPage", () => {
     const member = document.querySelector('[data-tier="course"]')?.textContent ?? ""
     expect(member).toContain(`${TOTAL_MANDATORY_LESSONS} core lessons`)
     expect(member).not.toMatch(/\d+ go-deeper|\d+ optional/)
-    expect(member).toMatch(/Family AI Bot/)
+    // 12 Nov 2026: the Family AI Bot lessons are optional in the syllabus, so
+    // the tier leads with a core Month 1 project (bead gwth-launch-ote8).
+    expect(member).toMatch(/portfolio website/)
+    expect(member).not.toMatch(/Family AI Bot/)
     expect(member).toMatch(/AskMyCo/)
     expect(member).toMatch(/your own AI consultant/)
     expect(member).not.toMatch(/AskEveryone|Capstones for/)

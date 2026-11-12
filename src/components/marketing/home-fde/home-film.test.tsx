@@ -1,43 +1,55 @@
 import { afterEach, describe, expect, it } from "vitest"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
-import { HomeFilm } from "./home-film"
+import { FILM, HomeFilm } from "./home-film"
 
-// David, 2026-10-21: "We need to put the home page video on the home page."
+// David, 12 Nov 2026: "Home page for GWTH on the P520 with new video we have
+// just created and refine everything around it". Film A (the Opus journal
+// film, v04) replaced the 21 Oct film.
 describe("HomeFilm", () => {
   afterEach(() => cleanup())
 
-  it("shows a poster for each edition and nothing plays until asked", () => {
+  it("shows Film A's poster and plays nothing until asked", () => {
     const { container } = render(<HomeFilm />)
     expect(container.querySelector("video")).toBeNull()
     const posters = Array.from(container.querySelectorAll("img")).map((i) => i.getAttribute("src"))
-    expect(posters.some((s) => s?.endsWith("homepage-film-paper-poster.jpg"))).toBe(true)
-    expect(posters.some((s) => s?.endsWith("homepage-film-night-poster.jpg"))).toBe(true)
+    expect(posters).toEqual([FILM.poster])
+    expect(FILM.poster).toMatch(/\/site\/home-film\/2026-11-12\/homepage-film-a-poster\.jpg$/)
   })
 
-  it("plays the paper edition in the light theme, with captions on", () => {
-    document.documentElement.classList.remove("dark")
+  it("plays Film A from its new dated key, with captions on", () => {
     const { container } = render(<HomeFilm />)
     fireEvent.click(screen.getByRole("button", { name: /play the gwth film/i }))
     const video = container.querySelector("video")!
-    expect(video.getAttribute("src")).toMatch(/homepage-film-paper\.mp4$/)
-    expect(container.querySelector("track")?.getAttribute("src")).toMatch(/homepage-film\.vtt$/)
+    expect(video.getAttribute("src")).toMatch(/\/site\/home-film\/2026-11-12\/homepage-film-a\.mp4$/)
+    const track = container.querySelector("track")!
+    expect(track.hasAttribute("default")).toBe(true)
+    // Same origin: media.gwth.ai sends no CORS header, so a <track> from it
+    // would never load.
+    expect(track.getAttribute("src")).toBe("/home/film/homepage-film-a.vtt")
   })
 
-  // The film says "Try our free lesson to get a feel for the course" (bead
-  // gwth-launch-xw6s), so the line under it goes to the free lesson. The
-  // link says the lesson opens through an email (persona review PR09).
-  it("links the film's free lesson line to /start-here", () => {
-    render(<HomeFilm />)
-    const line = screen.getByTestId("home-free-lesson")
-    expect(line.textContent).toMatch(/try our free lesson/i)
-    expect(screen.getByRole("link", { name: /get an email link to the free lesson/i }).getAttribute("href")).toBe("/start-here")
-  })
-
-  it("plays the night edition in the dark theme", () => {
+  it("plays the same film in the dark theme", () => {
     document.documentElement.classList.add("dark")
     const { container } = render(<HomeFilm />)
     fireEvent.click(screen.getByRole("button", { name: /play the gwth film/i }))
-    expect(container.querySelector("video")!.getAttribute("src")).toMatch(/homepage-film-night\.mp4$/)
+    expect(container.querySelector("video")!.getAttribute("src")).toBe(FILM.src)
     document.documentElement.classList.remove("dark")
+  })
+
+  // The film ends "The link is beside this film", on an end card with a
+  // "Start here" button, so the panel beside it carries the same words and
+  // goes to the free lesson. It says the lesson opens through an email
+  // (persona review PR09).
+  it("puts the free lesson beside the film, with the end card's words", () => {
+    render(<HomeFilm />)
+    const panel = screen.getByTestId("home-free-lesson")
+    expect(panel.textContent).toMatch(/free lesson/i)
+    expect(panel.textContent).toMatch(/email/i)
+    expect(screen.getByRole("link", { name: /^start here$/i }).getAttribute("href")).toBe("/start-here")
+  })
+
+  it("says how long the film is and that it has captions", () => {
+    render(<HomeFilm />)
+    expect(screen.getByText(/1 minute 19 seconds/i).textContent).toMatch(/captions/i)
   })
 })

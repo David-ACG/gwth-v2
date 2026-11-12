@@ -1,29 +1,24 @@
-/* The home page film block, paper-first register: paper ground, one hairline
-   frame, Bitter heading, the one mint button for Play. Tokens come from the
-   home page's scoped --v-* block, so light and dark follow the page. */
-.section {
-  padding: clamp(3rem, 6vw, 4.5rem) 0 0;
+/* The home page film in the hero (Film A, 12 Nov 2026), paper-first register:
+   one hairline frame, the mint button for Play, the free-lesson panel beside
+   the film on wide screens and under it on phones. Tokens come from the home
+   page's scoped --v-* block, so light and dark follow the page. */
+.block {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(2.25rem, 4.5vw, 3.5rem);
+  scroll-margin-top: 5rem;
 }
 
-.page {
-  margin: 0 auto;
-  width: min(1140px, calc(100% - 2.5rem));
+@media (min-width: 64rem) {
+  .block {
+    grid-template-columns: minmax(0, 8fr) minmax(0, 3fr);
+    gap: clamp(2rem, 3.5vw, 3rem);
+    align-items: center;
+  }
 }
 
-.title {
-  font-family: var(--font-serif);
-  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.12;
-  color: var(--v-ink);
-  margin: 0;
-}
-
-.meta {
-  margin: 0.4rem 0 1.25rem;
-  font-size: var(--fde-body-sm);
-  color: var(--v-muted);
+.filmCol {
+  min-width: 0;
 }
 
 .frame {
@@ -60,18 +55,6 @@
   object-fit: cover;
 }
 
-.nightOnly {
-  display: none;
-}
-
-:global(.dark) .paperOnly {
-  display: none;
-}
-
-:global(.dark) .nightOnly {
-  display: block;
-}
-
 .play {
   position: absolute;
   left: 1.25rem;
@@ -88,28 +71,56 @@
   font-size: 1rem;
 }
 
+@media (max-width: 30rem) {
+  .play {
+    left: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.95rem;
+  }
+}
+
 .posterButton:hover .play,
 .posterButton:focus-visible .play {
   outline: 2px solid var(--v-ink);
   outline-offset: 2px;
 }
 
-/* The film's "Try our free lesson" line, answered right under it (bead
-   gwth-launch-xw6s). */
-.freeLesson {
-  margin: 1rem 0 0;
+.meta {
+  margin: 0.6rem 0 0;
+  font-size: var(--fde-body-sm);
+  color: var(--v-muted);
+}
+
+/* The panel the film points to ("The link is beside this film"). A hairline
+   rule above it on phones, beside it on wide screens; no tint, no card. */
+.beside {
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.25rem;
+}
+
+@media (min-width: 64rem) {
+  .beside {
+    border-top: 0;
+    border-left: 1px solid var(--v-line);
+    padding: 0.25rem 0 0.25rem clamp(1.5rem, 2.5vw, 2rem);
+    margin-bottom: 1.6rem; /* lines it up with the film, not the caption line */
+  }
+}
+
+.besideTitle {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.45rem, 2.4vw, 1.8rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--v-ink);
+}
+
+.besideBody {
+  margin: 0.75rem 0 1.25rem;
   font-size: var(--fde-body);
   line-height: 1.6;
   color: var(--v-soft);
-}
-
-.freeLesson a {
-  color: var(--v-ink);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.freeLesson a:hover {
-  text-decoration-thickness: 2px;
 }
