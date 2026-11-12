@@ -18,7 +18,9 @@
 
 @media (min-width: 64rem) {
   .heroGrid {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    /* 6/6 since 12 Nov 2026: the headline grew "and at home" and the film
+       sits under it, so three wide lines keep Play inside the first screen. */
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
     gap: clamp(3rem, 5vw, 4.5rem);
     align-items: start;
   }
@@ -26,7 +28,7 @@
 
 .heroTitle {
   font-family: var(--font-serif);
-  font-size: clamp(2.7rem, 6.4vw, 4.85rem);
+  font-size: clamp(2.6rem, 5.6vw, 4.2rem);
   font-weight: 600;
   line-height: 1.04;
   letter-spacing: -0.02em;

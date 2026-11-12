@@ -545,7 +545,8 @@ export function HomeFde({
                 contrast to decode before it tells you anything. The layout is
                 unchanged; the words say what the course is. */}
             <h1 className={styles.heroTitle}>
-              <span>Learn to use AI at work and at home </span>
+              <span>Learn to use AI </span>
+              <span>at work and at home </span>
               <span>
                 by <em>making things</em>.
               </span>
