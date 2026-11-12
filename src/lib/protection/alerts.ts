@@ -24,8 +24,13 @@ export type FlagAlert = {
 
 export type AlertChannel = "slack" | "email" | "telegram"
 
+/**
+ * The address David opens: the public sign-in origin (gwth.ai in production,
+ * the Tailscale preview on hlab). NEXT_PUBLIC_SITE_URL can be a local address
+ * on the preview, so it is only the fallback.
+ */
 function siteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.BETTER_AUTH_URL ?? "https://gwth.ai").replace(/\/+$/, "")
+  return (process.env.BETTER_AUTH_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://gwth.ai").replace(/\/+$/, "")
 }
 
 export function flagLink(flagId: number): string {
