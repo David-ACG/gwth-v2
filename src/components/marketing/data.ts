@@ -18,7 +18,6 @@ import {
   TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
 import { ukFigure, ukFigureCitation } from "@/lib/data/uk-ai-context"
-import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -407,7 +406,10 @@ export const PRICING: readonly PricingTier[] = [
     // names them. "Starter price may rise later" went: it sat beside "no
     // pretend scarcity" and promised nothing a buyer could use.
     features: [
-      `Month 1 opens on ${COURSE_OPENS_ON}. Month 2 opens around ${LATER_MONTHS_OPEN.month2} and Month 3 around ${LATER_MONTHS_OPEN.month3}. If you reach a month before it opens, your time is paused until it does.`,
+      // The dates and the 75% rule are in full in "When each course month
+      // opens", above the cards on /pricing (bead gwth-launch-735c, Sol-checked
+      // 12 Nov 2026). This card is only shown on /pricing.
+      "Three monthly parts, with the opening rules explained above",
       `${TOTAL_MANDATORY_LESSONS} core lessons, plus optional lessons for your field`,
       "Projects including your own portfolio website, the AskMyCo support chatbot and your own AI consultant",
       "Plain course progress tracking",

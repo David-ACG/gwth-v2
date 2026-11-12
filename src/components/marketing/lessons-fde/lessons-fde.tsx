@@ -7,6 +7,7 @@ import p from "@/components/marketing/paper/paper.module.css"
 import { canPromoteLabs } from "@/lib/labs-cta"
 import { COURSE_OPENS_ON } from "@/lib/launch-date"
 import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
+import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 
 /**
  * The core-lesson count for one month, read from config. Never type a count
@@ -321,10 +322,17 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           {/* When each month opens, as it is true from the GO LIVE release
               (facts sheet, launch readiness 2026-10-20). Written so it stays
               true on both sides of 1 December. */}
+          {/* The 75% rule (bead gwth-launch-735c), written by the latest
+              Astra and Sol-checked 12 Nov 2026. */}
           <p className={styles.optionalNote} data-testid="months-availability">
-            Month 1 is open from {COURSE_OPENS_ON}. Month 2 opens around {LATER_MONTHS_OPEN.month2} and Month
-            3 around {LATER_MONTHS_OPEN.month3}. If you reach a month before it opens,
-            your time on the course is paused until it does.
+            Month 1 is available from {COURSE_OPENS_ON}, Month 2 around{" "}
+            {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
+            {LATER_MONTHS_OPEN.month3}. Each later month must also be due to
+            start for you and needs {DEFAULT_GATE_PERCENT}% of the previous
+            month&apos;s core lessons finished; while you wait, you keep using
+            your current month, with pass time paused or your next monthly
+            payment waiting. See{" "}
+            <Link href="/terms#course-months">how months open</Link>.
           </p>
         </div>
       </section>

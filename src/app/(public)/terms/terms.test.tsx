@@ -1,6 +1,7 @@
-import { render, screen, cleanup } from "@testing-library/react"
+import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import TermsPage from "./page"
+import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 
 afterEach(cleanup)
 
@@ -51,8 +52,52 @@ describe("TermsPage", () => {
     expect(screen.getByText("2. Intellectual property")).toBeInTheDocument()
     expect(screen.getByText("6. Subscriptions")).toBeInTheDocument()
     expect(screen.getByText("7. Gifts and prepaid passes")).toBeInTheDocument()
-    expect(screen.getByText("8. Prohibited activities")).toBeInTheDocument()
-    expect(screen.getByText("16. Contact us")).toBeInTheDocument()
+    expect(screen.getByText("8. How course months open")).toBeInTheDocument()
+    expect(screen.getByText("9. Protecting the course")).toBeInTheDocument()
+    expect(screen.getByText("10. Prohibited activities")).toBeInTheDocument()
+    expect(screen.getByText("18. Contact us")).toBeInTheDocument()
+  })
+
+  /**
+   * The content-protection rules (bead gwth-launch-735c). The 75% rule must be
+   * in the Terms before anyone pays; the review hold, the monitoring, "only a
+   * person suspends" and the right to contest must be here too.
+   */
+  it("sets out the 75% rule with the share the gate uses", () => {
+    const { container } = render(<TermsPage />)
+    const section = container.querySelector("#course-months")
+    expect(section?.textContent).toBe("8. How course months open")
+    const text = (container.textContent ?? "").replace(/\s+/g, " ")
+    expect(text).toContain(`finished ${DEFAULT_GATE_PERCENT}% of Month 1's core lessons for Month 2`)
+    expect(text).toMatch(/Each later month opens at the latest of these three points/)
+    expect(text).toMatch(/Optional lessons never count/)
+    expect(text).toMatch(/There is no time limit on reaching 75%/)
+    expect(text).toMatch(/your course time is paused/)
+    expect(text).toMatch(/We never charge you for a month you cannot open/)
+    expect(text).toMatch(/We may change the required share of core lessons only after giving notice/)
+  })
+
+  it("explains the monitoring, the review hold and that only a person suspends", () => {
+    const { container } = render(<TermsPage />)
+    expect(container.querySelector("#course-protection")?.textContent).toBe("9. Protecting the course")
+    const text = (container.textContent ?? "").replace(/\s+/g, " ")
+    expect(text).toMatch(/your next month is held until a person at GWTH reviews it, usually within a day/)
+    expect(text).toMatch(/Suspension is always decided by a person/)
+    expect(text).toMatch(/You can contest a hold or suspension through our contact form/)
+    expect(text).toMatch(/We never judge an account on its IP address alone/)
+    expect(text).not.toMatch(/watermark|captcha|device limit/i)
+    // The licence points.
+    expect(text).toMatch(/personal, non-transferable, non-exclusive licence/)
+    expect(text).toMatch(/except through features we provide/)
+    expect(text).toMatch(/Use scrapers, bots or other automated tools/)
+    expect(text).toMatch(/Share your account or its lesson links with anyone else/)
+    // Monitoring relies on legitimate interests, so no blanket consent line.
+    expect(text).not.toMatch(/you consent to the data practices/)
+    // One notice rule: section 4 points at section 13.
+    expect(text).not.toMatch(/immediately, without prior notice/)
+    const toc = screen.getByRole("navigation", { name: /table of contents/i })
+    expect(within(toc).getByRole("link", { name: "How course months open" })).toHaveAttribute("href", "#course-months")
+    expect(within(toc).getByRole("link", { name: "Protecting the course" })).toHaveAttribute("href", "#course-protection")
   })
 
   it("sets out the gift and pass terms David decided (2026-10-19)", () => {

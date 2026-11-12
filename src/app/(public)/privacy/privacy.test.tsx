@@ -77,4 +77,27 @@ describe("PrivacyPage", () => {
     expect(screen.getByText("8. Age and privacy")).toBeInTheDocument()
     expect(screen.getByText("9. Third-party links")).toBeInTheDocument()
   })
+  /**
+   * The course-protection paragraph (bead gwth-launch-735c). Retention is
+   * what purgeOldProtectionRecords deletes: raw lesson-view records after 90
+   * days, a resolved check after 12 months.
+   */
+  it("explains course-protection monitoring, its lawful basis, the hold and retention", () => {
+    render(<PrivacyPage />)
+    const item = screen.getByTestId("privacy-course-protection")
+    expect(item).toHaveAttribute("id", "course-protection")
+    const text = (item.textContent ?? "").replace(/\s+/g, " ")
+    expect(text).toMatch(/your IP address and the country it indicates, and your browser details/)
+    expect(text).toMatch(/Our lawful basis is legitimate interests/)
+    expect(text).toMatch(/automatically holds your next course month for a person at GWTH to review, usually within a day/)
+    expect(text).toMatch(/A person decides whether to clear the hold or suspend/)
+    expect(text).toMatch(/You can contest a hold or suspension/)
+    expect(text).toMatch(/right to object/)
+    expect(text).toMatch(/email, Slack and Telegram/)
+    expect(text).toMatch(/for 90 days, then delete them/)
+    expect(text).toMatch(/for 12 months after it is resolved, then delete it/)
+    expect(text).not.toMatch(/watermark|identifier linked|challenge access|device limit/i)
+    const page = document.body.textContent ?? ""
+    expect(page).not.toMatch(/continued use of our services after changes constitutes acceptance/)
+  })
 })

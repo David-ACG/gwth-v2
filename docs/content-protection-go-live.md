@@ -12,6 +12,10 @@ The code is safe to release before the Cloudflare switches: signed links work wh
 ## Before the release
 
 1. **Terms and pricing page.** The 75% rule has to be on the pricing page and in the Terms *before anyone pays* (consumer law). The review hold and the monitoring need a sentence in the Terms and the privacy notice (draft in `GWTH-launch-plan/research/2026-09-27_content-protection.md`, "Privacy notice paragraph"). A solicitor checks the wording. **Do not switch the gate on for paying students until this text is live.**
+   - Written 12 Nov 2026 (ship `content-protection-wording`; latest Astra wrote it, latest Sol polished and checked it): `/pricing` section "When each course month opens" above both buying options and the notes beside each button; the months notes on `/`, `/lessons`, `/for-teams` and the `/gift` answer; Terms sections 8 "How course months open" and 9 "Protecting the course" (old 8 to 16 are now 10 to 18), the licence in section 2, and consistency changes in sections 4, 6, 7, 10, 12 and 13; Privacy section 1 "Course protection" with retention (90 days, 12 months after a check is resolved), plus sections 2, 3, 4 and 6.
+   - The solicitor's checklist (12 points) is `GWTH-launch-plan/completion/content-protection-wording/solicitor.md`. David picks the wording on the decision page `content-protection-wording` first.
+   - **The share is printed from `DEFAULT_GATE_PERCENT`** (`src/lib/protection/month-hold.ts`), not from `MONTH_GATE_PERCENT`. To change the share: change the Terms and pricing wording first (the Terms promise notice before a change), then `DEFAULT_GATE_PERCENT`, then `MONTH_GATE_PERCENT` on production. Never set `MONTH_GATE_PERCENT` above what the Terms say.
+   - If the persona-test pricing page (branch `persona-apply`, ship `public-pages-persona-apply`) is approved, carry this wording onto it: it keeps the same `TermsNote` and `pricing-offer-months` blocks, and needs the `MonthOpeningRules` section above its pay-once band.
 2. **Migration 033** on production:
    ```bash
    ssh hetzner 'docker exec -i zo0gkcwoo0o4gow0go4cwk0o psql -U gwth -d gwth_v2' < supabase/migrations/033_content_protection.sql

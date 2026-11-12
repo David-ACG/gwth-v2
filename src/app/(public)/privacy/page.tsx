@@ -83,6 +83,68 @@ export default function PrivacyPage() {
           <strong>Log data:</strong> IP address, access times, and
           referring URLs.
         </li>
+        {/* Course protection (bead gwth-launch-735c), from the draft in
+            GWTH-launch-plan research/2026-09-27_content-protection.md, written
+            by the latest Astra and polished and checked by the latest Sol,
+            12 Nov 2026. Every statement is enforced in code: the records in
+            migration 033 (content_access_events), the check in
+            src/lib/protection/monitor.ts, the hold and "only a person
+            suspends" in store.ts and month-hold.ts, the alerts in alerts.ts,
+            and deletion after 90 days and 12 months in purgeOldProtectionRecords
+            (the 15-minute cron). No watermark, challenge or device limit
+            exists, so none is described. A solicitor confirms it before GO
+            LIVE. */}
+        <li id="course-protection" data-testid="privacy-course-protection">
+          <strong>Course protection:</strong>{" "}When you open a lesson while
+          signed in, our server records which lesson you open, when you open
+          it, whether it is your first opening, how many video, audio and
+          picture links it provides, your IP address and the country it
+          indicates, and your browser details. We also record attempts to open
+          lessons your account cannot yet access. We store these records in our
+          own database.
+          <p>
+            We use this information to detect and stop bulk copying, scraping,
+            other automated access and account sharing. Our lawful basis is
+            legitimate interests in protecting the course content and service
+            and preventing fraud and account sharing.
+          </p>
+          <p>
+            An automatic check looks for many new lessons opened within
+            minutes, lessons left after a small fraction of their reading time,
+            timing so regular it looks like a script, many attempts to open
+            locked lessons, and use from many browsers or networks. Going back
+            over lessons you have already opened never counts towards the
+            check. We never judge an account on its IP address alone, because
+            people in an office may share one.
+          </p>
+          <p>
+            If the check flags your account, it automatically holds your next
+            course month for a person at GWTH to review, usually within a day.
+            You keep full use of your current month, with pass time paused or
+            your next monthly payment waiting. A notice on your course page
+            explains that a quick check is happening and includes a contact
+            link. We send an alert to our team through email, Slack and
+            Telegram, containing your account&apos;s email address and what the
+            check found.
+          </p>
+          <p>
+            A person decides whether to clear the hold or suspend your course
+            access. If cleared, your next month opens and your time restarts
+            once its other opening conditions are met. During suspension,
+            course lessons are unavailable until access is reinstated, no
+            monthly payments are taken, and your account and the free labs
+            remain available. You can contest a hold or suspension through our{" "}
+            <Link href="/contact">contact form</Link>, and a person will review
+            it again. You also have the right to object to this use of your
+            information through the contact form, as explained in section 6.
+          </p>
+          <p>
+            We keep lesson-opening records, including attempts to open locked
+            lessons, for 90 days, then delete them. We keep a record of a check
+            for 12 months after it is resolved, then delete it. These periods
+            do not extend the account-deletion period in section 4.
+          </p>
+        </li>
       </ul>
 
       <h2>2. How we use your information</h2>
@@ -104,6 +166,11 @@ export default function PrivacyPage() {
           threats.
         </li>
         <li>
+          Detect and stop bulk copying, scraping, other automated access,
+          fraud and account sharing, using the course-protection checks
+          described in section 1.
+        </li>
+        <li>
           Analyse usage patterns to improve the course content and user
           experience.
         </li>
@@ -116,10 +183,10 @@ export default function PrivacyPage() {
       </p>
       <ul>
         <li>
-          <strong>Service providers:</strong> third-party services that
-          help us operate (hosting, email delivery and payment processing).
-          These providers are contractually obligated to
-          protect your data.
+          <strong>Service providers:</strong>{" "}We use third-party services
+          for hosting, email delivery, payment processing and delivery of
+          course-protection alerts to our team by email, Slack and Telegram,
+          as described in section 1.
         </li>
         {marking && (
           <li>
@@ -144,11 +211,13 @@ export default function PrivacyPage() {
 
       <h2>4. Data retention</h2>
       <p>
-        We retain your personal data for as long as your account is active
-        or as needed to provide our services. If you delete your account,
-        we will delete or anonymise your personal data within 30 days,
-        except where we are required to retain it for legal or regulatory
-        purposes.
+        We retain personal data for as long as your account is active or as
+        needed to provide our services, except where this policy states a
+        specific retention period. The periods for course-protection records
+        are set out in section 1 and apply even while your account remains
+        active. If you delete your account, we delete or anonymise your
+        personal data within 30 days, except where we are required to retain
+        it for legal or regulatory purposes.
       </p>
       {marking && (
         <p>
@@ -176,7 +245,10 @@ export default function PrivacyPage() {
         <li>Request deletion of your data.</li>
         <li>Object to or restrict processing of your data.</li>
         <li>Request a portable copy of your data.</li>
-        <li>Withdraw consent at any time.</li>
+        <li>
+          Withdraw consent at any time where we rely on consent to process
+          your data.
+        </li>
       </ul>
       <p>
         To exercise any of these rights, please{" "}
@@ -219,9 +291,7 @@ export default function PrivacyPage() {
       <p>
         We may update this privacy policy from time to time. We will notify
         you of any material changes by posting the new policy on this page
-        and updating the &quot;Last updated&quot; date. Your continued use of our
-        services after changes constitutes acceptance of the updated
-        policy.
+        and updating the &quot;Last updated&quot; date.
       </p>
 
       <h2>{`${11 + after}. Contact us`}</h2>

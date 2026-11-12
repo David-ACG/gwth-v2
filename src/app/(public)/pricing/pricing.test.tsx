@@ -2,6 +2,7 @@ import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import PricingPage from "./page"
 import { TOTAL_MANDATORY_LESSONS } from "@/lib/config"
+import { DEFAULT_GATE_PERCENT, gatePercent } from "@/lib/protection/month-hold"
 
 /**
  * Rows in the comparison table body, kept beside the component it mirrors.
@@ -172,19 +173,68 @@ describe("PricingPage", () => {
     expect(monthly.textContent).toMatch(/first three monthly payments each open one month/)
     expect(monthly.textContent).toMatch(/£7\.50 a month for continued access to the updated lessons, unless you cancel/)
     expect(pass.textContent).toMatch(/one year from the date you buy it to enter the gift code/)
-    expect(within(monthly).getByRole("link")).toHaveAttribute(
+    expect(within(monthly).getByRole("link", { name: "Terms for monthly payments" })).toHaveAttribute(
       "href",
       "/terms#subscriptions"
     )
     expect(monthly.textContent).toMatch(/refunds/)
   })
 
-  it("says when Months 2 and 3 open and that time is paused if a month is late", () => {
+  /**
+   * The 75% rule (bead gwth-launch-735c, David 12 Nov 2026: "set it to 75%
+   * lessons complete for now"). Consumer law needs it in front of a buyer
+   * before they pay: in full above both buying options, and beside each
+   * paying button, with the share read from the gate itself.
+   */
+  it("explains the 75% rule, the review hold and the personal links before either buying option", () => {
+    render(<PricingPage />)
+    const rules = screen.getByTestId("month-opening-rules")
+    expect(rules).toHaveAttribute("id", "month-opening-rules")
+    const text = (rules.textContent ?? "").replace(/\s+/g, " ")
+    expect(screen.getByRole("heading", { name: "When each course month opens" })).toBeInTheDocument()
+    expect(text).toContain(`Before Month 2 opens, you must finish ${DEFAULT_GATE_PERCENT}% of Month 1's core lessons`)
+    expect(text).toContain(`Before Month 3 opens, you must finish ${DEFAULT_GATE_PERCENT}% of Month 2's core lessons`)
+    expect(text).toMatch(/Optional lessons do not count and are never required/)
+    expect(text).toMatch(/no time limit/)
+    expect(text).toMatch(/latest of three points/)
+    expect(text).toMatch(/your course time is paused/)
+    expect(text).toMatch(/your next payment waits until that month can open; your plan is not cancelled/)
+    expect(text).toMatch(/held for a person at GWTH to review, usually within a day/)
+    expect(screen.getByTestId("media-links-note").textContent).toMatch(/links made for your account that stop working after a few hours/)
+    expect(within(rules).getByRole("link", { name: "how months open" })).toHaveAttribute("href", "/terms#course-months")
+    expect(within(rules).getByRole("link", { name: "how we protect the course" })).toHaveAttribute("href", "/terms#course-protection")
+    // Above both buying options: the rules come before the pay-once band.
+    const offer = screen.getByTestId("pricing-offer")
+    expect(rules.compareDocumentPosition(offer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // Nothing that is not built: no watermark, challenge or device limit.
+    expect(text).not.toMatch(/watermark|identifier|captcha|challenge|device limit/i)
+  })
+
+  it("shows the same share the gate uses when MONTH_GATE_PERCENT is unset", () => {
+    // Changing the share means changing the Terms first; the gate's default
+    // and the public wording are one number.
+    expect(gatePercent(undefined)).toBe(DEFAULT_GATE_PERCENT)
+    expect(DEFAULT_GATE_PERCENT).toBe(75)
+  })
+
+  it("repeats the rule beside each paying button and links to it", () => {
+    render(<PricingPage />)
+    for (const id of ["pricing-offer-terms", "member-terms"]) {
+      const note = screen.getByTestId(id)
+      expect(note.textContent).toContain(`${DEFAULT_GATE_PERCENT}% of the previous month's core lessons`)
+      expect(within(note).getByRole("link", { name: "opening rules above" })).toHaveAttribute("href", "#month-opening-rules")
+    }
+    expect(screen.getByTestId("pricing-offer-terms").textContent).toMatch(/your pass time is paused while you wait/)
+    expect(screen.getByTestId("member-terms").textContent).toMatch(/your next payment waits until that month can open/)
+  })
+
+  it("says when Months 2 and 3 open for everyone, beside the pay-once offer", () => {
     render(<PricingPage />)
     const member = document.querySelector('[data-tier="course"]')?.textContent ?? ""
-    expect(member).toMatch(/Month 2 opens around 1 January 2027 and Month 3 around 1 February 2027/)
-    expect(member).toMatch(/your time is paused/)
-    expect(screen.getByTestId("pricing-offer-months").textContent).toMatch(/your time is paused/)
+    expect(member).toMatch(/Three monthly parts, with the opening rules explained above/)
+    const months = screen.getByTestId("pricing-offer-months").textContent ?? ""
+    expect(months.replace(/\s+/g, " ")).toMatch(/Month 2 around 1 January 2027 and Month 3 around 1 February 2027/)
+    expect(months).toMatch(/opening rules above/)
   })
 
   it("prints the core count from config, no optional count, and the projects the home page names", () => {
