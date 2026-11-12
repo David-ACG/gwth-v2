@@ -162,7 +162,7 @@ function TermsNote({
     <p className={styles.termsNote} data-testid={testId}>
       You pay once and it never renews. If you buy it for yourself, sign in
       first: Month 1 opens as soon as you&apos;ve paid. Months 2 and 3 each
-      require {SHARE} of the previous month&apos;s core lessons to be
+      require {SHARE}{" "}of the previous month&apos;s core lessons to be
       finished, under the {rules}; your pass time is paused while you wait.
       With a gift, the person you give it to has one year from the date you
       buy it to enter the gift code. Their course starts when they do, and we
@@ -181,10 +181,10 @@ function TermsNote({
   ) : (
     <p className={styles.termsNote} data-testid={testId}>
       Your first three monthly payments each open one month of the course.
-      Months 2 and 3 each require {SHARE} of the previous month&apos;s core
+      Months 2 and 3 each require {SHARE}{" "}of the previous month&apos;s core
       lessons to be finished, under the {rules}; your next payment waits
       until that month can open. After your third course payment, the plan
-      carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month for continued
+      carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)}{" "}a month for continued
       access to the updated lessons, unless you cancel. We email you before
       each payment. Cancel at any time in your account settings and you keep
       access until the end of the month you&apos;ve paid for, subject to the
@@ -231,8 +231,8 @@ function MonthOpeningRules() {
         <div className={`${styles.splitNote} ${styles.monthRules}`}>
           <p>
             Month 1 starts when you pay or open your pass. Before Month 2
-            opens, you must finish {SHARE} of Month 1&apos;s core lessons.
-            Before Month 3 opens, you must finish {SHARE} of Month 2&apos;s
+            opens, you must finish {SHARE}{" "}of Month 1&apos;s core lessons.
+            Before Month 3 opens, you must finish {SHARE}{" "}of Month 2&apos;s
             core lessons. Use Finish lesson at the end of each lesson to record
             that you&apos;ve finished it. Optional lessons do not count and are
             never required. There is no time limit on reaching {SHARE}.

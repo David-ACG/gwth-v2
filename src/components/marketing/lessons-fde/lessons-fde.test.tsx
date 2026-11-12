@@ -56,7 +56,7 @@ describe("LessonsFde launch readiness", () => {
     expect(note).toMatch(/Month 2 around 1 January 2027/)
     expect(note).toMatch(/Month 3 around 1 February 2027/)
     // The 75% rule (bead gwth-launch-735c).
-    expect(note).toMatch(/75% of the previous month's core lessons finished/)
+    expect(note.replace(/\s+/g, " ")).toMatch(/finished 75% of that month's core lessons/)
     expect(note).toMatch(/paused/)
     expect(text()).not.toMatch(/\bbeta\b|invite-only|testers|intake/i)
   })

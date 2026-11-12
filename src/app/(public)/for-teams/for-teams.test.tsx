@@ -876,7 +876,7 @@ describe("launch readiness review, 2026-10-21: true from the GO LIVE release", (
       /Month 2 around 1 January 2027 and Month 3 around 1 February 2027/
     )
     // The 75% rule (bead gwth-launch-735c).
-    expect(note.replace(/\s+/g, " ")).toMatch(/75% of their previous month's core lessons/)
+    expect(note.replace(/\s+/g, " ")).toMatch(/finished 75% of that month's core lessons/)
     expect(note).toMatch(/paused/)
   })
 

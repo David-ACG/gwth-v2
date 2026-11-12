@@ -274,8 +274,8 @@ export default function TermsPage() {
           you pay monthly.
         </li>
         <li>
-          The point when you have finished {SHARE} of Month 1&apos;s core
-          lessons for Month 2, or {SHARE} of Month 2&apos;s core lessons for
+          The point when you have finished {SHARE}{" "}of Month 1&apos;s core
+          lessons for Month 2, or {SHARE}{" "}of Month 2&apos;s core lessons for
           Month 3.
         </li>
       </ul>

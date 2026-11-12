@@ -466,8 +466,8 @@ describe("HomeFde self-service promises match the product", () => {
     expect(months).toMatch(/Month 2 around 1 January 2027/)
     expect(months).toMatch(/Month 3 around 1 February 2027/)
     // The 75% rule before anyone pays (bead gwth-launch-735c).
-    expect(months).toMatch(/75% of the previous month's core lessons finished/)
-    expect(months).toMatch(/pass time paused or your next monthly payment waiting/)
+    expect(months.replace(/\s+/g, " ")).toMatch(/finished 75% of that month's core lessons/)
+    expect(months.replace(/\s+/g, " ")).toMatch(/With a pass, your time is paused. On a monthly plan, your next payment waits/)
   })
 
   it("quotes the canonical prices and the stop-any-time terms, once", () => {

@@ -766,11 +766,12 @@ export function ForTeamsFde({
           <p className={styles.monthsNote} data-testid="months-availability">
             Month 1 is available from {price.opensOn}, Month 2 around{" "}
             {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-            {LATER_MONTHS_OPEN.month3}. Before someone starts each later month,
-            it must be due to start for them and they must have finished{" "}
-            {DEFAULT_GATE_PERCENT}% of their previous month&apos;s core
-            lessons; while they wait, they keep using their current month, with
-            pass time paused or their next monthly payment waiting. See{" "}
+            {LATER_MONTHS_OPEN.month3}. From those dates, each later month opens
+            for someone once a month has passed since their previous month
+            began and they&apos;ve finished {DEFAULT_GATE_PERCENT}% of that
+            month&apos;s core lessons. While they wait, they keep using their
+            current month. With a pass, their time is paused. On a monthly
+            plan, their next payment waits. See{" "}
             <Link href="/terms#course-months">how months open</Link>.
           </p>
           <div className={styles.controlBox}>

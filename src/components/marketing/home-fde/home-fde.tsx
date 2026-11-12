@@ -659,11 +659,12 @@ export function HomeFde({
               <p className={styles.offerNote} data-testid="home-offer-months">
                 Month 1 is available from {offer.opensOn}, Month 2 around{" "}
                 {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-                {LATER_MONTHS_OPEN.month3}. Each later month must also be due
-                to start for you and needs {GATE_SHARE} of the previous
-                month&apos;s core lessons finished; while you wait, you keep
-                using your current month, with pass time paused or your next
-                monthly payment waiting. See{" "}
+                {LATER_MONTHS_OPEN.month3}. From those dates, each later month
+                opens once a month has passed since your previous month began
+                and you&apos;ve finished {GATE_SHARE}{" "}of that month&apos;s
+                core lessons. While you wait, you keep using your current
+                month. With a pass, your time is paused. On a monthly plan,
+                your next payment waits. See{" "}
                 <Link href="/terms#course-months">how months open</Link>.
               </p>
               <div className={styles.offerActions}>
