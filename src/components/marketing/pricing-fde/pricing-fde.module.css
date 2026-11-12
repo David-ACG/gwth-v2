@@ -706,3 +706,14 @@
   line-height: 1.65;
   color: var(--v-soft);
 }
+
+/* "What you get" (12 Nov 2026): the card heading already has a hairline under
+   it, so the list starts straight below it rather than with a second rule. */
+.tierFeatures {
+  margin-top: 0;
+}
+
+.tierFeatures li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
