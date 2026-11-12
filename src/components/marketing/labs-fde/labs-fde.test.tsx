@@ -206,3 +206,22 @@ describe("Labs closing: the course teaches you to compare models (David, 2026-10
     expect(body).not.toMatch(/Lesson \d+/)
   })
 })
+
+describe("Labs replica notes (David, 12 Nov 2026)", () => {
+  it("says on every lab card that it opens, in words, without an arrow icon", () => {
+    renderIndex()
+    for (const card of screen.getAllByTestId("model-lab-card")) {
+      expect(card.textContent).toMatch(/Open the lab to compare the answers/)
+      expect(card.querySelector("svg")).toBeNull()
+    }
+  })
+
+  it("puts a picture of a lab beside the closing text, in both themes", () => {
+    renderIndex()
+    const fig = screen.getByTestId("labs-closing-figure")
+    const imgs = within(fig).getAllByRole("img", { hidden: true })
+    expect(imgs).toHaveLength(2)
+    for (const img of imgs) expect(img.getAttribute("alt")).toMatch(/Inside the research lab/)
+    expect(fig.closest("section")?.textContent).toMatch(/Labs show you which AI/)
+  })
+})

@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import type { ModelLabIndex, ModelLabPick } from "@/lib/types"
 import { aboutCost, formatTestedMonth, formatTestedRange, levelLabel } from "@/lib/model-lab-format"
@@ -148,6 +149,13 @@ export function LabsFde({ index }: LabsFdeProps) {
                       <span>{lab.count} set-ups</span>
                       <span>Main task: {lab.sig_title}</span>
                     </p>
+                    {/* David, 12 Nov 2026, on the replica: "It is not obvious that these boxes
+                        can be clicked on for more information. Please can we make it more
+                        obvious?" A worded link line, underlined in the accent, says what opens
+                        (paper-first-components: no arrow icons). */}
+                    <span className={styles.cardAction} aria-hidden="true">
+                      Open the lab to compare the answers
+                    </span>
                   </div>
                 </Link>
               ))}
@@ -156,37 +164,63 @@ export function LabsFde({ index }: LabsFdeProps) {
         </div>
       </section>
 
+      {/* David, 12 Nov 2026, on the replica: "Can we justify it to the left or move it all to
+          the left, the main text box and then put an image to the right?" Text left; the right
+          shows what a lab looks like inside (the research lab's picks) until the short labs video
+          he asked about replaces it. */}
       <section className={styles.closing} data-section="closing">
-        <div className={styles.page}>
-          <h2>
-            Labs show you which AI. <em>The course shows you how.</em>
-          </h2>
-          <p>
-            Each lab shows which AI did best on real work tasks, what it cost and when we tested
-            it. In Month 1 of the course you build your own portfolio website without writing code.
-            In Month 2 you build a
-            customer support chatbot. In Month 3 you build an AI consultant that interviews people
-            and writes a plan for an organisation.
-          </p>
-          {/* David, 2026-10-23: "Do we have lessons that show you how to compare models? ... Maybe we
-              should mention that on the labs page." Month 1 Lesson 5 (frontier labs), Month 2's cheaper
-              and open models lesson and Month 3's premium plans lesson; numbers left out because the
-              syllabus can move. Latest Sol checked. */}
-          <p>
-            The course also teaches you to run your own comparison. In Month 1 you give two AI tools
-            the same task in exactly the same words. You compare their answers using four questions,
-            then set up a monthly check to keep your choice up to date as models change. Later lessons
-            show when a cheaper AI model or an open model you can download and run yourself is good
-            enough, and when a premium plan is worth paying for.
-          </p>
-          <div className={styles.closingActions}>
-            <Link href="/pricing" className={styles.buttonSolid}>
-              See the course
-            </Link>
-            <Link href="/why-gwth" className={styles.buttonOutline}>
-              Why GWTH
-            </Link>
+        <div className={`${styles.page} ${styles.closingGrid}`}>
+          <div className={styles.closingText}>
+            <h2>
+              Labs show you which AI. <em>The course shows you how.</em>
+            </h2>
+            <p>
+              Each lab shows which AI did best on real work tasks, what it cost and when we tested
+              it. In Month 1 of the course you build your own portfolio website without writing code.
+              In Month 2 you build a
+              customer support chatbot. In Month 3 you build an AI consultant that interviews people
+              and writes a plan for an organisation.
+            </p>
+            {/* David, 2026-10-23: "Do we have lessons that show you how to compare models? ... Maybe we
+                should mention that on the labs page." Month 1 Lesson 5 (frontier labs), Month 2's cheaper
+                and open models lesson and Month 3's premium plans lesson; numbers left out because the
+                syllabus can move. Latest Sol checked. */}
+            <p>
+              The course also teaches you to run your own comparison. In Month 1 you give two AI tools
+              the same task in exactly the same words. You compare their answers using four questions,
+              then set up a monthly check to keep your choice up to date as models change. Later lessons
+              show when a cheaper AI model or an open model you can download and run yourself is good
+              enough, and when a premium plan is worth paying for.
+            </p>
+            <div className={styles.closingActions}>
+              <Link href="/pricing" className={styles.buttonSolid}>
+                See the course
+              </Link>
+              <Link href="/why-gwth" className={styles.buttonOutline}>
+                Why GWTH
+              </Link>
+            </div>
           </div>
+          <figure className={styles.closingFigure} data-testid="labs-closing-figure">
+            <Image
+              src="/images/labs/lab-picks-light.webp"
+              alt="Inside the research lab: four picks, each naming a model, its setting, its score out of 100 and its cost a task."
+              width={1240}
+              height={1120}
+              sizes="(min-width: 64rem) 460px, 100vw"
+              className={styles.closingImgLight}
+            />
+            <Image
+              src="/images/labs/lab-picks-dark.webp"
+              alt="Inside the research lab: four picks, each naming a model, its setting, its score out of 100 and its cost a task."
+              width={1240}
+              height={1120}
+              sizes="(min-width: 64rem) 460px, 100vw"
+              loading="lazy"
+              className={styles.closingImgDark}
+            />
+            <figcaption>Inside the research lab: our four picks.</figcaption>
+          </figure>
         </div>
       </section>
       {index.cost_chart.rows.length ? (
