@@ -87,7 +87,7 @@ export default async function AdminFlaggedPage({
           </div>
           <p className={styles.panelLead}>
             {f.reasons.join("; ")}.
-            {f.signals ? (
+            {typeof f.signals?.new24h === "number" ? (
               <>
                 <br />
                 {describeSignals(f.signals)}.

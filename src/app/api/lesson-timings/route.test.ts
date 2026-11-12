@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { isAllowedTimingsUrl } from "./route"
 
 /**
@@ -59,5 +59,35 @@ describe("isAllowedTimingsUrl", () => {
   it("refuses a malformed URL", () => {
     expect(isAllowedTimingsUrl("not a url", CDN)).toBe(false)
     expect(isAllowedTimingsUrl("/relative_timestamps.json", CDN)).toBe(false)
+  })
+})
+
+describe("GET ?lesson= (bead gwth-launch-735c)", () => {
+  it("refuses a visitor without access, before reading anything", async () => {
+    vi.resetModules()
+    vi.doMock("@/lib/lessons/lesson-access", () => ({
+      checkLessonAccess: async () => ({ ok: false, status: 401, message: "Sign in to continue this lesson." }),
+    }))
+    vi.doMock("@/lib/auth", () => ({ getSessionEmail: async () => null }))
+    const { GET } = await import("./route")
+    const res = await GET(new Request("https://gwth.ai/api/lesson-timings?lesson=m1_l01"))
+    expect(res.status).toBe(401)
+  })
+
+  it("refuses the old ?src= form without a session", async () => {
+    vi.resetModules()
+    vi.doMock("@/lib/auth", () => ({ getSessionEmail: async () => null }))
+    const { GET } = await import("./route")
+    const res = await GET(
+      new Request("https://gwth.ai/api/lesson-timings?src=https%3A%2F%2Fmedia.gwth.ai%2Flessons%2Fm1_l01%2Faudio%2Fa_timestamps.json")
+    )
+    expect(res.status).toBe(401)
+  })
+
+  it("refuses a malformed lesson id", async () => {
+    vi.resetModules()
+    const { GET } = await import("./route")
+    const res = await GET(new Request("https://gwth.ai/api/lesson-timings?lesson=../../etc"))
+    expect(res.status).toBe(400)
   })
 })
