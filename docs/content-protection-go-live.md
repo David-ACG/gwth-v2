@@ -20,7 +20,11 @@ The code is safe to release before the Cloudflare switches: signed links work wh
    - `S3_ENDPOINT`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`: the site's **read-only** R2 key (the `R2_READ_*` pair in `~/.cloudflare-gwth.env` on hlab, scoped to `gwth-media`). Never the write key.
    - `MEDIA_SIGNED_LINKS=1`
    - `MONTH_GATE_PERCENT=75` (0 switches the gate off; this is the one place to change the share)
-   - An alert channel, once David has picked one (decision page `content-protection-alerts`): `FLAG_ALERT_SLACK_WEBHOOK` and/or `FLAG_ALERT_EMAIL`.
+   - Alerts on all three channels (David, 12 Nov: "lets do all 3 - slack, email and telegram"):
+     - `FLAG_ALERT_SLACK_WEBHOOK`: the incoming-webhook address David creates for his alerts channel (secret).
+     - `FLAG_ALERT_EMAIL`: David's address (sent through Plunk, which production already has).
+     - `FLAG_ALERT_TELEGRAM_TOKEN` and `FLAG_ALERT_TELEGRAM_CHAT_ID`: the GWTH bot (`~/.gwth-telegram.env` on hlab).
+     Each is independent; one failing never stops the others.
 
 ## The release
 

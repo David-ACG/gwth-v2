@@ -1,11 +1,14 @@
 /**
  * Telling David an account was flagged (bead gwth-launch-735c). Sent straight
- * from the site, so it does not depend on the P520 being on. Each channel is
- * switched on by its own setting; with none set the flag still waits on
- * /admin/flagged and nothing is sent.
+ * from the site, so it does not depend on the P520 being on. David, 12 Nov
+ * 2026: "lets do all 3 - slack, email and telegram". Each channel is switched
+ * on by its own setting; with none set the flag still waits on /admin/flagged
+ * and nothing is sent. One channel failing never stops the others.
  *
- *   FLAG_ALERT_SLACK_WEBHOOK  a Slack incoming-webhook URL (secret)
- *   FLAG_ALERT_EMAIL          an address to email through Plunk
+ *   FLAG_ALERT_SLACK_WEBHOOK      a Slack incoming-webhook URL (secret)
+ *   FLAG_ALERT_EMAIL              an address to email through Plunk
+ *   FLAG_ALERT_TELEGRAM_TOKEN     a Telegram bot token (secret)
+ *   FLAG_ALERT_TELEGRAM_CHAT_ID   the chat the bot posts to
  */
 import "server-only"
 
@@ -18,6 +21,8 @@ export type FlagAlert = {
   reasons: string[]
   summary: string
 }
+
+export type AlertChannel = "slack" | "email" | "telegram"
 
 function siteUrl(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.BETTER_AUTH_URL ?? "https://gwth.ai").replace(/\/+$/, "")
@@ -39,34 +44,66 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
 
-/** True when at least one channel accepted the alert. */
-export async function sendFlagAlert(a: FlagAlert): Promise<boolean> {
+/** The channels switched on by the settings. */
+export function enabledChannels(env: NodeJS.ProcessEnv = process.env): AlertChannel[] {
+  const out: AlertChannel[] = []
+  if (env.FLAG_ALERT_SLACK_WEBHOOK) out.push("slack")
+  if (env.FLAG_ALERT_EMAIL) out.push("email")
+  if (env.FLAG_ALERT_TELEGRAM_TOKEN && env.FLAG_ALERT_TELEGRAM_CHAT_ID) out.push("telegram")
+  return out
+}
+
+async function postJson(url: string, payload: unknown, label: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10_000),
+    })
+    if (!res.ok) console.error(`[protection] ${label} alert refused`, res.status)
+    return res.ok
+  } catch (error) {
+    console.error(`[protection] ${label} alert failed`, error)
+    return false
+  }
+}
+
+/**
+ * Send the alert on every channel that is switched on. Returns the channels
+ * that accepted it; the flag records an alert as sent when at least one did.
+ */
+export async function sendFlagAlert(a: FlagAlert): Promise<AlertChannel[]> {
   const { title, body } = alertText(a)
-  let sent = false
-  const webhook = process.env.FLAG_ALERT_SLACK_WEBHOOK
-  if (webhook) {
-    try {
-      const res = await fetch(webhook, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ text: `*${title}*\n${body}` }),
-      })
-      sent = sent || res.ok
-      if (!res.ok) console.error("[protection] Slack alert refused", res.status)
-    } catch (error) {
-      console.error("[protection] Slack alert failed", error)
-    }
+  const env = process.env
+  const channels = enabledChannels(env)
+  if (channels.length === 0) {
+    console.info("[protection] flag", a.flagId, "recorded; no alert channel set")
+    return []
   }
-  const to = process.env.FLAG_ALERT_EMAIL
-  if (to) {
-    const ok = await sendPlunkEmail({
-      to,
-      subject: title,
-      body: `<p>${escapeHtml(body).replace(/\n/g, "<br>")}</p>`,
-      text: body,
-    }).catch(() => false)
-    sent = sent || ok
-  }
-  if (!webhook && !to) console.info("[protection] flag", a.flagId, "recorded; no alert channel set")
-  return sent
+  const results = await Promise.all(
+    channels.map(async (channel): Promise<[AlertChannel, boolean]> => {
+      if (channel === "slack") {
+        return [channel, await postJson(env.FLAG_ALERT_SLACK_WEBHOOK as string, { text: `*${title}*\n${body}` }, "Slack")]
+      }
+      if (channel === "telegram") {
+        return [
+          channel,
+          await postJson(
+            `https://api.telegram.org/bot${env.FLAG_ALERT_TELEGRAM_TOKEN}/sendMessage`,
+            { chat_id: env.FLAG_ALERT_TELEGRAM_CHAT_ID, text: `${title}\n${body}`, disable_web_page_preview: true },
+            "Telegram"
+          ),
+        ]
+      }
+      const ok = await sendPlunkEmail({
+        to: env.FLAG_ALERT_EMAIL as string,
+        subject: title,
+        body: `<p>${escapeHtml(body).replace(/\n/g, "<br>")}</p>`,
+        text: body,
+      }).catch(() => false)
+      return [channel, ok]
+    })
+  )
+  return results.filter(([, ok]) => ok).map(([channel]) => channel)
 }

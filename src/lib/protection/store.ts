@@ -215,7 +215,7 @@ export async function evaluateAccount(
       reasons: verdict.reasons,
       summary: describeSignals(verdict.signals),
     })
-    if (sent) {
+    if (sent.length > 0) {
       await db
         .update(contentAccessFlags)
         .set({ alertSentAt: new Date().toISOString() })
