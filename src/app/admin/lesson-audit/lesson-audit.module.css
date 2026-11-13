@@ -1,0 +1,61 @@
+/* Lesson Audit: the admin cell styles are nowrap by design (short values); this page
+   carries sentences, so it wraps and stacks the decisions as a list instead of a table. */
+
+.wrap {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.decisions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.decision {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.decisionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.3rem 1rem;
+}
+
+.decisionTitle {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.why {
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+  max-width: 52rem;
+}
+
+.meta {
+  font-family: var(--font-sans);
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.month > summary {
+  cursor: pointer;
+  padding: 0.55rem 0;
+}
+
+.wideOnly {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .wideOnly {
+    display: table-cell;
+  }
+}

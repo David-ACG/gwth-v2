@@ -2,6 +2,7 @@ import { requireAdminOrRedirect } from "@/lib/admin"
 import audit from "@/data/lesson-audit.json"
 import { formatDate } from "../admin-shared"
 import styles from "../admin-fde.module.css"
+import la from "./lesson-audit.module.css"
 
 /**
  * /admin/lesson-audit: the one page David reads about keeping the lessons current
@@ -148,43 +149,30 @@ export default async function AdminLessonAuditPage() {
         {decide.length === 0 ? (
           <p className={styles.cellMuted}>Nothing to decide.</p>
         ) : (
-          <div className={styles.tableWrap}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th scope="col">Change</th>
-                  <th scope="col">Why</th>
-                  <th scope="col">We recommend</th>
-                </tr>
-              </thead>
-              <tbody>
-                {decide.map((s) => (
-                  <tr key={s.id}>
-                    <td>
-                      <span className={styles.cellName}>
-                        {TYPE_LABEL[s.type] ?? s.type}: {s.title.replace(/^(Add|Remove|Merge|Split|Move|Widen)\b:?\s*/i, "")}
-                      </span>
-                      <span className={styles.cellEmail}>
-                        {s.effort ? `${s.effort} job` : ""}
-                        {s.raised?.length ? `, raised ${s.raised.length} time${s.raised.length > 1 ? "s" : ""}` : ""}
-                      </span>
-                    </td>
-                    <td className={styles.cellMuted}>{s.why}</td>
-                    <td>
-                      <span className={styles.status}>{s.recommendation === "do" ? "Do it" : "Consider"}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ul className={la.decisions}>
+            {decide.map((s) => (
+              <li key={s.id} className={la.decision}>
+                <div className={la.decisionHead}>
+                  <span className={la.decisionTitle}>
+                    {TYPE_LABEL[s.type] ?? s.type}: {s.title.replace(/^(Add|Remove|Merge|Split|Move|Widen)\b:?\s*/i, "")}
+                  </span>
+                  <span className={styles.status}>{s.recommendation === "do" ? "We recommend: do it" : "We recommend: consider"}</span>
+                </div>
+                <span className={la.why}>{s.why}</span>
+                <span className={la.meta}>
+                  {s.effort ? `${s.effort[0].toUpperCase()}${s.effort.slice(1)} job` : ""}
+                  {s.raised?.length ? `, raised ${s.raised.length} time${s.raised.length > 1 ? "s" : ""}` : ""}
+                </span>
+              </li>
+            ))}
+          </ul>
         )}
         {later.length > 0 && (
           <details>
             <summary className={styles.cellMuted}>{later.length} more raised but not recommended now</summary>
             <ul>
               {later.map((s) => (
-                <li key={s.id} className={styles.cellMuted}>
+                <li key={s.id} className={`${styles.cellMuted} ${la.wrap}`}>
                   {TYPE_LABEL[s.type] ?? s.type}: {s.title}
                 </li>
               ))}
@@ -206,7 +194,7 @@ export default async function AdminLessonAuditPage() {
                 <a className={styles.cellName} href={n.words_check}>
                   {n.code} {n.part}: {n.title}
                 </a>
-                <span className={styles.cellEmail}>{n.why}</span>
+                <span className={`${styles.cellEmail} ${la.wrap}`}>{n.why}</span>
               </li>
             ))}
           </ul>
@@ -221,7 +209,7 @@ export default async function AdminLessonAuditPage() {
           {data.rounds.map((r) => (
             <li key={r.kind}>
               <span className={styles.cellName}>{r.label}</span>{" "}
-              <span className={styles.cellMuted}>
+              <span className={`${styles.cellMuted} ${la.wrap}`}>
                 {day(r.from)}
                 {r.to !== r.from ? ` to ${day(r.to)}` : ""}: {r.lessons} lessons
                 {r.fact_changes ? `, ${r.fact_changes} facts updated with a source` : ""}
@@ -251,7 +239,7 @@ export default async function AdminLessonAuditPage() {
         {[1, 2, 3].map((m) => {
           const rows = data.lessons.filter((l) => l.month === m)
           return (
-            <details key={m}>
+            <details key={m} className={la.month}>
               <summary className={styles.cellName}>
                 {MONTHS[m]} ({rows.length})
               </summary>
@@ -261,7 +249,7 @@ export default async function AdminLessonAuditPage() {
                     <tr>
                       <th scope="col">Lesson</th>
                       <th scope="col">Facts checked</th>
-                      <th scope="col">Rewritten for clarity</th>
+                      <th scope="col" className={la.wideOnly}>Rewritten for clarity</th>
                       <th scope="col">QA</th>
                     </tr>
                   </thead>
@@ -269,15 +257,15 @@ export default async function AdminLessonAuditPage() {
                     {rows.map((l) => (
                       <tr key={l.slug}>
                         <td>
-                          <a className={styles.cellName} href={l.words_check}>
+                          <a className={`${styles.cellName} ${la.wrap}`} href={l.words_check}>
                             {l.code} {l.title}
                           </a>
                         </td>
-                        <td className={styles.cellMuted}>
+                        <td className={`${styles.cellMuted} ${la.wrap}`}>
                           {day(l.facts_checked)}
                           {l.fact_changes ? ` (${l.fact_changes} changes)` : ""}
                         </td>
-                        <td className={styles.cellMuted}>{day(l.clarity_rewritten)}</td>
+                        <td className={`${styles.cellMuted} ${la.wideOnly}`}>{day(l.clarity_rewritten)}</td>
                         <td className={styles.cellMuted}>{qaText(l.qa)}</td>
                       </tr>
                     ))}
@@ -289,7 +277,7 @@ export default async function AdminLessonAuditPage() {
         })}
       </div>
 
-      <p className={styles.cellMuted}>
+      <p className={`${styles.cellMuted} ${la.wrap}`}>
         Updated {formatDate(data.generated)}. The detail behind this page (every change, its reason and sources, the
         research and the old drafts) is in {data.detail.log} and {data.detail.process}.
       </p>
