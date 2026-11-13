@@ -15,6 +15,18 @@ import {
 } from "@/lib/billing/passes"
 import { BuyButton } from "@/components/billing/buy-button"
 import { PRICING_OFFER_COPY as OFFER } from "@/components/marketing/gift/gift-copy"
+import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
+
+/**
+ * The completion share the course gate uses (bead gwth-launch-735c, David,
+ * 12 Nov 2026: "set it to 75% lessons complete for now"). Read from the gate's
+ * own default so the page and the gate cannot disagree; changing the share
+ * means changing the Terms first (docs/content-protection-go-live.md).
+ */
+const SHARE = `${DEFAULT_GATE_PERCENT}%`
+
+/** Where the opening rules sit on this page; the notes beside each button link here. */
+const RULES_ANCHOR = "month-opening-rules"
 
 /**
  * David's /pricing annotations, 14 September 2026, applied here and in
@@ -87,16 +99,25 @@ function TermsNote({
   kind: "pass" | "monthly"
   testId: string
 }) {
+  // The 75% rule beside each button (bead gwth-launch-735c): written by the
+  // latest Astra, polished and checked by the latest Sol, 12 Nov 2026. The
+  // full rule is in the "When each course month opens" section above.
+  const rules = (
+    <Link href={`#${RULES_ANCHOR}`} className={styles.inlineLink}>
+      opening rules above
+    </Link>
+  )
   return kind === "pass" ? (
     <p className={styles.termsNote} data-testid={testId}>
       You pay once and it never renews. If you buy it for yourself, sign in
-      first: Month 1 opens as soon as you&apos;ve paid, and Months 2 and 3
-      open around the dates above, with your time paused if you reach one
-      first. With a gift, the person you give it to has one year from the
-      date you buy it to enter the gift code. Their course starts when they
-      do, and we never ask for their card details. We refund a
-      pass in full until it&apos;s opened, but not after, unless the law
-      requires; to ask for one,{" "}
+      first: Month 1 opens as soon as you&apos;ve paid. Months 2 and 3 each
+      require {SHARE}{" "}of the previous month&apos;s core lessons to be
+      finished, under the {rules}; your pass time is paused while you wait.
+      With a gift, the person you give it to has one year from the date you
+      buy it to enter the gift code. Their course starts when they do, and we
+      never ask for their card details. We refund a pass in full until
+      it&apos;s opened, but not after, unless the law requires; to ask for
+      one,{" "}
       <Link href="/contact" className={styles.inlineLink}>
         contact us
       </Link>
@@ -109,15 +130,107 @@ function TermsNote({
   ) : (
     <p className={styles.termsNote} data-testid={testId}>
       Your first three monthly payments each open one month of the course.
-      After that, the plan carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)}
-      {" "}a month for continued access to the updated lessons, unless you cancel. We email you
-      before each payment. Cancel at any time in your account settings and you
-      keep access until the end of the month you&apos;ve paid for. See the{" "}
+      Months 2 and 3 each require {SHARE}{" "}of the previous month&apos;s core
+      lessons to be finished, under the {rules}; your next payment waits
+      until that month can open. After your third course payment, the plan
+      carries on at £{ONGOING_MONTHLY_PRICE.toFixed(2)}{" "}a month for continued
+      access to the updated lessons, unless you cancel. We email you before
+      each payment. Cancel at any time in your account settings and you keep
+      access until the end of the month you&apos;ve paid for, subject to the
+      Terms on{" "}
+      <Link href="/terms#course-protection" className={styles.inlineLink}>
+        course protection
+      </Link>{" "}
+      and{" "}
+      <Link href="/terms#termination" className={styles.inlineLink}>
+        termination
+      </Link>
+      . See the{" "}
       <Link href="/terms#subscriptions" className={styles.inlineLink}>
         Terms for monthly payments
       </Link>
       , including refunds.
     </p>
+  )
+}
+
+/**
+ * When each course month opens (bead gwth-launch-735c). Consumer law needs
+ * the 75% rule, the review hold and the personal media links in front of a
+ * buyer BEFORE they pay, so this sits above both buying options, in full,
+ * with no disclosure to open. Every statement matches the code:
+ * src/lib/protection/month-hold.ts (the latest of the three points),
+ * src/lib/billing/passes.ts and subscriptions.ts (time paused, payment
+ * waits), src/lib/media/signed.ts (links valid a few hours) and
+ * src/lib/protection/monitor.ts (the check). Written by the latest Astra,
+ * polished and checked by the latest Sol, 12 Nov 2026.
+ */
+function MonthOpeningRules() {
+  return (
+    <section
+      className={styles.section}
+      data-section="month-rules"
+      data-testid="month-opening-rules"
+      id={RULES_ANCHOR}
+    >
+      <div className={`${styles.page} ${styles.splitGrid}`}>
+        <div>
+          <h2>When each course month opens</h2>
+        </div>
+        <div className={`${styles.splitNote} ${styles.monthRules}`}>
+          <p>
+            Month 1 starts when you pay or open your pass. Before Month 2
+            opens, you must finish {SHARE}{" "}of Month 1&apos;s core lessons.
+            Before Month 3 opens, you must finish {SHARE}{" "}of Month 2&apos;s
+            core lessons. Use Finish lesson at the end of each lesson to record
+            that you&apos;ve finished it. Optional lessons do not count and are
+            never required. There is no time limit on reaching {SHARE}.
+          </p>
+          <p>Each later month opens at the latest of three points:</p>
+          <ul>
+            <li>Its opening date for everyone, shown below.</li>
+            <li>
+              Your own start date for that month: one month after your
+              previous month began with a pass, or your next monthly payment
+              date if you pay monthly.
+            </li>
+            <li>When you&apos;ve reached the required {SHARE}.</li>
+          </ul>
+          <p>
+            While you wait, you keep using the month you&apos;re on. With a
+            pass, including a gift or prepaid team place, your course time is
+            paused, so you still get a full month of each part. On a monthly
+            plan, your next payment waits until that month can open; your plan
+            is not cancelled.
+          </p>
+          <p>
+            The completion rule helps stop someone copying the whole course in
+            a few days from one account. Each month also builds on the one
+            before.
+          </p>
+          <p data-testid="media-links-note">
+            Videos, audio and pictures use links made for your account that
+            stop working after a few hours; they still play and display
+            normally inside GWTH.
+          </p>
+          <p>
+            We also check lesson-opening activity for bulk copying and account
+            sharing. If an automatic check flags your account, your next month
+            is held for a person at GWTH to review, usually within a day. The
+            same arrangements for access, pass time and payments apply while it
+            is held. See{" "}
+            <Link href="/terms#course-months" className={styles.inlineLink}>
+              how months open
+            </Link>{" "}
+            and{" "}
+            <Link href="/terms#course-protection" className={styles.inlineLink}>
+              how we protect the course
+            </Link>
+            .
+          </p>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -229,6 +342,8 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
         </div>
       </section>
 
+      <MonthOpeningRules />
+
       <section
         className={`${styles.section} ${styles.sectionAlt}`}
         data-section="offer"
@@ -309,11 +424,29 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               </Link>
             )}
           </div>
+          {/* The 75% rule beside the paying buttons (bead gwth-launch-735c,
+              wording option A, David 12 Nov). Both buttons share one row in
+              the persona layout, so the two button notes from master are said
+              once here, in master's own words. */}
+          <p className={styles.termsNote} data-testid="pricing-offer-rule">
+            Months 2 and 3 each require {SHARE}{" "}of the previous month&apos;s
+            core lessons to be finished, under the{" "}
+            <Link href={`#${RULES_ANCHOR}`} className={styles.inlineLink}>
+              opening rules above
+            </Link>
+            . With a pass, your pass time is paused while you wait. On a monthly
+            plan, your next payment waits until that month can open.
+          </p>
           <p className={styles.termsNote} data-testid="pricing-offer-months">
-            Month 1 opens on {salesOpenOn}. Month 2 opens around{" "}
+            {/* The 75% rule (bead gwth-launch-735c, master f81f8e2): the dates
+                here, the full rule in the section above the comparison. */}
+            Month 1 is available from {salesOpenOn}, Month 2 around{" "}
             {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-            {LATER_MONTHS_OPEN.month3}. If you reach a month before it opens,
-            your time is paused until it does, so you get all three months.
+            {LATER_MONTHS_OPEN.month3}. Both ways to pay follow the{" "}
+            <Link href={`#${RULES_ANCHOR}`} className={styles.inlineLink}>
+              opening rules above
+            </Link>
+            .
           </p>
           <p className={styles.termsNote} data-testid="pricing-continuation">
             After the first three months, continued access to updated lessons

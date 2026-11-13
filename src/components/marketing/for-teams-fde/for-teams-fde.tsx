@@ -7,6 +7,7 @@ import {
   TOTAL_MANDATORY_LESSONS,
 } from "@/lib/config"
 import { LATER_MONTHS_OPEN, UK_STAT_IDS } from "@/components/marketing/data"
+import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 import {
   formatPence,
   formatUkDate,
@@ -760,11 +761,18 @@ export function ForTeamsFde({
           {/* When each month opens, true on both sides of 1 December (facts
               sheet, launch readiness 2026-10-20). Dates from
               LATER_MONTHS_OPEN, so this page agrees with / and /pricing. */}
+          {/* The 75% rule (bead gwth-launch-735c), written by the latest
+              Astra and Sol-checked 12 Nov 2026. */}
           <p className={styles.monthsNote} data-testid="months-availability">
-            Month 1 is open from {price.opensOn}. Month 2 opens around{" "}
+            Month 1 is available from {price.opensOn}, Month 2 around{" "}
             {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-            {LATER_MONTHS_OPEN.month3}. If someone reaches a month before it
-            opens, their time on the course is paused until it does.
+            {LATER_MONTHS_OPEN.month3}. From those dates, each later month opens
+            for someone once a month has passed since their previous month
+            began and they&apos;ve finished {DEFAULT_GATE_PERCENT}% of that
+            month&apos;s core lessons. While they wait, they keep using their
+            current month. With a pass, their time is paused. On a monthly
+            plan, their next payment waits. See{" "}
+            <Link href="/terms#course-months">how months open</Link>.
           </p>
           <div className={styles.controlBox}>
             <h3>How lesson choice works</h3>

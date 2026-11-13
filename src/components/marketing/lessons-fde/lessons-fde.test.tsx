@@ -52,9 +52,11 @@ describe("LessonsFde launch readiness", () => {
   it("says when each month opens, with no beta wording", () => {
     render(<LessonsFde />)
     const note = screen.getByTestId("months-availability").textContent ?? ""
-    expect(note).toMatch(/Month 1 is open from 1 December 2026/)
-    expect(note).toMatch(/Month 2 opens around 1 January 2027/)
+    expect(note).toMatch(/Month 1 is available from 1 December 2026/)
+    expect(note).toMatch(/Month 2 around 1 January 2027/)
     expect(note).toMatch(/Month 3 around 1 February 2027/)
+    // The 75% rule (bead gwth-launch-735c).
+    expect(note.replace(/\s+/g, " ")).toMatch(/finished 75% of that month's core lessons/)
     expect(note).toMatch(/paused/)
     expect(text()).not.toMatch(/\bbeta\b|invite-only|testers|intake/i)
   })

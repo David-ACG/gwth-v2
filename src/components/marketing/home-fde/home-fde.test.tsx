@@ -464,10 +464,12 @@ describe("HomeFde self-service promises match the product", () => {
     )
     expect(offer).toMatch(/Or pay £29 a month/)
     const months = screen.getByTestId("home-offer-months").textContent ?? ""
-    expect(months).toMatch(/Month 1 opens on 1 December 2026/)
+    expect(months).toMatch(/Month 1 is available from 1 December 2026/)
     expect(months).toMatch(/Month 2 around 1 January 2027/)
     expect(months).toMatch(/Month 3 around 1 February 2027/)
-    expect(months).toMatch(/Your time pauses/)
+    // The 75% rule before anyone pays (bead gwth-launch-735c).
+    expect(months.replace(/\s+/g, " ")).toMatch(/finished 75% of that month's core lessons/)
+    expect(months.replace(/\s+/g, " ")).toMatch(/With a pass, your time is paused. On a monthly plan, your next payment waits/)
   })
 
   it("quotes the canonical prices and the stop-any-time terms, once", () => {
@@ -505,6 +507,8 @@ describe("HomeFde self-service promises match the product", () => {
       "/start-here",
       // The six building blocks on /lessons (persona review PR06, 2026-11-06).
       "/lessons#six-building-blocks",
+      // The 75% rule in the Terms, beside the offer (bead gwth-launch-735c).
+      "/terms#course-months",
     ])
     for (const selling of [false, true]) {
       cleanup()

@@ -6,6 +6,7 @@ import {
   ONGOING_MONTHLY_PRICE,
 } from "@/lib/config"
 import { CURRICULUM, LATER_MONTHS_OPEN } from "@/components/marketing/data"
+import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 import {
   formatPence,
   formatUkDate,
@@ -18,6 +19,9 @@ import { ScoreCard, type ScoreState } from "./score-card"
 import { HomeFilm } from "./home-film"
 import p from "@/components/marketing/paper/paper.module.css"
 import styles from "./home-fde.module.css"
+
+/** The course gate's completion share (bead gwth-launch-735c), from the gate itself. */
+const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
 
 /**
  * The home page in the paper-first register (N12, 2026-09-03), on the artboard
@@ -648,11 +652,18 @@ export function HomeFde({
                   </li>
                 </ul>
               </div>
+              {/* The 75% rule (bead gwth-launch-735c), said before anyone
+                  pays. Written by the latest Astra, Sol-checked 12 Nov 2026. */}
               <p className={styles.offerNote} data-testid="home-offer-months">
-                Month 1 opens on {offer.opensOn}, Month 2 around{" "}
+                Month 1 is available from {offer.opensOn}, Month 2 around{" "}
                 {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-                {LATER_MONTHS_OPEN.month3}. Your time pauses if you reach a
-                month before it opens.
+                {LATER_MONTHS_OPEN.month3}. From those dates, each later month
+                opens once a month has passed since your previous month began
+                and you&apos;ve finished {GATE_SHARE}{" "}of that month&apos;s
+                core lessons. While you wait, you keep using your current
+                month. With a pass, your time is paused. On a monthly plan,
+                your next payment waits. See{" "}
+                <Link href="/terms#course-months">how months open</Link>.
               </p>
               <div className={styles.offerActions}>
                 {selling ? (

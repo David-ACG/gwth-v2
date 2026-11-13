@@ -24,16 +24,19 @@ import styles from "./home-film.module.css"
  * too, inside its frame. Click to play, so nothing downloads before the visitor
  * asks; captions are on by default.
  *
- * The film and poster are on R2 under a dated key (site/home-film/2026-11-12/);
- * the 21 Oct film is untouched there and archived under site/home-film/archive/.
+ * The film and poster are on R2 under a dated key (site/home-film/2026-11-13-gpt/):
+ * Film A with its signs drawn by GPT Image and traced to SVG, which David picked
+ * on 13 Nov 2026 (bead gwth-launch-1cin). The 12 Nov hand-drawn Film A is
+ * untouched under site/home-film/2026-11-12/, and the 21 Oct film is archived
+ * under site/home-film/archive/. Same narration, so the captions are unchanged.
  * The captions are served from this site (public/home/film/) because
  * media.gwth.ai sends no CORS header, and a <track> from another origin without
  * one never loads.
  */
-const BASE = "https://media.gwth.ai/site/home-film/2026-11-12"
+const BASE = "https://media.gwth.ai/site/home-film/2026-11-13-gpt"
 export const FILM = {
-  src: `${BASE}/homepage-film-a.mp4`,
-  poster: `${BASE}/homepage-film-a-poster.jpg`,
+  src: `${BASE}/homepage-film-a-gpt.mp4`,
+  poster: `${BASE}/homepage-film-a-gpt-poster.jpg`,
   captions: "/home/film/homepage-film-a.vtt",
 }
 

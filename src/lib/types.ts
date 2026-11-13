@@ -44,6 +44,10 @@ export interface User {
   accessEndsAt?: Date | null
   /** Hold the clock: the month they are waiting for while it is not open yet */
   courseOnHoldFor?: 2 | 3 | null
+  /** Why: not open for anyone yet, the 75% completion gate, or a review (bead gwth-launch-735c) */
+  courseHoldReason?: "release" | "progress" | "review" | null
+  /** The next completion gate: Month `month` opens at `need` of `total` lessons finished */
+  courseNextGate?: { month: 2 | 3; done: number; need: number; total: number; percent: number } | null
   /** When the user account was created */
   createdAt: Date
   /** When the user profile was last updated */

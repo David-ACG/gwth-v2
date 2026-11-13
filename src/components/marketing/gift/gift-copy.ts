@@ -1,4 +1,5 @@
 import { COURSE_OPENS_ON } from "@/lib/launch-date"
+import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 
 /**
  * Every public word on the gift pages, in reading order, so the copy pass
@@ -80,8 +81,10 @@ export const GIFT_COPY = {
       body: "When they open the gift with its code on GWTH, not when the email arrives. They must open it within one year of purchase.",
     },
     {
-      title: "What if a month isn't ready yet?",
-      body: "Their time is paused until that month opens, so they don't lose any of their course.",
+      // The 75% rule (bead gwth-launch-735c), written by the latest Astra and
+      // Sol-checked 12 Nov 2026. Replaces "What if a month isn't ready yet?".
+      title: "When the next month opens",
+      body: `For a three-month gift, each later month opens once it is available to everyone, a month has passed since their previous month began, and they've finished ${DEFAULT_GATE_PERCENT}% of the previous month's core lessons. While they wait, their paid course time is paused and they keep using their current month, so they lose none of their course time.`,
     },
     {
       title: "What happens at the end?",

@@ -13,14 +13,14 @@ describe("HomeFilm", () => {
     expect(container.querySelector("video")).toBeNull()
     const posters = Array.from(container.querySelectorAll("img")).map((i) => i.getAttribute("src"))
     expect(posters).toEqual([FILM.poster])
-    expect(FILM.poster).toMatch(/\/site\/home-film\/2026-11-12\/homepage-film-a-poster\.jpg$/)
+    expect(FILM.poster).toMatch(/\/site\/home-film\/2026-11-13-gpt\/homepage-film-a-gpt-poster\.jpg$/)
   })
 
   it("plays Film A from its new dated key, with captions on", () => {
     const { container } = render(<HomeFilm />)
     fireEvent.click(screen.getByRole("button", { name: /play the gwth film/i }))
     const video = container.querySelector("video")!
-    expect(video.getAttribute("src")).toMatch(/\/site\/home-film\/2026-11-12\/homepage-film-a\.mp4$/)
+    expect(video.getAttribute("src")).toMatch(/\/site\/home-film\/2026-11-13-gpt\/homepage-film-a-gpt\.mp4$/)
     const track = container.querySelector("track")!
     expect(track.hasAttribute("default")).toBe(true)
     // Same origin: media.gwth.ai sends no CORS header, so a <track> from it

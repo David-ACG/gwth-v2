@@ -97,6 +97,8 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<
     accessSource: access.source,
     accessEndsAt: access.validUntil,
     courseOnHoldFor: access.onHoldFor,
+    courseHoldReason: access.holdReason ?? null,
+    courseNextGate: access.nextGate ?? null,
     createdAt: new Date(sessionUser.createdAt),
     updatedAt: new Date(sessionUser.updatedAt ?? sessionUser.createdAt),
   }

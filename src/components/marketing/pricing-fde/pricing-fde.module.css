@@ -650,6 +650,29 @@
   margin-top: 1.75rem;
 }
 
+/* When each course month opens (bead gwth-launch-735c): several short
+   paragraphs and one list, read before either buying option. */
+.monthRules p + p,
+.monthRules ul + p {
+  margin-top: 1rem;
+}
+
+.monthRules ul {
+  margin: 0.6rem 0 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.monthRules li {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.monthRules li + li {
+  margin-top: 0.35rem;
+}
+
 /* ---------------- Closing band ---------------- */
 
 .closing {
