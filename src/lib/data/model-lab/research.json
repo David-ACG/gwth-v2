@@ -92,6 +92,13 @@
    "cost": "81p"
   },
   {
+   "name": "Claude Fable 5.2",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 94,
+   "cost": "91p"
+  },
+  {
    "name": "GPT-6 Astra",
    "level": "max",
    "maker": "OpenAI",
@@ -701,7 +708,37 @@
    ]
   },
   {
-   "rank": 17,
+   "rank": 15,
+   "setup": "gpt-6.1-terra_medium",
+   "name": "GPT-6.1 Terra",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 91,
+   "basics": 3,
+   "n": 4,
+   "cost": "3p",
+   "tasks": [
+    85,
+    93,
+    90,
+    94
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "revised_message.md",
+     "src": "/labs-files/gpt-6.1-terra_medium/research_02_ceo_fact_check/revised_message.md",
+     "text": "# People update from Martin\n\nTo: All staff (email and noticeboards at all four sites)  \nFrom: Martin Ashdown, Chief Executive, Hollins Brook Foods Ltd  \nSend date: Monday 5 October 2026\n\n---\n\nHello everyone,\n\nBefore the busy season starts, I want to share how we are doing as an employer. I am proud of these numbers, and they are yours.\n\n**Fair pay.** Our median gender pay gap fell from 14.2% to 7.4%, and our mean gap has fallen by a quarter. We have published our gender pay gap figures for the last two years, as required by law. Women now hold 41% of our filled senior leadership roles, up from 35% a year ago.\n\n**Pay.** In April, basic pay rose by 5% for grades 1 to 6, 3.5% for grades 7 to 8 and 2% for grade 9.\n\n**A place people stay.** Voluntary staff turnover fell from 22.7% to 18.1% last year. There is more to do. All sickness absence fell to 4.2%, compared with a sector average of 3.6%.\n\n**Growing.** At the end of March, Hollinsford remained our largest site. Our Line 4 investment at Thorncliffe created 64 permanent roles last year, with 58 filled by the end of March.\n\n**Your voice.** Thank you to everyone who filled in the PulsePoint survey: 79% of those invited took part. Our engagement score rose four points this year to 72%.\n\n**Learning.** We invested £362,500 in training and development last year. We want every new starter to have a good induction.\n\nThank you for everything you do.\n\nMartin\n"
+    },
+    {
+     "name": "briefing.md",
+     "src": "/labs-files/gpt-6.1-terra_medium/research_02_ceo_fact_check/briefing.md",
+     "text": "4 supported, 8 wrong, 1 misleading, 2 cannot verify\n\n| Claim | Verdict | Evidence |\n|---|---|---|\n| C1 Median pay gap | ✘ Wrong | Fell from 14.2% to 7.4%, not more than half. [d05_gpg_report_2025: \"Our median gap fell from 14.2% to 7.4%.\"] |\n| C2 Mean gap | ✔ Supported | Fell from 16.8% to 12.6%, exactly one quarter. [d05_gpg_report_2025: \"\\| Mean gender pay gap (hourly pay) \\| 12.6% \\| 16.8% \\|\"] |\n| C3 Voluntary reporting | ✘ Wrong | Required at 250 employees; Hollins Brook exceeded 1,100. [d06_govuk_gpg_who_must_report: \"Employers in Great Britain with 250 or more employees on their snapshot date must publish their gender pay gap information.\"] [d01_gpg_report_2024: \"Number of relevant employees on the snapshot date: 1,152\"] [d05_gpg_report_2025: \"We had 1,184 relevant employees on the snapshot date.\"] |\n| C4 Women leaders | ✔ Supported | 9 of 22 filled posts, approximately 41%, versus 8 of 23, approximately 35%. [d09_slt_structure_2026: \"On 1 April 2026, 22 were filled and 2 were vacant.\"] [d09_slt_structure_2026: \"\\| Total \\| 24 \\| 9 \\| 13 \\| 2 \\|\"] [d31_ceo_speech_notes_2025: \"Women hold 35% of senior leadership roles.\"] |\n| C5 Pay rise | ✘ Wrong | Basic pay rose 5% for grades 1–6, 3.5% for 7–8 and 2% for 9. [d20_pay_award_confirmation_2026: \"All increases take effect from 1 April 2026.\"] [d20_pay_award_confirmation_2026: \"\\| 7 to 8 \\| Managers \\| 3.5% \\|\"] [d20_pay_award_confirmation_2026: \"\\| 9 \\| Senior leadership team \\| 2.0% \\|\"] |\n| C6 Voluntary turnover | ✔ Supported | Fell from 22.7% to 18.1% in 2025/26. [d11_hr_dashboard_fy2025_26: \"\\| Voluntary staff turnover \\| 18.1% \\| 22.7% \\|\"] |\n| C7 Lowest turnover | ✘ Wrong | Calendar 2025 total turnover: 24.4%; benchmark lower quartile: 19.5%. [d34_hr_dashboard_q3_2025_26: \"\\| Total staff turnover \\| 24.4% \\| 28.3% \\|\"] [d12_nfma_benchmark_2026: \"\\| Total turnover \\| 19.5% \\| 26.2% \\| 33.0% \\|\"] |\n| C8 Sickness absence | ⚠ Misleading | 3.1% excludes long-term absence; all absence was 4.2%, above the comparable 3.6% sector average. [d11_hr_dashboard_fy2025_26: \"All sickness absence including long-term absence was 4.2% in 2025/26 (4.5% in 2024/25).\"] [d12_nfma_benchmark_2026: \"This figure covers all sickness absence, including long-term absence.\"] |\n| C9 Largest site | ✘ Wrong | At 31 March, Hollinsford had 402 employees, Thorncliffe 371. [d08_headcount_snapshot_2026_03: \"\\| Hollinsford (head office and bakery) \\| 402 \\| -8 \\|\"] [d08_headcount_snapshot_2026_03: \"\\| Thorncliffe (ready meals) \\| 371 \\| +59 \\|\"] |\n| C10 Line 4 jobs | ✘ Wrong | 64 permanent roles created in 2025/26, 58 filled by March. [d16_line4_recruitment_report: \"In 2025/26, Line 4 at Thorncliffe created 64 new permanent roles.\"] |\n| C11 Survey response | ✘ Wrong | 79% of those invited responded, including employees and long-term agency workers. [d21_pulsepoint_survey_report_2026: \"972 of 1,231 people invited took part, a response rate of 79%.\"] |\n| C12 Engagement change | ✘ Wrong | 72%, up four points from 68% in 2025; six points since 2024. [d33_engagement_survey_2025_summary: \"Engagement index: 68% (2024: 66%)\"] [d22_newsletter_summer2026: \"Our engagement score is now 72%, up six points since 2024.\"] |\n| C13 Top 10% | ? Cannot verify | No official benchmark; the provider's suggestion was speculation. [d21_pulsepoint_survey_report_2026: \"External benchmark comparison is not included in your package.\"] |\n| C14 Training spend | ✔ Supported | Actual 2025/26 learning and development spend was £362,500. [d24_finance_outturn_fy2025_26: \"\\| Learning and development \\| £410,000 \\| £362,500 \\| £47,500 under budget \\|\"] |\n| C15 Induction rating | ? Cannot verify | 2024 respondents: 87%; no current survey. [d26_onboarding_pulse_jul2024: \"\\| How would you rate your induction overall? \\| 87% \\|\"] [d25_hr_team_minutes_mar2026: \"it has not run since the survey tool licence lapsed in summer 2024.\"] |\n"
+    }
+   ]
+  },
+  {
+   "rank": 18,
    "setup": "gpt-6.1-sol_low",
    "name": "GPT-6.1 Sol",
    "level": "low",
@@ -731,7 +768,7 @@
    ]
   },
   {
-   "rank": 17,
+   "rank": 18,
    "setup": "gpt-6.1-sol_medium",
    "name": "GPT-6.1 Sol",
    "level": "medium",
@@ -761,7 +798,7 @@
    ]
   },
   {
-   "rank": 17,
+   "rank": 18,
    "setup": "gemini-3.8-flash_high",
    "name": "Gemini 3.8 Flash",
    "level": "high",
@@ -791,7 +828,7 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
    "setup": "gpt-6.1-sol_max",
    "name": "GPT-6.1 Sol",
    "level": "max",
@@ -821,7 +858,7 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
    "setup": "gpt-6.1-sol_xhigh",
    "name": "GPT-6.1 Sol",
    "level": "xhigh",
@@ -851,7 +888,7 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
    "setup": "opus-5.5_high",
    "name": "Claude Opus 5.5",
    "level": "high",
@@ -881,7 +918,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 24,
    "setup": "sonnet-5.5_low",
    "name": "Claude Sonnet 5.5",
    "level": "low",
@@ -911,7 +948,7 @@
    ]
   },
   {
-   "rank": 24,
+   "rank": 25,
    "setup": "gpt-6-luna_max",
    "name": "GPT-6 Luna",
    "level": "max",
@@ -941,7 +978,7 @@
    ]
   },
   {
-   "rank": 24,
+   "rank": 25,
    "setup": "glm-5.3_max",
    "name": "GLM-5.3",
    "level": "max",
@@ -971,7 +1008,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 27,
    "setup": "gemini-3.6-flash_low",
    "name": "Gemini 3.6 Flash",
    "level": "low",
@@ -1001,7 +1038,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 27,
    "setup": "minimax-m3_default",
    "name": "MiniMax M3",
    "level": "standard",
@@ -1031,7 +1068,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 29,
    "setup": "mimo-v2.6-pro_default",
    "name": "MiMo v2.6 Pro",
    "level": "standard",
@@ -1061,7 +1098,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 29,
    "setup": "gpt-6-luna_medium",
    "name": "GPT-6 Luna",
    "level": "medium",
@@ -1091,7 +1128,37 @@
    ]
   },
   {
-   "rank": 30,
+   "rank": 29,
+   "setup": "gpt-6.1-terra_max",
+   "name": "GPT-6.1 Terra",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 84,
+   "basics": 3,
+   "n": 4,
+   "cost": "16p",
+   "tasks": [
+    76,
+    77,
+    91,
+    92
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "revised_message.md",
+     "src": "/labs-files/gpt-6.1-terra_max/research_02_ceo_fact_check/revised_message.md",
+     "text": "# People update from Martin\n\nTo: All staff (email and noticeboards at all four sites)\nFrom: Martin Ashdown, Chief Executive, Hollins Brook Foods Ltd\nPlanned send date: Monday 5 October 2026\n\n---\n\nHello everyone,\n\nBefore the busy season starts, I want to share how we are doing as an employer. I am proud of these numbers, and they are yours.\n\n**Fair pay.** Our median gender pay gap fell from 14.2% to 7.4% in the 2025 report, and our mean gap fell by a quarter. We have published our gender pay gap reports for the last two years, in line with the legal requirement for businesses of our size. At 31 March 2026, women held 9 of 22 filled senior leadership posts (41%), up from 8 of 23 (35%) a year earlier.\n\n**Pay.** In April, basic pay rose by 5% for grades 1–6, 3.5% for grades 7–8 and 2% for grade 9.\n\n**A place people stay.** Voluntary staff turnover fell from 22.7% in 2024/25 to 18.1% in 2025/26. Sickness absence, including long-term absence, fell from 4.5% to 4.2% in 2025/26, compared with 3.6% in a North of England food-and-drink manufacturing survey for calendar 2025.\n\n**Growing.** At 31 March 2026, Hollinsford was our largest site. Our Line 4 investment at Thorncliffe created 64 permanent roles in 2025/26, of which 58 were filled by 31 March.\n\n**Your voice.** Thank you to everyone who filled in the PulsePoint survey: 972 of the 1,231 employees and long-term agency workers invited took part, a 79% response rate. Our engagement score rose four percentage points this year to 72%.\n\n**Learning.** We invested £362,500 in training and development last year. Thank you to everyone who helps welcome our new starters.\n\nThank you for everything you do.\n\nMartin\n"
+    },
+    {
+     "name": "briefing.md",
+     "src": "/labs-files/gpt-6.1-terra_max/research_02_ceo_fact_check/briefing.md",
+     "text": "3 supported, 4 wrong, 1 misleading, 7 cannot verify\n\n|Claim|Verdict|Evidence|\n|---|---|---|\n|C1: Median gap more than halved|✘ Wrong|7.4%, down from 14.2%; a 47.9% reduction. [d05_gpg_report_2025: \"Our median gap fell from 14.2% to 7.4%.\"]|\n|C2: Mean gap down a quarter|✔ Supported|16.8% to 12.6% is a 25% reduction. [d05_gpg_report_2025: \"Mean gender pay gap (hourly pay)\"]|\n|C3: Reporting was voluntary|✘ Wrong|Compulsory from 250 employees; the reports cover 1,152 and 1,184. [d06_govuk_gpg_who_must_report: \"250 or more employees on their snapshot date must publish\"] [d01_gpg_report_2024: \"employees on the snapshot date: 1,152\"] [d05_gpg_report_2025: \"1,184 relevant employees on the snapshot date.\"]|\n|C4: Women hold 41% of leadership roles now|? Cannot verify|March 2026: 9/22 filled (41%); 9/24 established (37.5%). March 2025: 8/23 filled (35%). October unknown. [d08_headcount_snapshot_2026_03: \"Vacant posts: 2 (Head of Engineering, Head of Commercial Finance)\"] [d07_headcount_snapshot_2025_03: \"Senior leadership team (grade 9)\"] [d09_slt_structure_2026: \"The senior leadership team has 24 established posts.\"]|\n|C5: Everyone received at least 5%|✘ Wrong|Basic pay: 5% for grades 1–6, 3.5% for 7–8, 2% for 9. [d20_pay_award_confirmation_2026: \"All increases take effect from 1 April 2026.\"]|\n|C6: Voluntary turnover fell|✔ Supported|22.7% in 2024/25 to 18.1% in 2025/26. [d11_hr_dashboard_fy2025_26: \"Voluntary turnover counts resignations only.\"]|\n|C7: Lowest turnover in the North|? Cannot verify|No 2025/26 ranking. In 2025, Hollins Brook: 18.6%; a quarter of surveyed food-and-drink firms below 13.8%. [d10_board_paper_people_feb2026: \"turnover for the 12 months to 31 December 2025 was 18.6%\"] [d12_nfma_benchmark_2026: \"participating employers reported voluntary turnover below 13.8%.\"]|\n|C8: Sickness absence below sector average|⚠ Misleading|3.1% excludes long-term absence. Total fell from 4.5% to 4.2%; the 2025 sector average was 3.6%, including long-term absence. [d11_hr_dashboard_fy2025_26: \"All sickness absence including long-term absence was 4.2% in 2025/26 (4.5% in 2024/25).\"] [d12_nfma_benchmark_2026: \"The sector average sickness absence rate was 3.6%.\"]|\n|C9: Thorncliffe is now largest|? Cannot verify|October unknown. On 31 March: Hollinsford 402; Thorncliffe 371. [d08_headcount_snapshot_2026_03: \"Hollinsford (head office and bakery)\"]|\n|C10: Line 4 already created 120 jobs|? Cannot verify|October unknown. In 2025/26, 64 permanent roles created; 58 filled by 31 March. [d16_line4_recruitment_report: \"created 64 new permanent roles. At 31 March 2026, 58 of these were filled\"]|\n|C11: Over four in five staff responded|? Cannot verify|79% responded; invitees included agency workers. Employee-only rate unknown. [d21_pulsepoint_survey_report_2026: \"a response rate of 79%. Invitations went to employees and to long-term agency workers.\"]|\n|C12: Engagement up six points this year|✘ Wrong|72% versus 68% in 2025: up four points. Six points is since 2024. [d22_newsletter_summer2026: \"Our engagement score is now 72%, up six points since 2024.\"] [d31_ceo_speech_notes_2025: \"Engagement score 68%, up from 66%.\"]|\n|C13: Top 10% of UK manufacturers|? Cannot verify|No official benchmark; the top-10% remark was speculative. [d23_pulsepoint_account_email: \"your package doesn't include benchmarking, so I can't give you an official comparison.\"]|\n|C14: £362,500 spent on training|✔ Supported|Actual: £362,500 in 2025/26; £410,000 was budget. [d24_finance_outturn_fy2025_26: \"Learning and development: actual spend includes external courses\"]|\n|C15: Nine in ten new starters rate induction highly|? Cannot verify|No current rate. In 2024, 87% of 46 respondents rated induction good or excellent. [d26_onboarding_pulse_jul2024: \"How would you rate your induction overall?\"] [d25_hr_team_minutes_mar2026: \"not run since the survey tool licence lapsed in summer 2024.\"]|\n"
+    }
+   ]
+  },
+  {
+   "rank": 32,
    "setup": "glm-5.3-flash_max",
    "name": "GLM-5.3 Flash",
    "level": "max",
@@ -1121,7 +1188,7 @@
    ]
   },
   {
-   "rank": 31,
+   "rank": 33,
    "setup": "gemini-3.5-flash-lite_default",
    "name": "Gemini 3.5 Flash-Lite",
    "level": "standard",
@@ -1151,7 +1218,7 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 34,
    "setup": "haiku-4.5_default",
    "name": "Claude Haiku 4.5",
    "level": "standard",
@@ -1181,7 +1248,7 @@
    ]
   },
   {
-   "rank": 33,
+   "rank": 35,
    "setup": "gemini-4-argon_high",
    "name": "Gemini 4 Argon",
    "level": "high",
@@ -1200,7 +1267,7 @@
    "sig_files": []
   },
   {
-   "rank": 34,
+   "rank": 36,
    "setup": "mistral-large-4_high",
    "name": "Mistral Large 4",
    "level": "high",
@@ -1256,9 +1323,9 @@
    "name": "Automation"
   }
  ],
- "count": 40,
+ "count": 43,
  "tested_from": "2026-10-02",
- "tested_to": "2026-10-21",
+ "tested_to": "2026-11-13",
  "chart": {
   "tasks": 4,
   "rows": [
@@ -1337,6 +1404,17 @@
     "cost_gbp": 4.3629,
     "cost": "£4.36",
     "score": 92,
+    "tasks_run": 4
+   },
+   {
+    "setup": "fable-5.2_high",
+    "name": "Claude Fable 5.2",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 3.6577,
+    "cost": "£3.66",
+    "score": 94,
     "tasks_run": 4
    },
    {
@@ -1549,6 +1627,17 @@
     "tasks_run": 4
    },
    {
+    "setup": "gpt-6.1-terra_max",
+    "name": "GPT-6.1 Terra",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.6406,
+    "cost": "64p",
+    "score": 84,
+    "tasks_run": 4
+   },
+   {
     "setup": "sonnet-5.5_medium",
     "name": "Claude Sonnet 5.5",
     "level": "medium",
@@ -1667,6 +1756,17 @@
     "cost_gbp": 0.118,
     "cost": "12p",
     "score": 94,
+    "tasks_run": 4
+   },
+   {
+    "setup": "gpt-6.1-terra_medium",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.1013,
+    "cost": "10p",
+    "score": 91,
     "tasks_run": 4
    },
    {

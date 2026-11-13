@@ -99,6 +99,13 @@
    "cost": "61p"
   },
   {
+   "name": "Claude Fable 5.2",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 95,
+   "cost": "89p"
+  },
+  {
    "name": "Claude Fable 5.1",
    "level": "high",
    "maker": "Anthropic",
@@ -477,6 +484,31 @@
   },
   {
    "rank": 8,
+   "setup": "gpt-6.1-terra_max",
+   "name": "GPT-6.1 Terra",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "8p",
+   "tasks": [
+    93,
+    93,
+    100,
+    84
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6.1-terra_max/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Fernhill Kitchens: four-day week decision and pilot\n\n**Does the proposal work?** No. Basic pay stays the same while contracted hours fall from 1,500 to 1,280 a week (14.67%). Showroom staffing Monday–Saturday would be 6/12/12/12/6/0; Friday's sole key holder, S08, needs break and absence relief.\n\nEven if all four showroom overtime volunteers attend, that gives four Saturday staff, including one designer, against a minimum of six people and two designers. Seven-hour shifts cost £617.40 gross per Saturday, or £7,408.80 for 12. Extra staff and break cover would still be needed.\n\nThe survey's 87% is 13 of 15 respondents: 37.5% of staff responded and yes answers were 32.5% of all staff. It was voluntary and shared through WhatsApp; three showroom staff responded.\n\n**Options.** Keep the current week; retain the proposed patterns with extra qualified Saturday staff, overtime and Friday relief; close Saturdays, risking a third of design appointments and still needing Friday relief; or use the rota below.\n\n**Possible pilot: 4 January–28 March 2027.** This fixed weekly showroom rota uses staff IDs. S05 and S06 retain their no-Saturday arrangements. Seven staff would work all 12 Saturdays rather than rotate as now; consult them and obtain agreement.\n\n| Day | Staff on duty (total) | Key holders / designers |\n|---|---|---|\n| Mon | S01 S02 S03 S04 S05 S06 S07 S09 (8) | 2 / 3 |\n| Tue | S01 S02 S03 S05 S06 S09 S10 S11 (8) | 2 / 3 |\n| Wed | S02 S04 S05 S06 S08 S09 S11 S12 (8) | 2 / 2 |\n| Thu | S02 S03 S05 S07 S08 S10 S11 S12 (8) | 2 / 2 |\n| Fri | S01 S04 S06 S07 S08 S09 S10 S11 S12 (9) | 2 / 3 |\n| Sat | S01 S03 S04 S07 S08 S10 S12 (7) | 2 / 3 |\n\nWeekdays are 09:00–17:30 with a 30-minute unpaid lunch: eight paid hours. Saturday's 09:00–16:30 shift, including lunch, is seven paid hours, followed by one paid hour of administration after closing. Confirm useful work and agreement to the later finish. Each person works four eight-hour days. Stagger breaks one at a time to maintain minimum cover.\n\nCover absence or leave by agreed swaps or voluntary overtime; check skills and breaks. S02 (key holder), S09 (designer) and S11 (sales) are off Saturday and have volunteered: confirm availability. Overtime pays 1.5 times the hourly rate. Delay opening or close affected hours if cover fails.\n\nSplit fitting, warehouse and office teams 7/7, 3/3 and 4/4 between Monday–Thursday and Tuesday–Friday. Assign the sole electrician F08 to the former and plumber F09 to the latter; schedule joint jobs Tuesday–Thursday. Check longer eight-hour days with fitters.\n\nAll teams close on Good Friday, 26 March. Give anyone normally off Friday eight hours' paid leave in lieu; preserve contractual annual leave and bank-holiday benefits, and schedule leave with cover.\n\n**Measure and review.** Agree an overtime budget and baselines before launch. Suggested targets: full cover during opening hours; maintain comparable-season sales, appointments and completed fittings per open day; no increase in rework per job; keep overtime within budget. Track complaints, absence, overtime and qualified applications weekly; survey all staff anonymously on workload and wellbeing at start and end. Review on 15 February and decide whether to continue, amend or stop on **30 March 2027**. Arrange that day's cover in advance; Easter Monday, 29 March, is closed.\n"
+    }
+   ]
+  },
+  {
+   "rank": 8,
    "setup": "opus-5.5_low",
    "name": "Claude Opus 5.5",
    "level": "low",
@@ -526,7 +558,7 @@
    ]
   },
   {
-   "rank": 14,
+   "rank": 15,
    "setup": "opus-5.5_xhigh",
    "name": "Claude Opus 5.5",
    "level": "xhigh",
@@ -551,7 +583,7 @@
    ]
   },
   {
-   "rank": 15,
+   "rank": 16,
    "setup": "grok-4.6_high",
    "name": "Grok 4.6",
    "level": "high",
@@ -576,7 +608,32 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 17,
+   "setup": "gpt-6.1-terra_medium",
+   "name": "GPT-6.1 Terra",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 90,
+   "basics": 4,
+   "n": 4,
+   "cost": "1p",
+   "tasks": [
+    90,
+    86,
+    100,
+    85
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "pilot_plan.md",
+     "src": "/labs-files/gpt-6.1-terra_medium/thinking_02_four_day_week/pilot_plan.md",
+     "text": "# Four-day week: decision and pilot plan\n\n**The proposal does not work as written.** Its two patterns put no showroom staff on Saturday, despite a minimum of six, including a key holder and two designers. The four showroom overtime volunteers could bring cover to four, including only one designer; volunteers from other teams are not trained to count. Using all four every Saturday would cost £617.40 per Saturday, or £7,408.80 gross over 12 Saturdays, and still leave a shortfall. Overtime is voluntary. “Saturdays as now” also conflicts with the fixed Monday–Thursday and Tuesday–Friday patterns.\n\nAcross 40 staff, contracted hours fall from 1,500 to 1,280 a week (14.67%) on unchanged pay. The survey's 87% is 13 of 15 respondents, not all staff: 37.5% responded and 32.5% of all staff said yes. The optional, unevenly distributed survey is not representative evidence of overall support; seek views from all teams before setting patterns.\n\n**Options for Nina to consider:** retain current hours and rota; run the proposed hours and pay with a redesigned showroom rota; or change Saturday opening, minimum cover or staffing, subject to operational and staffing checks. Overtime alone cannot fix the written proposal. The following is a testable rota, not a recommendation to adopt the policy permanently.\n\n**Pilot: 4 January–28 March 2027.** Keep the proposed 32 hours and pay; use A/B patterns for other teams, subject to checking their cover and staff arrangements. For showroom staff, the four days for each person are in `numbers.json`. Ella (S05) and Joy (S06) retain their agreed Saturday exclusions. The fixed rota covers the open days as follows:\n\n| Day | Staff scheduled | Key holders | Designers |\n|---|---:|---:|---:|\n| Mon | 8 | 2 | 2 |\n| Tue | 8 | 2 | 2 |\n| Wed | 8 | 2 | 3 |\n| Thu | 9 | 2 | 3 |\n| Fri | 8 | 2 | 2 |\n| Sat | 7 | 2 | 3 |\n\nStagger unpaid lunches one at a time, preserving the required on-duty numbers and skills. Schedule weekday shifts 09:00–17:30 with a 30-minute unpaid lunch; Saturday shifts 08:00–16:30 with a 30-minute unpaid lunch, using the hour before opening for preparation. Each shift therefore has eight paid hours. This relies on agreeing the earlier Saturday start and the new patterns with staff. Plan trained relief for leave, sickness and breaks; the table is scheduled cover, not a guarantee of cover during absence. Check individual leave and bank-holiday treatment fairly before launch. Good Friday, 26 March, is closed; the pilot contains 12 Saturdays.\n\nBefore launch, agree baseline measures and targets with managers. Track weekly sales and completed appointments against comparable prior weeks, customer waiting times, errors or rework, staffing and skill cover, overtime and its cost, absence, and staff wellbeing and workload across all teams. Record missed cover and customer impact. Review weekly, adjust safely if cover fails, and consult staff at the midpoint. Meet on **Tuesday 30 March 2027**, after the pilot and Easter Monday closure, to compare results with the baseline and targets and decide whether to keep, change or stop the arrangement.\n"
+    }
+   ]
+  },
+  {
+   "rank": 17,
    "setup": "sonnet-5.5_medium",
    "name": "Claude Sonnet 5.5",
    "level": "medium",
@@ -601,7 +658,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 17,
    "setup": "glm-5.3_max",
    "name": "GLM-5.3",
    "level": "max",
@@ -626,7 +683,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 17,
    "setup": "kimi-k3_max",
    "name": "Kimi K3",
    "level": "max",
@@ -651,7 +708,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "opus-5.5_high",
    "name": "Claude Opus 5.5",
    "level": "high",
@@ -676,7 +733,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "gpt-6-luna_max",
    "name": "GPT-6 Luna",
    "level": "max",
@@ -701,7 +758,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "gemini-4-argon_high",
    "name": "Gemini 4 Argon",
    "level": "high",
@@ -726,7 +783,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "haiku-5.5_default",
    "name": "Claude Haiku 5.5",
    "level": "standard",
@@ -751,7 +808,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "opus-5.5_medium",
    "name": "Claude Opus 5.5",
    "level": "medium",
@@ -776,7 +833,7 @@
    ]
   },
   {
-   "rank": 24,
+   "rank": 26,
    "setup": "mistral-large-4_high",
    "name": "Mistral Large 4",
    "level": "high",
@@ -801,7 +858,7 @@
    ]
   },
   {
-   "rank": 24,
+   "rank": 26,
    "setup": "mimo-v2.6-pro_default",
    "name": "MiMo v2.6 Pro",
    "level": "standard",
@@ -826,7 +883,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 28,
    "setup": "glm-5.3-flash_max",
    "name": "GLM-5.3 Flash",
    "level": "max",
@@ -851,7 +908,7 @@
    ]
   },
   {
-   "rank": 27,
+   "rank": 29,
    "setup": "gemini-3.6-flash_low",
    "name": "Gemini 3.6 Flash",
    "level": "low",
@@ -876,7 +933,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 30,
    "setup": "gemini-3.8-flash_high",
    "name": "Gemini 3.8 Flash",
    "level": "high",
@@ -901,7 +958,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 30,
    "setup": "minimax-m3_default",
    "name": "MiniMax M3",
    "level": "standard",
@@ -926,7 +983,7 @@
    ]
   },
   {
-   "rank": 30,
+   "rank": 32,
    "setup": "gpt-6-luna_medium",
    "name": "GPT-6 Luna",
    "level": "medium",
@@ -951,7 +1008,7 @@
    ]
   },
   {
-   "rank": 31,
+   "rank": 33,
    "setup": "grok-4.7_high",
    "name": "Grok 4.7",
    "level": "high",
@@ -976,7 +1033,7 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 34,
    "setup": "sonnet-5.5_low",
    "name": "Claude Sonnet 5.5",
    "level": "low",
@@ -1001,7 +1058,7 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 34,
    "setup": "haiku-4.5_default",
    "name": "Claude Haiku 4.5",
    "level": "standard",
@@ -1026,7 +1083,7 @@
    ]
   },
   {
-   "rank": 34,
+   "rank": 36,
    "setup": "gemini-3.5-flash-lite_default",
    "name": "Gemini 3.5 Flash-Lite",
    "level": "standard",
@@ -1071,9 +1128,9 @@
    "name": "Automation"
   }
  ],
- "count": 40,
+ "count": 43,
  "tested_from": "2026-10-02",
- "tested_to": "2026-10-21",
+ "tested_to": "2026-11-13",
  "chart": {
   "tasks": 4,
   "rows": [
@@ -1119,6 +1176,17 @@
     "cost_gbp": 3.6372,
     "cost": "£3.64",
     "score": 90,
+    "tasks_run": 4
+   },
+   {
+    "setup": "fable-5.2_high",
+    "name": "Claude Fable 5.2",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 3.5474,
+    "cost": "£3.55",
+    "score": 95,
     "tasks_run": 4
    },
    {
@@ -1364,6 +1432,17 @@
     "tasks_run": 4
    },
    {
+    "setup": "gpt-6.1-terra_max",
+    "name": "GPT-6.1 Terra",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.3397,
+    "cost": "34p",
+    "score": 93,
+    "tasks_run": 4
+   },
+   {
     "setup": "gpt-6.1-sol_high",
     "name": "GPT-6.1 Sol",
     "level": "high",
@@ -1482,6 +1561,17 @@
     "cost_gbp": 0.0631,
     "cost": "6p",
     "score": 62,
+    "tasks_run": 4
+   },
+   {
+    "setup": "gpt-6.1-terra_medium",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.049,
+    "cost": "5p",
+    "score": 90,
     "tasks_run": 4
    },
    {

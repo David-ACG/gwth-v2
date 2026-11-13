@@ -38,17 +38,17 @@
   "n": 4
  },
  "value": {
-  "name": "Claude Haiku 5.5",
-  "level": "standard",
-  "maker": "Anthropic",
-  "score": 91,
-  "cost": "3p",
+  "name": "GPT-6.1 Terra",
+  "level": "medium",
+  "maker": "OpenAI",
+  "score": 89,
+  "cost": "2p",
   "basics": 4,
   "n": 4
  },
  "app": {
-  "name": "GPT-6.1 Sol",
-  "level": "low",
+  "name": "GPT-6.1 Terra",
+  "level": "medium",
   "maker": "OpenAI",
   "score": 89,
   "plan": {
@@ -104,6 +104,13 @@
    "maker": "OpenAI",
    "score": 89,
    "cost": "£1.92"
+  },
+  {
+   "name": "Claude Fable 5.2",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 95,
+   "cost": "£2.73"
   },
   {
    "name": "Claude Fable 5.1",
@@ -187,18 +194,18 @@
   },
   {
    "letter": "D",
-   "setup": "haiku-5.5_default",
+   "setup": "gpt-6.1-terra_medium",
    "files": [
     {
      "name": "index.html",
-     "src": "/labs-files/haiku-5.5_default/building_02_pronunciation_coach/index.html",
+     "src": "/labs-files/gpt-6.1-terra_medium/building_02_pronunciation_coach/index.html",
      "kind": "html"
     }
    ],
-   "name": "Claude Haiku 5.5",
-   "level": "standard",
-   "maker": "Anthropic",
-   "score": 96,
+   "name": "GPT-6.1 Terra",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 92,
    "basics": true,
    "cost": "3p"
   }
@@ -590,6 +597,30 @@
   },
   {
    "rank": 16,
+   "setup": "gpt-6.1-terra_medium",
+   "name": "GPT-6.1 Terra",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 89,
+   "basics": 4,
+   "n": 4,
+   "cost": "2p",
+   "tasks": [
+    90,
+    92,
+    90,
+    83
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "index.html",
+     "src": "/labs-files/gpt-6.1-terra_medium/building_02_pronunciation_coach/index.html"
+    }
+   ]
+  },
+  {
+   "rank": 16,
    "setup": "gpt-6.1-sol_high",
    "name": "GPT-6.1 Sol",
    "level": "high",
@@ -661,7 +692,7 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
    "setup": "grok-4.6_high",
    "name": "Grok 4.6",
    "level": "high",
@@ -685,7 +716,7 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
    "setup": "sonnet-5.5_max",
    "name": "Claude Sonnet 5.5",
    "level": "max",
@@ -709,7 +740,31 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
+   "setup": "gpt-6.1-terra_max",
+   "name": "GPT-6.1 Terra",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 88,
+   "basics": 4,
+   "n": 4,
+   "cost": "20p",
+   "tasks": [
+    92,
+    86,
+    88,
+    86
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "index.html",
+     "src": "/labs-files/gpt-6.1-terra_max/building_02_pronunciation_coach/index.html"
+    }
+   ]
+  },
+  {
+   "rank": 21,
    "setup": "minimax-m3_default",
    "name": "MiniMax M3",
    "level": "standard",
@@ -733,7 +788,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 25,
    "setup": "gemini-3.8-flash_high",
    "name": "Gemini 3.8 Flash",
    "level": "high",
@@ -757,7 +812,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 25,
    "setup": "gemini-3.6-flash_low",
    "name": "Gemini 3.6 Flash",
    "level": "low",
@@ -781,7 +836,7 @@
    ]
   },
   {
-   "rank": 25,
+   "rank": 27,
    "setup": "qwen3.8-max-0902_xhigh",
    "name": "Qwen 3.8 Max",
    "level": "xhigh",
@@ -805,7 +860,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 28,
    "setup": "gemini-3.5-flash-lite_default",
    "name": "Gemini 3.5 Flash-Lite",
    "level": "standard",
@@ -829,7 +884,7 @@
    ]
   },
   {
-   "rank": 27,
+   "rank": 29,
    "setup": "gpt-6-luna_max",
    "name": "GPT-6 Luna",
    "level": "max",
@@ -853,7 +908,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 30,
    "setup": "glm-5.3_max",
    "name": "GLM-5.3",
    "level": "max",
@@ -877,7 +932,7 @@
    ]
   },
   {
-   "rank": 29,
+   "rank": 31,
    "setup": "glm-5.3-flash_max",
    "name": "GLM-5.3 Flash",
    "level": "max",
@@ -901,7 +956,7 @@
    ]
   },
   {
-   "rank": 30,
+   "rank": 32,
    "setup": "gpt-6-luna_medium",
    "name": "GPT-6 Luna",
    "level": "medium",
@@ -925,7 +980,7 @@
    ]
   },
   {
-   "rank": 31,
+   "rank": 33,
    "setup": "grok-4.7_high",
    "name": "Grok 4.7",
    "level": "high",
@@ -949,7 +1004,7 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 34,
    "setup": "haiku-4.5_default",
    "name": "Claude Haiku 4.5",
    "level": "standard",
@@ -973,7 +1028,7 @@
    ]
   },
   {
-   "rank": 33,
+   "rank": 35,
    "setup": "mistral-large-4_high",
    "name": "Mistral Large 4",
    "level": "high",
@@ -997,7 +1052,7 @@
    ]
   },
   {
-   "rank": 34,
+   "rank": 36,
    "setup": "gemini-4-argon_high",
    "name": "Gemini 4 Argon",
    "level": "high",
@@ -1042,9 +1097,9 @@
    "name": "Automation"
   }
  ],
- "count": 40,
+ "count": 43,
  "tested_from": "2026-10-02",
- "tested_to": "2026-10-21",
+ "tested_to": "2026-11-12",
  "chart": {
   "tasks": 4,
   "rows": [
@@ -1079,6 +1134,17 @@
     "cost_gbp": 11.8672,
     "cost": "£11.87",
     "score": 88,
+    "tasks_run": 4
+   },
+   {
+    "setup": "fable-5.2_high",
+    "name": "Claude Fable 5.2",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 10.9138,
+    "cost": "£10.91",
+    "score": 95,
     "tasks_run": 4
    },
    {
@@ -1324,6 +1390,17 @@
     "tasks_run": 4
    },
    {
+    "setup": "gpt-6.1-terra_max",
+    "name": "GPT-6.1 Terra",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.7801,
+    "cost": "78p",
+    "score": 88,
+    "tasks_run": 4
+   },
+   {
     "setup": "sonnet-5.5_medium",
     "name": "Claude Sonnet 5.5",
     "level": "medium",
@@ -1453,6 +1530,17 @@
     "cost_gbp": 0.1143,
     "cost": "11p",
     "score": 91,
+    "tasks_run": 4
+   },
+   {
+    "setup": "gpt-6.1-terra_medium",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.0894,
+    "cost": "9p",
+    "score": 89,
     "tasks_run": 4
    },
    {

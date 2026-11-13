@@ -1,4 +1,4 @@
-import { aboutCost } from "@/lib/model-lab-format"
+import { aboutCost, formatTestedMonth } from "@/lib/model-lab-format"
 import { render, screen, cleanup, within, fireEvent } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import { CostChart, shortRunsSentence, LabsFde } from "./labs-fde"
@@ -55,7 +55,9 @@ describe("LabsFde, the six labs", () => {
     expect(text).toMatch(/same real UK work tasks/)
     expect(text).toMatch(/Computer checks and AI judges/)
     expect(text).toMatch(/No AI company pays us/)
-    expect(text).toMatch(/Tested October 2026/)
+    // the months come from the data (round 2 ran into November, 12 Nov 2026); formatTestedMonth has its own tests
+    expect(text).toContain(`Tested ${formatTestedMonth(index.tested_from, index.tested_to)}.`)
+    expect(text).toMatch(/Tested October( and November)? 2026\./)
     expect(screen.getByRole("heading", { name: "How we test" })).toBeInTheDocument()
   })
 

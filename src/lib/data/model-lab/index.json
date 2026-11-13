@@ -24,10 +24,10 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 43,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "content",
@@ -53,10 +53,10 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 43,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "thinking",
@@ -82,10 +82,10 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 43,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "building",
@@ -103,18 +103,18 @@
     "n": 4
    },
    "value": {
-    "name": "Claude Haiku 5.5",
-    "level": "standard",
-    "maker": "Anthropic",
-    "score": 91,
-    "cost": "3p",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "score": 89,
+    "cost": "2p",
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 43,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-12"
   },
   {
    "sp": "data",
@@ -140,10 +140,10 @@
     "basics": 5,
     "n": 5
    },
-   "count": 40,
+   "count": 43,
    "tasks": 5,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-23"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "automation",
@@ -152,11 +152,11 @@
    "ask": "Which assistant would you trust with your week?",
    "sig_title": "Clear my week",
    "best": {
-    "name": "Claude Opus 5.5",
-    "level": "xhigh",
-    "maker": "Anthropic",
+    "name": "GPT-6.1 Terra",
+    "level": "max",
+    "maker": "OpenAI",
     "score": 98,
-    "cost": "91p",
+    "cost": "13p",
     "basics": 4,
     "n": 4
    },
@@ -169,16 +169,16 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 43,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-12"
   }
  ],
  "tested_from": "2026-10-02",
- "tested_to": "2026-10-23",
- "model_count": 23,
- "setup_count": 40,
+ "tested_to": "2026-11-13",
+ "model_count": 25,
+ "setup_count": 43,
  "p_per_usd": 75,
  "cost_chart": {
   "tasks": 25,
@@ -214,6 +214,17 @@
     "cost_gbp": 49.1015,
     "cost": "£49.10",
     "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "fable-5.2_high",
+    "name": "Claude Fable 5.2",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 34.6861,
+    "cost": "£34.69",
+    "score": 95,
     "tasks_run": 25
    },
    {
@@ -514,6 +525,17 @@
     "tasks_run": 25
    },
    {
+    "setup": "gpt-6.1-terra_max",
+    "name": "GPT-6.1 Terra",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 3.2275,
+    "cost": "£3.23",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
     "setup": "gpt-6.1-sol_medium",
     "name": "GPT-6.1 Sol",
     "level": "medium",
@@ -588,6 +610,17 @@
     "cost_gbp": 0.6382,
     "cost": "64p",
     "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6.1-terra_medium",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.5799,
+    "cost": "58p",
+    "score": 89,
     "tasks_run": 25
    },
    {

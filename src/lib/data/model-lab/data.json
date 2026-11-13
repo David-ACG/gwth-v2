@@ -104,6 +104,13 @@
    "cost": "98p"
   },
   {
+   "name": "Claude Fable 5.2",
+   "level": "high",
+   "maker": "Anthropic",
+   "score": 99,
+   "cost": "£1.57"
+  },
+  {
    "name": "Claude Fable 5.1",
    "level": "high",
    "maker": "Anthropic",
@@ -556,7 +563,37 @@
    ]
   },
   {
-   "rank": 12,
+   "rank": 9,
+   "setup": "gpt-6.1-terra_max",
+   "name": "GPT-6.1 Terra",
+   "level": "max",
+   "maker": "OpenAI",
+   "score": 98,
+   "basics": 5,
+   "n": 5,
+   "cost": "12p",
+   "tasks": [
+    100,
+    97,
+    98,
+    99,
+    94
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "chart.svg",
+     "src": "/labs-files/gpt-6.1-terra_max/data_04_gender_pay_gap/chart.svg"
+    },
+    {
+     "name": "board_note.md",
+     "src": "/labs-files/gpt-6.1-terra_max/data_04_gender_pay_gap/board_note.md",
+     "text": "# Board note: gender pay gap at 5 April 2026\n\n**Publication is required.** There were 262 relevant employees on the snapshot date, above the threshold of 250. The test is headcount, including part-time staff and staff on leave, not full-time equivalents. Agency workers are excluded. Of these employees, 248 were on full pay and are included in the hourly-pay analysis; 14 were excluded from that analysis because they were paid less due to leave. They remain in the headcount and bonus analysis.\n\nMen's mean hourly pay was £19.37 and women's was £15.50. The mean gender pay gap was **20.0%** and the median gap was **5.0%**, both in men's favour. The mean is more affected by very high rates. These workforce-wide comparisons do not establish whether people receive equal pay for equal work.\n\nBonus gaps were **78.1%** at the mean and **73.5%** at the median, both in men's favour. A bonus was received by 34.2% of men (27 of 79) and 28.4% of women (52 of 183). These compare amounts actually paid in the 12 months to 5 April 2026, without adjusting for part-time hours.\n\nEach pay quartile contains 62 full-pay employees, ranked from lowest to highest hourly pay:\n\n| Quartile | Women | Men |\n| --- | ---: | ---: |\n| Lower | 77.4% | 22.6% |\n| Lower middle | 71.0% | 29.0% |\n| Upper middle | 74.2% | 25.8% |\n| Upper | 53.2% | 46.8% |\n\nWe counted 15 repeated payroll lines with identical line IDs only once, applied a bonus reversal, standardised the sex labels and used the contracted hours in force on the snapshot date. The exports contain no ethnicity data, so an ethnicity pay gap cannot be calculated reliably; it is recorded as null.\n"
+    }
+   ]
+  },
+  {
+   "rank": 13,
    "setup": "opus-5.5_max",
    "name": "Claude Opus 5.5",
    "level": "max",
@@ -586,7 +623,7 @@
    ]
   },
   {
-   "rank": 13,
+   "rank": 14,
    "setup": "grok-4.6_high",
    "name": "Grok 4.6",
    "level": "high",
@@ -616,7 +653,7 @@
    ]
   },
   {
-   "rank": 13,
+   "rank": 14,
    "setup": "mistral-large-4_high",
    "name": "Mistral Large 4",
    "level": "high",
@@ -646,7 +683,7 @@
    ]
   },
   {
-   "rank": 13,
+   "rank": 14,
    "setup": "deepseek-v4.1-flash_max",
    "name": "DeepSeek V4.1 Flash",
    "level": "max",
@@ -676,7 +713,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 17,
    "setup": "gemini-4-argon_high",
    "name": "Gemini 4 Argon",
    "level": "high",
@@ -706,7 +743,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 17,
    "setup": "sonnet-5.5_medium",
    "name": "Claude Sonnet 5.5",
    "level": "medium",
@@ -736,7 +773,7 @@
    ]
   },
   {
-   "rank": 18,
+   "rank": 19,
    "setup": "opus-5.5_high",
    "name": "Claude Opus 5.5",
    "level": "high",
@@ -766,7 +803,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 20,
    "setup": "gpt-6-luna_max",
    "name": "GPT-6 Luna",
    "level": "max",
@@ -796,7 +833,7 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
    "setup": "opus-5.5_medium",
    "name": "Claude Opus 5.5",
    "level": "medium",
@@ -826,7 +863,7 @@
    ]
   },
   {
-   "rank": 21,
+   "rank": 22,
    "setup": "kimi-k3_max",
    "name": "Kimi K3",
    "level": "max",
@@ -856,7 +893,7 @@
    ]
   },
   {
-   "rank": 22,
+   "rank": 23,
    "setup": "grok-4.7_high",
    "name": "Grok 4.7",
    "level": "high",
@@ -886,7 +923,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 24,
    "setup": "gpt-6.1-sol_low",
    "name": "GPT-6.1 Sol",
    "level": "low",
@@ -916,7 +953,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 24,
    "setup": "gemini-3.8-flash_high",
    "name": "Gemini 3.8 Flash",
    "level": "high",
@@ -946,7 +983,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 24,
    "setup": "opus-5.5_low",
    "name": "Claude Opus 5.5",
    "level": "low",
@@ -976,7 +1013,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 27,
    "setup": "glm-5.3-flash_max",
    "name": "GLM-5.3 Flash",
    "level": "max",
@@ -1006,7 +1043,37 @@
    ]
   },
   {
-   "rank": 27,
+   "rank": 28,
+   "setup": "gpt-6.1-terra_medium",
+   "name": "GPT-6.1 Terra",
+   "level": "medium",
+   "maker": "OpenAI",
+   "score": 77,
+   "basics": 5,
+   "n": 5,
+   "cost": "3p",
+   "tasks": [
+    100,
+    77,
+    72,
+    45,
+    94
+   ],
+   "where": "ChatGPT Plus, in the desktop app",
+   "sig_files": [
+    {
+     "name": "chart.svg",
+     "src": "/labs-files/gpt-6.1-terra_medium/data_04_gender_pay_gap/chart.svg"
+    },
+    {
+     "name": "board_note.md",
+     "src": "/labs-files/gpt-6.1-terra_medium/data_04_gender_pay_gap/board_note.md",
+     "text": "# Gender pay gap: 5 April 2026\n\nThistlecombe Care must publish its gender pay gap figures. It had 262 relevant employees on 5 April 2026, above the 250-employee threshold. The test is a headcount of employees, including part-time employees and those on leave, rather than full-time equivalents. Agency workers are counted by their agency. The hourly figures use 248 full-pay relevant employees; 14 were excluded because their April pay was reduced due to leave.\n\nMen's mean hourly pay was £20.07 and women's was £15.91. The mean gender pay gap was 20.8% and the median gap was 4.1%, both in favour of men. These compare average and middle hourly rates across the workforce; they do not by themselves establish whether women and men receive equal pay for equal work.\n\nThe mean bonus gap was 77.5% and the median bonus gap was 77.5%, in favour of men. Bonuses were received by 34.2% of men and 28.4% of women. These gaps compare recipients' total bonuses in the year to 5 April 2026 and are not adjusted for part-time hours.\n\nWomen made up 79.0% of the lower hourly pay quartile, 66.1% of the lower middle, 72.6% of the upper middle and 58.1% of the upper. Each quartile contains 62 people.\n\nWe applied the recorded reversal of an annual bonus, cancelling the payment made in error. We also standardised the different sex labels in the HR export. An ethnicity pay gap cannot be calculated from these files because they contain no ethnicity data.\n"
+    }
+   ]
+  },
+  {
+   "rank": 29,
    "setup": "mimo-v2.6-pro_default",
    "name": "MiMo v2.6 Pro",
    "level": "standard",
@@ -1036,7 +1103,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 30,
    "setup": "qwen3.8-max-0902_xhigh",
    "name": "Qwen 3.8 Max",
    "level": "xhigh",
@@ -1066,7 +1133,7 @@
    ]
   },
   {
-   "rank": 29,
+   "rank": 31,
    "setup": "gemini-3.6-flash_low",
    "name": "Gemini 3.6 Flash",
    "level": "low",
@@ -1096,7 +1163,7 @@
    ]
   },
   {
-   "rank": 30,
+   "rank": 32,
    "setup": "minimax-m3_default",
    "name": "MiniMax M3",
    "level": "standard",
@@ -1126,7 +1193,7 @@
    ]
   },
   {
-   "rank": 31,
+   "rank": 33,
    "setup": "gemini-3.5-flash-lite_default",
    "name": "Gemini 3.5 Flash-Lite",
    "level": "standard",
@@ -1156,7 +1223,7 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 34,
    "setup": "glm-5.3_max",
    "name": "GLM-5.3",
    "level": "max",
@@ -1186,7 +1253,7 @@
    ]
   },
   {
-   "rank": 33,
+   "rank": 35,
    "setup": "gpt-6-luna_medium",
    "name": "GPT-6 Luna",
    "level": "medium",
@@ -1216,7 +1283,7 @@
    ]
   },
   {
-   "rank": 33,
+   "rank": 35,
    "setup": "haiku-4.5_default",
    "name": "Claude Haiku 4.5",
    "level": "standard",
@@ -1272,9 +1339,9 @@
    "name": "Automation"
   }
  ],
- "count": 40,
+ "count": 43,
  "tested_from": "2026-10-02",
- "tested_to": "2026-10-23",
+ "tested_to": "2026-11-13",
  "chart": {
   "tasks": 5,
   "rows": [
@@ -1320,6 +1387,17 @@
     "cost_gbp": 9.4642,
     "cost": "£9.46",
     "score": 98,
+    "tasks_run": 5
+   },
+   {
+    "setup": "fable-5.2_high",
+    "name": "Claude Fable 5.2",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 7.8313,
+    "cost": "£7.83",
+    "score": 99,
     "tasks_run": 5
    },
    {
@@ -1620,6 +1698,17 @@
     "tasks_run": 5
    },
    {
+    "setup": "gpt-6.1-terra_max",
+    "name": "GPT-6.1 Terra",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.5864,
+    "cost": "59p",
+    "score": 98,
+    "tasks_run": 5
+   },
+   {
     "setup": "deepseek-v4.1-flash_max",
     "name": "DeepSeek V4.1 Flash",
     "level": "max",
@@ -1683,6 +1772,17 @@
     "cost_gbp": 0.1615,
     "cost": "16p",
     "score": 76,
+    "tasks_run": 5
+   },
+   {
+    "setup": "gpt-6.1-terra_medium",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.1376,
+    "cost": "14p",
+    "score": 77,
     "tasks_run": 5
    },
    {

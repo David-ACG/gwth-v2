@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="460" viewBox="0 0 800 460" role="img" aria-labelledby="title desc">
+<title id="title">Women and men in each hourly pay quartile</title>
+<desc id="desc">Women and men respectively: lower 79.0 and 21.0 percent; lower middle 66.1 and 33.9; upper middle 72.6 and 27.4; upper 58.1 and 41.9.</desc>
+<rect width="800" height="460" fill="white"/>
+<g font-family="Arial, sans-serif" fill="#202a35">
+<text x="40" y="43" font-size="24" font-weight="bold">Women and men across pay quartiles</text>
+<text x="40" y="70" font-size="15">Share of employees in each hourly pay quartile, 5 April 2026</text>
+<rect x="40" y="91" width="14" height="14" fill="#315d91"/><text x="61" y="103" font-size="15">Women</text>
+<rect x="150" y="91" width="14" height="14" fill="#d28b3c"/><text x="171" y="103" font-size="15">Men</text>
+<g font-size="16" text-anchor="end"><text x="175" y="158">Lower</text><text x="175" y="226">Lower middle</text><text x="175" y="294">Upper middle</text><text x="175" y="362">Upper</text></g>
+<g><rect x="195" y="129" width="395" height="40" fill="#315d91"/><rect x="590" y="129" width="105" height="40" fill="#d28b3c"/><rect x="195" y="197" width="330.5" height="40" fill="#315d91"/><rect x="525.5" y="197" width="169.5" height="40" fill="#d28b3c"/><rect x="195" y="265" width="363" height="40" fill="#315d91"/><rect x="558" y="265" width="137" height="40" fill="#d28b3c"/><rect x="195" y="333" width="290.5" height="40" fill="#315d91"/><rect x="485.5" y="333" width="209.5" height="40" fill="#d28b3c"/></g>
+<g text-anchor="middle" font-size="16" font-weight="bold"><g fill="white"><text x="392.5" y="155">79.0%</text><text x="360.25" y="223">66.1%</text><text x="376.5" y="291">72.6%</text><text x="340.25" y="359">58.1%</text></g><g fill="#202a35"><text x="642.5" y="155">21.0%</text><text x="610.25" y="223">33.9%</text><text x="626.5" y="291">27.4%</text><text x="590.25" y="359">41.9%</text></g></g>
+<text x="195" y="416" font-size="14" fill="#536170">Each quartile contains 62 full-pay relevant employees.</text>
+</g></svg>

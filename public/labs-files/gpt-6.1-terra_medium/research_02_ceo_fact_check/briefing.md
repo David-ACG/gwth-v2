@@ -1,0 +1,19 @@
+4 supported, 8 wrong, 1 misleading, 2 cannot verify
+
+| Claim | Verdict | Evidence |
+|---|---|---|
+| C1 Median pay gap | ✘ Wrong | Fell from 14.2% to 7.4%, not more than half. [d05_gpg_report_2025: "Our median gap fell from 14.2% to 7.4%."] |
+| C2 Mean gap | ✔ Supported | Fell from 16.8% to 12.6%, exactly one quarter. [d05_gpg_report_2025: "\| Mean gender pay gap (hourly pay) \| 12.6% \| 16.8% \|"] |
+| C3 Voluntary reporting | ✘ Wrong | Required at 250 employees; Hollins Brook exceeded 1,100. [d06_govuk_gpg_who_must_report: "Employers in Great Britain with 250 or more employees on their snapshot date must publish their gender pay gap information."] [d01_gpg_report_2024: "Number of relevant employees on the snapshot date: 1,152"] [d05_gpg_report_2025: "We had 1,184 relevant employees on the snapshot date."] |
+| C4 Women leaders | ✔ Supported | 9 of 22 filled posts, approximately 41%, versus 8 of 23, approximately 35%. [d09_slt_structure_2026: "On 1 April 2026, 22 were filled and 2 were vacant."] [d09_slt_structure_2026: "\| Total \| 24 \| 9 \| 13 \| 2 \|"] [d31_ceo_speech_notes_2025: "Women hold 35% of senior leadership roles."] |
+| C5 Pay rise | ✘ Wrong | Basic pay rose 5% for grades 1–6, 3.5% for 7–8 and 2% for 9. [d20_pay_award_confirmation_2026: "All increases take effect from 1 April 2026."] [d20_pay_award_confirmation_2026: "\| 7 to 8 \| Managers \| 3.5% \|"] [d20_pay_award_confirmation_2026: "\| 9 \| Senior leadership team \| 2.0% \|"] |
+| C6 Voluntary turnover | ✔ Supported | Fell from 22.7% to 18.1% in 2025/26. [d11_hr_dashboard_fy2025_26: "\| Voluntary staff turnover \| 18.1% \| 22.7% \|"] |
+| C7 Lowest turnover | ✘ Wrong | Calendar 2025 total turnover: 24.4%; benchmark lower quartile: 19.5%. [d34_hr_dashboard_q3_2025_26: "\| Total staff turnover \| 24.4% \| 28.3% \|"] [d12_nfma_benchmark_2026: "\| Total turnover \| 19.5% \| 26.2% \| 33.0% \|"] |
+| C8 Sickness absence | ⚠ Misleading | 3.1% excludes long-term absence; all absence was 4.2%, above the comparable 3.6% sector average. [d11_hr_dashboard_fy2025_26: "All sickness absence including long-term absence was 4.2% in 2025/26 (4.5% in 2024/25)."] [d12_nfma_benchmark_2026: "This figure covers all sickness absence, including long-term absence."] |
+| C9 Largest site | ✘ Wrong | At 31 March, Hollinsford had 402 employees, Thorncliffe 371. [d08_headcount_snapshot_2026_03: "\| Hollinsford (head office and bakery) \| 402 \| -8 \|"] [d08_headcount_snapshot_2026_03: "\| Thorncliffe (ready meals) \| 371 \| +59 \|"] |
+| C10 Line 4 jobs | ✘ Wrong | 64 permanent roles created in 2025/26, 58 filled by March. [d16_line4_recruitment_report: "In 2025/26, Line 4 at Thorncliffe created 64 new permanent roles."] |
+| C11 Survey response | ✘ Wrong | 79% of those invited responded, including employees and long-term agency workers. [d21_pulsepoint_survey_report_2026: "972 of 1,231 people invited took part, a response rate of 79%."] |
+| C12 Engagement change | ✘ Wrong | 72%, up four points from 68% in 2025; six points since 2024. [d33_engagement_survey_2025_summary: "Engagement index: 68% (2024: 66%)"] [d22_newsletter_summer2026: "Our engagement score is now 72%, up six points since 2024."] |
+| C13 Top 10% | ? Cannot verify | No official benchmark; the provider's suggestion was speculation. [d21_pulsepoint_survey_report_2026: "External benchmark comparison is not included in your package."] |
+| C14 Training spend | ✔ Supported | Actual 2025/26 learning and development spend was £362,500. [d24_finance_outturn_fy2025_26: "\| Learning and development \| £410,000 \| £362,500 \| £47,500 under budget \|"] |
+| C15 Induction rating | ? Cannot verify | 2024 respondents: 87%; no current survey. [d26_onboarding_pulse_jul2024: "\| How would you rate your induction overall? \| 87% \|"] [d25_hr_team_minutes_mar2026: "it has not run since the survey tool licence lapsed in summer 2024."] |

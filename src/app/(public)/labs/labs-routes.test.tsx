@@ -102,7 +102,7 @@ describe("/labs/[slug]", () => {
   it("titles each page with its headline", async () => {
     const meta = await generateMetadata(params("building"))
     expect(meta.title).toBe("Which AI builds the best working tool?")
-    expect(String(meta.description)).toMatch(/Tested \d+ to \d+ October 2026/)
+    expect(String(meta.description)).toMatch(/Tested \d+ (October |November )?to \d+ (October|November) 2026/)
     expect((await generateMetadata(params("nope"))).title).toBe("Lab not found")
   })
 })
