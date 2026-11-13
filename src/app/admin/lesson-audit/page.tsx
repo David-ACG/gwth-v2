@@ -147,7 +147,7 @@ export default async function AdminLessonAuditPage() {
           Changes to the shape of the course that research and rewriting have raised. Reply in chat with the ones you want.
         </p>
         {decide.length === 0 ? (
-          <p className={styles.cellMuted}>Nothing to decide.</p>
+          <p className={`${styles.cellMuted} ${la.wrap}`}>Nothing to decide.</p>
         ) : (
           <ul className={la.decisions}>
             {decide.map((s) => (
@@ -186,7 +186,7 @@ export default async function AdminLessonAuditPage() {
           <h2 className={styles.panelTitle}>Needs you</h2>
         </div>
         {data.needs_you.length === 0 ? (
-          <p className={styles.cellMuted}>Nothing. Checks that failed for other reasons re-run by themselves every hour.</p>
+          <p className={`${styles.cellMuted} ${la.wrap}`}>Nothing. Checks that failed for other reasons re-run by themselves every hour.</p>
         ) : (
           <ul>
             {data.needs_you.map((n) => (
@@ -243,7 +243,7 @@ export default async function AdminLessonAuditPage() {
               <summary className={styles.cellName}>
                 {MONTHS[m]} ({rows.length})
               </summary>
-              <div className={styles.tableWrap}>
+              <div className={`${styles.tableWrap} ${la.scroll}`}>
                 <table className={styles.table}>
                   <thead>
                     <tr>

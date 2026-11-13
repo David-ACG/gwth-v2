@@ -50,12 +50,22 @@
   padding: 0.55rem 0;
 }
 
+/* The admin table wrap clips; on a phone the lesson table may be a little wider. */
+.scroll {
+  overflow-x: auto;
+}
+
 .wideOnly {
   display: none;
 }
 
 @media (min-width: 48rem) {
-  .wideOnly {
+  /* The admin table wrap clips; on a phone the lesson table may be a little wider. */
+.scroll {
+  overflow-x: auto;
+}
+
+.wideOnly {
     display: table-cell;
   }
 }
