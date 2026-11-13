@@ -160,7 +160,7 @@ export default async function AdminLessonAuditPage() {
                 </div>
                 <span className={la.why}>{s.why}</span>
                 <span className={la.meta}>
-                  {s.effort ? `${s.effort[0].toUpperCase()}${s.effort.slice(1)} job` : ""}
+                  {s.effort ? `${s.effort.charAt(0).toUpperCase()}${s.effort.slice(1)} job` : ""}
                   {s.raised?.length ? `, raised ${s.raised.length} time${s.raised.length > 1 ? "s" : ""}` : ""}
                 </span>
               </li>
