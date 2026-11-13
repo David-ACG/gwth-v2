@@ -60,12 +60,7 @@
 }
 
 @media (min-width: 48rem) {
-  /* The admin table wrap clips; on a phone the lesson table may be a little wider. */
-.scroll {
-  overflow-x: auto;
-}
-
-.wideOnly {
+  .wideOnly {
     display: table-cell;
   }
 }
