@@ -587,17 +587,12 @@ export function HomeFde({
               picture, which moved to the top of the months section, where it
               illustrates exactly what that section says. */}
           <HomeFilm />
-          <div className={p.plateMeta}>
-            <p>Three months · About five hours a week · Assessed throughout</p>
-          </div>
-          {/* P2, video refresh (Felix Rieseberg's talk, bead gwth-launch-ooc6),
-              approved by David 2026-10-25. Under the hero, not in it: the hero
-              copy was cut to three sentences for phones. */}
-          <p className={styles.updatesLine} data-testid="home-updates-line">
-            When the tools change, or the best way to use them changes, we
-            rewrite the lessons and add new ones.{" "}
-            <Link href="/why-gwth#up-to-date">See what we changed and why</Link>
-          </p>
+          {/* The "Three months · About five hours a week" line and the
+              updates line with "See what we changed and why" were removed
+              here (David, 13 Nov 2026, a-20261113-153022-a61050 and
+              a-20261113-153136-c055fb: "Please remove this whole area"; the
+              link did not explain what changed, and the facts are said
+              elsewhere on the page). */}
         </div>
       </section>
 
