@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 import type { ModelLabIndex, ModelLabPick } from "@/lib/types"
 import { aboutCost, formatTestedMonth, formatTestedRange, levelLabel } from "@/lib/model-lab-format"
@@ -201,25 +200,30 @@ export function LabsFde({ index }: LabsFdeProps) {
               </Link>
             </div>
           </div>
+          {/* David, 12 Nov 2026, on the replica: "maybe we should add a short video here explaining
+              the labs, why we built them, and how to use them ... a first trial of the screen
+              recording process". Version 2 of the scripted walkthrough (labs-tour-v2: Astra script,
+              Sol check, Kokoro bm_daniel, highlights per the walkthrough highlighting research).
+              Replica only: the file sits untracked in public/videos/labs/; at GO LIVE it goes to the
+              media CDN under a new name and this src moves with it. */}
           <figure className={styles.closingFigure} data-testid="labs-closing-figure">
-            <Image
-              src="/images/labs/lab-picks-light.webp"
-              alt="Inside the research lab: four picks, each naming a model, its setting, its score out of 100 and its cost a task."
-              width={1240}
-              height={1120}
-              sizes="(min-width: 64rem) 460px, 100vw"
-              className={styles.closingImgLight}
-            />
-            <Image
-              src="/images/labs/lab-picks-dark.webp"
-              alt="Inside the research lab: four picks, each naming a model, its setting, its score out of 100 and its cost a task."
-              width={1240}
-              height={1120}
-              sizes="(min-width: 64rem) 460px, 100vw"
-              loading="lazy"
-              className={styles.closingImgDark}
-            />
-            <figcaption>Inside the research lab: our four picks.</figcaption>
+            <video
+              controls
+              playsInline
+              preload="none"
+              poster="/videos/labs/labs-tour-v2.poster.jpg"
+              className={styles.closingVideo}
+              aria-label="How to use the GWTH labs: a short narrated tour"
+            >
+              <source src="/videos/labs/labs-tour-v2.mp4" type="video/mp4" />
+              <track
+                kind="captions"
+                src="/videos/labs/labs-tour-v2.vtt"
+                srcLang="en"
+                label="English"
+              />
+            </video>
+            <figcaption>How to use the labs, in just over a minute.</figcaption>
           </figure>
         </div>
       </section>

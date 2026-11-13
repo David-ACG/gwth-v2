@@ -72,3 +72,7 @@ next-env.d.ts
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# Replica-only lab walkthrough video (David, 13 Nov 2026). It goes to the media CDN under a new
+# name at GO LIVE; never commit video files here.
+public/videos/labs/

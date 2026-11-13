@@ -745,7 +745,8 @@
   margin: 0;
 }
 
-.closingFigure img {
+.closingFigure img,
+.closingFigure video {
   display: block;
   width: 100%;
   height: auto;
@@ -753,16 +754,11 @@
   border-radius: var(--radius-md);
 }
 
-.closingFigure .closingImgDark {
-  display: none;
-}
-
-:global(.dark) .closingFigure .closingImgLight {
-  display: none;
-}
-
-:global(.dark) .closingFigure .closingImgDark {
-  display: block;
+/* The walkthrough tool renders one (paper) edition only, so the same video plays in
+   both themes. */
+.closingFigure video {
+  aspect-ratio: 16 / 9;
+  background: var(--v-surface);
 }
 
 .closingFigure figcaption {

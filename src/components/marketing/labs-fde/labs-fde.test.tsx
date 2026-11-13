@@ -218,12 +218,14 @@ describe("Labs replica notes (David, 12 Nov 2026)", () => {
     }
   })
 
-  it("puts a picture of a lab beside the closing text, in both themes", () => {
+  it("puts the labs walkthrough video beside the closing text, with captions", () => {
     renderIndex()
     const fig = screen.getByTestId("labs-closing-figure")
-    const imgs = within(fig).getAllByRole("img", { hidden: true })
-    expect(imgs).toHaveLength(2)
-    for (const img of imgs) expect(img.getAttribute("alt")).toMatch(/Inside the research lab/)
+    const video = fig.querySelector("video")
+    expect(video).not.toBeNull()
+    expect(video?.getAttribute("poster")).toMatch(/labs-tour-v2\.poster\.jpg$/)
+    expect(fig.querySelector("source")?.getAttribute("src")).toMatch(/labs-tour-v2\.mp4$/)
+    expect(fig.querySelector("track")?.getAttribute("kind")).toBe("captions")
     expect(fig.closest("section")?.textContent).toMatch(/Labs show you which AI/)
   })
 })
