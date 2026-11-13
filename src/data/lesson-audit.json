@@ -1,0 +1,2027 @@
+{
+ "generated": "2026-11-13T23:24",
+ "last_work": "2026-11-13",
+ "next_due": "2026-11-27",
+ "cadence_days": 14,
+ "rounds": [
+  {
+   "kind": "clarity",
+   "label": "Clearer for beginners",
+   "from": "2026-11-10",
+   "to": "2026-11-13",
+   "lessons": 96,
+   "facts_restored_by_checker": 297,
+   "fact_changes": null
+  },
+  {
+   "kind": "facts",
+   "label": "Facts checked against the web",
+   "from": "2026-09-07",
+   "to": "2026-11-06",
+   "lessons": 71,
+   "facts_restored_by_checker": null,
+   "fact_changes": 1136
+  }
+ ],
+ "suggestions": [
+  {
+   "id": "dated-reference-pages",
+   "type": "move",
+   "title": "Move fast-changing tool lists and policy timelines into dated reference pages",
+   "lessons": [
+    "m1_l04_ai_tooling_landscape_where_ai_shows_up_in_real_life",
+    "m1_l05_frontier_labs_tooling_openai_anthropic_google_and_what_to_use_when",
+    "m1_l38_anthropic_aka_claude",
+    "m2_l16_geo_and_agent_shopping_the_new_seo_for_uk_businesses",
+    "m2_l17_advanced_content_superpower_brand_proposals_decks_and_sites",
+    "m2_l28_observability_and_evals_langfuse_braintrust_helicone_custom_tests",
+    "m2_l30_selfhosting_llms_local_models_privacy_and_uk_data_control",
+    "m2_l38_ai_for_creative_industries"
+   ],
+   "why": "Repeated refreshes find that vendor maps, product picks and policy news age much faster than the underlying teaching. Keep the durable methods in lessons and move volatile material into linked, dated references, sharing the model list between M1 L04 and L05.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-09-07",
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-25",
+    "2026-10-31"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "shared-builder-governance",
+   "type": "widen",
+   "title": "Widen security foundations into a shared builder governance module",
+   "lessons": [
+    "m2_l01_welcome_to_month_2_from_ai_user_to_ai_builder",
+    "m2_l05_gwth_ai_app_architecture_useful_secure_reliable_efficient",
+    "m2_l06_security_from_day_one_keys_permissions_uk_gdpr_prompt_injection",
+    "m2_l19_capstone_build_askmyco_and_fractionalbuddy_production_sprint",
+    "m2_l21_codex_deep_dive_desktop_first_cli_when_it_helps",
+    "m2_l22_claude_code_deep_dive_desktop_first_warp_and_cli_when_it_helps",
+    "m2_l29_security_deep_dive_hardening_auditing_compliance"
+   ],
+   "why": "The notes repeatedly flag gaps around automated decisions, EU-facing services and agent security, while coding lessons repeat growing compliance briefings. Give the essentials one home in M2 L06, with advanced practice in L29 and clear pointers from the coding lessons and capstone.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-08"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "shared-app-backbone",
+   "type": "widen",
+   "title": "Widen database foundations to match the shared Month 2 app build",
+   "lessons": [
+    "m2_l08_supabase_foundations_data_auth_roles_and_business_records",
+    "m2_l10_advanced_research_superpower_business_knowledge_and_rag_foundations",
+    "m2_l13_askmyco_part_1_build_the_company_knowledge_engine",
+    "m2_l14_advanced_data_superpower_dashboards_reports_and_evaluation"
+   ],
+   "why": "The Supabase title conflicts with a Neon and Better Auth build, and later lessons disagree about the database and retrieval stack. Make L08 a technology-neutral app-backbone lesson, choose one working build route and carry it consistently through research, AskMyCo and dashboards.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-08",
+    "2026-09-24"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "builder-work-in-month-two",
+   "type": "move",
+   "title": "Move advanced builder and workplace exercises from Month 1 into Month 2",
+   "lessons": [
+    "m1_l11_automation_superpower_save_time_by_connecting_repeatable_steps",
+    "m1_l12_agents_superpower_ai_that_can_do_things_for_you",
+    "m1_l18_ai_power_tools_mcps_clis_skills_plugins_and_connectors",
+    "m2_l15_advanced_automation_superpower_workflows_agents_and_human_control",
+    "m2_l22_claude_code_deep_dive_desktop_first_warp_and_cli_when_it_helps",
+    "m2_l23_advanced_ai_coding_harnesses_cli_remote_control_multimachine_workflows",
+    "m2_l39_browser_and_computer_use_agents_research_and_admin_on_autopilot"
+   ],
+   "why": "Month 1 now includes team automation, MCP building, remote workflows and a workplace agent lab that needs an employer licence. Move team tasks to M2 L15, builder workflows to L22 and L23, and the licensed workplace lab to optional agent practice, keeping a simple introduction in Month 1.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-10-31",
+    "2026-10-31",
+    "2026-11-06"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "ai-garage-progression",
+   "type": "merge",
+   "title": "Merge repeated paid-model comparisons into the Month 2 AI Garage",
+   "lessons": [
+    "m1_l20_ai_efficiency_better_results_for_less_cost",
+    "m2_l03_choosing_your_ai_builder_stack_codex_claude_code_cursor_gemini",
+    "m3_l36_your_ai_garage_premium_models_and_multi_model_workflows"
+   ],
+   "why": "The renamed Month 1 and Month 2 Garage lessons still carry their older efficiency and coding-stack material, while Month 3 repeats premium-model comparisons. Keep free and low-cost testing in Month 1, consolidate paid-model value and routine efficiency in Month 2, and retain only distinct workplace strategy in Month 3.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-10-31",
+    "2026-10-31"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "creation-project-homes",
+   "type": "move",
+   "title": "Move website and visual launch-kit projects into the existing media lessons",
+   "lessons": [
+    "m1_l07_content_superpower_write_design_and_communicate_in_your_voice",
+    "m1_l09_building_superpower_make_your_first_useful_thing_without_coding",
+    "m1_l16_ai_presentations_and_websites_make_ideas_visible",
+    "m1_l27_images_and_short_video_make_visuals_for_your_message_with_ai"
+   ],
+   "why": "M1 L09 has a public-website project attached to mostly private-build teaching, and L07 promises visual follow-on work without an assigned home. Put website publishing in L16 and visual launch-kit work in L27, leaving L09 with a private-assistant build and L07 focused on writing.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-10-31",
+    "2026-10-31"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "testing-and-evals-progression",
+   "type": "widen",
+   "title": "Widen app testing to include AI output evaluation before advanced evals",
+   "lessons": [
+    "m2_l09_testing_aibuilt_apps_tdd_playwright_and_regression_checks",
+    "m2_l15_advanced_automation_superpower_workflows_agents_and_human_control",
+    "m2_l28_observability_and_evals_langfuse_braintrust_helicone_custom_tests"
+   ],
+   "why": "The testing lesson needs a beginner method for judging variable AI answers, while automation has accumulated advanced simulated-user testing. Introduce a small review of real outputs in L09 and move simulated-user evaluation from L15 to L28.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-09-08",
+    "2026-09-25"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "portable-saved-assistants",
+   "type": "widen",
+   "title": "Widen saved-assistant teaching beyond custom GPTs",
+   "lessons": [
+    "m1_l18_ai_power_tools_mcps_clis_skills_plugins_and_connectors",
+    "m1_l26_month_1_review_your_next_step_toward_month_2"
+   ],
+   "why": "The notes flag changing access to custom GPTs and Gems, putting exercises tied to one saved-assistant format at risk. Teach a portable route using saved instructions, skills or plugins in L18 and make the Month 1 review accept equivalent working assistants.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-09-07",
+    "2026-11-06"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "familybot-connectors",
+   "type": "widen",
+   "title": "Widen FamilyBot sharing to cover connectors and consent",
+   "lessons": [
+    "m1_l21_familybot_blueprint_design_a_helpful_ai_for_home_life",
+    "m1_l22_familybot_listens_turn_voice_notes_or_meetings_into_useful_text",
+    "m1_l23_familybot_organises_extract_tasks_meals_events_and_shopping",
+    "m1_l24_familybot_shares_make_the_outputs_useful_for_real_life"
+   ],
+   "why": "The FamilyBot arc stops at prompts and uploaded files, while the notes identify connected mail, calendars and documents as a missing next step. Keep files as the starting point and add an optional L24 connector exercise covering consent, permissions and approval before writing.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-09-07"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "managed-search-first",
+   "type": "widen",
+   "title": "Widen RAG foundations to start with managed and agentic document search",
+   "lessons": [
+    "m2_l10_advanced_research_superpower_business_knowledge_and_rag_foundations",
+    "m2_l11_embeddings_retrieval_and_search_without_the_maths",
+    "m2_l12_rag_that_actually_works_citations_chunking_trust",
+    "m2_l13_askmyco_part_1_build_the_company_knowledge_engine",
+    "m2_l27_advanced_rag_hybrid_search_reranking_and_production_retrieval"
+   ],
+   "why": "The research notes question whether a hand-built chunk-and-embed pipeline should remain the first route for beginners. Compare managed file search and agentic document search in L10, then teach embeddings and custom retrieval as deliberate choices that lead into AskMyCo and advanced RAG.",
+   "recommendation": "do",
+   "effort": "large",
+   "raised": [
+    "2026-09-08"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "capstone-sector-adaptation",
+   "type": "widen",
+   "title": "Widen the Month 2 capstone with a sector-adaptation brief",
+   "lessons": [
+    "m2_l19_capstone_build_askmyco_and_fractionalbuddy_production_sprint",
+    "m2_l20_month_2_portfolio_sell_your_skills_show_your_builds_bridge_to_month_3"
+   ],
+   "why": "The portfolio expects an industry-specific build that the capstone never explicitly assigns. Add a clear option to adapt AskMyCo or FractionalBuddy using an existing sector lesson, so the portfolio can assess work learners were actually asked to do.",
+   "recommendation": "do",
+   "effort": "small",
+   "raised": [
+    "2026-09-08"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "travel-for-personal-and-group-use",
+   "type": "widen",
+   "title": "Widen the travel lesson to include personal and group trips",
+   "lessons": [
+    "m2_l37_ai_for_travel_and_event_planning"
+   ],
+   "why": "The syllabus promises a group event planner, but the lesson and project mainly serve a travel-business owner. Offer personal or group planning alongside the business route, with a matching project brief for each audience.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-10-15"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "linkedin-in-cv-lesson",
+   "type": "move",
+   "title": "Move LinkedIn rewriting into the CV and LinkedIn lesson",
+   "lessons": [
+    "m1_l14_cv_and_linkedin_upgrade_tell_your_story_better_with_ai",
+    "m1_l15_job_search_and_interview_confidence_with_ai"
+   ],
+   "why": "LinkedIn rewriting in the job-search lesson duplicates the CV and LinkedIn lesson. Keep profile and friend-rewrite exercises in L14 so L15 can concentrate on finding roles and preparing for interviews.",
+   "recommendation": "do",
+   "effort": "small",
+   "raised": [
+    "2026-10-26"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "shorter-month-one-sessions",
+   "type": "split",
+   "title": "Split overloaded Month 1 lessons into shorter, focused sessions",
+   "lessons": [
+    "m1_l00_start_here_the_tips_we_wish_we_d_had_when_we_started",
+    "m1_l02_your_ai_colleague_how_to_get_brilliant_help_without_giving_up_your_judgement",
+    "m1_l03_how_ai_works_the_useful_bits_that_make_you_better_at_it",
+    "m1_l06_research_superpower_find_compare_and_verify_anything",
+    "m1_l07_content_superpower_write_design_and_communicate_in_your_voice",
+    "m1_l10_data_superpower_turn_messy_information_into_answers"
+   ],
+   "why": "Several introductory lessons now run well beyond their intended sitting as extra topics and exercises accumulate. Give basic safety its own early session, place specialist rights, accessibility, complaints and bookkeeping work in focused follow-ons, and move extra taster exercises and project alternatives into later practice.",
+   "recommendation": "consider",
+   "effort": "large",
+   "raised": [
+    "2026-10-25",
+    "2026-10-26",
+    "2026-10-31",
+    "2026-10-31",
+    "2026-10-31",
+    "2026-10-31"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "broader-frontier-labs",
+   "type": "widen",
+   "title": "Widen the frontier-labs comparison beyond three companies",
+   "lessons": [
+    "m1_l05_frontier_labs_tooling_openai_anthropic_google_and_what_to_use_when"
+   ],
+   "why": "The research notes question a comparison limited to OpenAI, Anthropic and Google when learners also encounter xAI and open-weight models from other suppliers. Widen the comparison to cover those choices and model provenance without adding another introductory vendor-tour lesson.",
+   "recommendation": "consider",
+   "effort": "small",
+   "raised": [
+    "2026-09-07"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "solo-and-team-coding",
+   "type": "split",
+   "title": "Split coding workflows by solo work and team delivery",
+   "lessons": [
+    "m2_l21_codex_deep_dive_desktop_first_cli_when_it_helps",
+    "m2_l22_claude_code_deep_dive_desktop_first_warp_and_cli_when_it_helps",
+    "m2_l23_advanced_ai_coding_harnesses_cli_remote_control_multimachine_workflows"
+   ],
+   "why": "The current boundary between one-machine practice and remote or parallel work is weakening as those features appear in ordinary coding tools. Recut L22 and L23 around careful solo work versus team workflows and automated delivery, using L21 as a tool-specific companion.",
+   "recommendation": "consider",
+   "effort": "medium",
+   "raised": [
+    "2026-09-08"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "geo-and-agent-shopping",
+   "type": "split",
+   "title": "Split search visibility from agent shopping",
+   "lessons": [
+    "m2_l16_geo_and_agent_shopping_the_new_seo_for_uk_businesses"
+   ],
+   "why": "GEO auditing and website trust form a relatively stable lesson, while agent checkout, payments and commercial responsibilities have become a separate fast-moving subject. Split L16 into search visibility and agent shopping so each has a clear project and maintenance cycle.",
+   "recommendation": "consider",
+   "effort": "medium",
+   "raised": [
+    "2026-09-08"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "design-foundations-and-tools",
+   "type": "split",
+   "title": "Split design foundations from AI design tools",
+   "lessons": [
+    "m2_l25_design_systems_and_ai_design_tools_claude_design_impeccable_ui_polish"
+   ],
+   "why": "L25 now combines design systems, accessibility, a tool survey, Claude Design and Impeccable in one long sitting. Separate reusable design and accessibility foundations from the practical AI design-tool workshop.",
+   "recommendation": "consider",
+   "effort": "medium",
+   "raised": [
+    "2026-09-25"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "performer-voice-and-likeness",
+   "type": "split",
+   "title": "Split performers' voice and likeness rights from training-data copyright",
+   "lessons": [
+    "m2_l38_ai_for_creative_industries"
+   ],
+   "why": "The creative-industries lesson combines training-data copyright with rights over a performer's voice and likeness, which the notes identify as a growing topic of its own. Give performers a focused follow-on if the policy work produces enough practical material to justify another session.",
+   "recommendation": "consider",
+   "effort": "medium",
+   "raised": [
+    "2026-09-08"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "finance-for-everyday-ai-users",
+   "type": "widen",
+   "title": "Widen the finance lesson to cover everyday chatbot money questions",
+   "lessons": [
+    "m2_l36_ai_for_uk_finance"
+   ],
+   "why": "The finance lesson focuses on builders and regulated services, leaving out ordinary learners asking general chatbots about pensions or other money decisions. Add a consumer route that teaches boundaries, checking and where to seek appropriate help alongside the builder route.",
+   "recommendation": "consider",
+   "effort": "small",
+   "raised": [
+    "2026-09-08"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  }
+ ],
+ "needs_you": [],
+ "lessons": [
+  {
+   "slug": "m1_l00_start_here_the_tips_we_wish_we_d_had_when_we_started",
+   "code": "M1 L00",
+   "month": 1,
+   "title": "Start Here - The Tips We Wish We'd Had When We Started",
+   "facts_checked": "2026-10-26",
+   "fact_changes": 15,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l00_start_here_the_tips_we_wish_we_d_had_when_we_started#lesson"
+  },
+  {
+   "slug": "m1_l01_welcome_to_gwth_six_ways_ai_can_give_you_superpowers",
+   "code": "M1 L01",
+   "month": 1,
+   "title": "Welcome to GWTH - Six Ways AI Can Give You Superpowers",
+   "facts_checked": "2026-10-25",
+   "fact_changes": 8,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l01_welcome_to_gwth_six_ways_ai_can_give_you_superpowers#lesson"
+  },
+  {
+   "slug": "m1_l02_your_ai_colleague_how_to_get_brilliant_help_without_giving_up_your_judgement",
+   "code": "M1 L02",
+   "month": 1,
+   "title": "Your AI Colleague - How to Get Brilliant Help Without Giving Up Your Judgement",
+   "facts_checked": "2026-10-26",
+   "fact_changes": 23,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l02_your_ai_colleague_how_to_get_brilliant_help_without_giving_up_your_judgement#lesson"
+  },
+  {
+   "slug": "m1_l03_how_ai_works_the_useful_bits_that_make_you_better_at_it",
+   "code": "M1 L03",
+   "month": 1,
+   "title": "How AI Works - The Useful Bits That Make You Better At It",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 23,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l03_how_ai_works_the_useful_bits_that_make_you_better_at_it#lesson"
+  },
+  {
+   "slug": "m1_l04_ai_tooling_landscape_where_ai_shows_up_in_real_life",
+   "code": "M1 L04",
+   "month": 1,
+   "title": "AI Tooling Landscape - Where AI Shows Up In Real Life",
+   "facts_checked": "2026-09-07",
+   "fact_changes": 13,
+   "clarity_rewritten": "2026-11-13",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l04_ai_tooling_landscape_where_ai_shows_up_in_real_life#lesson"
+  },
+  {
+   "slug": "m1_l05_frontier_labs_tooling_openai_anthropic_google_and_what_to_use_when",
+   "code": "M1 L05",
+   "month": 1,
+   "title": "Frontier Labs Tooling - OpenAI, Anthropic, Google, And What To Use When",
+   "facts_checked": "2026-09-07",
+   "fact_changes": 12,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l05_frontier_labs_tooling_openai_anthropic_google_and_what_to_use_when#lesson"
+  },
+  {
+   "slug": "m1_l06_research_superpower_find_compare_and_verify_anything",
+   "code": "M1 L06",
+   "month": 1,
+   "title": "Research Superpower - Find, Compare, And Verify Anything",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 19,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l06_research_superpower_find_compare_and_verify_anything#lesson"
+  },
+  {
+   "slug": "m1_l07_content_superpower_write_design_and_communicate_in_your_voice",
+   "code": "M1 L07",
+   "month": 1,
+   "title": "Content Superpower - Write, Design, And Communicate In Your Voice",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 25,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l07_content_superpower_write_design_and_communicate_in_your_voice#lesson"
+  },
+  {
+   "slug": "m1_l08_thinking_superpower_plan_decide_and_learn_faster",
+   "code": "M1 L08",
+   "month": 1,
+   "title": "Thinking Superpower - Plan, Decide, And Learn Faster",
+   "facts_checked": "2026-10-26",
+   "fact_changes": 13,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l08_thinking_superpower_plan_decide_and_learn_faster#lesson"
+  },
+  {
+   "slug": "m1_l09_building_superpower_make_your_first_useful_thing_without_coding",
+   "code": "M1 L09",
+   "month": 1,
+   "title": "Building Superpower - Make Your First Useful Thing Without Coding",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 23,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l09_building_superpower_make_your_first_useful_thing_without_coding#lesson"
+  },
+  {
+   "slug": "m1_l10_data_superpower_turn_messy_information_into_answers",
+   "code": "M1 L10",
+   "month": 1,
+   "title": "Data Superpower - Turn Messy Information Into Answers",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 20,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l10_data_superpower_turn_messy_information_into_answers#lesson"
+  },
+  {
+   "slug": "m1_l11_automation_superpower_save_time_by_connecting_repeatable_steps",
+   "code": "M1 L11",
+   "month": 1,
+   "title": "Automation Superpower - Save Time By Connecting Repeatable Steps",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 12,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l11_automation_superpower_save_time_by_connecting_repeatable_steps#lesson"
+  },
+  {
+   "slug": "m1_l12_agents_superpower_ai_that_can_do_things_for_you",
+   "code": "M1 L12",
+   "month": 1,
+   "title": "Agents Superpower - AI That Can Do Things For You",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 24,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l12_agents_superpower_ai_that_can_do_things_for_you#lesson"
+  },
+  {
+   "slug": "m1_l13_agent_safety_how_to_stay_in_control",
+   "code": "M1 L13",
+   "month": 1,
+   "title": "Agent Safety - How To Stay In Control",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 10,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l13_agent_safety_how_to_stay_in_control#lesson"
+  },
+  {
+   "slug": "m1_l14_cv_and_linkedin_upgrade_tell_your_story_better_with_ai",
+   "code": "M1 L14",
+   "month": 1,
+   "title": "CV And LinkedIn Upgrade - Tell Your Story Better With AI",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 14,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l14_cv_and_linkedin_upgrade_tell_your_story_better_with_ai#lesson"
+  },
+  {
+   "slug": "m1_l15_job_search_and_interview_confidence_with_ai",
+   "code": "M1 L15",
+   "month": 1,
+   "title": "Job Search And Interview Confidence With AI",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 16,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l15_job_search_and_interview_confidence_with_ai#lesson"
+  },
+  {
+   "slug": "m1_l16_ai_presentations_and_websites_make_ideas_visible",
+   "code": "M1 L16",
+   "month": 1,
+   "title": "AI Presentations And Websites - Make Ideas Visible",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 13,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l16_ai_presentations_and_websites_make_ideas_visible#lesson"
+  },
+  {
+   "slug": "m1_l17_ai_data_dashboards_turn_numbers_into_decisions",
+   "code": "M1 L17",
+   "month": 1,
+   "title": "AI Data Dashboards - Turn Numbers Into Decisions",
+   "facts_checked": "2026-10-26",
+   "fact_changes": 10,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l17_ai_data_dashboards_turn_numbers_into_decisions#lesson"
+  },
+  {
+   "slug": "m1_l18_ai_power_tools_mcps_clis_skills_plugins_and_connectors",
+   "code": "M1 L18",
+   "month": 1,
+   "title": "AI Power Tools - MCPs, CLIs, Skills, Plugins, And Connectors",
+   "facts_checked": "2026-11-06",
+   "fact_changes": 26,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l18_ai_power_tools_mcps_clis_skills_plugins_and_connectors#lesson"
+  },
+  {
+   "slug": "m1_l19_choosing_your_coding_tool_codex_claude_code_opencode_and_what_to_use_when",
+   "code": "M1 L19",
+   "month": 1,
+   "title": "Choosing Your Coding Tool - Codex, Claude Code, OpenCode, And What To Use When",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 21,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l19_choosing_your_coding_tool_codex_claude_code_opencode_and_what_to_use_when#lesson"
+  },
+  {
+   "slug": "m1_l20_ai_efficiency_better_results_for_less_cost",
+   "code": "M1 L20",
+   "month": 1,
+   "title": "Your AI Garage - Test Free and Low-Cost Models",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 14,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l20_ai_efficiency_better_results_for_less_cost#lesson"
+  },
+  {
+   "slug": "m1_l21_familybot_blueprint_design_a_helpful_ai_for_home_life",
+   "code": "M1 L21",
+   "month": 1,
+   "title": "FamilyBot Blueprint - Design A Helpful AI For Home Life",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 14,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l21_familybot_blueprint_design_a_helpful_ai_for_home_life#lesson"
+  },
+  {
+   "slug": "m1_l22_familybot_listens_turn_voice_notes_or_meetings_into_useful_text",
+   "code": "M1 L22",
+   "month": 1,
+   "title": "FamilyBot Listens - Turn Voice Notes Or Meetings Into Useful Text",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 18,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l22_familybot_listens_turn_voice_notes_or_meetings_into_useful_text#lesson"
+  },
+  {
+   "slug": "m1_l23_familybot_organises_extract_tasks_meals_events_and_shopping",
+   "code": "M1 L23",
+   "month": 1,
+   "title": "FamilyBot Organises - Extract Tasks, Meals, Events, And Shopping",
+   "facts_checked": "2026-10-26",
+   "fact_changes": 9,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l23_familybot_organises_extract_tasks_meals_events_and_shopping#lesson"
+  },
+  {
+   "slug": "m1_l24_familybot_shares_make_the_outputs_useful_for_real_life",
+   "code": "M1 L24",
+   "month": 1,
+   "title": "FamilyBot Shares - Make The Outputs Useful For Real Life",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 18,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l24_familybot_shares_make_the_outputs_useful_for_real_life#lesson"
+  },
+  {
+   "slug": "m1_l25_month_1_portfolio_show_what_you_can_now_do_with_ai",
+   "code": "M1 L25",
+   "month": 1,
+   "title": "Month 1 Portfolio - Show What You Can Now Do With AI",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 15,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l25_month_1_portfolio_show_what_you_can_now_do_with_ai#lesson"
+  },
+  {
+   "slug": "m1_l26_month_1_review_your_next_step_toward_month_2",
+   "code": "M1 L26",
+   "month": 1,
+   "title": "Month 1 Review - Your Next Step Toward Month 2",
+   "facts_checked": "2026-10-26",
+   "fact_changes": 5,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l26_month_1_review_your_next_step_toward_month_2#lesson"
+  },
+  {
+   "slug": "m1_l27_images_and_short_video_make_visuals_for_your_message_with_ai",
+   "code": "M1 L27",
+   "month": 1,
+   "title": "Images And Short Video - Make Visuals For Your Message With AI",
+   "facts_checked": "2026-11-06",
+   "fact_changes": 3,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l27_images_and_short_video_make_visuals_for_your_message_with_ai#lesson"
+  },
+  {
+   "slug": "m1_l28_transcription_extraction_teaching_ai_to_listen",
+   "code": "M1 L28",
+   "month": 1,
+   "title": "Transcription & Extraction - Teaching AI to Listen",
+   "facts_checked": "2026-11-06",
+   "fact_changes": 2,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "stuck",
+    "project_why": "Must fix: The fallback transcript is uncorrected AI output, so checking against it alone could carry transcription mistakes into both drafts."
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l28_transcription_extraction_teaching_ai_to_listen#lesson"
+  },
+  {
+   "slug": "m1_l37_openai_aka_chatgpt",
+   "code": "M1 L37",
+   "month": 1,
+   "title": "OpenAI aka ChatGPT",
+   "facts_checked": "2026-11-06",
+   "fact_changes": 8,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l37_openai_aka_chatgpt#lesson"
+  },
+  {
+   "slug": "m1_l38_anthropic_aka_claude",
+   "code": "M1 L38",
+   "month": 1,
+   "title": "Anthropic aka Claude",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 55,
+   "clarity_rewritten": "2026-11-10",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l38_anthropic_aka_claude#lesson"
+  },
+  {
+   "slug": "m1_l40_google_aka_gemini",
+   "code": "M1 L40",
+   "month": 1,
+   "title": "Google aka Gemini",
+   "facts_checked": "2026-11-06",
+   "fact_changes": 12,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l40_google_aka_gemini#lesson"
+  },
+  {
+   "slug": "m1_l41_test_a_small_online_shop_with_ai_before_you_spend_money",
+   "code": "M1 L41",
+   "month": 1,
+   "title": "Test A Small Online Shop With AI - Before You Spend Money",
+   "facts_checked": "2026-11-06",
+   "fact_changes": 1,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l41_test_a_small_online_shop_with_ai_before_you_spend_money#lesson"
+  },
+  {
+   "slug": "m1_l42_build_an_audience_with_ai_test_a_podcast_youtube_or_instagram_channel",
+   "code": "M1 L42",
+   "month": 1,
+   "title": "Build An Audience With AI - Test A Podcast, YouTube Or Instagram Channel",
+   "facts_checked": "2026-11-06",
+   "fact_changes": 6,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l42_build_an_audience_with_ai_test_a_podcast_youtube_or_instagram_channel#lesson"
+  },
+  {
+   "slug": "m2_l01_welcome_to_month_2_from_ai_user_to_ai_builder",
+   "code": "M2 L01",
+   "month": 2,
+   "title": "Welcome to Month 2 - From AI User to AI Builder",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 8,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l01_welcome_to_month_2_from_ai_user_to_ai_builder#lesson"
+  },
+  {
+   "slug": "m2_l02_advanced_thinking_superpower_specs_context_and_ai_builder_judgement",
+   "code": "M2 L02",
+   "month": 2,
+   "title": "Advanced Thinking Superpower - Specs, Context, And AI Builder Judgement",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 14,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l02_advanced_thinking_superpower_specs_context_and_ai_builder_judgement#lesson"
+  },
+  {
+   "slug": "m2_l03_choosing_your_ai_builder_stack_codex_claude_code_cursor_gemini",
+   "code": "M2 L03",
+   "month": 2,
+   "title": "Your AI Garage - Get More Value from Paid Models",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 38,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l03_choosing_your_ai_builder_stack_codex_claude_code_cursor_gemini#lesson"
+  },
+  {
+   "slug": "m2_l04_github_projects_and_professional_workflow",
+   "code": "M2 L04",
+   "month": 2,
+   "title": "GitHub, Projects, And Professional Workflow",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 16,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l04_github_projects_and_professional_workflow#lesson"
+  },
+  {
+   "slug": "m2_l05_gwth_ai_app_architecture_useful_secure_reliable_efficient",
+   "code": "M2 L05",
+   "month": 2,
+   "title": "GWTH AI App Architecture - Useful, Secure, Reliable, Efficient",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 16,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l05_gwth_ai_app_architecture_useful_secure_reliable_efficient#lesson"
+  },
+  {
+   "slug": "m2_l06_security_from_day_one_keys_permissions_uk_gdpr_prompt_injection",
+   "code": "M2 L06",
+   "month": 2,
+   "title": "Security From Day One - Keys, Permissions, UK GDPR, Prompt Injection",
+   "facts_checked": "2026-10-31",
+   "fact_changes": 16,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l06_security_from_day_one_keys_permissions_uk_gdpr_prompt_injection#lesson"
+  },
+  {
+   "slug": "m2_l07_advanced_building_superpower_from_vibe_coding_to_agentic_engineering",
+   "code": "M2 L07",
+   "month": 2,
+   "title": "Advanced Building Superpower - From Vibe Coding To Agentic Engineering",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 20,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l07_advanced_building_superpower_from_vibe_coding_to_agentic_engineering#lesson"
+  },
+  {
+   "slug": "m2_l08_supabase_foundations_data_auth_roles_and_business_records",
+   "code": "M2 L08",
+   "month": 2,
+   "title": "Supabase Foundations - Data, Auth, Roles, And Business Records",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 7,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l08_supabase_foundations_data_auth_roles_and_business_records#lesson"
+  },
+  {
+   "slug": "m2_l09_testing_aibuilt_apps_tdd_playwright_and_regression_checks",
+   "code": "M2 L09",
+   "month": 2,
+   "title": "Testing AI-Built Apps - TDD, Playwright, And Regression Checks",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 8,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l09_testing_aibuilt_apps_tdd_playwright_and_regression_checks#lesson"
+  },
+  {
+   "slug": "m2_l10_advanced_research_superpower_business_knowledge_and_rag_foundations",
+   "code": "M2 L10",
+   "month": 2,
+   "title": "Advanced Research Superpower - Business Knowledge And RAG Foundations",
+   "facts_checked": "2026-09-25",
+   "fact_changes": 19,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l10_advanced_research_superpower_business_knowledge_and_rag_foundations#lesson"
+  },
+  {
+   "slug": "m2_l11_embeddings_retrieval_and_search_without_the_maths",
+   "code": "M2 L11",
+   "month": 2,
+   "title": "Embeddings, Retrieval, And Search Without The Maths",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 11,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l11_embeddings_retrieval_and_search_without_the_maths#lesson"
+  },
+  {
+   "slug": "m2_l12_rag_that_actually_works_citations_chunking_trust",
+   "code": "M2 L12",
+   "month": 2,
+   "title": "RAG That Actually Works - Citations, Chunking, Trust",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 18,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l12_rag_that_actually_works_citations_chunking_trust#lesson"
+  },
+  {
+   "slug": "m2_l13_askmyco_part_1_build_the_company_knowledge_engine",
+   "code": "M2 L13",
+   "month": 2,
+   "title": "AskMyCo Part 1 - Build The Company Knowledge Engine",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 7,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l13_askmyco_part_1_build_the_company_knowledge_engine#lesson"
+  },
+  {
+   "slug": "m2_l14_advanced_data_superpower_dashboards_reports_and_evaluation",
+   "code": "M2 L14",
+   "month": 2,
+   "title": "Advanced Data Superpower - Dashboards, Reports, And Evaluation",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 13,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l14_advanced_data_superpower_dashboards_reports_and_evaluation#lesson"
+  },
+  {
+   "slug": "m2_l15_advanced_automation_superpower_workflows_agents_and_human_control",
+   "code": "M2 L15",
+   "month": 2,
+   "title": "Advanced Automation Superpower - Workflows, Agents, And Human Control",
+   "facts_checked": "2026-09-25",
+   "fact_changes": 20,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l15_advanced_automation_superpower_workflows_agents_and_human_control#lesson"
+  },
+  {
+   "slug": "m2_l16_geo_and_agent_shopping_the_new_seo_for_uk_businesses",
+   "code": "M2 L16",
+   "month": 2,
+   "title": "GEO And Agent Shopping - The New SEO For UK Businesses",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 16,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l16_geo_and_agent_shopping_the_new_seo_for_uk_businesses#lesson"
+  },
+  {
+   "slug": "m2_l17_advanced_content_superpower_brand_proposals_decks_and_sites",
+   "code": "M2 L17",
+   "month": 2,
+   "title": "Advanced Content Superpower - Brand, Proposals, Decks, And Sites",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 27,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l17_advanced_content_superpower_brand_proposals_decks_and_sites#lesson"
+  },
+  {
+   "slug": "m2_l18_fractionalbuddy_part_1_ai_consultant_business_assistant_blueprint",
+   "code": "M2 L18",
+   "month": 2,
+   "title": "FractionalBuddy Part 1 - AI Consultant / Business Assistant Blueprint",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 12,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l18_fractionalbuddy_part_1_ai_consultant_business_assistant_blueprint#lesson"
+  },
+  {
+   "slug": "m2_l19_capstone_build_askmyco_and_fractionalbuddy_production_sprint",
+   "code": "M2 L19",
+   "month": 2,
+   "title": "Capstone Build - AskMyCo And FractionalBuddy Production Sprint",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 14,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l19_capstone_build_askmyco_and_fractionalbuddy_production_sprint#lesson"
+  },
+  {
+   "slug": "m2_l20_month_2_portfolio_sell_your_skills_show_your_builds_bridge_to_month_3",
+   "code": "M2 L20",
+   "month": 2,
+   "title": "Month 2 Portfolio - Sell Your Skills, Show Your Builds, Bridge To Month 3",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 23,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l20_month_2_portfolio_sell_your_skills_show_your_builds_bridge_to_month_3#lesson"
+  },
+  {
+   "slug": "m2_l21_codex_deep_dive_desktop_first_cli_when_it_helps",
+   "code": "M2 L21",
+   "month": 2,
+   "title": "Codex Deep Dive - Desktop First, CLI When It Helps",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 14,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l21_codex_deep_dive_desktop_first_cli_when_it_helps#lesson"
+  },
+  {
+   "slug": "m2_l22_claude_code_deep_dive_desktop_first_warp_and_cli_when_it_helps",
+   "code": "M2 L22",
+   "month": 2,
+   "title": "Claude Code Deep Dive - Desktop First, Warp And CLI When It Helps",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 18,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l22_claude_code_deep_dive_desktop_first_warp_and_cli_when_it_helps#lesson"
+  },
+  {
+   "slug": "m2_l23_advanced_ai_coding_harnesses_cli_remote_control_multimachine_workflows",
+   "code": "M2 L23",
+   "month": 2,
+   "title": "Advanced AI Coding Harnesses - CLI, Remote Control, Multi-Machine Workflows",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 19,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l23_advanced_ai_coding_harnesses_cli_remote_control_multimachine_workflows#lesson"
+  },
+  {
+   "slug": "m2_l24_ai_for_product_and_project_management_roadmaps_delivery_and_team_efficiency",
+   "code": "M2 L24",
+   "month": 2,
+   "title": "AI for Product And Project Management - Roadmaps, Delivery, And Team Efficiency",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 10,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l24_ai_for_product_and_project_management_roadmaps_delivery_and_team_efficiency#lesson"
+  },
+  {
+   "slug": "m2_l25_design_systems_and_ai_design_tools_claude_design_impeccable_ui_polish",
+   "code": "M2 L25",
+   "month": 2,
+   "title": "Design Systems And AI Design Tools - Claude Design, Impeccable, UI Polish",
+   "facts_checked": "2026-09-25",
+   "fact_changes": 25,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l25_design_systems_and_ai_design_tools_claude_design_impeccable_ui_polish#lesson"
+  },
+  {
+   "slug": "m2_l26_ai_second_brain_build_a_personal_knowledge_wiki",
+   "code": "M2 L26",
+   "month": 2,
+   "title": "AI Second Brain - Build A Personal Knowledge Wiki",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 9,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l26_ai_second_brain_build_a_personal_knowledge_wiki#lesson"
+  },
+  {
+   "slug": "m2_l27_advanced_rag_hybrid_search_reranking_and_production_retrieval",
+   "code": "M2 L27",
+   "month": 2,
+   "title": "Advanced RAG - Hybrid Search, Re-Ranking, And Production Retrieval",
+   "facts_checked": "2026-09-25",
+   "fact_changes": 22,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l27_advanced_rag_hybrid_search_reranking_and_production_retrieval#lesson"
+  },
+  {
+   "slug": "m2_l28_observability_and_evals_langfuse_braintrust_helicone_custom_tests",
+   "code": "M2 L28",
+   "month": 2,
+   "title": "Observability And Evals - Langfuse, Braintrust, Helicone, Custom Tests",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 18,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l28_observability_and_evals_langfuse_braintrust_helicone_custom_tests#lesson"
+  },
+  {
+   "slug": "m2_l29_security_deep_dive_hardening_auditing_compliance",
+   "code": "M2 L29",
+   "month": 2,
+   "title": "Security Deep Dive - Hardening, Auditing, Compliance",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 23,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l29_security_deep_dive_hardening_auditing_compliance#lesson"
+  },
+  {
+   "slug": "m2_l30_selfhosting_llms_local_models_privacy_and_uk_data_control",
+   "code": "M2 L30",
+   "month": 2,
+   "title": "Self-Hosting LLMs - Local Models, Privacy, And UK Data Control",
+   "facts_checked": "2026-09-25",
+   "fact_changes": 22,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l30_selfhosting_llms_local_models_privacy_and_uk_data_control#lesson"
+  },
+  {
+   "slug": "m2_l31_cheaper_and_open_models_china_europe_and_when_frontier_models_are_worth_it",
+   "code": "M2 L31",
+   "month": 2,
+   "title": "Cheaper And Open Models - China, Europe, And When Frontier Models Are Worth It",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 15,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l31_cheaper_and_open_models_china_europe_and_when_frontier_models_are_worth_it#lesson"
+  },
+  {
+   "slug": "m2_l32_finetuning_and_distillation_when_to_use_them_and_when_not_to",
+   "code": "M2 L32",
+   "month": 2,
+   "title": "Fine-Tuning And Distillation - When To Use Them And When Not To",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l32_finetuning_and_distillation_when_to_use_them_and_when_not_to#lesson"
+  },
+  {
+   "slug": "m2_l33_open_source_and_community_build_credibility_in_public",
+   "code": "M2 L33",
+   "month": 2,
+   "title": "Open Source And Community - Build Credibility In Public",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 18,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l33_open_source_and_community_build_credibility_in_public#lesson"
+  },
+  {
+   "slug": "m2_l34_ai_for_uk_healthcare",
+   "code": "M2 L34",
+   "month": 2,
+   "title": "AI for UK Healthcare",
+   "facts_checked": "2026-10-15",
+   "fact_changes": 16,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l34_ai_for_uk_healthcare#lesson"
+  },
+  {
+   "slug": "m2_l35_ai_for_uk_legal",
+   "code": "M2 L35",
+   "month": 2,
+   "title": "AI for UK Legal",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 16,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l35_ai_for_uk_legal#lesson"
+  },
+  {
+   "slug": "m2_l36_ai_for_uk_finance",
+   "code": "M2 L36",
+   "month": 2,
+   "title": "AI for UK Finance",
+   "facts_checked": "2026-09-08",
+   "fact_changes": 19,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l36_ai_for_uk_finance#lesson"
+  },
+  {
+   "slug": "m2_l37_ai_for_travel_and_event_planning",
+   "code": "M2 L37",
+   "month": 2,
+   "title": "AI for Travel And Event Planning",
+   "facts_checked": "2026-10-15",
+   "fact_changes": 11,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l37_ai_for_travel_and_event_planning#lesson"
+  },
+  {
+   "slug": "m2_l38_ai_for_creative_industries",
+   "code": "M2 L38",
+   "month": 2,
+   "title": "AI for Creative Industries",
+   "facts_checked": "2026-10-15",
+   "fact_changes": 18,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l38_ai_for_creative_industries#lesson"
+  },
+  {
+   "slug": "m2_l39_browser_and_computer_use_agents_research_and_admin_on_autopilot",
+   "code": "M2 L39",
+   "month": 2,
+   "title": "Browser and Computer-Use Agents: Research and Admin on Autopilot",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l39_browser_and_computer_use_agents_research_and_admin_on_autopilot#lesson"
+  },
+  {
+   "slug": "m2_l40_ai_for_uk_hr_and_people_teams",
+   "code": "M2 L40",
+   "month": 2,
+   "title": "AI for UK HR And People Teams",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l40_ai_for_uk_hr_and_people_teams#lesson"
+  },
+  {
+   "slug": "m2_l41_ai_for_uk_marketing",
+   "code": "M2 L41",
+   "month": 2,
+   "title": "AI for UK Marketing",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l41_ai_for_uk_marketing#lesson"
+  },
+  {
+   "slug": "m2_l42_ai_for_uk_sales",
+   "code": "M2 L42",
+   "month": 2,
+   "title": "AI for UK Sales",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l42_ai_for_uk_sales#lesson"
+  },
+  {
+   "slug": "m3_l01_welcome_to_month_3_from_ai_builder_to_ai_transformation_leader",
+   "code": "M3 L01",
+   "month": 3,
+   "title": "Welcome to Month 3 - From AI Builder to AI Transformation Leader",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l01_welcome_to_month_3_from_ai_builder_to_ai_transformation_leader#lesson"
+  },
+  {
+   "slug": "m3_l02_the_ai_transformation_reality_20_75_growth_and_economic_leverage",
+   "code": "M3 L02",
+   "month": 3,
+   "title": "The AI Transformation Reality - 20/75, Growth, And Economic Leverage",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l02_the_ai_transformation_reality_20_75_growth_and_economic_leverage#lesson"
+  },
+  {
+   "slug": "m3_l03_ai_readiness_framework_domains_maturity_and_the_12_themes",
+   "code": "M3 L03",
+   "month": 3,
+   "title": "AI Readiness Framework - Domains, Maturity, And The 12 Themes",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l03_ai_readiness_framework_domains_maturity_and_the_12_themes#lesson"
+  },
+  {
+   "slug": "m3_l04_interviewing_the_organisation_discover_where_ai_can_actually_help",
+   "code": "M3 L04",
+   "month": 3,
+   "title": "Interviewing The Organisation - Discover Where AI Can Actually Help",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l04_interviewing_the_organisation_discover_where_ai_can_actually_help#lesson"
+  },
+  {
+   "slug": "m3_l05_voice_first_assessment_speech_conversation_and_accessibility",
+   "code": "M3 L05",
+   "month": 3,
+   "title": "Voice-First Assessment - Speech, Conversation, And Accessibility",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l05_voice_first_assessment_speech_conversation_and_accessibility#lesson"
+  },
+  {
+   "slug": "m3_l06_consent_trust_and_uk_ai_governance",
+   "code": "M3 L06",
+   "month": 3,
+   "title": "Consent, Trust, And UK AI Governance",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l06_consent_trust_and_uk_ai_governance#lesson"
+  },
+  {
+   "slug": "m3_l07_evidence_wiki_enterprise_rag_for_interview_knowledge",
+   "code": "M3 L07",
+   "month": 3,
+   "title": "Evidence Wiki - Enterprise RAG For Interview Knowledge",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l07_evidence_wiki_enterprise_rag_for_interview_knowledge#lesson"
+  },
+  {
+   "slug": "m3_l08_thematic_analysis_find_patterns_across_teams",
+   "code": "M3 L08",
+   "month": 3,
+   "title": "Thematic Analysis - Find Patterns Across Teams",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l08_thematic_analysis_find_patterns_across_teams#lesson"
+  },
+  {
+   "slug": "m3_l09_ai_maturity_scoring_benchmarks_confidence_and_evidence",
+   "code": "M3 L09",
+   "month": 3,
+   "title": "AI Maturity Scoring - Benchmarks, Confidence, And Evidence",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l09_ai_maturity_scoring_benchmarks_confidence_and_evidence#lesson"
+  },
+  {
+   "slug": "m3_l10_transformation_roadmaps_prioritise_work_that_matters",
+   "code": "M3 L10",
+   "month": 3,
+   "title": "Transformation Roadmaps - Prioritise Work That Matters",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l10_transformation_roadmaps_prioritise_work_that_matters#lesson"
+  },
+  {
+   "slug": "m3_l11_enterprise_economics_roi_cost_and_the_ai_p_l",
+   "code": "M3 L11",
+   "month": 3,
+   "title": "Enterprise Economics - ROI, Cost, And The AI P&L",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l11_enterprise_economics_roi_cost_and_the_ai_p_l#lesson"
+  },
+  {
+   "slug": "m3_l12_workflow_redesign_with_agents_humans_tools_and_new_operating_models",
+   "code": "M3 L12",
+   "month": 3,
+   "title": "Workflow Redesign With Agents - Humans, Tools, And New Operating Models",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l12_workflow_redesign_with_agents_humans_tools_and_new_operating_models#lesson"
+  },
+  {
+   "slug": "m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes",
+   "code": "M3 L13",
+   "month": 3,
+   "title": "Your Company's AI Workspace - What A Rollout Really Takes",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "running",
+    "project": "stuck",
+    "project_why": "The Sol check did not run: codex exited 1 with no answer: ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 8:30 AM."
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes#lesson"
+  },
+  {
+   "slug": "m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost",
+   "code": "M3 L13",
+   "month": 3,
+   "title": "Model and infrastructure strategy frontier open local and cost",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "stuck",
+    "lesson_why": "The automated QA itself failed: RuntimeError: m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost is not linked to a syllabus lesson",
+    "project": "stuck",
+    "project_why": "The automated QA itself failed: RuntimeError: m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost is not linked to a syllabus lesson"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost#lesson"
+  },
+  {
+   "slug": "m3_l14_adoption_that_sticks_culture_training_and_change_management",
+   "code": "M3 L14",
+   "month": 3,
+   "title": "Adoption That Sticks - Culture, Training, And Change Management",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "stuck",
+    "lesson_why": "The Sol check did not run: codex exited 1 with no answer: ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 8:30 AM.",
+    "project": "stuck",
+    "project_why": "The Sol check did not run: codex exited 1 with no answer: ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 8:30 AM."
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l14_adoption_that_sticks_culture_training_and_change_management#lesson"
+  },
+  {
+   "slug": "m3_l15_ai_transformation_dashboard_track_impact_and_midstream_adjustments",
+   "code": "M3 L15",
+   "month": 3,
+   "title": "AI Transformation Dashboard - Track Impact And Midstream Adjustments",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l15_ai_transformation_dashboard_track_impact_and_midstream_adjustments#lesson"
+  },
+  {
+   "slug": "m3_l16_capstone_part_1_build_the_voice_interview_prototype",
+   "code": "M3 L16",
+   "month": 3,
+   "title": "Capstone Part 1 - Build The Voice Interview Prototype",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "running",
+    "project": "running"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l16_capstone_part_1_build_the_voice_interview_prototype#lesson"
+  },
+  {
+   "slug": "m3_l17_capstone_part_2_build_the_evidence_rag_and_scoring_engine",
+   "code": "M3 L17",
+   "month": 3,
+   "title": "Capstone Part 2 - Build The Evidence RAG And Scoring Engine",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "running"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l17_capstone_part_2_build_the_evidence_rag_and_scoring_engine#lesson"
+  },
+  {
+   "slug": "m3_l18_capstone_part_3_generate_the_roadmap_and_executive_report",
+   "code": "M3 L18",
+   "month": 3,
+   "title": "Capstone Part 3 - Generate The Roadmap And Executive Report",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "running"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l18_capstone_part_3_generate_the_roadmap_and_executive_report#lesson"
+  },
+  {
+   "slug": "m3_l19_ai_champion_playbook_board_briefing_and_90_day_plan",
+   "code": "M3 L19",
+   "month": 3,
+   "title": "AI Champion Playbook - Board Briefing And 90-Day Plan",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-13",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l19_ai_champion_playbook_board_briefing_and_90_day_plan#lesson"
+  },
+  {
+   "slug": "m3_l20_month_3_portfolio_transformation_leader_showcase",
+   "code": "M3 L20",
+   "month": 3,
+   "title": "Month 3 Portfolio - Transformation Leader Showcase",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-13",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l20_month_3_portfolio_transformation_leader_showcase#lesson"
+  },
+  {
+   "slug": "m3_l21_building_a_chief_ai_officer_role_the_uk_playbook",
+   "code": "M3 L21",
+   "month": 3,
+   "title": "Building A Chief AI Officer Role - The UK Playbook",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-13",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l21_building_a_chief_ai_officer_role_the_uk_playbook#lesson"
+  },
+  {
+   "slug": "m3_l22_the_ai_board_briefing_what_to_tell_your_board_and_how_often",
+   "code": "M3 L22",
+   "month": 3,
+   "title": "The AI Board Briefing - What To Tell Your Board And How Often",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-13",
+   "qa": {
+    "lesson": "stuck",
+    "lesson_why": "The automated QA itself failed: RuntimeError: the QA fix moved facts nobody asked for, so it was not saved: {\"urls\": {\"lost\": [\"https://www.ncsc.gov.uk/guidance/ai-and-cyber-security-what-you-need-to-know#questions-to-ask-about-the-security-of-your-organisations-ai-systems\"], \"gained\": [\"https://www",
+    "project": "stuck",
+    "project_why": "The Sol check did not run: codex exited 1 with no answer: ERROR: Selected model is at capacity. Please try a different model."
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l22_the_ai_board_briefing_what_to_tell_your_board_and_how_often#lesson"
+  },
+  {
+   "slug": "m3_l23_public_sector_procurement_and_vendor_risk",
+   "code": "M3 L23",
+   "month": 3,
+   "title": "Public Sector, Procurement, And Vendor Risk",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "running"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l23_public_sector_procurement_and_vendor_risk#lesson"
+  },
+  {
+   "slug": "m3_l24_ai_for_financial_services_compliance_risk_and_automation",
+   "code": "M3 L24",
+   "month": 3,
+   "title": "AI For Financial Services - Compliance, Risk, And Automation",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l24_ai_for_financial_services_compliance_risk_and_automation#lesson"
+  },
+  {
+   "slug": "m3_l25_ai_for_healthcare_safety_evidence_and_clinical_boundaries",
+   "code": "M3 L25",
+   "month": 3,
+   "title": "AI For Healthcare - Safety, Evidence, And Clinical Boundaries",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "running",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l25_ai_for_healthcare_safety_evidence_and_clinical_boundaries#lesson"
+  },
+  {
+   "slug": "m3_l26_ai_for_professional_services_consulting_legal_and_accounting",
+   "code": "M3 L26",
+   "month": 3,
+   "title": "AI For Professional Services - Consulting, Legal, And Accounting",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l26_ai_for_professional_services_consulting_legal_and_accounting#lesson"
+  },
+  {
+   "slug": "m3_l27_ai_for_manufacturing_and_supply_chain",
+   "code": "M3 L27",
+   "month": 3,
+   "title": "AI For Manufacturing And Supply Chain",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "running",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l27_ai_for_manufacturing_and_supply_chain#lesson"
+  },
+  {
+   "slug": "m3_l28_advanced_voice_ai_and_conversational_interfaces",
+   "code": "M3 L28",
+   "month": 3,
+   "title": "Advanced Voice AI And Conversational Interfaces",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l28_advanced_voice_ai_and_conversational_interfaces#lesson"
+  },
+  {
+   "slug": "m3_l29_advanced_multi_agent_orchestration_production_pipelines",
+   "code": "M3 L29",
+   "month": 3,
+   "title": "Advanced Multi-Agent Orchestration - Production Pipelines",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l29_advanced_multi_agent_orchestration_production_pipelines#lesson"
+  },
+  {
+   "slug": "m3_l30_self_hosted_ai_infrastructure_ollama_vllm_and_gpu_management",
+   "code": "M3 L30",
+   "month": 3,
+   "title": "Self-Hosted AI Infrastructure - Ollama, vLLM, And GPU Management",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l30_self_hosted_ai_infrastructure_ollama_vllm_and_gpu_management#lesson"
+  },
+  {
+   "slug": "m3_l31_open_source_models_at_enterprise_scale_deepseek_qwen_mistral_llama",
+   "code": "M3 L31",
+   "month": 3,
+   "title": "Open-Source Models At Enterprise Scale - DeepSeek, Qwen, Mistral, Llama",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l31_open_source_models_at_enterprise_scale_deepseek_qwen_mistral_llama#lesson"
+  },
+  {
+   "slug": "m3_l32_ai_security_red_teaming_testing_ai_systems_before_deployment",
+   "code": "M3 L32",
+   "month": 3,
+   "title": "AI Security Red Teaming - Testing AI Systems Before Deployment",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l32_ai_security_red_teaming_testing_ai_systems_before_deployment#lesson"
+  },
+  {
+   "slug": "m3_l33_responsible_ai_ethics_ip_and_disclosure",
+   "code": "M3 L33",
+   "month": 3,
+   "title": "Responsible AI, Ethics, IP, And Disclosure",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l33_responsible_ai_ethics_ip_and_disclosure#lesson"
+  },
+  {
+   "slug": "m3_l34_workforce_transition_accessibility_and_inclusion",
+   "code": "M3 L34",
+   "month": 3,
+   "title": "Workforce Transition, Accessibility, And Inclusion",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l34_workforce_transition_accessibility_and_inclusion#lesson"
+  },
+  {
+   "slug": "m3_l35_ai_consulting_practice_advisory_fractional_cto_and_ai_auditing",
+   "code": "M3 L35",
+   "month": 3,
+   "title": "AI Consulting Practice - Advisory, Fractional CTO, And AI Auditing",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l35_ai_consulting_practice_advisory_fractional_cto_and_ai_auditing#lesson"
+  },
+  {
+   "slug": "m3_l36_your_ai_garage_premium_models_and_multi_model_workflows",
+   "code": "M3 L36",
+   "month": 3,
+   "title": "Your AI Garage - Premium Models and Multi-Model Workflows",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l36_your_ai_garage_premium_models_and_multi_model_workflows#lesson"
+  }
+ ],
+ "totals": {
+  "lessons": 113,
+  "rewritten": 96,
+  "facts_checked": 71,
+  "never_facts_checked": 42,
+  "qa_passed": 102,
+  "needs_you": 0,
+  "qa_rechecking": 8
+ },
+ "detail": {
+  "log": "GWTH-launch-plan/lesson_audit/log.jsonl",
+  "register": "GWTH-launch-plan/lesson_audit/suggestions.json",
+  "fact_research": "each lesson's content/refresh.json in ~/gwth-dashboard/generated_lessons",
+  "clarity_runs": "GWTH-launch-plan/lesson_refresh/astra_clarity/<lesson>/run-*/",
+  "process": "GWTH-launch-plan/docs/lesson-audit.md"
+ }
+}
