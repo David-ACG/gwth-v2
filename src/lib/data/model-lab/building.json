@@ -175,22 +175,22 @@
   },
   {
    "letter": "C",
-   "setup": "deepseek-v4.1-flash_max",
+   "setup": "mimo-v2.6-pro_default",
    "files": [
     {
      "name": "index.html",
-     "src": "/labs-files/deepseek-v4.1-flash_max/building_02_pronunciation_coach/index.png",
+     "src": "/labs-files/mimo-v2.6-pro_default/building_02_pronunciation_coach/index.png",
      "kind": "shot",
-     "try": "/labs-files/deepseek-v4.1-flash_max/building_02_pronunciation_coach/index.html",
+     "try": "/labs-files/mimo-v2.6-pro_default/building_02_pronunciation_coach/index.html",
      "try_label": "Try it"
     }
    ],
-   "name": "DeepSeek V4.1 Flash",
-   "level": "max",
-   "maker": "DeepSeek",
-   "score": 89,
+   "name": "MiMo v2.6 Pro",
+   "level": "standard",
+   "maker": "Xiaomi",
+   "score": 90,
    "basics": true,
-   "cost": "12p"
+   "cost": "3p"
   },
   {
    "letter": "D",
@@ -232,6 +232,30 @@
     {
      "name": "index.html",
      "src": "/labs-files/opus-5.5_medium/building_02_pronunciation_coach/index.html"
+    }
+   ]
+  },
+  {
+   "rank": 2,
+   "setup": "gemini-4-hydrogen_high",
+   "name": "Gemini 4 Hydrogen",
+   "level": "high",
+   "maker": "Google",
+   "score": 95,
+   "basics": 4,
+   "n": 4,
+   "cost": "27p",
+   "tasks": [
+    100,
+    97,
+    93,
+    91
+   ],
+   "where": "Google AI Plus, Google AI Pro",
+   "sig_files": [
+    {
+     "name": "index.html",
+     "src": "/labs-files/gemini-4-hydrogen_high/building_02_pronunciation_coach/index.html"
     }
    ]
   },
@@ -284,7 +308,7 @@
    ]
   },
   {
-   "rank": 4,
+   "rank": 5,
    "setup": "opus-5.5_low",
    "name": "Claude Opus 5.5",
    "level": "low",
@@ -308,7 +332,7 @@
    ]
   },
   {
-   "rank": 4,
+   "rank": 5,
    "setup": "sonnet-5.5_medium",
    "name": "Claude Sonnet 5.5",
    "level": "medium",
@@ -332,7 +356,7 @@
    ]
   },
   {
-   "rank": 6,
+   "rank": 7,
    "setup": "sonnet-5.5_low",
    "name": "Claude Sonnet 5.5",
    "level": "low",
@@ -356,7 +380,31 @@
    ]
   },
   {
-   "rank": 6,
+   "rank": 7,
+   "setup": "kimi-k3.1-pro_max",
+   "name": "Kimi K3.1 Pro",
+   "level": "max",
+   "maker": "Moonshot AI",
+   "score": 93,
+   "basics": 4,
+   "n": 4,
+   "cost": "32p",
+   "tasks": [
+    96,
+    97,
+    90,
+    90
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "index.html",
+     "src": "/labs-files/kimi-k3.1-pro_max/building_02_pronunciation_coach/index.html"
+    }
+   ]
+  },
+  {
+   "rank": 7,
    "setup": "sonnet-5.5_high",
    "name": "Claude Sonnet 5.5",
    "level": "high",
@@ -380,7 +428,7 @@
    ]
   },
   {
-   "rank": 8,
+   "rank": 10,
    "setup": "gpt-6.1-sol_max",
    "name": "GPT-6.1 Sol",
    "level": "max",
@@ -404,7 +452,7 @@
    ]
   },
   {
-   "rank": 8,
+   "rank": 10,
    "setup": "deepseek-v4.1-flash_max",
    "name": "DeepSeek V4.1 Flash",
    "level": "max",
@@ -428,7 +476,7 @@
    ]
   },
   {
-   "rank": 8,
+   "rank": 10,
    "setup": "kimi-k3_max",
    "name": "Kimi K3",
    "level": "max",
@@ -452,7 +500,7 @@
    ]
   },
   {
-   "rank": 11,
+   "rank": 13,
    "setup": "haiku-5.5_default",
    "name": "Claude Haiku 5.5",
    "level": "standard",
@@ -476,7 +524,7 @@
    ]
   },
   {
-   "rank": 11,
+   "rank": 13,
    "setup": "gpt-6.1-sol_medium",
    "name": "GPT-6.1 Sol",
    "level": "medium",
@@ -500,7 +548,7 @@
    ]
   },
   {
-   "rank": 11,
+   "rank": 13,
    "setup": "muse-spark-1.3_max",
    "name": "Muse Spark 1.3",
    "level": "max",
@@ -524,7 +572,7 @@
    ]
   },
   {
-   "rank": 11,
+   "rank": 13,
    "setup": "sonnet-5.5_xhigh",
    "name": "Claude Sonnet 5.5",
    "level": "xhigh",
@@ -548,7 +596,7 @@
    ]
   },
   {
-   "rank": 11,
+   "rank": 13,
    "setup": "mimo-v2.6-pro_default",
    "name": "MiMo v2.6 Pro",
    "level": "standard",
@@ -572,7 +620,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 18,
    "setup": "gpt-6.1-sol_low",
    "name": "GPT-6.1 Sol",
    "level": "low",
@@ -596,7 +644,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 18,
    "setup": "gpt-6.1-terra_medium",
    "name": "GPT-6.1 Terra",
    "level": "medium",
@@ -620,7 +668,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 18,
    "setup": "gpt-6.1-sol_high",
    "name": "GPT-6.1 Sol",
    "level": "high",
@@ -644,7 +692,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 18,
    "setup": "gpt-6.1-sol_xhigh",
    "name": "GPT-6.1 Sol",
    "level": "xhigh",
@@ -668,7 +716,7 @@
    ]
   },
   {
-   "rank": 16,
+   "rank": 18,
    "setup": "opus-5.5_max",
    "name": "Claude Opus 5.5",
    "level": "max",
@@ -692,7 +740,7 @@
    ]
   },
   {
-   "rank": 21,
+   "rank": 23,
    "setup": "grok-4.6_high",
    "name": "Grok 4.6",
    "level": "high",
@@ -716,7 +764,7 @@
    ]
   },
   {
-   "rank": 21,
+   "rank": 23,
    "setup": "sonnet-5.5_max",
    "name": "Claude Sonnet 5.5",
    "level": "max",
@@ -740,7 +788,7 @@
    ]
   },
   {
-   "rank": 21,
+   "rank": 23,
    "setup": "gpt-6.1-terra_max",
    "name": "GPT-6.1 Terra",
    "level": "max",
@@ -764,7 +812,7 @@
    ]
   },
   {
-   "rank": 21,
+   "rank": 23,
    "setup": "minimax-m3_default",
    "name": "MiniMax M3",
    "level": "standard",
@@ -788,7 +836,7 @@
    ]
   },
   {
-   "rank": 25,
+   "rank": 27,
    "setup": "gemini-3.8-flash_high",
    "name": "Gemini 3.8 Flash",
    "level": "high",
@@ -812,7 +860,7 @@
    ]
   },
   {
-   "rank": 25,
+   "rank": 27,
    "setup": "gemini-3.6-flash_low",
    "name": "Gemini 3.6 Flash",
    "level": "low",
@@ -836,7 +884,7 @@
    ]
   },
   {
-   "rank": 27,
+   "rank": 29,
    "setup": "qwen3.8-max-0902_xhigh",
    "name": "Qwen 3.8 Max",
    "level": "xhigh",
@@ -860,7 +908,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 30,
    "setup": "gemini-3.5-flash-lite_default",
    "name": "Gemini 3.5 Flash-Lite",
    "level": "standard",
@@ -884,7 +932,7 @@
    ]
   },
   {
-   "rank": 29,
+   "rank": 31,
    "setup": "gpt-6-luna_max",
    "name": "GPT-6 Luna",
    "level": "max",
@@ -908,7 +956,7 @@
    ]
   },
   {
-   "rank": 30,
+   "rank": 32,
    "setup": "glm-5.3_max",
    "name": "GLM-5.3",
    "level": "max",
@@ -932,7 +980,7 @@
    ]
   },
   {
-   "rank": 31,
+   "rank": 33,
    "setup": "glm-5.3-flash_max",
    "name": "GLM-5.3 Flash",
    "level": "max",
@@ -956,7 +1004,31 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 34,
+   "setup": "gemini-4-carbon_high",
+   "name": "Gemini 4 Carbon",
+   "level": "high",
+   "maker": "Google",
+   "score": 72,
+   "basics": 3,
+   "n": 4,
+   "cost": "74p",
+   "tasks": [
+    100,
+    97,
+    0,
+    91
+   ],
+   "where": "Google AI Ultra",
+   "sig_files": [
+    {
+     "name": "index.html",
+     "src": "/labs-files/gemini-4-carbon_high/building_02_pronunciation_coach/index.html"
+    }
+   ]
+  },
+  {
+   "rank": 35,
    "setup": "gpt-6-luna_medium",
    "name": "GPT-6 Luna",
    "level": "medium",
@@ -980,7 +1052,7 @@
    ]
   },
   {
-   "rank": 33,
+   "rank": 36,
    "setup": "grok-4.7_high",
    "name": "Grok 4.7",
    "level": "high",
@@ -1004,7 +1076,7 @@
    ]
   },
   {
-   "rank": 34,
+   "rank": 37,
    "setup": "haiku-4.5_default",
    "name": "Claude Haiku 4.5",
    "level": "standard",
@@ -1028,7 +1100,7 @@
    ]
   },
   {
-   "rank": 35,
+   "rank": 38,
    "setup": "mistral-large-4_high",
    "name": "Mistral Large 4",
    "level": "high",
@@ -1052,7 +1124,7 @@
    ]
   },
   {
-   "rank": 36,
+   "rank": 39,
    "setup": "gemini-4-argon_high",
    "name": "Gemini 4 Argon",
    "level": "high",
@@ -1097,9 +1169,9 @@
    "name": "Automation"
   }
  ],
- "count": 43,
+ "count": 46,
  "tested_from": "2026-10-02",
- "tested_to": "2026-11-12",
+ "tested_to": "2026-11-13",
  "chart": {
   "tasks": 4,
   "rows": [
@@ -1236,6 +1308,17 @@
     "tasks_run": 4
    },
    {
+    "setup": "gemini-4-carbon_high",
+    "name": "Gemini 4 Carbon",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 2.9481,
+    "cost": "£2.95",
+    "score": 72,
+    "tasks_run": 4
+   },
+   {
     "setup": "kimi-k3_max",
     "name": "Kimi K3",
     "level": "max",
@@ -1346,6 +1429,17 @@
     "tasks_run": 4
    },
    {
+    "setup": "kimi-k3.1-pro_max",
+    "name": "Kimi K3.1 Pro",
+    "level": "max",
+    "maker": "Moonshot AI",
+    "premium": false,
+    "cost_gbp": 1.2726,
+    "cost": "£1.27",
+    "score": 93,
+    "tasks_run": 4
+   },
+   {
     "setup": "opus-5.5_low",
     "name": "Claude Opus 5.5",
     "level": "low",
@@ -1354,6 +1448,17 @@
     "cost_gbp": 1.1106,
     "cost": "£1.11",
     "score": 94,
+    "tasks_run": 4
+   },
+   {
+    "setup": "gemini-4-hydrogen_high",
+    "name": "Gemini 4 Hydrogen",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 1.0928,
+    "cost": "£1.09",
+    "score": 95,
     "tasks_run": 4
    },
    {
