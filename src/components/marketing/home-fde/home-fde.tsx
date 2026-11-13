@@ -706,15 +706,21 @@ export function HomeFde({
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>Build on your foundation every month</h2>
           </div>
-          {/* The three-projects picture (bead gwth-launch-88z.32.12), moved
-              here from the hero on 12 Nov 2026 when Film A took the hero.
-              Three projects, each bigger than the last, the newest in a hand:
-              the picture of this section's argument. Its labels are lettered
-              into the photograph, so the page renders no key under it. */}
+          {/* The months picture: a paper cutout in the site's greens, drawn by
+              the latest Astra with GPT Image (David, 13 Nov 2026: he picked
+              "The paper cutout style for every public-page picture" after
+              comparing it with the open terraces on six subjects). Month 1 is
+              the foundation layer, a team builds on it in Month 2, a whole
+              organisation in Month 3. Labels are lettered into the picture, so
+              the page renders no key or caption under it. Source and prompt:
+              GWTH-launch-plan completion/home-picture-two-styles/cutout/. The
+              earlier paper-craft plate (what-you-make.png) is kept on disk. */}
           <figure className={`${p.plate} ${styles.monthsPlate}`} id="what-you-make">
             <Plate
-              name="what-you-make"
-              alt="Three paper-craft objects on a desk, each larger than the one before. A small card with a speech bubble and a cog, labelled Month 1, a tool that works. A propped screen showing a bar chart with a key beside it, labelled Month 2, real software. A bound booklet with a microphone on its mint cover, labelled Month 3, your AI consultant, being set down by a hand."
+              name="what-you-make-cutout"
+              width={1536}
+              height={1024}
+              alt="A paper cutout model in green card with three stepped layers. On the lowest layer one person works at a laptop, labelled Month 1, a tool that works. On the layer above, a team of four builds software together, labelled Month 2, real software. On the top and largest layer, a whole office of people works together, labelled Month 3, your AI consultant."
               sizes="(max-width: 1180px) 100vw, 1140px"
             />
             {/* No caption under the picture (David, 13 Nov 2026,

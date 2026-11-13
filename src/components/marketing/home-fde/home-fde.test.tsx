@@ -70,8 +70,9 @@ describe("HomeFde (paper-first, N12)", () => {
     const srcs = (screen.getAllByRole("img") as HTMLImageElement[]).map(
       (img) => img.getAttribute("src") ?? ""
     )
-    expect(srcs.some((s) => s.includes("what-you-make.png"))).toBe(true)
-    expect(srcs.some((s) => s.includes("what-you-make-dark.png"))).toBe(true)
+    // 13 Nov 2026: the paper cutout months picture David picked.
+    expect(srcs.some((s) => s.includes("what-you-make-cutout.png"))).toBe(true)
+    expect(srcs.some((s) => s.includes("what-you-make-cutout-dark.png"))).toBe(true)
     // The six-cards legend was the lesson-figure picture David rejected for
     // this page (bead gwth-launch-88z.32.12). It must not come back quietly.
     expect(srcs.some((s) => s.includes("six-blocks"))).toBe(false)

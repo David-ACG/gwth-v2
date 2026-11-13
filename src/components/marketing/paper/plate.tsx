@@ -5,7 +5,9 @@ import styles from "./paper.module.css"
  * A stripped-register plate: the light render and its dark-ground twin (the
  * same photograph with only the ground swapped, an image-to-image edit, per
  * the stripped-image-register decision of 2026-09-02). Files live under
- * `public/home/paper/<name>.png` and `<name>-dark.png`, both 1376x768.
+ * `public/home/paper/<name>.png` and `<name>-dark.png`, 1376x768 unless
+ * `width`/`height` say otherwise (the 13 Nov 2026 paper cutout plates are
+ * 1536x1024, 3:2).
  *
  * The page shows one per mode via `.plateLight` / `.plateDark`. Off the hero
  * the hidden one is lazy so it is not fetched until the mode needs it; on the
@@ -21,19 +23,23 @@ export function Plate({
   alt,
   sizes,
   priority = false,
+  width = 1376,
+  height = 768,
 }: {
   name: string
   alt: string
   sizes: string
   priority?: boolean
+  width?: number
+  height?: number
 }) {
   return (
     <>
       <Image
         src={`/home/paper/${name}.png`}
         alt={alt}
-        width={1376}
-        height={768}
+        width={width}
+        height={height}
         sizes={sizes}
         priority={priority}
         className={styles.plateLight}
@@ -41,8 +47,8 @@ export function Plate({
       <Image
         src={`/home/paper/${name}-dark.png`}
         alt={alt}
-        width={1376}
-        height={768}
+        width={width}
+        height={height}
         sizes={sizes}
         priority={priority}
         loading={priority ? undefined : "lazy"}
