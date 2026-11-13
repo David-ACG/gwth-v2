@@ -202,23 +202,24 @@ export function LabsFde({ index }: LabsFdeProps) {
           </div>
           {/* David, 12 Nov 2026, on the replica: "maybe we should add a short video here explaining
               the labs, why we built them, and how to use them ... a first trial of the screen
-              recording process". Version 2 of the scripted walkthrough (labs-tour-v2: Astra script,
-              Sol check, Kokoro bm_daniel, highlights per the walkthrough highlighting research).
-              Replica only: the file sits untracked in public/videos/labs/; at GO LIVE it goes to the
+              recording process". Version 3 of the scripted walkthrough (labs-tour-v3), after his
+              13 Nov review: the homepage film's journal look, yellow highlighter marks on the
+              element's own box, no magnifier, three slow zooms. Astra script, Sol check, Kokoro
+              bm_daniel. Replica only: the file sits untracked in public/videos/labs/; at GO LIVE it goes to the
               media CDN under a new name and this src moves with it. */}
           <figure className={styles.closingFigure} data-testid="labs-closing-figure">
             <video
               controls
               playsInline
               preload="none"
-              poster="/videos/labs/labs-tour-v2.poster.jpg"
+              poster="/videos/labs/labs-tour-v3.poster.jpg"
               className={styles.closingVideo}
               aria-label="How to use the GWTH labs: a short narrated tour"
             >
-              <source src="/videos/labs/labs-tour-v2.mp4" type="video/mp4" />
+              <source src="/videos/labs/labs-tour-v3.mp4" type="video/mp4" />
               <track
                 kind="captions"
-                src="/videos/labs/labs-tour-v2.vtt"
+                src="/videos/labs/labs-tour-v3.vtt"
                 srcLang="en"
                 label="English"
               />
