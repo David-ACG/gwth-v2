@@ -204,22 +204,24 @@ export function LabsFde({ index }: LabsFdeProps) {
               the labs, why we built them, and how to use them ... a first trial of the screen
               recording process". Version 3 of the scripted walkthrough (labs-tour-v3), after his
               13 Nov review: the homepage film's journal look, yellow highlighter marks on the
-              element's own box, no magnifier, three slow zooms. Astra script, Sol check, Kokoro
-              bm_daniel. Replica only: the file sits untracked in public/videos/labs/; at GO LIVE it goes to the
+              element's own box, no magnifier, three slow zooms. He then asked for "the same voice
+              as the homepage video from elevenlabs" with the house pronunciation rules, so this is
+              the GWTH narrator reading it, saying "read" rather than "red". Astra script, Sol check.
+              Replica only: the file sits untracked in public/videos/labs/; at GO LIVE it goes to the
               media CDN under a new name and this src moves with it. */}
           <figure className={styles.closingFigure} data-testid="labs-closing-figure">
             <video
               controls
               playsInline
               preload="none"
-              poster="/videos/labs/labs-tour-v3.poster.jpg"
+              poster="/videos/labs/labs-tour-v3-narrator.poster.jpg"
               className={styles.closingVideo}
               aria-label="How to use the GWTH labs: a short narrated tour"
             >
-              <source src="/videos/labs/labs-tour-v3.mp4" type="video/mp4" />
+              <source src="/videos/labs/labs-tour-v3-narrator.mp4" type="video/mp4" />
               <track
                 kind="captions"
-                src="/videos/labs/labs-tour-v3.vtt"
+                src="/videos/labs/labs-tour-v3-narrator.vtt"
                 srcLang="en"
                 label="English"
               />
