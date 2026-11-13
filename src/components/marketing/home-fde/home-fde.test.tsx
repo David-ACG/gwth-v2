@@ -10,7 +10,6 @@ import {
 } from "./home-fde"
 import { getTrajectoryLabel } from "@/lib/progress/gwth-score"
 import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
-import { CURRICULUM } from "@/components/marketing/data"
 
 afterEach(cleanup)
 
@@ -377,19 +376,11 @@ describe("HomeFde hero plate: the flagship picture, not a lesson figure", () => 
     expect(screen.queryAllByTestId("six-blocks-key-cell")).toHaveLength(0)
   })
 
-  it("makes the flagship point under the plate, about the work rather than the categories", () => {
-    render(<HomeFde />)
-    // Persona review round 2 (D25, 12 Nov 2026): the caption names the three
-    // projects once, without retelling the progression the cards tell.
-    const caption = screen.getByText(/The picture shows a small working tool/)
-    expect(caption.textContent).toMatch(/real software in Month 2/)
-    expect(caption.textContent).toMatch(/your own AI consultant in Month 3/)
-    expect(caption.textContent).toMatch(/keep all three/)
-    // David, a-20260915-210202-691323: *"The phrase on your own work is not
-    // really used commonly in the UK. Maybe you could say using your own work
-    // as an example."*
-    expect(caption.textContent).toMatch(/using your own work as an example/)
-    expect(caption.textContent).not.toMatch(/them, on your own work/)
+  it("has no caption under the months picture (David, 13 Nov 2026)", () => {
+    // a-20261113-153509-2de8af: "I'm not sure why we need this text below the
+    // image. Please remove it."
+    const { container } = render(<HomeFde />)
+    expect(container.textContent).not.toMatch(/The picture shows a small working tool/)
   })
 
   it("still names six building blocks for /lessons to show", () => {
@@ -663,23 +654,28 @@ describe("HomeFde three-month progression", () => {
     expect(hero).not.toMatch(/Month 2/i)
   })
 
-  it("moves from one person in Month 1 to an organisation in Month 3", () => {
+  it("moves from a foundation in Month 1 to a whole organisation in Month 3", () => {
     render(<HomeFde />)
     const [one, two, three] = screen.getAllByTestId("month-card")
-    // Persona review round 2 (D25, 12 Nov 2026): the CV and LinkedIn work is
-    // told once, in the career cards, so Month 1 leads with what you build.
+    // David, 13 Nov 2026 (a-20261113-153555-18b8d1): less text, Month 1 as the
+    // foundation the other two build on. Each card keeps its real project.
+    expect(one!.textContent).toMatch(/foundation/i)
     expect(one!.textContent).toMatch(/portfolio website/i)
+    expect(one!.textContent).toMatch(/Spending Detective/)
     expect(two!.textContent).toMatch(/AskMyCo/)
-    expect(two!.textContent).toMatch(/FractionalBuddy/)
-    expect(three!.textContent).toMatch(/an organisation's work/i)
-    expect(three!.textContent).toMatch(/twelve areas/i)
+    expect(three!.textContent).toMatch(/whole organisation/i)
+    expect(three!.textContent).toMatch(/AI consultant/)
+    for (const card of [one, two, three]) {
+      const body = card!.querySelector("p:last-of-type")?.textContent ?? ""
+      expect(body.trim().split(/\s+/).length).toBeLessThanOrEqual(25)
+    }
   })
 
-  it("reads the Month 1 capstone name from the canonical curriculum", () => {
+  it("leaves no template placeholder in the month cards", () => {
     render(<HomeFde />)
-    const [one] = screen.getAllByTestId("month-card")
-    expect(one!.textContent).toContain(CURRICULUM[0]!.capstone)
-    expect(one!.textContent).not.toContain("{CAPSTONE}")
+    for (const card of screen.getAllByTestId("month-card")) {
+      expect(card.textContent).not.toContain("{CAPSTONE}")
+    }
   })
 
   /**

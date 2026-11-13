@@ -2,7 +2,6 @@ import Link from "next/link"
 import {
   COURSE_MONTHLY_PRICE,
   ENABLE_GWTH_SCORE,
-  MONTH_CONFIGS,
   ONGOING_MONTHLY_PRICE,
 } from "@/lib/config"
 import { CURRICULUM, LATER_MONTHS_OPEN } from "@/components/marketing/data"
@@ -223,21 +222,26 @@ const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
  * answers a-20260915-101324-6aa90f: the same card component, so the page keeps
  * its shape, with the progression in it instead of figures about employers.
  */
+// David, 13 Nov 2026 (a-20261113-153555-18b8d1): "We need less text here and
+// more diagrams or images showing what we mean by month one being a
+// foundation and the other two months building upon it." Words by the latest
+// Astra (medium), refined and checked by the latest Sol (high), PASS:
+// GWTH-launch-plan completion/public-pages-persona-apply/round3-2026-11-13/.
 export const MONTHS = [
   {
     kicker: "Month 1",
-    title: "Your own work and home life",
-    body: "You build your own portfolio website without writing code. In Spending Detective, you clean a messy bank export, find the top five spending categories and make two charts. Marked projects use example data we provide. An unmarked step then lets you use your own information, so the projects are useful to you and good fun to make. The {CAPSTONE} lessons are optional.",
+    title: "Build your foundation",
+    body: "Make your own portfolio website without writing code and use Spending Detective. The projects are useful to you and good fun to make.",
   },
   {
     kicker: "Month 2",
-    title: "A small business",
-    body: "You learn to protect other people's data before they use what you build. You build AskMyCo, a support chatbot that answers from a company's own documents and shows where each answer came from. You then write a plan for FractionalBuddy, a second assistant for a small consulting firm.",
+    title: "Support a small business",
+    body: "Learn to protect other people's data and build AskMyCo, a support chatbot that answers from a company's own documents.",
   },
   {
     kicker: "Month 3",
-    title: "A whole organisation",
-    body: "For the marked project, you score twelve areas of an organisation's work using our example data. You build a working AI consultant that interviews people by voice, links every score to their answers and writes the report and slide deck. The organisation's leaders decide what changes. An unmarked step lets you adapt it for your employer, a charity or your own business.",
+    title: "Help a whole organisation",
+    body: "Bring your skills together in your own AI consultant that interviews people by voice and writes the report and slide deck.",
   },
 ] as const
 
@@ -700,7 +704,7 @@ export function HomeFde({
       <section className={p.section} data-section="months">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>The work gets bigger every month</h2>
+            <h2 className={p.sectionTitle}>Build on your foundation every month</h2>
           </div>
           {/* The three-projects picture (bead gwth-launch-88z.32.12), moved
               here from the hero on 12 Nov 2026 when Film A took the hero.
@@ -713,14 +717,9 @@ export function HomeFde({
               alt="Three paper-craft objects on a desk, each larger than the one before. A small card with a speech bubble and a cog, labelled Month 1, a tool that works. A propped screen showing a bar chart with a key beside it, labelled Month 2, real software. A bound booklet with a microphone on its mint cover, labelled Month 3, your AI consultant, being set down by a hand."
               sizes="(max-width: 1180px) 100vw, 1140px"
             />
-            <figcaption className={styles.plateCaption}>
-              <span className={styles.plateLine}>
-                The picture shows a small working tool in Month 1, real
-                software in Month 2 and your own AI consultant in Month 3. You
-                keep all three and can adapt them using your own work as an
-                example.
-              </span>
-            </figcaption>
+            {/* No caption under the picture (David, 13 Nov 2026,
+                a-20261113-153509-2de8af: "I'm not sure why we need this text
+                below the image. Please remove it."). */}
           </figure>
           <div className={p.cards3}>
             {MONTHS.map((month) => (
@@ -751,20 +750,19 @@ export function HomeFde({
             which would describe a picker that does not exist. No count appears
             here for the reason /for-teams prints none (a-20260914-201426-ae7f0e).
           */}
+          {/* David, 13 Nov 2026 (a-20261113-153646-33f0e6): "Please make this
+              more of a marketing site ... rather than just statements of what
+              is included." Latest Astra wrote it, latest Sol checked it. No
+              "choose" (there is no lesson picker yet) and no counts. */}
           <p className={styles.monthsNote} data-testid="months-optional-note">
-            Month 2 starts with {MONTH_CONFIGS[1]?.mandatoryLessons} core
-            lessons and Month 3 with {MONTH_CONFIGS[2]?.mandatoryLessons}, and
-            everybody does those. Optional lessons follow: AI in UK legal work,
-            finance, healthcare and other fields, building more advanced AI
-            tools, and leading AI at work. You are not expected to take all of
-            them. For work tasks, use the AI tool your
+            After the core lessons in Months 2 and 3, explore AI for UK
+            healthcare or legal work. Go deep into one area without taking
+            every optional lesson. For work tasks, use the AI tool your
             organisation has approved.
           </p>
-          <div className={p.actions}>
-            <Link href="/lessons" className={p.buttonOutline}>
-              See the optional lessons
-            </Link>
-          </div>
+          {/* No "See the optional lessons" button (David, 13 Nov 2026,
+              a-20261113-153733-1288d3: "Remove this as it doesn't actually
+              take you to what is in the optional lessons"). */}
         </div>
       </section>
 
