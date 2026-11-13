@@ -166,25 +166,25 @@
   },
   {
    "letter": "B",
-   "setup": "sonnet-5.5_xhigh",
+   "setup": "sonnet-5.5_high",
    "files": [
     {
      "name": "chart.svg",
-     "src": "/labs-files/sonnet-5.5_xhigh/data_04_gender_pay_gap/chart.svg",
+     "src": "/labs-files/sonnet-5.5_high/data_04_gender_pay_gap/chart.svg",
      "kind": "svg"
     },
     {
      "name": "board_note.md",
-     "text": "# Gender pay gap: board note (snapshot 5 April 2026)\n\n## Must we publish? Yes\n\nThe threshold of 250 counts people, not full-time equivalents. Everyone employed on 5 April 2026 counts, including part-timers and people on leave. We had **262** relevant employees (183 women, 79 men), so we must publish. Graham's figure of about 210 FTE is right, but it is not the test. Agency workers (14), leavers before 5 April and joiners after it are excluded. Publication is due within 12 months of the snapshot, by 4 April 2027.\n\n## Figures\n\n248 employees were on full pay in April (171 women, 77 men). The other 14 were on maternity, sick or unpaid leave and are left out of the pay figures. A positive gap means men are paid more.\n\n| | Men | Women | Gap |\n|---|---|---|---|\n| Mean hourly pay | £19.37 | £15.50 | 20.0% |\n| Median hourly pay | £14.63 | £13.91 | 5.0% |\n| Mean bonus | £3,857 | £846 | 78.1% |\n| Median bonus | £1,700 | £450 | 73.5% |\n\n34.2% of men and 28.4% of women received a bonus. Women are 69% of full-pay staff but 77.4%, 71.0%, 74.2% and 53.2% of the lowest to highest pay quartiles (see chart).\n\n**What it means:** the five directors, all men, are the five highest paid and received the five largest bonuses (£9,250 to £19,650). Without them the mean pay gap would be about 7.5%. The median gap of 5.0% is the better guide to typical pay. Fewer women reach the top quartile.\n\n## Corrected in the data\n\n- 15 payroll lines appeared twice with identical line numbers. I counted each once. Three were bonuses that would have been doubled.\n- Sex was recorded in eight formats. I standardised it to M or F.\n- A £1,500 bonus paid in November 2025 was reversed in December. It nets to zero, so that person is not a recipient.\n- Four bonus recipients left before 5 April and are not counted.\n- Hours changes agreed for after 5 April were ignored.\n\n## Could not work out\n\n- **Ethnicity pay gap: null.** No file records ethnicity, so no figure is possible. We would first need to collect it, voluntarily and with consent.\n- Sex is as recorded at onboarding, so it may not match anyone's current legal sex.\n",
+     "text": "# Gender pay gap, snapshot 5 April 2026\n\n## Must we publish? Yes.\nThe 250 threshold counts **employees (headcount)**, not full-time equivalents. Part-timers and people on leave each count as one. On 5 April 2026 we had **262 relevant employees**, so we must publish. The \"about 210 FTE\" figure is the wrong measure. Excluded: 14 agency workers, 18 leavers before the snapshot and 5 people who joined after it.\n\n## Figures (positive gap = men paid more)\n248 of the 262 are on full pay. The other 14 were on maternity, sick or unpaid leave in April and are left out of the pay figures.\n\n| Measure | Result |\n|---|---|\n| Mean hourly pay | Men £19.37, women £15.50 |\n| Mean gap | **20.0%** |\n| Median gap | **5.0%** |\n| Mean bonus gap | **78.1%** |\n| Median bonus gap | **73.5%** |\n| Received a bonus | Men 34.2%, women 28.4% |\n\nWomen in each pay quartile, lowest to highest: **77.4%, 71.0%, 74.2%, 53.2%** (chart: `chart.svg`).\n\n**What this means:** the mean gap is much bigger than the median gap, so a few very highly paid men pull the men's average up. A typical man and woman are paid similarly, but women are under-represented in the top quartile. Bonus gaps are larger because the biggest annual bonuses went to a small group of senior staff, and more men than women received a bonus.\n\n## Data corrected\n- **15 payroll lines were exact duplicates** (12 in the April run, 3 bonuses) and were counted once.\n- **Sex** was recorded in eight formats and was standardised to M/F.\n- A £1,500 bonus paid in November was reversed in December, so it counts as nil.\n- Bonuses paid before 6 April 2025 (including March 2025 and the 4 April 2025 off-cycle run) are outside the 12 months. The 2 April 2026 off-cycle payments are inside it.\n- Contract-hour changes dated after 5 April 2026 were ignored.\n\n## Could not be worked out\n- **Ethnicity pay gap:** none of the files holds ethnicity data, so I have left it blank (`null`) rather than invent a figure. It would need an ethnicity field from HR, and small groups may be too few to report safely.\n",
      "kind": "md"
     }
    ],
    "name": "Claude Sonnet 5.5",
-   "level": "xhigh",
+   "level": "high",
    "maker": "Anthropic",
-   "score": 97,
+   "score": 95,
    "basics": true,
-   "cost": "48p"
+   "cost": "27p"
   },
   {
    "letter": "C",
@@ -714,6 +714,36 @@
   },
   {
    "rank": 17,
+   "setup": "gemini-4-hydrogen_high",
+   "name": "Gemini 4 Hydrogen",
+   "level": "high",
+   "maker": "Google",
+   "score": 94,
+   "basics": 4,
+   "n": 5,
+   "cost": "33p",
+   "tasks": [
+    88,
+    100,
+    95,
+    92,
+    98
+   ],
+   "where": "Google AI Plus, Google AI Pro",
+   "sig_files": [
+    {
+     "name": "chart.svg",
+     "src": "/labs-files/gemini-4-hydrogen_high/data_04_gender_pay_gap/chart.svg"
+    },
+    {
+     "name": "board_note.md",
+     "src": "/labs-files/gemini-4-hydrogen_high/data_04_gender_pay_gap/board_note.md",
+     "text": "# Gender Pay Gap Report — 5 April 2026 Snapshot\n\n## Must we publish?\n**Yes.** We must publish our statutory gender pay gap figures. On 5 April 2026, Thistlecombe Care Ltd employed **262 relevant employees** (183 women, 79 men), exceeding the 250-employee statutory threshold. The ~210 figure cited previously reflects full-time equivalent hours (7,857 contracted weekly hours ÷ 37.5 = 209.5 FTE), not headcount. Under the regulations, part-time staff and employees on leave count as one employee each; only our 14 agency workers, 18 pre-snapshot leavers, and 5 post-snapshot joiners are excluded.\n\n## Key figures and what they mean\nAfter excluding 14 relevant employees on reduced pay due to maternity, sick, or unpaid leave in April 2026, **248 full-pay relevant employees** (171 women, 77 men) are included in the hourly pay calculations:\n\n- **Hourly pay gap:** Mean hourly pay is **£19.37** for men and **£15.50** for women, giving a **20.0% mean gap**. The **median gap is 5.0%** (men £14.63/hr vs women £13.91/hr).\n- **Pay quartiles:** Women make up 69.8% of our relevant workforce overall, and **77.4%** of the lower quartile, **71.0%** of the lower middle, **74.2%** of the upper middle, and **53.2%** of the upper quartile.\n- **Bonus pay:** In the 12 months to 5 April 2026, **34.2%** of men and **28.4%** of women received a bonus, with a **78.1% mean bonus gap** and a **73.5% median bonus gap**.\n\nThe large gap between the mean (20.0%) and median (5.0%)—and the steep bonus gap—is driven by senior representation rather than unequal pay for equal work. All 5 Directors and 6 of 8 Home Managers are men, while Care Assistants (83% women) and Domestic Assistants (60% women) are concentrated in the lower pay quartiles and receive smaller retention, referral, or long-service bonuses rather than large annual bonuses.\n\n## Data corrections and missing information\n- **Duplicate payroll lines:** Removed 15 exact duplicate export rows (same `line_id`: 12 in April 2026 ordinary pay and 3 in March 2026 bonuses).\n- **Formatting and cut-offs:** Standardised inconsistent `sex` labels, used contracted hours effective on or before 5 April 2026 (ignoring 26 later changes), excluded the 4 April 2025 off-cycle bonus run, included the 2 April 2026 off-cycle run, and netted out one £1,500 December 2025 bonus reversal.\n- **Ethnicity pay gap (`null`):** Could not be calculated because the HR and payroll exports contain no ethnicity data.\n"
+    }
+   ]
+  },
+  {
+   "rank": 17,
    "setup": "gemini-4-argon_high",
    "name": "Gemini 4 Argon",
    "level": "high",
@@ -773,7 +803,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 20,
    "setup": "opus-5.5_high",
    "name": "Claude Opus 5.5",
    "level": "high",
@@ -803,7 +833,7 @@
    ]
   },
   {
-   "rank": 20,
+   "rank": 21,
    "setup": "gpt-6-luna_max",
    "name": "GPT-6 Luna",
    "level": "max",
@@ -833,7 +863,7 @@
    ]
   },
   {
-   "rank": 21,
+   "rank": 22,
    "setup": "opus-5.5_medium",
    "name": "Claude Opus 5.5",
    "level": "medium",
@@ -863,7 +893,7 @@
    ]
   },
   {
-   "rank": 22,
+   "rank": 23,
    "setup": "kimi-k3_max",
    "name": "Kimi K3",
    "level": "max",
@@ -893,7 +923,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 24,
    "setup": "grok-4.7_high",
    "name": "Grok 4.7",
    "level": "high",
@@ -923,7 +953,7 @@
    ]
   },
   {
-   "rank": 24,
+   "rank": 25,
    "setup": "gpt-6.1-sol_low",
    "name": "GPT-6.1 Sol",
    "level": "low",
@@ -953,7 +983,7 @@
    ]
   },
   {
-   "rank": 24,
+   "rank": 25,
    "setup": "gemini-3.8-flash_high",
    "name": "Gemini 3.8 Flash",
    "level": "high",
@@ -983,7 +1013,7 @@
    ]
   },
   {
-   "rank": 24,
+   "rank": 25,
    "setup": "opus-5.5_low",
    "name": "Claude Opus 5.5",
    "level": "low",
@@ -1013,7 +1043,37 @@
    ]
   },
   {
-   "rank": 27,
+   "rank": 28,
+   "setup": "kimi-k3.1-pro_max",
+   "name": "Kimi K3.1 Pro",
+   "level": "max",
+   "maker": "Moonshot AI",
+   "score": 80,
+   "basics": 5,
+   "n": 5,
+   "cost": "28p",
+   "tasks": [
+    100,
+    64,
+    93,
+    50,
+    94
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "chart.svg",
+     "src": "/labs-files/kimi-k3.1-pro_max/data_04_gender_pay_gap/chart.svg"
+    },
+    {
+     "name": "board_note.md",
+     "src": "/labs-files/kimi-k3.1-pro_max/data_04_gender_pay_gap/board_note.md",
+     "text": "# Board note: gender pay gap at 5 April 2026\n\n## Publication duty\n\nThistlecombe Care **must publish** because it has **262 relevant employees** on the snapshot date. The 250-person threshold is an employee headcount, not an FTE measure; part-time staff and employees on leave count. People not employed on the snapshot and 14 agency workers are excluded. Hourly-pay figures use **248 full-pay relevant employees**, after 14 leave-related exclusions specified in the method note.\n\n## Results and interpretation\n\n- Men's mean hourly pay is **£20.07** and women's **£15.91**. Women's mean hourly pay is **20.8% lower** and median hourly pay **4.1% lower** than men's.\n- The mean and median bonus gaps are both **77.5%**: women's mean and median bonus amounts are that much lower than men's among recipients. Bonuses are not hours-adjusted. **34.2% of men** (27/79) and **28.4% of women** (52/183) received a bonus.\n\n| Pay quartile | Women | Men |\n|---|---:|---:|\n| Lower (1) | 79.0% | 21.0% |\n| Lower middle (2) | 66.1% | 33.9% |\n| Upper middle (3) | 72.6% | 27.4% |\n| Upper (4) | 58.1% | 41.9% |\n\nEach quartile has 62 employees; quartile 1 is lowest paid. Women form a majority in every quartile, but their concentration is highest in the lower quartile.\n\n## Data treatment and limitation\n\nSex labels were standardised. Calculations use contracted hours effective on the snapshot, ignoring later changes. Ordinary pay includes only the specified April monthly elements, deducts salary sacrifice, and excludes overtime, mileage and bonuses. The bonus window uses pay dates from 6 April 2025 to 5 April 2026 inclusive: 4 April 2025 payments are excluded, 2 April 2026 off-cycle payments included, and the December reversal netted off. A fully reversed bonus does not count as receipt.\n\n**Ethnicity pay gap: not calculable.** None of the source files contains ethnicity data or categories, so no reliable figure or like-for-like comparison can be produced; the JSON value is `null`.\n"
+    }
+   ]
+  },
+  {
+   "rank": 29,
    "setup": "glm-5.3-flash_max",
    "name": "GLM-5.3 Flash",
    "level": "max",
@@ -1043,7 +1103,7 @@
    ]
   },
   {
-   "rank": 28,
+   "rank": 30,
    "setup": "gpt-6.1-terra_medium",
    "name": "GPT-6.1 Terra",
    "level": "medium",
@@ -1073,7 +1133,7 @@
    ]
   },
   {
-   "rank": 29,
+   "rank": 31,
    "setup": "mimo-v2.6-pro_default",
    "name": "MiMo v2.6 Pro",
    "level": "standard",
@@ -1103,7 +1163,37 @@
    ]
   },
   {
-   "rank": 30,
+   "rank": 32,
+   "setup": "gemini-4-carbon_high",
+   "name": "Gemini 4 Carbon",
+   "level": "high",
+   "maker": "Google",
+   "score": 75,
+   "basics": 3,
+   "n": 5,
+   "cost": "87p",
+   "tasks": [
+    92,
+    92,
+    0,
+    95,
+    96
+   ],
+   "where": "Google AI Ultra",
+   "sig_files": [
+    {
+     "name": "chart.svg",
+     "src": "/labs-files/gemini-4-carbon_high/data_04_gender_pay_gap/chart.svg"
+    },
+    {
+     "name": "board_note.md",
+     "src": "/labs-files/gemini-4-carbon_high/data_04_gender_pay_gap/board_note.md",
+     "text": "# Board Note: Gender Pay Gap (5 April 2026)\n\n## Must We Publish?\n**Yes.** Although our staff equate to roughly 210 full-time equivalents (209.5 FTE), the Chair's view does not apply: the statutory 250-employee threshold uses **headcount** on 5 April 2026, not FTE. Part-time staff and employees on maternity, sick, or unpaid leave each count as one person, while our 14 agency workers, 18 earlier leavers, and 5 mid-April starters are excluded. With **262 relevant employees** (183 women, 79 men), we must publish by 4 April 2027.\n\n## Figures and Meaning\nExcluding 14 staff on reduced or nil leave pay in April 2026 leaves **248 full-pay relevant employees** (171 women, 77 men; 69.0% women):\n\n- **Hourly pay:** Men average **£19.37** vs **£15.50** for women (**20.0% mean gap**); median pay is **£14.63** vs **£13.91** (**5.0% median gap**).\n- **Pay quartiles (62 each):** Women represent **77.4%** (lower), **71.0%** (lower middle), **74.2%** (upper middle), and **53.2%** (upper); men represent **22.6%**, **29.0%**, **25.8%**, and **46.8%**.\n- **Bonuses (all 262 relevant staff):** **34.2%** of men (27 of 79) and **28.4%** of women (52 of 183) received bonuses, with a **78.1% mean bonus gap** (£3,857.41 vs £846.15) and **73.5% median bonus gap** (£1,700.00 vs £450.00).\n\nMen and women in identical roles earn similar hourly rates. Both gaps reflect **seniority mix**: frontline care roles are mostly female, whereas **all 5 Directors** and **6 of 8 Home managers** are men receiving top salaries and executive annual bonuses (most female bonuses are £250–£500 retention, referral, or long-service awards).\n\n## Data Corrections and Missing Data\n- **Corrected:** Removed **15 duplicate payroll lines** (12 in April 2026 ordinary pay, 3 in March 2026 bonuses); standardised **8 sex label formats**; used contracted hours effective on/before 5 April 2026 (ignoring May/June 2026 changes); netted a reversed £1,500 error bonus to £0; and excluded bonuses outside 6 April 2025–5 April 2026 (including the 4 April 2025 off-cycle run) or paid to non-relevant staff.\n- **Ethnicity pay gap (`null`):** Our files contain no ethnicity data, and inferring ethnicity from names is unreliable and inappropriate. HR recommends introducing voluntary self-reporting.\n"
+    }
+   ]
+  },
+  {
+   "rank": 33,
    "setup": "qwen3.8-max-0902_xhigh",
    "name": "Qwen 3.8 Max",
    "level": "xhigh",
@@ -1133,7 +1223,7 @@
    ]
   },
   {
-   "rank": 31,
+   "rank": 34,
    "setup": "gemini-3.6-flash_low",
    "name": "Gemini 3.6 Flash",
    "level": "low",
@@ -1163,7 +1253,7 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 35,
    "setup": "minimax-m3_default",
    "name": "MiniMax M3",
    "level": "standard",
@@ -1193,7 +1283,7 @@
    ]
   },
   {
-   "rank": 33,
+   "rank": 36,
    "setup": "gemini-3.5-flash-lite_default",
    "name": "Gemini 3.5 Flash-Lite",
    "level": "standard",
@@ -1223,7 +1313,7 @@
    ]
   },
   {
-   "rank": 34,
+   "rank": 37,
    "setup": "glm-5.3_max",
    "name": "GLM-5.3",
    "level": "max",
@@ -1253,7 +1343,7 @@
    ]
   },
   {
-   "rank": 35,
+   "rank": 38,
    "setup": "gpt-6-luna_medium",
    "name": "GPT-6 Luna",
    "level": "medium",
@@ -1283,7 +1373,7 @@
    ]
   },
   {
-   "rank": 35,
+   "rank": 38,
    "setup": "haiku-4.5_default",
    "name": "Claude Haiku 4.5",
    "level": "standard",
@@ -1339,7 +1429,7 @@
    "name": "Automation"
   }
  ],
- "count": 43,
+ "count": 46,
  "tested_from": "2026-10-02",
  "tested_to": "2026-11-13",
  "chart": {
@@ -1442,6 +1532,17 @@
     "cost_gbp": 4.538,
     "cost": "£4.54",
     "score": 99,
+    "tasks_run": 5
+   },
+   {
+    "setup": "gemini-4-carbon_high",
+    "name": "Gemini 4 Carbon",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 4.3253,
+    "cost": "£4.33",
+    "score": 75,
     "tasks_run": 5
    },
    {
@@ -1577,6 +1678,17 @@
     "tasks_run": 5
    },
    {
+    "setup": "gemini-4-hydrogen_high",
+    "name": "Gemini 4 Hydrogen",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 1.6493,
+    "cost": "£1.65",
+    "score": 94,
+    "tasks_run": 5
+   },
+   {
     "setup": "sonnet-5.5_high",
     "name": "Claude Sonnet 5.5",
     "level": "high",
@@ -1585,6 +1697,17 @@
     "cost_gbp": 1.4246,
     "cost": "£1.42",
     "score": 98,
+    "tasks_run": 5
+   },
+   {
+    "setup": "kimi-k3.1-pro_max",
+    "name": "Kimi K3.1 Pro",
+    "level": "max",
+    "maker": "Moonshot AI",
+    "premium": false,
+    "cost_gbp": 1.4222,
+    "cost": "£1.42",
+    "score": 80,
     "tasks_run": 5
    },
    {

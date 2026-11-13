@@ -139,20 +139,20 @@
  "answers": [
   {
    "letter": "A",
-   "setup": "sonnet-5.5_medium",
+   "setup": "opus-5.5_medium",
    "files": [
     {
      "name": "short_post.md",
-     "text": "Some Saturdays, someone walks a long way to the bakery and goes home with nothing. I hate that.\n\nThe shelf keeps emptying by 9.40am. On a quiet week, we have the opposite problem. We throw away about 6 loaves. Neither one is fair to you, and neither one is good for the bread.\n\nSo from Saturday 7 November 2026, Saturday bread is pre-order only.\n\nHere is how it works.\n\nYou order on our website by 8pm on Thursday. You pay when you order. Then you collect your loaf on Saturday between 8am and 11am.\n\nWeekday sales stay walk-in, exactly as now.\n\nThe reason is simple. I have 1 oven and 2 hands, and neither is getting bigger. The oven makes 64 loaves on a Saturday at most. If I know what you've asked for, I can bake that, and you know your loaf is set aside before you leave the house.\n\nTwo rules you should know now.\n\nIf you can't make it, cancel by 8pm on Thursday and you get a full refund. After that, there is no refund, because the bread is baked for you.\n\nAnything not collected by 11am goes to the Chapeltown food bank.\n\nI'll be honest. We haven't done this before. It may be clumsy for the first few Saturdays. I'll probably get something wrong, and I'll tell you when I do.\n\nI also know it's less casual than wandering in on a Saturday morning. That's a real cost, and I'm asking you to put up with it. I think it's better than a long walk and an empty shelf.\n\nIf something about the new system doesn't work for you, reply and tell me. I read every message.\n\nOrder your Saturday loaf on our website by 8pm on Thursday 5 November.\n",
+     "text": "We keep selling out by 9.40am on Saturdays.\n\nThat sounds like a nice problem. It isn't, if you've walked across Leeds and found an empty shelf. You got up early for bread, and we let you down. I hate that part.\n\nHere's the thing I can't change. I have one oven, and it bakes 64 loaves on a Saturday. I've asked it nicely for more. It doesn't listen.\n\nOn quiet weeks it goes the other way. We throw away about 6 loaves. That's flour, time and money in the bin, and it bothers me too.\n\nSo from Saturday 7 November, Saturday bread is pre-order only.\n\nHow it works:\n- Order on our website by 8pm Thursday.\n- Pay when you order.\n- Collect between 8am and 11am on Saturday.\n\nPaying upfront might feel a bit formal for a loaf of bread. It means your loaf is waiting for you, not gone by 9.40am.\n\nIf your plans change, cancel by 8pm Thursday for a full refund. After that we can't refund, because the bread is baked for you. This doesn't change your rights if something is wrong with the loaf itself.\n\nAnything not collected by 11am goes to the Chapeltown food bank. Your loaf still gets eaten, just by someone else.\n\nWeekdays stay the same. You can walk in and buy bread as you do now, no ordering needed.\n\nWe haven't done this before. I expect to get a few things wrong in the first weeks, and I'd rather hear about it than guess. I read every comment and message.\n\nIf you want bread on Saturday 7 November, order on our website by 8pm on Thursday 5 November.\n",
      "kind": "md"
     }
    ],
-   "name": "Claude Sonnet 5.5",
+   "name": "Claude Opus 5.5",
    "level": "medium",
    "maker": "Anthropic",
    "score": 86,
    "basics": true,
-   "cost": "13p"
+   "cost": "35p"
   },
   {
    "letter": "B",
@@ -234,6 +234,31 @@
   },
   {
    "rank": 2,
+   "setup": "kimi-k3.1-pro_max",
+   "name": "Kimi K3.1 Pro",
+   "level": "max",
+   "maker": "Moonshot AI",
+   "score": 95,
+   "basics": 4,
+   "n": 4,
+   "cost": "19p",
+   "tasks": [
+    91,
+    99,
+    96,
+    92
+   ],
+   "where": "Only through the developer API",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/kimi-k3.1-pro_max/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am on Saturday. That's good for a small bakery. It isn't good if you've walked from Headingley to find an empty shelf. Three people told me that's what happened. I felt awful.\n\nSo we're changing Saturday bread. From Saturday 7 November 2026, it will be pre-order only. Weekday sales will stay walk-in, just as they are now.\n\nYou'll need to order on our website by 8pm on Thursday. Payment is taken when you order. Collection is between 8am and 11am on Saturday. Any bread not collected by 11am will go to the Chapeltown food bank.\n\nThe reason is our 1 oven. I can bake a maximum of 64 loaves on a Saturday. More coffee does not increase that number. I've checked.\n\nOn busy mornings, people miss out. On a quiet week, we throw away about 6 loaves. Neither feels fair. Pre-ordering means we know how many loaves to bake before the oven goes on.\n\nYou can cancel by 8pm Thursday for a full refund if your plans change. After that, our pre-order terms don't offer a refund. That's because the bread is baked for you.\n\nA friend said businesses with under 10 staff were exempt from the Consumer Rights Act. That isn't correct. The Act applies to small businesses too. Our pre-order terms do not remove your statutory rights.\n\nWe haven't tried this before. I don't know yet whether it will suit everyone. We'll learn from the first few Saturdays and make changes if needed.\n\nWeekdays stay as they are. Saturday needs a little more planning. Order your Saturday bread on our website by 8pm on Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 3,
    "setup": "gpt-6.1-sol_max",
    "name": "GPT-6.1 Sol",
    "level": "max",
@@ -258,7 +283,7 @@
    ]
   },
   {
-   "rank": 3,
+   "rank": 4,
    "setup": "gpt-6.1-sol_medium",
    "name": "GPT-6.1 Sol",
    "level": "medium",
@@ -283,7 +308,7 @@
    ]
   },
   {
-   "rank": 4,
+   "rank": 5,
    "setup": "sonnet-5.5_max",
    "name": "Claude Sonnet 5.5",
    "level": "max",
@@ -308,7 +333,32 @@
    ]
   },
   {
-   "rank": 4,
+   "rank": 5,
+   "setup": "gemini-4-hydrogen_high",
+   "name": "Gemini 4 Hydrogen",
+   "level": "high",
+   "maker": "Google",
+   "score": 92,
+   "basics": 4,
+   "n": 4,
+   "cost": "18p",
+   "tasks": [
+    90,
+    96,
+    90,
+    93
+   ],
+   "where": "Google AI Plus, Google AI Pro",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gemini-4-hydrogen_high/content_01_bakery_preorder/short_post.md",
+     "text": "We sold out by 9.40am on Saturday. 3 people told me they'd walked from Headingley and found an empty shelf. You got up early for bread, and we let you down. Nobody should walk across Leeds for nothing.\n\nAt Rise & Crumb, I only have 1 oven and 2 hands. I can bake 64 loaves on a Saturday and not 1 more, however much coffee I drink. Yet on a quiet week, we still throw away about 6 loaves. Guessing on a Thursday night is failing both ways.\n\nFrom Saturday 7 November 2026, Saturday bread is pre-order only. Weekday sales stay walk-in, just as they are now. If you drop by during the week, nothing changes at our counter.\n\nHere is how Saturday works. You order on our website by 8pm on Thursday and pay when you order. That gives me a real count before I light the oven at 4.10am. You collect your bread between 8am and 11am on Saturday. Anything not collected by 11am goes straight to the Chapeltown food bank. Spare loaves help someone nearby instead of going in the bin.\n\nPlans change, and I know mornings get messy. If you can't make it, cancel by 8pm on Thursday for a full refund. After 8pm on Thursday, there is no refund. Your bread is already baked for you.\n\nWe haven't tried pre-orders before. Knowing me, I'll mix up a ticket or misplace a tray on week 1. I've got things wrong before, like the Tuesday rye that came out too dark. We'll watch how the early Saturdays go and fix what isn't working.\n\nOrder your Saturday bread on our website before 8pm on Thursday.\n\n#RiseAndCrumb #Leeds #Chapeltown\n"
+    }
+   ]
+  },
+  {
+   "rank": 5,
    "setup": "opus-5.5_xhigh",
    "name": "Claude Opus 5.5",
    "level": "xhigh",
@@ -333,7 +383,7 @@
    ]
   },
   {
-   "rank": 4,
+   "rank": 5,
    "setup": "sonnet-5.5_high",
    "name": "Claude Sonnet 5.5",
    "level": "high",
@@ -358,7 +408,7 @@
    ]
   },
   {
-   "rank": 4,
+   "rank": 5,
    "setup": "sonnet-5.5_xhigh",
    "name": "Claude Sonnet 5.5",
    "level": "xhigh",
@@ -383,7 +433,7 @@
    ]
   },
   {
-   "rank": 8,
+   "rank": 10,
    "setup": "opus-5.5_high",
    "name": "Claude Opus 5.5",
    "level": "high",
@@ -408,7 +458,7 @@
    ]
   },
   {
-   "rank": 8,
+   "rank": 10,
    "setup": "gpt-6-luna_max",
    "name": "GPT-6 Luna",
    "level": "max",
@@ -433,7 +483,7 @@
    ]
   },
   {
-   "rank": 8,
+   "rank": 10,
    "setup": "gpt-6.1-terra_medium",
    "name": "GPT-6.1 Terra",
    "level": "medium",
@@ -458,7 +508,7 @@
    ]
   },
   {
-   "rank": 8,
+   "rank": 10,
    "setup": "deepseek-v4.1-flash_max",
    "name": "DeepSeek V4.1 Flash",
    "level": "max",
@@ -483,7 +533,7 @@
    ]
   },
   {
-   "rank": 12,
+   "rank": 14,
    "setup": "sonnet-5.5_medium",
    "name": "Claude Sonnet 5.5",
    "level": "medium",
@@ -508,7 +558,7 @@
    ]
   },
   {
-   "rank": 12,
+   "rank": 14,
    "setup": "gpt-6.1-sol_low",
    "name": "GPT-6.1 Sol",
    "level": "low",
@@ -533,7 +583,7 @@
    ]
   },
   {
-   "rank": 12,
+   "rank": 14,
    "setup": "opus-5.5_medium",
    "name": "Claude Opus 5.5",
    "level": "medium",
@@ -558,7 +608,7 @@
    ]
   },
   {
-   "rank": 12,
+   "rank": 14,
    "setup": "glm-5.3_max",
    "name": "GLM-5.3",
    "level": "max",
@@ -583,7 +633,7 @@
    ]
   },
   {
-   "rank": 12,
+   "rank": 14,
    "setup": "grok-4.6_high",
    "name": "Grok 4.6",
    "level": "high",
@@ -608,7 +658,7 @@
    ]
   },
   {
-   "rank": 12,
+   "rank": 14,
    "setup": "gpt-6.1-terra_max",
    "name": "GPT-6.1 Terra",
    "level": "max",
@@ -633,7 +683,7 @@
    ]
   },
   {
-   "rank": 18,
+   "rank": 20,
    "setup": "gpt-6.1-sol_high",
    "name": "GPT-6.1 Sol",
    "level": "high",
@@ -658,7 +708,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "glm-5.3-flash_max",
    "name": "GLM-5.3 Flash",
    "level": "max",
@@ -683,7 +733,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "muse-spark-1.3_max",
    "name": "Muse Spark 1.3",
    "level": "max",
@@ -708,7 +758,7 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
    "setup": "kimi-k3_max",
    "name": "Kimi K3",
    "level": "max",
@@ -733,7 +783,32 @@
    ]
   },
   {
-   "rank": 19,
+   "rank": 21,
+   "setup": "gemini-4-carbon_high",
+   "name": "Gemini 4 Carbon",
+   "level": "high",
+   "maker": "Google",
+   "score": 88,
+   "basics": 3,
+   "n": 4,
+   "cost": "51p",
+   "tasks": [
+    81,
+    88,
+    89,
+    93
+   ],
+   "where": "Google AI Ultra",
+   "sig_files": [
+    {
+     "name": "short_post.md",
+     "src": "/labs-files/gemini-4-carbon_high/content_01_bakery_preorder/short_post.md",
+     "text": "Not long ago, we sold out by 9.40am on a Saturday. That morning, 3 people told me they walked from Headingley to an empty shelf. I felt awful standing behind that bare counter. You walked a long way across Leeds for bread, and we let you down.\n\nQuiet weeks go wrong in the other direction. On a slow week, we throw away about 6 unsold loaves. I only have 1 oven and 2 hands at Rise & Crumb. The oven hits 250 at 4.10am while I am still in my coat. However much coffee I drink, I can bake 64 Saturday loaves and not 1 more. Guessing Saturday crowds is clearly not my gift.\n\nFrom Saturday 7 November 2026, Saturday bread is pre-order only. You order on our website by 8pm Thursday and pay when you order. Then you collect your bread between 8am and 11am on Saturday. We hold your loaf on our shelf until 11am. Turning up at 10.30am works just like turning up at 8.10am. You don't have to race a 9.40am sell-out anymore.\n\nPlans change, and sometimes you can't make it. You can cancel by 8pm Thursday for a full refund. After 8pm Thursday, we don't refund cancelled or uncollected orders. By then, your bread is already being baked for you. Anything not collected by 11am on Saturday goes to the Chapeltown food bank. Good loaves feed neighbours instead of going in our bin.\n\nWeekday sales stay walk-in as now, including Tuesday and Thursday rye. Only Saturday's 64 loaves are moving to pre-order. We haven't tried pre-orders at the bakery before. Knowing me, I will check Thursday's list 3 times before setting my 4.10am alarm. Order your loaf for Saturday 7 November 2026 on our website by 8pm Thursday.\n"
+    }
+   ]
+  },
+  {
+   "rank": 21,
    "setup": "opus-5.5_low",
    "name": "Claude Opus 5.5",
    "level": "low",
@@ -758,7 +833,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 26,
    "setup": "gpt-6.1-sol_xhigh",
    "name": "GPT-6.1 Sol",
    "level": "xhigh",
@@ -783,7 +858,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 26,
    "setup": "gemini-3.8-flash_high",
    "name": "Gemini 3.8 Flash",
    "level": "high",
@@ -808,7 +883,7 @@
    ]
   },
   {
-   "rank": 23,
+   "rank": 26,
    "setup": "haiku-5.5_default",
    "name": "Claude Haiku 5.5",
    "level": "standard",
@@ -833,7 +908,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 29,
    "setup": "qwen3.8-max-0902_xhigh",
    "name": "Qwen 3.8 Max",
    "level": "xhigh",
@@ -858,7 +933,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 29,
    "setup": "mimo-v2.6-pro_default",
    "name": "MiMo v2.6 Pro",
    "level": "standard",
@@ -883,7 +958,7 @@
    ]
   },
   {
-   "rank": 26,
+   "rank": 29,
    "setup": "minimax-m3_default",
    "name": "MiniMax M3",
    "level": "standard",
@@ -908,7 +983,7 @@
    ]
   },
   {
-   "rank": 29,
+   "rank": 32,
    "setup": "sonnet-5.5_low",
    "name": "Claude Sonnet 5.5",
    "level": "low",
@@ -933,7 +1008,7 @@
    ]
   },
   {
-   "rank": 29,
+   "rank": 32,
    "setup": "mistral-large-4_high",
    "name": "Mistral Large 4",
    "level": "high",
@@ -958,7 +1033,7 @@
    ]
   },
   {
-   "rank": 31,
+   "rank": 34,
    "setup": "grok-4.7_high",
    "name": "Grok 4.7",
    "level": "high",
@@ -983,7 +1058,7 @@
    ]
   },
   {
-   "rank": 32,
+   "rank": 35,
    "setup": "gpt-6-luna_medium",
    "name": "GPT-6 Luna",
    "level": "medium",
@@ -1008,7 +1083,7 @@
    ]
   },
   {
-   "rank": 33,
+   "rank": 36,
    "setup": "gemini-4-argon_high",
    "name": "Gemini 4 Argon",
    "level": "high",
@@ -1033,7 +1108,7 @@
    ]
   },
   {
-   "rank": 34,
+   "rank": 37,
    "setup": "gemini-3.6-flash_low",
    "name": "Gemini 3.6 Flash",
    "level": "low",
@@ -1058,7 +1133,7 @@
    ]
   },
   {
-   "rank": 35,
+   "rank": 38,
    "setup": "gemini-3.5-flash-lite_default",
    "name": "Gemini 3.5 Flash-Lite",
    "level": "standard",
@@ -1083,7 +1158,7 @@
    ]
   },
   {
-   "rank": 36,
+   "rank": 39,
    "setup": "haiku-4.5_default",
    "name": "Claude Haiku 4.5",
    "level": "standard",
@@ -1134,7 +1209,7 @@
    "name": "Automation"
   }
  ],
- "count": 43,
+ "count": 46,
  "tested_from": "2026-10-02",
  "tested_to": "2026-11-13",
  "chart": {
@@ -1226,6 +1301,17 @@
     "cost_gbp": 3.0068,
     "cost": "£3.01",
     "score": 95,
+    "tasks_run": 4
+   },
+   {
+    "setup": "gemini-4-carbon_high",
+    "name": "Gemini 4 Carbon",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 2.049,
+    "cost": "£2.05",
+    "score": 88,
     "tasks_run": 4
    },
    {
@@ -1369,6 +1455,28 @@
     "cost_gbp": 0.8782,
     "cost": "88p",
     "score": 88,
+    "tasks_run": 4
+   },
+   {
+    "setup": "kimi-k3.1-pro_max",
+    "name": "Kimi K3.1 Pro",
+    "level": "max",
+    "maker": "Moonshot AI",
+    "premium": false,
+    "cost_gbp": 0.7594,
+    "cost": "76p",
+    "score": 95,
+    "tasks_run": 4
+   },
+   {
+    "setup": "gemini-4-hydrogen_high",
+    "name": "Gemini 4 Hydrogen",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 0.7317,
+    "cost": "73p",
+    "score": 92,
     "tasks_run": 4
    },
    {

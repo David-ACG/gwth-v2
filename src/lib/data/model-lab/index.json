@@ -7,11 +7,11 @@
    "ask": "Which fact-check would you trust?",
    "sig_title": "Fact-check the CEO",
    "best": {
-    "name": "Claude Opus 5.5",
-    "level": "medium",
-    "maker": "Anthropic",
-    "score": 94,
-    "cost": "38p",
+    "name": "Gemini 4 Hydrogen",
+    "level": "high",
+    "maker": "Google",
+    "score": 95,
+    "cost": "27p",
     "basics": 4,
     "n": 4
    },
@@ -24,7 +24,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 43,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-11-13"
@@ -53,7 +53,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 43,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-11-13"
@@ -82,7 +82,7 @@
     "basics": 4,
     "n": 4
    },
-   "count": 43,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
    "tested_to": "2026-11-13"
@@ -111,10 +111,10 @@
     "basics": 4,
     "n": 4
    },
-   "count": 43,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-11-12"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "data",
@@ -140,7 +140,7 @@
     "basics": 5,
     "n": 5
    },
-   "count": 43,
+   "count": 46,
    "tasks": 5,
    "tested_from": "2026-10-02",
    "tested_to": "2026-11-13"
@@ -152,11 +152,11 @@
    "ask": "Which assistant would you trust with your week?",
    "sig_title": "Clear my week",
    "best": {
-    "name": "GPT-6.1 Terra",
-    "level": "max",
-    "maker": "OpenAI",
-    "score": 98,
-    "cost": "13p",
+    "name": "Gemini 4 Carbon",
+    "level": "high",
+    "maker": "Google",
+    "score": 99,
+    "cost": "60p",
     "basics": 4,
     "n": 4
    },
@@ -169,16 +169,16 @@
     "basics": 4,
     "n": 4
    },
-   "count": 43,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-11-12"
+   "tested_to": "2026-11-13"
   }
  ],
  "tested_from": "2026-10-02",
  "tested_to": "2026-11-13",
- "model_count": 25,
- "setup_count": 43,
+ "model_count": 28,
+ "setup_count": 46,
  "p_per_usd": 75,
  "cost_chart": {
   "tasks": 25,
@@ -280,6 +280,17 @@
     "cost_gbp": 21.5825,
     "cost": "£21.58",
     "score": 93,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-4-carbon_high",
+    "name": "Gemini 4 Carbon",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 16.8661,
+    "cost": "£16.87",
+    "score": 86,
     "tasks_run": 25
    },
    {
@@ -412,6 +423,28 @@
     "cost_gbp": 6.5706,
     "cost": "£6.57",
     "score": 93,
+    "tasks_run": 25
+   },
+   {
+    "setup": "kimi-k3.1-pro_max",
+    "name": "Kimi K3.1 Pro",
+    "level": "max",
+    "maker": "Moonshot AI",
+    "premium": false,
+    "cost_gbp": 6.1734,
+    "cost": "£6.17",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-4-hydrogen_high",
+    "name": "Gemini 4 Hydrogen",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 6.1692,
+    "cost": "£6.17",
+    "score": 94,
     "tasks_run": 25
    },
    {
