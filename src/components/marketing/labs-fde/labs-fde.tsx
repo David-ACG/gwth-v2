@@ -204,9 +204,10 @@ export function LabsFde({ index }: LabsFdeProps) {
               the labs, why we built them, and how to use them ... a first trial of the screen
               recording process". Version 3 of the scripted walkthrough (labs-tour-v3), after his
               13 Nov review: the homepage film's journal look, yellow highlighter marks on the
-              element's own box, no magnifier, three slow zooms. He then asked for "the same voice
-              as the homepage video from elevenlabs" with the house pronunciation rules, so this is
-              the GWTH narrator reading it, saying "read" rather than "red". Astra script, Sol check.
+              element's own box, no magnifier, three slow zooms. He then asked for "the same new male
+              deep voice as the home page video" with the house pronunciation rules, so this is the
+              GWTH narrator reading it (deepldn_m1, the voice he picked for the home page film on
+              8 Nov), saying "read" rather than "red". Astra script, Sol check.
               Replica only: the file sits untracked in public/videos/labs/; at GO LIVE it goes to the
               media CDN under a new name and this src moves with it. */}
           <figure className={styles.closingFigure} data-testid="labs-closing-figure">
@@ -214,14 +215,14 @@ export function LabsFde({ index }: LabsFdeProps) {
               controls
               playsInline
               preload="none"
-              poster="/videos/labs/labs-tour-v3-narrator.poster.jpg"
+              poster="/videos/labs/labs-tour-v3-deepldn.poster.jpg"
               className={styles.closingVideo}
               aria-label="How to use the GWTH labs: a short narrated tour"
             >
-              <source src="/videos/labs/labs-tour-v3-narrator.mp4" type="video/mp4" />
+              <source src="/videos/labs/labs-tour-v3-deepldn.mp4" type="video/mp4" />
               <track
                 kind="captions"
-                src="/videos/labs/labs-tour-v3-narrator.vtt"
+                src="/videos/labs/labs-tour-v3-deepldn.vtt"
                 srcLang="en"
                 label="English"
               />
