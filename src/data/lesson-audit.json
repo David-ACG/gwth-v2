@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T11:28",
+ "generated": "2026-11-14T14:09",
  "last_work": "2026-11-14",
  "next_due": "2026-11-28",
  "cadence_days": 14,
@@ -735,33 +735,59 @@
    }
   ],
   "operations": 58,
-  "placed": 0,
-  "problems": [],
+  "placed": 53,
+  "problems": [
+   {
+    "op": "op-36",
+    "what": "m2_l13_askmyco_part_1_build_the_company_knowledge_engine",
+    "why": "rejected by Sol"
+   },
+   {
+    "op": "op-38",
+    "what": "m2_l15_advanced_automation_superpower_workflows_agents_and_human_control",
+    "why": "waits for ['op-51'], which did not pass"
+   },
+   {
+    "op": "op-40",
+    "what": "m2_l16_geo_and_agent_shopping_the_new_seo_for_uk_businesses",
+    "why": "rejected by Sol"
+   },
+   {
+    "op": "op-51",
+    "what": "m2_l28_observability_and_evals_langfuse_braintrust_helicone_custom_tests",
+    "why": "rejected by Sol"
+   },
+   {
+    "op": "op-56",
+    "what": "m2_l38_ai_for_creative_industries",
+    "why": "rejected by Sol"
+   }
+  ],
   "new_lessons": [
    {
     "title": "Stay Safe With AI - Check, Protect, And Spot Fakes",
     "month": 1,
-    "slug": null
+    "slug": "m1_l43_stay_safe_with_ai_check_protect_and_spot_fakes"
    },
    {
     "title": "Know Your Rights With AI - Refunds, Complaints, Work, And Access",
     "month": 1,
-    "slug": null
+    "slug": "m1_l44_know_your_rights_with_ai_refunds_complaints_work_and_access"
    },
    {
     "title": "Agent Shopping - When AI Agents Compare And Buy For Your Customers",
     "month": 2,
-    "slug": null
+    "slug": "m2_l43_agent_shopping_when_ai_agents_compare_and_buy_for_your_customers"
    },
    {
     "title": "AI Design Tools Workshop - Claude Design, Impeccable, And UI Polish",
     "month": 2,
-    "slug": null
+    "slug": "m2_l44_ai_design_tools_workshop_claude_design_impeccable_and_ui_polish"
    },
    {
     "title": "Performers' Voice And Likeness - Your Rights When AI Can Copy You",
     "month": 2,
-    "slug": null
+    "slug": "m2_l45_performers_voice_and_likeness_your_rights_when_ai_can_copy_you"
    }
   ],
   "decided_by_default": [
@@ -771,7 +797,24 @@
    "New lessons: op-04 (Stay Safe With AI) core; op-09, op-41, op-49, op-57 optional, as planned. David can change it in the syllabus."
   ]
  },
- "needs_you": [],
+ "needs_you": [
+  {
+   "slug": "m1_l09_building_superpower_make_your_first_useful_thing_without_coding",
+   "code": "M1 L09",
+   "title": "Building Superpower - Make Your First Useful Thing Without Coding",
+   "part": "project",
+   "why": "The required website-building and publishing outcomes are deferred to L16. (The supplied project is a private-assistant exercise throughout. Adding the suggested introduction would promise website instructions that are absent. Resolving this requires a decision to replace the assistant project with ",
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l09_building_superpower_make_your_first_useful_thing_without_coding#project"
+  },
+  {
+   "slug": "m2_l08_supabase_foundations_data_auth_roles_and_business_records",
+   "code": "M2 L08",
+   "title": "Supabase Foundations - Data, Auth, Roles, And Business Records",
+   "part": "lesson",
+   "why": "The guided activity and project use Neon Postgres with Better Auth rather than teaching Supabase dashboard, Auth, RLS and Storage practice. (The brief and suggested wording do not supply the dashboard steps, Auth setup or RLS and Storage policy definitions needed for a complete replacement. Adding t",
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l08_supabase_foundations_data_auth_roles_and_business_records#lesson"
+  }
+ ],
  "lessons": [
   {
    "slug": "m1_l00_start_here_the_tips_we_wish_we_d_had_when_we_started",
@@ -908,8 +951,10 @@
    "fact_changes": 23,
    "clarity_rewritten": "2026-11-10",
    "qa": {
-    "lesson": "passed",
-    "project": "passed"
+    "lesson": "stuck",
+    "lesson_why": "The automated QA itself failed: RuntimeError: the QA fix moved facts nobody asked for, so it was not saved: {\"numbers\": {\"lost\": [\"20\", \"40\"], \"gained\": []}, \"entities\": {\"lost\": [\"MealPlanBot\", \"OK\"], \"gained\": []}}",
+    "project": "stuck",
+    "project_person": "The required website-building and publishing outcomes are deferred to L16. (The supplied project is a private-assistant exercise throughout. Adding the suggested introduction would promise website instructions that are absent. Resolving this requires a decision to replace the assistant project with "
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l09_building_superpower_make_your_first_useful_thing_without_coding#lesson"
   },
@@ -1251,6 +1296,34 @@
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l42_build_an_audience_with_ai_test_a_podcast_youtube_or_instagram_channel#lesson"
   },
   {
+   "slug": "m1_l43_stay_safe_with_ai_check_protect_and_spot_fakes",
+   "code": "M1 L43",
+   "month": 1,
+   "title": "Stay Safe With AI - Check, Protect, And Spot Fakes",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l43_stay_safe_with_ai_check_protect_and_spot_fakes#lesson"
+  },
+  {
+   "slug": "m1_l44_know_your_rights_with_ai_refunds_complaints_work_and_access",
+   "code": "M1 L44",
+   "month": 1,
+   "title": "Know Your Rights With AI - Refunds, Complaints, Work, And Access",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m1_l44_know_your_rights_with_ai_refunds_complaints_work_and_access#lesson"
+  },
+  {
    "slug": "m2_l01_welcome_to_month_2_from_ai_user_to_ai_builder",
    "code": "M2 L01",
    "month": 2,
@@ -1357,8 +1430,10 @@
    "fact_changes": 7,
    "clarity_rewritten": "2026-11-11",
    "qa": {
-    "lesson": "passed",
-    "project": "passed"
+    "lesson": "stuck",
+    "lesson_person": "The guided activity and project use Neon Postgres with Better Auth rather than teaching Supabase dashboard, Auth, RLS and Storage practice. (The brief and suggested wording do not supply the dashboard steps, Auth setup or RLS and Storage policy definitions needed for a complete replacement. Adding t",
+    "project": "stuck",
+    "project_why": "The automated QA itself failed: RuntimeError: the QA fix moved facts nobody asked for, so it was not saved: {\"numbers\": {\"lost\": [\"32\"], \"gained\": []}, \"entities\": {\"lost\": [\"CLI\", \"URL\"], \"gained\": []}}"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l08_supabase_foundations_data_auth_roles_and_business_records#lesson"
   },
@@ -1839,6 +1914,48 @@
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l42_ai_for_uk_sales#lesson"
   },
   {
+   "slug": "m2_l43_agent_shopping_when_ai_agents_compare_and_buy_for_your_customers",
+   "code": "M2 L43",
+   "month": 2,
+   "title": "Agent Shopping - When AI Agents Compare And Buy For Your Customers",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l43_agent_shopping_when_ai_agents_compare_and_buy_for_your_customers#lesson"
+  },
+  {
+   "slug": "m2_l44_ai_design_tools_workshop_claude_design_impeccable_and_ui_polish",
+   "code": "M2 L44",
+   "month": 2,
+   "title": "AI Design Tools Workshop - Claude Design, Impeccable, And UI Polish",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l44_ai_design_tools_workshop_claude_design_impeccable_and_ui_polish#lesson"
+  },
+  {
+   "slug": "m2_l45_performers_voice_and_likeness_your_rights_when_ai_can_copy_you",
+   "code": "M2 L45",
+   "month": 2,
+   "title": "Performers' Voice And Likeness - Your Rights When AI Can Copy You",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": null,
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m2_l45_performers_voice_and_likeness_your_rights_when_ai_can_copy_you#lesson"
+  },
+  {
    "slug": "m3_l01_welcome_to_month_3_from_ai_builder_to_ai_transformation_leader",
    "code": "M3 L01",
    "month": 3,
@@ -2007,6 +2124,20 @@
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l12_workflow_redesign_with_agents_humans_tools_and_new_operating_models#lesson"
   },
   {
+   "slug": "m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes",
+   "code": "M3 L13",
+   "month": 3,
+   "title": "Your Company's AI Workspace - What A Rollout Really Takes",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes#lesson"
+  },
+  {
    "slug": "m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost",
    "code": "M3 L13",
    "month": 3,
@@ -2021,20 +2152,6 @@
     "project_why": "The automated QA itself failed: RuntimeError: m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost is not linked to a syllabus lesson"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost#lesson"
-  },
-  {
-   "slug": "m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes",
-   "code": "M3 L13",
-   "month": 3,
-   "title": "Your Company's AI Workspace - What A Rollout Really Takes",
-   "facts_checked": null,
-   "fact_changes": null,
-   "clarity_rewritten": "2026-11-11",
-   "qa": {
-    "lesson": "passed",
-    "project": "passed"
-   },
-   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes#lesson"
   },
   {
    "slug": "m3_l14_adoption_that_sticks_culture_training_and_change_management",
@@ -2363,13 +2480,13 @@
   }
  ],
  "totals": {
-  "lessons": 113,
+  "lessons": 118,
   "rewritten": 113,
   "facts_checked": 71,
-  "never_facts_checked": 42,
-  "qa_passed": 109,
-  "needs_you": 0,
-  "qa_rechecking": 6
+  "never_facts_checked": 47,
+  "qa_passed": 112,
+  "needs_you": 2,
+  "qa_rechecking": 8
  },
  "detail": {
   "log": "GWTH-launch-plan/lesson_audit/log.jsonl",
