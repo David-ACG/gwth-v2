@@ -1,16 +1,16 @@
 {
- "generated": "2026-11-13T23:24",
- "last_work": "2026-11-13",
- "next_due": "2026-11-27",
+ "generated": "2026-11-14T11:28",
+ "last_work": "2026-11-14",
+ "next_due": "2026-11-28",
  "cadence_days": 14,
  "rounds": [
   {
    "kind": "clarity",
    "label": "Clearer for beginners",
    "from": "2026-11-10",
-   "to": "2026-11-13",
-   "lessons": 96,
-   "facts_restored_by_checker": 297,
+   "to": "2026-11-14",
+   "lessons": 113,
+   "facts_restored_by_checker": 360,
    "fact_changes": null
   },
   {
@@ -51,6 +51,38 @@
     "2026-10-31"
    ],
    "evidence": [],
+   "status": "accepted"
+  },
+  {
+   "id": "aligned-syllabus-projects",
+   "type": "widen",
+   "title": "Widen syllabus project briefs to match the work learners actually do",
+   "lessons": [
+    "m1_l00_start_here_the_tips_we_wish_we_d_had_when_we_started",
+    "m1_l01_welcome_to_gwth_six_ways_ai_can_give_you_superpowers",
+    "m1_l02_your_ai_colleague_how_to_get_brilliant_help_without_giving_up_your_judgement",
+    "m1_l03_how_ai_works_the_useful_bits_that_make_you_better_at_it",
+    "m1_l06_research_superpower_find_compare_and_verify_anything",
+    "m1_l08_thinking_superpower_plan_decide_and_learn_faster",
+    "m1_l10_data_superpower_turn_messy_information_into_answers",
+    "m2_l12_rag_that_actually_works_citations_chunking_trust",
+    "m2_l34_ai_for_uk_healthcare",
+    "m2_l36_ai_for_uk_finance",
+    "m2_l38_ai_for_creative_industries"
+   ],
+   "why": "Repeated notes find syllabus briefs, project titles and lesson summaries promising different tasks or outcomes from the projects supplied. Align each affected lesson around one project brief, with matching scope, title and realistic time, rather than adding exercises to satisfy obsolete descriptions.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-10-15",
+    "2026-10-25",
+    "2026-10-25",
+    "2026-10-25",
+    "2026-10-31",
+    "2026-11-14",
+    "2026-11-14"
+   ],
+   "evidence": [],
    "status": "proposed"
   },
   {
@@ -77,7 +109,7 @@
     "2026-09-08"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "shared-app-backbone",
@@ -99,7 +131,7 @@
     "2026-09-24"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "builder-work-in-month-two",
@@ -109,21 +141,46 @@
     "m1_l11_automation_superpower_save_time_by_connecting_repeatable_steps",
     "m1_l12_agents_superpower_ai_that_can_do_things_for_you",
     "m1_l18_ai_power_tools_mcps_clis_skills_plugins_and_connectors",
+    "m1_l19_choosing_your_coding_tool_codex_claude_code_opencode_and_what_to_use_when",
+    "m2_l03_choosing_your_ai_builder_stack_codex_claude_code_cursor_gemini",
     "m2_l15_advanced_automation_superpower_workflows_agents_and_human_control",
+    "m2_l21_codex_deep_dive_desktop_first_cli_when_it_helps",
     "m2_l22_claude_code_deep_dive_desktop_first_warp_and_cli_when_it_helps",
     "m2_l23_advanced_ai_coding_harnesses_cli_remote_control_multimachine_workflows",
     "m2_l39_browser_and_computer_use_agents_research_and_admin_on_autopilot"
    ],
-   "why": "Month 1 now includes team automation, MCP building, remote workflows and a workplace agent lab that needs an employer licence. Move team tasks to M2 L15, builder workflows to L22 and L23, and the licensed workplace lab to optional agent practice, keeping a simple introduction in Month 1.",
+   "why": "Month 1 includes coding-agent installation, team automation, MCP building and licensed workplace practice that overlap the Month 2 builder route. Move coding setup and test drives into the Month 2 coding lessons, team tasks into L15 and advanced agent labs into optional practice, keeping simple introductions in Month 1.",
    "recommendation": "do",
    "effort": "medium",
    "raised": [
     "2026-10-31",
     "2026-10-31",
-    "2026-11-06"
+    "2026-11-06",
+    "2026-11-14"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
+  },
+  {
+   "id": "testing-and-evals-progression",
+   "type": "widen",
+   "title": "Widen app testing to include AI output evaluation before advanced evals",
+   "lessons": [
+    "m2_l04_github_projects_and_professional_workflow",
+    "m2_l09_testing_aibuilt_apps_tdd_playwright_and_regression_checks",
+    "m2_l15_advanced_automation_superpower_workflows_agents_and_human_control",
+    "m2_l28_observability_and_evals_langfuse_braintrust_helicone_custom_tests"
+   ],
+   "why": "Testing needs to build on the GitHub Actions check introduced in L04 and teach beginners how to judge variable AI answers, while automation has accumulated advanced simulated-user testing. Add a small review of real outputs in L09 and move simulated-user evaluation from L15 to L28.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-09-08",
+    "2026-09-24",
+    "2026-09-25"
+   ],
+   "evidence": [],
+   "status": "accepted"
   },
   {
    "id": "ai-garage-progression",
@@ -142,7 +199,7 @@
     "2026-10-31"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "creation-project-homes",
@@ -162,26 +219,7 @@
     "2026-10-31"
    ],
    "evidence": [],
-   "status": "proposed"
-  },
-  {
-   "id": "testing-and-evals-progression",
-   "type": "widen",
-   "title": "Widen app testing to include AI output evaluation before advanced evals",
-   "lessons": [
-    "m2_l09_testing_aibuilt_apps_tdd_playwright_and_regression_checks",
-    "m2_l15_advanced_automation_superpower_workflows_agents_and_human_control",
-    "m2_l28_observability_and_evals_langfuse_braintrust_helicone_custom_tests"
-   ],
-   "why": "The testing lesson needs a beginner method for judging variable AI answers, while automation has accumulated advanced simulated-user testing. Introduce a small review of real outputs in L09 and move simulated-user evaluation from L15 to L28.",
-   "recommendation": "do",
-   "effort": "medium",
-   "raised": [
-    "2026-09-08",
-    "2026-09-25"
-   ],
-   "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "portable-saved-assistants",
@@ -197,6 +235,29 @@
    "raised": [
     "2026-09-07",
     "2026-11-06"
+   ],
+   "evidence": [],
+   "status": "accepted"
+  },
+  {
+   "id": "month-one-review-last",
+   "type": "move",
+   "title": "Move the Month 1 portfolio and review to the end of the learning route",
+   "lessons": [
+    "m1_l25_month_1_portfolio_show_what_you_can_now_do_with_ai",
+    "m1_l26_month_1_review_your_next_step_toward_month_2",
+    "m1_l37_openai_aka_chatgpt",
+    "m1_l38_anthropic_aka_claude",
+    "m1_l40_google_aka_gemini",
+    "m1_l41_test_a_small_online_shop_with_ai_before_you_spend_money",
+    "m1_l42_build_an_audience_with_ai_test_a_podcast_youtube_or_instagram_channel"
+   ],
+   "why": "The Month 1 portfolio and review precede later lessons, including the core OpenAI lesson, and an earlier note already found that the recap did not match the month. Put the portfolio immediately before the final review and make clear which optional lessons contribute.",
+   "recommendation": "do",
+   "effort": "small",
+   "raised": [
+    "2026-09-07",
+    "2026-11-14"
    ],
    "evidence": [],
    "status": "proposed"
@@ -218,7 +279,7 @@
     "2026-09-07"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "managed-search-first",
@@ -238,7 +299,7 @@
     "2026-09-08"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "capstone-sector-adaptation",
@@ -255,7 +316,7 @@
     "2026-09-08"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "travel-for-personal-and-group-use",
@@ -271,7 +332,7 @@
     "2026-10-15"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "linkedin-in-cv-lesson",
@@ -286,6 +347,104 @@
    "effort": "small",
    "raised": [
     "2026-10-26"
+   ],
+   "evidence": [],
+   "status": "accepted"
+  },
+  {
+   "id": "landscape-before-frontier-labs",
+   "type": "move",
+   "title": "Move the AI landscape lesson before the frontier-labs comparison",
+   "lessons": [
+    "m1_l03_how_ai_works_the_useful_bits_that_make_you_better_at_it",
+    "m1_l04_ai_tooling_landscape_where_ai_shows_up_in_real_life",
+    "m1_l05_frontier_labs_tooling_openai_anthropic_google_and_what_to_use_when"
+   ],
+   "why": "The notes place the landscape lesson after L11 even though L03 leads into it and it introduces L05. Move it before L05 so beginners meet the map before comparing suppliers.",
+   "recommendation": "do",
+   "effort": "small",
+   "raised": [
+    "2026-11-14"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "self-contained-agent-safety",
+   "type": "widen",
+   "title": "Widen core agent safety to introduce agents without optional prerequisites",
+   "lessons": [
+    "m1_l11_automation_superpower_save_time_by_connecting_repeatable_steps",
+    "m1_l12_agents_superpower_ai_that_can_do_things_for_you",
+    "m1_l13_agent_safety_how_to_stay_in_control"
+   ],
+   "why": "Core agent safety relies on an explanation of agents taught only in optional automation and agents lessons. Add the minimum agent introduction to L13 so every learner can complete the safety lesson independently.",
+   "recommendation": "do",
+   "effort": "small",
+   "raised": [
+    "2026-11-14"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "shared-month-one-habits",
+   "type": "merge",
+   "title": "Merge repeated prompting and checking instructions into shared Month 1 guidance",
+   "lessons": [
+    "m1_l00_start_here_the_tips_we_wish_we_d_had_when_we_started",
+    "m1_l02_your_ai_colleague_how_to_get_brilliant_help_without_giving_up_your_judgement",
+    "m1_l03_how_ai_works_the_useful_bits_that_make_you_better_at_it",
+    "m1_l06_research_superpower_find_compare_and_verify_anything",
+    "m1_l20_ai_efficiency_better_results_for_less_cost",
+    "m1_l21_familybot_blueprint_design_a_helpful_ai_for_home_life",
+    "m1_l24_familybot_shares_make_the_outputs_useful_for_real_life"
+   ],
+   "why": "Goal-first briefs and whole-document habits are retaught across seven lessons, while most Month 1 projects repeat the two-chat critique method. Teach each method fully in one place and link back from later applications, retaining task-specific safety instructions.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-11-14"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "shared-transcription-setup",
+   "type": "merge",
+   "title": "Merge repeated transcription setup into one reusable introduction",
+   "lessons": [
+    "m1_l00_start_here_the_tips_we_wish_we_d_had_when_we_started",
+    "m1_l22_familybot_listens_turn_voice_notes_or_meetings_into_useful_text",
+    "m1_l28_transcription_extraction_teaching_ai_to_listen"
+   ],
+   "why": "Handy and Buzz setup is repeated in the taster, transcription lesson and FamilyBot Listens. Keep the minimum voice setup in L00, put the full setup in L28 and let FamilyBot reuse it for its household task.",
+   "recommendation": "do",
+   "effort": "small",
+   "raised": [
+    "2026-11-14"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "consistent-assessment-guidance",
+   "type": "widen",
+   "title": "Widen project guidance to explain assessment consistently across the course",
+   "lessons": [
+    "m1_l24_familybot_shares_make_the_outputs_useful_for_real_life",
+    "m1_l25_month_1_portfolio_show_what_you_can_now_do_with_ai",
+    "m1_l26_month_1_review_your_next_step_toward_month_2",
+    "m2_l19_capstone_build_askmyco_and_fractionalbuddy_production_sprint",
+    "m2_l20_month_2_portfolio_sell_your_skills_show_your_builds_bridge_to_month_3",
+    "m3_l18_capstone_part_3_generate_the_roadmap_and_executive_report",
+    "m3_l20_month_3_portfolio_transformation_leader_showcase"
+   ],
+   "why": "Only three capstone endpoints currently explain how projects are marked, while the notes flag inconsistent points and marking elsewhere. Explain assessment at the start of each project arc and carry the same criteria and points through its project, portfolio and review guidance.",
+   "recommendation": "do",
+   "effort": "medium",
+   "raised": [
+    "2026-11-14"
    ],
    "evidence": [],
    "status": "proposed"
@@ -314,7 +473,7 @@
     "2026-10-31"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "broader-frontier-labs",
@@ -330,7 +489,7 @@
     "2026-09-07"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "solo-and-team-coding",
@@ -348,7 +507,7 @@
     "2026-09-08"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "geo-and-agent-shopping",
@@ -364,7 +523,7 @@
     "2026-09-08"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "design-foundations-and-tools",
@@ -380,7 +539,7 @@
     "2026-09-25"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "performer-voice-and-likeness",
@@ -396,7 +555,7 @@
     "2026-09-08"
    ],
    "evidence": [],
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "finance-for-everyday-ai-users",
@@ -412,9 +571,206 @@
     "2026-09-08"
    ],
    "evidence": [],
+   "status": "accepted"
+  },
+  {
+   "id": "infrastructure-build-to-lead",
+   "type": "merge",
+   "title": "Merge repeated hosting and open-model introductions across Months 2 and 3",
+   "lessons": [
+    "m2_l30_selfhosting_llms_local_models_privacy_and_uk_data_control",
+    "m2_l31_cheaper_and_open_models_china_europe_and_when_frontier_models_are_worth_it",
+    "m3_l30_self_hosted_ai_infrastructure_ollama_vllm_and_gpu_management",
+    "m3_l31_open_source_models_at_enterprise_scale_deepseek_qwen_mistral_llama"
+   ],
+   "why": "The course notes flag overlapping self-hosting and open-model lessons in Months 2 and 3. Keep practical setup and model trials in Month 2, and retain Month 3 sessions only for distinct enterprise operation and leadership decisions.",
+   "recommendation": "consider",
+   "effort": "large",
+   "raised": [
+    "2026-11-14"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "sector-build-to-lead",
+   "type": "split",
+   "title": "Split sector teaching between building in Month 2 and leading in Month 3",
+   "lessons": [
+    "m2_l34_ai_for_uk_healthcare",
+    "m2_l35_ai_for_uk_legal",
+    "m2_l36_ai_for_uk_finance",
+    "m3_l24_ai_for_financial_services_compliance_risk_and_automation",
+    "m3_l25_ai_for_healthcare_safety_evidence_and_clinical_boundaries",
+    "m3_l26_ai_for_professional_services_consulting_legal_and_accounting"
+   ],
+   "why": "Healthcare, legal and finance topics recur across Months 2 and 3 without a clear difference in purpose in the course notes. Give Month 2 the practical build exercises and Month 3 the organisational adoption, assurance and accountability work, linking back to shared foundations.",
+   "recommendation": "consider",
+   "effort": "large",
+   "raised": [
+    "2026-11-14"
+   ],
+   "evidence": [],
+   "status": "proposed"
+  },
+  {
+   "id": "single-board-briefing",
+   "type": "merge",
+   "title": "Merge repeated board-briefing teaching into the core AI champion lesson",
+   "lessons": [
+    "m3_l19_ai_champion_playbook_board_briefing_and_90_day_plan",
+    "m3_l22_the_ai_board_briefing_what_to_tell_your_board_and_how_often"
+   ],
+   "why": "Board briefing appears in both the core AI champion playbook and an optional dedicated lesson. Consolidate the shared briefing method and exercise in L19, retaining L22 only if it offers distinct advanced practice.",
+   "recommendation": "consider",
+   "effort": "medium",
+   "raised": [
+    "2026-11-14"
+   ],
+   "evidence": [],
    "status": "proposed"
   }
  ],
+ "making": {
+  "accepted": [
+   {
+    "id": "dated-reference-pages",
+    "type": "move",
+    "title": "Move fast-changing tool lists and policy timelines into dated reference pages"
+   },
+   {
+    "id": "shared-builder-governance",
+    "type": "widen",
+    "title": "Widen security foundations into a shared builder governance module"
+   },
+   {
+    "id": "shared-app-backbone",
+    "type": "widen",
+    "title": "Widen database foundations to match the shared Month 2 app build"
+   },
+   {
+    "id": "builder-work-in-month-two",
+    "type": "move",
+    "title": "Move advanced builder and workplace exercises from Month 1 into Month 2"
+   },
+   {
+    "id": "testing-and-evals-progression",
+    "type": "widen",
+    "title": "Widen app testing to include AI output evaluation before advanced evals"
+   },
+   {
+    "id": "ai-garage-progression",
+    "type": "merge",
+    "title": "Merge repeated paid-model comparisons into the Month 2 AI Garage"
+   },
+   {
+    "id": "creation-project-homes",
+    "type": "move",
+    "title": "Move website and visual launch-kit projects into the existing media lessons"
+   },
+   {
+    "id": "portable-saved-assistants",
+    "type": "widen",
+    "title": "Widen saved-assistant teaching beyond custom GPTs"
+   },
+   {
+    "id": "familybot-connectors",
+    "type": "widen",
+    "title": "Widen FamilyBot sharing to cover connectors and consent"
+   },
+   {
+    "id": "managed-search-first",
+    "type": "widen",
+    "title": "Widen RAG foundations to start with managed and agentic document search"
+   },
+   {
+    "id": "capstone-sector-adaptation",
+    "type": "widen",
+    "title": "Widen the Month 2 capstone with a sector-adaptation brief"
+   },
+   {
+    "id": "travel-for-personal-and-group-use",
+    "type": "widen",
+    "title": "Widen the travel lesson to include personal and group trips"
+   },
+   {
+    "id": "linkedin-in-cv-lesson",
+    "type": "move",
+    "title": "Move LinkedIn rewriting into the CV and LinkedIn lesson"
+   },
+   {
+    "id": "shorter-month-one-sessions",
+    "type": "split",
+    "title": "Split overloaded Month 1 lessons into shorter, focused sessions"
+   },
+   {
+    "id": "broader-frontier-labs",
+    "type": "widen",
+    "title": "Widen the frontier-labs comparison beyond three companies"
+   },
+   {
+    "id": "solo-and-team-coding",
+    "type": "split",
+    "title": "Split coding workflows by solo work and team delivery"
+   },
+   {
+    "id": "geo-and-agent-shopping",
+    "type": "split",
+    "title": "Split search visibility from agent shopping"
+   },
+   {
+    "id": "design-foundations-and-tools",
+    "type": "split",
+    "title": "Split design foundations from AI design tools"
+   },
+   {
+    "id": "performer-voice-and-likeness",
+    "type": "split",
+    "title": "Split performers' voice and likeness rights from training-data copyright"
+   },
+   {
+    "id": "finance-for-everyday-ai-users",
+    "type": "widen",
+    "title": "Widen the finance lesson to cover everyday chatbot money questions"
+   }
+  ],
+  "operations": 58,
+  "placed": 0,
+  "problems": [],
+  "new_lessons": [
+   {
+    "title": "Stay Safe With AI - Check, Protect, And Spot Fakes",
+    "month": 1,
+    "slug": null
+   },
+   {
+    "title": "Know Your Rights With AI - Refunds, Complaints, Work, And Access",
+    "month": 1,
+    "slug": null
+   },
+   {
+    "title": "Agent Shopping - When AI Agents Compare And Buy For Your Customers",
+    "month": 2,
+    "slug": null
+   },
+   {
+    "title": "AI Design Tools Workshop - Claude Design, Impeccable, And UI Polish",
+    "month": 2,
+    "slug": null
+   },
+   {
+    "title": "Performers' Voice And Likeness - Your Rights When AI Can Copy You",
+    "month": 2,
+    "slug": null
+   }
+  ],
+  "decided_by_default": [
+   "Month 2 build route: Neon Postgres + Better Auth + pgvector, because L08's build and the M3 capstone already use it (and it is what GWTH itself runs). David can overturn.",
+   "Optional M2 sector lessons stay where they are; op-43 names them as follow-ups after the capstone instead of a step inside it. Moving them is left for David (course note).",
+   "The new titles go ahead; David sees them in the Words check and the syllabus and can rename.",
+   "New lessons: op-04 (Stay Safe With AI) core; op-09, op-41, op-49, op-57 optional, as planned. David can change it in the syllabus."
+  ]
+ },
  "needs_you": [],
  "lessons": [
   {
@@ -1651,21 +2007,6 @@
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l12_workflow_redesign_with_agents_humans_tools_and_new_operating_models#lesson"
   },
   {
-   "slug": "m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes",
-   "code": "M3 L13",
-   "month": 3,
-   "title": "Your Company's AI Workspace - What A Rollout Really Takes",
-   "facts_checked": null,
-   "fact_changes": null,
-   "clarity_rewritten": "2026-11-11",
-   "qa": {
-    "lesson": "running",
-    "project": "stuck",
-    "project_why": "The Sol check did not run: codex exited 1 with no answer: ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 8:30 AM."
-   },
-   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes#lesson"
-  },
-  {
    "slug": "m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost",
    "code": "M3 L13",
    "month": 3,
@@ -1682,6 +2023,20 @@
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost#lesson"
   },
   {
+   "slug": "m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes",
+   "code": "M3 L13",
+   "month": 3,
+   "title": "Your Company's AI Workspace - What A Rollout Really Takes",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes#lesson"
+  },
+  {
    "slug": "m3_l14_adoption_that_sticks_culture_training_and_change_management",
    "code": "M3 L14",
    "month": 3,
@@ -1690,10 +2045,8 @@
    "fact_changes": null,
    "clarity_rewritten": "2026-11-11",
    "qa": {
-    "lesson": "stuck",
-    "lesson_why": "The Sol check did not run: codex exited 1 with no answer: ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 8:30 AM.",
-    "project": "stuck",
-    "project_why": "The Sol check did not run: codex exited 1 with no answer: ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 8:30 AM."
+    "lesson": "passed",
+    "project": "passed"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l14_adoption_that_sticks_culture_training_and_change_management#lesson"
   },
@@ -1718,10 +2071,11 @@
    "title": "Capstone Part 1 - Build The Voice Interview Prototype",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
-    "lesson": "running",
-    "project": "running"
+    "lesson": "passed",
+    "project": "stuck",
+    "project_why": "Must fix: Vercel deployment protection can stop testers before they reach the app, but the instructions give no way to resolve this ([Vercel guidance](https://vercel.com/docs/deployment-protection/methods-to-protect-deployments/vercel-authentication)"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l16_capstone_part_1_build_the_voice_interview_prototype#lesson"
   },
@@ -1732,10 +2086,10 @@
    "title": "Capstone Part 2 - Build The Evidence RAG And Scoring Engine",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
-    "project": "running"
+    "project": "passed"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l17_capstone_part_2_build_the_evidence_rag_and_scoring_engine#lesson"
   },
@@ -1746,10 +2100,10 @@
    "title": "Capstone Part 3 - Generate The Roadmap And Executive Report",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
-    "project": "running"
+    "project": "passed"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l18_capstone_part_3_generate_the_roadmap_and_executive_report#lesson"
   },
@@ -1818,10 +2172,10 @@
    "title": "Public Sector, Procurement, And Vendor Risk",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
-    "project": "running"
+    "project": "passed"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l23_public_sector_procurement_and_vendor_risk#lesson"
   },
@@ -1832,7 +2186,7 @@
    "title": "AI For Financial Services - Compliance, Risk, And Automation",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1846,9 +2200,9 @@
    "title": "AI For Healthcare - Safety, Evidence, And Clinical Boundaries",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
-    "lesson": "running",
+    "lesson": "passed",
     "project": "passed"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l25_ai_for_healthcare_safety_evidence_and_clinical_boundaries#lesson"
@@ -1860,7 +2214,7 @@
    "title": "AI For Professional Services - Consulting, Legal, And Accounting",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1874,9 +2228,9 @@
    "title": "AI For Manufacturing And Supply Chain",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
-    "lesson": "running",
+    "lesson": "passed",
     "project": "passed"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l27_ai_for_manufacturing_and_supply_chain#lesson"
@@ -1888,7 +2242,7 @@
    "title": "Advanced Voice AI And Conversational Interfaces",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1902,7 +2256,7 @@
    "title": "Advanced Multi-Agent Orchestration - Production Pipelines",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1916,7 +2270,7 @@
    "title": "Self-Hosted AI Infrastructure - Ollama, vLLM, And GPU Management",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1930,7 +2284,7 @@
    "title": "Open-Source Models At Enterprise Scale - DeepSeek, Qwen, Mistral, Llama",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1944,7 +2298,7 @@
    "title": "AI Security Red Teaming - Testing AI Systems Before Deployment",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1958,7 +2312,7 @@
    "title": "Responsible AI, Ethics, IP, And Disclosure",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-13",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1972,7 +2326,7 @@
    "title": "Workforce Transition, Accessibility, And Inclusion",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-14",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -1986,7 +2340,7 @@
    "title": "AI Consulting Practice - Advisory, Fractional CTO, And AI Auditing",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-14",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -2000,7 +2354,7 @@
    "title": "Your AI Garage - Premium Models and Multi-Model Workflows",
    "facts_checked": null,
    "fact_changes": null,
-   "clarity_rewritten": null,
+   "clarity_rewritten": "2026-11-14",
    "qa": {
     "lesson": "passed",
     "project": "passed"
@@ -2010,12 +2364,12 @@
  ],
  "totals": {
   "lessons": 113,
-  "rewritten": 96,
+  "rewritten": 113,
   "facts_checked": 71,
   "never_facts_checked": 42,
-  "qa_passed": 102,
+  "qa_passed": 109,
   "needs_you": 0,
-  "qa_rechecking": 8
+  "qa_rechecking": 6
  },
  "detail": {
   "log": "GWTH-launch-plan/lesson_audit/log.jsonl",

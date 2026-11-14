@@ -48,6 +48,15 @@ type Round = {
   facts_restored_by_checker: number | null
 }
 
+type Making = {
+  accepted: { id: string; type: string; title: string }[]
+  operations: number
+  placed: number
+  problems: { op: string; what: string; why: string }[]
+  new_lessons: { title: string; month: number; slug: string | null }[]
+  decided_by_default: string[]
+}
+
 /** The shape lesson_audit.py writes. Typed here so an empty list in the JSON still type-checks. */
 type AuditData = {
   generated: string
@@ -56,6 +65,7 @@ type AuditData = {
   cadence_days: number
   rounds: Round[]
   suggestions: Suggestion[]
+  making?: Making
   needs_you: NeedsYou[]
   lessons: LessonRow[]
   totals: {
@@ -180,6 +190,46 @@ export default async function AdminLessonAuditPage() {
           </details>
         )}
       </div>
+
+      {data.making && data.making.accepted.length > 0 && (
+        <div className={styles.panel} id="making">
+          <div className={styles.panelHead}>
+            <h2 className={styles.panelTitle}>Being made</h2>
+          </div>
+          <p className={styles.panelLead}>
+            The {data.making.accepted.length} changes you accepted, planned across the whole course as{" "}
+            {data.making.operations} lesson rewrites ({data.making.new_lessons.length} new lessons).{" "}
+            {data.making.placed} of {data.making.operations} are in the Words check so far.
+          </p>
+          {data.making.new_lessons.length > 0 && (
+            <ul>
+              {data.making.new_lessons.map((n) => (
+                <li key={n.title} className={la.wrap}>
+                  <span className={la.decisionTitle}>New in Month {n.month}:</span> {n.title}
+                  {n.slug ? "" : " (being written)"}
+                </li>
+              ))}
+            </ul>
+          )}
+          {data.making.decided_by_default.length > 0 && (
+            <>
+              <p className={styles.panelLead}>Chosen for you while making them. Say if you want any of these the other way:</p>
+              <ul>
+                {data.making.decided_by_default.map((d) => (
+                  <li key={d} className={`${la.why} ${la.wrap}`}>
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {data.making.problems.length > 0 && (
+            <p className={`${la.meta} ${la.wrap}`}>
+              {data.making.problems.length} not placed yet; they are retried: {data.making.problems.map((p) => p.what).join(", ")}.
+            </p>
+          )}
+        </div>
+      )}
 
       <div className={styles.panel} id="needs-you">
         <div className={styles.panelHead}>
