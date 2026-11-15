@@ -36,6 +36,24 @@ const HOW_WE_TEST: ReadonlyArray<HowItem> = [
   },
 ]
 
+/**
+ * The short narrated tour of the labs, beside the closing text (David, 12 Nov 2026:
+ * "maybe we should add a short video here explaining the labs, why we built them, and
+ * how to use them ... a first trial of the screen recording process"; "The video is
+ * great. please add it to the labs page", 15 Nov). Made with the walkthrough tool in
+ * the homepage film's journal look, read by the same ElevenLabs narrator as the
+ * homepage film. Film and poster are on R2 under a dated key; the captions are served
+ * from this site because media.gwth.ai sends no CORS header, and a <track> from
+ * another origin without one never loads. They sit under /labs-film/, not /labs/,
+ * because the /labs/[slug] route answers before the static file and a caption file
+ * served from there comes back as the 404 page.
+ */
+const LABS_FILM = {
+  src: "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour.mp4",
+  poster: "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour-poster.jpg",
+  captions: "/labs-film/labs-tour.vtt",
+}
+
 /** "Claude Opus 5.5, medium thinking. 94 out of 100, about 38p a task." */
 function PickLine({ label, pick }: { label: string; pick: ModelLabPick }) {
   return (
@@ -164,37 +182,54 @@ export function LabsFde({ index }: LabsFdeProps) {
         </section>
       ) : null}
 
+      {/* David, 12 Nov 2026: "Can we justify it to the left or move it all to the left, the
+          main text box and then put an image to the right?" Text left, the labs tour right. */}
       <section className={styles.closing} data-section="closing">
-        <div className={styles.page}>
-          <h2>
-            Labs show you which AI. <em>The course shows you how.</em>
-          </h2>
-          <p>
-            Each lab shows which AI did best on real work tasks, what it cost and when we tested
-            it. In Month 1 of the course you build your own portfolio website without writing code.
-            In Month 2 you build a
-            customer support chatbot. In Month 3 you build an AI consultant that interviews people
-            and writes a plan for an organisation.
-          </p>
-          {/* David, 2026-10-23: "Do we have lessons that show you how to compare models? ... Maybe we
-              should mention that on the labs page." Month 1 Lesson 5 (frontier labs), Month 2's cheaper
-              and open models lesson and Month 3's premium plans lesson; numbers left out because the
-              syllabus can move. Latest Sol checked. */}
-          <p>
-            The course also teaches you to run your own comparison. In Month 1 you give two AI tools
-            the same task in exactly the same words. You compare their answers using four questions,
-            then set up a monthly check to keep your choice up to date as models change. Later lessons
-            show when a cheaper AI model or an open model you can download and run yourself is good
-            enough, and when a premium plan is worth paying for.
-          </p>
-          <div className={styles.closingActions}>
-            <Link href="/pricing" className={styles.buttonSolid}>
-              See the course
-            </Link>
-            <Link href="/why-gwth" className={styles.buttonOutline}>
-              Why GWTH
-            </Link>
+        <div className={`${styles.page} ${styles.closingGrid}`}>
+          <div>
+            <h2>
+              Labs show you which AI. <em>The course shows you how.</em>
+            </h2>
+            <p>
+              Each lab shows which AI did best on real work tasks, what it cost and when we tested
+              it. In Month 1 of the course you build your own portfolio website without writing code.
+              In Month 2 you build a
+              customer support chatbot. In Month 3 you build an AI consultant that interviews people
+              and writes a plan for an organisation.
+            </p>
+            {/* David, 2026-10-23: "Do we have lessons that show you how to compare models? ... Maybe we
+                should mention that on the labs page." Month 1 Lesson 5 (frontier labs), Month 2's cheaper
+                and open models lesson and Month 3's premium plans lesson; numbers left out because the
+                syllabus can move. Latest Sol checked. */}
+            <p>
+              The course also teaches you to run your own comparison. In Month 1 you give two AI tools
+              the same task in exactly the same words. You compare their answers using four questions,
+              then set up a monthly check to keep your choice up to date as models change. Later lessons
+              show when a cheaper AI model or an open model you can download and run yourself is good
+              enough, and when a premium plan is worth paying for.
+            </p>
+            <div className={styles.closingActions}>
+              <Link href="/pricing" className={styles.buttonSolid}>
+                See the course
+              </Link>
+              <Link href="/why-gwth" className={styles.buttonOutline}>
+                Why GWTH
+              </Link>
+            </div>
           </div>
+          <figure className={styles.closingFigure} data-testid="labs-closing-figure">
+            <video
+              controls
+              playsInline
+              preload="none"
+              poster={LABS_FILM.poster}
+              aria-label="How to use the GWTH labs: a short narrated tour"
+            >
+              <source src={LABS_FILM.src} type="video/mp4" />
+              <track kind="captions" src={LABS_FILM.captions} srcLang="en" label="English" />
+            </video>
+            <figcaption>How to use the labs, in just over a minute.</figcaption>
+          </figure>
         </div>
       </section>
     </div>

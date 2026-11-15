@@ -205,3 +205,26 @@ describe("Labs closing: the course teaches you to compare models (David, 2026-10
     expect(body).not.toMatch(/Lesson \d+/)
   })
 })
+
+describe("Labs closing: the narrated tour of the labs (David, 15 Nov 2026)", () => {
+  it("plays the labs tour from the media CDN, with captions from this site", () => {
+    const { container } = renderIndex()
+    const figure = container.querySelector('[data-testid="labs-closing-figure"]')
+    expect(figure).toBeTruthy()
+
+    const source = figure!.querySelector("source")
+    expect(source?.getAttribute("src")).toBe(
+      "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour.mp4",
+    )
+
+    // media.gwth.ai sends no CORS header, so a <track> must come from this origin.
+    const track = figure!.querySelector("track")
+    expect(track?.getAttribute("src")).toBe("/labs-film/labs-tour.vtt")
+    expect(track?.getAttribute("kind")).toBe("captions")
+
+    const video = figure!.querySelector("video")
+    expect(video?.getAttribute("poster")).toContain("labs-tour-poster.jpg")
+    expect(video?.hasAttribute("controls")).toBe(true)
+    expect(video?.getAttribute("aria-label")).toMatch(/labs/i)
+  })
+})

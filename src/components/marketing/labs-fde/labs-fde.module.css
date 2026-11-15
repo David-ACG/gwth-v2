@@ -690,3 +690,57 @@
   gap: 0.875rem;
   margin-top: 2.25rem;
 }
+
+/* Closing band: text left, the labs video right (David, 12 Nov 2026: "Can we justify
+   it to the left or move it all to the left, the main text box and then put an image
+   to the right?"). One column on a phone, text first. */
+.closingGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+  text-align: left;
+}
+
+.closingGrid h2 {
+  text-wrap: balance;
+}
+
+.closingGrid p {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.closingGrid .closingActions {
+  justify-content: flex-start;
+}
+
+@media (min-width: 64rem) {
+  .closingGrid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+}
+
+.closingFigure {
+  margin: 0;
+}
+
+.closingFigure video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  /* The walkthrough tool renders one (paper) edition only, so the same video plays
+     in both themes. */
+  aspect-ratio: 16 / 9;
+  background: var(--v-surface);
+}
+
+.closingFigure figcaption {
+  margin-top: 0.75rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.5;
+  color: var(--v-muted);
+}
