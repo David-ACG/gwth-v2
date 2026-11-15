@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T14:09",
+ "generated": "2026-11-15T19:43",
  "last_work": "2026-11-14",
  "next_due": "2026-11-28",
  "cadence_days": 14,
@@ -796,6 +796,13 @@
    "The new titles go ahead; David sees them in the Words check and the syllabus and can rename.",
    "New lessons: op-04 (Stay Safe With AI) core; op-09, op-41, op-49, op-57 optional, as planned. David can change it in the syllabus."
   ]
+ },
+ "approved_without_you": [],
+ "auto_rule": "Approved on the P520 without you only when under 20% of the words changed, the other model family checked it and flagged nothing, no quiz answer changed and every changed fact cites a source fetched that cycle. gwth.ai changes only at your GO LIVE.",
+ "next_cycle": {
+  "last": null,
+  "due": null,
+  "timer_on": false
  },
  "needs_you": [
   {
@@ -2124,20 +2131,6 @@
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l12_workflow_redesign_with_agents_humans_tools_and_new_operating_models#lesson"
   },
   {
-   "slug": "m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes",
-   "code": "M3 L13",
-   "month": 3,
-   "title": "Your Company's AI Workspace - What A Rollout Really Takes",
-   "facts_checked": null,
-   "fact_changes": null,
-   "clarity_rewritten": "2026-11-11",
-   "qa": {
-    "lesson": "passed",
-    "project": "passed"
-   },
-   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes#lesson"
-  },
-  {
    "slug": "m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost",
    "code": "M3 L13",
    "month": 3,
@@ -2152,6 +2145,20 @@
     "project_why": "The automated QA itself failed: RuntimeError: m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost is not linked to a syllabus lesson"
    },
    "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_model_and_infrastructure_strategy_frontier_open_local_and_cost#lesson"
+  },
+  {
+   "slug": "m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes",
+   "code": "M3 L13",
+   "month": 3,
+   "title": "Your Company's AI Workspace - What A Rollout Really Takes",
+   "facts_checked": null,
+   "fact_changes": null,
+   "clarity_rewritten": "2026-11-11",
+   "qa": {
+    "lesson": "passed",
+    "project": "passed"
+   },
+   "words_check": "https://hlab.taila51191.ts.net:9492/lesson/m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes#lesson"
   },
   {
    "slug": "m3_l14_adoption_that_sticks_culture_training_and_change_management",
@@ -2486,7 +2493,8 @@
   "never_facts_checked": 47,
   "qa_passed": 112,
   "needs_you": 2,
-  "qa_rechecking": 8
+  "qa_rechecking": 8,
+  "approved_without_you": 0
  },
  "detail": {
   "log": "GWTH-launch-plan/lesson_audit/log.jsonl",

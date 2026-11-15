@@ -57,6 +57,26 @@ type Making = {
   decided_by_default: string[]
 }
 
+/** A change the auto-approve gate ("Under 20%, with checks", David 15 Nov 2026) approved without him. */
+type Approved = {
+  id: string
+  slug: string
+  code: string
+  title: string
+  part: string
+  at: string
+  words_changed_pct: number | null
+  facts: number | null
+  writer: string | null
+  checker: string | null
+  promoted: boolean | null
+  note: string | null
+  undo: string
+  words_check: string
+}
+
+const FAMILY: Record<string, string> = { sol: "Sol", opus: "Opus" }
+
 /** The shape lesson_audit.py writes. Typed here so an empty list in the JSON still type-checks. */
 type AuditData = {
   generated: string
@@ -66,6 +86,9 @@ type AuditData = {
   rounds: Round[]
   suggestions: Suggestion[]
   making?: Making
+  approved_without_you?: Approved[]
+  auto_rule?: string
+  next_cycle?: { last: string | null; due: string | null; timer_on: boolean }
   needs_you: NeedsYou[]
   lessons: LessonRow[]
   totals: {
@@ -112,6 +135,7 @@ export default async function AdminLessonAuditPage() {
   const decide = suggestions.filter((s) => s.recommendation !== "not now")
   const later = suggestions.filter((s) => s.recommendation === "not now")
   const neverChecked = data.lessons.filter((l) => !l.facts_checked)
+  const approved = data.approved_without_you ?? []
 
   return (
     <section className={styles.section} data-section="lesson-audit">
@@ -121,7 +145,8 @@ export default async function AdminLessonAuditPage() {
       <p className={styles.sectionLead}>
         Last work on the lessons: {day(data.last_work)}. {t.rewritten} of {t.lessons} lessons were rewritten to be clearer
         for beginners, and {t.facts_checked} have had their facts checked against the web. Next audit due{" "}
-        {day(data.next_due)} (every {data.cadence_days} days).
+        {day(data.next_due)} (every {data.cadence_days} days
+        {data.next_cycle ? (data.next_cycle.timer_on ? ", runs by itself" : ", run when you ask") : ""}).
       </p>
 
       <div className={styles.metricsRow}>
@@ -134,6 +159,11 @@ export default async function AdminLessonAuditPage() {
           <span className={styles.mono}>Needs you</span>
           <span className={styles.metricValue}>{data.needs_you.length}</span>
           <span className={styles.metricCaption}>things only a person can supply</span>
+        </a>
+        <a href="#approved" className={styles.metricCard}>
+          <span className={styles.mono}>Approved without you</span>
+          <span className={styles.metricValue}>{approved.length}</span>
+          <span className={styles.metricCaption}>small checked changes, each with Undo</span>
         </a>
         <a href="#changed" className={styles.metricCard}>
           <span className={styles.mono}>Never fact-checked</span>
@@ -245,6 +275,37 @@ export default async function AdminLessonAuditPage() {
                   {n.code} {n.part}: {n.title}
                 </a>
                 <span className={`${styles.cellEmail} ${la.wrap}`}>{n.why}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className={styles.panel} id="approved">
+        <div className={styles.panelHead}>
+          <h2 className={styles.panelTitle}>Approved without you</h2>
+        </div>
+        <p className={styles.panelLead}>{data.auto_rule}</p>
+        {approved.length === 0 ? (
+          <p className={`${styles.cellMuted} ${la.wrap}`}>Nothing yet.</p>
+        ) : (
+          <ul className={la.decisions}>
+            {approved.map((a) => (
+              <li key={a.id} className={la.decision}>
+                <div className={la.decisionHead}>
+                  <a className={`${la.decisionTitle} ${la.wrap}`} href={a.words_check}>
+                    {a.code} {a.part}: {a.title}
+                  </a>
+                  <a className={styles.status} href={a.undo}>
+                    Undo
+                  </a>
+                </div>
+                <span className={la.meta}>
+                  {formatDate(`${a.at}:00Z`)}: {a.words_changed_pct ?? 0}% of the words changed
+                  {a.facts ? `, ${a.facts} fact${a.facts > 1 ? "s" : ""} with a source` : ""}. Written by{" "}
+                  {FAMILY[a.writer ?? ""] ?? a.writer}, checked by {FAMILY[a.checker ?? ""] ?? a.checker}.
+                  {a.promoted === false && a.note ? ` ${a.note}` : ""}
+                </span>
               </li>
             ))}
           </ul>
