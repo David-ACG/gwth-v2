@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/admin/passes", label: "Gifts" },
   { href: "/admin/funnel", label: "Funnel" },
   { href: "/admin/lessons", label: "Lessons" },
+  { href: "/admin/lesson-audit", label: "Lesson Audit" },
   { href: "/admin/feedback", label: "Feedback" },
   { href: "/admin/comments", label: "Comments" },
   { href: "/admin/capstones", label: "Capstones" },

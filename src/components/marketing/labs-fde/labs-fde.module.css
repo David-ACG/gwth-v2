@@ -711,8 +711,9 @@
   text-decoration-thickness: 2px;
 }
 
-/* Closing band: text left, a picture of a lab right (David, 12 Nov 2026). One
-   column on a phone, text first. */
+/* Closing band: text left, the labs video right (David, 12 Nov 2026: "Can we justify
+   it to the left or move it all to the left, the main text box and then put an image
+   to the right?"). One column on a phone, text first. */
 .closingGrid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -745,18 +746,14 @@
   margin: 0;
 }
 
-.closingFigure img,
 .closingFigure video {
   display: block;
   width: 100%;
   height: auto;
   border: 1px solid var(--v-line);
   border-radius: var(--radius-md);
-}
-
-/* The walkthrough tool renders one (paper) edition only, so the same video plays in
-   both themes. */
-.closingFigure video {
+  /* The walkthrough tool renders one (paper) edition only, so the same video plays
+     in both themes. */
   aspect-ratio: 16 / 9;
   background: var(--v-surface);
 }

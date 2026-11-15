@@ -217,15 +217,27 @@ describe("Labs replica notes (David, 12 Nov 2026)", () => {
       expect(card.querySelector("svg")).toBeNull()
     }
   })
+})
 
-  it("puts the labs walkthrough video beside the closing text, with captions", () => {
-    renderIndex()
-    const fig = screen.getByTestId("labs-closing-figure")
-    const video = fig.querySelector("video")
-    expect(video).not.toBeNull()
-    expect(video?.getAttribute("poster")).toMatch(/labs-tour-v3-deepldn\.poster\.jpg$/)
-    expect(fig.querySelector("source")?.getAttribute("src")).toMatch(/labs-tour-v3-deepldn\.mp4$/)
-    expect(fig.querySelector("track")?.getAttribute("kind")).toBe("captions")
-    expect(fig.closest("section")?.textContent).toMatch(/Labs show you which AI/)
+describe("Labs closing: the narrated tour of the labs (David, 15 Nov 2026)", () => {
+  it("plays the labs tour from the media CDN, with captions from this site", () => {
+    const { container } = renderIndex()
+    const figure = container.querySelector('[data-testid="labs-closing-figure"]')
+    expect(figure).toBeTruthy()
+
+    const source = figure!.querySelector("source")
+    expect(source?.getAttribute("src")).toBe(
+      "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour.mp4",
+    )
+
+    // media.gwth.ai sends no CORS header, so a <track> must come from this origin.
+    const track = figure!.querySelector("track")
+    expect(track?.getAttribute("src")).toBe("/labs-film/labs-tour.vtt")
+    expect(track?.getAttribute("kind")).toBe("captions")
+
+    const video = figure!.querySelector("video")
+    expect(video?.getAttribute("poster")).toContain("labs-tour-poster.jpg")
+    expect(video?.hasAttribute("controls")).toBe(true)
+    expect(video?.getAttribute("aria-label")).toMatch(/labs/i)
   })
 })

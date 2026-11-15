@@ -36,6 +36,24 @@ const HOW_WE_TEST: ReadonlyArray<HowItem> = [
   },
 ]
 
+/**
+ * The short narrated tour of the labs, beside the closing text (David, 12 Nov 2026:
+ * "maybe we should add a short video here explaining the labs, why we built them, and
+ * how to use them ... a first trial of the screen recording process"; "The video is
+ * great. please add it to the labs page", 15 Nov). Made with the walkthrough tool in
+ * the homepage film's journal look, read by the same ElevenLabs narrator as the
+ * homepage film. Film and poster are on R2 under a dated key; the captions are served
+ * from this site because media.gwth.ai sends no CORS header, and a <track> from
+ * another origin without one never loads. They sit under /labs-film/, not /labs/,
+ * because the /labs/[slug] route answers before the static file and a caption file
+ * served from there comes back as the 404 page.
+ */
+const LABS_FILM = {
+  src: "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour.mp4",
+  poster: "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour-poster.jpg",
+  captions: "/labs-film/labs-tour.vtt",
+}
+
 /** "Claude Opus 5.5, medium thinking. 94 out of 100, about 38p a task." */
 function PickLine({ label, pick }: { label: string; pick: ModelLabPick }) {
   return (
@@ -208,24 +226,19 @@ export function LabsFde({ index }: LabsFdeProps) {
               deep voice as the home page video" with the house pronunciation rules, so this is the
               GWTH narrator reading it (deepldn_m1, the voice he picked for the home page film on
               8 Nov), saying "read" rather than "red". Astra script, Sol check.
-              Replica only: the file sits untracked in public/videos/labs/; at GO LIVE it goes to the
-              media CDN under a new name and this src moves with it. */}
+              Since 15 Nov the film comes from LABS_FILM (the media CDN key master uses, captions
+              under /labs-film/), not the replica-only files in public/videos/labs/. */}
           <figure className={styles.closingFigure} data-testid="labs-closing-figure">
             <video
               controls
               playsInline
               preload="none"
-              poster="/videos/labs/labs-tour-v3-deepldn.poster.jpg"
+              poster={LABS_FILM.poster}
               className={styles.closingVideo}
               aria-label="How to use the GWTH labs: a short narrated tour"
             >
-              <source src="/videos/labs/labs-tour-v3-deepldn.mp4" type="video/mp4" />
-              <track
-                kind="captions"
-                src="/videos/labs/labs-tour-v3-deepldn.vtt"
-                srcLang="en"
-                label="English"
-              />
+              <source src={LABS_FILM.src} type="video/mp4" />
+              <track kind="captions" src={LABS_FILM.captions} srcLang="en" label="English" />
             </video>
             <figcaption>How to use the labs, in just over a minute.</figcaption>
           </figure>
