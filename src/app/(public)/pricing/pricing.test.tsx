@@ -132,7 +132,7 @@ describe("PricingPage", () => {
     expect(screen.getByRole("heading", { name: "When each course month opens" })).toBeInTheDocument()
     expect(text).toContain(`Before Month 2 opens, you must finish ${DEFAULT_GATE_PERCENT}% of Month 1's core lessons`)
     expect(text).toContain(`Before Month 3 opens, you must finish ${DEFAULT_GATE_PERCENT}% of Month 2's core lessons`)
-    expect(text).toMatch(/Optional lessons do not count and are never required/)
+    expect(text).toMatch(/Optional lessons do not count and are\s+never required for a later month to open/)
     expect(text).toMatch(/no time limit/)
     expect(text).toMatch(/latest of three points/)
     expect(text).toMatch(/your course time is paused/)
