@@ -524,8 +524,8 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
               </p>
               <p data-testid="score-denominator">
                 You can compare scores only for the same set of lessons. An
-                institution choosing required optional lessons and its own pass
-                mark also chooses what the score measures.
+                institution chooses which optional lessons count towards the
+                score and sets the quiz pass mark.
               </p>
               {/* The shareable record page (with the LinkedIn mention David
                   asked for on 2026-09-14) went on 2026-10-20: no credential
