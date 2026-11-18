@@ -184,7 +184,8 @@ function MonthOpeningRules() {
             Before Month 3 opens, you must finish {SHARE}{" "}of Month 2&apos;s
             core lessons. Use Finish lesson at the end of each lesson to record
             that you&apos;ve finished it. Optional lessons do not count and are
-            never required. There is no time limit on reaching {SHARE}.
+            never required for a later month to open. There is no time limit
+            on reaching {SHARE}.
           </p>
           <p>Each later month opens at the latest of three points:</p>
           <ul>
@@ -564,8 +565,9 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
               <>
                 <p data-testid="teams-split-body">
                   Teams pay the same per-person price, with no minimum size.
-                  Each learner has an account and tracks their own progress. Pay
-                  monthly for each person or buy places one at a time. For 100
+                  Each learner has an account and tracks their own progress. Each
+                  person can sign up and pay monthly, or you can buy a pass for
+                  each person, one at a time. For 100
                   or more people, GWTH can create an edition with a tutor
                   dashboard and lessons written around your work. Institutions
                   get a proposal based on their needs.
