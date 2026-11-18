@@ -17,6 +17,16 @@ function text(): string {
  * Musk and Oprah Winfrey that read as an endorsement.
  */
 describe("LessonsFde launch readiness", () => {
+  it("opens the anchored six superpowers progression without a disclosure", () => {
+    const { container } = render(<LessonsFde />)
+    const section = container.querySelector("#six-building-blocks")!
+    expect(section.querySelector("h2")).toHaveTextContent("Your six AI superpowers over three months")
+    expect(section.querySelector("details")).toBeNull()
+    expect(section.querySelectorAll('[data-testid="block-card"]')).toHaveLength(6)
+    expect(section.querySelectorAll('[data-testid="block-step"]')).toHaveLength(18)
+    expect(section).toHaveTextContent("You design your first safe automation on paper")
+  })
+
   it("sends both main buttons to the waitlist before sales open", () => {
     render(<LessonsFde selling={false} />)
     for (const id of ["lessons-primary-cta", "lessons-closing-cta"]) {

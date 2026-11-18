@@ -335,17 +335,12 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
         </div>
       </section>
 
-      <section className={p.section} data-section="blocks" id="six-building-blocks">
+      <section className={`${p.section} ${styles.superpowersSection}`} data-section="blocks" id="six-building-blocks">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>How your skills develop</h2>
+            <h2 className={p.sectionTitle}>Your six AI superpowers over three months</h2>
           </div>
-          {/* Persona review round 2 (D25, 7 Nov 2026): all ten personas found
-              this page too long. The six-skill grid stays, one click away. */}
           <p className={styles.sectionLead}>See how you use the six AI superpowers in larger projects each month.</p>
-          <details className={p.reveal} data-testid="skills-reveal">
-          <summary>Show the six superpowers</summary>
-          <div className={p.revealBody}>
           <div className={p.cards3}>
             {SIX_BLOCKS.map((block) => (
               <article className={p.card} key={block.n} data-testid="block-card">
@@ -370,8 +365,6 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
             creation, ideation and strategy, coding, data analysis and
             automation. The names above are ours.
           </p>
-          </div>
-          </details>
         </div>
       </section>
 

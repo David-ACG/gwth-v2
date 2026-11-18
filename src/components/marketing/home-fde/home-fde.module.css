@@ -507,7 +507,8 @@
   white-space: normal;
   text-align: center;
 }
-.audienceBox:has(input[value="personal"]:checked) .audiencePanel:not([data-audience="personal"]),
+.audienceBox:has(input[value="home"]:checked) .audiencePanel:not([data-audience="home"]),
+.audienceBox:has(input[value="work"]:checked) .audiencePanel:not([data-audience="work"]),
 .audienceBox:has(input[value="career"]:checked) .audiencePanel:not([data-audience="career"]),
 .audienceBox:has(input[value="others"]:checked) .audiencePanel:not([data-audience="others"]) {
   display: none;
@@ -517,7 +518,7 @@
   display: grid;
   gap: 1.5rem;
   padding: 0;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
 }
 .portfolioTrack li {
   border-left: 3px solid var(--v-line);
@@ -526,16 +527,86 @@
 .portfolioTrack span {
   display: block;
   color: var(--v-soft);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.25rem;
 }
 .portfolioSummary {
   display: grid;
   gap: 1.5rem;
-  border-top: 1px solid var(--v-line);
-  padding-top: 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.portfolioSummary > div {
+  min-width: 0;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  background: var(--v-surface);
+}
+.portfolioSummary h4 {
+  color: var(--v-ink);
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+.portfolioSummary figure {
+  margin: 0.5rem 0 1rem;
+}
+.portfolioSummary .scoreValue {
+  font-size: clamp(3.5rem, 6vw, 5rem);
+}
+.portfolioSummary .scoreFigure {
+  line-height: 1.2;
+  flex-wrap: wrap;
 }
 @media (min-width: 60rem) {
   .offer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .portfolioTrack { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .portfolioSummary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* The core skills and purpose examples share the existing paper tokens. */
+.purposeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+}
+.purposeGrid li { min-width: 0; }
+.purposeGrid h4, .purposeGrid h5 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 0.35rem;
+}
+.recipientHeading { margin-top: 1.5rem; }
+.superpowerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.superpowerCard {
+  min-width: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--v-line);
+  border-top: 3px solid var(--v-accent);
+  border-radius: var(--radius-lg);
+  background: var(--v-surface);
+}
+.superpowerClause {
+  font-weight: 600;
+  margin: 0.75rem 0;
+}
+.superpowerClause::first-letter { text-transform: uppercase; }
+.designNote { margin-top: 0.75rem; font-weight: 600; }
+.purposePage a { white-space: normal; text-align: center; }
+@media (max-width: 60rem) {
+  .superpowerGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 40rem) {
+  .purposePage { width: calc(100% - 2rem); }
+  .purposeGrid, .superpowerGrid { grid-template-columns: minmax(0, 1fr); }
+  .audienceBox { padding: 1rem; }
+  .audienceChoices label { width: 100%; }
 }
