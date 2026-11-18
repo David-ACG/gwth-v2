@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="440" viewBox="0 0 820 440" role="img" aria-label="Pay quartiles by sex for Thistlecombe Care Ltd, 5 April 2026">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; fill: #1e293b; }
+      .subtitle { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 13px; fill: #475569; }
+      .qlabel { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 600; fill: #1e293b; }
+      .qrange { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11.5px; fill: #64748b; }
+      .pct { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 13.5px; font-weight: 700; fill: #ffffff; }
+      .axis { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11.5px; fill: #64748b; }
+      .legend { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 600; fill: #334155; }
+      .footnote { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11px; fill: #64748b; }
+      .grid { stroke: #e2e8f0; stroke-width: 1; }
+    </style>
+  </defs>
+  <rect class="bg" x="0" y="0" width="820" height="440" />
+  <text class="title" x="32" y="42">Pay Quartiles by Sex — 5 April 2026 Snapshot</text>
+  <text class="subtitle" x="32" y="64">Thistlecombe Care Ltd · 248 full-pay relevant employees (62 employees per quartile)</text>
+
+  <!-- Legend -->
+  <rect x="32" y="84" width="14" height="14" rx="2" fill="#0f766e" />
+  <text class="legend" x="52" y="96">Women</text>
+  <rect x="122" y="84" width="14" height="14" rx="2" fill="#334155" />
+  <text class="legend" x="142" y="96">Men</text>
+
+  <!-- Gridlines -->
+  <line class="grid" x1="225.0" y1="118" x2="225.0" y2="382" />
+  <text class="axis" x="225.0" y="398" text-anchor="middle">0%</text>
+  <line class="grid" x1="357.5" y1="118" x2="357.5" y2="382" />
+  <text class="axis" x="357.5" y="398" text-anchor="middle">25%</text>
+  <line class="grid" x1="490.0" y1="118" x2="490.0" y2="382" />
+  <text class="axis" x="490.0" y="398" text-anchor="middle">50%</text>
+  <line class="grid" x1="622.5" y1="118" x2="622.5" y2="382" />
+  <text class="axis" x="622.5" y="398" text-anchor="middle">75%</text>
+  <line class="grid" x1="755.0" y1="118" x2="755.0" y2="382" />
+  <text class="axis" x="755.0" y="398" text-anchor="middle">100%</text>
+
+  <!-- Lower (Q1) -->
+  <text class="qlabel" x="32" y="148">Lower (Q1)</text>
+  <text class="qrange" x="32" y="165">£12.22 – £13.29/hr</text>
+  <rect x="225" y="130" width="410.22" height="44" fill="#0f766e" />
+  <rect x="635.22" y="130" width="119.78" height="44" fill="#334155" />
+  <text class="pct" x="430.11" y="157" text-anchor="middle">77.4%</text>
+  <text class="pct" x="695.11" y="157" text-anchor="middle">22.6%</text>
+  <!-- Lower Middle (Q2) -->
+  <text class="qlabel" x="32" y="214">Lower Middle (Q2)</text>
+  <text class="qrange" x="32" y="231">£13.31 – £14.14/hr</text>
+  <rect x="225" y="196" width="376.30" height="44" fill="#0f766e" />
+  <rect x="601.30" y="196" width="153.70" height="44" fill="#334155" />
+  <text class="pct" x="413.15" y="223" text-anchor="middle">71.0%</text>
+  <text class="pct" x="678.15" y="223" text-anchor="middle">29.0%</text>
+  <!-- Upper Middle (Q3) -->
+  <text class="qlabel" x="32" y="280">Upper Middle (Q3)</text>
+  <text class="qrange" x="32" y="297">£14.14 – £15.84/hr</text>
+  <rect x="225" y="262" width="393.26" height="44" fill="#0f766e" />
+  <rect x="618.26" y="262" width="136.74" height="44" fill="#334155" />
+  <text class="pct" x="421.63" y="289" text-anchor="middle">74.2%</text>
+  <text class="pct" x="686.63" y="289" text-anchor="middle">25.8%</text>
+  <!-- Upper (Q4) -->
+  <text class="qlabel" x="32" y="346">Upper (Q4)</text>
+  <text class="qrange" x="32" y="363">£16.01 – £72.41/hr</text>
+  <rect x="225" y="328" width="281.96" height="44" fill="#0f766e" />
+  <rect x="506.96" y="328" width="248.04" height="44" fill="#334155" />
+  <text class="pct" x="365.98" y="355" text-anchor="middle">53.2%</text>
+  <text class="pct" x="630.98" y="355" text-anchor="middle">46.8%</text>
+
+  <text class="footnote" x="32" y="422">Note: Quartiles rank full-pay relevant employees from lowest to highest hourly rate. Workforce overall: 69.8% women, 30.2% men (relevant employees).</text>
+</svg>

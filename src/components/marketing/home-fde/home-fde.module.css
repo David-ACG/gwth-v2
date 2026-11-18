@@ -355,8 +355,7 @@
   stroke-linejoin: round;
 }
 
-/* The stale card's line stops being drawn solid at the point the learner
-   stopped: a dashed run is the shape of "nothing recorded since". */
+/* The falling example uses a dashed line as well as a different marker. */
 .scoreLineStale {
   stroke-dasharray: 5 5;
 }
@@ -409,13 +408,134 @@
   color: var(--v-muted);
 }
 
-/* P2: the one line under the hero saying the lessons are rewritten (2026-10-25). */
-.updatesLine {
-  margin: 1rem 0 0;
-  max-width: 62ch;
+
+/* Native radio controls keep every route usable without JavaScript. */
+.lessonSteps {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+}
+.lessonSteps li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1rem;
+  position: relative;
+  padding-bottom: 2rem;
+}
+.lessonSteps li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 1.2rem;
+  top: 2.5rem;
+  bottom: 0;
+  border-left: 1px solid var(--v-line);
+}
+.stepNumber {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  color: var(--v-ink);
+  font-weight: 600;
+}
+.lessonSteps h3, .audiencePanel h3, .portfolioBox h3 {
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: var(--v-ink);
+  margin-bottom: 0.5rem;
+}
+.lessonSteps p, .audiencePanel p, .portfolioBox p {
+  color: var(--v-soft);
+  line-height: 1.7;
+}
+.audienceBox, .portfolioBox {
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+.audienceChoices {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.audienceChoices legend {
+  margin-bottom: 0.75rem;
+  color: var(--v-ink);
+}
+.audienceChoices label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  min-height: 44px;
+  cursor: pointer;
   color: var(--v-soft);
 }
-
-.updatesLine a {
-  color: var(--v-accent);
+.audienceChoices label span {
+  min-width: 0;
+}
+.audienceChoices input {
+  accent-color: var(--v-ink);
+  flex-shrink: 0;
+}
+.audienceChoices label:has(:checked) {
+  background: var(--v-quiet);
+  box-shadow: inset 3px 0 var(--v-ink);
+  color: var(--v-ink);
+  font-weight: 600;
+}
+.audienceChoices label:has(:focus-visible) {
+  outline: 2px solid var(--v-ink);
+  outline-offset: 3px;
+}
+.audiencePanel {
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+.audiencePanel p + p, .audiencePanel article + article {
+  margin-top: 1rem;
+}
+.audienceBox a {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+.audienceBox:has(input[value="personal"]:checked) .audiencePanel:not([data-audience="personal"]),
+.audienceBox:has(input[value="career"]:checked) .audiencePanel:not([data-audience="career"]),
+.audienceBox:has(input[value="others"]:checked) .audiencePanel:not([data-audience="others"]) {
+  display: none;
+}
+.portfolioTrack {
+  list-style: none;
+  display: grid;
+  gap: 1.5rem;
+  padding: 0;
+  margin: 2rem 0;
+}
+.portfolioTrack li {
+  border-left: 3px solid var(--v-ink);
+  padding-left: 1.25rem;
+}
+.portfolioTrack span {
+  display: block;
+  color: var(--v-soft);
+  margin-bottom: 0.75rem;
+}
+.portfolioSummary {
+  display: grid;
+  gap: 1.5rem;
+  border-top: 1px solid var(--v-line);
+  padding-top: 1.5rem;
+}
+@media (min-width: 60rem) {
+  .offer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .portfolioTrack { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .portfolioSummary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

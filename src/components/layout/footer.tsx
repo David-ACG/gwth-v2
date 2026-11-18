@@ -21,6 +21,9 @@ const footerLinks = [
     title: "Learn",
     links: [
       { href: "/lessons", label: "The course" },
+      // Persona review round 2 (D19, 7 Nov 2026): the free lesson could only
+      // be found from the home page. The header order stays David's N9 one.
+      { href: "/start-here", label: "Free lesson" },
       { href: "/labs", label: "Labs" },
       { href: "/news", label: "News" },
       { href: "/newsletter", label: "Newsletter" },

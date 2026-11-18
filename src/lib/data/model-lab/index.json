@@ -7,11 +7,11 @@
    "ask": "Which fact-check would you trust?",
    "sig_title": "Fact-check the CEO",
    "best": {
-    "name": "Claude Opus 5.5",
-    "level": "medium",
-    "maker": "Anthropic",
-    "score": 94,
-    "cost": "38p",
+    "name": "Gemini 4 Hydrogen",
+    "level": "high",
+    "maker": "Google",
+    "score": 95,
+    "cost": "27p",
     "basics": 4,
     "n": 4
    },
@@ -24,10 +24,10 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "content",
@@ -53,10 +53,10 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "thinking",
@@ -82,10 +82,10 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "building",
@@ -103,18 +103,18 @@
     "n": 4
    },
    "value": {
-    "name": "Claude Haiku 5.5",
-    "level": "standard",
-    "maker": "Anthropic",
-    "score": 91,
-    "cost": "3p",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "score": 89,
+    "cost": "2p",
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "data",
@@ -140,10 +140,10 @@
     "basics": 5,
     "n": 5
    },
-   "count": 40,
+   "count": 46,
    "tasks": 5,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-23"
+   "tested_to": "2026-11-13"
   },
   {
    "sp": "automation",
@@ -152,11 +152,11 @@
    "ask": "Which assistant would you trust with your week?",
    "sig_title": "Clear my week",
    "best": {
-    "name": "Claude Opus 5.5",
-    "level": "xhigh",
-    "maker": "Anthropic",
-    "score": 98,
-    "cost": "91p",
+    "name": "Gemini 4 Carbon",
+    "level": "high",
+    "maker": "Google",
+    "score": 99,
+    "cost": "60p",
     "basics": 4,
     "n": 4
    },
@@ -169,16 +169,16 @@
     "basics": 4,
     "n": 4
    },
-   "count": 40,
+   "count": 46,
    "tasks": 4,
    "tested_from": "2026-10-02",
-   "tested_to": "2026-10-21"
+   "tested_to": "2026-11-13"
   }
  ],
  "tested_from": "2026-10-02",
- "tested_to": "2026-10-23",
- "model_count": 23,
- "setup_count": 40,
+ "tested_to": "2026-11-13",
+ "model_count": 28,
+ "setup_count": 46,
  "p_per_usd": 75,
  "cost_chart": {
   "tasks": 25,
@@ -214,6 +214,17 @@
     "cost_gbp": 49.1015,
     "cost": "£49.10",
     "score": 94,
+    "tasks_run": 25
+   },
+   {
+    "setup": "fable-5.2_high",
+    "name": "Claude Fable 5.2",
+    "level": "high",
+    "maker": "Anthropic",
+    "premium": true,
+    "cost_gbp": 34.6861,
+    "cost": "£34.69",
+    "score": 95,
     "tasks_run": 25
    },
    {
@@ -269,6 +280,17 @@
     "cost_gbp": 21.5825,
     "cost": "£21.58",
     "score": 93,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-4-carbon_high",
+    "name": "Gemini 4 Carbon",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 16.8661,
+    "cost": "£16.87",
+    "score": 86,
     "tasks_run": 25
    },
    {
@@ -404,6 +426,28 @@
     "tasks_run": 25
    },
    {
+    "setup": "kimi-k3.1-pro_max",
+    "name": "Kimi K3.1 Pro",
+    "level": "max",
+    "maker": "Moonshot AI",
+    "premium": false,
+    "cost_gbp": 6.1734,
+    "cost": "£6.17",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gemini-4-hydrogen_high",
+    "name": "Gemini 4 Hydrogen",
+    "level": "high",
+    "maker": "Google",
+    "premium": false,
+    "cost_gbp": 6.1692,
+    "cost": "£6.17",
+    "score": 94,
+    "tasks_run": 25
+   },
+   {
     "setup": "opus-5.5_low",
     "name": "Claude Opus 5.5",
     "level": "low",
@@ -514,6 +558,17 @@
     "tasks_run": 25
    },
    {
+    "setup": "gpt-6.1-terra_max",
+    "name": "GPT-6.1 Terra",
+    "level": "max",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 3.2275,
+    "cost": "£3.23",
+    "score": 92,
+    "tasks_run": 25
+   },
+   {
     "setup": "gpt-6.1-sol_medium",
     "name": "GPT-6.1 Sol",
     "level": "medium",
@@ -588,6 +643,17 @@
     "cost_gbp": 0.6382,
     "cost": "64p",
     "score": 92,
+    "tasks_run": 25
+   },
+   {
+    "setup": "gpt-6.1-terra_medium",
+    "name": "GPT-6.1 Terra",
+    "level": "medium",
+    "maker": "OpenAI",
+    "premium": false,
+    "cost_gbp": 0.5799,
+    "cost": "58p",
+    "score": 89,
     "tasks_run": 25
    },
    {

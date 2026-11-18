@@ -373,20 +373,20 @@ describe("/for-teams: the same story, told for somebody choosing for other peopl
 })
 
 describe("/: a signpost, not a fifth copy of the argument", () => {
-  it("points at the optional lessons and links to the course page", () => {
+  it("points at the optional lessons, with no counts and no button", () => {
     render(<HomeFde />)
     const note = (screen.getByTestId("months-optional-note").textContent ?? "").replace(/\s+/g, " ")
-    // The core counts come from config, never typed (launch readiness,
-    // 2026-10-20: the syllabus now runs 20 and 21, not twenty and twenty).
-    expect(note).toContain(
-      `Month 2 starts with ${MONTH_CONFIGS[1]!.mandatoryLessons} core lessons and Month 3 with ${MONTH_CONFIGS[2]!.mandatoryLessons}, and everybody does those`
-    )
-    expect(note).toMatch(/UK legal work/i)
+    // David, 13 Nov 2026: "Why do students want to know this? ... make this
+    // more of a marketing site" (a-20261113-153646-33f0e6), and the "See the
+    // optional lessons" button went (a-20261113-153733-1288d3).
+    expect(note).toMatch(/optional lesson/i)
+    expect(note).toMatch(/UK healthcare or legal work/i)
+    expect(note).not.toMatch(/core lessons and Month 3 with \d+/)
     // Not a picker: the product has no way for a learner to select one.
-    expect(note).toMatch(/not expected to take all of them/i)
-    expect(note).not.toMatch(/you choose which/i)
-    const link = screen.getByRole("link", { name: /see the optional lessons/i })
-    expect(link).toHaveAttribute("href", "/lessons")
+    expect(note).toMatch(/without taking every optional lesson/i)
+    expect(note).not.toMatch(/you choose|pick/i)
+    expect(note).toContain("For work tasks, use the AI tool your organisation has approved.")
+    expect(screen.queryByRole("link", { name: /see the optional lessons/i })).toBeNull()
   })
 
   // Launch readiness, 2026-10-20: the score section renders only while the
@@ -427,7 +427,7 @@ describe("the four pages do four different jobs", () => {
     {
       page: "/",
       node: <HomeFde />,
-      phrase: /not expected to take all of them/i,
+      phrase: /Go deep into one area without taking every optional lesson/i,
     },
   ] as const
 

@@ -114,7 +114,9 @@ describe("recovered ideas are on the page", () => {
     render(<HomeFde />)
     const monthOne = screen.getAllByTestId("month-card")[0]!
     expect(monthOne.textContent).toMatch(/Month 1/)
-    expect(monthOne.textContent).toMatch(/your own work and home life/i)
+    // 13 Nov 2026: the card title is now "Build your foundation" (David asked
+    // for less text and Month 1 as the foundation); his line stays.
+    expect(monthOne.textContent).toMatch(/foundation/i)
     expect(monthOne.textContent).toMatch(/projects are useful to you and good fun to make/i)
     expect(monthOne.textContent).toMatch(/good fun to make/i)
   })

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="500" viewBox="0 0 920 500" role="img" aria-labelledby="chartTitle chartDesc">
+  <title id="chartTitle">Thistlecombe Care Ltd — Pay Quartiles by Sex (5 April 2026 Snapshot)</title>
+  <desc id="chartDesc">Horizontal 100% stacked bar chart showing the percentage of women and men in each of the four pay quartiles: Lower 77.4% women and 22.6% men; Lower middle 71.0% women and 29.0% men; Upper middle 74.2% women and 25.8% men; Upper 53.2% women and 46.8% men.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  </style>
+  <rect x="0" y="0" width="920" height="500" fill="#ffffff"/>
+  <rect x="1" y="1" width="918" height="498" rx="8" fill="none" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="40" y="40" font-size="20" font-weight="700" fill="#0f172a">Pay Quartiles by Sex — 5 April 2026 Snapshot</text>
+  <text x="40" y="63" font-size="13" fill="#475569">Thistlecombe Care Ltd · 248 full-pay relevant employees (62 per quartile)</text>
+  <rect x="40" y="82" width="14" height="14" rx="3" fill="#1b6b78"/>
+  <text x="61" y="94" font-size="13" font-weight="600" fill="#1e293b">Women (171 · 69.0%)</text>
+  <rect x="235" y="82" width="14" height="14" rx="3" fill="#d97724"/>
+  <text x="256" y="94" font-size="13" font-weight="600" fill="#1e293b">Men (77 · 31.0%)</text>
+  <line x1="415" y1="89" x2="445" y2="89" stroke="#0f172a" stroke-width="1.8" stroke-dasharray="5,4"/>
+  <text x="453" y="94" font-size="12.5" fill="#334155">Overall full-pay workforce benchmark (69.0% women)</text>
+  <line x1="260.0" y1="124" x2="260.0" y2="402" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="260.0" y1="402" x2="260.0" y2="407" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="260.0" y="423" font-size="12" fill="#475569" text-anchor="middle">0%</text>
+  <line x1="380.0" y1="124" x2="380.0" y2="402" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="380.0" y1="402" x2="380.0" y2="407" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="380.0" y="423" font-size="12" fill="#475569" text-anchor="middle">20%</text>
+  <line x1="500.0" y1="124" x2="500.0" y2="402" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="500.0" y1="402" x2="500.0" y2="407" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="500.0" y="423" font-size="12" fill="#475569" text-anchor="middle">40%</text>
+  <line x1="620.0" y1="124" x2="620.0" y2="402" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="620.0" y1="402" x2="620.0" y2="407" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="620.0" y="423" font-size="12" fill="#475569" text-anchor="middle">60%</text>
+  <line x1="740.0" y1="124" x2="740.0" y2="402" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="740.0" y1="402" x2="740.0" y2="407" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="740.0" y="423" font-size="12" fill="#475569" text-anchor="middle">80%</text>
+  <line x1="860.0" y1="124" x2="860.0" y2="402" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="860.0" y1="402" x2="860.0" y2="407" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="860.0" y="423" font-size="12" fill="#475569" text-anchor="middle">100%</text>
+  <line x1="260.0" y1="402" x2="860.0" y2="402" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="560.0" y="446" font-size="12.5" font-weight="600" fill="#334155" text-anchor="middle">Percentage of quartile (%)</text>
+  <text x="244" y="155.0" font-size="13.5" font-weight="700" fill="#0f172a" text-anchor="end">Upper (Q4)</text>
+  <text x="244" y="172.0" font-size="11.5" fill="#64748b" text-anchor="end">Highest · £16.01–£72.41/hr</text>
+  <rect x="260.0" y="136.0" width="319.2" height="46.0" fill="#1b6b78"/>
+  <rect x="579.2" y="136.0" width="280.8" height="46.0" fill="#d97724"/>
+  <line x1="579.2" y1="136.0" x2="579.2" y2="182.0" stroke="#ffffff" stroke-width="2"/>
+  <text x="274.0" y="164.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="start">53.2% (33)</text>
+  <text x="846.0" y="164.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="end">46.8% (29)</text>
+  <text x="244" y="223.0" font-size="13.5" font-weight="700" fill="#0f172a" text-anchor="end">Upper middle (Q3)</text>
+  <text x="244" y="240.0" font-size="11.5" fill="#64748b" text-anchor="end">£14.14–£15.84/hr</text>
+  <rect x="260.0" y="204.0" width="445.2" height="46.0" fill="#1b6b78"/>
+  <rect x="705.2" y="204.0" width="154.8" height="46.0" fill="#d97724"/>
+  <line x1="705.2" y1="204.0" x2="705.2" y2="250.0" stroke="#ffffff" stroke-width="2"/>
+  <text x="274.0" y="232.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="start">74.2% (46)</text>
+  <text x="846.0" y="232.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="end">25.8% (16)</text>
+  <text x="244" y="291.0" font-size="13.5" font-weight="700" fill="#0f172a" text-anchor="end">Lower middle (Q2)</text>
+  <text x="244" y="308.0" font-size="11.5" fill="#64748b" text-anchor="end">£13.31–£14.14/hr</text>
+  <rect x="260.0" y="272.0" width="426.0" height="46.0" fill="#1b6b78"/>
+  <rect x="686.0" y="272.0" width="174.0" height="46.0" fill="#d97724"/>
+  <line x1="686.0" y1="272.0" x2="686.0" y2="318.0" stroke="#ffffff" stroke-width="2"/>
+  <text x="274.0" y="300.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="start">71.0% (44)</text>
+  <text x="846.0" y="300.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="end">29.0% (18)</text>
+  <text x="244" y="359.0" font-size="13.5" font-weight="700" fill="#0f172a" text-anchor="end">Lower (Q1)</text>
+  <text x="244" y="376.0" font-size="11.5" fill="#64748b" text-anchor="end">Lowest · £12.22–£13.29/hr</text>
+  <rect x="260.0" y="340.0" width="464.4" height="46.0" fill="#1b6b78"/>
+  <rect x="724.4" y="340.0" width="135.6" height="46.0" fill="#d97724"/>
+  <line x1="724.4" y1="340.0" x2="724.4" y2="386.0" stroke="#ffffff" stroke-width="2"/>
+  <text x="274.0" y="368.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="start">77.4% (48)</text>
+  <text x="846.0" y="368.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="end">22.6% (14)</text>
+  <line x1="673.7" y1="120" x2="673.7" y2="402" stroke="#0f172a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="40" y="478" font-size="11.5" fill="#64748b">Source: Thistlecombe Care HR &amp; April 2026 payroll exports (excludes 14 staff on reduced/nil leave pay).</text>
+</svg>

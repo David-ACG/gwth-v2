@@ -1,4 +1,4 @@
-import { aboutCost } from "@/lib/model-lab-format"
+import { aboutCost, formatTestedMonth } from "@/lib/model-lab-format"
 import { render, screen, cleanup, within, fireEvent } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
 import { CostChart, shortRunsSentence, LabsFde } from "./labs-fde"
@@ -55,14 +55,17 @@ describe("LabsFde, the six labs", () => {
     expect(text).toMatch(/same real UK work tasks/)
     expect(text).toMatch(/Computer checks and AI judges/)
     expect(text).toMatch(/No AI company pays us/)
-    expect(text).toMatch(/Tested October 2026/)
+    // the months come from the data (round 2 ran into November, 12 Nov 2026); formatTestedMonth has its own tests
+    expect(text).toContain(`Tested ${formatTestedMonth(index.tested_from, index.tested_to)}.`)
+    expect(text).toMatch(/Tested October( and November)? 2026\./)
     expect(screen.getByRole("heading", { name: "How we test" })).toBeInTheDocument()
   })
 
   it("states the model and set-up counts from the data", () => {
     const { container } = renderIndex()
     expect(container.textContent).toContain(
-      `${index.model_count} models, ${index.setup_count} set-ups`,
+      // Persona review PR07 (6 Nov 2026): plain words, not "set-ups".
+      `${index.model_count} models tested in ${index.setup_count} combinations of model and settings`,
     )
   })
 
@@ -203,6 +206,16 @@ describe("Labs closing: the course teaches you to compare models (David, 2026-10
     expect(body).toMatch(/The course also teaches you to run your own comparison/)
     expect(body).toMatch(/same task in exactly the same words/)
     expect(body).not.toMatch(/Lesson \d+/)
+  })
+})
+
+describe("Labs replica notes (David, 12 Nov 2026)", () => {
+  it("says on every lab card that it opens, in words, without an arrow icon", () => {
+    renderIndex()
+    for (const card of screen.getAllByTestId("model-lab-card")) {
+      expect(card.textContent).toMatch(/Open the lab to compare the answers/)
+      expect(card.querySelector("svg")).toBeNull()
+    }
   })
 })
 

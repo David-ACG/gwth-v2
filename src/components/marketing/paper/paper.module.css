@@ -360,6 +360,54 @@
   color: var(--v-soft);
 }
 
+/* ---------------- Reveal (detail behind a click) ----------------
+   Persona review round 2 (D25, 7 Nov 2026): long pages keep their evidence
+   but show a one-line summary first, with the detail one click away. Same
+   hairline and +/minus as the FAQ, so it reads as part of the page. */
+
+.reveal {
+  border-top: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
+  margin-top: 1.25rem;
+}
+
+.reveal > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  font-family: var(--font-sans);
+  font-size: var(--fde-body);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.reveal > summary::-webkit-details-marker {
+  display: none;
+}
+
+.reveal > summary::after {
+  content: "+";
+  color: var(--v-muted);
+  flex-shrink: 0;
+}
+
+.reveal[open] > summary::after {
+  content: "\2212";
+}
+
+.reveal > summary:focus-visible {
+  outline: 2px solid var(--v-ink);
+  outline-offset: 2px;
+}
+
+.revealBody {
+  padding: 0.25rem 0 1.5rem;
+}
+
 /* ---------------- Quiet band + closing ---------------- */
 
 .band {

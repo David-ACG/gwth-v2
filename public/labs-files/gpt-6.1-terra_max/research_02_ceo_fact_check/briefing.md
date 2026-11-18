@@ -1,0 +1,19 @@
+3 supported, 4 wrong, 1 misleading, 7 cannot verify
+
+|Claim|Verdict|Evidence|
+|---|---|---|
+|C1: Median gap more than halved|✘ Wrong|7.4%, down from 14.2%; a 47.9% reduction. [d05_gpg_report_2025: "Our median gap fell from 14.2% to 7.4%."]|
+|C2: Mean gap down a quarter|✔ Supported|16.8% to 12.6% is a 25% reduction. [d05_gpg_report_2025: "Mean gender pay gap (hourly pay)"]|
+|C3: Reporting was voluntary|✘ Wrong|Compulsory from 250 employees; the reports cover 1,152 and 1,184. [d06_govuk_gpg_who_must_report: "250 or more employees on their snapshot date must publish"] [d01_gpg_report_2024: "employees on the snapshot date: 1,152"] [d05_gpg_report_2025: "1,184 relevant employees on the snapshot date."]|
+|C4: Women hold 41% of leadership roles now|? Cannot verify|March 2026: 9/22 filled (41%); 9/24 established (37.5%). March 2025: 8/23 filled (35%). October unknown. [d08_headcount_snapshot_2026_03: "Vacant posts: 2 (Head of Engineering, Head of Commercial Finance)"] [d07_headcount_snapshot_2025_03: "Senior leadership team (grade 9)"] [d09_slt_structure_2026: "The senior leadership team has 24 established posts."]|
+|C5: Everyone received at least 5%|✘ Wrong|Basic pay: 5% for grades 1–6, 3.5% for 7–8, 2% for 9. [d20_pay_award_confirmation_2026: "All increases take effect from 1 April 2026."]|
+|C6: Voluntary turnover fell|✔ Supported|22.7% in 2024/25 to 18.1% in 2025/26. [d11_hr_dashboard_fy2025_26: "Voluntary turnover counts resignations only."]|
+|C7: Lowest turnover in the North|? Cannot verify|No 2025/26 ranking. In 2025, Hollins Brook: 18.6%; a quarter of surveyed food-and-drink firms below 13.8%. [d10_board_paper_people_feb2026: "turnover for the 12 months to 31 December 2025 was 18.6%"] [d12_nfma_benchmark_2026: "participating employers reported voluntary turnover below 13.8%."]|
+|C8: Sickness absence below sector average|⚠ Misleading|3.1% excludes long-term absence. Total fell from 4.5% to 4.2%; the 2025 sector average was 3.6%, including long-term absence. [d11_hr_dashboard_fy2025_26: "All sickness absence including long-term absence was 4.2% in 2025/26 (4.5% in 2024/25)."] [d12_nfma_benchmark_2026: "The sector average sickness absence rate was 3.6%."]|
+|C9: Thorncliffe is now largest|? Cannot verify|October unknown. On 31 March: Hollinsford 402; Thorncliffe 371. [d08_headcount_snapshot_2026_03: "Hollinsford (head office and bakery)"]|
+|C10: Line 4 already created 120 jobs|? Cannot verify|October unknown. In 2025/26, 64 permanent roles created; 58 filled by 31 March. [d16_line4_recruitment_report: "created 64 new permanent roles. At 31 March 2026, 58 of these were filled"]|
+|C11: Over four in five staff responded|? Cannot verify|79% responded; invitees included agency workers. Employee-only rate unknown. [d21_pulsepoint_survey_report_2026: "a response rate of 79%. Invitations went to employees and to long-term agency workers."]|
+|C12: Engagement up six points this year|✘ Wrong|72% versus 68% in 2025: up four points. Six points is since 2024. [d22_newsletter_summer2026: "Our engagement score is now 72%, up six points since 2024."] [d31_ceo_speech_notes_2025: "Engagement score 68%, up from 66%."]|
+|C13: Top 10% of UK manufacturers|? Cannot verify|No official benchmark; the top-10% remark was speculative. [d23_pulsepoint_account_email: "your package doesn't include benchmarking, so I can't give you an official comparison."]|
+|C14: £362,500 spent on training|✔ Supported|Actual: £362,500 in 2025/26; £410,000 was budget. [d24_finance_outturn_fy2025_26: "Learning and development: actual spend includes external courses"]|
+|C15: Nine in ten new starters rate induction highly|? Cannot verify|No current rate. In 2024, 87% of 46 respondents rated induction good or excellent. [d26_onboarding_pulse_jul2024: "How would you rate your induction overall?"] [d25_hr_team_minutes_mar2026: "not run since the survey tool licence lapsed in summer 2024."]|

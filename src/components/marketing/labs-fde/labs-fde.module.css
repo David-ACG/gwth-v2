@@ -318,7 +318,8 @@
   overflow: hidden;
 }
 
-.card:hover {
+.card:hover,
+.card:focus-visible {
   border-color: var(--v-ink);
 }
 
@@ -689,6 +690,25 @@
   justify-content: center;
   gap: 0.875rem;
   margin-top: 2.25rem;
+}
+
+/* The worded link at the foot of each lab card (David, 12 Nov 2026: make it obvious
+   the cards open). Accent and underlined at rest so it reads as a link before any
+   hover; the underline thickens on hover with the boundary and title colour. */
+.cardAction {
+  margin-top: 0.85rem;
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--v-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.card:hover .cardAction,
+.card:focus-visible .cardAction {
+  text-decoration-thickness: 2px;
 }
 
 /* Closing band: text left, the labs video right (David, 12 Nov 2026: "Can we justify

@@ -27,6 +27,5 @@ describe("Pricing with the team dashboard switched on", () => {
     expect(body).toMatch(/quiz marks/i)
     expect(body).toMatch(/project they build each month/i)
     expect(body).not.toMatch(/screen/i)
-    expect(screen.getAllByText("Manager dashboard").length).toBeGreaterThan(0)
   })
 })

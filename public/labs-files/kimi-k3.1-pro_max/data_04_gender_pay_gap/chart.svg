@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">Thistlecombe Care pay quartiles by sex</title>
+<desc id="chart-desc">Percentage of women and men in each equal-sized pay quartile of full-pay relevant employees at the 5 April 2026 snapshot.</desc>
+<rect width="1000" height="640" fill="#ffffff"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#17252a}.title{font-size:27px;font-weight:700}.subtitle{font-size:15px;fill:#52656d}.axis{font-size:13px;fill:#52656d}.rowlabel{font-size:17px;font-weight:700}.segment{font-size:16px;font-weight:700;fill:#ffffff}.legend{font-size:15px}.note{font-size:14px;fill:#52656d}</style>
+<text x="60" y="55" class="title">Pay quartiles by sex</text>
+<text x="60" y="84" class="subtitle">Thistlecombe Care | 5 April 2026 snapshot | 248 full-pay relevant employees</text>
+<rect x="650" y="105" width="16" height="16" rx="2" fill="#167c80"/>
+<text x="674" y="119" class="legend">Women</text>
+<rect x="770" y="105" width="16" height="16" rx="2" fill="#284b63"/>
+<text x="794" y="119" class="legend">Men</text>
+<line x1="220.0" y1="150" x2="220.0" y2="522" stroke="#dce4e7" stroke-width="1"/>
+<text x="220.0" y="141" text-anchor="middle" class="axis">0%</text>
+<line x1="395.0" y1="150" x2="395.0" y2="522" stroke="#dce4e7" stroke-width="1"/>
+<text x="395.0" y="141" text-anchor="middle" class="axis">25%</text>
+<line x1="570.0" y1="150" x2="570.0" y2="522" stroke="#dce4e7" stroke-width="1"/>
+<text x="570.0" y="141" text-anchor="middle" class="axis">50%</text>
+<line x1="745.0" y1="150" x2="745.0" y2="522" stroke="#dce4e7" stroke-width="1"/>
+<text x="745.0" y="141" text-anchor="middle" class="axis">75%</text>
+<line x1="920.0" y1="150" x2="920.0" y2="522" stroke="#dce4e7" stroke-width="1"/>
+<text x="920.0" y="141" text-anchor="middle" class="axis">100%</text>
+<text x="60" y="191" class="rowlabel">Lower (1)</text>
+<text x="60" y="213" class="axis">62 employees</text>
+<rect x="220" y="165" width="553.226" height="60" rx="3" fill="#167c80"/>
+<rect x="773.226" y="165" width="146.774" height="60" rx="3" fill="#284b63"/>
+<text x="496.613" y="202" text-anchor="middle" class="segment">Women 79.0%</text>
+<text x="846.613" y="202" text-anchor="middle" class="segment">Men 21.0%</text>
+<text x="60" y="286" class="rowlabel">Lower middle (2)</text>
+<text x="60" y="308" class="axis">62 employees</text>
+<rect x="220" y="260" width="462.903" height="60" rx="3" fill="#167c80"/>
+<rect x="682.903" y="260" width="237.097" height="60" rx="3" fill="#284b63"/>
+<text x="451.452" y="297" text-anchor="middle" class="segment">Women 66.1%</text>
+<text x="801.452" y="297" text-anchor="middle" class="segment">Men 33.9%</text>
+<text x="60" y="381" class="rowlabel">Upper middle (3)</text>
+<text x="60" y="403" class="axis">62 employees</text>
+<rect x="220" y="355" width="508.065" height="60" rx="3" fill="#167c80"/>
+<rect x="728.065" y="355" width="191.935" height="60" rx="3" fill="#284b63"/>
+<text x="474.032" y="392" text-anchor="middle" class="segment">Women 72.6%</text>
+<text x="824.032" y="392" text-anchor="middle" class="segment">Men 27.4%</text>
+<text x="60" y="476" class="rowlabel">Upper (4)</text>
+<text x="60" y="498" class="axis">62 employees</text>
+<rect x="220" y="450" width="406.452" height="60" rx="3" fill="#167c80"/>
+<rect x="626.452" y="450" width="293.548" height="60" rx="3" fill="#284b63"/>
+<text x="423.226" y="487" text-anchor="middle" class="segment">Women 58.1%</text>
+<text x="773.226" y="487" text-anchor="middle" class="segment">Men 41.9%</text>
+<text x="60" y="590" class="note">Quartile 1 is the lowest paid. Each quartile contains 62 employees; rows total 100%.</text>
+<text x="60" y="614" class="note">Hourly pay uses April 2026 ordinary pay and contracted hours in force on the snapshot date.</text>
+</svg>

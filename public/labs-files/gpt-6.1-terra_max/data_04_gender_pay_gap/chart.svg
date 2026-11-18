@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520" role="img" aria-labelledby="chart-title chart-desc">
+  <title id="chart-title">Women and men in each hourly pay quartile</title>
+  <desc id="chart-desc">From lowest to highest hourly pay, the percentage of women is 77.4, 71.0, 74.2, 53.2. The percentage of men is 22.6, 29.0, 25.8, 46.8. Each quartile contains 62 employees.</desc>
+  <defs><clipPath id="rounded-0"><rect x="260" y="188" width="690" height="42" rx="5" /></clipPath>
+<clipPath id="rounded-1"><rect x="260" y="255" width="690" height="42" rx="5" /></clipPath>
+<clipPath id="rounded-2"><rect x="260" y="322" width="690" height="42" rx="5" /></clipPath>
+<clipPath id="rounded-3"><rect x="260" y="389" width="690" height="42" rx="5" /></clipPath></defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; }
+    .title { font-size: 25px; font-weight: 700; fill: #152b37; }
+    .subtitle { font-size: 14px; fill: #526675; }
+    .legend { font-size: 14px; fill: #263e4a; }
+    .row-label { font-size: 16px; font-weight: 700; fill: #213846; }
+    .scale { font-size: 12px; fill: #637580; }
+    .grid { stroke: #d8e2e4; stroke-width: 1; }
+    .inside { text-anchor: middle; font-size: 15px; font-weight: 700; }
+    .light { fill: #ffffff; }
+    .dark { fill: #2f2a1f; }
+    .foot { font-size: 13px; fill: #596e79; }
+  </style>
+  <rect width="1000" height="520" rx="14" fill="#f8faf9" />
+  <text x="48" y="54" class="title">Women and men across hourly pay quartiles</text>
+  <text x="48" y="80" class="subtitle">Full-pay relevant employees · snapshot 5 April 2026</text>
+  <rect x="48" y="106" width="14" height="14" rx="3" fill="#075f68" />
+  <text x="70" y="118" class="legend">Women</text>
+  <rect x="146" y="106" width="14" height="14" rx="3" fill="#e9ad59" />
+  <text x="168" y="118" class="legend">Men</text>
+  <line x1="48" y1="140" x2="952" y2="140" stroke="#d8e2e4" />
+  <text x="260.0" y="169" text-anchor="middle" class="scale">0%</text><line x1="260.0" y1="178" x2="260.0" y2="441" class="grid" />
+<text x="432.5" y="169" text-anchor="middle" class="scale">25%</text><line x1="432.5" y1="178" x2="432.5" y2="441" class="grid" />
+<text x="605.0" y="169" text-anchor="middle" class="scale">50%</text><line x1="605.0" y1="178" x2="605.0" y2="441" class="grid" />
+<text x="777.5" y="169" text-anchor="middle" class="scale">75%</text><line x1="777.5" y1="178" x2="777.5" y2="441" class="grid" />
+<text x="950.0" y="169" text-anchor="middle" class="scale">100%</text><line x1="950.0" y1="178" x2="950.0" y2="441" class="grid" />
+  
+    <text x="48" y="215" class="row-label">Lower</text>
+    <g clip-path="url(#rounded-0)">
+      <rect x="260" y="188" width="534.19355" height="42" fill="#075f68" />
+      <rect x="794.19355" y="188" width="155.80645" height="42" fill="#e9ad59" />
+    </g>
+    <text x="527.09677" y="215" class="inside light">77.4%</text>
+    <text x="872.09677" y="215" class="inside dark">22.6%</text>
+    <text x="48" y="282" class="row-label">Lower middle</text>
+    <g clip-path="url(#rounded-1)">
+      <rect x="260" y="255" width="489.67742" height="42" fill="#075f68" />
+      <rect x="749.67742" y="255" width="200.32258" height="42" fill="#e9ad59" />
+    </g>
+    <text x="504.83871" y="282" class="inside light">71.0%</text>
+    <text x="849.83871" y="282" class="inside dark">29.0%</text>
+    <text x="48" y="349" class="row-label">Upper middle</text>
+    <g clip-path="url(#rounded-2)">
+      <rect x="260" y="322" width="511.93548" height="42" fill="#075f68" />
+      <rect x="771.93548" y="322" width="178.06452" height="42" fill="#e9ad59" />
+    </g>
+    <text x="515.96774" y="349" class="inside light">74.2%</text>
+    <text x="860.96774" y="349" class="inside dark">25.8%</text>
+    <text x="48" y="416" class="row-label">Upper</text>
+    <g clip-path="url(#rounded-3)">
+      <rect x="260" y="389" width="367.25806" height="42" fill="#075f68" />
+      <rect x="627.25806" y="389" width="322.74194" height="42" fill="#e9ad59" />
+    </g>
+    <text x="443.62903" y="416" class="inside light">53.2%</text>
+    <text x="788.62903" y="416" class="inside dark">46.8%</text>
+  <line x1="48" y1="464" x2="952" y2="464" stroke="#d8e2e4" />
+  <text x="48" y="490" class="foot">Lowest to highest hourly pay · 62 employees per quartile · Percentages rounded to one decimal place</text>
+</svg>

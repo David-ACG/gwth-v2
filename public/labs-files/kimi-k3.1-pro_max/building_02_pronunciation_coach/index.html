@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b3a">
+  <meta name="description" content="Private Spanish and French pronunciation practice for Harbour & Vale secondees.">
+  <title>Pronunciation Coach | Harbour & Vale</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18302f;
+      --muted: #5b6d6b;
+      --deep: #123b3a;
+      --teal: #16756c;
+      --teal-dark: #0e5c55;
+      --mint: #e2f1eb;
+      --cream: #f6f5ef;
+      --paper: #ffffff;
+      --line: #dce3df;
+      --orange: #e8784a;
+      --green: #23744d;
+      --green-bg: #e5f4e9;
+      --amber: #925c08;
+      --amber-bg: #fff0ce;
+      --red: #ad3e3e;
+      --red-bg: #fde9e7;
+      --shadow: 0 16px 40px rgba(18, 59, 58, 0.08);
+      border-radius: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 280px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% 0%, rgba(226, 241, 235, 0.85), transparent 30rem),
+        var(--cream);
+      line-height: 1.5;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button,
+    summary {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .site-header {
+      color: #fff;
+      background: var(--deep);
+      border-bottom: 4px solid var(--orange);
+    }
+
+    .header-inner,
+    .page-shell,
+    .site-footer {
+      width: min(1120px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 74px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 39px;
+      height: 39px;
+      color: var(--deep);
+      background: #f5c09c;
+      border-radius: 11px 11px 11px 3px;
+      font-size: 0.82rem;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    .header-tag {
+      color: #c7dcd7;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .page-shell {
+      padding-block: 34px 44px;
+    }
+
+    .intro {
+      max-width: 740px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--teal-dark);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      overflow-wrap: break-word;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--deep);
+      font-size: clamp(2rem, 7vw, 3.6rem);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .intro-copy {
+      max-width: 650px;
+      margin: 15px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .workspace {
+      display: grid;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid rgba(18, 59, 58, 0.08);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .library {
+      padding: 20px;
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 5px;
+    }
+
+    .panel-heading h2,
+    .practice-heading h2 {
+      margin: 0;
+      color: var(--deep);
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .phrase-count {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .section-copy {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .language-group + .language-group {
+      margin-top: 20px;
+    }
+
+    .language-heading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 9px;
+      color: var(--deep);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.025em;
+    }
+
+    .language-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--orange);
+      border-radius: 50%;
+    }
+
+    .language-group[data-language="fr-FR"] .language-dot {
+      background: var(--teal);
+    }
+
+    .phrase-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .phrase-button {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      width: 100%;
+      padding: 13px 12px;
+      color: var(--ink);
+      text-align: left;
+      background: #fbfcfa;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+    }
+
+    .phrase-button:not(:disabled):hover {
+      border-color: #92b7ad;
+      transform: translateY(-1px);
+    }
+
+    .phrase-button[aria-pressed="true"] {
+      background: var(--mint);
+      border-color: var(--teal);
+      box-shadow: inset 3px 0 0 var(--teal);
+    }
+
+    .phrase-text {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .phrase-english {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 450;
+      line-height: 1.35;
+    }
+
+    .best-box {
+      align-self: start;
+      min-width: 45px;
+      padding: 4px 6px;
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 0.65rem;
+      line-height: 1.2;
+    }
+
+    .best-label {
+      display: block;
+      margin-bottom: 2px;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .best-value {
+      color: var(--deep);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .best-empty {
+      color: #8b9996;
+      font-size: 0.85rem;
+    }
+
+    .practice {
+      overflow: hidden;
+    }
+
+    .practice-top {
+      padding: 22px;
+    }
+
+    .practice-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .selected-language {
+      padding: 5px 9px;
+      color: var(--teal-dark);
+      background: var(--mint);
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .target-card {
+      position: relative;
+      padding: 24px 20px;
+      overflow: hidden;
+      background: var(--deep);
+      border-radius: 16px;
+    }
+
+    .target-card::after {
+      position: absolute;
+      right: -35px;
+      bottom: -58px;
+      width: 145px;
+      height: 145px;
+      border: 24px solid rgba(255, 255, 255, 0.045);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .target-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #a9cbc3;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .target {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: #fff;
+      font-size: clamp(1.55rem, 5.8vw, 2.35rem);
+      font-weight: 720;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+
+    .translation {
+      position: relative;
+      z-index: 1;
+      margin: 11px 0 0;
+      color: #c7dcd7;
+      font-size: 0.88rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 19px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 650;
+    }
+
+    .step-number {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      color: var(--teal-dark);
+      background: var(--mint);
+      border-radius: 50%;
+      font-size: 0.68rem;
+      font-weight: 850;
+    }
+
+    .listen-button,
+    .record-button,
+    .stop-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 48px;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .listen-button {
+      width: 100%;
+      color: var(--deep);
+      background: #fff;
+      border: 1px solid #aac3bb;
+    }
+
+    .listen-button:not(:disabled):hover {
+      background: #f4faf7;
+      border-color: var(--teal);
+    }
+
+    .record-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .record-button {
+      color: #fff;
+      background: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .record-button:not(:disabled):hover {
+      background: var(--teal-dark);
+    }
+
+    .stop-button {
+      color: var(--deep);
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .stop-button:not(:disabled):hover {
+      background: #f7f8f6;
+      border-color: #9aaba6;
+    }
+
+    .icon {
+      flex: 0 0 auto;
+      width: 19px;
+      height: 19px;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 0.73rem;
+      line-height: 1.45;
+    }
+
+    .privacy-note .icon {
+      width: 15px;
+      height: 15px;
+      margin-top: 1px;
+      color: var(--teal);
+    }
+
+    .message {
+      margin: 0 22px 20px;
+      padding: 12px 14px;
+      color: #294946;
+      background: #edf6f2;
+      border: 1px solid #c5ded4;
+      border-radius: 11px;
+      font-size: 0.85rem;
+    }
+
+    .message[data-tone="error"] {
+      color: #823535;
+      background: #fff0ee;
+      border-color: #efc5c0;
+    }
+
+    .message[data-tone="warning"] {
+      color: #765019;
+      background: #fff5df;
+      border-color: #ead5a7;
+    }
+
+    .message[data-tone="recording"] {
+      color: #823535;
+      background: #fff0ee;
+      border-color: #efc5c0;
+    }
+
+    .results {
+      padding: 22px;
+      background: #f8faf7;
+      border-top: 1px solid var(--line);
+    }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .results h2 {
+      margin: 0 0 3px;
+      color: var(--deep);
+      font-size: 1.15rem;
+    }
+
+    .results-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .score-box {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: baseline;
+      color: var(--deep);
+    }
+
+    .score {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .score-total {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 650;
+    }
+
+    .result-label {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .result-words {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 6px;
+      margin-bottom: 13px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .result-word {
+      padding: 3px 6px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+    }
+
+    .result-word[data-colour="green"] {
+      color: var(--green);
+      background: var(--green-bg);
+      border-color: #add5ba;
+    }
+
+    .result-word[data-colour="amber"] {
+      color: var(--amber);
+      background: var(--amber-bg);
+      border-color: #dfba6d;
+      border-style: dashed;
+    }
+
+    .result-word[data-colour="red"] {
+      color: var(--red);
+      background: var(--red-bg);
+      border-color: #df9f99;
+      border-style: dotted;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 0.7rem;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-mark {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+    }
+
+    .legend-mark.green {
+      background: var(--green);
+    }
+
+    .legend-mark.amber {
+      background: #c88819;
+    }
+
+    .legend-mark.red {
+      background: var(--red);
+    }
+
+    .heard-box {
+      padding: 13px 15px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+    }
+
+    .heard-box .result-label {
+      margin-bottom: 5px;
+    }
+
+    .heard {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .site-footer {
+      padding: 0 0 28px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    @media (min-width: 820px) {
+      .page-shell {
+        padding-block: 46px 54px;
+      }
+
+      .intro {
+        margin-bottom: 34px;
+      }
+
+      .intro-copy {
+        font-size: 1.06rem;
+      }
+
+      .workspace {
+        grid-template-columns: minmax(280px, 0.83fr) minmax(0, 1.45fr);
+        gap: 24px;
+      }
+
+      .library {
+        max-height: 720px;
+        padding: 22px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #b9c8c2 transparent;
+      }
+
+      .practice-top,
+      .results {
+        padding: 28px;
+      }
+
+      .message {
+        margin-inline: 28px;
+      }
+
+      .target-card {
+        min-height: 190px;
+        padding: 30px 26px;
+      }
+
+      .listen-button {
+        min-height: 52px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-inner,
+      .page-shell,
+      .site-footer {
+        width: min(100% - 24px, 1120px);
+      }
+
+      .header-tag {
+        display: none;
+      }
+
+      .page-shell {
+        padding-top: 27px;
+      }
+
+      .library,
+      .practice-top,
+      .results {
+        padding: 17px;
+      }
+
+      .message {
+        margin-inline: 17px;
+      }
+
+      .panel {
+        border-radius: 17px;
+      }
+
+      .phrase-button {
+        padding: 12px 10px;
+      }
+
+      .steps li {
+        gap: 5px;
+        font-size: 0.69rem;
+      }
+
+      .record-button,
+      .stop-button {
+        padding-inline: 9px;
+        font-size: 0.82rem;
+      }
+
+      .results-header {
+        gap: 10px;
+      }
+
+      .score {
+        font-size: 2.15rem;
+      }
+    }
+
+    @media (max-width: 330px) {
+      .record-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        gap: 3px;
+      }
+
+      .steps li {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand" aria-label="Harbour and Vale Logistics">
+        <span class="brand-mark" aria-hidden="true">H&amp;V</span>
+        <span>Harbour &amp; Vale</span>
+      </div>
+      <span class="header-tag">Secondee toolkit</span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">Spanish &amp; French pronunciation coach</p>
+      <h1 id="page-title">Say it with confidence.</h1>
+      <p class="intro-copy">Choose an everyday phrase, listen, then say it out loud. You’ll get friendly, word-by-word feedback—without an audience.</p>
+    </section>
+
+    <div class="workspace">
+      <aside class="library panel" aria-labelledby="library-title">
+        <div class="panel-heading">
+          <h2 id="library-title">Phrase library</h2>
+          <span class="phrase-count">12 phrases</span>
+        </div>
+        <p class="section-copy">Pick something useful for your secondment.</p>
+        <div id="phrase-groups"></div>
+      </aside>
+
+      <section class="practice panel" aria-labelledby="practice-title">
+        <div class="practice-top">
+          <div class="practice-heading">
+            <h2 id="practice-title">Your practice</h2>
+            <span id="selected-language" class="selected-language"></span>
+          </div>
+
+          <div class="target-card">
+            <span class="target-label">Your chosen phrase</span>
+            <p id="target" class="target" data-testid="target" lang="es-ES"></p>
+            <p id="translation" class="translation"></p>
+          </div>
+
+          <ol class="steps" aria-label="How to practise">
+            <li><span class="step-number">1</span>Listen</li>
+            <li><span class="step-number">2</span>Record</li>
+            <li><span class="step-number">3</span>Review</li>
+          </ol>
+
+          <button id="listen" class="listen-button" type="button" data-testid="listen">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+              <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+              <path d="M18 6a8.5 8.5 0 0 1 0 12"></path>
+            </svg>
+            <span>Listen to phrase</span>
+          </button>
+
+          <div class="record-controls" aria-label="Recording controls">
+            <button id="record" class="record-button" type="button" data-testid="record">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="3" width="6" height="11" rx="3"></rect>
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"></path>
+              </svg>
+              <span id="record-label">Record phrase</span>
+            </button>
+            <button id="stop" class="stop-button" type="button" data-testid="stop" disabled>
+              <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+              </svg>
+              <span>Stop recording</span>
+            </button>
+          </div>
+
+          <p class="privacy-note">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="5" y="10" width="14" height="11" rx="2"></rect>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+            <span>Audio goes only to the company listening service. This page stores your best scores, never your recordings.</span>
+          </p>
+        </div>
+
+        <div id="message" class="message" data-testid="message" data-tone="info" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+        <section id="results" class="results" aria-labelledby="results-title" hidden>
+          <div class="results-header">
+            <div>
+              <h2 id="results-title">Your attempt</h2>
+              <p class="results-subtitle">A little clearer every time.</p>
+            </div>
+            <div class="score-box" aria-label="Overall score out of 100">
+              <span id="score" class="score" data-testid="score"></span>
+              <span class="score-total">/100</span>
+            </div>
+          </div>
+
+          <span class="result-label">Word-by-word feedback</span>
+          <div id="result-words" class="result-words" aria-label="Word-by-word result"></div>
+          <p class="legend" aria-label="Colour guide">
+            <span><span class="legend-mark green" aria-hidden="true"></span>Green: clear</span>
+            <span><span class="legend-mark amber" aria-hidden="true"></span>Amber: keep practising</span>
+            <span><span class="legend-mark red" aria-hidden="true"></span>Red: missed or unclear</span>
+          </p>
+
+          <div class="heard-box">
+            <span class="result-label">What the service heard</span>
+            <p id="heard" class="heard" data-testid="heard"></p>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">Private practice, steady progress. Scores stay in this browser on this device.</footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const phrases = [
+        {"id":"es_01","language":"es-ES","text":"Buenos días, ¿qué tal?","english":"Good morning, how are you?"},
+        {"id":"es_02","language":"es-ES","text":"Me llamo Sam y trabajo en el almacén.","english":"My name is Sam and I work in the warehouse."},
+        {"id":"es_03","language":"es-ES","text":"¿Dónde está la estación de tren?","english":"Where is the train station?"},
+        {"id":"es_04","language":"es-ES","text":"El camión llega a las tres y media.","english":"The lorry arrives at half past three."},
+        {"id":"es_05","language":"es-ES","text":"Me gustaría reservar una mesa para dos.","english":"I would like to book a table for two."},
+        {"id":"es_06","language":"es-ES","text":"¿Puede repetirlo más despacio, por favor?","english":"Can you repeat it more slowly, please?"},
+        {"id":"fr_01","language":"fr-FR","text":"Bonjour, je suis nouveau ici.","english":"Hello, I am new here."},
+        {"id":"fr_02","language":"fr-FR","text":"Je voudrais un café, s'il vous plaît.","english":"I would like a coffee, please."},
+        {"id":"fr_03","language":"fr-FR","text":"À quelle heure part le prochain train ?","english":"What time does the next train leave?"},
+        {"id":"fr_04","language":"fr-FR","text":"Il fait très beau aujourd'hui.","english":"The weather is lovely today."},
+        {"id":"fr_05","language":"fr-FR","text":"Le chargement est prêt à partir.","english":"The load is ready to go."},
+        {"id":"fr_06","language":"fr-FR","text":"Pouvez-vous parler plus lentement ?","english":"Can you speak more slowly?"}
+      ];
+
+      const storageKey = "harbour-vale-pronunciation-best-v1";
+      const languageNames = {"es-ES": "Spanish · Spain", "fr-FR": "French · France"};
+      const phraseWords = (text) => String(text).split(" ").filter((word) => /[\p{L}\p{N}]/u.test(makePlain(word)));
+      const makePlain = (value) => String(value).toLowerCase().normalize("NFD").replace(/\p{M}/gu, "").replace(/\p{P}/gu, "");
+
+      function scoreAttempt(phrase, heardWords) {
+        const targetWords = phraseWords(phrase.text);
+        const plainTargets = targetWords.map(makePlain);
+        const plainHeard = heardWords.map((heard) => makePlain(heard.word));
+        let nextHeardIndex = 0;
+        let points = 0;
+        let matchedCount = 0;
+
+        const words = targetWords.map((text, targetIndex) => {
+          let matchIndex = -1;
+          for (let heardIndex = nextHeardIndex; heardIndex < plainHeard.length; heardIndex += 1) {
+            if (plainHeard[heardIndex] === plainTargets[targetIndex]) {
+              matchIndex = heardIndex;
+              break;
+            }
+          }
+
+          if (matchIndex === -1) {
+            return {text, colour: "red", matched: false};
+          }
+
+          const confidence = heardWords[matchIndex].confidence;
+          const colour = confidence >= 0.85 ? "green" : confidence >= 0.60 ? "amber" : "red";
+          nextHeardIndex = matchIndex + 1;
+          points += confidence;
+          matchedCount += 1;
+          return {text, colour, matched: true, confidence};
+        });
+
+        const extraCount = heardWords.length - matchedCount;
+        const roundedAverage = targetWords.length ? Math.round((points / targetWords.length) * 100) : 0;
+        return {words, extraCount, score: Math.max(0, roundedAverage - extraCount * 5)};
+      }
+
+      function validServiceResult(result) {
+        return Boolean(
+          result &&
+          typeof result.transcript === "string" &&
+          Array.isArray(result.words) &&
+          result.words.every((heard) =>
+            heard &&
+            typeof heard.word === "string" &&
+            typeof heard.confidence === "number" &&
+            Number.isFinite(heard.confidence) &&
+            heard.confidence >= 0 &&
+            heard.confidence <= 1
+          )
+        );
+      }
+
+      function loadBestScores() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+          if (!saved || typeof saved !== "object" || Array.isArray(saved)) return {};
+          return phrases.reduce((scores, phrase) => {
+            const value = saved[phrase.id];
+            if (Number.isInteger(value) && value >= 0 && value <= 100) scores[phrase.id] = value;
+            return scores;
+          }, {});
+        } catch (error) {
+          return {};
+        }
+      }
+
+      let selectedPhrase = phrases[0];
+      let bestScores = loadBestScores();
+      let appState = "idle";
+      let recorder = null;
+      let mediaStream = null;
+      let audioChunks = [];
+      let activeController = null;
+      let recordingFailed = false;
+
+      const elements = {
+        phraseGroups: document.getElementById("phrase-groups"),
+        selectedLanguage: document.getElementById("selected-language"),
+        target: document.getElementById("target"),
+        translation: document.getElementById("translation"),
+        listen: document.getElementById("listen"),
+        record: document.getElementById("record"),
+        recordLabel: document.getElementById("record-label"),
+        stop: document.getElementById("stop"),
+        message: document.getElementById("message"),
+        results: document.getElementById("results"),
+        score: document.getElementById("score"),
+        resultWords: document.getElementById("result-words"),
+        heard: document.getElementById("heard")
+      };
+
+      function showMessage(text, tone = "info") {
+        elements.message.textContent = String(text);
+        elements.message.dataset.tone = tone;
+        elements.message.hidden = false;
+      }
+
+      function clearMessage() {
+        elements.message.textContent = "";
+        elements.message.hidden = true;
+      }
+
+      function clearResults() {
+        elements.results.hidden = true;
+        elements.score.textContent = "";
+        elements.resultWords.replaceChildren();
+        elements.heard.textContent = "";
+      }
+
+      function updateControls() {
+        const busy = appState !== "idle";
+        elements.listen.disabled = busy;
+        elements.record.disabled = busy;
+        elements.stop.disabled = appState !== "recording";
+        elements.recordLabel.textContent = appState === "recording" ? "Recording…" : appState === "processing" ? "Checking…" : appState === "requesting" ? "Allow microphone…" : "Record phrase";
+        document.querySelectorAll("[data-phrase-id]").forEach((button) => {
+          button.disabled = busy;
+        });
+      }
+
+      function setAppState(nextState) {
+        appState = nextState;
+        updateControls();
+      }
+
+      function renderPhraseLibrary() {
+        for (const language of ["es-ES", "fr-FR"]) {
+          const group = document.createElement("section");
+          group.className = "language-group";
+          group.dataset.language = language;
+          group.setAttribute("aria-labelledby", `language-${language}`);
+
+          const heading = document.createElement("h3");
+          heading.id = `language-${language}`;
+          heading.className = "language-heading";
+          const dot = document.createElement("span");
+          dot.className = "language-dot";
+          dot.setAttribute("aria-hidden", "true");
+          heading.append(dot, document.createTextNode(languageNames[language]));
+
+          const list = document.createElement("div");
+          list.className = "phrase-list";
+          for (const phrase of phrases.filter((item) => item.language === language)) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "phrase-button";
+            button.dataset.phraseId = phrase.id;
+            button.setAttribute("data-testid", `phrase-${phrase.id}`);
+            button.setAttribute("aria-pressed", String(phrase.id === selectedPhrase.id));
+            button.setAttribute("aria-label", `Practise ${phrase.text} ${phrase.english} ${Object.hasOwn(bestScores, phrase.id) ? `Best score ${bestScores[phrase.id]} out of 100.` : "Not tried yet."}`);
+
+            const copy = document.createElement("span");
+            const phraseText = document.createElement("span");
+            phraseText.className = "phrase-text";
+            phraseText.lang = phrase.language;
+            phraseText.textContent = phrase.text;
+            const english = document.createElement("span");
+            english.className = "phrase-english";
+            english.textContent = phrase.english;
+            copy.append(phraseText, english);
+
+            const bestBox = document.createElement("span");
+            bestBox.className = "best-box";
+            const bestLabel = document.createElement("span");
+            bestLabel.className = "best-label";
+            bestLabel.textContent = "Best";
+            const bestValue = document.createElement("span");
+            bestValue.className = "best-value";
+            bestValue.setAttribute("data-testid", `best-${phrase.id}`);
+            bestValue.textContent = Object.hasOwn(bestScores, phrase.id) ? String(bestScores[phrase.id]) : "";
+            const bestEmpty = document.createElement("span");
+            bestEmpty.className = "best-empty";
+            bestEmpty.textContent = "—";
+            bestEmpty.hidden = Object.hasOwn(bestScores, phrase.id);
+            bestBox.append(bestLabel, bestValue, bestEmpty);
+
+            button.append(copy, bestBox);
+            button.addEventListener("click", () => selectPhrase(phrase.id));
+            list.append(button);
+          }
+          group.append(heading, list);
+          elements.phraseGroups.append(group);
+        }
+      }
+
+      function selectPhrase(id) {
+        const phrase = phrases.find((item) => item.id === id);
+        if (!phrase || appState !== "idle") return;
+        selectedPhrase = phrase;
+        if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+        elements.target.textContent = phrase.text;
+        elements.target.lang = phrase.language;
+        elements.translation.textContent = phrase.english;
+        elements.selectedLanguage.textContent = languageNames[phrase.language];
+        document.querySelectorAll("[data-phrase-id]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.phraseId === phrase.id));
+        });
+        clearMessage();
+        clearResults();
+      }
+
+      function listenToPhrase() {
+        if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+          showMessage("This browser cannot read the phrase aloud. Try a current version of Chrome, Edge or Safari.", "error");
+          return;
+        }
+        clearMessage();
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(selectedPhrase.text);
+        utterance.lang = selectedPhrase.language;
+        const voices = window.speechSynthesis.getVoices();
+        const exactVoice = voices.find((voice) => voice.lang.replace("_", "-").toLowerCase() === selectedPhrase.language.toLowerCase());
+        if (exactVoice) utterance.voice = exactVoice;
+        utterance.rate = 0.85;
+        utterance.onerror = (event) => {
+          if (event.error !== "canceled" && event.error !== "interrupted") {
+            showMessage("The phrase could not be played. Check that a Spanish or French voice is installed, then try again.", "error");
+          }
+        };
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function stopMediaStream() {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((track) => track.stop());
+          mediaStream = null;
+        }
+      }
+
+      function microphoneMessage(error) {
+        if (error && (error.name === "NotAllowedError" || error.name === "SecurityError" || error.name === "PermissionDeniedError")) {
+          return "Microphone access is blocked. Allow it in your browser’s site settings, then come back and press Record phrase again.";
+        }
+        if (error && (error.name === "NotFoundError" || error.name === "DevicesNotFoundError" || error.name === "OverconstrainedError")) {
+          return "No microphone was found. Connect or enable a microphone, allow access when asked, then try again.";
+        }
+        if (error && (error.name === "NotReadableError" || error.name === "AbortError")) {
+          return "The microphone could not be opened. Close other apps that may be using it, check your browser’s microphone permission, then try again.";
+        }
+        return "The microphone could not be started. Check that it is connected and allowed in your browser’s site settings, then try again.";
+      }
+
+      async function startRecording() {
+        if (appState !== "idle") return;
+        clearMessage();
+        clearResults();
+        if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+        if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function" || typeof window.MediaRecorder !== "function") {
+          showMessage("Recording is not available in this browser. Open the page in a current browser using its secure web address, then allow microphone access.", "error");
+          return;
+        }
+
+        setAppState("requesting");
+        showMessage("Your browser may ask for microphone access. Choose Allow to start recording.");
+        try {
+          mediaStream = await navigator.mediaDevices.getUserMedia({audio: true});
+          recorder = new MediaRecorder(mediaStream);
+          audioChunks = [];
+          recordingFailed = false;
+          const phraseAtStart = selectedPhrase;
+
+          recorder.addEventListener("dataavailable", (event) => {
+            if (event.data && event.data.size > 0) audioChunks.push(event.data);
+          });
+          recorder.addEventListener("error", () => {
+            recordingFailed = true;
+            stopMediaStream();
+            audioChunks = [];
+            clearResults();
+            setAppState("idle");
+            showMessage("The recording stopped unexpectedly. Please check your microphone and try again.", "error");
+          });
+          recorder.addEventListener("stop", () => {
+            stopMediaStream();
+            if (recordingFailed) return;
+            const mimeType = recorder.mimeType || (audioChunks[0] && audioChunks[0].type) || "audio/webm";
+            const audioBlob = new Blob(audioChunks, {type: mimeType});
+            void assessRecording(audioBlob, phraseAtStart);
+          }, {once: true});
+
+          recorder.start();
+          setAppState("recording");
+          showMessage("Recording now. Say the phrase, then press Stop recording.", "recording");
+        } catch (error) {
+          stopMediaStream();
+          recorder = null;
+          audioChunks = [];
+          clearResults();
+          setAppState("idle");
+          showMessage(microphoneMessage(error), "error");
+        }
+      }
+
+      function stopRecording() {
+        if (appState !== "recording" || !recorder || recorder.state === "inactive") return;
+        setAppState("processing");
+        showMessage("Finishing your recording…");
+        try {
+          recorder.stop();
+        } catch (error) {
+          stopMediaStream();
+          audioChunks = [];
+          setAppState("idle");
+          showMessage("The recording could not be finished. Please try again.", "error");
+        }
+      }
+
+      function saveBestScores() {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(bestScores));
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function refreshBestScore(phrase) {
+        const scoreElement = document.querySelector(`[data-testid="best-${phrase.id}"]`);
+        if (scoreElement) {
+          scoreElement.textContent = Object.hasOwn(bestScores, phrase.id) ? String(bestScores[phrase.id]) : "";
+          const emptyMark = scoreElement.parentElement.querySelector(".best-empty");
+          if (emptyMark) emptyMark.hidden = Object.hasOwn(bestScores, phrase.id);
+          const phraseButton = scoreElement.closest("button");
+          if (phraseButton) phraseButton.setAttribute("aria-label", `Practise ${phrase.text} ${phrase.english} Best score ${bestScores[phrase.id]} out of 100.`);
+        }
+      }
+
+      function showResults(phrase, assessment, transcript) {
+        elements.resultWords.replaceChildren();
+        const colourDescriptions = {green: "green, clear", amber: "amber, keep practising", red: "red, missed or unclear"};
+        assessment.words.forEach((word, index) => {
+          const wordElement = document.createElement("span");
+          wordElement.className = "result-word";
+          wordElement.setAttribute("data-testid", `word-${index + 1}`);
+          wordElement.dataset.colour = word.colour;
+          wordElement.lang = phrase.language;
+          wordElement.textContent = word.text;
+          wordElement.setAttribute("aria-label", `${word.text}: ${colourDescriptions[word.colour]}`);
+          elements.resultWords.append(wordElement);
+        });
+        elements.score.textContent = String(assessment.score);
+        elements.score.parentElement.setAttribute("aria-label", `Overall score: ${assessment.score} out of 100`);
+        elements.heard.textContent = transcript.trim() ? transcript : "Nothing was heard.";
+        elements.results.hidden = false;
+      }
+
+      async function assessRecording(audioBlob, phrase) {
+        if (!audioBlob.size) {
+          audioChunks = [];
+          clearResults();
+          setAppState("idle");
+          showMessage("No sound was captured. Check your microphone, then record again and speak after the recording message appears.", "error");
+          return;
+        }
+
+        setAppState("processing");
+        showMessage("Listening to your attempt…");
+        clearResults();
+        const controller = new AbortController();
+        activeController = controller;
+        let timedOut = false;
+        const timeout = window.setTimeout(() => {
+          timedOut = true;
+          controller.abort();
+        }, 8000);
+
+        try {
+          const form = new FormData();
+          const extension = audioBlob.type.includes("ogg") ? "ogg" : audioBlob.type.includes("mp4") ? "m4a" : "webm";
+          form.append("audio", audioBlob, `pronunciation-attempt.${extension}`);
+          form.append("language", phrase.language);
+          form.append("phrase_id", phrase.id);
+          form.append("target", phrase.text);
+
+          const response = await fetch("/api/listen", {method: "POST", body: form, signal: controller.signal});
+          if (response.status !== 200) {
+            showMessage("The listening service had a problem. Please try again. No score was given.", "error");
+            return;
+          }
+
+          const result = await response.json();
+          if (!validServiceResult(result)) {
+            showMessage("The listening service returned a response that could not be read. Please try again. No score was given.", "error");
+            return;
+          }
+
+          const assessment = scoreAttempt(phrase, result.words);
+          showResults(phrase, assessment, result.transcript);
+          const previousBest = bestScores[phrase.id];
+          const isNewBest = previousBest === undefined || assessment.score > previousBest;
+          let saved = true;
+          if (isNewBest) {
+            bestScores[phrase.id] = assessment.score;
+            refreshBestScore(phrase);
+            saved = saveBestScores();
+          }
+          if (saved) {
+            showMessage("Attempt complete. You can record again whenever you’re ready.", "info");
+          } else {
+            showMessage("Your attempt is scored, but this browser could not save your best score. Check that site storage is allowed.", "warning");
+          }
+        } catch (error) {
+          clearResults();
+          if (timedOut) {
+            showMessage("The listening service is taking too long. Please try again. No score was given.", "error");
+          } else {
+            showMessage("The listening service could not be reached. Check your connection and try again. No score was given.", "error");
+          }
+        } finally {
+          window.clearTimeout(timeout);
+          if (activeController === controller) activeController = null;
+          audioChunks = [];
+          recorder = null;
+          setAppState("idle");
+        }
+      }
+
+      elements.listen.addEventListener("click", listenToPhrase);
+      elements.record.addEventListener("click", startRecording);
+      elements.stop.addEventListener("click", stopRecording);
+      window.addEventListener("pagehide", () => {
+        if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+        if (activeController) activeController.abort();
+        if (recorder && recorder.state !== "inactive") {
+          recordingFailed = true;
+          try {
+            recorder.stop();
+          } catch (error) {
+            stopMediaStream();
+          }
+        }
+        stopMediaStream();
+      });
+
+      renderPhraseLibrary();
+      selectPhrase(selectedPhrase.id);
+    })();
+  </script>
+</body>
+</html>

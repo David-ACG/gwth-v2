@@ -111,7 +111,7 @@ export function LabsFde({ index }: LabsFdeProps) {
           <div className={styles.mastheadFoot}>
             <p>Tested {tested}</p>
             <p>
-              {index.model_count} models, {index.setup_count} set-ups including different thinking settings
+              {index.model_count} models tested in {index.setup_count} combinations of model and settings
             </p>
             <p>Free, no card required</p>
           </div>
@@ -166,6 +166,13 @@ export function LabsFde({ index }: LabsFdeProps) {
                       <span>{lab.count} set-ups</span>
                       <span>Main task: {lab.sig_title}</span>
                     </p>
+                    {/* David, 12 Nov 2026, on the replica: "It is not obvious that these boxes
+                        can be clicked on for more information. Please can we make it more
+                        obvious?" A worded link line, underlined in the accent, says what opens
+                        (paper-first-components: no arrow icons). */}
+                    <span className={styles.cardAction} aria-hidden="true">
+                      Open the lab to compare the answers
+                    </span>
                   </div>
                 </Link>
               ))}
@@ -174,19 +181,13 @@ export function LabsFde({ index }: LabsFdeProps) {
         </div>
       </section>
 
-      {index.cost_chart.rows.length ? (
-        <section className={styles.section} data-section="cost-chart">
-          <div className={styles.page}>
-            <CostChartView chart={index.cost_chart} />
-          </div>
-        </section>
-      ) : null}
-
-      {/* David, 12 Nov 2026: "Can we justify it to the left or move it all to the left, the
-          main text box and then put an image to the right?" Text left, the labs tour right. */}
+      {/* David, 12 Nov 2026, on the replica: "Can we justify it to the left or move it all to
+          the left, the main text box and then put an image to the right?" Text left; the right
+          shows what a lab looks like inside (the research lab's picks) until the short labs video
+          he asked about replaces it. */}
       <section className={styles.closing} data-section="closing">
         <div className={`${styles.page} ${styles.closingGrid}`}>
-          <div>
+          <div className={styles.closingText}>
             <h2>
               Labs show you which AI. <em>The course shows you how.</em>
             </h2>
@@ -217,12 +218,23 @@ export function LabsFde({ index }: LabsFdeProps) {
               </Link>
             </div>
           </div>
+          {/* David, 12 Nov 2026, on the replica: "maybe we should add a short video here explaining
+              the labs, why we built them, and how to use them ... a first trial of the screen
+              recording process". Version 3 of the scripted walkthrough (labs-tour-v3), after his
+              13 Nov review: the homepage film's journal look, yellow highlighter marks on the
+              element's own box, no magnifier, three slow zooms. He then asked for "the same new male
+              deep voice as the home page video" with the house pronunciation rules, so this is the
+              GWTH narrator reading it (deepldn_m1, the voice he picked for the home page film on
+              8 Nov), saying "read" rather than "red". Astra script, Sol check.
+              Since 15 Nov the film comes from LABS_FILM (the media CDN key master uses, captions
+              under /labs-film/), not the replica-only files in public/videos/labs/. */}
           <figure className={styles.closingFigure} data-testid="labs-closing-figure">
             <video
               controls
               playsInline
               preload="none"
               poster={LABS_FILM.poster}
+              className={styles.closingVideo}
               aria-label="How to use the GWTH labs: a short narrated tour"
             >
               <source src={LABS_FILM.src} type="video/mp4" />
@@ -232,6 +244,14 @@ export function LabsFde({ index }: LabsFdeProps) {
           </figure>
         </div>
       </section>
+      {index.cost_chart.rows.length ? (
+        <section className={styles.section} data-section="cost-chart">
+          <div className={styles.page}>
+            <CostChartView chart={index.cost_chart} />
+          </div>
+        </section>
+      ) : null}
+
     </div>
   )
 }

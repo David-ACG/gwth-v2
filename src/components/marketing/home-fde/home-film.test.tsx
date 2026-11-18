@@ -48,8 +48,8 @@ describe("HomeFilm", () => {
     expect(screen.getByRole("link", { name: /^start here$/i }).getAttribute("href")).toBe("/start-here")
   })
 
-  it("says how long the film is and that it has captions", () => {
-    render(<HomeFilm />)
-    expect(screen.getByText(/1 minute 19 seconds/i).textContent).toMatch(/captions/i)
+  it("has no running time or captions line under the film (David, 13 Nov 2026)", () => {
+    const { container } = render(<HomeFilm />)
+    expect(container.textContent).not.toMatch(/1 minute 19 seconds|English captions/i)
   })
 })

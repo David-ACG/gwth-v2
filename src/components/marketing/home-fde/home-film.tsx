@@ -41,7 +41,6 @@ export const FILM = {
 }
 
 export type HomeFilmCopy = {
-  label: string
   play: string
   heading: string
   body: string
@@ -49,7 +48,6 @@ export type HomeFilmCopy = {
 }
 
 export const FILM_COPY: HomeFilmCopy = {
-  label: "1 minute 19 seconds, with English captions",
   play: "Play the film",
   heading: "Try the free lesson",
   body: "You'll read the lesson, watch a film, try a project and take a quiz. Enter your email address and we'll send you the link.",
@@ -93,7 +91,8 @@ export function HomeFilm({ copy = FILM_COPY }: { copy?: HomeFilmCopy }) {
             </button>
           )}
         </figure>
-        <p className={styles.meta}>{copy.label}</p>
+        {/* No running time or captions line under the film (David, 13 Nov
+            2026, a-20261113-153022-a61050: "Remove that"). */}
       </div>
       {/* Lesson zero is the one open lesson; it still asks for an email before
           it opens (persona review PR09), which the body says. */}
