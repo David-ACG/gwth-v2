@@ -1,0 +1,688 @@
+/* The new home page draft (`/home-new`), in the paper-first register. Every
+   colour is a --v-* token from the page's scoped block, so paper and night
+   follow the theme. Shared recipes come from `marketing/paper/`. */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 1. Hero: the real home page's grid, with a new headline ─────────────── */
+
+.hero {
+  padding: clamp(3rem, 6vw, 5rem) 0 0;
+}
+
+.heroGrid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 64rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 5.6vw, 4.2rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+.heroTitle span {
+  display: block;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
+}
+
+.heroCopy {
+  padding-top: 0.45rem;
+}
+
+/* ── Shared text ─────────────────────────────────────────────────────────── */
+
+.lead {
+  max-width: 46rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.note {
+  max-width: 46rem;
+  margin-top: 1.75rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.smallNote {
+  max-width: 46rem;
+  margin-top: 1.1rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
+}
+
+/* ── The chooser: radio buttons drawn as cards, panels shown by :has() ───── */
+
+.chooser {
+  margin-top: 1.75rem;
+}
+
+.options {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.optionsSix {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.optionsThree {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 40rem) {
+  .optionsSix,
+  .optionsThree {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .optionsSix {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.option {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.option input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.optionFace {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 0.95rem 1rem 1.05rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  color: var(--v-soft);
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.optionFaceRow {
+  justify-content: center;
+  padding: 0.9rem 1.1rem;
+}
+
+.optionIcon {
+  color: var(--v-accent);
+}
+
+.optionName {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--v-ink);
+}
+
+.optionGloss {
+  font-size: var(--fde-mono-sm);
+  line-height: 1.45;
+  color: var(--v-soft);
+}
+
+.option input:hover + .optionFace {
+  background: var(--v-quiet);
+}
+
+/* Selected: a tint, a jade bar along the bottom and (on wide screens) a notch
+   pointing at the panel, so the state never rests on colour alone. */
+.option input:checked + .optionFace {
+  background: var(--v-quiet);
+  border-color: var(--v-accent);
+  box-shadow: inset 0 -4px 0 var(--v-accent);
+}
+
+.option input:checked + .optionFace .optionName {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.option input:focus-visible + .optionFace {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+@media (min-width: 64rem) {
+  .option input:checked + .optionFace::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -0.55rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background: var(--v-accent);
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 2px;
+  }
+}
+
+.panel {
+  display: none;
+  margin-top: 1.1rem;
+  padding: clamp(1.1rem, 2.5vw, 2rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.chooser:has(input[value="research"]:checked) .panel[data-panel="research"],
+.chooser:has(input[value="content"]:checked) .panel[data-panel="content"],
+.chooser:has(input[value="thinking"]:checked) .panel[data-panel="thinking"],
+.chooser:has(input[value="building"]:checked) .panel[data-panel="building"],
+.chooser:has(input[value="data"]:checked) .panel[data-panel="data"],
+.chooser:has(input[value="automation"]:checked) .panel[data-panel="automation"],
+.chooser:has(input[value="home"]:checked) .panel[data-panel="home"],
+.chooser:has(input[value="work"]:checked) .panel[data-panel="work"],
+.chooser:has(input[value="career"]:checked) .panel[data-panel="career"] {
+  display: grid;
+}
+
+/* A browser without :has() shows every panel, so nothing is ever hidden
+   behind a control that cannot open it. */
+@supports not selector(:has(*)) {
+  .panel {
+    display: grid;
+  }
+}
+
+.powerPanel,
+.purposePanel {
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .powerPanel {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+  }
+
+  .purposePanel {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 7fr);
+  }
+}
+
+.powerPicture,
+.purposePicture,
+.proofPicture,
+.ukPicture {
+  min-width: 0;
+}
+
+.panelTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.panelLead {
+  margin-top: 0.5rem;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+/* Month 1 to Month 3 as a rising track: the marker grows with the month. */
+.growth {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.growth li {
+  position: relative;
+  padding: 0 0 1.25rem 2.25rem;
+}
+
+.growth li:last-child {
+  padding-bottom: 0;
+}
+
+.growth li::before {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  top: 0.45rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--v-accent);
+  transform: translateX(-50%);
+}
+
+.growth li[data-step="2"]::before {
+  width: 0.85rem;
+  height: 0.85rem;
+  top: 0.35rem;
+}
+
+.growth li[data-step="3"]::before {
+  width: 1.1rem;
+  height: 1.1rem;
+  top: 0.22rem;
+}
+
+.growth li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  top: 1.5rem;
+  bottom: 0.15rem;
+  border-left: 1px solid var(--v-line);
+}
+
+.growthMonth {
+  display: block;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.growth p {
+  margin-top: 0.15rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+/* ── 3. The months ───────────────────────────────────────────────────────── */
+
+.monthsPlate {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.monthSteps {
+  list-style: none;
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.monthStep {
+  padding: 1.35rem 1.5rem 1.5rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+/* On wide screens the three rise like steps: each month starts higher than
+   the one before and all three share a floor. */
+@media (min-width: 48rem) {
+  .monthSteps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .monthStep:nth-child(1) {
+    margin-top: 3rem;
+  }
+
+  .monthStep:nth-child(2) {
+    margin-top: 1.5rem;
+  }
+}
+
+.monthKicker {
+  font-weight: 600;
+  color: var(--v-accent);
+}
+
+.makes {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.makes li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-ink);
+}
+
+.makes li + li {
+  margin-top: 0.55rem;
+}
+
+/* A drawn tick. */
+.makes li::before,
+.routeList li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 0.3rem;
+  width: 0.4rem;
+  height: 0.7rem;
+  border-right: 2px solid var(--v-accent);
+  border-bottom: 2px solid var(--v-accent);
+  transform: rotate(40deg);
+}
+
+/* ── 4. What would you like to do with AI? ───────────────────────────────── */
+
+.route {
+  margin-top: 1.25rem;
+}
+
+.routeMonth {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-weight: 600;
+  color: var(--v-accent);
+}
+
+.routeList {
+  list-style: none;
+  display: grid;
+  gap: 0.9rem 2rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+}
+
+@media (min-width: 40rem) {
+  .routeList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.routeList li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.routeList h5 {
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--v-ink);
+}
+
+.routeList p {
+  margin-top: 0.15rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+.others {
+  max-width: 52rem;
+  margin-top: 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.others a,
+.priceNote a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* ── 5. A score and a portfolio ──────────────────────────────────────────── */
+
+.proofBox,
+.priceBox {
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.proofTop {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  margin-top: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .proofTop {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+}
+
+.proofPoints {
+  margin: 0;
+}
+
+.proofPoints > div + div {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.proofPoints dt {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--v-ink);
+}
+
+.proofPoints dd {
+  margin: 0.5rem 0 0;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.scoreBlock {
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.scoreCopy {
+  display: grid;
+  gap: 0.9rem 2.5rem;
+  margin: 0.75rem 0 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+@media (min-width: 48rem) {
+  .scoreCopy {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ── 6. How a lesson works, and the UK ───────────────────────────────────── */
+
+.lessonSteps {
+  list-style: none;
+  display: grid;
+  gap: 1.75rem;
+  margin: 2.25rem 0 0;
+  padding: 0;
+}
+
+.lessonSteps li {
+  position: relative;
+  padding-top: 2rem;
+  border-top: 1px solid var(--v-line);
+}
+
+@media (min-width: 48rem) {
+  .lessonSteps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .lessonSteps li {
+    padding-right: 2rem;
+  }
+}
+
+/* The number sits on the line, so the three read as one path. */
+.stepNumber {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  color: var(--v-ink);
+  font-weight: 600;
+  transform: translateY(-50%);
+}
+
+.lessonSteps h3,
+.ukList h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.lessonSteps p,
+.ukList p {
+  margin-top: 0.4rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.ukGrid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .ukGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+.ukList {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.ukList li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.ukList li:last-child {
+  padding-bottom: 0;
+}
+
+/* ── 7. The price ────────────────────────────────────────────────────────── */
+
+.priceGrid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 60rem) {
+  .priceGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.priceHeadline {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 2.1vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--v-ink);
+}
+
+.priceList {
+  list-style: disc;
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.priceList li + li {
+  margin-top: 0.6rem;
+}
+
+.priceList strong {
+  color: var(--v-ink);
+}
+
+.priceSub {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.priceNote {
+  margin-top: 0.6rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
