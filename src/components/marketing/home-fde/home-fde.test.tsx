@@ -890,7 +890,7 @@ describe("HomeFde score section", () => {
     expect(honesty).toMatch(/5%/)
     expect(honesty).toMatch(/each full week/)
     expect(honesty).toMatch(/Passing another core lesson removes that reduction/)
-    expect(screen.getByTestId("score-lead")).toHaveTextContent("Marks for your three monthly projects")
+    expect(screen.getByTestId("score-lead")).toHaveTextContent("The marks for your monthly projects count")
     // The beta wording went with the beta (launch readiness, 2026-10-20):
     // the section only shows once the score is switched on.
     expect(screen.getByTestId("score-lead").textContent).not.toMatch(/beta/i)
