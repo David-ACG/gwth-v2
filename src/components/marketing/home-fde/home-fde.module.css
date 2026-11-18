@@ -520,7 +520,7 @@
   margin: 2rem 0;
 }
 .portfolioTrack li {
-  border-left: 3px solid var(--v-ink);
+  border-left: 3px solid var(--v-line);
   padding-left: 1.25rem;
 }
 .portfolioTrack span {

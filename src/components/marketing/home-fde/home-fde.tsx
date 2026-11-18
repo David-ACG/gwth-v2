@@ -893,8 +893,8 @@ export function HomeFde({
           </div>
           <p className={styles.scoreLead} data-testid="score-lead">
             Your GWTH score is a number out of 100. Core lessons and quiz
-            results count for half. Marks for your three monthly projects
-            count for the other half.
+            results count for half. The marks for your monthly projects count
+            for the other half.
           </p>
           <p className={styles.scoreLead} data-testid="score-honesty">
             After 28 days without passing a core lesson, you start losing 5%
