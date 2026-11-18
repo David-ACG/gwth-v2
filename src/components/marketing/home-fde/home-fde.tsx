@@ -231,7 +231,7 @@ export const MONTHS = [
   {
     kicker: "Month 1",
     title: "Build your foundation",
-    body: "Make your own portfolio website without writing code and use Spending Detective. The projects are useful to you and good fun to make.",
+    body: "Make a portfolio website without code and explore your spending with Spending Detective. The projects are useful to you and good fun to make.",
   },
   {
     kicker: "Month 2",
@@ -371,36 +371,16 @@ export const SIX_BLOCKS = [
  *
  * ## What is real here, and what is not. Read this before touching the copy.
  *
- * The score ITSELF is implemented: `calculateGwthScore()` in
- * `lib/progress/gwth-score.ts` is mandatory lessons completed times 1.5,
- * multiplied by the average best quiz mark, against a denominator taken from
- * the learner's own syllabus edition. The band beside each number below is the
- * product's own `getTrajectoryLabel()`, copied from that file.
+ * `calculateGwthScore()` in `lib/progress/gwth-score.ts` combines core
+ * lessons and quiz results (50 points) with three capstone marks (50 points).
+ * After 28 days without passing a core lesson, each full week reduces the
+ * earned score by 5%. Passing a core lesson removes that reduction.
+ * `getDynamicScore()` supplies those inputs but returns an empty history.
  *
- * The MOVEMENT is not. There is no decay, no staleness, no recency weighting
- * and no stored history anywhere in the product: `SCORE_DECAY_DAYS` is a
- * config constant that nothing reads, `scoreHistory` is returned empty
- * unconditionally, and the whole feature sits behind `GWTH_SCORE_ENABLED`,
- * which is set in no environment. Copy ledger C35 bans asserting the four
- * named metrics and score decay as present facts, and the /for-teams tests
- * enforce the same thing on that page.
- *
- * So the section does NOT assert the mechanic in the present tense. It says on
- * the page, in body copy rather than in a footnote, that the update tracking
- * is still being built, and the note under the cards says the numbers are
- * examples.
- *
- * **Launch readiness, 2026-10-20: the whole section renders only while the
- * score is switched on** (`showScore`, which the page reads from
- * `ENABLE_GWTH_SCORE`). Both reviewers read it as a preview of a feature a
- * 1 December buyer does not get, and the launch rule is to say what exists or
- * say nothing. The flag is off unless an environment sets it, so the section
- * is not on the launch page. It is kept, not deleted, because David asked for
- * it (a-20260915-211845-237ea3): switching the score on brings it back.
- *
- * Values are kept under 94 on purpose: the core lessons at 1.5 points each
- * set the ceiling (63 core lessons is 94.5), so a marketing "104" or "reaching
- * 100" would be a number the product cannot produce.
+ * The whole section stays behind `showScore` / `ENABLE_GWTH_SCORE`. The
+ * three charts are labelled examples, not stored learner histories. The
+ * public `/score/[id]` route still renders demonstration data rather than
+ * looking up a learner, so the close must not promise public score sharing.
  *
  * Deliberately absent: any percentile or rarity claim ("top 1%"), any claim
  * about what an employer thinks, the word certificate as something GWTH
@@ -414,7 +394,7 @@ export const SCORE_STATES: readonly ScoreState[] = [
     history: [8, 14, 21, 27, 33, 38, 45, 52, 57, 62, 67, 71],
     state: "Going up",
     marker: "filled",
-    said: "You are finishing lessons and doing well on the questions, so the number has risen every month since you started.",
+    said: "Passing more core lessons, improving quiz results or earning higher project marks can raise your score.",
   },
   {
     id: "level",
@@ -423,17 +403,17 @@ export const SCORE_STATES: readonly ScoreState[] = [
     history: [8, 15, 22, 29, 36, 43, 44, 44, 44, 44, 44, 44],
     state: "No change",
     marker: "square",
-    said: "You finished Month 1 and have not started Month 2. Nothing you earned is taken away, and nothing new is being added either.",
+    said: "During a short break, your score stays the same. The fall begins after five weeks without passing a core lesson.",
   },
   {
     id: "stale",
-    value: 58,
-    band: "Confident builder",
-    history: [10, 19, 28, 37, 46, 55, 62, 62, 61, 60, 59, 58],
+    value: 50,
+    band: "Month 1 foundations",
+    history: [10, 19, 28, 37, 46, 55, 62, 62, 59, 56, 53, 50],
     recordedUpTo: 7,
-    state: "Needs updating",
+    state: "Falling",
     marker: "ring",
-    said: "Lessons you passed have been rewritten since, because the tools moved on. Working through the new versions will bring your score back up.",
+    said: "You haven't passed a core lesson for more than five weeks, so your score has fallen. Passing another core lesson stops the fall.",
   },
 ]
 
@@ -477,11 +457,11 @@ export const CAREER_SIDE_LESSONS_WRITTEN = false
 export const CAREER_CARDS = [
   {
     title: "Prepare for applications and interviews",
-    body: "Rewrite your CV and your LinkedIn profile, learn how AI screening tools read a CV and what your rights are, and practise interviews with AI playing the interviewer.",
+    body: "Rewrite your CV and your LinkedIn profile for a new role. Learn how AI screening tools read a CV and what your rights are. Practise interviews with AI playing the interviewer.",
   },
   {
-    title: "Build a portfolio and plan your prices",
-    body: "Build a portfolio, learn ways to price your work and find where to check the UK rules on self-employment.",
+    title: "Plan to work for yourself",
+    body: "Learn ways to price your work and find where to check the UK rules on self-employment.",
   },
   {
     title: "Test a small shop or online channel",
@@ -614,11 +594,20 @@ export function HomeFde({
           <div className={styles.offer}>
             <div>
               <p className={styles.offerBody}>
-                Every lesson is built around a project. Try it first, then
-                follow the lesson step by step. The questions at the end are
-                marked for you, so you know what to revisit. You don&apos;t
-                need coding experience.
+                Every lesson is built around a project. You don&apos;t need coding experience.
               </p>
+              <ol className={styles.lessonSteps} aria-label="How a lesson works">
+                {[
+                  ["Try the project", "Start with the task and see what you can do."],
+                  ["Follow the lesson", "Work through the steps and improve what you make."],
+                  ["Check your understanding", "Take the quiz to see what to revisit."],
+                ].map(([title, body], index) => (
+                  <li key={title}>
+                    <span className={styles.stepNumber} aria-hidden="true">{index + 1}</span>
+                    <div><h3>{title}</h3><p>{body}</p></div>
+                  </li>
+                ))}
+              </ol>
             </div>
             <div className={styles.offerAside}>
               {/* The launch offer (launch readiness, 2026-10-20). The words
@@ -772,23 +761,68 @@ export function HomeFde({
         </div>
       </section>
 
-      {/* For people changing role or career: see CAREER_CARDS. */}
       <section className={p.section} data-section="career" id="career">
         <div className={p.page}>
-          <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>Changing role or career?</h2>
-          </div>
-          <p className={styles.blocksLead} data-testid="career-lead">
-            The course helps whether you want to do your current job better,
-            move to a new role or work for yourself.
-          </p>
-          <div className={careerCards.length === 3 ? p.cards3 : p.cards2}>
-            {careerCards.map((item) => (
-              <article className={p.card} key={item.title} data-testid="career-card">
-                <h3 className={p.cardTitle}>{item.title}</h3>
-                <p className={p.cardBody}>{item.body}</p>
+          <div className={styles.audienceBox}>
+            <h2 className={p.sectionTitle}>What would you like to do with AI?</h2>
+            <fieldset className={styles.audienceChoices}>
+              <legend>Choose what matters to you</legend>
+              {[
+                ["personal", "Use AI at work or at home"],
+                ["career", "Change role or work for yourself"],
+                ["others", "Buy for other people"],
+                ["all", "Show all"],
+              ].map(([value, label]) => (
+                <label key={value}>
+                  <input
+                    type="radio"
+                    name="course-purpose"
+                    value={value}
+                    defaultChecked={value === "personal"}
+                    aria-controls={value === "all" ? "home-purpose-panels" : `home-purpose-${value}`}
+                  />
+                  <span>{label}</span>
+                </label>
+              ))}
+            </fieldset>
+            <div id="home-purpose-panels">
+              <article className={styles.audiencePanel} data-audience="personal" id="home-purpose-personal">
+                <h3>Get help with everyday tasks</h3>
+                <p>Compare quotes, draft a letter or plan a task with AI. Learn when to use it and how to check its answers.</p>
               </article>
-            ))}
+              <div className={styles.audiencePanel} data-audience="career" id="home-purpose-career">
+                {careerCards.map((item) => (
+                  <article key={item.title} data-testid="career-card">
+                    <h3>{item.title}</h3>
+                    <p>{item.body}</p>
+                  </article>
+                ))}
+              </div>
+              <div className={styles.audiencePanel} data-audience="others" id="home-purpose-others" data-testid="organisations-signpost">
+                <h3>Give someone else a place to learn</h3>
+                {/* The teams sentence and its /for-teams link went on
+                    2026-10-20: /for-teams is hidden at launch (a real 404,
+                    `lib/public-routes.ts`). The gift is the way one person buys
+                    for another, so it is named first. */}
+                <p className={styles.signpostBody}>
+                  Give the course as a gift, or buy team places at the same price
+                  per person. Professional bodies and large companies can choose
+                  lessons and a pass mark for their own edition. Tutors and
+                  training leads can see who passes; learners keep a record of
+                  lessons passed.
+                </p>
+                <div className={p.actions}>
+                  {selling && (
+                    <Link href="/gift" className={p.buttonOutline}>
+                      Give it as a gift
+                    </Link>
+                  )}
+                  <Link href="/for-institutions" className={p.buttonOutline}>
+                    For institutions and large companies
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -855,32 +889,17 @@ export function HomeFde({
       <section className={p.section} data-section="score">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>Your score, and which way it is going</h2>
+            <h2 className={p.sectionTitle}>How your GWTH score works</h2>
           </div>
-          {/* The gate caught two things here on the first run and both were
-              right. The opening claimed everything marked feeds the score,
-              which contradicted the sentence after it and is not what
-              `calculateGwthScore()` does. Since 2026-10-23 (bible
-              gwth-score-inputs) the marked monthly projects count too; this
-              section only shows once the score is on, which is after
-              project marking exists. And a rising score was said to show somebody had kept
-              up, which it cannot show until the update tracking exists. */}
           <p className={styles.scoreLead} data-testid="score-lead">
-            Your GWTH score is one number, worked out from the lessons you have
-            finished, how you did on the questions at the end of each one and
-            the marks for your monthly projects.
-            It is a record of work you have actually done rather than a note
-            saying you attended.
+            Your GWTH score is a number out of 100. Core lessons and quiz
+            results count for half. Marks for your three monthly projects
+            count for the other half.
           </p>
-          {/* The copy says only what the planned update tracking can establish:
-              whether a completed lesson has since changed. It does not claim
-              to measure whether the learner's knowledge or work is current. */}
           <p className={styles.scoreLead} data-testid="score-honesty">
-            AI tools move quickly, and a completion date on its own does not
-            show whether somebody has kept up with them. We are still building
-            the part of the score that shows when a lesson you passed has been
-            rewritten. The three cards below show what that part will look
-            like.
+            After 28 days without passing a core lesson, you start losing 5%
+            of your earned points for each full week. Passing another core
+            lesson removes that reduction.
           </p>
           <div className={p.cards3} data-testid="score-cards">
             {SCORE_STATES.map((state) => (
@@ -888,50 +907,13 @@ export function HomeFde({
             ))}
           </div>
           <p className={styles.scoreNote}>
-            {/* NOT YET GATED, same run. "On a different scale" did not say
-                which comparison is unsafe, which matters on a page that
-                presents the score as something to show somebody. */}
-            The numbers here are examples rather than real learners. Your score
-            is based on the lessons you were given, so two scores mean the same
-            thing only when they come from the same set of lessons.
+            These cards show examples rather than real learners. We don&apos;t
+            yet store a history of your score. Compare scores only for people
+            taking the same set of lessons.
           </p>
         </div>
       </section>
       )}
-
-      {/*
-        The signpost, and deliberately nothing more. Everything an institution
-        or a large company needs to decide is on its own page; what belongs
-        here is enough for a reader to recognise themselves and one link each.
-      */}
-      <section className={p.section} data-section="organisations">
-        <div className={p.page}>
-          <div className={styles.signpost} data-testid="organisations-signpost">
-            <h2 className={p.sectionTitle}>Buying this for other people?</h2>
-            {/* The teams sentence and its /for-teams link went on
-                2026-10-20: /for-teams is hidden at launch (a real 404,
-                `lib/public-routes.ts`). The gift is the way one person buys
-                for another, so it is named first. */}
-            <p className={styles.signpostBody}>
-              Give the course as a gift, or buy team places at the same price
-              per person. Professional bodies and large companies can choose
-              lessons and a pass mark for their own edition. Tutors and
-              training leads can see who passes; learners keep a record of
-              lessons passed.
-            </p>
-            <div className={p.actions}>
-              {selling && (
-                <Link href="/gift" className={p.buttonOutline}>
-                  Give it as a gift
-                </Link>
-              )}
-              <Link href="/for-institutions" className={p.buttonOutline}>
-                For institutions and large companies
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/*
         The close, and the last word on the page, because the reader it is
@@ -941,24 +923,42 @@ export function HomeFde({
       */}
       <section className={p.closing} data-section="individuals">
         <div className={p.page}>
-          <h2 className={p.sectionTitle}>
-            You finish with <em>work</em> you can show.
-          </h2>
-          <p className={p.standfirst}>
-            {/* Recovered: David's own refined home wording, "every lesson and
-                project" and the portfolio line (18a3e09^, a51de31). */}
-            Everything you make in a lesson is yours, and it stays yours when
-            the course ends. By the end of the three months that is a folder of
-            finished work: documents you can hand to somebody else, and tools
-            you can open and run.
-          </p>
-          <div className={p.actions}>
-            <Link href={joinCta.href} className={p.buttonSolid}>
-              {joinCta.label}
-            </Link>
-            <Link href="/lessons" className={p.buttonOutline}>
-              See the course
-            </Link>
+          <div className={styles.portfolioBox}>
+            <h2 className={p.sectionTitle}>
+              You finish with <em>work</em> you can show.
+            </h2>
+            <p className={p.standfirst}>
+              {/* Recovered: David's own refined home wording, "every lesson and
+                  project" and the portfolio line (18a3e09^, a51de31). */}
+              Everything you make in a lesson is yours, and it stays yours when
+              the course ends. Build up your portfolio over the three months so
+              someone else can understand how you work.
+            </p>
+            <ol className={styles.portfolioTrack} aria-label="Your portfolio over three months">
+              <li><span>Month 1</span><h3>Save your work</h3><p>Keep your finished projects and notes together.</p></li>
+              <li><span>Month 2</span><h3>Explain your decisions</h3><p>Describe the task, your approach and the checks you made.</p></li>
+              <li><span>Month 3</span><h3>Review the results</h3><p>Add what worked and what you would improve.</p></li>
+            </ol>
+            <div className={styles.portfolioSummary}>
+              <div>
+                <h3>Show an employer how you work</h3>
+                <p>Link to your portfolio in an application, or talk through a project at interview. Get permission before sharing anyone else&apos;s information.</p>
+              </div>
+              <div data-testid="portfolio-record">
+                <h3>{showScore ? "Sharing your score" : "Your record of learning"}</h3>
+                <p>{showScore
+                  ? "Public GWTH score sharing isn't available yet. The public score page is a demonstration, with no link to your results."
+                  : "Your account shows the lessons you've passed and your quiz results."}</p>
+              </div>
+            </div>
+            <div className={p.actions}>
+              <Link href={joinCta.href} className={p.buttonSolid}>
+                {joinCta.label}
+              </Link>
+              <Link href="/lessons" className={p.buttonOutline}>
+                See the course
+              </Link>
+            </div>
           </div>
         </div>
       </section>

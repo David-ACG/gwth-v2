@@ -40,9 +40,8 @@ const PAD_Y = 9
 
 /** The band the sample histories are drawn inside. All three cards share one
  *  vertical scale, so a reader can compare their slopes honestly, and the band
- *  is the range the implemented formula can actually produce rather than a
- *  round number: 66 mandatory lessons at 1.5 points ceilings the score at 99,
- *  and no example here passes 71. A wider band pushed every line into the
+ *  holds all the illustrative values (the real score is out of 100).
+ *  No example here passes 71. A wider band pushed every line into the
  *  bottom third and left the flat one sitting on the axis. */
 const SCALE_MIN = 0
 const SCALE_MAX = 80
@@ -76,8 +75,8 @@ export type ScoreState = {
   band: string
   /** Twelve readings, oldest first. */
   history: readonly number[]
-  /** How many of those readings are real rather than carried forward. A stale
-   *  card stops recording partway, and the rest of its line is drawn dashed. */
+  /** Where the illustrated fall starts. Its readings are drawn dashed to
+   *  distinguish the falling state without relying on colour. */
   recordedUpTo?: number
   state: string
   marker: MarkerKind
