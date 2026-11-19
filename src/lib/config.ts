@@ -153,7 +153,7 @@ export const MONTH_CONFIGS: MonthConfig[] = [
     // unchanged: 67 core and 45 optional in all.
     mandatoryLessons: 26,
     optionalLessons: 8,
-    capstoneName: "Family AI Bot",
+    capstoneName: "FamilyBot",
     // Made core on 19 Nov 2026 (above), so the public pages call it the
     // month's main project. It was optional from 12 Nov 2026 (bead
     // gwth-launch-ote8) until then.
