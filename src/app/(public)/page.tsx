@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { CourseJsonLd } from "@/components/marketing/json-ld/course-jsonld"
 import { HomeNext } from "@/components/marketing/home-next/home-next"
-import { ENABLE_GWTH_SCORE } from "@/lib/config"
 import { isSelling } from "@/lib/launch"
 
 export const metadata: Metadata = {
@@ -37,10 +36,20 @@ export const metadata: Metadata = {
 export default function HomePage() {
   // Read at request time: the (public) layout is force-dynamic, so the
   // buttons switch from the waitlist to buying on 1 December by themselves.
+  //
+  // The score section is always shown (David, 19 Nov 2026: "show the public
+  // pages with what we will have in December, so that CIPD and the people
+  // testing it ... can see exactly what will be available when we go live").
+  // It describes the course at launch, and so does project marking, in the
+  // present tense (David, same day: "Please override the style Bible, as we
+  // want to show exactly what will be available when we launch. We don't want
+  // to show what is available now because we're not ready now."). The
+  // product's own score screens stay behind GWTH_SCORE_ENABLED, and hand-ins
+  // behind CAPSTONE_HAND_IN_ENABLED, until they work.
   return (
     <>
       <CourseJsonLd />
-      <HomeNext selling={isSelling()} showScore={ENABLE_GWTH_SCORE} />
+      <HomeNext selling={isSelling()} showScore markingLive />
     </>
   )
 }

@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 import Link from "next/link"
 import {
   COURSE_MONTHLY_PRICE,
+  ENABLE_CAPSTONE_HAND_IN,
   ENABLE_GWTH_SCORE,
   ONGOING_MONTHLY_PRICE,
 } from "@/lib/config"
@@ -321,11 +322,20 @@ export type HomeNextProps = {
   selling?: boolean
   /** Describes the score as live. Defaults to the `ENABLE_GWTH_SCORE` flag. */
   showScore?: boolean
+  /**
+   * Describes project marking in the present tense. Defaults to the
+   * `ENABLE_CAPSTONE_HAND_IN` flag, so the page never says projects "are
+   * marked" before hand-ins open (Style Bible score rule; David, 19 Nov 2026:
+   * the public pages show the December course with the score, while marking
+   * is still being built).
+   */
+  markingLive?: boolean
 }
 
 export function HomeNext({
   selling = false,
   showScore = ENABLE_GWTH_SCORE,
+  markingLive = ENABLE_CAPSTONE_HAND_IN,
 }: HomeNextProps = {}) {
   const offer = launchOffer()
   const joinCta = selling
@@ -630,31 +640,31 @@ export function HomeNext({
 
             <div className={styles.scoreBlock} data-testid="proof-marking">
               <h3 className={styles.panelTitle}>
-                {showScore
+                {markingLive
                   ? "Your monthly projects are marked, with feedback on your work"
                   : "Your monthly projects will be marked, with feedback on your work"}
               </h3>
               <div className={styles.scoreCopy}>
                 <div>
                   <p>
-                    {showScore
+                    {markingLive
                       ? "You build and hand in a major project at the end of each month. All three projects are marked by AI against GWTH's published marking guides."
                       : "You'll build and hand in a major project at the end of each month. All three projects will be marked by AI against GWTH's published marking guides."}
                   </p>
                   <p>
-                    {showScore
+                    {markingLive
                       ? "Your feedback quotes your own work to show what you've done well and how to reach the next level in each part of the marking guide. You get one clear next step."
                       : "Your feedback will quote your own work to show what you've done well and how to reach the next level in each part of the marking guide. You'll get one clear next step."}
                   </p>
                 </div>
                 <div>
                   <p>
-                    {showScore
+                    {markingLive
                       ? "There are four levels: Not yet, Pass, Good and Excellent. Two AI markers mark each project independently. A person at GWTH checks any mark in doubt."
                       : "There will be four levels: Not yet, Pass, Good and Excellent. Two AI markers will mark each project independently. A person at GWTH will check any mark in doubt."}
                   </p>
                   <p>
-                    {showScore
+                    {markingLive
                       ? "You see a provisional mark at once. It becomes final once checked, within 7 days. Not yet tells you exactly what to fix before handing in again. You can hand in each project up to three times; your best mark counts."
                       : "You'll see a provisional mark at once. It will become final once checked, within 7 days. Not yet will tell you exactly what to fix before handing in again. You'll be able to hand in each project up to three times; your best mark will count."}
                   </p>
