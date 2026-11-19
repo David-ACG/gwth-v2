@@ -238,9 +238,11 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     const section = container.querySelector('[data-section="score"]')
     expect(section).not.toBeNull()
     const lead = screen.getByTestId("score-lead").textContent ?? ""
-    // calculateGwthScore(): finished lessons, weighted by the quiz average.
-    expect(lead).toMatch(/lessons you have finished/i)
-    expect(lead).toMatch(/questions/i)
+    // calculateGwthScore(): core lessons passed, quiz results and the best
+    // project marks, in the home page's words since 19 Nov 2026 (public pages
+    // describe the course as it will be at launch, David's override).
+    expect(lead).toMatch(/core lessons you've passed/i)
+    expect(lead).toMatch(/quiz results/i)
     // The denominator is the learner's own edition, which is why two scores are
     // only comparable within one set of lessons.
     expect(screen.getByTestId("score-denominator").textContent).toMatch(
@@ -267,9 +269,10 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     render(<LessonsFde />)
     expect(screen.queryByTestId("score-record")).toBeNull()
     expect(text()).not.toMatch(/its own web address/i)
-    expect(screen.getByTestId("score-beta-note").textContent).toMatch(
-      /does not show a GWTH score yet/i
-    )
+    // 19 Nov 2026: David, "Please override the style Bible, as we want to
+    // show exactly what will be available when we launch". The "not yet" note
+    // went; the record page is still not promised.
+    expect(screen.queryByTestId("score-beta-note")).toBeNull()
   })
 })
 
@@ -582,17 +585,16 @@ describe("bible gwth-score-inputs: the score counts the marked monthly projects"
   // the score names lessons, questions and project marks. Marking is not built
   // (bead gwth-launch-9289), so /lessons is in the future tense and names no
   // weighting or marker.
-  it("/lessons names all three, in the future tense", () => {
+  it("/lessons names all three, in the present tense as at launch (19 Nov 2026)", () => {
     cleanup()
     render(<LessonsFde />)
     const lead = screen.getByTestId("score-lead").textContent ?? ""
-    expect(lead).toMatch(/lessons you have finished/i)
-    expect(lead).toMatch(/questions/i)
-    expect(lead).toMatch(/marks for your monthly projects/i)
-    expect(lead).toMatch(/will be worked out/i)
+    expect(lead).toMatch(/core lessons you've passed/i)
+    expect(lead).toMatch(/quiz results/i)
+    expect(lead).toMatch(/marks for the three monthly projects/i)
     const inputs = screen.getAllByTestId("score-inputs")[0]!.textContent ?? ""
     expect(inputs).toMatch(/Your monthly projects/)
-    expect(inputs).toMatch(/will count toward your score/i)
+    expect(inputs).toMatch(/count towards your score/i)
     expect(lead + inputs).not.toMatch(/per ?cent|%|half|tutors? mark|AI marks/i)
   })
 

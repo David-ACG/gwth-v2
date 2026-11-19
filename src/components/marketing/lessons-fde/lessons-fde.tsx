@@ -177,7 +177,7 @@ const SCORE_INPUTS = [
   },
   {
     title: "Your monthly projects",
-    body: "Their marks will count toward your score. These projects use example data we provide. Afterwards, an unmarked step lets you make them your own.",
+    body: "Their marks count towards your score. These projects use example data we provide. Afterwards, an unmarked step lets you make them your own.",
   },
   {
     title: "Nothing else",
@@ -502,17 +502,21 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
         <div className={styles.page}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>
-              How your score will work
+              How your score works
             </h2>
           </div>
           <div className={styles.scoreGrid}>
             <div className={styles.scoreBody}>
-              <p data-testid="score-beta-note">
-                The course does not show a GWTH score yet.
-              </p>
+              {/* David, 19 Nov 2026: "show the public pages with what we will
+                  have in December" and "Please override the style Bible, as we
+                  want to show exactly what will be available when we launch".
+                  So the score is described as it will be at launch on 14
+                  December 2026, in the home page's words, and the "not yet"
+                  note went (the copy gate failed the two pages for
+                  disagreeing). */}
               <p data-testid="score-lead">
-                When it does, it will be worked out from the lessons you have
-                finished, how you did on the questions and the marks for your
+                A number out of 100. It combines the core lessons you&apos;ve
+                passed, your quiz results and your best marks for the three
                 monthly projects.
               </p>
               <p data-testid="score-denominator">
