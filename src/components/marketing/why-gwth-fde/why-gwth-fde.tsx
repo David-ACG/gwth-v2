@@ -107,7 +107,7 @@ const REASONS: readonly Reason[] = [
     id: "what-you-build",
     title: "What you'll build",
     body: [
-      "In Month 1 you build your own portfolio website without writing code. In Month 2 you build a customer support chatbot. In Month 3 you build an AI consultant that interviews people and writes a plan for an organisation. AI writes the code, and you learn how to direct it and check the result.",
+      "In Month 1 you build FamilyBot, an assistant that turns a family meeting into jobs, a meal plan and a shopping list. In Month 2 you build a customer support chatbot. In Month 3 you build an AI consultant that interviews people and writes a plan for an organisation. AI writes the code, and you learn how to direct it and check the result.",
     ],
   },
   {

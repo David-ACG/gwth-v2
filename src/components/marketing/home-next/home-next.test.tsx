@@ -224,10 +224,11 @@ describe("the three months", () => {
       expect(steps[i]).toHaveTextContent(month.title)
       expect(within(steps[i]!).getAllByRole("listitem")).toHaveLength(3)
     })
-    // Family AI Bot is an optional project in Month 1 (config.ts), so the
-    // month's summary names core projects only.
+    // 19 Nov 2026, David: "FamilyBot, made core". FamilyBot is Month 1's
+    // main project (config.ts), and no lesson builds a portfolio website.
+    expect(steps[0]).toHaveTextContent("FamilyBot")
     expect(steps[0]).toHaveTextContent("Spending Detective")
-    expect(steps[0]!.textContent).not.toContain("Family AI Bot")
+    expect(steps[0]!.textContent).not.toMatch(/portfolio website/i)
     expect(steps[1]).toHaveTextContent("AskMyCo")
   })
 

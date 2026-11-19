@@ -569,8 +569,8 @@ export function ForInstitutionsFde({ showScore = false }: { showScore?: boolean 
           <p className={p.lead}>
             Month 1 starts with AI for a person&apos;s own life and work.
             Months 2 and 3 move on to building apps for a business and leading
-            AI work across an organisation. Months 2 and 3 each end with a
-            larger project, and Month 1 offers an optional one.
+            AI work across an organisation. Each month has a larger
+            project.
           </p>
           <div className={`${p.cards3} ${styles.months}`}>
             {MONTH_CONFIGS.map((month) => (

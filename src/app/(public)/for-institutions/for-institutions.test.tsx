@@ -252,6 +252,8 @@ describe("ForInstitutionsPage", () => {
       const text = cards[i]!.textContent ?? ""
       expect(text).toContain(month.title)
       expect(text).toContain(`${month.mandatoryLessons} core lessons`)
+      // 19 Nov 2026: FamilyBot made core, so no month's project is optional.
+      expect(text).not.toContain("(optional)")
     })
   })
 

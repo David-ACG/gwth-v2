@@ -55,8 +55,18 @@ describe("LessonsFde launch readiness", () => {
         `Month ${month.month}, ${month.mandatoryLessons} core lessons`
       )
     }
-    expect(body).not.toMatch(/\b(66|26) core\b/)
+    // Stale totals from earlier counts. Month 1 has been 26 core again since
+    // 19 Nov 2026 (FamilyBot made core), so 26 is no longer a stale figure.
+    expect(body).not.toMatch(/\b(66|63|22) core\b/)
     expect(body).not.toMatch(/twenty core lessons/i)
+  })
+
+  it("calls FamilyBot Month 1's main project (David, 19 Nov 2026)", () => {
+    render(<LessonsFde />)
+    const [one] = screen.getAllByTestId("month-card")
+    expect(one).toHaveTextContent("The month's main project")
+    expect(one).toHaveTextContent(MONTH_CONFIGS[0]!.capstoneName)
+    expect(text()).not.toMatch(/An optional project/)
   })
 
   it("says when each month opens, with no beta wording", () => {
