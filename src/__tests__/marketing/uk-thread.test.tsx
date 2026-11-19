@@ -3,15 +3,14 @@ import { describe, it, expect, afterEach, beforeEach } from "vitest"
 import { readFileSync, readdirSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 
-import { HomeFde } from "@/components/marketing/home-fde/home-fde"
-import { WhyGwthFde } from "@/components/marketing/why-gwth-fde/why-gwth-fde"
-import { ForInstitutionsFde } from "@/components/marketing/for-institutions-fde/for-institutions-fde"
-import { ForTeamsFde } from "@/components/marketing/for-teams-fde/for-teams-fde"
-import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
-import { PricingFde } from "@/components/marketing/pricing-fde/pricing-fde"
-import { LabsFde } from "@/components/marketing/labs-fde/labs-fde"
-import { ContactFde } from "@/components/marketing/contact-fde/contact-fde"
-import { WaitlistFde } from "@/components/marketing/waitlist-fde/waitlist-fde"
+import { HomeNext } from "@/components/marketing/home-next/home-next"
+import { WhyGwthNext } from "@/components/marketing/why-gwth-next/why-gwth-next"
+import { ForOrganisationsNext } from "@/components/marketing/for-organisations-next/for-organisations-next"
+import { LessonsNext } from "@/components/marketing/lessons-next/lessons-next"
+import { PricingNext } from "@/components/marketing/pricing-next/pricing-next"
+import { LabsNext } from "@/components/marketing/labs-next/labs-next"
+import { ContactNext } from "@/components/marketing/contact-next/contact-next"
+import { WaitlistNext } from "@/components/marketing/waitlist-next/waitlist-next"
 import { NewsletterFde } from "@/components/marketing/newsletter-fde/newsletter-fde"
 import { Footer } from "@/components/layout/footer"
 import { getModelLabIndex } from "@/lib/data/model-lab"
@@ -78,23 +77,34 @@ interface Surface {
   render: () => void
 }
 
+/**
+ * Each surface is rendered with the props its route passes (19 Nov 2026: the
+ * `*-next` pages replaced the `*-fde` ones; /for-organisations replaced
+ * /for-teams and /for-institutions, which now redirect to it).
+ */
 const SURFACES: readonly Surface[] = [
-  { route: "/", render: () => void render(<HomeFde />) },
-  { route: "/why-gwth", render: () => void render(<WhyGwthFde />) },
   {
-    route: "/for-institutions",
-    render: () => void render(<ForInstitutionsFde />),
+    route: "/",
+    render: () => void render(<HomeNext showScore markingLive />),
   },
-  { route: "/for-teams", render: () => void render(<ForTeamsFde />) },
-  { route: "/lessons", render: () => void render(<LessonsFde />) },
-  { route: "/pricing", render: () => void render(<PricingFde />) },
+  { route: "/why-gwth", render: () => void render(<WhyGwthNext showScore />) },
+  {
+    route: "/for-organisations",
+    render: () =>
+      void render(<ForOrganisationsNext showScore markingLive />),
+  },
+  {
+    route: "/lessons",
+    render: () => void render(<LessonsNext showScore markingLive />),
+  },
+  { route: "/pricing", render: () => void render(<PricingNext />) },
   {
     route: "/labs",
     render: () =>
-      void render(<LabsFde index={getModelLabIndex()} />),
+      void render(<LabsNext index={getModelLabIndex()} />),
   },
-  { route: "/contact", render: () => void render(<ContactFde />) },
-  { route: "/waitlist", render: () => void render(<WaitlistFde />) },
+  { route: "/contact", render: () => void render(<ContactNext />) },
+  { route: "/waitlist", render: () => void render(<WaitlistNext />) },
   { route: "/newsletter", render: () => void render(<NewsletterFde />) },
   {
     route: "footer (every page)",
@@ -363,25 +373,34 @@ const ROOT = join(__dirname, "..", "..")
  * exempts them: they record what the site used to be.
  */
 const LIVE_MARKETING_DIRS = [
-  "components/marketing/contact-fde",
-  "components/marketing/for-institutions-fde",
-  "components/marketing/for-teams-fde",
-  "components/marketing/home-fde",
-  "components/marketing/labs-fde",
-  "components/marketing/lessons-fde",
+  "components/marketing/contact-next",
+  "components/marketing/for-organisations-next",
+  "components/marketing/home-next",
+  "components/marketing/labs-next",
+  "components/marketing/lessons-next",
   "components/marketing/newsletter-fde",
-  "components/marketing/pricing-fde",
-  "components/marketing/waitlist-fde",
-  "components/marketing/why-gwth-fde",
+  "components/marketing/pricing-next",
+  "components/marketing/waitlist-next",
+  "components/marketing/why-gwth-next",
   "components/layout",
   "app/(public)",
 ]
 
-/** Source with comments removed, so a JSDoc note about a figure is allowed. */
+/**
+ * Source with comments removed, so a JSDoc note about a figure is allowed.
+ *
+ * Also removed (19 Nov 2026, when home-next joined the scan): CSS shape
+ * strings such as `polygon(0% 73.5%, ...)` and bare numeric literals used as
+ * object values or array items (`strokeWidth: 1.6`, `[1.6, 3.6, ...]`). They
+ * are drawing geometry, not copy, and they made "1.6" and "95%" look
+ * hard-coded. A figure written as words a reader sees is still caught.
+ */
 function codeOf(path: string): string {
   return readFileSync(path, "utf8")
     .replace(/\/\*[\s\S]*?\*\//g, " ")
     .replace(/^\s*\/\/.*$/gm, " ")
+    .replace(/\b(?:polygon|inset|circle|ellipse|path)\([^)]*\)/g, " ")
+    .replace(/([:[,]\s*)-?\d+(?:\.\d+)?(?=\s*[,\]}\n])/g, "$1 ")
 }
 
 function sourceFiles(): string[] {
@@ -417,8 +436,12 @@ describe("no live marketing file hard-codes a figure the module owns", () => {
 
   for (const figure of UK_AI_FIGURES) {
     it(`${figure.id} (${figure.value}) is written once, in the module`, () => {
+      // Whole-token match, so "1.6" is not found inside "51.6%" or "-1.6deg".
+      const literal = new RegExp(
+        `(?<![\\d.])${figure.value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w])`
+      )
       const offenders = files
-        .filter((file) => codeOf(file).includes(figure.value))
+        .filter((file) => literal.test(codeOf(file)))
         .map((file) => relative(ROOT, file))
       expect(
         offenders,
@@ -452,10 +475,9 @@ const DESCRIBED_ROUTES: readonly { route: string; file: string }[] = [
   { route: "/", file: "app/layout.tsx" },
   { route: "/contact", file: "app/(public)/contact/page.tsx" },
   {
-    route: "/for-institutions",
-    file: "app/(public)/for-institutions/page.tsx",
+    route: "/for-organisations",
+    file: "app/(public)/for-organisations/page.tsx",
   },
-  { route: "/for-teams", file: "app/(public)/for-teams/page.tsx" },
   { route: "/labs", file: "app/(public)/labs/page.tsx" },
   { route: "/lessons", file: "app/(public)/lessons/page.tsx" },
   { route: "/newsletter", file: "app/(public)/newsletter/page.tsx" },

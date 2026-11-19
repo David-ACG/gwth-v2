@@ -74,16 +74,46 @@ describe("PublicNav lessons link", () => {
 
   it("keeps hidden and unlisted pages off the header (launch readiness, 2026-10-20)", () => {
     // David: "Use your recommendations for all 30 pages (1 Ready, 21 Fix,
-    // 8 Hide)". /for-teams and /news are hidden. /for-institutions stays on
-    // the menu: "it has to be visible" (David, 2026-10-21).
+    // 8 Hide)". /news and /tech-radar are hidden. The organisations page is
+    // on the menu; it replaced For institutions and For teams on 2026-11-19.
     const view = renderNav({ lessonsHref: "/lessons" })
     const hrefs = view.getAllByRole("link").map((el) => el.getAttribute("href"))
-    expect(hrefs).toContain("/for-institutions")
-    // "Also put back the teams page" (David, 2026-10-21).
-    expect(hrefs).toContain("/for-teams")
+    expect(hrefs).toContain("/for-organisations")
+    expect(hrefs).not.toContain("/for-institutions")
+    expect(hrefs).not.toContain("/for-teams")
     for (const gone of ["/news", "/tech-radar"]) {
       expect(hrefs).not.toContain(gone)
     }
+  })
+
+  it("follows the home page: free lesson first, organisations last (David, 19 Nov 2026)", () => {
+    // He picked "Free lesson first": Free lesson, The course, Labs, Pricing,
+    // Why GWTH, For organisations.
+    const view = renderNav({ lessonsHref: "/lessons", showLabs: true })
+    const nav = view.getAllByRole("navigation")[0]
+    const labels = Array.from(nav?.querySelectorAll("a") ?? [])
+      .map((el) => el.textContent?.trim())
+      .filter((label) =>
+        [
+          "Free lesson",
+          "The course",
+          "Labs",
+          "Pricing",
+          "Why GWTH",
+          "For organisations",
+        ].includes(label ?? "")
+      )
+    expect(labels.slice(0, 6)).toEqual([
+      "Free lesson",
+      "The course",
+      "Labs",
+      "Pricing",
+      "Why GWTH",
+      "For organisations",
+    ])
+    expect(
+      view.getAllByRole("link", { name: "Free lesson" })[0]
+    ).toHaveAttribute("href", "/start-here")
   })
 
   it("links the merged Why GWTH page and no longer links /about (2026-09-28)", () => {
@@ -157,6 +187,8 @@ describe("PublicNav primary CTA follows the audience", () => {
     "/contact",
   ]
   const INSTITUTION_ROUTES = [
+    "/for-organisations",
+    "/for-organisations/anything",
     "/for-institutions",
     "/for-teams",
     "/for-institutions/anything",
@@ -204,8 +236,8 @@ describe("PublicNav primary CTA follows the audience", () => {
     expect(view.queryByRole("link", { name: "Book a walkthrough" })).toBeNull()
   })
 
-  it("renders the walkthrough CTA in the header on /for-institutions", () => {
-    pathname = "/for-institutions"
+  it("renders the walkthrough CTA in the header on /for-organisations", () => {
+    pathname = "/for-organisations"
     const view = renderNav({ lessonsHref: "/lessons" })
     expect(
       view.getAllByRole("link", { name: "Book a walkthrough" })[0]

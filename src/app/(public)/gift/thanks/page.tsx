@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { GiftThanksPage } from "@/components/marketing/gift/gift-thanks-page"
+import { GiftThanksNext } from "@/components/marketing/gift-next/gift-thanks-next"
 import { THANKS_COPY } from "@/components/marketing/gift/gift-copy"
 import { ENABLE_BILLING } from "@/lib/config"
 import { fulfilPassCheckout } from "@/lib/billing/pass-fulfil"
@@ -34,5 +34,5 @@ export default async function Page({
       })
     }
   }
-  return <GiftThanksPage pass={pass} hasPayment={hasPayment} />
+  return <GiftThanksNext pass={pass} hasPayment={hasPayment} />
 }

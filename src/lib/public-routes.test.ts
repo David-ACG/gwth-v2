@@ -12,7 +12,7 @@ describe("public routes at launch", () => {
   })
 
   it("leaves every page judged Ready or Fix alone, including look-alikes", () => {
-    for (const p of ["/", "/pricing", "/gift", "/lessons", "/labs", "/for-institutions", "/for-teams", "/contact", "/newsletters", "/verifying", "/terms"]) {
+    for (const p of ["/", "/pricing", "/gift", "/lessons", "/labs", "/for-organisations", "/for-institutions", "/for-teams", "/contact", "/newsletters", "/verifying", "/terms"]) {
       expect(isHiddenPublicPath(p)).toBe(false)
     }
   })

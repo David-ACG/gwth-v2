@@ -28,18 +28,20 @@ import { isOffMenu } from "@/lib/public-routes"
 import styles from "./public-nav-fde.module.css"
 
 /**
- * Nav order and labels are the N9 artboard David approved (annex 15,
- * FinalHome / HN2L): institutions first, sentence case throughout (the bible
- * bans title-case labels). "The course" is the lessons link; it resolves per
- * viewer (see `lessonsHref`).
+ * Nav order (David, 19 Nov 2026, picked "Free lesson first"): the menu follows
+ * the home page. Try it, see what is in it, the labs, the price, why us, then
+ * one page for organisations, which replaced For institutions and For teams
+ * ("I think we can consolidate the For teams and For institutions into one
+ * page"). Sentence case throughout (the bible bans title-case labels). "The
+ * course" is the lessons link; it resolves per viewer (see `lessonsHref`).
  */
 const navLinks = [
-  { href: "/for-institutions", label: "For institutions" },
-  { href: "/for-teams", label: "For teams" },
+  { href: "/start-here", label: "Free lesson" },
   { href: "/lessons", label: "The course" },
   { href: "/labs", label: "Labs" },
   { href: "/pricing", label: "Pricing" },
   { href: "/why-gwth", label: "Why GWTH" },
+  { href: "/for-organisations", label: "For organisations" },
   { href: "/news", label: "News" },
 ].filter(
   (link) => (ENABLE_NEWS || link.href !== "/news") && !isOffMenu(link.href)
@@ -71,7 +73,7 @@ interface PublicNavProps {
 
 /**
  * A link is "current" for its own path and anything beneath it, so
- * /for-institutions/anything still marks "For institutions". The old exact
+ * /for-organisations/anything still marks "For organisations". The old exact
  * match never highlighted nested routes.
  */
 function isCurrent(pathname: string, href: string): boolean {
@@ -85,8 +87,14 @@ function isCurrent(pathname: string, href: string): boolean {
  */
 // /contact left this list on 2026-10-20: on the contact page itself the
 // walkthrough button pointed at the page the visitor was already on, so the
-// click appeared to do nothing. /for-teams is back since 2026-10-21.
-const INSTITUTION_ROUTES = ["/for-institutions", "/for-teams"]
+// click appeared to do nothing. /for-organisations replaced the two older
+// pages on 2026-11-19; their addresses redirect to it (next.config.ts) and stay
+// listed so the button is right even before the redirect lands.
+const INSTITUTION_ROUTES = [
+  "/for-organisations",
+  "/for-institutions",
+  "/for-teams",
+]
 
 /**
  * The header's one button, resolved per route.

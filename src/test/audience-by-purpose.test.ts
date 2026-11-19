@@ -85,7 +85,7 @@ describe("audience-by-purpose: the four places that state the age agree", () => 
   const FOUR = {
     terms: "app/(public)/terms/page.tsx",
     privacy: "app/(public)/privacy/page.tsx",
-    pricing: "components/marketing/pricing-fde/pricing-fde.tsx",
+    pricing: "components/marketing/pricing-next/pricing-next.tsx",
     signup: "components/auth/signup-form.tsx",
   }
 

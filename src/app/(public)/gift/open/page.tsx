@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSessionIdentity } from "@/lib/auth"
-import { OpenGiftPage } from "@/components/marketing/gift/open-gift-page"
+import { OpenGiftNext } from "@/components/marketing/gift-next/open-gift-next"
 import { OPEN_COPY } from "@/components/marketing/gift/gift-copy"
 
 export const metadata: Metadata = {
@@ -19,5 +19,5 @@ export default async function Page({
   const { code } = await searchParams
   const raw = Array.isArray(code) ? code[0] : code
   // An empty box sends "?code=": keep it as "" so the page can say what to enter.
-  return <OpenGiftPage rawCode={raw === undefined ? null : raw.trim()} identity={await getSessionIdentity()} />
+  return <OpenGiftNext rawCode={raw === undefined ? null : raw.trim()} identity={await getSessionIdentity()} />
 }

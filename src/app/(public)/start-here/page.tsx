@@ -8,7 +8,7 @@ import { START_HERE_LESSON_MD, START_HERE_PROJECT_MD } from "@/lib/start-here/co
 import { START_HERE_IMAGES } from "@/lib/start-here/media"
 import { renderStartHere } from "@/lib/start-here/render"
 import { StartHereFilm } from "@/components/marketing/start-here/start-here-film"
-import { StartHereGate } from "@/components/marketing/start-here/start-here-gate"
+import { StartHereNext } from "@/components/marketing/start-here-next/start-here-next"
 import p from "@/components/marketing/paper/paper.module.css"
 import styles from "@/components/marketing/start-here/start-here.module.css"
 
@@ -19,17 +19,6 @@ export const metadata: Metadata = {
 }
 
 type PageProps = { searchParams: Promise<{ link?: string; welcome?: string }> }
-
-/**
- * The lesson's own "What you will be able to do by the end" list (approved
- * text), read from the lesson so it never drifts from it. Plain sentences
- * explain the terms the bare tip titles left to the reader (copy gate,
- * 2026-11-06).
- */
-function outcomes(): string[] {
-  const section = START_HERE_LESSON_MD.split(/^## /m).find((s) => s.startsWith("What you will be able to do by the end"))
-  return [...(section ?? "").matchAll(/^- (.+)$/gm)].map((m) => (m[1] ?? "").trim())
-}
 
 /**
  * Start Here, lesson zero, behind the email gate (bead gwth-launch-xw6s).
@@ -60,51 +49,9 @@ export default async function StartHerePage({ searchParams }: PageProps) {
         : sp.link === "error"
           ? "Something went wrong when we opened the lesson. Please try the link in your email again."
           : null
-    return (
-      <div className={p.shell} data-testid="start-here" data-state="locked">
-        <section className={styles.masthead}>
-          <div className={p.page}>
-            {masthead}
-            <p className={styles.summary}>
-              A free lesson from the GWTH course, with seven tips for using
-              AI, ten shorter habits and advice from the first month. Enter
-              your email address and we&apos;ll send you a link. Following the
-              link confirms your address and opens the lesson on this site.
-              We&apos;ll also send you news about the GWTH course, and you can
-              opt out in any email.
-            </p>
-            <p className={styles.meta}>About 20 to 25 minutes to read, with a short film and a 25-minute project.</p>
-            {notice && (
-              <p className={styles.notice} role="status">
-                {notice}
-              </p>
-            )}
-            <div className={p.actions}>
-              <StartHereGate />
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.bottomSection}>
-          <div className={p.page}>
-            <div className={styles.inside}>
-              <h2 className={styles.insideTitle}>What you will be able to do by the end</h2>
-              <ul className={styles.outcomes}>
-                {outcomes().map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
-              <p className={styles.after}>
-                The 25-minute project at the end sets up three things you&apos;ll use in every lesson: a keyboard shortcut that types what you say, saved instructions that tell your AI tool how you like its answers, and a notebook for the requests that work for you.
-              </p>
-              <div className={p.actions}>
-                <StartHereGate />
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    )
+    // The public face, before the email step (start-here-next/). Everything
+    // below this branch, the open lesson, is unchanged.
+    return <StartHereNext notice={notice} />
   }
 
   const lesson = renderStartHere(START_HERE_LESSON_MD, { images: START_HERE_IMAGES })

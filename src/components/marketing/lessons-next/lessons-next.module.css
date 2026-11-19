@@ -1,0 +1,987 @@
+/* "The course" (`/lessons`), in the paper-first register, built to sit beside
+   the home page (`home-next`). Every colour is a --v-* token, so paper and
+   night follow the theme. Shared recipes come from `marketing/paper/`. */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 1. Hero ─────────────────────────────────────────────────────────────── */
+
+.hero {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0 0;
+}
+
+.heroGrid {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+  }
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5.4vw, 4.1rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+.heroTitle span {
+  display: block;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
+}
+
+.heroStandfirst {
+  margin-top: 1.4rem;
+}
+
+.heroPicture {
+  min-width: 0;
+}
+
+/* The course in four figures: a ruled row, not four cards. */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  border-top: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line-soft);
+}
+
+.facts > div {
+  padding: 1.1rem 1rem 1.2rem 0;
+}
+
+.facts > div:nth-child(n + 3) {
+  border-top: 1px solid var(--v-line-soft);
+}
+
+@media (min-width: 48rem) {
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .facts > div {
+    padding: 1.25rem 1.5rem 1.35rem 0;
+  }
+
+  .facts > div:nth-child(n + 3) {
+    border-top: 0;
+  }
+
+  .facts > div + div {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--v-line-soft);
+  }
+}
+
+.facts dt {
+  font-family: var(--font-serif);
+  font-size: clamp(1.45rem, 2.6vw, 1.95rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.facts dd {
+  margin: 0.35rem 0 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.45;
+  color: var(--v-soft);
+}
+
+/* ── Shared text ─────────────────────────────────────────────────────────── */
+
+.lead {
+  max-width: 46rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.note {
+  max-width: 46rem;
+  margin-top: 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.bodyText {
+  max-width: 40rem;
+  margin-top: 0.75rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.panelTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.panelLead {
+  max-width: 40rem;
+  margin-top: 0.5rem;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.note a,
+.opensBody a,
+.currentList a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.note a:focus-visible,
+.opensBody a:focus-visible,
+.currentList a:focus-visible,
+.chipLink:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+/* ── 2. The month chooser: radio buttons drawn as cards ──────────────────── */
+
+.chooser {
+  margin-top: 1.75rem;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+@media (min-width: 40rem) {
+  .options {
+    gap: 0.75rem;
+  }
+}
+
+.option {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.option input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.optionFace {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  height: 100%;
+  padding: 0.7rem 0.55rem 0.9rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  color: var(--v-soft);
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 40rem) {
+  .optionFace {
+    padding: 1rem 1.2rem 1.2rem;
+  }
+}
+
+.optionMonth {
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-accent);
+}
+
+.optionName {
+  font-family: var(--font-serif);
+  font-size: clamp(0.88rem, 2.4vw, 1.3rem);
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--v-ink);
+}
+
+.optionCount {
+  margin-top: 0.15rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.4;
+  color: var(--v-soft);
+}
+
+/* One mark for each core lesson in the month; the project lessons are solid.
+   A picture of the count beside it, hidden from assistive technology. */
+.dots {
+  display: none;
+}
+
+@media (min-width: 40rem) {
+  .dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 0.7rem;
+  }
+
+  .dots i {
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--v-line);
+    border-radius: 2px;
+    transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .dots i[data-kind="project"] {
+    background: var(--v-line);
+  }
+}
+
+.option input:hover + .optionFace {
+  background: var(--v-quiet);
+}
+
+/* Selected: a tint, a jade bar along the bottom, an underlined name and (on
+   wide screens) a notch pointing at the panel, so the state never rests on
+   colour alone. The same recipe as the home page's choosers. */
+.option input:checked + .optionFace {
+  background: var(--v-quiet);
+  border-color: var(--v-accent);
+  box-shadow: inset 0 -4px 0 var(--v-accent);
+}
+
+.option input:checked + .optionFace .optionName {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.option input:checked + .optionFace .dots i {
+  border-color: var(--v-accent);
+  background: var(--v-accent);
+}
+
+.option input:checked + .optionFace .dots i[data-kind="project"] {
+  border-color: var(--v-ink);
+  background: var(--v-ink);
+}
+
+.option input:focus-visible + .optionFace {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+@media (min-width: 64rem) {
+  .option input:checked + .optionFace::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -0.55rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background: var(--v-accent);
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 2px;
+  }
+}
+
+.panel {
+  display: none;
+  margin-top: 1.1rem;
+  padding: clamp(1.1rem, 2.5vw, 2rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.chooser:has(input[value="m1"]:checked) .panel[data-panel="m1"],
+.chooser:has(input[value="m2"]:checked) .panel[data-panel="m2"],
+.chooser:has(input[value="m3"]:checked) .panel[data-panel="m3"] {
+  display: block;
+}
+
+/* A browser without :has() shows every month, so nothing is ever hidden
+   behind a control that cannot open it. Print shows every month too. */
+@supports not selector(:has(*)) {
+  .panel {
+    display: block;
+  }
+}
+
+@media print {
+  .panel {
+    display: block !important;
+  }
+}
+
+/* The chosen month settles in. No motion at all when the visitor asks for
+   less of it. */
+@media (prefers-reduced-motion: no-preference) {
+  .panel {
+    animation: settle 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.monthTop {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .monthTop {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+.monthPicture,
+.currentPicture {
+  min-width: 0;
+}
+
+.makes {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.makes li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-ink);
+}
+
+.makes li + li {
+  margin-top: 0.55rem;
+}
+
+/* A drawn tick. */
+.makes li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 0.3rem;
+  width: 0.4rem;
+  height: 0.7rem;
+  border-right: 2px solid var(--v-accent);
+  border-bottom: 2px solid var(--v-accent);
+  transform: rotate(40deg);
+}
+
+.block {
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.blockTitle {
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--v-line);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+/* The lessons, in syllabus order: down the first column, then the second. */
+.lessonList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 48rem) {
+  .lessonList {
+    columns: 2;
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+.lesson {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.1rem 0.75rem;
+  align-items: start;
+  padding: 0.7rem 0 0.75rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  break-inside: avoid;
+}
+
+.lessonTitle {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--v-ink);
+}
+
+.lessonGloss {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
+/* Functional tags: what kind of lesson this is. 6px chips, never pills. */
+.chip,
+.chipLink {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-sm);
+  font-size: var(--fde-mono-xs);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--v-ink);
+  white-space: nowrap;
+}
+
+.chipLink {
+  background: var(--v-btn);
+  border-color: var(--v-btn);
+  color: var(--v-btn-text);
+  text-decoration: none;
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chipLink:hover {
+  border-color: var(--v-accent);
+}
+
+.optionalReveal {
+  margin-top: 0;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.optionalGroup + .optionalGroup {
+  margin-top: 1.5rem;
+}
+
+.groupTitle {
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-accent);
+}
+
+/* The month's project: a ruled block inside the panel, not a card in a card. */
+.project {
+  display: grid;
+  gap: 1.25rem clamp(1.5rem, 4vw, 3.5rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-top: 1px solid var(--v-line);
+}
+
+@media (min-width: 48rem) {
+  .project {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.projectKicker {
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-accent);
+}
+
+.projectName {
+  margin-top: 0.2rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.projectBody {
+  margin-top: 0.5rem;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.handIn {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+}
+
+.handIn li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+.handIn li + li {
+  margin-top: 0.4rem;
+}
+
+/* A small sheet of paper. */
+.handIn li::before {
+  content: "";
+  position: absolute;
+  left: 0.1rem;
+  top: 0.32rem;
+  width: 0.62rem;
+  height: 0.8rem;
+  border: 1.5px solid var(--v-accent);
+  border-radius: 2px;
+}
+
+.opens {
+  max-width: 52rem;
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.opensTitle {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.opensBody {
+  margin-top: 0.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+/* ── 3. How a lesson works ───────────────────────────────────────────────── */
+
+.lessonSteps {
+  list-style: none;
+  display: grid;
+  gap: 1.75rem;
+  margin: 2.5rem 0 0;
+  padding: 0;
+}
+
+.lessonSteps li {
+  position: relative;
+  padding-top: 2rem;
+  border-top: 1px solid var(--v-line);
+}
+
+@media (min-width: 40rem) {
+  .lessonSteps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 0;
+  }
+
+  .lessonSteps li {
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .lessonSteps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* The number sits on the line, so the four read as one path. */
+.stepNumber {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  color: var(--v-ink);
+  font-weight: 600;
+  transform: translateY(-50%);
+}
+
+.lessonSteps h3,
+.currentList h3,
+.markSteps h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.lessonSteps p,
+.currentList p,
+.markSteps p {
+  margin-top: 0.4rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+/* The picture lays the four steps out along one desk, so on a wide screen
+   each step's words sit under its object. */
+.lessonStrip {
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 64rem) {
+  .lessonStrip img {
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    object-position: 50% 60%;
+  }
+}
+
+/* ── 4. Marking, the score and the portfolio ─────────────────────────────── */
+
+.box {
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.boxLead {
+  margin-top: 0.9rem;
+}
+
+.markGrid {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+@media (min-width: 64rem) {
+  .markGrid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+}
+
+/* What happens to a hand-in, as a numbered path down the page. */
+.markSteps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: mark;
+}
+
+.markSteps > li {
+  position: relative;
+  padding: 0 0 1.5rem 3.25rem;
+  counter-increment: mark;
+}
+
+.markSteps > li:last-child {
+  padding-bottom: 0;
+}
+
+.markSteps > li::before {
+  content: counter(mark);
+  position: absolute;
+  left: 0;
+  top: -0.2rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  color: var(--v-ink);
+  font-weight: 600;
+}
+
+.markSteps > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 1.125rem;
+  top: 2.3rem;
+  bottom: 0.25rem;
+  border-left: 1px solid var(--v-line);
+}
+
+.questions {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0.75rem 0 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.questions li {
+  font-family: var(--font-serif);
+  font-size: var(--fde-body-sm);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--v-ink);
+}
+
+.questions li + li {
+  margin-top: 0.35rem;
+}
+
+/* The four levels as rising steps. Height, an edge and the word carry the
+   order; the tint only reinforces it. "Not yet" is drawn open and dashed. */
+.levels {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 0.4rem;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  border-bottom: 2px solid var(--v-line);
+}
+
+.levels li {
+  display: flex;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 0.55rem 0.45rem;
+  background: var(--v-quiet);
+  border: 1px solid var(--v-line);
+  border-bottom: 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.levels li span {
+  font-size: var(--fde-mono-sm);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.levels li[data-level="1"] {
+  height: 3.25rem;
+  background: transparent;
+  border-style: dashed;
+}
+
+.levels li[data-level="2"] {
+  height: 5rem;
+}
+
+.levels li[data-level="3"] {
+  height: 6.75rem;
+}
+
+.levels li[data-level="4"] {
+  height: 8.5rem;
+}
+
+@media (min-width: 40rem) {
+  .levels {
+    gap: 0.6rem;
+  }
+
+  .levels li {
+    padding: 0.7rem 0.8rem;
+  }
+
+  .levels li span {
+    font-size: var(--fde-body-sm);
+  }
+}
+
+.levelsNote {
+  max-width: 34rem;
+  margin-top: 0.9rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.split {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--v-line-soft);
+}
+
+@media (min-width: 64rem) {
+  .split {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+}
+
+.portfolio {
+  margin-top: 1.5rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.scoreRules > p:first-child {
+  margin-top: 0;
+}
+
+@media (min-width: 64rem) {
+  /* Lines up with the paragraph under "Your GWTH score". */
+  .scoreRules {
+    padding-top: 2.4rem;
+  }
+}
+
+/* The score in two halves. */
+.halves {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 40rem;
+  margin-top: 1rem;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.halves span {
+  padding: 0.8rem 0.9rem 0.9rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.45;
+  color: var(--v-soft);
+}
+
+.halves span + span {
+  background: var(--v-quiet);
+  border-left: 1px solid var(--v-line);
+}
+
+.halves strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--v-ink);
+}
+
+/* ── 5. Optional lessons, the UK rules and organisations ─────────────────── */
+
+.paths {
+  margin-top: 1.75rem;
+}
+
+.duo {
+  display: grid;
+  gap: 0 clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+@media (min-width: 60rem) {
+  .duo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.duoItem {
+  padding: 1.4rem 0 1.5rem;
+  border-top: 1px solid var(--v-line);
+}
+
+.duoItem .bodyText {
+  margin-top: 0.5rem;
+}
+
+/* ── 6. How the course stays up to date ──────────────────────────────────── */
+
+.currentGrid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .currentGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+.currentList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.currentList li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.currentList li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.currentList li:last-child {
+  padding-bottom: 0;
+}
+
+/* ── 7. Closing ──────────────────────────────────────────────────────────── */
+
+.closingBox {
+  text-align: left;
+}

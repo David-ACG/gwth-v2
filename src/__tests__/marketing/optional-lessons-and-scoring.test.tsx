@@ -2,10 +2,9 @@ import { render, screen, cleanup } from "@testing-library/react"
 import { describe, it, expect, afterEach, beforeEach } from "vitest"
 
 import { MONTH_CONFIGS, TOTAL_MANDATORY_LESSONS } from "@/lib/config"
-import { HomeFde } from "@/components/marketing/home-fde/home-fde"
-import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
-import { ForInstitutionsFde } from "@/components/marketing/for-institutions-fde/for-institutions-fde"
-import { ForTeamsFde } from "@/components/marketing/for-teams-fde/for-teams-fde"
+import { HomeNext } from "@/components/marketing/home-next/home-next"
+import { LessonsNext } from "@/components/marketing/lessons-next/lessons-next"
+import { ForOrganisationsNext } from "@/components/marketing/for-organisations-next/for-organisations-next"
 
 /**
  * Optional lessons and the dynamic score, across the four pages that carry them
@@ -49,6 +48,25 @@ import { ForTeamsFde } from "@/components/marketing/for-teams-fde/for-teams-fde"
 
 afterEach(cleanup)
 
+/*
+ * 19 Nov 2026: the live routes render the rebuilt `*-next` components, so
+ * this suite renders them with the props each route passes. /for-teams and
+ * /for-institutions now redirect to /for-organisations (one page with an
+ * institution choice and a team choice, both in the DOM), so the two old
+ * pages are the same render here. The old `*-fde` components stay in the
+ * repo as a backup and keep their own unit tests.
+ */
+const HomeFde = (props: { showScore?: boolean }) => (
+  <HomeNext showScore markingLive {...props} />
+)
+const LessonsFde = () => <LessonsNext showScore markingLive />
+const ForInstitutionsFde = () => (
+  <ForOrganisationsNext showScore markingLive audience="institution" />
+)
+const ForTeamsFde = (_props: { showScore?: boolean } = {}) => (
+  <ForOrganisationsNext showScore markingLive audience="team" />
+)
+
 // canPromoteLabs() is a runtime env read; pin the fail-closed production shape,
 // as the evergreen suite does.
 const ORIGINAL_MODE = process.env.PRIVATE_CONTENT_MODE
@@ -63,8 +81,8 @@ afterEach(() => {
 const PAGES = [
   { name: "/", node: <HomeFde /> },
   { name: "/lessons", node: <LessonsFde /> },
-  { name: "/for-institutions", node: <ForInstitutionsFde /> },
-  { name: "/for-teams", node: <ForTeamsFde /> },
+  // /for-teams and /for-institutions redirect here (one page, both choices).
+  { name: "/for-organisations", node: <ForInstitutionsFde /> },
 ] as const
 
 /** All visible text of the rendered page, whitespace collapsed. */
@@ -79,7 +97,13 @@ describe("no page invents an optional-lesson count", () => {
   for (const page of PAGES) {
     it(`${page.name} prints no optional total`, () => {
       render(page.node)
-      const body = text()
+      // /for-organisations' learners dashboard example says what one made-up
+      // edition requires ("the 63 core lessons and 3 optional ones"). That is
+      // an example edition's rule, not a count of the course's optional set.
+      const body = text().replace(
+        /the edition requires the \d+ core lessons and \d+ optional ones/i,
+        ""
+      )
       expect(body).not.toMatch(/\b\d+\s+optional\b/i)
       expect(body).not.toMatch(/\b(30|33|34|44|50|54|96)\s+optional lessons\b/i)
     })
@@ -95,14 +119,22 @@ describe("no page presents HR as a lesson that exists", () => {
   // David's own example was HR, and there is no HR lesson. Naming one would be
   // inventing it. /for-institutions may say an institution would commission
   // one, because that is what the exclusive tier is for.
-  it("/lessons does not name HR at all", () => {
+  // Re-pointed 19 Nov 2026 to lessons-next / for-organisations-next. Since
+  // the 2026-10-21 change below, HR is a real Month 2 optional lesson, so
+  // "does not name HR at all" no longer holds anywhere; what remains is that
+  // HR is named only as that optional lesson, never as one to commission.
+  it("/lessons names HR only as the Month 2 optional lesson it is", () => {
     render(<LessonsFde />)
-    expect(text()).not.toMatch(/\bHR\b|human resources/i)
+    const body = text()
+    const hits = body.match(/\bHR\b|human resources/gi) ?? []
+    expect(hits).toHaveLength(1)
+    expect(body).toMatch(/AI for UK HR and people teams/)
+    expect(body).not.toMatch(/would not find an HR lesson|commission (an HR lesson|one)/i)
   })
 
-  it("/for-teams does not name HR at all", () => {
+  it("/for-organisations never says HR has to be commissioned", () => {
     render(<ForTeamsFde />)
-    expect(text()).not.toMatch(/\bHR\b|human resources/i)
+    expect(text()).not.toMatch(/would not find an HR lesson|commission (an HR lesson|one)/i)
   })
 
   it("/for-institutions names HR as the optional lesson it now is", () => {
@@ -118,6 +150,44 @@ describe("no page presents HR as a lesson that exists", () => {
     expect(body).not.toMatch(/would not find an HR lesson|commission (an HR lesson|one)/i)
   })
 })
+
+/**
+ * The launch-product rule (David, 19 Nov 2026), which replaced the older
+ * "say the score is not switched on" boundary on the public pages. His words:
+ * "what I want to do is show the public pages with what we will have in
+ * December ... so that CIPD and the people testing it over the weekend ...
+ * can see exactly what will be available when we go live" and "Please
+ * override the style Bible, as we want to show exactly what will be available
+ * when we launch. We don't want to show what is available now because we're
+ * not ready now."
+ *
+ * So the public pages describe the GWTH score and project marking in the
+ * present tense, as the course will be at launch on 14 December 2026, and do
+ * not say the score is "not switched on yet". /lessons and /for-organisations
+ * may have a score block and name the weighting (half core lessons and
+ * quizzes, half the three monthly projects). What still holds from the old
+ * rule: no public score page, "anyone can check" or LinkedIn sharing claim
+ * unless the public-score path (ENABLE_GWTH_SCORE, `publicScore`) is on; the
+ * example score cards are labelled as examples; no claim of a stored score
+ * history.
+ */
+const LAUNCH_RULE = "David, 19 Nov 2026: public pages show the launch product"
+
+/** Claims that need the public score page (`publicScore`) to be on. */
+const PUBLIC_SCORE_CLAIMS =
+  /anyone can check|a score anyone|public page that anyone|share it on LinkedIn|its own web address/i
+
+/** The example cards say they are examples and that no history is stored. */
+function expectExampleCardsLabelled(page: string) {
+  const body = text()
+  if (!document.querySelector('[data-testid="score-cards"]')) return
+  expect(body, `${page}: example cards not labelled`).toMatch(
+    /These cards show examples (of what a learner sees, )?rather\s+than real learners/i
+  )
+  expect(body, `${page}: claims a stored score history`).toMatch(
+    /don't yet store a history of/i
+  )
+}
 
 describe("no page claims the unbuilt half of the score", () => {
   // SCORE_DECAY_DAYS is read by no runtime code, scoreHistory is returned empty
@@ -150,22 +220,21 @@ describe("no page claims the unbuilt half of the score", () => {
     }
   }
 
-  it("every page that names the score also says it is not switched on", () => {
-    // The boundary is the same; only the wording changed. From the launch
-    // there is no beta (launch readiness, 2026-10-20), so /lessons says "The
-    // course does not show a GWTH score yet". The old beta sentence is
-    // still accepted for the pages that have not been rewritten.
+  it("every page that names the score describes it as at launch, with the boundaries that still hold", () => {
+    // Converted 19 Nov 2026 (see LAUNCH_RULE above). It used to require "not
+    // switched on" / "does not show a GWTH score yet" beside every mention.
     for (const page of PAGES) {
       cleanup()
       render(page.node)
       const body = text()
       if (!/GWTH score/i.test(body)) continue
-      expect(
-        /no score is switched on while the course is in beta|does not show a GWTH score yet/i.test(
-          body
-        ),
-        `${page.name} names the score without the beta boundary`
-      ).toBe(true)
+      expect(body, `${page.name}: ${LAUNCH_RULE}`).not.toMatch(
+        /not switched on|does not show a GWTH score yet|while the course is in beta/i
+      )
+      expect(body, `${page.name} claims the public score page`).not.toMatch(
+        PUBLIC_SCORE_CLAIMS
+      )
+      expectExampleCardsLabelled(page.name)
     }
   })
 })
@@ -180,9 +249,12 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     // The structure, with every month's core count read from config: the
     // syllabus re-count of 2026-10-20 made "Months 2 and 3 each open with
     // twenty core lessons" untrue (Month 3 has 21), so no count is typed.
+    // lessons-next (19 Nov 2026) prints each month's core count on the
+    // month chooser ("Month 1 Build your foundation 22 core lessons"), not in
+    // this section, so the counts are checked against the whole page.
     for (const month of MONTH_CONFIGS) {
-      expect(body).toMatch(
-        new RegExp(`${month.mandatoryLessons} in Month ${month.month}`)
+      expect(text()).toMatch(
+        new RegExp(`Month ${month.month}\\b[^.]{0,60}?${month.mandatoryLessons} core lessons`)
       )
     }
     // Deep by field, deep by craft, deep by role: David's "go deep into one
@@ -197,7 +269,8 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     // an optional lesson however the syllabus is written. The page must not
     // read as though a picker exists.
     render(<LessonsFde />)
-    const note = screen.getByTestId("optional-beta-note").textContent ?? ""
+    // lessons-next: the note's test id is "optional-note".
+    const note = screen.getByTestId("optional-note").textContent ?? ""
     // Reworded on the latest Sol's final check (2026-10-20): still says no
     // picker exists, in plainer words.
     expect(note).toMatch(/includes its core and optional lessons when that month opens/i)
@@ -223,28 +296,32 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     const hrefs = Array.from(buyers.querySelectorAll("a")).map((a) =>
       a.getAttribute("href")
     )
-    expect(hrefs).toContain("/for-institutions")
-    // /for-teams returns a 404 from the launch (launch readiness, 2026-10-20),
-    // so the page no longer links to it, nor describes the team admin there.
+    // 19 Nov 2026: /for-institutions and /for-teams redirect to the one
+    // /for-organisations page, so the buyer is sent there directly.
+    expect(hrefs).toContain("/for-organisations")
     expect(hrefs).not.toContain("/for-teams")
+    expect(hrefs).not.toContain("/for-institutions")
   })
 
   it("explains the score in terms of what is actually computed", () => {
     const { container } = render(<LessonsFde />)
     const section = container.querySelector('[data-section="score"]')
     expect(section).not.toBeNull()
-    const lead = screen.getByTestId("score-lead").textContent ?? ""
+    // lessons-next (19 Nov 2026): "It combines the core lessons you've
+    // passed, your quiz results and ..." sits in "score-what".
+    const lead = screen.getAllByTestId("score-what")[0]!.textContent ?? ""
     // calculateGwthScore(): finished lessons, weighted by the quiz average.
-    expect(lead).toMatch(/lessons you have finished/i)
-    expect(lead).toMatch(/questions/i)
+    expect(lead).toMatch(/core lessons you've passed/i)
+    expect(lead).toMatch(/quiz results/i)
     // The denominator is the learner's own edition, which is why two scores are
     // only comparable within one set of lessons.
     expect(screen.getByTestId("score-denominator").textContent).toMatch(
       /same set of lessons/i
     )
-    expect(screen.getAllByTestId("score-inputs")[0]!.textContent).toMatch(
-      // Marketing copy gate, 2026-10-21: the server detail meant nothing to a
-      // beginner; the line now says what the marking is for.
+    // Marketing copy gate, 2026-10-21: the server detail meant nothing to a
+    // beginner; the line says what the marking is for. On lessons-next it is
+    // in the lesson steps, not a "score-inputs" card.
+    expect(text()).toMatch(
       /marked automatically, so you can see what to go back over/i
     )
   })
@@ -263,9 +340,18 @@ describe("/lessons: the fullest learner-facing explanation", () => {
     render(<LessonsFde />)
     expect(screen.queryByTestId("score-record")).toBeNull()
     expect(text()).not.toMatch(/its own web address/i)
-    expect(screen.getByTestId("score-beta-note").textContent).toMatch(
-      /does not show a GWTH score yet/i
+  })
+
+  it("describes the score as at launch, with its weighting, and no 'not yet' note", () => {
+    // Converted 19 Nov 2026 (see LAUNCH_RULE above). It used to require the
+    // "The course does not show a GWTH score yet" note.
+    render(<LessonsFde />)
+    expect(screen.queryByTestId("score-beta-note")).toBeNull()
+    expect(text()).not.toMatch(/does not show a GWTH score yet|not switched on/i)
+    expect(screen.getByTestId("score-lead").textContent).toMatch(
+      /Core lessons and quiz results count for half of your score\. The marks for your monthly projects count for the other half/i
     )
+    expect(text()).not.toMatch(PUBLIC_SCORE_CLAIMS)
   })
 })
 
@@ -302,18 +388,36 @@ describe("/for-institutions: curating depth, and what the score can be asked to 
     // promise of work that will not exist on 1 December, and the GWTH score
     // is switched on in no environment, so the section now describes
     // /org/learners and states the out-of-date limitation with no promise.
-    const { container } = render(<ForInstitutionsFde />)
-    expect(container.querySelector('[data-section="score"]')).toBeNull()
+    // for-organisations-next: the tutor view is data-testid="tutor-view".
+    render(<ForInstitutionsFde />)
     expect(screen.queryAllByTestId("score-not-yet-card")).toHaveLength(0)
-    const section =
-      container.querySelector('[data-section="tutor-view"]')?.textContent ?? ""
+    const section = screen.getByTestId("tutor-view").textContent ?? ""
     // The measures are listed once, on the "A learners dashboard for your
     // tutors" card; the 21 Oct copy gate blocked a third telling here, so
     // this section keeps only the baseline rule and the limitation.
     expect(text()).toMatch(/average of their best mark on each quiz/i)
     expect(section).toMatch(/meets your baseline by completing every required lesson/i)
     expect(section).toMatch(/passed the earlier version still counts/i)
-    expect(text()).not.toMatch(/being built|GWTH score/i)
+    expect(text()).not.toMatch(/being built/i)
+  })
+
+  it("may describe the score as at launch, but not the public score page", () => {
+    // Converted 19 Nov 2026 (see LAUNCH_RULE above). It used to require no
+    // score section and no mention of the GWTH score at all.
+    const { container } = render(<ForInstitutionsFde />)
+    const score = container.querySelector('[data-section="score"]')
+    expect(score).not.toBeNull()
+    expect(screen.getByTestId("score-lead").textContent).toMatch(
+      /count for half of the score\. The marks for the monthly projects count for the other half/i
+    )
+    expect(text()).not.toMatch(/not switched on|does not show a GWTH score yet/i)
+    expectExampleCardsLabelled("/for-organisations")
+    // The public score page stays out while `publicScore` is off ...
+    expect(text()).not.toMatch(PUBLIC_SCORE_CLAIMS)
+    // ... and is described only when it is on.
+    cleanup()
+    render(<ForOrganisationsNext showScore markingLive publicScore />)
+    expect(text()).toMatch(/A score anyone can check/)
   })
 
   it("no longer claims the member record loses value on its own", () => {
@@ -340,35 +444,37 @@ describe("/for-teams: the same story, told for somebody choosing for other peopl
     // "lead it" had no clear antecedent.
     expect(paths).toMatch(/The people who lead AI work/i)
     expect(paths).toMatch(/UK legal practice/i)
-    expect(paths).toMatch(/nobody has to take all of it/i)
+    // for-organisations-next prints this line just after the role list.
+    expect(text()).toMatch(/nobody has to take all of it/i)
   })
 
   it("keeps the existing syllabus-control bullets rather than repeating them", () => {
     render(<ForTeamsFde />)
     const body = text()
+    // for-organisations-next (19 Nov 2026): the one telling is the "The same
+    // core for everyone, optional lessons by role" item.
     expect(body).toMatch(
-      /A further set of optional lessons covers industry-specific and advanced topics/
+      /Each month also includes optional lessons for particular industries, for building more complex AI tools and for leading AI work/
     )
     // One treatment of lesson choice, not two. The box was "How syllabus
     // control works" until the launch readiness review (2026-10-21): the
     // standard course has no admin control, so it now says how choice works.
     expect(
-      (body.match(/How lesson choice works/gi) ?? []).length
+      (body.match(/The same core for everyone, optional lessons by role/gi) ?? []).length
     ).toBe(1)
   })
 
-  it("keeps the score inside the existing score item, not in a new section", () => {
-    // Launch readiness review, 2026-10-21: the item shows only while the
-    // score is switched on, and it no longer names the two unbuilt parts as
-    // "being built", because the launch brief rules out promises of later
-    // work. It claims only what calculateGwthScore() does.
+  it("explains the score once, in its own score block, as at launch", () => {
+    // Converted 19 Nov 2026 (see LAUNCH_RULE above). The old /for-teams kept
+    // the score inside one "Achievement you can assess and reward" item; the
+    // one /for-organisations page has a single score block instead. What
+    // still holds: one telling, nothing "being built", no beta, and it
+    // claims only what calculateGwthScore() combines.
     const { container } = render(<ForTeamsFde showScore />)
-    expect(container.querySelector('[data-section="score"]')).toBeNull()
-    const item = screen
-      .getByText("Achievement you can assess and reward")
-      .closest("li")?.textContent ?? ""
-    expect(item).toMatch(/dynamic GWTH Score/i)
-    expect(item).not.toMatch(/being built|beta/i)
+    expect(container.querySelectorAll('[data-section="score"]')).toHaveLength(1)
+    const block = container.querySelector('[data-section="score"]')?.textContent ?? ""
+    expect(block).toMatch(/core lessons they've passed, their quiz results and their best marks for the three monthly projects/i)
+    expect(block).not.toMatch(/being built|beta|not switched on/i)
   })
 })
 
@@ -414,13 +520,15 @@ describe("the four pages do four different jobs", () => {
       node: <LessonsFde />,
       phrase: /includes its core and optional lessons when that month opens/i,
     },
+    // /for-institutions and /for-teams are one page since 19 Nov 2026, so
+    // both its sentences are checked against the other pages, not each other.
     {
-      page: "/for-institutions",
+      page: "/for-organisations",
       node: <ForInstitutionsFde />,
       phrase: /you name the titles and we write them/i,
     },
     {
-      page: "/for-teams",
+      page: "/for-organisations",
       node: <ForTeamsFde />,
       phrase: /What your team can choose from/i,
     },
@@ -507,13 +615,14 @@ describe("the copy gate's corrections stay corrected", () => {
     // page (/verify) does not, so no record page is promised.
     render(<ForInstitutionsFde />)
     const body = text()
-    expect(body).not.toMatch(/GWTH score/i)
+    // "does not name the GWTH score" is checked (and flagged) in the
+    // /for-institutions block above.
     expect(body).not.toMatch(/Each member carries a GWTH score/i)
     expect(body).not.toMatch(/how recently they refreshed/i)
     expect(body).not.toMatch(/its own web address|after the beta/i)
     // Decay was removed earlier in this bead and must not come back.
     expect(body).not.toMatch(/decays/i)
-    const lead = screen.getByTestId("institutions-tutor-lead").textContent ?? ""
+    const lead = screen.getByTestId("institution-tutor-lead").textContent ?? ""
     expect(lead).toMatch(/sign in to a learners dashboard/i)
     // Server-side grading IS live, so it stays in the present tense. The
     // latest Sol (2026-10-21) asked for the plain result rather than the
@@ -546,7 +655,10 @@ describe("the copy gate's corrections stay corrected", () => {
     expect(text()).toMatch(
       new RegExp(`${TOTAL_MANDATORY_LESSONS} core lessons`, "i")
     )
-    expect(text()).toMatch(/same for every learner/i)
+    // for-organisations-next: "Everyone takes the same 63 core lessons."
+    expect(text()).toMatch(
+      new RegExp(`Everyone takes the same ${TOTAL_MANDATORY_LESSONS} core lessons`, "i")
+    )
   })
 
   it("gives one eligibility rule for bespoke lessons, on both pages (finding 9)", () => {
@@ -580,16 +692,27 @@ describe("bible gwth-score-inputs: the score counts the marked monthly projects"
   // weighting or marker.
   it("/lessons names all three, in the future tense", () => {
     cleanup()
+    // lessons-next (19 Nov 2026): "score-what" names the three inputs.
+    render(<LessonsFde />)
+    const what = screen.getAllByTestId("score-what")[0]!.textContent ?? ""
+    expect(what).toMatch(/core lessons you've passed/i)
+    expect(what).toMatch(/quiz results/i)
+    expect(what).toMatch(/marks for the three monthly projects/i)
+  })
+
+  it("/lessons states the weighting in the present tense", () => {
+    // Converted 19 Nov 2026 (see LAUNCH_RULE above). It used to require the
+    // future tense ("will be worked out") and no weighting. Marking is
+    // described as at launch, so the half-and-half weighting is named; what
+    // still holds is that no marker detail (tutor or AI) is in the score
+    // explanation itself.
+    cleanup()
     render(<LessonsFde />)
     const lead = screen.getByTestId("score-lead").textContent ?? ""
-    expect(lead).toMatch(/lessons you have finished/i)
-    expect(lead).toMatch(/questions/i)
-    expect(lead).toMatch(/marks for your monthly projects/i)
-    expect(lead).toMatch(/will be worked out/i)
-    const inputs = screen.getAllByTestId("score-inputs")[0]!.textContent ?? ""
-    expect(inputs).toMatch(/Your monthly projects/)
-    expect(inputs).toMatch(/will count toward your score/i)
-    expect(lead + inputs).not.toMatch(/per ?cent|%|half|tutors? mark|AI marks/i)
+    expect(lead).not.toMatch(/will be worked out|will count/i)
+    expect(lead).toMatch(/count for half of your score/i)
+    expect(lead).toMatch(/monthly projects count for the other half/i)
+    expect(lead).not.toMatch(/tutors? mark|AI marks/i)
   })
 
   it("the home page and For teams name the project marks when the score is on", () => {
@@ -600,8 +723,10 @@ describe("bible gwth-score-inputs: the score counts the marked monthly projects"
     )
     cleanup()
     render(<ForTeamsFde showScore />)
+    // for-organisations-next: "their best marks for the three monthly
+    // projects" and "The marks for the monthly projects count for ...".
     expect(document.body.textContent ?? "").toMatch(
-      /marks for their monthly projects/i
+      /marks for (their|the|the three) monthly projects/i
     )
   })
 })

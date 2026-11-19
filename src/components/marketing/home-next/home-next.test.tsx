@@ -280,14 +280,14 @@ describe("What would you like to do with AI? (a-20261118-215935)", () => {
     render(<HomeNext selling />)
     const signpost = screen.getByTestId("organisations-signpost")
     const links = within(signpost).getAllByRole("link").map((a) => a.getAttribute("href"))
-    expect(links).toEqual(["/gift", "/for-institutions"])
+    expect(links).toEqual(["/gift", "/for-organisations"])
   })
 
   it("offers no gift link before sales open", () => {
     render(<HomeNext />)
     const signpost = screen.getByTestId("organisations-signpost")
     const links = within(signpost).getAllByRole("link").map((a) => a.getAttribute("href"))
-    expect(links).toEqual(["/for-institutions"])
+    expect(links).toEqual(["/for-organisations"])
   })
 })
 

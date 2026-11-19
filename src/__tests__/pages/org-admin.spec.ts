@@ -322,7 +322,9 @@ test.describe("Institution admin (/org)", () => {
   // The N7 brief pins the marketing copy: /for-teams and /pricing stay
   // UNTOUCHED. That is ultimately a diff fact, but these keep the pages from
   // being broken as collateral by the new route group and the shared CSS.
-  for (const path of ["/for-teams", "/pricing"]) {
+  // 19 Nov 2026: /for-teams redirects to /for-organisations, so the page the
+  // team buyer actually reads is checked at its new address.
+  for (const path of ["/for-organisations", "/pricing"]) {
     test(`${path} still renders and carries no /org chrome`, async ({
       page,
     }) => {

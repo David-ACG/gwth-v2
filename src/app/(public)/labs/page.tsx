@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
-import { getModelLabIndex } from "@/lib/data/model-lab"
-import { LabsFde } from "@/components/marketing/labs-fde/labs-fde"
+import { getModelLab, getModelLabIndex } from "@/lib/data/model-lab"
+import { LabsNext } from "@/components/marketing/labs-next/labs-next"
+import type { ModelLabSlug } from "@/lib/types"
 import { requireContentAccessOrRedirect } from "@/lib/content-access"
 
 /**
@@ -26,7 +27,8 @@ export const metadata: Metadata = {
  * The Model Lab index (David, 2026-10-21, option A): the six labs, how we
  * test, and the cost and score of every set-up. It replaced the Model Arena
  * listing. No progress data: labs are the free taster once the site is
- * public.
+ * public. Since 19 Nov 2026 it renders `labs-next/` (the page in the family
+ * of the new home page); `labs-fde/` is kept beside it as the backup.
  *
  * While `PRIVATE_CONTENT_MODE` is on the gate below restricts the page to the
  * content allowlist. It is the FIRST await, before any lab is read: App
@@ -36,5 +38,14 @@ export const metadata: Metadata = {
 export default async function PublicLabsPage() {
   await requireContentAccessOrRedirect()
 
-  return <LabsFde index={getModelLabIndex()} />
+  const index = getModelLabIndex()
+  // Each lab's main task in plain English, from the lab's own export, so the
+  // six cards can say what the task is (19 Nov 2026). Read after the gate.
+  const plain: Partial<Record<ModelLabSlug, string>> = {}
+  for (const lab of index.labs) {
+    const task = getModelLab(lab.sp)?.sig_plain
+    if (task) plain[lab.sp] = task
+  }
+
+  return <LabsNext index={index} plain={plain} />
 }

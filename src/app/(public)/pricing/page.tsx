@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { PricingFde } from "@/components/marketing/pricing-fde/pricing-fde"
+import { PricingNext } from "@/components/marketing/pricing-next/pricing-next"
 import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import { formatPence, PASS_PRICES_PENCE } from "@/lib/billing/passes"
 import { COURSE_OPENS_ON } from "@/lib/launch-date"
@@ -16,9 +16,16 @@ export const metadata: Metadata = {
 }
 
 /**
- * Public pricing page in the FDE journal register.
- * Three tiers (Free, Member, Teams), comparison table, and teams detail.
+ * Public pricing page in the paper-first register, rebuilt on 19 Nov 2026 to
+ * sit beside the new home page (David: "Pricing looks extremely complex and
+ * messy. We really need to revamp that page."). Source module:
+ * `marketing/pricing-next/`. The page it replaces, `marketing/pricing-fde/`,
+ * is kept untouched so it can come back.
+ *
+ * The component reads the sale window at request time (the (public) layout is
+ * force-dynamic), so the buttons switch from the waitlist to buying on the
+ * opening date by themselves.
  */
 export default function PricingPage() {
-  return <PricingFde />
+  return <PricingNext />
 }

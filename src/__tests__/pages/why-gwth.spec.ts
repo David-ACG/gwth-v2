@@ -7,8 +7,8 @@ import AxeBuilder from "@axe-core/playwright"
  * and /about permanently redirects there.
  *
  * The copy's meaning is asserted next to the component, in
- * `why-gwth-fde.test.tsx`. What only a browser can check is here: the
- * redirect, that nothing scrolls sideways on a phone (the comparison table
+ * `why-gwth-next.test.tsx` (the page was rebuilt on 19 Nov 2026). What only
+ * a browser can check is here: the redirect, that nothing scrolls sideways on a phone (the comparison table
  * stacks), that the government source links work from the keyboard, and that
  * neither theme ships a serious accessibility violation. Replaces the old
  * `about.spec.ts`, whose page no longer exists.
