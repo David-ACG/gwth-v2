@@ -295,6 +295,9 @@ describe("the shape of the course, not the list", () => {
           : "The month's main project"
       )
     })
+    // 19 Nov 2026, David: "FamilyBot, made core".
+    expect(MONTH_CONFIGS[0]!.capstoneOptional).toBeFalsy()
+    expect(projects[0]).toHaveTextContent("The month's main project")
   })
 
   it("keeps the month-opening rule, word for word", () => {
@@ -410,6 +413,11 @@ describe("marking, the score and the portfolio", () => {
     )
     expect(screen.getByTestId("portfolio-block")).toHaveTextContent(
       "Get permission before sharing anyone else's information."
+    )
+    // 19 Nov 2026, David: "FamilyBot, made core". No lesson builds a website
+    // to start the portfolio with.
+    expect(screen.getByTestId("portfolio-block")).toHaveTextContent(
+      "from FamilyBot to your AI consultant"
     )
   })
 

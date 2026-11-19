@@ -419,8 +419,8 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
               </h2>
               <p>
                 Each lab shows which AI did best on real work tasks, what it cost and when we
-                tested it. In Month 1 of the course you build your own portfolio website without
-                writing code. In Month 2 you build a customer support chatbot. In Month 3 you
+                tested it. In Month 1 of the course you build FamilyBot, an assistant that turns a
+                family meeting recording into a list of jobs, a meal plan and a shopping list. In Month 2 you build a customer support chatbot. In Month 3 you
                 build an AI consultant that interviews people and writes a plan for an
                 organisation.
               </p>

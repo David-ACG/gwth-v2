@@ -213,6 +213,9 @@ describe("LabsNext, the closing", () => {
     expect(body).toMatch(/The course also teaches you to run your own comparison/)
     expect(body).toMatch(/same task in exactly the same words/)
     expect(body).toMatch(/In Month 2 you build a customer support chatbot/)
+    // 19 Nov 2026, David: "FamilyBot, made core". No lesson builds a portfolio website.
+    expect(body).toMatch(/In Month 1 of the course you build FamilyBot/)
+    expect(body).not.toMatch(/portfolio website/i)
     expect(body).not.toMatch(/Lesson \d+/)
   })
 

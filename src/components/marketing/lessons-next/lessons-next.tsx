@@ -582,8 +582,8 @@ export function LessonsNext({
                 <div className={styles.portfolio} data-testid="portfolio-block">
                   <h3 className={styles.panelTitle}>Your portfolio</h3>
                   <p className={styles.bodyText}>
-                    The projects you made in all three months, from your first
-                    website to your AI consultant. Link to it in an application
+                    The projects you made in all three months, from FamilyBot
+                    to your AI consultant. Link to it in an application
                     or talk it through at an interview. Get permission before
                     sharing anyone else&apos;s information.
                   </p>

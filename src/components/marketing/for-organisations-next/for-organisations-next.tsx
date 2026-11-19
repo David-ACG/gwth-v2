@@ -799,7 +799,7 @@ export function ForOrganisationsNext({
                 </p>
                 <p>
                   They finish with a portfolio too: the projects they made in
-                  all three months, from their first website to their AI
+                  all three months, from FamilyBot to their AI
                   consultant.
                 </p>
               </div>

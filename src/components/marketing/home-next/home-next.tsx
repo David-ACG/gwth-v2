@@ -192,7 +192,7 @@ export const MONTH_STEPS = [
     title: "Build your foundation",
     body: "You start with projects for yourself. They are useful to you and good fun to make.",
     makes: [
-      "A portfolio website, made without code",
+      "FamilyBot, which turns a family meeting recording into a list of jobs, a meal plan and a shopping list",
       "Spending Detective, which shows where your money goes",
       "A one-page plan for a real decision in your life",
     ],
@@ -655,8 +655,8 @@ export function HomeNext({
                 <div data-testid="proof-portfolio" data-motion="rise">
                   <dt>Your portfolio</dt>
                   <dd>
-                    The projects you made in all three months, from your first
-                    website to your AI consultant. Link to it in an
+                    The projects you made in all three months, from FamilyBot
+                    to your AI consultant. Link to it in an
                     application or talk it through at an interview. Get
                     permission before sharing anyone else&apos;s information.
                   </dd>

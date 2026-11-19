@@ -251,10 +251,10 @@ describe("PricingPage", () => {
     const course = flat(document.querySelector('[data-tier="course"]'))
     expect(course).toContain(`${TOTAL_MANDATORY_LESSONS} core lessons`)
     expect(course).not.toMatch(/\d+ go-deeper|\d+ optional/)
-    // 12 Nov 2026: the Family AI Bot lessons are optional in the syllabus, so
-    // the course leads with a core Month 1 project (bead gwth-launch-ote8).
-    expect(course).toMatch(/portfolio website/)
-    expect(course).not.toMatch(/Family AI Bot/)
+    // 19 Nov 2026, David: "FamilyBot, made core". Month 1's main project is
+    // FamilyBot; no lesson builds a portfolio website.
+    expect(course).toMatch(/FamilyBot/)
+    expect(course).not.toMatch(/portfolio website/)
     expect(course).toMatch(/AskMyCo/)
     expect(course).toMatch(/your own AI consultant/)
     // The latest Sol, 12 Nov 2026: no "hidden charges" while AI tool costs are unstated.

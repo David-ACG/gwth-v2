@@ -195,14 +195,17 @@ const REASONS: readonly Reason[] = [
 ]
 
 /**
- * What you build each month. Month 1 and 3 are the old page's sentence; the
- * Month 2 detail is the home page's (`MONTH_STEPS` in `home-next.tsx`).
+ * What you build each month. Month 3 is the old page's sentence; the Month 2
+ * detail is the home page's (`MONTH_STEPS` in `home-next.tsx`). Month 1 is
+ * FamilyBot since 19 Nov 2026 (David: "FamilyBot, made core"; no lesson
+ * builds the portfolio website the old page promised), described as its
+ * `capstoneDescription` in config.
  */
 const MONTHS = [
   {
     kicker: "Month 1",
-    title: "Your own portfolio website",
-    body: "You build it without writing code.",
+    title: "FamilyBot",
+    body: "It turns a family meeting recording into a list of jobs, a meal plan and a shopping list.",
   },
   {
     kicker: "Month 2",

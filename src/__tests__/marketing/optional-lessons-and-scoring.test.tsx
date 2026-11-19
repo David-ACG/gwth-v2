@@ -119,7 +119,11 @@ describe("no page invents an optional-lesson count", () => {
 
   it("/lessons keeps the mandatory figure, which config owns", () => {
     render(<LessonsFde />)
-    expect(text()).toMatch(/63 core lessons/i)
+    expect(text()).toMatch(
+      new RegExp(`${TOTAL_MANDATORY_LESSONS} core lessons`, "i")
+    )
+    // 19 Nov 2026: FamilyBot's four lessons became core (26 + 20 + 21).
+    expect(TOTAL_MANDATORY_LESSONS).toBe(67)
   })
 })
 

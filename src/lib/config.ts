@@ -136,17 +136,28 @@ export const MONTH_CONFIGS: MonthConfig[] = [
       "Learn to get good results from AI tools, then build useful things with their help: a simple app or website, a dashboard, a research report, your own AI assistant and a tool that does a regular task for you.",
     // The counts on every month follow the syllabus database (the pipeline's
     // v3 syllabus, the source of truth for lesson identity), re-counted on
-    // 2026-10-20 for the launch readiness check: Month 1 is 22 core and 10
-    // optional, Month 2 is 20 and 22 (with the HR, marketing and sales
-    // lessons), Month 3 is 21 and 15. The pages had said 26 core in Month 1,
-    // 66 core and 30 optional in all. Re-count when the syllabus changes.
-    mandatoryLessons: 22,
-    optionalLessons: 10,
+    // 2026-10-20 for the launch readiness check (Month 1 22 core and 10
+    // optional then; the pages had said 26 core in Month 1, 66 core and 30
+    // optional in all). Re-count when the syllabus changes.
+    //
+    // 19 Nov 2026, David chose "FamilyBot, made core": FamilyBot is Month 1's
+    // major, marked project and its four lessons (m1_l21 to m1_l24, syllabus
+    // ids 255 to 258) are core, not optional. The lessons call it "the most
+    // substantial build of Month 1", while the public pages promised a
+    // portfolio website that no lesson builds. The syllabus database was
+    // updated the same day and re-counted: Month 1 has 28 core rows, but two
+    // of them ("Stay safe with AI", id 268, and "Know your rights with AI")
+    // are newer lessons the public counts deliberately leave out for now (a
+    // separate open question), so Month 1 is 26 core and 8 optional. Month 2
+    // (20 core, 22 optional) and Month 3 (21 core, 15 optional) are
+    // unchanged: 67 core and 45 optional in all.
+    mandatoryLessons: 26,
+    optionalLessons: 8,
     capstoneName: "Family AI Bot",
-    // The four FamilyBot lessons (m1_l21 to m1_l24) are optional in the
-    // syllabus database (checked 12 Nov 2026, bead gwth-launch-ote8), so the
-    // public pages call it an optional project, not the month's main one.
-    capstoneOptional: true,
+    // Made core on 19 Nov 2026 (above), so the public pages call it the
+    // month's main project. It was optional from 12 Nov 2026 (bead
+    // gwth-launch-ote8) until then.
+    capstoneOptional: false,
     capstoneDomain: "familyaibot.com",
     capstoneDescription:
       "Build an assistant that turns a family meeting recording into a written record, a list of jobs, calendar events, a meal plan and a shopping list.",

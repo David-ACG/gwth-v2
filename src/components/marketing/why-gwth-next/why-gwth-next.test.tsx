@@ -149,6 +149,10 @@ describe("David's points from the writing rounds", () => {
     const text = pageText()
     expect(text).not.toMatch(/100x|100 times cheaper/i)
     expect(text).not.toMatch(/free trial|start free|no card/i)
+    // 19 Nov 2026, David: "FamilyBot, made core". No lesson builds a
+    // portfolio website, so Month 1's project is FamilyBot.
+    expect(text).not.toMatch(/portfolio website/i)
+    expect(text).toMatch(/FamilyBot/)
   })
 
   it("names every optional-lesson field, since people look for their own", () => {

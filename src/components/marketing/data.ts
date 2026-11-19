@@ -411,7 +411,7 @@ export const PRICING: readonly PricingTier[] = [
       // 12 Nov 2026). This card is only shown on /pricing.
       "Three monthly parts, with the opening rules explained above",
       `${TOTAL_MANDATORY_LESSONS} core lessons, plus optional lessons for your field`,
-      "Projects including your own portfolio website, the AskMyCo support chatbot and your own AI consultant",
+      "Projects including FamilyBot, the AskMyCo support chatbot and your own AI consultant",
       "Plain course progress tracking",
       "No adverts or hidden charges",
     ],

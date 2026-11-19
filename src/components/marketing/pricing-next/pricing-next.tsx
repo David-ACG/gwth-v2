@@ -223,7 +223,7 @@ export function PricingNext({ now = new Date() }: { now?: Date } = {}) {
     },
     {
       title: "Projects you make yourself",
-      body: "Including your own portfolio website, the AskMyCo support chatbot and your own AI consultant.",
+      body: "Including FamilyBot, the AskMyCo support chatbot and your own AI consultant.",
     },
     {
       title: "A marked project each month",
