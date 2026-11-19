@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  */
 export default function TermsPage() {
   return (
-    <LegalFde title="Terms and conditions" updated="1 December 2026">
+    <LegalFde title="Terms and conditions" updated="14 December 2026">
       <p>
         These terms and conditions (&quot;Terms&quot;) govern your use of the
         GWTH.ai website and services (&quot;Services&quot;) provided at{" "}

@@ -203,7 +203,7 @@ describe("HomeFde is individual-first", () => {
     expect(within(signpost).getAllByRole("listitem")).toHaveLength(6)
     // And it routes off the page rather than pitching on it. /for-teams is
     // hidden at launch (a real 404, lib/public-routes.ts, 2026-10-20), so its
-    // link went; from 1 December the gift is the way to buy for one person.
+    // link went; from 14 December the gift is the way to buy for one person.
     const links = within(signpost)
       .getAllByRole("link")
       .map((a) => a.getAttribute("href"))
@@ -417,11 +417,11 @@ describe("HomeFde offers no walkthrough", () => {
 describe("HomeFde self-service promises match the product", () => {
   /**
    * Launch readiness, 2026-10-20. gwth.ai changes at the GO LIVE release
-   * (about 28 November) and sales open on 1 December, so the WORDS are true on
+   * (about 28 November) and sales open on 14 December, so the WORDS are true on
    * both sides of that date and only the buttons branch on `selling`
-   * (`isSelling()`): the waitlist before, buy or give from 1 December. The
+   * (`isSelling()`): the waitlist before, buy or give from 14 December. The
    * invite-only, beta tester and next-intake wording is gone, because the
-   * course is on open sale from 1 December.
+   * course is on open sale from 14 December.
    */
   it("never claims an instant purchase, and links the waitlist before sales open", () => {
     const { container } = render(<HomeFde />)
@@ -435,7 +435,7 @@ describe("HomeFde self-service promises match the product", () => {
     )
   })
 
-  it("from 1 December, buys through /pricing and gives through /gift", () => {
+  it("from 14 December, buys through /pricing and gives through /gift", () => {
     const { container } = render(<HomeFde selling />)
     const course = within(
       document.querySelector('[data-section="course"]') as HTMLElement
@@ -458,15 +458,15 @@ describe("HomeFde self-service promises match the product", () => {
     }
   })
 
-  it("states the launch offer in words that are true before and after 1 December", () => {
+  it("states the launch offer in words that are true before and after 14 December", () => {
     render(<HomeFde />)
     const offer = screen.getByTestId("home-offer").textContent ?? ""
     expect(offer).toMatch(
-      /From 1 December 2026 to 6 January 2027, a three-month pass costs £69/
+      /From 14 December 2026 to 6 January 2027, a three-month pass costs £69/
     )
     expect(offer).toMatch(/Or pay £29 a month/)
     const months = screen.getByTestId("home-offer-months").textContent ?? ""
-    expect(months).toMatch(/Month 1 is available from 1 December 2026/)
+    expect(months).toMatch(/Month 1 is available from 14 December 2026/)
     expect(months).toMatch(/Month 2 around 1 January 2027/)
     expect(months).toMatch(/Month 3 around 1 February 2027/)
     // The 75% rule before anyone pays (bead gwth-launch-735c).
@@ -810,7 +810,7 @@ describe("HomeFde score section", () => {
    * Launch readiness, 2026-10-20: the section renders only while the score is
    * switched on (`showScore`, from ENABLE_GWTH_SCORE, which is off unless an
    * environment sets it). Both reviewers read it as a preview of a feature a
-   * 1 December buyer does not get. It is kept, not deleted, because David
+   * 14 December buyer does not get. It is kept, not deleted, because David
    * asked for it; these tests render it switched on.
    */
   it("is not on the page while the score is switched off", () => {

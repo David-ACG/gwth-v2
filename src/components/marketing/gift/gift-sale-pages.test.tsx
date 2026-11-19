@@ -7,7 +7,7 @@ import { cleanup, render, screen } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
 const BEFORE = new Date("2026-11-20T12:00:00Z")
-const IN_SALE = new Date("2026-12-10T12:00:00Z")
+const IN_SALE = new Date("2026-12-16T12:00:00Z")
 const AFTER = new Date("2027-01-07T00:00:00Z")
 
 async function load(billing: boolean) {
@@ -28,10 +28,10 @@ afterEach(() => {
 })
 
 describe("/gift", () => {
-  it("says when gifts go on sale, with no form, before 1 December", async () => {
+  it("says when gifts go on sale, with no form, before 14 December", async () => {
     const { GiftPage } = await load(true)
     render(<GiftPage now={BEFORE} />)
-    expect(screen.getByTestId("gift-not-on-sale")).toHaveTextContent("1 December 2026")
+    expect(screen.getByTestId("gift-not-on-sale")).toHaveTextContent("14 December 2026")
     expect(screen.queryByTestId("gift-form")).toBeNull()
     expect(screen.getByRole("link", { name: /open your gift/i })).toHaveAttribute("href", "/gift/open")
   })
@@ -68,11 +68,11 @@ describe("/pricing during the gift sale", () => {
     const { PricingFde } = await load(true)
     render(<PricingFde now={BEFORE} />)
     // Launch readiness, 2026-10-20: the £69 band is on the page from the GO
-    // LIVE release, in words true before and after 1 December; only its
+    // LIVE release, in words true before and after 14 December; only its
     // button waits (the waitlist until sales open, no checkout).
     const band = screen.getByTestId("pricing-offer")
     expect(band).toHaveTextContent("£69")
-    expect(band).toHaveTextContent("1 December 2026")
+    expect(band).toHaveTextContent("14 December 2026")
     expect(band).toHaveTextContent("6 January 2027")
     expect(screen.queryByRole("button", { name: /Buy the whole course/ })).toBeNull()
     expect(screen.queryByRole("link", { name: "Give it as a gift" })).toBeNull()
@@ -83,7 +83,7 @@ describe("/pricing during the gift sale", () => {
     const { PricingFde } = await load(true)
     render(<PricingFde now={IN_SALE} />)
     const band = screen.getByTestId("pricing-offer")
-    expect(band).toHaveTextContent("£69 once if you buy from 1 December 2026 to 6 January 2027")
+    expect(band).toHaveTextContent("£69 once if you buy from 14 December 2026 to 6 January 2027")
     expect(band).toHaveTextContent("£87")
     expect(screen.getByRole("button", { name: "Buy the whole course (£69)" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Give it as a gift" })).toHaveAttribute("href", "/gift")

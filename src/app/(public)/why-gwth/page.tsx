@@ -40,7 +40,7 @@ export default function WhyGwthPage() {
         }}
       />
       {/* Read at request time (the (public) layout is force-dynamic), so
-          the buttons switch to buying on 1 December by themselves. */}
+          the buttons switch to buying on 14 December by themselves. */}
       <WhyGwthFde selling={isSelling()} />
     </>
   )

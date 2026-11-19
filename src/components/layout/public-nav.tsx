@@ -111,7 +111,7 @@ export function primaryCta(
     isCurrent(pathname, route)
   )
   if (institutional) return { href: "/contact", label: "Book a walkthrough" }
-  // From the day sales open (1 December 2026) the self-service step is buying,
+  // From the day sales open (14 December 2026) the self-service step is buying,
   // so the button leads to the prices; before it, the waitlist is still the
   // only step that does what its label says.
   return selling

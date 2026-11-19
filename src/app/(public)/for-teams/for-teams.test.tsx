@@ -853,7 +853,7 @@ describe("launch readiness review, 2026-10-21: true from the GO LIVE release", (
 
   it("states the one-off price and its dates, and drops 'lowest possible price'", () => {
     render(<ForTeamsPage />)
-    expect(body()).toMatch(/£69 per person paid once if you buy between 1 December 2026 and 6 January 2027/)
+    expect(body()).toMatch(/£69 per person paid once if you buy between 14 December 2026 and 6 January 2027/)
     expect(body()).toMatch(/After that, the whole course is £87/)
     expect(body()).not.toMatch(/lowest possible price/i)
   })

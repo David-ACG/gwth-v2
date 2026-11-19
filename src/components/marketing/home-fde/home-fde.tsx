@@ -202,12 +202,12 @@ const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
  * ## What the self-service route may promise (launch readiness, 2026-10-20)
  *
  * gwth.ai changes at David's GO LIVE release (about 28 November) and sales
- * open on 1 December 2026, so every visible WORD here is written to be true on
+ * open on 14 December 2026, so every visible WORD here is written to be true on
  * both sides of that date, and only the buttons branch on `selling`
  * (`isSelling()` in `lib/launch.ts`, read by the server page and passed in):
- * buy or give from 1 December, the waitlist before. The beta, invite-only and
+ * buy or give from 14 December, the waitlist before. The beta, invite-only and
  * intake wording went at the same time, because the course is on open sale
- * from 1 December. The prices are the canonical ones from config and from
+ * from 14 December. The prices are the canonical ones from config and from
  * `lib/billing/passes.ts`; the dates come from the sale window.
  *
  * Copy rules: British English, sentence case, no em or en dashes, GBP only.
@@ -719,7 +719,7 @@ function launchOffer() {
 export type HomeFdeProps = {
   /**
    * True once GWTH is on sale (`isSelling()`, read by the server page). Only
-   * the buttons change with it: buy or give from 1 December, the waitlist
+   * the buttons change with it: buy or give from 14 December, the waitlist
    * before.
    */
   selling?: boolean

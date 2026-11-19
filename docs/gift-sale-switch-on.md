@@ -7,7 +7,7 @@ at once, through `ship.py release website`). Nothing here is done by the code on
 
 ## What the code already does by itself
 
-- Sells nothing before `SALES_OPEN_AT` (default `2026-12-01T00:00:00Z`): `/gift` says when sales
+- Sells nothing before `SALES_OPEN_AT` (default `2026-12-14T00:00:00Z`): `/gift` says when sales
   open, `/pricing` is unchanged, both checkout routes refuse, sign-up stays invite-only.
 - Switches the whole course from £69 to £87 at `CHRISTMAS_SALE_ENDS_AT` (default
   `2027-01-07T00:00:00Z`) on every page and in the checkout route.

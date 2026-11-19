@@ -239,7 +239,7 @@ export const DEPTH = [
   },
 ] as const
 
-/** Plain words for each month's opening, true on both sides of 1 December. */
+/** Plain words for each month's opening, true on both sides of 14 December. */
 const MONTH_OPENS: Record<number, string> = {
   1: `Opens on ${COURSE_OPENS_ON}`,
   2: `Opens around ${LATER_MONTHS_OPEN.month2}`,
@@ -522,7 +522,7 @@ export function ForInstitutionsFde({ showScore = false }: { showScore?: boolean 
         What a tutor sees, as /org/learners shows it. This replaced "What the
         score tells a tutor" and its two "Being built" cards on 2026-10-21: the
         GWTH score is switched on in no environment, and the launch readiness
-        brief allows no promise of work that will not exist on 1 December. The
+        brief allows no promise of work that will not exist on 14 December. The
         one limitation an institution needs is stated as a fact.
       */}
       <section className={p.section} data-section="tutor-view">

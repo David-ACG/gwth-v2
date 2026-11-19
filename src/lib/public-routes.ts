@@ -1,5 +1,5 @@
 /**
- * Which public pages are hidden or unlisted at launch (1 December 2026).
+ * Which public pages are hidden or unlisted at launch (14 December 2026).
  *
  * David, 2026-10-20, on the launch readiness check of every public page
  * (Claude and the latest Sol each judged Ready, Fix or Hide): *"Use your

@@ -35,7 +35,7 @@ export const metadata: Metadata = {
  */
 export default function HomePage() {
   // Read at request time: the (public) layout is force-dynamic, so the
-  // buttons switch from the waitlist to buying on 1 December by themselves.
+  // buttons switch from the waitlist to buying on 14 December by themselves.
   //
   // The score section is always shown (David, 19 Nov 2026: "show the public
   // pages with what we will have in December, so that CIPD and the people

@@ -12,9 +12,9 @@ function sourceFiles(dir: string): string[] {
 }
 
 describe("the opening date lives in one place", () => {
-  it("prints 1 December 2026 from the one constant", () => {
-    expect(DEFAULT_SALES_OPEN_AT).toBe("2026-12-01T00:00:00Z")
-    expect(COURSE_OPENS_ON).toBe("1 December 2026")
+  it("prints 14 December 2026 from the one constant", () => {
+    expect(DEFAULT_SALES_OPEN_AT).toBe("2026-12-14T00:00:00Z")
+    expect(COURSE_OPENS_ON).toBe("14 December 2026")
   })
 
   it("is never typed into page words, so moving the launch is a one-line change", () => {
@@ -26,7 +26,7 @@ describe("the opening date lives in one place", () => {
         readFileSync(f, "utf8")
           .split("\n")
           .map((line, i) => ({ f, i: i + 1, line }))
-          .filter(({ line }) => /1 December 2026/.test(line) && !/^\s*(\/\/|\*|\/\*|\{\/\*)/.test(line))
+          .filter(({ line }) => /14 December 2026/.test(line) && !/^\s*(\/\/|\*|\/\*|\{\/\*)/.test(line))
       )
       .map(({ f, i }) => `${f}:${i}`)
     expect(offenders).toEqual([])

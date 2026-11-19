@@ -23,7 +23,7 @@ export default function PrivacyPage() {
   const marking = ENABLE_CAPSTONE_HAND_IN
   const after = marking ? 1 : 0
   return (
-    <LegalFde title="Privacy policy" updated="1 December 2026">
+    <LegalFde title="Privacy policy" updated="14 December 2026">
       <p>
         This privacy policy describes how GWTH.ai (&quot;we&quot;, &quot;us&quot;, or
         &quot;our&quot;) collects, uses, and protects your personal information when

@@ -700,7 +700,7 @@ export function ActiveDashboard({
 
 export function FreeDashboard({ user }: { user: User | null }) {
   const name = user ? firstName(user.name) : "there"
-  // From 1 December the course is on sale (gift sale, decision 6), so the
+  // From 14 December the course is on sale (gift sale, decision 6), so the
   // invite-only wording below no longer applies.
   const selling = ENABLE_BILLING && isSalesOpen(new Date())
   return (

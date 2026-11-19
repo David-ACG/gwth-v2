@@ -173,7 +173,7 @@ describe("Why GWTH sign-up", () => {
   /**
    * David: "The call to action should be to sign up on the Why GWTH page. We
    * don't want to send them back to the lab to procrastinate further". From
-   * 1 December (launch readiness, 2026-10-20) joining starts on /pricing, as
+   * 14 December (launch readiness, 2026-10-20) joining starts on /pricing, as
    * the header's "Join the course" does, and the only other link in the close
    * is the gift: /for-teams is hidden at launch.
    */
@@ -230,7 +230,7 @@ describe("What the old About page brought", () => {
 
   it("promises no credential, since none is switched on at launch", () => {
     // Launch readiness, 2026-10-20: "Credentials are switched on after the
-    // beta" was untrue from 1 December (there is no beta), and the score and
+    // beta" was untrue from 14 December (there is no beta), and the score and
     // /verify are off at launch. The page says what a learner has instead.
     const { container } = render(<WhyGwthFde />)
     const text = pageText()
@@ -245,7 +245,7 @@ describe("What the old About page brought", () => {
     const price = (container.querySelector('[data-reason="price"]')?.textContent ?? "").replace(/\s+/g, " ")
     expect(price).toMatch(/£29 a month/)
     expect(price).toMatch(
-      /£69 once for the whole three-month course, for yourself or as a gift, if you buy between 1 December 2026 and 6 January 2027/
+      /£69 once for the whole three-month course, for yourself or as a gift, if you buy between 14 December 2026 and 6 January 2027/
     )
     const fields = (container.querySelector('[data-reason="optional-lessons"]')?.textContent ?? "")
     expect(fields).toMatch(/Month 2 around 1 January 2027 and Month 3 around 1 February 2027/)

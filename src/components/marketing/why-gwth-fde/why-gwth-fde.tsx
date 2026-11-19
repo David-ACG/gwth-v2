@@ -117,7 +117,7 @@ const REASONS: readonly Reason[] = [
       // Every field is named: David, why-gwth round 1, D s3, "Add all the
       // fields as people will be looking for their own."
       // Launch readiness, 2026-10-20: the field lessons sit in Months 2 and 3,
-      // which open after 1 December, so "today" and "being written now" went.
+      // which open after 14 December, so "today" and "being written now" went.
       // HR, marketing and sales are optional Month 2 lessons in the syllabus
       // (facts sheet, re-counted 2026-10-20).
       `Most optional lessons open with Month 2 around ${LATER_MONTHS_OPEN.month2} and Month 3 around ${LATER_MONTHS_OPEN.month3}. You can focus on AI in your own field: finance, medicine, law, logistics, human resources (HR), marketing or sales. You can go further with local AI, which runs on your own computer, with advanced AI-assisted coding, or with hardware that uses AI. Or you can take the lessons for AI transformation experts, who help a business, your own or someone else's, choose AI tools and start using them well.`,
@@ -133,7 +133,7 @@ const REASONS: readonly Reason[] = [
       // Recovered idea C06 (from the old /about): the REASON a record has to
       // stay current, not just the mechanic.
       // Launch readiness, 2026-10-20: "Credentials are switched on after the
-      // beta" went. There is no beta on 1 December and no credential is
+      // beta" went. There is no beta on 14 December and no credential is
       // switched on at launch (the score and /verify are off), so the page
       // says what a learner actually has: the work itself.
       "Every lesson leaves you with real work you can show people. A certificate from six months ago tells you what somebody once passed, not what they can do today. So the proof GWTH gives you is the work itself: the documents and tools you made, which you can show to anyone who wants to see what you can do.",
@@ -351,7 +351,7 @@ export function WhyGwthFde({
    */
   selling?: boolean
 } = {}) {
-  // From 1 December joining the course starts on /pricing, as the header's
+  // From 14 December joining the course starts on /pricing, as the header's
   // "Join the course" does; before it, the waitlist. Never a lab (David: "We
   // don't want to send them back to the lab to procrastinate further").
   const cta = selling

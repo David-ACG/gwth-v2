@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  * Public lessons landing page in the paper-first register.
  *
  * `isSelling()` is read here, per request (the (public) layout is
- * force-dynamic), and passed down, so only the buttons change on 1 December.
+ * force-dynamic), and passed down, so only the buttons change on 14 December.
  */
 export default function LessonsPage() {
   return <LessonsFde selling={isSelling()} />
