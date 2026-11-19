@@ -75,31 +75,25 @@ function buildWaitlistEmail(name: string): EmailParts {
     blocks: [
       {
         type: "p",
-        text: "Thanks for joining the GWTH earlybird waitlist. We are building something genuinely different: an AI course that is updated every single day, built by practitioners, and completely independent. No sponsors, no ads, no vendor partnerships.",
+        text: "Thanks for joining the GWTH waitlist. We'll email you when places open.",
       },
       {
         type: "p",
-        text: "As an earlybird, you will be among the first to access the course when it launches. We will email you as soon as it is ready.",
-      },
-      {
-        type: "list",
-        items: [
-          "94 hands-on projects, no theory and no fluff",
-          "Video walkthroughs for every single project",
-          "60+ AI tools tracked and compared daily",
-          "Content updated every day so your skills never go stale",
-          "No coding required, everything in plain English",
-        ],
+        text: "GWTH is a practical AI course for work and everyday life in the UK. It has three monthly parts, with about five hours of learning each week.",
       },
       {
         type: "p",
-        text: "In the meantime, explore the Tech Radar. It is live right now and tracks 60+ AI tools daily.",
+        text: "You'll work on a project in every lesson. We rewrite lessons as the tools change.",
+      },
+      {
+        type: "p",
+        text: "While you wait, try the free lesson to see what learning with GWTH is like.",
       },
     ],
-    cta: { label: "Explore the Tech Radar", href: "https://gwth.ai/tech-radar" },
+    cta: { label: "Try the free lesson", href: "https://gwth.ai/start-here" },
     footer: [
-      "GWTH.ai. Independent AI education, updated every day.",
-      "You are receiving this because you joined the earlybird waitlist.",
+      "From the GWTH team",
+      "You're receiving this email because you joined the GWTH waitlist.",
     ],
   })
 }
@@ -171,7 +165,7 @@ export async function subscribeToWaitlist(params: {
     const [userSent, adminSent] = await Promise.all([
       sendEmail({
         to: params.email,
-        subject: "You're on the GWTH earlybird list",
+        subject: "You're on the GWTH waitlist",
         body: userEmail.html,
         text: userEmail.text,
       }),
