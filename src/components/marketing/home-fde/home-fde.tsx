@@ -854,11 +854,11 @@ export function HomeFde({
                     account settings.
                   </li>
                   <li>
-                    <strong>Afterwards</strong>, continued access to the updated
-                    lessons costs £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
-                    Monthly plans
-                    renew automatically unless cancelled; a pass ends unless you
-                    choose to continue.
+                    <strong>After three months</strong>, your monthly plan
+                    continues at £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month for
+                    access to the updated lessons unless you cancel. If you paid
+                    once for a pass, your access to the course lessons stops. You
+                    only pay again if you choose to subscribe.
                   </li>
                 </ul>
               </div>

@@ -382,7 +382,9 @@ describe("the price closes the page, word for word", () => {
     expect(offer).toHaveTextContent(/a three-month pass costs £69\./)
     expect(offer).toHaveTextContent("It never renews, and gift recipients give no card details.")
     expect(offer).toHaveTextContent(/Or pay £29 a month for the first three months/)
-    expect(offer).toHaveTextContent(/costs £7\.50 a month/)
+    expect(offer).toHaveTextContent(/After three months, your monthly plan continues at £7\.50 a month for access to the updated lessons unless you cancel/)
+    expect(offer).toHaveTextContent(/If you paid once for a pass, your access to the course lessons stops/)
+    expect(offer).toHaveTextContent(/You only pay again if you choose to subscribe/)
     const months = screen.getByTestId("home-offer-months")
     expect(months).toHaveTextContent(
       /each later month opens once a month has passed since your previous month began and you.ve finished 75% of that month.s core lessons/

@@ -478,9 +478,9 @@ describe("HomeFde self-service promises match the product", () => {
     render(<HomeFde />)
     const course = sectionText("course")
     expect(course).toMatch(/£29 a month/)
-    // The £7.50 plan is optional (facts sheet).
-    // Copy gate, 2026-10-21: the £7.50 buys continued access, so say so.
-    expect(course).toMatch(/continued access to the updated lessons costs £7\.50 a month/)
+    expect(course).toMatch(/After three months, your monthly plan continues at £7\.50 a month for access to the updated lessons unless you cancel/)
+    expect(course).toMatch(/If you paid once for a pass, your access to the course lessons stops/)
+    expect(course).toMatch(/You only pay again if you choose to subscribe/)
     expect(course).toMatch(/cancel at any time/)
   })
 
