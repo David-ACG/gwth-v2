@@ -62,6 +62,14 @@ describe("the draft is a draft (David, 18 Nov 2026: do not overwrite the old hom
     delete process.env.SHOW_DRAFT_PAGES
     expect(isHiddenPublicPath("/")).toBe(false)
   })
+  it("is the real home page since 19 Nov 2026, with the real score flag", () => {
+    const route = readFileSync(join(process.cwd(), "src/app/(public)/page.tsx"), "utf8")
+    expect(route).toContain("<HomeNext selling={isSelling()} showScore={ENABLE_GWTH_SCORE} />")
+    expect(route).not.toContain("<HomeFde")
+    const draft = readFileSync(join(process.cwd(), "src/app/(public)/home-new/page.tsx"), "utf8")
+    expect(draft).toContain('redirect("/")')
+    expect(draft).toContain("notFound()")
+  })
 })
 
 describe("HomeNext: the new home page draft", () => {

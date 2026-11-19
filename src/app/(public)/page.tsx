@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { CourseJsonLd } from "@/components/marketing/json-ld/course-jsonld"
-import { HomeFde } from "@/components/marketing/home-fde/home-fde"
+import { HomeNext } from "@/components/marketing/home-next/home-next"
 import { ENABLE_GWTH_SCORE } from "@/lib/config"
 import { isSelling } from "@/lib/launch"
 
@@ -22,9 +22,12 @@ export const metadata: Metadata = {
 }
 
 /**
- * Marketing home page in the paper-first register (N12, 2026-09-03), built
- * to the N9 artboard David approved (annex 15). Source module:
- * `marketing/home-fde/`. Shared recipes: `marketing/paper/`.
+ * Marketing home page in the paper-first register. Since 19 Nov 2026 it is the
+ * new version first drafted at /home-new (David: "I like
+ * https://hlab.taila51191.ts.net:9509/home-new more. please replace the main
+ * homepage with" it). Source module: `marketing/home-next/`, which reuses the
+ * film and data from `marketing/home-fde/` (the previous page, kept so it can
+ * come back). Shared recipes: `marketing/paper/`.
  *
  * The 90-second explainer embed David placed after the hero on 2026-07-04
  * (W12) is not on the approved artboard and is not rendered here; the
@@ -37,7 +40,7 @@ export default function HomePage() {
   return (
     <>
       <CourseJsonLd />
-      <HomeFde selling={isSelling()} showScore={ENABLE_GWTH_SCORE} />
+      <HomeNext selling={isSelling()} showScore={ENABLE_GWTH_SCORE} />
     </>
   )
 }
