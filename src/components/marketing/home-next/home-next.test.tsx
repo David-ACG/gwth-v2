@@ -393,13 +393,23 @@ describe("the price closes the page, word for word", () => {
     expect(hrefs(selling.container)).not.toContain("/waitlist")
   })
 
-  it("does not advertise the labs while they are private", () => {
-    const { container, unmount } = render(<HomeNext />)
-    expect(hrefs(container)).not.toContain("/labs")
-    unmount()
-    process.env.PRIVATE_CONTENT_MODE = "off"
-    const open = render(<HomeNext />)
-    expect(hrefs(open.container)).toContain("/labs")
+  it.each(["on", "off"])("offers the free lesson before sales open, with private content %s", (mode) => {
+    process.env.PRIVATE_CONTENT_MODE = mode
+    const { container } = render(<HomeNext />)
+    const price = within(container.querySelector<HTMLElement>('[data-section="price"]')!)
+    expect(price.getAllByRole("link").map((link) => link.getAttribute("href"))).toEqual([
+      "/terms#course-months", "/waitlist", "/start-here",
+    ])
+    expect(price.getByRole("link", { name: "Try the free lesson" })).toHaveAttribute("href", "/start-here")
+    expect(price.queryByRole("link", { name: "Try a free lab" })).not.toBeInTheDocument()
+  })
+
+  it("keeps the purchase and gift buttons when selling", () => {
+    const { container } = render(<HomeNext selling />)
+    const price = within(container.querySelector<HTMLElement>('[data-section="price"]')!)
+    expect(price.getByRole("link", { name: "Buy it for yourself" })).toHaveAttribute("href", "/pricing")
+    expect(price.getByRole("link", { name: "Give it as a gift" })).toHaveAttribute("href", "/gift")
+    expect(price.queryByRole("link", { name: "Try the free lesson" })).not.toBeInTheDocument()
   })
 })
 
@@ -445,5 +455,37 @@ describe("house rules for public text", () => {
     expect(stripped).not.toMatch(/border[a-z-]*:\s*[\d.]+px\s+(solid|dashed)\s+var\(--v-ink\)/)
     expect(stripped).not.toMatch(/text-transform:\s*uppercase/)
     expect(stripped).not.toMatch(/font-mono|--font-mono/)
+  })
+})
+
+describe("lesson order and checking UK answers", () => {
+  it("describes film, reading, project and end-of-lesson questions in order", () => {
+    const { container } = render(<HomeNext />)
+    const lesson = within(container.querySelector<HTMLElement>('[data-section="lesson"]')!)
+    const steps = lesson.getAllByRole("listitem")
+    expect(steps.map((step) => within(step).getByRole("heading").textContent)).toEqual([
+      "Watch a short film", "Read the lesson", "Do the project, then answer questions",
+    ])
+    expect(steps[0]).toHaveTextContent("Get an introduction to the subject.")
+    expect(steps[1]).toHaveTextContent("Work through the lesson over several pages.")
+    expect(steps[2]).toHaveTextContent("Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark.")
+    expect(container.querySelector('[data-section="lesson"]')).not.toHaveTextContent(/as you go/i)
+    expect(lesson.getByText(/three monthly parts/)).toHaveTextContent(
+      "The course has three monthly parts, with about five hours of work a week."
+    )
+    expect(container.querySelector('[data-section="lesson"]')).not.toHaveTextContent(/Start with a short film/)
+    expect(lesson.getAllByRole("link")).toHaveLength(1)
+    expect(lesson.getByRole("link", { name: "Try the free lesson" })).toHaveAttribute("href", "/start-here")
+    expect(container.querySelector('[data-section="lesson"]')).not.toHaveTextContent(/demo|instant|Every lesson is built around a project/i)
+  })
+
+  it("explains checking sources without assuming a workplace or specialist knowledge", () => {
+    const { container } = render(<HomeNext />)
+    const uk = container.querySelector<HTMLElement>('[data-section="uk"]')!
+    expect(within(uk).getByRole("heading", { name: "Check where the answer comes from" })).toBeInTheDocument()
+    expect(uk).toHaveTextContent(
+      "AI can give you an answer based on another country's rules. Ask where the information comes from. Before you act, check a trusted UK source, such as GOV.UK for government information."
+    )
+    expect(uk).not.toHaveTextContent(/regulator|employer's policy/)
   })
 })

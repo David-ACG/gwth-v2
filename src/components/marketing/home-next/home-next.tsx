@@ -13,7 +13,6 @@ import {
   getSaleWindow,
   PASS_PRICES_PENCE,
 } from "@/lib/billing/passes"
-import { canPromoteLabs } from "@/lib/labs-cta"
 import { Plate } from "@/components/marketing/paper/plate"
 import {
   CAREER_CARDS,
@@ -282,9 +281,9 @@ export function groupByMonth(
 }
 
 const LESSON_STEPS = [
-  ["Try the project", "Start with the task and see what you can do."],
-  ["Follow the lesson", "Work through the steps and improve what you make."],
-  ["Check your understanding", "Take the quiz to see what to revisit."],
+  ["Watch a short film", "Get an introduction to the subject."],
+  ["Read the lesson", "Work through the lesson over several pages."],
+  ["Do the project, then answer questions", "Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark."],
 ] as const
 
 /** The UK thread, the same three claims as on `/` (see `UK_THREAD` there). */
@@ -298,8 +297,8 @@ const UK_POINTS = [
     body: "Practise with UK examples of tax, pensions, employment and data protection, and learn to check which rules apply to your situation.",
   },
   {
-    title: "Check the source before you act",
-    body: "AI may use another country's rules. Ask for the source and check it against GOV.UK, the regulator's guidance or your employer's policy before acting.",
+    title: "Check where the answer comes from",
+    body: "AI can give you an answer based on another country's rules. Ask where the information comes from. Before you act, check a trusted UK source, such as GOV.UK for government information.",
   },
 ] as const
 
@@ -332,7 +331,6 @@ export function HomeNext({
   const joinCta = selling
     ? { href: "/pricing", label: "Join the course" }
     : { href: "/waitlist", label: "Join the waitlist" }
-  const labsArePublic = canPromoteLabs()
 
   return (
     <div className={p.shell}>
@@ -703,8 +701,8 @@ export function HomeNext({
             <h2 className={p.sectionTitle}>How a lesson works</h2>
           </div>
           <p className={styles.lead}>
-            Every lesson is built around a project. The course has three
-            monthly parts, with about five hours of work a week.
+            The course has three monthly parts, with about five hours of work
+            a week.
           </p>
           <ol className={styles.lessonSteps} aria-label="How a lesson works">
             {LESSON_STEPS.map(([title, body], index) => (
@@ -717,6 +715,11 @@ export function HomeNext({
               </li>
             ))}
           </ol>
+          <div className={p.actions}>
+            <Link href="/start-here" className={p.buttonOutline}>
+              Try the free lesson
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -816,13 +819,9 @@ export function HomeNext({
                   Join the waitlist
                 </Link>
               )}
-              {selling ? null : labsArePublic ? (
-                <Link href="/labs" className={p.buttonOutline}>
-                  Try a free lab
-                </Link>
-              ) : (
-                <Link href="/pricing" className={p.buttonOutline}>
-                  See pricing
+              {selling ? null : (
+                <Link href="/start-here" className={p.buttonOutline}>
+                  Try the free lesson
                 </Link>
               )}
             </div>

@@ -1014,7 +1014,16 @@ describe("HomeFde lesson diagram and purpose picker", () => {
 
   it("explains the lesson sequence and offers all purposes with native controls", () => {
     render(<HomeFde />)
-    expect(within(screen.getByRole("list", { name: "How a lesson works" })).getAllByRole("listitem")).toHaveLength(3)
+    const list = screen.getByRole("list", { name: "How a lesson works" })
+    const steps = within(list).getAllByRole("listitem")
+    expect(steps.map((step) => within(step).getByRole("heading").textContent)).toEqual([
+      "Watch a short film", "Read the lesson", "Do the project, then answer questions",
+    ])
+    expect(steps[0]).toHaveTextContent("Get an introduction to the subject.")
+    expect(steps[1]).toHaveTextContent("Work through the lesson over several pages.")
+    expect(steps[2]).toHaveTextContent("Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark.")
+    expect(list).not.toHaveTextContent(/as you go/i)
+    expect(screen.getByText("Every lesson is built around a project. You don't need coding experience.")).toBeInTheDocument()
     const choices = screen.getByRole("group", { name: "Choose what matters to you" })
     expect(within(choices).getAllByRole("radio")).toHaveLength(5)
     expect(within(choices).getByRole("radio", { name: "Use AI at home" })).toBeChecked()

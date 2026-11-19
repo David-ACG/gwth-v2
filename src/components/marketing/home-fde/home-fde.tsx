@@ -820,9 +820,9 @@ export function HomeFde({
               </p>
               <ol className={styles.lessonSteps} aria-label="How a lesson works">
                 {[
-                  ["Try the project", "Start with the task and see what you can do."],
-                  ["Follow the lesson", "Work through the steps and improve what you make."],
-                  ["Check your understanding", "Take the quiz to see what to revisit."],
+                  ["Watch a short film", "Get an introduction to the subject."],
+                  ["Read the lesson", "Work through the lesson over several pages."],
+                  ["Do the project, then answer questions", "Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark."],
                 ].map(([title, body], index) => (
                   <li key={title}>
                     <span className={styles.stepNumber} aria-hidden="true">{index + 1}</span>
