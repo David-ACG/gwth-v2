@@ -8,7 +8,9 @@ import {
   SIX_BLOCKS,
   SCORE_STATES,
   CAREER_CARDS,
-  CAREER_SIDE_LESSONS_WRITTEN,
+  HOME_CARDS,
+  WORK_CARDS,
+  OTHERS_CARDS,
 } from "./home-fde"
 import { getTrajectoryLabel } from "@/lib/progress/gwth-score"
 import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
@@ -95,15 +97,22 @@ describe("HomeFde (paper-first, N12)", () => {
   // their OpenAI attribution, moved to /lessons. Home keeps a short preview.
   // 12 Nov 2026: the heading says "Six AI superpowers", the words Film A
   // (approved by David) uses for the same six.
-  it("previews the six AI superpowers and links to the full section", () => {
+  it("shows all six AI superpowers with examples and links to their progression", () => {
     render(<HomeFde />)
     const blocks = sectionText("blocks")
     expect(blocks).toMatch(/^Six AI superpowers/)
     expect(blocks).toMatch(/Automation and agents/)
     expect(
-      screen.getByRole("link", { name: "See how the skills develop" })
+      screen.getByRole("link", { name: "See how each superpower grows over three months" })
     ).toHaveAttribute("href", "/lessons#six-building-blocks")
-    expect(document.querySelectorAll('[data-testid="block-card"]')).toHaveLength(0)
+    expect(document.querySelectorAll('[data-testid="block-card"]')).toHaveLength(6)
+    for (const block of SIX_BLOCKS) {
+      expect(blocks).toContain(block.name)
+      expect(blocks).toContain(block.clause)
+      expect(blocks).toContain(block.example)
+    }
+    expect(blocks).toContain("You design these workflows on paper")
+    expect(document.querySelector('[data-section="blocks"] details')).toBeNull()
   })
 
   it("carries no em dashes, en dashes or section signs (bible emdash-policy)", () => {
@@ -181,7 +190,7 @@ describe("HomeFde is individual-first", () => {
     expect(hero).not.toMatch(/buying for an organisation/i)
   })
 
-  it("keeps the organisation route to a signpost, not a second sales page", () => {
+  it("keeps buying terms concise alongside examples of what recipients learn", () => {
     render(<HomeFde />)
     const signpost = screen.getByTestId("organisations-signpost")
     // A signpost is short by definition: if it grows past a few sentences it
@@ -190,10 +199,11 @@ describe("HomeFde is individual-first", () => {
       .split(/(?<=\.)\s+/)
       .filter(Boolean)
     expect(sentences.length).toBeLessThanOrEqual(5)
-    expect(signpost.querySelectorAll("p")).toHaveLength(1)
+    expect(signpost.querySelectorAll(":scope > p")).toHaveLength(1)
+    expect(within(signpost).getAllByRole("listitem")).toHaveLength(6)
     // And it routes off the page rather than pitching on it. /for-teams is
     // hidden at launch (a real 404, lib/public-routes.ts, 2026-10-20), so its
-    // link went; from 1 December the gift is the way to buy for one person.
+    // link went; from 14 December the gift is the way to buy for one person.
     const links = within(signpost)
       .getAllByRole("link")
       .map((a) => a.getAttribute("href"))
@@ -407,11 +417,11 @@ describe("HomeFde offers no walkthrough", () => {
 describe("HomeFde self-service promises match the product", () => {
   /**
    * Launch readiness, 2026-10-20. gwth.ai changes at the GO LIVE release
-   * (about 28 November) and sales open on 1 December, so the WORDS are true on
+   * (about 28 November) and sales open on 14 December, so the WORDS are true on
    * both sides of that date and only the buttons branch on `selling`
-   * (`isSelling()`): the waitlist before, buy or give from 1 December. The
+   * (`isSelling()`): the waitlist before, buy or give from 14 December. The
    * invite-only, beta tester and next-intake wording is gone, because the
-   * course is on open sale from 1 December.
+   * course is on open sale from 14 December.
    */
   it("never claims an instant purchase, and links the waitlist before sales open", () => {
     const { container } = render(<HomeFde />)
@@ -425,7 +435,7 @@ describe("HomeFde self-service promises match the product", () => {
     )
   })
 
-  it("from 1 December, buys through /pricing and gives through /gift", () => {
+  it("from 14 December, buys through /pricing and gives through /gift", () => {
     const { container } = render(<HomeFde selling />)
     const course = within(
       document.querySelector('[data-section="course"]') as HTMLElement
@@ -448,15 +458,15 @@ describe("HomeFde self-service promises match the product", () => {
     }
   })
 
-  it("states the launch offer in words that are true before and after 1 December", () => {
+  it("states the launch offer in words that are true before and after 14 December", () => {
     render(<HomeFde />)
     const offer = screen.getByTestId("home-offer").textContent ?? ""
     expect(offer).toMatch(
-      /From 1 December 2026 to 6 January 2027, a three-month pass costs £69/
+      /From 14 December 2026 to 6 January 2027, a three-month pass costs £69/
     )
     expect(offer).toMatch(/Or pay £29 a month/)
     const months = screen.getByTestId("home-offer-months").textContent ?? ""
-    expect(months).toMatch(/Month 1 is available from 1 December 2026/)
+    expect(months).toMatch(/Month 1 is available from 14 December 2026/)
     expect(months).toMatch(/Month 2 around 1 January 2027/)
     expect(months).toMatch(/Month 3 around 1 February 2027/)
     // The 75% rule before anyone pays (bead gwth-launch-735c).
@@ -468,9 +478,9 @@ describe("HomeFde self-service promises match the product", () => {
     render(<HomeFde />)
     const course = sectionText("course")
     expect(course).toMatch(/£29 a month/)
-    // The £7.50 plan is optional (facts sheet).
-    // Copy gate, 2026-10-21: the £7.50 buys continued access, so say so.
-    expect(course).toMatch(/continued access to the updated lessons costs £7\.50 a month/)
+    expect(course).toMatch(/After three months, your monthly plan continues at £7\.50 a month for access to the updated lessons unless you cancel/)
+    expect(course).toMatch(/If you paid once for a pass, your access to the course lessons stops/)
+    expect(course).toMatch(/You only pay again if you choose to subscribe/)
     expect(course).toMatch(/cancel at any time/)
   })
 
@@ -800,13 +810,13 @@ describe("HomeFde score section", () => {
    * Launch readiness, 2026-10-20: the section renders only while the score is
    * switched on (`showScore`, from ENABLE_GWTH_SCORE, which is off unless an
    * environment sets it). Both reviewers read it as a preview of a feature a
-   * 1 December buyer does not get. It is kept, not deleted, because David
+   * 14 December buyer does not get. It is kept, not deleted, because David
    * asked for it; these tests render it switched on.
    */
   it("is not on the page while the score is switched off", () => {
     const { container } = render(<HomeFde showScore={false} />)
     expect(container.querySelector('[data-section="score"]')).toBeNull()
-    expect(container.textContent).not.toMatch(/GWTH score|beta/i)
+    expect(container.textContent).not.toMatch(/beta/i)
   })
 
   it("gives the three states David named, once each", () => {
@@ -929,8 +939,8 @@ describe("HomeFde score section", () => {
   it("does not repeat the closing section's promise", () => {
     render(<HomeFde showScore />)
     expect(sectionText("score")).not.toMatch(/work you can show/i)
-    expect(sectionText("individuals")).toMatch(/Sharing your score/)
-    expect(sectionText("individuals")).not.toMatch(/monthly project marks|quiz results/)
+    expect(sectionText("individuals")).toMatch(/Your GWTH score/)
+    expect(sectionText("individuals")).not.toContain(screen.getByTestId("score-lead").textContent)
   })
 })
 
@@ -946,13 +956,28 @@ describe("HomeFde speaks to people changing role or career (bead gwth-launch-c5y
     )
   })
 
-  it("hides the shop and channel card until those optional lessons are written", () => {
+  it("shows the written shop and channel lessons alongside the full career choices", () => {
     render(<HomeFde />)
-    const cards = screen.getAllByTestId("career-card").map((c) => c.textContent ?? "")
-    const promised = CAREER_CARDS.filter((c) => "needsSideLessons" in c).map((c) => c.title)
-    for (const title of promised) {
-      expect(cards.some((t) => t.includes(title))).toBe(CAREER_SIDE_LESSONS_WRITTEN)
+    const cards = screen.getAllByTestId("career-card")
+    expect(cards).toHaveLength(8)
+    expect(cards.map((card) => card.textContent).join(" ")).toMatch(/small online shop/)
+    expect(cards.map((card) => card.textContent).join(" ")).toMatch(/podcast, YouTube or Instagram/)
+    expect(CAREER_CARDS.flatMap((item) => item.lessons)).toEqual(expect.arrayContaining(["M1 L41", "M1 L42"]))
+  })
+
+  it("gives every purpose six to nine curriculum-backed examples", () => {
+    render(<HomeFde />)
+    for (const [purpose, items] of [["home", HOME_CARDS], ["work", WORK_CARDS], ["career", CAREER_CARDS], ["others", OTHERS_CARDS]] as const) {
+      const panel = document.getElementById(`home-purpose-${purpose}`)!
+      expect(within(panel).getAllByRole("listitem")).toHaveLength(items.length)
+      expect(items.length).toBeGreaterThanOrEqual(6)
+      expect(items.length).toBeLessThanOrEqual(9)
+      for (const item of items) {
+        expect(item.lessons.length).toBeGreaterThan(0)
+        for (const code of item.lessons) expect(code).toMatch(/^M[123] L\d{2}$/)
+      }
     }
+    expect(document.getElementById("home-purpose-work")).toHaveTextContent("Optional lessons cover UK healthcare, legal, finance, HR, marketing, sales, creative work, travel and events")
   })
 
   it("tells the Month 1 reader the CV work also serves a change of career", () => {
@@ -970,7 +995,7 @@ describe("HomeFde lesson diagram and purpose picker", () => {
   it("server-renders every purpose and connects the native controls to their content", async () => {
     const html = renderToStaticMarkup(<HomeFde />)
     const document = new DOMParser().parseFromString(html, "text/html")
-    expect(document.querySelectorAll("[data-audience]")).toHaveLength(3)
+    expect(document.querySelectorAll("[data-audience]")).toHaveLength(4)
     for (const radio of document.querySelectorAll('input[name="course-purpose"]')) {
       expect(document.getElementById(radio.getAttribute("aria-controls")!)).toBeTruthy()
     }
@@ -989,26 +1014,60 @@ describe("HomeFde lesson diagram and purpose picker", () => {
 
   it("explains the lesson sequence and offers all purposes with native controls", () => {
     render(<HomeFde />)
-    expect(within(screen.getByRole("list", { name: "How a lesson works" })).getAllByRole("listitem")).toHaveLength(3)
+    const list = screen.getByRole("list", { name: "How a lesson works" })
+    const steps = within(list).getAllByRole("listitem")
+    expect(steps.map((step) => within(step).getByRole("heading").textContent)).toEqual([
+      "Watch a short film", "Read the lesson", "Do the project, then answer questions",
+    ])
+    expect(steps[0]).toHaveTextContent("Get an introduction to the subject.")
+    expect(steps[1]).toHaveTextContent("Work through the lesson over several pages.")
+    expect(steps[2]).toHaveTextContent("Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark.")
+    expect(list).not.toHaveTextContent(/as you go/i)
+    expect(screen.getByText("Every lesson is built around a project. You don't need coding experience.")).toBeInTheDocument()
     const choices = screen.getByRole("group", { name: "Choose what matters to you" })
-    expect(within(choices).getAllByRole("radio")).toHaveLength(4)
-    expect(within(choices).getByRole("radio", { name: "Use AI at work or at home" })).toBeChecked()
-    expect(screen.getByText("Get help with everyday tasks")).toBeInTheDocument()
+    expect(within(choices).getAllByRole("radio")).toHaveLength(5)
+    expect(within(choices).getByRole("radio", { name: "Use AI at home" })).toBeChecked()
+    expect(screen.getByText("Organise meals and shopping")).toBeInTheDocument()
     expect(screen.getByTestId("organisations-signpost").closest('[data-section]')).toHaveAttribute("id", "career")
   })
 
-  it("connects the portfolio months to employer evidence without promising live score sharing", () => {
-    const { container } = render(<HomeFde showScore />)
-    const close = within(container.querySelector('[data-section="individuals"]') as HTMLElement)
-    expect(within(close.getByRole("list", { name: "Your portfolio over three months" })).getAllByRole("listitem")).toHaveLength(3)
-    expect(close.getByTestId("portfolio-record")).toHaveTextContent("Public GWTH score sharing isn't available yet")
-    expect(close.getByTestId("portfolio-record")).toHaveTextContent("The public score page is a demonstration")
-    expect(close.getByRole("list", { name: "Your portfolio over three months" })).not.toHaveTextContent(/AskMyCo|chatbot|consultant|portfolio website/)
+  it.each([false, true])("shows the example and real projects with showScore=%s", (showScore) => {
+    const { container } = render(<HomeFde showScore={showScore} />)
+    const section = container.querySelector('[data-section="individuals"]') as HTMLElement
+    const close = within(section)
+    const record = close.getByTestId("portfolio-record")
+    expect(close.getByRole("figure", { name: "Example GWTH score: 78 out of 100" })).toHaveTextContent("Example score")
+    expect(record).toHaveTextContent("Lessons and questions: half")
+    expect(record).toHaveTextContent("Monthly projects: half")
+    expect(record).toHaveTextContent("how you do on the questions at the end of each lesson")
+    expect(record).toHaveTextContent("three monthly project marks")
+    expect(record).toHaveTextContent("Not yet, Pass, Good or Excellent")
+    expect(record).toHaveTextContent("After 4 weeks without passing a lesson")
+    if (showScore) {
+      expect(record).toHaveTextContent("Half comes")
+      expect(record).toHaveTextContent("Each project is marked")
+      expect(record).toHaveTextContent("Your score rises")
+      expect(record).not.toHaveTextContent(/does not show|will come|will be marked/)
+    } else {
+      expect(record).toHaveTextContent("The course does not show a GWTH score yet")
+      expect(record).toHaveTextContent("Half will come")
+      expect(record).toHaveTextContent("Each project will be marked")
+      expect(record).toHaveTextContent("Your score will rise")
+    }
+    const projects = close.getByRole("list", { name: "Your portfolio over three months" })
+    expect(within(projects).getAllByRole("listitem")).toHaveLength(3)
+    for (const name of ["Portfolio website and Spending Detective", "AskMyCo", "Your own AI consultant"]) {
+      expect(within(projects).getByRole("heading", { name })).toBeInTheDocument()
+    }
+    expect(projects).toHaveTextContent("company's own documents")
+    expect(projects).toHaveTextContent("interviews people by voice and writes the report and slide deck")
+    expect(section).toHaveTextContent("your employer or a future employer")
+    expect(section).toHaveTextContent("in an application or talk it through at interview")
+    expect(section.textContent).not.toMatch(/[—–§]|LinkedIn|public score|certificate|Merit|Distinction|percentile/i)
     expect(close.getAllByRole("link")).toHaveLength(2)
-    cleanup()
-    render(<HomeFde showScore={false} />)
-    expect(screen.getByTestId("portfolio-record")).toHaveTextContent("Your account shows the lessons you've passed and your quiz results")
-    expect(screen.getByTestId("portfolio-record")).not.toHaveTextContent(/score/i)
-    expect(screen.queryByText("Sharing your score")).not.toBeInTheDocument()
+    expect(close.getByRole("link", { name: "See the course" })).toHaveAttribute("href", "/lessons")
+    for (const link of close.getAllByRole("link")) {
+      expect(link.getAttribute("href")).not.toMatch(/^\/lessons?\//)
+    }
   })
 })

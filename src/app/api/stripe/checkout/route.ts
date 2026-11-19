@@ -5,7 +5,7 @@
  * stopped working at W11.
  *
  * - Needs a signed-in account (sign-up is open once private mode is off).
- * - Sells nothing before SALES_OPEN_AT (decision 6: opens 1 December).
+ * - Sells nothing before SALES_OPEN_AT (decision 6: opens 14 December).
  * - No automatic_tax: GWTH is not VAT registered (decision 8).
  */
 import { NextResponse } from "next/server"

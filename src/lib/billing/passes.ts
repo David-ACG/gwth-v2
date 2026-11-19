@@ -43,7 +43,7 @@ export const PASS_PRICES_PENCE = {
   month1: 2900,
 } as const
 
-/** Default sale window (decision 3): sales open 1 Dec (lib/launch-date.ts, the one place), the £69 price ends after 6 Jan (UK). */
+/** Default sale window (decision 3): sales open 14 Dec (lib/launch-date.ts, the one place), the £69 price ends after 6 Jan (UK). */
 export { DEFAULT_SALES_OPEN_AT, formatUkDate, COURSE_OPENS_ON } from "@/lib/launch-date"
 export const DEFAULT_CHRISTMAS_SALE_ENDS_AT = "2027-01-07T00:00:00Z"
 

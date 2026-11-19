@@ -190,7 +190,7 @@ interface LessonsFdeProps {
   /**
    * True once GWTH is on sale (`isSelling()` in `lib/launch.ts`, read by the
    * server page). Only the buttons branch on it: the page copy is written to
-   * be true on both sides of 1 December (launch readiness brief, rule 2).
+   * be true on both sides of 14 December (launch readiness brief, rule 2).
    */
   selling?: boolean
 }
@@ -318,7 +318,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
           </div>
           {/* When each month opens, as it is true from the GO LIVE release
               (facts sheet, launch readiness 2026-10-20). Written so it stays
-              true on both sides of 1 December. */}
+              true on both sides of 14 December. */}
           {/* The 75% rule (bead gwth-launch-735c), written by the latest
               Astra and Sol-checked 12 Nov 2026. */}
           <p className={styles.optionalNote} data-testid="months-availability">
@@ -335,17 +335,12 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
         </div>
       </section>
 
-      <section className={p.section} data-section="blocks" id="six-building-blocks">
+      <section className={`${p.section} ${styles.superpowersSection}`} data-section="blocks" id="six-building-blocks">
         <div className={p.page}>
           <div className={p.sectionHead}>
-            <h2 className={p.sectionTitle}>How your skills develop</h2>
+            <h2 className={p.sectionTitle}>Your six AI superpowers over three months</h2>
           </div>
-          {/* Persona review round 2 (D25, 7 Nov 2026): all ten personas found
-              this page too long. The six-skill grid stays, one click away. */}
           <p className={styles.sectionLead}>See how you use the six AI superpowers in larger projects each month.</p>
-          <details className={p.reveal} data-testid="skills-reveal">
-          <summary>Show the six superpowers</summary>
-          <div className={p.revealBody}>
           <div className={p.cards3}>
             {SIX_BLOCKS.map((block) => (
               <article className={p.card} key={block.n} data-testid="block-card">
@@ -370,8 +365,6 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
             creation, ideation and strategy, coding, data analysis and
             automation. The names above are ours.
           </p>
-          </div>
-          </details>
         </div>
       </section>
 
@@ -531,7 +524,7 @@ export function LessonsFde({ selling = false }: LessonsFdeProps = {}) {
                   asked for on 2026-09-14) went on 2026-10-20: no credential
                   row has ever been written and the score is switched on in no
                   environment, so describing the page was a promise of a
-                  feature that may not exist on 1 December (launch readiness
+                  feature that may not exist on 14 December (launch readiness
                   brief, rule 3; latest Sol writing check). Bring it back the
                   day the record page is live. */}
             </div>

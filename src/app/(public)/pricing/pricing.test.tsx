@@ -38,7 +38,7 @@ describe("PricingPage", () => {
     expect(within(table).getAllByRole("rowheader")).toHaveLength(PAY_ROWS)
     expect(table.textContent).toMatch(/All three cost £87/)
     expect(table.textContent).toMatch(/Your plan continues automatically unless you cancel/)
-    expect(table.textContent).toMatch(/Your lesson access ends unless you choose to continue/)
+    expect(table.textContent).toContain("Your access to the course lessons stops. You only pay again if you choose to subscribe at £7.50 a month.")
     expect(table.textContent).toMatch(/We email you before each payment/)
   })
 

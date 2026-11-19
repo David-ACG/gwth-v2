@@ -14,7 +14,7 @@ describe("SignupForm", () => {
   it("says when sign-up opens, with no beta wording (launch readiness, 2026-10-20)", () => {
     render(<SignupForm />)
 
-    expect(screen.getByText(/opens to everyone on 1 December 2026/i)).toBeInTheDocument()
+    expect(screen.getByText(/opens to everyone on 14 December 2026/i)).toBeInTheDocument()
     expect(document.body.textContent).not.toMatch(/beta|invite-only/i)
   })
 

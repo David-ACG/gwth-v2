@@ -202,12 +202,12 @@ const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
  * ## What the self-service route may promise (launch readiness, 2026-10-20)
  *
  * gwth.ai changes at David's GO LIVE release (about 28 November) and sales
- * open on 1 December 2026, so every visible WORD here is written to be true on
+ * open on 14 December 2026, so every visible WORD here is written to be true on
  * both sides of that date, and only the buttons branch on `selling`
  * (`isSelling()` in `lib/launch.ts`, read by the server page and passed in):
- * buy or give from 1 December, the waitlist before. The beta, invite-only and
+ * buy or give from 14 December, the waitlist before. The beta, invite-only and
  * intake wording went at the same time, because the course is on open sale
- * from 1 December. The prices are the canonical ones from config and from
+ * from 14 December. The prices are the canonical ones from config and from
  * `lib/billing/passes.ts`; the dates come from the sale window.
  *
  * Copy rules: British English, sentence case, no em or en dashes, GBP only.
@@ -305,6 +305,7 @@ export const SIX_BLOCKS = [
     n: "01",
     name: "Research",
     clause: "find facts and check the source",
+    example: "Compare holiday cottages, with a source for every fact you use to choose.",
     months: [
       "You build a one-page comparison to settle a real decision you are facing, and you say where every fact came from.",
       "You check what information an organisation has and where it keeps it.",
@@ -315,6 +316,7 @@ export const SIX_BLOCKS = [
     n: "02",
     name: "Content",
     clause: "create work in your own voice",
+    example: "Write a post in your own voice and create an image you can use with it.",
     months: [
       "You write a short post and a longer piece in your own voice, with one image you are allowed to use commercially.",
       "You describe your brand in a form your AI tools can read, to help you keep your later work consistent.",
@@ -325,6 +327,7 @@ export const SIX_BLOCKS = [
     n: "03",
     name: "Thinking",
     clause: "plan with AI, then decide for yourself",
+    example: "Plan a career move by comparing your options and choosing a next step.",
     months: [
       "You make a one-page plan for a real decision in your life, using a seven-step routine you can use again.",
       "You write a builder's brief: what to make, what good looks like, and how you will check it.",
@@ -335,6 +338,7 @@ export const SIX_BLOCKS = [
     n: "04",
     name: "Building",
     clause: "make useful tools without code",
+    example: "Build a meal planner from sample fridge contents, without writing code.",
     months: [
       "In your first couple of weeks you build one small working tool, without writing any code.",
       "You start building real software: a database with real logins, a chatbot that shows where its answers came from, a dashboard, and tests that check each part works.",
@@ -345,6 +349,7 @@ export const SIX_BLOCKS = [
     n: "05",
     name: "Data",
     clause: "check that the numbers add up",
+    example: "Turn a messy bank export into a clear picture of your spending.",
     months: [
       "You clean up a messy bank export, find the top five spending categories and make two charts from it.",
       "You build a dashboard with three panels, and a way of measuring whether the answers it gives are any good.",
@@ -354,7 +359,8 @@ export const SIX_BLOCKS = [
   {
     n: "06",
     name: "Automation and agents",
-    clause: "hand routine jobs to AI",
+    clause: "plan routine jobs for AI",
+    example: "Design a library return reminder, including what it can access, how to test it and how to stop it.",
     months: [
       "You design your first safe automation on paper: the steps, the permissions, four test cases and how to undo it if it goes wrong.",
       "You design a workflow where AI does the repetitive part and a person still signs it off.",
@@ -448,26 +454,245 @@ const UK_THREAD = [
  * age (bible audience-by-purpose), and like the UK section it carries no
  * statistic: the research figures belong on a page of their own.
  *
- * The third card describes two optional lessons that are not written yet (a
- * small online shop; a podcast, YouTube or Instagram channel). It stays hidden
- * until they exist, so the page never promises a lesson nobody can take.
  */
-export const CAREER_SIDE_LESSONS_WRITTEN = false
+// Lesson references are editorial evidence, never visitor lesson links.
+export const HOME_CARDS = [
+  {
+    "title": "Compare before you buy",
+    "body": "Put your options side by side and check where the facts came from.",
+    "lessons": [
+      "M1 L06"
+    ]
+  },
+  {
+    "title": "Write in your own voice",
+    "body": "Draft a message or a longer piece without losing the way you speak.",
+    "lessons": [
+      "M1 L07"
+    ]
+  },
+  {
+    "title": "Make a plan you can use",
+    "body": "Work through a real decision and turn it into a plan.",
+    "lessons": [
+      "M1 L08"
+    ]
+  },
+  {
+    "title": "Understand your spending",
+    "body": "Clean up a bank export and see where your money goes.",
+    "lessons": [
+      "M1 L10",
+      "M1 L17"
+    ]
+  },
+  {
+    "title": "Turn voice notes into useful text",
+    "body": "Use spoken notes as the starting point for tasks and plans.",
+    "lessons": [
+      "M1 L22",
+      "M1 L28"
+    ]
+  },
+  {
+    "title": "Organise meals and shopping",
+    "body": "Turn household information into tasks, events, a meal plan and a shopping list.",
+    "lessons": [
+      "M1 L23",
+      "M1 L24"
+    ]
+  },
+  {
+    "title": "Spot fakes and protect your information",
+    "body": "Learn what to check before you trust or share something.",
+    "lessons": [
+      "M1 L43"
+    ]
+  },
+  {
+    "title": "Prepare a complaint or refund request",
+    "body": "Use AI to understand your options and check the rules that apply.",
+    "lessons": [
+      "M1 L44"
+    ]
+  }
+] as const
+
+export const WORK_CARDS = [
+  {
+    "title": "Research a decision",
+    "body": "Compare information and check the sources before you recommend an option.",
+    "lessons": [
+      "M1 L06"
+    ]
+  },
+  {
+    "title": "Turn meetings into useful notes",
+    "body": "Extract the information you need from a recording or transcript.",
+    "lessons": [
+      "M1 L22",
+      "M1 L28"
+    ]
+  },
+  {
+    "title": "Explain an idea clearly",
+    "body": "Make a presentation or website to help other people understand it.",
+    "lessons": [
+      "M1 L16"
+    ]
+  },
+  {
+    "title": "Find answers in business documents",
+    "body": "Build a company chatbot that shows where its answers came from.",
+    "lessons": [
+      "M2 L13",
+      "M2 L19"
+    ]
+  },
+  {
+    "title": "Turn numbers into decisions",
+    "body": "Build a dashboard and check whether its answers are useful.",
+    "lessons": [
+      "M2 L14"
+    ]
+  },
+  {
+    "title": "Plan routine work with human checks",
+    "body": "Design the steps for a routine task, with limits on what AI can do and a person who signs off its work.",
+    "lessons": [
+      "M2 L15"
+    ]
+  },
+  {
+    "title": "Decide where AI could help your team",
+    "body": "Gather evidence, set priorities and plan the work.",
+    "lessons": [
+      "M3 L04",
+      "M3 L10"
+    ]
+  },
+  {
+    "title": "Explore examples from your field",
+    "body": "Optional lessons cover UK healthcare, legal, finance, HR, marketing, sales, creative work, travel and events.",
+    "lessons": [
+      "M2 L34",
+      "M2 L35",
+      "M2 L36",
+      "M2 L37",
+      "M2 L38",
+      "M2 L40",
+      "M2 L41",
+      "M2 L42"
+    ]
+  }
+] as const
 
 export const CAREER_CARDS = [
   {
-    title: "Prepare for applications and interviews",
-    body: "Rewrite your CV and your LinkedIn profile for a new role. Learn how AI screening tools read a CV and what your rights are. Practise interviews with AI playing the interviewer.",
+    "title": "Improve your CV and LinkedIn",
+    "body": "Rewrite your CV and your LinkedIn profile for a new role.",
+    "lessons": [
+      "M1 L14"
+    ]
   },
   {
-    title: "Plan to work for yourself",
-    body: "Learn ways to price your work and find where to check the UK rules on self-employment.",
+    "title": "Practise for interviews",
+    "body": "Prepare your answers and rehearse with AI before the conversation.",
+    "lessons": [
+      "M1 L15"
+    ]
   },
   {
-    title: "Test a small shop or online channel",
-    body: "Two optional lessons show you how to test a small online shop, or a podcast, YouTube or Instagram channel, before you spend money on it, with honest figures on what most of them earn.",
-    needsSideLessons: true,
+    "title": "Test a small online shop",
+    "body": "Explore a shop idea before you spend money on it.",
+    "lessons": [
+      "M1 L41"
+    ]
   },
+  {
+    "title": "Test a podcast, YouTube or Instagram idea",
+    "body": "Test an idea for a podcast, YouTube or Instagram channel before spending money.",
+    "lessons": [
+      "M1 L42"
+    ]
+  },
+  {
+    "title": "Make a website for your work",
+    "body": "Show people what you do through a website you create with AI.",
+    "lessons": [
+      "M1 L16"
+    ]
+  },
+  {
+    "title": "Show and sell your skills",
+    "body": "Present your projects and explain the work you can offer.",
+    "lessons": [
+      "M2 L20"
+    ]
+  },
+  {
+    "title": "Help a business use AI",
+    "body": "Learn to assess how a business uses AI and recommend what it should do next.",
+    "lessons": [
+      "M3 L35"
+    ]
+  },
+  {
+    "title": "Build a portfolio across three months",
+    "body": "Collect projects that show how your skills develop.",
+    "lessons": [
+      "M1 L25",
+      "M2 L20",
+      "M3 L20"
+    ]
+  }
+] as const
+
+export const OTHERS_CARDS = [
+  {
+    "title": "Find and check information",
+    "body": "Compare options and trace the facts back to their sources.",
+    "lessons": [
+      "M1 L06"
+    ]
+  },
+  {
+    "title": "Write with more confidence",
+    "body": "Create useful writing in their own voice.",
+    "lessons": [
+      "M1 L07"
+    ]
+  },
+  {
+    "title": "Make decisions with AI",
+    "body": "Work through a real choice and decide for themselves.",
+    "lessons": [
+      "M1 L08"
+    ]
+  },
+  {
+    "title": "Make a useful tool",
+    "body": "Build something small without writing code.",
+    "lessons": [
+      "M1 L09"
+    ]
+  },
+  {
+    "title": "Make sense of numbers",
+    "body": "Clean up messy information and use it to answer a question.",
+    "lessons": [
+      "M1 L10",
+      "M1 L17"
+    ]
+  },
+  {
+    "title": "Plan safer ways to handle routine work",
+    "body": "Design the steps, permissions and human checks before anything runs.",
+    "lessons": [
+      "M1 L11",
+      "M2 L15"
+    ]
+  }
 ] as const
 
 export const PRIMITIVES_URL =
@@ -494,7 +719,7 @@ function launchOffer() {
 export type HomeFdeProps = {
   /**
    * True once GWTH is on sale (`isSelling()`, read by the server page). Only
-   * the buttons change with it: buy or give from 1 December, the waitlist
+   * the buttons change with it: buy or give from 14 December, the waitlist
    * before.
    */
   selling?: boolean
@@ -517,9 +742,6 @@ export function HomeFde({
   // advertising a call to action a visitor cannot reach is worse than one
   // button (W25, `lib/labs-cta.ts`).
   const labsArePublic = canPromoteLabs()
-  const careerCards = CAREER_CARDS.filter(
-    (c) => CAREER_SIDE_LESSONS_WRITTEN || !("needsSideLessons" in c)
-  )
 
   return (
     <div className={p.shell}>
@@ -598,9 +820,9 @@ export function HomeFde({
               </p>
               <ol className={styles.lessonSteps} aria-label="How a lesson works">
                 {[
-                  ["Try the project", "Start with the task and see what you can do."],
-                  ["Follow the lesson", "Work through the steps and improve what you make."],
-                  ["Check your understanding", "Take the quiz to see what to revisit."],
+                  ["Watch a short film", "Get an introduction to the subject."],
+                  ["Read the lesson", "Work through the lesson over several pages."],
+                  ["Do the project, then answer questions", "Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark."],
                 ].map(([title, body], index) => (
                   <li key={title}>
                     <span className={styles.stepNumber} aria-hidden="true">{index + 1}</span>
@@ -632,11 +854,11 @@ export function HomeFde({
                     account settings.
                   </li>
                   <li>
-                    <strong>Afterwards</strong>, continued access to the updated
-                    lessons costs £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month.
-                    Monthly plans
-                    renew automatically unless cancelled; a pass ends unless you
-                    choose to continue.
+                    <strong>After three months</strong>, your monthly plan
+                    continues at £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month for
+                    access to the updated lessons unless you cancel. If you paid
+                    once for a pass, your access to the course lessons stops. You
+                    only pay again if you choose to subscribe.
                   </li>
                 </ul>
               </div>
@@ -762,13 +984,14 @@ export function HomeFde({
       </section>
 
       <section className={p.section} data-section="career" id="career">
-        <div className={p.page}>
+        <div className={`${p.page} ${styles.purposePage}`}>
           <div className={styles.audienceBox}>
             <h2 className={p.sectionTitle}>What would you like to do with AI?</h2>
             <fieldset className={styles.audienceChoices}>
               <legend>Choose what matters to you</legend>
               {[
-                ["personal", "Use AI at work or at home"],
+                ["home", "Use AI at home"],
+                ["work", "Use AI in your job"],
                 ["career", "Change role or work for yourself"],
                 ["others", "Buy for other people"],
                 ["all", "Show all"],
@@ -778,7 +1001,7 @@ export function HomeFde({
                     type="radio"
                     name="course-purpose"
                     value={value}
-                    defaultChecked={value === "personal"}
+                    defaultChecked={value === "home"}
                     aria-controls={value === "all" ? "home-purpose-panels" : `home-purpose-${value}`}
                   />
                   <span>{label}</span>
@@ -786,18 +1009,23 @@ export function HomeFde({
               ))}
             </fieldset>
             <div id="home-purpose-panels">
-              <article className={styles.audiencePanel} data-audience="personal" id="home-purpose-personal">
-                <h3>Get help with everyday tasks</h3>
-                <p>Compare quotes, draft a letter or plan a task with AI. Learn when to use it and how to check its answers.</p>
-              </article>
-              <div className={styles.audiencePanel} data-audience="career" id="home-purpose-career">
-                {careerCards.map((item) => (
-                  <article key={item.title} data-testid="career-card">
-                    <h3>{item.title}</h3>
-                    <p>{item.body}</p>
-                  </article>
-                ))}
-              </div>
+              {[
+                { value: "home", title: "Use AI at home", items: HOME_CARDS },
+                { value: "work", title: "Use AI in your job", items: WORK_CARDS },
+                { value: "career", title: "Change role or work for yourself", items: CAREER_CARDS },
+              ].map(({ value, title, items }) => (
+                <div className={styles.audiencePanel} data-audience={value} id={`home-purpose-${value}`} key={value}>
+                  <h3>{title}</h3>
+                  <ul className={styles.purposeGrid}>
+                    {items.map((item) => (
+                      <li key={item.title} data-testid={value === "career" ? "career-card" : undefined}>
+                        <h4>{item.title}</h4>
+                        <p>{item.body}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
               <div className={styles.audiencePanel} data-audience="others" id="home-purpose-others" data-testid="organisations-signpost">
                 <h3>Give someone else a place to learn</h3>
                 {/* The teams sentence and its /for-teams link went on
@@ -807,10 +1035,19 @@ export function HomeFde({
                 <p className={styles.signpostBody}>
                   Give the course as a gift, or buy team places at the same price
                   per person. Professional bodies and large companies can choose
-                  lessons and a pass mark for their own edition. Tutors and
+                  optional lessons and set a quiz pass mark for their own edition. Tutors and
                   training leads can see who passes; learners keep a record of
                   lessons passed.
                 </p>
+                <h4 className={styles.recipientHeading}>What they can learn</h4>
+                <ul className={styles.purposeGrid}>
+                  {OTHERS_CARDS.map((item) => (
+                    <li key={item.title}>
+                      <h5>{item.title}</h5>
+                      <p>{item.body}</p>
+                    </li>
+                  ))}
+                </ul>
                 <div className={p.actions}>
                   {selling && (
                     <Link href="/gift" className={p.buttonOutline}>
@@ -828,14 +1065,26 @@ export function HomeFde({
       </section>
 
       <section className={p.section} data-section="blocks">
-        <div className={p.page}>
+        <div className={`${p.page} ${styles.purposePage}`}>
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>Six AI superpowers</h2>
           </div>
-          <p className={styles.blocksLead}>The course is built around six AI superpowers: Research, Content, Thinking, Building, Data, and Automation and agents. In the Month 1 dashboard lesson, for example, you turn a spreadsheet into one chart, two checked numbers and a decision.</p>
+          <p className={styles.blocksLead}>Practise these six AI superpowers through projects you can explain and check.</p>
+          <div className={styles.superpowerGrid}>
+            {SIX_BLOCKS.map((block) => (
+              <article className={styles.superpowerCard} key={block.n} data-testid="block-card">
+                <h3 className={p.cardTitle}>{block.name}</h3>
+                <p className={styles.superpowerClause}>{block.clause}</p>
+                <p>{block.example}</p>
+                {block.name === "Automation and agents" && (
+                  <p className={styles.designNote}>You design these workflows on paper.</p>
+                )}
+              </article>
+            ))}
+          </div>
           <div className={p.actions}>
             <Link href="/lessons#six-building-blocks" className={p.buttonOutline}>
-              See how the skills develop
+              See how each superpower grows over three months
             </Link>
           </div>
         </div>
@@ -927,28 +1176,43 @@ export function HomeFde({
             <h2 className={p.sectionTitle}>
               You finish with <em>work</em> you can show.
             </h2>
-            <p className={p.standfirst}>
-              {/* Recovered: David's own refined home wording, "every lesson and
-                  project" and the portfolio line (18a3e09^, a51de31). */}
-              Everything you make in a lesson is yours, and it stays yours when
-              the course ends. Build up your portfolio over the three months so
-              someone else can understand how you work.
-            </p>
-            <ol className={styles.portfolioTrack} aria-label="Your portfolio over three months">
-              <li><span>Month 1</span><h3>Save your work</h3><p>Keep your finished projects and notes together.</p></li>
-              <li><span>Month 2</span><h3>Explain your decisions</h3><p>Describe the task, your approach and the checks you made.</p></li>
-              <li><span>Month 3</span><h3>Review the results</h3><p>Add what worked and what you would improve.</p></li>
-            </ol>
             <div className={styles.portfolioSummary}>
-              <div>
-                <h3>Show an employer how you work</h3>
-                <p>Link to your portfolio in an application, or talk through a project at interview. Get permission before sharing anyone else&apos;s information.</p>
-              </div>
-              <div data-testid="portfolio-record">
-                <h3>{showScore ? "Sharing your score" : "Your record of learning"}</h3>
+              <div className={styles.scoreCard} data-testid="portfolio-record">
+                <h3>Your GWTH score</h3>
+                <figure aria-label="Example GWTH score: 78 out of 100">
+                  <figcaption className={styles.scoreName}>Example score</figcaption>
+                  <p className={styles.scoreFigure}>
+                    <span className={styles.scoreValue}>78</span>
+                    <span className={styles.scoreOf}>out of 100</span>
+                  </p>
+                </figure>
                 <p>{showScore
-                  ? "Public GWTH score sharing isn't available yet. The public score page is a demonstration, with no link to your results."
-                  : "Your account shows the lessons you've passed and your quiz results."}</p>
+                  ? "Your GWTH score shows how you are doing."
+                  : "The course does not show a GWTH score yet."}</p>
+                <ol className={styles.portfolioTrack} aria-label="What makes up your GWTH score">
+                  <li>
+                    <h4>Lessons and questions: half</h4>
+                    <p>{showScore ? "Half comes" : "Half will come"} from the lessons you finish and how you do on the questions at the end of each lesson.</p>
+                  </li>
+                  <li>
+                    <h4>Monthly projects: half</h4>
+                    <p>{showScore ? "Half comes" : "Half will come"} from your three monthly project marks.</p>
+                    <p>Each project {showScore ? "is" : "will be"} marked Not yet, Pass, Good or Excellent.</p>
+                  </li>
+                </ol>
+                <p>{showScore
+                  ? "Your score rises as you pass lessons. After 4 weeks without passing a lesson, it falls a little each week until you pass another."
+                  : "Your score will rise as you pass lessons. After 4 weeks without passing a lesson, it will fall a little each week until you pass another."}</p>
+              </div>
+              <div>
+                <h3>Your portfolio for an employer</h3>
+                <p>Show your work to your employer or a future employer.</p>
+                <ol className={styles.portfolioTrack} aria-label="Your portfolio over three months">
+                  <li><span>Month 1</span><h4>Portfolio website and Spending Detective</h4><p>Build your website and explore your spending.</p></li>
+                  <li><span>Month 2</span><h4>AskMyCo</h4><p>A support chatbot that answers from a company&apos;s own documents.</p></li>
+                  <li><span>Month 3</span><h4>Your own AI consultant</h4><p>It interviews people by voice and writes the report and slide deck.</p></li>
+                </ol>
+                <p>Link to your portfolio in an application or talk it through at interview. Get permission before sharing anyone else&apos;s information.</p>
               </div>
             </div>
             <div className={p.actions}>

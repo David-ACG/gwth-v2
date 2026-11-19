@@ -17,6 +17,16 @@ function text(): string {
  * Musk and Oprah Winfrey that read as an endorsement.
  */
 describe("LessonsFde launch readiness", () => {
+  it("opens the anchored six superpowers progression without a disclosure", () => {
+    const { container } = render(<LessonsFde />)
+    const section = container.querySelector("#six-building-blocks")!
+    expect(section.querySelector("h2")).toHaveTextContent("Your six AI superpowers over three months")
+    expect(section.querySelector("details")).toBeNull()
+    expect(section.querySelectorAll('[data-testid="block-card"]')).toHaveLength(6)
+    expect(section.querySelectorAll('[data-testid="block-step"]')).toHaveLength(18)
+    expect(section).toHaveTextContent("You design your first safe automation on paper")
+  })
+
   it("sends both main buttons to the waitlist before sales open", () => {
     render(<LessonsFde selling={false} />)
     for (const id of ["lessons-primary-cta", "lessons-closing-cta"]) {
@@ -52,7 +62,7 @@ describe("LessonsFde launch readiness", () => {
   it("says when each month opens, with no beta wording", () => {
     render(<LessonsFde />)
     const note = screen.getByTestId("months-availability").textContent ?? ""
-    expect(note).toMatch(/Month 1 is available from 1 December 2026/)
+    expect(note).toMatch(/Month 1 is available from 14 December 2026/)
     expect(note).toMatch(/Month 2 around 1 January 2027/)
     expect(note).toMatch(/Month 3 around 1 February 2027/)
     // The 75% rule (bead gwth-launch-735c).

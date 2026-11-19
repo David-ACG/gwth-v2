@@ -1,5 +1,5 @@
 /**
- * Which public pages are hidden or unlisted at launch (1 December 2026).
+ * Which public pages are hidden or unlisted at launch (14 December 2026).
  *
  * David, 2026-10-20, on the launch readiness check of every public page
  * (Claude and the latest Sol each judged Ready, Fix or Hide): *"Use your
@@ -36,9 +36,29 @@ function under(pathname: string, route: string): boolean {
   return pathname === route || pathname.startsWith(`${route}/`)
 }
 
+/**
+ * Draft pages: a new version of a public page that David is reviewing beside
+ * the page it might replace (18 Nov 2026: "Don't overwrite the old home page.
+ * Just take a copy of it and then start making changes. That I can review and
+ * either keep or discard."). A draft answers a real 404 everywhere, gwth.ai
+ * included, unless the server is started with SHOW_DRAFT_PAGES=1, which only
+ * the review replica sets. Keeping a draft means moving it onto the real
+ * route; discarding it means deleting it. Either way it leaves this list.
+ */
+export const DRAFT_PUBLIC_PATHS = ["/home-new"] as const
+
+/** True on a server started to show drafts (the review replica). */
+export function draftPagesShown(): boolean {
+  return process.env.SHOW_DRAFT_PAGES === "1"
+}
+
 /** True for a hidden route and everything below it (/news/some-story). */
 export function isHiddenPublicPath(pathname: string): boolean {
-  return HIDDEN_PUBLIC_PATHS.some((route) => under(pathname, route))
+  if (HIDDEN_PUBLIC_PATHS.some((route) => under(pathname, route))) return true
+  return (
+    !draftPagesShown() &&
+    DRAFT_PUBLIC_PATHS.some((route) => under(pathname, route))
+  )
 }
 
 /** True when a menu should leave this link out (hidden or unlisted). */

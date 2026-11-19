@@ -507,7 +507,7 @@ const STAT_SOURCES = Array.from(
 export type ForTeamsFdeProps = {
   /**
    * True once GWTH is on sale (isSelling(), read per request in page.tsx).
-   * Only the buttons branch on it: buy from 1 December, the waitlist before.
+   * Only the buttons branch on it: buy from 14 December, the waitlist before.
    * The words are written to be true on both sides.
    */
   selling?: boolean
@@ -758,7 +758,7 @@ export function ForTeamsFde({
               </article>
             ))}
           </div>
-          {/* When each month opens, true on both sides of 1 December (facts
+          {/* When each month opens, true on both sides of 14 December (facts
               sheet, launch readiness 2026-10-20). Dates from
               LATER_MONTHS_OPEN, so this page agrees with / and /pricing. */}
           {/* The 75% rule (bead gwth-launch-735c), written by the latest

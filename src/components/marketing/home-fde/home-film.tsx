@@ -50,7 +50,7 @@ export type HomeFilmCopy = {
 export const FILM_COPY: HomeFilmCopy = {
   play: "Play the film",
   heading: "Try the free lesson",
-  body: "You'll read the lesson, watch a film, try a project and take a quiz. Enter your email address and we'll send you the link.",
+  body: "You'll watch a short film, read the lesson, do the project, then answer the end-of-lesson questions. Enter your email address and we'll send you the link.",
   link: "Start here",
 }
 

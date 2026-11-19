@@ -14,7 +14,7 @@ describe("TermsPage", () => {
   it("renders the last updated date", () => {
     render(<TermsPage />)
     expect(
-      screen.getByText(/1 December 2026/)
+      screen.getByText(/14 December 2026/)
     ).toBeInTheDocument()
   })
 
@@ -110,7 +110,7 @@ describe("TermsPage", () => {
     expect(text).not.toMatch(/23 June beta/)
   })
 
-  it("has no beta or invite-only wording from 1 December (launch readiness, 2026-10-20)", () => {
+  it("has no beta or invite-only wording from 14 December (launch readiness, 2026-10-20)", () => {
     const { container } = render(<TermsPage />)
     const text = container.textContent ?? ""
     expect(text).not.toMatch(/beta/i)

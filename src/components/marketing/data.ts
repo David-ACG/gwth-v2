@@ -364,7 +364,7 @@ export const CURRICULUM: readonly CurriculumModule[] = [
 
 /**
  * When Months 2 and 3 open for students (launch readiness facts sheet,
- * 2026-10-20). Month 1 is complete on 1 December 2026. These are the
+ * 2026-10-20). Month 1 is complete on 14 December 2026. These are the
  * expected dates, so every page says "around" before them, and a student who
  * reaches a month before it opens has their time paused (the clock is held,
  * `lib/billing/passes.ts`). One place, so /, /pricing and /why-gwth agree.

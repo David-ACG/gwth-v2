@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  * large organisation commissioning an edition of its own.
  *
  * `isSelling()` is read here, per request (the (public) layout is
- * force-dynamic), and passed down, so only the buttons change on 1 December.
+ * force-dynamic), and passed down, so only the buttons change on 14 December.
  */
 export default function ForTeamsPage() {
   return <ForTeamsFde selling={isSelling()} showScore={ENABLE_GWTH_SCORE} />

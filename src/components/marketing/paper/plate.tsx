@@ -25,6 +25,7 @@ export function Plate({
   priority = false,
   width = 1376,
   height = 768,
+  ext = "png",
 }: {
   name: string
   alt: string
@@ -32,11 +33,14 @@ export function Plate({
   priority?: boolean
   width?: number
   height?: number
+  /** File type of both renders. The 18 Nov 2026 home draft plates are JPEG
+      (22 pictures; as PNG they were 63 MB in the repository). */
+  ext?: "png" | "jpg"
 }) {
   return (
     <>
       <Image
-        src={`/home/paper/${name}.png`}
+        src={`/home/paper/${name}.${ext}`}
         alt={alt}
         width={width}
         height={height}
@@ -45,7 +49,7 @@ export function Plate({
         className={styles.plateLight}
       />
       <Image
-        src={`/home/paper/${name}-dark.png`}
+        src={`/home/paper/${name}-dark.${ext}`}
         alt={alt}
         width={width}
         height={height}

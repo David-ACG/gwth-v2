@@ -11,7 +11,7 @@ import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 /**
  * Sign-up opens to everyone once sales open (decision 6, 2026-10-19: the
- * £29-a-month sign-up and the gift sale both open on 1 December). Until then
+ * £29-a-month sign-up and the gift sale both open on 14 December). Until then
  * it stays the invite-only beta form.
  */
 function isPublicSignup(now = new Date()): boolean {

@@ -73,7 +73,7 @@ const RULES_ANCHOR = "month-opening-rules"
  * and "five hours of new material" claims nothing supports; the comparison
  * stacked one plan at a time on a phone; no tinted card tops or table header;
  * and nothing links to /for-teams, which is hidden at launch. The £69 offer
- * is now on the page before 1 December too, in words that are true on both
+ * is now on the page before 14 December too, in words that are true on both
  * sides of that date; only its buttons wait for sales to open.
  *
  * ONE RECORDED DISCREPANCY. `SHOW_TOTAL_COURSE_COST` in that file is `false`
@@ -248,19 +248,19 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
   const ongoing = ONGOING_MONTHLY_PRICE.toFixed(2)
 
   // Christmas gift sale (beads gwth-launch-v1uj.5 and .9). The band offering
-  // to pay once for all three months (£69 from 1 December to 6 January, then
+  // to pay once for all three months (£69 from 14 December to 6 January, then
   // £87) or to give the course as a gift is on the page from the GO LIVE
   // release (launch readiness, 2026-10-20). Before sales open its button is
-  // the waitlist; from 1 December the Member button takes the monthly payment
+  // the waitlist; from 14 December the Member button takes the monthly payment
   // and the band sells the pass. The checkout routes enforce the same dates.
   const window = getSaleWindow()
   const selling = ENABLE_BILLING && isSalesOpen(now, window)
   // The £69 words are shown from the GO LIVE release, before sales open, and
-  // stay until the sale window closes; only the buttons wait for 1 December.
+  // stay until the sale window closes; only the buttons wait for 14 December.
   const christmas = isChristmasSale(now, window) || !isSalesOpen(now, window)
   const salesOpenOn = formatUkDate(window.announcedOpenAt)
   // Before sales open the band already names the £69 sale price it will sell
-  // at; passPrice() alone would give the full price until 1 December.
+  // at; passPrice() alone would give the full price until 14 December.
   const coursePass = formatPence(
     christmas
       ? PASS_PRICES_PENCE.courseSale
@@ -296,7 +296,7 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
     {
       row: "At the end of month three",
       monthly: "Your plan continues automatically unless you cancel.",
-      pass: "Your lesson access ends unless you choose to continue.",
+      pass: `Your access to the course lessons stops. You only pay again if you choose to subscribe at £${ongoing} a month.`,
     },
     {
       row: "How to cancel",

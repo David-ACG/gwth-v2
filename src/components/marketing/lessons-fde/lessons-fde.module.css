@@ -598,3 +598,7 @@
   line-height: 1.6;
   color: var(--v-soft);
 }
+
+.superpowersSection {
+  scroll-margin-top: 7rem;
+}

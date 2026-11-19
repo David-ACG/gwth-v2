@@ -36,7 +36,7 @@ async function post(body: unknown) {
 
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ["Date"] })
-  vi.setSystemTime(new Date("2026-12-10T12:00:00Z"))
+  vi.setSystemTime(new Date("2026-12-16T12:00:00Z"))
   vi.stubEnv("BILLING_ENABLED", "true")
   vi.stubEnv("SALES_OPEN_AT", "")
   vi.stubEnv("CHRISTMAS_SALE_ENDS_AT", "")
@@ -60,7 +60,7 @@ describe("POST /api/passes/checkout", () => {
     expect((await post(GIFT)).status).toBe(503)
   })
 
-  it("sells nothing before 1 December", async () => {
+  it("sells nothing before 14 December", async () => {
     vi.setSystemTime(new Date("2026-11-30T23:59:00Z"))
     const res = await post(GIFT)
     expect(res.status).toBe(409)
@@ -83,7 +83,7 @@ describe("POST /api/passes/checkout", () => {
       recipientEmail: "sam@example.com",
       message: "Happy Christmas",
     })
-    expect(new Date(args.metadata.deliverAt).toISOString()).toBe("2026-12-10T12:00:00.000Z")
+    expect(new Date(args.metadata.deliverAt).toISOString()).toBe("2026-12-16T12:00:00.000Z")
     expect(args.success_url).toBe("https://hlab.example.net:9458/gift/thanks?session_id={CHECKOUT_SESSION_ID}")
     // A sale-price session cannot outlive the sale by more than Stripe's minimum.
     expect(args.expires_at * 1000).toBeLessThanOrEqual(new Date("2027-01-07T00:00:00Z").getTime())

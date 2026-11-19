@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { CourseJsonLd } from "@/components/marketing/json-ld/course-jsonld"
-import { HomeFde } from "@/components/marketing/home-fde/home-fde"
-import { ENABLE_GWTH_SCORE } from "@/lib/config"
+import { HomeNext } from "@/components/marketing/home-next/home-next"
 import { isSelling } from "@/lib/launch"
 
 export const metadata: Metadata = {
@@ -22,9 +21,12 @@ export const metadata: Metadata = {
 }
 
 /**
- * Marketing home page in the paper-first register (N12, 2026-09-03), built
- * to the N9 artboard David approved (annex 15). Source module:
- * `marketing/home-fde/`. Shared recipes: `marketing/paper/`.
+ * Marketing home page in the paper-first register. Since 19 Nov 2026 it is the
+ * new version first drafted at /home-new (David: "I like
+ * https://hlab.taila51191.ts.net:9509/home-new more. please replace the main
+ * homepage with" it). Source module: `marketing/home-next/`, which reuses the
+ * film and data from `marketing/home-fde/` (the previous page, kept so it can
+ * come back). Shared recipes: `marketing/paper/`.
  *
  * The 90-second explainer embed David placed after the hero on 2026-07-04
  * (W12) is not on the approved artboard and is not rendered here; the
@@ -33,11 +35,21 @@ export const metadata: Metadata = {
  */
 export default function HomePage() {
   // Read at request time: the (public) layout is force-dynamic, so the
-  // buttons switch from the waitlist to buying on 1 December by themselves.
+  // buttons switch from the waitlist to buying on 14 December by themselves.
+  //
+  // The score section is always shown (David, 19 Nov 2026: "show the public
+  // pages with what we will have in December, so that CIPD and the people
+  // testing it ... can see exactly what will be available when we go live").
+  // It describes the course at launch, and so does project marking, in the
+  // present tense (David, same day: "Please override the style Bible, as we
+  // want to show exactly what will be available when we launch. We don't want
+  // to show what is available now because we're not ready now."). The
+  // product's own score screens stay behind GWTH_SCORE_ENABLED, and hand-ins
+  // behind CAPSTONE_HAND_IN_ENABLED, until they work.
   return (
     <>
       <CourseJsonLd />
-      <HomeFde selling={isSelling()} showScore={ENABLE_GWTH_SCORE} />
+      <HomeNext selling={isSelling()} showScore markingLive />
     </>
   )
 }

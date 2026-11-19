@@ -184,8 +184,8 @@ describe("first-month pass", () => {
 describe("sale window and prices", () => {
   const window = getSaleWindow({})
 
-  it("defaults to 1 December 2026 to the end of 6 January 2027", () => {
-    expect(window.salesOpenAt).toEqual(d("2026-12-01T00:00:00Z"))
+  it("defaults to 14 December 2026 to the end of 6 January 2027", () => {
+    expect(window.salesOpenAt).toEqual(d("2026-12-14T00:00:00Z"))
     expect(window.saleEndsAt).toEqual(d("2027-01-07T00:00:00Z"))
   })
 
@@ -198,30 +198,30 @@ describe("sale window and prices", () => {
   it("prints the decided date even when the hlab preview opens early", () => {
     const w = getSaleWindow({ SALES_PREVIEW_OPEN_AT: "2026-10-01T00:00:00Z", STRIPE_REQUIRE_TEST_MODE: "1" })
     expect(w.salesOpenAt).toEqual(d("2026-10-01T00:00:00Z"))
-    expect(w.announcedOpenAt).toEqual(d("2026-12-01T00:00:00Z"))
+    expect(w.announcedOpenAt).toEqual(d("2026-12-14T00:00:00Z"))
     expect(isSalesOpen(d("2026-10-25T12:00:00Z"), w)).toBe(true)
   })
 
   it("ignores the preview's early opening outside Stripe test mode", () => {
     const w = getSaleWindow({ SALES_PREVIEW_OPEN_AT: "2026-10-01T00:00:00Z" })
-    expect(w.salesOpenAt).toEqual(d("2026-12-01T00:00:00Z"))
+    expect(w.salesOpenAt).toEqual(d("2026-12-14T00:00:00Z"))
     expect(isSalesOpen(d("2026-10-25T12:00:00Z"), w)).toBe(false)
   })
 
-  it("sells nothing before 1 December", () => {
-    expect(isSalesOpen(d("2026-11-30T23:59:59Z"), window)).toBe(false)
-    expect(isSalesOpen(d("2026-12-01T00:00:00Z"), window)).toBe(true)
+  it("sells nothing before 14 December", () => {
+    expect(isSalesOpen(d("2026-12-13T23:59:59Z"), window)).toBe(false)
+    expect(isSalesOpen(d("2026-12-14T00:00:00Z"), window)).toBe(true)
   })
 
   it("prices the whole course at £69 in the sale and £87 from 7 January", () => {
-    expect(passPrice("course", d("2026-12-01T00:00:00Z"), window)).toMatchObject({ pence: 6900, onSale: true, priceEnv: "STRIPE_PASS_COURSE_SALE_PRICE_ID" })
+    expect(passPrice("course", d("2026-12-14T00:00:00Z"), window)).toMatchObject({ pence: 6900, onSale: true, priceEnv: "STRIPE_PASS_COURSE_SALE_PRICE_ID" })
     expect(passPrice("course", d("2027-01-06T23:59:59Z"), window).pence).toBe(6900)
     expect(passPrice("course", d("2027-01-07T00:00:00Z"), window)).toMatchObject({ pence: 8700, onSale: false, priceEnv: "STRIPE_PASS_COURSE_PRICE_ID" })
     expect(isChristmasSale(d("2027-01-07T00:00:00Z"), window)).toBe(false)
   })
 
   it("keeps the first month at £29 all year", () => {
-    for (const at of ["2026-12-10T00:00:00Z", "2027-06-01T00:00:00Z"]) {
+    for (const at of ["2026-12-16T00:00:00Z", "2027-06-01T00:00:00Z"]) {
       expect(passPrice("month1", d(at), window)).toMatchObject({ pence: 2900, onSale: false })
     }
   })
@@ -259,17 +259,17 @@ describe("delivery and open-by dates", () => {
   })
 
   it("defaults Christmas morning to 7am UK on 25 December", () => {
-    expect(christmasMorning(d("2026-12-03T10:00:00Z"))).toEqual(d("2026-12-25T07:00:00Z"))
+    expect(christmasMorning(d("2026-12-16T10:00:00Z"))).toEqual(d("2026-12-25T07:00:00Z"))
   })
 
-  const redeemBy = redeemByFrom(d("2026-12-03T10:00:00Z"))
+  const redeemBy = redeemByFrom(d("2026-12-16T10:00:00Z"))
 
   it("can be opened up to one year after purchase", () => {
-    expect(redeemBy).toEqual(d("2027-12-03T10:00:00Z"))
+    expect(redeemBy).toEqual(d("2027-12-16T10:00:00Z"))
   })
 
   it("sends on Christmas morning, now, or 7am UK on a chosen date", () => {
-    const now = d("2026-12-03T10:00:00Z")
+    const now = d("2026-12-16T10:00:00Z")
     expect(resolveDeliverAt({ kind: "christmas" }, now, redeemBy)).toEqual(d("2026-12-25T07:00:00Z"))
     expect(resolveDeliverAt({ kind: "now" }, now, redeemBy)).toEqual(now)
     expect(resolveDeliverAt({ kind: "date", date: "2026-12-20" }, now, redeemBy)).toEqual(d("2026-12-20T07:00:00Z"))
@@ -284,7 +284,7 @@ describe("delivery and open-by dates", () => {
   })
 
   it("sends at once when the chosen date has passed, and refuses a date after the open-by date", () => {
-    const now = d("2026-12-03T10:00:00Z")
+    const now = d("2026-12-16T10:00:00Z")
     expect(resolveDeliverAt({ kind: "date", date: "2026-12-01" }, now, redeemBy)).toEqual(now)
     expect(resolveDeliverAt({ kind: "date", date: "2028-01-01" }, now, redeemBy)).toBeNull()
     expect(resolveDeliverAt({ kind: "date", date: "25/12/2026" }, now, redeemBy)).toBeNull()
