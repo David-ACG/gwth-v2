@@ -456,13 +456,10 @@ export function HomeNext({
             })}
           </div>
           <p className={p.attribution}>
-            The six superpowers follow the{" "}
+            OpenAI found{" "}
             <a href={PRIMITIVES_URL} rel="noopener noreferrer" target="_blank">
-              six common ways of using AI at work
-            </a>{" "}
-            that OpenAI found across its customers: research, content
-            creation, ideation and strategy, coding, data analysis and
-            automation. The names above are ours.
+              six common ways its customers use AI at work
+            </a>.
           </p>
         </div>
       </section>
