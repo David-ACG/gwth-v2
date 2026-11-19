@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 /**
- * "The course": the full month-by-month syllabus, in the paper-first register
+ * "The course": the shape of the course, month by month, in the paper-first register
  * (rebuilt 19 Nov 2026; source module `marketing/lessons-next/`). The previous
  * page is kept beside it at `marketing/lessons-fde/` so it can come back.
  *

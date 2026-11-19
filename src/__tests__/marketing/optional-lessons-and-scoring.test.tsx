@@ -100,10 +100,18 @@ describe("no page invents an optional-lesson count", () => {
       // /for-organisations' learners dashboard example says what one made-up
       // edition requires ("the 63 core lessons and 3 optional ones"). That is
       // an example edition's rule, not a count of the course's optional set.
-      const body = text().replace(
-        /the edition requires the \d+ core lessons and \d+ optional ones/i,
-        ""
-      )
+      // /lessons prints the optional total once, in its facts row, read from
+      // config (David, 19 Nov 2026, "One total, once"). That row is checked in
+      // lessons-next.test.tsx; every other optional count stays banned.
+      const facts = page.name === "/lessons"
+        ? (screen.getByTestId("course-facts").textContent ?? "").replace(/\s+/g, " ")
+        : ""
+      const body = text()
+        .replace(facts, "")
+        .replace(
+          /the edition requires the \d+ core lessons and \d+ optional ones/i,
+          ""
+        )
       expect(body).not.toMatch(/\b\d+\s+optional\b/i)
       expect(body).not.toMatch(/\b(30|33|34|44|50|54|96)\s+optional lessons\b/i)
     })
@@ -128,7 +136,12 @@ describe("no page presents HR as a lesson that exists", () => {
     const body = text()
     const hits = body.match(/\bHR\b|human resources/gi) ?? []
     expect(hits).toHaveLength(1)
-    expect(body).toMatch(/AI for UK HR and people teams/)
+    // 19 Nov 2026: /lessons no longer lists lesson titles ("Shape, not the
+    // list"), so HR appears as the example project from that optional lesson,
+    // marked as one.
+    expect(body).toMatch(
+      /An HR assistant that drafts job adverts and new-starter checklists for you to check for fairness Optional lesson/
+    )
     expect(body).not.toMatch(/would not find an HR lesson|commission (an HR lesson|one)/i)
   })
 

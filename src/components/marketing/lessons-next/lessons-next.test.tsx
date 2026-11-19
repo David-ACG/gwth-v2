@@ -2,9 +2,12 @@ import { readFileSync, existsSync } from "node:fs"
 import { join } from "node:path"
 import { render, screen, cleanup, within } from "@testing-library/react"
 import { describe, it, expect, afterEach } from "vitest"
-import { LessonsNext } from "./lessons-next"
-import { SYLLABUS, coreLessons, syllabusMonth } from "./syllabus"
-import { MONTH_CONFIGS, TOTAL_MANDATORY_LESSONS } from "@/lib/config"
+import { EXAMPLE_PROJECTS, LessonsNext } from "./lessons-next"
+import {
+  MONTH_CONFIGS,
+  TOTAL_MANDATORY_LESSONS,
+  TOTAL_OPTIONAL_LESSONS,
+} from "@/lib/config"
 import { MONTH_STEPS } from "@/components/marketing/home-next/home-next"
 import { HAND_IN_QUESTIONS, MAX_HAND_INS } from "@/lib/capstones/guides"
 import { BAND_LABELS } from "@/lib/capstones/rules"
@@ -50,7 +53,7 @@ describe("the page, in order", () => {
     const { container } = renderLaunch()
     expect(container.querySelectorAll("h1")).toHaveLength(1)
     expect(container.querySelector("h1")).toHaveTextContent(
-      "The whole course, lesson by lesson."
+      "The whole course, month by month."
     )
     const order = Array.from(
       container.querySelectorAll("section[data-section]")
@@ -124,16 +127,6 @@ describe("no link opens a lesson (David, 1 Nov 2026)", () => {
     }
   })
 
-  it("makes exactly one lesson row a link, and it is the free lesson", () => {
-    const { container } = renderLaunch()
-    const linked = Array.from(
-      container.querySelectorAll('[data-testid="lesson-row"] a')
-    )
-    expect(linked).toHaveLength(1)
-    expect(linked[0]).toHaveAttribute("href", "/start-here")
-    expect(linked[0]!.closest("li")).toHaveTextContent("Start here")
-  })
-
   it("does not link to pages closed at launch", () => {
     const { container } = renderLaunch()
     for (const hidden of ["/for-teams", "/news", "/tech-radar", "/score"]) {
@@ -142,99 +135,158 @@ describe("no link opens a lesson (David, 1 Nov 2026)", () => {
   })
 })
 
-describe("the syllabus", () => {
-  it("prints only counts read from config", () => {
-    const { container } = renderLaunch()
-    const body = text(container)
-    expect(body).toContain(`${TOTAL_MANDATORY_LESSONS} core lessons`)
-    const headings = screen.getAllByTestId("core-heading")
-    MONTH_CONFIGS.forEach((month, index) => {
-      expect(headings[index]).toHaveTextContent(
-        `The ${month.mandatoryLessons} core lessons`
-      )
-    })
+/**
+ * David, 19 Nov 2026: the page gave away enough to rebuild the course from
+ * its syllabus. He chose "Shape, not the list": no lesson titles reach the
+ * page, each month shows three example projects, and the optional lessons are
+ * one total, once ("One total, once").
+ */
+describe("the shape of the course, not the list", () => {
+  // A sample of real lesson titles from the syllabus database (the list this
+  // page printed until 19 Nov 2026, in git history as syllabus.ts).
+  const LESSON_TITLES = [
+    "Frontier labs tooling",
+    "Supabase foundations",
+    "FamilyBot listens",
+    "AskMyCo part 1",
+    "Your AI garage",
+    "Start here",
+  ]
+
+  it("prints no lesson title anywhere in the HTML, in any state", () => {
+    const states = [
+      {},
+      { selling: true },
+      { showScore: false, markingLive: false, labsOpen: false },
+    ]
+    for (const state of states) {
+      cleanup()
+      const { container } = renderLaunch(state)
+      const html = container.innerHTML.toLowerCase()
+      for (const title of LESSON_TITLES) {
+        expect(html, `lesson title "${title}" is on the page`).not.toContain(
+          title.toLowerCase()
+        )
+      }
+    }
   })
 
-  it("lists exactly as many core lessons as it says, in every month", () => {
+  it("has no lesson list, optional list, lesson marks or hand-in lists", () => {
+    for (const markingLive of [true, false]) {
+      cleanup()
+      const { container } = renderLaunch({ markingLive })
+      const html = container.innerHTML
+      expect(html).not.toMatch(/hand in for marking/i)
+      expect(html).not.toMatch(/Show the optional lessons/i)
+      expect(html).not.toMatch(/This page lists every lesson/i)
+      expect(html).not.toMatch(/Some lesson titles/i)
+      expect(container.querySelector('[data-section="months"] details')).toBeNull()
+      for (const id of [
+        "lesson-row",
+        "core-lessons",
+        "core-heading",
+        "optional-lessons",
+        "syllabus-terms-note",
+      ]) {
+        expect(container.querySelector(`[data-testid="${id}"]`)).toBeNull()
+      }
+      // The per-lesson marks on the month cards.
+      expect(container.querySelector("[data-kind]")).toBeNull()
+      expect(container.querySelectorAll(".option i, label i")).toHaveLength(0)
+    }
+  })
+
+  it("shows exactly three example projects in every month", () => {
     renderLaunch()
     const panels = screen.getAllByTestId("month-panel")
     expect(panels).toHaveLength(3)
     MONTH_CONFIGS.forEach((month, index) => {
-      const list = within(panels[index]!).getByTestId("core-lessons")
-      expect(within(list).getAllByTestId("lesson-row")).toHaveLength(
-        month.mandatoryLessons
-      )
+      const panel = panels[index]!
+      expect(panel).toHaveTextContent("What you'll make")
+      const items = within(panel).getAllByTestId("example-project")
+      expect(items).toHaveLength(3)
+      const examples = EXAMPLE_PROJECTS[month.month]!
+      expect(examples).toHaveLength(3)
+      items.forEach((item, i) => {
+        expect(item).toHaveTextContent(examples[i]!.text)
+      })
     })
   })
 
-  it("follows config when the count is raised to the whole syllabus", () => {
-    for (const month of SYLLABUS) {
-      const added = month.core.filter((lesson) => lesson.sinceCount).length
-      const counted = MONTH_CONFIGS.find((m) => m.month === month.month)!
-        .mandatoryLessons
-      // Config is either the 20 October count or the whole list. Anything
-      // else means the syllabus database moved: re-read it into syllabus.ts.
-      expect([month.core.length, month.core.length - added]).toContain(counted)
-      expect(coreLessons(month.month, month.core.length)).toHaveLength(
-        month.core.length
-      )
-      expect(coreLessons(month.month, month.core.length - added)).toHaveLength(
-        month.core.length - added
+  it("marks the example that comes from an optional lesson, and only that one", () => {
+    renderLaunch()
+    const marked = screen
+      .getAllByTestId("example-project")
+      .filter((li) => /Optional lesson/.test(li.textContent ?? ""))
+    expect(marked).toHaveLength(1)
+    expect(marked[0]).toHaveTextContent(
+      "An HR assistant that drafts job adverts and new-starter checklists for you to check for fairness"
+    )
+  })
+
+  it("shows both totals from config in the facts row, and the optional one once", () => {
+    const { container } = renderLaunch()
+    const facts = screen.getByTestId("course-facts")
+    const terms = Array.from(facts.querySelectorAll("dt")).map(
+      (dt) => dt.textContent
+    )
+    expect(terms).toContain(String(TOTAL_MANDATORY_LESSONS))
+    expect(terms).toContain(String(TOTAL_OPTIONAL_LESSONS))
+    const optional = screen.getByTestId("course-facts-optional")
+    expect(optional.querySelector("dt")).toHaveTextContent(
+      String(TOTAL_OPTIONAL_LESSONS)
+    )
+    expect(optional.querySelector("dd")).toHaveTextContent(
+      "optional lessons for going deeper into your own field"
+    )
+    // The totals are the sums of the months in config.
+    expect(TOTAL_MANDATORY_LESSONS).toBe(
+      MONTH_CONFIGS.reduce((sum, m) => sum + m.mandatoryLessons, 0)
+    )
+    expect(TOTAL_OPTIONAL_LESSONS).toBe(
+      MONTH_CONFIGS.reduce((sum, m) => sum + m.optionalLessons, 0)
+    )
+    // One optional total, once: no per-month optional count anywhere.
+    const body = text(container)
+    for (const month of MONTH_CONFIGS) {
+      expect(body).not.toMatch(
+        new RegExp(`\\b${month.optionalLessons}\\s*optional`, "i")
       )
     }
+    const outsideFacts = body.replace(text(facts), "")
+    expect(outsideFacts).not.toMatch(/\b\d+\s*optional\b/i)
   })
 
-  it("never lists a lesson twice", () => {
-    const ids = SYLLABUS.flatMap((month) => [
-      ...month.core,
-      ...month.optional.flatMap((group) => group.lessons),
-    ]).map((lesson) => lesson.id)
-    expect(new Set(ids).size).toBe(ids.length)
-  })
-
-  it("prints no optional total (David, a-20260914-201426-ae7f0e)", () => {
+  it("keeps each month card's count, read from config", () => {
     const { container } = renderLaunch()
-    expect(text(container)).not.toMatch(/\b\d+\s+optional\b/i)
-  })
-
-  it("lists every optional lesson behind one click, grouped", () => {
-    renderLaunch()
-    const panels = screen.getAllByTestId("month-panel")
-    SYLLABUS.forEach((month, index) => {
-      const details = panels[index]!.querySelector("details")!
-      expect(details.querySelector("summary")).toHaveTextContent(
-        `Show the optional lessons in Month ${month.month}`
-      )
-      const rows = within(details).getAllByTestId("lesson-row")
-      expect(rows).toHaveLength(
-        syllabusMonth(month.month).optional.reduce(
-          (sum, group) => sum + group.lessons.length,
-          0
-        )
+    const cards = container.querySelectorAll("label")
+    expect(cards).toHaveLength(3)
+    MONTH_CONFIGS.forEach((month, index) => {
+      expect(cards[index]).toHaveTextContent(`Month ${month.month}`)
+      expect(cards[index]).toHaveTextContent(
+        `${month.mandatoryLessons} core lessons`
       )
     })
-    // The fields the home page already names.
-    expect(panels[1]).toHaveTextContent("AI for UK HR and people teams")
-    expect(panels[1]).toHaveTextContent("AI for UK legal")
+    expect(text(container)).toContain(`${TOTAL_MANDATORY_LESSONS} core lessons`)
   })
 
-  it("names each month as the home page does", () => {
+  it("names each month and its purpose as the home page does", () => {
     renderLaunch()
     const panels = screen.getAllByTestId("month-panel")
     MONTH_STEPS.forEach((step, index) => {
       expect(panels[index]).toHaveTextContent(
         `Month ${index + 1}: ${step.title}`
       )
-      for (const item of step.makes) {
-        expect(panels[index]).toHaveTextContent(item)
-      }
+      expect(panels[index]).toHaveTextContent(step.body)
     })
   })
 
-  it("shows each month's project and what is handed in", () => {
+  it("shows each month's major project in one line, worded by config", () => {
     renderLaunch()
     const projects = screen.getAllByTestId("month-project")
+    expect(projects).toHaveLength(3)
     MONTH_CONFIGS.forEach((month, index) => {
+      expect(projects[index]!.tagName).toBe("P")
       expect(projects[index]).toHaveTextContent(month.capstoneName)
       expect(projects[index]).toHaveTextContent(month.capstoneDescription)
       expect(projects[index]).toHaveTextContent(
@@ -242,9 +294,7 @@ describe("the syllabus", () => {
           ? "An optional project"
           : "The month's main project"
       )
-      expect(projects[index]).toHaveTextContent("What you hand in for marking")
     })
-    expect(projects[1]).toHaveTextContent("The two-company test")
   })
 
   it("keeps the month-opening rule, word for word", () => {
@@ -333,7 +383,7 @@ describe("marking, the score and the portfolio", () => {
       "your best mark will count"
     )
     expect(text()).toMatch(/How your projects will be marked/)
-    expect(text()).toMatch(/What you will hand in for marking/)
+    expect(text()).not.toMatch(/hand in for marking/i)
   })
 
   it("names the four levels and the four questions from the product", () => {
@@ -499,7 +549,8 @@ describe("the words rules", () => {
 
   it("types no launch date or count in the source", () => {
     expect(SOURCE).not.toMatch(/14 December|1 January 2027|1 February 2027/)
-    expect(SOURCE).not.toMatch(/\b(63|68) core\b/)
+    expect(SOURCE).not.toMatch(/\b(63|67|68) core\b/)
+    expect(SOURCE).not.toMatch(/\b(45|47) optional\b/)
   })
 })
 

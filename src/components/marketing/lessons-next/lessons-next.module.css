@@ -164,8 +164,7 @@
 
 .note a:focus-visible,
 .opensBody a:focus-visible,
-.currentList a:focus-visible,
-.chipLink:focus-visible {
+.currentList a:focus-visible {
   outline: 2px solid var(--v-accent);
   outline-offset: 2px;
 }
@@ -237,7 +236,8 @@
 
 .optionName {
   font-family: var(--font-serif);
-  font-size: clamp(0.88rem, 2.4vw, 1.3rem);
+  /* Small enough on a phone that "organisation" fits a third of the row. */
+  font-size: clamp(0.8rem, 2.4vw, 1.3rem);
   overflow-wrap: anywhere;
   font-weight: 600;
   line-height: 1.2;
@@ -249,34 +249,6 @@
   font-size: var(--fde-mono-sm);
   line-height: 1.4;
   color: var(--v-soft);
-}
-
-/* One mark for each core lesson in the month; the project lessons are solid.
-   A picture of the count beside it, hidden from assistive technology. */
-.dots {
-  display: none;
-}
-
-@media (min-width: 40rem) {
-  .dots {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: 0.7rem;
-  }
-
-  .dots i {
-    width: 9px;
-    height: 9px;
-    border: 1px solid var(--v-line);
-    border-radius: 2px;
-    transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .dots i[data-kind="project"] {
-    background: var(--v-line);
-  }
 }
 
 .option input:hover + .optionFace {
@@ -296,16 +268,6 @@
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
-}
-
-.option input:checked + .optionFace .dots i {
-  border-color: var(--v-accent);
-  background: var(--v-accent);
-}
-
-.option input:checked + .optionFace .dots i[data-kind="project"] {
-  border-color: var(--v-ink);
-  background: var(--v-ink);
 }
 
 .option input:focus-visible + .optionFace {
@@ -393,11 +355,21 @@
   min-width: 0;
 }
 
+/* "What you'll make": three example projects under a small ruled label. */
+.makesTitle {
+  margin-top: 1.4rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--v-accent);
+}
+
 .makes {
   list-style: none;
-  margin: 1rem 0 0;
-  padding: 0.9rem 0 0;
-  border-top: 1px solid var(--v-line-soft);
+  margin: 0.9rem 0 0;
+  padding: 0;
 }
 
 .makes li {
@@ -425,172 +397,55 @@
   transform: rotate(40deg);
 }
 
-.block {
-  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
-}
-
-.blockTitle {
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--v-line);
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--v-ink);
-}
-
-/* The lessons, in syllabus order: down the first column, then the second. */
-.lessonList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-@media (min-width: 48rem) {
-  .lessonList {
-    columns: 2;
-    column-gap: clamp(2rem, 4vw, 3.5rem);
-  }
-}
-
-.lesson {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.1rem 0.75rem;
-  align-items: start;
-  padding: 0.7rem 0 0.75rem;
-  border-bottom: 1px solid var(--v-line-soft);
-  break-inside: avoid;
-}
-
-.lessonTitle {
-  grid-column: 1;
-  grid-row: 1;
-  font-size: var(--fde-body-sm);
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--v-ink);
-}
-
-.lessonGloss {
-  grid-column: 1 / -1;
-  grid-row: 2;
-  font-size: var(--fde-body-sm);
-  line-height: 1.5;
-  color: var(--v-soft);
-}
-
-/* Functional tags: what kind of lesson this is. 6px chips, never pills. */
-.chip,
-.chipLink {
-  grid-column: 2;
-  grid-row: 1;
-  padding: 0.1rem 0.5rem;
+/* A quiet functional tag after an example: the project comes from an
+   optional lesson. A 6px chip after the text, never a pill above a heading. */
+.tag {
+  display: inline-block;
+  margin-left: 0.15rem;
+  padding: 0 0.45rem;
   border: 1px solid var(--v-line);
   border-radius: var(--radius-sm);
   font-size: var(--fde-mono-xs);
   font-weight: 500;
   line-height: 1.5;
-  color: var(--v-ink);
+  color: var(--v-soft);
   white-space: nowrap;
+  vertical-align: 0.08em;
 }
 
-.chipLink {
-  background: var(--v-btn);
-  border-color: var(--v-btn);
-  color: var(--v-btn-text);
-  text-decoration: none;
-  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.chipLink:hover {
-  border-color: var(--v-accent);
-}
-
-.optionalReveal {
-  margin-top: 0;
-  border-top: 0;
-  border-bottom: 0;
-}
-
-.optionalGroup + .optionalGroup {
-  margin-top: 1.5rem;
-}
-
-.groupTitle {
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid var(--v-line-soft);
-  font-size: var(--fde-body-sm);
-  font-weight: 600;
-  color: var(--v-accent);
-}
-
-/* The month's project: a ruled block inside the panel, not a card in a card. */
+/* The month's major project, in one line: a ruled row inside the panel, not
+   a card in a card. */
 .project {
-  display: grid;
-  gap: 1.25rem clamp(1.5rem, 4vw, 3.5rem);
-  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
-  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  padding-top: clamp(1.1rem, 2.2vw, 1.4rem);
   border-top: 1px solid var(--v-line);
 }
 
-@media (min-width: 48rem) {
-  .project {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
+.projectLine {
+  max-width: 62rem;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
 }
 
 .projectKicker {
+  display: block;
+  margin-bottom: 0.2rem;
   font-size: var(--fde-body-sm);
   font-weight: 600;
   color: var(--v-accent);
 }
 
 .projectName {
-  margin-top: 0.2rem;
   font-family: var(--font-serif);
-  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-size: 1.2rem;
   font-weight: 600;
-  line-height: 1.2;
   letter-spacing: -0.01em;
   color: var(--v-ink);
 }
 
 .projectBody {
-  margin-top: 0.5rem;
-  font-size: var(--fde-body);
-  line-height: 1.65;
   color: var(--v-soft);
-}
-
-.handIn {
-  list-style: none;
-  margin: 0.7rem 0 0;
-  padding: 0;
-}
-
-.handIn li {
-  position: relative;
-  padding-left: 1.5rem;
-  font-size: var(--fde-body-sm);
-  line-height: 1.55;
-  color: var(--v-soft);
-}
-
-.handIn li + li {
-  margin-top: 0.4rem;
-}
-
-/* A small sheet of paper. */
-.handIn li::before {
-  content: "";
-  position: absolute;
-  left: 0.1rem;
-  top: 0.32rem;
-  width: 0.62rem;
-  height: 0.8rem;
-  border: 1.5px solid var(--v-accent);
-  border-radius: 2px;
 }
 
 .opens {

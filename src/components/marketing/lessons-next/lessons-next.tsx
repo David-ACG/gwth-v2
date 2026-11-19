@@ -6,40 +6,33 @@ import {
   MONTH_CONFIGS,
   ONGOING_MONTHLY_PRICE,
   TOTAL_MANDATORY_LESSONS,
+  TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
 import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
 import { MONTH_STEPS } from "@/components/marketing/home-next/home-next"
-import {
-  builtInGuide,
-  capstoneForMonth,
-  HAND_IN_QUESTIONS,
-} from "@/lib/capstones/guides"
+import { HAND_IN_QUESTIONS } from "@/lib/capstones/guides"
 import { BAND_LABELS, type Band } from "@/lib/capstones/rules"
 import { canPromoteLabs } from "@/lib/labs-cta"
 import { COURSE_OPENS_ON } from "@/lib/launch-date"
 import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 import p from "@/components/marketing/paper/paper.module.css"
-import {
-  coreLessons,
-  syllabusMonth,
-  type SyllabusLesson,
-} from "./syllabus"
 import styles from "./lessons-next.module.css"
 
 /**
  * "The course" (`/lessons`), rebuilt on 19 Nov 2026 as the month-by-month
  * detail the home page only summarises. David: *"The course, we've mostly
  * covered this on the home page, and it needs a complete revamp if we're going
- * to keep it."* Decided with him: it stays in the menu and becomes the full
- * syllabus, for someone who liked the home page and wants to see exactly what
- * they will learn and make. CIPD reads it to judge the course's substance.
+ * to keep it."* Decided with him: it stays in the menu and shows the shape of
+ * the course, for someone who liked the home page and wants to see what they
+ * will learn and make. CIPD reads it to judge the course's substance. Later
+ * the same day it stopped listing lessons (see "No lesson titles" below).
  *
  * ## The page, in order
  *
  * 1. `hero`: what the page is, with the course in four figures.
- * 2. `months`: the syllabus. Choose a month to see what it is for, every core
- *    lesson, its optional lessons and the project you hand in. Radio buttons
- *    drawn as cards, as on the home page, so it works with no script.
+ * 2. `months`: the shape of the course. Choose a month to see what it is for,
+ *    three example projects you make in it and its major project. Radio
+ *    buttons drawn as cards, as on the home page, so it works with no script.
  * 3. `lesson`: how one lesson works, in the real order (film, reading,
  *    project, end-of-lesson questions).
  * 4. `marking`: how the monthly projects are marked, the four levels, the
@@ -51,13 +44,21 @@ import styles from "./lessons-next.module.css"
  *
  * ## Where the facts come from
  *
- * - Lesson titles: `./syllabus.ts`, read from the syllabus database. Counts:
- *   `MONTH_CONFIGS`, never typed.
- * - Month names and what you make: `MONTH_STEPS` on the home page, so the two
- *   pages cannot disagree.
+ * - No lesson titles, on purpose. David, 19 Nov 2026: *"we give an awful lot
+ *   away as to what's in the course, and I'm worried that people will be able
+ *   to reverse engineer the whole course from the syllabus"*. He chose "Shape,
+ *   not the list": each month shows three example projects instead of its
+ *   lessons (`EXAMPLE_PROJECTS` below), and the optional lessons appear as one
+ *   total, once ("One total, once"). The lesson list that was here
+ *   (`syllabus.ts`) was deleted; it is in git history. Do not bring titles,
+ *   per-lesson marks or per-month hand-in lists back onto this page.
+ * - Counts: `MONTH_CONFIGS` (`TOTAL_MANDATORY_LESSONS`,
+ *   `TOTAL_OPTIONAL_LESSONS`, `mandatoryLessons`), never typed.
+ * - Month names and what each month is for: `MONTH_STEPS` on the home page,
+ *   so the two pages cannot disagree.
  * - The monthly projects: `capstoneName` and `capstoneDescription` in
- *   `MONTH_CONFIGS`; what is handed in and the four hand-in questions come
- *   from the marking guides in `lib/capstones/guides.ts`; the level names from
+ *   `MONTH_CONFIGS`; the four hand-in questions come from the marking guides
+ *   in `lib/capstones/guides.ts`; the level names from
  *   `lib/capstones/rules.ts`.
  * - Marking, the score and the portfolio: the sentences on the home page
  *   (`home-next`), reordered. The score rules are in the `SCORE_STATES`
@@ -132,6 +133,66 @@ const PATHS = [
   },
 ] as const
 
+type ExampleProject = {
+  /** What you make, in one sentence-case line. */
+  text: string
+  /** The project comes from an optional lesson, so the page says so. */
+  optional?: true
+}
+
+/**
+ * Three example projects a month, shown instead of the lesson list (David,
+ * 19 Nov 2026: *"we should just put the examples of projects that you do in
+ * each month, say 3 examples from each month. This may be more of a hook than
+ * having the lesson list"*). Each line comes from a real lesson's project
+ * file in `~/gwth-dashboard/generated_lessons/<folder>/content/`, named in the
+ * comment beside it. Keep the meaning; never add a lesson title.
+ */
+export const EXAMPLE_PROJECTS: Record<number, readonly ExampleProject[]> = {
+  1: [
+    // m1_l09_building_superpower_make_your_first_useful_thing_without_coding
+    // (project.candidate.md)
+    {
+      text: "An assistant for a weekly chore, like a meal planner that starts from what's in your fridge",
+    },
+    // m1_l15_job_search_and_interview_confidence_with_ai
+    {
+      text: "A mock job interview, with AI playing the panel and coaching your answers",
+    },
+    // m1_l14_cv_and_linkedin_upgrade_tell_your_story_better_with_ai
+    {
+      text: "Your CV and LinkedIn profile, checked honestly against a real UK job advert",
+    },
+  ],
+  2: [
+    // m2_l17_advanced_content_superpower_brand_proposals_decks_and_sites
+    {
+      text: "A brand guide for a small business, then a proposal, presentation or website made with it",
+    },
+    // m2_l16_geo_and_agent_shopping_the_new_seo_for_uk_businesses
+    {
+      text: "A check of whether AI assistants can find and understand a local business online",
+    },
+    // m2_l40_ai_for_uk_hr_and_people_teams (an optional lesson)
+    {
+      text: "An HR assistant that drafts job adverts and new-starter checklists for you to check for fairness",
+      optional: true,
+    },
+  ],
+  3: [
+    // m3_l13_your_company_s_ai_workspace_what_a_rollout_really_takes
+    {
+      text: "A recommendation on which AI tools an organisation should use and what they would cost",
+    },
+    // m3_l19_ai_champion_playbook_board_briefing_and_90_day_plan
+    { text: "A board briefing and a 90-day AI plan for a UK firm" },
+    // m3_l11_enterprise_economics_roi_cost_and_the_ai_p_l
+    {
+      text: "A one-page business case estimating an AI project's costs and potential savings",
+    },
+  ],
+}
+
 /** One picture in both editions, swapped by theme like the home page's plates. */
 function Picture({
   name,
@@ -169,26 +230,6 @@ function Picture({
   )
 }
 
-/** One lesson in a list: its name, what it covers and, where it helps, a tag. */
-function LessonRow({ lesson }: { lesson: SyllabusLesson }) {
-  return (
-    <li className={styles.lesson} data-testid="lesson-row">
-      <span className={styles.lessonTitle}>{lesson.title}</span>{" "}
-      {lesson.gloss && (
-        <span className={styles.lessonGloss}>{lesson.gloss}</span>
-      )}{" "}
-      {lesson.kind === "project" && (
-        <span className={styles.chip}>Project</span>
-      )}
-      {lesson.kind === "free" && (
-        <Link href="/start-here" className={styles.chipLink}>
-          Try this lesson free
-        </Link>
-      )}
-    </li>
-  )
-}
-
 export type LessonsNextProps = {
   /** True once GWTH is on sale (`isSelling()`). Only the buttons change. */
   selling?: boolean
@@ -218,19 +259,11 @@ export function LessonsNext({
     ? { href: "/pricing", label: "Join the course" }
     : { href: "/waitlist", label: "Join the waitlist" }
 
-  const months = MONTH_CONFIGS.map((config, index) => {
-    const step = MONTH_STEPS[index]!
-    const capstoneId = capstoneForMonth(config.month)
-    return {
-      config,
-      step,
-      core: coreLessons(config.month, config.mandatoryLessons),
-      optional: syllabusMonth(config.month).optional,
-      handIn: capstoneId
-        ? builtInGuide(capstoneId).expectedFiles.filter((file) => file.required)
-        : [],
-    }
-  })
+  const months = MONTH_CONFIGS.map((config, index) => ({
+    config,
+    step: MONTH_STEPS[index]!,
+    examples: EXAMPLE_PROJECTS[config.month] ?? [],
+  }))
 
   return (
     <div className={p.shell}>
@@ -242,15 +275,15 @@ export function LessonsNext({
               <h1 className={styles.heroTitle}>
                 <span>The whole course, </span>
                 <span>
-                  <em>lesson by lesson</em>.
+                  <em>month by month</em>.
                 </span>
               </h1>
               <p className={`${p.standfirst} ${styles.heroStandfirst}`}>
                 The course has {TOTAL_MANDATORY_LESSONS} core lessons in three
                 monthly parts, with optional lessons for going deeper and a
                 major project each month. You learn to use AI through practical
-                tasks from your own work. This page lists every lesson and
-                explains how your projects are marked.
+                tasks from your own work. This page shows what you make in
+                each month and explains how your projects are marked.
               </p>
               <div className={p.actions}>
                 <Link
@@ -281,26 +314,27 @@ export function LessonsNext({
             </div>
             <div>
               <dt>{TOTAL_MANDATORY_LESSONS}</dt>
-              <dd>core lessons, plus optional lessons</dd>
+              <dd>core lessons, the same for everyone</dd>
             </div>
-            <div>
-              <dt>About 1 hour</dt>
-              <dd>for each lesson</dd>
+            <div data-testid="course-facts-optional">
+              <dt>{TOTAL_OPTIONAL_LESSONS}</dt>
+              <dd>optional lessons for going deeper into your own field</dd>
             </div>
             <div>
               <dt>About 5 hours</dt>
-              <dd>of work a week, around the day job</dd>
+              <dd>of work a week around the day job, about an hour a lesson</dd>
             </div>
           </dl>
         </div>
       </section>
 
-      {/* 2. The syllabus, a month at a time. */}
+      {/* 2. The shape of the course, a month at a time: what each month is
+          for and what you make in it. No lesson titles (see the top). */}
       <section className={p.section} data-section="months" id="months">
         <div className={p.page}>
           <div className={p.sectionHead}>
             <h2 className={p.sectionTitle}>
-              Three months, <em>every lesson</em>
+              Three months, <em>example projects</em>
             </h2>
           </div>
           <p className={styles.lead}>
@@ -309,7 +343,7 @@ export function LessonsNext({
           <div className={styles.chooser} data-chooser="month">
             <fieldset className={styles.options}>
               <legend className={styles.srOnly}>Choose a month</legend>
-              {months.map(({ config, step, core }, index) => (
+              {months.map(({ config, step }, index) => (
                 <label className={styles.option} key={config.month}>
                   <input
                     type="radio"
@@ -326,17 +360,12 @@ export function LessonsNext({
                     <span className={styles.optionCount}>
                       {config.mandatoryLessons} core lessons
                     </span>
-                    <span className={styles.dots} aria-hidden="true">
-                      {core.map((lesson) => (
-                        <i key={lesson.id} data-kind={lesson.kind} />
-                      ))}
-                    </span>
                   </span>
                 </label>
               ))}
             </fieldset>
 
-            {months.map(({ config, step, core, optional, handIn }) => (
+            {months.map(({ config, step, examples }) => (
               <article
                 className={styles.panel}
                 data-panel={`m${config.month}`}
@@ -357,86 +386,41 @@ export function LessonsNext({
                       Month {config.month}: {step.title}
                     </h3>
                     <p className={styles.panelLead}>{step.body}</p>
-                    <ul className={styles.makes}>
-                      {step.makes.map((item) => (
-                        <li key={item}>{item}</li>
+                    <h4 className={styles.makesTitle}>What you&apos;ll make</h4>
+                    <ul className={styles.makes} data-testid="example-projects">
+                      {examples.map((item) => (
+                        <li key={item.text} data-testid="example-project">
+                          {item.text}
+                          {item.optional && (
+                            <>
+                              {" "}
+                              <span className={styles.tag}>Optional lesson</span>
+                            </>
+                          )}
+                        </li>
                       ))}
                     </ul>
                   </div>
                 </div>
 
-                <div className={styles.block}>
-                  <h4 className={styles.blockTitle} data-testid="core-heading">
-                    The {config.mandatoryLessons} core lessons
-                  </h4>
-                  <ul className={styles.lessonList} data-testid="core-lessons">
-                    {core.map((lesson) => (
-                      <LessonRow key={lesson.id} lesson={lesson} />
-                    ))}
-                  </ul>
-                  <details className={`${p.reveal} ${styles.optionalReveal}`}>
-                    <summary>
-                      Show the optional lessons in Month {config.month}
-                    </summary>
-                    <div className={p.revealBody}>
-                      {optional.map((group) => (
-                        <div
-                          className={styles.optionalGroup}
-                          key={group.title}
-                        >
-                          <h5 className={styles.groupTitle}>{group.title}</h5>
-                          <ul
-                            className={styles.lessonList}
-                            data-testid="optional-lessons"
-                          >
-                            {group.lessons.map((lesson) => (
-                              <LessonRow key={lesson.id} lesson={lesson} />
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </details>
-                </div>
-
-                <div className={styles.project} data-testid="month-project">
-                  <div>
-                    <p className={styles.projectKicker}>
+                <div className={styles.project}>
+                  <p className={styles.projectLine} data-testid="month-project">
+                    <span className={styles.projectKicker}>
                       {config.capstoneOptional
                         ? "An optional project"
                         : "The month's main project"}
-                    </p>
-                    <h4 className={styles.projectName}>
-                      {config.capstoneName}
-                    </h4>
-                    <p className={styles.projectBody}>
+                    </span>{" "}
+                    <span className={styles.projectName}>
+                      {config.capstoneName}.
+                    </span>{" "}
+                    <span className={styles.projectBody}>
                       {config.capstoneDescription}
-                    </p>
-                  </div>
-                  {handIn.length > 0 && (
-                    <div>
-                      <h5 className={styles.groupTitle}>
-                        {markingLive
-                          ? "What you hand in for marking"
-                          : "What you will hand in for marking"}
-                      </h5>
-                      <ul className={styles.handIn}>
-                        {handIn.map((file) => (
-                          <li key={file.id}>{file.label}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                    </span>
+                  </p>
                 </div>
               </article>
             ))}
           </div>
-
-          <p className={styles.note} data-testid="syllabus-terms-note">
-            Some lesson titles name tools and technical terms. You don&apos;t
-            need to know them before you start: the course is written first
-            for people who aren&apos;t technical.
-          </p>
 
           {/* The month-opening rule (bead gwth-launch-735c): legal wording,
               the previous page's sentences word for word. */}

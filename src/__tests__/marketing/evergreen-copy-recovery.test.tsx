@@ -312,7 +312,6 @@ describe("recovered ideas did not displace what was already decided", () => {
 const MARKETING_SOURCES = [
   "home-next/home-next.tsx",
   "lessons-next/lessons-next.tsx",
-  "lessons-next/syllabus.ts",
   "pricing-next/pricing-next.tsx",
   "why-gwth-next/why-gwth-next.tsx",
   "for-organisations-next/for-organisations-next.tsx",
