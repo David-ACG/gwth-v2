@@ -297,6 +297,45 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
     expect(srcs.some((s) => s.includes("next/show-your-work.jpg"))).toBe(true)
   })
 
+  it.each([true, false])("gives project marking its own title and clear feedback (showScore=%s)", (showScore) => {
+    const { container } = render(<HomeNext showScore={showScore} />)
+    const marking = screen.getByTestId("proof-marking")
+    const proof = container.querySelector('[data-section="proof"]')!
+    expect(proof.contains(marking)).toBe(true)
+    expect(within(marking).getByRole("heading", { level: 3 })).toHaveTextContent(
+      showScore
+        ? "Your monthly projects are marked, with feedback on your work"
+        : "Your monthly projects will be marked, with feedback on your work"
+    )
+    expect(marking).toHaveTextContent("marked by AI against GWTH's published marking guides")
+    expect(marking).toHaveTextContent("Not yet, Pass, Good and Excellent")
+    expect(marking).toHaveTextContent("at the end of each month")
+    expect(marking).toHaveTextContent("All three projects")
+    expect(marking).toHaveTextContent("your own work")
+    expect(marking).toHaveTextContent("what you've done well")
+    expect(marking).toHaveTextContent("how to reach the next level")
+    expect(marking).toHaveTextContent(/Two AI markers .*independently/)
+    expect(marking).toHaveTextContent(/A person at GWTH .*any mark in doubt/)
+    expect(marking).toHaveTextContent("provisional mark")
+    expect(marking).toHaveTextContent("within 7 days")
+    expect(marking).toHaveTextContent("exactly what to fix")
+    expect(marking).toHaveTextContent("up to three times")
+    expect(marking.textContent).not.toMatch(/tutor|teacher|assessor|examiner|grade|Merit|Distinction|[—–§]/i)
+    expect(marking.querySelector("a, button")).toBeNull()
+    expect(marking.previousElementSibling).toContainElement(screen.getByTestId("proof-portfolio"))
+    if (showScore) {
+      expect(marking).toHaveTextContent("All three projects are marked")
+      expect(marking.nextElementSibling).toHaveAttribute("data-section", "score")
+    } else {
+      expect(marking).toHaveTextContent("All three projects will be marked")
+      expect(marking).toHaveTextContent("Your feedback will quote")
+      expect(marking).toHaveTextContent("Two AI markers will mark")
+      expect(marking).toHaveTextContent("A person at GWTH will check")
+      expect(marking).toHaveTextContent("your best mark will count")
+      expect(proof.textContent).not.toMatch(/already marked|(?:are|is|have been|has been) marked|you get|you see|mark counts/i)
+    }
+  })
+
   it("shows the three directions a score can take (a-20260915-211845)", () => {
     render(<HomeNext showScore />)
     const cards = screen.getByTestId("score-cards")

@@ -630,6 +630,40 @@ export function HomeNext({
               </dl>
             </div>
 
+            <div className={styles.scoreBlock} data-testid="proof-marking">
+              <h3 className={styles.panelTitle}>
+                {showScore
+                  ? "Your monthly projects are marked, with feedback on your work"
+                  : "Your monthly projects will be marked, with feedback on your work"}
+              </h3>
+              <div className={styles.scoreCopy}>
+                <div>
+                  <p>
+                    {showScore
+                      ? "You build and hand in a major project at the end of each month. All three projects are marked by AI against GWTH's published marking guides."
+                      : "You'll build and hand in a major project at the end of each month. All three projects will be marked by AI against GWTH's published marking guides."}
+                  </p>
+                  <p>
+                    {showScore
+                      ? "Your feedback quotes your own work to show what you've done well and how to reach the next level in each part of the marking guide. You get one clear next step."
+                      : "Your feedback will quote your own work to show what you've done well and how to reach the next level in each part of the marking guide. You'll get one clear next step."}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    {showScore
+                      ? "There are four levels: Not yet, Pass, Good and Excellent. Two AI markers mark each project independently. A person at GWTH checks any mark in doubt."
+                      : "There will be four levels: Not yet, Pass, Good and Excellent. Two AI markers will mark each project independently. A person at GWTH will check any mark in doubt."}
+                  </p>
+                  <p>
+                    {showScore
+                      ? "You see a provisional mark at once. It becomes final once checked, within 7 days. Not yet tells you exactly what to fix before handing in again. You can hand in each project up to three times; your best mark counts."
+                      : "You'll see a provisional mark at once. It will become final once checked, within 7 days. Not yet will tell you exactly what to fix before handing in again. You'll be able to hand in each project up to three times; your best mark will count."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {showScore && (
               <div className={styles.scoreBlock} data-section="score">
                 <h3 className={styles.panelTitle}>How your score changes</h3>
@@ -637,8 +671,7 @@ export function HomeNext({
                   <p data-testid="score-lead">
                     Core lessons and quiz results count for half of your score.
                     The marks for your monthly projects count for the other
-                    half. Each project is marked Not yet, Pass, Good or
-                    Excellent.
+                    half.
                   </p>
                   <p data-testid="score-honesty">
                     After 28 days without passing a core lesson, you start

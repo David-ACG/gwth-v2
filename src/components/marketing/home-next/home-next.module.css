@@ -530,6 +530,15 @@
   border-top: 1px solid var(--v-line-soft);
 }
 
+/* Keep the marking paragraphs readable in the existing responsive columns. */
+.scoreBlock .scoreCopy > div {
+  min-width: 0;
+}
+
+.scoreBlock .scoreCopy > div > p + p {
+  margin-top: 1rem;
+}
+
 .scoreCopy {
   display: grid;
   gap: 0.9rem 2.5rem;
