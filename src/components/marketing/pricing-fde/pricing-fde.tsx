@@ -296,7 +296,7 @@ export function PricingFde({ now = new Date() }: { now?: Date } = {}) {
     {
       row: "At the end of month three",
       monthly: "Your plan continues automatically unless you cancel.",
-      pass: "Your lesson access ends unless you choose to continue.",
+      pass: `Your access to the course lessons stops. You only pay again if you choose to subscribe at £${ongoing} a month.`,
     },
     {
       row: "How to cancel",
