@@ -8,7 +8,7 @@
  * - 1px ink hairlines for structure. Square corners. NO gradients, NO shadows,
  *   NO border-radius, NO images required to read the message.
  * - One solid-teal bulletproof table-button CTA, sentence case.
- * - The real GWTH.ai wordmark (hosted /logo-email.png, ink wordmark +
+ * - The real GWTH.ai wordmark (the green paper-first logo at media.gwth.ai/email/logo-email-paper.png since 20 Nov 2026; David: "The logo should be green not brown"; was /logo-email.png, ink wordmark +
  *   terracotta accent) on the light ground. Email is light-ground only.
  * - British English, no emojis, no em dashes.
  *
@@ -153,7 +153,7 @@ export function renderFdeEmail(input: EmailLayoutInput): EmailParts {
           <!-- Masthead -->
           <tr>
             <td style="padding:16px 24px;border-bottom:1px solid ${COLOR.ink};">
-              <img src="https://gwth.ai/logo-email.png" width="150" height="26" alt="GWTH.ai" style="display:block;border:0;outline:none;text-decoration:none;height:26px;width:150px;">
+              <img src="https://media.gwth.ai/email/logo-email-paper.png" width="150" height="26" alt="GWTH.ai" style="display:block;border:0;outline:none;text-decoration:none;height:26px;width:150px;">
             </td>
           </tr>
           <!-- Body -->
