@@ -2,25 +2,36 @@ import { afterEach, describe, expect, it } from "vitest"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { FILM, HomeFilm } from "./home-film"
 
-// David, 12 Nov 2026: "Home page for GWTH on the P520 with new video we have
-// just created and refine everything around it". Film A (the Opus journal
-// film, v04) replaced the 21 Oct film.
+// David, 20 Nov 2026: "Once you finish rendering please put all the videos
+// into the site". The paper cutout film (homepage-paper-depth v06) replaced
+// Film A, in two editions: paper in the light theme, night in the dark.
 describe("HomeFilm", () => {
-  afterEach(() => cleanup())
+  afterEach(() => {
+    cleanup()
+    document.documentElement.classList.remove("dark")
+  })
 
-  it("shows Film A's poster and plays nothing until asked", () => {
+  it("shows both editions' posters and plays nothing until asked", () => {
     const { container } = render(<HomeFilm />)
     expect(container.querySelector("video")).toBeNull()
     const posters = Array.from(container.querySelectorAll("img")).map((i) => i.getAttribute("src"))
-    expect(posters).toEqual([FILM.poster])
-    expect(FILM.poster).toMatch(/\/site\/home-film\/2026-11-13-gpt\/homepage-film-a-gpt-poster\.jpg$/)
+    expect(posters).toEqual([FILM.paper.poster, FILM.night.poster])
+    expect(FILM.paper.poster).toMatch(/\/site\/home-film\/2026-11-20-paper-depth\/poster-paper\.jpg$/)
+    expect(FILM.night.poster).toMatch(/\/site\/home-film\/2026-11-20-paper-depth\/poster-night\.jpg$/)
+    // CSS shows the poster for the current theme.
+    const [paper, night] = Array.from(container.querySelectorAll("img"))
+    expect(paper!.className).toMatch(/paperOnly/)
+    expect(night!.className).toMatch(/nightOnly/)
   })
 
-  it("plays Film A from its new dated key, with captions on", () => {
+  it("plays the paper edition in the light theme, from its new dated key, with captions on", () => {
     const { container } = render(<HomeFilm />)
     fireEvent.click(screen.getByRole("button", { name: /play the gwth film/i }))
     const video = container.querySelector("video")!
-    expect(video.getAttribute("src")).toMatch(/\/site\/home-film\/2026-11-13-gpt\/homepage-film-a-gpt\.mp4$/)
+    expect(video.getAttribute("src")).toMatch(
+      /\/site\/home-film\/2026-11-20-paper-depth\/homepage-paper-depth-paper\.mp4$/
+    )
+    expect(video.getAttribute("poster")).toBe(FILM.paper.poster)
     const track = container.querySelector("track")!
     expect(track.hasAttribute("default")).toBe(true)
     // Same origin: media.gwth.ai sends no CORS header, so a <track> from it
@@ -28,12 +39,16 @@ describe("HomeFilm", () => {
     expect(track.getAttribute("src")).toBe("/home/film/homepage-film-a.vtt")
   })
 
-  it("plays the same film in the dark theme", () => {
+  it("plays the night edition in the dark theme", () => {
     document.documentElement.classList.add("dark")
     const { container } = render(<HomeFilm />)
     fireEvent.click(screen.getByRole("button", { name: /play the gwth film/i }))
-    expect(container.querySelector("video")!.getAttribute("src")).toBe(FILM.src)
-    document.documentElement.classList.remove("dark")
+    const video = container.querySelector("video")!
+    expect(video.getAttribute("src")).toMatch(
+      /\/site\/home-film\/2026-11-20-paper-depth\/homepage-paper-depth-night\.mp4$/
+    )
+    expect(video.getAttribute("poster")).toBe(FILM.night.poster)
+    expect(container.querySelector("track")!.getAttribute("src")).toBe("/home/film/homepage-film-a.vtt")
   })
 
   // The film ends "The link is beside this film", on an end card with a

@@ -108,7 +108,7 @@ describe("HomeNext: the new home page draft", () => {
     const poster = container.querySelector(
       '[data-section="film"] img'
     ) as HTMLImageElement
-    expect(poster.getAttribute("src")).toBe(FILM.poster)
+    expect(poster.getAttribute("src")).toBe(FILM.paper.poster)
     expect(
       screen.getByRole("button", { name: "Play the GWTH film" })
     ).toHaveTextContent(FILM_COPY.play)

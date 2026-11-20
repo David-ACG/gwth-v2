@@ -6,9 +6,18 @@ import p from "@/components/marketing/paper/paper.module.css"
 import styles from "./home-film.module.css"
 
 /**
- * The home page film: Film A, the Opus journal film (v04), which David approved
- * on 12 Nov 2026 ("Film A looks great"). Source:
- * GWTH-launch-plan/completion/homepage-film-journal/options/opus-still/.
+ * The home page film: the paper cutout film (homepage-paper-depth, v06), in two
+ * editions, paper and night, with the logo now green. David, 20 Nov 2026:
+ * "Once you finish rendering please put all the videos into the site". Source:
+ * GWTH-launch-plan/Video_Prroduction_with_AI/Claude Video Solution/notebook/
+ * projects/homepage-paper-depth/out/ (the -v06-web copies).
+ *
+ * Before it: Film A, the Opus journal film (v04), which David approved on
+ * 12 Nov 2026 ("Film A looks great"), with its signs drawn by GPT Image, which
+ * he picked on 13 Nov 2026 (bead gwth-launch-1cin). It stays untouched on R2
+ * under site/home-film/2026-11-13-gpt/, the 12 Nov Film A under
+ * site/home-film/2026-11-12/, and the 21 Oct film under site/home-film/archive/,
+ * so any of them can come back.
  *
  * David, 12 Nov 2026: "Home page for GWTH on the P520 with new video we have
  * just created and refine everything around it and all the public pages."
@@ -20,25 +29,24 @@ import styles from "./home-film.module.css"
  * sits BESIDE the film on wide screens and straight under it on phones, with
  * the same button words.
  *
- * One edition: Film A is a paper film, and it plays as it is in the dark theme
- * too, inside its frame. Click to play, so nothing downloads before the visitor
- * asks; captions are on by default.
+ * Two editions, the way the Start Here film does it: the paper edition in the
+ * light theme and the night edition in the dark theme. Both posters are in the
+ * page and CSS shows the one for the current theme; the edition is picked when
+ * the visitor presses play. Click to play, so nothing downloads before the
+ * visitor asks; captions are on by default.
  *
- * The film and poster are on R2 under a dated key (site/home-film/2026-11-13-gpt/):
- * Film A with its signs drawn by GPT Image and traced to SVG, which David picked
- * on 13 Nov 2026 (bead gwth-launch-1cin). The 12 Nov hand-drawn Film A is
- * untouched under site/home-film/2026-11-12/, and the 21 Oct film is archived
- * under site/home-film/archive/. Same narration, so the captions are unchanged.
- * The captions are served from this site (public/home/film/) because
- * media.gwth.ai sends no CORS header, and a <track> from another origin without
- * one never loads.
+ * The films and posters are on R2 under a new dated key
+ * (site/home-film/2026-11-20-paper-depth/). Same narration as Film A, so the
+ * captions are unchanged. The captions are served from this site
+ * (public/home/film/) because media.gwth.ai sends no CORS header, and a <track>
+ * from another origin without one never loads.
  */
-const BASE = "https://media.gwth.ai/site/home-film/2026-11-13-gpt"
+const BASE = "https://media.gwth.ai/site/home-film/2026-11-20-paper-depth"
 export const FILM = {
-  src: `${BASE}/homepage-film-a-gpt.mp4`,
-  poster: `${BASE}/homepage-film-a-gpt-poster.jpg`,
+  paper: { src: `${BASE}/homepage-paper-depth-paper.mp4`, poster: `${BASE}/poster-paper.jpg` },
+  night: { src: `${BASE}/homepage-paper-depth-night.mp4`, poster: `${BASE}/poster-night.jpg` },
   captions: "/home/film/homepage-film-a.vtt",
-}
+} as const
 
 export type HomeFilmCopy = {
   play: string
@@ -55,17 +63,22 @@ export const FILM_COPY: HomeFilmCopy = {
 }
 
 export function HomeFilm({ copy = FILM_COPY }: { copy?: HomeFilmCopy }) {
-  const [playing, setPlaying] = useState(false)
+  const [edition, setEdition] = useState<"paper" | "night" | null>(null)
+
+  function play() {
+    const dark = document.documentElement.classList.contains("dark")
+    setEdition(dark ? "night" : "paper")
+  }
 
   return (
     <div className={styles.block} data-section="film">
       <div className={styles.filmCol}>
         <figure className={styles.frame}>
-          {playing ? (
+          {edition ? (
             <video
               className={styles.video}
-              src={FILM.src}
-              poster={FILM.poster}
+              src={FILM[edition].src}
+              poster={FILM[edition].poster}
               controls
               autoPlay
               playsInline
@@ -77,11 +90,18 @@ export function HomeFilm({ copy = FILM_COPY }: { copy?: HomeFilmCopy }) {
             <button
               type="button"
               className={styles.posterButton}
-              onClick={() => setPlaying(true)}
+              onClick={play}
               aria-label="Play the GWTH film"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- poster served from media.gwth.ai */}
-              <img className={styles.poster} src={FILM.poster} alt="" fetchPriority="high" />
+              <img
+                className={`${styles.poster} ${styles.paperOnly}`}
+                src={FILM.paper.poster}
+                alt=""
+                fetchPriority="high"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element -- poster served from media.gwth.ai */}
+              <img className={`${styles.poster} ${styles.nightOnly}`} src={FILM.night.poster} alt="" />
               <span className={styles.play}>
                 <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                   <path d="M7 5l12 7-12 7V5z" fill="currentColor" />

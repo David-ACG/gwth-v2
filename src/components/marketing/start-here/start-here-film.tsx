@@ -5,10 +5,11 @@ import { START_HERE_FILM } from "@/lib/start-here/media"
 import film from "@/components/marketing/home-fde/home-film.module.css"
 
 /**
- * Lesson zero's own film (lesson-zero-film7, approved by David 2026-10-17),
- * shown only once the lesson is open: it is the lesson's intro, not a public
- * trailer (David, 2026-10-16). Same frame as the home page film: paper edition
- * in the light theme, night in the dark, click to play, captions on.
+ * Lesson zero's own film (the ink and watercolour film since 20 Nov 2026; see
+ * START_HERE_FILM in lib/start-here/media.ts), shown only once the lesson is
+ * open: it is the lesson's intro, not a public trailer (David, 2026-10-16).
+ * Same frame as the home page film: paper edition in the light theme, night in
+ * the dark, click to play, captions on.
  */
 export function StartHereFilm() {
   const [edition, setEdition] = useState<"paper" | "night" | null>(null)
