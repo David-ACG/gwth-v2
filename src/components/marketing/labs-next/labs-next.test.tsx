@@ -171,20 +171,32 @@ describe("LabsNext, inside a lab and how we test", () => {
     )
   })
 
-  it("plays the labs tour from the media CDN, with captions from this site", () => {
+  // David, 20 Nov 2026: "Once you finish rendering please put all the videos
+  // into the site". The soft 3D tour, paper edition in light, night in dark.
+  it("plays the labs tour from a new dated key on the media CDN, paper in light and night in dark, with captions from this site", () => {
     renderPage()
     const figure = screen.getByTestId("labs-film")
-    expect(figure.querySelector("source")?.getAttribute("src")).toBe(
-      "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour.mp4"
-    )
-    // media.gwth.ai sends no CORS header, so a <track> must come from this origin.
-    const track = figure.querySelector("track")
-    expect(track?.getAttribute("src")).toBe("/labs-film/labs-tour.vtt")
-    expect(track?.getAttribute("kind")).toBe("captions")
-    const video = figure.querySelector("video")
-    expect(video?.getAttribute("poster")).toBe(LABS_FILM.poster)
-    expect(video?.hasAttribute("controls")).toBe(true)
-    expect(video?.getAttribute("aria-label")).toMatch(/labs/i)
+    const videos = Array.from(figure.querySelectorAll("video"))
+    expect(videos.map((v) => v.getAttribute("data-edition"))).toEqual(["paper", "night"])
+    const base = "https://media.gwth.ai/site/labs-tour/2026-11-20-soft3d"
+    expect(videos.map((v) => v.querySelector("source")?.getAttribute("src"))).toEqual([
+      `${base}/labs-tour-soft3d-paper.mp4`,
+      `${base}/labs-tour-soft3d-night.mp4`,
+    ])
+    expect(videos.map((v) => v.getAttribute("poster"))).toEqual([LABS_FILM.paper.poster, LABS_FILM.night.poster])
+    expect(LABS_FILM.paper.poster).toBe(`${base}/poster-paper.jpg`)
+    // CSS shows the player for the current theme.
+    expect(videos[0]!.className).toMatch(/paperOnly/)
+    expect(videos[1]!.className).toMatch(/nightOnly/)
+    for (const video of videos) {
+      // media.gwth.ai sends no CORS header, so a <track> must come from this origin.
+      const track = video.querySelector("track")
+      expect(track?.getAttribute("src")).toBe("/labs-film/labs-tour.vtt")
+      expect(track?.getAttribute("kind")).toBe("captions")
+      expect(video.hasAttribute("controls")).toBe(true)
+      expect(video.getAttribute("preload")).toBe("none")
+      expect(video.getAttribute("aria-label")).toMatch(/labs/i)
+    }
     expect(figure.textContent).toMatch(/How to use the labs, in just over a minute\./)
   })
 

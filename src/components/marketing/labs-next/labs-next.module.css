@@ -372,6 +372,20 @@
   border-radius: var(--radius-md);
 }
 
+/* Two editions of the tour (20 Nov 2026): paper in the light theme, night in
+   the dark. Both players are in the page; only one shows. */
+.filmVideo.nightOnly {
+  display: none;
+}
+
+:global(.dark) .filmVideo.paperOnly {
+  display: none;
+}
+
+:global(.dark) .filmVideo.nightOnly {
+  display: block;
+}
+
 .film figcaption {
   margin-top: 0.7rem;
   font-size: var(--fde-mono-sm);

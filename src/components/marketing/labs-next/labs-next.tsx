@@ -53,16 +53,27 @@ import styles from "./labs-next.module.css"
 
 /**
  * The narrated tour of the labs (David, 15 Nov 2026: "The video is great.
- * please add it to the labs page"). The same film, poster and captions as
- * `labs-fde.tsx`: film and poster on the media CDN under a dated key, captions
- * from this site because media.gwth.ai sends no CORS header and a `<track>`
- * from another origin without one never loads. The captions sit under
- * `/labs-film/`, not `/labs/`, because the proxy answers unknown `/labs/...`
- * paths with the 404 page.
+ * please add it to the labs page"). Since 20 Nov 2026 it is the tour in the new
+ * soft 3D style (labs-tour-soft3d v02), in two editions: David, 20 Nov 2026:
+ * "Once you finish rendering please put all the videos into the site". The
+ * paper edition shows in the light theme and the night edition in the dark,
+ * like the home page and Start Here films; this page is server-rendered, so
+ * both players are in the page and CSS shows the one for the theme (each has
+ * preload="none", so the hidden one downloads nothing). Same narration as the
+ * 15 Nov film, so the captions are unchanged.
+ *
+ * Films and posters are on the media CDN under a new dated key
+ * (site/labs-tour/2026-11-20-soft3d/); the 15 Nov film stays untouched under
+ * site/labs-tour/2026-11-15/ so it can come back (`labs-fde.tsx` still names
+ * it). The captions come from this site because media.gwth.ai sends no CORS
+ * header and a `<track>` from another origin without one never loads. They sit
+ * under `/labs-film/`, not `/labs/`, because the proxy answers unknown
+ * `/labs/...` paths with the 404 page.
  */
+const LABS_FILM_BASE = "https://media.gwth.ai/site/labs-tour/2026-11-20-soft3d"
 export const LABS_FILM = {
-  src: "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour.mp4",
-  poster: "https://media.gwth.ai/site/labs-tour/2026-11-15/labs-tour-poster.jpg",
+  paper: { src: `${LABS_FILM_BASE}/labs-tour-soft3d-paper.mp4`, poster: `${LABS_FILM_BASE}/poster-paper.jpg` },
+  night: { src: `${LABS_FILM_BASE}/labs-tour-soft3d-night.mp4`, poster: `${LABS_FILM_BASE}/poster-night.jpg` },
   captions: "/labs-film/labs-tour.vtt",
 } as const
 
@@ -328,17 +339,21 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
           </div>
           <div className={styles.tourGrid}>
             <figure className={styles.film} data-testid="labs-film">
-              <video
-                controls
-                playsInline
-                preload="none"
-                poster={LABS_FILM.poster}
-                className={styles.filmVideo}
-                aria-label="How to use the GWTH labs: a short narrated tour"
-              >
-                <source src={LABS_FILM.src} type="video/mp4" />
-                <track kind="captions" src={LABS_FILM.captions} srcLang="en" label="English" />
-              </video>
+              {(["paper", "night"] as const).map((edition) => (
+                <video
+                  key={edition}
+                  controls
+                  playsInline
+                  preload="none"
+                  poster={LABS_FILM[edition].poster}
+                  className={`${styles.filmVideo} ${edition === "paper" ? styles.paperOnly : styles.nightOnly}`}
+                  data-edition={edition}
+                  aria-label="How to use the GWTH labs: a short narrated tour"
+                >
+                  <source src={LABS_FILM[edition].src} type="video/mp4" />
+                  <track kind="captions" src={LABS_FILM.captions} srcLang="en" label="English" />
+                </video>
+              ))}
               <figcaption>How to use the labs, in just over a minute.</figcaption>
             </figure>
             <InView className={styles.stepsWrap}>
