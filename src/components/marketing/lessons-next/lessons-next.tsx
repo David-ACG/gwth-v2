@@ -276,7 +276,7 @@ export function LessonsNext({
                 The course has {TOTAL_MANDATORY_LESSONS} core lessons in three
                 monthly parts, with optional lessons for going deeper and a
                 major project each month. You learn to use AI through practical
-                tasks from your own work. This page shows what you make in
+                projects for work and everyday life. This page shows what you make in
                 each month and explains how your projects are marked.
               </p>
               <div className={p.actions}>
@@ -659,8 +659,7 @@ export function LessonsNext({
                 UK professional rules covered in optional lessons
               </h3>
               <p className={styles.bodyText} data-testid="lessons-uk-note">
-                These lessons are optional, for people in those jobs who want
-                to take them. Nobody else needs to take them. The legal practice lesson covers the Solicitors Regulation
+                 The legal practice lesson covers the Solicitors Regulation
                 Authority code and the Ayinde judgment on citing cases invented
                 by AI. The accountancy
                 lesson follows the codes of the UK accountancy bodies ICAEW,

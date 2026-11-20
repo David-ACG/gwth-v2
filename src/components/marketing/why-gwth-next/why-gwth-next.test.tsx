@@ -372,7 +372,8 @@ describe("What the old About page brought", () => {
     const proof = pageText(
       container.querySelector('[data-reason="proof"]') as HTMLElement
     )
-    expect(proof).toMatch(/the proof GWTH gives you is the work itself/i)
+    expect(proof).toMatch(/Every lesson leaves you with real work you can show people/i)
+    expect(proof).not.toMatch(/the proof GWTH gives you is the work itself/i)
   })
 
   it("mentions the score only when the score flag is on, in the home page's words", () => {

@@ -698,8 +698,7 @@ export function WhyGwthNext({
             <div>
               <h3 className={styles.rowTitle}>Proof of what you can do</h3>
               <p className={styles.body}>
-                Every lesson leaves you with real work you can show people. So
-                the proof GWTH gives you is the work itself.
+                Every lesson leaves you with real work you can show people.
               </p>
               {showScore && (
                 <p className={styles.body} data-testid="why-score">

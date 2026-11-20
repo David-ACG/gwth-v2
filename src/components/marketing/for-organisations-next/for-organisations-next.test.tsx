@@ -170,11 +170,10 @@ describe("for institutions: the old page's promises, and nothing more", () => {
       within(intro).getByRole("heading", { level: 2 }).textContent
     ).toMatch(/See who has passed your required AI lessons before specialist teaching begins/)
     const text = sectionText(container, "institution-intro")
-    expect(text).toMatch(/tutors/i)
-    expect(text).toMatch(/whole class up to the same level/i)
-    expect(text).toMatch(/before your course begins/i)
-    expect(text).toMatch(/set the pass mark/i)
-    expect(text).toMatch(/tutors can see who has met it/i)
+    // 20 Nov 2026 release gate (latest Sol): the intro is cut to the offer.
+    expect(text).toMatch(/Your learners take GWTH before your specialist course/)
+    expect(text).toMatch(/choose which optional lessons they must pass and set the quiz pass mark/)
+    expect(text).toMatch(/Your tutors can see who has passed/)
   })
 
   it("contrasts the catch-up problem with the baseline, and promises a record, not readiness", () => {
@@ -424,7 +423,7 @@ describe("for teams: places on the standard course", () => {
     const text = sectionText(container, "team-price")
     expect(screen.getByTestId("team-price-monthly").textContent).toMatch(/£29/)
     expect(text).toMatch(/can cancel at any time/)
-    expect(text).toMatch(/carries on at £7\.50 a month to keep lessons\s+up to date, unless they cancel/)
+    expect(text).toMatch(/After three months, the plan continues at £7\.50 a month for access to\s+updated lessons unless they cancel/)
     expect(screen.getByTestId("team-price-once").textContent).toMatch(/£69/)
     expect(text).toMatch(/If you buy between 14 December 2026 and 6 January 2027/)
     expect(text).toMatch(/After that, the whole course is £87/)

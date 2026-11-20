@@ -135,9 +135,8 @@ function teamFaqs(price: Prices): { q: string; a: ReactNode }[] {
       a: (
         <>
           Everyone takes the same {TOTAL_MANDATORY_LESSONS} core lessons. Each
-          month also opens optional lessons on particular industries, advanced
-          topics and specialisations, and each person chooses which of those
-          to take, so you can tell people which ones matter for their role. If
+          month includes optional lessons. Each person chooses which to
+          take. You can recommend lessons that fit their role. If
           you need to set the lessons for a whole group yourself, that is an
           edition of the course. See{" "}
           <Link href={audienceHref("institution")} data-audience="institution">
@@ -404,13 +403,9 @@ export function ForOrganisationsNext({
                   <em>before specialist teaching begins</em>.
                 </h2>
                 <p className={styles.introLead}>
-                  Learners often arrive at a professional course with very
-                  different levels of experience using AI, and tutors can
-                  spend the first sessions bringing the whole class up to the
-                  same level. GWTH is a three-month applied AI course your
-                  learners take before your course begins. You choose which
-                  optional lessons are required and set the pass mark for
-                  their quizzes, and your tutors can see who has met it.
+                  Your learners take GWTH before your specialist course. You
+                  choose which optional lessons they must pass and set the
+                  quiz pass mark. Your tutors can see who has passed.
                 </p>
                 <p className={styles.introLead}>
                   It is for professional bodies, colleges and training
@@ -472,9 +467,8 @@ export function ForOrganisationsNext({
                   enthusiasts experimenting with no path from experiment to
                   organisational capability, or enterprise AI tools bought and
                   barely used because nobody was ever taught how to think with
-                  AI, only how to click the buttons in one product. GWTH gives
-                  each person three months of guided practice using AI on the
-                  work they already do.
+                  AI, only how to click the buttons in one product. GWTH gives each person three months of guided
+                  practice, from personal projects to tools for a business.
                 </p>
                 <div className={p.actions}>
                   {teamPrimary}
@@ -1094,10 +1088,9 @@ export function ForOrganisationsNext({
                   </p>
                   <p className={styles.priceText}>
                     For each of the three months. Each person signs up with
-                    their own account and can cancel at any time. After the
-                    three months, the plan carries on at £
-                    {ONGOING_MONTHLY_PRICE.toFixed(2)} a month to keep lessons
-                    up to date, unless they cancel.
+                    their own account and can cancel at any time. After three months, the plan continues at £
+                    {ONGOING_MONTHLY_PRICE.toFixed(2)} a month for access to
+                    updated lessons unless they cancel.
                   </p>
                 </div>
                 <div data-testid="team-price-once">
@@ -1225,7 +1218,7 @@ export function ForOrganisationsNext({
                   <td data-label="Places on the standard course">
                     £{COURSE_MONTHLY_PRICE} a month for each of the three
                     months, then £{ONGOING_MONTHLY_PRICE.toFixed(2)} a month
-                    to keep lessons up to date unless they cancel. Or{" "}
+                    for access to updated lessons unless they cancel. Or{" "}
                     {price.sale} paid once if you buy between {price.opensOn}{" "}
                     and {price.endsOn}, then {price.full}. A pass never renews.
                   </td>

@@ -79,7 +79,9 @@ describe("recovered ideas are on the page", () => {
     // went: the latest Sol writing check ruled three times on 2026-10-20 that
     // "We do not teach you what AI is" confuses a beginner, since Month 1 does
     // explain how AI tools work (launch readiness, bead gwth-launch-ajqs.2).
-    expect(text()).toMatch(/learn to use AI through practical tasks from your own work/i)
+    // 20 Nov 2026 release gate (latest Sol): projects are personal and for
+    // work, so "from your own work" became "for work and everyday life".
+    expect(text()).toMatch(/learn to use AI through practical projects for work and everyday life/i)
   })
 
   it("C02 /lessons names what the projects are, not only what they are not", () => {
