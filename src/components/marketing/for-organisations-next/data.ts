@@ -236,7 +236,7 @@ export const INSTITUTION_FAQS: readonly {
   },
   {
     q: "Does it teach our profession?",
-    a: "No, and it is not meant to. The subject lessons teach people how to use AI within the rules their work already follows. Your own courses keep the professional depth, and can start with the whole class on the same footing.",
+    a: "No, and it is not meant to. The subject lessons teach people how to use AI within the rules their work already follows. Your own courses keep the professional depth, and you can see who has passed your required AI lessons before they begin.",
   },
   {
     q: "Can our members skip the parts that are not for them?",
@@ -281,7 +281,7 @@ export const WHY_TEAMS = [
   },
   {
     title: "Beginner-friendly, and it stays that way",
-    body: "Month 1 starts in plain English. Later lessons introduce writing code and building tools with help from AI. They follow the same order: watch a short film, read the lesson, answer the questions, then do the project with a worked solution available if you want it. As the work gets more advanced, the support does not thin out.",
+    body: "Month 1 starts in plain English. Later lessons introduce writing code and building more complex tools with help from AI. Worked solutions remain available for those projects too. As the work gets more advanced, the support does not thin out.",
   },
   {
     title: "The same core for everyone, optional lessons by role",

@@ -400,8 +400,8 @@ export function ForOrganisationsNext({
               <div>
                 {/* David, 2026-10-23, option A: the old page's headline. */}
                 <h2 className={styles.introTitle}>
-                  Start your specialist courses{" "}
-                  <em>with the whole class on the same footing</em>.
+                  See who has passed your required AI lessons{" "}
+                  <em>before specialist teaching begins</em>.
                 </h2>
                 <p className={styles.introLead}>
                   Learners often arrive at a professional course with very
@@ -413,8 +413,8 @@ export function ForOrganisationsNext({
                   their quizzes, and your tutors can see who has met it.
                 </p>
                 <p className={styles.introLead}>
-                  It is for professional bodies, colleges, training providers
-                  and large employers that run their own courses.
+                  It is for professional bodies, colleges and training
+                  providers, or companies and teams with 100 or more learners.
                 </p>
                 <div className={p.actions}>
                   <Link href="/contact" className={p.buttonSolid}>
@@ -1184,8 +1184,8 @@ export function ForOrganisationsNext({
                     A team of any size. There is no minimum number of places.
                   </td>
                   <td data-label="Your own edition">
-                    Professional bodies, colleges, training providers and
-                    large employers that run their own courses.
+                    Professional bodies, colleges and training providers, or
+                    companies and teams with 100 or more learners.
                   </td>
                 </tr>
                 <tr>

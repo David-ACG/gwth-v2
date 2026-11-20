@@ -248,7 +248,7 @@ const OPTIONAL_GROUPS = [
   {
     title: "Helping a business",
     items: [
-      "Lessons for AI transformation experts, who help a business, your own or someone else's, choose AI tools and start using them well",
+      "Learn to help your own business or someone else's choose AI tools and use them well",
     ],
   },
 ] as const
@@ -710,12 +710,12 @@ export function WhyGwthNext({
               )}
             </div>
             <div className={styles.versus}>
-              <div className={`${styles.versusCard} ${styles.versusThen}`}>
+              <div className={`${styles.versusCard} ${styles.versusNow}`}>
                 <VersusIcon kind="certificate" />
-                <h4>A certificate from six months ago</h4>
+                <h4>Marked against published guides</h4>
                 <p>
-                  It tells you what somebody once passed, not what they can do
-                  today.
+                  Your monthly projects are marked against published guides,
+                  with feedback on your work.
                 </p>
               </div>
               <div className={`${styles.versusCard} ${styles.versusNow}`}>

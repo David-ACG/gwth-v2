@@ -171,7 +171,9 @@ describe("David's points from the writing rounds", () => {
       "local ai",
       "advanced ai-assisted coding",
       "hardware that uses ai",
-      "ai transformation expert",
+      // 20 Nov 2026 (master copy gate, latest Sol): "AI transformation experts"
+      // became plain words for the same lessons.
+      "help your own business or someone else's choose ai tools",
     ]) {
       expect(text, field).toContain(field)
     }
@@ -207,8 +209,10 @@ describe("David's points from the writing rounds", () => {
     render(<WhyGwthNext />)
     const body = pageText()
     // C06
-    expect(body).toMatch(/certificate from six months ago/i)
-    expect(body).toMatch(/what they can do today/i)
+    // 20 Nov 2026: the certificate comparison was replaced by a positive line
+    // (master copy gate, latest Sol), so it does not knock certificates.
+    expect(body).not.toMatch(/certificate from six months ago/i)
+    expect(body).toMatch(/marked against published guides, with feedback on your work/i)
     expect(body).toMatch(/every lesson leaves you with real work/i)
     // C07
     expect(body).toMatch(/teaching yourself with a chatbot/i)

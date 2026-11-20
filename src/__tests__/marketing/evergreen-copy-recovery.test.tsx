@@ -147,8 +147,11 @@ describe("recovered ideas are on the page", () => {
   it("C06 /why-gwth gives the REASON a record has to stay current, not just the mechanic", () => {
     render(<WhyGwth />)
     const body = text()
-    expect(body).toMatch(/certificate from six months ago/i)
-    expect(body).toMatch(/what they can do today/i)
+    // 20 Nov 2026: the certificate comparison was replaced by a positive line
+    // (master copy gate, latest Sol: do not knock certificates). The idea that
+    // the record is real, marked work stays.
+    expect(body).not.toMatch(/certificate from six months ago/i)
+    expect(body).toMatch(/marked against published guides, with feedback on your work/i)
     expect(body).toMatch(/every lesson leaves you with real work/i)
   })
 
