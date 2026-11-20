@@ -1,4 +1,3 @@
-import type { ReactNode } from "react"
 import Link from "next/link"
 import type { ModelLabIndex, ModelLabPick, ModelLabSlug } from "@/lib/types"
 import { aboutCost, countWord, levelLabel } from "@/lib/model-lab-format"
@@ -49,6 +48,36 @@ import styles from "./labs-next.module.css"
  * The page is the same whether or not the course is on sale: it has no price
  * and no buy button. The labs gate (`PRIVATE_CONTENT_MODE`) is in the route
  * file and the proxy, not here.
+ *
+ * ## 20 Nov 2026: rebuilt at the top for someone who has only used ChatGPT
+ *
+ * David, on the page above: *"I asked my wife to watch the video and was
+ * surprised when she didn't understand what a model was. I've now read this
+ * section and we don't really explain what we're testing. ... The icons next
+ * to each lab are not particularly inspiring. Please can we make this more
+ * attractive to new users who don't understand using different models. For
+ * example, my wife has only used chat GPT in chat mode and doesn't really
+ * understand how to change the model or the thinking level."*
+ *
+ * - **masthead** now says what an AI model is in its first sentence.
+ * - **explainer** (new, straight under it): what a model is, what the
+ *   thinking setting does, why the choice matters and where to look in a chat
+ *   app, beside a drawing of a made-up chat app whose two menus can be tried
+ *   (`PickerDrawing`). It then says what the labs test; the four figures moved
+ *   here from the masthead, so "models" is explained before it is counted.
+ * - **labs**: each card leads with a paper cutout picture of its main task
+ *   (`public/labs/v2/`), in place of the small line icon, and a one-line
+ *   description for a beginner. The best and best-value picks are still read
+ *   from the data, now behind a native `<details>` on each card, so nobody
+ *   meets a model name or a cost before the explainer and nobody is told the
+ *   answer before they have judged for themselves.
+ * - The film, "How we test", the chart, the list and the closing are as they
+ *   were. The film changes next week (David's choice, 20 Nov), not today.
+ *
+ * The new words were written by the latest GPT Astra and checked by the latest
+ * GPT Sol, as David asked; the briefs and reports are in
+ * `GWTH-launch-plan/completion/public-pages-fable/labs-v2/`. They are in
+ * `COPY` below. No sentence there names a model or a model version.
  */
 
 /**
@@ -77,63 +106,185 @@ export const LABS_FILM = {
   captions: "/labs-film/labs-tour.vtt",
 } as const
 
-/** Line icons for the six labs, the same six drawn on the home page's superpowers. */
-function LabIcon({ id }: { id: ModelLabSlug }) {
-  const paths: Record<ModelLabSlug, ReactNode> = {
-    research: (
-      <>
-        <circle cx="10.5" cy="10.5" r="6" />
-        <path d="M15 15l5.5 5.5" />
-      </>
-    ),
-    content: (
-      <>
-        <path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20V3.5z" />
-        <path d="M9 11h6M9 14.5h6M9 18h3.5" />
-      </>
-    ),
-    thinking: (
-      <>
-        <circle cx="5" cy="12" r="1.8" />
-        <path d="M6.8 12H11m0 0l5-6h3m-8 6h8m-8 0l5 6h3" />
-      </>
-    ),
-    building: (
-      <>
-        <rect x="3.5" y="12.5" width="8" height="8" rx="1" />
-        <rect x="12.5" y="12.5" width="8" height="8" rx="1" />
-        <rect x="8" y="3.5" width="8" height="8" rx="1" />
-      </>
-    ),
-    data: (
-      <>
-        <path d="M3.5 20.5h17" />
-        <path d="M6.5 20.5v-6M12 20.5v-11M17.5 20.5v-15" />
-      </>
-    ),
-    automation: (
-      <>
-        <path d="M19.5 12a7.5 7.5 0 0 1-13 5.1M4.5 12a7.5 7.5 0 0 1 13-5.1" />
-        <path d="M17.5 3.5v3.6h-3.6M6.5 20.5v-3.6h3.6" />
-      </>
-    ),
-  }
+/**
+ * The words for a newcomer (20 Nov 2026): drafted by the latest GPT Astra,
+ * corrected by the latest GPT Sol. `{tasksPerLab}`, `{labs}` and `{labNames}` are
+ * filled from the data (`fill`).
+ * Nothing here may name an AI model or a model version (there is a test).
+ */
+export const COPY = {
+  heroWhat:
+    "An AI model is the part of a chat app that writes your answer. Our labs let you compare how different models handle the same real UK work task.",
+  heroDo:
+    "Read four answers with the AI names hidden. Choose the one you’d use, then see which AI wrote each answer. It’s free, with no card required. No AI company pays us.",
+  heroNew: "Explain the choices",
+  explainerTitle: "New to AI models? Start here",
+  explainerIntro: "The app you type in may offer choices that affect how it answers your question.",
+  questions: [
+    {
+      title: "What is an AI model?",
+      body: "A model is the part of a chat app that writes the answers you read. Different companies make different models. One app can offer several and let you choose which one writes your answer.",
+    },
+    {
+      title: "What does the thinking setting do?",
+      body: "It controls how much work the model can do before replying. More thinking can help with difficult questions, but may take longer and cost more to run.",
+    },
+    {
+      title: "Why does the choice matter?",
+      body: "The best model for your job is not always the most famous or the dearest. In each lab, you can read the answers and decide which you would use before seeing the AI names.",
+    },
+  ],
+  setUp:
+    "A “set-up” means one model with one thinking setting. If there’s no setting to choose, we label it “standard”.",
+  whereTitle: "Where to look in your chat app",
+  whereBody:
+    "In apps such as ChatGPT, Claude and Gemini, check the app’s help for information about choosing a model or a thinking setting. What you can change depends on the app and your access. You do not need to change anything in your app to use these labs.",
+  drawing: {
+    question: "What can I cook with leftover roast potatoes?",
+    modelLabel: "AI model",
+    modelChoices: ["Model A", "Model B", "Model C"],
+    thinkingLabel: "Thinking",
+    thinkingChoices: ["Less", "Medium", "More"],
+    notes: [
+      "Choose the model that writes your answer.",
+      "Choose how much work the model can do before replying.",
+    ],
+    caption: "This is a drawing of a made-up chat app. Try the two menus. Real apps look different.",
+  },
+  testTitle: "What the labs test",
+  testBody:
+    "We give models the same real work task. You compare answers with names hidden, then see their marks and whether they caught the hidden problem, or “trap”. Costs are for direct access to the AI through a connection called an API, rather than app subscriptions.",
+  testBody2:
+    "Our {labs} labs each cover a type of work we call an AI superpower: {labNames}. Computer checks and AI judges, which are other models, mark every answer.",
+  labsLead:
+    "Start with the kind of work closest to your own. Each lab has {tasksPerLab} tasks, so you can compare answers to different problems.",
+  picksLabel: "Show our picks",
+  picksNote:
+    "Our picks offer a short answer if you want one, and each lab explains how we chose them.",
+} as const
+
+/**
+ * Each lab's line for a beginner and the alt text of its picture. The picture
+ * shows the lab's main task (`sig_title`): `public/labs/v2/<slug>.jpg` and its
+ * dusk twin `<slug>-dark.jpg`, drawn for this page on 20 Nov 2026.
+ */
+export const LAB_INTRO: Record<ModelLabSlug, { line: string; alt: string }> = {
+  research: {
+    line: "Check facts, compare sources and decide which information to use.",
+    alt: "A paper cutout scene: a woman at a desk checks a printed page line by line against a box of records, with two lines marked by rust-coloured tabs.",
+  },
+  content: {
+    line: "Write something that sounds like you and says what you mean.",
+    alt: "A paper cutout scene: a bakery owner in an apron writes on a laptop at her counter, beside fresh loaves and a blank notice in the window.",
+  },
+  thinking: {
+    line: "Weigh up a plan, check its assumptions and spot what needs more thought.",
+    alt: "A paper cutout scene: a man stands at a wall planner with seven day panels, holding one loose panel.",
+  },
+  building: {
+    line: "Turn an idea into a useful page people can try.",
+    alt: "A paper cutout scene: a woman practises a phrase aloud at a laptop, with five cards coloured green, amber and red on the desk.",
+  },
+  data: {
+    line: "Make sense of messy figures and explain what they mean.",
+    alt: "A paper cutout scene: a man measures the gap between a tall stack of coins and a short one with a ruler, beside a pile of printouts.",
+  },
+  automation: {
+    line: "Compare how AI handles routine jobs and whether it asks before doing anything risky.",
+    alt: "A paper cutout scene: a man sits at a tidy desk and holds up an envelope.",
+  },
+}
+
+/** The grey lines that stand for an answer: one pattern of line lengths per model choice. */
+const ANSWER_LINES = [
+  [92, 78, 86, 54, 70],
+  [84, 96, 62, 90, 48],
+  [70, 88, 94, 66, 80, 36],
+] as const
+
+/**
+ * A drawing of a made-up chat app, in the page's own paper and ink: one sent
+ * message, an answer drawn as plain lines, and the two menus this page is
+ * about. It is not a picture of any real app and carries no brand.
+ *
+ * The menus are real radio buttons, so they can be tried with a mouse, a
+ * finger or the keyboard, and the drawing answers in CSS alone (`:has()` in
+ * the stylesheet): another model draws a different answer, and more thinking
+ * fills more of the three marks above it, the work done before the reply. It
+ * does not draw a longer answer: the words check (20 Nov 2026) found nothing
+ * to support "more thinking, longer answer". No script; without `:has()` it
+ * is simply a still drawing with the middle choice of each menu.
+ */
+function PickerDrawing() {
+  const d = COPY.drawing
   return (
-    <svg
-      width={28}
-      height={28}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      focusable="false"
-      className={styles.cardIcon}
-    >
-      {paths[id]}
-    </svg>
+    <figure className={styles.drawing} data-testid="labs-drawing">
+      <div className={styles.app}>
+        <div className={styles.chat}>
+          <p className={styles.bubbleUser}>{d.question}</p>
+          <div className={styles.bubbleAnswer} aria-hidden="true">
+            <span className={styles.work}>
+              <i />
+              <i />
+              <i />
+            </span>
+            {ANSWER_LINES.map((lines, model) => (
+              <span className={styles.answer} data-answer={model} key={model}>
+                {lines.map((width, i) => (
+                  <i key={i} style={{ width: `${width}%` }} />
+                ))}
+              </span>
+            ))}
+          </div>
+        </div>
+        {/* The box she types in, drawn empty, with the two menus beside it. */}
+        <div className={styles.typeBox} aria-hidden="true">
+          <i className={styles.caret} />
+          <i className={styles.send} />
+        </div>
+        <div className={styles.menus}>
+          <fieldset className={styles.menu} data-menu="model">
+            <legend>
+              <span className={styles.marker} aria-hidden="true">
+                1
+              </span>
+              {d.modelLabel}
+            </legend>
+            {d.modelChoices.map((choice, i) => (
+              <label key={choice}>
+                <input type="radio" name="labs-drawing-model" value={i} defaultChecked={i === 1} />
+                <span>{choice}</span>
+              </label>
+            ))}
+          </fieldset>
+          <fieldset className={styles.menu} data-menu="thinking">
+            <legend>
+              <span className={styles.marker} aria-hidden="true">
+                2
+              </span>
+              {d.thinkingLabel}
+            </legend>
+            {d.thinkingChoices.map((choice, i) => (
+              <label key={choice}>
+                <input type="radio" name="labs-drawing-thinking" value={i} defaultChecked={i === 1} />
+                <span>{choice}</span>
+              </label>
+            ))}
+          </fieldset>
+        </div>
+      </div>
+      <ol className={styles.drawingNotes}>
+        {d.notes.map((note, i) => (
+          <li key={note}>
+            <span className={styles.marker} aria-hidden="true">
+              {i + 1}
+            </span>
+            {note}
+          </li>
+        ))}
+      </ol>
+      <figcaption>{d.caption}</figcaption>
+    </figure>
   )
 }
 
@@ -188,9 +339,21 @@ export type LabsNextProps = {
   plain?: Partial<Record<ModelLabSlug, string>>
 }
 
+/** "Research, Content and Thinking": the labs' own names from the data, as a list in a sentence. */
+export function listOf(names: readonly string[]): string {
+  if (names.length < 2) return names.join("")
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`
+}
+
 export function LabsNext({ index, plain = {} }: LabsNextProps) {
   const labCount = index.labs.length
   const tasks = index.cost_chart.tasks
+  /** Fills the counts and names a sentence in `COPY` leaves to the data. */
+  const fill = (text: string) =>
+    text
+      .replace("{tasksPerLab}", tasksPerLab(index.labs.map((lab) => lab.tasks)))
+      .replace("{labs}", countWord(labCount))
+      .replace("{labNames}", listOf(index.labs.map((lab) => lab.sp_name)))
 
   /** The three points of "How we test", with the counts read from the data. */
   const howWeTest = [
@@ -223,20 +386,17 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
                 </span>
               </h1>
               <p className={p.standfirst} data-testid="labs-what">
-                Read four answers side by side with the AI names hidden. Choose the one you
-                would use, then reveal the names, marks and costs.
+                {COPY.heroWhat}
               </p>
               <p className={`${p.standfirst} ${styles.heroSecond}`} data-testid="labs-uk-note">
-                We give new AI models the same real UK work tasks in six labs, one for each AI
-                superpower: Research, Content, Thinking, Building, Data, and Automation and
-                agents. Computer checks and AI judges mark every answer. No AI company pays us.
+                {COPY.heroDo}
               </p>
               <div className={p.actions}>
                 <a href="#labs" className={`${p.buttonSolid} ${styles.press}`}>
                   Choose a lab
                 </a>
-                <a href="#tour" className={`${p.buttonOutline} ${styles.press}`}>
-                  Watch the short tour
+                <a href="#new-here" className={`${p.buttonOutline} ${styles.press}`}>
+                  {COPY.heroNew}
                 </a>
               </div>
             </div>
@@ -250,6 +410,55 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
             </figure>
           </div>
 
+        </div>
+      </section>
+
+      {/* 2. For a newcomer: what a model is, what thinking is, what we test. */}
+      <section
+        className={`${p.band} ${styles.explainer}`}
+        data-section="explainer"
+        id="new-here"
+        aria-labelledby="h-new"
+      >
+        <div className={p.page}>
+          <div className={p.sectionHead}>
+            <h2 className={p.sectionTitle} id="h-new">
+              {COPY.explainerTitle}
+            </h2>
+          </div>
+          <p className={styles.lead} data-testid="explainer-intro">
+            {COPY.explainerIntro}
+          </p>
+          <InView className={styles.explainGrid}>
+            <PickerDrawing />
+            <div className={styles.questions} data-testid="labs-explainer">
+              {COPY.questions.map((q) => (
+                <div className={styles.question} key={q.title}>
+                  <h3>{q.title}</h3>
+                  <p>{q.body}</p>
+                </div>
+              ))}
+              <p className={styles.setUp} data-testid="labs-set-up">
+                {COPY.setUp}
+              </p>
+            </div>
+          </InView>
+          <div className={styles.afterGrid}>
+            <div className={styles.where} data-testid="labs-where">
+              <h3>{COPY.whereTitle}</h3>
+              <p>{COPY.whereBody}</p>
+            </div>
+            <div className={styles.test} data-testid="labs-test">
+              <h3>{COPY.testTitle}</h3>
+              <p>{COPY.testBody}</p>
+              <p>{fill(COPY.testBody2)}</p>
+              <p>
+                <a href="#tour" className={styles.textLink}>
+                  Watch the short tour
+                </a>
+              </p>
+            </div>
+          </div>
           <dl className={styles.facts} data-testid="labs-facts">
             <div>
               <dt>{labCount}</dt>
@@ -274,7 +483,7 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
         </div>
       </section>
 
-      {/* 2. The six labs, as six things to try. */}
+      {/* 3. The six labs, as six things to try. */}
       <section className={p.section} data-section="labs" id="labs">
         <div className={p.page}>
           <div className={p.sectionHead}>
@@ -282,10 +491,8 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
               Six labs to <em>try</em>
             </h2>
           </div>
-          <p className={styles.lead}>
-            Start with the kind of work that is closest to your own. Each lab has{" "}
-            {tasksPerLab(index.labs.map((lab) => lab.tasks))} tasks. A set-up is one AI model
-            with a setting for how long it can think before answering.
+          <p className={styles.lead} data-testid="labs-lead">
+            {fill(COPY.labsLead)}
           </p>
           {index.labs.length === 0 ? (
             <div className={styles.empty}>
@@ -296,42 +503,57 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
             <InView className={styles.cards}>
               {index.labs.map((lab) => (
                 <article className={styles.card} data-testid="model-lab-card" key={lab.sp}>
-                  <div className={styles.cardTop}>
-                    <LabIcon id={lab.sp} />
-                    <h3 className={styles.cardName}>{lab.sp_name}</h3>
-                    <span className={styles.cardCount}>{countWord(lab.tasks)} tasks</span>
-                  </div>
-                  <p className={styles.cardQuestion}>{lab.headline}</p>
-                  <div className={styles.cardTask}>
-                    <p className={styles.cardTaskTitle}>The main task: {lab.sig_title}</p>
-                    {plain[lab.sp] ? <p>{plain[lab.sp]}</p> : null}
-                    <p className={styles.cardAsk}>
-                      You decide: <em>{lab.ask}</em>
+                  <figure className={`${p.plate} ${styles.cardPicture}`}>
+                    <LabsPlate
+                      name={`v2/${lab.sp}`}
+                      alt={LAB_INTRO[lab.sp].alt}
+                      sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 370px"
+                    />
+                  </figure>
+                  <div className={styles.cardBody}>
+                    <div className={styles.cardTop}>
+                      <h3 className={styles.cardName}>{lab.sp_name}</h3>
+                      <span className={styles.cardCount}>{countWord(lab.tasks)} tasks</span>
+                    </div>
+                    <p className={styles.cardQuestion}>{LAB_INTRO[lab.sp].line}</p>
+                    <div className={styles.cardTask}>
+                      <p className={styles.cardTaskTitle}>The main task: {lab.sig_title}</p>
+                      {plain[lab.sp] ? <p>{plain[lab.sp]}</p> : null}
+                      <p className={styles.cardAsk}>
+                        You decide: <em>{lab.ask}</em>
+                      </p>
+                    </div>
+                    <p className={styles.cardFoot}>
+                      <Link href={`/labs/${lab.sp}`} className={styles.cardAction}>
+                        Open the {lab.sp_name} lab
+                        <span className={styles.srOnly}>: {lab.headline}</span>
+                      </Link>
                     </p>
+                    {/* Our picks, from the data, shown only when asked for: you
+                        judge the answers before you are told ours. A native
+                        <details>, so it opens without JavaScript; it sits above
+                        the card's stretched link. */}
+                    <details className={styles.cardPicks} data-testid="lab-picks">
+                      <summary>{COPY.picksLabel}</summary>
+                      <dl className={styles.picks} aria-label={`Our picks in the ${lab.sp_name} lab`}>
+                        <PickRow label="Best" pick={lab.best} />
+                        <PickRow label="Best value" pick={lab.value} />
+                      </dl>
+                      <p className={styles.cardMeta}>{lab.count} set-ups compared</p>
+                    </details>
                   </div>
-                  <dl className={styles.picks} aria-label={`Our picks in the ${lab.sp_name} lab`}>
-                    <PickRow label="Best" pick={lab.best} />
-                    <PickRow label="Best value" pick={lab.value} />
-                  </dl>
-                  <p className={styles.cardFoot}>
-                    <Link href={`/labs/${lab.sp}`} className={styles.cardAction}>
-                      Open the {lab.sp_name} lab
-                      <span className={styles.srOnly}>: {lab.headline}</span>
-                    </Link>
-                    <span className={styles.cardMeta}>{lab.count} set-ups compared</span>
-                  </p>
                 </article>
               ))}
             </InView>
           )}
-          <p className={styles.note}>
-            Each lab explains how we chose its picks. The costs are what the tests cost through
-            developer access (the API), not the price of an app subscription.
+          <p className={styles.note} data-testid="labs-picks-note">
+            {COPY.picksNote} The costs are what the tests cost through developer access (the API),
+            not the price of an app subscription.
           </p>
         </div>
       </section>
 
-      {/* 3. Inside a lab: three steps, and the narrated tour. */}
+      {/* 4. Inside a lab: three steps, and the narrated tour. */}
       <section className={p.section} data-section="tour" id="tour">
         <div className={p.page}>
           <div className={p.sectionHead}>
@@ -373,7 +595,7 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
         </div>
       </section>
 
-      {/* 4. How we test. */}
+      {/* 5. How we test. */}
       <section className={p.section} data-section="how-we-test" aria-labelledby="h-how">
         <div className={p.page}>
           <div className={p.sectionHead}>
@@ -401,7 +623,7 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
         </div>
       </section>
 
-      {/* 5. What every set-up cost, and how it scored. */}
+      {/* 6. What every set-up cost, and how it scored. */}
       {index.cost_chart.rows.length ? (
         <section className={p.section} data-section="cost-chart" aria-labelledby="h-cost">
           <div className={p.page}>
@@ -424,7 +646,7 @@ export function LabsNext({ index, plain = {} }: LabsNextProps) {
         </section>
       ) : null}
 
-      {/* 6. Labs show you which AI. The course shows you how. */}
+      {/* 7. Labs show you which AI. The course shows you how. */}
       <section className={p.closing} data-section="closing">
         <div className={p.page}>
           <div className={styles.closingBox}>

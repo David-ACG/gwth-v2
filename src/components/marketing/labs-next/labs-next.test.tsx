@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react"
 import { afterEach, describe, expect, it } from "vitest"
@@ -7,7 +7,7 @@ import { getModelLab, getModelLabIndex } from "@/lib/data/model-lab"
 import { aboutCost, levelLabel } from "@/lib/model-lab-format"
 import type { ModelLabCostChart, ModelLabIndex, ModelLabSlug } from "@/lib/types"
 import { callouts, CostMap, costTick, plotScales } from "./cost-map"
-import { LABS_FILM, LabsNext, tasksPerLab } from "./labs-next"
+import { COPY, LAB_INTRO, LABS_FILM, LabsNext, listOf, tasksPerLab } from "./labs-next"
 
 afterEach(cleanup)
 
@@ -22,29 +22,43 @@ function renderPage(over: Partial<ModelLabIndex> = {}) {
 
 const pageText = (container: HTMLElement) => (container.textContent ?? "").replace(/\s+/g, " ")
 
+/** The picture whose file ends with `file` (next/image writes the path URL-encoded). */
+const picture = (within: Element, file: string) =>
+  [...within.querySelectorAll("img")].find((img) =>
+    decodeURIComponent(img.getAttribute("src") ?? "").includes(`/labs/${file}`)
+  ) ?? null
+
 /**
  * The Labs page in the family of the new home page (19 Nov 2026). Assertions
  * are on the data and on semantics, as in `labs-fde.test.tsx`, so the copy can
  * go through the words check without the suite being rewritten with it.
  */
 describe("LabsNext, what a lab is", () => {
-  it("says plainly what a lab is, under one h1", () => {
+  it("says plainly what a lab is, under one h1, and explains the word model as it uses it", () => {
     renderPage()
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       "Which AI should you use? See for yourself."
     )
-    expect(screen.getByTestId("labs-what")).toHaveTextContent(
-      "Read four answers side by side with the AI names hidden. Choose the one you would use, then reveal the names, marks and costs."
-    )
+    // 20 Nov 2026, David: "she didn't understand what a model was". The first
+    // sentence under the headline says what an AI model is.
+    const what = screen.getByTestId("labs-what")
+    expect(what).toHaveTextContent(COPY.heroWhat)
+    expect(what.textContent).toMatch(/^An AI model is the part of a chat app that writes your answer/)
+    const second = screen.getByTestId("labs-uk-note")
+    expect(second.textContent).toMatch(/names hidden/)
+    expect(second.textContent).toMatch(/free/i)
   })
 
   it("keeps the facts the old page stated: UK tasks, two kinds of marking, nobody pays us", () => {
     const { container } = renderPage()
     const text = pageText(container)
-    expect(text).toMatch(/same real UK work tasks/)
+    expect(text).toMatch(/same real UK work tasks?/)
     expect(text).toMatch(/Computer checks and AI judges/)
     expect(text).toMatch(/No AI company pays us/)
-    expect(text).toMatch(/Research, Content, Thinking, Building, Data, and Automation and agents/)
+    // The six kinds of work, named from the data (the words check, 20 Nov 2026).
+    expect(text).toContain(`AI superpower: ${listOf(index.labs.map((lab) => lab.sp_name))}.`)
+    expect(listOf(["Research", "Content", "Thinking"])).toBe("Research, Content and Thinking")
+    expect(text).not.toMatch(/\{[a-zA-Z]+\}/)
   })
 
   it("states the counts and free price, without dating the check", () => {
@@ -69,12 +83,135 @@ describe("LabsNext, what a lab is", () => {
       expect(level - previous).toBeLessThanOrEqual(1)
       return level
     })
-    for (const name of ["compare", "check", "your-own"]) {
-      const light = container.querySelector(`img[src*="${name}.jpg"]`)
-      const dark = container.querySelector(`img[src*="${name}-dark.jpg"]`)
+    for (const name of ["compare", "check", "your-own", ...index.labs.map((lab) => `v2/${lab.sp}`)]) {
+      const light = picture(container, `${name}.jpg`)
+      const dark = picture(container, `${name}-dark.jpg`)
       expect(light?.getAttribute("alt")?.length).toBeGreaterThan(40)
       expect(dark?.getAttribute("alt")).toBe(light?.getAttribute("alt"))
     }
+  })
+})
+
+/**
+ * David, 20 Nov 2026: "I asked my wife to watch the video and was surprised
+ * when she didn't understand what a model was ... my wife has only used chat
+ * GPT in chat mode and doesn't really understand how to change the model or
+ * the thinking level." The explainer sits straight under the masthead.
+ */
+describe("LabsNext, the explainer for a newcomer", () => {
+  /** Model families and version numbers that must never be typed into the explainer. */
+  const MODEL_NAMES =
+    /GPT|Opus|Sonnet|Haiku|Fable|Astra|Luna|Terra|\bSol\b|Grok|Kimi|Qwen|Mistral|DeepSeek|Llama|GLM|Hydrogen|Carbon|Flash|\bPro\b|\bo\d\b/
+  const VERSION = /\b\d+(\.\d+)+\b|\bv\d+\b|\b[A-Z][a-z]+ \d+(\.\d+)?\b/
+
+  it("comes straight after the masthead and before the six labs, and the top button goes to it", () => {
+    const { container } = renderPage()
+    const sections = [...container.querySelectorAll("[data-section]")].map((s) =>
+      s.getAttribute("data-section")
+    )
+    expect(sections.slice(0, 3)).toEqual(["masthead", "explainer", "labs"])
+    const explainer = container.querySelector('[data-section="explainer"]')!
+    expect(explainer.id).toBe("new-here")
+    expect(within(explainer as HTMLElement).getByRole("heading", { level: 2 })).toHaveTextContent(
+      COPY.explainerTitle
+    )
+    expect(screen.getByRole("link", { name: COPY.heroNew })).toHaveAttribute("href", "#new-here")
+  })
+
+  it("answers what a model is, what the thinking setting does and why the choice matters", () => {
+    renderPage()
+    const explainer = screen.getByTestId("labs-explainer")
+    const titles = within(explainer)
+      .getAllByRole("heading", { level: 3 })
+      .map((h) => h.textContent)
+    expect(titles).toEqual(COPY.questions.map((q) => q.title))
+    expect(titles).toHaveLength(3)
+    const text = pageText(explainer)
+    expect(text).toMatch(/model is the part of a chat app that writes the answers you read/i)
+    expect(text).toMatch(/Different companies make different models/)
+    expect(text).toMatch(/how much work the model can do before replying/)
+    expect(text).toMatch(/not always the most famous or the dearest/)
+    // "Set-up" is the word the cards, the chart and the list use: explained here first.
+    expect(pageText(screen.getByTestId("labs-set-up"))).toMatch(
+      /set-up.+one model with one thinking setting/
+    )
+  })
+
+  it("says where to look for the choice in a chat app without naming a menu, and that nothing needs changing", () => {
+    renderPage()
+    const where = screen.getByTestId("labs-where")
+    expect(within(where).getByRole("heading", { level: 3 })).toHaveTextContent(COPY.whereTitle)
+    const text = pageText(where)
+    for (const app of ["ChatGPT", "Claude", "Gemini"]) expect(text).toContain(app)
+    // No menu, button or plan name is typed: apps move and rename them.
+    expect(text).not.toMatch(/drop-?down|toggle|\bPlus\b|\bPro\b|\bMax\b|settings menu/i)
+    expect(text).toMatch(/do not need to change anything/)
+  })
+
+  it("says what the labs test, then the counts from the data", () => {
+    renderPage()
+    const test = pageText(screen.getByTestId("labs-test"))
+    expect(test).toMatch(/same real (UK )?work task/)
+    expect(test).toMatch(/names hidden/)
+    expect(test).toMatch(/trap/)
+    expect(test).toMatch(/cost/i)
+    const explainer = document.querySelector('[data-section="explainer"]')!
+    expect(explainer.contains(screen.getByTestId("labs-facts"))).toBe(true)
+  })
+
+  it("draws a made-up chat app whose two menus are real radio buttons, one chosen in each", () => {
+    renderPage()
+    const drawing = screen.getByTestId("labs-drawing")
+    expect(drawing.tagName).toBe("FIGURE")
+    expect(drawing.querySelector("figcaption")!.textContent).toBe(COPY.drawing.caption)
+    expect(drawing.querySelector("img, svg")).toBeNull()
+    const model = within(drawing).getByRole("group", { name: new RegExp(COPY.drawing.modelLabel) })
+    const thinking = within(drawing).getByRole("group", {
+      name: new RegExp(COPY.drawing.thinkingLabel),
+    })
+    for (const [group, choices] of [
+      [model, COPY.drawing.modelChoices],
+      [thinking, COPY.drawing.thinkingChoices],
+    ] as const) {
+      const radios = within(group).getAllByRole("radio") as HTMLInputElement[]
+      expect(radios).toHaveLength(3)
+      expect(radios.filter((r) => r.checked)).toHaveLength(1)
+      for (const choice of choices) expect(within(group).getByLabelText(choice)).toBeInTheDocument()
+    }
+    // Trying a menu moves the choice; the drawing itself answers in CSS.
+    const other = within(model).getByLabelText(COPY.drawing.modelChoices[2]) as HTMLInputElement
+    fireEvent.click(other)
+    expect(other.checked).toBe(true)
+    expect(pageText(drawing)).toContain(COPY.drawing.question)
+    for (const note of COPY.drawing.notes) expect(pageText(drawing)).toContain(note)
+  })
+
+  it("names no model and no model version anywhere in the words written for it", () => {
+    const strings: string[] = []
+    const collect = (value: unknown) => {
+      if (typeof value === "string") strings.push(value)
+      else if (value && typeof value === "object") Object.values(value).forEach(collect)
+    }
+    collect(COPY)
+    collect(LAB_INTRO)
+    expect(strings.length).toBeGreaterThan(40)
+    for (const text of strings) {
+      // The three chat apps may be named as apps, in the one "where to look" sentence.
+      const checked = text === COPY.whereBody ? text.replace(/ChatGPT|Claude|Gemini/g, "") : text
+      expect(checked, text).not.toMatch(/ChatGPT|Claude|Gemini/)
+      expect(checked, text).not.toMatch(MODEL_NAMES)
+      expect(checked, text).not.toMatch(VERSION)
+      expect(text, text).not.toMatch(/[–—§!]/)
+      expect(text, text).not.toMatch(/as of|last checked|at the time of writing/i)
+    }
+    // And on the page: the whole explainer section, as a visitor reads it.
+    const { container } = renderPage()
+    const explainer = pageText(container.querySelector('[data-section="explainer"]') as HTMLElement)
+    expect(explainer.replace(/ChatGPT, Claude and Gemini/, "")).not.toMatch(MODEL_NAMES)
+    for (const row of index.cost_chart.rows) expect(explainer).not.toContain(row.name)
+    const masthead = pageText(container.querySelector('[data-section="masthead"]') as HTMLElement)
+    expect(masthead).not.toMatch(MODEL_NAMES)
+    for (const row of index.cost_chart.rows) expect(masthead).not.toContain(row.name)
   })
 })
 
@@ -105,6 +242,8 @@ describe("LabsNext, the six labs", () => {
       const card = cards[i]!
       expect(within(card).getByRole("heading", { level: 3, name: lab.sp_name })).toBeInTheDocument()
       const text = pageText(card)
+      // A line for a beginner, then the lab's own question for a screen reader.
+      expect(text).toContain(LAB_INTRO[lab.sp].line)
       expect(text).toContain(lab.headline)
       expect(text).toContain(`The main task: ${lab.sig_title}`)
       expect(text).toContain(plain[lab.sp]!)
@@ -124,6 +263,49 @@ describe("LabsNext, the six labs", () => {
         )
       }
       expect(text).not.toContain("about under")
+    })
+  })
+
+  // 20 Nov 2026, David: "The icons next to each lab are not particularly
+  // inspiring." Each card leads with a paper cutout picture of its main task.
+  it("leads each card with a picture of its main task, paper and dusk, and no icon", () => {
+    renderPage()
+    const cards = screen.getAllByTestId("model-lab-card")
+    index.labs.forEach((lab, i) => {
+      const card = cards[i]!
+      const light = picture(card, `v2/${lab.sp}.jpg`)
+      const dark = picture(card, `v2/${lab.sp}-dark.jpg`)
+      expect(light, lab.sp).not.toBeNull()
+      expect(dark, lab.sp).not.toBeNull()
+      expect(light!.getAttribute("alt")).toBe(LAB_INTRO[lab.sp].alt)
+      expect(card.querySelector("svg")).toBeNull()
+      for (const edition of ["", "-dark"]) {
+        expect(
+          existsSync(join(process.cwd(), "public/labs/v2", `${lab.sp}${edition}.jpg`)),
+          `${lab.sp}${edition}.jpg`
+        ).toBe(true)
+      }
+    })
+  })
+
+  // A newcomer must not meet a model name or a cost in pence on the cards: the
+  // picks are still read from the data, behind a native <details>, closed.
+  it("keeps each lab's picks out of sight until asked for, in a native details", () => {
+    renderPage()
+    const cards = screen.getAllByTestId("model-lab-card")
+    index.labs.forEach((lab, i) => {
+      const picks = within(cards[i]!).getByTestId("lab-picks")
+      expect(picks.tagName).toBe("DETAILS")
+      expect(picks.hasAttribute("open")).toBe(false)
+      expect(picks.querySelector("summary")!.textContent).toBe(COPY.picksLabel)
+      const outside = cards[i]!.cloneNode(true) as HTMLElement
+      outside.querySelector("details")!.remove()
+      const text = pageText(outside)
+      for (const pick of [lab.best, lab.value]) {
+        expect(text).not.toContain(pick.name)
+        expect(pageText(picks)).toContain(pick.name)
+      }
+      expect(text).not.toMatch(/\d+p a task|£\d/)
     })
   })
 
@@ -152,9 +334,10 @@ describe("LabsNext, the six labs", () => {
     expect(tasksPerLab([3, 6])).toBe("three to six")
     expect(tasksPerLab([])).toBe("several")
     const { container } = renderPage()
-    expect(pageText(container)).toContain(
-      `Each lab has ${tasksPerLab(index.labs.map((lab) => lab.tasks))} tasks.`
+    expect(pageText(screen.getByTestId("labs-lead"))).toContain(
+      `Each lab has ${tasksPerLab(index.labs.map((lab) => lab.tasks))} tasks`
     )
+    expect(pageText(container)).not.toContain("{tasksPerLab}")
   })
 })
 
@@ -234,7 +417,7 @@ describe("LabsNext, the closing", () => {
   it("is the same page whether or not the course is on sale: no price, no buy or waitlist button", () => {
     const { container } = renderPage()
     const hrefs = [...container.querySelectorAll("a")].map((a) => a.getAttribute("href") ?? "")
-    const allowed = /^(#labs|#tour|\/labs\/[a-z]+|\/lessons|\/start-here)$/
+    const allowed = /^(#labs|#tour|#new-here|\/labs\/[a-z]+|\/lessons|\/start-here)$/
     for (const href of hrefs) expect(href, href).toMatch(allowed)
     expect(hrefs).toContain("/lessons")
     expect(hrefs).toContain("/start-here")
@@ -257,9 +440,13 @@ describe("LabsNext, the words", () => {
   it("types no model name and no check date: every one comes from the data", () => {
     const dir = join(process.cwd(), "src/components/marketing/labs-next")
     for (const file of ["labs-next.tsx", "cost-map.tsx"]) {
+      // The one sentence that says where to look names three chat APPS, so a
+      // newcomer recognises the one she uses (20 Nov 2026). It is taken out
+      // before the scan; "the explainer names no model" checks it separately.
       const code = readFileSync(join(dir, file), "utf8")
         .replace(/\/\*[\s\S]*?\*\//g, " ")
         .replace(/^\s*\/\/.*$/gm, " ")
+        .replace(COPY.whereBody, " ")
       expect(code, file).not.toMatch(
         /Claude|GPT|Gemini|Fable|Opus|Sonnet|Haiku|Astra|Luna|Terra|Grok|Kimi|Qwen|Mistral|DeepSeek/
       )

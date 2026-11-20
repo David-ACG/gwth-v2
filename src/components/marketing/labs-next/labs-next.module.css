@@ -67,12 +67,14 @@
   min-width: 0;
 }
 
-/* The counts: a stat list (figure in Bitter, label in Public Sans). */
+/* The counts: a stat list (figure in Bitter, label in Public Sans). Since
+   20 Nov 2026 it closes the explainer, so "models" is explained before it is
+   counted. */
 .facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 1.75rem;
-  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  margin: clamp(1.75rem, 3.5vw, 2.5rem) 0 0;
   border-top: 1px solid var(--v-line);
 }
 
@@ -127,7 +129,383 @@
   color: var(--v-muted);
 }
 
-/* ── 2. The six labs ─────────────────────────────────────────────────────── */
+/* ── 2. For a newcomer ───────────────────────────────────────────────────── */
+
+/* A white band, so the place to start stands apart from the six labs. It
+   sits close under the masthead: its heading shows on the first screen. */
+.explainer {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  scroll-margin-top: 4.5rem;
+}
+
+.explainGrid {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 60rem) {
+  .explainGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+/* The three questions a newcomer is asking, each answered in a few lines. */
+.questions {
+  min-width: 0;
+}
+
+.question {
+  padding: 0 0 1.35rem;
+}
+
+.question + .question {
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.question h3,
+.where h3,
+.test h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 2vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.question p,
+.where p,
+.test p {
+  margin-top: 0.5rem;
+  max-width: 38rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.setUp {
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
+/* Where to look, and what the labs test: two plain panels side by side. */
+.afterGrid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: clamp(1.75rem, 4vw, 3rem);
+}
+
+@media (min-width: 56rem) {
+  .afterGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+  }
+}
+
+.where {
+  align-self: start;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  background: var(--v-quiet);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.test {
+  min-width: 0;
+}
+
+.test p + p {
+  margin-top: 0.75rem;
+}
+
+.textLink {
+  font-size: var(--fde-body);
+  font-weight: 600;
+  color: var(--v-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.textLink:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ── The drawing of a made-up chat app ───────────────────────────────────── */
+
+.drawing {
+  margin: 0;
+  min-width: 0;
+}
+
+.app {
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* The question she sent: on the right, as in every chat app. */
+.bubbleUser {
+  align-self: flex-end;
+  max-width: 88%;
+  padding: 0.7rem 1rem;
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border-radius: var(--radius-lg) var(--radius-lg) 0.3rem var(--radius-lg);
+  font-size: var(--fde-body-sm);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* The answer, drawn as plain lines. Its height is fixed so the drawing does
+   not jump when a menu is tried. */
+.bubbleAnswer {
+  align-self: flex-start;
+  box-sizing: border-box;
+  width: 88%;
+  height: 9.2rem;
+  padding: 0.9rem 1rem;
+  background: var(--v-quiet);
+  border: 1px solid var(--v-line-soft);
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 0.3rem;
+  overflow: hidden;
+}
+
+/* The work done before the reply: three marks, filled as far as the
+   thinking setting goes. Filled and hollow, so it does not rest on colour. */
+.work {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.work i {
+  box-sizing: border-box;
+  width: 1.6rem;
+  height: 0.5rem;
+  border: 1px solid var(--v-accent);
+  border-radius: 0.25rem;
+  background: var(--v-accent);
+}
+
+.answer {
+  display: none;
+}
+
+.answer i {
+  display: block;
+  height: 0.5rem;
+  margin-top: 0.6rem;
+  border-radius: 0.25rem;
+  background: var(--v-line);
+  transform-origin: 0 50%;
+}
+
+.answer i:first-child {
+  margin-top: 0;
+}
+
+/* The still drawing (and any browser without :has()): the middle model, and
+   medium thinking (two of the three marks filled). */
+.answer[data-answer="1"] {
+  display: block;
+}
+
+.work i:nth-child(3) {
+  background: transparent;
+}
+
+/* Another model draws a different answer. */
+.app:has(input[name="labs-drawing-model"]:checked) .answer {
+  display: none;
+}
+
+.app:has(input[name="labs-drawing-model"][value="0"]:checked) .answer[data-answer="0"],
+.app:has(input[name="labs-drawing-model"][value="1"]:checked) .answer[data-answer="1"],
+.app:has(input[name="labs-drawing-model"][value="2"]:checked) .answer[data-answer="2"] {
+  display: block;
+}
+
+/* Less thinking fills one mark, more thinking all three. The answer is not
+   made longer: only the work before it changes. */
+.app:has(input[name="labs-drawing-thinking"][value="0"]:checked) .work i:nth-child(2) {
+  background: transparent;
+}
+
+.app:has(input[name="labs-drawing-thinking"][value="2"]:checked) .work i:nth-child(3) {
+  background: var(--v-accent);
+}
+
+/* The box you type in: empty, with a caret and a send button drawn in. */
+.typeBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2.75rem;
+  margin-top: 1rem;
+  padding: 0 0.5rem 0 1rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.caret {
+  width: 2px;
+  height: 1.15rem;
+  background: var(--v-ink);
+}
+
+.send {
+  position: relative;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: var(--v-btn);
+}
+
+.send::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-left: 2px solid var(--v-btn-text);
+  border-top: 2px solid var(--v-btn-text);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* The two menus, open, side by side under the box. */
+.menus {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.menu {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.menu legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.marker {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--v-accent);
+  border-radius: 50%;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--v-accent);
+}
+
+.menu label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  font-size: var(--fde-body-sm);
+  line-height: 1.3;
+  color: var(--v-soft);
+  cursor: pointer;
+}
+
+.menu label + label {
+  margin-top: 0.4rem;
+}
+
+.menu input {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--v-accent);
+  cursor: pointer;
+}
+
+/* The chosen row: a heavier accent boundary and ink text as well as the
+   filled radio, so the choice never rests on colour alone. */
+.menu label:has(input:checked) {
+  border-color: var(--v-accent);
+  box-shadow: inset 0 0 0 1px var(--v-accent);
+  color: var(--v-ink);
+  font-weight: 600;
+}
+
+.menu label:hover {
+  border-color: var(--v-accent);
+}
+
+.menu label:has(input:focus-visible) {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+.drawingNotes {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.drawingNotes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+  color: var(--v-ink);
+}
+
+.drawingNotes li + li {
+  margin-top: 0.5rem;
+}
+
+.drawing figcaption {
+  margin-top: 0.85rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.5;
+  color: var(--v-muted);
+}
+
+/* ── 3. The six labs ─────────────────────────────────────────────────────── */
 
 .cards {
   display: grid;
@@ -135,20 +513,26 @@
   margin-top: 1.75rem;
 }
 
-@media (min-width: 56rem) {
+@media (min-width: 40rem) {
   .cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* The whole card opens the lab: the worded link at its foot is stretched over
-   it, so a screen reader still reads the card's contents in order. */
+@media (min-width: 64rem) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* The whole card opens the lab: the worded link in it is stretched over the
+   card, so a screen reader still reads the card's contents in order. */
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  overflow: hidden;
   background: var(--v-surface);
   border: 1px solid var(--v-line);
   border-radius: var(--radius-lg);
@@ -160,20 +544,37 @@
   border-color: var(--v-accent);
 }
 
-.cardTop {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
+/* The picture of the lab's main task, edge to edge at the top of the card. */
+.cardPicture {
+  overflow: hidden;
+  border-bottom: 1px solid var(--v-line-soft);
+  aspect-ratio: 3 / 2;
+  background: var(--v-quiet);
 }
 
-.cardIcon {
-  flex: none;
-  color: var(--v-accent);
+.card .cardPicture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.cardBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+.cardTop {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
 }
 
 .cardName {
   font-family: var(--font-serif);
-  font-size: clamp(1.45rem, 2.4vw, 1.75rem);
+  font-size: clamp(1.45rem, 2.4vw, 1.7rem);
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -200,8 +601,8 @@
 }
 
 .cardTask {
-  margin-top: 1.1rem;
-  padding-top: 1.1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--v-line-soft);
   font-size: var(--fde-body-sm);
   line-height: 1.6;
@@ -226,57 +627,16 @@
   display: block;
   margin-top: 0.1rem;
   font-family: var(--font-serif);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-style: italic;
   font-weight: 500;
   line-height: 1.3;
   color: var(--v-accent);
 }
 
-.picks {
-  margin: 1.1rem 0 0;
-  padding: 0.25rem 0 0;
-  border-top: 1px solid var(--v-line-soft);
-}
-
-.pick {
-  display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
-  gap: 0.75rem;
-  padding: 0.6rem 0;
-  font-size: var(--fde-body-sm);
-  line-height: 1.5;
-}
-
-.pick + .pick {
-  border-top: 1px solid var(--v-line-soft);
-}
-
-.pick dt {
-  font-size: var(--fde-mono-sm);
-  line-height: 1.83;
-  color: var(--v-muted);
-}
-
-.pick dd {
-  margin: 0;
-  color: var(--v-soft);
-}
-
-.pick dd strong {
-  font-weight: 600;
-  color: var(--v-ink);
-}
-
 .cardFoot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.35rem 1.25rem;
   margin-top: auto;
   padding-top: 1.1rem;
-  border-top: 1px solid var(--v-line-soft);
 }
 
 /* Accent and underlined at rest, so it reads as a link before any hover
@@ -311,10 +671,92 @@
 
 .cardAction:focus-visible::after {
   outline: 2px solid var(--v-accent);
+  outline-offset: -3px;
+}
+
+/* Our picks, shown only when asked for. It sits above the stretched link so
+   it can be opened without opening the lab. */
+.cardPicks {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.cardPicks summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  font-size: var(--fde-body-sm);
+  font-weight: 500;
+  color: var(--v-soft);
+  cursor: pointer;
+  list-style: none;
+}
+
+.cardPicks summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A drawn chevron that turns when the picks are open. */
+.cardPicks summary::before {
+  content: "";
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0 0.15rem 0 0.1rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.cardPicks[open] summary::before {
+  transform: rotate(45deg) translate(-0.1rem, -0.1rem);
+}
+
+.cardPicks summary:hover {
+  color: var(--v-ink);
+}
+
+.cardPicks summary:focus-visible {
+  outline: 2px solid var(--v-accent);
   outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+.picks {
+  margin: 0.35rem 0 0;
+}
+
+.pick {
+  padding: 0.55rem 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+}
+
+.pick + .pick {
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.pick dt {
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.pick dd {
+  margin: 0.1rem 0 0;
+  color: var(--v-soft);
+}
+
+.pick dd strong {
+  font-weight: 600;
+  color: var(--v-ink);
 }
 
 .cardMeta {
+  margin-top: 0.35rem;
   font-size: var(--fde-mono-sm);
   color: var(--v-muted);
 }
@@ -343,7 +785,7 @@
   color: var(--v-soft);
 }
 
-/* ── 3. What you do in a lab ─────────────────────────────────────────────── */
+/* ── 4. What you do in a lab ─────────────────────────────────────────────── */
 
 .tourGrid {
   display: grid;
@@ -1123,7 +1565,68 @@
     animation-delay: 180ms;
   }
 
-  /* The six labs are dealt, two at a time. */
+  /* The explainer: the drawing and the three questions rise into place. */
+  .explainGrid[data-armed]:not([data-in]) > * {
+    opacity: 0;
+  }
+
+  .explainGrid[data-in] > * {
+    animation: labsRise 620ms var(--labs-ease) backwards;
+  }
+
+  .explainGrid[data-in] > *:nth-child(2) {
+    animation-delay: 120ms;
+  }
+
+  /* Trying a menu: the new answer is written out, line by line. */
+  .app:has(input:checked) .answer i {
+    animation: labsBar 420ms var(--labs-ease) backwards;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(2) {
+    animation-delay: 60ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(3) {
+    animation-delay: 120ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(4) {
+    animation-delay: 180ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(5) {
+    animation-delay: 240ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(6) {
+    animation-delay: 300ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(7) {
+    animation-delay: 360ms;
+  }
+
+  @keyframes labsCaret {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .caret {
+    animation: labsCaret 1.2s steps(1) 5;
+  }
+
+  .work i {
+    transition: background-color 320ms var(--labs-ease);
+  }
+
+  .menu label {
+    transition: border-color 200ms var(--labs-ease), box-shadow 200ms var(--labs-ease),
+      color 200ms var(--labs-ease);
+  }
+
+  /* The six labs are dealt, one after another. */
   .cards[data-armed]:not([data-in]) > * {
     opacity: 0;
   }
@@ -1225,6 +1728,10 @@
     transform: scale(0.97);
   }
 
+  .cardPicture img {
+    transition: transform 520ms var(--labs-ease);
+  }
+
   .card,
   .heroPicture img,
   .howPicture img,
@@ -1247,6 +1754,10 @@
 
   .card:hover {
     transform: translateY(-4px) rotate(-0.25deg);
+  }
+
+  .card:hover .cardPicture img {
+    transform: scale(1.03);
   }
 
   .heroPicture:hover img,
