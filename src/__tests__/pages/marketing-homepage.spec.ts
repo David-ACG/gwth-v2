@@ -35,9 +35,10 @@ const BODY_SECTIONS = [
   "individuals",
 ] as const
 
+// 19 Nov 2026: /for-institutions and /for-teams redirect to the one
+// /for-organisations page (header and footer link it directly).
 const EXPECTED_INTERNAL_HREFS = [
-  "/for-institutions",
-  "/for-teams",
+  "/for-organisations",
   "/pricing",
   "/lessons",
   "/why-gwth",
@@ -209,7 +210,10 @@ test.describe("Marketing homepage, full-page smoke", () => {
     const hrefs = await signpost
       .locator("a")
       .evaluateAll((els) => els.map((el) => el.getAttribute("href")))
-    expect(hrefs).toEqual(["/for-institutions", "/for-teams"])
+    // 19 Nov 2026: one organisations page. NOTE: home-next.tsx still links
+    // the old /for-institutions address (which redirects); this expects the
+    // new address and fails until the page link is updated.
+    expect(hrefs).toEqual(["/for-organisations"])
     // And the institution feature list is not rebuilt here.
     const body = page.locator("main")
     await expect(body).not.toContainText("What an institution gets")
@@ -220,7 +224,7 @@ test.describe("Marketing homepage, full-page smoke", () => {
     page,
   }) => {
     // The walkthrough costs David an hour and now lives only where a large
-    // buyer arrives (/for-institutions). Nothing on this page offers it.
+    // buyer arrives (/for-organisations). Nothing on this page offers it.
     await expect(page.locator("main")).not.toContainText(/walkthrough/i)
     await expect(
       page.locator('[data-section="nav"] a', { hasText: "Join the waitlist" }).first()

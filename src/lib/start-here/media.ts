@@ -1,19 +1,35 @@
 /**
  * Start Here media on R2 (bead gwth-launch-xw6s).
  *
- * The film is lesson-zero-film7, approved by David on 2026-10-17 ("The intro
- * film for lesson zero is excellent. No further changes needed."). Web copies
- * (x264 CRF 26, faststart) of its paper and night masters, the frame at 15 s
- * as the poster, and its captions. The pictures are the lesson's seven
- * published images (light and dark), as WebP at 1536 px wide. Everything
- * sits under a new dated key, so nothing gwth.ai served before is touched.
+ * The film is the ink and watercolour lesson zero film (v03), in paper and
+ * night editions. David, 20 Nov 2026: "Once you finish rendering please put
+ * all the videos into the site". Its narration is the newer 12 Nov lesson zero
+ * intro, not the one in the film this replaced: David chose to put the new
+ * films into the site, so the new narration comes with it on purpose. Web
+ * copies (x264, faststart) and posters from
+ * GWTH-launch-plan/completion/lesson-zero-film-new-style/, under a new dated
+ * key (site/start-here/2026-11-20-watercolour/).
+ *
+ * Before it: lesson-zero-film7, approved by David on 2026-10-17 ("The intro
+ * film for lesson zero is excellent. No further changes needed."), still on R2
+ * untouched under site/start-here/2026-11-06/ so it can come back.
+ *
+ * The captions are served from this site (public/start-here-film/), not from
+ * R2: media.gwth.ai sends no CORS header, so a <track> from it never loads
+ * (the 6 Nov captions sat on R2 and so never showed). The folder name is one
+ * no route uses, so nothing shadows it.
+ *
+ * The pictures are the lesson's seven published images (light and dark), as
+ * WebP at 1536 px wide, still under the 6 Nov key. Everything sits under dated
+ * keys, so nothing gwth.ai served before is touched.
  */
 const BASE = "https://media.gwth.ai/site/start-here/2026-11-06"
+const FILM_BASE = "https://media.gwth.ai/site/start-here/2026-11-20-watercolour"
 
 export const START_HERE_FILM = {
-  paper: { src: `${BASE}/lesson-zero-film-paper.mp4`, poster: `${BASE}/lesson-zero-film-paper-poster.jpg` },
-  night: { src: `${BASE}/lesson-zero-film-night.mp4`, poster: `${BASE}/lesson-zero-film-night-poster.jpg` },
-  captions: `${BASE}/lesson-zero-film.vtt`,
+  paper: { src: `${FILM_BASE}/lesson-zero-watercolour-paper.mp4`, poster: `${FILM_BASE}/poster-paper.jpg` },
+  night: { src: `${FILM_BASE}/lesson-zero-watercolour-night.mp4`, poster: `${FILM_BASE}/poster-night.jpg` },
+  captions: "/start-here-film/lesson-zero-film.vtt",
 } as const
 
 export type StartHereImage = { light: string; dark: string; alt: string }

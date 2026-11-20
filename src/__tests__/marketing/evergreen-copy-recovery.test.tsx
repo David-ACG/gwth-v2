@@ -3,11 +3,11 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { describe, it, expect, afterEach, beforeEach } from "vitest"
 
-import { HomeFde } from "@/components/marketing/home-fde/home-fde"
-import { LessonsFde } from "@/components/marketing/lessons-fde/lessons-fde"
-import { PricingFde } from "@/components/marketing/pricing-fde/pricing-fde"
-import { WhyGwthFde } from "@/components/marketing/why-gwth-fde/why-gwth-fde"
-import { ForTeamsFde } from "@/components/marketing/for-teams-fde/for-teams-fde"
+import { HomeNext } from "@/components/marketing/home-next/home-next"
+import { LessonsNext } from "@/components/marketing/lessons-next/lessons-next"
+import { PricingNext } from "@/components/marketing/pricing-next/pricing-next"
+import { WhyGwthNext } from "@/components/marketing/why-gwth-next/why-gwth-next"
+import { ForOrganisationsNext } from "@/components/marketing/for-organisations-next/for-organisations-next"
 import { NewsletterFde } from "@/components/marketing/newsletter-fde/newsletter-fde"
 
 /**
@@ -43,6 +43,20 @@ import { NewsletterFde } from "@/components/marketing/newsletter-fde/newsletter-
 
 afterEach(cleanup)
 
+/*
+ * 19 Nov 2026: the live routes now render the rebuilt `*-next` components,
+ * so this suite renders them with the props each route passes. /for-teams
+ * and /for-institutions redirect to /for-organisations, whose team choice
+ * carries the old /for-teams copy. The old `*-fde` components stay in the
+ * repo as a backup and keep their own unit tests.
+ */
+const Home = () => <HomeNext showScore markingLive />
+const Lessons = () => <LessonsNext showScore markingLive />
+const WhyGwth = () => <WhyGwthNext showScore />
+const ForTeams = () => (
+  <ForOrganisationsNext showScore markingLive audience="team" />
+)
+
 // canPromoteLabs() is a runtime env read; pin the fail-closed production shape.
 const ORIGINAL_MODE = process.env.PRIVATE_CONTENT_MODE
 beforeEach(() => {
@@ -60,7 +74,7 @@ function text(): string {
 
 describe("recovered ideas are on the page", () => {
   it("C01 /lessons says what the course teaches instead of what AI is", () => {
-    render(<LessonsFde />)
+    render(<Lessons />)
     // The idea is kept (practical use, through your own work), the contrast
     // went: the latest Sol writing check ruled three times on 2026-10-20 that
     // "We do not teach you what AI is" confuses a beginner, since Month 1 does
@@ -69,7 +83,7 @@ describe("recovered ideas are on the page", () => {
   })
 
   it("C02 /lessons names what the projects are, not only what they are not", () => {
-    render(<LessonsFde />)
+    render(<Lessons />)
     const body = text()
     // The idea is kept; the wording changed on 2026-10-20, when the latest
     // Sol writing check asked for plain words in place of "transformer
@@ -79,12 +93,12 @@ describe("recovered ideas are on the page", () => {
   })
 
   it("C03 /lessons answers the objection that there is no time for it", () => {
-    render(<LessonsFde />)
+    render(<Lessons />)
     expect(text()).toMatch(/around the day job/i)
   })
 
   it("C04 /lessons closes on what a learner will have built", () => {
-    render(<LessonsFde />)
+    render(<Lessons />)
     // The idea is kept: the page closes on what the learner builds. "Most
     // people assume need a developer" and the fixed "three months from now"
     // went on 2026-10-20 (latest Sol writing check: unsupported, and untrue
@@ -111,13 +125,16 @@ describe("recovered ideas are on the page", () => {
    * describes, so this checks the idea in the place it lives.
    */
   it("C05 home keeps David's line about Month 1 being personal, and good fun", () => {
-    render(<HomeFde />)
-    const monthOne = screen.getAllByTestId("month-card")[0]!
+    render(<Home />)
+    // 19 Nov 2026 (home-next): the cards are `month-step`, and the line reads
+    // "You start with projects for yourself. They are useful to you and good
+    // fun to make." The idea and David's words are the same.
+    const monthOne = screen.getAllByTestId("month-step")[0]!
     expect(monthOne.textContent).toMatch(/Month 1/)
     // 13 Nov 2026: the card title is now "Build your foundation" (David asked
     // for less text and Month 1 as the foundation); his line stays.
     expect(monthOne.textContent).toMatch(/foundation/i)
-    expect(monthOne.textContent).toMatch(/projects are useful to you and good fun to make/i)
+    expect(monthOne.textContent).toMatch(/projects for yourself\. They are useful to you and good fun to make/i)
     expect(monthOne.textContent).toMatch(/good fun to make/i)
   })
 
@@ -128,7 +145,7 @@ describe("recovered ideas are on the page", () => {
    * the old list it replaced was about.
    */
   it("C06 /why-gwth gives the REASON a record has to stay current, not just the mechanic", () => {
-    render(<WhyGwthFde />)
+    render(<WhyGwth />)
     const body = text()
     expect(body).toMatch(/certificate from six months ago/i)
     expect(body).toMatch(/what they can do today/i)
@@ -143,7 +160,7 @@ describe("recovered ideas are on the page", () => {
    * carries the argument, that a beginner does not know what to ask, stays.
    */
   it("C07 /why-gwth answers why a course beats teaching yourself with AI", () => {
-    render(<WhyGwthFde />)
+    render(<WhyGwth />)
     const body = text()
     expect(body).toMatch(/teaching yourself with a chatbot/i)
     expect(body).toMatch(/may not yet know what to ask/i)
@@ -164,35 +181,35 @@ describe("recovered ideas are on the page", () => {
     // companies that will lead in three years are not the ones buying the
     // most AI tools today" an unsupported claim about other companies. The
     // recovered idea, capability over tool spend, still opens the page.
-    render(<ForTeamsFde />)
+    render(<ForTeams />)
     expect(text()).toMatch(
       /Buying AI tools is only the start.*useful at work when the people using them know how/i
     )
   })
 
   it("C10 /for-teams names the two places an organisation gets stuck", () => {
-    render(<ForTeamsFde />)
+    render(<ForTeams />)
     const body = text()
     expect(body).toMatch(/a few enthusiasts experimenting/i)
     expect(body).toMatch(/click the buttons in one product/i)
   })
 
   it("C11 /for-teams says WHY single-platform training goes stale", () => {
-    render(<ForTeamsFde />)
+    render(<ForTeams />)
     expect(text()).toMatch(
       /built around one platform.*changes its pricing, its capabilities or its terms/i
     )
   })
 
   it("C12 /for-teams states the technical requirements concretely", () => {
-    render(<ForTeamsFde />)
+    render(<ForTeams />)
     expect(text()).toMatch(
       /computer, an internet connection and the ability to type/i
     )
   })
 
   it("C13 /pricing says why the price drops, in David's words", () => {
-    render(<PricingFde />)
+    render(<PricingNext />)
     expect(text()).toContain(
       "you are never paying course prices out of habit"
     )
@@ -205,9 +222,11 @@ describe("recovered ideas are on the page", () => {
    * closing block ties cancelling to whether the course is still worth it.
    */
   it("C14 /pricing ties cancellation to the reason it is offered", () => {
-    const { container } = render(<PricingFde />)
+    const { container } = render(<PricingNext />)
+    // 19 Nov 2026: on pricing-next the price-drop and cancelling copy sits
+    // in data-section="after" ("What happens after the first three months").
     const closing = (
-      container.querySelector('[data-section="closing"]')?.textContent ?? ""
+      container.querySelector('[data-section="after"]')?.textContent ?? ""
     ).replace(/\s+/g, " ")
     expect(closing).toMatch(/If it stops being worth it to you, cancel/i)
     expect(closing).not.toMatch(/keeps us honest/i)
@@ -221,7 +240,7 @@ describe("recovered ideas are on the page", () => {
 
 describe("recovered ideas did not displace what was already decided", () => {
   it("C12 leaves the a-20260914-200357-6dddb2 answer intact", () => {
-    render(<ForTeamsFde />)
+    render(<ForTeams />)
     expect(text()).toMatch(
       /subject gets deeper, the hand-holding does not stop/i
     )
@@ -243,7 +262,7 @@ describe("recovered ideas did not displace what was already decided", () => {
    * of order when it is not.
    */
   it("C05 leaves the Month 1 outputs and the three-month arc intact", () => {
-    const { container } = render(<HomeFde />)
+    const { container } = render(<Home />)
     const body = text()
     expect(body).toMatch(/rewrite your CV and your LinkedIn profile/i)
     expect(["Month 1", "Month 2", "Month 3"].every((m) => body.includes(m)),
@@ -251,31 +270,35 @@ describe("recovered ideas did not displace what was already decided", () => {
 
     // The arc itself: the three cards, in order.
     const cards = Array.from(
-      container.querySelectorAll('[data-testid="month-card"]')
+      container.querySelectorAll('[data-testid="month-step"]')
     ).map((c) => (c.textContent ?? "").replace(/\s+/g, " "))
     expect(cards).toHaveLength(3)
     cards.forEach((card, i) => expect(card).toMatch(new RegExp(`^Month ${i + 1}`)))
 
     // And the hero names where it ends up, which is why the arc is no longer
     // the first place the page says "Month 3".
+    // home-next says it mid-sentence: "and by Month 3 you build your own AI
+    // consultant".
     const hero = container.querySelector('[data-section="hero"]')
-    expect(hero?.textContent).toMatch(/By Month 3/)
+    expect(hero?.textContent).toMatch(/by Month 3/i)
   })
 
   it("C13 and C14 leave the a-20260914-203753-b9d050 closing intact", () => {
-    render(<PricingFde />)
+    render(<PricingNext />)
     const body = text()
     // "No timer and no pretend scarcity" went on 2026-10-20 (launch
     // readiness): it sat beside a dated £69 offer, which is a timer.
     expect(body).not.toMatch(/no timer/i)
-    expect(body).toMatch(/unlock one month at a time/i)
-    expect(body).toMatch(/cancel whenever you like/i)
+    // 19 Nov 2026 (pricing-next): "Each payment opens one month" and
+    // "Cancel at any time" carry the same two promises.
+    expect(body).toMatch(/unlock one month at a time|Each payment opens one month/i)
+    expect(body).toMatch(/cancel whenever you like|cancel at any time/i)
     // "Try before you join" was removed by that annotation and must stay out.
     expect(body).not.toMatch(/try (it )?before you (join|subscribe)/i)
   })
 
   it("C09 leaves the sourced UK figures and their per-stat citations intact", () => {
-    render(<ForTeamsFde />)
+    render(<ForTeams />)
     const sources = screen.getAllByText(/^Source: /)
     expect(sources.length).toBeGreaterThanOrEqual(3)
   })
@@ -287,16 +310,17 @@ describe("recovered ideas did not displace what was already decided", () => {
  * not come back onto a live marketing page.
  */
 const MARKETING_SOURCES = [
-  "home-fde/home-fde.tsx",
-  "lessons-fde/lessons-fde.tsx",
-  "pricing-fde/pricing-fde.tsx",
-  "why-gwth-fde/why-gwth-fde.tsx",
-  "for-teams-fde/for-teams-fde.tsx",
-  "for-institutions-fde/for-institutions-fde.tsx",
-  "labs-fde/labs-fde.tsx",
+  "home-next/home-next.tsx",
+  "lessons-next/lessons-next.tsx",
+  "pricing-next/pricing-next.tsx",
+  "why-gwth-next/why-gwth-next.tsx",
+  "for-organisations-next/for-organisations-next.tsx",
+  "for-organisations-next/data.ts",
+  "labs-next/labs-next.tsx",
+  "labs-next/cost-map.tsx",
   "newsletter-fde/newsletter-fde.tsx",
-  "waitlist-fde/waitlist-fde.tsx",
-  "contact-fde/contact-fde.tsx",
+  "waitlist-next/waitlist-next.tsx",
+  "contact-next/contact-next.tsx",
 ] as const
 
 const BANNED: ReadonlyArray<{

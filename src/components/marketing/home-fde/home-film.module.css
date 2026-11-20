@@ -1,4 +1,5 @@
-/* The home page film in the hero (Film A, 12 Nov 2026), paper-first register:
+/* The home page film in the hero (Film A, 12 Nov 2026; the paper cutout film
+   in paper and night editions since 20 Nov 2026), paper-first register:
    one hairline frame, the mint button for Play, the free-lesson panel beside
    the film on wide screens and under it on phones. Tokens come from the home
    page's scoped --v-* block, so light and dark follow the page. */
@@ -53,6 +54,21 @@
 
 .poster {
   object-fit: cover;
+}
+
+/* Two editions (paper cutout film, 20 Nov 2026): the paper poster in the
+   light theme, the night poster in the dark. The Start Here film uses the
+   same classes from this file. */
+.nightOnly {
+  display: none;
+}
+
+:global(.dark) .paperOnly {
+  display: none;
+}
+
+:global(.dark) .nightOnly {
+  display: block;
 }
 
 .play {

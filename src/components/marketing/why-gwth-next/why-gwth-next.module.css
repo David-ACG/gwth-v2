@@ -1,0 +1,1130 @@
+/*
+ * The Why GWTH page (`/why-gwth`), in the paper-first register and in the
+ * family of the new home page. Every colour is a --v-* token from
+ * globals.css, so paper and night follow the theme; there is no raw hex here.
+ * Shared recipes (shell, page, buttons, section head, plates) come from
+ * `marketing/paper/paper.module.css`.
+ *
+ * A boundary is --v-line; a decorative divider is --v-line-soft. A tint never
+ * carries a state alone: the GWTH column of the table has a boundary and a
+ * heavier ink as well as its quiet fill.
+ */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 1. The question: the home page's hero grid ──────────────────────────── */
+
+.hero {
+  padding: clamp(3rem, 6vw, 5rem) 0 0;
+}
+
+.heroGrid {
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 64rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: end;
+  }
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.7rem, 6vw, 4.6rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+.heroTitle span {
+  display: block;
+}
+
+.heroTitle em,
+.closingTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
+}
+
+.heroCopy {
+  padding-bottom: 0.35rem;
+}
+
+/* ── 2. The name ─────────────────────────────────────────────────────────── */
+
+.name {
+  padding: clamp(2.5rem, 5vw, 4rem) 0 0;
+}
+
+.nameGrid {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .nameGrid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+  }
+}
+
+.namePicture {
+  min-width: 0;
+}
+
+.nameLead {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-family: var(--font-sans);
+  font-size: var(--fde-body-lg);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--v-soft);
+}
+
+/* Four words, one to a line. The first letter of each is the letter in the
+   name, picked out in the accent; "and" is the italic accent, because the
+   joining of the two is the point. */
+.acrostic {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 5.4vw, 4.4rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+.acrostic > span {
+  display: block;
+}
+
+.acrostic > span::first-letter {
+  color: var(--v-accent);
+}
+
+.acrostic em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
+}
+
+.nameCopy p {
+  max-width: 34rem;
+  margin-top: 1.1rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.nameCopy p:first-of-type {
+  margin-top: 1.6rem;
+}
+
+/* ── Shared text ─────────────────────────────────────────────────────────── */
+
+.lead {
+  max-width: 46rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.body {
+  max-width: 38rem;
+  margin-top: 0.8rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.rowTitle {
+  text-wrap: balance;
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+/* A drawn tick, as on the home page. */
+.gwthList li::before,
+.tickList li::before,
+.slips li::before {
+  content: "";
+  position: absolute;
+  left: 0.2rem;
+  top: 0.38rem;
+  width: 0.4rem;
+  height: 0.72rem;
+  border-right: 2px solid var(--v-accent);
+  border-bottom: 2px solid var(--v-accent);
+  transform: rotate(40deg);
+}
+
+/* ── 3. How we teach ─────────────────────────────────────────────────────── */
+
+/* The one statement in display type. */
+.statement {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: center;
+  padding: clamp(1.35rem, 3.2vw, 2.5rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 60rem) {
+  .statement {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+}
+
+.statementLine {
+  text-wrap: balance;
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 2.9vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  color: var(--v-ink);
+}
+
+.statementLine em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
+}
+
+/* A picture row. The picture changes side from row to row. */
+.row {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: center;
+  margin-top: clamp(2.5rem, 5.5vw, 4.5rem);
+  scroll-margin-top: 6rem;
+}
+
+@media (min-width: 64rem) {
+  .row {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .row[data-flip] {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+
+  .row[data-flip] .rowPicture {
+    order: 2;
+  }
+}
+
+.rowPicture {
+  min-width: 0;
+}
+
+/* What GWTH does: set off by a hairline, in the full ink, each with a tick. */
+.gwthList {
+  list-style: none;
+  max-width: 38rem;
+  margin: 1.15rem 0 0;
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.gwthList li {
+  position: relative;
+  padding-left: 1.7rem;
+  font-size: var(--fde-body);
+  font-weight: 500;
+  line-height: 1.65;
+  color: var(--v-ink);
+}
+
+.gwthList li + li {
+  margin-top: 0.75rem;
+}
+
+/* ── 4. You learn by making things ───────────────────────────────────────── */
+
+/* A picture, then what you build: Month 1 to Month 3 as a rising track whose
+   marker grows with the month, as on the home page. */
+.make {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .make {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .make .rowPicture {
+    order: 2;
+  }
+}
+
+.makeLead {
+  max-width: 38rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.months {
+  list-style: none;
+  max-width: 38rem;
+  margin: 1.5rem 0 0;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.months li {
+  position: relative;
+  padding: 0 0 1.35rem 2.4rem;
+}
+
+.months li:last-child {
+  padding-bottom: 0;
+}
+
+.months li::before {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  top: 0.4rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--v-accent);
+  transform: translateX(-50%);
+}
+
+.months li[data-step="2"]::before {
+  width: 0.9rem;
+  height: 0.9rem;
+  top: 0.3rem;
+}
+
+.months li[data-step="3"]::before {
+  width: 1.2rem;
+  height: 1.2rem;
+  top: 0.15rem;
+}
+
+.months li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  top: 1.6rem;
+  bottom: 0.2rem;
+  border-left: 1px solid var(--v-line);
+}
+
+/* On the bare ground the accent measures 4.35:1, under the 4.5:1 bar for
+   small text, so the month label is ink and the marker carries the jade. */
+.monthKicker {
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-soft);
+}
+
+.monthTitle {
+  margin-top: 0.1rem;
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.monthBody {
+  margin-top: 0.25rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+/* Proof: a certificate set against the work itself. */
+.proof,
+.optional {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin-top: clamp(2.5rem, 5.5vw, 4.5rem);
+  scroll-margin-top: 6rem;
+}
+
+@media (min-width: 64rem) {
+  .proof {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+}
+
+.versus {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 36rem) {
+  .versus {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+.versusCard {
+  padding: 1.25rem 1.35rem 1.45rem;
+  border-radius: var(--radius-lg);
+}
+
+.versusCard h4 {
+  margin-top: 0.8rem;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.versusCard p {
+  margin-top: 0.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+}
+
+/* Then: an outline only, in the quieter ink. The dashed edge and the missing
+   fill carry the difference; the colour only reinforces it. */
+.versusThen {
+  border: 1px dashed var(--v-line);
+  color: var(--v-muted);
+}
+
+.versusThen h4 {
+  color: var(--v-soft);
+}
+
+.versusThen p {
+  color: var(--v-soft);
+}
+
+/* Now: a real card with a jade bar along its foot. */
+.versusNow {
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 -4px 0 var(--v-accent);
+  color: var(--v-accent);
+}
+
+.versusNow h4 {
+  color: var(--v-ink);
+}
+
+.versusNow p {
+  color: var(--v-ink);
+}
+
+.versusIcon {
+  display: block;
+}
+
+/* Optional lessons: lists a visitor can scan for their own field. */
+.optional {
+  padding: clamp(1.35rem, 3.2vw, 2.5rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 64rem) {
+  .optional {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+}
+
+.optionalGroups {
+  display: grid;
+  gap: 1.5rem 2rem;
+}
+
+@media (min-width: 44rem) {
+  .optionalGroups {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1.15fr);
+  }
+}
+
+.groupTitle {
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-family: var(--font-sans);
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-accent);
+}
+
+.tickList {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+}
+
+.tickList li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-ink);
+}
+
+.tickList li + li {
+  margin-top: 0.5rem;
+}
+
+.tickList li::before {
+  top: 0.3rem;
+}
+
+/* ── 5. Written for the UK ───────────────────────────────────────────────── */
+
+.uk {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .uk {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+  }
+}
+
+.uk .body:first-of-type {
+  margin-top: 1.1rem;
+}
+
+/* The examples as slips of paper, like the label tags in the pictures. */
+.slips {
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 30rem) {
+  .slips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.slips li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.95rem 1rem 0.95rem 2.6rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  font-size: var(--fde-body);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--v-ink);
+}
+
+.slips li::before {
+  left: 1.15rem;
+  top: calc(50% - 0.5rem);
+}
+
+/* ── 6. The government comparison: one quiet band ────────────────────────── */
+
+.evidence {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding: clamp(3rem, 6vw, 4.5rem) 0;
+  background: var(--v-surface);
+  border-top: 1px solid var(--v-line-soft);
+  border-bottom: 1px solid var(--v-line-soft);
+  scroll-margin-top: 4rem;
+}
+
+.evidenceHead {
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 64rem) {
+  .evidenceHead {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .evidenceHead .body:first-child {
+    margin-top: 0.2rem;
+  }
+}
+
+.subTitle {
+  margin: clamp(2.25rem, 4.5vw, 3.25rem) 0 1.1rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 2vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--v-ink);
+}
+
+/* The three UK figures, each with a drawing sized from the figure itself. */
+.stats {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 52rem) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 1.35rem 1.5rem 1.3rem;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.statValue {
+  font-family: var(--font-serif);
+  font-size: clamp(2.7rem, 4.6vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+.dots,
+.bars,
+.tiles {
+  margin: 1.1rem 0 1.15rem;
+}
+
+/* The three drawings share a height, so the three labels start level. */
+.drawing {
+  display: flex;
+  align-items: center;
+  min-height: 7.1rem;
+}
+
+.drawing > * {
+  flex: 1;
+}
+
+/* 100 dots, 20 to a row: the solid ones are the figure. Solid against hollow
+   is a shape difference, so it does not rest on colour. */
+.dots {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  gap: 4px;
+  max-width: 21rem;
+}
+
+.dots span {
+  aspect-ratio: 1;
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+}
+
+.dots span[data-on] {
+  background: var(--v-accent);
+  border-color: var(--v-accent);
+}
+
+.bars {
+  display: grid;
+  gap: 0.7rem;
+  align-content: center;
+}
+
+.barRow {
+  display: grid;
+  grid-template-columns: 5.4rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.barLabel {
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.barTrack {
+  display: block;
+  height: 1rem;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  background: var(--v-accent);
+  transform-origin: left center;
+}
+
+.tiles {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.tile {
+  display: block;
+  width: 4.1rem;
+  height: 4.1rem;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tile span {
+  display: block;
+  height: 100%;
+  background: var(--v-accent);
+  transform-origin: left center;
+}
+
+.statLabel {
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+.statSource {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  font-size: var(--fde-mono-xs);
+  color: var(--v-muted);
+}
+
+.sourcesLine {
+  max-width: 62rem;
+  margin-top: 1rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
+}
+
+.sourcesLine a,
+.view a,
+.priceMore a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.sourcesLine a:focus-visible,
+.view a:focus-visible,
+.priceMore a:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Side by side: a table on wide screens, a stack on a phone. */
+.compTable {
+  display: none;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+}
+
+.compTable th,
+.compTable td {
+  padding: 0.95rem 1.1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--v-line-soft);
+}
+
+.compTable thead th {
+  padding-top: 1.1rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--v-ink);
+  border-bottom: 1px solid var(--v-line);
+}
+
+.compTable thead th span:not(.srOnly) {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: var(--fde-mono-sm);
+  font-weight: 400;
+  color: var(--v-muted);
+}
+
+.compTable tbody th {
+  width: 10rem;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.compTable td {
+  color: var(--v-soft);
+}
+
+/* The GWTH column: a quiet fill, a real boundary and a heavier ink. */
+.compTable .cellGwth {
+  background: var(--v-quiet);
+  border-left: 1px solid var(--v-line);
+  border-right: 1px solid var(--v-line);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.compTable thead .cellGwth {
+  border-top: 1px solid var(--v-line);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+}
+
+.compTable tbody tr:last-child .cellGwth {
+  border-bottom: 1px solid var(--v-line);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.compStack {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 52rem) {
+  .compTable {
+    display: table;
+  }
+
+  .compStack {
+    display: none;
+  }
+}
+
+.compStackRow {
+  padding: 1.1rem 1.2rem 0.6rem;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.compStackRow h4 {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.compStackRow dl {
+  margin: 0.7rem 0 0;
+}
+
+.compStackRow dl > div {
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.compStackRow dt {
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.compStackRow dd {
+  margin: 0.1rem 0 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
+.stackGwth dt {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.stackGwth dd {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.views {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .views {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.view {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 1.35rem 1.5rem 1.4rem;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.view p {
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.view figcaption {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  font-size: var(--fde-mono-sm);
+}
+
+/* ── 7. Who writes the course: a letter ──────────────────────────────────── */
+
+.founder {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  align-items: start;
+}
+
+.founderPicture {
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 64rem) {
+  .founder {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  /* The picture keeps the letter company while it is read. */
+  .founderSide {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+.letter {
+  padding: clamp(1.4rem, 3.6vw, 3rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.letter p {
+  max-width: 40rem;
+  font-size: var(--fde-body-lg);
+  line-height: 1.75;
+  color: var(--v-soft);
+}
+
+.letter p + p {
+  margin-top: 1.15rem;
+}
+
+.letter .letterLabel {
+  max-width: none;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+/* His own closing lesson, in display type where it falls in the letter. The
+   words are his, unchanged; only the first letter is shown as a capital. */
+.letterLine {
+  display: block;
+  text-wrap: balance;
+  max-width: 34rem;
+  margin: 1.3rem 0 0.35rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3.3vw, 2.5rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--v-ink);
+}
+
+.letterLine::first-letter {
+  text-transform: uppercase;
+}
+
+/* ── 8. The price ────────────────────────────────────────────────────────── */
+
+.prices {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .prices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.priceCard {
+  padding: 1.5rem 1.6rem 1.6rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.priceCard p {
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.priceCard p + p {
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.priceFigure {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.6vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--v-ink);
+}
+
+.priceMore {
+  margin-top: 1.1rem;
+  font-size: var(--fde-body-sm);
+  color: var(--v-soft);
+}
+
+/* ── 9. Join ─────────────────────────────────────────────────────────────── */
+
+.closing {
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+}
+
+.closingBox {
+  display: grid;
+  gap: 1.25rem;
+  align-items: center;
+  padding: clamp(1.6rem, 4.5vw, 3.75rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 60rem) {
+  .closingBox {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+}
+
+.closingTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.3rem, 4.8vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+.closingTitle span {
+  display: block;
+}
+
+.closingBody {
+  max-width: 30rem;
+  font-size: var(--fde-body-lg);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.closingBox .closingBody + div {
+  margin-top: 1.5rem;
+}
+
+/* ── Motion: one quiet entrance each, never without the visitor's leave ────
+   `data-armed` is only ever set by `in-view.tsx`, only below the fold and
+   only when the visitor has not asked for reduced motion. Without it (server
+   render, no JavaScript, reduced motion) everything is simply in place. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise[data-armed] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .rise[data-armed][data-in] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .stats[data-armed] .barFill,
+  .stats[data-armed] .tile span {
+    transform: scaleX(0);
+    transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1) 150ms;
+  }
+
+  .stats[data-armed][data-in] .barFill,
+  .stats[data-armed][data-in] .tile span {
+    transform: scaleX(1);
+  }
+
+  .stats[data-armed] .dots span[data-on] {
+    background: transparent;
+    border-color: var(--v-line);
+    transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--i) * 28ms);
+  }
+
+  .stats[data-armed][data-in] .dots span[data-on] {
+    background: var(--v-accent);
+    border-color: var(--v-accent);
+  }
+}

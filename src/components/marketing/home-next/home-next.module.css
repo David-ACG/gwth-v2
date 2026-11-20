@@ -469,8 +469,7 @@
   color: var(--v-soft);
 }
 
-.others a,
-.priceNote a {
+.others a {
   color: var(--v-ink);
   text-decoration: underline;
   text-underline-offset: 0.2em;
@@ -645,15 +644,7 @@
 /* ── 7. The price ────────────────────────────────────────────────────────── */
 
 .priceGrid {
-  display: grid;
-  gap: clamp(1.5rem, 3vw, 3rem);
   margin-top: 1.5rem;
-}
-
-@media (min-width: 60rem) {
-  .priceGrid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
 }
 
 .priceHeadline {
@@ -681,17 +672,579 @@
   color: var(--v-ink);
 }
 
-.priceSub {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--v-ink);
+/* ── Motion ──────────────────────────────────────────────────────────────────
+   David, 19 Nov 2026: "some really stylish animation as you move from one part
+   of the page to another, or click on things ... but don't change any of the
+   wording or the layout or the content." He picked "a few showpieces":
+
+   1. The six superpowers are dealt like cards, and the panel folds open like
+      a sheet of paper every time one is chosen, with its three months drawn in.
+   2. The months picture builds itself: Month 1, then Month 2 behind it, then
+      Month 3 behind them both. The three month cards then step up in turn.
+   3. The other cutout pictures assemble: three panels dealt, labels pressed on.
+   4. The lesson path and the score lines draw themselves.
+
+   Everything else rises gently as it comes into view.
+
+   The rules this block keeps:
+   - It is all inside `prefers-reduced-motion: no-preference`. Ask for reduced
+     motion and none of it exists.
+   - Nothing here hides anything by itself. The hidden "before" state is only
+     ever set by `home-motion.tsx`, on parts still below the screen, so with no
+     JavaScript the page is simply the page.
+   - Every animation ends on the element's own style (`backwards` fill only),
+     so the resting page is the page as it was. Only transform and opacity
+     move; the two short `clip-path` wipes are on a small chart.
+   - One easing, the register's own. */
+
+.motionRoot {
+  --home-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --home-press: cubic-bezier(0.34, 1.45, 0.64, 1);
 }
 
-.priceNote {
-  margin-top: 0.6rem;
-  font-size: var(--fde-body-sm);
-  line-height: 1.7;
-  color: var(--v-soft);
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes homeRise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  @keyframes homeCard {
+    from {
+      opacity: 0;
+      transform: translateY(28px) rotate(-0.9deg);
+    }
+  }
+
+  @keyframes homeDeal {
+    from {
+      opacity: 0;
+      transform: translateY(-22px) rotate(-3.5deg) scale(1.04);
+    }
+    62% {
+      opacity: 1;
+      transform: translateY(2px) rotate(0.5deg) scale(1);
+    }
+  }
+
+  @keyframes homeDealOther {
+    from {
+      opacity: 0;
+      transform: translateY(-22px) rotate(3.5deg) scale(1.04);
+    }
+    62% {
+      opacity: 1;
+      transform: translateY(2px) rotate(-0.5deg) scale(1);
+    }
+  }
+
+  /* A sheet hinged along its top edge, folded back, swinging down flat. */
+  @keyframes homeUnfold {
+    from {
+      opacity: 0;
+      transform: perspective(1100px) rotateX(-78deg);
+    }
+    16% {
+      opacity: 1;
+    }
+    64% {
+      transform: perspective(1100px) rotateX(4deg);
+    }
+    to {
+      transform: perspective(1100px) rotateX(0deg);
+    }
+  }
+
+  /* The underside of the sheet is in shade until it lies flat. */
+  @keyframes homeShade {
+    from {
+      opacity: 0.14;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes homeDot {
+    from {
+      transform: translateX(-50%) scale(0);
+    }
+  }
+
+  @keyframes homeDrawDown {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes homeTick {
+    from {
+      opacity: 0;
+      transform: rotate(40deg) scale(0);
+    }
+  }
+
+  /* A strip of the page's own colour slides off a hairline, left to right,
+     so the line looks drawn. */
+  @keyframes homeWipe {
+    from {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes homeStamp {
+    from {
+      opacity: 0;
+      transform: translateY(-50%) scale(0.4) rotate(-14deg);
+    }
+  }
+
+  @keyframes homeDrawLine {
+    from {
+      clip-path: inset(-20% 100% -20% -5%);
+    }
+    to {
+      clip-path: inset(-20% -5% -20% -5%);
+    }
+  }
+
+  @keyframes homePop {
+    from {
+      transform: scale(0.55) rotate(-14deg);
+    }
+    60% {
+      transform: scale(1.16) rotate(3deg);
+    }
+  }
+
+  /* ── The hero arrives as the page loads. CSS only: it needs no script. ── */
+
+  .heroTitle span,
+  .heroCopy {
+    animation-name: homeRise;
+    animation-duration: 640ms;
+    animation-timing-function: var(--home-ease);
+    animation-fill-mode: backwards;
+  }
+
+  .heroTitle span:nth-child(2) {
+    animation-delay: 70ms;
+  }
+
+  .heroTitle span:nth-child(3) {
+    animation-delay: 140ms;
+  }
+
+  .heroCopy {
+    animation-delay: 220ms;
+  }
+
+  /* ── Gentle entrances ─────────────────────────────────────────────────── */
+
+  .motionRoot [data-motion="rise"][data-motion-state="before"],
+  .motionRoot [data-motion="deal"][data-motion-state="before"],
+  .motionRoot [data-motion="card"][data-motion-state="before"],
+  .motionRoot [data-motion="score"][data-motion-state="before"],
+  .motionRoot [data-motion="head"][data-motion-state="before"] > * {
+    opacity: 0;
+  }
+
+  .motionRoot [data-motion="rise"][data-motion-state="in"],
+  .motionRoot [data-motion="head"][data-motion-state="in"] > * {
+    animation-name: homeRise;
+    animation-duration: 560ms;
+    animation-timing-function: var(--home-ease);
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: backwards;
+  }
+
+  /* A section heading: the title rises and its rule is drawn across. */
+  .motionRoot [data-motion="head"][data-motion-state] {
+    position: relative;
+  }
+
+  .motionRoot [data-motion="head"][data-motion-state]::after,
+  .motionRoot [data-motion="step"][data-motion-state]::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--v-bg);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    pointer-events: none;
+  }
+
+  .motionRoot [data-motion="head"][data-motion-state]::after {
+    bottom: -2px;
+  }
+
+  .motionRoot [data-motion="step"][data-motion-state]::before {
+    top: -2px;
+  }
+
+  .motionRoot [data-motion="head"][data-motion-state="before"]::after,
+  .motionRoot [data-motion="step"][data-motion-state="before"]::before {
+    transform: scaleX(1);
+  }
+
+  .motionRoot [data-motion="head"][data-motion-state="in"]::after {
+    animation-name: homeWipe;
+    animation-duration: 900ms;
+    animation-timing-function: var(--home-ease);
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: backwards;
+  }
+
+  /* ── Showpiece 1: the choosers ────────────────────────────────────────── */
+
+  .motionRoot [data-motion="deal"][data-motion-state="in"] {
+    animation-name: homeDeal;
+    animation-duration: 560ms;
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.3, 1);
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot [data-motion="deal"][data-motion-state="in"]:nth-of-type(even) {
+    animation-name: homeDealOther;
+  }
+
+  /* The panel folds open whenever it appears: when it is first reached, and
+     each time a choice is made (a panel going from `display: none` to shown
+     starts its animation again, so this needs no script). */
+  .motionRoot .panel {
+    position: relative;
+    transform-origin: 50% 0;
+    animation-name: homeUnfold;
+    animation-duration: 680ms;
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.3, 1);
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--v-ink);
+    opacity: 0;
+    pointer-events: none;
+    animation-name: homeShade;
+    animation-duration: 520ms;
+    animation-timing-function: ease-out;
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .panel[data-motion-state="before"] {
+    opacity: 0;
+    animation-name: none;
+  }
+
+  .motionRoot .panel[data-motion-state="before"]::after {
+    animation-name: none;
+  }
+
+  /* What is written on the sheet follows it down. */
+  .motionRoot .panel:not([data-motion-state="before"]) .panelTitle,
+  .motionRoot .panel:not([data-motion-state="before"]) .panelLead,
+  .motionRoot .panel:not([data-motion-state="before"]) .route,
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li {
+    animation-name: homeRise;
+    animation-duration: 520ms;
+    animation-timing-function: var(--home-ease);
+    animation-delay: calc(var(--motion-delay, 0ms) + 220ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .panelLead {
+    animation-delay: calc(var(--motion-delay, 0ms) + 280ms);
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .route:nth-of-type(1),
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="1"] {
+    animation-delay: calc(var(--motion-delay, 0ms) + 340ms);
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .route:nth-of-type(2),
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="2"] {
+    animation-delay: calc(var(--motion-delay, 0ms) + 470ms);
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .route:nth-of-type(n + 3),
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="3"] {
+    animation-delay: calc(var(--motion-delay, 0ms) + 600ms);
+  }
+
+  /* Month 1 to Month 3: each marker pops and its line is drawn to the next. */
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li::before {
+    animation-name: homeDot;
+    animation-duration: 460ms;
+    animation-timing-function: var(--home-press);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .growth li::after {
+    transform-origin: 50% 0;
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li::after {
+    animation-name: homeDrawDown;
+    animation-duration: 420ms;
+    animation-timing-function: var(--home-ease);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="1"]::before {
+    animation-delay: calc(var(--motion-delay, 0ms) + 380ms);
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="1"]::after {
+    animation-delay: calc(var(--motion-delay, 0ms) + 480ms);
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="2"]::before {
+    animation-delay: calc(var(--motion-delay, 0ms) + 510ms);
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="2"]::after {
+    animation-delay: calc(var(--motion-delay, 0ms) + 610ms);
+  }
+
+  .motionRoot .panel:not([data-motion-state="before"]) .growth li[data-step="3"]::before {
+    animation-delay: calc(var(--motion-delay, 0ms) + 640ms);
+  }
+
+  /* Choosing: the icon springs and the notch drops into place. */
+  .motionRoot .option input:checked + .optionFace .optionIcon {
+    animation-name: homePop;
+    animation-duration: 460ms;
+    animation-timing-function: var(--home-ease);
+  }
+
+  /* The notch is a transition, not an animation: it is always there on wide
+     screens, shrunk to nothing until its card is chosen. (As an animation it
+     started again whenever the browser re-read the width rule, which a
+     full-page screenshot does, and was caught missing.) */
+  @media (min-width: 64rem) {
+    .motionRoot .optionFace::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -0.55rem;
+      width: 0.9rem;
+      height: 0.9rem;
+      background: var(--v-accent);
+      border-radius: 2px;
+      transform: translateX(-50%) translateY(-0.6rem) rotate(45deg) scale(0);
+      transition: transform 320ms var(--home-press);
+    }
+
+    .motionRoot .option input:checked + .optionFace::after {
+      transform: translateX(-50%) rotate(45deg);
+    }
+  }
+
+  .motionRoot .optionFace {
+    transition: background-color 200ms var(--home-ease),
+      border-color 200ms var(--home-ease), transform 220ms var(--home-ease);
+  }
+
+  .motionRoot .option input:active + .optionFace {
+    transform: scale(0.97);
+  }
+
+  /* ── Showpieces 2 and 3: pictures that assemble ───────────────────────── */
+
+  /* The picture waits out of sight while its pieces arrive on top of it
+     (`home-motion.tsx` makes the pieces and takes them away again). */
+  .motionRoot [data-motion="assemble"][data-motion-state="before"] img,
+  .motionRoot [data-motion="assemble"][data-motion-state="run"] img:not([data-piece]) {
+    opacity: 0;
+  }
+
+  /* Until it is whole, the picture's place is a blank sheet. */
+  .motionRoot [data-motion="assemble"][data-motion-state="before"],
+  .motionRoot [data-motion="assemble"][data-motion-state="run"] {
+    background: var(--v-quiet);
+    border-radius: var(--radius-md);
+  }
+
+  /* At night the quiet fill is a pale block on a dark page, so it is thinned. */
+  :global(.dark) .motionRoot [data-motion="assemble"][data-motion-state="before"],
+  :global(.dark) .motionRoot [data-motion="assemble"][data-motion-state="run"] {
+    background: color-mix(in srgb, var(--v-quiet) 35%, transparent);
+  }
+
+  .motionRoot [data-motion="assemble"] img[data-piece] {
+    will-change: transform, opacity;
+  }
+
+  /* The three months step up in turn, and what you make in each is ticked. */
+  .motionRoot [data-motion="card"][data-motion-state="in"],
+  .motionRoot [data-motion="score"][data-motion-state="in"] {
+    animation-name: homeCard;
+    animation-duration: 700ms;
+    animation-timing-function: var(--home-ease);
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .monthStep[data-motion-state="before"] .makes li {
+    opacity: 0;
+  }
+
+  .motionRoot .monthStep[data-motion-state="in"] .makes li {
+    animation-name: homeRise;
+    animation-duration: 460ms;
+    animation-timing-function: var(--home-ease);
+    animation-delay: calc(var(--motion-delay, 0ms) + 300ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .monthStep[data-motion-state="in"] .makes li::before {
+    animation-name: homeTick;
+    animation-duration: 420ms;
+    animation-timing-function: var(--home-press);
+    animation-delay: calc(var(--motion-delay, 0ms) + 420ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot .monthStep[data-motion-state="in"] .makes li:nth-child(2) {
+    animation-delay: calc(var(--motion-delay, 0ms) + 400ms);
+  }
+
+  .motionRoot .monthStep[data-motion-state="in"] .makes li:nth-child(2)::before {
+    animation-delay: calc(var(--motion-delay, 0ms) + 520ms);
+  }
+
+  .motionRoot .monthStep[data-motion-state="in"] .makes li:nth-child(n + 3) {
+    animation-delay: calc(var(--motion-delay, 0ms) + 500ms);
+  }
+
+  .motionRoot .monthStep[data-motion-state="in"] .makes li:nth-child(n + 3)::before {
+    animation-delay: calc(var(--motion-delay, 0ms) + 620ms);
+  }
+
+  /* ── Showpiece 4: lines that draw themselves ──────────────────────────── */
+
+  /* How a lesson works: the path is drawn through 1, 2 and 3, and each number
+     is stamped on as the line reaches it. */
+  .motionRoot [data-motion="step"][data-motion-state="before"] > * {
+    opacity: 0;
+  }
+
+  .motionRoot [data-motion="step"][data-motion-state="in"]::before {
+    animation-name: homeWipe;
+    animation-duration: 620ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.3, 1);
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot [data-motion="step"][data-motion-state="in"] > * {
+    animation-name: homeRise;
+    animation-duration: 520ms;
+    animation-timing-function: var(--home-ease);
+    animation-delay: calc(var(--motion-delay, 0ms) + 200ms);
+    animation-fill-mode: backwards;
+  }
+
+  .motionRoot [data-motion="step"][data-motion-state="in"] > p {
+    animation-delay: calc(var(--motion-delay, 0ms) + 270ms);
+  }
+
+  .motionRoot [data-motion="step"][data-motion-state="in"] > .stepNumber {
+    animation-name: homeStamp;
+    animation-duration: 520ms;
+    animation-timing-function: var(--home-press);
+    animation-delay: calc(var(--motion-delay, 0ms) + 40ms);
+  }
+
+  /* The three example scores: each line is drawn from left to right. */
+  .motionRoot [data-motion="score"][data-motion-state="in"] > svg {
+    animation-name: homeDrawLine;
+    animation-duration: 1000ms;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+    animation-delay: calc(var(--motion-delay, 0ms) + 320ms);
+    animation-fill-mode: backwards;
+  }
+
+  /* ── Answers to a press ───────────────────────────────────────────────── */
+
+  .motionRoot .press {
+    transition: background-color 200ms var(--home-ease),
+      border-color 200ms var(--home-ease), color 200ms var(--home-ease),
+      transform 220ms var(--home-ease);
+  }
+
+  .motionRoot .press:active {
+    transform: scale(0.97);
+  }
+
+  .motionRoot .monthStep,
+  .motionRoot .scoreCards > *,
+  .motionRoot .stepNumber,
+  .motionRoot figure > img {
+    transition: transform 360ms var(--home-ease);
+  }
+}
+
+/* Pointing at things: paper lifts a little. Only where there is a pointer that
+   can hover, so a phone never leaves a card stuck in the air. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .motionRoot .press:hover,
+  .motionRoot .press:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .motionRoot .press:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .motionRoot .option input:hover + .optionFace {
+    transform: translateY(-3px);
+  }
+
+  .motionRoot .option input:active + .optionFace {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .motionRoot .monthStep:hover,
+  .motionRoot .scoreCards > *:hover {
+    transform: translateY(-4px) rotate(-0.3deg);
+  }
+
+  .motionRoot .lessonSteps li:hover .stepNumber {
+    transform: translateY(-50%) scale(1.12);
+  }
+
+  .motionRoot figure:hover > img {
+    transform: scale(1.012) rotate(-0.3deg);
+  }
+}
+
+/* On paper, everything is simply there. */
+@media print {
+  .motionRoot [data-motion-state],
+  .motionRoot [data-motion="head"][data-motion-state] > *,
+  .motionRoot [data-motion="step"][data-motion-state] > *,
+  .motionRoot [data-motion="assemble"][data-motion-state] img:not([data-piece]),
+  .motionRoot [data-motion-state] .makes li {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  .motionRoot [data-motion="head"][data-motion-state]::after,
+  .motionRoot [data-motion="step"][data-motion-state]::before,
+  .motionRoot [data-motion="assemble"] img[data-piece] {
+    display: none !important;
+  }
 }

@@ -1,0 +1,1788 @@
+/* The Labs page (`/labs`), in the paper-first register and the family of the
+   new home page. Every colour is a --v-* token, so paper and night follow the
+   theme; the one exception is the chart's company colours, which are data
+   (see "The chart"). Shared recipes come from `marketing/paper/`. */
+
+.root {
+  --labs-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --labs-press: cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 1. Masthead ─────────────────────────────────────────────────────────── */
+
+.hero {
+  padding: clamp(2.5rem, 5vw, 4.5rem) 0 0;
+}
+
+.heroGrid {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5.4vw, 4.1rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+  margin-bottom: 1.5rem;
+}
+
+.heroTitle span {
+  display: block;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
+}
+
+.heroSecond {
+  margin-top: 0.9rem;
+}
+
+.heroPicture {
+  min-width: 0;
+}
+
+/* The counts: a stat list (figure in Bitter, label in Public Sans). Since
+   20 Nov 2026 it closes the explainer, so "models" is explained before it is
+   counted. */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.75rem;
+  margin: clamp(1.75rem, 3.5vw, 2.5rem) 0 0;
+  border-top: 1px solid var(--v-line);
+}
+
+@media (min-width: 56rem) {
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.facts > div {
+  padding: 1.1rem 0 1rem;
+  border-bottom: 1px solid var(--v-line-soft);
+}
+
+.facts dt {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.6vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.facts dd {
+  margin: 0.5rem 0 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.45;
+  color: var(--v-soft);
+}
+
+.tested {
+  margin-top: 0.9rem;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+/* ── Shared text ─────────────────────────────────────────────────────────── */
+
+.lead {
+  max-width: 46rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.note {
+  max-width: 46rem;
+  margin-top: 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-muted);
+}
+
+/* ── 2. For a newcomer ───────────────────────────────────────────────────── */
+
+/* A white band, so the place to start stands apart from the six labs. It
+   sits close under the masthead: its heading shows on the first screen. */
+.explainer {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  scroll-margin-top: 4.5rem;
+}
+
+.explainGrid {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 60rem) {
+  .explainGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+/* The three questions a newcomer is asking, each answered in a few lines. */
+.questions {
+  min-width: 0;
+}
+
+.question {
+  padding: 0 0 1.35rem;
+}
+
+.question + .question {
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.question h3,
+.where h3,
+.test h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 2vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+
+.question p,
+.where p,
+.test p {
+  margin-top: 0.5rem;
+  max-width: 38rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.setUp {
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-ink);
+}
+
+/* Where to look, and what the labs test: two plain panels side by side. */
+.afterGrid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: clamp(1.75rem, 4vw, 3rem);
+}
+
+@media (min-width: 56rem) {
+  .afterGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+  }
+}
+
+.where {
+  align-self: start;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  background: var(--v-quiet);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.test {
+  min-width: 0;
+}
+
+.test p + p {
+  margin-top: 0.75rem;
+}
+
+.textLink {
+  font-size: var(--fde-body);
+  font-weight: 600;
+  color: var(--v-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.textLink:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ── The drawing of a made-up chat app ───────────────────────────────────── */
+
+.drawing {
+  margin: 0;
+  min-width: 0;
+}
+
+.app {
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* The question she sent: on the right, as in every chat app. */
+.bubbleUser {
+  align-self: flex-end;
+  max-width: 88%;
+  padding: 0.7rem 1rem;
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border-radius: var(--radius-lg) var(--radius-lg) 0.3rem var(--radius-lg);
+  font-size: var(--fde-body-sm);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* The answer, drawn as plain lines. Its height is fixed so the drawing does
+   not jump when a menu is tried. */
+.bubbleAnswer {
+  align-self: flex-start;
+  box-sizing: border-box;
+  width: 88%;
+  height: 9.2rem;
+  padding: 0.9rem 1rem;
+  background: var(--v-quiet);
+  border: 1px solid var(--v-line-soft);
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 0.3rem;
+  overflow: hidden;
+}
+
+/* The work done before the reply: three marks, filled as far as the
+   thinking setting goes. Filled and hollow, so it does not rest on colour. */
+.work {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.work i {
+  box-sizing: border-box;
+  width: 1.6rem;
+  height: 0.5rem;
+  border: 1px solid var(--v-accent);
+  border-radius: 0.25rem;
+  background: var(--v-accent);
+}
+
+.answer {
+  display: none;
+}
+
+.answer i {
+  display: block;
+  height: 0.5rem;
+  margin-top: 0.6rem;
+  border-radius: 0.25rem;
+  background: var(--v-line);
+  transform-origin: 0 50%;
+}
+
+.answer i:first-child {
+  margin-top: 0;
+}
+
+/* The still drawing (and any browser without :has()): the middle model, and
+   medium thinking (two of the three marks filled). */
+.answer[data-answer="1"] {
+  display: block;
+}
+
+.work i:nth-child(3) {
+  background: transparent;
+}
+
+/* Another model draws a different answer. */
+.app:has(input[name="labs-drawing-model"]:checked) .answer {
+  display: none;
+}
+
+.app:has(input[name="labs-drawing-model"][value="0"]:checked) .answer[data-answer="0"],
+.app:has(input[name="labs-drawing-model"][value="1"]:checked) .answer[data-answer="1"],
+.app:has(input[name="labs-drawing-model"][value="2"]:checked) .answer[data-answer="2"] {
+  display: block;
+}
+
+/* Less thinking fills one mark, more thinking all three. The answer is not
+   made longer: only the work before it changes. */
+.app:has(input[name="labs-drawing-thinking"][value="0"]:checked) .work i:nth-child(2) {
+  background: transparent;
+}
+
+.app:has(input[name="labs-drawing-thinking"][value="2"]:checked) .work i:nth-child(3) {
+  background: var(--v-accent);
+}
+
+/* The box you type in: empty, with a caret and a send button drawn in. */
+.typeBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2.75rem;
+  margin-top: 1rem;
+  padding: 0 0.5rem 0 1rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.caret {
+  width: 2px;
+  height: 1.15rem;
+  background: var(--v-ink);
+}
+
+.send {
+  position: relative;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: var(--v-btn);
+}
+
+.send::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-left: 2px solid var(--v-btn-text);
+  border-top: 2px solid var(--v-btn-text);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* The two menus, open, side by side under the box. */
+.menus {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.menu {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.menu legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: var(--fde-body-sm);
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.marker {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--v-accent);
+  border-radius: 50%;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--v-accent);
+}
+
+.menu label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  font-size: var(--fde-body-sm);
+  line-height: 1.3;
+  color: var(--v-soft);
+  cursor: pointer;
+}
+
+.menu label + label {
+  margin-top: 0.4rem;
+}
+
+.menu input {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--v-accent);
+  cursor: pointer;
+}
+
+/* The chosen row: a heavier accent boundary and ink text as well as the
+   filled radio, so the choice never rests on colour alone. */
+.menu label:has(input:checked) {
+  border-color: var(--v-accent);
+  box-shadow: inset 0 0 0 1px var(--v-accent);
+  color: var(--v-ink);
+  font-weight: 600;
+}
+
+.menu label:hover {
+  border-color: var(--v-accent);
+}
+
+.menu label:has(input:focus-visible) {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+.drawingNotes {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.drawingNotes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+  color: var(--v-ink);
+}
+
+.drawingNotes li + li {
+  margin-top: 0.5rem;
+}
+
+.drawing figcaption {
+  margin-top: 0.85rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.5;
+  color: var(--v-muted);
+}
+
+/* ── 3. The six labs ─────────────────────────────────────────────────────── */
+
+.cards {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 40rem) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* The whole card opens the lab: the worded link in it is stretched over the
+   card, so a screen reader still reads the card's contents in order. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  transition: border-color 200ms var(--labs-ease);
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: var(--v-accent);
+}
+
+/* The picture of the lab's main task, edge to edge at the top of the card. */
+.cardPicture {
+  overflow: hidden;
+  border-bottom: 1px solid var(--v-line-soft);
+  aspect-ratio: 3 / 2;
+  background: var(--v-quiet);
+}
+
+.card .cardPicture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.cardBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+.cardTop {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+.cardName {
+  font-family: var(--font-serif);
+  font-size: clamp(1.45rem, 2.4vw, 1.7rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+  transition: color 200ms var(--labs-ease);
+}
+
+.card:hover .cardName {
+  color: var(--v-accent);
+}
+
+.cardCount {
+  margin-left: auto;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+  white-space: nowrap;
+}
+
+.cardQuestion {
+  margin-top: 0.45rem;
+  font-size: var(--fde-body);
+  line-height: 1.5;
+  color: var(--v-soft);
+}
+
+.cardTask {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.cardTaskTitle {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.cardTask p + p {
+  margin-top: 0.35rem;
+}
+
+.cardTask .cardAsk {
+  margin-top: 0.9rem;
+  color: var(--v-ink);
+}
+
+.cardAsk em {
+  display: block;
+  margin-top: 0.1rem;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--v-accent);
+}
+
+.cardFoot {
+  margin-top: auto;
+  padding-top: 1.1rem;
+}
+
+/* Accent and underlined at rest, so it reads as a link before any hover
+   (David, 12 Nov 2026: make it obvious the cards open). */
+.cardAction {
+  font-size: var(--fde-body);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--v-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.cardAction::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+}
+
+.card:hover .cardAction {
+  text-decoration-thickness: 2px;
+}
+
+/* The focus ring goes round the whole card, not the words (the site's own
+   ring on the link is switched off here so there are not two). */
+.cardAction:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.cardAction:focus-visible::after {
+  outline: 2px solid var(--v-accent);
+  outline-offset: -3px;
+}
+
+/* Our picks, shown only when asked for. It sits above the stretched link so
+   it can be opened without opening the lab. */
+.cardPicks {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.cardPicks summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  font-size: var(--fde-body-sm);
+  font-weight: 500;
+  color: var(--v-soft);
+  cursor: pointer;
+  list-style: none;
+}
+
+.cardPicks summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A drawn chevron that turns when the picks are open. */
+.cardPicks summary::before {
+  content: "";
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0 0.15rem 0 0.1rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.cardPicks[open] summary::before {
+  transform: rotate(45deg) translate(-0.1rem, -0.1rem);
+}
+
+.cardPicks summary:hover {
+  color: var(--v-ink);
+}
+
+.cardPicks summary:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+.picks {
+  margin: 0.35rem 0 0;
+}
+
+.pick {
+  padding: 0.55rem 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+}
+
+.pick + .pick {
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.pick dt {
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.pick dd {
+  margin: 0.1rem 0 0;
+  color: var(--v-soft);
+}
+
+.pick dd strong {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.cardMeta {
+  margin-top: 0.35rem;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.empty {
+  margin-top: 1.75rem;
+  padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
+  text-align: center;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.empty h3 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.empty p {
+  margin: 0.75rem auto 0;
+  max-width: 32rem;
+  font-size: var(--fde-body);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+/* ── 4. What you do in a lab ─────────────────────────────────────────────── */
+
+.tourGrid {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .tourGrid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+.film {
+  margin: 0;
+  min-width: 0;
+}
+
+.filmVideo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: var(--v-quiet);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+}
+
+/* Two editions of the tour (20 Nov 2026): paper in the light theme, night in
+   the dark. Both players are in the page; only one shows. */
+.filmVideo.nightOnly {
+  display: none;
+}
+
+:global(.dark) .filmVideo.paperOnly {
+  display: none;
+}
+
+:global(.dark) .filmVideo.nightOnly {
+  display: block;
+}
+
+.film figcaption {
+  margin-top: 0.7rem;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.steps li {
+  position: relative;
+  padding: 0 0 1.6rem 3.5rem;
+}
+
+.steps li:last-child {
+  padding-bottom: 0;
+}
+
+/* The line that joins one step to the next. */
+.steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  top: 2.75rem;
+  bottom: 0.25rem;
+  border-left: 1px solid var(--v-line);
+  transform-origin: 50% 0;
+}
+
+.stepNumber {
+  position: absolute;
+  left: 0;
+  top: -0.2rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--v-bg);
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.steps h3,
+.howList h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.steps p,
+.howList p {
+  margin-top: 0.4rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.stepsAfter {
+  margin-top: 1.6rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+/* ── 4. How we test ──────────────────────────────────────────────────────── */
+
+.howGrid {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .howGrid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+}
+
+.howList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.howList li {
+  padding: 1.15rem 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.howList li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.howList li:last-child {
+  padding-bottom: 0;
+}
+
+.howPicture,
+.closingPicture {
+  min-width: 0;
+}
+
+/* ── 5. The chart ────────────────────────────────────────────────────────────
+   Colour by company (David, 2026-10-23, option C), with a key. These six
+   values are the ones `labs-fde.module.css` already ships for the same chart
+   and the lab pages still use: each clears 3:1 on the page ground and on the
+   card in both modes. The company is also in the model's name and "premium"
+   is a word, so colour is never the only signal. */
+
+.costMap {
+  --maker-anthropic: #b35a24;
+  --maker-openai: #2f6f5e;
+  --maker-google: #3a6bb3;
+  --maker-other: #838884;
+  margin-top: 1.75rem;
+}
+
+:global(.dark) .costMap {
+  --maker-anthropic: #e39a6a;
+  --maker-openai: #8fd3b6;
+  --maker-google: #9dbdf0;
+  --maker-other: #7c8782;
+}
+
+.swatch,
+.dot,
+.listFill {
+  --maker: var(--maker-other);
+}
+
+.swatch[data-maker="anthropic"],
+.dot[data-maker="anthropic"],
+.listFill[data-maker="anthropic"] {
+  --maker: var(--maker-anthropic);
+}
+
+.swatch[data-maker="openai"],
+.dot[data-maker="openai"],
+.listFill[data-maker="openai"] {
+  --maker: var(--maker-openai);
+}
+
+.swatch[data-maker="google"],
+.dot[data-maker="google"],
+.listFill[data-maker="google"] {
+  --maker: var(--maker-google);
+}
+
+.swatch {
+  display: inline-block;
+  flex: none;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: var(--maker);
+}
+
+.swatch[data-premium="true"] {
+  background: transparent;
+  box-shadow: inset 0 0 0 3px var(--maker);
+}
+
+/* Three set-ups pointed out in words. Each is a button that picks its dot. */
+.callouts {
+  display: grid;
+  gap: 0.9rem;
+}
+
+@media (min-width: 52rem) {
+  .callouts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.callout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 1.05rem 1.2rem 1.15rem;
+  text-align: left;
+  font: inherit;
+  color: var(--v-soft);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: border-color 200ms var(--labs-ease), background-color 200ms var(--labs-ease);
+}
+
+.callout:hover {
+  border-color: var(--v-accent);
+}
+
+/* Chosen: a tint, an accent boundary and a bar along the bottom, so the state
+   never rests on the tint alone. */
+.callout[aria-pressed="true"] {
+  background: var(--v-quiet);
+  border-color: var(--v-accent);
+  box-shadow: inset 0 -4px 0 var(--v-accent);
+}
+
+.callout:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+.calloutLabel {
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.callout[aria-pressed="true"] .calloutLabel {
+  color: var(--v-ink);
+}
+
+.calloutName {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.calloutName .swatch {
+  align-self: center;
+}
+
+.calloutLine {
+  font-size: var(--fde-body-sm);
+  line-height: 1.5;
+}
+
+/* The picture: one dot per set-up. */
+.plotPanel {
+  margin-top: 0.9rem;
+  padding: clamp(1rem, 2.4vw, 1.75rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.axisTitle {
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.axisTitleX {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.plot {
+  position: relative;
+  height: clamp(18rem, 34vw, 24rem);
+  margin: 0.9rem 0.75rem 0 2.1rem;
+  border-left: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line);
+}
+
+.yTick,
+.xTick {
+  position: absolute;
+  pointer-events: none;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.yTick {
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.yTick span {
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  top: 0;
+  transform: translateY(-50%);
+}
+
+.xTick {
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid var(--v-line-soft);
+}
+
+.xTick span {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.dot {
+  position: absolute;
+  width: 0.95rem;
+  height: 0.95rem;
+  padding: 0;
+  border: 2px solid var(--v-surface);
+  border-radius: 50%;
+  background: var(--maker);
+  transform: translate(-50%, 50%);
+  cursor: pointer;
+  transition: transform 220ms var(--labs-press);
+}
+
+/* A larger target than the dot itself, for a finger. */
+.dot::before {
+  content: "";
+  position: absolute;
+  inset: -0.45rem;
+  border-radius: 50%;
+}
+
+/* Premium: a hollow dot (and the word, in the readout and the list). */
+.dot[data-premium="true"] {
+  background: var(--v-surface);
+  border: 3px solid var(--maker);
+}
+
+.dot[data-picked="true"] {
+  z-index: 2;
+  transform: translate(-50%, 50%) scale(1.55);
+  outline: 2px solid var(--v-ink);
+  outline-offset: 2px;
+}
+
+.dot:focus-visible {
+  z-index: 3;
+  outline: 2px solid var(--v-accent);
+  outline-offset: 3px;
+}
+
+.readout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+/* Room for two lines on a phone, so choosing a dot does not move the page. */
+@media (max-width: 40rem) {
+  .readout {
+    min-height: 6.2rem;
+  }
+}
+
+.readout .swatch {
+  margin-top: 0.42rem;
+}
+
+.readout strong {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.plotTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+}
+
+.plotHint {
+  font-size: var(--fde-mono-sm);
+  color: var(--v-soft);
+}
+
+.key {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-soft);
+}
+
+.key li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* The list: every set-up, the first ten showing. */
+.list {
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+}
+
+.listTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.listTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--v-ink);
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fde-body-sm);
+  color: var(--v-muted);
+}
+
+.sort button {
+  font: inherit;
+  color: var(--v-ink);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  padding: 0.35rem 0.95rem;
+  cursor: pointer;
+}
+
+/* Chosen: the button fill, a heavier label and an underline. */
+.sort button[aria-pressed="true"] {
+  background: var(--v-btn);
+  color: var(--v-btn-text);
+  border-color: var(--v-btn);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.sort button:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+.listHead,
+.listRow {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) minmax(0, 1fr) 6.5rem;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.listHead {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--v-line);
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.listScoreHead,
+.listScore {
+  text-align: right;
+}
+
+.listRows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.listRow {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body-sm);
+}
+
+.listName {
+  min-width: 0;
+  line-height: 1.35;
+  color: var(--v-ink);
+}
+
+.listName small {
+  display: block;
+  font-size: var(--fde-mono-sm);
+  color: var(--v-muted);
+}
+
+.listTrack {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.listFill {
+  display: block;
+  flex: none;
+  height: 1.1rem;
+  min-width: 3px;
+  border-radius: 4px;
+  background: var(--maker);
+  transform-origin: 0 50%;
+}
+
+.listCost {
+  white-space: nowrap;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.listScore {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* On a phone the name goes above its bar, so the bar keeps the width. */
+@media (max-width: 40rem) {
+  .listHead {
+    grid-template-columns: minmax(0, 1fr) 6.5rem;
+  }
+
+  .listHead span:first-child {
+    display: none;
+  }
+
+  .listRow {
+    grid-template-columns: minmax(0, 1fr) 3rem;
+    grid-template-areas:
+      "name name"
+      "track score";
+    row-gap: 0.3rem;
+  }
+
+  .listName {
+    grid-area: name;
+  }
+
+  .listTrack {
+    grid-area: track;
+  }
+
+  .listScore {
+    grid-area: score;
+  }
+}
+
+.more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.6rem 1.1rem;
+  list-style: none;
+  font-size: var(--fde-body-sm);
+  font-weight: 500;
+  color: var(--v-ink);
+  background: transparent;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.more > summary::after {
+  content: "+";
+  color: var(--v-muted);
+}
+
+.more[open] > summary::after {
+  content: "\2212";
+}
+
+.more > summary:hover {
+  background: var(--v-quiet);
+}
+
+.more > summary:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+.more[open] > summary {
+  margin-bottom: 0.5rem;
+}
+
+.chartNote {
+  max-width: 46rem;
+  margin-top: 1.25rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-muted);
+}
+
+/* ── 6. Closing ──────────────────────────────────────────────────────────── */
+
+.closingBox {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 64rem) {
+  .closingBox {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+}
+
+.closingCopy p {
+  margin-top: 1rem;
+  max-width: 40rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────────────
+   In the spirit of the home page: the masthead arrives, the six labs are
+   dealt like cards, the dots land on the chart, the bars draw to length.
+   - All of it is inside `prefers-reduced-motion: no-preference`.
+   - Nothing here hides anything by itself: the "before" state (`data-armed`)
+     is only ever set by `in-view.tsx`, on parts still below the screen.
+   - Every animation ends on the element's own style, and only transform and
+     opacity move. */
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes labsRise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  @keyframes labsDeal {
+    from {
+      opacity: 0;
+      transform: translateY(-20px) rotate(-2.4deg) scale(1.03);
+    }
+    62% {
+      opacity: 1;
+      transform: translateY(2px) rotate(0.4deg) scale(1);
+    }
+  }
+
+  @keyframes labsDealOther {
+    from {
+      opacity: 0;
+      transform: translateY(-20px) rotate(2.4deg) scale(1.03);
+    }
+    62% {
+      opacity: 1;
+      transform: translateY(2px) rotate(-0.4deg) scale(1);
+    }
+  }
+
+  @keyframes labsDot {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 50%) scale(0);
+    }
+  }
+
+  @keyframes labsBar {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes labsStamp {
+    from {
+      opacity: 0;
+      transform: scale(0.4) rotate(-14deg);
+    }
+  }
+
+  @keyframes labsDrawDown {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  /* The masthead arrives as the page loads. CSS only: it needs no script. */
+  .heroTitle span,
+  .heroCopy > p,
+  .heroCopy > div,
+  .heroPicture {
+    animation: labsRise 640ms var(--labs-ease) backwards;
+  }
+
+  .heroTitle span:nth-child(2) {
+    animation-delay: 70ms;
+  }
+
+  .heroTitle span:nth-child(3) {
+    animation-delay: 140ms;
+  }
+
+  .heroCopy > p {
+    animation-delay: 220ms;
+  }
+
+  .heroCopy > div {
+    animation-delay: 300ms;
+  }
+
+  .heroPicture {
+    animation-delay: 180ms;
+  }
+
+  /* The explainer: the drawing and the three questions rise into place. */
+  .explainGrid[data-armed]:not([data-in]) > * {
+    opacity: 0;
+  }
+
+  .explainGrid[data-in] > * {
+    animation: labsRise 620ms var(--labs-ease) backwards;
+  }
+
+  .explainGrid[data-in] > *:nth-child(2) {
+    animation-delay: 120ms;
+  }
+
+  /* Trying a menu: the new answer is written out, line by line. */
+  .app:has(input:checked) .answer i {
+    animation: labsBar 420ms var(--labs-ease) backwards;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(2) {
+    animation-delay: 60ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(3) {
+    animation-delay: 120ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(4) {
+    animation-delay: 180ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(5) {
+    animation-delay: 240ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(6) {
+    animation-delay: 300ms;
+  }
+
+  .app:has(input:checked) .answer i:nth-child(7) {
+    animation-delay: 360ms;
+  }
+
+  @keyframes labsCaret {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .caret {
+    animation: labsCaret 1.2s steps(1) 5;
+  }
+
+  .work i {
+    transition: background-color 320ms var(--labs-ease);
+  }
+
+  .menu label {
+    transition: border-color 200ms var(--labs-ease), box-shadow 200ms var(--labs-ease),
+      color 200ms var(--labs-ease);
+  }
+
+  /* The six labs are dealt, one after another. */
+  .cards[data-armed]:not([data-in]) > * {
+    opacity: 0;
+  }
+
+  .cards[data-in] > * {
+    animation: labsDeal 600ms cubic-bezier(0.3, 0.7, 0.3, 1) backwards;
+  }
+
+  .cards[data-in] > *:nth-child(even) {
+    animation-name: labsDealOther;
+  }
+
+  .cards[data-in] > *:nth-child(2) {
+    animation-delay: 90ms;
+  }
+
+  .cards[data-in] > *:nth-child(3) {
+    animation-delay: 180ms;
+  }
+
+  .cards[data-in] > *:nth-child(4) {
+    animation-delay: 270ms;
+  }
+
+  .cards[data-in] > *:nth-child(5) {
+    animation-delay: 360ms;
+  }
+
+  .cards[data-in] > *:nth-child(6) {
+    animation-delay: 450ms;
+  }
+
+  /* The three steps: each number is stamped on and its line drawn down. */
+  .stepsWrap[data-armed]:not([data-in]) li,
+  .stepsWrap[data-armed]:not([data-in]) .stepsAfter {
+    opacity: 0;
+  }
+
+  .stepsWrap[data-in] li,
+  .stepsWrap[data-in] .stepsAfter {
+    animation: labsRise 560ms var(--labs-ease) backwards;
+  }
+
+  .stepsWrap[data-in] .stepNumber {
+    animation: labsStamp 520ms var(--labs-press) backwards;
+  }
+
+  .stepsWrap[data-in] li::after {
+    animation: labsDrawDown 460ms var(--labs-ease) backwards;
+  }
+
+  .stepsWrap[data-in] li:nth-child(1)::after {
+    animation-delay: 220ms;
+  }
+
+  .stepsWrap[data-in] li:nth-child(2),
+  .stepsWrap[data-in] li:nth-child(2) .stepNumber {
+    animation-delay: 160ms;
+  }
+
+  .stepsWrap[data-in] li:nth-child(2)::after {
+    animation-delay: 380ms;
+  }
+
+  .stepsWrap[data-in] li:nth-child(3),
+  .stepsWrap[data-in] li:nth-child(3) .stepNumber {
+    animation-delay: 320ms;
+  }
+
+  .stepsWrap[data-in] .stepsAfter {
+    animation-delay: 480ms;
+  }
+
+  /* The dots land on the chart, cheapest first. */
+  .plotPanel[data-armed]:not([data-in]) .dot {
+    opacity: 0;
+  }
+
+  .plotPanel[data-in] .dot {
+    animation: labsDot 520ms var(--labs-press) backwards;
+    animation-delay: var(--dot-delay, 0ms);
+  }
+
+  /* The bars draw to their length. */
+  .bars[data-armed]:not([data-in]) .listFill {
+    transform: scaleX(0);
+  }
+
+  .bars[data-in] .listFill {
+    animation: labsBar 700ms var(--labs-ease) backwards;
+  }
+
+  .press {
+    transition: background-color 200ms var(--labs-ease), border-color 200ms var(--labs-ease),
+      color 200ms var(--labs-ease), transform 220ms var(--labs-ease);
+  }
+
+  .press:active {
+    transform: scale(0.97);
+  }
+
+  .cardPicture img {
+    transition: transform 520ms var(--labs-ease);
+  }
+
+  .card,
+  .heroPicture img,
+  .howPicture img,
+  .closingPicture img {
+    transition: transform 360ms var(--labs-ease), border-color 200ms var(--labs-ease);
+  }
+}
+
+/* Pointing at things: paper lifts a little. Only where a pointer can hover,
+   so a phone never leaves a card stuck in the air. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .press:hover,
+  .press:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .press:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .card:hover {
+    transform: translateY(-4px) rotate(-0.25deg);
+  }
+
+  .card:hover .cardPicture img {
+    transform: scale(1.03);
+  }
+
+  .heroPicture:hover img,
+  .howPicture:hover img,
+  .closingPicture:hover img {
+    transform: scale(1.012) rotate(-0.3deg);
+  }
+
+  .dot:hover {
+    transform: translate(-50%, 50%) scale(1.55);
+  }
+}
+
+/* On paper, everything is simply there. */
+@media print {
+  .cards > *,
+  .stepsWrap li,
+  .stepsWrap .stepsAfter,
+  .plotPanel .dot {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  .bars .listFill {
+    transform: none !important;
+    animation: none !important;
+  }
+}

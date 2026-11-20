@@ -1,0 +1,419 @@
+/* The free lesson's front door (`/start-here`, before the email step), in the
+   paper-first register, built to sit beside the home page (`home-next`) and
+   `/pricing`. Every colour is a --v-* token from globals.css, so paper and
+   night follow the theme. Shared recipes (shell, page, buttons, section head,
+   cards, plates) come from `marketing/paper/`. The entrance motion is in
+   `reveal.module.css`. */
+
+/* ── 1. Hero: the invitation, then the picture ───────────────────────────── */
+
+.hero {
+  padding: clamp(2.5rem, 6vw, 5rem) 0 0;
+}
+
+.heroGrid {
+  display: grid;
+  gap: 2.25rem;
+}
+
+@media (min-width: 64rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 5.6vw, 4.2rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+/* The lesson's own subtitle, set as the second voice of the headline. */
+.heroTitle em {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.6em;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--v-accent);
+}
+
+.heroLead {
+  max-width: 34rem;
+  margin-top: 1.25rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+/* A stat list (paper-first-components), as on /pricing: the figure in Bitter,
+   the label in Public Sans, rows parted by the soft hairline. */
+.figures {
+  margin: 1.5rem 0 0;
+  border-top: 1px solid var(--v-line);
+}
+
+.figure {
+  display: grid;
+  gap: 0.1rem 1.25rem;
+  align-items: baseline;
+  padding: 0.85rem 0 0.9rem;
+  border-bottom: 1px solid var(--v-line-soft);
+}
+
+@media (min-width: 30rem) {
+  .figure {
+    grid-template-columns: 13.25rem minmax(0, 1fr);
+  }
+
+  .figure dt {
+    white-space: nowrap;
+  }
+}
+
+.figure dt {
+  font-family: var(--font-serif);
+  font-size: clamp(1.45rem, 2.6vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--v-ink);
+}
+
+.figure dd {
+  margin: 0;
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+  color: var(--v-soft);
+}
+
+/* A message about the link the reader followed. The --v-line boundary carries
+   it; the accent bar only reinforces (tint-is-never-the-only-signal). */
+.notice {
+  max-width: 36rem;
+  margin-top: 1.5rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-left: 3px solid var(--v-accent);
+  border-radius: var(--radius-md);
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-ink);
+}
+
+.heroSmall {
+  max-width: 34rem;
+  margin-top: 1rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
+}
+
+.heroPicture {
+  min-width: 0;
+}
+
+/* ── Shared text ─────────────────────────────────────────────────────────── */
+
+.lead {
+  max-width: 44rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.note {
+  max-width: 46rem;
+  margin-top: 1.5rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.icon {
+  flex: none;
+  color: var(--v-accent);
+}
+
+/* ── 2. The three steps ──────────────────────────────────────────────────── */
+
+/* A jump from the hero button lands with the heading clear of the header. */
+.anchor {
+  scroll-margin-top: 2rem;
+}
+
+.steps {
+  list-style: none;
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 52rem) {
+  .steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.step {
+  padding: 1.35rem 1.5rem 1.5rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.stepTop {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.stepNumber {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+/* A functional chip (6px): how long this step takes. */
+.time {
+  margin-left: auto;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--v-line);
+  border-radius: 6px;
+  font-size: var(--fde-mono-sm);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--v-soft);
+  white-space: nowrap;
+}
+
+/* ── 3. What you will be able to do ──────────────────────────────────────── */
+
+.outcomesGrid {
+  display: grid;
+  gap: 1.5rem;
+  padding-top: clamp(1.25rem, 3vw, 2rem);
+  border-top: 1px solid var(--v-line);
+}
+
+@media (min-width: 64rem) {
+  .outcomesGrid {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .outcomesHead {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+.outcomesHead .lead {
+  margin-top: 1rem;
+}
+
+.outcomes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.outcomes li {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--v-line-soft);
+  font-size: var(--fde-body);
+  line-height: 1.6;
+  color: var(--v-ink);
+}
+
+.outcomes li:first-child {
+  padding-top: 0;
+}
+
+.outcomeNumber {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--v-accent);
+}
+
+/* ── 4. What you need ────────────────────────────────────────────────────── */
+
+.needs {
+  list-style: none;
+  display: grid;
+  gap: 0 2.5rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+@media (min-width: 48rem) {
+  .needs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.needs li {
+  padding: 1.25rem 0 1.35rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+.needs h3 {
+  margin-top: 0.6rem;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.needs p {
+  margin-top: 0.4rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+/* ── 5. Get the lesson by email ──────────────────────────────────────────── */
+
+.getBox {
+  padding: clamp(1.35rem, 3vw, 2.5rem);
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.getGrid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+@media (min-width: 60rem) {
+  .getGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.emailSteps {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+.emailSteps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+  padding-bottom: 1.1rem;
+  font-size: var(--fde-body);
+  line-height: 1.55;
+  color: var(--v-ink);
+}
+
+.emailSteps li > span:last-child {
+  padding-top: 0.3rem;
+}
+
+.emailSteps li:last-child {
+  padding-bottom: 0;
+}
+
+/* The three numbers sit on one line, so they read as one path. */
+.emailSteps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 1.125rem;
+  top: 2.25rem;
+  bottom: 0;
+  border-left: 1px solid var(--v-line);
+}
+
+.emailNumber {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.promises {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.promises li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-ink);
+}
+
+.promises li + li {
+  margin-top: 0.6rem;
+}
+
+/* A drawn tick, as on the home page. */
+.promises li::before {
+  content: "";
+  position: absolute;
+  left: 0.2rem;
+  top: 0.32rem;
+  width: 0.4rem;
+  height: 0.7rem;
+  border-right: 2px solid var(--v-accent);
+  border-bottom: 2px solid var(--v-accent);
+  transform: rotate(40deg);
+}
+
+.getActions {
+  margin-top: 1.5rem;
+}
+
+.consent {
+  max-width: 34rem;
+  margin-top: 1rem;
+  font-size: var(--fde-mono-sm);
+  line-height: 1.6;
+  color: var(--v-muted);
+}
+
+.consent a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.consent a:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}

@@ -6,8 +6,6 @@ import {
   ENABLE_GWTH_SCORE,
   ONGOING_MONTHLY_PRICE,
 } from "@/lib/config"
-import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
-import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 import {
   formatPence,
   formatUkDate,
@@ -26,6 +24,7 @@ import {
 import { HomeFilm } from "@/components/marketing/home-fde/home-film"
 import { ScoreCard } from "@/components/marketing/home-fde/score-card"
 import p from "@/components/marketing/paper/paper.module.css"
+import { HomeMotion } from "./home-motion"
 import styles from "./home-next.module.css"
 
 /**
@@ -73,8 +72,8 @@ import styles from "./home-next.module.css"
  * 6. **How a lesson works** is a row of three steps (the blank half of the
  *    old "How the course works" section is gone), and the **UK** section has
  *    its picture.
- * 7. **The price closes the page.** The offer and the month-opening rule are
- *    the same sentences as on `/`, word for word: they are legal wording.
+ * 7. **The price closes the page.** The offer keeps the same sentences as
+ *    on `/`, word for word: they are legal wording.
  *
  * ## What is reused, so the facts cannot drift
  *
@@ -88,8 +87,6 @@ import styles from "./home-next.module.css"
  * the latest Astra with GPT Image. Briefs and prompts:
  * GWTH-launch-plan `completion/home-fable/pictures/`.
  */
-
-const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
 
 type SuperpowerId =
   | "research"
@@ -191,7 +188,7 @@ export const MONTH_STEPS = [
     title: "Build your foundation",
     body: "You start with projects for yourself. They are useful to you and good fun to make.",
     makes: [
-      "FamilyBot, which turns a family meeting into jobs, a meal plan and a shopping list",
+      "FamilyBot, which turns a family meeting recording into a list of jobs, a meal plan and a shopping list",
       "Spending Detective, which shows where your money goes",
       "A one-page plan for a real decision in your life",
     ],
@@ -283,8 +280,8 @@ export function groupByMonth(
 
 const LESSON_STEPS = [
   ["Watch a short film", "Get an introduction to the subject."],
-  ["Read the lesson", "Work through the lesson over several pages."],
-  ["Do the project, then answer questions", "Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark."],
+  ["Read the lesson, then answer questions", "Work through the lesson over several pages. The questions on the lesson are a quiz with a pass mark. Your answers are marked automatically, so you can see what to go back over."],
+  ["Do the project", "Put what you have learnt into practice."],
 ] as const
 
 /** The UK thread, the same three claims as on `/` (see `UK_THREAD` there). */
@@ -343,7 +340,10 @@ export function HomeNext({
     : { href: "/waitlist", label: "Join the waitlist" }
 
   return (
-    <div className={p.shell}>
+    <div className={`${p.shell} ${styles.motionRoot}`} data-home-motion>
+      {/* Motion only: it renders nothing, and the page is whole without it
+          (see `home-motion.tsx`). */}
+      <HomeMotion />
       {/* 1. Hero. The film and the free-lesson panel beside it are the real
           home page's, untouched: the film ends "Why not try the free lesson
           to see how it works? The link is beside this film." */}
@@ -366,10 +366,10 @@ export function HomeNext({
                 writes a plan for what to change first.
               </p>
               <div className={p.actions}>
-                <Link href={joinCta.href} className={p.buttonSolid}>
+                <Link href={joinCta.href} className={`${p.buttonSolid} ${styles.press}`}>
                   {joinCta.label}
                 </Link>
-                <a href="#superpowers" className={p.buttonOutline}>
+                <a href="#superpowers" className={`${p.buttonOutline} ${styles.press}`}>
                   See the six superpowers
                 </a>
               </div>
@@ -386,12 +386,12 @@ export function HomeNext({
         id="superpowers"
       >
         <div className={p.page}>
-          <div className={p.sectionHead}>
+          <div className={p.sectionHead} data-motion="head">
             <h2 className={p.sectionTitle}>
               Six AI <em>superpowers</em>
             </h2>
           </div>
-          <p className={styles.lead}>
+          <p className={styles.lead} data-motion="rise">
             The course teaches six skills, which we call the six AI
             superpowers. You practise all six every month, and the projects
             get bigger each time. Choose one to see how it grows.
@@ -402,7 +402,7 @@ export function HomeNext({
               {SIX_BLOCKS.map((block, index) => {
                 const id = SUPERPOWER_IDS[index]!
                 return (
-                  <label className={styles.option} key={id}>
+                  <label className={styles.option} key={id} data-motion="deal">
                     <input
                       type="radio"
                       name="superpower"
@@ -430,8 +430,12 @@ export function HomeNext({
                   id={`superpower-${id}`}
                   key={id}
                   data-testid="superpower-panel"
+                  data-motion="panel"
                 >
-                  <figure className={`${p.plate} ${styles.powerPicture}`}>
+                  <figure
+                    className={`${p.plate} ${styles.powerPicture}`}
+                    data-motion="assemble"
+                  >
                     <Plate
                       name={`next/${id}`}
                       ext="jpg"
@@ -463,7 +467,7 @@ export function HomeNext({
               )
             })}
           </div>
-          <p className={p.attribution}>
+          <p className={p.attribution} data-motion="rise">
             OpenAI found{" "}
             <a href={PRIMITIVES_URL} rel="noopener noreferrer" target="_blank">
               six common ways its customers use AI at work
@@ -475,10 +479,14 @@ export function HomeNext({
       {/* 3. The three months, with what you make in each. */}
       <section className={p.section} data-section="months" id="months">
         <div className={p.page}>
-          <div className={p.sectionHead}>
+          <div className={p.sectionHead} data-motion="head">
             <h2 className={p.sectionTitle}>Each month builds on the last</h2>
           </div>
-          <figure className={`${p.plate} ${styles.monthsPlate}`}>
+          <figure
+            className={`${p.plate} ${styles.monthsPlate}`}
+            data-motion="assemble"
+            data-motion-pieces="months"
+          >
             <Plate
               name="what-you-make-cutout"
               width={1536}
@@ -489,7 +497,12 @@ export function HomeNext({
           </figure>
           <ol className={styles.monthSteps}>
             {MONTH_STEPS.map((month) => (
-              <li className={styles.monthStep} key={month.kicker} data-testid="month-step">
+              <li
+                className={styles.monthStep}
+                key={month.kicker}
+                data-testid="month-step"
+                data-motion="card"
+              >
                 <p className={styles.monthKicker}>{month.kicker}</p>
                 <h3 className={p.cardTitle}>{month.title}</h3>
                 <p className={p.cardBody}>{month.body}</p>
@@ -501,7 +514,7 @@ export function HomeNext({
               </li>
             ))}
           </ol>
-          <p className={styles.note} data-testid="months-optional-note">
+          <p className={styles.note} data-testid="months-optional-note" data-motion="rise">
             After the core lessons in Months 2 and 3, explore AI for UK
             healthcare or legal work. Go deep into one area without taking
             every optional lesson. For work tasks, use the AI tool your
@@ -513,14 +526,14 @@ export function HomeNext({
       {/* 4. What would you like to do with AI? A route for each purpose. */}
       <section className={p.section} data-section="purpose" id="career">
         <div className={p.page}>
-          <div className={p.sectionHead}>
+          <div className={p.sectionHead} data-motion="head">
             <h2 className={p.sectionTitle}>What would you like to do with AI?</h2>
           </div>
           <div className={styles.chooser} data-chooser="purpose">
             <fieldset className={`${styles.options} ${styles.optionsThree}`}>
               <legend className={styles.srOnly}>Choose what matters to you</legend>
               {PURPOSES.map((purpose, index) => (
-                <label className={styles.option} key={purpose.id}>
+                <label className={styles.option} key={purpose.id} data-motion="deal">
                   <input
                     type="radio"
                     name="purpose"
@@ -541,8 +554,13 @@ export function HomeNext({
                 id={`purpose-${purpose.id}`}
                 key={purpose.id}
                 data-testid="purpose-panel"
+                data-motion="panel"
               >
-                <figure className={`${p.plate} ${styles.purposePicture}`}>
+                <figure
+                  className={`${p.plate} ${styles.purposePicture}`}
+                  data-motion="assemble"
+                  data-motion-pieces="triptych"
+                >
                   <Plate
                     name={purpose.picture}
                     ext="jpg"
@@ -572,7 +590,7 @@ export function HomeNext({
               </article>
             ))}
           </div>
-          <p className={styles.others} data-testid="organisations-signpost">
+          <p className={styles.others} data-testid="organisations-signpost" data-motion="rise">
             Buying for someone else? Give the course as a gift, or buy team
             places at the same price per person. Professional bodies and large
             companies can choose optional lessons and set a quiz pass mark for
@@ -583,7 +601,7 @@ export function HomeNext({
                 {" or see "}
               </>
             )}
-            <Link href="/for-institutions">
+            <Link href="/for-organisations">
               {selling ? "the page for institutions and large companies" : "See the page for institutions and large companies"}
             </Link>
             .
@@ -595,7 +613,7 @@ export function HomeNext({
       <section className={p.section} data-section="proof" id="proof">
         <div className={p.page}>
           <div className={styles.proofBox}>
-            <h2 className={p.sectionTitle}>
+            <h2 className={p.sectionTitle} data-motion="rise">
               {showScore ? (
                 <>
                   Finish with a <em>score</em> and a <em>portfolio</em>
@@ -607,7 +625,11 @@ export function HomeNext({
               )}
             </h2>
             <div className={styles.proofTop}>
-              <figure className={`${p.plate} ${styles.proofPicture}`}>
+              <figure
+                className={`${p.plate} ${styles.proofPicture}`}
+                data-motion="assemble"
+                data-motion-pieces="proof"
+              >
                 <Plate
                   name="next/show-your-work"
                   ext="jpg"
@@ -618,7 +640,7 @@ export function HomeNext({
                 />
               </figure>
               <dl className={styles.proofPoints}>
-                <div data-testid="proof-score">
+                <div data-testid="proof-score" data-motion="rise">
                   <dt>Your GWTH score</dt>
                   <dd>
                     {showScore
@@ -626,7 +648,7 @@ export function HomeNext({
                       : "A number out of 100 is planned. It will combine the core lessons you've passed, your quiz results and your best marks for the three monthly projects. The course does not show it yet."}
                   </dd>
                 </div>
-                <div data-testid="proof-portfolio">
+                <div data-testid="proof-portfolio" data-motion="rise">
                   <dt>Your portfolio</dt>
                   <dd>
                     The projects you made in all three months, from FamilyBot
@@ -638,7 +660,7 @@ export function HomeNext({
               </dl>
             </div>
 
-            <div className={styles.scoreBlock} data-testid="proof-marking">
+            <div className={styles.scoreBlock} data-testid="proof-marking" data-motion="rise">
               <h3 className={styles.panelTitle}>
                 {markingLive
                   ? "Your monthly projects are marked, with feedback on your work"
@@ -648,8 +670,8 @@ export function HomeNext({
                 <div>
                   <p>
                     {markingLive
-                      ? "You build and hand in a major project at the end of each month. All three projects are marked by AI against GWTH's published marking guides."
-                      : "You'll build and hand in a major project at the end of each month. All three projects will be marked by AI against GWTH's published marking guides."}
+                      ? "You build and hand in a major project at the end of each month. All three projects are marked against GWTH's published marking guides."
+                      : "You'll build and hand in a major project at the end of each month. All three projects will be marked against GWTH's published marking guides."}
                   </p>
                   <p>
                     {markingLive
@@ -660,8 +682,8 @@ export function HomeNext({
                 <div>
                   <p>
                     {markingLive
-                      ? "There are four levels: Not yet, Pass, Good and Excellent. Two AI markers mark each project independently. A person at GWTH checks any mark in doubt."
-                      : "There will be four levels: Not yet, Pass, Good and Excellent. Two AI markers will mark each project independently. A person at GWTH will check any mark in doubt."}
+                      ? "There are four levels: Not yet, Pass, Good and Excellent."
+                      : "There will be four levels: Not yet, Pass, Good and Excellent."}
                   </p>
                   <p>
                     {markingLive
@@ -674,8 +696,10 @@ export function HomeNext({
 
             {showScore && (
               <div className={styles.scoreBlock} data-section="score">
-                <h3 className={styles.panelTitle}>How your score changes</h3>
-                <div className={styles.scoreCopy}>
+                <h3 className={styles.panelTitle} data-motion="rise">
+                  How your score changes
+                </h3>
+                <div className={styles.scoreCopy} data-motion="rise">
                   <p data-testid="score-lead">
                     Core lessons and quiz results count for half of your score.
                     The marks for your monthly projects count for the other
@@ -688,12 +712,16 @@ export function HomeNext({
                     stays up to date.
                   </p>
                 </div>
-                <div className={p.cards3} data-testid="score-cards">
+                <div
+                  className={`${p.cards3} ${styles.scoreCards}`}
+                  data-testid="score-cards"
+                  data-motion-children="score"
+                >
                   {SCORE_STATES.map((state) => (
                     <ScoreCard key={state.id} state={state} cardClassName={p.card} />
                   ))}
                 </div>
-                <p className={styles.smallNote}>
+                <p className={styles.smallNote} data-motion="rise">
                   These cards show examples rather than real learners. We
                   don&apos;t yet store a history of your score. Compare scores
                   only for people taking the same set of lessons.
@@ -707,16 +735,16 @@ export function HomeNext({
       {/* 6. How a lesson works, and where it is set. */}
       <section className={p.section} data-section="lesson">
         <div className={p.page}>
-          <div className={p.sectionHead}>
+          <div className={p.sectionHead} data-motion="head">
             <h2 className={p.sectionTitle}>How a lesson works</h2>
           </div>
-          <p className={styles.lead}>
+          <p className={styles.lead} data-motion="rise">
             The course has three monthly parts, with about five hours of work
             a week.
           </p>
           <ol className={styles.lessonSteps} aria-label="How a lesson works">
             {LESSON_STEPS.map(([title, body], index) => (
-              <li key={title}>
+              <li key={title} data-motion="step">
                 <span className={styles.stepNumber} aria-hidden="true">
                   {index + 1}
                 </span>
@@ -725,8 +753,8 @@ export function HomeNext({
               </li>
             ))}
           </ol>
-          <div className={p.actions}>
-            <Link href="/start-here" className={p.buttonOutline}>
+          <div className={p.actions} data-motion="rise">
+            <Link href="/start-here" className={`${p.buttonOutline} ${styles.press}`}>
               Try the free lesson
             </Link>
           </div>
@@ -735,13 +763,17 @@ export function HomeNext({
 
       <section className={p.section} data-section="uk">
         <div className={p.page}>
-          <div className={p.sectionHead}>
+          <div className={p.sectionHead} data-motion="head">
             <h2 className={p.sectionTitle}>
               Written for work and life <em>in the United Kingdom</em>
             </h2>
           </div>
           <div className={styles.ukGrid}>
-            <figure className={`${p.plate} ${styles.ukPicture}`}>
+            <figure
+              className={`${p.plate} ${styles.ukPicture}`}
+              data-motion="assemble"
+              data-motion-pieces="uk"
+            >
               <Plate
                 name="next/uk-paperwork"
                 ext="jpg"
@@ -752,13 +784,13 @@ export function HomeNext({
               />
             </figure>
             <div>
-              <p className={styles.lead} data-testid="uk-lead">
+              <p className={styles.lead} data-testid="uk-lead" data-motion="rise">
                 The course uses UK examples, because forms, rules and money
                 work differently from country to country.
               </p>
               <ul className={styles.ukList}>
                 {UK_POINTS.map((item) => (
-                  <li key={item.title} data-testid="uk-card">
+                  <li key={item.title} data-testid="uk-card" data-motion="rise">
                     <h3>{item.title}</h3>
                     <p>{item.body}</p>
                   </li>
@@ -774,9 +806,11 @@ export function HomeNext({
       <section className={p.closing} data-section="price" id="price">
         <div className={p.page}>
           <div className={styles.priceBox}>
-            <h2 className={p.sectionTitle}>What it costs</h2>
+            <h2 className={p.sectionTitle} data-motion="rise">
+              What it costs
+            </h2>
             <div className={styles.priceGrid}>
-              <div className={styles.pricePrice} data-testid="home-offer">
+              <div className={styles.pricePrice} data-testid="home-offer" data-motion="rise">
                 <p className={styles.priceHeadline}>
                   From {offer.opensOn} to {offer.endsOn}, a three-month pass
                   costs {offer.sale}.
@@ -800,38 +834,24 @@ export function HomeNext({
                   </li>
                 </ul>
               </div>
-              <div>
-                <h3 className={styles.priceSub}>When each month opens</h3>
-                <p className={styles.priceNote} data-testid="home-offer-months">
-                  Month 1 is available from {offer.opensOn}, Month 2 around{" "}
-                  {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-                  {LATER_MONTHS_OPEN.month3}. From those dates, each later month
-                  opens once a month has passed since your previous month began
-                  and you&apos;ve finished {GATE_SHARE}{" "}of that month&apos;s
-                  core lessons. While you wait, you keep using your current
-                  month. With a pass, your time is paused. On a monthly plan,
-                  your next payment waits. See{" "}
-                  <Link href="/terms#course-months">how months open</Link>.
-                </p>
-              </div>
             </div>
-            <div className={p.actions}>
+            <div className={p.actions} data-motion="rise">
               {selling ? (
                 <>
-                  <Link href="/pricing" className={p.buttonSolid}>
+                  <Link href="/pricing" className={`${p.buttonSolid} ${styles.press}`}>
                     Buy it for yourself
                   </Link>
-                  <Link href="/gift" className={p.buttonOutline}>
+                  <Link href="/gift" className={`${p.buttonOutline} ${styles.press}`}>
                     Give it as a gift
                   </Link>
                 </>
               ) : (
-                <Link href="/waitlist" className={p.buttonSolid}>
+                <Link href="/waitlist" className={`${p.buttonSolid} ${styles.press}`}>
                   Join the waitlist
                 </Link>
               )}
               {selling ? null : (
-                <Link href="/start-here" className={p.buttonOutline}>
+                <Link href="/start-here" className={`${p.buttonOutline} ${styles.press}`}>
                   Try the free lesson
                 </Link>
               )}

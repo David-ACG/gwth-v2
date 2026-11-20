@@ -41,6 +41,19 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/about", destination: "/why-gwth", permanent: true },
+      // For teams and For institutions became one page (David, 2026-11-19:
+      // "I think we can consolidate the For teams and For institutions into
+      // one page"). Old links, bookmarks and search results keep working.
+      {
+        source: "/for-teams",
+        destination: "/for-organisations?for=team",
+        permanent: true,
+      },
+      {
+        source: "/for-institutions",
+        destination: "/for-organisations?for=institution",
+        permanent: true,
+      },
       // The four Model Arena labs were replaced by the six Model Lab pages
       // (David, 2026-10-21, option A). Each old lab goes to the lab that now
       // covers its task, permanently, so shared links keep working.

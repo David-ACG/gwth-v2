@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { WaitlistFde } from "@/components/marketing/waitlist-fde/waitlist-fde"
+import { WaitlistNext } from "@/components/marketing/waitlist-next/waitlist-next"
 
 export const metadata: Metadata = {
   title: "Join the Waitlist",
@@ -8,9 +8,11 @@ export const metadata: Metadata = {
 }
 
 /**
- * Waitlist signup page in the FDE journal register. The destination for
- * every "Join waitlist" CTA; invited testers are pointed on to /signup.
+ * Waitlist signup page, in the family look of the home page (waitlist-next/;
+ * waitlist-fde/ is the page it replaced, kept as the backup). The destination
+ * for every "Join the waitlist" button; invited testers are pointed on to
+ * /signup, and from the day sales open the proxy sends this route there too.
  */
 export default function WaitlistPage() {
-  return <WaitlistFde />
+  return <WaitlistNext />
 }

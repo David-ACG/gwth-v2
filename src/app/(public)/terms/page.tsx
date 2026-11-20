@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { LegalFde } from "@/components/marketing/legal-fde/legal-fde"
+import { LegalNext } from "@/components/marketing/legal-next/legal-next"
 import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
 import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 
@@ -14,7 +14,8 @@ export const metadata: Metadata = {
 }
 
 /**
- * Terms and Conditions page in the FDE journal register.
+ * Terms and Conditions page. The shell is legal-next/ (layout only; the
+ * words are here and unchanged). legal-fde/ is the shell it replaced.
  * Stealth mode: no physical address, no personal names, contact via form only. *
  * Keep the explicit {" "} after a bold label: the build drops the leading
  * space of a text node that holds an HTML entity such as &apos;, and the
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
  */
 export default function TermsPage() {
   return (
-    <LegalFde title="Terms and conditions" updated="14 December 2026">
+    <LegalNext title="Terms and conditions" updated="14 December 2026">
       <p>
         These terms and conditions (&quot;Terms&quot;) govern your use of the
         GWTH.ai website and services (&quot;Services&quot;) provided at{" "}
@@ -471,6 +472,6 @@ export default function TermsPage() {
         If you have any questions about these Terms, please{" "}
         <Link href="/contact">contact us through our website</Link>.
       </p>
-    </LegalFde>
+    </LegalNext>
   )
 }

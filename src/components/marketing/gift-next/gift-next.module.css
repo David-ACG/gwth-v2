@@ -1,0 +1,230 @@
+/* The gift pages (`/gift`, `/gift/open`, `/gift/thanks`), in the paper-first
+   register, built to sit beside the home page (`home-next`) and `/pricing`.
+   Every colour is a --v-* token from globals.css, so paper and night follow
+   the theme. The order form, the code box and everything inside the panels
+   keep their own styles (`gift/gift.module.css`, `contact-fde.module.css`),
+   untouched; this file is only the frame around them. Shared recipes come
+   from `marketing/paper/`. */
+
+/* ── Hero: the words, then the present ───────────────────────────────────── */
+
+.hero {
+  padding: clamp(2.5rem, 6vw, 5rem) 0 0;
+}
+
+.heroEnd {
+  padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+}
+
+.heroGrid {
+  display: grid;
+  gap: 2.25rem;
+}
+
+@media (min-width: 64rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .heroGridTop {
+    align-items: start;
+  }
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 5.6vw, 4.2rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--v-ink);
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--v-accent);
+}
+
+.heroLead {
+  max-width: 34rem;
+  margin-top: 1.25rem;
+  font-size: var(--fde-body);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.heroPicture {
+  min-width: 0;
+}
+
+/* The panel on /gift/open and /gift/thanks sits under the headline. */
+.heroPanel {
+  max-width: 36rem;
+  margin-top: 1.75rem;
+}
+
+/* One column, centred, when there is no picture beside it. */
+.single {
+  max-width: 38rem;
+  margin-inline: auto;
+}
+
+/* ── On sale soon: a dated notice ────────────────────────────────────────── */
+
+/* A panel with its boundary and an accent bar, so it is never told apart by
+   tint alone (tint-is-never-the-only-signal). */
+.notice {
+  max-width: 36rem;
+  margin-top: 1.75rem;
+  padding: 1.1rem 1.25rem 1.2rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-left: 3px solid var(--v-accent);
+  border-radius: var(--radius-lg);
+}
+
+.noticeTitle {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--v-ink);
+}
+
+.noticeBody {
+  margin-top: 0.45rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.links {
+  max-width: 36rem;
+  margin-top: 1.25rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.7;
+  color: var(--v-soft);
+}
+
+.links a {
+  color: var(--v-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.links a:hover {
+  color: var(--v-accent);
+}
+
+.links a:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}
+
+.links span + span {
+  display: block;
+}
+
+/* ── The order form ──────────────────────────────────────────────────────── */
+
+/* A jump from the hero button lands with the form clear of the header. */
+.anchor {
+  scroll-margin-top: 2rem;
+}
+
+.formColumn {
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+/* ── How a gift works ────────────────────────────────────────────────────── */
+
+.steps {
+  list-style: none;
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 52rem) {
+  .steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.step {
+  padding: 1.35rem 1.5rem 1.5rem;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg);
+}
+
+.stepTop {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.stepNumber {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--v-line);
+  border-radius: 50%;
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.icon {
+  flex: none;
+  color: var(--v-accent);
+}
+
+/* ── The three answers ───────────────────────────────────────────────────── */
+
+.answers {
+  display: grid;
+  gap: 0 2.5rem;
+  margin: 0;
+}
+
+@media (min-width: 52rem) {
+  .answers {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.answer {
+  padding: 1.25rem 0 1.35rem;
+  border-top: 1px solid var(--v-line-soft);
+}
+
+/* letter-spacing: 0 undoes the global tracking-tight on headings, which
+   squeezed the word spaces in Bitter at this size (launch readiness review,
+   2026-10-20). */
+.answer h3 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0;
+  color: var(--v-ink);
+}
+
+.answer p {
+  margin-top: 0.45rem;
+  font-size: var(--fde-body-sm);
+  line-height: 1.65;
+  color: var(--v-soft);
+}
+
+.end {
+  padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+}

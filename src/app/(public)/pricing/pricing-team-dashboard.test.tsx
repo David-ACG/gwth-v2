@@ -18,7 +18,10 @@ describe("Pricing with the team dashboard switched on", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: /Same learner experience\. More visibility for managers\./i,
+        // David's own heading (option B, 2026-10-21). The latest Sol's
+        // 19 Nov 2026 pass replaced it; the lead restored it, because his
+        // own wording is not the words check's to change.
+        name: "Same learner experience. More visibility for managers.",
       })
     ).toBeInTheDocument()
     const body = screen.getByTestId("teams-split-body").textContent ?? ""

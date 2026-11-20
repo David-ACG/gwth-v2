@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ContactFde } from "@/components/marketing/contact-fde/contact-fde"
+import { ContactNext } from "@/components/marketing/contact-next/contact-next"
 
 export const metadata: Metadata = {
   title: "Contact us",
@@ -8,9 +8,10 @@ export const metadata: Metadata = {
 }
 
 /**
- * Contact page with a form for enquiries, in the FDE journal register.
- * No published email addresses — all contact goes through the form.
+ * Contact page with a form for enquiries, in the family look of the home page
+ * (contact-next/; contact-fde/ is the page it replaced, kept as the backup).
+ * No published email addresses: all contact goes through the form.
  */
 export default function ContactPage() {
-  return <ContactFde />
+  return <ContactNext />
 }

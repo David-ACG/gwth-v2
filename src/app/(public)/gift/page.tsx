@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { GiftPage } from "@/components/marketing/gift/gift-page"
+import { GiftNext } from "@/components/marketing/gift-next/gift-next"
 import { GIFT_COPY } from "@/components/marketing/gift/gift-copy"
 
 export const metadata: Metadata = {
@@ -11,5 +11,5 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic"
 
 export default function Page() {
-  return <GiftPage />
+  return <GiftNext />
 }

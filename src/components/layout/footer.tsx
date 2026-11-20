@@ -9,8 +9,7 @@ const footerLinks = [
   {
     title: "Product",
     links: [
-      { href: "/for-institutions", label: "For institutions" },
-      { href: "/for-teams", label: "For teams" },
+      { href: "/for-organisations", label: "For organisations" },
       { href: "/pricing", label: "Pricing" },
       { href: "/gift", label: "Gifts" },
       { href: "/why-gwth", label: "Why GWTH" },
