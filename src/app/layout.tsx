@@ -59,7 +59,9 @@ export const metadata: Metadata = {
       "A UK-focused applied AI course for beginners moving from ChatGPT basics to practical research, building, automation, and verifiable AI capability.",
     url: "https://gwth.ai",
     siteName: "GWTH.ai",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    // v2: green logo (David, 20 Nov 2026: "When I share on WhatsApp it picks up the old
+    // logo"). A new file name so WhatsApp and LinkedIn cannot reuse a cached brown copy.
+    images: [{ url: "/og-image-v2.png", width: 1200, height: 630 }],
     type: "website",
   },
   twitter: { card: "summary_large_image" },
