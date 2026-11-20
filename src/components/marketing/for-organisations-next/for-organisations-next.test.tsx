@@ -160,12 +160,15 @@ describe("the choice at the top (David, 19 Nov 2026: one page for teams and inst
 })
 
 describe("for institutions: the old page's promises, and nothing more", () => {
-  it("keeps David's headline and the four halves of the proposition", () => {
+  // David's 23 Oct headline ("whole class on the same footing") was replaced on
+  // 20 Nov 2026: the master copy gate (latest Sol) found it promised equal
+  // readiness, which the page later says it cannot promise.
+  it("leads with the required-lessons headline and the four halves of the proposition", () => {
     const { container } = render(<ForOrganisationsNext />)
     const intro = section(container, "institution-intro")
     expect(
       within(intro).getByRole("heading", { level: 2 }).textContent
-    ).toMatch(/Start your specialist courses with the whole class on the same footing/)
+    ).toMatch(/See who has passed your required AI lessons before specialist teaching begins/)
     const text = sectionText(container, "institution-intro")
     expect(text).toMatch(/tutors/i)
     expect(text).toMatch(/whole class up to the same level/i)

@@ -617,8 +617,8 @@ export function LessonsNext({
                   Nothing else counts: not time spent, not lessons opened, and
                   nothing you say about yourself. Compare scores only for
                   people taking the same set of lessons. An institution
-                  chooses which optional lessons count towards the score and
-                  sets the quiz pass mark.
+                  chooses which optional lessons members must pass and sets
+                  the quiz pass mark.
                 </p>
               </div>
             </div>
@@ -660,11 +660,9 @@ export function LessonsNext({
               </h3>
               <p className={styles.bodyText} data-testid="lessons-uk-note">
                 These lessons are optional, for people in those jobs who want
-                to take them. Nobody else needs to take them. For example, a
-                hairdresser does not need to take the lesson for solicitors.
-                The legal practice lesson follows the Solicitors Regulation
-                Authority code and the Ayinde judgment. This court ruling deals
-                with citing cases that an AI tool invented. The accountancy
+                to take them. Nobody else needs to take them. The legal practice lesson covers the Solicitors Regulation
+                Authority code and the Ayinde judgment on citing cases invented
+                by AI. The accountancy
                 lesson follows the codes of the UK accountancy bodies ICAEW,
                 ACCA and CIMA. It also follows ISA (UK) 700, the rule for signing
                 off an audit. Lessons that handle personal information follow

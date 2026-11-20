@@ -478,11 +478,11 @@ describe("the optional lessons, the UK rules and organisations", () => {
     expect(note).toHaveTextContent(
       "These lessons are optional, for people in those jobs who want to take them. Nobody else needs to take them."
     )
+    // David, 20 Nov 2026: "we should not keep my hairdresser example as it may
+    // offend. Please don't use an example".
+    expect(note).not.toHaveTextContent(/hairdresser|for example/i)
     expect(note).toHaveTextContent(
-      "a hairdresser does not need to take the lesson for solicitors"
-    )
-    expect(note).toHaveTextContent(
-      "This court ruling deals with citing cases that an AI tool invented."
+      "the Ayinde judgment on citing cases invented by AI."
     )
     for (const name of [
       "Solicitors Regulation Authority",
