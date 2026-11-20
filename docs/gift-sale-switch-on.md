@@ -39,13 +39,14 @@ at once, through `ship.py release website`). Nothing here is done by the code on
 7. **`PRIVATE_CONTENT_MODE=off`** in production. While it is locked, sign-up is closed and only
    allowlisted emails can see lessons, so neither a gift recipient nor a monthly payer could use
    the course. This opens sign-up and the free labs to everyone.
-8. **Database migrations 016 to 032, all of them**, before the release that carries the code.
-   Production has 001 to 015. The release code reads tables and columns from the later files, and
+8. **Database migrations 016 to 033, all of them**, before the release that carries the code.
+   Done on 20 Nov 2026: production now has 001 to 033 (backup and log in GWTH-launch-plan
+   `completion/friday-demo-plan/db-updates-2026-11-20.log`). Before that it had 001 to 015. The release code reads tables and columns from the later files, and
    at boot the schema guard (`src/lib/schema-guard.ts`) refuses to start if 016, 019, 021, 022
    or 032 is missing. Back up first, then
    apply them in order, each file in one transaction (all are additive and safe to run again):
    ```bash
-   for f in supabase/migrations/0{16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32}_*.sql; do
+   for f in supabase/migrations/0{16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33}_*.sql; do
      echo "== $f"
      ssh hetzner 'docker exec -i zo0gkcwoo0o4gow0go4cwk0o psql -U gwth -d gwth_v2 -v ON_ERROR_STOP=1 -1 -q' < "$f" || break
    done
