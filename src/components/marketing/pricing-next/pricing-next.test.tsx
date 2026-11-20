@@ -210,7 +210,7 @@ describe("PricingNext: the page as a whole, in every state", () => {
       )
       expect(text).toContain("Before Month 2 opens, you must finish 75% of Month 1's core lessons")
       expect(text).toContain("We refund a pass in full until it's opened, but not after, unless the law requires")
-      expect(text).toContain("AI marks it against GWTH's published marking guides, and a person at GWTH checks any mark in doubt")
+      expect(text).toContain("It is marked against GWTH's published marking guides")
       expect(text).toContain("Anyone aged 16 or over")
     })
   }

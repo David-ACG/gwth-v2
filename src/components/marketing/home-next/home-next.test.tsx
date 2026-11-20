@@ -326,15 +326,15 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
         ? "Your monthly projects are marked, with feedback on your work"
         : "Your monthly projects will be marked, with feedback on your work"
     )
-    expect(marking).toHaveTextContent("marked by AI against GWTH's published marking guides")
+    expect(marking).toHaveTextContent("marked against GWTH's published marking guides")
     expect(marking).toHaveTextContent("Not yet, Pass, Good and Excellent")
     expect(marking).toHaveTextContent("at the end of each month")
     expect(marking).toHaveTextContent("All three projects")
     expect(marking).toHaveTextContent("your own work")
     expect(marking).toHaveTextContent("what you've done well")
     expect(marking).toHaveTextContent("how to reach the next level")
-    expect(marking).toHaveTextContent(/Two AI markers .*independently/)
-    expect(marking).toHaveTextContent(/A person at GWTH .*any mark in doubt/)
+    expect(marking).not.toHaveTextContent(/Two AI markers .*independently/)
+    expect(marking).not.toHaveTextContent(/A person at GWTH .*any mark in doubt/)
     expect(marking).toHaveTextContent("provisional mark")
     expect(marking).toHaveTextContent("within 7 days")
     expect(marking).toHaveTextContent("exactly what to fix")
@@ -348,8 +348,8 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
     } else {
       expect(marking).toHaveTextContent("All three projects will be marked")
       expect(marking).toHaveTextContent("Your feedback will quote")
-      expect(marking).toHaveTextContent("Two AI markers will mark")
-      expect(marking).toHaveTextContent("A person at GWTH will check")
+      expect(marking).not.toHaveTextContent("Two AI markers will mark")
+      expect(marking).not.toHaveTextContent("A person at GWTH will check")
       expect(marking).toHaveTextContent("your best mark will count")
       expect(proof.textContent).not.toMatch(/already marked|(?:are|is|have been|has been) marked|you get|you see|mark counts/i)
     }
@@ -387,7 +387,7 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
 })
 
 describe("the price closes the page, word for word", () => {
-  it("carries the offer and the month-opening rule", () => {
+  it("carries the offer without the month-opening rule", () => {
     render(<HomeNext />)
     const offer = screen.getByTestId("home-offer")
     expect(offer).toHaveTextContent(/a three-month pass costs £69\./)
@@ -396,11 +396,7 @@ describe("the price closes the page, word for word", () => {
     expect(offer).toHaveTextContent(/After three months, your monthly plan continues at £7\.50 a month for access to the updated lessons unless you cancel/)
     expect(offer).toHaveTextContent(/If you paid once for a pass, your access to the course lessons stops/)
     expect(offer).toHaveTextContent(/You only pay again if you choose to subscribe/)
-    const months = screen.getByTestId("home-offer-months")
-    expect(months).toHaveTextContent(
-      /each later month opens once a month has passed since your previous month began and you.ve finished 75% of that month.s core lessons/
-    )
-    expect(within(months).getByRole("link")).toHaveAttribute("href", "/terms#course-months")
+    expect(screen.queryByTestId("home-offer-months")).not.toBeInTheDocument()
   })
 
   it("sells from the buttons only once GWTH is on sale", () => {
@@ -419,7 +415,7 @@ describe("the price closes the page, word for word", () => {
     const { container } = render(<HomeNext />)
     const price = within(container.querySelector<HTMLElement>('[data-section="price"]')!)
     expect(price.getAllByRole("link").map((link) => link.getAttribute("href"))).toEqual([
-      "/terms#course-months", "/waitlist", "/start-here",
+      "/waitlist", "/start-here",
     ])
     expect(price.getByRole("link", { name: "Try the free lesson" })).toHaveAttribute("href", "/start-here")
     expect(price.queryByRole("link", { name: "Try a free lab" })).not.toBeInTheDocument()
@@ -480,16 +476,17 @@ describe("house rules for public text", () => {
 })
 
 describe("lesson order and checking UK answers", () => {
-  it("describes film, reading, project and end-of-lesson questions in order", () => {
+  it("describes film, reading, questions and project in order", () => {
     const { container } = render(<HomeNext />)
     const lesson = within(container.querySelector<HTMLElement>('[data-section="lesson"]')!)
     const steps = lesson.getAllByRole("listitem")
     expect(steps.map((step) => within(step).getByRole("heading").textContent)).toEqual([
-      "Watch a short film", "Read the lesson", "Do the project, then answer questions",
+      "Watch a short film", "Read the lesson, then answer questions", "Do the project",
     ])
     expect(steps[0]).toHaveTextContent("Get an introduction to the subject.")
     expect(steps[1]).toHaveTextContent("Work through the lesson over several pages.")
-    expect(steps[2]).toHaveTextContent("Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark.")
+    expect(steps[1]).toHaveTextContent("The questions on the lesson are a quiz with a pass mark. Your answers are marked automatically, so you can see what to go back over.")
+    expect(steps[2]).toHaveTextContent("Put what you have learnt into practice.")
     expect(container.querySelector('[data-section="lesson"]')).not.toHaveTextContent(/as you go/i)
     expect(lesson.getByText(/three monthly parts/)).toHaveTextContent(
       "The course has three monthly parts, with about five hours of work a week."

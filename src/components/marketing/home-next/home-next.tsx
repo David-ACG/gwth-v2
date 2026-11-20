@@ -6,8 +6,6 @@ import {
   ENABLE_GWTH_SCORE,
   ONGOING_MONTHLY_PRICE,
 } from "@/lib/config"
-import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
-import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 import {
   formatPence,
   formatUkDate,
@@ -74,8 +72,8 @@ import styles from "./home-next.module.css"
  * 6. **How a lesson works** is a row of three steps (the blank half of the
  *    old "How the course works" section is gone), and the **UK** section has
  *    its picture.
- * 7. **The price closes the page.** The offer and the month-opening rule are
- *    the same sentences as on `/`, word for word: they are legal wording.
+ * 7. **The price closes the page.** The offer keeps the same sentences as
+ *    on `/`, word for word: they are legal wording.
  *
  * ## What is reused, so the facts cannot drift
  *
@@ -89,8 +87,6 @@ import styles from "./home-next.module.css"
  * the latest Astra with GPT Image. Briefs and prompts:
  * GWTH-launch-plan `completion/home-fable/pictures/`.
  */
-
-const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
 
 type SuperpowerId =
   | "research"
@@ -284,8 +280,8 @@ export function groupByMonth(
 
 const LESSON_STEPS = [
   ["Watch a short film", "Get an introduction to the subject."],
-  ["Read the lesson", "Work through the lesson over several pages."],
-  ["Do the project, then answer questions", "Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark."],
+  ["Read the lesson, then answer questions", "Work through the lesson over several pages. The questions on the lesson are a quiz with a pass mark. Your answers are marked automatically, so you can see what to go back over."],
+  ["Do the project", "Put what you have learnt into practice."],
 ] as const
 
 /** The UK thread, the same three claims as on `/` (see `UK_THREAD` there). */
@@ -674,8 +670,8 @@ export function HomeNext({
                 <div>
                   <p>
                     {markingLive
-                      ? "You build and hand in a major project at the end of each month. All three projects are marked by AI against GWTH's published marking guides."
-                      : "You'll build and hand in a major project at the end of each month. All three projects will be marked by AI against GWTH's published marking guides."}
+                      ? "You build and hand in a major project at the end of each month. All three projects are marked against GWTH's published marking guides."
+                      : "You'll build and hand in a major project at the end of each month. All three projects will be marked against GWTH's published marking guides."}
                   </p>
                   <p>
                     {markingLive
@@ -686,8 +682,8 @@ export function HomeNext({
                 <div>
                   <p>
                     {markingLive
-                      ? "There are four levels: Not yet, Pass, Good and Excellent. Two AI markers mark each project independently. A person at GWTH checks any mark in doubt."
-                      : "There will be four levels: Not yet, Pass, Good and Excellent. Two AI markers will mark each project independently. A person at GWTH will check any mark in doubt."}
+                      ? "There are four levels: Not yet, Pass, Good and Excellent."
+                      : "There will be four levels: Not yet, Pass, Good and Excellent."}
                   </p>
                   <p>
                     {markingLive
@@ -837,20 +833,6 @@ export function HomeNext({
                     only pay again if you choose to subscribe.
                   </li>
                 </ul>
-              </div>
-              <div data-motion="rise">
-                <h3 className={styles.priceSub}>When each month opens</h3>
-                <p className={styles.priceNote} data-testid="home-offer-months">
-                  Month 1 is available from {offer.opensOn}, Month 2 around{" "}
-                  {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-                  {LATER_MONTHS_OPEN.month3}. From those dates, each later month
-                  opens once a month has passed since your previous month began
-                  and you&apos;ve finished {GATE_SHARE}{" "}of that month&apos;s
-                  core lessons. While you wait, you keep using your current
-                  month. With a pass, your time is paused. On a monthly plan,
-                  your next payment waits. See{" "}
-                  <Link href="/terms#course-months">how months open</Link>.
-                </p>
               </div>
             </div>
             <div className={p.actions} data-motion="rise">

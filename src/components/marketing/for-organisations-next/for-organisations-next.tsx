@@ -7,8 +7,7 @@ import {
   ONGOING_MONTHLY_PRICE,
   TOTAL_MANDATORY_LESSONS,
 } from "@/lib/config"
-import { LATER_MONTHS_OPEN, UK_STAT_IDS } from "@/components/marketing/data"
-import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
+import { UK_STAT_IDS } from "@/components/marketing/data"
 import {
   formatPence,
   formatUkDate,
@@ -101,8 +100,6 @@ import styles from "./for-organisations-next.module.css"
  * The words themselves are in `./data.ts`, with their sources.
  */
 
-const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
-
 /** The published documents behind the three UK figures, deduplicated. */
 const STAT_SOURCES = Array.from(
   new Map(
@@ -164,7 +161,7 @@ function teamFaqs(price: Prices): { q: string; a: ReactNode }[] {
     },
     {
       q: "Our team is not technical. Is this appropriate?",
-      a: "Yes, it's designed for people across your workforce, from apprentices to senior leaders. People need a computer, an internet connection and the ability to type. That is the complete list of technical requirements. Month 1 uses plain English and practical examples. Later lessons introduce writing code with help from AI and building more complex tools, and they are taught the same way as the first ones: you see it, you attempt it, then the lesson works through it. The subject gets deeper, the hand-holding does not stop.",
+      a: "Yes, it's designed for people across your workforce, from apprentices to senior leaders. People need a computer, an internet connection and the ability to type. That is the complete list of technical requirements. Month 1 uses plain English and practical examples. Later lessons introduce writing code with help from AI and building more complex tools. They follow the same order as the first ones: you watch a short film, read the lesson, answer the questions, then do the project. The subject gets deeper, the hand-holding does not stop.",
     },
     {
       q: "How does this compare to the government's AI Skills Boost?",
@@ -205,8 +202,8 @@ function markingCopy(live: boolean) {
     ? {
         title: "Monthly projects are marked, with feedback on the work",
         paragraphs: [
-          "Each learner builds and hands in a major project at the end of each month. All three projects are marked by AI against GWTH's published marking guides.",
-          "Two AI markers mark each project independently. A person at GWTH checks any mark in doubt.",
+          "Each learner builds and hands in a major project at the end of each month.",
+          "All three projects are marked against GWTH's published marking guides.",
           "The feedback quotes the learner's own work to show what they've done well and how to reach the next level in each part of the marking guide. They get one clear next step.",
           "They see a provisional mark at once. It becomes final once checked, within 7 days. Not yet tells them exactly what to fix before handing in again. They can hand in each project up to three times, and their best mark counts.",
         ],
@@ -215,8 +212,8 @@ function markingCopy(live: boolean) {
     : {
         title: "Monthly projects will be marked, with feedback on the work",
         paragraphs: [
-          "Each learner will build and hand in a major project at the end of each month. All three projects will be marked by AI against GWTH's published marking guides.",
-          "Two AI markers will mark each project independently. A person at GWTH will check any mark in doubt.",
+          "Each learner will build and hand in a major project at the end of each month.",
+          "All three projects will be marked against GWTH's published marking guides.",
           "The feedback will quote the learner's own work to show what they've done well and how to reach the next level in each part of the marking guide. They'll get one clear next step.",
           "They'll see a provisional mark at once. It will become final once checked, within 7 days. Not yet will tell them exactly what to fix before handing in again. They'll be able to hand in each project up to three times, and their best mark will count.",
         ],
@@ -705,19 +702,6 @@ export function ForOrganisationsNext({
                 </li>
               ))}
             </ol>
-            {/* The 75% rule (bead gwth-launch-735c), in the old team page's
-                words: legal wording, kept whole. */}
-            <p className={styles.note} data-testid="months-availability">
-              Month 1 is available from {price.opensOn}, Month 2 around{" "}
-              {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-              {LATER_MONTHS_OPEN.month3}. From those dates, each later month
-              opens for someone once a month has passed since their previous
-              month began and they&apos;ve finished {GATE_SHARE}{" "}of that
-              month&apos;s core lessons. While they wait, they keep using
-              their current month. With a pass, their time is paused. On a
-              monthly plan, their next payment waits. See{" "}
-              <Link href="/terms#course-months">how months open</Link>.
-            </p>
 
             <h3 className={styles.subTitle}>How a lesson works</h3>
             <ol className={styles.lessonSteps} aria-label="How a lesson works">
@@ -783,7 +767,7 @@ export function ForOrganisationsNext({
               <div data-testid="proof-quizzes">
                 <h3 className={styles.proofHead}>A quiz in every lesson</h3>
                 <p>
-                  Each lesson ends with a quiz with a pass mark.
+                  Each lesson has questions in a quiz with a pass mark.
                   Quizzes are marked automatically, and learners cannot see
                   the answers before they submit.
                 </p>

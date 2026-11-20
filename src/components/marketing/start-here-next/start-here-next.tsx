@@ -245,8 +245,8 @@ export function StartHereNext({ notice = null }: StartHereNextProps = {}) {
             ))}
           </ol>
           <p className={styles.note}>
-            Every lesson in the course follows the same order, and then ends
-            with questions on what you&apos;ve learnt.
+            In the course, you watch a short film, read the lesson, answer
+            questions on the lesson, then do the project.
           </p>
         </div>
       </section>

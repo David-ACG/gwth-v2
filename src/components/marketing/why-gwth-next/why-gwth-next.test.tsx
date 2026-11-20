@@ -3,7 +3,6 @@ import { describe, it, expect, afterEach } from "vitest"
 import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import { WhyGwthNext } from "./why-gwth-next"
-import { WhyGwthFde } from "@/components/marketing/why-gwth-fde/why-gwth-fde"
 import { COURSE_MONTHLY_PRICE, ONGOING_MONTHLY_PRICE } from "@/lib/config"
 import { ukFigure, ukFigureSource } from "@/lib/data/uk-ai-context"
 
@@ -12,8 +11,8 @@ import { ukFigure, ukFigureSource } from "@/lib/data/uk-ai-context"
  * "It's okay, but I think we can lay this out in a much more interesting
  * way." The layout is new; the facts are not. These tests hold the new page
  * to every point the old page's suite held (`why-gwth-fde.test.tsx`), plus
- * the founder's note word for word against the old component, so a layout
- * change can never quietly change what is claimed.
+ * the founder's own points, so wording improvements do not quietly change
+ * what is claimed.
  *
  * Assertions are on MEANING, so the wording can still be improved.
  */
@@ -293,13 +292,39 @@ describe("Why GWTH sign-up", () => {
 })
 
 describe("What the old About page brought", () => {
-  it("keeps the founder note word for word", () => {
-    const next = render(<WhyGwthNext />)
-    const note = pageText(screen.getByTestId("founder-note"))
-    next.unmount()
-    render(<WhyGwthFde />)
-    const original = pageText(screen.getByTestId("founder-note"))
-    expect(note).toBe(original)
+  it("keeps a non-empty founder note with his experience, teaching and purpose", () => {
+    render(<WhyGwthNext />)
+    const letter = screen.getByTestId("founder-note")
+    const paragraphs = Array.from(letter.querySelectorAll("p"))
+    expect(pageText(paragraphs[0]!)).toBe("A note from the founder")
+    expect(paragraphs.slice(1)).toHaveLength(4)
+    for (const paragraph of paragraphs.slice(1)) {
+      expect(pageText(paragraph)).not.toBe("")
+    }
+    const note = pageText(letter)
+    for (const point of [
+      /consultant and solution architect/i,
+      /plain terms.*computer systems.*fit together.*build/i,
+      /world's largest companies, start-ups and UK brands/i,
+      /AI since long before you could chat with it/i,
+      /factories.*run and check production/i,
+      /sell online to businesses and the public/i,
+      /AI assistants.*find and buy products.*place orders/i,
+      /marketing and advertising/i,
+      /everyday office work/i,
+      /very large systems.*company's own documents/i,
+      /AI agents.*tasks on their own/i,
+      /still try new tools.*using them myself, mistakes included/i,
+      /what I enjoy most.*teaching/i,
+      /GWTH starts with what people actually use AI for/i,
+      /best way to use AI for each task.*keep the course updated/i,
+      /new tools, models and ways of working/i,
+      /made me far more productive/i,
+      /small share of people in the UK.*learn to use it well.*all be better off/i,
+      /I'd like to help you be one of them/i,
+    ]) {
+      expect(note).toMatch(point)
+    }
   })
 
   it("keeps the founder's own points, and names no employer, client or product", () => {

@@ -8,13 +8,10 @@ import {
   TOTAL_MANDATORY_LESSONS,
   TOTAL_OPTIONAL_LESSONS,
 } from "@/lib/config"
-import { LATER_MONTHS_OPEN } from "@/components/marketing/data"
 import { MONTH_STEPS } from "@/components/marketing/home-next/home-next"
 import { HAND_IN_QUESTIONS } from "@/lib/capstones/guides"
 import { BAND_LABELS, type Band } from "@/lib/capstones/rules"
 import { canPromoteLabs } from "@/lib/labs-cta"
-import { COURSE_OPENS_ON } from "@/lib/launch-date"
-import { DEFAULT_GATE_PERCENT } from "@/lib/protection/month-hold"
 import p from "@/components/marketing/paper/paper.module.css"
 import styles from "./lessons-next.module.css"
 
@@ -34,7 +31,7 @@ import styles from "./lessons-next.module.css"
  *    three example projects you make in it and its major project. Radio
  *    buttons drawn as cards, as on the home page, so it works with no script.
  * 3. `lesson`: how one lesson works, in the real order (film, reading,
- *    project, end-of-lesson questions).
+ *    questions on the lesson, project).
  * 4. `marking`: how the monthly projects are marked, the four levels, the
  *    score and the portfolio.
  * 5. `optional`: the three directions the optional lessons run in, the UK
@@ -64,9 +61,8 @@ import styles from "./lessons-next.module.css"
  *   (`home-next`), reordered. The score rules are in the `SCORE_STATES`
  *   comment in `home-fde`: read it before changing the score copy.
  * - How a lesson works, the optional directions, the UK rules, the
- *   organisation route and the month-opening rule: the previous page
- *   (`lessons-fde`), whose comments trace each sentence. The month-opening
- *   paragraph is legal wording and is that page's, word for word.
+ *   organisation route: the previous page (`lessons-fde`), whose comments
+ *   trace each sentence.
  *
  * Public pages describe the course as it is at launch, in the present tense
  * (David, 19 Nov 2026), so the route passes `showScore` and `markingLive`. The
@@ -78,8 +74,6 @@ import styles from "./lessons-next.module.css"
  * Pictures: paper cutouts in the style David picked on 13 Nov 2026. Briefs:
  * GWTH-launch-plan `completion/public-pages-fable/pictures/lessons/`.
  */
-
-const GATE_SHARE = `${DEFAULT_GATE_PERCENT}%`
 
 /** The four levels of a project mark, lowest first, named by the product. */
 const BANDS: readonly Band[] = ["not_yet", "pass", "good", "excellent"]
@@ -104,12 +98,12 @@ const LESSON_STEPS = [
     body: "The written lesson takes you through it step by step, over several pages.",
   },
   {
-    title: "Do the project",
-    body: "Put what you have learnt into practice. You build useful things that you can use and show to other people.",
+    title: "Answer the questions",
+    body: "The questions on the lesson are a quiz with a pass mark. Your answers are marked automatically, so you can see what to go back over.",
   },
   {
-    title: "Answer the questions",
-    body: "The end-of-lesson questions are a quiz with a pass mark. Your answers are marked automatically, so you can see what to go back over.",
+    title: "Do the project",
+    body: "Put what you have learnt into practice. You build useful things that you can use and show to other people.",
   },
 ] as const
 
@@ -386,7 +380,7 @@ export function LessonsNext({
                       Month {config.month}: {step.title}
                     </h3>
                     <p className={styles.panelLead}>{step.body}</p>
-                    <h4 className={styles.makesTitle}>What you&apos;ll make</h4>
+                    <h4 className={styles.makesTitle}>Some examples of what you&apos;ll make</h4>
                     <ul className={styles.makes} data-testid="example-projects">
                       {examples.map((item) => (
                         <li key={item.text} data-testid="example-project">
@@ -421,22 +415,6 @@ export function LessonsNext({
               </article>
             ))}
           </div>
-
-          {/* The month-opening rule (bead gwth-launch-735c): legal wording,
-              the previous page's sentences word for word. */}
-          <div className={styles.opens}>
-            <h3 className={styles.opensTitle}>When each month opens</h3>
-            <p className={styles.opensBody} data-testid="months-availability">
-              Month 1 is available from {COURSE_OPENS_ON}, Month 2 around{" "}
-              {LATER_MONTHS_OPEN.month2} and Month 3 around{" "}
-              {LATER_MONTHS_OPEN.month3}. From those dates, each later month
-              opens once a month has passed since your previous month began and
-              you&apos;ve finished {GATE_SHARE}{" "}of that month&apos;s core
-              lessons. While you wait, you keep using your current month. With
-              a pass, your time is paused. On a monthly plan, your next payment
-              waits. See <Link href="/terms#course-months">how months open</Link>.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -453,8 +431,8 @@ export function LessonsNext({
           </p>
           <figure className={`${p.plate} ${styles.lessonStrip}`}>
             <Picture
-              name="lesson-desk"
-              alt="A paper cutout scene: a learner works along a desk laid out in four steps, from a small screen with a film, to the printed lesson, to the project they are making, to a card of ticked questions."
+              name="lesson-desk-v2"
+              alt="A paper cutout scene along a desk, left to right: a small screen showing a film, the printed lesson, a card of ticked questions, then a learner making the project."
               sizes="(max-width: 1180px) 100vw, 1140px"
             />
           </figure>
@@ -510,8 +488,8 @@ export function LessonsNext({
             </h2>
             <p className={`${styles.lead} ${styles.boxLead}`} data-testid="marking-lead">
               {markingLive
-                ? "You build and hand in a major project at the end of each month. All three projects are marked by AI against GWTH's published marking guides."
-                : "You'll build and hand in a major project at the end of each month. All three projects will be marked by AI against GWTH's published marking guides."}
+                ? "You build and hand in a major project at the end of each month. All three projects are marked against GWTH's published marking guides."
+                : "You'll build and hand in a major project at the end of each month. All three projects will be marked against GWTH's published marking guides."}
             </p>
 
             <div className={styles.markGrid}>
@@ -528,14 +506,6 @@ export function LessonsNext({
                       <li key={item.id}>{item.question}</li>
                     ))}
                   </ul>
-                </li>
-                <li>
-                  <h3>Two AI markers mark it</h3>
-                  <p>
-                    {markingLive
-                      ? "Two AI markers mark each project independently. A person at GWTH checks any mark in doubt."
-                      : "Two AI markers will mark each project independently. A person at GWTH will check any mark in doubt."}
-                  </p>
                 </li>
                 <li>
                   <h3>See your mark</h3>
@@ -665,8 +635,9 @@ export function LessonsNext({
             </h2>
           </div>
           <p className={styles.lead} data-testid="optional-lead">
-            The optional lessons go three ways: your own profession, building
-            more advanced AI tools and leading AI work in an organisation.
+            On the standard course, all optional lessons are your choice. Choose
+            lessons for your profession, for building more advanced AI tools, or
+            for leading AI work in an organisation.
           </p>
           <div className={`${p.cards3} ${styles.paths}`}>
             {PATHS.map((path) => (
@@ -678,25 +649,26 @@ export function LessonsNext({
           </div>
           <p className={styles.note} data-testid="optional-note">
             Each month includes its core and optional lessons when that month
-            opens. You don&apos;t have to take every optional lesson. Choose
-            the area that fits your work. For work tasks, use the AI tool your organisation has approved.
+            opens. You can skip any or all of the optional lessons. For work
+            tasks, use the AI tool your organisation has approved.
           </p>
 
           <div className={styles.duo}>
             <div className={styles.duoItem}>
               <h3 className={styles.panelTitle}>
-                The UK rules the specialist lessons follow
+                UK professional rules covered in optional lessons
               </h3>
               <p className={styles.bodyText} data-testid="lessons-uk-note">
-                The specialist lessons use the UK rules and professional
-                standards that apply to your work. The lesson on legal practice
-                works to the Solicitors Regulation Authority code and to the
-                Ayinde judgment, a court ruling about citing cases that an AI
-                tool invented. The lesson on accountancy works to the codes of
-                the three main UK accountancy bodies (ICAEW, ACCA and CIMA) and
-                to the rule for signing off an audit, ISA (UK) 700. Lessons
-                that handle personal information work to UK data protection
-                law.
+                These lessons are optional, for people in those jobs who want
+                to take them. Nobody else needs to take them. For example, a
+                hairdresser does not need to take the lesson for solicitors.
+                The legal practice lesson follows the Solicitors Regulation
+                Authority code and the Ayinde judgment. This court ruling deals
+                with citing cases that an AI tool invented. The accountancy
+                lesson follows the codes of the UK accountancy bodies ICAEW,
+                ACCA and CIMA. It also follows ISA (UK) 700, the rule for signing
+                off an audit. Lessons that handle personal information follow
+                UK data protection law.
               </p>
             </div>
             <div className={styles.duoItem} data-testid="optional-buyers">

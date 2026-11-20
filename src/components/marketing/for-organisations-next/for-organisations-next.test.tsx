@@ -461,8 +461,9 @@ describe("for teams: places on the standard course", () => {
       WHY_TEAMS.map((item) => item.title)
     )
     expect(items[0]!.textContent).toMatch(/cut repetition/)
-    expect(items[1]!.textContent).toMatch(/attempt the project themselves, then the lesson works through it/)
-    expect(items[1]!.textContent).toMatch(/dip into the worked solution only where they want it/)
+    expect(items[1]!.textContent).toMatch(/watch a short film, read the lesson, answer the questions on the lesson, then do the project/)
+    expect(items[1]!.textContent).toMatch(/A worked solution is there if they want help, so nobody is left stuck/)
+    expect(items[1]!.textContent).toMatch(/can build it their own way/)
     expect(items[2]!.textContent).toMatch(/the support does not thin out/)
     expect(items[3]!.textContent).toMatch(/Each person chooses/)
   })
@@ -496,26 +497,19 @@ describe("what both readers see, once", () => {
     expect(text).toContain(`${TOTAL_MANDATORY_LESSONS} core lessons`)
   })
 
-  it("keeps the rule for when a later month opens, whole", () => {
+  it("keeps the month-opening rule off this marketing page", () => {
     render(<ForOrganisationsNext />)
-    const note = (screen.getByTestId("months-availability").textContent ?? "").replace(/\s+/g, " ")
-    expect(note).toMatch(/Month 1 is available from 14 December 2026, Month 2 around 1 January 2027 and Month 3 around 1 February 2027/)
-    expect(note).toMatch(/once a month has passed since their previous month began and they've finished 75% of that month's core lessons/)
-    expect(note).toMatch(/While they wait, they keep using their current month/)
-    expect(note).toMatch(/With a pass, their time is paused/)
-    expect(note).toMatch(/On a monthly plan, their next payment waits/)
-    expect(
-      within(screen.getByTestId("months-availability")).getByRole("link", { name: "how months open" })
-    ).toHaveAttribute("href", "/terms#course-months")
+    expect(screen.queryByTestId("months-availability")).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "how months open" })).not.toBeInTheDocument()
   })
 
-  it("describes project marking as the home page does: AI marking, a person checking doubts", () => {
+  it("describes marked projects without identifying who or what marks them", () => {
     const { container } = render(<ForOrganisationsNext markingLive />)
     const text = sectionText(container, "proof")
-    expect(text).toMatch(/All three projects are marked by AI against GWTH's published marking guides/)
+    expect(text).toMatch(/All three projects are marked against GWTH's published marking guides/)
     expect(text).toMatch(/Not yetPassGoodExcellent/)
-    expect(text).toMatch(/Two AI markers mark each project independently/)
-    expect(text).toMatch(/A person at GWTH checks any mark in doubt/)
+    expect(text).not.toMatch(/Two AI markers mark each project independently/)
+    expect(text).not.toMatch(/A person at GWTH checks any mark in doubt/)
     expect(text).toMatch(/provisional mark at once/)
     expect(text).toMatch(/final once checked, within 7 days/)
     expect(text).toMatch(/up to three times, and their best mark counts/)
@@ -527,8 +521,8 @@ describe("what both readers see, once", () => {
     const { container } = render(<ForOrganisationsNext markingLive={false} />)
     const text = sectionText(container, "proof")
     expect(text).toMatch(/Monthly projects will be marked/)
-    expect(text).toMatch(/will be marked by AI/)
-    expect(text).toMatch(/A person at GWTH will check any mark in doubt/)
+    expect(text).toMatch(/will be marked/)
+    expect(text).not.toMatch(/A person at GWTH will check any mark in doubt/)
     expect(text).not.toMatch(/projects are marked/)
   })
 

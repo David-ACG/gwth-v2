@@ -227,7 +227,7 @@ export function PricingNext({ now = new Date() }: { now?: Date } = {}) {
     },
     {
       title: "A marked project each month",
-      body: "You hand in a major project at the end of each month. AI marks it against GWTH's published marking guides, and a person at GWTH checks any mark in doubt.",
+      body: "You hand in a major project at the end of each month. It is marked against GWTH's published marking guides.",
     },
     {
       title: "Your GWTH score",
@@ -849,9 +849,9 @@ export function PricingNext({ now = new Date() }: { now?: Date } = {}) {
                   client module, so the sentence is repeated here, not
                   imported). */}
               <p className={p.cardBody}>
-                You&apos;ll watch a short film, read the lesson, do the
-                project, then answer the end-of-lesson questions. Enter your
-                email address and we&apos;ll send you the link.
+                In the free lesson, you&apos;ll watch a short film, read the
+                lesson, then do the project. Enter your email address and
+                we&apos;ll send you the link.
               </p>
               <div className={styles.freeAction}>
                 <Link href="/start-here" className={p.buttonOutline}>

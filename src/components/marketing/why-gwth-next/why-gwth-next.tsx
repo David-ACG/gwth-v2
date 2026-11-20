@@ -57,7 +57,7 @@ import styles from "./why-gwth-next.module.css"
  *
  * ## Kept exactly
  *
- * The founder's note is word for word (bead gwth-launch-l7ch; no employer,
+ * The founder's note preserves his points (bead gwth-launch-l7ch; no employer,
  * client or product is named, on purpose). The press views are attributed
  * summaries, never quotations. The UK figures come from
  * `lib/data/uk-ai-context.ts` and carry `data-uk-figure`. Prices and dates
@@ -954,43 +954,44 @@ export function WhyGwthNext({
               <p className={styles.letterLabel}>A note from the founder</p>
               <p>
                 I&apos;ve spent 25 years as a consultant and solution
-                architect. The title means very little to most people, so in
-                plain terms: I helped companies work out how their computer
-                systems should fit together, then build them. I was lucky
+                architect. That title means very little to most people. In
+                plain terms, I helped companies work out how their computer
+                systems should fit together, then helped build those systems.
+                I&apos;ve been lucky
                 enough to work with some of the world&apos;s largest
-                companies, start-ups, and UK brands you&apos;ll know, including
+                companies, start-ups and UK brands you&apos;ll know, including
                 most of the supermarkets.
               </p>
               <p>
                 I&apos;ve worked with AI since long before you could chat with
                 it. I&apos;ve helped factories use it to run and check
-                production, and helped companies sell to businesses and the
-                public online. More and more, people ask an AI assistant to
-                find a product and buy it for them, so I&apos;ve helped
+                production, and helped companies sell online to businesses and
+                the public. Increasingly, people ask AI assistants to find and
+                buy products for them, so I&apos;ve helped
                 companies make sure those assistants can find what they sell
-                and place the order. I&apos;ve used AI in marketing and
+                and place orders. I&apos;ve used AI in marketing and
                 advertising, and to speed up everyday office work. I&apos;ve
-                set up very large systems that let AI answer questions from a
-                company&apos;s own documents, and AI agents that carry out
+                set up very large systems that let AI answer questions using a
+                company&apos;s own documents, as well as AI agents that carry out
                 tasks on their own. I still try new tools as they come out, so
                 what I teach comes from using them myself, mistakes included.
               </p>
               <p>
-                What I enjoy most, though, is teaching, and getting people
+                What I enjoy most, though, is teaching and getting people
                 excited about what AI can do for them. I&apos;ve helped my
                 children, friends and grandparents get started, including some
                 who were quite sure this wasn&apos;t for them. I&apos;ve also
-                sat with the heads of large companies working out their plans
-                for AI. Both groups taught me the same thing:{" "}
+                sat down with the heads of large companies to work through
+                their plans for AI. Both groups have taught me the same thing:{" "}
                 <span className={styles.letterLine}>
                   it&apos;s people who make the difference, not the technology.
                 </span>
               </p>
               <p>
                 So GWTH starts with what people actually use AI for. I work out
-                the best way to use AI for each task, and keep updating the
-                course as new tools, models and ways of working arrive. AI has
-                made me far more productive, and if even a small share of
+                the best way to use AI for each task and keep the course updated
+                as new tools, models and ways of working emerge. AI has
+                made me far more productive. If even a small share of
                 people in the UK learn to use it well, I think we&apos;ll all
                 be better off. I&apos;d like to help you be one of them.
               </p>

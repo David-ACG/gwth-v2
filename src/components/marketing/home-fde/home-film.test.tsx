@@ -60,7 +60,7 @@ describe("HomeFilm", () => {
     const panel = screen.getByTestId("home-free-lesson")
     expect(panel.textContent).toMatch(/free lesson/i)
     expect(panel).toHaveTextContent(
-      "You'll watch a short film, read the lesson, do the project, then answer the end-of-lesson questions. Enter your email address and we'll send you the link."
+      "In the free lesson, you'll watch a short film, read the lesson, then do the project. Enter your email address and we'll send you the link."
     )
     expect(panel).not.toHaveTextContent(/as you go/i)
     expect(screen.getByRole("link", { name: /^start here$/i }).getAttribute("href")).toBe("/start-here")

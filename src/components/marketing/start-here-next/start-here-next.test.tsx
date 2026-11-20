@@ -49,12 +49,12 @@ describe("StartHereNext, the free lesson's front door", () => {
     expect(STEPS.map((s) => s.time)).toEqual(["About 2 minutes", "20 to 25 minutes", "About 25 minutes"])
   })
 
-  it("does not promise end-of-lesson questions in the free lesson itself", () => {
+  it("does not promise questions in the free lesson itself", () => {
     // The open lesson is a film, the lesson and a project. Questions belong to
     // the course's lessons, and the page says so in those words.
     for (const step of STEPS) expect(`${step.title} ${step.body}`).not.toMatch(/question|quiz/i)
     const { container } = render(<StartHereNext />)
-    expect(pageText(container)).toContain("Every lesson in the course follows the same order")
+    expect(pageText(container)).toContain("In the course, you watch a short film, read the lesson, answer questions on the lesson, then do the project.")
   })
 
   it("lists the lesson's own seven outcomes, read from the lesson", () => {

@@ -469,8 +469,7 @@
   color: var(--v-soft);
 }
 
-.others a,
-.priceNote a {
+.others a {
   color: var(--v-ink);
   text-decoration: underline;
   text-underline-offset: 0.2em;
@@ -645,15 +644,7 @@
 /* ── 7. The price ────────────────────────────────────────────────────────── */
 
 .priceGrid {
-  display: grid;
-  gap: clamp(1.5rem, 3vw, 3rem);
   margin-top: 1.5rem;
-}
-
-@media (min-width: 60rem) {
-  .priceGrid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
 }
 
 .priceHeadline {
@@ -679,21 +670,6 @@
 
 .priceList strong {
   color: var(--v-ink);
-}
-
-.priceSub {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--v-ink);
-}
-
-.priceNote {
-  margin-top: 0.6rem;
-  font-size: var(--fde-body-sm);
-  line-height: 1.7;
-  color: var(--v-soft);
 }
 
 /* ── Motion ──────────────────────────────────────────────────────────────────

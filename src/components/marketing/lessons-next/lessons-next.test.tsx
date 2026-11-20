@@ -202,7 +202,7 @@ describe("the shape of the course, not the list", () => {
     expect(panels).toHaveLength(3)
     MONTH_CONFIGS.forEach((month, index) => {
       const panel = panels[index]!
-      expect(panel).toHaveTextContent("What you'll make")
+      expect(panel).toHaveTextContent("Some examples of what you'll make")
       const items = within(panel).getAllByTestId("example-project")
       expect(items).toHaveLength(3)
       const examples = EXAMPLE_PROJECTS[month.month]!
@@ -300,21 +300,10 @@ describe("the shape of the course, not the list", () => {
     expect(projects[0]).toHaveTextContent("The month's main project")
   })
 
-  it("keeps the month-opening rule, word for word", () => {
+  it("keeps the month-opening rule off this marketing page", () => {
     renderLaunch()
-    const note = (
-      screen.getByTestId("months-availability").textContent ?? ""
-    ).replace(/\s+/g, " ")
-    expect(note).toMatch(/Month 1 is available from 14 December 2026/)
-    expect(note).toMatch(/Month 2 around 1 January 2027/)
-    expect(note).toMatch(/Month 3 around 1 February 2027/)
-    expect(note).toMatch(/finished 75% of that month's core lessons/)
-    expect(note).toMatch(/you keep using your current month/)
-    expect(note).toMatch(/With a pass, your time is paused/)
-    expect(note).toMatch(/On a monthly plan, your next payment waits/)
-    expect(
-      within(screen.getByTestId("months-availability")).getByRole("link")
-    ).toHaveAttribute("href", "/terms#course-months")
+    expect(screen.queryByTestId("months-availability")).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "how months open" })).not.toBeInTheDocument()
   })
 
   it("draws the months as real radio buttons with a panel each", () => {
@@ -347,8 +336,8 @@ describe("how a lesson works", () => {
     expect(steps).toEqual([
       "Watch a short film",
       "Read the lesson",
-      "Do the project",
       "Answer the questions",
+      "Do the project",
     ])
     expect(text()).toMatch(/Every lesson has the same four steps/)
     expect(text()).not.toMatch(/video showing you exactly what to do/i)
@@ -359,11 +348,11 @@ describe("marking, the score and the portfolio", () => {
   it("describes marking in the present tense at launch", () => {
     renderLaunch()
     expect(screen.getByTestId("marking-lead")).toHaveTextContent(
-      "All three projects are marked by AI against GWTH's published marking guides."
+      "All three projects are marked against GWTH's published marking guides."
     )
     const steps = text(screen.getByTestId("marking-steps"))
-    expect(steps).toMatch(/Two AI markers mark each project independently/)
-    expect(steps).toMatch(/A person at GWTH checks any mark in doubt/)
+    expect(steps).not.toMatch(/Two AI markers mark each project independently/)
+    expect(steps).not.toMatch(/A person at GWTH checks any mark in doubt/)
     expect(steps).toMatch(/provisional mark at once/)
     expect(steps).toMatch(/final once checked, within 7 days/)
     expect(steps).toMatch(/one clear next step/)
@@ -376,11 +365,11 @@ describe("marking, the score and the portfolio", () => {
   it("moves every marking sentence to the future while hand-ins are off", () => {
     renderLaunch({ markingLive: false })
     expect(screen.getByTestId("marking-lead")).toHaveTextContent(
-      "All three projects will be marked by AI"
+      "All three projects will be marked"
     )
     const steps = text(screen.getByTestId("marking-steps"))
-    expect(steps).toMatch(/will mark each project independently/)
-    expect(steps).toMatch(/will check any mark in doubt/)
+    expect(steps).not.toMatch(/will mark each project independently/)
+    expect(steps).not.toMatch(/will check any mark in doubt/)
     expect(steps).not.toMatch(/You hand in|You see a provisional/)
     expect(screen.getByTestId("levels-note")).toHaveTextContent(
       "your best mark will count"
@@ -474,9 +463,27 @@ describe("the optional lessons, the UK rules and organisations", () => {
     )
   })
 
-  it("keeps the UK rules the specialist lessons work to", () => {
+  it("makes the professional lessons optional and keeps their UK rules", () => {
     renderLaunch()
+    expect(screen.getByTestId("optional-lead")).toHaveTextContent(
+      "On the standard course, all optional lessons are your choice."
+    )
+    expect(screen.getByTestId("optional-note")).toHaveTextContent(
+      "You can skip any or all of the optional lessons."
+    )
+    expect(screen.getByRole("heading", {
+      name: "UK professional rules covered in optional lessons",
+    })).toBeInTheDocument()
     const note = screen.getByTestId("lessons-uk-note")
+    expect(note).toHaveTextContent(
+      "These lessons are optional, for people in those jobs who want to take them. Nobody else needs to take them."
+    )
+    expect(note).toHaveTextContent(
+      "a hairdresser does not need to take the lesson for solicitors"
+    )
+    expect(note).toHaveTextContent(
+      "This court ruling deals with citing cases that an AI tool invented."
+    )
     for (const name of [
       "Solicitors Regulation Authority",
       "Ayinde judgment",
@@ -575,7 +582,7 @@ describe("pictures and themes", () => {
       "month-1",
       "month-2",
       "month-3",
-      "lesson-desk",
+      "lesson-desk-v2",
       "updated",
     ]) {
       expect(existsSync(join(PUBLIC, "lessons", `${name}.jpg`))).toBe(true)

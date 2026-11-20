@@ -240,7 +240,7 @@ export const INSTITUTION_FAQS: readonly {
   },
   {
     q: "Can our members skip the parts that are not for them?",
-    a: "Yes, for optional lessons. Everyone in your edition completes the core lessons, and members see only the optional lessons you switch on, so they spend their time on subjects that fit their work.",
+    a: "Members can skip optional lessons you have not made compulsory. Everyone must complete the core lessons and any optional lessons you require.",
   },
   {
     q: "Who marks the quizzes?",
@@ -276,12 +276,12 @@ export const WHY_TEAMS = [
     body: "We keep lessons focused and cut repetition. When the tools change, or the way experts use them changes, we rewrite the lesson. Your team learns what works now, with those changes included. Your team's time is more valuable than the course, and we treat it that way.",
   },
   {
-    title: "Try it yourself first, then we work through it",
-    body: "Every lesson builds towards a piece of work your team can relate to their own jobs. Nobody is left staring at a blank screen: people attempt the project themselves, then the lesson works through it step by step. Anyone who already works with AI can build it their own way and dip into the worked solution only where they want it.",
+    title: "Learn, answer the questions, then do the project",
+    body: "Every lesson builds towards a piece of work your team can relate to their own jobs. People watch a short film, read the lesson, answer the questions on the lesson, then do the project. A worked solution is there if they want help, so nobody is left stuck. Anyone who already works with AI can build it their own way.",
   },
   {
     title: "Beginner-friendly, and it stays that way",
-    body: "Month 1 starts in plain English. Later lessons introduce writing code and building tools with help from AI, and they are taught exactly like the first ones: shown, attempted, then worked through. As the work gets more advanced, the support does not thin out.",
+    body: "Month 1 starts in plain English. Later lessons introduce writing code and building tools with help from AI. They follow the same order: watch a short film, read the lesson, answer the questions, then do the project with a worked solution available if you want it. As the work gets more advanced, the support does not thin out.",
   },
   {
     title: "The same core for everyone, optional lessons by role",
@@ -378,11 +378,8 @@ export const AT_A_GLANCE = [
 /** How a lesson works: the home page's three steps, word for word. */
 export const LESSON_STEPS = [
   ["Watch a short film", "Get an introduction to the subject."],
-  ["Read the lesson", "Work through the lesson over several pages."],
-  [
-    "Do the project, then answer questions",
-    "Put what you have learnt into practice. Then answer the end-of-lesson questions in a quiz with a pass mark.",
-  ],
+  ["Read the lesson, then answer questions", "Work through the lesson over several pages. The questions on the lesson are a quiz with a pass mark. Your answers are marked automatically, so you can see what to go back over."],
+  ["Do the project", "Put what you have learnt into practice."],
 ] as const
 
 /** The four project marks, as the home page names them. */

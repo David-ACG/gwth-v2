@@ -155,7 +155,6 @@
 }
 
 .note a,
-.opensBody a,
 .currentList a {
   color: var(--v-ink);
   text-decoration: underline;
@@ -163,7 +162,6 @@
 }
 
 .note a:focus-visible,
-.opensBody a:focus-visible,
 .currentList a:focus-visible {
   outline: 2px solid var(--v-accent);
   outline-offset: 2px;
@@ -445,28 +443,6 @@
 }
 
 .projectBody {
-  color: var(--v-soft);
-}
-
-.opens {
-  max-width: 52rem;
-  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--v-line-soft);
-}
-
-.opensTitle {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--v-ink);
-}
-
-.opensBody {
-  margin-top: 0.5rem;
-  font-size: var(--fde-body-sm);
-  line-height: 1.7;
   color: var(--v-soft);
 }
 
