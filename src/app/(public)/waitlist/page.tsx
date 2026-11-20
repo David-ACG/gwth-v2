@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import { WaitlistNext } from "@/components/marketing/waitlist-next/waitlist-next"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 export const metadata: Metadata = {
   title: "Join the Waitlist",
   description:
-    "The GWTH UK beta is invite-only. Leave your email and we will contact you when more beta places open.",
+    `The GWTH UK beta is invite-only. Leave your email and we'll email you when the course launches on ${COURSE_OPENS_ON}.`,
 }
 
 /**

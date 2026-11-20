@@ -12,6 +12,7 @@ import { getDb } from "@/db"
 import { waitlist } from "@/db/schema"
 import { renderFdeEmail, type EmailParts } from "@/lib/email/fde-layout"
 import { resolvePlunk } from "@/lib/email/plunk"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 const FROM_EMAIL = "david@gwth.ai"
 const FROM_NAME = "GWTH.ai"
@@ -75,7 +76,7 @@ function buildWaitlistEmail(name: string): EmailParts {
     blocks: [
       {
         type: "p",
-        text: "Thanks for joining the GWTH waitlist. We'll email you when places open.",
+        text: `Thanks for joining the GWTH waitlist. We'll email you when the course launches on ${COURSE_OPENS_ON}.`,
       },
       {
         type: "p",

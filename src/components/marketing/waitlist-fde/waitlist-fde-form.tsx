@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import styles from "@/components/marketing/contact-fde/contact-fde.module.css"
+import { COURSE_OPENS_ON } from "@/lib/launch-date"
 
 /**
  * Waitlist form (name + email) in the PAPER-FIRST register (rounded paper
@@ -59,7 +60,8 @@ export function WaitlistFdeForm() {
           <p className={styles.mono}>Status · On the list</p>
           <h2 className={styles.successTitle}>You are on the waitlist</h2>
           <p className={styles.successBody}>
-            Thank you. We will email you as soon as more beta places open.
+            Thank you. We&apos;ll email you when the course launches on{" "}
+            {COURSE_OPENS_ON}.
           </p>
         </div>
       </div>

@@ -25,7 +25,7 @@ import styles from "@/components/marketing/contact-next/form-page.module.css"
 const NEXT_STEPS = [
   "Leave your name and email address.",
   "We'll send you an email to confirm you're on the list.",
-  "We'll email you again when more places open.",
+  `We'll email you again when the course launches on ${COURSE_OPENS_ON}.`,
 ] as const
 
 export function WaitlistNext() {
@@ -41,7 +41,7 @@ export function WaitlistNext() {
               <p className={styles.lead}>
                 Access is invite-only while we work closely with a small group
                 of testers. Leave your name and email address and we&apos;ll
-                contact you when more places open.
+                email you when the course launches.
               </p>
               <p className={styles.opens} data-testid="waitlist-opens">
                 The course opens on {COURSE_OPENS_ON}.
