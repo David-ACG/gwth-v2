@@ -354,7 +354,7 @@ describe("PricingPage: David's 2026-09-14 annotations", () => {
     expect(text).not.toMatch(/\bTeam\b(?! dashboard)/)
     const teams = flat(section("teams"))
     expect(teams).toMatch(/Teams pay the same per-person price/)
-    expect(teams).toMatch(/Institutions get a proposal based on their needs/)
+    expect(teams).toMatch(/Institutions can commission an edition, as can companies and teams with 100 or more learners/)
     expect(
       screen.getAllByRole("link", { name: "GWTH for organisations" })[0]
     ).toHaveAttribute("href", "/for-organisations")

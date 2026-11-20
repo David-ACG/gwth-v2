@@ -722,10 +722,10 @@ export function PricingNext({ now = new Date() }: { now?: Date } = {}) {
                   Teams pay the same per-person price, with no minimum size.
                   Each learner has an account and tracks their own progress.
                   Each person can sign up and pay monthly, or you can buy a
-                  pass for each person, one at a time. For 100 or more people,
-                  GWTH can create an edition with a tutor dashboard and
-                  lessons written around your work. Institutions get a
-                  proposal based on their needs.
+                  pass for each person, one at a time. Institutions can commission an
+                  edition, as can companies and teams with 100 or more
+                  learners. We send a proposal covering the tutor dashboard
+                  and any lessons written for them.
                 </p>
               )}
               <div className={p.actions}>

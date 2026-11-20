@@ -475,9 +475,9 @@ describe("the optional lessons, the UK rules and organisations", () => {
       name: "UK professional rules covered in optional lessons",
     })).toBeInTheDocument()
     const note = screen.getByTestId("lessons-uk-note")
-    expect(note).toHaveTextContent(
-      "These lessons are optional, for people in those jobs who want to take them. Nobody else needs to take them."
-    )
+    // 20 Nov 2026 release gate (latest Sol, David chose "All 8 Sol fixes"):
+    // the section lead and note already say optional lessons can be skipped.
+    expect(note).not.toHaveTextContent(/Nobody else needs to take them/)
     // David, 20 Nov 2026: "we should not keep my hairdresser example as it may
     // offend. Please don't use an example".
     expect(note).not.toHaveTextContent(/hairdresser|for example/i)
