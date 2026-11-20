@@ -16,8 +16,8 @@ describe("HomeFilm", () => {
     expect(container.querySelector("video")).toBeNull()
     const posters = Array.from(container.querySelectorAll("img")).map((i) => i.getAttribute("src"))
     expect(posters).toEqual([FILM.paper.poster, FILM.night.poster])
-    expect(FILM.paper.poster).toMatch(/\/site\/home-film\/2026-11-20-paper-depth\/poster-paper\.jpg$/)
-    expect(FILM.night.poster).toMatch(/\/site\/home-film\/2026-11-20-paper-depth\/poster-night\.jpg$/)
+    expect(FILM.paper.poster).toMatch(/\/site\/home-film\/2026-11-20-paper-depth-v07\/poster-paper\.jpg$/)
+    expect(FILM.night.poster).toMatch(/\/site\/home-film\/2026-11-20-paper-depth-v07\/poster-night\.jpg$/)
     // CSS shows the poster for the current theme.
     const [paper, night] = Array.from(container.querySelectorAll("img"))
     expect(paper!.className).toMatch(/paperOnly/)
@@ -29,7 +29,7 @@ describe("HomeFilm", () => {
     fireEvent.click(screen.getByRole("button", { name: /play the gwth film/i }))
     const video = container.querySelector("video")!
     expect(video.getAttribute("src")).toMatch(
-      /\/site\/home-film\/2026-11-20-paper-depth\/homepage-paper-depth-paper\.mp4$/
+      /\/site\/home-film\/2026-11-20-paper-depth-v07\/homepage-paper-depth-paper\.mp4$/
     )
     expect(video.getAttribute("poster")).toBe(FILM.paper.poster)
     const track = container.querySelector("track")!
@@ -45,7 +45,7 @@ describe("HomeFilm", () => {
     fireEvent.click(screen.getByRole("button", { name: /play the gwth film/i }))
     const video = container.querySelector("video")!
     expect(video.getAttribute("src")).toMatch(
-      /\/site\/home-film\/2026-11-20-paper-depth\/homepage-paper-depth-night\.mp4$/
+      /\/site\/home-film\/2026-11-20-paper-depth-v07\/homepage-paper-depth-night\.mp4$/
     )
     expect(video.getAttribute("poster")).toBe(FILM.night.poster)
     expect(container.querySelector("track")!.getAttribute("src")).toBe("/home/film/homepage-film-a.vtt")

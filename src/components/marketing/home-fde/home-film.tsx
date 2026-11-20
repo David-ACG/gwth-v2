@@ -41,7 +41,9 @@ import styles from "./home-film.module.css"
  * (public/home/film/) because media.gwth.ai sends no CORS header, and a <track>
  * from another origin without one never loads.
  */
-const BASE = "https://media.gwth.ai/site/home-film/2026-11-20-paper-depth"
+// v07 (20 Nov 2026): the quiz stands before the project on the lesson desk, after David's "The order is
+// actually Answer the questions first and then Do the project last." The v06 folder stays on R2.
+const BASE = "https://media.gwth.ai/site/home-film/2026-11-20-paper-depth-v07"
 export const FILM = {
   paper: { src: `${BASE}/homepage-paper-depth-paper.mp4`, poster: `${BASE}/poster-paper.jpg` },
   night: { src: `${BASE}/homepage-paper-depth-night.mp4`, poster: `${BASE}/poster-night.jpg` },
