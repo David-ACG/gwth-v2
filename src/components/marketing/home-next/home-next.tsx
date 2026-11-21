@@ -694,7 +694,7 @@ export function HomeNext({
             </div>
 
             {showScore && (
-              <div className={styles.scoreBlock} data-section="score">
+              <div className={styles.scoreBlock} data-section="score" id="score">
                 <h3 className={styles.panelTitle} data-motion="rise">
                   How your score changes
                 </h3>
