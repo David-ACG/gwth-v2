@@ -1,6 +1,5 @@
 import type { ReactNode } from "react"
 import Link from "next/link"
-import { CONSENT_LINE } from "@/lib/start-here/consent-wording"
 import { START_HERE_LESSON_MD } from "@/lib/start-here/content.generated"
 import { StartHereGate } from "@/components/marketing/start-here/start-here-gate"
 import p from "@/components/marketing/paper/paper.module.css"
@@ -24,8 +23,11 @@ import styles from "./start-here-next.module.css"
  *   the button, the pop-up, the consent wording, the honeypot, the "check your
  *   inbox" state and the call to `/api/start-here` are all its own. David
  *   chose a pop-up (2026-10-16), so the form is not moved onto the page.
- * - The consent sentence shown beside the button is `CONSENT_LINE`, imported,
- *   so the page can never say something different from the pop-up.
+ * - The full consent sentence (`CONSENT_LINE`) appears once, in the pop-up
+ *   beside the Send button where people agree. Beside the page's buttons we
+ *   show the shorter `NEWS_LINE`, the same at the top and the bottom. David,
+ *   21 Nov 2026, picked this so the page stops repeating the consent sentence
+ *   word for word (copy gate finding, 20 and 21 Nov).
  *
  * ## Where each fact comes from
  *
@@ -159,6 +161,9 @@ export type StartHereNextProps = {
   notice?: string | null
 }
 
+/** The short news line beside the page's buttons (the full consent sentence is in the pop-up). */
+export const NEWS_LINE = "We'll also send you news about the GWTH course. You can opt out in any email."
+
 export function StartHereNext({ notice = null }: StartHereNextProps = {}) {
   const done = outcomes()
 
@@ -205,8 +210,7 @@ export function StartHereNext({ notice = null }: StartHereNextProps = {}) {
                 </a>
               </div>
               <p className={styles.heroSmall}>
-                We&apos;ll also send you news about the GWTH course. You can
-                opt out in any email.
+                {NEWS_LINE}
               </p>
             </div>
             <figure className={`${p.plate} ${styles.heroPicture}`}>
@@ -332,7 +336,7 @@ export function StartHereNext({ notice = null }: StartHereNextProps = {}) {
                   <StartHereGate />
                 </div>
                 <p className={styles.consent} data-testid="start-here-consent-summary">
-                  {CONSENT_LINE}{" "}
+                  {NEWS_LINE}{" "}
                   <Link href="/privacy">Privacy notice</Link>
                 </p>
               </div>

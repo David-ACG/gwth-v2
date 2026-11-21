@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { CONSENT_LINE } from "@/lib/start-here/consent-wording"
-import { NEEDS, STEPS, StartHereNext, outcomes } from "./start-here-next"
+import { NEEDS, NEWS_LINE, STEPS, StartHereNext, outcomes } from "./start-here-next"
 
 vi.mock("next/headers", () => ({
   cookies: async () => ({ get: () => undefined }),
@@ -83,7 +83,9 @@ describe("StartHereNext, the free lesson's front door", () => {
     for (const button of buttons) expect(button).toHaveTextContent(/^Get the free lesson$/)
     // The gate's pop-ups are on the page, each with its own form.
     expect(screen.getAllByTestId("start-here-dialog")).toHaveLength(2)
-    expect(screen.getByTestId("start-here-consent-summary")).toHaveTextContent(CONSENT_LINE)
+    expect(screen.getByTestId("start-here-consent-summary")).toHaveTextContent(NEWS_LINE)
+    // The full consent sentence appears only in the two pop-ups, once each.
+    expect(screen.getAllByText(CONSENT_LINE, { exact: false })).toHaveLength(2)
     expect(
       within(screen.getByTestId("start-here-consent-summary")).getByRole("link", { name: "Privacy notice" })
     ).toHaveAttribute("href", "/privacy")
