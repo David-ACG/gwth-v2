@@ -214,6 +214,7 @@ export function ScoreStory() {
               grades={EXAMPLE.grades}
               foot={{ kind: "link", label: EXAMPLE.link }}
               stepMarks
+              lit={lit}
             />
           </div>
         </li>

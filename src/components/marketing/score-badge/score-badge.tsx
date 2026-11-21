@@ -55,6 +55,8 @@ export type ScoreBadgeProps = {
   className?: string
   /** Marks the three grades for the home page story (`data-at="p1"` ...). */
   stepMarks?: boolean
+  /** Which of those marks the story has reached (`data-on`). */
+  lit?: ReadonlySet<string>
   style?: CSSProperties
 }
 
@@ -149,6 +151,7 @@ export function ScoreBadge({
   id,
   className,
   stepMarks = false,
+  lit,
   style,
 }: ScoreBadgeProps) {
   const vars = { "--shown": shown, "--earned": earned ?? shown, ...style } as CSSProperties
@@ -194,7 +197,12 @@ export function ScoreBadge({
               <dt>
                 Month {i + 1} <span>project</span>
               </dt>
-              <dd data-at={stepMarks ? `p${i + 1}` : undefined}>{grade}</dd>
+              <dd
+                data-at={stepMarks ? `p${i + 1}` : undefined}
+                data-on={stepMarks && lit?.has(`p${i + 1}`) ? "" : undefined}
+              >
+                {grade}
+              </dd>
             </div>
           ))}
         </dl>

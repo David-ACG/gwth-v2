@@ -375,6 +375,8 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
       expect(badge).toHaveTextContent("Month 3 projectPass")
       expect(badge.textContent).not.toMatch(/Confident builder|foundations|Advanced|quiz|lessons passed/i)
     }
+    // Without the animation running, nothing is left dimmed.
+    expect(story.querySelector("[data-animated]")).toBeNull()
     // The page an employer lands on says when the score last changed.
     expect(badges[2]).toHaveTextContent("Last changed9 March 2027")
     expect(badges[2]!.getAttribute("data-status")).toBe("ok")
