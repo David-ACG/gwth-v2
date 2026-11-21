@@ -57,12 +57,12 @@ describe("StartHereNext, the free lesson's front door", () => {
     expect(pageText(container)).toContain("In the course, you watch a short film, read the lesson, answer questions on the lesson, then do the project.")
   })
 
-  it("lists the lesson's own seven outcomes, read from the lesson", () => {
+  it("lists the lesson's own eight outcomes, read from the lesson", () => {
     render(<StartHereNext />)
     const list = screen.getByTestId("start-here-outcomes")
     const items = within(list).getAllByRole("listitem")
-    expect(outcomes()).toHaveLength(7)
-    expect(items).toHaveLength(7)
+    expect(outcomes()).toHaveLength(8)
+    expect(items).toHaveLength(8)
     outcomes().forEach((line, index) => expect(items[index]).toHaveTextContent(line))
   })
 

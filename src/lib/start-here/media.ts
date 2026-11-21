@@ -54,5 +54,6 @@ export const START_HERE_IMAGES: Record<string, StartHereImage> = {
   "Tip 5: Keep a learning notebook": image(4, "A saved prompt and example are retrieved from a notebook for a similar task."),
   "Tip 7: Look at the labs before you choose": image(5, "Different model answers face the same scenario and checklist before a learner chooses."),
   "Ten more habits worth starting now": image(6, "An adult checks an AI answer against an open reference source."),
-  "Vital tips from your first month": image(7, "Five parts, role, task, context, format and limits, combine into a fuller brief for a bigger job."),
+  // The 21 Nov lesson has no "Vital tips" section; this picture sits with Tip 2, as in the lesson parts (parts.json p2 used i07).
+  "Tip 2: Ask AI as you would ask a new colleague": image(7, "Five parts, role, task, context, format and limits, combine into a fuller brief for a bigger job."),
 }
