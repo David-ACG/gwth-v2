@@ -360,9 +360,9 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
     const story = screen.getByTestId("score-story")
     const steps = within(story).getAllByRole("listitem")
     expect(steps.map((li) => within(li).getByRole("heading", { level: 4 }).textContent)).toEqual([
-      "1You earn it",
-      "2You add it to LinkedIn",
-      "3Anyone can check it",
+      "1Earn it",
+      "2Add it to LinkedIn",
+      "3Build trust in your skills",
     ])
     // The same badge in all three steps, with the GWTH.ai score title and the
     // three project grades only (no band name, no quiz marks, no lesson count).

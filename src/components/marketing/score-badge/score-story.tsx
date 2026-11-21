@@ -10,16 +10,21 @@ import styles from "./score-story.module.css"
  * place it into LinkedIn and how your score changes", built for trust: *"why
  * would I do it? And how do I know the score is genuine?"*
  *
- * 1. You earn it: the badge's ring fills as lessons are passed and the three
+ * 1. Earn it: the badge's ring fills as lessons are passed and the three
  *    projects are marked, falls a little after a long break, and comes back.
- * 2. You add it to LinkedIn: the same badge in a plain profile frame. The
+ * 2. Add it to LinkedIn: the same badge in a plain profile frame. The
  *    frame borrows nothing from LinkedIn's own look; it is named in words.
- * 3. Anyone can check it: Show credential opens the score page on gwth.ai.
+ * 3. Build trust in your skills: Show credential opens the score page on gwth.ai.
  *
  * It plays once when it scrolls into view (about eight seconds) and rests on
  * the last frame. Without JavaScript, or with reduced motion, every step shows
  * its last frame. Before its turn a step is dimmed, never empty, so a phone
  * reader scrolling past never sees a blank box.
+ *
+ * Step titles without "You" (David, 21 Nov 2026: *"this sounds like there's
+ * actual work to do for the student ... take out the 'you'"*, and step 3 should
+ * promote the kudos, not the checking); Astra drafted, Sol chose "Build trust
+ * in your skills" over "Earn trust" to avoid a second "Earn".
  *
  * Wording: the latest Astra wrote the captions and the latest Sol checked and
  * fixed them (21 Nov 2026), as the public writing rule requires.
@@ -197,7 +202,7 @@ export function ScoreStory() {
             <span className={styles.n} aria-hidden="true">
               1
             </span>
-            You earn it
+            Earn it
           </h4>
           <p className={styles.cap}>
             Your score rises as you pass core lessons and projects are marked.
@@ -224,7 +229,7 @@ export function ScoreStory() {
             <span className={styles.n} aria-hidden="true">
               2
             </span>
-            You add it to LinkedIn
+            Add it to LinkedIn
           </h4>
           <p className={styles.cap}>
             Add your GWTH.ai score under Licences and certifications on your
@@ -284,7 +289,7 @@ export function ScoreStory() {
             <span className={styles.n} aria-hidden="true">
               3
             </span>
-            Anyone can check it
+            Build trust in your skills
           </h4>
           <p className={styles.cap}>
             Show credential opens your score page on gwth.ai. The same card
