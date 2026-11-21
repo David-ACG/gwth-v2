@@ -27,11 +27,13 @@ const dir = process.argv[2] ?? DEFAULT_DIR
 // The lesson David approved on 21 Nov 2026: the 14 Nov rewrite (latest Astra
 // wrote it, latest Sol checked it), 4,358 words. His words: "This is the 4,358
 // word version, which is the newer version, and it sounds great. So let's use
-// this text." v3 keeps it as lesson.candidate.md (the curriculum register owns
+// this text." Later that day he had one sentence cut (higher subscription
+// prices if OpenAI and Anthropic list on the stock market: "not really worth
+// having this conjecture"). v3 keeps it as lesson.candidate.md (the curriculum register owns
 // the lesson), so the approved version is pinned by its hash: a later rewrite
 // of the candidate stops this script instead of reaching the page unapproved.
 // Before 21 Nov the page showed lesson.md, approved on 2026-10-09.
-const APPROVED_LESSON_SHA256 = "7d6d4f3b43398cb618d6fc26bfe556d6710481591df32e8d2c301727afd20827"
+const APPROVED_LESSON_SHA256 = "bb350d880424f8007a16803289c8e71ed9f70055f57b32b0fce6e47fffcbe46c"
 const lesson = readFileSync(join(dir, "content", "lesson.candidate.md"), "utf8")
 const project = readFileSync(join(dir, "content", "project.candidate.md"), "utf8")
 const sha = (s) => createHash("sha256").update(s).digest("hex")

@@ -56,7 +56,7 @@ describe("Start Here content snapshot", () => {
   it("is the lesson David approved on 21 Nov 2026 and the current project", () => {
     // v3 keeps his approved 14 Nov rewrite as lesson.candidate.md; the script pins its hash.
     expect(START_HERE_SOURCE.lessonFile).toBe("content/lesson.candidate.md")
-    expect(START_HERE_SOURCE.lessonSha256).toBe("7d6d4f3b43398cb618d6fc26bfe556d6710481591df32e8d2c301727afd20827")
+    expect(START_HERE_SOURCE.lessonSha256).toBe("bb350d880424f8007a16803289c8e71ed9f70055f57b32b0fce6e47fffcbe46c")
     expect(START_HERE_LESSON_MD).toMatch(/^## Who this lesson is for/)
     expect(START_HERE_PROJECT_MD).toMatch(/^# Student Project: /)
   })
