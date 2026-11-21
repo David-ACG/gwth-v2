@@ -77,7 +77,7 @@ function renderWordmark({
       width={width}
       className={className}
     >
-      <title>{title}</title>
+      {title ? <title>{title}</title> : null}
       {/* G */}
       <path
         fill={wordmarkColor}
@@ -187,7 +187,7 @@ export function LogoGwthMark({
       width={width}
       className={className}
     >
-      <title>{title}</title>
+      {title ? <title>{title}</title> : null}
       {/* G outline */}
       <path
         fill={resolvedWordmark}

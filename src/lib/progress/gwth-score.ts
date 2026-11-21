@@ -100,6 +100,42 @@ export function fallBackFactor(lastPassedAt: Date | null | undefined, now: Date 
   return Math.max(0, 1 - weeks * FALL_BACK_WEEKLY_RATE)
 }
 
+/**
+ * When the fall-back rule last took points away: the start of the latest
+ * FULL week counted by {@link fallBackFactor} (day 35, 42, ... after the last
+ * lesson passed), or null while the score is still held. Once the factor has
+ * reached 0 the score stops changing, so the date stops moving too.
+ */
+export function lastFallStepAt(lastPassedAt: Date | null | undefined, now: Date = new Date()): Date | null {
+  if (!lastPassedAt) return null
+  const days = (now.getTime() - lastPassedAt.getTime()) / DAY_MS
+  if (!(days > FALL_BACK_HOLD_DAYS)) return null
+  const weeks = Math.min(
+    Math.floor((days - FALL_BACK_HOLD_DAYS) / 7),
+    Math.ceil(1 / FALL_BACK_WEEKLY_RATE)
+  )
+  if (weeks < 1) return null
+  return new Date(lastPassedAt.getTime() + (FALL_BACK_HOLD_DAYS + weeks * 7) * DAY_MS)
+}
+
+/**
+ * When the score last changed: the latest of the last lesson passed, the
+ * latest capstone mark, and the latest fall-back step. Null when nothing has
+ * happened yet. This is the "Last changed" line on the score badge (David,
+ * 21 Nov 2026).
+ */
+export function scoreLastChangedAt(
+  lastPassedAt: Date | null | undefined,
+  capstoneMarkedAt: readonly (Date | null | undefined)[] = [],
+  now: Date = new Date()
+): Date | null {
+  let latest: Date | null = null
+  for (const d of [lastPassedAt, ...capstoneMarkedAt, lastFallStepAt(lastPassedAt, now)]) {
+    if (d && (!latest || d.getTime() > latest.getTime())) latest = d
+  }
+  return latest
+}
+
 /** The latest `completedAt` among completed lessons: the fall-back clock. */
 export function lastLessonPassedAt(lessonProgress: LessonProgress[]): Date | null {
   let latest: Date | null = null

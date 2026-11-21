@@ -1,0 +1,48 @@
+/*
+ * The public score page, gwth.ai/verify/<code> (bead gwth-launch-phjb): the
+ * learner's badge and a few lines on what the score means. Paper-first
+ * tokens only.
+ */
+
+.shell {
+  background: var(--v-bg);
+  color: var(--v-ink);
+  padding: clamp(2rem, 6vw, 4.5rem) 1rem clamp(3rem, 8vw, 6rem);
+}
+
+.inner {
+  display: grid;
+  gap: 1.75rem;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0;
+  font: 600 clamp(1.6rem, 4vw, 2.2rem) / 1.15 var(--font-serif);
+  letter-spacing: -0.012em;
+}
+
+.body {
+  display: grid;
+  gap: 0.9rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--v-soft);
+}
+
+.body p {
+  margin: 0;
+}
+
+.link {
+  color: var(--v-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--v-accent);
+  outline-offset: 2px;
+}

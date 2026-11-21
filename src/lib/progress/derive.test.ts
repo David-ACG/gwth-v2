@@ -187,6 +187,10 @@ describe("empty states", () => {
       consistencyScore: 0,
       improvementRate: 0,
       scoreHistory: [],
+      earnedScore: 0,
+      falling: false,
+      lastPassedAt: null,
+      lastChangedAt: null,
     })
   })
 })

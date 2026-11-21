@@ -45,6 +45,7 @@
 //  14. Capstone judge runs (canonical DDL: 029): capstoneJudgeRuns, end of file.
 //  15. Checks and queries (canonical DDL: 031): capstoneAttempts gains five
 //      columns; capstoneQueries at the end of this file.
+//  16. Score shares (canonical DDL: 034): scoreShares at the end of this file.
 import { pgTable, index, uniqueIndex, foreignKey, pgPolicy, check, uuid, text, integer, numeric, timestamp, boolean, unique, real, jsonb, pgView, doublePrecision, primaryKey, bigserial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 // W11: the Better Auth `user` table (public."user", text ids) is now the FK
@@ -1165,4 +1166,17 @@ export const contentAccessFlags = pgTable("content_access_flags", {
 	foreignKey({ columns: [table.userId], foreignColumns: [user.id], name: "content_access_flags_user_id_fkey" }).onDelete("cascade"),
 	check("content_access_flags_status_check", sql`status = ANY (ARRAY['open'::text, 'cleared'::text, 'suspended'::text])`),
 	check("content_access_flags_held_month_check", sql`held_month = ANY (ARRAY[2, 3])`),
+]);
+
+// 034 (bead gwth-launch-phjb): the learner's public score page code.
+export const scoreShares = pgTable("score_shares", {
+	userId: text("user_id").primaryKey().notNull(),
+	code: text().notNull(),
+	isPublic: boolean("is_public").default(false).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({ columns: [table.userId], foreignColumns: [user.id], name: "score_shares_user_id_fkey" }).onDelete("cascade"),
+	unique("score_shares_code_key").on(table.code),
+	check("score_shares_code_check", sql`code ~ '^[a-z2-9]{10}$'::text`),
 ]);

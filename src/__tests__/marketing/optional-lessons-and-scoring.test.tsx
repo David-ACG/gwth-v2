@@ -518,7 +518,10 @@ describe("/: a signpost, not a fifth copy of the argument", () => {
   it("still carries exactly one score section, the one already approved", () => {
     const { container } = render(<HomeFde showScore />)
     expect(container.querySelectorAll('[data-section="score"]')).toHaveLength(1)
-    expect(screen.getAllByTestId("score-card")).toHaveLength(3)
+    // 21 Nov 2026 (bead gwth-launch-phjb): the three line cards became one
+    // GWTH.ai score badge, earned, added to LinkedIn and checked.
+    expect(screen.queryAllByTestId("score-card")).toHaveLength(0)
+    expect(screen.getAllByTestId("score-badge").length).toBeGreaterThan(0)
     cleanup()
     const off = render(<HomeFde showScore={false} />)
     expect(off.container.querySelectorAll('[data-section="score"]')).toHaveLength(0)

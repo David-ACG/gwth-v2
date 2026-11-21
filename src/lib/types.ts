@@ -76,6 +76,14 @@ export interface DynamicScore {
   improvementRate: number
   /** Score history over time for chart display */
   scoreHistory: { date: Date; score: number }[]
+  /** The points earned before any fall-back, rounded (the ring's full arc). */
+  earnedScore: number
+  /** True while the fall-back rule is taking points away (badge status "Falling"). */
+  falling: boolean
+  /** When the learner last passed a mandatory lesson (the fall-back clock). */
+  lastPassedAt: Date | null
+  /** When the score last changed: a lesson passed, a capstone mark or a fall-back step. */
+  lastChangedAt: Date | null
 }
 
 // ─── Tech Radar ──────────────────────────────────────────────────────────────

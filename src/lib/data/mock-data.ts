@@ -1538,6 +1538,10 @@ export const mockDynamicScore: DynamicScore = {
       score: Math.round((baseScore + variation) * 10) / 10,
     }
   }),
+  earnedScore: 18,
+  falling: false,
+  lastPassedAt: new Date("2026-02-19"),
+  lastChangedAt: new Date("2026-02-19"),
 }
 
 // ─── News Articles ────────────────────────────────────────────────────────────

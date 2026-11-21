@@ -23,9 +23,22 @@ export const HIDDEN_PUBLIC_PATHS = [
   "/tech-radar",
   "/newsletter",
   // /for-teams came back on 2026-10-21 (David: "Also put back the teams page").
-  "/verify",
   "/score",
 ] as const
+
+/**
+ * Hidden only while the GWTH.ai score is switched off (ENABLE_GWTH_SCORE).
+ * /verify/<code> is the learner's public score page, the link LinkedIn's
+ * Show credential opens (bead gwth-launch-phjb); it was hidden outright on
+ * 2026-10-20 because the score was off at launch. Switched on, it answers
+ * (a private or unknown code is still a 404 from the page itself).
+ */
+export const SCORE_GATED_PUBLIC_PATHS = ["/verify"] as const
+
+/** The same test as ENABLE_GWTH_SCORE, read when called so the proxy follows the server's env. */
+function scoreSwitchedOn(): boolean {
+  return ["1", "true", "yes", "on"].includes(process.env.GWTH_SCORE_ENABLED?.toLowerCase() ?? "")
+}
 
 // Empty since 2026-10-21. /for-institutions was unlisted for a day; David:
 // "CIPD are going to help get other institutions to look at the site so it
@@ -55,6 +68,7 @@ export function draftPagesShown(): boolean {
 /** True for a hidden route and everything below it (/news/some-story). */
 export function isHiddenPublicPath(pathname: string): boolean {
   if (HIDDEN_PUBLIC_PATHS.some((route) => under(pathname, route))) return true
+  if (!scoreSwitchedOn() && SCORE_GATED_PUBLIC_PATHS.some((route) => under(pathname, route))) return true
   return (
     !draftPagesShown() &&
     DRAFT_PUBLIC_PATHS.some((route) => under(pathname, route))

@@ -35,7 +35,7 @@ import {
 } from "@/db/schema"
 import { QUIZ_PASS_SCORE } from "@/lib/progress/completion"
 import { mockLessons } from "./mock-data"
-import { resolveDataMode } from "./mode"
+import { resolveDataMode, type DataMode } from "./mode"
 
 /** The single production course's slug (see mock-data.ts / import route). */
 export const GWTH_COURSE_SLUG = "applied-ai-skills"
@@ -164,7 +164,19 @@ async function assembleEdition(
 export const getEffectiveEdition = cache(async function getEffectiveEdition(
   courseSlug: string = GWTH_COURSE_SLUG
 ): Promise<EffectiveEdition> {
-  const mode = await resolveDataMode()
+  return resolveEditionForMode(await resolveDataMode(), courseSlug)
+})
+
+/**
+ * The same resolution for an explicit data mode rather than the request's
+ * session. The public score page (`/verify/[code]`) scores a learner who is
+ * not the visitor, so it passes `{ kind: "user", userId }` for that learner
+ * (bead gwth-launch-phjb).
+ */
+export async function resolveEditionForMode(
+  mode: DataMode,
+  courseSlug: string = GWTH_COURSE_SLUG
+): Promise<EffectiveEdition> {
   if (mode.kind === "mock") return FALLBACK_EDITION
 
   const db = getDb()
@@ -256,7 +268,7 @@ export const getEffectiveEdition = cache(async function getEffectiveEdition(
 
   // Rung 4: no live default edition — serve the raw lessons table.
   return FALLBACK_EDITION
-})
+}
 
 /**
  * The lesson ids that count toward the current user's baseline and GWTH
@@ -268,34 +280,59 @@ export const getMandatoryLessonIds = cache(
   async function getMandatoryLessonIds(
     courseSlug: string = GWTH_COURSE_SLUG
   ): Promise<Set<string>> {
-    const edition = await getEffectiveEdition(courseSlug)
-    if (edition.lessons) {
-      const ids = new Set<string>()
-      for (const [lessonId, entry] of edition.lessons) {
-        if (entry.isMandatory && entry.state === "ratified") ids.add(lessonId)
-      }
-      return ids
-    }
-
-    const mode = await resolveDataMode()
-    if (mode.kind !== "mock") {
-      const db = getDb()
-      const rows = await db
-        .select({ id: lessons.id })
-        .from(lessons)
-        .where(
-          and(eq(lessons.courseSlug, courseSlug), eq(lessons.isOptional, false))
-        )
-      return new Set(rows.map((r) => r.id))
-    }
-
-    return new Set(
-      mockLessons
-        .filter((l) => l.courseSlug === courseSlug && !l.isOptional)
-        .map((l) => l.id)
+    return mandatoryIdsFor(
+      await getEffectiveEdition(courseSlug),
+      await resolveDataMode(),
+      courseSlug
     )
   }
 )
+
+/**
+ * The mandatory lesson ids for an explicit data mode (see
+ * {@link resolveEditionForMode}): the public score page's denominator.
+ */
+export async function getMandatoryLessonIdsForMode(
+  mode: DataMode,
+  courseSlug: string = GWTH_COURSE_SLUG
+): Promise<Set<string>> {
+  return mandatoryIdsFor(
+    await resolveEditionForMode(mode, courseSlug),
+    mode,
+    courseSlug
+  )
+}
+
+async function mandatoryIdsFor(
+  edition: EffectiveEdition,
+  mode: DataMode,
+  courseSlug: string
+): Promise<Set<string>> {
+  if (edition.lessons) {
+    const ids = new Set<string>()
+    for (const [lessonId, entry] of edition.lessons) {
+      if (entry.isMandatory && entry.state === "ratified") ids.add(lessonId)
+    }
+    return ids
+  }
+
+  if (mode.kind !== "mock") {
+    const db = getDb()
+    const rows = await db
+      .select({ id: lessons.id })
+      .from(lessons)
+      .where(
+        and(eq(lessons.courseSlug, courseSlug), eq(lessons.isOptional, false))
+      )
+    return new Set(rows.map((r) => r.id))
+  }
+
+  return new Set(
+    mockLessons
+      .filter((l) => l.courseSlug === courseSlug && !l.isOptional)
+      .map((l) => l.id)
+  )
+}
 
 /**
  * The per-learner mandatory-lesson count — the GWTH Score denominator

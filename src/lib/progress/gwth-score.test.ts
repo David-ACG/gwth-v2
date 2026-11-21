@@ -7,7 +7,9 @@ import {
   fallBackFactor,
   getPercentileLabel,
   getTrajectoryLabel,
+  lastFallStepAt,
   lastLessonPassedAt,
+  scoreLastChangedAt,
 } from "./gwth-score"
 import { createEmptyLessonProgress } from "./completion"
 
@@ -181,5 +183,37 @@ describe("GWTH Score", () => {
       expect(lastLessonPassedAt(rows)?.getTime()).toBe(at(9).getTime())
       expect(lastLessonPassedAt([])).toBeNull()
     })
+  })
+})
+
+describe("when the score last changed (bead gwth-launch-phjb)", () => {
+  const DAY = 24 * 60 * 60 * 1000
+  const passed = new Date("2027-01-01T09:00:00Z")
+  const at = (days: number) => new Date(passed.getTime() + days * DAY)
+
+  it("has no fall step while the score is held", () => {
+    expect(lastFallStepAt(passed, at(20))).toBeNull()
+    expect(lastFallStepAt(passed, at(34))).toBeNull()
+    expect(lastFallStepAt(null, at(100))).toBeNull()
+  })
+
+  it("dates each fall step on the day it happened", () => {
+    expect(lastFallStepAt(passed, at(35))).toEqual(at(35))
+    expect(lastFallStepAt(passed, at(41))).toEqual(at(35))
+    expect(lastFallStepAt(passed, at(44))).toEqual(at(42))
+  })
+
+  it("stops moving once the score has fallen to nothing", () => {
+    // 20 weeks of 5% after the 28-day hold.
+    expect(lastFallStepAt(passed, at(400))).toEqual(at(28 + 20 * 7))
+    expect(fallBackFactor(passed, at(400))).toBe(0)
+  })
+
+  it("is the latest of a lesson passed, a capstone mark and a fall step", () => {
+    const mark = at(10)
+    expect(scoreLastChangedAt(passed, [mark], at(20))).toEqual(mark)
+    expect(scoreLastChangedAt(passed, [mark], at(50))).toEqual(at(49))
+    expect(scoreLastChangedAt(null, [], at(50))).toBeNull()
+    expect(scoreLastChangedAt(null, [mark, null], at(50))).toEqual(mark)
   })
 })

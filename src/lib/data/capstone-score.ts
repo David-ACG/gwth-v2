@@ -14,7 +14,8 @@ import "server-only"
 import { eq } from "drizzle-orm"
 import { getDb } from "@/db"
 import { capstoneSubmissions } from "@/db/schema"
-import { isCapstoneId } from "@/lib/capstones/guides"
+import { isCapstoneId, type CapstoneId } from "@/lib/capstones/guides"
+import type { Band } from "@/lib/capstones/rules"
 import type { CapstoneBestTotals } from "@/lib/progress/gwth-score"
 
 /** Postgres "undefined_table": a database that has not run migration 028. */
@@ -36,19 +37,46 @@ function isUndefinedTable(error: unknown): boolean {
  * error is thrown.
  */
 export async function getCapstoneBestTotals(userId: string): Promise<CapstoneBestTotals> {
-  let rows: { capstoneId: string; bestTotal: number | null }[]
+  return (await getCapstoneMarks(userId)).totals
+}
+
+/** One learner's counted capstone marks, with the band and when it was set. */
+export interface CapstoneMarks {
+  totals: CapstoneBestTotals
+  bands: Partial<Record<CapstoneId, Band>>
+  /** When each counted mark was last applied (the score's "Last changed" clock). */
+  markedAt: Partial<Record<CapstoneId, Date>>
+}
+
+/**
+ * Each capstone's counted points, band and mark time for one learner (the
+ * score badge's three month project grades, bead gwth-launch-phjb). Same
+ * missing-table rule as {@link getCapstoneBestTotals}.
+ */
+export async function getCapstoneMarks(userId: string): Promise<CapstoneMarks> {
+  const marks: CapstoneMarks = { totals: {}, bands: {}, markedAt: {} }
+  let rows: { capstoneId: string; bestTotal: number | null; bestBand: string | null; updatedAt: string }[]
   try {
     rows = await getDb()
-      .select({ capstoneId: capstoneSubmissions.capstoneId, bestTotal: capstoneSubmissions.bestTotal })
+      .select({
+        capstoneId: capstoneSubmissions.capstoneId,
+        bestTotal: capstoneSubmissions.bestTotal,
+        bestBand: capstoneSubmissions.bestBand,
+        updatedAt: capstoneSubmissions.updatedAt,
+      })
       .from(capstoneSubmissions)
       .where(eq(capstoneSubmissions.userId, userId))
   } catch (error) {
-    if (isUndefinedTable(error)) return {}
+    if (isUndefinedTable(error)) return marks
     throw error
   }
-  const totals: CapstoneBestTotals = {}
   for (const row of rows) {
-    if (isCapstoneId(row.capstoneId) && row.bestTotal !== null) totals[row.capstoneId] = row.bestTotal
+    if (!isCapstoneId(row.capstoneId) || row.bestTotal === null) continue
+    marks.totals[row.capstoneId] = row.bestTotal
+    if (row.bestBand && BANDS.has(row.bestBand)) marks.bands[row.capstoneId] = row.bestBand as Band
+    marks.markedAt[row.capstoneId] = new Date(row.updatedAt)
   }
-  return totals
+  return marks
 }
+
+const BANDS: ReadonlySet<string> = new Set(["not_yet", "pass", "good", "excellent"])

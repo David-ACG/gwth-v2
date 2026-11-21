@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { isHiddenPublicPath, isOffMenu } from "./public-routes"
 
 // Launch readiness, David 2026-10-20: "Use your recommendations for all 30
@@ -23,5 +23,21 @@ describe("public routes at launch", () => {
     expect(isHiddenPublicPath("/for-institutions")).toBe(false)
     expect(isOffMenu("/for-institutions")).toBe(false)
     expect(isOffMenu("/pricing")).toBe(false)
+  })
+})
+
+describe("the public score page follows the score switch (bead gwth-launch-phjb)", () => {
+  afterEach(() => vi.unstubAllEnvs())
+
+  it("hides /verify while the score is off", () => {
+    vi.stubEnv("GWTH_SCORE_ENABLED", "")
+    expect(isHiddenPublicPath("/verify/abcde23456")).toBe(true)
+  })
+
+  it("opens /verify once the score is on, and keeps the old /score demo hidden", () => {
+    vi.stubEnv("GWTH_SCORE_ENABLED", "on")
+    expect(isHiddenPublicPath("/verify/abcde23456")).toBe(false)
+    expect(isHiddenPublicPath("/score/123")).toBe(true)
+    expect(isOffMenu("/verify/abcde23456")).toBe(false)
   })
 })

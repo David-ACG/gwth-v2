@@ -8,6 +8,7 @@ import {
 } from "@/lib/data/progress"
 import { ENABLE_GWTH_SCORE } from "@/lib/config"
 import { getCourses } from "@/lib/data/courses"
+import { LearnerScoreCard } from "@/components/score/learner-score-card"
 import { StudyStreakCalendar } from "@/components/progress/study-streak-calendar"
 import { formatDuration, formatProgress, getGradeFromScore } from "@/lib/utils"
 import styles from "./progress-fde.module.css"
@@ -91,11 +92,19 @@ export default async function ProgressPage() {
       </p>
 
       {ENABLE_GWTH_SCORE && (
+        <div className={styles.scorePanel} id="score">
+          <LearnerScoreCard
+            id="progress"
+            buttonClassName={styles.buttonOutline}
+          />
+        </div>
+      )}
+
+      {ENABLE_GWTH_SCORE && (
         <div className={styles.scorePanel}>
           <p className={styles.mono}>GWTH Score</p>
           <p className={styles.pageLead} style={{ marginTop: "0.4rem" }}>
-            Your score reflects current competence. It grows as you learn and
-            decays if updated content is not reviewed.
+            Your score goes up as you pass lessons and monthly projects. It starts to fall after 4 weeks without passing a lesson and goes straight back up when you pass another lesson.
           </p>
           <div className="mt-5 flex flex-col gap-6 sm:flex-row sm:items-center">
             <div>

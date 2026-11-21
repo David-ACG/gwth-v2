@@ -54,9 +54,10 @@ import {
 import {
   calculateGwthScore,
   lastLessonPassedAt,
+  scoreLastChangedAt,
 } from "@/lib/progress/gwth-score"
-import { getMandatoryLessonIds } from "./editions"
-import { getCapstoneBestTotals } from "./capstone-score"
+import { getMandatoryLessonIds, getMandatoryLessonIdsForMode } from "./editions"
+import { getCapstoneMarks, type CapstoneMarks } from "./capstone-score"
 import { resolveDataMode } from "./mode"
 import { getCourses } from "./courses"
 import { getDb } from "@/db"
@@ -793,23 +794,66 @@ export async function getDynamicScore(): Promise<DynamicScore> {
   // the three capstones 50 (each capstone's counted best_total scaled to
   // about 16.7), and the fall-back rule (bible gwth-score-fall-back) applies
   // to the whole score, timed from the last mandatory lesson passed.
-  const [{ rows }, mandatoryIds, capstoneBestTotals] = await Promise.all([
+  const [{ rows }, mandatoryIds] = await Promise.all([
     lessonRowsForMode(),
     getMandatoryLessonIds(),
-    getCapstoneBestTotals(mode.userId),
   ])
+  return (await scoreFromRows(mode.userId, rows, mandatoryIds)).score
+}
+
+/**
+ * One learner's score and capstone marks, for a learner named by id rather
+ * than by the request's session: the public score page (`/verify/[code]`)
+ * scores the learner the share code belongs to (bead gwth-launch-phjb).
+ * Same rules, same edition and same denominator as {@link getDynamicScore}.
+ */
+export async function getLearnerScore(
+  userId: string,
+  now: Date = new Date()
+): Promise<{ score: DynamicScore; marks: CapstoneMarks }> {
+  const mode = { kind: "user", userId } as const
+  const [dbRows, mandatoryIds] = await Promise.all([
+    getDb()
+      .select()
+      .from(lessonProgress)
+      .where(eq(lessonProgress.userId, userId)),
+    getMandatoryLessonIdsForMode(mode),
+  ])
+  return scoreFromRows(userId, dbRows.map(mapLessonRow), mandatoryIds, now)
+}
+
+async function scoreFromRows(
+  userId: string,
+  rows: LessonProgress[],
+  mandatoryIds: Set<string>,
+  now: Date = new Date()
+): Promise<{ score: DynamicScore; marks: CapstoneMarks }> {
+  const marks = await getCapstoneMarks(userId)
   const mandatoryRows = rows.filter((row) => mandatoryIds.has(row.lessonId))
+  const lastPassedAt = lastLessonPassedAt(mandatoryRows)
   const summary = calculateGwthScore(mandatoryRows, mandatoryIds.size, {
-    capstoneBestTotals,
-    lastPassedAt: lastLessonPassedAt(mandatoryRows),
+    capstoneBestTotals: marks.totals,
+    lastPassedAt,
+    now,
   })
   return {
-    overallScore: summary.overallScore,
-    maxPossibleScore: summary.maxPossibleScore,
-    percentile: summary.percentile,
-    curiosityIndex: summary.curiosityIndex,
-    consistencyScore: summary.consistencyScore,
-    improvementRate: summary.improvementRate,
-    scoreHistory: [],
+    marks,
+    score: {
+      overallScore: summary.overallScore,
+      maxPossibleScore: summary.maxPossibleScore,
+      percentile: summary.percentile,
+      curiosityIndex: summary.curiosityIndex,
+      consistencyScore: summary.consistencyScore,
+      improvementRate: summary.improvementRate,
+      scoreHistory: [],
+      earnedScore: Math.round(summary.breakdown.earned),
+      falling: summary.breakdown.fallBackFactor < 1,
+      lastPassedAt,
+      lastChangedAt: scoreLastChangedAt(
+        lastPassedAt,
+        Object.values(marks.markedAt),
+        now
+      ),
+    },
   }
 }

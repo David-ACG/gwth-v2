@@ -14,7 +14,7 @@ import {
   canUserAccessCourse,
   isInGracePeriod,
 } from "@/lib/auth"
-import { HeroDevice } from "@/components/marketing/hero/hero-device"
+import { LearnerScoreCard } from "@/components/score/learner-score-card"
 import {
   ENABLE_BILLING,
   ENABLE_GWTH_SCORE,
@@ -76,7 +76,8 @@ export const DASHBOARD_BREAKOUT =
  * streak derive from `lesson_progress`, lesson rows come from the imported
  * course, and stores that do not exist yet (labs, portfolio, capstones,
  * notifications) render designed honest-zero states instead of fixtures.
- * Post-beta score panel reuses <HeroDevice /> behind a flag.
+ * Behind ENABLE_GWTH_SCORE the score panel is the learner's own GWTH.ai
+ * score badge with its share buttons (LearnerScoreCard, bead gwth-launch-phjb).
  */
 export default async function DashboardPage() {
   // Session first (server-validated; a forged cookie bounces here even
@@ -462,8 +463,11 @@ export function ActiveDashboard({
           </h2>
 
           {ENABLE_GWTH_SCORE ? (
-            <div className="mt-5 max-w-[520px]">
-              <HeroDevice />
+            <div className="mt-5">
+              <LearnerScoreCard
+                id="dashboard"
+                buttonClassName={cn(styles.buttonOutline, styles.buttonSm)}
+              />
             </div>
           ) : (
             <div className={styles.panel} style={{ maxWidth: "32rem" }}>
@@ -479,19 +483,6 @@ export function ActiveDashboard({
             </div>
           )}
 
-          {ENABLE_GWTH_SCORE && (
-            <div className={styles.actionRow}>
-              <Link href="#" className={cn(styles.buttonOutline, styles.buttonSm)}>
-                Copy public URL
-              </Link>
-              <Link href="#" className={cn(styles.buttonOutline, styles.buttonSm)}>
-                Add to LinkedIn
-              </Link>
-              <Link href="#" className={cn(styles.buttonOutline, styles.buttonSm)}>
-                Download QR
-              </Link>
-            </div>
-          )}
         </div>
 
         <div className={styles.splitCell}>
@@ -1039,7 +1030,10 @@ export function LapsedDashboard({
 
           {ENABLE_GWTH_SCORE ? (
             <div className="mt-5">
-              <HeroDevice />
+              <LearnerScoreCard
+                id="dashboard-lapsed"
+                buttonClassName={cn(styles.buttonOutline, styles.buttonSm)}
+              />
             </div>
           ) : (
             <div className={styles.panel}>
