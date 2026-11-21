@@ -17,12 +17,11 @@ import {
   CAREER_CARDS,
   HOME_CARDS,
   PRIMITIVES_URL,
-  SCORE_STATES,
   SIX_BLOCKS,
   WORK_CARDS,
 } from "@/components/marketing/home-fde/home-fde"
 import { HomeFilm } from "@/components/marketing/home-fde/home-film"
-import { ScoreCard } from "@/components/marketing/home-fde/score-card"
+import { ScoreStory } from "@/components/marketing/score-badge/score-story"
 import p from "@/components/marketing/paper/paper.module.css"
 import { HomeMotion } from "./home-motion"
 import styles from "./home-next.module.css"
@@ -712,19 +711,24 @@ export function HomeNext({
                     stays up to date.
                   </p>
                 </div>
-                <div
-                  className={`${p.cards3} ${styles.scoreCards}`}
-                  data-testid="score-cards"
-                  data-motion-children="score"
-                >
-                  {SCORE_STATES.map((state) => (
-                    <ScoreCard key={state.id} state={state} cardClassName={p.card} />
-                  ))}
-                </div>
-                <p className={styles.smallNote} data-motion="rise">
-                  These cards show examples rather than real learners. We
-                  don&apos;t yet store a history of your score. Compare scores
-                  only for people taking the same set of lessons.
+                {/* The score story (David, 21 Nov 2026, bead gwth-launch-phjb):
+                    one badge earned, added to LinkedIn and checked. It replaces
+                    the three line cards. The statistic is from the primary
+                    source, checked 21 Nov: PwC, 2026 Global AI Jobs Barometer. */}
+                <ScoreStory />
+                <p className={styles.scoreWhy} data-testid="score-why">
+                  Skills needed for the most AI-exposed jobs are changing more
+                  than twice as fast as for the least AI-exposed jobs (
+                  <a href="https://www.pwc.com/gx/en/1/services/ai/ai-jobs-barometer.html">
+                    PwC, 2026 Global AI Jobs Barometer
+                  </a>
+                  ).
+                </p>
+                <p className={styles.smallNote}>
+                  The card is an example and doesn&apos;t show a real
+                  learner&apos;s score. We don&apos;t yet store a history of
+                  your score. Compare scores only for people taking the same
+                  set of lessons.
                 </p>
               </div>
             )}

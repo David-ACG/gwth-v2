@@ -9,7 +9,7 @@ import {
   groupByMonth,
 } from "./home-next"
 import { FILM, FILM_COPY } from "@/components/marketing/home-fde/home-film"
-import { SIX_BLOCKS, SCORE_STATES } from "@/components/marketing/home-fde/home-fde"
+import { SIX_BLOCKS } from "@/components/marketing/home-fde/home-fde"
 import {
   DRAFT_PUBLIC_PATHS,
   isHiddenPublicPath,
@@ -355,12 +355,33 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
     }
   })
 
-  it("shows the three directions a score can take (a-20260915-211845)", () => {
+  it("tells the score as one badge earned, added to LinkedIn and checked (David, 21 Nov 2026)", () => {
     render(<HomeNext showScore />)
-    const cards = screen.getByTestId("score-cards")
-    for (const state of SCORE_STATES) {
-      expect(cards).toHaveTextContent(state.state)
+    const story = screen.getByTestId("score-story")
+    const steps = within(story).getAllByRole("listitem")
+    expect(steps.map((li) => within(li).getByRole("heading", { level: 4 }).textContent)).toEqual([
+      "1You earn it",
+      "2You add it to LinkedIn",
+      "3Anyone can check it",
+    ])
+    // The same badge in all three steps, with the GWTH.ai score title and the
+    // three project grades only (no band name, no quiz marks, no lesson count).
+    const badges = within(story).getAllByTestId("score-badge")
+    expect(badges).toHaveLength(3)
+    for (const badge of badges) {
+      expect(badge).toHaveTextContent("GWTH.aiscore")
+      expect(badge).toHaveTextContent("72out of 100")
+      expect(badge).toHaveTextContent("Month 1 projectGood")
+      expect(badge).toHaveTextContent("Month 3 projectPass")
+      expect(badge.textContent).not.toMatch(/Confident builder|foundations|Advanced|quiz|lessons passed/i)
     }
+    // The page an employer lands on says when the score last changed.
+    expect(badges[2]).toHaveTextContent("Last changed9 March 2027")
+    expect(badges[2]!.getAttribute("data-status")).toBe("ok")
+    // The statistic, as checked against the primary source on 21 Nov 2026.
+    expect(screen.getByTestId("score-why")).toHaveTextContent(
+      "more than twice as fast as for the least AI-exposed jobs (PwC, 2026 Global AI Jobs Barometer)"
+    )
     // The Style Bible's required phrase, and the real rule from gwth-score.ts.
     expect(screen.getByTestId("score-lead")).toHaveTextContent(
       "The marks for your monthly projects count"
@@ -374,7 +395,9 @@ describe("a score and a portfolio, at a glance (a-20261118-220253)", () => {
     const { container } = render(<HomeNext showScore />)
     const text = pageText(container)
     expect(text).not.toMatch(/top \d+%|percentile|certificate|LinkedIn score|share your score/i)
-    expect(text).toContain("These cards show examples rather than real learners.")
+    expect(text).toContain("The card is an example and doesn't show a real learner's score.")
+    // The example's link is printed, never a live link to a made-up code.
+    expect(container.querySelector('[data-testid="score-story"] a')).toBeNull()
   })
 
   it("does not describe the score as live while it is switched off", () => {

@@ -187,13 +187,12 @@ describe("with motion", () => {
     expect(purposes.every((el) => el.getAttribute("data-motion-state") === "before")).toBe(true)
   })
 
-  it("gives the score cards their motion without touching their markup's module", () => {
-    const { container, reach } = start()
-    const cards = Array.from(container.querySelectorAll<HTMLElement>('[data-testid="score-card"]'))
-    expect(cards).toHaveLength(3)
-    expect(cards.every((el) => el.getAttribute("data-motion") === "score")).toBe(true)
-    reach(...cards)
-    expect(cards.every((el) => el.getAttribute("data-motion-state") === "in")).toBe(true)
+  it("leaves the score story to run its own animation", () => {
+    const { container } = start()
+    const story = container.querySelector<HTMLElement>('[data-testid="score-story"]')!
+    expect(story).not.toBeNull()
+    expect(story.querySelector("[data-motion]")).toBeNull()
+    expect(story.closest("[data-motion]")).toBeNull()
   })
 
   it("shows a picture plainly when it cannot be assembled, never leaving it hidden", () => {

@@ -73,6 +73,19 @@
   color: var(--v-soft);
 }
 
+/* The statistic under the score story: why a score has to keep moving. */
+.scoreWhy {
+  max-width: 46rem;
+  margin: 1.5rem 0 0;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--v-accent);
+  border-radius: 0 8px 8px 0;
+  background: var(--v-quiet);
+  color: var(--v-ink);
+  font-size: var(--fde-body-sm);
+  line-height: 1.55;
+}
+
 .smallNote {
   max-width: 46rem;
   margin-top: 1.1rem;
@@ -1190,7 +1203,6 @@
   }
 
   .motionRoot .monthStep,
-  .motionRoot .scoreCards > *,
   .motionRoot .stepNumber,
   .motionRoot figure > img {
     transition: transform 360ms var(--home-ease);
@@ -1217,8 +1229,7 @@
     transform: translateY(0) scale(0.97);
   }
 
-  .motionRoot .monthStep:hover,
-  .motionRoot .scoreCards > *:hover {
+  .motionRoot .monthStep:hover {
     transform: translateY(-4px) rotate(-0.3deg);
   }
 

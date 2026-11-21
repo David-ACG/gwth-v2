@@ -1,0 +1,309 @@
+/*
+ * The GWTH.ai score badge, layout "ring on the left" (David, 21 Nov 2026).
+ * Ported from the round 3 prototype in GWTH-launch-plan
+ * completion/score-badge-r3-2026-11-21. Paper-first tokens only; no gradient,
+ * no shadow (Bible paper-first-banned-patterns). Every size follows the
+ * badge's own width, so it is the same object in a profile and on a page.
+ */
+
+.badge {
+  container-type: inline-size;
+  width: 100%;
+  background: var(--v-surface);
+  border: 1px solid var(--v-line);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: left;
+  color: var(--v-ink);
+}
+
+.inner {
+  --p: max(0.95rem, 5.33cqw);
+  display: grid;
+  height: 100%;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "title title"
+    "ring name"
+    "ring status"
+    "months months"
+    "foot foot";
+  column-gap: max(0.9rem, 4.6cqw);
+  padding: max(0.95rem, 3.7cqw) var(--p) 0;
+}
+
+.title {
+  grid-area: title;
+  display: flex;
+  align-items: flex-end;
+  gap: max(0.42rem, 1.7cqw);
+  min-width: 0;
+  margin: 0 0 max(0.95rem, 3cqw);
+}
+
+.logo {
+  display: block;
+  width: max(5.5rem, 21cqw);
+  height: auto;
+  flex: none;
+}
+
+.word {
+  font: italic 500 max(1.5rem, 5.75cqw) / 1 var(--font-serif);
+  color: var(--v-accent);
+  letter-spacing: -0.01em;
+  margin-bottom: -0.15em;
+}
+
+.name {
+  grid-area: name;
+  align-self: end;
+  margin: 0;
+  font: 600 max(1.2rem, 5.8cqw) / 1.08 var(--font-serif);
+  letter-spacing: -0.012em;
+  color: var(--v-ink);
+  min-width: 0;
+}
+
+.ringCell {
+  grid-area: ring;
+  align-self: center;
+}
+
+.status {
+  grid-area: status;
+  align-self: start;
+  margin: 0.35em 0 0;
+  font-size: max(0.8rem, 2.6cqw);
+  color: var(--v-soft);
+  line-height: 1.3;
+  min-width: 0;
+}
+
+.status > span {
+  display: none;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.status > span:not([data-s="date"]) {
+  font-weight: 600;
+  color: var(--v-ink);
+}
+
+.badge[data-status="date"] [data-s="date"],
+.badge[data-status="up"] [data-s="up"],
+.badge[data-status="fall"] [data-s="fall"],
+.badge[data-status="ok"] [data-s="ok"] {
+  display: inline-flex;
+}
+
+.glyph {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.months {
+  grid-area: months;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: space-between;
+  gap: 0.2rem 0.6rem;
+  margin: max(0.9rem, 2.8cqw) 0 0;
+  padding-top: max(0.55rem, 2.2cqw);
+  border-top: 1px solid var(--v-line-soft);
+  min-width: 0;
+}
+
+.months dt {
+  font-size: max(0.72rem, 2.2cqw);
+  color: var(--v-muted);
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.months dd {
+  margin: 0;
+  font-size: max(0.88rem, 3.1cqw);
+  font-weight: 600;
+  color: var(--v-ink);
+  line-height: 1.35;
+}
+
+.foot {
+  grid-area: foot;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.05rem max(0.5rem, 1.8cqw);
+  min-width: 0;
+  margin: max(0.9rem, 3cqw) calc(-1 * var(--p)) 0;
+  padding: max(0.6rem, 2.3cqw) var(--p);
+  background: var(--v-quiet);
+  border-top: 1px solid var(--v-line);
+}
+
+.footKey {
+  font-size: max(0.74rem, 2.4cqw);
+  color: var(--v-soft);
+  white-space: nowrap;
+}
+
+.footValue {
+  font-size: max(0.86rem, 3cqw);
+  font-weight: 600;
+  color: var(--v-ink);
+  overflow-wrap: anywhere;
+}
+
+a.footValue {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/* Wide: the ring holds the left column and the grades sit beside it. */
+@container (min-width: 34rem) {
+  .inner {
+    grid-template-areas:
+      "title title"
+      "ring name"
+      "ring status"
+      "ring months"
+      "foot foot";
+    grid-template-rows: auto 1fr auto 1fr auto;
+  }
+
+  .months {
+    align-self: start;
+  }
+}
+
+@container (max-width: 20.5rem) {
+  .months dt span {
+    display: block;
+  }
+}
+
+@container (max-width: 17rem) {
+  .months {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .months > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.1rem 0;
+  }
+
+  .months dt span {
+    display: inline;
+  }
+}
+
+@container (max-width: 15.5rem) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "title" "ring" "name" "status" "months" "foot";
+  }
+
+  .name {
+    margin-top: 0.7rem;
+  }
+}
+
+/* The ring: drawn from --shown (points held today) and --earned (points
+   earned). The dashed stretch between them is the points lost for now. */
+.ring {
+  position: relative;
+  aspect-ratio: 1;
+  flex: none;
+  width: max(6.6rem, 25.5cqw);
+}
+
+.ring svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.rgTrack {
+  fill: none;
+  stroke: var(--v-quiet);
+}
+
+.rgEdge {
+  fill: none;
+  stroke: var(--v-line);
+  stroke-width: 0.8;
+}
+
+.rgFill {
+  fill: none;
+  stroke: var(--v-accent);
+  stroke-dasharray: var(--shown) 100;
+}
+
+.rgMask {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 14;
+  stroke-dasharray: 0 var(--shown) calc(var(--earned) - var(--shown)) 100;
+}
+
+.rgLost {
+  fill: none;
+  stroke: var(--v-ink);
+  stroke-dasharray: 2 2.2;
+}
+
+.rgGap {
+  stroke: var(--v-surface);
+}
+
+.rgInk {
+  stroke: var(--v-ink);
+  stroke-linecap: round;
+  fill: none;
+}
+
+.rgSpin {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  transform: rotate(calc(var(--shown) * 3.6deg));
+}
+
+.ringIn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.num {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: max(2rem, 10.4cqw);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ringIn small {
+  font-size: max(0.66rem, 2.05cqw);
+  color: var(--v-muted);
+  margin-top: 0.15em;
+  line-height: 1.2;
+}
