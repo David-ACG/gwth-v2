@@ -80,7 +80,7 @@ describe("StartHereNext, the free lesson's front door", () => {
     render(<StartHereNext />)
     const buttons = screen.getAllByTestId("start-here-open")
     expect(buttons).toHaveLength(2)
-    for (const button of buttons) expect(button).toHaveTextContent("Get the free lesson by email")
+    for (const button of buttons) expect(button).toHaveTextContent(/^Get the free lesson$/)
     // The gate's pop-ups are on the page, each with its own form.
     expect(screen.getAllByTestId("start-here-dialog")).toHaveLength(2)
     expect(screen.getByTestId("start-here-consent-summary")).toHaveTextContent(CONSENT_LINE)

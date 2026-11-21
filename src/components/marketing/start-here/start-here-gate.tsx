@@ -15,7 +15,7 @@ import styles from "./start-here.module.css"
  * under it are his wording (2026-10-09, option A). A native <dialog> gives the
  * focus trap, Escape to close and the backdrop without a library.
  */
-export function StartHereGate({ label = "Get the free lesson by email" }: { label?: string }) {
+export function StartHereGate({ label = "Get the free lesson" }: { label?: string }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const uid = useId()
   const ids = { title: `${uid}-title`, email: `${uid}-email`, website: `${uid}-website`, consent: `${uid}-consent` }
@@ -120,7 +120,7 @@ export function StartHereGate({ label = "Get the free lesson by email" }: { labe
         ) : (
           <form onSubmit={onSubmit} noValidate={false} data-testid="start-here-form">
             <h2 id={ids.title} className={styles.dialogTitle}>
-              Get the free lesson by email
+              Get the free lesson
             </h2>
             <p className={styles.dialogText}>
               Enter your email address and we&apos;ll send you a link that opens the lesson and its film.
