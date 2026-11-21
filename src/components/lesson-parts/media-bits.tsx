@@ -20,6 +20,12 @@ export function pauseOtherMedia(except: HTMLMediaElement | null): void {
   })
 }
 
+/**
+ * The Listen bar's speeds. 1.75x and 2x added on 21 Nov 2026, when David
+ * chose "Add read-aloud + 2x" for the free lesson: some learners listen fast.
+ */
+export const LISTEN_SPEEDS = ["0.75", "1", "1.25", "1.5", "1.75", "2"] as const
+
 function fmt(sec: number | null | undefined): string {
   if (sec == null || !Number.isFinite(sec)) return "--:--"
   const s = Math.max(0, Math.round(sec))
@@ -202,10 +208,11 @@ export const ListenBar = React.forwardRef<
               if (audioRef.current) audioRef.current.playbackRate = Number(e.target.value)
             }}
           >
-            <option value="0.75">0.75x</option>
-            <option value="1">1x</option>
-            <option value="1.25">1.25x</option>
-            <option value="1.5">1.5x</option>
+            {LISTEN_SPEEDS.map((v) => (
+              <option key={v} value={v}>
+                {v}x
+              </option>
+            ))}
           </select>
         </label>
         <label className={styles.toggle}>
